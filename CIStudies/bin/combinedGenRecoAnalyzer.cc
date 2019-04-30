@@ -35,7 +35,9 @@
 #include "PhysicsTools/FWLite/interface/CommandLineParser.h"
 
 #include "combinedGenRecoAnalyzer.h" 
-
+#include <TLorentzVector.h>
+double highPtSignFlipWrongCounter= 0;
+double highPtSignFlipRightCounter= 0;
 Histograms::Histograms()
 {
   TH1::SetDefaultSumw2();
@@ -50,6 +52,11 @@ Histograms::Histograms()
   histos["histEta"] = new TH1D("histEta", "#Eta", 50, -4.0, 4.0);
   histos["histPhi"] = new TH1D("histPhi", "#Phi", 30, -3.2, 3.2);
 
+  histos["histCollinsSoper"] = new TH1D("histCollinsSoper", "CSAngle", 50,-1.0,1.0);
+  histos["histIncorrectCollinsSoper"] = new TH1D("histIncorrectCollinsSoper", "IncorrectCollinsSoperAngle", 50,-1.0,1.0);
+  histos["histDifferenceAngle"] = new TH1D("histDifferenceAngle", "DifferenceCollinsSoperAngle", 50,0.0,1.0);
+  histos["histRandomCollinsSoper"] = new TH1D("histRandomCollinsSoper", "RandomCollinsSoperAngle", 50,-1.0,1.0);
+  histos["histHighPtCollinsSoper"] = new TH1D("histHighPtCollinsSoper", "HighPtCollinsSoperAngle", 50,-1.0,1.0);
   histos["histMinusGenPt"] = new TH1D("histMinusGenPt","Pt",100,0.,500.);
   histos["histMinusGenEta"] = new TH1D("histMinusGenEta", "Eta",50,-3.5,3.5);
   histos["histMinusGenPhi"] = new TH1D("histMinusGentPhi", "Phi", 50,-3.15,3.15);
@@ -72,6 +79,21 @@ Histograms::Histograms()
   histos["GenhistNewMassScaleDown"] = new TH1D("GhistNewMassScaleDown", "histNewMassScaleDown", scalingbinnum, scalingdmin, scalingdmax); 
   histos["GenhistNewMassScaleUpDown"] = new TH1D("GhistNewMassScaleUpDown", "histNewMassMuScaleUpAntiScaleDown", scalingbinnum, scalingdmin, scalingdmax);
 
+  histos["RecohistCollinsSoper"] = new TH1D("RecohistCollinsSoper", "RecoCollinsSoperAngle", 50,-1.0,1.0);
+  histos["RecohistIncorrectCollinsSoper"] = new TH1D("RecohistIncorrectCollinsSoper", "RecoIncorrectCollinsSoperAngle", 50,-1.0,1.0);
+  //histos["RecohistDifferenceAngle"] = new TH1D("histDifferenceAngle", "RecoDifferenceCollinsSoperAngle", 50,0.0,1.0);
+  //histos["RecohistRandomCollinsSoper"] = new TH1D("histRandomCollinsSoper", "RecoRandomCollinsSoperAngle", 50,-1.0,1.0);
+  //histos["REcohistHighPtCollinsSoper"] = new TH1D("histHighPtCollinsSoper", "RecoHighPtCollinsSoperAngle", 50,-1.0,1.0);
+  histos["GenRecoDifferenceSignFlipsRandom"] = new TH1D("GenRecoDifferenceSignFlipsRandom", "GenRecoDifferenceSignFlipsRandom", 50,0,2);
+  histos["GenRecoDifferenceSignFlipsHighPt"] = new TH1D("GenRecoDifferenceSignFlipsHighPt", "GenRecoDifferenceSignFlipsHighPt", 50,0,2);
+
+  histos["RecoSignFlipsPt"] = new TH1D("RecoSignFlipsPt", "RecoSignFlipsPt", 50,0,500);
+  histos["RecoSignFlipsPhi"] = new TH1D("RecoSignFlipsPhi", "RecoSignFlipsPhi", 100,-3.5,3.5);
+  histos["RecoSignFlipsEta"] = new TH1D("RecoSignFlipsEta", "RecoSignFlipsEta", 100,-3.15,3.15);
+  histos["RecoPt"] = new TH1D("RecoPt", "RecoPt", 50,0,500);
+  histos["RecoPhi"] = new TH1D("RecoPhi", "RecoPhi", 100,-3.5,3.5);
+  histos["RecoEta"] = new TH1D("RecoEta", "RecoEta", 100,-3.15,3.15);
+
   histos["RecohistInvariantMass"] = new TH1D("RhistInvariantMass","Mass Dist",scalingbinnum,scalingdmin,scalingdmax); 
   histos["RecohistNewMassScaleUp"] = new TH1D("RhistNewMassScaleUp", "histNewMassScaleUp", scalingbinnum, scalingdmin, scalingdmax); 
   histos["RecohistNewMassScaleDown"] = new TH1D("RhistNewMassScaleDown", "histNewMassScaleDown", scalingbinnum, scalingdmin, scalingdmax);  
@@ -85,18 +107,18 @@ Histograms::Histograms()
   histos["Recohistreldn"] = new TH1D("Rhistreldn", "Reco Scaled Down", scalingbinnum, scalingdmin, scalingdmax); 
   histos["Recohistrelupdn"] = new TH1D("Rhistrelupdn", "Reco Mu scaled up AntiMu scaled down", scalingbinnum, scalingdmin, scalingdmax);
 
-//Histograms to calculate acceptance 
- histos["totalGenSimBinsHist"] = new TH1D("Total Gen Sim Hist", "Acceptance", numberOfBins, 300, 3200);
- histos["acceptedRecoBinsHist"] = new TH1D("Total Reco Matched hist", "Acceptance of Events from Gen Sim to Reco", numberOfBins, 300, 3200);
+  //Histograms to calculate acceptance 
+  histos["totalGenSimBinsHist"] = new TH1D("Total Gen Sim Hist", "Acceptance", numberOfBins, 300, 3200);
+  histos["acceptedRecoBinsHist"] = new TH1D("Total Reco Matched hist", "Acceptance of Events from Gen Sim to Reco", numberOfBins, 300, 3200);
   
- //array of hists to write for muons
- histsMu = {histos["histMinusGenPt"], histos["histMinusGenEta"], histos["histMinusGenPhi"], histos["histPlusGenPt"], histos["histPlusGenEta"], histos["histPlusGenPhi"], histos["histInvariantMass"], histos["histTkLayWMeas"], histos["histVdPxHits"], histos["histVdMuHits"], histos["histPtRes"], histos["histDxy"], histos["histMatchMuStation"], histos["histPt"], histos["histEta"], histos["histPhi"]};
+  //array of hists to write for muons
+  histsMu = {histos["histMinusGenPt"], histos["histMinusGenEta"], histos["histMinusGenPhi"], histos["histPlusGenPt"], histos["histPlusGenEta"], histos["histPlusGenPhi"], histos["histInvariantMass"], histos["histTkLayWMeas"], histos["histVdPxHits"], histos["histVdMuHits"], histos["histPtRes"], histos["histDxy"], histos["histMatchMuStation"], histos["histPt"], histos["histEta"], histos["histPhi"]};
   //array of hists to write for electrons
-  histsEle = {histos["histMinusGenPt"], histos["histMinusGenEta"], histos["histMinusGenPhi"], histos["histPlusGenPt"], histos["histPlusGenEta"], histos["histPlusGenPhi"], histos["histInvariantMass"], histos["histPt"], histos["histEta"], histos["histPhi"]};
+  histsEle = {histos["histMinusGenPt"], histos["histMinusGenEta"], histos["histMinusGenPhi"],histos["histPlusGenPt"], histos["histPlusGenEta"], histos["histPlusGenPhi"], histos["histInvariantMass"], histos["histPt"], histos["histEta"], histos["histPhi"]};
 
   GenHists = {histos["GenhistInvariantMass"], histos["GenhistNewMassScaleUp"], histos["GenhistNewMassScaleDown"], histos["GenhistNewMassScaleUpDown"]}; 
   GenTempHists = {histos["GentemphistInvariantMass"], histos["GentemphistNewMassScaleUp"], histos["GentemphistNewMassScaleDown"], histos["GentemphistNewMassScaleUpDown"]}; 
-  RecoHists = {histos["RecohistInvariantMass"], histos["RecohistNewMassScaleUp"], histos["RecohistNewMassScaleDown"], histos["RecohistNewMassScaleUpDown"]}; 
+  RecoHists = {histos["RecohistInvariantMass"], histos["RecohistNewMassScaleUp"], histos["RecohistNewMassScaleDown"], histos["RecohistNewMassScaleUpDown"]};//, histos["RecohistCollinsSoper"]};//histos["RecohistRandomCollinsSoper"], histos["RecohistHighPtCollinsSoper"], histos["RecohistIncorrectCollinsSoper"], histos["RecohistDifferenceAngle"]}; 
   RecoTempHists = {histos["RecotemphistInvariantMass"], histos["RecotemphistNewMassScaleUp"], histos["RecotemphistNewMassScaleDown"], histos["RecotemphistNewMassScaleUpDown"]}; 
 
   GenRelDiffHists = {histos["Genhistrelup"], histos["Genhistreldn"], histos["Genhistrelupdn"]};
@@ -438,11 +460,169 @@ void Histograms::fillMaps()
 	}
     }
 }
+double calculateCosTheta(TLorentzVector Ele, TLorentzVector Elebar)
+{
+  //=***********************************************************************
+  //
+  // 1) cos(theta) = 2 Q^-1 (Q^2+Qt^2)^-1 (Ele^+ Elebar^- - Ele^- Elebar^+)
+  //
+  // ?) cos(theta) = (2/(Q.Mag()*sqrt(Q.Mag()^2 + Q.Pt()^2 
+  //          * (Eleplus * Elebarminus - Eleminus * Elebarplus)
+  //
+  //
+  //=***********************************************************************
+  double Eleplus  = 1.0/sqrt(2.0) * (Ele.E() + Ele.Z());
+  double Eleminus = 1.0/sqrt(2.0) * (Ele.E() - Ele.Z());
+
+  double Elebarplus  = 1.0/sqrt(2.0) * (Elebar.E() + Elebar.Z());
+  double Elebarminus = 1.0/sqrt(2.0) * (Elebar.E() - Elebar.Z());
+
+  TLorentzVector Q(Ele+Elebar);
+
+  //std::cout << "\nQ.Mag = " << Q.Mag() << " Mag of Mag = " << sqrt(pow(Q.Mag(), 2));
+  // double costheta = 2.0 / Q.Mag() / sqrt(pow(Q.Mag(), 2) + pow(Q.Pt(), 2)) *
+  //  (Eleplus * Elebarminus - Eleminus * Elebarplus);
+
+  //Fix her!!!!
+  //std::cout<<Ele.Pt()<<" " << Ele.E()<< " " << Elebar.Pt()<<" " << Elebar.E()<<std::endl;
+  //std::cout << "\nQ.Mag = " << Q.Mag() << " Q.Pt = " << Q.Pt() << " Ele+ = " << Eleplus << " Elebar- = " << Elebarminus << " Ele- = " << Eleminus << " Elebar+ = " << Elebarplus << " Pz = " << Ele.E() << " E = " << Ele.Z() << " Pz = " << Elebar.E() << " E = " << Elebar.Z();
+  double costheta = 2.0 / (Q.Mag() * sqrt(pow(Q.Mag(),2) + pow(Q.Pt(),2))) * (Eleplus * Elebarminus - Eleminus * Elebarplus);
+  //std::cout << "\n(0) cosTheta = " << costheta;
+  if (Q.Pz()<0.0) costheta = -costheta;
+  //std::cout << "\n(1) cosTheta = " << costheta;
+  return costheta;
+}
+
+double cosThetaCollinsSoper(const reco::Candidate* particle1, const reco::Candidate* particle2, float RecoMass) 
+//start collinssoper
+{  
+  //std::cout << "big bop";
+  //std::cout << "starting collinper\n";
+  TLorentzVector Ele;
+  TLorentzVector Elebar;
+  //std::cout << "/nEt1 = " << Et1 << " Eta1 = " << Eta1 << " Phi1 = " << Phi1 << " En1 = " << En1;
+  //std::cout << "/nEt2 = " << Et2 << " Eta2 = " << Eta2 << " Phi2 = " << Phi2 << " En2 = " << En2;
+
+  //if (ChargeEle1<0) 
+  //{
+  float Et1 = particle1->et();
+  float Et2 = particle2->et();
+  float Eta1 = particle1->eta();
+  float Eta2 = particle2->eta();
+  float Phi1 = particle1->phi();
+  float Phi2 = particle2->phi();
+  float En1 = particle1->energy();
+  float En2 = particle2->energy();
+  Ele.SetPtEtaPhiE(Et1,Eta1,Phi1,En1);
+  Elebar.SetPtEtaPhiE(Et2,Eta2,Phi2,En2);
+  //}
+  //if (ChargeEle1>0) 
+  //{
+  //Ele.SetPtEtaPhiE(Et2,Eta2,Phi2,En2);
+  //Elebar.SetPtEtaPhiE(Et1,Eta1,Phi1,En1);
+  //}
+  TLorentzVector Q(Ele+Elebar);
+  
+  double costheta = calculateCosTheta(Ele, Elebar);
+
+
+  //=************************************************************************
+  //
+  // 2) tanphi = (Q^2 + Qt^2)^1/2 / Q (Dt dot R unit) /(Dt dot Qt unit)
+  //
+  //= ************************************************************************ /
+  TLorentzVector Pbeam(0.0, 0.0,  4000., 4000.); // beam momentum in lab frame
+  TLorentzVector Ptarget(0.0, 0.0, -4000., 4000.); // beam momentum in lab frame
+  // std::cout << "\n(2) cosTheta = " << costheta;
+
+  TLorentzVector D(Ele-Elebar);
+  // unit vector on R direction
+  TVector3 R = Pbeam.Vect().Cross(Q.Vect());
+  TVector3 Runit = R.Unit();
+  // unit vector on Qt
+  TVector3 Qt = Q.Vect(); Qt.SetZ(0);
+  TVector3 Qtunit = Qt.Unit();
+  TVector3 Dt = D.Vect(); Dt.SetZ(0);
+  double tanphi = sqrt(pow(Q.Mag(), 2) + pow(Q.Perp(), 2)) / Q.Mag() * Dt.Dot(Runit) / 
+    Dt.Dot(Qtunit);
+  //std::cout << "tanphi equals ";
+  //std::cout << tanphi;
+  if (Q.Pz()<0.0) 
+    tanphi = -tanphi;
+  //std::cout << "\n(3) cosTheta = " << costheta;
+  //h1_TanPhiCollinsSoperCorrect_->Fill(tanphi,newweight);
+  //=************************************************************************
+  //
+  // 3) sin2(theta) = Q^-2 Dt^2 - Q^-2 (Q^2 + Qt^2)^-1 * (Dt dot Qt)^2
+  //
+  //=************************************************************************ /
+  //double dt_qt = D.X()*Q.X() + D.Y()*Q.Y();
+  //double sin2theta = pow(D.Pt()/Q.Mag(), 2)
+
+  //- 1.0/pow(Q.Mag(), 2)/(pow(Q.Mag(), 2) + pow(Q.Pt(), 2))*pow(dt_qt, 2);
+
+  //h1_Sin2AngleCollinsSoperCorrect_->Fill(sin2theta,newweight);
+  
+  //std::cout << "\n(4) cosTheta = " << cosThetaCS << " = " << costheta;
+  //std::cout << "finishing collinssoper\n";
+  //cosThetaCS = costheta;
+  //std::cout << "\n(5) cosTheta = " << costheta<<std::endl;;
+  //tanPhi = tanphi;
+  //sin2Theta = sin2theta;
+  return costheta;
+}
 
 void Histograms::fillHistograms (int loopRange,int minCut,int interval,bool isPt,std::vector<matchedList> matchingPairs,std::map<std::string, TH1*> &dictErrorHist, double etaBarrelCutMin, double etaBarrelCutMax)
 { 
+  //std::cout << __LINE__ << std::endl;
+  //int counter = 0;
+  if (matchingPairs.size()==0)
+    {
+      return;
+    }
+  matchedList collinsSoper=matchingPairs[0];
+  //matchedList collinsSoper = new matchedList;
+  //std::cout << __LINE__ << std::endl;
+  matchedList antiCollinsSoper=matchingPairs[0];
+  //auto antiCollinsSoper = new matchedList;
+  if (matchingPairs.size()>2)
+    {
+      std::cout<<"too many pairs"<<std::endl;
+    }
+
+  //if (matchingPairs.size()==2)
+  //{
+  //std::cout<<"1: "<<matchingPairs[0].bestRecoParticle->charge()<<std::endl;
+  //std::cout<<"2: "<<matchingPairs[1].bestRecoParticle->charge()<<std::endl;
+  //}
+  //std::cout << __LINE__ << std::endl;
+
+
+
+
+
+
+ 
+
   for (auto& pair : matchingPairs)
     {
+      //if (counter == 0)
+      //{
+      //  collinsSoper = pair;
+      //  antiCollinsSoper = pair;
+      //  counter+=1;
+      //}
+      if (pair.bestRecoParticle->charge()<0)
+	{
+	  collinsSoper = pair;
+	}
+      else
+	{
+	  antiCollinsSoper = pair;
+	}
+
+	
+      //std::cout << __LINE__ << std::endl;
       //loop through the different pt ranges (50-3100)
       for (int i = 0; i<loopRange; ++i)
 	{
@@ -468,6 +648,7 @@ void Histograms::fillHistograms (int loopRange,int minCut,int interval,bool isPt
 		      recoParameterValue = findInvariantMass(matchingPairs[0].bestRecoParticle,matchingPairs[1].bestRecoParticle);
 		      genParameterValue = findInvariantMass(matchingPairs[0].bestGenParticle,matchingPairs[1].bestGenParticle);
 		    }
+		  //std::cout << __LINE__ << std::endl;
 		  //determine if this is the correct range to fill the histogram for pt error
 		  if (genParameterValue>min && genParameterValue<max)
 		    {
@@ -477,6 +658,7 @@ void Histograms::fillHistograms (int loopRange,int minCut,int interval,bool isPt
 			  double error = calculateError(recoParameterValue,genParameterValue);
 			  std::string histNameEnd = barrelStateName+std::to_string(min)+"to"+std::to_string(max);
 			  std::string histName;
+			  //std::cout << __LINE__ << std::endl;
 			  if (isPt)
 			    {
 			      histName = "histPtError" + histNameEnd;
@@ -497,7 +679,152 @@ void Histograms::fillHistograms (int loopRange,int minCut,int interval,bool isPt
 	  break;
 	}
     }
+  //std::cout<<pcount<<std::endl;
+  //double angle = 0;
+
+
+  
+  if (matchingPairs.size()==2)
+    {
+
+      //subset of same sign reco particles (sign flips)
+      if (matchingPairs[0].bestRecoParticle->charge()==matchingPairs[1].bestRecoParticle->charge())
+	{
+	  double recoRandomAngle;
+	  int random = std::rand()%2;
+	  //randomly choose "first" particle for the Collins Soper Angle calculation
+	  if (random==0)
+	    {
+	      recoRandomAngle = cosThetaCollinsSoper(matchingPairs[0].bestRecoParticle, matchingPairs[1].bestRecoParticle, findInvariantMass(matchingPairs[0].bestRecoParticle, matchingPairs[1].bestRecoParticle));
+	    }
+	  else
+	    {
+	      recoRandomAngle = cosThetaCollinsSoper(matchingPairs[1].bestRecoParticle, matchingPairs[0].bestRecoParticle, findInvariantMass(matchingPairs[1].bestRecoParticle, matchingPairs[0].bestRecoParticle));
+	    }
+	  
+	  //choose the high pT as the first particle for Collins Soper
+	  matchedList highPtPair;
+	  matchedList lowPtPair;
+	  if (matchingPairs[0].bestRecoParticle->pt()>matchingPairs[1].bestRecoParticle->pt())
+	    {
+	      highPtPair = matchingPairs[0];
+	      lowPtPair = matchingPairs[1];
+	    }
+	  else
+	    {
+	      highPtPair = matchingPairs[1];
+	      lowPtPair = matchingPairs[0];
+	    }
+	  double recoHighPtAngle = cosThetaCollinsSoper(highPtPair.bestRecoParticle, lowPtPair.bestRecoParticle, findInvariantMass(highPtPair.bestRecoParticle, lowPtPair.bestRecoParticle));
+
+	  //keeps track of how many times the higher pT is actually the electron
+	  //std::cout<<lowPtPair.bestGenParticle->charge()<<std::endl;
+	  if (highPtPair.bestGenParticle->charge()<0)
+	    {
+	      highPtSignFlipRightCounter +=1;
+	    }
+	  else
+	    {
+	      highPtSignFlipWrongCounter+=1;
+	    }
+	  
+
+	  matchedList genNegative;
+	  matchedList genPositive;
+	  if (matchingPairs[0].bestGenParticle->charge()<0)
+	    {
+	      genNegative = matchingPairs[0];
+	      genPositive = matchingPairs[1];
+	    }
+	  else
+	    {
+	      genNegative = matchingPairs[1];
+	      genPositive = matchingPairs[0];
+	    }
+
+
+	  double genAngle = cosThetaCollinsSoper(genNegative.bestGenParticle, genPositive.bestGenParticle, findInvariantMass(genNegative.bestGenParticle, genPositive.bestGenParticle));
+	  //std::cout<<"genAngle is "<<genAngle<<std::endl;
+	  //std::cout<<"recoRandomAngle is "<<recoRandomAngle<<std::endl;
+	  //std::cout<<"recoHighPtAngle is "<<recoHighPtAngle<<std::endl;
+	  histos["GenRecoDifferenceSignFlipsRandom"]->Fill(fabs(genAngle-recoRandomAngle));
+	  histos["GenRecoDifferenceSignFlipsHighPt"]->Fill(fabs(genAngle-recoHighPtAngle));
+
+
+	  //adds to histograms that keeps track of pT, phi, and eta for sign flips vs regular
+	  for (unsigned int i = 0; i<matchingPairs.size(); i++)
+	    {
+	  
+	      histos["RecoSignFlipsPt"]->Fill(matchingPairs[i].bestRecoParticle->pt());
+	      histos["RecoSignFlipsPhi"]->Fill(matchingPairs[i].bestRecoParticle->phi());
+	      histos["RecoSignFlipsEta"]->Fill(matchingPairs[i].bestRecoParticle->eta());
+	  
+	    }
+	}
+      
+      //no sign flips
+      else
+	{
+	  for (unsigned int i = 0; i<matchingPairs.size(); i++)
+	    {
+	  
+	      histos["RecoPt"]->Fill(matchingPairs[i].bestRecoParticle->pt());
+	      histos["RecoPhi"]->Fill(matchingPairs[i].bestRecoParticle->phi());
+	      histos["RecoEta"]->Fill(matchingPairs[i].bestRecoParticle->eta());
+	  
+	    }
+
+	}
+
+      bool differentSigns = collinsSoper.bestRecoParticle->charge() != antiCollinsSoper.bestRecoParticle->charge();
+      //bool differentSignsBase = matchingPairs[0].bestRecoParticle->charge() != matchingPairs[1].bestRecoParticle->charge();
+      //std::cout<<"differentSigns is "<<differentSigns<<"  differentSignsBase is "<<differentSignsBase<<std::endl;
+      if (differentSigns)
+	{
+	  //std::cout<<"particle: "<<collinsSoper.bestRecoParticle->et()<<"   "<<collinsSoper.bestRecoParticle->eta()<<"   "<<collinsSoper.bestRecoParticle->phi()<<"   "<<collinsSoper.bestRecoParticle->energy()<<"      "<<collinsSoper.bestRecoParticle->charge()<<std::endl;
+	  //std::cout<<"anti particle: "<<antiCollinsSoper.bestRecoParticle->et()<<"   "<<antiCollinsSoper.bestRecoParticle->eta()<<"   "<<antiCollinsSoper.bestRecoParticle->phi()<<"   "<<antiCollinsSoper.bestRecoParticle->energy()<<"      "<<antiCollinsSoper.bestRecoParticle->charge()<<std::endl;
+	  //std::cout<<"invariant mass: "<<findInvariantMass(collinsSoper.bestRecoParticle, antiCollinsSoper.bestRecoParticle)<<std::endl;
+	  double angle = cosThetaCollinsSoper(collinsSoper.bestRecoParticle, antiCollinsSoper.bestRecoParticle, findInvariantMass(collinsSoper.bestRecoParticle, antiCollinsSoper.bestRecoParticle));
+	  double incorrectAngle = cosThetaCollinsSoper(antiCollinsSoper.bestRecoParticle, collinsSoper.bestRecoParticle, findInvariantMass(collinsSoper.bestRecoParticle, antiCollinsSoper.bestRecoParticle));
+	  //std::cout<<__LINE__<<"angle is "<<angle<<std::endl;
+	  //std::cout<<"****************************"<<std::endl;
+	  //	std::cout<<angle<<std::endl;
+	  histos["RecohistCollinsSoper"]->Fill(angle);
+	  histos["RecohistIncorrectCollinsSoper"]->Fill(incorrectAngle);
+	  //std::cout << __LINE__ << std::endl;
+	}
+    }
+
 }
+
+/*void FillMatchingCollinsSoper(std::vector<Histogram::matchedList> matchingPairs, std::string particle1)
+  {
+  const std::vector<const reco::RecoCandidate*> electron = nullptr;
+  const std::vector<const reco::RecoCandidate*> antielectron = nullptr; 
+  for (auto& pair: matchingPairs)
+  {
+  if (particle1 == "electron")
+  {
+  if (initCounter == 0)
+  {
+  electron = &pair.bestRecoParticle;
+  antielectron = &pair.bestRecoParticle;
+  }
+  else
+  {
+  if (pair.bestRecoParticle.charge()<0)
+  {
+  electron= &pair.bestRecoParticle;
+  }
+  else if (pair.bestRecoParticle.charge()>0)
+  {
+  antielectron = &pair.bestRecoParticle;
+  }
+  }
+  }
+  }
+  }
+*/
 
 void Histograms::checkMatchingHistograms(const std::vector<const reco::GenParticle*>& matchingGen, const std::vector<const reco::RecoCandidate*>& matchingReco, std::string particle1)
 {
@@ -517,6 +844,7 @@ void Histograms::checkMatchingHistograms(const std::vector<const reco::GenPartic
 	  etaBarrelCutMin=etaBarrelCutElec;
 	  etaBarrelCutMax=etaEndcapCutElec;
 	}
+
       //fill the interval histograms for pt and mass
       fillHistograms(ptLoopRange,minPtCut,ptInterval,true, matchingPairs,dictErrorHist,etaBarrelCutMin,etaBarrelCutMax);
       fillHistograms(massLoopRange,minMassCut,massInterval,false,matchingPairs,dictErrorHist,etaBarrelCutMin,etaBarrelCutMax);
@@ -543,7 +871,7 @@ void Histograms::fillTGraphs()
 {
   const int medianLower = 1900; 
   const int medianUpper = 3600; 
- //loop for filling the error TGraphs
+  //loop for filling the error TGraphs
   for (auto& parameter : parameters)
     {
       for (auto& barrelState : barrelStates)
@@ -620,6 +948,9 @@ void Histograms::fillTGraphs()
 }
 
 
+
+
+
 void Histograms::process(const edm::EventBase& event, std::string particle1, int index)
 { 
   const double kappa = 0.00005; 
@@ -649,7 +980,7 @@ void Histograms::process(const edm::EventBase& event, std::string particle1, int
   //Loop through Particle list&
   for (const auto& p : *genParticles)
     {	
-      //Check for muon 
+      //Check for muon or electron
       if ((p.pdgId() == 13 || p.pdgId() == 11))
 	{
 	  if (p.status() == 1 && !particle && (p.mother()->status() != 1))
@@ -691,9 +1022,43 @@ void Histograms::process(const edm::EventBase& event, std::string particle1, int
     }
   double invariantMass1 = findInvariantMass(particle, antiparticle);
   histos["totalGenSimBinsHist"]->Fill(invariantMass1);
+
   if (particle && antiparticle)
     {
       double invariantMass = findInvariantMass(particle->pt(), antiparticle->pt(), *particle, *antiparticle); 
+      double angle = cosThetaCollinsSoper(particle, antiparticle, invariantMass);
+      double incorrectAngle = cosThetaCollinsSoper(antiparticle, particle, invariantMass);
+      double difference = std::abs(angle-incorrectAngle);
+      double randomAngle = 0;
+      int random = std::rand()%2;
+      //std::cout<<random<<std::endl;
+      if (random==0)
+	{
+	  randomAngle = cosThetaCollinsSoper(particle, antiparticle, invariantMass);;
+	}
+      else
+	{
+	  randomAngle = cosThetaCollinsSoper(antiparticle, particle, invariantMass);
+	}
+      double histAngle = 0;
+      if (particle->pt()>antiparticle->pt())
+	{
+	  histAngle = cosThetaCollinsSoper(particle, antiparticle, invariantMass);;
+	}
+      else
+	{
+	  histAngle = cosThetaCollinsSoper(antiparticle, particle, invariantMass);
+	}
+
+      if (particle->charge()==antiparticle->charge())
+	{
+	  std::cout<<"Signs same"<<std::endl;
+	}
+      histos["histCollinsSoper"]->Fill(angle);
+      histos["histIncorrectCollinsSoper"]->Fill(incorrectAngle);
+      histos["histDifferenceAngle"]->Fill(difference);
+      histos["histRandomCollinsSoper"]->Fill(randomAngle);
+      histos["histHighPtCollinsSoper"]->Fill(histAngle);
       histos["histInvariantMass"]->Fill(invariantMass);
       std::map<TH1 *, std::function<double()>> hists1 = genMakeDictionary(particle, false);
       std::map<TH1 *, std::function<double()>> hists2 = genMakeDictionary(antiparticle, true);
@@ -802,40 +1167,40 @@ void Histograms::process(const edm::EventBase& event, std::string particle1, int
 	
 //function that finds the scales 
 void Histograms::findScales(int index)
- {
-   std::vector<double> crossSections = {0.5798, 0.01902, 0.003909, 0.001052}; //lambda 16 TeV cross sections 
-   //std::vector<double> crossSections = {372.7, 208.8, 116.8, 49.84}; // lambda 1 TeV cross sections 
-   if (index == 0)
-     { 
-       double Gscale = findScale(index, crossSections, histos["GenhistInvariantMass"]);
-       double Rscale = findScale(index, crossSections, histos["RecohistInvariantMass"]); 
-       for (TH1* hist : GenHists)
-	 {
-	   hist->Scale(Gscale);
-	 }
-       for (TH1* hist : RecoHists)
-	 {
-	   hist->Scale(Rscale); 
-	 }	  
-     }
-   else
-     {
-       double Gscale = findScale(index, crossSections, histos["GentemphistInvariantMass"]);
-       double Rscale = findScale(index, crossSections, histos["RecotemphistInvariantMass"]); 
-       for (unsigned int j = 0; j < GenHists.size(); j++)
-	 {
-	   GenTempHists[j]->Scale(Gscale);
-	   GenHists[j]->Add(GenTempHists[j]);
-	   GenTempHists[j]->Reset();
-	 }
-       for(unsigned int j = 0; j < RecoHists.size(); j++)
-	 {
-	   RecoTempHists[j]->Scale(Rscale);
-	   RecoHists[j]->Add(RecoTempHists[j]);
-	   RecoTempHists[j]->Reset(); 
-	 }	    
-     }
- }
+{
+  std::vector<double> crossSections = {0.5798, 0.01902, 0.003909, 0.001052}; //lambda 16 TeV cross sections 
+  //std::vector<double> crossSections = {372.7, 208.8, 116.8, 49.84}; // lambda 1 TeV cross sections 
+  if (index == 0)
+    { 
+      double Gscale = findScale(index, crossSections, histos["GenhistInvariantMass"]);
+      double Rscale = findScale(index, crossSections, histos["RecohistInvariantMass"]); 
+      for (TH1* hist : GenHists)
+	{
+	  hist->Scale(Gscale);
+	}
+      for (TH1* hist : RecoHists)
+	{
+	  hist->Scale(Rscale); 
+	}	  
+    }
+  else
+    {
+      double Gscale = findScale(index, crossSections, histos["GentemphistInvariantMass"]);
+      double Rscale = findScale(index, crossSections, histos["RecotemphistInvariantMass"]); 
+      for (unsigned int j = 0; j < GenHists.size(); j++)
+	{
+	  GenTempHists[j]->Scale(Gscale);
+	  GenHists[j]->Add(GenTempHists[j]);
+	  GenTempHists[j]->Reset();
+	}
+      for(unsigned int j = 0; j < RecoHists.size(); j++)
+	{
+	  RecoTempHists[j]->Scale(Rscale);
+	  RecoHists[j]->Add(RecoTempHists[j]);
+	  RecoTempHists[j]->Reset(); 
+	}	    
+    }
+}
 
 void Histograms::findError()
 {
@@ -894,6 +1259,25 @@ void Histograms::writeHistograms(std::string particle1)
   relDiffHists[1][1]->SetLineColor(2);  
   scaleLegend2->Draw(); 
   c2->Update(); 
+  histos["histCollinsSoper"]->Write();
+  histos["histIncorrectCollinsSoper"]->Write();
+  histos["histDifferenceAngle"]->Write();
+  histos["histRandomCollinsSoper"]->Write();
+  histos["histHighPtCollinsSoper"]->Write();
+  histos["RecohistCollinsSoper"]->Write();
+  histos["RecohistIncorrectCollinsSoper"]->Write();
+  histos["GenRecoDifferenceSignFlipsRandom"]->Write();
+  histos["GenRecoDifferenceSignFlipsHighPt"]->Write();
+
+  histos["RecoSignFlipsPt"]->Write();
+  histos["RecoSignFlipsPhi"]->Write();
+  histos["RecoSignFlipsEta"]->Write();
+  histos["RecoPt"]->Write();
+  histos["RecoPhi"]->Write();
+  histos["RecoEta"]->Write();
+
+
+
   //write hists for muons
   if (particle1 == "muon")
     {
@@ -989,8 +1373,34 @@ void Histograms::writeMigrationHists()
 }
 int main(int argc, char* argv[])
 { 
-  std::vector<std::string> filenames = {"CITo2MuM300_Lam16ConLL.txt","CITo2MuM800_Lam16ConLL.txt", "CITo2MuM1300_Lam16ConLL.txt", "CITo2MuM2000_Lam16ConLL.txt"};  //muon text files
-  //std::vector<std::string> filenames = {"CITo2EM300_Lam16ConLL.txt","CITo2EM800_Lam16ConLL.txt", "CITo2EM1300_Lam16ConLL.txt", "CITo2EM2000_Lam16ConLL.txt"}; //electron text files
+  //std::vector<std::string> filenames = {"CITo2MuM300_Lam16ConLL.txt","CITo2MuM800_Lam16ConLL.txt"/*, "CITo2MuM1300_Lam16ConLL.txt", "CITo2MuM2000_Lam16ConLL.txt"*/};  //muon text files
+  std::ofstream myfile ("output.txt");
+  std::vector<std::string> mass300;
+  std::vector<std::string> mass800;
+  std::vector<std::string> mass1300;
+  std::vector<std::string> lambdas = {/*"Lam10",*/"Lam16"/*,"Lam22","Lam34"*/};
+  std::vector<std::string> interference = {"Con","Des"};
+  std::vector<std::string> helicity = {"RR"/*,"LL","LR"*/};
+  for(unsigned int l = 0; l < lambdas.size(); ++l)
+    {
+      for(unsigned int i = 0; i < interference.size(); ++i)
+	{
+	  for(unsigned int h = 0; h < helicity.size(); ++h)
+	    {
+	      std::string fileName300="CITo2EM300_"+lambdas[l]+interference[i]+helicity[h]+".txt";
+	      std::string fileName800="CITo2EM800_"+lambdas[l]+interference[i]+helicity[h]+".txt";
+	      std::string fileName1300="CITo2EM1300_"+lambdas[l]+interference[i]+helicity[h]+".txt";
+	      mass300.push_back(fileName300);
+	      mass800.push_back(fileName800);
+	      mass1300.push_back(fileName1300);
+	    }
+	}
+
+    }
+  //std::vector<std::string> mass2000 = {"CITo2EM2000_Lam16ConRR.txt"}; //electron text files
+  //std::cout<<"First entry in 800 mass" << mass800[0]<<std::endl;
+  std::vector<std::vector<std::string>> filenames = {mass300,mass800/*,mass1300*/};
+  //std::cout<<filenames[1][0]<<std::endl;
   gSystem->Load("libFWCoreFWLite");
   FWLiteEnabler::enable();
   gSystem->Load("libDataFormatsFWLite");
@@ -1002,27 +1412,49 @@ int main(int argc, char* argv[])
   int ievt=0;
   std::string w_content="";
   
-  std::vector <std::vector<std::string>> array(filenames.size());
+
+  std::vector<std::vector<std::string>> array(filenames.size());
   
+  //create 2D array of mass ranges and different types
   for (unsigned int i = 0; i < filenames.size(); i++)
     {
-      std::ifstream ifs; 
-      ifs.open(filenames[i], std::ifstream::in);
-      if (!ifs)
-	throw std::runtime_error("File not found!");
-      std::cout<<"opened file"<<std::endl;
-      while (ifs)
+      //std::cout<<__LINE__<<std::endl;
+      
+      //array[i].push_back(filenames[i]);
+      //std::cout<<filenames[i][i]<<std::endl;
+      for (unsigned int j = 0; j < filenames[i].size(); j++)
 	{
-	  std::getline(ifs, w_content);
-	  if (!w_content.empty())
+	  //std::cout<<__LINE__<<std::endl;
+	  std::ifstream ifs; 
+	  
+	  ifs.open(filenames[i][j], std::ifstream::in);
+	  if (!ifs)
+	    throw std::runtime_error("File not found!");
+	  std::cout<<"opened file"<<std::endl;
+	  while (ifs)
 	    {
-	      array[i].push_back(w_content);
+	      while(std::getline(ifs, w_content))
+		{
+		  if (!w_content.empty())
+		    {
+		      //std::cout<<array[j].size()<<std::endl;
+		      //std::cout<<array[j][i].size()<<std::endl;
+		      //std::cout<<i<<" "<<j<<std::endl;
+		      //std::cout<<"w_content"<<w_content<<std::endl;
+		      //std::cout<<"size: "<<array[i].size()<<std::endl;
+		      //std::cout<<__LINE__<<std::endl;
+		      array[i].push_back(w_content);
+		      //std::cout<<"size: "<<array[i].size()<<std::endl;
+		  
+		    }
+		}
+	      break; 
 	    }
-	  break; 
 	}
     }
   std::string eossrc = "root://cmsxrootd.fnal.gov//";
   gROOT->SetBatch(true);
+  //std::cout<<__LINE__<<std::endl;
   // load FWLite C++ libraries
   gSystem->Load("libFWCoreFWLite.so");
   gSystem->Load("libDataFormatsFWLite.so");
@@ -1031,10 +1463,17 @@ int main(int argc, char* argv[])
   TFile *of = new TFile("genOutput.root", "recreate");
   Histograms histograms;
   histograms.fillMaps();
+  //std::cout<<__LINE__<<std::endl;
   histograms.fillVectors(); 
+  //std::cout<<__LINE__<<std::endl;
   //Loop over ROOT file list
-  for (unsigned int index = 0; index < array.size(); ++index)
+  for (unsigned int index = 0; index < array.size(); ++index) //masses
     {
+      highPtSignFlipWrongCounter = 0;
+      highPtSignFlipRightCounter = 0;
+      //for(unsigned int types=0; types<filenames[index].size(); ++types)
+      //{
+      std::cout<<"# of root files: "<<array[index].size()<<std::endl;
       for(unsigned int c=0; c<array[index].size(); ++c)
 	{
 	  auto& x = array[index][c];
@@ -1047,17 +1486,35 @@ int main(int argc, char* argv[])
 	      continue;
 	    } 
 	  fwlite::Event ev(file);
-	  std::cerr << "Events: " << ev.size() << std::endl;
+	  if (c==array[index].size()-1)
+	    {
+	      std::cerr << "Events: " << ev.size() << std::endl;
+	    }
 	  for(ev.toBegin(); !ev.atEnd(); ++ev, ++ievt)
 	    {
 	      edm::EventBase const & event = ev;
 	      if(outputEvery_!=0 ? (ievt>0 && ievt%outputEvery_==0) : false) 
 		std::cout<<" processing event: "<<ievt<<std::endl; 
-	      histograms.process(event, particle1, index);
+	      histograms.process(event, particle1, index); 
+	    }
+	  if (c==array[index].size()-1)
+	    {
+	      std::cout<<"Done with all events"<<std::endl;
 	    }
 	  file->Close();
+	  if (c==array[index].size()-1)
+	    {
+	      std::cout<<"closed the file"<<std::endl;
+	    }
 	  delete file;
-	}
+	} 
+      //}
+      myfile<<"high pt sign flip wrong counter: "<<highPtSignFlipWrongCounter<<std::endl;
+      myfile<<"high pt sign flip right counter: "<<highPtSignFlipRightCounter<<std::endl;
+      double percentageWrong = highPtSignFlipWrongCounter/(highPtSignFlipWrongCounter+highPtSignFlipRightCounter);
+      myfile<<"Percentage Wrong: "<<percentageWrong<<std::endl;
+      double percentageRight = highPtSignFlipRightCounter/(highPtSignFlipWrongCounter+highPtSignFlipRightCounter);
+      myfile<<"Percentage Right: "<<percentageRight<<std::endl;
       of->cd(); 
       histograms.findScales(index); 
     }
@@ -1069,6 +1526,7 @@ int main(int argc, char* argv[])
   histograms.writeMigrationHists(); 
  
   of->Close(); 
+  myfile.close();
 
   return 0; 
 }

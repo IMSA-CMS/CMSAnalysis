@@ -18,121 +18,117 @@ void refineOutput()
   //TFile* outputPercentDiff = TFile::Open("refinedOutput20binsNotScaledZoomedQuadFit.root", "recreate");
   //TFile* outputPercentDiff = TFile::Open("refinedOutput20binsNotScaledZoomed.root", "recreate");
   TFile* outputPercentDiff = TFile::Open("refinedOutput20binsNotScaled.root", "recreate");
-  TCanvas * c1 = new TCanvas("c1", "Gen Relative Difference");
-  TCanvas * c2 = new TCanvas("c2", "Reco Relative Difference");
-  std::string histName;
-  std::string word = "histrel";
-  TLatex T; 
-  TLatex T1; 
-  if (genOutput)
-    {
-      
-      std::string scales [2] = {"up", "dn"};
-      std::string levels [2] = {"G", "R"}; 
-      double kappa = 0.00005; 
-      for(int a = 0; a < 2; a++)
+  TCanvas * c1 = new TCanvas("Collins Soper Angle", "Collins Soper Angle");
+  TCanvas * c2 = new TCanvas("Collins Soper Angle Incorrect Order", "Collins Soper Angle Incorrect Order");
+  TCanvas * c3 = new TCanvas("Collins Soper Angle Difference", "Collins Soper Angle Difference");
+  TCanvas * c4 = new TCanvas("Random Order Collins Soper Angle", "Random Order Collins Soper Angle");
+  TCanvas * c5 = new TCanvas("High pT Collins Soper Angle", "High pT Collins Soper Angle"); 
+  TCanvas * c6 = new TCanvas("Reco Collins Soper Angle", "Reco Collins Soper Angle"); 
+  TCanvas * c7 = new TCanvas("Reco Incorrect Collins Soper Angle", "Reco Incorrect Collins Soper Angle"); 
+  TCanvas * c8 = new TCanvas("Collins Soper Angle Sign Flips Difference between Gen Reco Random", "Collins Soper Angle Sign Flips Difference between Gen Reco Random"); 
+  TCanvas * c9 = new TCanvas("Collins Soper Angle Sign Flips Difference between Gen Reco High pT", "Collins Soper Angle Sign Flips Difference between Gen Reco High pT"); 
+  TCanvas * c10 = new TCanvas("Sign Flips Reco pT", "Sign Flips Reco pT"); 
+  TCanvas * c11 = new TCanvas("Sign Flips Reco Phi", "Sign Flips Reco Phi"); 
+  TCanvas * c12 = new TCanvas("Sign Flips Reco Eta", "Sign Flips Reco Eta"); 
+ TCanvas * c13 = new TCanvas("Reco pT", "Reco pT"); 
+  TCanvas * c14 = new TCanvas("Reco Phi", "Reco Phi"); 
+  TCanvas * c15 = new TCanvas("Reco Eta", "Reco Eta"); 
+
+
+      //collins soper angle histograms
+  std::vector<TCanvas*> canvi = {c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15};
+  std::vector<std::string> histNames = {"histCollinsSoper", "histIncorrectCollinsSoper", "histDifferenceAngle", "histRandomCollinsSoper", "histHighPtCollinsSoper", "RecohistCollinsSoper", "RecohistIncorrectCollinsSoper","GenRecoDifferenceSignFlipsRandom","GenRecoDifferenceSignFlipsHighPt","RecoSignFlipsPt","RecoSignFlipsPhi","RecoSignFlipsEta","RecoPt","RecoPhi","RecoEta"};
+      //loop over all the histograms
+      for(int c = 0; c < histNames.size(); c++)
 	{
-	  
-	  if (a == 0)
+	  canvi[c]->cd();
+	  TH1D* histCollins=dynamic_cast<TH1D*>(genOutput->Get(histNames[c].c_str()));
+	  if (c==0 || c==1 || c==5 || c==6)
 	    {
-	      c1->cd();
+	      histCollins->GetXaxis()->SetTitle("Collins Soper Angle");
 	    }
+	  else{
+	    
+	    histCollins->GetXaxis()->SetTitle("Collins Soper Angle Difference");
+	  }
 
-	  else
+	  histCollins->GetYaxis()->SetTitle("Number of Events");
+	  //std::cout<<c<<std::endl;
+
+	  //set titles for each histogram
+	  if (c==0)
 	    {
-	      c2->cd();
+	      histCollins->SetTitle("Collins Soper Angle Correctly Ordered");
 	    }
-	  auto scaleLegend = new TLegend(0.16,0.63,0.35,0.85);
-	  for(int b = 0; b < 2; b++)
+	  else if (c==1)
 	    {
-	      
-	      histName = levels[a] + word + scales[b];
-	      //histName = levels[a] + word + scales[0] + scales[1];
-	      //histName = levels[a] + word + scales[0] + scales[1];
-	      TH1D* percentdiff=dynamic_cast<TH1D*>(genOutput->Get(histName.c_str()));
-	  
-	  
-	      if(percentdiff)
-		{
-		  
-		  percentdiff->SetStats(kFALSE); //take out statistics box
-		  
-		  percentdiff->SetLineColor(b+1);
-		  percentdiff->GetXaxis()->SetTitle("Invariant Mass (GeV)");
-		  percentdiff->GetYaxis()->SetTitle("Relative Difference");
-		  percentdiff->GetXaxis()->SetRangeUser(1000, 2400); //only for zoomed in graphs
-		  percentdiff->GetYaxis()->SetTitleOffset(1.4);
-		  double bincontent = percentdiff->GetBinContent(51); //get bin content at 1000 GeV 
-		  //for(int c = 51; 
-		  // double binerror = percentdiff->GetBinError()
-		  double scalefactor = .015/bincontent;
-		  percentdiff->Scale(scalefactor); //scale 1.5% at 1000 GeV
-		  T.SetTextSize(0.03); 
-		  T.DrawLatex(1100, 0.035, "#kappa = 0.00005");
-		  T.DrawLatex(1100, 0.04, "#lambda = 16 TeV");
-		  percentdiff->SetOption("E");
-		  
-		      
-		  if (b==0)
-		    {
-		      percentdiff->SetLineColor(kBlue);
-		      
-		      percentdiff->Draw("");
-		      //-----These lines only for quadratic fit-----------
-		      auto func = new TF1("myfunction", "pol2", 0, 3000);
-		      percentdiff->Fit(func);
-		      func->SetLineColor(kBlack);
-		      func->Draw("SAME");
-		      double p0 = func->GetParameter(0);
-		      double p1 = func->GetParameter(1);
-		      //double p2 = func->GetParameter(2); 
-		      std::string equation = std::to_string(p0)+"x^{2} + "+std::to_string(p1)+"x "; 
-		      T.DrawLatex(1100, 0.03, equation.c_str());
-		      //------------------------------------------------
-		      scaleLegend->AddEntry(percentdiff, "Scaled-up", "l");
-		    }
-		  else
-		    {
-		      percentdiff->SetLineColor(kRed);
-		      percentdiff->Draw("SAME");
-		      scaleLegend->AddEntry(percentdiff, "Scaled-down", "l");
-		    }
-
-		  
-		  if(a==0)
-		    {
-		      percentdiff->SetTitle("Gen Relative Difference, 1.5% at 1000 GeV"); //when scaling to 1.5%
-		      //percentdiff->SetTitle("Gen Relative Difference Mu Scaled Up AntiMu Scaled Down "); 
-		      //percentdiff->SetTitle("Gen Relative Difference"); 
-		    }
-		  else
-		    {
-		      percentdiff->SetTitle("Reco Relative Difference, 1.5% at 1000 GeV"); //when scaling to 1.5%
-		      //percentdiff->SetTitle("Reco Relative Difference Mu Scaled Up AntiMu Scaled Down");
-		      //percentdiff->SetTitle("Reco Relative Difference"); 
-		    }
-		  
-			
-		}
-	      
+	      histCollins->SetTitle("Collins Soper Angle Incorrectly Ordered");
 	    }
-          
-
-	  scaleLegend->Draw();
-	  if (a == 0)
+	  else if (c==2)
 	    {
-	      
-	      c1->Update();
-
+	      histCollins->SetTitle("Collins Soper Angle Difference Between Ordering");
+	    }
+	  else if (c==3)
+	    {
+	      histCollins->SetTitle("Collins Soper Angle Randomly Ordered");
+	    }
+	  else if (c==4)
+	    {
+	      histCollins->SetTitle("Collins Soper Angle High Pt is First Particle");
+	    }
+	  else if (c==5)
+	    {
+	      histCollins->SetTitle("Reco Collins Soper Correctly Ordered");
+	    }
+	  else if (c==6)
+	    {
+	      histCollins->SetTitle("Reco Collins Soper Incorrectly Ordered");
+	    }
+	  else if (c==7)
+	    {
+	      histCollins->SetTitle("Collins Soper Angle Sign Flips Difference between Gen and Reco Randomly Ordered");
+	    }
+	  else if (c==8)
+	    {
+	      histCollins->SetTitle("Collins Soper Angle Sign Flips Difference between Gen and Reco High Pt is First Particle");
+	    }
+	  else if (c==9)
+	    {
+	      histCollins->SetTitle("Sign Flips Reco Pt");
+	    }
+	  else if (c==10)
+	    {
+	      histCollins->SetTitle("Sign Flips Reco Phi");
+	    }
+	  else if (c==11)
+	    {
+	      histCollins->SetTitle("Sign Flips Reco Eta");
+	    }
+	  else if (c==12)
+	    {
+	      histCollins->SetTitle("Reco Pt");
+	    }
+	  else if (c==13)
+	    {
+	      histCollins->SetTitle("Reco Phi");
+	    }
+	  else if (c==14)
+	    {
+	      histCollins->SetTitle("Reco Eta");
 	    }
 	  else
+	    
 	    {
-	      
-	      c2->Update();
+	      std::cout<<"No title set"<<std::endl;
 	    }
-	}
-      
-      c1->Write();
-      c2->Write();
+	    
+	  histCollins->SetFillColor(30);
+	  histCollins->Draw("HIST");
+	  canvi[c]->Update();
+	  canvi[c]->Write(); 
+	  canvi[c]->Close();
+	  
     }
 }
+
+
