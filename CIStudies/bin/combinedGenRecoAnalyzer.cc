@@ -93,6 +93,10 @@ Histograms::Histograms()
   histos["RecoPt"] = new TH1D("RecoPt", "RecoPt", 50,0,500);
   histos["RecoPhi"] = new TH1D("RecoPhi", "RecoPhi", 100,-3.5,3.5);
   histos["RecoEta"] = new TH1D("RecoEta", "RecoEta", 100,-3.15,3.15);
+  histos["RecoCorrectSignPt"] = new TH1D("RecoCorrectSignPt", "RecoCorrectSignPt", 50,0,500);
+  histos["RecoCorrectSignEta"] = new TH1D("RecoCorrectSignEta", "RecoCorrectSignEta", 100,-3.15,3.15);
+  histos["RecoWrongSignPt"] = new TH1D("RecoWrongSignPt", "RecoWrongSignPt", 50,0,500);
+  histos["RecoWrongSignEta"] = new TH1D("RecoWrongSignEta", "RecoWrongSignEta", 100,-3.15,3.15);
 
   histos["RecohistInvariantMass"] = new TH1D("RhistInvariantMass","Mass Dist",scalingbinnum,scalingdmin,scalingdmax); 
   histos["RecohistNewMassScaleUp"] = new TH1D("RhistNewMassScaleUp", "histNewMassScaleUp", scalingbinnum, scalingdmin, scalingdmax); 
@@ -741,6 +745,21 @@ void Histograms::fillHistograms (int loopRange,int minCut,int interval,bool isPt
 	      genNegative = matchingPairs[1];
 	      genPositive = matchingPairs[0];
 	    }
+	  
+	  //plots eta and pt for the correct and wrong sign particles
+	  for (unsigned int i = 0; i < matchingPairs.size(); i++)
+	    {
+	      if(matchingPairs[i].bestRecoParticle->charge()==matchingPairs[i].bestGenParticle->charge())
+		{
+		  histos["RecoCorrectSignPt"]->Fill(matchingPairs[i].bestRecoParticle->pt());
+		  histos["RecoCorrectSignEta"]->Fill(matchingPairs[i].bestRecoParticle->eta());
+		}
+	      else
+	        {
+                  histos["RecoWrongSignPt"]->Fill(matchingPairs[i].bestRecoParticle->pt());
+		  histos["RecoWrongSignEta"]->Fill(matchingPairs[i].bestRecoParticle->eta());
+		}
+	     }
 
 
 	  double genAngle = cosThetaCollinsSoper(genNegative.bestGenParticle, genPositive.bestGenParticle, findInvariantMass(genNegative.bestGenParticle, genPositive.bestGenParticle));
@@ -755,9 +774,13 @@ void Histograms::fillHistograms (int loopRange,int minCut,int interval,bool isPt
 	  for (unsigned int i = 0; i<matchingPairs.size(); i++)
 	    {
 	  
-	      histos["RecoSignFlipsPt"]->Fill(matchingPairs[i].bestRecoParticle->pt());
-	      histos["RecoSignFlipsPhi"]->Fill(matchingPairs[i].bestRecoParticle->phi());
-	      histos["RecoSignFlipsEta"]->Fill(matchingPairs[i].bestRecoParticle->eta());
+	      // std::cout<<"Reco charge: " << matchingPairs[i].bestRecoParticle->charge() << " Gen charge: " << matchingPairs[i].bestGenParticle->charge() <<std::endl;
+	      if (matchingPairs[i].bestRecoParticle->charge()!=matchingPairs[i].bestGenParticle->charge())
+		{
+		  histos["RecoSignFlipsPt"]->Fill(matchingPairs[i].bestRecoParticle->pt());
+		  histos["RecoSignFlipsPhi"]->Fill(matchingPairs[i].bestRecoParticle->phi());
+		  histos["RecoSignFlipsEta"]->Fill(matchingPairs[i].bestRecoParticle->eta());
+		}
 	  
 	    }
 	}
@@ -1275,6 +1298,10 @@ void Histograms::writeHistograms(std::string particle1)
   histos["RecoPt"]->Write();
   histos["RecoPhi"]->Write();
   histos["RecoEta"]->Write();
+  histos["RecoCorrectSignPt"]->Write();
+  histos["RecoCorrectSignEta"]->Write();
+  histos["RecoWrongSignPt"]->Write();
+  histos["RecoWrongSignEta"]->Write();
 
 
 

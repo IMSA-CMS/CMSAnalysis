@@ -30,14 +30,18 @@ void refineOutput()
   TCanvas * c10 = new TCanvas("Sign Flips Reco pT", "Sign Flips Reco pT"); 
   TCanvas * c11 = new TCanvas("Sign Flips Reco Phi", "Sign Flips Reco Phi"); 
   TCanvas * c12 = new TCanvas("Sign Flips Reco Eta", "Sign Flips Reco Eta"); 
- TCanvas * c13 = new TCanvas("Reco pT", "Reco pT"); 
+  TCanvas * c13 = new TCanvas("Reco pT", "Reco pT"); 
   TCanvas * c14 = new TCanvas("Reco Phi", "Reco Phi"); 
   TCanvas * c15 = new TCanvas("Reco Eta", "Reco Eta"); 
+  TCanvas * c16 = new TCanvas("Reco Correct Sign Pt", "Reco Correct Sign Pt");
+  TCanvas * c17 = new TCanvas("Reco Correct Sign Eta", "Reco Correct Sign Eta");
+  TCanvas * c18 = new TCanvas("Reco Wrong Sign Pt", "Reco Wrong Sign Pt");
+  TCanvas * c19 = new TCanvas("Reco Wrong Sign Eta", "Reco Wrong Sign Eta");
 
 
       //collins soper angle histograms
-  std::vector<TCanvas*> canvi = {c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15};
-  std::vector<std::string> histNames = {"histCollinsSoper", "histIncorrectCollinsSoper", "histDifferenceAngle", "histRandomCollinsSoper", "histHighPtCollinsSoper", "RecohistCollinsSoper", "RecohistIncorrectCollinsSoper","GenRecoDifferenceSignFlipsRandom","GenRecoDifferenceSignFlipsHighPt","RecoSignFlipsPt","RecoSignFlipsPhi","RecoSignFlipsEta","RecoPt","RecoPhi","RecoEta"};
+  std::vector<TCanvas*> canvi = {c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17,c18,c19};
+  std::vector<std::string> histNames = {"histCollinsSoper", "histIncorrectCollinsSoper", "histDifferenceAngle", "histRandomCollinsSoper", "histHighPtCollinsSoper", "RecohistCollinsSoper", "RecohistIncorrectCollinsSoper","GenRecoDifferenceSignFlipsRandom","GenRecoDifferenceSignFlipsHighPt","RecoSignFlipsPt","RecoSignFlipsPhi","RecoSignFlipsEta","RecoPt","RecoPhi","RecoEta","RecoCorrectSignPt","RecoCorrectSignEta","RecoWrongSignPt","RecoWrongSignEta"};
       //loop over all the histograms
       for(int c = 0; c < histNames.size(); c++)
 	{
@@ -46,6 +50,18 @@ void refineOutput()
 	  if (c==0 || c==1 || c==5 || c==6)
 	    {
 	      histCollins->GetXaxis()->SetTitle("Collins Soper Angle");
+	    }
+	  else if (c==9||c==12)
+	    {
+	      histCollins->GetXaxis()->SetTitle("pT");
+	    }
+	  else if (c==10||c==13)
+	    {
+	      histCollins->GetXaxis()->SetTitle("Phi");
+	    }
+	  else if (c==11||c==14)
+	    {
+	      histCollins->GetXaxis()->SetTitle("Eta");
 	    }
 	  else{
 	    
@@ -115,6 +131,22 @@ void refineOutput()
 	  else if (c==14)
 	    {
 	      histCollins->SetTitle("Reco Eta");
+	    }
+	  else if (c==15)
+	    {
+	     histCollins->SetTitle("Reco Correct Sign Pt");
+	    }
+	  else if (c==16)
+	    {
+	     histCollins->SetTitle("Reco Correct Sign Eta");
+	    }
+	  else if (c==17)
+	    {
+	     histCollins->SetTitle("Reco Wrong Sign Pt");
+	    }
+	  else if (c==18)
+	    {
+	     histCollins->SetTitle("Reco Wrong Sign Eta");
 	    }
 	  else
 	    
