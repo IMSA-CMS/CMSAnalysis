@@ -1,0 +1,1706 @@
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+opened file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/0C733A41-C579-E711-949A-C4346BC76CD8.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/D8345D44-C179-E711-94BF-0CC47A4C8E26.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/3EF3104A-C079-E711-8FEC-0CC47A4C8F26.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/80BD722E-6E79-E711-80D6-FA163EB0E9DC.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/C8E5DA90-7479-E711-B8C5-FA163EDF22A7.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/5C6C2779-4879-E711-BF15-0242AC130002.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/BCF78082-7279-E711-9DD2-001E67DFF4F6.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/9264FD90-3679-E711-8A1A-002590200B48.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/A608B581-1C79-E711-96BA-0CC47A6C186C.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/9A4BBA4E-4F79-E711-A8E6-008CFA111348.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/A092A602-5379-E711-B8FF-E0071B7A8570.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/9A6CE70E-7379-E711-944D-001C23BED6A0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/80559C7A-B47A-E711-AAE0-0CC47A1DF806.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/58120B16-487A-E711-BE33-C45444922949.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/0AFCA56C-6F7A-E711-9255-00259074AE54.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/48AFC569-707A-E711-96CD-0CC47A78A458.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/28772A82-5A7A-E711-8FDC-7CD30ACE176E.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/B64128A5-3B7A-E711-B39C-00266CFFC044.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/48536B82-807B-E711-BBFE-48D539F3866E.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/82A1E91C-907A-E711-8377-001E677925AC.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/4AEB8CF7-FC78-E711-AEA5-00269E95ACE4.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/E8EC92CE-747A-E711-8AA4-001E67DFF67C.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/60B35A88-6E7A-E711-B78A-842B2B61B187.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/D2B7F6AA-207A-E711-AF74-A0369FC51BB8.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/1025F43E-D079-E711-80CF-6C3BE5B59200.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/FA819454-B47A-E711-9A76-20CF3019DEFF.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/0014E6BC-717A-E711-9094-BCAEC509720C.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/82FE95F8-B47A-E711-B347-3417EBE528AF.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/CEA619A0-C67B-E711-8E69-A0369F7F9350.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/9E767DCC-297A-E711-855D-0CC47A0AD6FE.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/E222B46E-F279-E711-96AF-A4BADB22B641.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/823B0813-E779-E711-BCF7-002590A80DF0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/682EF253-F279-E711-AB1D-E0071B7B2380.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/161E950D-0379-E711-9E2A-0025905C53D2.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/FE2F0C61-F279-E711-A401-008CFA197A20.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/7EECA710-F279-E711-8B06-00266CFEFE1C.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/F4574F64-F279-E711-90B7-0242AC130002.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/869690CC-BE79-E711-85A1-484D7E8DF078.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/B63E416A-F279-E711-8F0A-0CC47AD98A9A.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/929C5B06-CB79-E711-ADA6-44A84225C7BB.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/88E2583F-C779-E711-A833-7CD30AC030F8.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/76DA943B-C779-E711-86C3-7CD30AC030F8.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/8E62C056-C779-E711-BAC4-0025905C53A8.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/6C4DA2F7-C679-E711-934F-0242AC110004.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/948B5F86-E279-E711-847B-0242AC1C0501.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/48011EBA-A879-E711-876E-002590E7D7C2.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/D29219D4-C779-E711-B37D-BC305B390A8D.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/8E31578A-E279-E711-B078-00266CFFCCBC.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/D4AE0F15-8779-E711-B2B7-001E6779267A.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/DA21BE3E-C779-E711-8D0E-7845C4FC3A67.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/44ABD14E-7979-E711-BDE9-002590DE6E78.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/7A0C7737-E079-E711-99A5-0CC47A7C351E.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/6EB6845C-7E79-E711-A595-008CFA0A570C.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/D403BC32-C779-E711-9FF2-0CC47A546E5E.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/108130E4-CE79-E711-900C-A4BF01025A8B.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/BEFD1968-7879-E711-8AF7-E0071B7AC7B0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/8012A861-8879-E711-821B-001E67504D2D.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/3AFAD034-C779-E711-BF85-44A842CFD640.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/C4E3DE1B-C879-E711-9BBA-0025901D0946.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/98429935-E979-E711-9621-1866DAED2780.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/E2EB232A-C779-E711-B234-0CC47A57CBCC.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/523E2723-C779-E711-A717-1866DAEB5C74.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/46974245-C979-E711-A005-008CFA111224.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/D69A4215-0C79-E711-AAD4-1866DA879EDE.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/806233EF-0B79-E711-8EE1-3417EBE643F6.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/B215C4C9-0B79-E711-994C-0090FAA573D0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/DA30EFF6-0B79-E711-A855-0242AC110002.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/7200F6EC-0B79-E711-A9A8-001E67397C79.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/8E57321A-0C79-E711-B342-00259021A4C2.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/AE830415-0C79-E711-836D-0CC47A1DF81C.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/044B2D10-0C79-E711-8EF3-C45444922C46.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/4A9F9CB6-0B79-E711-9C20-2047478D67E8.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/808DD6DF-0B79-E711-99CC-24B6FDFFBB7F.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/E06A34EA-0B79-E711-BBAF-0025904B7C42.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/84A27612-0C79-E711-BDA2-3417EBE64BB8.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/C03D023D-0B79-E711-8B66-141877636851.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/16A3FA19-0C79-E711-81D9-549F358EB762.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/EA864715-0C79-E711-A05B-0017A4770C78.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/D04A791B-0C79-E711-8E96-B499BAAC054A.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/EE476113-0C79-E711-995F-009C02AAB4C0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/80781982-DB79-E711-847F-0CC47A4D768E.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/6E905482-DB79-E711-BD16-0025905B85C0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/40961D2D-DB79-E711-B450-0025904C6414.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/C257AA9D-DB79-E711-A090-008CFA1660F8.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/3209A22A-DB79-E711-BDBC-A0369F83637E.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/2C12D9C2-DB79-E711-8A85-24BE05CEEDA1.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/56B7A351-DB79-E711-AD06-5C260AFFFB45.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/58CFE07C-DB79-E711-AB99-0242AC110009.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/B86088D1-1679-E711-9924-0025901D4898.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/68B298D3-1679-E711-BA8E-3417EBE8862E.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/80767ED0-1679-E711-8807-6CC2173C3DD0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/2037060B-1779-E711-B6F7-0025905B857C.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/74D282D1-1679-E711-B709-008CFA165FD0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/92FABBCF-1679-E711-9CD4-0025907B4F04.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/E61CB5F1-1679-E711-8B3F-002590E7D7CE.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/684A85D1-1679-E711-8D5F-0023AEEEB208.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/2E207801-1779-E711-A2B3-049FCA10116C.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/483087D7-1679-E711-9133-1866DA890574.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/020E8B86-1779-E711-94ED-001EC94BE9F2.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/5CF4625A-1779-E711-8271-002590E2DD10.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/329300D5-1679-E711-9ABB-001E675047A5.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/C0B851DF-1679-E711-9038-001E67579748.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/A223F304-1779-E711-A7A1-0242AC1C0500.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/50B52E3C-867A-E711-8C9B-0242AC110002.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/2E7C1400-657A-E711-A3E1-B8CA3A709028.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/88AF9D20-7E7A-E711-9D6C-001517FAAB30.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/7A481B35-BB7A-E711-8126-A0369FD1EF00.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/AEA7F24B-767A-E711-B843-0CC47A13D416.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/C6B1FF08-F87A-E711-A8CA-0CC47A0AD780.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/80226A1B-657A-E711-B5A3-0019B9CB0258.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/B2AD4E34-737A-E711-A7E7-0CC47A4D7636.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/123929FD-7A7A-E711-8F31-0CC47A78A456.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/40E4100F-F479-E711-90ED-0025905B85D2.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/0C463620-F479-E711-B9B7-0025905B855C.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/A06A9EF5-F379-E711-8AD8-001CC4A62CD0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/AE130D16-F479-E711-A408-0242AC110002.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/467C2C05-F479-E711-B018-0025905C2CE8.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/7AF6738B-1E79-E711-90FF-0025905D1D02.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/D2A951E5-F379-E711-8B2A-782BCB539B50.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/06BF61E1-F379-E711-8D59-E0071B749CA0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/82602311-F479-E711-AB73-002590A83192.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/0A23D147-D078-E711-9A70-002590DE6E6A.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/54553445-D078-E711-96E5-F832E4CC4E51.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/5A06B049-D078-E711-8CE4-0017A4771070.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/A67CB03B-D078-E711-ACD1-0242AC1C0500.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/C888EA41-D078-E711-B0AB-44A842CFD619.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/EE29EF4D-D078-E711-9EE4-0CC47AD98D10.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/14475D47-D078-E711-A14A-20CF3027A57D.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/ECCA034F-D078-E711-80FD-782BCB161FC2.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/A48EAD47-D078-E711-8DE6-B083FED1321B.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/82457D56-D078-E711-BF18-0CC47A1DF81C.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/E66B9A4F-D078-E711-877E-00266CFC7800.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/72D9374A-D078-E711-B7E9-0242AC130002.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/48A75448-D078-E711-870D-008CFA5807F0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/D4139116-D278-E711-8D37-001EC94BFB37.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/5033F644-D078-E711-9E93-008CFAFBEBF8.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/E465E5CF-CF79-E711-8824-0CC47A57CBCC.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/C2AA3DC3-CF79-E711-8664-E0071B73B6B0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/32249CA8-CF79-E711-ACE6-0025905B855A.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/A6F31AAA-CF79-E711-AB6E-0CC47A7C35A4.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/08C904B2-4779-E711-820A-0025904C63FA.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/48377165-5679-E711-B5DF-0CC47A5FA215.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/9E06490E-D379-E711-874E-7CD30AC03722.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/2ED5A766-4F79-E711-A097-A0369FC5E8FC.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/AE416B1E-2E79-E711-89DC-001E67E6F990.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/6AAE5777-FC78-E711-8378-0242AC110002.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/182198CA-1A79-E711-B70D-0CC47A4C8E22.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/F45BB862-1E79-E711-B35A-0025905A6080.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam22TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/9862879E-D179-E711-9327-48FD8EE73A79.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/3AE50CCD-DA79-E711-A2F0-549F3525C318.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/9EF9B3C0-1379-E711-BBCC-90B11C27F89E.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/8C00B4E0-DA79-E711-B84C-002590E39D90.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/6E52A6BC-B87B-E711-8FB9-F02FA768CCE6.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/0CF66AA8-1E79-E711-A2C8-002590D9D9A4.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/2CAA83C7-DA79-E711-B542-0242AC1C0505.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/00F88C84-1B79-E711-8B72-003048CB9598.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/D298C799-DA79-E711-8F18-5C260AFFFB45.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/C8778499-DA79-E711-8C2F-24B6FDFFBB8E.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/487F3DA4-DA79-E711-9E8D-0CC47A1DF7FC.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/347E3DBA-827B-E711-A628-48FD8EE73AD9.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/3AD0448C-DA79-E711-8009-3417EBE2F40F.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/AAC1FB48-3D79-E711-83BF-44A84225CFF0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/0068E58D-DA79-E711-9469-141877639F59.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/386EAD0B-877B-E711-870A-008CFA1982C0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/58CFA18F-DA79-E711-8A1D-0CC47A7EED28.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/6C9DCB2D-DB79-E711-B178-001E675A690A.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/647A4A51-DC79-E711-A88C-002590D0AFD0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/58A37592-DA79-E711-A83B-002481CFE888.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/76B238B9-1979-E711-A8AB-002481D20912.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/6EECBD09-D079-E711-9090-484D7E8DF092.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/0202028A-DA79-E711-8209-0023AEEEB6CD.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/988B19A1-1E79-E711-B958-3417EBE47FE5.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/44FCB6C0-DA79-E711-88E0-0025907B4EEE.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/5C6A83B2-1979-E711-8595-A0369FC5E6FC.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/52CB708E-DA79-E711-A8BA-008CFA1C907C.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/E294C966-BF78-E711-8380-782BCB20EDD0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/E2566C6B-BF78-E711-BC57-C45444922BB0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/EC3E7C6E-BF78-E711-8FD6-7CD30AB0527A.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/BADE406E-BF78-E711-86EE-008CFA56D770.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/5C706575-BF78-E711-A451-B083FECFD4F0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/6893BA69-BF78-E711-9267-28924A3504DA.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/64835A1E-C078-E711-96EF-90B11CBCFF41.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/9E4D9977-BF78-E711-BBA1-002590E7DEBE.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/CCA1143E-BF78-E711-B261-20CF300E9EC6.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/DEBA706B-BF78-E711-BBE4-44A842CFD667.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/F8E94066-BF78-E711-9C78-0025905C3E66.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/7A31C76B-BF78-E711-8BFE-0025905A60C6.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/CC4B516B-BF78-E711-BC1D-0025905B85EE.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/E804199A-1B79-E711-9516-7CD30AC036FE.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/7E3F988B-1B79-E711-AF4E-B083FED1321B.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/609F204E-1B79-E711-A669-D4AE52E7F60F.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/4661B692-1B79-E711-AF11-001E6779276A.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/14F56289-1B79-E711-B33F-549F35AD8B7B.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/3EA1A048-1B79-E711-871D-24BE05BD4F81.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/783B0696-1B79-E711-A950-10983627C3CE.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/E0C3988B-1B79-E711-9FED-F832E4CC4E51.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/F8D0A08B-1B79-E711-B5FB-7CD30ACE1750.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/667E6E05-1D79-E711-A696-C81F66B78DC0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/D6EFA48A-1B79-E711-9A5F-0CC47A5FC61D.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/74BF0D96-1B79-E711-AE84-0CC47A4D76A2.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/16E1BC96-1B79-E711-994E-0CC47A7C3428.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/C62F7756-1B79-E711-81F0-0CC47AA989CA.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/3290554C-1B79-E711-9DFF-008CFA0B19E0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/56DEE47B-2A7A-E711-B9C0-0CC47A13CB18.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/64C76040-2F7A-E711-964F-BCAEC509720C.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/5AE80025-2A7A-E711-AA0C-0CC47A0AD6FE.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/84254579-2A7A-E711-A468-008CFA197E58.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/E860E773-2A7A-E711-AB09-24BE05C48831.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/EC8C837A-2A7A-E711-B889-B083FED3F4E2.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/249A6A3A-2A7A-E711-9DDC-44A842CFC9E6.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/761D0237-EE79-E711-8302-001E0BED05D8.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/10EFC96C-0D79-E711-8AF3-0CC47A4D763C.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/EA19D580-A279-E711-B3C3-0CC47A4D76AC.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/824A2D83-A279-E711-BB63-0025905B8572.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/C81A2E59-7E79-E711-90D2-0CC47A1DF7F2.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/786EE500-4979-E711-900F-A0369F7FCBA0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/028A6FFA-3379-E711-BDBA-14DDA9D4F168.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/743D9305-4979-E711-80B2-1866DA879EDE.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/B069C4BF-5979-E711-889C-A4BADB1E74F7.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/6E352813-3779-E711-BABA-6CC2173CAAE0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/0CE317E4-9379-E711-92D7-0242AC130002.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/DE3025D1-3379-E711-8906-A0369F8362E6.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/D0286C16-3B79-E711-B996-0025905C53D0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/16DEDD4B-3E79-E711-955C-0242AC1C0503.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/E88D0642-3E79-E711-9C0C-0CC47A4C8EB0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/24BCAF4C-3E79-E711-A050-0CC47A4D76C0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M300_CUETP8M1_Lam34TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/280D25B5-1079-E711-97E0-0CC47A7C3428.root
+Done with all events
+closed the file
+high pt sign flip wrong counter: 2
+high pt sign flip right counter: 26682
+Percentage Wrong: 7.49513e-05
+Percentage Right: 0.999925
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/5434E589-1E79-E711-A341-0025905C2C86.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/C279A39D-F779-E711-805B-0025905C3D96.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/A49748D6-BA79-E711-872A-B499BAAC0658.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/8058A70E-637A-E711-8759-0CC47A4C8EB6.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/34586F0B-637A-E711-8D08-0CC47A7C3610.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/CAD9702F-4079-E711-B28F-0CC47A4C8F10.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/5CA47156-B679-E711-88B2-48FD8EE739D1.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/42EF24EE-527A-E711-A29B-0CC47A0AD6FE.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/DECA395E-837A-E711-8613-7CD30AD09316.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/9E020469-577A-E711-B862-0CC47A537688.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/7AA9BB65-527A-E711-9860-0CC47A6C1866.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/D6AA4004-1479-E711-952B-C4346BC8F6D0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/E026C0AD-AF79-E711-9072-7CD30AC030F8.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/2CD7BAD1-9979-E711-A96D-7CD30ABD2EEA.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/1A9BD3EE-C579-E711-976B-002590200988.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/D2B8DEF3-397A-E711-B487-0CC47A5FBE35.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/7835F929-2279-E711-8E09-0242AC110002.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/10752896-FE79-E711-9DF6-0242AC110002.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/0EC8B5E5-F379-E711-B525-24BE05CE3E61.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/EA55B800-F479-E711-A509-0025905C2D9A.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/E2D9DC0A-F479-E711-8484-0242AC1C0504.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/360F2AE9-F379-E711-8076-B083FED426E4.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/327DDD35-EE79-E711-93EB-2C768AAF879E.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/14648226-F479-E711-A53D-002590200AE4.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/ACFEC90B-F479-E711-A357-0025905A606A.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/4EBBDA7C-CD79-E711-AABB-0025905A611E.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/A4316D7D-CD79-E711-9159-0025905A60AA.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/3A10BFB1-CD79-E711-ABE4-0242AC130002.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/A688E6AF-CD79-E711-91A2-A4BF01010C66.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/8036E1C3-CD79-E711-8F45-0025904886E6.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/36B4458B-CD79-E711-A9C7-7CD30AC0311A.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/543E61C7-CD79-E711-A807-0CC47AA53D8A.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/425D4FC2-CD79-E711-86B4-0019B9CB01A5.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/023D45BE-CD79-E711-8689-008CFA165F48.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVConLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/FA67B566-CE79-E711-8714-24BE05C48831.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/10EEB9F9-177A-E711-AC8A-141877641875.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/D0E80AF8-177A-E711-BE19-002590E7E010.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/EEB6D3F2-177A-E711-A919-549F35AF44C9.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/56B0D1EA-1179-E711-9609-0022195E678D.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/0A53838B-177A-E711-820B-008CFAF28F22.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/78BB8214-187A-E711-9D6A-0CC47A7034D2.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/384DDFBF-B77B-E711-AAF2-549F35AC7E3C.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/96704EF6-B87B-E711-A71C-F02FA768CCE6.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/18B75F08-1A7A-E711-8BDE-0242AC110007.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/9EBD7A7A-197A-E711-9BC5-B8CA3A70A520.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/36E48CF1-177A-E711-8905-6CC2173C9150.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/C656D824-197A-E711-ADC4-5C260AFFFB57.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/110000/161D8728-197A-E711-92EA-24B6FDFFBC27.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/08678ADF-4B79-E711-BFB1-0017A4770C60.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/EAFFD834-5A79-E711-8D94-008CFAF554CA.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/4E60223A-8D79-E711-82BE-842B2B7609C0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/E8C416AF-7A79-E711-9A24-14187763B750.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/D61FF1EB-8D79-E711-9626-0242AC130002.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/1E865FBE-4979-E711-84B9-00259073E364.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/00A31CB2-B279-E711-88D1-001E67397CB0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/AAC187EA-9B79-E711-98FC-7CD30AD09BB6.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/6C057567-7C79-E711-B295-E0071B6CAD00.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/DC272E19-1679-E711-AC27-20CF3027A58B.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/AC1D2961-9E79-E711-ABA8-002590E7E050.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/F29B551A-E079-E711-8364-0025905A60B6.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/58C0E919-E079-E711-9977-0CC47A4C8E8A.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/8AE443D0-F679-E711-855A-0242AC110002.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/5E69115F-6A79-E711-BA4A-001E0BED1522.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/4E95EB16-E979-E711-A264-1866DAED2780.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/32E451CA-F679-E711-A586-A0369F836280.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/AC6B7A08-5879-E711-BCAD-3417EBE2EC95.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/42A51A24-4F79-E711-A192-008CFA0A5914.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/CE45E704-5279-E711-BBA9-0CC47AC08C34.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/BC4E6DFC-1979-E711-9734-A0369FC5FBA4.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/FEA66D5E-0979-E711-BC5E-141877636851.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/22C613FB-1979-E711-B8DF-14187763663C.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/CEFC9608-1A79-E711-A240-20CF300E9ED0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/165D8C01-1A79-E711-98C8-1866DA890574.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/70EDBD08-1A79-E711-A277-E4115BB4C4BC.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/489CF1B7-1979-E711-BF8C-008CFA165F5C.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/BE8BEF03-1A79-E711-8D57-7CD30AC0301A.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/940D5BCD-1979-E711-8E47-001E67E6F8B4.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/F6C208FE-1979-E711-9C27-7CD30ACE1750.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/3C905903-1A79-E711-B582-0CC47A5FA3BD.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/1A1EA5BA-1979-E711-8EB2-90B11C27F383.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/2A436CE1-1979-E711-A9D8-48FD8E282483.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/3C15AF00-1A79-E711-8A7A-002590DE6E86.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/6ECC780C-1A79-E711-A84B-0CC47A1E0DC2.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam16TeVDesLR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/8CFDDAD3-1979-E711-A440-0242AC1C0503.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/00455A49-4B79-E711-A450-E0071B695B81.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/A6C14DC9-5079-E711-AD5C-0CC47AD99112.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/6678E268-5079-E711-80E1-008CFA111220.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/E4386A61-4B79-E711-A049-0242AC1C0503.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/CA7FE350-BF79-E711-9C65-00266CFFBED8.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/F8365C5A-0D79-E711-B7D6-549F35AC7E22.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/92DF2CEB-9079-E711-A02C-001EC9ADFCF7.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/C46F924E-BF79-E711-9A43-48FD8E282477.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/1C45107B-AB79-E711-BE18-0CC47A4C8F1C.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/14BD44F4-8D79-E711-99F7-0CC47A4D75EE.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/78D63BE6-A979-E711-8A46-008CFAFBE5E0.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/C4645AF0-5179-E711-A4B4-0025905C54F4.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/602BCFCE-5079-E711-BE20-FA163EA3E716.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/02CF343F-6C79-E711-962C-FA163E1DC6BD.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam22TeVConRR_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/60132CD8-4879-E711-9D83-0242AC130002.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam22TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/FAA91468-C779-E711-A179-A0369F8363F2.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam22TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/BED1EFC9-1779-E711-A587-0025904CDDFA.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam22TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/2E4F547F-5679-E711-8BBC-0242AC1C050E.root
+Done with all events
+closed the file
+
+ Now Reading file:
+/store/mc/RunIISummer16MiniAODv2/CITo2E_M800_CUETP8M1_Lam22TeVConLL_13TeV_Pythia8_Corrected-v4/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/50000/6CC11669-C779-E711-9BE9-0CC47A4C8E96.root
