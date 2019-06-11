@@ -81,11 +81,17 @@ Histograms::Histograms()
 
   histos["RecohistCollinsSoper"] = new TH1D("RecohistCollinsSoper", "RecoCollinsSoperAngle", 50,-1.0,1.0);
   histos["RecohistIncorrectCollinsSoper"] = new TH1D("RecohistIncorrectCollinsSoper", "RecoIncorrectCollinsSoperAngle", 50,-1.0,1.0);
+  histos["DeltaCosThetaOppositeSign"] =new TH1D("DeltaCosThetaOppositeSign", "DeltaCosThetaOppositeSign", 50,-2.0,2.0);
   //histos["RecohistDifferenceAngle"] = new TH1D("histDifferenceAngle", "RecoDifferenceCollinsSoperAngle", 50,0.0,1.0);
   //histos["RecohistRandomCollinsSoper"] = new TH1D("histRandomCollinsSoper", "RecoRandomCollinsSoperAngle", 50,-1.0,1.0);
   //histos["REcohistHighPtCollinsSoper"] = new TH1D("histHighPtCollinsSoper", "RecoHighPtCollinsSoperAngle", 50,-1.0,1.0);
-  histos["GenRecoDifferenceSignFlipsRandom"] = new TH1D("GenRecoDifferenceSignFlipsRandom", "GenRecoDifferenceSignFlipsRandom", 50,0,2);
-  histos["GenRecoDifferenceSignFlipsHighPt"] = new TH1D("GenRecoDifferenceSignFlipsHighPt", "GenRecoDifferenceSignFlipsHighPt", 50,0,2);
+  histos["DeltaCosThetaSignFlipsRandom"] = new TH1D("DeltaCosThetaSignFlipsRandom", "DeltaCosThetaSignFlipsRandom", 50,-2.0,2.0);
+  histos["DeltaCosThetaSignFlipsHighPt"] = new TH1D("DeltaCosThetaSignFlipsHighPt", "DeltaCosThetaSignFlipsHighPt", 50,-2.0,2.0);
+  histos["DeltaCosThetaSignFlipsLowEta"] = new TH1D("DeltaCosThetaSignFlipsLowEta", "DeltaCosThetaSignFlipsLowEta", 50,-2.0,2.0);
+
+  histos["CorrectRandom"] = new TH1I("CorrectRandom", "CorrectRandom", 2, 0, 2);
+  histos["CorrectHighPt"] = new TH1I("CorrectHighPt", "CorrectHighPt", 2, 0, 2);
+  histos["CorrectLowEta"] = new TH1I("CorrectLowEta", "CorrectLowEta", 2, 0, 2);
 
   histos["RecoSignFlipsPt"] = new TH1D("RecoSignFlipsPt", "RecoSignFlipsPt", 50,0,500);
   histos["RecoSignFlipsPhi"] = new TH1D("RecoSignFlipsPhi", "RecoSignFlipsPhi", 100,-3.5,3.5);
@@ -93,10 +99,6 @@ Histograms::Histograms()
   histos["RecoPt"] = new TH1D("RecoPt", "RecoPt", 50,0,500);
   histos["RecoPhi"] = new TH1D("RecoPhi", "RecoPhi", 100,-3.5,3.5);
   histos["RecoEta"] = new TH1D("RecoEta", "RecoEta", 100,-3.15,3.15);
-  histos["RecoCorrectSignPt"] = new TH1D("RecoCorrectSignPt", "RecoCorrectSignPt", 50,0,500);
-  histos["RecoCorrectSignEta"] = new TH1D("RecoCorrectSignEta", "RecoCorrectSignEta", 100,-3.15,3.15);
-  histos["RecoWrongSignPt"] = new TH1D("RecoWrongSignPt", "RecoWrongSignPt", 50,0,500);
-  histos["RecoWrongSignEta"] = new TH1D("RecoWrongSignEta", "RecoWrongSignEta", 100,-3.15,3.15);
 
   histos["RecohistInvariantMass"] = new TH1D("RhistInvariantMass","Mass Dist",scalingbinnum,scalingdmin,scalingdmax); 
   histos["RecohistNewMassScaleUp"] = new TH1D("RhistNewMassScaleUp", "histNewMassScaleUp", scalingbinnum, scalingdmin, scalingdmax); 
@@ -172,17 +174,21 @@ double Histograms::findDeltaPhi(double recoPhi, double genPhi) const
   const double pi = 3.1415926535897932384;
   double actualPhiDif = recoPhi-genPhi;
   double phiDif = fabs(actualPhiDif);
+  //  std::cout << "recoPhi " << recoPhi << " genPhi " << genPhi << " phiDif before " << phiDif;
   if(phiDif>pi)
     {
       phiDif = (2*pi)-phiDif;
     }
+  //  std::cout << " phiDif after " << phiDif << '\n';
   return phiDif; 
 }
 
 double Histograms::findDeltaR(double recoEta, double genEta, double recoPhi, double genPhi, double phiDif) const
 {  
+  //  std::cout << "Phi dif: " << phiDif;
   double etaDif = recoEta-genEta; 
   double deltaR = sqrt((etaDif*etaDif)+(phiDif*phiDif));
+  //  std::cout << " recoEta " << recoEta << " genEta " << genEta << " etaDif " << etaDif << " deltaR " << deltaR << '\n';
   return deltaR; 
 }
 
@@ -357,10 +363,38 @@ std::vector<Histograms::matchedList> Histograms::matchParticles(std::vector<cons
   //keeps track of when the best particles are assigned 
   int bestGenIndex = 0;
   int bestIndex = 0;
+
+//  {
+//    double bestPt = 0;
+//    const reco::RecoCandidate* recomatch = nullptr;
+//    for (auto reco : matching)
+//      {
+//	if (reco && reco->pt() > bestPt)
+//	  {
+//	    bestPt = reco->pt();
+//	    recomatch = reco;
+//	  }
+//	  }
+//    
+//    if (recomatch)
+//      {
+//	for (auto gen : matchingGen)
+//	  {
+//	    if (gen && gen->charge() == -1)
+//	      {
+//		double phiDif = findDeltaPhi(recomatch->phi(), gen->phi());
+//		std::cout << "Delta R: " << findDeltaR(recomatch->eta(), gen->eta(), recomatch->phi(), gen->phi(), phiDif) << std::endl;
+//	      }
+//	  }
+//      }
+//    
+//  }
+//
   
   //loops through while there are still at least one gen and reco particle left that have not been matched and set to null
   while (!checkIsNull(matchingGen) && !checkIsNull(matching))
     {
+
       //goes through all possible particle combinations of gen and reco particles
       for(auto& genParticle : matchingGen)
 	{
@@ -390,15 +424,21 @@ std::vector<Histograms::matchedList> Histograms::matchParticles(std::vector<cons
 		    }
 		  ++matchingCounter;
 		}
+
 	    }
 	  ++matchingGenCounter;
 	}
+      //      std::cout << "Gen particle Pt " << pairDataList.bestGenParticle->pt() << " phi " << pairDataList.bestGenParticle->phi() << " eta " << pairDataList.bestGenParticle->eta() << " matched Pt " << pairDataList.bestRecoParticle->pt() << " phi " << pairDataList.bestRecoParticle->phi() << " eta " << pairDataList.bestRecoParticle->eta() << " with deltaR " << deltaRMin << '\n';
+
       //makes an additional delta R cut and fills matching best pairs, resets values for the next loop
       //checks if the final (and best) delta R value for the matches passes the cut
-      if(deltaR<0.1)
+      if(deltaRMin<0.1)
 	{
 	  //keeps track of that match by adding it to the vector that will be returned
 	  matchingBestPairs.push_back(pairDataList);
+
+	  //	  std::cout << "Matching pt: " << pairDataList.bestGenParticle->pt() << " Gen charge " << pairDataList.bestGenParticle->charge() <<  << '\n';
+
 	  ++matchingBestPairsCounter;
 	  double genParticlePt = pairDataList.bestGenParticle->pt();
 	  double indexDecimal = genParticlePt/50-1;
@@ -419,6 +459,12 @@ std::vector<Histograms::matchedList> Histograms::matchParticles(std::vector<cons
       deltaRMin = 100;
       deltaR = 100;
     }
+
+//  if (matchingBestPairs.size() == 2)
+//    {
+//      std::cout << "Highest pt: " << (matchingBestPairs[0].bestRecoParticle->pt() > matchingBestPairs[1].bestRecoParticle->pt() ? 0 : 1) << " Negative charge: " << (matchingBestPairs[0].bestGenParticle->charge() == -1 ? 0 : 1) << '\n';
+//    }
+
   return matchingBestPairs;
 }
 
@@ -682,29 +728,75 @@ void Histograms::fillHistograms (int loopRange,int minCut,int interval,bool isPt
 	{
 	  break;
 	}
-    }
+    
   //std::cout<<pcount<<std::endl;
   //double angle = 0;
 
 
   
+
+      bool differentSigns = collinsSoper.bestRecoParticle->charge() != antiCollinsSoper.bestRecoParticle->charge();
+      //bool differentSignsBase = matchingPairs[0].bestRecoParticle->charge() != matchingPairs[1].bestRecoParticle->charge();
+      //std::cout<<"differentSigns is "<<differentSigns<<"  differentSignsBase is "<<differentSignsBase<<std::endl;
+      if (differentSigns)
+	{
+	  //std::cout<<"particle: "<<collinsSoper.bestRecoParticle->et()<<"   "<<collinsSoper.bestRecoParticle->eta()<<"   "<<collinsSoper.bestRecoParticle->phi()<<"   "<<collinsSoper.bestRecoParticle->energy()<<"      "<<collinsSoper.bestRecoParticle->charge()<<std::endl;
+	  //std::cout<<"anti particle: "<<antiCollinsSoper.bestRecoParticle->et()<<"   "<<antiCollinsSoper.bestRecoParticle->eta()<<"   "<<antiCollinsSoper.bestRecoParticle->phi()<<"   "<<antiCollinsSoper.bestRecoParticle->energy()<<"      "<<antiCollinsSoper.bestRecoParticle->charge()<<std::endl;
+	  //std::cout<<"invariant mass: "<<findInvariantMass(collinsSoper.bestRecoParticle, antiCollinsSoper.bestRecoParticle)<<std::endl;
+	  double recoAngle = cosThetaCollinsSoper(collinsSoper.bestRecoParticle, antiCollinsSoper.bestRecoParticle, findInvariantMass(collinsSoper.bestRecoParticle, antiCollinsSoper.bestRecoParticle));
+	  double incorrectAngle = cosThetaCollinsSoper(antiCollinsSoper.bestRecoParticle, collinsSoper.bestRecoParticle, findInvariantMass(collinsSoper.bestRecoParticle, antiCollinsSoper.bestRecoParticle));
+	  matchedList genNegative;
+	  matchedList genPositive;
+	  if (matchingPairs[0].bestGenParticle->charge()<0)
+	    {
+	      genNegative = matchingPairs[0];
+	      genPositive = matchingPairs[1];
+	    }
+	  else
+	    {
+	      genNegative = matchingPairs[1];
+	      genPositive = matchingPairs[0];
+	    }
+	  
+	  
+	  double genAngle = cosThetaCollinsSoper(genNegative.bestGenParticle, genPositive.bestGenParticle, findInvariantMass(genNegative.bestGenParticle, genPositive.bestGenParticle));
+	  //std::cout<<__LINE__<<"angle is "<<angle<<std::endl;
+	  //std::cout<<"****************************"<<std::endl;
+	  //	std::cout<<angle<<std::endl;
+	  histos["RecohistCollinsSoper"]->Fill(recoAngle);
+	  histos["RecohistIncorrectCollinsSoper"]->Fill(incorrectAngle);
+	  histos["DeltaCosThetaOppositeSign"]->Fill(recoAngle-genAngle);
+	  //std::cout << __LINE__ << std::endl;
+	}
+    }
+  
+  if (isPt)
+    return;
   if (matchingPairs.size()==2)
     {
-
+      
       //subset of same sign reco particles (sign flips)
       if (matchingPairs[0].bestRecoParticle->charge()==matchingPairs[1].bestRecoParticle->charge())
 	{
+	  //	  if (matchingPairs[0].bestRecoParticle->pt() > matchingPairs[1].bestRecoParticle->pt() && matchingPairs[0].bestGenParticle->pt() < matchingPairs[1].bestGenParticle->pt())
+	  //	    	    std::cout << "Particle 0: Pt " << matchingPairs[0].bestRecoParticle->pt() << " True Pt " << matchingPairs[0].bestGenParticle->pt() << " Eta " << matchingPairs[0].bestRecoParticle->eta() << " True eta " << matchingPairs[0].bestGenParticle->eta() << " charge " << matchingPairs[0].bestRecoParticle->charge() << " true charge " << matchingPairs[0].bestGenParticle->charge() << "\nParticle 1: Pt " << matchingPairs[1].bestRecoParticle->pt() << " True Pt " << matchingPairs[1].bestGenParticle->pt() << " Eta " << matchingPairs[1].bestRecoParticle->eta() << " True eta " << matchingPairs[1].bestGenParticle->eta() << " charge " << matchingPairs[1].bestRecoParticle->charge() << " true charge " << matchingPairs[1].bestGenParticle->charge() << '\n';
+
 	  double recoRandomAngle;
 	  int random = std::rand()%2;
 	  //randomly choose "first" particle for the Collins Soper Angle calculation
+	  
+	 
 	  if (random==0)
 	    {
 	      recoRandomAngle = cosThetaCollinsSoper(matchingPairs[0].bestRecoParticle, matchingPairs[1].bestRecoParticle, findInvariantMass(matchingPairs[0].bestRecoParticle, matchingPairs[1].bestRecoParticle));
+	      histos["CorrectRandom"]->Fill(matchingPairs[0].bestGenParticle->charge() == -1 ? 1 : 0);
 	    }
 	  else
 	    {
 	      recoRandomAngle = cosThetaCollinsSoper(matchingPairs[1].bestRecoParticle, matchingPairs[0].bestRecoParticle, findInvariantMass(matchingPairs[1].bestRecoParticle, matchingPairs[0].bestRecoParticle));
+	      histos["CorrectRandom"]->Fill(matchingPairs[1].bestGenParticle->charge() == -1 ? 1 : 0);
 	    }
+	  
 	  
 	  //choose the high pT as the first particle for Collins Soper
 	  matchedList highPtPair;
@@ -719,10 +811,44 @@ void Histograms::fillHistograms (int loopRange,int minCut,int interval,bool isPt
 	      highPtPair = matchingPairs[1];
 	      lowPtPair = matchingPairs[0];
 	    }
+	  histos["CorrectHighPt"]->Fill(highPtPair.bestGenParticle->charge() == -1 ? 1 : 0);
+
 	  double recoHighPtAngle = cosThetaCollinsSoper(highPtPair.bestRecoParticle, lowPtPair.bestRecoParticle, findInvariantMass(highPtPair.bestRecoParticle, lowPtPair.bestRecoParticle));
+	  matchedList etaPair1;
+	  matchedList etaPair2;
+	  if (std::abs(matchingPairs[0].bestRecoParticle->eta())<std::abs(matchingPairs[1].bestRecoParticle->eta()))
+	    {
+	      if (matchingPairs[0].bestRecoParticle->charge()<0)
+		{
+		  etaPair1 = matchingPairs[0];
+		  etaPair2 = matchingPairs[1];
+		}
+	      else
+		{
+		  etaPair1 = matchingPairs[1];
+		  etaPair2 = matchingPairs[0];
+		}
+	    }
+	  else
+	    {
+	      if (matchingPairs[0].bestRecoParticle->charge()<0)
+		{
+		  etaPair1 = matchingPairs[1];
+		  etaPair2 = matchingPairs[0];
+		}
+	      else
+		{
+		  etaPair1 = matchingPairs[0];
+		  etaPair2 = matchingPairs[1];
+		}
+	      //	      etaPair1 = matchingPairs[1];
+	      //etaPair2 = matchingPairs[0];
+	    }
+	  histos["CorrectLowEta"]->Fill(etaPair1.bestGenParticle->charge() == -1 ? 1 : 0);
+	  double recoLowEtaAngle = cosThetaCollinsSoper(etaPair1.bestRecoParticle, etaPair2.bestRecoParticle, findInvariantMass(etaPair1.bestRecoParticle, etaPair2.bestRecoParticle));
+	  
 
 	  //keeps track of how many times the higher pT is actually the electron
-	  //std::cout<<lowPtPair.bestGenParticle->charge()<<std::endl;
 	  if (highPtPair.bestGenParticle->charge()<0)
 	    {
 	      highPtSignFlipRightCounter +=1;
@@ -745,42 +871,24 @@ void Histograms::fillHistograms (int loopRange,int minCut,int interval,bool isPt
 	      genNegative = matchingPairs[1];
 	      genPositive = matchingPairs[0];
 	    }
-	  
-	  //plots eta and pt for the correct and wrong sign particles
-	  for (unsigned int i = 0; i < matchingPairs.size(); i++)
-	    {
-	      if(matchingPairs[i].bestRecoParticle->charge()==matchingPairs[i].bestGenParticle->charge())
-		{
-		  histos["RecoCorrectSignPt"]->Fill(matchingPairs[i].bestRecoParticle->pt());
-		  histos["RecoCorrectSignEta"]->Fill(matchingPairs[i].bestRecoParticle->eta());
-		}
-	      else
-	        {
-                  histos["RecoWrongSignPt"]->Fill(matchingPairs[i].bestRecoParticle->pt());
-		  histos["RecoWrongSignEta"]->Fill(matchingPairs[i].bestRecoParticle->eta());
-		}
-	     }
 
 
 	  double genAngle = cosThetaCollinsSoper(genNegative.bestGenParticle, genPositive.bestGenParticle, findInvariantMass(genNegative.bestGenParticle, genPositive.bestGenParticle));
+	  
 	  //std::cout<<"genAngle is "<<genAngle<<std::endl;
 	  //std::cout<<"recoRandomAngle is "<<recoRandomAngle<<std::endl;
 	  //std::cout<<"recoHighPtAngle is "<<recoHighPtAngle<<std::endl;
-	  histos["GenRecoDifferenceSignFlipsRandom"]->Fill(fabs(genAngle-recoRandomAngle));
-	  histos["GenRecoDifferenceSignFlipsHighPt"]->Fill(fabs(genAngle-recoHighPtAngle));
-
+	  histos["DeltaCosThetaSignFlipsRandom"]->Fill(recoRandomAngle-genAngle);
+	  histos["DeltaCosThetaSignFlipsHighPt"]->Fill(recoHighPtAngle-genAngle);
+	  histos["DeltaCosThetaSignFlipsLowEta"]->Fill(recoLowEtaAngle-genAngle);
 
 	  //adds to histograms that keeps track of pT, phi, and eta for sign flips vs regular
 	  for (unsigned int i = 0; i<matchingPairs.size(); i++)
 	    {
 	  
-	      // std::cout<<"Reco charge: " << matchingPairs[i].bestRecoParticle->charge() << " Gen charge: " << matchingPairs[i].bestGenParticle->charge() <<std::endl;
-	      if (matchingPairs[i].bestRecoParticle->charge()!=matchingPairs[i].bestGenParticle->charge())
-		{
-		  histos["RecoSignFlipsPt"]->Fill(matchingPairs[i].bestRecoParticle->pt());
-		  histos["RecoSignFlipsPhi"]->Fill(matchingPairs[i].bestRecoParticle->phi());
-		  histos["RecoSignFlipsEta"]->Fill(matchingPairs[i].bestRecoParticle->eta());
-		}
+	      histos["RecoSignFlipsPt"]->Fill(matchingPairs[i].bestRecoParticle->pt());
+	      histos["RecoSignFlipsPhi"]->Fill(matchingPairs[i].bestRecoParticle->phi());
+	      histos["RecoSignFlipsEta"]->Fill(matchingPairs[i].bestRecoParticle->eta());
 	  
 	    }
 	}
@@ -796,28 +904,9 @@ void Histograms::fillHistograms (int loopRange,int minCut,int interval,bool isPt
 	      histos["RecoEta"]->Fill(matchingPairs[i].bestRecoParticle->eta());
 	  
 	    }
-
-	}
-
-      bool differentSigns = collinsSoper.bestRecoParticle->charge() != antiCollinsSoper.bestRecoParticle->charge();
-      //bool differentSignsBase = matchingPairs[0].bestRecoParticle->charge() != matchingPairs[1].bestRecoParticle->charge();
-      //std::cout<<"differentSigns is "<<differentSigns<<"  differentSignsBase is "<<differentSignsBase<<std::endl;
-      if (differentSigns)
-	{
-	  //std::cout<<"particle: "<<collinsSoper.bestRecoParticle->et()<<"   "<<collinsSoper.bestRecoParticle->eta()<<"   "<<collinsSoper.bestRecoParticle->phi()<<"   "<<collinsSoper.bestRecoParticle->energy()<<"      "<<collinsSoper.bestRecoParticle->charge()<<std::endl;
-	  //std::cout<<"anti particle: "<<antiCollinsSoper.bestRecoParticle->et()<<"   "<<antiCollinsSoper.bestRecoParticle->eta()<<"   "<<antiCollinsSoper.bestRecoParticle->phi()<<"   "<<antiCollinsSoper.bestRecoParticle->energy()<<"      "<<antiCollinsSoper.bestRecoParticle->charge()<<std::endl;
-	  //std::cout<<"invariant mass: "<<findInvariantMass(collinsSoper.bestRecoParticle, antiCollinsSoper.bestRecoParticle)<<std::endl;
-	  double angle = cosThetaCollinsSoper(collinsSoper.bestRecoParticle, antiCollinsSoper.bestRecoParticle, findInvariantMass(collinsSoper.bestRecoParticle, antiCollinsSoper.bestRecoParticle));
-	  double incorrectAngle = cosThetaCollinsSoper(antiCollinsSoper.bestRecoParticle, collinsSoper.bestRecoParticle, findInvariantMass(collinsSoper.bestRecoParticle, antiCollinsSoper.bestRecoParticle));
-	  //std::cout<<__LINE__<<"angle is "<<angle<<std::endl;
-	  //std::cout<<"****************************"<<std::endl;
-	  //	std::cout<<angle<<std::endl;
-	  histos["RecohistCollinsSoper"]->Fill(angle);
-	  histos["RecohistIncorrectCollinsSoper"]->Fill(incorrectAngle);
-	  //std::cout << __LINE__ << std::endl;
+	  
 	}
     }
-
 }
 
 /*void FillMatchingCollinsSoper(std::vector<Histogram::matchedList> matchingPairs, std::string particle1)
@@ -851,6 +940,15 @@ void Histograms::fillHistograms (int loopRange,int minCut,int interval,bool isPt
 
 void Histograms::checkMatchingHistograms(const std::vector<const reco::GenParticle*>& matchingGen, const std::vector<const reco::RecoCandidate*>& matchingReco, std::string particle1)
 {
+//  if (matchingReco.size() == 2 && matchingReco[0]->charge() == matchingReco[1]->charge())
+//    {
+//      if ((matchingReco[0]->pt() > matchingReco[1]->pt() && matchingReco[0]->charge() != -1) || (matchingReco[0]->pt() < matchingReco[1]->pt() && matchingReco[1]->charge() != -1))
+//	{
+//	std::cout << "Highest pT is not negative\n";
+//	std::cout << "Values: particle 0 Pt " << matchingReco[0]->pt() << " charge " << matchingReco[0]->charge() << " particle 1 Pt " << matchingReco[1]->pt() << " charge " << matchingReco[1]->charge() << '\n';
+//	}
+//    }
+
   if(matchingReco.size()!=0 && matchingGen.size()!=0)
     {
       auto matchingPairs = matchParticles(matchingReco,matchingGen);
@@ -867,6 +965,8 @@ void Histograms::checkMatchingHistograms(const std::vector<const reco::GenPartic
 	  etaBarrelCutMin=etaBarrelCutElec;
 	  etaBarrelCutMax=etaEndcapCutElec;
 	}
+
+      //      std::cout << "Matched pairs size: " << matchingPairs.size() << std::endl;
 
       //fill the interval histograms for pt and mass
       fillHistograms(ptLoopRange,minPtCut,ptInterval,true, matchingPairs,dictErrorHist,etaBarrelCutMin,etaBarrelCutMax);
@@ -1185,6 +1285,18 @@ void Histograms::process(const edm::EventBase& event, std::string particle1, int
 	    }
 	}
     } 
+
+//  if (matchingReco.size() == 2 && matchingGen.size() == 2 && matchingReco[0]->charge() == matchingReco[1]->charge())
+//    {
+//      auto biggestPt = matchingReco[0]->pt() > matchingReco[1]->pt() ? matchingReco[0] : matchingReco[1];
+//      auto negative = matchingGen[0]->charge() == -1 ? matchingGen[0] : matchingGen[1];
+//      double phiDif = findDeltaPhi(biggestPt->phi(), negative->phi()); 
+//      double deltaR = findDeltaR(biggestPt->eta(), negative->eta(), biggestPt->phi(), negative->phi(), phiDif); 
+//      std::cout << "DeltaR: " << deltaR << '\n';
+//    }
+//  else
+//    return;
+
   checkMatchingHistograms(matchingGen, matchingReco, particle1);    
 }
 	
@@ -1282,27 +1394,29 @@ void Histograms::writeHistograms(std::string particle1)
   relDiffHists[1][1]->SetLineColor(2);  
   scaleLegend2->Draw(); 
   c2->Update(); 
-  histos["histCollinsSoper"]->Write();
-  histos["histIncorrectCollinsSoper"]->Write();
-  histos["histDifferenceAngle"]->Write();
-  histos["histRandomCollinsSoper"]->Write();
-  histos["histHighPtCollinsSoper"]->Write();
-  histos["RecohistCollinsSoper"]->Write();
-  histos["RecohistIncorrectCollinsSoper"]->Write();
-  histos["GenRecoDifferenceSignFlipsRandom"]->Write();
-  histos["GenRecoDifferenceSignFlipsHighPt"]->Write();
-
-  histos["RecoSignFlipsPt"]->Write();
-  histos["RecoSignFlipsPhi"]->Write();
-  histos["RecoSignFlipsEta"]->Write();
-  histos["RecoPt"]->Write();
-  histos["RecoPhi"]->Write();
-  histos["RecoEta"]->Write();
-  histos["RecoCorrectSignPt"]->Write();
-  histos["RecoCorrectSignEta"]->Write();
-  histos["RecoWrongSignPt"]->Write();
-  histos["RecoWrongSignEta"]->Write();
-
+//  histos["histCollinsSoper"]->Write();
+//  histos["histIncorrectCollinsSoper"]->Write();
+//  histos["histDifferenceAngle"]->Write();
+//  histos["histRandomCollinsSoper"]->Write();
+//  histos["histHighPtCollinsSoper"]->Write();
+//  histos["RecohistCollinsSoper"]->Write();
+//  histos["DeltaCosThetaOppositeSign"]->Write();
+//  histos["RecohistIncorrectCollinsSoper"]->Write();
+//  histos["DeltaCosThetaSignFlipsRandom"]->Write();
+//  histos["DeltaCosThetaSignFlipsHighPt"]->Write();
+//  histos["DeltaCosThetaSignFlipsLowEta"]->Write();
+//
+//  histos["RecoSignFlipsPt"]->Write();
+//  histos["RecoSignFlipsPhi"]->Write();
+//  histos["RecoSignFlipsEta"]->Write();
+//  histos["RecoPt"]->Write();
+//  histos["RecoPhi"]->Write();
+//  histos["RecoEta"]->Write();
+  for (auto& hist : histos)
+    {
+      hist.second->SetDrawOption("hist");
+      hist.second->Write();
+    }
 
 
   //write hists for muons
@@ -1405,18 +1519,18 @@ int main(int argc, char* argv[])
   std::vector<std::string> mass300;
   std::vector<std::string> mass800;
   std::vector<std::string> mass1300;
-  std::vector<std::string> lambdas = {/*"Lam10",*/"Lam16"/*,"Lam22","Lam34"*/};
+  std::vector<std::string> lambdas = {/*"Lam10",*/"Lam16","Lam22","Lam34"};
   std::vector<std::string> interference = {"Con","Des"};
-  std::vector<std::string> helicity = {"RR"/*,"LL","LR"*/};
+  std::vector<std::string> helicity = {"RR","LL","LR"};
   for(unsigned int l = 0; l < lambdas.size(); ++l)
     {
       for(unsigned int i = 0; i < interference.size(); ++i)
 	{
 	  for(unsigned int h = 0; h < helicity.size(); ++h)
 	    {
-	      std::string fileName300="CITo2EM300_"+lambdas[l]+interference[i]+helicity[h]+".txt";
-	      std::string fileName800="CITo2EM800_"+lambdas[l]+interference[i]+helicity[h]+".txt";
-	      std::string fileName1300="CITo2EM1300_"+lambdas[l]+interference[i]+helicity[h]+".txt";
+	      std::string fileName300="textfiles/CITo2EM300_"+lambdas[l]+interference[i]+helicity[h]+".txt";
+	      std::string fileName800="textfiles/CITo2EM800_"+lambdas[l]+interference[i]+helicity[h]+".txt";
+	      std::string fileName1300="textfiles/CITo2EM1300_"+lambdas[l]+interference[i]+helicity[h]+".txt";
 	      mass300.push_back(fileName300);
 	      mass800.push_back(fileName800);
 	      mass1300.push_back(fileName1300);
@@ -1426,7 +1540,7 @@ int main(int argc, char* argv[])
     }
   //std::vector<std::string> mass2000 = {"CITo2EM2000_Lam16ConRR.txt"}; //electron text files
   //std::cout<<"First entry in 800 mass" << mass800[0]<<std::endl;
-  std::vector<std::vector<std::string>> filenames = {mass300,mass800/*,mass1300*/};
+  std::vector<std::vector<std::string>> filenames = {mass300,mass800,mass1300};
   //std::cout<<filenames[1][0]<<std::endl;
   gSystem->Load("libFWCoreFWLite");
   FWLiteEnabler::enable();
@@ -1456,8 +1570,8 @@ int main(int argc, char* argv[])
 	  
 	  ifs.open(filenames[i][j], std::ifstream::in);
 	  if (!ifs)
-	    throw std::runtime_error("File not found!");
-	  std::cout<<"opened file"<<std::endl;
+	    throw std::runtime_error("File " + filenames[i][j] + " not found!");
+	  myfile<<"opened file"<<std::endl;
 	  while (ifs)
 	    {
 	      while(std::getline(ifs, w_content))
@@ -1504,8 +1618,8 @@ int main(int argc, char* argv[])
       for(unsigned int c=0; c<array[index].size(); ++c)
 	{
 	  auto& x = array[index][c];
-	  std::cout<<"\n Now Reading file:"<<std::endl; 
-	  std::cout<<x<<std::endl; 
+	  myfile<<"\n Now Reading file:"<<std::endl; 
+	  myfile<<x<<std::endl; 
 	  std::string fileStr= eossrc+x;
 	  TFile* file = TFile::Open(fileStr.c_str(), "READ");
 	  if (!file)
@@ -1513,10 +1627,7 @@ int main(int argc, char* argv[])
 	      continue;
 	    } 
 	  fwlite::Event ev(file);
-	  if (c==array[index].size()-1)
-	    {
-	      std::cerr << "Events: " << ev.size() << std::endl;
-	    }
+	  std::cerr << "Events: " << ev.size() << std::endl;
 	  for(ev.toBegin(); !ev.atEnd(); ++ev, ++ievt)
 	    {
 	      edm::EventBase const & event = ev;
@@ -1524,17 +1635,12 @@ int main(int argc, char* argv[])
 		std::cout<<" processing event: "<<ievt<<std::endl; 
 	      histograms.process(event, particle1, index); 
 	    }
-	  if (c==array[index].size()-1)
-	    {
-	      std::cout<<"Done with all events"<<std::endl;
-	    }
+	  myfile<<"Done with all events"<<std::endl;
+	  
 	  file->Close();
-	  if (c==array[index].size()-1)
-	    {
-	      std::cout<<"closed the file"<<std::endl;
-	    }
+	  myfile<<"closed the file"<<std::endl;
 	  delete file;
-	} 
+	}
       //}
       myfile<<"high pt sign flip wrong counter: "<<highPtSignFlipWrongCounter<<std::endl;
       myfile<<"high pt sign flip right counter: "<<highPtSignFlipRightCounter<<std::endl;
