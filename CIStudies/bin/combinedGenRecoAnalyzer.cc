@@ -1556,6 +1556,30 @@ std::vector<std::vector<std::string>> inputFiles(std::string txtFile, std::strin
     }
 
   auto mass = fillVector(inputFiles);
+
+  if (year[0] == "2017")
+    {
+      for (auto& massStr : mass)
+	{
+	  if (massStr == "300")
+	    {
+	      massStr = "300to800";
+	    }
+	  else if (massStr == "800")
+	    {
+	      massStr = "800to1300";
+	    }
+	  else if (massStr == "1300")
+	    {
+	      massStr = "1300to2000";
+	    }
+	  else if (massStr == "2000")
+	    {
+	      massStr = "2000toInf";
+	    }
+	}
+    }
+
   auto lambda = fillVector(inputFiles);
   auto interference = fillVector(inputFiles);
   auto helicity = fillVector(inputFiles);
