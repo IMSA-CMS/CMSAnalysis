@@ -1550,7 +1550,7 @@ std::vector<std::vector<std::string>> inputFiles(std::string txtFile, std::strin
     {
       particle1 = "electron";
     }
-  else if (lepton[0] == "M")
+  else if (lepton[0] == "Mu")
     {
       particle1 = "muon";
     }
