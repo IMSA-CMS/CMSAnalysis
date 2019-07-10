@@ -1,0 +1,6 @@
+Year:	2016
+Lepton:	E
+Mass:	800
+Lambda:	22
+Inter:	Con
+Helic:	LL
