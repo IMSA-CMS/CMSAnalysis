@@ -19,6 +19,7 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "PhysicsTools/FWLite/interface/TFileService.h"
+#include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
 
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
@@ -38,6 +39,7 @@
 #include <TLorentzVector.h>
 double highPtSignFlipWrongCounter= 0;
 double highPtSignFlipRightCounter= 0;
+std::string pileupLevel;
 Histograms::Histograms()
 {
   TH1::SetDefaultSumw2();
@@ -63,6 +65,7 @@ Histograms::Histograms()
   histos["histPlusGenPt"] = new TH1D("histPlusGenPt","Pt",100,0.,500.);
   histos["histPlusGenEta"] = new TH1D("histPlusGenEta", "Eta",50,-3.5,3.5);
   histos["histPlusGenPhi"] = new TH1D("histPlusGentPhi", "Phi", 50,-3.15,3.15);
+  histos["ResolutionPileup"] = new TH1D("ResolutionPileup", "ResolutionPileup", 100, 0, 100);
 
   histos["histInvariantMass"] = new TH1D("histInvariantMass","Mass Dist",300,0.,3000);
   histos["GentemphistInvariantMass"] = new TH1D("GtemphistInvariantMass","Mass Dist",scalingbinnum,scalingdmin,scalingdmax); 
@@ -270,6 +273,8 @@ bool Histograms::isParticle(const reco::GenParticle& p) const
     }
   return isParticle;
 }
+
+
 
 void Histograms::fillScaledGenHists(double GptUp, double GptDown, double GantiPtUp, double GantiPtDown, const reco::GenParticle* particle, const reco::GenParticle* antiparticle, int index)
 { 
@@ -1084,11 +1089,60 @@ void Histograms::process(const edm::EventBase& event, std::string particle1, int
   edm::Handle<std::vector<pat::Electron>> electrons;
   event.getByLabel(std::string("slimmedElectrons"), electrons);
   edm::Handle<std::vector<reco::GenParticle>> genParticles;
-  event.getByLabel(std::string("prunedGenParticles"), genParticles);		  
+  event.getByLabel(std::string("prunedGenParticles"), genParticles);
+  edm::Handle<std::vector<PileupSummaryInfo>> pileup;
+  event.getByLabel(std::string("slimmedAddPileupInfo"), pileup);		  
   std::vector<const reco::GenParticle*> matchingGen;
   std::vector<const reco::RecoCandidate*> matchingReco;
   std::vector<const reco::GenParticle*> mus;
-  std::vector<const reco::GenParticle*> antimus; 
+  std::vector<const reco::GenParticle*> antimus;
+ 
+  //splits up pileup values based on input from parser
+  int pileupVal = (*pileup)[0].getPU_NumInteractions();
+  if(pileupLevel == "low")
+    {
+      if(pileupVal < 25)
+	{
+	 
+	}
+      else
+	{
+	  return;
+	}
+    }
+  else if(pileupLevel == "high")
+    {
+      if(pileupVal >= 25)
+	{
+	
+	}
+      else
+	{
+	  return;
+	}
+    }
+  else if(pileupLevel == "lower")
+    {
+      if(pileupVal <= 15)
+	{
+	
+	}
+      else
+	{
+	  return;
+	}
+    }
+  else if(pileupLevel == "higher")
+    {
+      if(pileupVal >= 35)
+	{
+	
+	}
+      else
+	{
+	  return;
+	}
+    }
   double GantiPtUp = 0; 
   double GptUp = 0; 
   double GantiPtDown = 0;
@@ -1284,7 +1338,11 @@ void Histograms::process(const edm::EventBase& event, std::string particle1, int
 	      matchingReco.push_back(&p); 
 	    }
 	}
-    } 
+    }
+  
+  histos["ResolutionPileup"]->Fill((*pileup)[0].getPU_NumInteractions());
+  
+
 
 //  if (matchingReco.size() == 2 && matchingGen.size() == 2 && matchingReco[0]->charge() == matchingReco[1]->charge())
 //    {
@@ -1296,6 +1354,8 @@ void Histograms::process(const edm::EventBase& event, std::string particle1, int
 //    }
 //  else
 //    return;
+
+
 
   checkMatchingHistograms(matchingGen, matchingReco, particle1);    
 }
@@ -1412,6 +1472,7 @@ void Histograms::writeHistograms(std::string particle1)
 //  histos["RecoPt"]->Write();
 //  histos["RecoPhi"]->Write();
 //  histos["RecoEta"]->Write();
+  histos["ResolutionPileup"]->Write();
   for (auto& hist : histos)
     {
       hist.second->SetDrawOption("hist");
@@ -1512,47 +1573,156 @@ void Histograms::writeMigrationHists()
   histos["acceptedRecoBinsHist"]->Divide(histos["totalGenSimBinsHist"]);
   histos["acceptedRecoBinsHist"]->Write();
 }
-int main(int argc, char* argv[])
-{ 
-  //std::vector<std::string> filenames = {"CITo2MuM300_Lam16ConLL.txt","CITo2MuM800_Lam16ConLL.txt"/*, "CITo2MuM1300_Lam16ConLL.txt", "CITo2MuM2000_Lam16ConLL.txt"*/};  //muon text files
-  std::ofstream myfile ("output.txt");
-  std::vector<std::string> mass300;
-  std::vector<std::string> mass800;
-  std::vector<std::string> mass1300;
-  std::vector<std::string> lambdas = {/*"Lam10",*/"Lam16","Lam22","Lam34"};
-  std::vector<std::string> interference = {"Con","Des"};
-  std::vector<std::string> helicity = {"RR","LL","LR"};
-  for(unsigned int l = 0; l < lambdas.size(); ++l)
+
+
+std::vector<std::string> fillVector(std::ifstream& txtFile)
+{
+  std::string line;
+  std::getline(txtFile,line);
+  
+  std::istringstream stream(line);
+
+  std::vector<std::string> category;
+
+  int counter = 0; 
+  while (stream)
     {
-      for(unsigned int i = 0; i < interference.size(); ++i)
+      std::string word;
+      stream >> word;
+      
+      if (counter > 0)
 	{
-	  for(unsigned int h = 0; h < helicity.size(); ++h)
+	  category.push_back(word);
+	}
+      ++counter;
+    }
+
+  return category;
+}
+
+std::vector<std::vector<std::string>> inputFiles(std::string txtFile, std::string& particle1)
+{
+  std::ifstream inputFiles;
+  inputFiles.open(txtFile);
+
+  auto year = fillVector(inputFiles);
+  auto lepton = fillVector(inputFiles);
+
+  if (lepton[0] == "E")
+    {
+      particle1 = "electron";
+    }
+  else if (lepton[0] == "Mu")
+    {
+      particle1 = "muon";
+    }
+
+  auto mass = fillVector(inputFiles);
+
+  if (year[0] == "2017")
+    {
+      for (auto& massStr : mass)
+	{
+	  if (massStr == "300")
 	    {
-	      std::string fileName300="textfiles/CITo2EM300_"+lambdas[l]+interference[i]+helicity[h]+".txt";
-	      std::string fileName800="textfiles/CITo2EM800_"+lambdas[l]+interference[i]+helicity[h]+".txt";
-	      std::string fileName1300="textfiles/CITo2EM1300_"+lambdas[l]+interference[i]+helicity[h]+".txt";
-	      mass300.push_back(fileName300);
-	      mass800.push_back(fileName800);
-	      mass1300.push_back(fileName1300);
+	      massStr = "300to800";
+	    }
+	  else if (massStr == "800")
+	    {
+	      massStr = "800to1300";
+	    }
+	  else if (massStr == "1300")
+	    {
+	      massStr = "1300to2000";
+	    }
+	  else if (massStr == "2000")
+	    {
+	      massStr = "2000toInf";
+	    }
+	}
+    }
+
+  auto lambda = fillVector(inputFiles);
+  auto interference = fillVector(inputFiles);
+  auto helicity = fillVector(inputFiles);
+
+  std::vector<std::vector<std::string>> massCuts;
+
+  for (auto& massStr : mass)
+    {
+      std::vector<std::string> sameMass;
+      
+      for (auto& yearStr : year)
+	{
+	  for (auto& leptonStr : lepton)
+	    {
+	      for (auto& lambdaStr : lambda)
+		{
+		  for (auto& interferenceStr : interference)
+		    {
+		      for (auto& helicityStr : helicity)
+			{
+			  if (massStr.size() > 0 and yearStr.size() > 0 and leptonStr.size() > 0 and lambdaStr.size() and interferenceStr.size() > 0 and helicityStr.size() > 0)
+			    {
+			      std::string file = "textfiles/" + yearStr + "/CITo2" + leptonStr + "M" + massStr + "_" + "Lam" +  lambdaStr + interferenceStr + helicityStr +  ".txt";
+			  
+			      sameMass.push_back(file);
+			    }
+			}
+		    }
+		}
 	    }
 	}
 
+      massCuts.push_back(sameMass);
     }
+
+  return massCuts;
+}
+
+int main(int argc, char* argv[])
+{ 
+  //std::vector<std::string> filenames = {"CITo2MuM300_Lam16ConLL.txt","CITo2MuM800_Lam16ConLL.txt"/*, "CITo2MuM1300_Lam16ConLL.txt", "CITo2MuM2000_Lam16ConLL.txt"*/};  //muon text files
+  std::ofstream myfile ("output.txt"); //delete this later and corrsponding code
+
+  // std::vector<std::string> mass300;
+  // std::vector<std::string> mass800;
+  // std::vector<std::string> mass1300;
+  // std::vector<std::string> lambdas = {/*"Lam10",*/"Lam16","Lam22","Lam34"};
+  // std::vector<std::string> interference = {"Con","Des"};
+  // std::vector<std::string> helicity = {"RR","LL","LR"};
+
+  std::string particle1;
+  auto filenames = inputFiles("textfiles/pickFiles.txt", particle1);
+
   //std::vector<std::string> mass2000 = {"CITo2EM2000_Lam16ConRR.txt"}; //electron text files
   //std::cout<<"First entry in 800 mass" << mass800[0]<<std::endl;
-  std::vector<std::vector<std::string>> filenames = {mass300,mass800,mass1300};
+  //std::vector<std::vector<std::string>> filenames = {mass300,mass800,mass1300};
   //std::cout<<filenames[1][0]<<std::endl;
   gSystem->Load("libFWCoreFWLite");
   FWLiteEnabler::enable();
   gSystem->Load("libDataFormatsFWLite");
   optutl::CommandLineParser parser ("Analyze FWLite Histograms");
-  parser.addOption("p", optutl::CommandLineParser::kString, "Particle", "");
+  // parser.addOption("p", optutl::CommandLineParser::kString, "Particle", "");
+  //parser.parseArguments (argc, argv);
+  // std::string particle1=parser.stringValue("p");
+   parser.addOption("pileup", optutl::CommandLineParser::kString, "PileupLevel", "");
+  // parser.parseArguments (argc, argv);
+  std::string pileupLev=parser.stringValue("pileup");
+  pileupLevel = pileupLev;
+  parser.addOption("output", optutl::CommandLineParser::kString, "Particle", "");
   parser.parseArguments (argc, argv);
-  std::string particle1=parser.stringValue("p");
+  std::string outputFile =parser.stringValue("output");
+
+  std::cout << "This is the name of outputFile " << outputFile << std::endl;
+
   unsigned int outputEvery_ = parser.integerValue("outputEvery");
   int ievt=0;
   std::string w_content="";
-  
+ 
+ 
+
+
 
   std::vector<std::vector<std::string>> array(filenames.size());
   
@@ -1601,7 +1771,14 @@ int main(int argc, char* argv[])
   gSystem->Load("libDataFormatsFWLite.so");
   FWLiteEnabler::enable();
   //Create output ROOT file
-  TFile *of = new TFile("genOutput.root", "recreate");
+  std::string outputFileName = outputFile + ".root";
+
+  if (outputFile.empty())
+    {
+      outputFileName = "genOutput.root";
+    }
+
+  TFile *of = new TFile(outputFileName.c_str(), "recreate");
   Histograms histograms;
   histograms.fillMaps();
   //std::cout<<__LINE__<<std::endl;
