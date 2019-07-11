@@ -1574,12 +1574,13 @@ void Histograms::writeMigrationHists()
   histos["acceptedRecoBinsHist"]->Write();
 }
 
-
+//fills each of the inner vectors with the info in their respective lines in "pickFiles.txt"
 std::vector<std::string> fillVector(std::ifstream& txtFile)
 {
   std::string line;
   std::getline(txtFile,line);
   
+  //seperates each line by whitespace (tabs)
   std::istringstream stream(line);
 
   std::vector<std::string> category;
@@ -1590,7 +1591,8 @@ std::vector<std::string> fillVector(std::ifstream& txtFile)
       std::string word;
       stream >> word;
       
-      if (counter > 0)
+      //occasionally added empty strings to the vector which caused a runtime error
+      if (counter > 0 and word.size() > 0)
 	{
 	  category.push_back(word);
 	}
@@ -1602,12 +1604,15 @@ std::vector<std::string> fillVector(std::ifstream& txtFile)
 
 std::vector<std::vector<std::string>> inputFiles(std::string txtFile, std::string& particle1)
 {
+  //inputFiles looks at "pickFiles.txt" to determine which data (lepton type, mass cuts, etc.)  is inputed to make the histograms
   std::ifstream inputFiles;
   inputFiles.open(txtFile);
 
+  //each vector contains the options selected in "pickFiles.txt"
   auto year = fillVector(inputFiles);
   auto lepton = fillVector(inputFiles);
 
+  //particle1 is set based on the lepton chosen in "pickFiles,txt"
   if (lepton[0] == "E")
     {
       particle1 = "electron";
@@ -1616,9 +1621,14 @@ std::vector<std::vector<std::string>> inputFiles(std::string txtFile, std::strin
     {
       particle1 = "muon";
     }
+  else 
+    {
+      throw std::runtime_error("Particle type " + lepton[0] + " not valid! In  \"pickFiles.txt\", you shoukd include either E or Mu to note the particle type.");
+    }
 
   auto mass = fillVector(inputFiles);
 
+  //the files in the 2017 directory have a different naming convention so I correct for it
   if (year[0] == "2017")
     {
       for (auto& massStr : mass)
@@ -1639,6 +1649,10 @@ std::vector<std::vector<std::string>> inputFiles(std::string txtFile, std::strin
 	    {
 	      massStr = "2000toInf";
 	    }
+	  else if (massStr != "")
+	    {
+	      throw std::runtime_error("Mass input " + massStr + " not valid! Your options include 300, 800, 1300, and 2000.");
+	    }
 	}
     }
 
@@ -1648,6 +1662,7 @@ std::vector<std::vector<std::string>> inputFiles(std::string txtFile, std::strin
 
   std::vector<std::vector<std::string>> massCuts;
 
+  //adds all of the files to a larger vector that is seperated by mass cuts
   for (auto& massStr : mass)
     {
       std::vector<std::string> sameMass;
@@ -1662,12 +1677,10 @@ std::vector<std::vector<std::string>> inputFiles(std::string txtFile, std::strin
 		    {
 		      for (auto& helicityStr : helicity)
 			{
-			  if (massStr.size() > 0 and yearStr.size() > 0 and leptonStr.size() > 0 and lambdaStr.size() and interferenceStr.size() > 0 and helicityStr.size() > 0)
-			    {
+			      //based on the options selected, it adds the respective files following the standard naming system
 			      std::string file = "textfiles/" + yearStr + "/CITo2" + leptonStr + "M" + massStr + "_" + "Lam" +  lambdaStr + interferenceStr + helicityStr +  ".txt";
 			  
 			      sameMass.push_back(file);
-			    }
 			}
 		    }
 		}
@@ -1740,7 +1753,7 @@ int main(int argc, char* argv[])
 	  
 	  ifs.open(filenames[i][j], std::ifstream::in);
 	  if (!ifs)
-	    throw std::runtime_error("File " + filenames[i][j] + " not found!");
+	    throw std::runtime_error("File " + filenames[i][j] + " not found! Refer to the file, \"README.txt\", in the CIAnalysis folder to make sure the inputs added into \"pickFiles.txt\" are valid.");
 	  myfile<<"opened file"<<std::endl;
 	  while (ifs)
 	    {
@@ -1829,6 +1842,8 @@ int main(int argc, char* argv[])
       histograms.findScales(index); 
     }
   of->cd(); 
+
+  //fills the root files with the histogram data
   histograms.fillTGraphs();   
   histograms.findError(); 
   histograms.writeHistograms(particle1); 
