@@ -8,7 +8,12 @@
 <use   name="PhysicsTools/FWLite"/>
 <use   name="PhysicsTools/Utilities"/>
 <use   name="PhysicsTools/SelectorUtils"/>
+<use   name="SimDataFormats/GeneratorProducts"/>
+<use   name="pythia8"/>
 <environment>
   <bin   file="combinedGenRecoAnalyzer.cc"></bin>
-  <bin   file="combinedGenRecoPhotonAnalyzer.cc"></bin>
+  <bin   file="extractLRweights.cc"></bin>
+  <bin   file="runAnalyzer.cc">
+<use name="CIAnalysis/CIStudies"/>
+</bin>
 </environment>
