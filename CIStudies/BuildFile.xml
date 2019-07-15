@@ -1,0 +1,6 @@
+<use name="root"/>
+<use   name="FWCore/FWLite"/>
+<use   name="DataFormats/FWLite"/>
+<export>
+   <lib name="1"/>
+</export>
