@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "ProductionModule.h"
+#include "ProductionModule.hh"
 
 namespace edm
 {
@@ -18,7 +18,7 @@ namespace reco
 class GenSimIdentificationModule : public ProductionModule
 {
 public:
-  virtual void process(const edm::EventBase& event) override;
+  virtual bool process(const edm::EventBase& event) override;
   bool isParticle(const reco::GenParticle& p) const;
 
   const std::vector<const reco::GenParticle*>& getGenParticles() const
