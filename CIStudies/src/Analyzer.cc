@@ -10,6 +10,7 @@
 #include "CIAnalysis/CIStudies/interface/ProductionModule.hh"
 #include "FWCore/Framework/interface/Event.h"
 #include "DataFormats/FWLite/interface/Event.h"
+#include "CIAnalysis/CIStudies/interface/Module.hh"
 
 void Analyzer::run(const std::string& configFile, const std::string& outputFile, int outputEvery)
 {
@@ -120,11 +121,11 @@ std::vector<std::vector<std::string>> Analyzer::inputFiles(const std::string& tx
   //particle1 is set based on the lepton chosen in "pickFiles,txt"
   if (lepton[0] == "E")
     {
-      particle1 = "electron";
+      Module::setValue("isElectron", 1);
     }
   else if (lepton[0] == "Mu")
     {
-      particle1 = "muon";
+      Module::setValue("isElectron", 0);
     }
   else 
     {

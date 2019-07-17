@@ -7,6 +7,11 @@
 #include "FWCore/FWLite/interface/FWLiteEnabler.h"
 #include "PhysicsTools/FWLite/interface/CommandLineParser.h"
 
+#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
+#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
+#include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
+#include "CIAnalysis/CIStudies/interface/CommonValuesModule.hh"
+#include "CIAnalysis/CIStudies/interface/AcceptanceXMigrationModule.hh"
 
 int main(int argc, char** argv)
 {
@@ -32,8 +37,20 @@ int main(int argc, char** argv)
   unsigned outputEvery = parser.integerValue("outputEvery");
 
   Analyzer analyzer;
+  
+  GenSimIdentificationModule genSimMod;
+  RecoIdentificationModule recoMod;
+  MatchingModule matchMod(genSimMod, recoMod);
+  CommonValuesModule commonMod(matchMod);
+  AcceptanceXMigrationModule axmMod(commonMod);
 
-  analyzer.run("textfiles/pickfiles.txt", outputFile, outputEvery);
+  analyzer.addProductionModule(&genSimMod);
+  analyzer.addProductionModule(&recoMod);
+  analyzer.addProductionModule(&matchMod);
+  analyzer.addProductionModule(&commonMod);
+  analyzer.addAnalysisModule(&axmMod);
+
+  analyzer.run("textfiles/pickFiles.txt", outputFile, outputEvery);
   
   return 0;
 }
