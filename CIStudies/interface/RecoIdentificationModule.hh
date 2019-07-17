@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "ProductionModule.h"
+#include "ProductionModule.hh"
 
 namespace edm
 {
@@ -18,15 +18,16 @@ namespace reco
 class RecoIdentificationModule : public ProductionModule
 {
 public:
-  virtual void process(const edm::EventBase& event) override;
+  RecoIdentificationModule(double iptCut = 50);
+
+  virtual bool process(const edm::EventBase& event) override;
 
   const std::vector<const reco::RecoCandidate*>& getRecoCandidates() const
   {return recoCandidates;}
 
 private:
   std::vector<const reco::RecoCandidate*> recoCandidates;
-  double ptCut;
-  bool isElectronIfTrue;
+  const double ptCut;
 };
 
 #endif
