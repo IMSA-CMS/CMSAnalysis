@@ -10,8 +10,7 @@
 #include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
-#include "CIAnalysis/CIStudies/interface/CommonValuesModule.hh"
-#include "CIAnalysis/CIStudies/interface/AcceptanceXMigrationModule.hh"
+#include "CIAnalysis/CIStudies/interface/MigrationModule.hh"
 
 int main(int argc, char** argv)
 {
@@ -41,13 +40,11 @@ int main(int argc, char** argv)
   GenSimIdentificationModule genSimMod;
   RecoIdentificationModule recoMod;
   MatchingModule matchMod(genSimMod, recoMod);
-  CommonValuesModule commonMod(matchMod);
-  AcceptanceXMigrationModule axmMod(commonMod);
+  MigrationModule axmMod(matchMod);
 
   analyzer.addProductionModule(&genSimMod);
   analyzer.addProductionModule(&recoMod);
   analyzer.addProductionModule(&matchMod);
-  analyzer.addProductionModule(&commonMod);
   analyzer.addAnalysisModule(&axmMod);
 
   analyzer.run("textfiles/pickFiles.txt", outputFile, outputEvery);

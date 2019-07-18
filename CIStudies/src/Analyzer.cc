@@ -53,10 +53,19 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 	      if (outputEvery != 0 && ievt > 0 && ievt % outputEvery == 0) 
 		std::cout << "Processing event: " << ievt << std::endl; 
 
+	      bool continueProcessing = true;
 	      for (auto module : productionModules)
 		{
-		  module->process(event);
+		  if (!module->process(event))
+		    {
+		      continueProcessing = false;
+		      break;
+		    }
 		}
+
+	      if (!continueProcessing)
+		continue;
+
 	      for (auto module : analysisModules)
 		{
 		  module->process(event);
@@ -129,7 +138,7 @@ std::vector<std::vector<std::string>> Analyzer::inputFiles(const std::string& tx
     }
   else 
     {
-      throw std::runtime_error("Particle type " + lepton[0] + " not valid! In  \"pickFiles.txt\", you shoukd include either E or Mu to note the particle type.");
+      throw std::runtime_error("Particle type " + lepton[0] + " not valid! In  \"pickFiles.txt\", you should include either E or Mu to note the particle type.");
     }
 
   auto mass = parseLine(inputFiles);

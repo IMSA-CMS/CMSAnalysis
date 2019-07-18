@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "ProductionModule.hh"
+#include "ParticleCollection.hh"
 
 namespace edm
 {
@@ -19,13 +20,14 @@ class GenSimIdentificationModule : public ProductionModule
 {
 public:
   virtual bool process(const edm::EventBase& event) override;
-  bool isParticle(const reco::GenParticle& p) const;
 
-  const std::vector<const reco::GenParticle*>& getGenParticles() const
+  const ParticleCollection& getGenParticles() const
   {return genParticles;}
 
 private:
-  std::vector<const reco::GenParticle*> genParticles;
+  bool isParticle(const reco::GenParticle& p) const;
+
+  ParticleCollection genParticles;
   double ptCut;
   bool isElectronIfTrue;
 };
