@@ -11,8 +11,7 @@ RecoIdentificationModule::RecoIdentificationModule(double iptCut) :
 
 bool RecoIdentificationModule::process(const edm::EventBase& event)
 {
-
-  std::vector<const reco::RecoCandidate*> recoCandidates;
+  recoCandidates.clear();
 
   if (getValue("isElectron") == 1)
     {
@@ -23,7 +22,7 @@ bool RecoIdentificationModule::process(const edm::EventBase& event)
 	{       
 	  if (p.pt() > ptCut)
 	    {
-	      recoCandidates.push_back(&p); 
+	      recoCandidates.addParticle(&p); 
 	    }
 	}
     }
@@ -37,7 +36,7 @@ bool RecoIdentificationModule::process(const edm::EventBase& event)
 	{       
 	  if (p.pt() > ptCut)
 	    {
-	      recoCandidates.push_back(&p); 
+	      recoCandidates.addParticle(&p); 
 	    }
 	}
     }

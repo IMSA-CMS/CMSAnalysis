@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "ProductionModule.hh"
+#include "ParticleCollection.hh"
 
 namespace edm
 {
@@ -22,11 +23,11 @@ public:
 
   virtual bool process(const edm::EventBase& event) override;
 
-  const std::vector<const reco::RecoCandidate*>& getRecoCandidates() const
+  const ParticleCollection& getRecoCandidates() const
   {return recoCandidates;}
 
 private:
-  std::vector<const reco::RecoCandidate*> recoCandidates;
+  ParticleCollection recoCandidates;
   const double ptCut;
 };
 

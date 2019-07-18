@@ -1,8 +1,8 @@
-#include "CIAnalysis/CIStudies/interface/AcceptanceXMigrationModule.hh"
-#include "CIAnalysis/CIStudies/interface/CommonValuesModule.hh"
+#include "CIAnalysis/CIStudies/interface/MigrationModule.hh"
+#include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 
-AcceptanceXMigrationModule::AcceptanceXMigrationModule(const CommonValuesModule& commonModule, int minMass, int maxMass, int massInterval) :
-  common(commonModule),
+MigrationModule::MigrationModule(const MatchingModule& matchingModule, int minMass, int maxMass, int massInterval) :
+  matching(matchingModule),
   minMassCut(minMass),
   maxMassCut(maxMass),
   interval(massInterval)
@@ -10,16 +10,24 @@ AcceptanceXMigrationModule::AcceptanceXMigrationModule(const CommonValuesModule&
 }
 
 
-bool AcceptanceXMigrationModule::process(const edm::EventBase& event)
+bool MigrationModule::process(const edm::EventBase& event)
 {
-  std::string massBin = pickMassBin(common.getInvariantMass().genSim);
-  fillHistogram("genSimHistBin" + massBin, common.getInvariantMass().genSim);
-  fillHistogram("recoHistBin" + massBin, common.getInvariantMass().reco);
+  auto bestPairs = matching.getMatchingBestPairs();
+
+  if (bestPairs.getSize() >= 2)
+    {
+      double genSimMass = bestPairs.getGenParticles().getInvariantMass();
+      double recoMass = bestPairs.getRecoParticles().getInvariantMass();
+
+      std::string massBin = pickMassBin(genSimMass);
+      fillHistogram("genSimHistBin" + massBin, genSimMass);
+      fillHistogram("recoHistBin" + massBin, recoMass);
+    }
   
   return true;
 }
 
-void AcceptanceXMigrationModule::createHistograms()
+void MigrationModule::createHistograms()
 {
   const int numberOfBins = (maxMassCut - minMassCut) / interval;
 
@@ -32,7 +40,7 @@ void AcceptanceXMigrationModule::createHistograms()
     }
 }
 
-std::string AcceptanceXMigrationModule::pickMassBin(double invariantMass)
+std::string MigrationModule::pickMassBin(double invariantMass)
 {
   int mass = static_cast<int>(invariantMass) / interval * interval; //mass is invariantMass floored to the highest multiple of interval
   if (mass < minMassCut)

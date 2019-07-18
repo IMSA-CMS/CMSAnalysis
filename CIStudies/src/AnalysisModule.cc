@@ -1,13 +1,15 @@
 #include "CIAnalysis/CIStudies/interface/AnalysisModule.hh"
 
+#include <stdexcept>
+
 #include "TH1.h"
 
 AnalysisModule::~AnalysisModule()
 {
-  for (auto& entry : histograms)
-    {
-      delete entry.second;
-    }
+//  for (auto& entry : histograms)
+//    {
+//      delete entry.second;
+//    }
 }
 
 void AnalysisModule::initialize()
@@ -31,5 +33,12 @@ void AnalysisModule::makeHistogram(const std::string& name, const std::string& t
 
 void AnalysisModule::fillHistogram(const std::string& name, double number)
 {
-  histograms[name]->Fill(number);
+  if (histograms.find(name) != histograms.end())
+    {
+      histograms[name]->Fill(number);
+    }
+  else
+    {
+      throw std::runtime_error("Histogram " + name + ", called in AnalysisModule::fillHistogram(), does not exist!");
+    }
 }
