@@ -13,6 +13,15 @@ AcceptanceModule::AcceptanceModule(const GenSimIdentificationModule& genSimModul
 {
 }
 
+
+void AcceptanceModule::initialize()
+{
+  Module::initialize();
+
+  makeHistogram("GenSimParticles", "GenSimParticles", interval, minMassCut, maxMassCut);
+  makeHistogram("RecoParticles", "RecoParticles", interval, minMassCut, maxMassCut);
+}
+
 bool AcceptanceModule::process(const edm::EventBase& event)
 {
   double genSimParticle = genSim.getGenParticles().getInvariantMass();
@@ -20,23 +29,17 @@ bool AcceptanceModule::process(const edm::EventBase& event)
   
   if (matching.getMatchingBestPairs().getSize() >= 2)
     {
-      fillHistogram("Acceptance", genSimParticle);
       fillHistogram("RecoParticles", genSimParticle);
     }
   
   return true;
 }
 
-void AcceptanceModule::writeAllHistograms()
+void AcceptanceModule::finalize()
 {
-  getHistogram("Acceptance")->Divide(getHistogram("GenSimParticles"));
+  auto acceptanceHist = dynamic_cast<TH1*>(getHistogram("RecoParticles")->Clone("Acceptance"));
+  acceptanceHist->Divide(getHistogram("GenSimParticles"));
+  addObject("Acceptance", acceptanceHist);
   
-  AnalysisModule::writeAllHistograms();
-}
-
-void AcceptanceModule::createHistograms()
-{
-  makeHistogram("Acceptance", "Acceptance", interval, minMassCut, maxMassCut);
-  makeHistogram("GenSimParticles", "GenSimParticles", interval, minMassCut, maxMassCut);
-  makeHistogram("RecoParticles", "RecoParticles", interval, minMassCut, maxMassCut);
+  AnalysisModule::finalize();
 }

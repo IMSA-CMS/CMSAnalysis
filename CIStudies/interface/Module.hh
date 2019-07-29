@@ -12,6 +12,11 @@ namespace edm
 class Module
 {
 public:
+  virtual ~Module() {}
+
+  virtual void initialize() {}
+  virtual void finalize() {}
+
   virtual bool process(const edm::EventBase& event) = 0;
   static void setValue(const std::string& type, double value)
   {parameters[type] = value;}

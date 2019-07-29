@@ -9,6 +9,20 @@ MigrationModule::MigrationModule(const MatchingModule& matchingModule, int minMa
 {
 }
 
+void MigrationModule::initialize()
+{
+  const int numberOfBins = (maxMassCut - minMassCut) / interval;
+
+
+  for(int i = 0; i < numberOfBins; ++i)
+    {
+      const std::string migrationStr = "Migration";
+      makeHistogram(("genSimHistBin" + std::to_string(i * interval + minMassCut)), migrationStr, interval, 
+		    ((i - 2) * interval + minMassCut), ((i + 3) * interval + minMassCut));
+      makeHistogram(("recoHistBin" + std::to_string(i * interval + minMassCut)), migrationStr, interval,
+		    ((i - 2) * interval + minMassCut), ((i + 3) * interval + minMassCut));
+    }
+}
 
 bool MigrationModule::process(const edm::EventBase& event)
 {
@@ -25,19 +39,6 @@ bool MigrationModule::process(const edm::EventBase& event)
     }
   
   return true;
-}
-
-void MigrationModule::createHistograms()
-{
-  const int numberOfBins = (maxMassCut - minMassCut) / interval;
-
-
-  for(int i = 0; i < numberOfBins; ++i)
-    {
-      const std::string migrationStr = "Migration";
-      makeHistogram(("genSimHistBin" + std::to_string(i * interval + minMassCut)), migrationStr, interval, ((i - 2) * interval + minMassCut), ((i + 3) * interval + minMassCut));
-      makeHistogram(("recoHistBin" + std::to_string(i * interval + minMassCut)), migrationStr, interval, ((i - 2) * interval + minMassCut), ((i + 3) * interval + minMassCut));
-    }
 }
 
 std::string MigrationModule::pickMassBin(double invariantMass)
