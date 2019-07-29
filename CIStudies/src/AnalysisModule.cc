@@ -4,38 +4,27 @@
 
 #include "TH1.h"
 
-AnalysisModule::~AnalysisModule()
+void AnalysisModule::finalize()
 {
-//  for (auto& entry : histograms)
-//    {
-//      delete entry.second;
-//    }
-}
-
-void AnalysisModule::initialize()
-{
-  createHistograms();
-}
-
-void AnalysisModule::writeAllHistograms()
-{
-  for (auto& entry : histograms)
+  for (auto& entry : objects)
     {
       entry.second->Write();
     }
+
+  Module::finalize();
 }
 
 void AnalysisModule::makeHistogram(const std::string& name, const std::string& title, int nbins, int min, int max)
 {
   auto newHist = new TH1F(name.c_str(), title.c_str(), nbins, min, max);
-  histograms.insert({name, newHist});
+  objects.insert({name, newHist});
 }
 
 void AnalysisModule::fillHistogram(const std::string& name, double number)
 {
-  if (histograms.find(name) != histograms.end())
+  if (objects.find(name) != objects.end())
     {
-      histograms[name]->Fill(number);
+      getHistogram(name)->Fill(number);
     }
   else
     {

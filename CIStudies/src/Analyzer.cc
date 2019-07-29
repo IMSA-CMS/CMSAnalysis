@@ -20,7 +20,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 
   TFile *of = new TFile(outputFile.c_str(), "recreate");
 
-  for (auto module : analysisModules)
+  for (auto module : getAllModules())
     {
       module->initialize();
     }
@@ -78,9 +78,9 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
     }
 
   of->cd();
-  for (auto module : analysisModules)
+  for (auto module : getAllModules())
     {
-      module->writeAllHistograms();
+      module->finalize();
     }
   of->Close();
 }
@@ -233,4 +233,18 @@ std::vector<std::vector<std::string>> Analyzer::getFiles(const std::vector<std::
 	}
     }
   return array;
+}
+
+std::vector<Module*> Analyzer::getAllModules()
+{
+  std::vector<Module*> modules;
+  for (auto mod : analysisModules)
+    {
+      modules.push_back(mod);
+    }
+  for (auto mod : productionModules)
+    {
+      modules.push_back(mod);
+    }
+  return modules;
 }

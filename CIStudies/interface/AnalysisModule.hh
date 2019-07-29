@@ -4,6 +4,8 @@
 #include <map>
 #include <string>
 
+#include "TH1.h"
+
 #include "Module.hh"
 
 class TH1;
@@ -11,22 +13,22 @@ class TH1;
 class AnalysisModule : public Module
 {
 public:
-  // The destructor deletes the histograms, so don't destroy the object until the histograms are written
-  virtual ~AnalysisModule();
-
-  virtual void initialize();
-
-  virtual void writeAllHistograms();
+  virtual void finalize();
   
 protected:
-  virtual void createHistograms() = 0;
-  void makeHistogram(const std::string& name, const std::string& title, int nbins, int min, int max);
-  TH1* getHistogram(const std::string& name) {return histograms.at(name);}
-  const TH1* getHistogram(const std::string& name) const {return histograms.at(name);}
+  void addObject(const std::string& name, TObject* obj) {objects.insert({name, obj});}
+  TObject* getObject(const std::string& name) {return objects.at(name);}
+  const TObject* getObject(const std::string& name) const {return objects.at(name);}
+
+  void makeHistogram(const std::string& name, const std::string& title, int nbins,
+		     int min, int max);
+  TH1* getHistogram(const std::string& name) {return dynamic_cast<TH1*>(getObject(name));}
+  const TH1* getHistogram(const std::string& name) const
+  {return dynamic_cast<const TH1*>(getObject(name));}
   void fillHistogram(const std::string& name, double number);
 
 private:
-  std::map<std::string, TH1*> histograms;
+  std::map<std::string, TObject*> objects;
 };
 
 #endif

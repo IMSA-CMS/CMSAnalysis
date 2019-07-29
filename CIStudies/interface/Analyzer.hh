@@ -5,8 +5,9 @@
 #include <string>
 #include <vector>
 
-class ProductionModule;
 class AnalysisModule;
+class Module;
+class ProductionModule;
 
 class Analyzer
 {
@@ -25,6 +26,7 @@ private:
   std::vector<std::string> parseLine(std::ifstream& txtFile);
   std::vector<std::vector<std::string>> inputFiles(const std::string& txtFile, std::string& particle1);
   std::vector<std::vector<std::string>> getFiles(const std::vector<std::vector<std::string>>& inputs);
+  std::vector<Module*> getAllModules();
 };
 
 #endif
