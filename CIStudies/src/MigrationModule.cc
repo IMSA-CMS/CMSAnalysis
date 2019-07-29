@@ -35,8 +35,8 @@ void MigrationModule::createHistograms()
   for(int i = 0; i < numberOfBins; ++i)
     {
       const std::string migrationStr = "Migration";
-      makeHistogram(("genSimHistBin" + std::to_string(i * interval + minMassCut)), migrationStr, interval, (i * 100 + minMassCut - 200), (i * 100 + minMassCut + 300));
-      makeHistogram(("recoHistBin" + std::to_string(i * interval + minMassCut)), migrationStr, interval, (i * 100 + minMassCut - 200), (i * 100 + minMassCut + 300));
+      makeHistogram(("genSimHistBin" + std::to_string(i * interval + minMassCut)), migrationStr, interval, ((i - 2) * interval + minMassCut), ((i + 3) * interval + minMassCut));
+      makeHistogram(("recoHistBin" + std::to_string(i * interval + minMassCut)), migrationStr, interval, ((i - 2) * interval + minMassCut), ((i + 3) * interval + minMassCut));
     }
 }
 
@@ -47,9 +47,9 @@ std::string MigrationModule::pickMassBin(double invariantMass)
     {
       mass = minMassCut;
     }
-  else if (mass > maxMassCut)
+  else if (mass > maxMassCut - interval)
     {
-      mass = maxMassCut;
+      mass = maxMassCut - interval;
     }
 
   return std::to_string(mass);
