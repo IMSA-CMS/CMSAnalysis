@@ -8,7 +8,7 @@ class MatchingModule;
 class MigrationModule: public AnalysisModule
 {
 public:
-  MigrationModule(const MatchingModule& matchingModule, int minMass = 300, int maxMass = 3100, int massInterval = 100);
+  MigrationModule(const MatchingModule& matchingModule, int minMass = 300, int maxMass = 3200, int massInterval = 100);
   virtual bool process(const edm::EventBase& event) override;
 protected:
   virtual void createHistograms() override;
