@@ -1,5 +1,7 @@
 #include "CIAnalysis/CIStudies/interface/ResolutionModule.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
+#include "CIAnalysis/CIStudies/interface/MatchingPairCollection.hh"
+
 
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 
@@ -7,25 +9,19 @@
 #include <vector>
 #include <TF1.h>
 
-ResolutionModule::ResolutionModule(const MatchingModule& matchingModule, int minPt, int maxPt, int pTInterval) :
+ResolutionModule::ResolutionModule(const MatchingModule& matchingModule, std::string bin, int min, int max, int intervalSize) :
   matching(matchingModule),
-  minPtCut(minPt),
-  maxPtCut(maxPt),
-  interval(pTInterval)
+  binType(bin),
+  minCut(min),
+  maxCut(max),
+  interval(intervalSize)
 {
 }
 
 bool ResolutionModule::process(const edm::EventBase& event)
 {
   auto bestPairs = matching.getMatchingBestPairs();
-
-  for (auto matchingPair : bestPairs.getPairs())
-    {
-      double genSimPt = matchingPair.getGenParticle()->pt();
-      std::string pTBin = pickPtBin(genSimPt);
-      fillHistogram("ResolutionHistBin" + pTBin, matchingPair.getPtError());
-    }
-
+  fillError(bestPairs);
   return true;
 }
 
@@ -39,34 +35,31 @@ void ResolutionModule::initialize()
       const std::string resolutionStr = "Resolution";
       
       const int histBins = 100;
-      
-      const double minPtError = -0.5;
-      const double maxPtError = 0.5;
 
-      makeHistogram(("ResolutionHistBin" + std::to_string(i * interval + minPtCut)), resolutionStr, histBins, minPtError, maxPtError);
+      makeHistogram((binType + "ResolutionHistBin" + std::to_string(i * interval + minCut)), resolutionStr, histBins, minError, maxError);
     }
 }
 
 void ResolutionModule::finalize()
 {
-  auto pTErrorMeanHist = makeTGraphErrors("pTErrorMeanHist", getNumberOfBins());
-  auto pTErrorStdDevHist = makeTGraphErrors("pTErrorStdDevHist", getNumberOfBins());
+  auto errorMeanHist = makeTGraphErrors(binType + "ErrorMeanHist", getNumberOfBins());
+  auto errorStdDevHist = makeTGraphErrors(binType + "ErrorStdDevHist", getNumberOfBins());
 
   const int xError = interval / 2;
 
   int index = 0;
-  int median = minPtCut + interval / 2;
+  int median = minCut + interval / 2;
 
-  for (int i = minPtCut; i < maxPtCut; i += interval)
+  for (int i = minCut; i < maxCut; i += interval)
     {
-      auto errorMean = getErrorValues(getHistogram("ResolutionHistBin" + std::to_string(i)), "mean");
-      auto errorStdDev = getErrorValues(getHistogram("ResolutionHistBin" + std::to_string(i)), "standard deviation");
+      auto errorMean = getErrorValues(getHistogram(binType + "ResolutionHistBin" + std::to_string(i)), "mean");
+      auto errorStdDev = getErrorValues(getHistogram(binType + "ResolutionHistBin" + std::to_string(i)), "standard deviation");
 
-      pTErrorMeanHist->SetPoint(index, median, errorMean.first);
-      pTErrorMeanHist->SetPointError(index, xError, errorMean.second);
+      errorMeanHist->SetPoint(index, median, errorMean.first);
+      errorMeanHist->SetPointError(index, xError, errorMean.second);
 
-      pTErrorStdDevHist->SetPoint(index, median, errorStdDev.first);
-      pTErrorStdDevHist->SetPointError(index, xError, errorStdDev.second);
+      errorStdDevHist->SetPoint(index, median, errorStdDev.first);
+      errorStdDevHist->SetPointError(index, xError, errorStdDev.second);
 
       ++index;
       median += interval;
@@ -75,24 +68,24 @@ void ResolutionModule::finalize()
   AnalysisModule::finalize();
 }
 
-std::string ResolutionModule::pickPtBin(double pT) const
+std::string ResolutionModule::pickBin(double value) const
 {
-  int pTBin = static_cast<int>(pT) / interval * interval; //mass is invariantMass floored to the highest multiple of interval
-  if (pTBin < minPtCut)
+  int bin = static_cast<int>(value) / interval * interval; //mass is invariantMass floored to the highest multiple of interval
+  if (bin < minCut)
     {
-      pTBin = minPtCut;
+      bin = minCut;
     }
-  else if (pTBin > maxPtCut - interval)
+  else if (bin > maxCut - interval)
     {
-      pTBin = maxPtCut - interval;
+      bin = maxCut - interval;
     }
 
-  return std::to_string(pTBin);
+  return std::to_string(bin);
 }
 
 const int ResolutionModule::getNumberOfBins() const
 {
-  return (maxPtCut - minPtCut) / interval;
+  return (maxCut - minCut) / interval;
 }
 
 TGraphErrors* ResolutionModule::makeTGraphErrors(std::string name, int numberOfBins)
@@ -107,12 +100,9 @@ TGraphErrors* ResolutionModule::makeTGraphErrors(std::string name, int numberOfB
 
 std::pair<double, double> ResolutionModule::getErrorValues(TH1* histogram, std::string errorType)
 {
-  const double minPtError = -0.5;
-  const double maxPtError = 0.5;
-
   if (histogram->GetEntries() > 0)
     {
-      histogram->Fit("gaus", "", "", minPtError, maxPtError);
+      histogram->Fit("gaus", "q", "", minError, maxError); //q gets rid of table output to screen
 
       auto gaus = histogram->GetFunction("gaus");
 
