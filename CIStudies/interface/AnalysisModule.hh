@@ -13,12 +13,17 @@ class TH1;
 class AnalysisModule : public Module
 {
 public:
-  virtual void finalize();
+  void writeAll();
+
+  // This should just be used by Analyzer::run()
+  void setFilterString(const std::string& filterString) {currentFilter = filterString;}
+
+  void doneProcessing() {isFinalStep = true;}
   
 protected:
-  void addObject(const std::string& name, TObject* obj) {objects.insert({name, obj});}
-  TObject* getObject(const std::string& name) {return objects.at(name);}
-  const TObject* getObject(const std::string& name) const {return objects.at(name);}
+  void addObject(const std::string& name, TObject* obj);
+  TObject* getObject(const std::string& name) {return objects[getObjectName(name)];}
+  const TObject* getObject(const std::string& name) const {return objects[getObjectName(name)];}
 
   void makeHistogram(const std::string& name, const std::string& title, int nbins,
 		     int min, int max);
@@ -28,7 +33,13 @@ protected:
   void fillHistogram(const std::string& name, double number);
 
 private:
-  std::map<std::string, TObject*> objects;
+  std::map<std::string, TObject*> baseObjects;
+  mutable std::map<std::string, TObject*> objects;
+  std::string currentFilter;
+  bool isFinalStep = false;
+
+  std::string getObjectName(const std::string& str) const;
+  void addObjectClone(const std::string& oldName, const std::string& newName) const;
 };
 
 #endif
