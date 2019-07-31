@@ -12,7 +12,6 @@
 <use   name="pythia8"/>
 <environment>
   <bin   file="combinedGenRecoAnalyzer.cc"></bin>
-  <bin   file="extractLRweights.cc"></bin>
   <bin   file="runAnalyzer.cc">
 <use name="CIAnalysis/CIStudies"/>
 </bin>

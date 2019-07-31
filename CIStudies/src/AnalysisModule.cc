@@ -14,7 +14,7 @@ void AnalysisModule::finalize()
   Module::finalize();
 }
 
-void AnalysisModule::makeHistogram(const std::string& name, const std::string& title, int nbins, int min, int max)
+void AnalysisModule::makeHistogram(const std::string& name, const std::string& title, int nbins, double min, double max)
 {
   auto newHist = new TH1F(name.c_str(), title.c_str(), nbins, min, max);
   addObject(name, newHist);
