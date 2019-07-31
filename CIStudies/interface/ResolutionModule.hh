@@ -6,22 +6,30 @@
 #include <vector>
 
 class MatchingModule;
+class MatchingPairCollection;
 
 class ResolutionModule : public AnalysisModule
 {
 public:
-  ResolutionModule(const MatchingModule& matchingModule, int minPt = 50, int maxPt = 1900, int pTInterval = 50);
+  ResolutionModule(const MatchingModule& matchingModule, std::string bin, int min, int max, int intervalSize);
   virtual bool process(const edm::EventBase& event) override;
   virtual void initialize() override;
   virtual void finalize() override;
 
+protected:
+  virtual void fillError(const MatchingPairCollection& matchingPairCollection) = 0;
+  std::string pickBin(double value) const;
+
 private:
   const MatchingModule& matching;
-  const int minPtCut;
-  const int maxPtCut;
+  const std::string binType;
+  const int minCut;
+  const int maxCut;
   const int interval;
 
-  std::string pickPtBin(double pT) const;
+  const double minError = -0.5;
+  const double maxError = 0.5;
+
   const int getNumberOfBins() const;
   TGraphErrors* makeTGraphErrors(std::string name, int numberOfBins);
 

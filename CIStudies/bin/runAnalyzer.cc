@@ -12,6 +12,10 @@
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 #include "CIAnalysis/CIStudies/interface/MigrationModule.hh"
 #include "CIAnalysis/CIStudies/interface/AcceptanceModule.hh"
+#include "CIAnalysis/CIStudies/interface/ResolutionModule.hh"
+#include "CIAnalysis/CIStudies/interface/PtResolutionModule.hh"
+#include "CIAnalysis/CIStudies/interface/MassResolutionModule.hh"
+#include "CIAnalysis/CIStudies/interface/AFBModule.hh"
 
 int main(int argc, char** argv)
 {
@@ -43,12 +47,19 @@ int main(int argc, char** argv)
   MatchingModule matchMod(genSimMod, recoMod);
   MigrationModule migMod(matchMod);
   AcceptanceModule accMod(genSimMod, matchMod);
+  PtResolutionModule pTResMod(matchMod);
+  MassResolutionModule massResMod(matchMod);
+  AFBModule afbMod(genSimMod, recoMod);
+  
 
   analyzer.addProductionModule(&genSimMod);
   analyzer.addProductionModule(&recoMod);
   analyzer.addProductionModule(&matchMod);
-  analyzer.addAnalysisModule(&migMod);
-  analyzer.addAnalysisModule(&accMod);
+  //analyzer.addAnalysisModule(&migMod);
+  //analyzer.addAnalysisModule(&accMod);
+  //analyzer.addAnalysisModule(&pTResMod);
+  //analyzer.addAnalysisModule(&massResMod);
+  analyzer.addAnalysisModule(&afbMod);
 
 
 
