@@ -7,11 +7,12 @@
 #include "FWCore/FWLite/interface/FWLiteEnabler.h"
 #include "PhysicsTools/FWLite/interface/CommandLineParser.h"
 
+#include "CIAnalysis/CIStudies/interface/AcceptanceModule.hh"
 #include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 #include "CIAnalysis/CIStudies/interface/MigrationModule.hh"
-#include "CIAnalysis/CIStudies/interface/AcceptanceModule.hh"
+#include "CIAnalysis/CIStudies/interface/PileupFilter.hh"
+#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 
 int main(int argc, char** argv)
 {
@@ -41,16 +42,16 @@ int main(int argc, char** argv)
   GenSimIdentificationModule genSimMod;
   RecoIdentificationModule recoMod;
   MatchingModule matchMod(genSimMod, recoMod);
+  PileupFilter pileupFilter(15, 35);
   MigrationModule migMod(matchMod);
   AcceptanceModule accMod(genSimMod, matchMod);
 
   analyzer.addProductionModule(&genSimMod);
   analyzer.addProductionModule(&recoMod);
   analyzer.addProductionModule(&matchMod);
+  analyzer.addFilterModule(&pileupFilter);
   analyzer.addAnalysisModule(&migMod);
   analyzer.addAnalysisModule(&accMod);
-
-
 
   analyzer.run("textfiles/pickFiles.txt", outputFile, outputEvery);
   

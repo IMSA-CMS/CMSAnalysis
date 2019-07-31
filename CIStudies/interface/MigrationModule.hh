@@ -5,7 +5,7 @@
 
 class MatchingModule;
 
-class MigrationModule: public AnalysisModule
+class MigrationModule : public AnalysisModule
 {
 public:
   MigrationModule(const MatchingModule& matchingModule, int minMass = 300, int maxMass = 3200, int massInterval = 100);
