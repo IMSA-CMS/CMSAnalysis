@@ -13,7 +13,7 @@ bool RecoIdentificationModule::process(const edm::EventBase& event)
 {
   recoCandidates.clear();
 
-  if (getValue("isElectron") == 1)
+  if (getFileParams().getParticle() == "Electron")
     {
       edm::Handle<std::vector<pat::Electron>> electrons;
       event.getByLabel(std::string("slimmedElectrons"), electrons);
