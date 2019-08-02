@@ -1,6 +1,5 @@
 #include "CIAnalysis/CIStudies/interface/AcceptanceModule.hh"
 
-
 #include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 
@@ -37,7 +36,7 @@ bool AcceptanceModule::process(const edm::EventBase& event)
 
 void AcceptanceModule::finalize()
 {
-  auto acceptanceHist = dynamic_cast<TH1*>(getHistogram("RecoParticles")->Clone("Acceptance"));
+  auto acceptanceHist = dynamic_cast<TH1*>(getHistogram("RecoParticles")->Clone());
   acceptanceHist->Divide(getHistogram("GenSimParticles"));
   addObject("Acceptance", acceptanceHist);
   

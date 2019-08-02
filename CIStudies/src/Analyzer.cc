@@ -3,10 +3,13 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <unordered_set>
 
 #include "TFile.h"
+#include "TH1.h"
 
 #include "CIAnalysis/CIStudies/interface/AnalysisModule.hh"
+#include "CIAnalysis/CIStudies/interface/FilterModule.hh"
 #include "CIAnalysis/CIStudies/interface/ProductionModule.hh"
 #include "FWCore/Framework/interface/Event.h"
 #include "DataFormats/FWLite/interface/Event.h"
@@ -14,16 +17,20 @@
 
 void Analyzer::run(const std::string& configFile, const std::string& outputFile, int outputEvery)
 {
+  // This keeps the histograms separate from the files they came from, avoiding much silliness
+  TH1::AddDirectory(kFALSE);
+
   std::string particle1;
   auto filenames = inputFiles(configFile, particle1);
   auto files = getFiles(filenames);
-
-  TFile *of = new TFile(outputFile.c_str(), "recreate");
 
   for (auto module : getAllModules())
     {
       module->initialize();
     }
+
+  // A list of all the filters we used
+  std::unordered_set<std::string> filterNames;
 
   for (auto& massFiles : files)
     {
@@ -46,6 +53,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 	  std::cerr << "Events: " << ev.size() << std::endl;
       
 	  int ievt = 0;
+
 	  for (ev.toBegin(); !ev.atEnd(); ++ev, ++ievt)
 	    {
 	      const edm::EventBase& event = ev;
@@ -63,11 +71,28 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 		    }
 		}
 
+	      std::string filterString;
+	      for (auto module : filterModules)
+		{
+		  if (!module->process(event))
+		    {
+		      continueProcessing = false;
+		      break;
+		    }
+		  else
+		    {
+		      filterString += module->getFilterString();
+		    }
+		}
+
 	      if (!continueProcessing)
 		continue;
 
+	      filterNames.insert(filterString);
+	      
 	      for (auto module : analysisModules)
 		{
+		  module->setFilterString(filterString);
 		  module->process(event);
 		}
 	    }
@@ -77,16 +102,37 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
       
     }
 
-  of->cd();
-  for (auto module : getAllModules())
+  for (auto module : productionModules)
     {
       module->finalize();
     }
-  of->Close();
+  for (auto module : filterModules)
+    {
+      module->finalize();
+    }
+  TFile* outputRootFile = new TFile(outputFile.c_str(), "RECREATE");
+
+  // Finalize separately for each filterString, to be safe
+  for (auto module : analysisModules)
+    {
+      module->doneProcessing();
+
+      for (auto& str : filterNames)
+	{
+	  module->setFilterString(str);
+	  module->finalize();
+	}
+
+      module->writeAll();
+    }
+
+  outputRootFile->Close();
+
+  delete outputRootFile;
 }
 
 //fills each of the inner vectors with the info in their respective lines in "pickFiles.txt"
-std::vector<std::string> Analyzer::parseLine(std::ifstream& txtFile)
+std::vector<std::string> Analyzer::parseLine(std::ifstream& txtFile) const
 {
   std::string line;
   std::getline(txtFile,line);
@@ -113,7 +159,7 @@ std::vector<std::string> Analyzer::parseLine(std::ifstream& txtFile)
   return category;
 }
 
-std::vector<std::vector<std::string>> Analyzer::inputFiles(const std::string& txtFile, std::string& particle1)
+std::vector<std::vector<std::string>> Analyzer::inputFiles(const std::string& txtFile, std::string& particle1) const
 {
   //inputFiles looks at "pickFiles.txt" to determine which data (lepton type, mass cuts, etc.)  is inputed to make the histograms
   std::ifstream inputFiles(txtFile);
@@ -208,7 +254,7 @@ std::vector<std::vector<std::string>> Analyzer::inputFiles(const std::string& tx
   return massCuts;
 }
 
-std::vector<std::vector<std::string>> Analyzer::getFiles(const std::vector<std::vector<std::string>>& inputs)
+std::vector<std::vector<std::string>> Analyzer::getFiles(const std::vector<std::vector<std::string>>& inputs) const
 {
   std::vector<std::vector<std::string>> array(inputs.size());
   
@@ -235,14 +281,18 @@ std::vector<std::vector<std::string>> Analyzer::getFiles(const std::vector<std::
   return array;
 }
 
-std::vector<Module*> Analyzer::getAllModules()
+std::vector<Module*> Analyzer::getAllModules() const
 {
   std::vector<Module*> modules;
-  for (auto mod : analysisModules)
+  for (auto mod : productionModules)
     {
       modules.push_back(mod);
     }
-  for (auto mod : productionModules)
+  for (auto mod : filterModules)
+    {
+      modules.push_back(mod);
+    }
+  for (auto mod : analysisModules)
     {
       modules.push_back(mod);
     }
