@@ -4,6 +4,8 @@
 #include "TLorentzVector.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
 
+#include <iostream>
+
 using Particle = const reco::Candidate*;
 using PartPair = std::pair<Particle, Particle>;
 
@@ -11,9 +13,16 @@ double ParticleCollection::getInvariantMass() const
 {
   auto particlePair = chooseParticles();
   if (particlePair.first && particlePair.second)
-    return calculateInvariantMass(particlePair.first, particlePair.second);
+    {
+      
+      return calculateInvariantMass(particlePair.first, particlePair.second);
+    }
+
   else
-    return -1;
+    {
+      
+      return -1;
+    }
 }
 
 double ParticleCollection::getCollinsSoper() const
@@ -26,30 +35,35 @@ double ParticleCollection::getCollinsSoper() const
     {
       if (particlePair.first->charge() < 0) //no flip
 	{
+	  
 	  return calculateCollinsSoper(particlePair.first, particlePair.second);
 	}
       else //flip
 	{
+	  
 	  return calculateCollinsSoper(particlePair.second, particlePair.first);
 	}
     }
   else
     {
+      
       return -2;
     }
 }
 
 PartPair ParticleCollection::chooseParticles() const
 {
+  
+
   double maxInvariantMass = 0;
   bool oppositeSigns = false;
 
   const reco::Candidate* iPointer = nullptr;
   const reco::Candidate* jPointer = nullptr;
 
-  for (unsigned int i = 0; i < particles.size() - 1; ++i)
+  for (int i = 0; i < static_cast<int>(particles.size()) - 1; ++i)
     {
-      for (unsigned int j = i + 1; j < particles.size(); ++j)
+      for (int j = i + 1; j < static_cast<int>(particles.size()); ++j)
 	{
 	  if (checkSigns(particles[i], particles[j]))
 	    {
@@ -74,6 +88,7 @@ PartPair ParticleCollection::chooseParticles() const
 	}
     }
 
+  
   return {iPointer, jPointer};
 }
 
@@ -155,6 +170,7 @@ bool ParticleCollection::lowEtaFlip(Particle particle, Particle antiparticle) co
 	  return true;
 	}
     }
+
   else 
     {
       if (antiparticle->charge() > 0)
