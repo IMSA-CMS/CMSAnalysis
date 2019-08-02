@@ -19,7 +19,7 @@ bool GenSimIdentificationModule::process(const edm::EventBase& event)
   const int electronCode = 11;
   const int muonCode = 13;
 
-  int targetCode = getValue("isElectron") == 1 ? electronCode : muonCode;
+  int targetCode = getFileParams().getParticle() == "Electron" ? electronCode : muonCode;
 
   //Begin GEN looping
   //Loop through Particle list&
