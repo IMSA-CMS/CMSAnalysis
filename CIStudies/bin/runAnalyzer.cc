@@ -9,18 +9,17 @@
 
 #include "CIAnalysis/CIStudies/interface/AcceptanceModule.hh"
 #include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
+#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
+#include "CIAnalysis/CIStudies/interface/MassFilter.hh"
+#include "CIAnalysis/CIStudies/interface/PileupFilter.hh"
 #include "CIAnalysis/CIStudies/interface/MigrationModule.hh"
-<<<<<<< HEAD
 #include "CIAnalysis/CIStudies/interface/AcceptanceModule.hh"
 #include "CIAnalysis/CIStudies/interface/ResolutionModule.hh"
 #include "CIAnalysis/CIStudies/interface/PtResolutionModule.hh"
 #include "CIAnalysis/CIStudies/interface/MassResolutionModule.hh"
 #include "CIAnalysis/CIStudies/interface/AFBModule.hh"
-=======
-#include "CIAnalysis/CIStudies/interface/PileupFilter.hh"
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
->>>>>>> 0c3825aa201e1579373efec2f43c967e450d5128
+#include "CIAnalysis/CIStudies/interface/SimpleHistogramModule.hh"
 
 int main(int argc, char** argv)
 {
@@ -50,28 +49,27 @@ int main(int argc, char** argv)
   GenSimIdentificationModule genSimMod;
   RecoIdentificationModule recoMod;
   MatchingModule matchMod(genSimMod, recoMod);
+  MassFilter massFilter(genSimMod, 2000);
   PileupFilter pileupFilter(15, 35);
   MigrationModule migMod(matchMod);
   AcceptanceModule accMod(genSimMod, matchMod);
   PtResolutionModule pTResMod(matchMod);
   MassResolutionModule massResMod(matchMod);
   AFBModule afbMod(genSimMod, recoMod);
+  SimpleHistogramModule simpleMod(genSimMod, recoMod);
   
 
   analyzer.addProductionModule(&genSimMod);
   analyzer.addProductionModule(&recoMod);
   analyzer.addProductionModule(&matchMod);
-<<<<<<< HEAD
+  analyzer.addFilterModule(&massFilter);
+  //analyzer.addFilterModule(&pileupFilter);
   //analyzer.addAnalysisModule(&migMod);
-  //analyzer.addAnalysisModule(&accMod);
+  // analyzer.addAnalysisModule(&accMod);
   //analyzer.addAnalysisModule(&pTResMod);
   //analyzer.addAnalysisModule(&massResMod);
-  analyzer.addAnalysisModule(&afbMod);
-=======
-  analyzer.addFilterModule(&pileupFilter);
-  analyzer.addAnalysisModule(&migMod);
-  analyzer.addAnalysisModule(&accMod);
->>>>>>> 0c3825aa201e1579373efec2f43c967e450d5128
+  //analyzer.addAnalysisModule(&afbMod);
+  analyzer.addAnalysisModule(&simpleMod);
 
   analyzer.run("textfiles/pickFiles.txt", outputFile, outputEvery);
   
