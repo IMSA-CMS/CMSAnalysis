@@ -1,11 +1,11 @@
 #ifndef MIGRATIONMODULE_HH
 #define MIGRATIONMODULE_HH
 
-#include "AnalysisModule.hh"
+#include "HistogramOutputModule.hh"
 
 class MatchingModule;
 
-class MigrationModule : public AnalysisModule
+class MigrationModule : public HistogramOutputModule
 {
 public:
   MigrationModule(const MatchingModule& matchingModule, int minMass = 300, int maxMass = 3200, int massInterval = 100);

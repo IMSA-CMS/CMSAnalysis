@@ -65,6 +65,9 @@ void ResolutionModule::finalize()
       median += interval;
     }
 
+  addObject(binType + "ErrorMeanHist", errorMeanHist);
+  addObject(binType + "ErrorStdDevHist", errorStdDevHist);
+
   AnalysisModule::finalize();
 }
 
@@ -93,7 +96,6 @@ TGraphErrors* ResolutionModule::makeTGraphErrors(std::string name, int numberOfB
   auto hist = new TGraphErrors(numberOfBins);
   hist->SetTitle(name.c_str());
   hist->SetName(name.c_str());
-  addObject(name, hist);
 
   return hist;
 }
