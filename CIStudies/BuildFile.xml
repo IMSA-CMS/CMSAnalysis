@@ -5,6 +5,7 @@
 <use   name="DataFormats/HepMCCandidate"/>
 <use   name="DataFormats/RecoCandidate"/>
 <use   name="clhep"/>
+<use   name="pythia8"/>
 <export>
    <lib name="1"/>
 </export>

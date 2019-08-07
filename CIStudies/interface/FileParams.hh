@@ -30,6 +30,11 @@ class Helicity : public IDType
 public:
   Helicity(const std::string& helicity) {setValue(helicity);}
   virtual std::string getTypeName() const override {return "Helicity";}
+
+  static std::string LL() {return "LL";}
+  static std::string LR() {return "LR";}
+  static std::string RL() {return "RL";}
+  static std::string RR() {return "RR";}
   
 protected:
   virtual void addMaps() override;
@@ -40,6 +45,9 @@ class Interference : public IDType
 public:
   Interference(const std::string& interference) {setValue(interference);}
   virtual std::string getTypeName() const override {return "Interference";}
+
+  static std::string constructive() {return "Constructive";}
+  static std::string destructive() {return "Destructive";}
   
 protected:
   virtual void addMaps() override;
@@ -70,6 +78,9 @@ class Particle : public IDType
 public:
   Particle(const std::string& particle) {setValue(particle);}
   virtual std::string getTypeName() const override {return "Particle";}
+
+  static std::string electron() {return "Electron";}
+  static std::string muon() {return "Muon";}
   
 protected:
   virtual void addMaps() override;
@@ -79,10 +90,11 @@ class FileParams
 {  
 public: 
 
-  //constructor declaration
   FileParams(const std::string& yr, const std::string& heli, const std::string& inter, const std::string& mrange,
 	     const std::string& L, const std::string& part);
-    
+  // Default constructor - use with care
+  FileParams();
+
   //getters
   std::string getYear() const { return year.getValue(); }
   std::string getHelicity() const { return helicity.getValue(); }
@@ -107,6 +119,8 @@ private:
   Particle particle;
 };
 
-std::ostream& operator<<(std::ostream& stream, FileParams params);
+std::ostream& operator<<(std::ostream& stream, const FileParams& params);
+bool operator==(const FileParams& p1, const FileParams& p2);
+bool operator!=(const FileParams& p1, const FileParams& p2);
 
 #endif

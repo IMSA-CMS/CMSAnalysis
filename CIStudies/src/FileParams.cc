@@ -85,28 +85,24 @@ FileParams::FileParams(const std::string& yr, const std::string& heli, const std
   particle(part)
 {}
 
-
-std::ostream& operator<<(std::ostream& stream, FileParams params)
-{
-    stream << "Your Parameters:\nYear: " << params.getYear()
-	   << "\nHelicity: " << params.getHelicity() 
-	   << "\nInterference: " << params.getInterference() 
-	   << "\nMass Range: " << params.getMassRange() 
-	   << "\nLambda: " << params.getLambda() 
-	   << "\nParticle: " << params.getParticle() 
-	   << '\n';
-   
-    return stream;
-}
-
+FileParams::FileParams() :
+  year("2016"),
+  helicity("LL"),
+  interference("Constructive"),
+  massRange("M300"),
+  lambda("16"),
+  particle("Electron")
+{}
 
 //creates a vector of root files through parsing through the text file given by the path
 std::vector<std::string> FileParams::fileVector() const
 {
-  string textfilepath = locateTextFile();
+  string textFilePath = locateTextFile();
+  std::cout << "Processing file " << textFilePath << std::endl;
+
   std::vector<std::string> rootfileVector;
   string line;
-  std::ifstream myfile (textfilepath);
+  std::ifstream myfile (textFilePath);
   if (myfile)
     {
       while(getline(myfile,line))
@@ -122,15 +118,13 @@ std::vector<std::string> FileParams::fileVector() const
 string FileParams::locateTextFile() const
 {
   string yearString = getYear();
-  string leptonString = getParticle() == "Electron" ? "E" : "Mu";
+  string leptonString = getParticle() == Particle::electron() ? "E" : "Mu";
   string massString = yearString == "2017" ? massCutString2017() : getMassRange();
-  string interferenceString = getInterference() == "Constructive" ? "Con" : "Des";
+  string interferenceString = getInterference() == Interference::constructive() ? "Con" : "Des";
 
   string file = "textfiles/" + yearString + "/CITo2" + leptonString
     + massString + "_Lam" + getLambda() + interferenceString
     + getHelicity() + ".txt";
-
-  std::cout << "Getting file " << file << std::endl;
 
   return file;
 }
@@ -148,4 +142,32 @@ string FileParams::massCutString2017() const
     return "M2000toInf";
 
   throw std::runtime_error("Invalid mass type!");
+}
+
+std::ostream& operator<<(std::ostream& stream, const FileParams& params)
+{
+    stream << "Your Parameters:\nYear: " << params.getYear()
+	   << "\nHelicity: " << params.getHelicity() 
+	   << "\nInterference: " << params.getInterference() 
+	   << "\nMass Range: " << params.getMassRange() 
+	   << "\nLambda: " << params.getLambda() 
+	   << "\nParticle: " << params.getParticle() 
+	   << '\n';
+   
+    return stream;
+}
+
+bool operator==(const FileParams& p1, const FileParams& p2)
+{
+  return p1.getYear() == p2.getYear()
+    && p1.getHelicity() == p2.getHelicity()
+    && p1.getInterference() == p2.getInterference()
+    && p1.getMassRange() == p2.getMassRange()
+    && p1.getLambda() == p2.getLambda()
+    && p1.getParticle() == p2.getParticle();
+}
+
+bool operator!=(const FileParams& p1, const FileParams& p2)
+{
+  return !(p1 == p2);
 }

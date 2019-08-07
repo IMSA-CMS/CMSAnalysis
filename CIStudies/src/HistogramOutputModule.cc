@@ -1,11 +1,11 @@
-#include "CIAnalysis/CIStudies/interface/AnalysisModule.hh"
+#include "CIAnalysis/CIStudies/interface/HistogramOutputModule.hh"
 
 #include <iostream>
 #include <stdexcept>
 
 #include "TH1.h"
 
-void AnalysisModule::writeAll()
+void HistogramOutputModule::writeAll()
 {
   // Check if any baseObjects have not been copied to objects yet
   for (auto entry : baseObjects)
@@ -32,24 +32,24 @@ void AnalysisModule::writeAll()
     }
 }
 
-void AnalysisModule::addObject(const std::string& name, TObject* obj)
+void HistogramOutputModule::addObject(const std::string& name, TObject* obj)
 {
   if (baseObjects.find(name) == baseObjects.end())
     baseObjects.insert({name, obj});
   else
     baseObjects[name] = obj;
 
-  if (isFinalStep)
-    addObjectClone(name, currentFilter + name);
+  if (getFinalStep())
+    addObjectClone(name, getFilter() + name);
 }
 
-void AnalysisModule::makeHistogram(const std::string& name, const std::string& title, int nbins, double min, double max)
+void HistogramOutputModule::makeHistogram(const std::string& name, const std::string& title, int nbins, double min, double max)
 {
   auto newHist = new TH1F(name.c_str(), title.c_str(), nbins, min, max);
   addObject(name, newHist);
 }
 
-void AnalysisModule::fillHistogram(const std::string& name, double number)
+void HistogramOutputModule::fillHistogram(const std::string& name, double number)
 {
   auto hist = getHistogram(name);
   if (!hist)
@@ -58,9 +58,9 @@ void AnalysisModule::fillHistogram(const std::string& name, double number)
   getHistogram(name)->Fill(number);
 }
 
-std::string AnalysisModule::getObjectName(const std::string& str) const
+std::string HistogramOutputModule::getObjectName(const std::string& str) const
 {
-  std::string newName = currentFilter + str;
+  std::string newName = getFilter() + str;
 
   // If the map has this already, great!
   if (objects.find(newName) == objects.end()) 
@@ -81,7 +81,7 @@ std::string AnalysisModule::getObjectName(const std::string& str) const
   return newName;
 }
 
-void AnalysisModule::addObjectClone(const std::string& oldName, const std::string& newName) const
+void HistogramOutputModule::addObjectClone(const std::string& oldName, const std::string& newName) const
 {
   TObject* clone = baseObjects.find(oldName)->second->Clone();
   
