@@ -1,12 +1,12 @@
 #ifndef ACCEPTANCEMODULE_HH
 #define ACCEPTANCEMODULE_HH
 
-#include "AnalysisModule.hh"
+#include "HistogramOutputModule.hh"
 
 class GenSimIdentificationModule;
 class MatchingModule;
 
-class AcceptanceModule : public AnalysisModule
+class AcceptanceModule : public HistogramOutputModule
 {
 public:
   AcceptanceModule(const GenSimIdentificationModule& genSimModule, const MatchingModule& matchingModule, 

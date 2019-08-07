@@ -21,8 +21,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
   TH1::AddDirectory(kFALSE);
 
   std::string particle1;
-  auto filenames = inputFiles(configFile, particle1);
-  auto files = getFiles(filenames);
+  auto fileparams = inputFiles(configFile, particle1);
 
   for (auto module : getAllModules())
     {
@@ -32,11 +31,14 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
   // A list of all the filters we used
   std::unordered_set<std::string> filterNames;
 
-  for (auto& massFiles : files)
+  for (auto& filepar : fileparams)
     {
-      std::cout << "# of root files: " << massFiles.size() << std::endl;
+      Module::setFileParams(filepar);
+      
+      auto files = filepar.fileVector();
+      std::cout << "# of root files: " << files.size() << std::endl;
 
-      for (auto& filename : massFiles)
+      for (auto& filename : files)
 	{
 	  const std::string eossrc = "root://cmsxrootd.fnal.gov//";
 
@@ -99,8 +101,8 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 
 	  delete file;
 	}
-      
-    }
+    }      
+
 
   for (auto module : productionModules)
     {
@@ -159,7 +161,7 @@ std::vector<std::string> Analyzer::parseLine(std::ifstream& txtFile) const
   return category;
 }
 
-std::vector<std::vector<std::string>> Analyzer::inputFiles(const std::string& txtFile, std::string& particle1) const
+std::vector<FileParams> Analyzer::inputFiles(const std::string& txtFile, std::string& particle1) const
 {
   //inputFiles looks at "pickFiles.txt" to determine which data (lepton type, mass cuts, etc.)  is inputed to make the histograms
   std::ifstream inputFiles(txtFile);
@@ -172,62 +174,16 @@ std::vector<std::vector<std::string>> Analyzer::inputFiles(const std::string& tx
   //each vector contains the options selected in "pickFiles.txt"
   auto year = parseLine(inputFiles);
   auto lepton = parseLine(inputFiles);
-
-  //particle1 is set based on the lepton chosen in "pickFiles,txt"
-  if (lepton[0] == "E")
-    {
-      Module::setValue("isElectron", 1);
-    }
-  else if (lepton[0] == "Mu")
-    {
-      Module::setValue("isElectron", 0);
-    }
-  else 
-    {
-      throw std::runtime_error("Particle type " + lepton[0] + " not valid! In  \"pickFiles.txt\", you should include either E or Mu to note the particle type.");
-    }
-
   auto mass = parseLine(inputFiles);
-
-  //the files in the 2017 directory have a different naming convention so I correct for it
-  if (year[0] == "2017")
-    {
-      for (auto& massStr : mass)
-	{
-	  if (massStr == "300")
-	    {
-	      massStr = "300to800";
-	    }
-	  else if (massStr == "800")
-	    {
-	      massStr = "800to1300";
-	    }
-	  else if (massStr == "1300")
-	    {
-	      massStr = "1300to2000";
-	    }
-	  else if (massStr == "2000")
-	    {
-	      massStr = "2000toInf";
-	    }
-	  else if (massStr != "")
-	    {
-	      throw std::runtime_error("Mass input " + massStr + " not valid! Your options include 300, 800, 1300, and 2000.");
-	    }
-	}
-    }
-
   auto lambda = parseLine(inputFiles);
   auto interference = parseLine(inputFiles);
   auto helicity = parseLine(inputFiles);
 
-  std::vector<std::vector<std::string>> massCuts;
+  std::vector<FileParams> params;
 
   //adds all of the files to a larger vector that is seperated by mass cuts
   for (auto& massStr : mass)
     {
-      std::vector<std::string> sameMass;
-      
       for (auto& yearStr : year)
 	{
 	  for (auto& leptonStr : lepton)
@@ -239,46 +195,16 @@ std::vector<std::vector<std::string>> Analyzer::inputFiles(const std::string& tx
 		      for (auto& helicityStr : helicity)
 			{
 			  //based on the options selected, it adds the respective files following the standard naming system
-			  std::string file = "textfiles/" + yearStr + "/CITo2" + leptonStr + "M" + massStr + "_" + "Lam" +  lambdaStr + interferenceStr + helicityStr +  ".txt";
-			  
-			  sameMass.push_back(file);
+			  params.push_back(FileParams(yearStr, helicityStr, interferenceStr, massStr, 
+						      lambdaStr, leptonStr));
 			}
 		    }
 		}
 	    }
 	}
-
-      massCuts.push_back(sameMass);
     }
 
-  return massCuts;
-}
-
-std::vector<std::vector<std::string>> Analyzer::getFiles(const std::vector<std::vector<std::string>>& inputs) const
-{
-  std::vector<std::vector<std::string>> array(inputs.size());
-  
-  //create 2D array of mass ranges and different types
-  for (size_t i = 0; i < inputs.size(); ++i)
-    {
-      for (auto& filename : inputs[i])
-	{
-	  std::ifstream ifs(filename);
-
-	  if (!ifs)
-	    throw std::runtime_error("File " + filename + " not found! Refer to the file, \"README.txt\", in the CIAnalysis folder to make sure the inputs added into \"pickFiles.txt\" are valid.");
-
-	  std::string w_content;
-	  while (std::getline(ifs, w_content))
-	    {
-	      if (!w_content.empty())
-		{
-		  array[i].push_back(w_content);
-		}
-	    }
-	}
-    }
-  return array;
+  return params;
 }
 
 std::vector<Module*> Analyzer::getAllModules() const

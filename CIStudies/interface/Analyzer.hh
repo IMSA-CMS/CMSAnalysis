@@ -6,6 +6,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "FileParams.hh"
+
 class AnalysisModule;
 class FilterModule;
 class Module;
@@ -29,8 +31,7 @@ private:
   std::vector<AnalysisModule*> analysisModules;
 
   std::vector<std::string> parseLine(std::ifstream& txtFile) const;
-  std::vector<std::vector<std::string>> inputFiles(const std::string& txtFile, std::string& particle1) const;
-  std::vector<std::vector<std::string>> getFiles(const std::vector<std::vector<std::string>>& inputs) const;
+  std::vector<FileParams> inputFiles(const std::string& txtFile, std::string& particle1) const;
   std::vector<Module*> getAllModules() const;
 };
 

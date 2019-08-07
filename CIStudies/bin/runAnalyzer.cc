@@ -7,7 +7,6 @@
 #include "FWCore/FWLite/interface/FWLiteEnabler.h"
 #include "PhysicsTools/FWLite/interface/CommandLineParser.h"
 
-#include "CIAnalysis/CIStudies/interface/AcceptanceModule.hh"
 #include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
@@ -45,6 +44,7 @@ int main(int argc, char** argv)
   unsigned outputEvery = parser.integerValue("outputEvery");
 
   Analyzer analyzer;
+
   
   GenSimIdentificationModule genSimMod;
   RecoIdentificationModule recoMod;
@@ -58,17 +58,16 @@ int main(int argc, char** argv)
   AFBModule afbMod(genSimMod, recoMod);
   SimpleHistogramModule simpleMod(genSimMod, recoMod);
   
-
   analyzer.addProductionModule(&genSimMod);
   analyzer.addProductionModule(&recoMod);
   analyzer.addProductionModule(&matchMod);
   analyzer.addFilterModule(&massFilter);
-  //analyzer.addFilterModule(&pileupFilter);
-  //analyzer.addAnalysisModule(&migMod);
-  // analyzer.addAnalysisModule(&accMod);
-  //analyzer.addAnalysisModule(&pTResMod);
-  //analyzer.addAnalysisModule(&massResMod);
-  //analyzer.addAnalysisModule(&afbMod);
+  analyzer.addFilterModule(&pileupFilter);
+  analyzer.addAnalysisModule(&migMod);
+  analyzer.addAnalysisModule(&accMod);
+  analyzer.addAnalysisModule(&pTResMod);
+  analyzer.addAnalysisModule(&massResMod);
+  analyzer.addAnalysisModule(&afbMod);
   analyzer.addAnalysisModule(&simpleMod);
 
   analyzer.run("textfiles/pickFiles.txt", outputFile, outputEvery);
