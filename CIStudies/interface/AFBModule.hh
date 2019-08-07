@@ -1,12 +1,12 @@
 #ifndef AFBMODULE_HH
 #define AFBMODULE_HH
 
-#include "AnalysisModule.hh"
+#include "HistogramOutputModule.hh"
 
 class GenSimIdentificationModule;
 class RecoIdentificationModule;
 
-class AFBModule : public AnalysisModule
+class AFBModule : public HistogramOutputModule
 {
 public:
   AFBModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, int minMass = 300, int maxMass = 3200, int massInterval = 100);

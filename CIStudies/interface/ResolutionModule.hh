@@ -1,14 +1,14 @@
 #ifndef RESOLUTIONMODULE_HH
 #define RESOLUTIONMODULE_HH
 
-#include "AnalysisModule.hh"
+#include "HistogramOutputModule.hh"
 #include <TGraphErrors.h>
 #include <vector>
 
 class MatchingModule;
 class MatchingPairCollection;
 
-class ResolutionModule : public AnalysisModule
+class ResolutionModule : public HistogramOutputModule
 {
 public:
   ResolutionModule(const MatchingModule& matchingModule, std::string bin, int min, int max, int intervalSize);
