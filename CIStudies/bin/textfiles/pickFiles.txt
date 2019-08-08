@@ -1,6 +1,7 @@
-Year:	2016
-Lepton:	E
-Mass:	800
-Lambda:	22
+Procs:	ADD
+Year:	2018
+Lepton:	both
+Mass:	300	800	1300	2000
+Lambda:	4
 Inter:	Con
-Helic:	LL
+Helic:	LR
