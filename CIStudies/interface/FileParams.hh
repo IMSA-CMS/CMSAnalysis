@@ -1,20 +1,15 @@
 #ifndef FILEPARAMS_HH
 #define FILEPARAMS_HH
 
-/*
- * This is a header file for the fileParams struct
- * Written by Jay Reiter, John Woods, and Matt Hokinson
- * Last Edited: May 9th, 2018
- * Edits to merge fileLocator to FileParams by Kaushal Gumpula and Emily Springer
- * Last Edited: June 11th, 2018
- */
-
 #include <string>
 #include <iostream>
 #include <map>
 
 #include "IDType.hh"
 
+// First, the different types (similar to enums) for different things to add
+
+// The MC generation year (e.g., 2016)
 class Year : public IDType
 {
 public:
@@ -25,12 +20,14 @@ protected:
   virtual void addMaps() override;
 };
 
+// The helicity model for CI interactions (e.g., LL)
 class Helicity : public IDType
 {
 public:
   Helicity(const std::string& helicity) {setValue(helicity);}
   virtual std::string getTypeName() const override {return "Helicity";}
 
+  // Simple functions to return the right strings, so you don't have to remember conventions
   static std::string LL() {return "LL";}
   static std::string LR() {return "LR";}
   static std::string RL() {return "RL";}
@@ -40,12 +37,14 @@ protected:
   virtual void addMaps() override;
 };
 
+// The interference model for CI interactions
 class Interference : public IDType
 {
 public:
   Interference(const std::string& interference) {setValue(interference);}
   virtual std::string getTypeName() const override {return "Interference";}
 
+  // Simple functions to return the right strings, so you don't have to remember conventions
   static std::string constructive() {return "Constructive";}
   static std::string destructive() {return "Destructive";}
   
@@ -53,6 +52,7 @@ protected:
   virtual void addMaps() override;
 };
 
+// The lower mass cut used in the generation of the file (e.g., M300)
 class MassRange : public IDType
 {
 public:
@@ -63,6 +63,7 @@ protected:
   virtual void addMaps() override;
 };
 
+// The value of lambda for CI and ADD events, in TeV (e.g., 16)
 class Lambda : public IDType
 {
 public:
@@ -73,12 +74,14 @@ protected:
   virtual void addMaps() override;
 };
 
+// The lepton type (e.g., Electron)
 class Particle : public IDType
 {
 public:
   Particle(const std::string& particle) {setValue(particle);}
   virtual std::string getTypeName() const override {return "Particle";}
 
+  // Simple functions to return the right strings, so you don't have to remember conventions
   static std::string electron() {return "Electron";}
   static std::string muon() {return "Muon";}
   
@@ -92,10 +95,10 @@ public:
 
   FileParams(const std::string& yr, const std::string& heli, const std::string& inter, const std::string& mrange,
 	     const std::string& L, const std::string& part);
-  // Default constructor - use with care
+  // Default constructor - use with care because it assigns default values!
   FileParams();
 
-  //getters
+  // Getters
   std::string getYear() const { return year.getValue(); }
   std::string getHelicity() const { return helicity.getValue(); }
   std::string getInterference() const { return interference.getValue(); }
@@ -103,14 +106,17 @@ public:
   std::string getLambda() const { return lambda.getValue(); }
   std::string getParticle() const { return particle.getValue(); }
 
-  //function for parsing and locating textfiles
+  // Returns a vector of all filenames for this set of parameters
   std::vector<std::string> fileVector() const;
+ 
+  // Returns the name of the text file that contains the file
   std::string locateTextFile() const;
 
+  // A simple function to adjust mass cut naming conventions for 2017
+  // Public just in case someone else needs it
   std::string massCutString2017() const;
 
 private:
-  //file parameters
   Year year;
   Helicity helicity;
   Interference interference;
@@ -119,6 +125,7 @@ private:
   Particle particle;
 };
 
+// output and equality operators
 std::ostream& operator<<(std::ostream& stream, const FileParams& params);
 bool operator==(const FileParams& p1, const FileParams& p2);
 bool operator!=(const FileParams& p1, const FileParams& p2);
