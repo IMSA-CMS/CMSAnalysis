@@ -28,8 +28,15 @@ bool SimpleHistogramModule::process(const edm::EventBase& event)
   auto recoParticles = reco.getRecoCandidates();
   auto recoCS = recoParticles.getCollinsSoper();
 
-  fillHistogram("GenSimCS", genSimCS);
-  fillHistogram("RecoCS", recoCS);
+
+  if (genSimCS != -2)
+    {
+      fillHistogram("GenSimCS", genSimCS);
+    }
+  if (recoCS != -2)
+    {
+      fillHistogram("RecoCS", recoCS);
+    }
 
   return true;
 }

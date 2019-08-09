@@ -64,7 +64,7 @@ std::string LRWeightModule::formattedFilename(const FileParams& params)
 {
   std::string particleString = params.getParticle() == Particle::electron() ? "E" : "Mu";
   std::string interferenceString = params.getInterference() == Interference::constructive() ? "Con" : "Des";
-  std::string massString = params.getYear() == "2017" ? params.massCutString2017() : params.getMassRange();
+  std::string massString = (params.getYear() == "2017" || params.getYear() == "2018") ? params.massCutString20172018() : params.getMassRange();
 
   return "CITo2" + particleString + "_Lam" + params.getLambda() + "TeV" + interferenceString + params.getHelicity()
     + "_" + massString;

@@ -1,7 +1,7 @@
-Procs:	ADD
+Procs:	Diboson
 Year:	2018
 Lepton:	both
-Mass:	300	800	1300	2000
+Mass:	200	600	1200	2500
 Lambda:	4
-Inter:	Con
-Helic:	LR
+Inter:	con
+Helic:	WW

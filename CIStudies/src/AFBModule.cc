@@ -68,6 +68,10 @@ void AFBModule::fillFB(std::string level, double collinsSoper, double invariantM
     {
       fillHistogram(level + "Forward", invariantMass);
     }
+  else if (collinsSoper == -2)
+    {
+      return;
+    }
   else
     {
       fillHistogram(level + "Backward", invariantMass);

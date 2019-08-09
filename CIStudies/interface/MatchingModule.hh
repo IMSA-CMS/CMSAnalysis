@@ -14,6 +14,7 @@
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
 
+// MatchingModule creates a MatchingPairCollection by matching the gen sim particles with the reco particles 
 class MatchingModule : public ProductionModule
 {
 public:
@@ -25,10 +26,15 @@ public:
 private:
   const GenSimIdentificationModule& genSim;
   const RecoIdentificationModule& reco;
-  double deltaRCutoff;
+
+  // matching fails if the deltaR between the gen sim/reco pair
+  // does not lie under the deltaRCutoff
+  double deltaRCutoff; 
 
   MatchingPairCollection matchingBestPairs;
 
+  // template accepts a vector with either GenParticles and RecoCandidates
+  // checks if the MatchingPairCollection is filled
   template<typename T>
   bool checkIsNull (std::vector<T*> matching) const;
 };

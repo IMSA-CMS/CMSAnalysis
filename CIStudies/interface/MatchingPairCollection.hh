@@ -6,6 +6,7 @@
 
 #include <vector>
 
+// MatchingPairCollection contains a vector of the MatchingPairs for each event
 class MatchingPairCollection
 {
 public:

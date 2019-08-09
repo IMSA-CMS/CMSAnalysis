@@ -19,14 +19,20 @@ bool GenSimIdentificationModule::process(const edm::EventBase& event)
   const int electronCode = 11;
   const int muonCode = 13;
 
-  int targetCode = getFileParams().getParticle() == "Electron" ? electronCode : muonCode;
+  auto particle = getFileParams().getParticle();
+
+  int targetCode = particle == "Electron" ? electronCode : muonCode;
 
   //Begin GEN looping
   //Loop through Particle list&
   for (const auto& p : *genParticlesHandle)
-    {	
+    {
+      if (particle == "Both" && (std::abs(p.pdgId()) == electronCode || std::abs(p.pdgId()) == muonCode))
+	{
+	  genParticles.addParticle(&p);
+	}
       //Check for (anti)muon or (anti)electron
-      if (std::abs(p.pdgId()) == targetCode && isParticle(p))
+      else if (std::abs(p.pdgId()) == targetCode && isParticle(p))
 	{ 
 	  genParticles.addParticle(&p);
 	  //std::cout << genParticles.size() << std::endl;
