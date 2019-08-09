@@ -8,13 +8,16 @@ TextOutputModule::TextOutputModule(const std::string& outputFilename) :
 
 TextOutputModule::~TextOutputModule()
 {
+  // Make sure all files are closed, if they are not
   if (!filesDeleted)
     deleteFiles();
 }
 
 void TextOutputModule::writeAll()
 {
+  // Deleting an ofstream pointer is the same as closing the file
   deleteFiles();
+  // This avoids double deletes
   filesDeleted = true;
 }
 
@@ -26,7 +29,6 @@ void TextOutputModule::writeLine(const std::string& line)
 void TextOutputModule::writeToFile(const std::string& str)
 {
   getFileStream(getFullName()) << str;
-  //  std::flush(getFileStream(getFullName()));
 }
 
 std::string TextOutputModule::getFullName() const
