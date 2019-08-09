@@ -13,7 +13,9 @@ bool RecoIdentificationModule::process(const edm::EventBase& event)
 {
   recoCandidates.clear();
 
-  if (getFileParams().getParticle() == "Electron")
+  auto particle = getFileParams().getParticle();
+
+  if (particle == "Electron" || particle == "Both")
     {
       edm::Handle<std::vector<pat::Electron>> electrons;
       event.getByLabel(std::string("slimmedElectrons"), electrons);
@@ -27,7 +29,7 @@ bool RecoIdentificationModule::process(const edm::EventBase& event)
 	}
     }
 
-  else
+  if (particle == "Muon" || particle == "Both")
     {
       edm::Handle<std::vector<pat::Muon>> muons;
       event.getByLabel(std::string("slimmedMuons"), muons);

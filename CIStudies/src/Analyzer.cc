@@ -172,6 +172,7 @@ std::vector<FileParams> Analyzer::inputFiles(const std::string& txtFile, std::st
     }
   
   //each vector contains the options selected in "pickFiles.txt"
+  auto process = parseLine(inputFiles);
   auto year = parseLine(inputFiles);
   auto lepton = parseLine(inputFiles);
   auto mass = parseLine(inputFiles);
@@ -182,21 +183,24 @@ std::vector<FileParams> Analyzer::inputFiles(const std::string& txtFile, std::st
   std::vector<FileParams> params;
 
   //adds all of the files to a larger vector that is seperated by mass cuts
-  for (auto& massStr : mass)
+  for (auto& processStr : process)
     {
-      for (auto& yearStr : year)
+      for (auto& massStr : mass)
 	{
-	  for (auto& leptonStr : lepton)
+	  for (auto& yearStr : year)
 	    {
-	      for (auto& lambdaStr : lambda)
+	      for (auto& leptonStr : lepton)
 		{
-		  for (auto& interferenceStr : interference)
+		  for (auto& lambdaStr : lambda)
 		    {
-		      for (auto& helicityStr : helicity)
+		      for (auto& interferenceStr : interference)
 			{
-			  //based on the options selected, it adds the respective files following the standard naming system
-			  params.push_back(FileParams(yearStr, helicityStr, interferenceStr, massStr, 
-						      lambdaStr, leptonStr));
+			  for (auto& helicityStr : helicity)
+			    {
+			      //based on the options selected, it adds the respective files following the standard naming system
+			      params.push_back(FileParams(processStr, yearStr, helicityStr, interferenceStr, massStr, 
+							  lambdaStr, leptonStr));
+			    }
 			}
 		    }
 		}

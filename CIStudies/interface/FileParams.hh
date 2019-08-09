@@ -15,6 +15,23 @@
 
 #include "IDType.hh"
 
+class Process : public IDType
+{
+public:
+  Process(const std::string& process) {setValue(process);}
+  virtual std::string getTypeName() const override {return "Process";}
+
+  static std::string CI() {return "CI";}
+  static std::string ADD() {return "ADD";}
+  static std::string DY() {return "DY";}
+  static std::string Diboson() {return "Diboson";}
+  static std::string top() {return "top";}
+  static std::string QCD() {return "QCD";}
+
+protected:
+  virtual void addMaps() override;
+};
+
 class Year : public IDType
 {
 public:
@@ -81,6 +98,7 @@ public:
 
   static std::string electron() {return "Electron";}
   static std::string muon() {return "Muon";}
+  static std::string both() {return "Both";}
   
 protected:
   virtual void addMaps() override;
@@ -90,12 +108,13 @@ class FileParams
 {  
 public: 
 
-  FileParams(const std::string& yr, const std::string& heli, const std::string& inter, const std::string& mrange,
+  FileParams(const std::string& proc, const std::string& yr, const std::string& heli, const std::string& inter, const std::string& mrange,
 	     const std::string& L, const std::string& part);
   // Default constructor - use with care
   FileParams();
 
   //getters
+  std::string getProcess() const { return process.getValue(); }
   std::string getYear() const { return year.getValue(); }
   std::string getHelicity() const { return helicity.getValue(); }
   std::string getInterference() const { return interference.getValue(); }
@@ -107,10 +126,13 @@ public:
   std::vector<std::string> fileVector() const;
   std::string locateTextFile() const;
 
-  std::string massCutString2017() const;
+  std::string massCutString20172018() const;
+  std::string massCutStringDY() const;
+  std::string massCutStringBackgrounds() const;
 
 private:
   //file parameters
+  Process process;
   Year year;
   Helicity helicity;
   Interference interference;

@@ -6,6 +6,9 @@
 class GenSimIdentificationModule;
 class MatchingModule;
 
+// AcceptanceModule fills a histogram that contains all of the gen sim particles
+// and another that contains the reco particles that have been matched 
+// to calculate the acceptance of reconstruction at the end
 class AcceptanceModule : public HistogramOutputModule
 {
 public:

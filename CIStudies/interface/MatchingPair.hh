@@ -7,6 +7,8 @@ namespace reco
   class RecoCandidate;
 }
 
+// MatchingPair contains the gen particle with its respective reco particle
+// get functions calculate delta/error values between the two particles
 class MatchingPair
 {
 public:
