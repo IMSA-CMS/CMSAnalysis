@@ -1,10 +1,3 @@
-/*
- * This is the Source file for FileParams, which will be used to find files
- * Written by: Jay Reiter, Matt Hokinson, and John Woods
- * Last Edited: May 9th, 2018
- * Edits to merge fileLocator to FileParams by Kaushal Gumpula and Emily Springer
- * Last Edited: June 11th, 2018
- */
 #include "CIAnalysis/CIStudies/interface/FileParams.hh"
 
 #include <vector>
@@ -115,6 +108,7 @@ FileParams::FileParams(const std::string& proc, const std::string& yr, const std
   particle(part)
 {}
 
+// Default values - notice how dangerous this is
 FileParams::FileParams() :
   process("CI"),
   year("2016"),
@@ -125,7 +119,6 @@ FileParams::FileParams() :
   particle("Electron")
 {}
 
-//creates a vector of root files through parsing through the text file given by the path
 std::vector<std::string> FileParams::fileVector() const
 {
   string textFilePath = locateTextFile();

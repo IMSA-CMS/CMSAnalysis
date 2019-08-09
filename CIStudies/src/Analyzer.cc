@@ -20,9 +20,10 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
   // This keeps the histograms separate from the files they came from, avoiding much silliness
   TH1::AddDirectory(kFALSE);
 
-  std::string particle1;
-  auto fileparams = inputFiles(configFile, particle1);
+  // Get a list of FileParams objects
+  auto fileparams = inputFiles(configFile);
 
+  // Initialize all modules
   for (auto module : getAllModules())
     {
       module->initialize();
@@ -33,13 +34,16 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 
   for (auto& filepar : fileparams)
     {
+      // Set the static FileParams object so the modules know the file parameters
       Module::setFileParams(filepar);
-      
+
+      // Get a list of Root files
       auto files = filepar.fileVector();
       std::cout << "# of root files: " << files.size() << std::endl;
 
       for (auto& filename : files)
 	{
+	  // Open files with rootxd
 	  const std::string eossrc = "root://cmsxrootd.fnal.gov//";
 
 	  std::string fileStr = eossrc + filename;
@@ -50,6 +54,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 	      continue;
 	    } 
 
+	  // Extract events
 	  fwlite::Event ev(file);
 
 	  std::cerr << "Events: " << ev.size() << std::endl;
@@ -63,6 +68,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 	      if (outputEvery != 0 && ievt > 0 && ievt % outputEvery == 0) 
 		std::cout << "Processing event: " << ievt << std::endl; 
 
+	      // Run all production modules
 	      bool continueProcessing = true;
 	      for (auto module : productionModules)
 		{
@@ -73,6 +79,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 		    }
 		}
 
+	      // Run all filter modules and get filter string
 	      std::string filterString;
 	      for (auto module : filterModules)
 		{
@@ -90,10 +97,14 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 	      if (!continueProcessing)
 		continue;
 
+	      // Keep track of the filters we are using (multiple insertions
+	      // will cause no effect on a map)
 	      filterNames.insert(filterString);
-	      
+
+	      // Run all analysis modules
 	      for (auto module : analysisModules)
 		{
+		  // Set the filter string first
 		  module->setFilterString(filterString);
 		  module->process(event);
 		}
@@ -102,8 +113,8 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 	  delete file;
 	}
     }      
-
-
+  
+  // Finalize the modules
   for (auto module : productionModules)
     {
       module->finalize();
@@ -125,15 +136,16 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 	  module->finalize();
 	}
 
+      // Write the output
       module->writeAll();
     }
 
+  // Clean up
   outputRootFile->Close();
 
   delete outputRootFile;
 }
 
-//fills each of the inner vectors with the info in their respective lines in "pickFiles.txt"
 std::vector<std::string> Analyzer::parseLine(std::ifstream& txtFile) const
 {
   std::string line;
@@ -161,9 +173,8 @@ std::vector<std::string> Analyzer::parseLine(std::ifstream& txtFile) const
   return category;
 }
 
-std::vector<FileParams> Analyzer::inputFiles(const std::string& txtFile, std::string& particle1) const
+std::vector<FileParams> Analyzer::inputFiles(const std::string& txtFile) const
 {
-  //inputFiles looks at "pickFiles.txt" to determine which data (lepton type, mass cuts, etc.)  is inputed to make the histograms
   std::ifstream inputFiles(txtFile);
 
   if (!inputFiles)
@@ -172,6 +183,7 @@ std::vector<FileParams> Analyzer::inputFiles(const std::string& txtFile, std::st
     }
   
   //each vector contains the options selected in "pickFiles.txt"
+  // Configuration file must be in this order
   auto process = parseLine(inputFiles);
   auto year = parseLine(inputFiles);
   auto lepton = parseLine(inputFiles);
@@ -184,29 +196,28 @@ std::vector<FileParams> Analyzer::inputFiles(const std::string& txtFile, std::st
 
   //adds all of the files to a larger vector that is seperated by mass cuts
   for (auto& processStr : process)
-    {
-      for (auto& massStr : mass)
-	{
-	  for (auto& yearStr : year)
-	    {
-	      for (auto& leptonStr : lepton)
-		{
-		  for (auto& lambdaStr : lambda)
-		    {
-		      for (auto& interferenceStr : interference)
-			{
-			  for (auto& helicityStr : helicity)
-			    {
-			      //based on the options selected, it adds the respective files following the standard naming system
-			      params.push_back(FileParams(processStr, yearStr, helicityStr, interferenceStr, massStr, 
-							  lambdaStr, leptonStr));
-			    }
-			}
-		    }
-		}
-	    }
-	}
-    }
+    for (auto& massStr : mass)
+      {
+	for (auto& yearStr : year)
+	  {
+	    for (auto& leptonStr : lepton)
+	      {
+		for (auto& lambdaStr : lambda)
+		  {
+		    for (auto& interferenceStr : interference)
+		      {
+			for (auto& helicityStr : helicity)
+			  {
+			    //based on the options selected, it adds the respective files following the standard naming system
+			    params.push_back(FileParams(processStr, yearStr, helicityStr, interferenceStr, massStr, 
+							lambdaStr, leptonStr));
+			  }
+		      }
+		  }
+	      }
+	  }
+      }
+      
 
   return params;
 }

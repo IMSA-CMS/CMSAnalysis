@@ -7,7 +7,8 @@
 
 void HistogramOutputModule::writeAll()
 {
-  // Check if any baseObjects have not been copied to objects yet
+  // Check if any baseObjects have not been copied to objects yet,
+  // and fill them into the main map if not
   for (auto entry : baseObjects)
     {
       bool foundIt = false;
@@ -25,7 +26,8 @@ void HistogramOutputModule::writeAll()
 	  addObjectClone(entry.first, entry.first);
 	}
     }
-
+  
+  // Then write all the objects to file
   for (auto& entry : objects)
     {
       entry.second->Write();
@@ -39,7 +41,10 @@ void HistogramOutputModule::addObject(const std::string& name, TObject* obj)
   else
     baseObjects[name] = obj;
 
-  if (getFinalStep())
+  // If this is called during finalize(), it needs to be added explicitly/
+  // The filter name is set properly during calls to finalize(), so 
+  // this will work.
+  if (isDone())
     addObjectClone(name, getFilter() + name);
 }
 
@@ -81,16 +86,19 @@ std::string HistogramOutputModule::getObjectName(const std::string& str) const
   return newName;
 }
 
-void HistogramOutputModule::addObjectClone(const std::string& oldName, const std::string& newName) const
+void HistogramOutputModule::addObjectClone(const std::string& oldName, 
+					   const std::string& newName) const
 {
+  // Clone the object
   TObject* clone = baseObjects.find(oldName)->second->Clone();
   
   // Rename it if possible
   auto named = dynamic_cast<TNamed*>(clone);
-
   if (named)
      {
         named->SetName(newName.c_str());
      }
-   objects.insert({newName, clone});
+
+  // Insert it into the map
+  objects.insert({newName, clone});
 }

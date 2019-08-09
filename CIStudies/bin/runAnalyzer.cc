@@ -61,12 +61,12 @@ int main(int argc, char** argv)
   analyzer.addProductionModule(&genSimMod);
   analyzer.addProductionModule(&recoMod);
   analyzer.addProductionModule(&matchMod);
-  analyzer.addFilterModule(&massFilter);
-  analyzer.addFilterModule(&pileupFilter);
-  analyzer.addAnalysisModule(&migMod);
-  analyzer.addAnalysisModule(&accMod);
-  analyzer.addAnalysisModule(&pTResMod);
-  analyzer.addAnalysisModule(&massResMod);
+  //analyzer.addFilterModule(&massFilter);
+  //analyzer.addFilterModule(&pileupFilter);
+  //analyzer.addAnalysisModule(&migMod);
+  //analyzer.addAnalysisModule(&accMod);
+  //analyzer.addAnalysisModule(&pTResMod);
+  //analyzer.addAnalysisModule(&massResMod);
   analyzer.addAnalysisModule(&afbMod);
   analyzer.addAnalysisModule(&simpleMod);
 
