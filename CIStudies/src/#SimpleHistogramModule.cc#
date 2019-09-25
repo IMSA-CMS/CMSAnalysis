@@ -39,10 +39,10 @@ bool SimpleHistogramModule::process(const edm::EventBase& event)
       fillHistogram("RecoCS", recoCS);
     }
   
-  if (genSimCS != -2 && abs(recoCS) < .975)
-    {     
-      std::cout << "Gen Sim Leptons: " << genParticles.getNumParticles() << "      Reco Leptons: " << recoParticles.getNumParticles() << std::endl;
-    }
+  // if (genSimCS != -2 && abs(recoCS) < .975)
+  //   {     
+  //     std::cout << "Gen Sim Leptons: " << genParticles.getNumParticles() << "      Reco Leptons: " << recoParticles.getNumParticles() << std::endl;
+  //   }
 
   return true;
 }
