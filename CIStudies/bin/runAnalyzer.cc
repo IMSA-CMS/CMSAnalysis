@@ -11,6 +11,7 @@
 #include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 #include "CIAnalysis/CIStudies/interface/MassFilter.hh"
+#include "CIAnalysis/CIStudies/interface/CollinsSoperFilter.hh"
 #include "CIAnalysis/CIStudies/interface/PileupFilter.hh"
 #include "CIAnalysis/CIStudies/interface/MigrationModule.hh"
 #include "CIAnalysis/CIStudies/interface/AcceptanceModule.hh"
@@ -19,6 +20,8 @@
 #include "CIAnalysis/CIStudies/interface/MassResolutionModule.hh"
 #include "CIAnalysis/CIStudies/interface/AFBModule.hh"
 #include "CIAnalysis/CIStudies/interface/SimpleHistogramModule.hh"
+#include "CIAnalysis/CIStudies/interface/UnmatchedParticleModule.hh"
+#include "CIAnalysis/CIStudies/interface/PastingModule.hh"
 
 int main(int argc, char** argv)
 {
@@ -50,6 +53,7 @@ int main(int argc, char** argv)
   RecoIdentificationModule recoMod;
   MatchingModule matchMod(genSimMod, recoMod);
   MassFilter massFilter(genSimMod, 2000);
+  CollinsSoperFilter csFilter(genSimMod, .975);
   PileupFilter pileupFilter(15, 35);
   MigrationModule migMod(matchMod);
   AcceptanceModule accMod(genSimMod, matchMod);
@@ -57,18 +61,23 @@ int main(int argc, char** argv)
   MassResolutionModule massResMod(matchMod);
   AFBModule afbMod(genSimMod, recoMod);
   SimpleHistogramModule simpleMod(genSimMod, recoMod);
+  UnmatchedParticleModule unmatchedMod(genSimMod, matchMod);
+  PastingModule pasteMod(genSimMod, recoMod);
   
   analyzer.addProductionModule(&genSimMod);
   analyzer.addProductionModule(&recoMod);
   analyzer.addProductionModule(&matchMod);
   //analyzer.addFilterModule(&massFilter);
+  //analyzer.addFilterModule(&csFilter);
   //analyzer.addFilterModule(&pileupFilter);
   //analyzer.addAnalysisModule(&migMod);
   //analyzer.addAnalysisModule(&accMod);
   //analyzer.addAnalysisModule(&pTResMod);
   //analyzer.addAnalysisModule(&massResMod);
-  analyzer.addAnalysisModule(&afbMod);
-  analyzer.addAnalysisModule(&simpleMod);
+  //analyzer.addAnalysisModule(&afbMod);
+  //analyzer.addAnalysisModule(&simpleMod);
+  //analyzer.addAnalysisModule(&unmatchedMod);
+  analyzer.addAnalysisModule(&pasteMod);
 
   analyzer.run("textfiles/pickFiles.txt", outputFile, outputEvery);
   

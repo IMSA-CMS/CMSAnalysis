@@ -1,0 +1,16 @@
+#include "CIAnalysis/CIStudies/interface/PtResolutionModule.hh"
+
+PtResolutionModule::PtResolutionModule(const MatchingModule& matchingModule, const int minPt, const int maxPt, const int pTIntervalSize) :
+  ResolutionModule(matchingModule, "pT", minPt, maxPt, pTIntervalSize)
+{
+}
+
+void PtResolutionModule::fillErrors(const MatchingPairCollection& bestPairs)
+{
+  for (auto matchingPair : bestPairs.getPairs())
+    {
+      double genSimPt = matchingPair.getGenParticle()->pt();
+      std::string pTBin = pickBin(genSimPt);
+      fillHistogram("pT" + "ResolutionHistBin" + pTBin, matchingPair.getPtError());
+    }
+}

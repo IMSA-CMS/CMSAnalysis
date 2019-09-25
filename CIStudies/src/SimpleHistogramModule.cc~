@@ -1,0 +1,35 @@
+#include "CIAnalysis/CIStudies/interface/SimpleHistogramModule.hh"
+
+#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
+#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
+
+#include <iostream>
+
+SimpleHistogramModule::SimpleHistogramModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, int minMass, int maxMass, int massInterval) :
+  genSim(genSimModule),
+  reco(recoModule),
+  minMassCut(minMass),
+  maxMassCut(maxMass),
+  interval(massInterval)
+{
+}
+
+void SimpleHistogramModule::initialize()
+{  
+  makeHistogram("GenSimCS", "GenSimCS", histBins, minMassCut, maxMassCut);
+  makeHistogram("RecoCS", "RecoCS", histBins, minMassCut, maxMassCut);
+}
+
+bool SimpleHistogramModule::process(const edm::EventBase& event)
+{
+  auto genParticles = genSim.getGenParticles();
+  auto genSimCS = genParticles.getCollinsSoper();
+
+  auto recoParticles = reco.getRecoCandidates();
+  auto recoCS = recoParticles.getCollinsSoper();
+
+  fillHistogram("GenSimCS", genSimCS);
+  fillHistogram("RecoCS", recoCS);
+
+  return true;
+}
