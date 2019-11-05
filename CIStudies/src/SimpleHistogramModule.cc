@@ -15,9 +15,13 @@ void SimpleHistogramModule::initialize()
 {  
   const int cosMin = -1;
   const int cosMax = 1;
+  const int invMin = 0;
+  const int invMax = 3300;
 
   makeHistogram("GenSimCS", "GenSimCS", histBins, cosMin, cosMax);
   makeHistogram("RecoCS", "RecoCS", histBins, cosMin, cosMax);
+  makeHistogram("GenSimInv", "GenSimInv", histBins, invMin, invMax);
+  makeHistogram("RecoInv", "RecoInv", histBins, invMin, invMax);
 }
 
 bool SimpleHistogramModule::process(const edm::EventBase& event)
@@ -28,6 +32,9 @@ bool SimpleHistogramModule::process(const edm::EventBase& event)
   auto recoParticles = reco.getRecoCandidates();
   auto recoCS = recoParticles.getCollinsSoper();
 
+  auto genSimInv  = genParticles.getInvariantMass();
+  auto recoInv = recoParticles.getInvariantMass();
+
 
   if (genSimCS != -2)
     {
@@ -37,6 +44,9 @@ bool SimpleHistogramModule::process(const edm::EventBase& event)
     {
       fillHistogram("RecoCS", recoCS);
     }
+
+  fillHistogram("GenSimInv", genSimInv);
+  fillHistogram("RecoInv", recoInv);
 
   return true;
 }
