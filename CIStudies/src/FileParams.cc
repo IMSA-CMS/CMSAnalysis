@@ -156,8 +156,9 @@ string FileParams::locateTextFile() const
   string helicityString = getHelicity();
   string lambdaString = "_Lam" + getLambda();
 
-  if ((yearString == "2017" || yearString == "2018") && (processString == Process::CI()))
-    massString = massCutString20172018(); 
+  if ((yearString == "2017" || yearString == "2018") && (processString == (Process::CI()+"To2"))) {
+    massString = massCutString20172018();
+  }
   else if (processString == Process::DY())
     {
       massString = massCutStringDY();
