@@ -20,6 +20,8 @@ bool MatchingModule::process(const edm::EventBase& event)
   std::vector<const reco::Candidate*> genSimParticles(genSim.getGenParticles().getParticles());
   std::vector<const reco::Candidate*> recoCandidates(reco.getRecoCandidates().getParticles());
 
+  auto genSimCS = genSim.getGenParticles().getCollinsSoper();
+
   //loops through while there are still at least one gen and reco particle left that have not been matched and set to null
   while (!checkIsNull(genSimParticles) && !checkIsNull(recoCandidates))
     {
@@ -76,10 +78,27 @@ bool MatchingModule::process(const edm::EventBase& event)
 	  //keeps track of that match by adding it to the vector that will be returned
 	  matchingBestPairs.addMatchingPair(pairDataList);
 	}
+      // else
+      // 	{
+      // 	  std::cout << "DeltaR Cutoff FAILED! Gen Sim CS = " + std::to_string(genSimCS) << std::endl;
+      // 	}
+
       //sets the best matches to null so they are not matched again
       genSimParticles[bestGenIndex] = nullptr;
       recoCandidates[bestIndex] = nullptr;
     }
+
+  // if (!checkIsNull(genSimParticles) && checkIsNull(recoCandidates))
+  //   {
+  //     for (auto& particle : genSimParticles)
+  // 	{
+  // 	  if (particle)
+  // 	    {
+  // 	      std::cout << "Unmatched Particles Eta: " << particle->eta() << std::endl;
+  // 	    }
+  // 	}
+  //   }
+      
 
   return true;
 }

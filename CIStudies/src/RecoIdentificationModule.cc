@@ -40,6 +40,11 @@ bool RecoIdentificationModule::process(const edm::EventBase& event)
 	    {
 	      recoCandidates.addParticle(&p); 
 	    }
+	  // else 
+	  //   {
+	  //     auto recoCS = recoCandidates.getCollinsSoper();
+	  //     std::cout << "Pt Cut FAILED! Reco CS = " + std::to_string(recoCS) << " and Reco Pt = " + std::to_string(p.pt()) << std::endl;
+	  //   }
 	}
     }
   

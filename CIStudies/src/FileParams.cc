@@ -37,9 +37,11 @@ void Helicity::addMaps()
 
   vector<string> dibosons = {"WZ", "WZ3LNu", "WZ2L2Q", "ZZ", "ZZ2L2Nu", "ZZ2L2Q", "ZZ4L", "WW"};
   vector<string> tops = {"ttbar", "tW", "Wantitop"};
+  vector<string> qcd = {"Wjets"};
 
   addValuesToMap(dibosons);
   addValuesToMap(tops);
+  addValuesToMap(qcd);
 
   addAlternate("ll", "LL");
   addAlternate("lr", "LR");
@@ -162,7 +164,6 @@ string FileParams::locateTextFile() const
   else if (processString == Process::DY())
     {
       massString = massCutStringDY();
-      leptonString = "";
       interferenceString = "";
       helicityString = "";
       lambdaString = "";
