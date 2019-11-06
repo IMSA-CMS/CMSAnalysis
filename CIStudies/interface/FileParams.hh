@@ -125,6 +125,9 @@ public:
   std::string getLambda() const { return lambda.getValue(); }
   std::string getParticle() const { return particle.getValue(); }
 
+  //get-all
+  std::vector<std::string> getAllValues() const;
+
   // Returns a vector of all filenames for this set of parameters
   std::vector<std::string> fileVector() const;
  
