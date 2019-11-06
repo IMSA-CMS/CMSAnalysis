@@ -52,15 +52,32 @@ void PastingModule::finalize()
       getHistogram("Reco" + massBin)->Scale(getHistogram("Reco" + massBin)->Integral() / getHistogram("GenSim" + massBins[0])->Integral());
     }
 
-  getHistogram("GenSimM300")->Scale(.579800);
-  getHistogram("GenSimM800")->Scale(.019020);
-  getHistogram("GenSimM1300")->Scale(.003909);
-  getHistogram("GenSimM2000")->Scale(.001052);
+//"CITo2Mu_Lam16TeVConL
+  //getHistogram("GenSimM300")->Scale(.579800); ,
+  //getHistogram("GenSimM800")->Scale(.019020);
+  //getHistogram("GenSimM1300")->Scale(.003909);
+  //getHistogram("GenSimM2000")->Scale(.001052);
   
-  getHistogram("RecoM300")->Scale(.578500);
-  getHistogram("RecoM800")->Scale(.019000);
-  getHistogram("RecoM1300")->Scale(.003954);
-  getHistogram("RecoM2000")->Scale(.001052);
+  //getHistogram("RecoM300")->Scale(.578500);
+  //getHistogram("RecoM800")->Scale(.019000);
+  //getHistogram("RecoM1300")->Scale(.003954);
+  //getHistogram("RecoM2000")->Scale(.001052);
+
+  //ADD 2016
+  //getHistogram("GenSimM1700")->Scale(.004171);
+  //getHistogram("RecoM1700")->Scale(.004171);
+
+  //ADD 2017
+  getHistogram("GenSimM300")->Scale(1.90600000);
+  getHistogram("GenSimM800")->Scale(.042490000);
+  getHistogram("GenSimM1300")->Scale(.00531200);
+  getHistogram("GenSimM2000")->Scale(.00261800);
+ 
+  getHistogram("RecoM300")->Scale(1.90600000);
+  getHistogram("RecoM800")->Scale(.042490000);
+  getHistogram("RecoM1300")->Scale(.00531200);
+  getHistogram("RecoM2000")->Scale(.00261800);
+
 
 
   for (int i = 1; i < histBins; ++i)
