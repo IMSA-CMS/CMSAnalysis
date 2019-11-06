@@ -32,6 +32,8 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
   // A list of all the filters we used
   std::unordered_set<std::string> filterNames;
 
+  int numOfEvents = 0;
+
   for (auto& filepar : fileparams)
     {
       // Set the static FileParams object so the modules know the file parameters
@@ -58,6 +60,8 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 	  fwlite::Event ev(file);
 
 	  std::cerr << "Events: " << ev.size() << std::endl;
+
+	  numOfEvents += ev.size();
       
 	  int ievt = 0;
 
@@ -112,6 +116,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 
 	  delete file;
 	}
+      std::cout << numOfEvents << std::endl;
     }      
   
   // Finalize the modules
