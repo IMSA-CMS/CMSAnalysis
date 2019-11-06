@@ -158,9 +158,10 @@ string FileParams::locateTextFile() const
   string helicityString = getHelicity();
   string lambdaString = "_Lam" + getLambda();
 
-  if ((yearString == "2017" || yearString == "2018") && (processString == (Process::CI()+"To2"))) {
-    massString = massCutString20172018();
-  }
+
+  if ((yearString == "2017" || yearString == "2018") && (processString == Process::CI() + "To2" || processString == Process::ADD() + "GravToLL"))
+    massString = massCutString20172018(); 
+
   else if (processString == Process::DY())
     {
       massString = massCutStringDY();
@@ -263,6 +264,12 @@ string FileParams::massCutStringBackgrounds() const
     return "M2500toInf";
 
   throw std::runtime_error(mass + "Invalid mass type!");
+}
+
+std::vector<std::string> FileParams::getAllValues() const
+{
+  std::vector<std::string> values = {process.getValue(), year.getValue(), helicity.getValue(), interference.getValue(), massRange.getValue(), lambda.getValue(), particle.getValue()};
+  return values;
 }
 
 std::ostream& operator<<(std::ostream& stream, const FileParams& params)
