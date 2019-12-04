@@ -73,7 +73,7 @@ int main(int argc, char** argv)
   //analyzer.addFilterModule(&massFilter);
   //analyzer.addFilterModule(&csFilter);
   //analyzer.addFilterModule(&pileupFilter);
-  //analyzer.addAnalysisModule(&migMod);
+  analyzer.addAnalysisModule(&migMod);
   //analyzer.addAnalysisModule(&accMod);
   //analyzer.addAnalysisModule(&pTResMod);
   //analyzer.addAnalysisModule(&massResMod);
