@@ -129,6 +129,8 @@ public:
   //get-all
   std::vector<std::string> getAllValues() const;
 
+  std::string getFileKey() const;
+
   // Returns a vector of all filenames for this set of parameters
   std::vector<std::string> fileVector() const;
  

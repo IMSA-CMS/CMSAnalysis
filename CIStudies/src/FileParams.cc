@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
+#include <boost/algorithm/string.hpp>
 
 using std::map;
 using std::cout;
@@ -60,7 +61,7 @@ void Interference::addMaps()
 
 void MassRange::addMaps()
 {
-  vector<string> massVals = {"M300", "M800", "M1300", "M1700", "M2000", "M120", "M200", "M400", "M800", "M1400", "M2300", "M3500", "M4500", "M6000", "M600", "M1200", "M2500", "M500", "M1200", "M1800"};
+  vector<string> massVals = {"M300", "M800", "M1300", "M1700", "M2000", "M50", "M120", "M200", "M400", "M800", "M1400", "M2300", "M3500", "M4500", "M6000", "M600", "M1200", "M2500", "M500", "M1200", "M1800"};
   addValuesToMap(massVals);
   addValuesToMap({""});
   
@@ -221,7 +222,9 @@ string FileParams::massCutString20172018() const
 string FileParams::massCutStringDY() const
 {
   string mass = getMassRange();
-  if (mass == "M120")
+  if (mass == "M50")
+    return "M50to120";
+  else if (mass == "M120")
     return "M120to200";
   else if (mass == "M200")
     return "M200to400";
@@ -272,6 +275,69 @@ std::vector<std::string> FileParams::getAllValues() const
   std::vector<std::string> values = {process.getValue(), year.getValue(), helicity.getValue(), interference.getValue(), massRange.getValue(), lambda.getValue(), particle.getValue()};
   return values;
 }
+
+std::string FileParams::getFileKey() const
+{
+  string fileKey;
+
+  string processString = getProcess();
+  string yearString = getYear();
+  string leptonString = getParticle();
+  string massString = getMassRange();
+  string interferenceString = getInterference();
+  string helicityString = getHelicity();
+  string lambdaString = getLambda();
+
+  if ((processString == Process::CI() || processString == Process::ADD()) && (yearString == "2017" || yearString == "2018"))
+    {
+      massString = massCutString20172018();
+      if (leptonString == "Muon")
+	{
+	  leptonString = "Mu";
+	}
+      else if (leptonString == "Electron")
+	{
+	  leptonString = "E";
+	}
+
+      if (interferenceString == "Constructive")
+	{
+	  interferenceString = "Con";
+	}
+      else if (interferenceString == "Destructive")
+	{
+	  interferenceString = "Des";
+	}
+			   
+      fileKey = "CITo2" + leptonString + "_Lam" + lambdaString + "TeV" + interferenceString + helicityString + "_" + massString;
+    }
+
+  if (processString == Process::ADD())
+    {
+      processString = "ADDGravToLL";
+      lambdaString = std::to_string(stoi(lambdaString) * 1000);
+
+      if (yearString == "2016")
+	{
+	  fileKey = processString + "_Lam" + lambdaString + "_" + massString;
+	}
+      else if (yearString == "2017")
+	{
+	  massString = massString.substr(1); //cuts off the M
+	  fileKey = processString + "_LambdaT-" + lambdaString + "_M-" + massString;
+	}
+    }
+
+  else if (processString == Process::DY())
+    {
+      massString = massCutStringDY();
+      fileKey = "dy" + massString.substr(1);
+    }
+
+  boost::to_lower(fileKey);
+  return fileKey;  
+}
+  
 
 std::ostream& operator<<(std::ostream& stream, const FileParams& params)
 {
