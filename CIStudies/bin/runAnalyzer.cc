@@ -22,7 +22,7 @@
 #include "CIAnalysis/CIStudies/interface/SimpleHistogramModule.hh"
 #include "CIAnalysis/CIStudies/interface/UnmatchedParticleModule.hh"
 #include "CIAnalysis/CIStudies/interface/PastingModule.hh"
-#include "CIAnalysis/CIStudies/interface/WeightingModule.hh";
+#include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
 
 int main(int argc, char** argv)
 {
@@ -69,7 +69,7 @@ int main(int argc, char** argv)
   analyzer.addProductionModule(&genSimMod);
   analyzer.addProductionModule(&recoMod);
   analyzer.addProductionModule(&matchMod);
-  analyzer.addProudctionModule(&weightMod);
+  analyzer.addProductionModule(&weightMod);
   //analyzer.addFilterModule(&massFilter);
   //analyzer.addFilterModule(&csFilter);
   //analyzer.addFilterModule(&pileupFilter);
