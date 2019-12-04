@@ -24,7 +24,7 @@ private:
   const int minMassCut;
   const int maxMassCut;
   std::unordered_map<std::string, double> massBins;
-  std::unordered_map<std::string, std::string> fileKeys;
+  std::unordered_map<std::string, std::
 
   bool isNewMassBin(const std::string mass);
 };

@@ -3,15 +3,18 @@
 
 #include <vector>
 #include "ProductionModule.hh"
+#include <unordered_map>
 
 class WeightingModule : public ProductionModule
 {
 public:
+  WeightingModule();
   virtual bool process(const edm::EventBase& event) override;
-  double getWeight() {return weight;}
+  double getWeight() const {return weight;}
 
 private:
-  void findWeight(std::vector<std::string> values);
+  void findWeight(std::string key);
+  std::unordered_map<std::string, double> weights;
   double weight;
 };
 
