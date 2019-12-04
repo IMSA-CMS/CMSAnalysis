@@ -22,6 +22,7 @@
 #include "CIAnalysis/CIStudies/interface/SimpleHistogramModule.hh"
 #include "CIAnalysis/CIStudies/interface/UnmatchedParticleModule.hh"
 #include "CIAnalysis/CIStudies/interface/PastingModule.hh"
+#include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
 
 int main(int argc, char** argv)
 {
@@ -52,6 +53,7 @@ int main(int argc, char** argv)
   GenSimIdentificationModule genSimMod;
   RecoIdentificationModule recoMod;
   MatchingModule matchMod(genSimMod, recoMod);
+  WeightingModule weightMod;
   MassFilter massFilter(genSimMod, 2000);
   CollinsSoperFilter csFilter(genSimMod, .975);
   PileupFilter pileupFilter(15, 35);
@@ -62,22 +64,23 @@ int main(int argc, char** argv)
   AFBModule afbMod(genSimMod, recoMod);
   SimpleHistogramModule simpleMod(genSimMod, recoMod);
   UnmatchedParticleModule unmatchedMod(genSimMod, matchMod);
-  PastingModule pasteMod(genSimMod, recoMod);
+  PastingModule pasteMod(genSimMod, recoMod, weightMod);
   
   analyzer.addProductionModule(&genSimMod);
   analyzer.addProductionModule(&recoMod);
   analyzer.addProductionModule(&matchMod);
+  analyzer.addProductionModule(&weightMod);
   //analyzer.addFilterModule(&massFilter);
   //analyzer.addFilterModule(&csFilter);
   //analyzer.addFilterModule(&pileupFilter);
-  //analyzer.addAnalysisModule(&migMod);
+  analyzer.addAnalysisModule(&migMod);
   //analyzer.addAnalysisModule(&accMod);
   //analyzer.addAnalysisModule(&pTResMod);
   //analyzer.addAnalysisModule(&massResMod);
   //analyzer.addAnalysisModule(&afbMod);
   //analyzer.addAnalysisModule(&simpleMod);
   //analyzer.addAnalysisModule(&unmatchedMod);
-  analyzer.addAnalysisModule(&pasteMod);
+  //analyzer.addAnalysisModule(&pasteMod);
 
   analyzer.run("textfiles/pickFiles.txt", outputFile, outputEvery);
   
