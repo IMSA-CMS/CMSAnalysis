@@ -76,7 +76,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 	      bool continueProcessing = true;
 	      for (auto module : productionModules)
 		{
-		  if (!module->process(event))
+		  if (!module->processEvent(event))
 		    {
 		      continueProcessing = false;
 		      break;
@@ -87,7 +87,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 	      std::string filterString;
 	      for (auto module : filterModules)
 		{
-		  if (!module->process(event))
+		  if (!module->processEvent(event))
 		    {
 		      continueProcessing = false;
 		      break;
@@ -110,7 +110,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 		{
 		  // Set the filter string first
 		  module->setFilterString(filterString);
-		  module->process(event);
+		  module->processEvent(event);
 		}
 	    }
 
