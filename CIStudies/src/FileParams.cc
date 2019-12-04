@@ -13,10 +13,11 @@ using std::vector;
 
 void Process::addMaps()
 {
-  addValuesToMap({"CI", "ADD", "DY", "Diboson", "top", "QCD"});
+  addValuesToMap({"CI", "ADD", "ADD2", "DY", "Diboson", "top", "QCD"});
 
   addAlternates({"ci", "Ci", "cI"}, "CITo2");
   addAlternates({"add", "Add", "aDd", "adD", "aDD", "LED", "led"}, "ADD");
+  addAlternates({"add2", "Add2", "aDd2", "adD2", "aDD2"}, "ADD2");
   addAlternates({"dy", "Drell Yan", "Drell-Yan"}, "DY");
   addAlternates({"diboson", "DB", "db"}, "Diboson");
   addAlternate("Top", "top");
@@ -159,7 +160,7 @@ string FileParams::locateTextFile() const
   string lambdaString = "_Lam" + getLambda();
 
 
-  if ((yearString == "2017" || yearString == "2018") && (processString == Process::CI() + "To2" || processString == Process::ADD() + "GravToLL"))
+  if ((yearString == "2017" || yearString == "2018") && (processString == Process::CI() + "To2" || processString == Process::ADD() + "GravToLL" || processString == Process::ADD2() + "GravToLL"))
     massString = massCutString20172018(); 
 
   else if (processString == Process::DY())
@@ -172,7 +173,7 @@ string FileParams::locateTextFile() const
   else
     massString = getMassRange();
 
-  if (processString == "ADDGravToLL")
+  if (processString == "ADDGravToLL"||processString == "ADD2GravToLL")
     {
       leptonString = "";
       interferenceString = "";

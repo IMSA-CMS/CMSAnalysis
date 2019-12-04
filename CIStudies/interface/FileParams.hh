@@ -15,6 +15,7 @@ public:
 
   static std::string CI() {return "CI";}
   static std::string ADD() {return "ADD";}
+  static std::string ADD2() {return "ADD2";}
   static std::string DY() {return "DY";}
   static std::string Diboson() {return "Diboson";}
   static std::string top() {return "top";}

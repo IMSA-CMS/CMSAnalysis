@@ -37,8 +37,7 @@ std::string MassFilter::makeFilterString(const edm::EventBase& event)
   event.getByLabel(std::string("generator"), genEvtInfo);
   double qScale = genEvtInfo->pdf()->scalePDF;
   
-  // if (qScale <= massBinUpperCutoff)
-  if (qScale >= 1700)
+  if (qScale <= massBinUpperCutoff)
      return "Included";
   else
     return "";
