@@ -4,6 +4,10 @@
 #include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/FileParams.hh"
 
+#include "DataFormats/Common/interface/Handle.h"
+#include "DataFormats/FWLite/interface/Event.h"
+#include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
+
 #include "TH1.h"
 
 PastingModule::PastingModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, int minMass, int maxMass) :
@@ -28,7 +32,7 @@ bool PastingModule::process(const edm::EventBase& event)
     {
       massBins.push_back(massBin);
       makeHistogram("GenSim" + massBin, "GenSim" + massBin, histBins, minMassCut, maxMassCut);
-      makeHistogram("Reco" + massBin, "Reco" + massBin, histBins, minMassCut, maxMassCut);
+      makeHistogram("Reco" + massBin, "Reco" + massBin, histBins, minMassCut, maxMassCut);;
     }
 
   auto genParticles = genSim.getGenParticles();
@@ -36,9 +40,14 @@ bool PastingModule::process(const edm::EventBase& event)
 
   auto recoParticles = reco.getRecoCandidates();
   auto recoInv = recoParticles.getInvariantMass();
+  
+  edm::Handle<GenEventInfoProduct> genEvtInfo;
+  event.getByLabel(std::string("generator"), genEvtInfo);
+  double qScale = genEvtInfo->pdf()->scalePDF;
 
   fillHistogram("GenSim" + massBin, genSimInv);  
   fillHistogram("Reco" + massBin, recoInv);
+  fillHistogram("Compare qScale", qScale);
   return true;
 }
 
@@ -50,10 +59,10 @@ void PastingModule::finalize()
   //std::vector<double> fileSizes = {50000, 50000, 50000, 50000};
 
   //2016 ADD - Lambda: 5
-  std::vector<double> fileSizes = {96700};
+  //std::vector<double> fileSizes = {96700};
 
   //2017 ADD - Lambda: 5
-  //std::vector<double> fileSizes = {150000, 150000, 150000, 150000};
+  std::vector<double> fileSizes = {150000, 150000, 150000, 150000};
 
   //2016 electrons
   //std::vector<double> fileSizes = {49039, 50000, 50000, 48816};
@@ -99,15 +108,15 @@ void PastingModule::finalize()
 
   // CI 2016 Muon Weights
 
-  // getHistogram("GenSimM300")->Scale(.579800);
-  // getHistogram("GenSimM800")->Scale(.019020);
-  // getHistogram("GenSimM1300")->Scale(.003909);
-  // getHistogram("GenSimM2000")->Scale(.001052);
+   // getHistogram("GenSimM300")->Scale(.579800);
+   // getHistogram("GenSimM800")->Scale(.019020);
+   // getHistogram("GenSimM1300")->Scale(.003909);
+   // getHistogram("GenSimM2000")->Scale(.001052);
   
-  // getHistogram("RecoM300")->Scale(.579800);
-  // getHistogram("RecoM800")->Scale(.019020);
-  // getHistogram("RecoM1300")->Scale(.003909);
-  // getHistogram("RecoM2000")->Scale(.001052);
+   // getHistogram("RecoM300")->Scale(.579800);
+   // getHistogram("RecoM800")->Scale(.019020);
+   // getHistogram("RecoM1300")->Scale(.003909);
+   // getHistogram("RecoM2000")->Scale(.001052);
 
   // CI 2017 Muon Weights
 
@@ -147,20 +156,20 @@ void PastingModule::finalize()
 
   //ADD 2016 Weights: Lambda - 5000
 
-  getHistogram("GenSimM1700")->Scale(.004171);
-  getHistogram("RecoM1700")->Scale(.004171);
+  //getHistogram("GenSimM1700")->Scale(.004171);
+  //getHistogram("RecoM1700")->Scale(.004171);
 
   //ADD 2017 Weights
 
-  // getHistogram("GenSimM300")->Scale(1.90600000);
-  // getHistogram("GenSimM800")->Scale(.04249000);
-  // getHistogram("GenSimM1300")->Scale(.00531200);
-  // getHistogram("GenSimM2000")->Scale(.00261800);
+  getHistogram("GenSimM300")->Scale(1.90600000);
+  getHistogram("GenSimM800")->Scale(.04249000);
+  getHistogram("GenSimM1300")->Scale(.00531200);
+  getHistogram("GenSimM2000")->Scale(.00261800);
   
-  // getHistogram("RecoM300")->Scale(1.90600000);
-  // getHistogram("RecoM800")->Scale(.04249000);
-  // getHistogram("RecoM1300")->Scale(.00531200);
-  // getHistogram("RecoM2000")->Scale(.00261800);
+  getHistogram("RecoM300")->Scale(1.90600000);
+  getHistogram("RecoM800")->Scale(.04249000);
+  getHistogram("RecoM1300")->Scale(.00531200);
+  getHistogram("RecoM2000")->Scale(.00261800);
   
 
 
