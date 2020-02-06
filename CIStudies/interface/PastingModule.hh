@@ -2,6 +2,7 @@
 #define PASTINGMODULE_HH
 
 #include "HistogramOutputModule.hh"
+#include "BigPastingModule.hh"
 #include <unordered_map>
 
 class GenSimIdentificationModule;
@@ -10,6 +11,9 @@ class WeightingModule;
 
 class PastingModule : public HistogramOutputModule
 {
+
+friend class BigPastingModule;
+
 public:
   PastingModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, int minMass = 300, int maxMass = 5000);
   virtual void initialize() override;

@@ -201,17 +201,17 @@ std::vector<FileParams> Analyzer::inputFiles(const std::string& txtFile) const
 
   //adds all of the files to a larger vector that is seperated by mass cuts
   for (auto& processStr : process)
-    for (auto& massStr : mass)
+    for (auto& yearStr : year)
       {
-	for (auto& yearStr : year)
+	for (auto& leptonStr : lepton)
 	  {
-	    for (auto& leptonStr : lepton)
+	    for (auto& lambdaStr : lambda)
 	      {
-		for (auto& lambdaStr : lambda)
+		for (auto& interferenceStr : interference)
 		  {
-		    for (auto& interferenceStr : interference)
+		    for (auto& helicityStr : helicity)
 		      {
-			for (auto& helicityStr : helicity)
+			for (auto& massStr : mass)
 			  {
 			    //based on the options selected, it adds the respective files following the standard naming system
 			    params.push_back(FileParams(processStr, yearStr, helicityStr, interferenceStr, massStr, 

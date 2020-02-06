@@ -128,6 +128,7 @@ public:
 
   //get-all
   std::vector<std::string> getAllValues() const;
+  std::string getTabSeparatedValues() const;
 
   std::string getFileKey() const;
 
