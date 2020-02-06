@@ -50,11 +50,11 @@ bool PastingModule::process(const edm::EventBase& event)
   
   edm::Handle<GenEventInfoProduct> genEvtInfo;
   event.getByLabel(std::string("generator"), genEvtInfo);
-  double qScale = genEvtInfo->pdf()->scalePDF;
+  //double qScale = genEvtInfo->pdf()->scalePDF;
 
   fillHistogram("GenSim" + massBin, genSimInv);  
   fillHistogram("Reco" + massBin, recoInv);
-  fillHistogram("Compare qScale", qScale);
+  // fillHistogram("Compare qScale", qScale);
   return true;
 }
 
@@ -94,4 +94,6 @@ bool PastingModule::isNewMassBin(const std::string mass)
   
   return true;
 }
+
+
 

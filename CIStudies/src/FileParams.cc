@@ -276,6 +276,12 @@ std::vector<std::string> FileParams::getAllValues() const
   return values;
 }
 
+std::string FileParams::getTabSeparatedValues() const
+{
+  std::string values = process.getValue() + "\t" + year.getValue() + "\t" + particle.getValue() + "\t" + helicity.getValue() + "\t" + interference.getValue() + "\t" + lambda.getValue();
+  return values;
+}
+
 std::string FileParams::getFileKey() const
 {
   string fileKey;
@@ -288,9 +294,13 @@ std::string FileParams::getFileKey() const
   string helicityString = getHelicity();
   string lambdaString = getLambda();
 
-  if ((processString == Process::CI() || processString == Process::ADD()) && (yearString == "2017" || yearString == "2018"))
+  if (processString == Process::CI() || processString == Process::ADD())
     {
-      massString = massCutString20172018();
+      if (yearString == "2017" || yearString == "2018")
+	{
+	  massString = massCutString20172018();
+	}
+
       if (leptonString == "Muon")
 	{
 	  leptonString = "Mu";
@@ -335,6 +345,7 @@ std::string FileParams::getFileKey() const
     }
 
   boost::to_lower(fileKey);
+
   return fileKey;  
 }
   
