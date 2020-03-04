@@ -1,5 +1,6 @@
 #include "CIAnalysis/CIStudies/interface/BigPastingModule.hh"
 #include "CIAnalysis/CIStudies/interface/PastingModule.hh"
+#include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
 
 BigPastingModule::BigPastingModule(PastingModule& pastingModule) :
   pasting(pastingModule)
@@ -8,8 +9,8 @@ BigPastingModule::BigPastingModule(PastingModule& pastingModule) :
 
 void BigPastingModule::initialize()
 {
-  outputFile.open("histogramTables.txt");
-  outputFile << "Process" << "\t" << "Year" << "\t" << "Particle" << "\t" << "Helicity" << "\t" << "Interference" << "\t" << "Lambda" << "\t" << "Mass" << "\t" << "Bin Contents" << std::endl;
+  outputFile.open("histogramTables2016.txt");
+  outputFile << "Process" << "\t" << "Year" << "\t" << "Particle" << "\t" << "Helicity" << "\t" << "Interference" << "\t" << "Lambda" << "\t" << "Mass" << "\t" << "Bin Weight" << "\t" << "Bin Contents" << std::endl;
 }
 
 bool BigPastingModule::process(const edm::EventBase& event)
@@ -39,10 +40,20 @@ void BigPastingModule::printCurrentHistogram()
 
   for (int i = 1; i <= pasting.histBins; ++i)
     {
-      auto massBin = pasting.minMassCut + (i - 1) * 100;
+      auto massBin = pasting.minMassCut + (i - 1) * 50;
+
+      std::string key = "M300";
+      if (massBin >= 2000)
+	key = "M2000";
+      else if (massBin >= 1300)
+	key = "M1300";
+      else if (massBin >= 800)
+	key = "M800";
+
+      auto weight = pasting.massBins[key];
       auto binContents = genSimHistogram->GetBinContent(i);
 
-      completeRowOutput = outputRow + "\t" + std::to_string(massBin) + "\t" + std::to_string(binContents);
+      completeRowOutput = outputRow + "\t" + std::to_string(massBin) + "\t" + std::to_string(weight) + "\t" + std::to_string(binContents);
       outputFile << completeRowOutput << std::endl;
     }
 
