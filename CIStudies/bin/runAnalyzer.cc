@@ -78,9 +78,9 @@ int main(int argc, char** argv)
   //analyzer.addAnalysisModule(&pTResMod);
   //analyzer.addAnalysisModule(&massResMod);
   //analyzer.addAnalysisModule(&afbMod);
-  analyzer.addAnalysisModule(&simpleMod);
+  //analyzer.addAnalysisModule(&simpleMod);
   //analyzer.addAnalysisModule(&unmatchedMod);
-  //analyzer.addAnalysisModule(&pasteMod);
+  analyzer.addAnalysisModule(&pasteMod);
 
   analyzer.run("textfiles/pickFiles.txt", outputFile, outputEvery);
   
