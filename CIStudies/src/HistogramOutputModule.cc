@@ -1,5 +1,7 @@
 #include "CIAnalysis/CIStudies/interface/HistogramOutputModule.hh"
 
+#include "CIAnalysis/CIStudies/interface/HistogramPrototype.hh"
+
 #include <iostream>
 #include <stdexcept>
 
@@ -50,6 +52,18 @@ void HistogramOutputModule::addObject(const std::string& name, TObject* obj)
 
 void HistogramOutputModule::makeHistogram(const std::string& name, const std::string& title, int nbins, double min, double max)
 {
+  auto newHist = new TH1F(name.c_str(), title.c_str(), nbins, min, max);
+  addObject(name, newHist);
+}
+
+void HistogramOutputModule::makeHistogram(HistogramPrototype* h)
+{
+  const std::string& name = h->getName();
+  auto title = name;
+  int nbins = h->getNBins();
+  double max = h->getMaximum();
+  double min = h->getMinimum();
+  
   auto newHist = new TH1F(name.c_str(), title.c_str(), nbins, min, max);
   addObject(name, newHist);
 }

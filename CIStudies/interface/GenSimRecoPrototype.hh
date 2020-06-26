@@ -1,0 +1,26 @@
+#ifndef GENSIMRECOPROTOTYPE_HH
+#define GENSIMRECOPROTOTYPE_HH
+
+#include "CIAnalysis/CIStudies/interface/HistogramPrototype.hh"
+
+class GenSimIdentificationModule;
+class RecoIdentificationModule;
+
+class GenSimRecoPrototype : public HistogramPrototype
+{
+  public:
+    GenSimRecoPrototype(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const bool typeSwitch, std:: string iname, int iNBins, double iminimum, double imaximum);
+    double value() const override {return protectedValue(typeGenSim);};     // Overloads value() and calls protectedValue(typeGenSim)
+  protected:
+    const GenSimIdentificationModule& getGenSim() const {return genSim;}
+    const RecoIdentificationModule& getReco() const {return reco;}
+    bool getDataType() const {return typeGenSim;}
+    virtual double protectedValue(bool typeSwitch) const = 0;
+  private:
+    const GenSimIdentificationModule& genSim; 
+    const RecoIdentificationModule& reco;
+    bool typeGenSim;                            // Switch between GenSim and Reco: value is true for GenSim, false for Reco                       
+};          
+
+
+#endif
