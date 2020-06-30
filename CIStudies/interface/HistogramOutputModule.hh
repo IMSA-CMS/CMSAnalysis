@@ -8,6 +8,7 @@
 #include "TH1.h"
 
 class TObject;
+class HistogramPrototype;
 
 // An AnalysisModule designed to fill histograms into a Root file
 class HistogramOutputModule : public AnalysisModule
@@ -35,6 +36,8 @@ protected:
   // for addObject() above.
   void makeHistogram(const std::string& name, const std::string& title, int nbins,
 		     double min, double max);
+  // Creates a histogram and adds it to the collection, but uses the HistogramPrototype* object
+  // void makeHistogram(HistogramPrototype* h);
 
   // Convenient getter methods to access histograms
   TH1* getHistogram(const std::string& name) {return dynamic_cast<TH1*>(getObject(name));}
@@ -42,7 +45,7 @@ protected:
   {return dynamic_cast<const TH1*>(getObject(name));}
 
   // Convenient function to fill a histogram by name
-  void fillHistogram(const std::string& name, double number);
+  void fillHistogram(const std::string& name, double number, double weight = 1.00);
 
 private:
   // This is a map of objects as they are seen by the user, by name
