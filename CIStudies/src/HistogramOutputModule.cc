@@ -1,4 +1,5 @@
 #include "CIAnalysis/CIStudies/interface/HistogramOutputModule.hh"
+#include "CIAnalysis/CIStudies/interface/HistogramPrototype.hh"
 
 #include <iostream>
 #include <stdexcept>
@@ -54,13 +55,25 @@ void HistogramOutputModule::makeHistogram(const std::string& name, const std::st
   addObject(name, newHist);
 }
 
-void HistogramOutputModule::fillHistogram(const std::string& name, double number)
+// void HistogramOutputModule::makeHistogram(HistogramPrototype* h)
+// {
+  // const std::string& name = h->getName();
+  // auto title = name;
+  // int nbins = h->getNBins();
+  // double min = h->getMinimum();
+  // double max = h->getMaximum();
+  
+  // auto newHist = new TH1F(name.c_str(), title.c_str(), nbins, min, max);
+  // addObject(name, newHist);
+//}
+
+void HistogramOutputModule::fillHistogram(const std::string& name, double number, double weight)
 {
   auto hist = getHistogram(name);
   if (!hist)
     throw std::runtime_error("Argument to getHistogram was not of TH1 type!  Name: " + name 
 			     + " and Root type: " + getObject(name)->ClassName());
-  getHistogram(name)->Fill(number);
+  getHistogram(name)->Fill(number, weight);
 }
 
 std::string HistogramOutputModule::getObjectName(const std::string& str) const
