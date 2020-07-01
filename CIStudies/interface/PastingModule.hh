@@ -27,6 +27,7 @@ private:
   const GenSimIdentificationModule& genSim;
   const RecoIdentificationModule& reco;
   const WeightingModule& weighting;
+  const LRWeightModule & lrWeighting;
   // const PtResolutionModule& ptRes;
   // const int histBins = 54;
   // const int minMassCut;

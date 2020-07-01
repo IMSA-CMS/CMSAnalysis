@@ -8,35 +8,9 @@
 #include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 #include "TLorentzVector.h"
 
-LRWeightModule::LRWeightModule(const std::string& filename) :
-  TextOutputModule(filename)
-{
-  pythia.init();
-}
-
-void LRWeightModule::finalize()
-{
-  // The last one, which otherwise would be missed
-  writeCurrentWeights();
-}
 
 bool LRWeightModule::process(const edm::EventBase& event)
 {
-  if (firstTime || getFileParams() != currentFileParams)
-    {
-      if (firstTime)
-	{
-	  firstTime = false;
-	}
-      else
-	{
-	  writeCurrentWeights();
-	}
-      currentFileParams = getFileParams();
-      lrWeight.clear();
-      rlWeight.clear();
-    }
-
   edm::Handle<std::vector<reco::GenParticle>> genParticles;
   event.getByLabel(std::string("prunedGenParticles"), genParticles);	
   edm::Handle<GenEventInfoProduct> genInfo;
@@ -47,27 +21,10 @@ bool LRWeightModule::process(const edm::EventBase& event)
   int interference = getFileParams().getInterference() == Interference::constructive() ? -1 : 1;
 
   auto weights = calculateWeights(*genInfo, *genParticles, lambda, interference);
-  lrWeight.addNumber(weights.first);
-  rlWeight.addNumber(weights.second);
-
+  lrWeight = weights.first;
+  rlWeight = weights.second;
+  
   return true;
-}
-
-void LRWeightModule::writeCurrentWeights()
-{
-  std::string filename = formattedFilename(currentFileParams);
-  writeLine(filename + "\tLR:\t" + std::to_string(lrWeight.average()) + "\tRL:\t" 
-	    + std::to_string(rlWeight.average()));
-}
-
-std::string LRWeightModule::formattedFilename(const FileParams& params)
-{
-  std::string particleString = params.getParticle() == Particle::electron() ? "E" : "Mu";
-  std::string interferenceString = params.getInterference() == Interference::constructive() ? "Con" : "Des";
-  std::string massString = (params.getYear() == "2017" || params.getYear() == "2018") ? params.massCutString20172018() : params.getMassRange();
-
-  return "CITo2" + particleString + "_Lam" + params.getLambda() + "TeV" + interferenceString + params.getHelicity()
-    + "_" + massString;
 }
 
 // Jarvis' code
