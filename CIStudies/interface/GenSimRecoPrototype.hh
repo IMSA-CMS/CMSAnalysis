@@ -16,18 +16,12 @@ class GenSimRecoPrototype : public HistogramPrototype
     double value() const override {return protectedValue(typeGenSim);}     // Overloads value() and calls protectedValue(typeGenSim)
     virtual ~GenSimRecoPrototype() {} // Empty virtual destructor
 
-  protected:
-    const GenSimIdentificationModule& getGenSim() const {return genSim;}
-    const RecoIdentificationModule& getReco() const {return reco;}
-    bool getDataType() const {return typeGenSim;}
-    virtual double protectedValue(bool typeSwitch) const = 0;	
-
+    virtual double protectedValue(bool typeSwitch) const = 0;
   private:
     const GenSimIdentificationModule& genSim; 
     const RecoIdentificationModule& reco;
-    bool typeGenSim;         // Switch between GenSim and Reco: value is true for GenSim, false for Reco        
-};
+    bool typeGenSim;                            // Switch between GenSim and Reco: value is true for GenSim, false for Reco                       
+};          
 
 
 #endif
-

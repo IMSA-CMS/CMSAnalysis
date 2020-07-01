@@ -6,8 +6,7 @@
 class HistogramPrototype
 {
 public:
-	HistogramPrototype(const std::string& iname, int inBins, double iminimum, 
-		double imaximum) :
+	HistogramPrototype(const std::string& iname, int inBins, double iminimum, double imaximum) :
 		name(iname),
 		nBins(inBins),
 		minimum(iminimum),
@@ -15,6 +14,7 @@ public:
 	{}
 
 	virtual ~HistogramPrototype() {} // Empty virtual destructor
+	
 	virtual double value() const = 0;
 
 	std::string getName() const {return name;}

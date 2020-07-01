@@ -39,6 +39,9 @@ protected:
   // Creates a histogram and adds it to the collection, but uses the HistogramPrototype* object
   // void makeHistogram(HistogramPrototype* h);
 
+  // Creates a histogram from a HistogramPrototype* and adds it to the collection.
+  void makeHistogram(HistogramPrototype* h);
+
   // Convenient getter methods to access histograms
   TH1* getHistogram(const std::string& name) {return dynamic_cast<TH1*>(getObject(name));}
   const TH1* getHistogram(const std::string& name) const
