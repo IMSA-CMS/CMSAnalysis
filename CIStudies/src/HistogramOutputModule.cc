@@ -2,10 +2,23 @@
 
 #include "CIAnalysis/CIStudies/interface/HistogramPrototype.hh"
 
+#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
+#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
+#include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
+#include "CIAnalysis/CIStudies/interface/PtResolutionModule.hh"
+#include "CIAnalysis/CIStudies/interface/FileParams.hh"
+
 #include <iostream>
 #include <stdexcept>
 
 #include "TH1.h"
+
+HistogramOutputModule::HistogramOutputModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule) :
+  genSim(genSimModule),
+  reco(recoModule),
+  weighting(weightingModule)
+{
+}
 
 void HistogramOutputModule::writeAll()
 {
@@ -116,3 +129,85 @@ void HistogramOutputModule::addObjectClone(const std::string& oldName,
   // Insert it into the map
   objects.insert({newName, clone});
 }
+
+void HistogramOutputModule::initialize()
+{
+  for (HistogramPrototype* hist : histograms)
+  {
+    makeHistogram(hist);
+  }
+}
+
+bool HistogramOutputModule::process(const edm::EventBase& event)
+{
+  std::string massBin = getFileParams().getMassRange();
+  
+  if (isNewMassBin(massBin))
+    {
+      auto weight = weighting.getWeight();
+      auto fileKey = getFileParams().getFileKey();
+
+      massBins[massBin] = weight;
+      fileKeys[massBin] = fileKey;
+
+      for (HistogramPrototype* hist : histograms)
+      {
+        makeHistogram(hist->getName() + massBin, hist->getName() + massBin, hist->getNBins(), hist->getMinimum(), hist->getMaximum());
+      }
+    }
+
+  for (HistogramPrototype* hist : histograms)
+  {
+    fillHistogram(hist->getName() + massBin, hist->value());
+  }
+
+  return true;
+}
+
+void HistogramOutputModule::finalize()
+{
+  for (HistogramPrototype* hist : histograms)
+  {
+    for (auto massBin : massBins)
+      {
+        auto fileKey = fileKeys[massBin.first];
+        auto eventCount = getEventCount(fileKey);
+
+        std::cout << eventCount << std::endl;
+
+	getHistogram(hist->getName() + massBin.first)->Scale(massBin.second / eventCount);
+        // getHistogram("Invariant Mass GenSim" + massBin.first)->Scale(massBin.second / eventCount);
+        // getHistogram("Invariant Mass Reco" + massBin.first)->Scale(massBin.second / eventCount) ;
+        // getHistogram("Transverse Momentum GenSim" + massBin.first)->Scale(massBin.second / eventCount);
+        // getHistogram("Transverse Momentum Reco" + massBin.first)->Scale(massBin.second / eventCount) ;
+      }
+
+
+    for (int i = 1; i < hist->getNBins() ; ++i)
+      {
+        for (auto massBin : massBins)
+	  {
+	    getHistogram(hist->getName())->AddBinContent(i, getHistogram(hist->getName() + massBin.first)->GetBinContent(i));
+	    // getHistogram("GenSim Invariant Mass Pasted")->AddBinContent(i, getHistogram("Invariant Mass GenSim" + massBin.first)->GetBinContent(i));
+  	    // getHistogram("Reco Invariant Mass Pasted")->AddBinContent(i, getHistogram("Invariant Mass Reco" + massBin.first)->GetBinContent(i));
+	    // getHistogram("GenSim Transverse Momentum Pasted")->AddBinContent(i, getHistogram("Transverse Momentum GenSim" + massBin.first)->GetBinContent(i));
+	    // getHistogram("Reco Transverse Momentum Pasted")->AddBinContent(i, getHistogram("Transverse Momentum Reco" + massBin.first)->GetBinContent(i));
+
+	  }
+      }
+  }
+}
+
+bool HistogramOutputModule::isNewMassBin(const std::string mass)
+{
+  for (auto massBin : massBins)
+    {
+      if (mass == massBin.first)
+	{
+	  return false;
+	}
+    }
+  
+  return true;
+}
+

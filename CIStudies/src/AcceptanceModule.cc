@@ -3,7 +3,8 @@
 #include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 
-AcceptanceModule::AcceptanceModule(const GenSimIdentificationModule& genSimModule, const MatchingModule& matchingModule, int minMass, int maxMass, int massInterval) :
+AcceptanceModule::AcceptanceModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const MatchingModule& matchingModule, int minMass, int maxMass, int massInterval) :
+  HistogramOutputModule(genSimModule, recoModule, weightingModule),
   genSim(genSimModule),
   matching(matchingModule),
   minMassCut(minMass),

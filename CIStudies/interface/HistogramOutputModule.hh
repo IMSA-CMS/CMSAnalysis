@@ -8,13 +8,22 @@
 #include "TH1.h"
 
 class TObject;
+class GenSimIdentificationModule;
+class RecoIdentificationModule;
+class WeightingModule;
+class PtResolutionModule;
 class HistogramPrototype;
 
 // An AnalysisModule designed to fill histograms into a Root file
 class HistogramOutputModule : public AnalysisModule
 {
 public:
+  HistogramOutputModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule);
   virtual void writeAll();
+  virtual void initialize() override;
+  virtual bool process(const edm::EventBase& event) override;
+  virtual void finalize() override;
+  void addHistogram(HistogramPrototype* hist) {histograms.push_back(hist);}; // Adds a HistogramPrototype* to histogram (the vector)
 
 protected:
   // This adds an object to the collection to be written.
@@ -62,6 +71,16 @@ private:
   // This clones from the baseObjects map into the objects map, which must
   // be done before anyone can work profitably with the object
   void addObjectClone(const std::string& oldName, const std::string& newName) const;
+
+  const GenSimIdentificationModule& genSim;
+  const RecoIdentificationModule& reco;
+  const WeightingModule& weighting;
+
+  std::unordered_map<std::string, double> massBins;
+  std::unordered_map<std::string, std::string> fileKeys;
+
+  bool isNewMassBin(const std::string mass);
+  std::vector<HistogramPrototype*> histograms;
 };
 
 #endif

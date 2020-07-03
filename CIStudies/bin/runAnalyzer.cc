@@ -19,9 +19,7 @@
 #include "CIAnalysis/CIStudies/interface/PtResolutionModule.hh"
 #include "CIAnalysis/CIStudies/interface/MassResolutionModule.hh"
 #include "CIAnalysis/CIStudies/interface/AFBModule.hh"
-#include "CIAnalysis/CIStudies/interface/SimpleHistogramModule.hh"
 #include "CIAnalysis/CIStudies/interface/UnmatchedParticleModule.hh"
-#include "CIAnalysis/CIStudies/interface/PastingModule.hh"
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
 #include "CIAnalysis/CIStudies/interface/InvariantMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/PtHist.hh"
@@ -58,18 +56,18 @@ int main(int argc, char** argv)
   RecoIdentificationModule recoMod;
   MatchingModule matchMod(genSimMod, recoMod);
   WeightingModule weightMod;
-  PtResolutionModule ptResMod(matchMod);
+  // PtResolutionModule ptResMod(genSimMod, recoMod, weightMod, matchMod);
   MassFilter massFilter(genSimMod, 2000);
   CollinsSoperFilter csFilter(genSimMod, .975);
   PileupFilter pileupFilter(15, 35);
-  MigrationModule migMod(matchMod);
-  AcceptanceModule accMod(genSimMod, matchMod);
-  PtResolutionModule pTResMod(matchMod);
-  MassResolutionModule massResMod(matchMod);
-  AFBModule afbMod(genSimMod, recoMod);
-  SimpleHistogramModule simpleMod(genSimMod, recoMod);
-  UnmatchedParticleModule unmatchedMod(genSimMod, matchMod);
-  PastingModule pasteMod(genSimMod, recoMod, weightMod);
+  MigrationModule migMod(genSimMod, recoMod, weightMod, matchMod);
+  AcceptanceModule accMod(genSimMod, recoMod, weightMod, matchMod);
+  PtResolutionModule pTResMod(genSimMod, recoMod, weightMod, matchMod);
+  MassResolutionModule massResMod(genSimMod, recoMod, weightMod, matchMod);
+  AFBModule afbMod(genSimMod, recoMod, weightMod);
+  // SimpleHistogramModule simpleMod(genSimMod, recoMod);
+  UnmatchedParticleModule unmatchedMod(genSimMod, recoMod, weightMod, matchMod);
+  HistogramOutputModule histMod(genSimMod, recoMod, weightMod);
 
   InvariantMassHist genSimInvMassHist(genSimMod, recoMod, true, "GenSim Invariant Mass Pasted", 54, 300, 5000);  // GenSim Invariant Mass Histogram
   InvariantMassHist recoInvMassHist(genSimMod, recoMod, false, "Reco Invariant Mass Pasted", 54, 300, 5000);     // Reco Invariant Mass Histogram
@@ -77,10 +75,10 @@ int main(int argc, char** argv)
   PtHist recoPtHist(genSimMod, recoMod, false, "Reco Transverse Momentum Pasted", 54, 50, 1900);                 // Reco pT Histogram
 
   // Add the four histograms created above to pasteMod
-  pasteMod.addHistogram(&genSimInvMassHist);
-  pasteMod.addHistogram(&recoInvMassHist);
-  pasteMod.addHistogram(&genSimPtHist);
-  pasteMod.addHistogram(&recoPtHist);
+  histMod.addHistogram(&genSimInvMassHist);
+  histMod.addHistogram(&recoInvMassHist);
+  histMod.addHistogram(&genSimPtHist);
+  histMod.addHistogram(&recoPtHist);
   
   analyzer.addProductionModule(&genSimMod);
   analyzer.addProductionModule(&recoMod);
@@ -96,7 +94,7 @@ int main(int argc, char** argv)
   //analyzer.addAnalysisModule(&afbMod);
   //analyzer.addAnalysisModule(&simpleMod);
   //analyzer.addAnalysisModule(&unmatchedMod);
-  analyzer.addAnalysisModule(&pasteMod);
+  analyzer.addAnalysisModule(&histMod);
 
   if (inputFile.empty())
     {

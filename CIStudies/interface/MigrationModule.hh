@@ -3,6 +3,9 @@
 
 #include "HistogramOutputModule.hh"
 
+class GenSimIdentificationModule;
+class RecoIdentificationModule;
+class WeightingModule;
 class MatchingModule;
 
 // MigrationModule plots # of events over invariant mass
@@ -12,7 +15,7 @@ class MatchingModule;
 class MigrationModule : public HistogramOutputModule
 {
 public:
-  MigrationModule(const MatchingModule& matchingModule, int minMass = 300, int maxMass = 3200, int massInterval = 100);
+  MigrationModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const MatchingModule& matchingModule, int minMass = 300, int maxMass = 3200, int massInterval = 100);
   virtual void initialize() override;
   virtual bool process(const edm::EventBase& event) override;
 
