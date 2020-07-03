@@ -14,7 +14,7 @@ class MatchingPairCollection;
 class ResolutionModule : public HistogramOutputModule
 {
 public:
-  ResolutionModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const MatchingModule& matchingModule, std::string bin, int min, int max, int intervalSize);
+  ResolutionModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const LRWeightModule& lrWeightModule, const MatchingModule& matchingModule, std::string bin, int min, int max, int intervalSize);
   virtual bool process(const edm::EventBase& event) override;
   virtual void initialize() override;
   virtual void finalize() override;

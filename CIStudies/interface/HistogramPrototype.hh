@@ -12,7 +12,7 @@ public:
 		minimum(iminimum),
 		maximum(imaximum)
 	{}
-	
+
 	virtual ~HistogramPrototype() {} // Empty virtual destructor
 	
 	virtual double value() const = 0;

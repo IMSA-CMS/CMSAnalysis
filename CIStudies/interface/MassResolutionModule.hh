@@ -10,7 +10,7 @@ class MatchingPairCollection;
 class MassResolutionModule : public ResolutionModule
 {
 public:
-  MassResolutionModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const MatchingModule& matchingModule, std::string bin = "mass", const int minMass = 300, const int maxMass = 3200, const int massIntervalSize = 100);
+  MassResolutionModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const LRWeightModule& lrWeightModule, const MatchingModule& matchingModule, std::string bin = "mass", const int minMass = 300, const int maxMass = 3200, const int massIntervalSize = 100);
 
 protected:
   //calculates mass error and fills the histogram with the respective mass bin

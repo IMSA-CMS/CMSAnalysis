@@ -6,8 +6,8 @@
 #include <iostream>
 #include "TH2.h"
 
-UnmatchedParticleModule::UnmatchedParticleModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const MatchingModule& matchingModule) :
-  HistogramOutputModule(genSimModule, recoModule, weightingModule),
+UnmatchedParticleModule::UnmatchedParticleModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const LRWeightModule& lrWeighting, const MatchingModule& matchingModule) :
+  HistogramOutputModule(genSimModule, recoModule, weightingModule, lrWeighting),
   genSim(genSimModule),
   matching(matchingModule)
 {

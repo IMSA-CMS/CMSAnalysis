@@ -11,7 +11,7 @@ class WeightingModule;
 class AFBModule : public HistogramOutputModule
 {
 public:
-  AFBModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, int minMass = 300, int maxMass = 3200, int massInterval = 100);
+  AFBModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const LRWeightModule& lrWeightModule, int minMass = 300, int maxMass = 3200, int massInterval = 100);
 
   virtual void initialize() override;
   virtual bool process(const edm::EventBase& event) override;
