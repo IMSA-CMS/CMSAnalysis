@@ -4,12 +4,14 @@
 #include "HistogramOutputModule.hh"
 
 class GenSimIdentificationModule;
+class RecoIdentificationModule;
+class WeightingModule;
 class MatchingModule;
 
 class UnmatchedParticleModule : public HistogramOutputModule
 {
 public:
-  UnmatchedParticleModule(const GenSimIdentificationModule& genSimModule, const MatchingModule& matchingModule);
+  UnmatchedParticleModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const MatchingModule& matchingModule);
 
   virtual void initialize() override;
   virtual bool process(const edm::EventBase& event) override;

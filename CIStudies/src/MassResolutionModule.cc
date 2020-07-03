@@ -3,8 +3,8 @@
 
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 
-MassResolutionModule::MassResolutionModule(const MatchingModule& matchingModule, const int minMass, const int maxMass, const int massIntervalSize) :
-  ResolutionModule(matchingModule, "mass", minMass, maxMass, massIntervalSize)
+MassResolutionModule::MassResolutionModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const MatchingModule& matchingModule, std::string bin, const int minMass, const int maxMass, const int massIntervalSize) :
+  ResolutionModule(genSimModule, recoModule, weightingModule, matchingModule, bin, minMass, maxMass, massIntervalSize)
 {
 }
 

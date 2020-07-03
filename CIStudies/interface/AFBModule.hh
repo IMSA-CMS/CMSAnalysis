@@ -5,12 +5,13 @@
 
 class GenSimIdentificationModule;
 class RecoIdentificationModule;
+class WeightingModule;
 
 // AFBModule fills forward and backward histograms for both gen sim and reco and uses those histograms to calculate the value of Afb at the end
 class AFBModule : public HistogramOutputModule
 {
 public:
-  AFBModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, int minMass = 300, int maxMass = 3200, int massInterval = 100);
+  AFBModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, int minMass = 300, int maxMass = 3200, int massInterval = 100);
 
   virtual void initialize() override;
   virtual bool process(const edm::EventBase& event) override;

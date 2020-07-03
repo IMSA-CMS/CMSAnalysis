@@ -9,7 +9,8 @@
 #include <vector>
 #include <TF1.h>
 
-ResolutionModule::ResolutionModule(const MatchingModule& matchingModule, std::string bin, int min, int max, int intervalSize) :
+ResolutionModule::ResolutionModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const MatchingModule& matchingModule, std::string bin, int min, int max, int intervalSize) :
+  HistogramOutputModule(genSimModule, recoModule, weightingModule),
   matching(matchingModule),
   binType(bin),
   minCut(min),

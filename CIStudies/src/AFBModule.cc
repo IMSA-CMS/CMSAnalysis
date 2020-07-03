@@ -5,7 +5,8 @@
 
 #include <iostream>
 
-AFBModule::AFBModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, int minMass, int maxMass, int massInterval) :
+AFBModule::AFBModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, int minMass, int maxMass, int massInterval) :
+  HistogramOutputModule(genSimModule, recoModule, weightingModule),
   genSim(genSimModule),
   reco(recoModule),
   minMassCut(minMass),
