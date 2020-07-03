@@ -1,10 +1,12 @@
 #include "CIAnalysis/CIStudies/interface/HistogramOutputModule.hh"
+#include "CIAnalysis/CIStudies/interface/HistogramPrototype.hh"
 
 #include "CIAnalysis/CIStudies/interface/HistogramPrototype.hh"
 
 #include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
+#include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
 #include "CIAnalysis/CIStudies/interface/PtResolutionModule.hh"
 #include "CIAnalysis/CIStudies/interface/FileParams.hh"
 
@@ -13,10 +15,11 @@
 
 #include "TH1.h"
 
-HistogramOutputModule::HistogramOutputModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule) :
+HistogramOutputModule::HistogramOutputModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const LRWeightModule& lrWeightModule) :
   genSim(genSimModule),
   reco(recoModule),
-  weighting(weightingModule)
+  weighting(weightingModule),
+  lrWeighting(lrWeightModule)
 {
 }
 
@@ -74,20 +77,20 @@ void HistogramOutputModule::makeHistogram(HistogramPrototype* h)
   const std::string& name = h->getName();
   auto title = name;
   int nbins = h->getNBins();
-  double max = h->getMaximum();
   double min = h->getMinimum();
+  double max = h->getMaximum();
   
   auto newHist = new TH1F(name.c_str(), title.c_str(), nbins, min, max);
   addObject(name, newHist);
 }
 
-void HistogramOutputModule::fillHistogram(const std::string& name, double number)
+void HistogramOutputModule::fillHistogram(const std::string& name, double number, double weight)
 {
   auto hist = getHistogram(name);
   if (!hist)
     throw std::runtime_error("Argument to getHistogram was not of TH1 type!  Name: " + name 
 			     + " and Root type: " + getObject(name)->ClassName());
-  getHistogram(name)->Fill(number);
+  getHistogram(name)->Fill(number, weight);
 }
 
 std::string HistogramOutputModule::getObjectName(const std::string& str) const
@@ -141,7 +144,18 @@ void HistogramOutputModule::initialize()
 bool HistogramOutputModule::process(const edm::EventBase& event)
 {
   std::string massBin = getFileParams().getMassRange();
-  
+  std::string helicity = getFileParams().getHelicity();
+
+  double eventWeight = 1.00;
+  if (helicity == "LR")
+    {
+      eventWeight = lrWeighting.getLRWeight();
+    }
+  if (helicity == "RL")
+    {
+      eventWeight = lrWeighting.getRLWeight();
+    }
+
   if (isNewMassBin(massBin))
     {
       auto weight = weighting.getWeight();
@@ -158,7 +172,7 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
 
   for (HistogramPrototype* hist : histograms)
   {
-    fillHistogram(hist->getName() + massBin, hist->value());
+    fillHistogram(hist->getName() + massBin, hist->value(), eventWeight);
   }
 
   return true;

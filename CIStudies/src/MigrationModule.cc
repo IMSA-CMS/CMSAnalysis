@@ -1,8 +1,8 @@
 #include "CIAnalysis/CIStudies/interface/MigrationModule.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 
-MigrationModule::MigrationModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const MatchingModule& matchingModule, int minMass, int maxMass, int massInterval) :
-  HistogramOutputModule(genSimModule, recoModule, weightingModule),
+MigrationModule::MigrationModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const LRWeightModule& lrWeightModule, const MatchingModule& matchingModule, int minMass, int maxMass, int massInterval) :
+  HistogramOutputModule(genSimModule, recoModule, weightingModule, lrWeightModule),
   matching(matchingModule),
   minMassCut(minMass),
   maxMassCut(maxMass),

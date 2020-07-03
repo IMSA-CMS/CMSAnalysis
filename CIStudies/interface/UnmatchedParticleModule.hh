@@ -6,12 +6,13 @@
 class GenSimIdentificationModule;
 class RecoIdentificationModule;
 class WeightingModule;
+class LRWeightModule;
 class MatchingModule;
 
 class UnmatchedParticleModule : public HistogramOutputModule
 {
 public:
-  UnmatchedParticleModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const MatchingModule& matchingModule);
+  UnmatchedParticleModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const LRWeightModule& lrWeighting, const MatchingModule& matchingModule);
 
   virtual void initialize() override;
   virtual bool process(const edm::EventBase& event) override;

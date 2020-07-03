@@ -11,6 +11,7 @@ class TObject;
 class GenSimIdentificationModule;
 class RecoIdentificationModule;
 class WeightingModule;
+class LRWeightModule;
 class PtResolutionModule;
 class HistogramPrototype;
 
@@ -18,7 +19,7 @@ class HistogramPrototype;
 class HistogramOutputModule : public AnalysisModule
 {
 public:
-  HistogramOutputModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule);
+  HistogramOutputModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const LRWeightModule& lrWeightModule);
   virtual void writeAll();
   virtual void initialize() override;
   virtual bool process(const edm::EventBase& event) override;
@@ -45,6 +46,8 @@ protected:
   // for addObject() above.
   void makeHistogram(const std::string& name, const std::string& title, int nbins,
 		     double min, double max);
+  // Creates a histogram and adds it to the collection, but uses the HistogramPrototype* object
+  // void makeHistogram(HistogramPrototype* h);
 
   // Creates a histogram from a HistogramPrototype* and adds it to the collection.
   void makeHistogram(HistogramPrototype* h);
@@ -55,7 +58,7 @@ protected:
   {return dynamic_cast<const TH1*>(getObject(name));}
 
   // Convenient function to fill a histogram by name
-  void fillHistogram(const std::string& name, double number);
+  void fillHistogram(const std::string& name, double number, double weight = 1.00);
 
 private:
   // This is a map of objects as they are seen by the user, by name
@@ -75,6 +78,7 @@ private:
   const GenSimIdentificationModule& genSim;
   const RecoIdentificationModule& reco;
   const WeightingModule& weighting;
+  const LRWeightModule& lrWeighting;
 
   std::unordered_map<std::string, double> massBins;
   std::unordered_map<std::string, std::string> fileKeys;

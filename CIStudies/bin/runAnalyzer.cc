@@ -23,6 +23,7 @@
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
 #include "CIAnalysis/CIStudies/interface/InvariantMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/PtHist.hh"
+#include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
 
 int main(int argc, char** argv)
 {
@@ -56,18 +57,18 @@ int main(int argc, char** argv)
   RecoIdentificationModule recoMod;
   MatchingModule matchMod(genSimMod, recoMod);
   WeightingModule weightMod;
-  // PtResolutionModule ptResMod(genSimMod, recoMod, weightMod, matchMod);
+  LRWeightModule lrWeightMod;
   MassFilter massFilter(genSimMod, 2000);
   CollinsSoperFilter csFilter(genSimMod, .975);
   PileupFilter pileupFilter(15, 35);
-  MigrationModule migMod(genSimMod, recoMod, weightMod, matchMod);
-  AcceptanceModule accMod(genSimMod, recoMod, weightMod, matchMod);
-  PtResolutionModule pTResMod(genSimMod, recoMod, weightMod, matchMod);
-  MassResolutionModule massResMod(genSimMod, recoMod, weightMod, matchMod);
-  AFBModule afbMod(genSimMod, recoMod, weightMod);
-  // SimpleHistogramModule simpleMod(genSimMod, recoMod);
-  UnmatchedParticleModule unmatchedMod(genSimMod, recoMod, weightMod, matchMod);
-  HistogramOutputModule histMod(genSimMod, recoMod, weightMod);
+  MigrationModule migMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
+  AcceptanceModule accMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
+  PtResolutionModule pTResMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
+  MassResolutionModule massResMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
+  AFBModule afbMod(genSimMod, recoMod, weightMod, lrWeightMod);
+  UnmatchedParticleModule unmatchedMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
+  HistogramOutputModule histMod(genSimMod, recoMod, weightMod, lrWeightMod);
+
 
   InvariantMassHist genSimInvMassHist(genSimMod, recoMod, true, "GenSim Invariant Mass Pasted", 54, 300, 5000);  // GenSim Invariant Mass Histogram
   InvariantMassHist recoInvMassHist(genSimMod, recoMod, false, "Reco Invariant Mass Pasted", 54, 300, 5000);     // Reco Invariant Mass Histogram
@@ -84,6 +85,7 @@ int main(int argc, char** argv)
   analyzer.addProductionModule(&recoMod);
   analyzer.addProductionModule(&matchMod);
   analyzer.addProductionModule(&weightMod);
+  analyzer.addProductionModule(&lrWeightMod);
   //analyzer.addFilterModule(&massFilter);
   //analyzer.addFilterModule(&csFilter);
   //analyzer.addFilterModule(&pileupFilter);
@@ -92,7 +94,6 @@ int main(int argc, char** argv)
   analyzer.addAnalysisModule(&pTResMod);
   //analyzer.addAnalysisModule(&massResMod);
   //analyzer.addAnalysisModule(&afbMod);
-  //analyzer.addAnalysisModule(&simpleMod);
   //analyzer.addAnalysisModule(&unmatchedMod);
   analyzer.addAnalysisModule(&histMod);
 
