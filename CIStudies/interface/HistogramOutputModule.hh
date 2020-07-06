@@ -21,9 +21,9 @@ class HistogramOutputModule : public AnalysisModule
 public:
   HistogramOutputModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const LRWeightModule& lrWeightModule);
   virtual void writeAll();
-  virtual void initialize() override;
-  virtual bool process(const edm::EventBase& event) override;
-  virtual void finalize() override;
+  virtual void initialize() override;                                        // Makes the histograms
+  virtual bool process(const edm::EventBase& event) override;                // Fills the histograms
+  virtual void finalize() override;                                          // Scales the histograms
   void addHistogram(HistogramPrototype* hist) {histograms.push_back(hist);}; // Adds a HistogramPrototype* to histogram (the vector)
 
 protected:

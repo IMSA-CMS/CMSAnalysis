@@ -17,10 +17,10 @@ class GenSimRecoPrototype : public HistogramPrototype
     virtual ~GenSimRecoPrototype() {} // Empty virtual destructor
 
   protected:
-    const GenSimIdentificationModule& getGenSim() const {return genSim;}
-    const RecoIdentificationModule& getReco() const {return reco;}
-    bool getDataType() const {return typeGenSim;}
-    virtual double protectedValue(bool typeSwitch) const = 0;
+    const GenSimIdentificationModule& getGenSim() const {return genSim;}   // Getter for genSim
+    const RecoIdentificationModule& getReco() const {return reco;}         // Getter for reco
+    bool getDataType() const {return typeGenSim;}                          // Getter for typeGenSim
+    virtual double protectedValue(bool typeSwitch) const = 0;              // Virtual function that 
     
   private:
     const GenSimIdentificationModule& genSim; 
