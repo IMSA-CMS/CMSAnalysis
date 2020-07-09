@@ -8,7 +8,6 @@
 #include "ProductionModule.hh"
 
 #include "FileParams.hh"
-#include "Pythia8/Pythia.h"
 
 namespace reco
 {
@@ -23,7 +22,7 @@ class LRWeightModule : public ProductionModule
 {
 public:
 
-  LRWeightModule() {pythia.init();}
+  LRWeightModule();
 
   virtual bool process(const edm::EventBase& event) override;
   double getLRWeight() const {return lrWeight;}
@@ -34,8 +33,11 @@ private:
   double lrWeight;
   double rlWeight;
 
-  // Mutable because Pythia isn't very careful with const correctness
-  mutable Pythia8::Pythia pythia;
+  double findAf(int idAbs) const;
+  double findVf(int idAbs) const;
+  double findEf(int idAbs) const;
+  double findSin2thetaW() const {return 0.231;}
+  double findCos2thetaW() const {return 0.769;}
 
   std::pair<double, double> calculateWeights(const GenEventInfoProduct& genEventInfoProduct, 
 					     const std::vector<reco::GenParticle>& gen, double lam, 
