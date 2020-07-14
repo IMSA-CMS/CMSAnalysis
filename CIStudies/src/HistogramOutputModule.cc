@@ -190,7 +190,7 @@ void HistogramOutputModule::finalize()
         auto fileKey = fileKeys[massBin.first];
         auto eventCount = getEventCount(fileKey);
 
-        std::cout << eventCount << std::endl;
+        // std::cout << eventCount << std::endl;
 
 	getHistogram(hist->getName() + massBin.first)->Scale(massBin.second / eventCount);
         // getHistogram("Invariant Mass GenSim" + massBin.first)->Scale(massBin.second / eventCount);
