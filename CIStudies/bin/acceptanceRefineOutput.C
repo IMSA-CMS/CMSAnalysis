@@ -23,11 +23,11 @@
 #include "TPaveStats.h"
 #include "TString.h"
 
-using std::string;
-using std::cout;
+//using std::string;
+//using std::cout;
 
 //Combining the histograms that are submitted to the fuction into a single canvas
-void createCombinedCanvas(TH1* hist1, TH1* hist2, TCanvas* c, int loopCount);
+void createCombinedCanvas(TH1* hist1, TH1* hist2, TCanvas* c, int loopCount, int minX, int maxX);
 
 //Create the combined Acceptance Graphs and puts it in the output file 
 TCanvas* createAcceptanceCombined(TH1* hist1, TH1* hist2);
@@ -39,9 +39,10 @@ int const padsPerCanvas = 8;
 
 void acceptanceRefineOutput()// electronMuonOverlayer()
 {
-        int numberOfHists = 28;//Number of Bins
-  	string const inputFileName = "genOutput1.root";
-  	string const inputFileName2 = "genOutput.root";
+	std::cerr << "donut" << endl;        
+	int numberOfHists = 28;//Number of Bins
+  	string const inputFileName = "electron.root";  //old: "electron_16TeV_AccMig_MassRes.root"
+  	string const inputFileName2 = "genOutput.root"; // old: "muon_16TeV_AccMig_MassRes.root"
   	string const canvasOutputName = "Muon_Electron_16TeV_Overlayed.root";
   
   	//Here we are going to create arrays of muon and electron histograms  
@@ -53,52 +54,80 @@ void acceptanceRefineOutput()// electronMuonOverlayer()
   
   	//The file name is hard coded in, and changing it would mean you also have to change the names of the hists that you use to fill in the arrays 
   	TFile* inputFile = new TFile(inputFileName.c_str());
-  
-  	//This is going to loop throught the root file and set the hist arrays 
+        //The name of the second file 
+  	TFile* inputFileTwo = new TFile(inputFileName2.c_str());
+
+        //Create an array of Canvases to pass into the create combined canvas funciton 
+  	TCanvas* canvases[static_cast<int>(ceil(numberOfHists / 8)) + 1];//We put a plus one because for some reason the last Canvas was not written to the ROOT file  
+
+  	//This is going to loop throught the root files and set the hist arrays 
   	for (int i = 0; i < numberOfHists; ++i)
     {
       	//These two have to be hardcodes in anc changed when running with different files - (Use TBrowser to see hist names)
-      	string mH = "recoHistBin" + std::to_string(i);
+      	
+	//Original:
+	//string mH = "recoHistBin" + std::to_string(i);
+	
+        //Original:
+	//string accH = "Total Reco Matched hist";
 
-	string accH = "Total Reco Matched hist";
+	//Modified (Ellyn, 3/26/20):
+	string accH = "Reco Invariant Mass Pasted";
 
+        int xMin = 100 * i + 300;   // Minimum value on the mass bin
+        int xMax = 100 * i + 400;   // Maximum value on the mass bin    
+
+	//Modified (Ellyn, 3/26/20):	
+	string mH = std::to_string(xMin) + "-" + std::to_string(xMax) + accH;
+        std::cout << mH << endl;
+	//starts at 300 and adds 100 each time
+
+	//Ellyn: muonHists[i] is null --> not being filled properly?
         inputFile->GetObject(mH.c_str(), muonHists[i]);
+	if (!muonHists[i])
+	{
+		throw std::runtime_error("out of red bean buns");	
+	}
 	inputFile->GetObject(accH.c_str(), acceptanceFile1);
-    }
-  
-  	//The name of the second file 
-  	TFile* inputFileTwo = new TFile(inputFileName2.c_str());
-  
-  	//This is the second loop throught the other file 
-  	for (int i = 0; i < numberOfHists; ++i)
-    {
-      	string elH = "recoHistBin" + std::to_string(i);
+	if (!acceptanceFile1)
+	{
+		throw std::runtime_error("milk tea cooled");
+	}
 
-	string accH = "Total Reco Matched hist";
+        // This part of the loop loops through the second file
+
+	std::cerr << "crepe" << endl;
+
+        string elH = std::to_string(xMin) + "-" + std::to_string(xMax) + accH;
 
         inputFileTwo->GetObject(elH.c_str(), elecHists[i]);
 	inputFileTwo->GetObject(accH.c_str(), acceptanceFile2);
-    }
-  
-  	//Create an array of Canvases to pass into the create combined canvas funciton 
-  	TCanvas* canvases[static_cast<int>(ceil(numberOfHists / 8)) + 1];//We put a plus one because for some reason the last Canvas was not written to the ROOT file 
-  	
-  	//This will loop through the hists to 1) Create a new canvas 2) Create new overlay hist 3) Put these into the new output TFile 
-  	for( int i = 0; i < numberOfHists; ++i)
-    {
-      if((i % padsPerCanvas) == 0)
-      {
-        string const canvasName = "Muon_VS_Electron_Migration" + std::to_string(i / padsPerCanvas);
-        string const canvasTitle = "Muon Acceptance * Migration " + std::to_string((i / padsPerCanvas) + 1);
-      	canvases[i / padsPerCanvas] = new TCanvas(canvasName.c_str(), canvasTitle.c_str());
-        canvases[i / padsPerCanvas]->Divide(2,4);//We are able to do i / 8 here becuase we know i is divisible by 8 already 
-      }
-      
-      //cout << "Using index " << static_cast<int>(ceil(i / padsPerCanvas)) << "\n";
-      createCombinedCanvas(muonHists[i], elecHists[i], canvases[static_cast<int>(ceil(i / padsPerCanvas))], i);//The object will default write to the last opened TFile, 
-      															  //which is outputFile
-    } 
 
+        std::cerr << "tomato and egg noodles" << endl;
+
+        //This will loop through the hists to 1) Create a new canvas 2) Create new overlay hist 3) Put these into the new output TFile
+        if((i % padsPerCanvas) == 0)
+        {
+          string const canvasName = "Muon_VS_Electron_Migration" + std::to_string(i / padsPerCanvas);
+          string const canvasTitle = "Muon Acceptance * Migration " + std::to_string((i / padsPerCanvas) + 1);
+      	  canvases[i / padsPerCanvas] = new TCanvas(canvasName.c_str(), canvasTitle.c_str());
+          canvases[i / padsPerCanvas]->Divide(2,4);//We are able to do i / 8 here becuase we know i is divisible by 8 already 
+        }
+      
+	std::cerr << "fried rice" << endl;
+
+	//Ellyn: seg faults between fried rice and hotpot
+
+	if (!elecHists[i])
+	{
+		throw std::runtime_error("tried eating ice cream with chopsticks");	
+	}		
+
+      //cout << "Using index " << static_cast<int>(ceil(i / padsPerCanvas)) << "\n";
+      createCombinedCanvas(muonHists[i], elecHists[i], canvases[static_cast<int>(ceil(i / padsPerCanvas))], i, xMin, xMax);//The object will default write to the last opened TFile
+     
+	std::cerr << "hotpot" << endl;
+    }
                                        
     //Creating the Output ROOT File
   	TFile* canvasOutput = new TFile(canvasOutputName.c_str(), "RECREATE");
@@ -115,21 +144,37 @@ void acceptanceRefineOutput()// electronMuonOverlayer()
 
 //Canvas creator - Takes in two histograms and returns a TCanvas* that contains both histograms and a legend as a key 
 //The canvasName is what shows up in the TBrowser (ie. what is used to find the canvas when extracting them from the output root file)
-void createCombinedCanvas(TH1* hist1, TH1* hist2, TCanvas* c, int loopCount)
+void createCombinedCanvas(TH1* hist1, TH1* hist2, TCanvas* c, int loopCount, int minX, int maxX)
 {
+  std::cerr << "mochi" << endl;
   //cout << getPad(loopCount, padsPerCanvas) << " Pad number we are doing into\n";
   c->cd(getPad(loopCount, padsPerCanvas));
-        
+   
+  std::cerr << "egg tart" << endl;
+
   int  max2 = hist2->GetMaximum();
+
+  std::cerr << "rice cracker" << endl;
+
   int  max1 = hist1->GetMaximum();//Checks the bin with the highest number of events 
+  
+  //Ellyn: seg faults before seaweed
+  std::cerr << "seaweed" << endl;
+
   double scaleFactor = (hist1->Integral())/(hist2->Integral());//Uses integrals to find the scale factor - works to scale up and down 
   //It doesn't matter that we change the values because we are only looking at the percentages for the Acceptance * Migration on RECO 
 
+  //Ellyn: seg faults before snow pear
+  std::cerr << "snow pear" << endl;
   //MAYBE DELETE THIS LATER 
   //if (max > muonMax)
   //{
       //hist1->SetAxisRange(0., (max + 5),"Y");
   //}
+
+  hist1->SetAxisRange(minX - 200, maxX + 200, "X");  // Zooms into the graph so that the part between minX and maxX will be displayed
+  hist2->SetAxisRange(minX - 200, maxX + 200, "X");
+
   if((hist2->Integral()) < (hist1->Integral()))//Checks if hist2 will be scaled up 
     {
       hist1->SetAxisRange(0., ((max2 * scaleFactor) + 10),"Y");
@@ -157,6 +202,9 @@ void createCombinedCanvas(TH1* hist1, TH1* hist2, TCanvas* c, int loopCount)
   hist2->SetStats(kFALSE);//This gets rid of the default legend stats
   hist2->Draw("Same");
   
+  //Ellyn: seg faults before hot cheetos
+  std::cerr << "hot cheetos" << endl;
+
   auto legend = new TLegend(.78,.76,.98,.86);
   legend->AddEntry(hist2,"Scaled to other Hist","l");
   string const legendEntry = "Mass Bin: " + std::to_string((loopCount * 100) + 300);
@@ -164,8 +212,14 @@ void createCombinedCanvas(TH1* hist1, TH1* hist2, TCanvas* c, int loopCount)
   legend->Draw();
 
   auto legend2 = new TLegend(.78,.65,.98,.75);
-  legend2->AddEntry(hist1,"#Lambda = 1 TeV","l");
-  legend2->AddEntry(hist2,"#Lambda = 16 TeV","l");
+  //Original:
+  //legend2->AddEntry(hist1,"#Lambda = 1 TeV","l");
+  //Ellyn & Eva (4/8/20)
+  legend2->AddEntry(hist1,"Electron Reco","l");
+  //Original:
+  //legend2->AddEntry(hist2,"#Lambda = 16 TeV","l");
+  //Ellyn & Eva (4/8/20)
+  legend2->AddEntry(hist2,"Muon Reco","l");
   legend2->Draw();
 }
 
@@ -174,7 +228,7 @@ TCanvas* createAcceptanceCombined(TH1* hist1, TH1* hist2)
   TCanvas* c = new TCanvas("AcceptanceOverlay", "Acceptance Overlay");
   for (int i = 1; i < ((hist1 -> GetNbinsX()) - 2); ++i)
     {
-      cout << std::to_string(200 + (i * 100)) + "-" + std::to_string(300 + (i * 100)) + "\t" + std::to_string(hist1 -> GetBinContent(i)) + "\n";
+      std::cout << std::to_string(200 + (i * 100)) + "-" + std::to_string(300 + (i * 100)) + "\t" + std::to_string(hist1 -> GetBinContent(i)) + "\n";
     }
   hist1->SetTitle("Acceptance for Muons and Electrons at #Lambda = 16 TeV");
   hist1->SetLineWidth(2);
@@ -193,8 +247,8 @@ TCanvas* createAcceptanceCombined(TH1* hist1, TH1* hist2)
   hist2->Draw("Same");
 
   auto legend2 = new TLegend(.78,.65,.98,.75);
-  legend2->AddEntry(hist1,"Muons","l");
-  legend2->AddEntry(hist2,"Electrons","l");
+  legend2->AddEntry(hist1,"Electrons","l");
+  legend2->AddEntry(hist2,"Muons","l");
   legend2->Draw();
 
   return c;
