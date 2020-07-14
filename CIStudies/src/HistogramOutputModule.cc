@@ -172,7 +172,10 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
 
   for (HistogramPrototype* hist : histograms)
   {
-    fillHistogram(hist->getName() + massBin, hist->value(), eventWeight);
+    if (hist->shouldDraw())
+      {
+        fillHistogram(hist->getName() + massBin, hist->value(), eventWeight);
+      }
   }
 
   return true;

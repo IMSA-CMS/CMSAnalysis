@@ -21,6 +21,7 @@ public:
 	int getNBins() const {return nBins;}
 	double getMinimum() const {return minimum;}
 	double getMaximum() const {return maximum;}
+	virtual bool shouldDraw() const {return true;}  // Bool switch to determine if a histogram is to be filled
 
 private:
 	std::string name;
