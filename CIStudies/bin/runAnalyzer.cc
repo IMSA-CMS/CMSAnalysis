@@ -13,7 +13,7 @@
 #include "CIAnalysis/CIStudies/interface/MassFilter.hh"
 #include "CIAnalysis/CIStudies/interface/CollinsSoperFilter.hh"
 #include "CIAnalysis/CIStudies/interface/PileupFilter.hh"
-#include "CIAnalysis/CIStudies/interface/MigrationModule.hh"
+#include "CIAnalysis/CIStudies/interface/MassBinFilter.hh"
 #include "CIAnalysis/CIStudies/interface/AcceptanceModule.hh"
 #include "CIAnalysis/CIStudies/interface/ResolutionModule.hh"
 #include "CIAnalysis/CIStudies/interface/PtResolutionModule.hh"
@@ -61,7 +61,7 @@ int main(int argc, char** argv)
   MassFilter massFilter(genSimMod, 2000);
   CollinsSoperFilter csFilter(genSimMod, .975);
   PileupFilter pileupFilter(15, 35);
-  MigrationModule migMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
+  MassBinFilter massBinFilter(matchMod, 300, 3100, 28);
   AcceptanceModule accMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
   PtResolutionModule pTResMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
   MassResolutionModule massResMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
@@ -70,8 +70,8 @@ int main(int argc, char** argv)
   HistogramOutputModule histMod(genSimMod, recoMod, weightMod, lrWeightMod);
 
 
-  InvariantMassHist genSimInvMassHist(genSimMod, recoMod, true, "GenSim Invariant Mass Pasted", 54, 300, 5000);  // GenSim Invariant Mass Histogram
-  InvariantMassHist recoInvMassHist(genSimMod, recoMod, false, "Reco Invariant Mass Pasted", 54, 300, 5000);     // Reco Invariant Mass Histogram
+  InvariantMassHist genSimInvMassHist(genSimMod, recoMod, true, "GenSim Invariant Mass Pasted", 640, 100, 3300);  // GenSim Invariant Mass Histogram
+  InvariantMassHist recoInvMassHist(genSimMod, recoMod, false, "Reco Invariant Mass Pasted", 640, 100, 3300);     // Reco Invariant Mass Histogram
   PtHist genSimPtHist(genSimMod, recoMod, true, "GenSim Transverse Momentum Pasted", 54, 50, 1900);              // GenSim pT Histogram
   PtHist recoPtHist(genSimMod, recoMod, false, "Reco Transverse Momentum Pasted", 54, 50, 1900);                 // Reco pT Histogram
 
@@ -89,9 +89,9 @@ int main(int argc, char** argv)
   //analyzer.addFilterModule(&massFilter);
   //analyzer.addFilterModule(&csFilter);
   //analyzer.addFilterModule(&pileupFilter);
-  analyzer.addAnalysisModule(&migMod);
+  analyzer.addFilterModule(&massBinFilter);
   //analyzer.addAnalysisModule(&accMod);
-  analyzer.addAnalysisModule(&pTResMod);
+  //analyzer.addAnalysisModule(&pTResMod);
   //analyzer.addAnalysisModule(&massResMod);
   //analyzer.addAnalysisModule(&afbMod);
   //analyzer.addAnalysisModule(&unmatchedMod);
