@@ -13,6 +13,7 @@
 #include "CIAnalysis/CIStudies/interface/MassFilter.hh"
 #include "CIAnalysis/CIStudies/interface/CollinsSoperFilter.hh"
 #include "CIAnalysis/CIStudies/interface/PileupFilter.hh"
+#include "CIAnalysis/CIStudies/interface/BarrelStateFilter.hh"
 #include "CIAnalysis/CIStudies/interface/MigrationModule.hh"
 #include "CIAnalysis/CIStudies/interface/AcceptanceModule.hh"
 #include "CIAnalysis/CIStudies/interface/ResolutionModule.hh"
@@ -40,7 +41,7 @@ int main(int argc, char** argv)
   std::string outputFile = parser.stringValue("output");
   if (outputFile.empty())
     {
-      outputFile = "genOutput.root";
+      outputFile = "muonResolution.root";
     }
 
   std::cout << "This is the name of outputFile " << outputFile << std::endl;
@@ -48,7 +49,6 @@ int main(int argc, char** argv)
   unsigned outputEvery = parser.integerValue("outputEvery");
 
   Analyzer analyzer;
-
   
   GenSimIdentificationModule genSimMod;
   RecoIdentificationModule recoMod;
@@ -57,6 +57,7 @@ int main(int argc, char** argv)
   MassFilter massFilter(genSimMod, 2000);
   CollinsSoperFilter csFilter(genSimMod, .975);
   PileupFilter pileupFilter(15, 35);
+  BarrelStateFilter barrelStateFilter(matchMod);
   MigrationModule migMod(matchMod);
   AcceptanceModule accMod(genSimMod, matchMod);
   PtResolutionModule pTResMod(matchMod);
@@ -73,12 +74,13 @@ int main(int argc, char** argv)
   //analyzer.addFilterModule(&massFilter);
   //analyzer.addFilterModule(&csFilter);
   //analyzer.addFilterModule(&pileupFilter);
+  analyzer.addFilterModule(&barrelStateFilter);
   analyzer.addAnalysisModule(&migMod);
   //analyzer.addAnalysisModule(&accMod);
-  //analyzer.addAnalysisModule(&pTResMod);
-  //analyzer.addAnalysisModule(&massResMod);
+  analyzer.addAnalysisModule(&pTResMod);
+  analyzer.addAnalysisModule(&massResMod);
   //analyzer.addAnalysisModule(&afbMod);
-  analyzer.addAnalysisModule(&simpleMod);
+  //analyzer.addAnalysisModule(&simpleMod);
   //analyzer.addAnalysisModule(&unmatchedMod);
   //analyzer.addAnalysisModule(&pasteMod);
 

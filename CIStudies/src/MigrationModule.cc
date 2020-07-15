@@ -26,18 +26,20 @@ void MigrationModule::initialize()
 
 bool MigrationModule::process(const edm::EventBase& event)
 {
+  //std::cerr << "ENTERING MigrationModule" << std::endl;
   auto bestPairs = matching.getMatchingBestPairs();
 
   if (bestPairs.getSize() >= 2)
     {
       double genSimMass = bestPairs.getGenParticles().getInvariantMass();
+      //error happens on the following line:
       double recoMass = bestPairs.getRecoParticles().getInvariantMass();
 
       std::string massBin = pickMassBin(genSimMass);
       fillHistogram("genSimHistBin" + massBin, genSimMass);
       fillHistogram("recoHistBin" + massBin, recoMass);
     }
-  
+  //std::cerr << "EXITING MigrationModule" << std::endl;
   return true;
 }
 

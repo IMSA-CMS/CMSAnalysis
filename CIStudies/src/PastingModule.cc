@@ -28,8 +28,9 @@ void PastingModule::initialize()
 
 bool PastingModule::process(const edm::EventBase& event)
 {
+  std::cerr << "ENTERING PastingModule" << std::endl;
   std::string massBin = getFileParams().getMassRange();
-  
+
   if (isNewMassBin(massBin))
     {
       auto weight = weighting.getWeight();
@@ -46,7 +47,10 @@ bool PastingModule::process(const edm::EventBase& event)
   auto genSimInv = genParticles.getInvariantMass();
 
   auto recoParticles = reco.getRecoCandidates();
+  std::cerr << "Robber of ATMs" << std::endl;
+  //error happens on the line below (between "Robber of ATMs" and "farmer clown")
   auto recoInv = recoParticles.getInvariantMass();
+  std::cerr << "farmer clown" << std::endl;
   
   edm::Handle<GenEventInfoProduct> genEvtInfo;
   event.getByLabel(std::string("generator"), genEvtInfo);
@@ -55,6 +59,7 @@ bool PastingModule::process(const edm::EventBase& event)
   fillHistogram("GenSim" + massBin, genSimInv);  
   fillHistogram("Reco" + massBin, recoInv);
   // fillHistogram("Compare qScale", qScale);
+  std::cerr << "EXITING PastingModule" << std::endl;
   return true;
 }
 

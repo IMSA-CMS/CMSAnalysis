@@ -12,6 +12,7 @@
 class IDType
 {
 public:
+  virtual ~IDType() {};
   // Gets and sets the current value of the type
   // e.g. "Electron"
   std::string getValue() const;
