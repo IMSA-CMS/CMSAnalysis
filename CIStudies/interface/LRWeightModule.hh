@@ -5,10 +5,9 @@
 #include <utility>
 #include <vector>
 
-#include "TextOutputModule.hh"
+#include "ProductionModule.hh"
 
 #include "FileParams.hh"
-#include "Pythia8/Pythia.h"
 
 namespace reco
 {
@@ -18,53 +17,27 @@ namespace reco
 
 class GenEventInfoProduct;
 
-class LRWeightModule : public TextOutputModule
+class LRWeightModule : public ProductionModule
+
 {
 public:
 
-  LRWeightModule(const std::string& fileName);
+  LRWeightModule();
 
   virtual bool process(const edm::EventBase& event) override;
-  virtual void finalize() override;
+  double getLRWeight() const {return lrWeight;}
+  double getRLWeight() const {return rlWeight;}
 
 private:
 
-  class SumAndCount
-  {
-  public:
-    void addNumber(double num)
-    {
-      sum += num;
-      ++count;
-    }
+  double lrWeight;
+  double rlWeight;
 
-    double average() const
-    {
-      return sum / count;
-    }
-
-    void clear()
-    {
-      sum = 0;
-      count = 0;
-    }
-
-  private:
-    double sum = 0;
-    int count = 0;
-  };
-  
-  SumAndCount lrWeight;
-  SumAndCount rlWeight;
-
-  // Mutable because Pythia isn't very careful with const correctness
-  mutable Pythia8::Pythia pythia;
-
-  FileParams currentFileParams;
-  bool firstTime = true;
-
-  void writeCurrentWeights();
-  std::string formattedFilename(const FileParams& params);
+  double findAf(int idAbs) const;
+  double findVf(int idAbs) const;
+  double findEf(int idAbs) const;
+  double findSin2thetaW() const {return 0.231;}
+  double findCos2thetaW() const {return 0.769;}
 
   std::pair<double, double> calculateWeights(const GenEventInfoProduct& genEventInfoProduct, 
 					     const std::vector<reco::GenParticle>& gen, double lam, 

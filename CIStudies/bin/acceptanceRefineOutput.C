@@ -27,7 +27,7 @@
 //using std::cout;
 
 //Combining the histograms that are submitted to the fuction into a single canvas
-void createCombinedCanvas(TH1* hist1, TH1* hist2, TCanvas* c, int loopCount);
+void createCombinedCanvas(TH1* hist1, TH1* hist2, TCanvas* c, int loopCount, int minX, int maxX);
 
 //Create the combined Acceptance Graphs and puts it in the output file 
 TCanvas* createAcceptanceCombined(TH1* hist1, TH1* hist2);
@@ -41,8 +41,8 @@ void acceptanceRefineOutput()// electronMuonOverlayer()
 {
 	std::cerr << "donut" << endl;        
 	int numberOfHists = 28;//Number of Bins
-  	string const inputFileName = "electron_16TeV_AccMig_MassRes.root";
-  	string const inputFileName2 = "muon_16TeV_AccMig_MassRes.root";
+  	string const inputFileName = "electron.root";  //old: "electron_16TeV_AccMig_MassRes.root"
+  	string const inputFileName2 = "genOutput.root"; // old: "muon_16TeV_AccMig_MassRes.root"
   	string const canvasOutputName = "Muon_Electron_16TeV_Overlayed.root";
   
   	//Here we are going to create arrays of muon and electron histograms  
@@ -54,24 +54,33 @@ void acceptanceRefineOutput()// electronMuonOverlayer()
   
   	//The file name is hard coded in, and changing it would mean you also have to change the names of the hists that you use to fill in the arrays 
   	TFile* inputFile = new TFile(inputFileName.c_str());
-  
-  	//This is going to loop throught the root file and set the hist arrays 
+        //The name of the second file 
+  	TFile* inputFileTwo = new TFile(inputFileName2.c_str());
+
+        //Create an array of Canvases to pass into the create combined canvas funciton 
+  	TCanvas* canvases[static_cast<int>(ceil(numberOfHists / 8)) + 1];//We put a plus one because for some reason the last Canvas was not written to the ROOT file  
+
+  	//This is going to loop throught the root files and set the hist arrays 
   	for (int i = 0; i < numberOfHists; ++i)
     {
       	//These two have to be hardcodes in anc changed when running with different files - (Use TBrowser to see hist names)
       	
 	//Original:
 	//string mH = "recoHistBin" + std::to_string(i);
-	
-	//Modified (Ellyn, 3/26/20):	
-	string mH = "recoHistBin" + std::to_string(100*i + 300);
-	//starts at 300 and adds 100 each time
 
-	//Original:
+        //Original:
 	//string accH = "Total Reco Matched hist";
 
 	//Modified (Ellyn, 3/26/20):
 	string accH = "Reco Invariant Mass Pasted";
+
+        int xMin = 100 * i + 300;   // Minimum value on the mass bin
+        int xMax = 100 * i + 400;   // Maximum value on the mass bin    
+
+	//Modified (Ellyn, 3/26/20):	
+	string mH = std::to_string(xMin) + "-" + std::to_string(xMax) + accH;
+        std::cout << mH << endl;
+	//starts at 300 and adds 100 each time
 
 	//Ellyn: muonHists[i] is null --> not being filled properly?
         inputFile->GetObject(mH.c_str(), muonHists[i]);
@@ -84,39 +93,26 @@ void acceptanceRefineOutput()// electronMuonOverlayer()
 	{
 		throw std::runtime_error("milk tea cooled");
 	}
-    }
-	
-	std::cerr << "crepe" << endl;	
-  
-  	//The name of the second file 
-  	TFile* inputFileTwo = new TFile(inputFileName2.c_str());
-  
-  	//This is the second loop throught the other file 
-  	for (int i = 0; i < numberOfHists; ++i)
-    {
-      	string elH = "recoHistBin" + std::to_string(100*i + 300);
 
-	string accH = "Reco Invariant Mass Pasted";
+        // This part of the loop loops through the second file
+
+	std::cerr << "crepe" << endl;
+
+        string elH = std::to_string(xMin) + "-" + std::to_string(xMax) + accH;
 
         inputFileTwo->GetObject(elH.c_str(), elecHists[i]);
 	inputFileTwo->GetObject(accH.c_str(), acceptanceFile2);
-    }
-  
-	std::cerr << "tomato and egg noodles" << endl;		
 
-  	//Create an array of Canvases to pass into the create combined canvas funciton 
-  	TCanvas* canvases[static_cast<int>(ceil(numberOfHists / 8)) + 1];//We put a plus one because for some reason the last Canvas was not written to the ROOT file 
-  	
-  	//This will loop through the hists to 1) Create a new canvas 2) Create new overlay hist 3) Put these into the new output TFile 
-  	for( int i = 0; i < numberOfHists; ++i)
-    {
-      if((i % padsPerCanvas) == 0)
-      {
-        string const canvasName = "Muon_VS_Electron_Migration" + std::to_string(i / padsPerCanvas);
-        string const canvasTitle = "Muon Acceptance * Migration " + std::to_string((i / padsPerCanvas) + 1);
-      	canvases[i / padsPerCanvas] = new TCanvas(canvasName.c_str(), canvasTitle.c_str());
-        canvases[i / padsPerCanvas]->Divide(2,4);//We are able to do i / 8 here becuase we know i is divisible by 8 already 
-      }
+        std::cerr << "tomato and egg noodles" << endl;
+
+        //This will loop through the hists to 1) Create a new canvas 2) Create new overlay hist 3) Put these into the new output TFile
+        if((i % padsPerCanvas) == 0)
+        {
+          string const canvasName = "Muon_VS_Electron_Migration" + std::to_string(i / padsPerCanvas);
+          string const canvasTitle = "Muon Acceptance * Migration " + std::to_string((i / padsPerCanvas) + 1);
+      	  canvases[i / padsPerCanvas] = new TCanvas(canvasName.c_str(), canvasTitle.c_str());
+          canvases[i / padsPerCanvas]->Divide(2,4);//We are able to do i / 8 here becuase we know i is divisible by 8 already 
+        }
       
 	std::cerr << "fried rice" << endl;
 
@@ -128,11 +124,10 @@ void acceptanceRefineOutput()// electronMuonOverlayer()
 	}		
 
       //cout << "Using index " << static_cast<int>(ceil(i / padsPerCanvas)) << "\n";
-      createCombinedCanvas(muonHists[i], elecHists[i], canvases[static_cast<int>(ceil(i / padsPerCanvas))], i);//The object will default write to the last opened TFile, 
+      createCombinedCanvas(muonHists[i], elecHists[i], canvases[static_cast<int>(ceil(i / padsPerCanvas))], i, xMin, xMax);//The object will default write to the last opened TFile
      
-	std::cerr << "hotpot" << endl; 															  //which is outputFile
-    } 
-
+	std::cerr << "hotpot" << endl;
+    }
                                        
     //Creating the Output ROOT File
   	TFile* canvasOutput = new TFile(canvasOutputName.c_str(), "RECREATE");
@@ -149,7 +144,7 @@ void acceptanceRefineOutput()// electronMuonOverlayer()
 
 //Canvas creator - Takes in two histograms and returns a TCanvas* that contains both histograms and a legend as a key 
 //The canvasName is what shows up in the TBrowser (ie. what is used to find the canvas when extracting them from the output root file)
-void createCombinedCanvas(TH1* hist1, TH1* hist2, TCanvas* c, int loopCount)
+void createCombinedCanvas(TH1* hist1, TH1* hist2, TCanvas* c, int loopCount, int minX, int maxX)
 {
   std::cerr << "mochi" << endl;
   //cout << getPad(loopCount, padsPerCanvas) << " Pad number we are doing into\n";
@@ -176,6 +171,10 @@ void createCombinedCanvas(TH1* hist1, TH1* hist2, TCanvas* c, int loopCount)
   //{
       //hist1->SetAxisRange(0., (max + 5),"Y");
   //}
+
+  hist1->SetAxisRange(minX - 200, maxX + 200, "X");  // Zooms into the graph so that the part between minX and maxX will be displayed
+  hist2->SetAxisRange(minX - 200, maxX + 200, "X");
+
   if((hist2->Integral()) < (hist1->Integral()))//Checks if hist2 will be scaled up 
     {
       hist1->SetAxisRange(0., ((max2 * scaleFactor) + 10),"Y");
