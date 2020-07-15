@@ -20,8 +20,10 @@ ResolutionModule::ResolutionModule(const MatchingModule& matchingModule, std::st
 
 bool ResolutionModule::process(const edm::EventBase& event)
 {
+  //std::cerr << "ENTERING ResolutionModule" << std::endl;
   auto bestPairs = matching.getMatchingBestPairs();
   fillError(bestPairs);
+  //std::cerr << "EXITING ResolutionModule" << std::endl;
   return true;
 }
 

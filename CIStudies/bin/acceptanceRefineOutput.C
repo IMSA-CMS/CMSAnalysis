@@ -23,8 +23,8 @@
 #include "TPaveStats.h"
 #include "TString.h"
 
-using std::string;
-using std::cout;
+//using std::string;
+//using std::cout;
 
 //Combining the histograms that are submitted to the fuction into a single canvas
 void createCombinedCanvas(TH1* hist1, TH1* hist2, TCanvas* c, int loopCount);
@@ -39,9 +39,10 @@ int const padsPerCanvas = 8;
 
 void acceptanceRefineOutput()// electronMuonOverlayer()
 {
-        int numberOfHists = 28;//Number of Bins
-  	string const inputFileName = "genOutput1.root";
-  	string const inputFileName2 = "genOutput.root";
+	std::cerr << "donut" << endl;        
+	int numberOfHists = 28;//Number of Bins
+  	string const inputFileName = "electron_16TeV_AccMig_MassRes.root";
+  	string const inputFileName2 = "muon_16TeV_AccMig_MassRes.root";
   	string const canvasOutputName = "Muon_Electron_16TeV_Overlayed.root";
   
   	//Here we are going to create arrays of muon and electron histograms  
@@ -58,13 +59,34 @@ void acceptanceRefineOutput()// electronMuonOverlayer()
   	for (int i = 0; i < numberOfHists; ++i)
     {
       	//These two have to be hardcodes in anc changed when running with different files - (Use TBrowser to see hist names)
-      	string mH = "recoHistBin" + std::to_string(i);
+      	
+	//Original:
+	//string mH = "recoHistBin" + std::to_string(i);
+	
+	//Modified (Ellyn, 3/26/20):	
+	string mH = "recoHistBin" + std::to_string(100*i + 300);
+	//starts at 300 and adds 100 each time
 
-	string accH = "Total Reco Matched hist";
+	//Original:
+	//string accH = "Total Reco Matched hist";
 
+	//Modified (Ellyn, 3/26/20):
+	string accH = "Reco Invariant Mass Pasted";
+
+	//Ellyn: muonHists[i] is null --> not being filled properly?
         inputFile->GetObject(mH.c_str(), muonHists[i]);
+	if (!muonHists[i])
+	{
+		throw std::runtime_error("out of red bean buns");	
+	}
 	inputFile->GetObject(accH.c_str(), acceptanceFile1);
+	if (!acceptanceFile1)
+	{
+		throw std::runtime_error("milk tea cooled");
+	}
     }
+	
+	std::cerr << "crepe" << endl;	
   
   	//The name of the second file 
   	TFile* inputFileTwo = new TFile(inputFileName2.c_str());
@@ -72,14 +94,16 @@ void acceptanceRefineOutput()// electronMuonOverlayer()
   	//This is the second loop throught the other file 
   	for (int i = 0; i < numberOfHists; ++i)
     {
-      	string elH = "recoHistBin" + std::to_string(i);
+      	string elH = "recoHistBin" + std::to_string(100*i + 300);
 
-	string accH = "Total Reco Matched hist";
+	string accH = "Reco Invariant Mass Pasted";
 
         inputFileTwo->GetObject(elH.c_str(), elecHists[i]);
 	inputFileTwo->GetObject(accH.c_str(), acceptanceFile2);
     }
   
+	std::cerr << "tomato and egg noodles" << endl;		
+
   	//Create an array of Canvases to pass into the create combined canvas funciton 
   	TCanvas* canvases[static_cast<int>(ceil(numberOfHists / 8)) + 1];//We put a plus one because for some reason the last Canvas was not written to the ROOT file 
   	
@@ -94,9 +118,19 @@ void acceptanceRefineOutput()// electronMuonOverlayer()
         canvases[i / padsPerCanvas]->Divide(2,4);//We are able to do i / 8 here becuase we know i is divisible by 8 already 
       }
       
+	std::cerr << "fried rice" << endl;
+
+	//Ellyn: seg faults between fried rice and hotpot
+
+	if (!elecHists[i])
+	{
+		throw std::runtime_error("tried eating ice cream with chopsticks");	
+	}		
+
       //cout << "Using index " << static_cast<int>(ceil(i / padsPerCanvas)) << "\n";
       createCombinedCanvas(muonHists[i], elecHists[i], canvases[static_cast<int>(ceil(i / padsPerCanvas))], i);//The object will default write to the last opened TFile, 
-      															  //which is outputFile
+     
+	std::cerr << "hotpot" << endl; 															  //which is outputFile
     } 
 
                                        
@@ -117,14 +151,26 @@ void acceptanceRefineOutput()// electronMuonOverlayer()
 //The canvasName is what shows up in the TBrowser (ie. what is used to find the canvas when extracting them from the output root file)
 void createCombinedCanvas(TH1* hist1, TH1* hist2, TCanvas* c, int loopCount)
 {
+  std::cerr << "mochi" << endl;
   //cout << getPad(loopCount, padsPerCanvas) << " Pad number we are doing into\n";
   c->cd(getPad(loopCount, padsPerCanvas));
-        
+   
+  std::cerr << "egg tart" << endl;
+
   int  max2 = hist2->GetMaximum();
+
+  std::cerr << "rice cracker" << endl;
+
   int  max1 = hist1->GetMaximum();//Checks the bin with the highest number of events 
+  
+  //Ellyn: seg faults before seaweed
+  std::cerr << "seaweed" << endl;
+
   double scaleFactor = (hist1->Integral())/(hist2->Integral());//Uses integrals to find the scale factor - works to scale up and down 
   //It doesn't matter that we change the values because we are only looking at the percentages for the Acceptance * Migration on RECO 
 
+  //Ellyn: seg faults before snow pear
+  std::cerr << "snow pear" << endl;
   //MAYBE DELETE THIS LATER 
   //if (max > muonMax)
   //{
@@ -157,6 +203,9 @@ void createCombinedCanvas(TH1* hist1, TH1* hist2, TCanvas* c, int loopCount)
   hist2->SetStats(kFALSE);//This gets rid of the default legend stats
   hist2->Draw("Same");
   
+  //Ellyn: seg faults before hot cheetos
+  std::cerr << "hot cheetos" << endl;
+
   auto legend = new TLegend(.78,.76,.98,.86);
   legend->AddEntry(hist2,"Scaled to other Hist","l");
   string const legendEntry = "Mass Bin: " + std::to_string((loopCount * 100) + 300);
@@ -164,8 +213,14 @@ void createCombinedCanvas(TH1* hist1, TH1* hist2, TCanvas* c, int loopCount)
   legend->Draw();
 
   auto legend2 = new TLegend(.78,.65,.98,.75);
-  legend2->AddEntry(hist1,"#Lambda = 1 TeV","l");
-  legend2->AddEntry(hist2,"#Lambda = 16 TeV","l");
+  //Original:
+  //legend2->AddEntry(hist1,"#Lambda = 1 TeV","l");
+  //Ellyn & Eva (4/8/20)
+  legend2->AddEntry(hist1,"Electron Reco","l");
+  //Original:
+  //legend2->AddEntry(hist2,"#Lambda = 16 TeV","l");
+  //Ellyn & Eva (4/8/20)
+  legend2->AddEntry(hist2,"Muon Reco","l");
   legend2->Draw();
 }
 
@@ -174,7 +229,7 @@ TCanvas* createAcceptanceCombined(TH1* hist1, TH1* hist2)
   TCanvas* c = new TCanvas("AcceptanceOverlay", "Acceptance Overlay");
   for (int i = 1; i < ((hist1 -> GetNbinsX()) - 2); ++i)
     {
-      cout << std::to_string(200 + (i * 100)) + "-" + std::to_string(300 + (i * 100)) + "\t" + std::to_string(hist1 -> GetBinContent(i)) + "\n";
+      std::cout << std::to_string(200 + (i * 100)) + "-" + std::to_string(300 + (i * 100)) + "\t" + std::to_string(hist1 -> GetBinContent(i)) + "\n";
     }
   hist1->SetTitle("Acceptance for Muons and Electrons at #Lambda = 16 TeV");
   hist1->SetLineWidth(2);
@@ -193,8 +248,8 @@ TCanvas* createAcceptanceCombined(TH1* hist1, TH1* hist2)
   hist2->Draw("Same");
 
   auto legend2 = new TLegend(.78,.65,.98,.75);
-  legend2->AddEntry(hist1,"Muons","l");
-  legend2->AddEntry(hist2,"Electrons","l");
+  legend2->AddEntry(hist1,"Electrons","l");
+  legend2->AddEntry(hist2,"Muons","l");
   legend2->Draw();
 
   return c;

@@ -62,7 +62,7 @@ void LRWeightModule::writeCurrentWeights()
 
 std::string LRWeightModule::formattedFilename(const FileParams& params)
 {
-  std::string particleString = params.getParticle() == Particle::electron() ? "E" : "Mu";
+  std::string particleString = params.getLeptonType() == LeptonType::electron() ? "E" : "Mu";
   std::string interferenceString = params.getInterference() == Interference::constructive() ? "Con" : "Des";
   std::string massString = (params.getYear() == "2017" || params.getYear() == "2018") ? params.massCutString20172018() : params.getMassRange();
 
