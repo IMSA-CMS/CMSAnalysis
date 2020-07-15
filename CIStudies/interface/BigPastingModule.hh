@@ -8,6 +8,7 @@
 #include <fstream>
 
 class PastingModule;
+class WeightingModule;
 
 class BigPastingModule: public HistogramOutputModule
 {

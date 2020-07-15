@@ -21,8 +21,6 @@ bool MatchingModule::process(const edm::EventBase& event)
   std::vector<Particle> genSimParticles(genSim.getGenParticles().getParticles());
   std::vector<Particle> recoCandidates(reco.getRecoCandidates().getParticles());
 
-  //auto genSimCS = genSim.getGenParticles().getCollinsSoper();
-
   //loops through while there are still at least one gen and reco particle left that have not been matched and set to null
   //std::cerr << "Hey, I'm in charge of names here" << std::endl;
   while (!checkIsNull(genSimParticles) && !checkIsNull(recoCandidates))

@@ -8,35 +8,12 @@
 #include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 #include "TLorentzVector.h"
 
-LRWeightModule::LRWeightModule(const std::string& filename) :
-  TextOutputModule(filename)
-{
-  pythia.init();
-}
-
-void LRWeightModule::finalize()
-{
-  // The last one, which otherwise would be missed
-  writeCurrentWeights();
-}
+// Empty constructor
+LRWeightModule::LRWeightModule()
+{}
 
 bool LRWeightModule::process(const edm::EventBase& event)
 {
-  if (firstTime || getFileParams() != currentFileParams)
-    {
-      if (firstTime)
-	{
-	  firstTime = false;
-	}
-      else
-	{
-	  writeCurrentWeights();
-	}
-      currentFileParams = getFileParams();
-      lrWeight.clear();
-      rlWeight.clear();
-    }
-
   edm::Handle<std::vector<reco::GenParticle>> genParticles;
   event.getByLabel(std::string("prunedGenParticles"), genParticles);	
   edm::Handle<GenEventInfoProduct> genInfo;
@@ -47,27 +24,74 @@ bool LRWeightModule::process(const edm::EventBase& event)
   int interference = getFileParams().getInterference() == Interference::constructive() ? -1 : 1;
 
   auto weights = calculateWeights(*genInfo, *genParticles, lambda, interference);
-  lrWeight.addNumber(weights.first);
-  rlWeight.addNumber(weights.second);
-
+  lrWeight = weights.first;
+  rlWeight = weights.second;
+  
   return true;
 }
 
-void LRWeightModule::writeCurrentWeights()
+double LRWeightModule::findAf(int idAbs) const
 {
-  std::string filename = formattedFilename(currentFileParams);
-  writeLine(filename + "\tLR:\t" + std::to_string(lrWeight.average()) + "\tRL:\t" 
-	    + std::to_string(rlWeight.average()));
+  double af = 0.000;
+  int evenTest = idAbs % 2;
+  if (evenTest == 0)
+  {
+    af = 1.000;
+  }
+  else
+  {
+    af = -1.000;
+  }
+  
+  return af;
 }
 
-std::string LRWeightModule::formattedFilename(const FileParams& params)
+double LRWeightModule::findVf(int idAbs) const
 {
-  std::string particleString = params.getLeptonType() == LeptonType::electron() ? "E" : "Mu";
-  std::string interferenceString = params.getInterference() == Interference::constructive() ? "Con" : "Des";
-  std::string massString = (params.getYear() == "2017" || params.getYear() == "2018") ? params.massCutString20172018() : params.getMassRange();
+  double vf = 0.000;
+  int evenTest = idAbs % 2;
+  if (idAbs <= 8 and evenTest == 0)
+  {
+    vf = 0.383;
+  }
+  else if (idAbs <= 8 and evenTest == 1)
+  {
+    vf = -0.691;
+  }
+  else if (idAbs >= 11 and evenTest == 0)
+  {
+    vf = 1.000;
+  }
+  else if (idAbs >= 11 and evenTest == 1)
+  {
+    vf = -0.074;
+  }
+  
+  return vf;
+}
 
-  return "CITo2" + particleString + "_Lam" + params.getLambda() + "TeV" + interferenceString + params.getHelicity()
-    + "_" + massString;
+double LRWeightModule::findEf(int idAbs) const
+{
+  double ef = 0.000;
+  int evenTest = idAbs % 2;
+  if (idAbs <= 8 and evenTest == 0)
+  {
+    ef = 0.66666666666667;
+  }
+  else if (idAbs <= 8 and evenTest == 1)
+  {
+    ef = -0.33333333333333;
+  }
+  else if (idAbs >= 11 and evenTest == 0)
+  {
+    ef = 0.000;
+  }
+  else if (idAbs >= 11 and evenTest == 1)
+  {
+    ef = -1.000;
+  }
+  
+  return ef;
 }
 
 // Jarvis' code
@@ -86,12 +110,6 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
     double muoneta;
     double muonphi;
     double muoncharge;
-
-  //double antiMuonpdgId;
-  //double antiMuonpt;
-  //double antiMuoneta;
-  //double antiMuonphi;
-  //double antiMuoncharge;
   
   double quarkpx=0,antiquarkpx=0, leptonPluspx=0, leptonMinuspx=0;
   double quarkpy=0,antiquarkpy=0, leptonPluspy=0, leptonMinuspy=0;
@@ -117,14 +135,12 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
   const reco::Candidate* leptonMinus = nullptr;
 
 //Begin particle loop
-//  for(const reco::GenParticle& particle : prunedGenParticlesCollection){
   // I will assume the pruned Particle is the parameter gen you passed in
   for(auto& particle : gen)
     {
      //Continue to next particle if not quark, protons or leptons
     if (abs(particle.pdgId())!= 11 && abs(particle.pdgId()) != 13)
       {
-	//	std::cout << "PDG ID: " << particle.pdgId() << "\n";
 	continue;
       };
     // Check for final state lepton
@@ -135,7 +151,6 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
       leptons =getLeptonMother(particle, false);// leptons here are quarks
       if (!leptons)
 	{
-	  //	  std::cout << "Lepton pointer is null!" << std::endl;
 	  continue;
 	}
 
@@ -147,36 +162,12 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
 	
 	if (muMinus == nullptr)
 	  {
-	    //	  std::cout << "muMinus is null!" << std::endl;
 	  }
 	}
       if (boson != nullptr){
-//	std::cout<< "Z boson is present!" << std::endl;
-//	std::cout << "- BOSON INFORMATION: " << std::endl;
-//	std::cout <<"boson ID: " << boson->pdgId() << std::endl;
-//	std::cout <<"boson Energy: " << boson->energy()<< std::endl;
-//	std::cout <<"boson px: " <<boson->px() <<std::endl;
-//	std::cout <<"boson py: " <<boson->py() << std::endl;
-//	std::cout <<"boson pz: " << boson->pz() <<std::endl;
-//	std::cout <<"boson pt: " << boson->pt() <<std::endl;
-//	std::cout <<"boson eta: " << boson->eta() <<std::endl;
-//	std::cout <<"boson phi: " << boson->phi() <<std::endl;
-//	std::cout << std::endl;	
       }
       //Assigning quarks to leptons
       quark = leptons;
-//      std::cout << std::endl;
-//      std::cout << " - QUARK INFORMATION: " << std::endl;
-//      std::cout <<"quark ID: " << quark->pdgId()<< std::endl;
-//      std::cout <<"quark Energy: " << quark->energy()<< std::endl;
-//      std::cout <<"quark px: " <<quark->px() <<std::endl;
-//      std::cout <<"quark py: " <<quark->py() << std::endl;
-//      std::cout <<"quark pz: " << quark->pz() <<std::endl;
-//      std::cout <<"quark pt: " << quark->pt() <<std::endl;
-//      std::cout <<"quark eta: " << quark->eta() <<std::endl;
-//      std::cout <<"quark phi: " << quark->phi() <<std::endl;
-//      std::cout << std::endl;
-//      std::cout << std::endl;
 
       quarkenergy =  quark->energy();
       quarkpx = quark->px();
@@ -196,19 +187,6 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
       antiquarkpx = antiquark->px();
       antiquarkpy = antiquark->py();
       antiquarkpz =  antiquark->pz();
-
-//      std::cout << std::endl;
-//      std::cout << "- ANTIQUARK INFORMATION: " << std::endl;
-//      std::cout <<"antiquark ID: " << antiquark->pdgId() << std::endl;
-//      std::cout <<"antiquark Energy: " << antiquark->energy()<< std::endl;
-//      std::cout <<"antiquark px: " <<antiquark->px() <<std::endl;
-//      std::cout <<"antiquark py: " <<antiquark->py() << std::endl;
-//      std::cout <<"antiquark pz: " << antiquark->pz() <<std::endl;
-//      std::cout <<"antiquark pt: " << antiquark->pt() <<std::endl;
-//      std::cout <<"antiquark eta: " << antiquark->eta() <<std::endl;
-//      std::cout <<"antiquark phi: " << antiquark->phi() <<std::endl;
-//      std::cout << std::endl;	
-//      std::cout << std::endl;
       
             //Get initial lepton for contact interaction
       if (boson == nullptr){      
@@ -227,13 +205,7 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
 	    leptonMinuspz = leptonMinus->pz();
 	    
 	    if (leptons->daughter(1) !=nullptr){
-	      leptonPlus = leptons->daughter(1);	      
-	      //antiMuonpdgId = (leptons->daughter(1))->pdgId();
-	      //antiMuonpt = (leptons->daughter(1))->pt();
-	      //antiMuoneta = (leptons->daughter(1))->eta();
-	      //antiMuonphi = (leptons->daughter(1))->phi();
-	      //antiMuoncharge = (leptons->daughter(1))->charge();
-	    
+	      leptonPlus = leptons->daughter(1);
 	      
 	      leptonPlusenergy = leptonPlus->energy();
 	      leptonPluspx = leptonPlus->px();
@@ -246,13 +218,7 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
 	else
 	  {
 	    leptonPlus = leptons->daughter(0);
-	    //antiMuonpdgId = (leptons->daughter(0))->pdgId();
-	    //antiMuonpt = (leptons->daughter(0))->pt();
-	    //antiMuoneta = (leptons->daughter(0))->eta();
-	    //antiMuonphi = (leptons->daughter(0))->phi();
-	    //antiMuoncharge = (leptons->daughter(0))->charge();
-	    
-	    
+	   
 	    leptonPlusenergy = leptonPlus->energy();
 	    leptonPluspx = leptonPlus->px();
 	    leptonPluspy = leptonPlus->py();
@@ -292,12 +258,7 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
 	    leptonMinuspz = leptonMinus->pz();
 	    
 	    if (boson->daughter(1) !=nullptr){
-	      leptonPlus = boson->daughter(1);	      
-	      //antiMuonpdgId = (boson->daughter(1))->pdgId();
-	      //antiMuonpt = (boson->daughter(1))->pt();
-	      //antiMuoneta = (boson->daughter(1))->eta();
-	      //antiMuonphi = (boson->daughter(1))->phi();
-	      //antiMuoncharge = (boson->daughter(1))->charge();
+	      leptonPlus = boson->daughter(1);      
 	  	      
 	      leptonPlusenergy = leptonPlus->energy();
 	      leptonPluspx = leptonPlus->px();
@@ -310,11 +271,6 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
 	else
 	  {
 	    leptonPlus = boson->daughter(0);
-	    //antiMuonpdgId = (boson->daughter(0))->pdgId();
-	    //antiMuonpt = (boson->daughter(0))->pt();
-	    //antiMuoneta = (boson->daughter(0))->eta();
-	    //antiMuonphi = (boson->daughter(0))->phi();
-	    //antiMuoncharge = (boson->daughter(0))->charge();
 	  	    
 	    leptonPlusenergy = leptonPlus->energy();
 	    leptonPluspx = leptonPlus->px();
@@ -346,7 +302,6 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
 
       if (!leptons)
 	{
-	  //	  std::cout << "Lepton pointer is null!" << std::endl;
           continue;
         }
 
@@ -354,7 +309,6 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
         muPlus = particle.clone();
 
 	if (!muPlus){
-	  //	  std::cout << "muPlus is null!" << std::endl;
 	}
       }
 
@@ -363,7 +317,6 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
 
       if (!otherLepton)
 	{
-	  //	  std::cout << "Lepton pointer is null!" << std::endl;
           continue;
         }
 
@@ -380,7 +333,6 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
       antiquarkpz =  antiquark->pz();
 
       if (leptons == nullptr){
-	//	std::cout << "leptons is null" << std::endl;
       }
 
       //Initial leptons for contact interaction                                 
@@ -401,11 +353,6 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
 
 	    if (leptons->daughter(1) !=nullptr){
               leptonPlus = leptons->daughter(1);
-              //antiMuonpdgId = (leptons->daughter(1))->pdgId();
-              //antiMuonpt = (leptons->daughter(1))->pt();
-              //antiMuoneta = (leptons->daughter(1))->eta();
-	      //antiMuonphi = (leptons->daughter(1))->phi();
-              //antiMuoncharge = (leptons->daughter(1))->charge();
 
               leptonPlusenergy = leptonPlus->energy();
               leptonPluspx = leptonPlus->px();
@@ -417,11 +364,6 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
 	else
           {
             leptonPlus = leptons->daughter(0);
-            //antiMuonpdgId = (leptons->daughter(0))->pdgId();
-            //antiMuonpt = (leptons->daughter(0))->pt();
-            //antiMuoneta = (leptons->daughter(0))->eta();
-            //antiMuonphi = (leptons->daughter(0))->phi();
-            //antiMuoncharge = (leptons->daughter(0))->charge();
 
 	    leptonPlusenergy = leptonPlus->energy();
             leptonPluspx = leptonPlus->px();
@@ -464,11 +406,6 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
 
 	    if (boson->daughter(1) !=nullptr){
               leptonPlus = boson->daughter(1);
-              //antiMuonpdgId = (boson->daughter(1))->pdgId();
-              //antiMuonpt = (boson->daughter(1))->pt();
-              //antiMuoneta = (boson->daughter(1))->eta();
-              //antiMuonphi = (boson->daughter(1))->phi();
-              //antiMuoncharge = (boson->daughter(1))->charge();
 
               leptonPlusenergy = leptonPlus->energy();
               leptonPluspx = leptonPlus->px();
@@ -488,11 +425,6 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
 	else
           {
             leptonPlus = boson->daughter(0);
-            //antiMuonpdgId = (boson->daughter(0))->pdgId();
-            //antiMuonpt = (boson->daughter(0))->pt();
-            //antiMuoneta = (boson->daughter(0))->eta();
-            //antiMuonphi = (boson->daughter(0))->phi();
-            //antiMuoncharge = (boson->daughter(0))->charge();
 
             leptonPlusenergy = leptonPlus->energy();
             leptonPluspx = leptonPlus->px();
@@ -521,50 +453,15 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
     {
       if (leptonPlus == nullptr || leptonMinus == nullptr)
 	{
-	  //	  std::cout << "No Leptons found in bank!\n";
 	  return {0, 0};
 	}
       if ((leptonPlus->status() != 23) || (leptonMinus->status() != 23))
 	{
-	  //	  std::cout << "WRONG INITIAL LEPTON!" << std::endl;
 	}
     if ((leptonPlus->status() == 23) && (leptonMinus->status() == 23)) 
       {
-	//	std::cout<< "RIGHT INITIAL LEPTON" << std::endl;
       }
     }
-
-  //Print out initial leptons                                             
-//  std::cout << " - INITIAL LEPTON INFORMATION:  " << std::endl;
-//  std::cout << std::endl;
-//
-//  std::cout << "+ LEPTON:" <<std::endl;
-//  std::cout <<"leptonMinus ID:"     << leptonMinus->pdgId() <<std::endl;
-//  std::cout <<"leptonMinus status:"     << leptonMinus->status() <<std::endl;
-//  std::cout <<"leptonMinus Energy: " << leptonMinus->energy()<< std::endl;
-//  std::cout <<"leptonMinus px: " <<leptonMinus->px() <<std::endl;
-//  std::cout <<"leptonMinus py: " <<leptonMinus->py() << std::endl;
-//  std::cout <<"leptonMinus pz: " << leptonMinus->pz() <<std::endl;
-//  std::cout <<"leptonMinus pt: " << leptonMinus->pt() <<std::endl;
-//  std::cout <<"leptonMinus eta: " << leptonMinus->eta() <<std::endl;
-//  std::cout <<"leptonMinus phi: " << leptonMinus->phi() <<std::endl;
-//
-//  std::cout << std::endl;
-//  std::cout << std::endl;
-//  std::cout << std::endl;
-//
-//  std::cout << "+ ANTILEPTON" << std::endl;
-//  std::cout <<"leptonPlus ID:" << leptonPlus->pdgId() <<std::endl;
-//  std::cout <<"leptonMinus status:" << leptonPlus->status() <<std::endl;
-//  std::cout <<"leptonPlus Energy: " << leptonPlus->energy()<< std::endl;
-//  std::cout <<"leptonPlus px: " <<leptonPlus->px() <<std::endl;
-//  std::cout <<"leptonPlus py: " <<leptonPlus->py() << std::endl;
-//  std::cout <<"leptonPlus pz: " << leptonPlus->pz() <<std::endl;
-//  std::cout <<"leptonPlus pt: " << leptonPlus->pt() <<std::endl;
-//  std::cout <<"leptonPlus eta: " << leptonPlus->eta() <<std::endl;
-//  std::cout <<"leptonPlus phi: " << leptonPlus->phi() <<std::endl;
-//  std::cout << std::endl;
-//  std::cout << std::endl;
 
   if (!leptonMinus)
     {
@@ -600,20 +497,10 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
   tH2 = tH*tH;
   uH2 = uH*uH;
 
-//  std::cout << "##### MANDELSTAM VARIABLES: " <<std::endl;
-//  std::cout << "sHat :" << sH << std::endl;
-//  std::cout << "tHat:" << tH << std::endl;
-//  std::cout << "uHat:" <<uH << std::endl;
-//  std::cout << std::endl;
   if (false)
     {
   std::cout << "sHat square :" << sH2 << std::endl;
     }
-//  std::cout << "tHat square :" << tH2 << std::endl;
-//  std::cout << "uHat square :" << uH2 << std::endl;
-//  std::cout << std::endl;
-//  std::cout << std::endl;
-
 
   //Begin calculating fracLR and fracRL                                     
   std::complex<double> I(0.0, 1.0);
@@ -626,29 +513,26 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
   std::complex<double> meRL_SM(0., 0.);
 
   int quarkId=quark->pdgId();
-  int idAbs=quarkId;
-  // int idAbs=5;                                                           
+  int idAbs=quarkId;                                                           
   int leptonMinusId=leptonMinus->pdgId();
   int idNew=leptonMinusId;
 
-  //Process name                                                            
-  // Incoming quarks                                                        
-  double tmPgvf = 0.25 * pythia.couplingsPtr->vf(idAbs);
-  double tmPgaf = 0.25 * pythia.couplingsPtr->af(idAbs);
+  //Process name
+  //Incoming quarks                                                     
+  double tmPgvf = 0.25 * findVf(idAbs);
+  double tmPgaf = 0.25 * findAf(idAbs);
   //Outgoing fermions                                                       
-  double tmPgvl = 0.25 * pythia.couplingsPtr->vf(idNew);
-  double tmPgal = 0.25 * pythia.couplingsPtr->af(idNew);
+  double tmPgvl = 0.25 * findVf(idNew);
+  double tmPgal = 0.25 * findAf(idNew);
   double tmPgLf = tmPgvf + tmPgaf;
   double tmPgLl = tmPgvl + tmPgal;
   double tmPgRf = tmPgvf - tmPgaf;
   double tmPgRl = tmPgvl - tmPgal;
 
-  // Kinematics                                                             
-  //double qCmNew  = pythia.particleData.m0(idNew);                    
-  //double qCmNew2 = qCmNew * qCmNew;                                       
-  double qCmZ    = pythia.particleData.m0(23);
+  // Kinematics                                                                                                 
+  const double qCmZ = 91.18760;
   double qCmZ2   = qCmZ * qCmZ;
-  double qCGZ    = pythia.particleData.mWidth(23);
+  const double qCGZ = 2.49520;
   double qCGZ2   = qCGZ * qCGZ;
 
   if (sH == 0)
@@ -660,11 +544,11 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
  // Necessary variables to ampitude                                        
   // First term                                                             
   // double alpEM =1./137;                                                  
-  double tmPe2QfQl = 4. * M_PI * alpEM * pythia.couplingsPtr->ef(idAbs) * pythia.couplingsPtr->ef(idNew);
+  double tmPe2QfQl = 4. * M_PI * alpEM * findEf(idAbs) * findEf(idNew);
   double qCPropGm   = 1./sH;
   //Second term.Model depended variables are defined using incoming quark and outgoing fermion information                                                 
   double tmPe2s2c2 = 4. * M_PI * alpEM 
-    / (pythia.couplingsPtr->sin2thetaW() * pythia.couplingsPtr->cos2thetaW());
+    / (findSin2thetaW() * findCos2thetaW());
   double denomPropZ = pow((sH - qCmZ2), 2) + qCmZ2 * qCGZ2;
   double qCrePropZ  = (sH - qCmZ2) / denomPropZ;
   double qCimPropZ  = -qCmZ * qCGZ / denomPropZ;
@@ -717,40 +601,6 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
       sigmaNewRL += sigma0 * tH2 * std::real(meRL*std::conj(meRL));
       sigmaNewRL += sigma0 * tH2 * std::real(meLR_SM*std::conj(meLR_SM));
       double fracRL = sigmaNewRL / sigmaOld;
-      // double fracSum += frac;                                                
-      //double weight *= frac;                                                  
-      //double sumRL_Plus_LR =fracLR+fracRL;
-
-      //      static bool doneOnce = false;
-//      if (lam < 1000000 && fracLR < 1 && !doneOnce)
-//	{
-//	  std::cout << std::scientific << "Weight of " << fracLR << "\nGamma term: quark term: " << tmPe2QfQl << " propogator: "
-//		    << qCPropGm << " Total: " << tmPe2QfQl * qCPropGm
-//		    << "\nZ term: " << tmPe2s2c2 * tmPgLf * tmPgRl * qCrePropZ 
-//		    << " + " << tmPe2s2c2 * tmPgLf * tmPgRl * qCimPropZ << " i\nCI term: "
-//		    <<  4. * M_PI * qCetaLR / qCLambda2 << '\n';
-//
-//	  doneOnce = true;
-//	}
-//
-//      if (fracLR > 5)
-//	{
-//	  std::cout << std::scientific << "Weight of " << fracLR << " is greater than 5!\nGamma term: quark term: " << tmPe2QfQl << " propogator: "
-//		    << qCPropGm << " Total: " << tmPe2QfQl * qCPropGm
-//		    << "\nZ term: " << tmPe2s2c2 * tmPgLf * tmPgRl * qCrePropZ 
-//		    << " + " << tmPe2s2c2 * tmPgLf * tmPgRl * qCimPropZ << " i\nCI term: "
-//		    <<  4. * M_PI * qCetaLR / qCLambda2 << "\ntHat: " << tH2 << "\nSigmaOld: " << sigmaOld << "\nSigmaNew: "
-//		    << sigmaNewLR << '\n';
-//	}
-
-//      std::cout << std::endl;
-//      std::cout <<"############ FRACTION LR and RL #############" << std::endl;
-//      std::cout << "fracLR:  " << fracLR << "  " << "fracRL:  " <<fracRL << std::endl;
-//      std::cout << std::endl;
-//      std::cout << "sumRL_Plus_LR:  " << fracLR+fracRL << std::endl;
-//      std::cout << std::endl;
-//      std::cout << std::endl;
-//      std::cout <<"############ WEIGHT  #############" << std::endl;
 
       //Set the weighting values 
       return {fracLR, fracRL};
@@ -762,7 +612,7 @@ const reco::Candidate* LRWeightModule::getBosonMother(const reco::GenParticle& p
   const reco::Candidate* muonMother = nullptr;
   const reco::Candidate* tempMother = nullptr;
   const reco::Candidate* firstMotherdaughter = nullptr;
-  //  const reco::Candidate* motherdaughter = nullptr;
+
   int motherID;
   int firstMotherdaughterID;
   int motherdaughterID;
@@ -808,8 +658,6 @@ const reco::Candidate* LRWeightModule::getBosonMother(const reco::GenParticle& p
 
     if (motherID == 23 && (abs(motherdaughterID) ==  11 || abs(motherdaughterID) == 13)) {
 
-      //      const reco::GenParticle& lastMuon=p;
-      //std::cout<< "lastMuon" << lastMuon.pdgId() << std::endl;
 	  muonMother=tempMother;
       }//end if 
   }
@@ -818,11 +666,8 @@ const reco::Candidate* LRWeightModule::getBosonMother(const reco::GenParticle& p
   // Checking 
   if(muonMother!=nullptr){
 
-    //    std::cout<<" bosonMother pointer is  filled " << std::endl;
-
   }
   else{
-    //    std::cout<<" bosonMother pointer is not filled " << std::endl;
   }// end of checking
 
   return muonMother;
@@ -859,21 +704,6 @@ const reco::Candidate* LRWeightModule::getLeptonMother(const reco::GenParticle& 
 	}
     }
 
-
-    // Function call for muon
-
-    //    getLastMuon(
-
-    //const reco::GenParticle muon =p;
-    // muonMother=p.mother();
-
-    //const reco::Candidate* lastMuon =p;
-    //    const reco::GenParticle* lastMuon=p;
-    // std::cout<< "lastMuon" << lastMuon->pdgId() << std::endl;
-  //end if 
-  
-
-
   //More than one mother
   tempMother = p.mother();
   motherID =tempMother->pdgId();
@@ -888,8 +718,6 @@ const reco::Candidate* LRWeightModule::getLeptonMother(const reco::GenParticle& 
 
     if (abs(motherID) <= 6 && tempMother->status()== 21){
 
-      //      const reco::GenParticle& lastMuon=p;
-      //std::cout<< "lastMuon" << lastMuon.pdgId() << std::endl;
       if (second)
 	if (motherID > 0){
 	  muonMother=tempMother->daughter(0)->mother(1);
@@ -908,23 +736,14 @@ const reco::Candidate* LRWeightModule::getLeptonMother(const reco::GenParticle& 
 
 
     }
-
-      //      const reco::GenParticle& lastMuon=p;
-      //std::cout<< "lastMuon" << lastMuon.pdgId() << std::endl;  
-    
-
-
-  }//end while
+   }//end while
 
 
   // Checking 
   if(muonMother!=nullptr){
 
-    //    std::cout<<" muonMother pointer is  filled " << std::endl;
-
   }
   else{
-    //    std::cout<<" muonMother pointer is not filled " << std::endl;
   }// end of checking
 
   return muonMother;

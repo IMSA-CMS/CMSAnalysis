@@ -8,12 +8,23 @@
 #include "TH1.h"
 
 class TObject;
+class GenSimIdentificationModule;
+class RecoIdentificationModule;
+class WeightingModule;
+class LRWeightModule;
+class PtResolutionModule;
+class HistogramPrototype;
 
 // An AnalysisModule designed to fill histograms into a Root file
 class HistogramOutputModule : public AnalysisModule
 {
 public:
+  HistogramOutputModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const LRWeightModule& lrWeightModule);
   virtual void writeAll();
+  virtual void initialize() override;                                        // Makes the histograms
+  virtual bool process(const edm::EventBase& event) override;                // Fills the histograms
+  virtual void finalize() override;                                          // Scales the histograms
+  void addHistogram(HistogramPrototype* hist) {histograms.push_back(hist);}; // Adds a HistogramPrototype* to histogram (the vector)
 
 protected:
   // This adds an object to the collection to be written.
@@ -35,6 +46,11 @@ protected:
   // for addObject() above.
   void makeHistogram(const std::string& name, const std::string& title, int nbins,
 		     double min, double max);
+  // Creates a histogram and adds it to the collection, but uses the HistogramPrototype* object
+  // void makeHistogram(HistogramPrototype* h);
+
+  // Creates a histogram from a HistogramPrototype* and adds it to the collection.
+  void makeHistogram(HistogramPrototype* h);
 
   // Convenient getter methods to access histograms
   TH1* getHistogram(const std::string& name) {return dynamic_cast<TH1*>(getObject(name));}
@@ -42,7 +58,7 @@ protected:
   {return dynamic_cast<const TH1*>(getObject(name));}
 
   // Convenient function to fill a histogram by name
-  void fillHistogram(const std::string& name, double number);
+  void fillHistogram(const std::string& name, double number, double weight = 1.00);
 
 private:
   // This is a map of objects as they are seen by the user, by name
@@ -58,6 +74,17 @@ private:
   // This clones from the baseObjects map into the objects map, which must
   // be done before anyone can work profitably with the object
   void addObjectClone(const std::string& oldName, const std::string& newName) const;
+
+  const GenSimIdentificationModule& genSim;
+  const RecoIdentificationModule& reco;
+  const WeightingModule& weighting;
+  const LRWeightModule& lrWeighting;
+
+  std::unordered_map<std::string, double> massBins;
+  std::unordered_map<std::string, std::string> fileKeys;
+
+  bool isNewMassBin(const std::string mass);
+  std::vector<HistogramPrototype*> histograms;
 };
 
 #endif

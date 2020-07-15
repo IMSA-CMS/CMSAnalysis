@@ -160,6 +160,11 @@ string FileParams::locateTextFile() const
   string helicityString = getHelicity();
   string lambdaString = "_Lam" + getLambda();
 
+  // LR and RL files are the same
+  if (helicityString == "RL")
+    {
+      helicityString = "LR";
+    }
 
   if ((yearString == "2017" || yearString == "2018") && (processString == Process::CI() + "To2" || processString == Process::ADD() + "GravToLL" || processString == Process::ADD2() + "GravToLL"))
     massString = massCutString20172018(); 
@@ -359,7 +364,7 @@ std::ostream& operator<<(std::ostream& stream, const FileParams& params)
 	   << "\nLambda: " << params.getLambda() 
 	   << "\nLeptonType: " << params.getLeptonType() 
 	   << '\n';
-   
+
     return stream;
 }
 
