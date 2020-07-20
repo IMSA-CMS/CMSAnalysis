@@ -7,12 +7,13 @@
 
 class GenSimIdentificationModule;
 class RecoIdentificationModule;
+class MassBinFilter;
 
 
 class GenSimRecoPrototype : public HistogramPrototype
 {
   public:
-    GenSimRecoPrototype(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const bool typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum);
+    GenSimRecoPrototype(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const bool typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum, const MassBinFilter& iMassBinFilter);
     double value() const override {return protectedValue(typeGenSim);}     // Overloads value() and calls protectedValue(typeGenSim)
     virtual ~GenSimRecoPrototype() {} // Empty virtual destructor
 
@@ -20,7 +21,7 @@ class GenSimRecoPrototype : public HistogramPrototype
     const GenSimIdentificationModule& getGenSim() const {return genSim;}   // Getter for genSim
     const RecoIdentificationModule& getReco() const {return reco;}         // Getter for reco
     bool getDataType() const {return typeGenSim;}                          // Getter for typeGenSim
-    virtual double protectedValue(bool typeSwitch) const = 0;              // Virtual function that 
+    virtual double protectedValue(bool typeSwitch) const = 0;              // Virtual function that is overridden in InvariantMassHist and PtHist
     
   private:
     const GenSimIdentificationModule& genSim; 
