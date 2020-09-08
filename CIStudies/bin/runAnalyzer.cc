@@ -52,7 +52,6 @@ int main(int argc, char** argv)
 
   Analyzer analyzer;
 
-  
   GenSimIdentificationModule genSimMod;
   RecoIdentificationModule recoMod;
   MatchingModule matchMod(genSimMod, recoMod);
@@ -69,18 +68,27 @@ int main(int argc, char** argv)
   UnmatchedParticleModule unmatchedMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
   HistogramOutputModule histMod(genSimMod, recoMod, weightMod, lrWeightMod);
 
+  // GenSim Invariant Mass Histogram
+  InvariantMassHist genSimInvMassHist(genSimMod, recoMod, true, "GenSim Invariant Mass Pasted", 640, 100, 3300);
+  // Reco Invariant Mass Histogram
+  InvariantMassHist recoInvMassHist(genSimMod, recoMod, false, "Reco Invariant Mass Pasted", 640, 100, 3300);
+  // GenSim pT Histogram
+  PtHist genSimPtHist(genSimMod, recoMod, true, "GenSim Transverse Momentum Pasted", 54, 50, 1900);
+  // Reco pT Histogram
+  PtHist recoPtHist(genSimMod, recoMod, false, "Reco Transverse Momentum Pasted", 54, 50, 1900);
 
-  InvariantMassHist genSimInvMassHist(genSimMod, recoMod, true, "GenSim Invariant Mass Pasted", 640, 100, 3300);  // GenSim Invariant Mass Histogram
-  InvariantMassHist recoInvMassHist(genSimMod, recoMod, false, "Reco Invariant Mass Pasted", 640, 100, 3300);     // Reco Invariant Mass Histogram
-  PtHist genSimPtHist(genSimMod, recoMod, true, "GenSim Transverse Momentum Pasted", 54, 50, 1900);              // GenSim pT Histogram
-  PtHist recoPtHist(genSimMod, recoMod, false, "Reco Transverse Momentum Pasted", 54, 50, 1900);                 // Reco pT Histogram
+  // Add the filter modules to the four histograms created above
+  genSimInvMassHist.addFilter(&massBinFilter);
+  recoInvMassHist.addFilter(&massBinFilter);
+  genSimPtHist.addFilter(&massBinFilter);
+  recoPtHist.addFilter(&massBinFilter);
 
-  // Add the four histograms created above to pasteMod
+  // Add the four histograms created above to histMod
   histMod.addHistogram(&genSimInvMassHist);
   histMod.addHistogram(&recoInvMassHist);
   histMod.addHistogram(&genSimPtHist);
   histMod.addHistogram(&recoPtHist);
-  
+
   analyzer.addProductionModule(&genSimMod);
   analyzer.addProductionModule(&recoMod);
   analyzer.addProductionModule(&matchMod);
@@ -89,7 +97,7 @@ int main(int argc, char** argv)
   //analyzer.addFilterModule(&massFilter);
   //analyzer.addFilterModule(&csFilter);
   //analyzer.addFilterModule(&pileupFilter);
-  analyzer.addFilterModule(&massBinFilter);
+  //analyzer.addFilterModule(&massBinFilter);
   //analyzer.addAnalysisModule(&accMod);
   //analyzer.addAnalysisModule(&pTResMod);
   //analyzer.addAnalysisModule(&massResMod);

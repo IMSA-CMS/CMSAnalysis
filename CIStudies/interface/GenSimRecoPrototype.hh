@@ -7,13 +7,11 @@
 
 class GenSimIdentificationModule;
 class RecoIdentificationModule;
-class MassBinFilter;
-
 
 class GenSimRecoPrototype : public HistogramPrototype
 {
   public:
-    GenSimRecoPrototype(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const bool typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum, const MassBinFilter& iMassBinFilter);
+    GenSimRecoPrototype(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const bool typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum);
     double value() const override {return protectedValue(typeGenSim);}     // Overloads value() and calls protectedValue(typeGenSim)
     virtual ~GenSimRecoPrototype() {} // Empty virtual destructor
 
@@ -28,6 +26,5 @@ class GenSimRecoPrototype : public HistogramPrototype
     const RecoIdentificationModule& reco;
     bool typeGenSim;                            // Switch between GenSim and Reco: value is true for GenSim, false for Reco                       
 };          
-
 
 #endif
