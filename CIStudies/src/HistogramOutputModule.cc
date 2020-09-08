@@ -1,8 +1,6 @@
 #include "CIAnalysis/CIStudies/interface/HistogramOutputModule.hh"
 #include "CIAnalysis/CIStudies/interface/HistogramPrototype.hh"
 
-#include "CIAnalysis/CIStudies/interface/HistogramPrototype.hh"
-
 #include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
@@ -66,6 +64,22 @@ void HistogramOutputModule::addObject(const std::string& name, TObject* obj)
     addObjectClone(name, getFilter() + name);
 }
 
+void HistogramOutputModule::addMassBinObject(std::string name, std::string massbin)
+{
+  if (massBinMap.find(name) == massBinMap.end())  // 
+  {
+    // std::cout << "Added Mass Bin: " << name << ", " << massbin << '\n';
+    std::vector<std::string> v;           // Create a vector
+    v.push_back(massbin);                 // Add the mass bin string to the vector
+    massBinMap.insert({name, v});
+  }
+  else
+  {
+    auto massBinVec = massBinMap[name];
+    massBinVec.push_back(massbin);        // Add the mass bin string to the vector
+  }
+}
+
 void HistogramOutputModule::makeHistogram(const std::string& name, const std::string& title, int nbins, double min, double max)
 {
   auto newHist = new TH1F(name.c_str(), title.c_str(), nbins, min, max);
@@ -74,7 +88,8 @@ void HistogramOutputModule::makeHistogram(const std::string& name, const std::st
 
 void HistogramOutputModule::makeHistogram(HistogramPrototype* h)
 {
-  const std::string& name = h->getName();
+  const std::string& name = h->getFilteredName();
+  // std::cout << "makeHistogram Name: " << name << '\n';
   auto title = name;
   int nbins = h->getNBins();
   double min = h->getMinimum();
@@ -90,12 +105,13 @@ void HistogramOutputModule::fillHistogram(const std::string& name, double number
   if (!hist)
     throw std::runtime_error("Argument to getHistogram was not of TH1 type!  Name: " + name 
 			     + " and Root type: " + getObject(name)->ClassName());
-  getHistogram(name)->Fill(number, weight);
+  hist->Fill(number, weight);
 }
 
 std::string HistogramOutputModule::getObjectName(const std::string& str) const
 {
   std::string newName = getFilter() + str;
+  // std::cout << "Histogram Got: " << newName << '\n';
 
   // If the map has this already, great!
   if (objects.find(newName) == objects.end()) 
@@ -133,16 +149,10 @@ void HistogramOutputModule::addObjectClone(const std::string& oldName,
   objects.insert({newName, clone});
 }
 
-void HistogramOutputModule::initialize()
-{
-  for (HistogramPrototype* hist : histograms)
-  {
-    makeHistogram(hist);
-  }
-}
-
 bool HistogramOutputModule::process(const edm::EventBase& event)
 {
+  // std::cout << "Process\n";
+
   std::string massBin = getFileParams().getMassRange();
   std::string helicity = getFileParams().getHelicity();
 
@@ -156,25 +166,54 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
       eventWeight = lrWeighting.getRLWeight();
     }
 
-  if (isNewMassBin(massBin))
-    {
-      auto weight = weighting.getWeight();
-      auto fileKey = getFileParams().getFileKey();
-
-      massBins[massBin] = weight;
-      fileKeys[massBin] = fileKey;
-
-      for (HistogramPrototype* hist : histograms)
-      {
-        makeHistogram(hist->getName() + massBin, hist->getName() + massBin, hist->getNBins(), hist->getMinimum(), hist->getMaximum());
-      }
-    }
-
   for (HistogramPrototype* hist : histograms)
   {
-    if (hist->shouldDraw())
+    bool draw = hist->shouldDraw(event); // call the shouldDraw function so we can call process on the FilterModules
+    
+    // If the mass bin is a new mass bin, then make the histograms for that mass bin
+    if (isNewMassBin(massBin))
       {
-        fillHistogram(hist->getName() + massBin, hist->value(), eventWeight);
+        auto weight = weighting.getWeight();
+        auto fileKey = getFileParams().getFileKey();
+    
+        massBins[massBin] = weight;
+        fileKeys[massBin] = fileKey;
+
+    //    // std::cout << "New Mass Bin: " << massBin << '\n';
+    //    // std::cout << "New Histogram Made: " << hist->getFilteredName() + massBin << '\n';
+    //    makeHistogram(hist->getFilteredName() + massBin, hist->getFilteredName() + massBin, hist->getNBins(), hist->getMinimum(), hist->getMaximum());
+    //    addMassBinObject(hist->getFilteredName(), massBin);
+        }
+
+    // If the histogram with mass bin doesn't exist, make it
+    if (baseObjects.find(hist->getFilteredName() + massBin) == baseObjects.end())
+      {
+        // std::cout << "Name: " << hist->getName() << '\n';
+        // std::cout << "FilteredName: " << hist->getFilteredName() << '\n';
+        // std::cout << "Mass Bin: " << massBin << '\n';
+        // std::cout << "Histogram missing and made: " << hist->getFilteredName() + massBin << '\n';
+        makeHistogram(hist->getFilteredName() + massBin, hist->getFilteredName() + massBin, hist->getNBins(), hist->getMinimum(), hist->getMaximum()); 
+        addMassBinObject(hist->getFilteredName(), massBin);
+      }
+
+    // If the histogram without mass bin doesn't exist, make it
+    if (baseObjects.find(hist->getFilteredName()) == baseObjects.end())
+      {
+        // std::cout << "Name: " << hist->getName() << '\n';
+        // std::cout << "FilteredName: " << hist->getFilteredName() << '\n';
+        // std::cout << "Mass Bin: " << massBin << '\n';
+        // std::cout << "Histogram missing and made: " << hist->getFilteredName() << '\n';
+        makeHistogram(hist->getFilteredName(), hist->getFilteredName(), hist->getNBins(), hist->getMinimum(), hist->getMaximum()); 
+      }
+
+    // Fill the histogram if the filter string isn't empty
+    // if (hist->getName() != hist->getFilteredName()) // If the filter string is empty, then the name and the filtered name should be the same
+
+    // Fill the histogram if shouldDraw(event) (draw) returns true
+    if (draw)
+      {
+        // std::cout << "Histogram Filled: " << hist->getFilteredName() + massBin << '\n';
+        fillHistogram(hist->getFilteredName() + massBin, hist->value(), eventWeight);
       }
   }
 
@@ -183,35 +222,31 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
 
 void HistogramOutputModule::finalize()
 {
-  for (HistogramPrototype* hist : histograms)
+  // std::cout << "Finalize\n";
+
+  for (auto pair : massBinMap)
   {
+    // std::cout << pair.first << '\n';
+
     for (auto massBin : massBins)
       {
+        // std::cout << "Mass Bin: " << massBin.first << '\n';
         auto fileKey = fileKeys[massBin.first];
         auto eventCount = getEventCount(fileKey);
 
-        // std::cout << eventCount << std::endl;
+        for (auto bin : pair.second)
+        {
+          if (bin == massBin.first)
+          {
+            getHistogram(pair.first + bin)->Scale(massBin.second / eventCount);  // massBin.second is the scale
 
-	getHistogram(hist->getName() + massBin.first)->Scale(massBin.second / eventCount);
-        // getHistogram("Invariant Mass GenSim" + massBin.first)->Scale(massBin.second / eventCount);
-        // getHistogram("Invariant Mass Reco" + massBin.first)->Scale(massBin.second / eventCount) ;
-        // getHistogram("Transverse Momentum GenSim" + massBin.first)->Scale(massBin.second / eventCount);
-        // getHistogram("Transverse Momentum Reco" + massBin.first)->Scale(massBin.second / eventCount) ;
-      }
-
-
-    for (int i = 1; i < hist->getNBins() ; ++i)
-      {
-        for (auto massBin : massBins)
-	  {
-	    getHistogram(hist->getName())->AddBinContent(i, getHistogram(hist->getName() + massBin.first)->GetBinContent(i));
-	    // getHistogram("GenSim Invariant Mass Pasted")->AddBinContent(i, getHistogram("Invariant Mass GenSim" + massBin.first)->GetBinContent(i));
-  	    // getHistogram("Reco Invariant Mass Pasted")->AddBinContent(i, getHistogram("Invariant Mass Reco" + massBin.first)->GetBinContent(i));
-	    // getHistogram("GenSim Transverse Momentum Pasted")->AddBinContent(i, getHistogram("Transverse Momentum GenSim" + massBin.first)->GetBinContent(i));
-	    // getHistogram("Reco Transverse Momentum Pasted")->AddBinContent(i, getHistogram("Transverse Momentum Reco" + massBin.first)->GetBinContent(i));
-
-	  }
-      }
+            for (int i = 1; i < getHistogram(pair.first)->GetNbinsX() ; ++i)
+            {
+              getHistogram(pair.first)->AddBinContent(i, getHistogram(pair.first + massBin.first)->GetBinContent(i));
+            }
+          }
+        }
+      }    
   }
 }
 
