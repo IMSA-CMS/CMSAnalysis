@@ -28,7 +28,7 @@ public:
 
 private:
   // checks if the gen particles originates from the hard scatter process
-  bool isParticle(const reco::GenParticle& p) const;
+  bool isParticle(Particle p) const;
 
   ParticleCollection genParticles;
   double ptCut;

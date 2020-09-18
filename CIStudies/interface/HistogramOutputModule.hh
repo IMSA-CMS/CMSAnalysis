@@ -21,7 +21,7 @@ class HistogramOutputModule : public AnalysisModule
 public:
   HistogramOutputModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const LRWeightModule& lrWeightModule);
   virtual void writeAll();
-  virtual void initialize() override;                                        // Makes the histograms
+  virtual void initialize() override {};                                     // Empty function
   virtual bool process(const edm::EventBase& event) override;                // Fills the histograms
   virtual void finalize() override;                                          // Scales the histograms
   void addHistogram(HistogramPrototype* hist) {histograms.push_back(hist);}; // Adds a HistogramPrototype* to histogram (the vector)
@@ -41,6 +41,9 @@ protected:
   TObject* getObject(const std::string& name) {return objects[getObjectName(name)];}
   const TObject* getObject(const std::string& name) const 
   {return objects[getObjectName(name)];}
+
+  // Adds a mass bin to the massBinMap map
+  void addMassBinObject(std::string name, std::string massbin);
 
   // Creates a histogram and adds it to the collection.  Just a convenient shortcut
   // for addObject() above.
@@ -63,6 +66,9 @@ protected:
 private:
   // This is a map of objects as they are seen by the user, by name
   std::map<std::string, TObject*> baseObjects;
+
+  // This is a map of mass bins
+  std::map<std::string, std::vector<std::string>> massBinMap;
 
   // These are the true, underlying objects, with a clone made for each
   // different filter string.

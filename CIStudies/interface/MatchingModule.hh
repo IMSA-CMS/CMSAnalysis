@@ -35,25 +35,24 @@ private:
 
   // template accepts a vector with either GenParticles and RecoCandidates
   // checks if the MatchingPairCollection is filled
-  template<typename T>
-  bool checkIsNull (std::vector<T*> matching) const;
+  //template<typename T>
+  //bool checkIsNull (std::vector<T*> matching) const;
+
+  //E.Hu (7/1/20) - created Particle wrapper class, thus a template is no longer needed
+  bool checkIsNull(std::vector<Particle> matching) const;
 };
 
 
-template<typename T>
-inline bool MatchingModule::checkIsNull (std::vector<T*> matching)const
-{
-  for (auto& particle : matching)
-    {
-      if (particle)
-	{
-	  return false;
-	}
-    }
-  return true;
-}
-
-
+//template<typename T>
+//inline bool MatchingModule::checkIsNull (std::vector<T*> matching)const
+//{
+  //for (auto& particle : matching)
+    //{
+      //if (particle)
+	//{
+	  //return false;
+	//}
+    //}
 
 #endif
 

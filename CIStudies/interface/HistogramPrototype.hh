@@ -2,6 +2,14 @@
 #define HISTOGRAMPROTOTYPE_HH
 
 #include <string>
+#include <vector>
+
+namespace edm
+{
+  class EventBase;
+}
+
+class FilterModule;
 
 class HistogramPrototype
 {
@@ -21,13 +29,20 @@ public:
 	int getNBins() const {return nBins;}
 	double getMinimum() const {return minimum;}
 	double getMaximum() const {return maximum;}
-	virtual bool shouldDraw() const {return true;}  // Bool switch to determine if a histogram is to be filled
+
+	bool shouldDraw(const edm::EventBase& event) const; // Bool switch to determine if a histogram is to be filled
+	std::string getFilteredName() const {return (getFilterString() + getName());}
+
+	void addFilter(FilterModule* filterMod) {filters.push_back(filterMod);} // Adds a FilterModule& to filters (the vector)
+
+	std::string getFilterString() const;
 
 private:
 	std::string name;
 	int nBins;
 	double minimum;
 	double maximum;
+	std::vector<FilterModule*> filters; // Vector of FilterModule&'s
 };
 
 #endif
