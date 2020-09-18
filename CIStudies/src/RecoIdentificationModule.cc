@@ -11,9 +11,10 @@ RecoIdentificationModule::RecoIdentificationModule(double iptCut) :
 
 bool RecoIdentificationModule::process(const edm::EventBase& event)
 {
+  //std::cerr << "ENTERING RecoIdentificationModule" << std::endl;
   recoCandidates.clear();
 
-  auto particle = getFileParams().getParticle();
+  auto particle = getFileParams().getLeptonType();
 
   if (particle == "Electron" || particle == "Both")
     {
@@ -24,7 +25,7 @@ bool RecoIdentificationModule::process(const edm::EventBase& event)
 	{       
 	  if (p.pt() > ptCut)
 	    {
-	      recoCandidates.addParticle(&p); 
+	      recoCandidates.addParticle(Particle(&p, Particle::LeptonType::Electron)); 
 	    }
 	}
     }
@@ -38,7 +39,7 @@ bool RecoIdentificationModule::process(const edm::EventBase& event)
 	{       
 	  if (p.pt() > ptCut)
 	    {
-	      recoCandidates.addParticle(&p); 
+	      recoCandidates.addParticle(Particle(&p, Particle::LeptonType::Muon)); 
 	    }
 	  // else 
 	  //   {
@@ -47,7 +48,7 @@ bool RecoIdentificationModule::process(const edm::EventBase& event)
 	  //   }
 	}
     }
-  
+  //std::cerr << "EXITING RecoIdentificationModule" << std::endl;
   return true;
 }
 
