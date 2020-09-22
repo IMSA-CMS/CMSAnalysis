@@ -26,6 +26,7 @@
 #include "CIAnalysis/CIStudies/interface/InvariantMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/PtHist.hh"
 #include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
+#include "CIAnalysis/CIStudies/interface/WeakAlignmentBiasModule.hh"
 
 int main(int argc, char** argv)
 {
@@ -65,6 +66,7 @@ int main(int argc, char** argv)
   CollinsSoperFilter csFilter(genSimMod, .975);
   PileupFilter pileupFilter(15, 35);
   MigrationModule migMod(matchMod);
+  WeakAlignmentBiasModule weakAlignBiasMod(matchMod);
   AcceptanceModule accMod(genSimMod, matchMod);
   PtResolutionModule pTResMod(matchMod);
   MassResolutionModule massResMod(matchMod);
@@ -93,6 +95,7 @@ int main(int argc, char** argv)
   //analyzer.addFilterModule(&csFilter);
   //analyzer.addFilterModule(&pileupFilter);
   analyzer.addAnalysisModule(&migMod);
+  analyzer.addAnalysisModule(&weakAlignBiasMod);
   //analyzer.addAnalysisModule(&accMod);
   analyzer.addAnalysisModule(&pTResMod);
   //analyzer.addAnalysisModule(&massResMod);
