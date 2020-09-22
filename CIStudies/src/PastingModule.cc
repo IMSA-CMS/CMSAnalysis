@@ -19,7 +19,7 @@
 PastingModule::PastingModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const LRWeightModule& lrWeightModule) :
   genSim(genSimModule),
   reco(recoModule),
-  weighting(weightingModule)
+  weighting(weightingModule),
   lrWeighting(lrWeightModule)
   // ptRes(ptResModule),
   // minMassCut(minMass),

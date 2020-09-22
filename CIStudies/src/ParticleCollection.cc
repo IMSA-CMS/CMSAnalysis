@@ -25,6 +25,22 @@ double ParticleCollection::getInvariantMass() const
     }
 }
 
+double ParticleCollection::getLeadingTransverseMomentum() const
+{
+  auto particlePair = chooseParticles();
+  if (particlePair.first && particlePair.second)
+    {
+      
+      return calculateLeadingTransverseMomentum(particlePair.first, particlePair.second);
+    }
+
+  else
+    {
+      
+      return -1;
+    }
+}
+
 double ParticleCollection::getCollinsSoper() const
 {
   auto particlePair = chooseParticles();
@@ -116,6 +132,21 @@ double ParticleCollection::calculateInvariantMass(Particle particle1, Particle p
     {
       return 0; 
     }
+}
+
+double ParticleCollection::calculateLeadingTransverseMomentum(Particle particle1, Particle particle2) const
+{
+  double pt1 = particle1->pt();
+  double pt2 = particle2->pt();
+  // Returns the highest transverse momentum (pt)
+  if (pt1 > pt2)
+   {
+      return pt1;
+   }
+  else
+   {
+      return pt2;
+   }
 }
 
 double ParticleCollection::calculateCollinsSoper(Particle particle, Particle antiparticle) const

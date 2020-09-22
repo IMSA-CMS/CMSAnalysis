@@ -12,11 +12,14 @@ class RecoIdentificationModule;
 class GenSimRecoPrototype : public HistogramPrototype
 {
   public:
-    GenSimRecoPrototype(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const bool typeSwitch, std::string& iname, int iNBins, double iminimum, double imaximum);
+    GenSimRecoPrototype(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const bool typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum);
     double value() const override {return protectedValue(typeGenSim);}     // Overloads value() and calls protectedValue(typeGenSim)
     virtual ~GenSimRecoPrototype() {} // Empty virtual destructor
 
     virtual double protectedValue(bool typeSwitch) const = 0;
+  protected:
+    const GenSimIdentificationModule& getGenSim() const {return genSim;}
+    const RecoIdentificationModule& getReco() const {return reco;}
   private:
     const GenSimIdentificationModule& genSim; 
     const RecoIdentificationModule& reco;
