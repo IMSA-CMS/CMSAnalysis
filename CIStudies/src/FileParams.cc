@@ -93,7 +93,7 @@ void Lambda::addMaps()
     }
 }
 
-void Particle::addMaps()
+void LeptonType::addMaps()
 {
   addValuesToMap({"Electron", "Muon", "Both"});
   addAlternates({"E", "EE", "e", "ee", "El", "Ele", "el", "ele", "electron"}, "Electron");
@@ -109,7 +109,7 @@ FileParams::FileParams(const std::string& proc, const std::string& yr, const std
   interference(inter),
   massRange(mrange),
   lambda(L),
-  particle(part)
+  leptonType(part)
 {}
 
 // Default values - notice how dangerous this is
@@ -120,7 +120,7 @@ FileParams::FileParams() :
   interference("Constructive"),
   massRange("M300"),
   lambda("16"),
-  particle("Electron")
+  leptonType("Electron")
 {}
 
 std::vector<std::string> FileParams::fileVector() const
@@ -154,7 +154,7 @@ string FileParams::locateTextFile() const
     processString = getProcess();
 
   string yearString = getYear();
-  string leptonString = getParticle() == Particle::electron() ? "E" : "Mu";
+  string leptonString = getLeptonType() == LeptonType::electron() ? "E" : "Mu";
   string massString;
   string interferenceString = getInterference() == Interference::constructive() ? "Con" : "Des";
   string helicityString = getHelicity();
@@ -277,13 +277,13 @@ string FileParams::massCutStringBackgrounds() const
 
 std::vector<std::string> FileParams::getAllValues() const
 {
-  std::vector<std::string> values = {process.getValue(), year.getValue(), helicity.getValue(), interference.getValue(), massRange.getValue(), lambda.getValue(), particle.getValue()};
+  std::vector<std::string> values = {process.getValue(), year.getValue(), helicity.getValue(), interference.getValue(), massRange.getValue(), lambda.getValue(), leptonType.getValue()};
   return values;
 }
 
 std::string FileParams::getTabSeparatedValues() const
 {
-  std::string values = process.getValue() + "\t" + year.getValue() + "\t" + particle.getValue() + "\t" + helicity.getValue() + "\t" + interference.getValue() + "\t" + lambda.getValue();
+  std::string values = process.getValue() + "\t" + year.getValue() + "\t" + leptonType.getValue() + "\t" + helicity.getValue() + "\t" + interference.getValue() + "\t" + lambda.getValue();
   return values;
 }
 
@@ -293,7 +293,7 @@ std::string FileParams::getFileKey() const
 
   string processString = getProcess();
   string yearString = getYear();
-  string leptonString = getParticle();
+  string leptonString = getLeptonType();
   string massString = getMassRange();
   string interferenceString = getInterference();
   string helicityString = getHelicity();
@@ -362,7 +362,7 @@ std::ostream& operator<<(std::ostream& stream, const FileParams& params)
 	   << "\nInterference: " << params.getInterference() 
 	   << "\nMass Range: " << params.getMassRange() 
 	   << "\nLambda: " << params.getLambda() 
-	   << "\nParticle: " << params.getParticle() 
+	   << "\nLeptonType: " << params.getLeptonType() 
 	   << '\n';
 
     return stream;
@@ -376,7 +376,7 @@ bool operator==(const FileParams& p1, const FileParams& p2)
     && p1.getInterference() == p2.getInterference()
     && p1.getMassRange() == p2.getMassRange()
     && p1.getLambda() == p2.getLambda()
-    && p1.getParticle() == p2.getParticle();
+    && p1.getLeptonType() == p2.getLeptonType();
 }
 
 bool operator!=(const FileParams& p1, const FileParams& p2)

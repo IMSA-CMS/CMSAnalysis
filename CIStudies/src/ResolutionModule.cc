@@ -21,8 +21,10 @@ ResolutionModule::ResolutionModule(const GenSimIdentificationModule& genSimModul
 
 bool ResolutionModule::process(const edm::EventBase& event)
 {
+  //std::cerr << "ENTERING ResolutionModule" << std::endl;
   auto bestPairs = matching.getMatchingBestPairs();
   fillError(bestPairs);
+  //std::cerr << "EXITING ResolutionModule" << std::endl;
   return true;
 }
 
