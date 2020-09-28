@@ -93,11 +93,11 @@ protected:
 };
 
 // The lepton type (e.g., Electron)
-class Particle : public IDType
+class LeptonType : public IDType
 {
 public:
-  Particle(const std::string& particle) {setValue(particle);}
-  virtual std::string getTypeName() const override {return "Particle";}
+  LeptonType(const std::string& leptonType) {setValue(leptonType);}
+  virtual std::string getTypeName() const override {return "LeptonType";}
 
   // Simple functions to return the right strings, so you don't have to remember conventions
   static std::string electron() {return "Electron";}
@@ -124,7 +124,7 @@ public:
   std::string getInterference() const { return interference.getValue(); }
   std::string getMassRange() const { return massRange.getValue(); }
   std::string getLambda() const { return lambda.getValue(); }
-  std::string getParticle() const { return particle.getValue(); }
+  std::string getLeptonType() const { return leptonType.getValue(); }
 
   //get-all
   std::vector<std::string> getAllValues() const;
@@ -152,7 +152,7 @@ private:
   Interference interference;
   MassRange massRange;
   Lambda lambda;
-  Particle particle;
+  LeptonType leptonType;
 };
 
 // output and equality operators

@@ -3,24 +3,37 @@
 #include <cmath>
 #include "TLorentzVector.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
+#include "CIAnalysis/CIStudies/interface/Particle.hh"
 
 #include <iostream>
 
-using Particle = const reco::Candidate*;
+//using Particle = const reco::Candidate*;
 using PartPair = std::pair<Particle, Particle>;
 
 double ParticleCollection::getInvariantMass() const
 {
   auto particlePair = chooseParticles();
-  if (particlePair.first && particlePair.second)
-    {
-      
+  if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
+    {      
       return calculateInvariantMass(particlePair.first, particlePair.second);
     }
+  else
+    {     
+      return -1;
+    }
+}
 
+double ParticleCollection::getLeadingTransverseMomentum() const
+{
+  auto particlePair = chooseParticles();
+  if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
+    {
+
+      return calculateLeadingTransverseMomentum(particlePair.first, particlePair.second);
+    }
   else
     {
-      
+
       return -1;
     }
 }
@@ -60,9 +73,9 @@ double ParticleCollection::getCollinsSoper() const
 
   //guarantees that the particle has to have a negative charge or the antiparticle has to have a positve charge
   //if both particles have the same sign (i.e. electrons), the situation is solved at the start of calculateCollinsSoper()
-  if (particlePair.first && particlePair.second)
+  if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
     {
-      if (particlePair.first->charge() < 0) //no flip
+      if (particlePair.first.charge() < 0) //no flip
 	{
 	  
 	  return calculateCollinsSoper(particlePair.first, particlePair.second);
@@ -80,6 +93,43 @@ double ParticleCollection::getCollinsSoper() const
     }
 }
 
+bool ParticleCollection::isBB() const
+{
+  auto particlePair = chooseParticles();
+  if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
+    {
+      if (particlePair.first.getBarrelState() == Particle::BarrelState::Barrel && particlePair.second.getBarrelState() == Particle::BarrelState::Barrel)
+	{
+	  return true;
+	}
+    }
+  return false;
+}
+
+bool ParticleCollection::isBE() const
+{
+  auto particlePair = chooseParticles();
+  if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
+    {
+      if ((particlePair.first.getBarrelState() == Particle::BarrelState::Barrel
+	   && particlePair.second.getBarrelState() == Particle::BarrelState::Endcap)
+	   || (particlePair.first.getBarrelState() == Particle::BarrelState::Endcap 
+	   && particlePair.second.getBarrelState() == Particle::BarrelState::Barrel))
+	{
+	  return true;
+	}
+      //if both particles are muons, then EE counts as BE
+      if ((particlePair.first.getLeptonType() == Particle::LeptonType::Muon
+	   && particlePair.second.getLeptonType() == Particle::LeptonType::Muon)
+	   && (particlePair.first.getBarrelState() == Particle::BarrelState::Endcap
+	   && particlePair.second.getBarrelState() == Particle::BarrelState::Endcap))
+	{
+	  return true;
+	}
+    }
+  return false;
+}
+
 PartPair ParticleCollection::chooseParticles() const
 {
   
@@ -87,8 +137,8 @@ PartPair ParticleCollection::chooseParticles() const
   double maxInvariantMass = 0;
   bool oppositeSigns = false;
 
-  const reco::Candidate* iPointer = nullptr;
-  const reco::Candidate* jPointer = nullptr;
+  Particle iPointer(nullptr, Particle::LeptonType::None);
+  Particle jPointer(nullptr, Particle::LeptonType::None);
 
   for (int i = 0; i < static_cast<int>(particles.size()) - 1; ++i)
     {
@@ -124,7 +174,7 @@ PartPair ParticleCollection::chooseParticles() const
 //returns true if particle1 and particle2 have opposite signs
 bool ParticleCollection::checkSigns(Particle particle1, Particle particle2) const
 {
-  if (particle1->charge() != particle2->charge())
+  if (particle1.charge() != particle2.charge())
     {
       return true;
     }
@@ -134,8 +184,8 @@ bool ParticleCollection::checkSigns(Particle particle1, Particle particle2) cons
 
 double ParticleCollection::calculateInvariantMass(Particle particle1, Particle particle2) const
 {
-  double product = 2 * particle1->pt() * particle2->pt(); 
-  double diff = cosh(particle1->eta() - particle2->eta()) - cos(particle1->phi() - particle2->phi()); 
+  double product = 2 * particle1.pt() * particle2.pt(); 
+  double diff = cosh(particle1.eta() - particle2.eta()) - cos(particle1.phi() - particle2.phi()); 
   double invariantMass = product * diff; 
   if (invariantMass > 0)
     {
@@ -144,6 +194,20 @@ double ParticleCollection::calculateInvariantMass(Particle particle1, Particle p
   else
     {
       return 0; 
+    }
+}
+
+double ParticleCollection::calculateLeadingTransverseMomentum(Particle particle1, Particle particle2) const
+{
+  double pt1 = particle1.pt();
+  double pt2 = particle2.pt();
+  if (pt1 > pt2)
+    {
+      return pt1;
+    }
+  else
+    {
+      return pt2;
     }
 }
 
@@ -160,14 +224,14 @@ double ParticleCollection::calculateCollinsSoper(Particle particle, Particle ant
   TLorentzVector Ele;
   TLorentzVector Elebar;
 
-  float Et1 = particle->et();
-  float Et2 = antiparticle->et();
-  float Eta1 = particle->eta();
-  float Eta2 = antiparticle->eta();
-  float Phi1 = particle->phi();
-  float Phi2 = antiparticle->phi();
-  float En1 = particle->energy();
-  float En2 = antiparticle->energy();
+  float Et1 = particle.et();
+  float Et2 = antiparticle.et();
+  float Eta1 = particle.eta();
+  float Eta2 = antiparticle.eta();
+  float Phi1 = particle.phi();
+  float Phi2 = antiparticle.phi();
+  float En1 = particle.energy();
+  float En2 = antiparticle.energy();
   Ele.SetPtEtaPhiE(Et1,Eta1,Phi1,En1);
   Elebar.SetPtEtaPhiE(Et2,Eta2,Phi2,En2);
 
@@ -192,9 +256,9 @@ double ParticleCollection::calculateCosTheta(TLorentzVector Ele, TLorentzVector 
 
 bool ParticleCollection::lowEtaFlip(Particle particle, Particle antiparticle) const
 {
-  if (std::abs(particle->eta()) < std::abs(antiparticle->eta()))
+  if (std::abs(particle.eta()) < std::abs(antiparticle.eta()))
     {
-      if (particle->charge() < 0)
+      if (particle.charge() < 0)
 	{
 	  return true;
 	}
@@ -202,7 +266,7 @@ bool ParticleCollection::lowEtaFlip(Particle particle, Particle antiparticle) co
 
   else 
     {
-      if (antiparticle->charge() > 0)
+      if (antiparticle.charge() > 0)
 	{
 	  return true;
 	}
