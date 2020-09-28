@@ -19,6 +19,7 @@ public:
   double getNumParticles() const {return particles.size();}
 
   double getInvariantMass() const;
+  double getLeadingTransverseMomentum() const;
   double getCollinsSoper() const; 
 
   void clear() {particles.clear();}
@@ -30,6 +31,7 @@ private:
 
   bool checkSigns(const reco::Candidate* particle1, const reco::Candidate* particle2) const;
   double calculateInvariantMass(const reco::Candidate* particle1, const reco::Candidate* particle2) const;
+  double calculateLeadingTransverseMomentum(const reco::Candidate* particle1, const reco::Candidate* particle2) const;
   double calculateCollinsSoper(const reco::Candidate* particle1, const reco::Candidate* particle2) const;
   double calculateCosTheta(TLorentzVector Ele, TLorentzVector Elebar) const;
   bool lowEtaFlip(const reco::Candidate* particle, const reco::Candidate* antiparticle) const;
