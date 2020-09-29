@@ -9,6 +9,7 @@
 
 bool GenSimIdentificationModule::process(const edm::EventBase& event)
 {
+  //std::cerr << "ENTERING GenSimIdentificationModule" << std::endl;
   genParticles.clear();
 
   //Get Events Tree and create handle for GEN
@@ -19,7 +20,7 @@ bool GenSimIdentificationModule::process(const edm::EventBase& event)
   const int electronCode = 11;
   const int muonCode = 13;
 
-  auto particle = getFileParams().getParticle();
+  auto particle = getFileParams().getLeptonType();
 
   int targetCode = particle == "Electron" ? electronCode : muonCode;
 
@@ -29,36 +30,60 @@ bool GenSimIdentificationModule::process(const edm::EventBase& event)
     {
       if (particle == "Both" && (std::abs(p.pdgId()) == electronCode || std::abs(p.pdgId()) == muonCode))
 	{
-	  genParticles.addParticle(&p);
+	  if (std::abs(p.pdgId()) == electronCode)
+	  {
+	    genParticles.addParticle(Particle(&p, Particle::LeptonType::Electron));
+	  }
+	  else if (std::abs(p.pdgId()) == muonCode)
+	  {
+	    genParticles.addParticle(Particle(&p, Particle::LeptonType::Muon));
+	  }
+	  else
+	  {
+	    genParticles.addParticle(Particle(&p, Particle::LeptonType::None));
+	  }
 	}
       //Check for (anti)muon or (anti)electron
-      else if (std::abs(p.pdgId()) == targetCode && isParticle(p))
+      else if (std::abs(p.pdgId()) == targetCode && isParticle(Particle(&p, Particle::LeptonType::None)))
 	{ 
-	  genParticles.addParticle(&p);
+	  if (targetCode == electronCode)
+	  {
+	    genParticles.addParticle(Particle(&p, Particle::LeptonType::Electron));
+	  }
+	  else if (targetCode == muonCode)
+	  {
+	    genParticles.addParticle(Particle(&p, Particle::LeptonType::Muon));
+	  }
+	  else
+	  {
+	    genParticles.addParticle(Particle(&p, Particle::LeptonType::None));
+	  }
+	  
 	  //std::cout << genParticles.size() << std::endl;
 	}
     }
+  //std::cerr << "EXITING GenSimIdentificationModule" << std::endl;
  return true;
 }
 
-bool GenSimIdentificationModule::isParticle(const reco::GenParticle& p) const
+bool GenSimIdentificationModule::isParticle(Particle p) const
 {
   const int finalStateParticleStatusCode = 1;
   const int maxQuarkCode = 6;
   const int maxLeptonCode = 13; // More than this is not a practical particle
 
-  if (p.status() != finalStateParticleStatusCode || p.mother()->status() == finalStateParticleStatusCode || p.pt() < ptCut)
+  if (p.status() != finalStateParticleStatusCode || p.mother().status() == finalStateParticleStatusCode || p.pt() < ptCut)
     return false;
 
-  const reco::Candidate* nu = p.mother();
-  int motherId = nu->pdgId();
+  Particle nu = p.mother();
+  int motherId = nu.pdgId();
   bool isParticle = true; 
   while (std::abs(motherId) > maxQuarkCode) // not a quark
     {
-      if (nu->mother() && nu)
+      if (nu.mother().isNotNull() && nu.isNotNull())
 	{
-	  nu = nu->mother(); 
-	  motherId = nu->pdgId();
+	  nu = nu.mother(); 
+	  motherId = nu.pdgId();
 
 	  if (std::abs(motherId) > maxLeptonCode)
 	    { // not a particle

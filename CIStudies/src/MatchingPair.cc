@@ -3,9 +3,10 @@
 
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
+#include "CIAnalysis/CIStudies/interface/Particle.hh"
 
 
-MatchingPair::MatchingPair(const reco::GenParticle* bestGenParticle, const reco::RecoCandidate* bestRecoParticle) :
+MatchingPair::MatchingPair(Particle bestGenParticle, Particle bestRecoParticle) :
   genParticle(bestGenParticle),
   recoParticle(bestRecoParticle)
 {
@@ -13,8 +14,8 @@ MatchingPair::MatchingPair(const reco::GenParticle* bestGenParticle, const reco:
 
 double MatchingPair::getDeltaPhi() const
 {
-  double recoPhi = recoParticle->phi();
-  double genPhi = genParticle->phi();
+  double recoPhi = recoParticle.phi();
+  double genPhi = genParticle.phi();
   const double pi = 3.1415926535897932384;
 
   double actualPhiDif = recoPhi - genPhi;
@@ -31,8 +32,8 @@ double MatchingPair::getDeltaPhi() const
 
 double MatchingPair::getDeltaR() const
 {
-  double recoEta = recoParticle->eta();
-  double genEta = genParticle->eta();
+  double recoEta = recoParticle.eta();
+  double genEta = genParticle.eta();
   double etaDif = recoEta - genEta;
 
   double phiDif = getDeltaPhi();
@@ -42,12 +43,12 @@ double MatchingPair::getDeltaR() const
 
 double MatchingPair::getPtError() const
 {
-  return calculateError(recoParticle->pt(), genParticle->pt());
+  return calculateError(recoParticle.pt(), genParticle.pt());
 }
 
 double MatchingPair::getEtaError() const
 {
-  return calculateError(recoParticle->eta(), genParticle->eta());
+  return calculateError(recoParticle.eta(), genParticle.eta());
 }
 
 double MatchingPair::calculateError(double exp, double theo) const
