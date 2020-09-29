@@ -14,7 +14,7 @@ using std::vector;
 
 void Process::addMaps()
 {
-  addValuesToMap({"CI", "ADD", "ADD2", "DY", "Diboson", "top", "QCD"});
+  addValuesToMap({"CI", "ADD", "ADD2", "DY", "Diboson", "top", "QCD", "H++"});
 
   addAlternates({"ci", "Ci", "cI"}, "CITo2");
   addAlternates({"add", "Add", "aDd", "adD", "aDD", "LED", "led"}, "ADD");
@@ -27,7 +27,7 @@ void Process::addMaps()
 
 void Year::addMaps()
 {
-  addValuesToMap({"2016", "2017", "2018"});
+  addValuesToMap({"2016", "2017", "2018", "2020"});
   addAlternate("16", "2016");
   addAlternate("17", "2017");
   addAlternate("18", "2018");
@@ -80,7 +80,7 @@ void MassRange::addMaps()
 
 void Lambda::addMaps()
 {
-  vector<string> lambdaVals = {"1", "3", "3.5", "4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "10", "16", "22", "24", "28", "32", "34", "40", "100k"};
+  vector<string> lambdaVals = {"1", "3", "3.5", "4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "10", "16", "22", "24", "28", "32", "34", "40", "100k", "200", "800"};//H++ after 100k
   addValuesToMap(lambdaVals);
 
   for (const auto& val : lambdaVals)
@@ -159,6 +159,12 @@ string FileParams::locateTextFile() const
   string interferenceString = getInterference() == Interference::constructive() ? "Con" : "Des";
   string helicityString = getHelicity();
   string lambdaString = "_Lam" + getLambda();
+  
+  //H++
+  if(processString == "H++")
+    {
+      lambdaString = "M" + getLambda();
+    }
 
   // LR and RL files are the same
   if (helicityString == "RL")
@@ -198,6 +204,14 @@ string FileParams::locateTextFile() const
 	{
 	  massString = massCutStringBackgrounds();
 	}
+    }
+
+  if (processString == "H++")
+    {
+      leptonString = "";
+      interferenceString = "";
+      massString = "";
+      helicityString = "";
     }
       
 
