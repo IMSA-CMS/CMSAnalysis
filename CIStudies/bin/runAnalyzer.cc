@@ -13,6 +13,7 @@
 #include "CIAnalysis/CIStudies/interface/MassFilter.hh"
 #include "CIAnalysis/CIStudies/interface/CollinsSoperFilter.hh"
 #include "CIAnalysis/CIStudies/interface/PileupFilter.hh"
+#include "CIAnalysis/CIStudies/interface/BarrelStateFilter.hh"
 #include "CIAnalysis/CIStudies/interface/MassBinFilter.hh"
 #include "CIAnalysis/CIStudies/interface/AcceptanceModule.hh"
 #include "CIAnalysis/CIStudies/interface/ResolutionModule.hh"
@@ -23,6 +24,7 @@
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
 #include "CIAnalysis/CIStudies/interface/InvariantMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/PtHist.hh"
+#include "CIAnalysis/CIStudies/interface/MassResolutionHist.hh"
 #include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
 
 int main(int argc, char** argv)
@@ -43,7 +45,7 @@ int main(int argc, char** argv)
   std::string outputFile = parser.stringValue("output");
   if (outputFile.empty())
     {
-      outputFile = "genOutput.root";
+      outputFile = "muonResolution.root";
     }
 
   std::cout << "This is the name of outputFile " << outputFile << std::endl;
@@ -60,6 +62,7 @@ int main(int argc, char** argv)
   MassFilter massFilter(genSimMod, 2000);
   CollinsSoperFilter csFilter(genSimMod, .975);
   PileupFilter pileupFilter(15, 35);
+  BarrelStateFilter barrelStateFilter(matchMod);
   MassBinFilter massBinFilter(matchMod, 300, 3100, 28);
   AcceptanceModule accMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
   PtResolutionModule pTResMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
@@ -76,18 +79,22 @@ int main(int argc, char** argv)
   PtHist genSimPtHist(genSimMod, recoMod, true, "GenSim Transverse Momentum Pasted", 54, 50, 1900);
   // Reco pT Histogram
   PtHist recoPtHist(genSimMod, recoMod, false, "Reco Transverse Momentum Pasted", 54, 50, 1900);
+  MassResolutionHist massResHist(genSimMod, recoMod, "Mass Resolution Pasted", 100, 500, 3100);                 // Mass resolution Histogram
+  
 
-  // Add the filter modules to the four histograms created above
+  // Add the filter modules to the five histograms created above
   genSimInvMassHist.addFilter(&massBinFilter);
   recoInvMassHist.addFilter(&massBinFilter);
   genSimPtHist.addFilter(&massBinFilter);
   recoPtHist.addFilter(&massBinFilter);
 
-  // Add the four histograms created above to histMod
+  // Add the five histograms created above to histMod
+
   histMod.addHistogram(&genSimInvMassHist);
   histMod.addHistogram(&recoInvMassHist);
   histMod.addHistogram(&genSimPtHist);
   histMod.addHistogram(&recoPtHist);
+  histMod.addHistogram(&massResHist);
 
   analyzer.addProductionModule(&genSimMod);
   analyzer.addProductionModule(&recoMod);
@@ -97,10 +104,11 @@ int main(int argc, char** argv)
   //analyzer.addFilterModule(&massFilter);
   //analyzer.addFilterModule(&csFilter);
   //analyzer.addFilterModule(&pileupFilter);
+  analyzer.addFilterModule(&barrelStateFilter);
   //analyzer.addFilterModule(&massBinFilter);
   //analyzer.addAnalysisModule(&accMod);
-  //analyzer.addAnalysisModule(&pTResMod);
-  //analyzer.addAnalysisModule(&massResMod);
+  analyzer.addAnalysisModule(&pTResMod);
+  analyzer.addAnalysisModule(&massResMod);
   //analyzer.addAnalysisModule(&afbMod);
   //analyzer.addAnalysisModule(&unmatchedMod);
   analyzer.addAnalysisModule(&histMod);

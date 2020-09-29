@@ -67,7 +67,7 @@ void acceptanceRefineOutput()// electronMuonOverlayer()
       	
 	//Original:
 	//string mH = "recoHistBin" + std::to_string(i);
-	
+
         //Original:
 	//string accH = "Total Reco Matched hist";
 
