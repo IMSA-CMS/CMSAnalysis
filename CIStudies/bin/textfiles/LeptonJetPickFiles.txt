@@ -1,0 +1,7 @@
+Procs:	LeptonJet
+Year:	2020
+Lepton:	both
+Mass:	300
+Lambda:	M1
+Inter:	con
+Helic:	SUSYPortal
