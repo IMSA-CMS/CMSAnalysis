@@ -14,7 +14,7 @@ using std::vector;
 
 void Process::addMaps()
 {
-  addValuesToMap({"CI", "ADD", "ADD2", "DY", "Diboson", "top", "QCD"});
+  addValuesToMap({"CI", "ADD", "ADD2", "DY", "Diboson", "top", "QCD", "Higgs", "LeptonJet"});
 
   addAlternates({"ci", "Ci", "cI"}, "CITo2");
   addAlternates({"add", "Add", "aDd", "adD", "aDD", "LED", "led"}, "ADD");
@@ -23,14 +23,17 @@ void Process::addMaps()
   addAlternates({"diboson", "DB", "db"}, "Diboson");
   addAlternate("Top", "top");
   addAlternate("qcd", "QCD");
+  addAlternates({"Doubly Charged Higgs", "H++", "Higgs ++", "Higgs++"}, "Higgs");
+  addAlternates({"Lepton Jet", "leptonjet", "lepton jet"}, "LeptonJet");
 }
 
 void Year::addMaps()
 {
-  addValuesToMap({"2016", "2017", "2018"});
+  addValuesToMap({"2016", "2017", "2018", "2020"});
   addAlternate("16", "2016");
   addAlternate("17", "2017");
   addAlternate("18", "2018");
+  addAlternate("20", "2020");
 }
 
 void Helicity::addMaps()
@@ -40,15 +43,22 @@ void Helicity::addMaps()
   vector<string> dibosons = {"WZ", "WZ3LNu", "WZ2L2Q", "ZZ", "ZZ2L2Nu", "ZZ2L2Q", "ZZ4L", "WW"};
   vector<string> tops = {"ttbar", "tW", "Wantitop"};
   vector<string> qcd = {"Wjets"};
+  vector<string> doublyChargedHiggs = {"Higgs++to2Leptons", "Higgs++toWW"};  // Specifices Doubly Charged Higgs decay channels
+  vector<string> leptonJet = {"SUSYPortal", "HiggsPortal"}; // Specifies Lepton Jet Processes
 
   addValuesToMap(dibosons);
   addValuesToMap(tops);
   addValuesToMap(qcd);
+  addValuesToMap(doublyChargedHiggs);
+  addValuesToMap(leptonJet);
 
   addAlternate("ll", "LL");
   addAlternate("lr", "LR");
   addAlternate("rl", "RL");
   addAlternate("rr", "RR");
+
+  addAlternates({"2Leptons", "l+l-"}, "Higgs++to2Leptons");
+  addAlternate("WW", "Higgs++toWW");
 }
 
 void Interference::addMaps()
@@ -82,6 +92,12 @@ void Lambda::addMaps()
 {
   vector<string> lambdaVals = {"1", "3", "3.5", "4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "10", "16", "22", "24", "28", "32", "34", "40", "100k"};
   addValuesToMap(lambdaVals);
+
+  vector<string> higgsMasses = {"M300"};
+  addValuesToMap(higgsMasses);
+
+  vector<string> darkPhotonMasses = {"M1"};
+  addValuesToMap(darkPhotonMasses);
 
   for (const auto& val : lambdaVals)
     {
@@ -150,6 +166,10 @@ string FileParams::locateTextFile() const
     processString = "CITo2";
   else if (getProcess() == Process::ADD())
     processString = "ADDGravToLL";
+  else if (getProcess() == Process::Higgs())
+    processString = "H++";
+  else if (getProcess() == Process::LeptonJet())
+    processString = "LeptonJet";
   else 
     processString = getProcess();
 
@@ -176,6 +196,7 @@ string FileParams::locateTextFile() const
       helicityString = "";
       lambdaString = "";
     }
+
   else
     massString = getMassRange();
 
@@ -200,6 +221,13 @@ string FileParams::locateTextFile() const
 	}
     }
       
+  if (processString == "H++" || processString == "LeptonJet")
+    {
+      lambdaString = getLambda();
+      leptonString = "";
+      massString = "";
+      interferenceString = "";
+    }
 
   string file = "textfiles/" + yearString + "/" + processString + leptonString
     + massString + lambdaString + interferenceString
