@@ -25,6 +25,8 @@ public:
   bool isBB() const;
   bool isBE() const;
   
+  double calculateAllLeptonInvariantMass() const;
+  double calculateSameSignInvariantMass() const;
 
   void clear() {particles.clear();}
 
@@ -32,9 +34,12 @@ private:
   std::vector<Particle> particles;
 
   std::pair<Particle, Particle> chooseParticles() const; //picks particles with greatest invariant mass
+  std::pair<Particle, Particle> chooseParticles(bool oppositeSigns) const; // picks particles given if they are opposite signs or not
 
   bool checkSigns(Particle particle1, Particle particle2) const;
+
   double calculateInvariantMass(Particle particle1, Particle particle2) const;
+
   double calculateLeadingTransverseMomentum(Particle particle1, Particle particle2) const;
   double calculateCollinsSoper(Particle particle1, Particle particle2) const;
 
