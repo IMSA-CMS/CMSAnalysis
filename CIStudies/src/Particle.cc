@@ -43,6 +43,12 @@ double Particle::energy() const
   return particle->energy();
 }
 
+reco::Candidate::LorentzVector Particle::fourVector() const
+{
+  checkIsNull();
+  return particle->p4();
+}
+
 int Particle::pdgId() const
 {
   checkIsNull();
