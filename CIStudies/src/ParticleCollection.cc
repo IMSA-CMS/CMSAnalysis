@@ -170,7 +170,9 @@ double ParticleCollection::calculateInvariantMass(Particle particle1, Particle p
 
   auto sum = vec1 + vec2;
 
-  auto invariantMass = sum.M();
+  // std::cout << sum.M() << '\n';
+
+  return sum.M();
 
   //double product = 2 * particle1.pt() * particle2.pt(); 
   //double diff = std::cosh(particle1.eta() - particle2.eta()) - std::cos(particle1.phi() - particle2.phi()); 
@@ -185,7 +187,7 @@ double ParticleCollection::calculateInvariantMass(Particle particle1, Particle p
   //  }
 }
 
-double ParticleCollection::calculateSameSignInvariantMass(Particle particle1, Particle particle2, double charge1, double charge2) const
+double ParticleCollection::calculateSameSignInvariantMass() const
 {
   auto particlePair = chooseParticles(false);					// we want same sign particles with highest invariant mass
   if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
@@ -207,6 +209,8 @@ double ParticleCollection::calculateAllLeptonInvariantMass() const
     auto newVec = particle.fourVector();
     total += newVec;
   }
+
+  // std::cout << total.M() << '\n';
 
   return total.M();
 }
