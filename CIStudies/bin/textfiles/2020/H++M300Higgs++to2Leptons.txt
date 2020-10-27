@@ -1,0 +1,2 @@
+/store/user/ttchalak/doublyChargedHiggs/step2200_inMINIAODSIM.root
+

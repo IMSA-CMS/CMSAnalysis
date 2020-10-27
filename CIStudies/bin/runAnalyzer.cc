@@ -24,6 +24,8 @@
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
 #include "CIAnalysis/CIStudies/interface/InvariantMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/PtHist.hh"
+#include "CIAnalysis/CIStudies/interface/AllLeptonInvariantMassHist.hh"
+#include "CIAnalysis/CIStudies/interface/SameSignInvariantMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/MassResolutionHist.hh"
 #include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
 #include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
@@ -81,33 +83,45 @@ int main(int argc, char** argv)
   PtHist genSimPtHist(genSimMod, recoMod, true, "GenSim Transverse Momentum Pasted", 54, 50, 1900);
   // Reco pT Histogram
   PtHist recoPtHist(genSimMod, recoMod, false, "Reco Transverse Momentum Pasted", 54, 50, 1900);
-  MassResolutionHist massResHist(genSimMod, recoMod, "Mass Resolution Pasted", 100, 500, 3100);                 // Mass resolution Histogram
-  NLeptonsHist nLeptonsHist(matchMod, "Number of Leptons", 10, 0 , 10);
+  //Mass resolution Histogram
+  MassResolutionHist massResHist(genSimMod, recoMod, "Mass Resolution Pasted", 100, 500, 3100);
   // N Leptons Histogram
-  LeptonEfficiency leptonEfficiency(matchMod, genSimMod);
+  NLeptonsHist nLeptonsHist(matchMod, "Number of Leptons", 10, 0 , 10);
   //Lepton Efficiency output
-  
+  LeptonEfficiency leptonEfficiency(matchMod, genSimMod);
+  // GenSim All Lepton Invariant Mass Histogram
+  AllLeptonInvariantMassHist allLeptonGenSimInvMassHist(genSimMod, recoMod, true, "GenSim All Lepton Invariant Mass Pasted", 640, 0, 2000);
+  // Reco All Lepton Invariant Mass Histogram
+  AllLeptonInvariantMassHist allLeptonRecoInvMassHist(genSimMod, recoMod, false, "Reco All Lepton Invariant Mass Pasted", 640, 0, 2000);
+  // GenSim Same Sign Invariant Mass Histogram
+  SameSignInvariantMassHist sameSignGenSimInvMassHist(genSimMod, recoMod, true, "GenSim Same Sign Invariant Mass Pasted", 640, 0, 2000);
+  // Reco Same Sign Invariant Mass Histogram
+  SameSignInvariantMassHist sameSignRecoInvMassHist(genSimMod, recoMod, false, "Reco Same Sign Invariant Mass Pasted", 640, 0, 2000);
 
-  // Add the filter modules to the five histograms created above
-  genSimInvMassHist.addFilter(&massBinFilter);
-  recoInvMassHist.addFilter(&massBinFilter);
-  genSimPtHist.addFilter(&massBinFilter);
-  recoPtHist.addFilter(&massBinFilter);
+  // Add the filter modules to the histograms created above
+  //genSimInvMassHist.addFilter(&massBinFilter);
+  //recoInvMassHist.addFilter(&massBinFilter);
+  //genSimPtHist.addFilter(&massBinFilter);
+  //recoPtHist.addFilter(&massBinFilter);
 
-  // Add the five histograms created above to histMod
-
-  //histMod.addHistogram(&genSimInvMassHist);
-  //histMod.addHistogram(&recoInvMassHist);
-  //histMod.addHistogram(&genSimPtHist);
-  //histMod.addHistogram(&recoPtHist);
-  //histMod.addHistogram(&massResHist);
+  // Add the histograms created above to histMod
+  histMod.addHistogram(&genSimInvMassHist);
+  histMod.addHistogram(&recoInvMassHist);
+  histMod.addHistogram(&genSimPtHist);
+  histMod.addHistogram(&recoPtHist);
   histMod.addHistogram(&nLeptonsHist);
+  histMod.addHistogram(&allLeptonGenSimInvMassHist);
+  histMod.addHistogram(&allLeptonRecoInvMassHist);
+  histMod.addHistogram(&sameSignGenSimInvMassHist);
+  histMod.addHistogram(&sameSignRecoInvMassHist);
+  //histMod.addHistogram(&massResHist);
 
   analyzer.addProductionModule(&genSimMod);
   analyzer.addProductionModule(&recoMod);
   analyzer.addProductionModule(&matchMod);
-  analyzer.addProductionModule(&weightMod);
-  analyzer.addProductionModule(&lrWeightMod);
+  //analyzer.addProductionModule(&weightMod);
+  //analyzer.addProductionModule(&lrWeightMod);
+
   //analyzer.addFilterModule(&massFilter);
   //analyzer.addFilterModule(&csFilter);
   //analyzer.addFilterModule(&pileupFilter);
@@ -123,7 +137,7 @@ int main(int argc, char** argv)
 
   if (inputFile.empty())
     {
-      inputFile = "textfiles/pickFiles.txt";
+      inputFile = "textfiles/HiggsPickFiles.txt";
     }
 
   analyzer.run(inputFile, outputFile, outputEvery);

@@ -169,6 +169,7 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
   for (HistogramPrototype* hist : histograms)
   {
     bool draw = hist->shouldDraw(event); // call the shouldDraw function so we can call process on the FilterModules
+    // std::cout << "shouldDraw returns: " << draw << '\n';
     
     // If the mass bin is a new mass bin, then make the histograms for that mass bin
     if (isNewMassBin(massBin))
@@ -212,7 +213,7 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
     // Fill the histogram if shouldDraw(event) (draw) returns true
     if (draw)
       {
-        // std::cout << "Histogram Filled: " << hist->getFilteredName() + massBin << '\n';
+        // std::cout << "Histogram Filled: " << hist->getFilteredName() + massBin << '\n' << "Value: " << hist->value() << '\n';
         fillHistogram(hist->getFilteredName() + massBin, hist->value(), eventWeight);
       }
   }
@@ -238,7 +239,10 @@ void HistogramOutputModule::finalize()
         {
           if (bin == massBin.first)
           {
-            getHistogram(pair.first + bin)->Scale(massBin.second / eventCount);  // massBin.second is the scale
+            if (massBin.second != 0)
+            {
+              getHistogram(pair.first + bin)->Scale(massBin.second / eventCount);  // massBin.second is the scale
+            }
 
             for (int i = 1; i < getHistogram(pair.first)->GetNbinsX() ; ++i)
             {

@@ -1,7 +1,7 @@
-Procs:	Diboson
-Year:	2018
+Procs:	H++
+Year:	2020
 Lepton:	both
-Mass:	200	600	1200	2500
-Lambda:	4
+Mass:	200
+Lambda:	200
 Inter:	con
 Helic:	WW
