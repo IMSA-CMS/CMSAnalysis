@@ -26,6 +26,8 @@
 #include "CIAnalysis/CIStudies/interface/PtHist.hh"
 #include "CIAnalysis/CIStudies/interface/MassResolutionHist.hh"
 #include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
+#include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
+#include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
 
 int main(int argc, char** argv)
 {
@@ -80,6 +82,10 @@ int main(int argc, char** argv)
   // Reco pT Histogram
   PtHist recoPtHist(genSimMod, recoMod, false, "Reco Transverse Momentum Pasted", 54, 50, 1900);
   MassResolutionHist massResHist(genSimMod, recoMod, "Mass Resolution Pasted", 100, 500, 3100);                 // Mass resolution Histogram
+  NLeptonsHist nLeptonsHist(matchMod, "Number of Leptons", 10, 0 , 10);
+  // N Leptons Histogram
+  LeptonEfficiency leptonEfficiency(matchMod, genSimMod);
+  //Lepton Efficiency output
   
 
   // Add the filter modules to the five histograms created above
@@ -90,11 +96,12 @@ int main(int argc, char** argv)
 
   // Add the five histograms created above to histMod
 
-  histMod.addHistogram(&genSimInvMassHist);
-  histMod.addHistogram(&recoInvMassHist);
-  histMod.addHistogram(&genSimPtHist);
-  histMod.addHistogram(&recoPtHist);
-  histMod.addHistogram(&massResHist);
+  //histMod.addHistogram(&genSimInvMassHist);
+  //histMod.addHistogram(&recoInvMassHist);
+  //histMod.addHistogram(&genSimPtHist);
+  //histMod.addHistogram(&recoPtHist);
+  //histMod.addHistogram(&massResHist);
+  histMod.addHistogram(&nLeptonsHist);
 
   analyzer.addProductionModule(&genSimMod);
   analyzer.addProductionModule(&recoMod);
@@ -104,14 +111,15 @@ int main(int argc, char** argv)
   //analyzer.addFilterModule(&massFilter);
   //analyzer.addFilterModule(&csFilter);
   //analyzer.addFilterModule(&pileupFilter);
-  analyzer.addFilterModule(&barrelStateFilter);
+  //analyzer.addFilterModule(&barrelStateFilter);
   //analyzer.addFilterModule(&massBinFilter);
   //analyzer.addAnalysisModule(&accMod);
-  analyzer.addAnalysisModule(&pTResMod);
-  analyzer.addAnalysisModule(&massResMod);
+  //analyzer.addAnalysisModule(&pTResMod);
+  //analyzer.addAnalysisModule(&massResMod);
   //analyzer.addAnalysisModule(&afbMod);
   //analyzer.addAnalysisModule(&unmatchedMod);
   analyzer.addAnalysisModule(&histMod);
+  analyzer.addAnalysisModule(&leptonEfficiency);
 
   if (inputFile.empty())
     {
