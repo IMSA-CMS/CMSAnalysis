@@ -49,7 +49,6 @@ std::ofstream& TextOutputModule::getFileStream(const std::string& fullName)
       auto response = files.insert({fullName, newFile});
       it = response.first;
     }
-
   return *(it->second);
 }
 
