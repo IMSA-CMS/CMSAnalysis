@@ -45,9 +45,11 @@ WeightingModule::WeightingModule()
 
 bool WeightingModule::process(const edm::EventBase& event)
 {
+  //std::cerr << "ENTERING WeightingModule" << std::endl;
   auto keyname = getFileParams().getFileKey();
   findWeight(keyname);
 
+  //std::cerr << "EXITING WeightingModule" << std::endl;
   return true;
 }
 
