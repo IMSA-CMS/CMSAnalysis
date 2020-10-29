@@ -117,7 +117,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 
 	  delete file;
 	}
-      std::cout << numOfEvents << std::endl;
+      std::cout << "Events Processed: " << numOfEvents << std::endl;
     }      
   
   // Finalize the modules
