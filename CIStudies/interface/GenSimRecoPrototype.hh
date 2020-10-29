@@ -8,7 +8,6 @@
 class GenSimIdentificationModule;
 class RecoIdentificationModule;
 
-
 class GenSimRecoPrototype : public HistogramPrototype
 {
   public:
@@ -16,15 +15,16 @@ class GenSimRecoPrototype : public HistogramPrototype
     double value() const override {return protectedValue(typeGenSim);}     // Overloads value() and calls protectedValue(typeGenSim)
     virtual ~GenSimRecoPrototype() {} // Empty virtual destructor
 
-    virtual double protectedValue(bool typeSwitch) const = 0;
   protected:
-    const GenSimIdentificationModule& getGenSim() const {return genSim;}
-    const RecoIdentificationModule& getReco() const {return reco;}
+    const GenSimIdentificationModule& getGenSim() const {return genSim;}   // Getter for genSim
+    const RecoIdentificationModule& getReco() const {return reco;}         // Getter for reco
+    bool getDataType() const {return typeGenSim;}                          // Getter for typeGenSim
+    virtual double protectedValue(bool typeSwitch) const = 0;              // Virtual function that is overridden in InvariantMassHist and PtHist
+    
   private:
     const GenSimIdentificationModule& genSim; 
     const RecoIdentificationModule& reco;
     bool typeGenSim;                            // Switch between GenSim and Reco: value is true for GenSim, false for Reco                       
 };          
-
 
 #endif

@@ -6,7 +6,8 @@
 #include <iostream>
 #include "TH2.h"
 
-UnmatchedParticleModule::UnmatchedParticleModule(const GenSimIdentificationModule& genSimModule, const MatchingModule& matchingModule) :
+UnmatchedParticleModule::UnmatchedParticleModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const LRWeightModule& lrWeighting, const MatchingModule& matchingModule) :
+  HistogramOutputModule(genSimModule, recoModule, weightingModule, lrWeighting),
   genSim(genSimModule),
   matching(matchingModule)
 {
@@ -45,7 +46,7 @@ bool UnmatchedParticleModule::process(const edm::EventBase& event)
 	  bool isMatched = false;
 
 	  auto collinsSoper = genParticles.getCollinsSoper();
-	  auto eta = genParticle->eta();
+	  auto eta = genParticle.eta();
 
 	  auto EtaCSHist = dynamic_cast<TH2*>(getObject("EtaCSHist"));
 	  EtaCSHist->Fill(collinsSoper, eta);
@@ -61,11 +62,11 @@ bool UnmatchedParticleModule::process(const edm::EventBase& event)
 	  
 	  if (!isMatched)
 	    {
-	      fillHistogram("UnmatchedParticleEta", genParticle->eta());
+	      fillHistogram("UnmatchedParticleEta", genParticle.eta());
 	    }
 	  else
 	    {
-	      fillHistogram("MatchedParticleEta", genParticle->eta());
+	      fillHistogram("MatchedParticleEta", genParticle.eta());
 	    }
 	}
     }

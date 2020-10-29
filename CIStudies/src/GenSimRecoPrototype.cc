@@ -12,4 +12,3 @@ GenSimRecoPrototype::GenSimRecoPrototype(const GenSimIdentificationModule& genSi
   typeGenSim(typeSwitch)
 {
 }
-

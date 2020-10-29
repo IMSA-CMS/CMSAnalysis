@@ -4,6 +4,7 @@
 #include <utility>
 #include <vector>
 #include "TLorentzVector.h"
+#include "CIAnalysis/CIStudies/interface/Particle.hh"
 
 namespace reco
 {
@@ -13,28 +14,33 @@ namespace reco
 class ParticleCollection
 {
 public:
-  void addParticle(const reco::Candidate* particle) {particles.push_back(particle);}
+  void addParticle(Particle particle) {particles.push_back(particle);}
 
-  const std::vector<const reco::Candidate*>& getParticles() const {return particles;}
+  const std::vector<Particle>& getParticles() const {return particles;}
   double getNumParticles() const {return particles.size();}
 
   double getInvariantMass() const;
   double getLeadingTransverseMomentum() const;
   double getCollinsSoper() const; 
+  bool isBB() const;
+  bool isBE() const;
+  
 
   void clear() {particles.clear();}
 
 private:
-  std::vector<const reco::Candidate*> particles;
+  std::vector<Particle> particles;
 
-  std::pair<const reco::Candidate*, const reco::Candidate*> chooseParticles() const; //picks particles with greatest invariant mass
+  std::pair<Particle, Particle> chooseParticles() const; //picks particles with greatest invariant mass
 
-  bool checkSigns(const reco::Candidate* particle1, const reco::Candidate* particle2) const;
-  double calculateInvariantMass(const reco::Candidate* particle1, const reco::Candidate* particle2) const;
-  double calculateLeadingTransverseMomentum(const reco::Candidate* particle1, const reco::Candidate* particle2) const;
-  double calculateCollinsSoper(const reco::Candidate* particle1, const reco::Candidate* particle2) const;
+  bool checkSigns(Particle particle1, Particle particle2) const;
+  double calculateInvariantMass(Particle particle1, Particle particle2) const;
+  double calculateLeadingTransverseMomentum(Particle particle1, Particle particle2) const;
+  double calculateCollinsSoper(Particle particle1, Particle particle2) const;
+
+
   double calculateCosTheta(TLorentzVector Ele, TLorentzVector Elebar) const;
-  bool lowEtaFlip(const reco::Candidate* particle, const reco::Candidate* antiparticle) const;
+  bool lowEtaFlip(Particle particle, Particle antiparticle) const;
 };
 
 #endif
