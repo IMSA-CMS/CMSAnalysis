@@ -44,6 +44,7 @@ private:
   double calculateLeadingTransverseMomentum(Particle particle1, Particle particle2) const;
   double calculateCollinsSoper(Particle particle1, Particle particle2) const;
 
+
   double calculateCosTheta(TLorentzVector Ele, TLorentzVector Elebar) const;
   bool lowEtaFlip(Particle particle, Particle antiparticle) const;
 };

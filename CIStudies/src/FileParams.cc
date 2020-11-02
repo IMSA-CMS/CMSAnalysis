@@ -90,7 +90,7 @@ void MassRange::addMaps()
 
 void Lambda::addMaps()
 {
-  vector<string> lambdaVals = {"1", "3", "3.5", "4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "10", "16", "22", "24", "28", "32", "34", "40", "100k"};
+  vector<string> lambdaVals = {"1", "3", "3.5", "4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "10", "16", "22", "24", "28", "32", "34", "40", "100k", "200", "800"};//H++ after 100k
   addValuesToMap(lambdaVals);
 
   vector<string> higgsMasses = {"M300"};
@@ -179,6 +179,13 @@ string FileParams::locateTextFile() const
   string interferenceString = getInterference() == Interference::constructive() ? "Con" : "Des";
   string helicityString = getHelicity();
   string lambdaString = "_Lam" + getLambda();
+  
+  //H++
+  if(processString == "H++")
+    {
+      lambdaString = "M" + getLambda();
+    }
+
 
   // LR and RL files are the same
   if (helicityString == "RL")

@@ -29,6 +29,9 @@
 #include "CIAnalysis/CIStudies/interface/OppositeSignInvariantMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/MassResolutionHist.hh"
 #include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
+#include "CIAnalysis/CIStudies/interface/ScaledMassHist.hh"
+#include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
+#include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
 
 int main(int argc, char** argv)
 {
@@ -48,7 +51,7 @@ int main(int argc, char** argv)
   std::string outputFile = parser.stringValue("output");
   if (outputFile.empty())
     {
-      outputFile = "muonResolution.root";
+      outputFile = "weakAlignBiasOutput.root";
     }
 
   std::cout << "This is the name of outputFile " << outputFile << std::endl;
@@ -75,13 +78,64 @@ int main(int argc, char** argv)
   HistogramOutputModule histMod(genSimMod, recoMod, weightMod, lrWeightMod);
 
   // GenSim Invariant Mass Histogram
-  InvariantMassHist genSimInvMassHist(genSimMod, recoMod, true, "GenSim Invariant Mass Pasted", 640, 100, 3300);
+  // InvariantMassHist genSimInvMassHist(genSimMod, recoMod, true, "GenSim Invariant Mass Pasted", 640, 100, 3300);
   // Reco Invariant Mass Histogram
-  InvariantMassHist recoInvMassHist(genSimMod, recoMod, false, "Reco Invariant Mass Pasted", 640, 100, 3300);
+  // InvariantMassHist recoInvMassHist(genSimMod, recoMod, false, "Reco Invariant Mass Pasted", 640, 100, 3300);
   // GenSim pT Histogram
-  PtHist genSimPtHist(genSimMod, recoMod, true, "GenSim Transverse Momentum Pasted", 54, 50, 1900);
+  // PtHist genSimPtHist(genSimMod, recoMod, true, "GenSim Transverse Momentum Pasted", 54, 50, 1900);
   // Reco pT Histogram
+
+  // PtHist recoPtHist(genSimMod, recoMod, false, "Reco Transverse Momentum Pasted", 54, 50, 1900);
+  // MassResolutionHist massResHist(genSimMod, recoMod, "Mass Resolution Pasted", 100, 500, 3100);                // Mass resolution Histogram
+
+  // GenSim Invariant Mass Histogram
+  InvariantMassHist genSimInvMassHist(genSimMod, recoMod, true, "GenSim Invariant Mass Pasted", 29, 300, 3200);
+  // Reco Invariant Mass Histogram
+  InvariantMassHist recoInvMassHist(genSimMod, recoMod, false, "Reco Invariant Mass Pasted", 29, 300, 3200);
+
+  // GenSim Scaled Up Invariant Mass Histogram
+  ScaledMassHist genSimScaledUpHist(matchMod, "GenSim Weak Alignment Bias Scaled Up Hist", 29, 300, 3200, true, false, true);
+  // Reco Scaled Up Invariant Mass Histogram
+  ScaledMassHist recoScaledUpHist(matchMod, "Reco Weak Alignment Bias Scaled Up Hist", 29, 300, 3200, true, false, false);
+
+  // GenSim Scaled Down Invariant Mass Histogram
+  ScaledMassHist genSimScaledDownHist(matchMod, "GenSim Weak Alignment Bias Scaled Down Hist", 29, 300, 3200, false, false, true);
+  // Reco Scaled Down Invariant Mass Histogram
+  ScaledMassHist recoScaledDownHist(matchMod, "Reco Weak Alignment Bias Scaled Down Hist", 29, 300, 3200, false, false, false);
+
+  // GenSim Mu Scaled Up AntiMu Scaled Down Invariant Mass Histogram
+  ScaledMassHist genSimScaledUpDownHist(matchMod, "GenSim Weak Alignment Bias Mu Scaled Up AntiMu Scaled Down Hist", 29, 300, 3200, false, true, true);
+  // Reco Mu Scaled Up AntiMu Scaled Down Invariant Mass Histogram
+  ScaledMassHist recoScaledUpDownHist(matchMod, "Reco Weak Alignment Bias Mu Scaled Up AntiMu Scaled Down Hist", 29, 300, 3200, false, true, false);
+
+
+  // Add the filter modules to the five histograms created above
+  // genSimInvMassHist.addFilter(&massBinFilter);
+  // recoInvMassHist.addFilter(&massBinFilter);
+  // genSimPtHist.addFilter(&massBinFilter);
+  // recoPtHist.addFilter(&massBinFilter);
+
+  // Add the five histograms created above to histMod
+
+  histMod.addHistogram(&genSimInvMassHist);
+  histMod.addHistogram(&recoInvMassHist);
+  //histMod.addHistogram(&genSimPtHist);
+  //histMod.addHistogram(&recoPtHist);
+  //histMod.addHistogram(&massResHist);
+  histMod.addHistogram(&genSimScaledUpHist);
+  histMod.addHistogram(&recoScaledUpHist);
+  histMod.addHistogram(&genSimScaledDownHist);
+  histMod.addHistogram(&recoScaledDownHist);
+  histMod.addHistogram(&genSimScaledUpDownHist);
+  histMod.addHistogram(&recoScaledUpDownHist);
+
   PtHist recoPtHist(genSimMod, recoMod, false, "Reco Transverse Momentum Pasted", 54, 50, 1900);
+  //Mass resolution Histogram
+  MassResolutionHist massResHist(genSimMod, recoMod, "Mass Resolution Pasted", 100, 500, 3100);
+  // N Leptons Histogram
+  NLeptonsHist nLeptonsHist(matchMod, "Number of Leptons", 10, 0 , 10);
+  //Lepton Efficiency output
+  LeptonEfficiency leptonEfficiency(matchMod, genSimMod);
   // GenSim All Lepton Invariant Mass Histogram
   AllLeptonInvariantMassHist allLeptonGenSimInvMassHist(genSimMod, recoMod, true, "GenSim All Lepton Invariant Mass Pasted", 640, 0, 2000);
   // Reco All Lepton Invariant Mass Histogram
@@ -95,9 +149,6 @@ int main(int argc, char** argv)
   // Reco Opposite Sign Invariant Mass Histogram
   OppositeSignInvariantMassHist oppSignRecoInvMassHist(genSimMod, recoMod, false, "Reco Opposite Sign Invariant Mass Pasted", 640, 0, 2000);
 
-  //MassResolutionHist massResHist(genSimMod, recoMod, "Mass Resolution Pasted", 100, 500, 3100);                 // Mass resolution Histogram
-  
-
   // Add the filter modules to the histograms created above
   //genSimInvMassHist.addFilter(&massBinFilter);
   //recoInvMassHist.addFilter(&massBinFilter);
@@ -105,10 +156,9 @@ int main(int argc, char** argv)
   //recoPtHist.addFilter(&massBinFilter);
 
   // Add the histograms created above to histMod
-  histMod.addHistogram(&genSimInvMassHist);
-  histMod.addHistogram(&recoInvMassHist);
   histMod.addHistogram(&genSimPtHist);
   histMod.addHistogram(&recoPtHist);
+  histMod.addHistogram(&nLeptonsHist);
   histMod.addHistogram(&allLeptonGenSimInvMassHist);
   histMod.addHistogram(&allLeptonRecoInvMassHist);
   histMod.addHistogram(&sameSignGenSimInvMassHist);
@@ -134,10 +184,11 @@ int main(int argc, char** argv)
   //analyzer.addAnalysisModule(&afbMod);
   //analyzer.addAnalysisModule(&unmatchedMod);
   analyzer.addAnalysisModule(&histMod);
+  analyzer.addAnalysisModule(&leptonEfficiency);
 
   if (inputFile.empty())
     {
-      inputFile = "textfiles/pickFiles.txt";
+      inputFile = "textfiles/HiggsPickFiles.txt";
     }
 
   analyzer.run(inputFile, outputFile, outputEvery);
