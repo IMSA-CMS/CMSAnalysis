@@ -26,6 +26,7 @@
 #include "CIAnalysis/CIStudies/interface/PtHist.hh"
 #include "CIAnalysis/CIStudies/interface/AllLeptonInvariantMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/SameSignInvariantMassHist.hh"
+#include "CIAnalysis/CIStudies/interface/OppositeSignInvariantMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/MassResolutionHist.hh"
 #include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
 
@@ -57,7 +58,7 @@ int main(int argc, char** argv)
   Analyzer analyzer;
 
   GenSimIdentificationModule genSimMod;
-  RecoIdentificationModule recoMod;
+  RecoIdentificationModule recoMod(5);
   MatchingModule matchMod(genSimMod, recoMod);
   WeightingModule weightMod;
   LRWeightModule lrWeightMod;
@@ -89,6 +90,10 @@ int main(int argc, char** argv)
   SameSignInvariantMassHist sameSignGenSimInvMassHist(genSimMod, recoMod, true, "GenSim Same Sign Invariant Mass Pasted", 640, 0, 2000);
   // Reco Same Sign Invariant Mass Histogram
   SameSignInvariantMassHist sameSignRecoInvMassHist(genSimMod, recoMod, false, "Reco Same Sign Invariant Mass Pasted", 640, 0, 2000);
+  // GenSim Opposite Sign Invariant Mass Histogram
+  OppositeSignInvariantMassHist oppSignGenSimInvMassHist(genSimMod, recoMod, true, "GenSim Opposite Sign Invariant Mass Pasted", 640, 0, 2000);
+  // Reco Opposite Sign Invariant Mass Histogram
+  OppositeSignInvariantMassHist oppSignRecoInvMassHist(genSimMod, recoMod, false, "Reco Opposite Sign Invariant Mass Pasted", 640, 0, 2000);
 
   //MassResolutionHist massResHist(genSimMod, recoMod, "Mass Resolution Pasted", 100, 500, 3100);                 // Mass resolution Histogram
   
@@ -108,6 +113,8 @@ int main(int argc, char** argv)
   histMod.addHistogram(&allLeptonRecoInvMassHist);
   histMod.addHistogram(&sameSignGenSimInvMassHist);
   histMod.addHistogram(&sameSignRecoInvMassHist);
+  histMod.addHistogram(&oppSignGenSimInvMassHist);
+  histMod.addHistogram(&oppSignRecoInvMassHist);
   //histMod.addHistogram(&massResHist);
 
   analyzer.addProductionModule(&genSimMod);
