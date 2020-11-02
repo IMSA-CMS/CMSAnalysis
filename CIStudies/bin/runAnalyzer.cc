@@ -15,6 +15,7 @@
 #include "CIAnalysis/CIStudies/interface/PileupFilter.hh"
 #include "CIAnalysis/CIStudies/interface/BarrelStateFilter.hh"
 #include "CIAnalysis/CIStudies/interface/MassBinFilter.hh"
+#include "CIAnalysis/CIStudies/interface/NLeptonsFilter.hh"
 #include "CIAnalysis/CIStudies/interface/AcceptanceModule.hh"
 #include "CIAnalysis/CIStudies/interface/ResolutionModule.hh"
 #include "CIAnalysis/CIStudies/interface/PtResolutionModule.hh"
@@ -70,6 +71,7 @@ int main(int argc, char** argv)
   PileupFilter pileupFilter(15, 35);
   BarrelStateFilter barrelStateFilter(matchMod);
   MassBinFilter massBinFilter(matchMod, 300, 3100, 28);
+  NLeptonsFilter nLeptonsFilter(matchMod);
   AcceptanceModule accMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
   PtResolutionModule pTResMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
   MassResolutionModule massResMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
@@ -82,10 +84,9 @@ int main(int argc, char** argv)
   // Reco Invariant Mass Histogram
   // InvariantMassHist recoInvMassHist(genSimMod, recoMod, false, "Reco Invariant Mass Pasted", 640, 100, 3300);
   // GenSim pT Histogram
-  // PtHist genSimPtHist(genSimMod, recoMod, true, "GenSim Transverse Momentum Pasted", 54, 50, 1900);
+  PtHist genSimPtHist(genSimMod, recoMod, true, "GenSim Transverse Momentum Pasted", 54, 50, 1900);
   // Reco pT Histogram
-
-  // PtHist recoPtHist(genSimMod, recoMod, false, "Reco Transverse Momentum Pasted", 54, 50, 1900);
+  PtHist recoPtHist(genSimMod, recoMod, false, "Reco Transverse Momentum Pasted", 54, 50, 1900);
   // MassResolutionHist massResHist(genSimMod, recoMod, "Mass Resolution Pasted", 100, 500, 3100);                // Mass resolution Histogram
 
   // GenSim Invariant Mass Histogram
@@ -129,7 +130,6 @@ int main(int argc, char** argv)
   histMod.addHistogram(&genSimScaledUpDownHist);
   histMod.addHistogram(&recoScaledUpDownHist);
 
-  PtHist recoPtHist(genSimMod, recoMod, false, "Reco Transverse Momentum Pasted", 54, 50, 1900);
   //Mass resolution Histogram
   MassResolutionHist massResHist(genSimMod, recoMod, "Mass Resolution Pasted", 100, 500, 3100);
   // N Leptons Histogram
@@ -178,6 +178,7 @@ int main(int argc, char** argv)
   //analyzer.addFilterModule(&pileupFilter);
   //analyzer.addFilterModule(&barrelStateFilter);
   //analyzer.addFilterModule(&massBinFilter);
+  analyzer.addFilterModule(&nLeptonsFilter);
   //analyzer.addAnalysisModule(&accMod);
   //analyzer.addAnalysisModule(&pTResMod);
   //analyzer.addAnalysisModule(&massResMod);
