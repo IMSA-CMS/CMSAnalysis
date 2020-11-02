@@ -19,6 +19,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 {
   // This keeps the histograms separate from the files they came from, avoiding much silliness
   TH1::AddDirectory(kFALSE);
+  TH1::SetDefaultSumw2(kTRUE);
 
   // Get a list of FileParams objects
   auto fileparams = inputFiles(configFile);
