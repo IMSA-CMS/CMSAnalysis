@@ -96,7 +96,7 @@ void Lambda::addMaps()
   vector<string> higgsMasses = {"M300"};
   addValuesToMap(higgsMasses);
 
-  vector<string> darkPhotonMasses = {"M1"};
+  vector<string> darkPhotonMasses = {"M0_1", "M0_2", "M0_3", "M0_4", "M0_5", "M0_7", "M0_9", "M1", "M1_2", "M1_5", "M2_0"};
   addValuesToMap(darkPhotonMasses);
 
   for (const auto& val : lambdaVals)
