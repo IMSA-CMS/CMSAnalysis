@@ -72,28 +72,30 @@ int main(int argc, char** argv)
   HistogramOutputModule histMod(genSimMod, recoMod, weightMod, lrWeightMod);
 
   // GenSim Invariant Mass Histogram
-  InvariantMassHist genSimInvMassHist(genSimMod, recoMod, true, "GenSim Invariant Mass Pasted", 640, 100, 3300);
+  //InvariantMassHist genSimInvMassHist(genSimMod, recoMod, true, "GenSim Invariant Mass Pasted", 640, 100, 3300);
   // Reco Invariant Mass Histogram
-  InvariantMassHist recoInvMassHist(genSimMod, recoMod, false, "Reco Invariant Mass Pasted", 640, 100, 3300);
+  //InvariantMassHist recoInvMassHist(genSimMod, recoMod, false, "Reco Invariant Mass Pasted", 640, 100, 3300);
   // GenSim pT Histogram
-  PtHist genSimPtHist(genSimMod, recoMod, true, "GenSim Transverse Momentum Pasted", 54, 50, 1900);
+  //PtHist genSimPtHist(genSimMod, recoMod, true, "GenSim Transverse Momentum Pasted", 54, 50, 1900);
   // Reco pT Histogram
-  PtHist recoPtHist(genSimMod, recoMod, false, "Reco Transverse Momentum Pasted", 54, 50, 1900);
-  MassResolutionHist massResHist(genSimMod, recoMod, "Mass Resolution Pasted", 100, 500, 3100);                 // Mass resolution Histogram
+  //PtHist recoPtHist(genSimMod, recoMod, false, "Reco Transverse Momentum Pasted", 54, 50, 1900);
+  MassResolutionHist massResHist(genSimMod, recoMod, "Mass Resolution Pasted", 100, -1, 1);                 // Mass resolution Histogram
   
 
   // Add the filter modules to the five histograms created above
-  genSimInvMassHist.addFilter(&massBinFilter);
-  recoInvMassHist.addFilter(&massBinFilter);
-  genSimPtHist.addFilter(&massBinFilter);
-  recoPtHist.addFilter(&massBinFilter);
+  //genSimInvMassHist.addFilter(&massBinFilter);
+  //recoInvMassHist.addFilter(&massBinFilter);
+  //genSimPtHist.addFilter(&massBinFilter);
+  //recoPtHist.addFilter(&massBinFilter);
+  massResHist.addFilter(&massBinFilter);
+  massResHist.addFilter(&barrelStateFilter);
 
   // Add the five histograms created above to histMod
 
-  histMod.addHistogram(&genSimInvMassHist);
-  histMod.addHistogram(&recoInvMassHist);
-  histMod.addHistogram(&genSimPtHist);
-  histMod.addHistogram(&recoPtHist);
+  //histMod.addHistogram(&genSimInvMassHist);
+  //histMod.addHistogram(&recoInvMassHist);
+  //histMod.addHistogram(&genSimPtHist);
+  //histMod.addHistogram(&recoPtHist);
   histMod.addHistogram(&massResHist);
 
   analyzer.addProductionModule(&genSimMod);
@@ -105,9 +107,9 @@ int main(int argc, char** argv)
   //analyzer.addFilterModule(&csFilter);
   //analyzer.addFilterModule(&pileupFilter);
   analyzer.addFilterModule(&barrelStateFilter);
-  //analyzer.addFilterModule(&massBinFilter);
+  analyzer.addFilterModule(&massBinFilter);
   //analyzer.addAnalysisModule(&accMod);
-  analyzer.addAnalysisModule(&pTResMod);
+  //analyzer.addAnalysisModule(&pTResMod);
   analyzer.addAnalysisModule(&massResMod);
   //analyzer.addAnalysisModule(&afbMod);
   //analyzer.addAnalysisModule(&unmatchedMod);

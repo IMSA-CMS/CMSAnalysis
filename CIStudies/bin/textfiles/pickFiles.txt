@@ -1,7 +1,7 @@
-Procs:	Diboson
-Year:	2018
-Lepton:	both
-Mass:	200	600	1200	2500
-Lambda:	4
+Procs:	CI
+Year:	2016
+Lepton:	Mu
+Mass:	M300	M800	M1300	M2000
+Lambda:	16
 Inter:	con
-Helic:	WW
+Helic:	LL
