@@ -4,4 +4,4 @@ Lepton:	both
 Mass:	200
 Lambda:	200
 Inter:	con
-Helic:	LL	
+Helic:	LL
