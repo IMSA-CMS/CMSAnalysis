@@ -151,7 +151,7 @@ int main(int argc, char** argv)
   //recoPtHist.addFilter(&massBinFilter);
 
   // Add the histograms created above to histMod
-  histMod.addHistogram(&genSimPtHist);
+  // histMod.addHistogram(&genSimPtHist);
   histMod.addHistogram(&recoPtHist);
   histMod.addHistogram(&nLeptonsHist);
   histMod.addHistogram(&allLeptonGenSimInvMassHist);
