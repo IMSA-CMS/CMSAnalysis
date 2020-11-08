@@ -27,6 +27,7 @@ public:
   
   double calculateAllLeptonInvariantMass() const;
   double calculateSameSignInvariantMass() const;
+  double calculateOppositeSignInvariantMass() const;
 
   void clear() {particles.clear();}
 

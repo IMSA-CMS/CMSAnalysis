@@ -200,6 +200,19 @@ double ParticleCollection::calculateSameSignInvariantMass() const
     }
 }
 
+double ParticleCollection::calculateOppositeSignInvariantMass() const
+{
+  auto particlePair = chooseParticles(true);					// we want opposite sign particles with highest invariant mass
+  if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
+    {      
+      return calculateInvariantMass(particlePair.first, particlePair.second);
+    }
+  else
+    {     
+      return -1;
+    }
+}
+
 double ParticleCollection::calculateAllLeptonInvariantMass() const
 {
   reco::Candidate::LorentzVector total;
