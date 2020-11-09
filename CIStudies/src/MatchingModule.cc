@@ -14,7 +14,7 @@ MatchingModule::MatchingModule(const GenSimIdentificationModule& genSimModule, c
 
 bool MatchingModule::process(const edm::EventBase& event)
 {
-  //std::cerr << "ENTERING MatchingModule" << std::endl;
+  std::cerr << "ENTERING MatchingModule" << std::endl;
   matchingBestPairs.clear();
 
   // Make a copy so we don't modify the original
@@ -25,6 +25,7 @@ bool MatchingModule::process(const edm::EventBase& event)
   //std::cerr << "Hey, I'm in charge of names here" << std::endl;
   while (!checkIsNull(genSimParticles) && !checkIsNull(recoCandidates))
     {
+      std::cerr << "Loop starts" << std::endl;
       //start with a high value, only really needs to be higher than the cutoff delta R
       double deltaRMin = std::numeric_limits<double>::max();
 
@@ -33,14 +34,14 @@ bool MatchingModule::process(const edm::EventBase& event)
       MatchingPair pairDataList(nullParticle, nullParticle);
 
       //counters to set the indices to if the particle is best match
-      int matchingCounter = 0;
       int matchingGenCounter = 0;
+      int matchingRecoCounter = 0;
 
       //keeps track of when the best particles are assigned 
       int bestGenIndex = 0;
-      int bestIndex = 0;
+      int bestRecoIndex = 0;
 
-      //std::cerr << "I'm allergic to chocolate" << std::endl;
+      std::cerr << "I'm allergic to chocolate" << std::endl;
 
       //goes through all possible particle combinations of gen and reco particles
       for(auto& genParticle : genSimParticles)
@@ -48,6 +49,7 @@ bool MatchingModule::process(const edm::EventBase& event)
 	  //checks that the particle was not already matched and set to null
 	  if (genParticle.isNotNull())
 	    {
+              matchingRecoCounter = 0;  // Reset the Reco Counter
 	      for(auto& recoParticle : recoCandidates)
 		{
 		  if (recoParticle.isNotNull())
@@ -59,7 +61,7 @@ bool MatchingModule::process(const edm::EventBase& event)
 						 //dynamic_cast<const reco::RecoCandidate*>(recoParticle));
 		      MatchingPair pairCandidate(genParticle, recoParticle);
 
-			//std::cerr << "I'd like to do small things like rule the world" << std::endl;
+			std::cerr << "I'd like to do small things like rule the world" << std::endl;
 
 		      //if this delta R is better than the previous best one, keeps track of the information by assigning values ot pariDataList
 		      if (pairCandidate.getDeltaR() < deltaRMin)
@@ -69,11 +71,12 @@ bool MatchingModule::process(const edm::EventBase& event)
 			  //pairDataList.setRecoParticle(recoParticle);
 
 			  bestGenIndex = matchingGenCounter;
-			  bestIndex = matchingCounter;
+			  bestRecoIndex = matchingRecoCounter;
 
 			  deltaRMin = pairDataList.getDeltaR();
 			}
 		    }
+		  ++matchingRecoCounter;
 		}	
 	    }
 	  ++matchingGenCounter;
@@ -97,6 +100,8 @@ bool MatchingModule::process(const edm::EventBase& event)
 		
 	}
 
+// For each loop ends here
+
       //makes an additional delta R cut and fills matching best pairs, resets values for the next loop
       //checks if the final (and best) delta R value for the matches passes the cut
       if(deltaRMin<deltaRCutoff)
@@ -115,10 +120,10 @@ bool MatchingModule::process(const edm::EventBase& event)
 
       //sets the best matches to null so they are not matched again
 	
-      genSimParticles[bestGenIndex] = nullParticle;
-      recoCandidates[bestIndex] = nullParticle;
+      genSimParticles.at(bestGenIndex) = nullParticle;
+      recoCandidates.at(bestRecoIndex) = nullParticle;
 
-	//std::cerr << "Cabbages" << std::endl;
+      std::cerr << "Cabbages" << std::endl;
 
     }
 
@@ -133,7 +138,7 @@ bool MatchingModule::process(const edm::EventBase& event)
   // 	}
   //   }
       
-  //std::cerr << "EXITING MatchingModule" << std::endl;
+  std::cerr << "EXITING MatchingModule" << std::endl;
   return true;
 }
 
@@ -143,8 +148,10 @@ bool MatchingModule::checkIsNull(std::vector<Particle> matching) const
   {
     if(particle.isNotNull())
     {
+      std::cerr << "Particle is not null" << std::endl;
       return false;
     }
   }  
+  std::cerr << "Particle is null" << std::endl;
   return true;
 }
