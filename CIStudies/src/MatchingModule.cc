@@ -14,7 +14,7 @@ MatchingModule::MatchingModule(const GenSimIdentificationModule& genSimModule, c
 
 bool MatchingModule::process(const edm::EventBase& event)
 {
-  std::cerr << "ENTERING MatchingModule" << std::endl;
+  //std::cerr << "ENTERING MatchingModule" << std::endl;
   matchingBestPairs.clear();
 
   // Make a copy so we don't modify the original
@@ -25,7 +25,7 @@ bool MatchingModule::process(const edm::EventBase& event)
   //std::cerr << "Hey, I'm in charge of names here" << std::endl;
   while (!checkIsNull(genSimParticles) && !checkIsNull(recoCandidates))
     {
-      std::cerr << "Loop starts" << std::endl;
+      //std::cerr << "Loop starts" << std::endl;
       //start with a high value, only really needs to be higher than the cutoff delta R
       double deltaRMin = std::numeric_limits<double>::max();
 
@@ -41,7 +41,7 @@ bool MatchingModule::process(const edm::EventBase& event)
       int bestGenIndex = 0;
       int bestRecoIndex = 0;
 
-      std::cerr << "I'm allergic to chocolate" << std::endl;
+      //std::cerr << "I'm allergic to chocolate" << std::endl;
 
       //goes through all possible particle combinations of gen and reco particles
       for(auto& genParticle : genSimParticles)
@@ -61,7 +61,7 @@ bool MatchingModule::process(const edm::EventBase& event)
 						 //dynamic_cast<const reco::RecoCandidate*>(recoParticle));
 		      MatchingPair pairCandidate(genParticle, recoParticle);
 
-			std::cerr << "I'd like to do small things like rule the world" << std::endl;
+			//std::cerr << "I'd like to do small things like rule the world" << std::endl;
 
 		      //if this delta R is better than the previous best one, keeps track of the information by assigning values ot pariDataList
 		      if (pairCandidate.getDeltaR() < deltaRMin)
@@ -123,7 +123,7 @@ bool MatchingModule::process(const edm::EventBase& event)
       genSimParticles.at(bestGenIndex) = nullParticle;
       recoCandidates.at(bestRecoIndex) = nullParticle;
 
-      std::cerr << "Cabbages" << std::endl;
+      //std::cerr << "Cabbages" << std::endl;
 
     }
 
@@ -138,7 +138,7 @@ bool MatchingModule::process(const edm::EventBase& event)
   // 	}
   //   }
       
-  std::cerr << "EXITING MatchingModule" << std::endl;
+  //std::cerr << "EXITING MatchingModule" << std::endl;
   return true;
 }
 
@@ -148,10 +148,10 @@ bool MatchingModule::checkIsNull(std::vector<Particle> matching) const
   {
     if(particle.isNotNull())
     {
-      std::cerr << "Particle is not null" << std::endl;
+      //std::cerr << "Particle is not null" << std::endl;
       return false;
     }
   }  
-  std::cerr << "Particle is null" << std::endl;
+  //std::cerr << "Particle is null" << std::endl;
   return true;
 }

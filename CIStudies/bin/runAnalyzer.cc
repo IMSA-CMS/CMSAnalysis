@@ -52,7 +52,7 @@ int main(int argc, char** argv)
   std::string outputFile = parser.stringValue("output");
   if (outputFile.empty())
     {
-      outputFile = "weakAlignBiasOutput.root";
+      outputFile = "testHiggs.root";
     }
 
   std::cout << "This is the name of outputFile " << outputFile << std::endl;
@@ -80,62 +80,14 @@ int main(int argc, char** argv)
   HistogramOutputModule histMod(genSimMod, recoMod, weightMod, lrWeightMod);
 
   // GenSim Invariant Mass Histogram
-  // InvariantMassHist genSimInvMassHist(genSimMod, recoMod, true, "GenSim Invariant Mass Pasted", 640, 100, 3300);
+  InvariantMassHist genSimInvMassHist(genSimMod, recoMod, true, "GenSim Invariant Mass Pasted", 29, 300, 3200);
   // Reco Invariant Mass Histogram
-  // InvariantMassHist recoInvMassHist(genSimMod, recoMod, false, "Reco Invariant Mass Pasted", 640, 100, 3300);
+  InvariantMassHist recoInvMassHist(genSimMod, recoMod, false, "Reco Invariant Mass Pasted", 29, 300, 3200);
   // GenSim pT Histogram
   PtHist genSimPtHist(genSimMod, recoMod, true, "GenSim Transverse Momentum Pasted", 54, 50, 1900);
   // Reco pT Histogram
   PtHist recoPtHist(genSimMod, recoMod, false, "Reco Transverse Momentum Pasted", 54, 50, 1900);
-  // MassResolutionHist massResHist(genSimMod, recoMod, "Mass Resolution Pasted", 100, 500, 3100);                // Mass resolution Histogram
 
-  // GenSim Invariant Mass Histogram
-  InvariantMassHist genSimInvMassHist(genSimMod, recoMod, true, "GenSim Invariant Mass Pasted", 29, 300, 3200);
-  // Reco Invariant Mass Histogram
-  InvariantMassHist recoInvMassHist(genSimMod, recoMod, false, "Reco Invariant Mass Pasted", 29, 300, 3200);
-
-  // GenSim Scaled Up Invariant Mass Histogram
-  ScaledMassHist genSimScaledUpHist(matchMod, "GenSim Weak Alignment Bias Scaled Up Hist", 29, 300, 3200, true, false, true);
-  // Reco Scaled Up Invariant Mass Histogram
-  ScaledMassHist recoScaledUpHist(matchMod, "Reco Weak Alignment Bias Scaled Up Hist", 29, 300, 3200, true, false, false);
-
-  // GenSim Scaled Down Invariant Mass Histogram
-  ScaledMassHist genSimScaledDownHist(matchMod, "GenSim Weak Alignment Bias Scaled Down Hist", 29, 300, 3200, false, false, true);
-  // Reco Scaled Down Invariant Mass Histogram
-  ScaledMassHist recoScaledDownHist(matchMod, "Reco Weak Alignment Bias Scaled Down Hist", 29, 300, 3200, false, false, false);
-
-  // GenSim Mu Scaled Up AntiMu Scaled Down Invariant Mass Histogram
-  ScaledMassHist genSimScaledUpDownHist(matchMod, "GenSim Weak Alignment Bias Mu Scaled Up AntiMu Scaled Down Hist", 29, 300, 3200, false, true, true);
-  // Reco Mu Scaled Up AntiMu Scaled Down Invariant Mass Histogram
-  ScaledMassHist recoScaledUpDownHist(matchMod, "Reco Weak Alignment Bias Mu Scaled Up AntiMu Scaled Down Hist", 29, 300, 3200, false, true, false);
-
-
-  // Add the filter modules to the five histograms created above
-  // genSimInvMassHist.addFilter(&massBinFilter);
-  // recoInvMassHist.addFilter(&massBinFilter);
-  // genSimPtHist.addFilter(&massBinFilter);
-  // recoPtHist.addFilter(&massBinFilter);
-
-  // Add the five histograms created above to histMod
-
-  histMod.addHistogram(&genSimInvMassHist);
-  histMod.addHistogram(&recoInvMassHist);
-  //histMod.addHistogram(&genSimPtHist);
-  //histMod.addHistogram(&recoPtHist);
-  //histMod.addHistogram(&massResHist);
-  histMod.addHistogram(&genSimScaledUpHist);
-  histMod.addHistogram(&recoScaledUpHist);
-  histMod.addHistogram(&genSimScaledDownHist);
-  histMod.addHistogram(&recoScaledDownHist);
-  histMod.addHistogram(&genSimScaledUpDownHist);
-  histMod.addHistogram(&recoScaledUpDownHist);
-
-  //Mass resolution Histogram
-  MassResolutionHist massResHist(genSimMod, recoMod, "Mass Resolution Pasted", 100, 500, 3100);
-  // N Leptons Histogram
-  NLeptonsHist nLeptonsHist(matchMod, "Number of Leptons", 10, 0 , 10);
-  //Lepton Efficiency output
-  LeptonEfficiency leptonEfficiency(matchMod, genSimMod);
   // GenSim All Lepton Invariant Mass Histogram
   AllLeptonInvariantMassHist allLeptonGenSimInvMassHist(genSimMod, recoMod, true, "GenSim All Lepton Invariant Mass Pasted", 640, 0, 2000);
   // Reco All Lepton Invariant Mass Histogram
@@ -148,6 +100,27 @@ int main(int argc, char** argv)
   OppositeSignInvariantMassHist oppSignGenSimInvMassHist(genSimMod, recoMod, true, "GenSim Opposite Sign Invariant Mass Pasted", 640, 0, 2000);
   // Reco Opposite Sign Invariant Mass Histogram
   OppositeSignInvariantMassHist oppSignRecoInvMassHist(genSimMod, recoMod, false, "Reco Opposite Sign Invariant Mass Pasted", 640, 0, 2000);
+  
+  // Mass resolution Histogram
+  MassResolutionHist massResHist(genSimMod, recoMod, "Mass Resolution Pasted", 100, 500, 3100);
+  
+  // N Leptons Histogram
+  NLeptonsHist nLeptonsHist(matchMod, "Number of Leptons", 10, 0 , 10);
+  // Lepton Efficiency output
+  LeptonEfficiency leptonEfficiency(matchMod, genSimMod);
+ 
+  // GenSim Scaled Up Invariant Mass Histogram
+  ScaledMassHist genSimScaledUpHist(matchMod, "GenSim Weak Alignment Bias Scaled Up Hist", 29, 300, 3200, true, false, true);
+  // Reco Scaled Up Invariant Mass Histogram
+  ScaledMassHist recoScaledUpHist(matchMod, "Reco Weak Alignment Bias Scaled Up Hist", 29, 300, 3200, true, false, false);
+  // GenSim Scaled Down Invariant Mass Histogram
+  ScaledMassHist genSimScaledDownHist(matchMod, "GenSim Weak Alignment Bias Scaled Down Hist", 29, 300, 3200, false, false, true);
+  // Reco Scaled Down Invariant Mass Histogram
+  ScaledMassHist recoScaledDownHist(matchMod, "Reco Weak Alignment Bias Scaled Down Hist", 29, 300, 3200, false, false, false);
+  // GenSim Mu Scaled Up AntiMu Scaled Down Invariant Mass Histogram
+  ScaledMassHist genSimScaledUpDownHist(matchMod, "GenSim Weak Alignment Bias Mu Scaled Up AntiMu Scaled Down Hist", 29, 300, 3200, false, true, true);
+  // Reco Mu Scaled Up AntiMu Scaled Down Invariant Mass Histogram
+  ScaledMassHist recoScaledUpDownHist(matchMod, "Reco Weak Alignment Bias Mu Scaled Up AntiMu Scaled Down Hist", 29, 300, 3200, false, true, false);
 
   // Add the filter modules to the histograms created above
   //genSimInvMassHist.addFilter(&massBinFilter);
@@ -156,9 +129,10 @@ int main(int argc, char** argv)
   //recoPtHist.addFilter(&massBinFilter);
 
   // Add the histograms created above to histMod
+  histMod.addHistogram(&genSimInvMassHist);
+  histMod.addHistogram(&recoInvMassHist);
   histMod.addHistogram(&genSimPtHist);
   histMod.addHistogram(&recoPtHist);
-  histMod.addHistogram(&nLeptonsHist);
   histMod.addHistogram(&allLeptonGenSimInvMassHist);
   histMod.addHistogram(&allLeptonRecoInvMassHist);
   histMod.addHistogram(&sameSignGenSimInvMassHist);
@@ -166,6 +140,15 @@ int main(int argc, char** argv)
   histMod.addHistogram(&oppSignGenSimInvMassHist);
   histMod.addHistogram(&oppSignRecoInvMassHist);
   //histMod.addHistogram(&massResHist);
+  //histMod.addHistogram(&nLeptonsHist);
+  //histMod.addHistogram(&leptonEfficiency);
+  //histMod.addHistogram(&genSimScaledUpHist);
+  //histMod.addHistogram(&recoScaledUpHist);
+  //histMod.addHistogram(&genSimScaledDownHist);
+  //histMod.addHistogram(&recoScaledDownHist);
+  //histMod.addHistogram(&genSimScaledUpDownHist);
+  //histMod.addHistogram(&recoScaledUpDownHist);
+
 
   analyzer.addProductionModule(&genSimMod);
   analyzer.addProductionModule(&recoMod);
@@ -179,6 +162,7 @@ int main(int argc, char** argv)
   //analyzer.addFilterModule(&barrelStateFilter);
   //analyzer.addFilterModule(&massBinFilter);
   analyzer.addFilterModule(&nLeptonsFilter);
+
   //analyzer.addAnalysisModule(&accMod);
   //analyzer.addAnalysisModule(&pTResMod);
   //analyzer.addAnalysisModule(&massResMod);
@@ -189,7 +173,7 @@ int main(int argc, char** argv)
 
   if (inputFile.empty())
     {
-      inputFile = "textfiles/HiggsPickFiles.txt";
+      inputFile = "textfiles/pickFiles.txt";
     }
 
   analyzer.run(inputFile, outputFile, outputEvery);
