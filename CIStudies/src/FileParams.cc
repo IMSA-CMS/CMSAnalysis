@@ -93,10 +93,10 @@ void Lambda::addMaps()
   vector<string> lambdaVals = {"1", "3", "3.5", "4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "10", "16", "22", "24", "28", "32", "34", "40", "100k", "200", "800"};//H++ after 100k
   addValuesToMap(lambdaVals);
 
-  vector<string> higgsMasses = {"M300"};
+  vector<string> higgsMasses = {"M200", "M300", "M800", "M1300"};
   addValuesToMap(higgsMasses);
 
-  vector<string> darkPhotonMasses = {"M1"};
+  vector<string> darkPhotonMasses = {"M0_1", "M0_2", "M0_3", "M0_4", "M0_5", "M0_7", "M0_9", "M1", "M1_2", "M1_5", "M2_0"};
   addValuesToMap(darkPhotonMasses);
 
   for (const auto& val : lambdaVals)
@@ -185,6 +185,7 @@ string FileParams::locateTextFile() const
     {
       lambdaString = "M" + getLambda();
     }
+
 
   // LR and RL files are the same
   if (helicityString == "RL")
