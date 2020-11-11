@@ -2,6 +2,6 @@ Procs:	LeptonJet
 Year:	2020
 Lepton:	both
 Mass:	300
-Lambda:	M1
+Lambda:	M0_1
 Inter:	con
 Helic:	SUSYPortal
