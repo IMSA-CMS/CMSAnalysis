@@ -48,6 +48,7 @@ bool RecoIdentificationModule::process(const edm::EventBase& event)
 	  //   }
 	}
     }
+
   //std::cerr << "EXITING RecoIdentificationModule" << std::endl;
   return true;
 }
