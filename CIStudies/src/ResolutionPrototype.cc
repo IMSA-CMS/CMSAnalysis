@@ -6,9 +6,16 @@
 
 ResolutionPrototype::ResolutionPrototype(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const std::string& iname, int iNBins, double iminimum, double imaximum) :
   HistogramPrototype(iname, iNBins, iminimum, imaximum), //initialize the base class
-  genSimMass(genSimModule.getGenParticles().getInvariantMass()),
-  recoMass(recoModule.getRecoCandidates().getInvariantMass())
+  genSim(genSimModule),
+  reco(recoModule)
 {
 }
 
-
+double ResolutionPrototype::value() const
+{
+  double genSimValue = getValue(genSim.getGenParticles());
+  //std::cerr << "genSimValue = " << genSimValue << std::endl;
+  double recoValue = getValue(reco.getRecoCandidates());
+  //std::cerr << "recoValue = " << recoValue << std::endl;
+  return ((recoValue - genSimValue)/genSimValue);
+}

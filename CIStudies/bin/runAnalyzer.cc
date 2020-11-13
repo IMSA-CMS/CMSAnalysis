@@ -24,8 +24,14 @@
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
 #include "CIAnalysis/CIStudies/interface/InvariantMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/PtHist.hh"
+#include "CIAnalysis/CIStudies/interface/AllLeptonInvariantMassHist.hh"
+#include "CIAnalysis/CIStudies/interface/SameSignInvariantMassHist.hh"
+#include "CIAnalysis/CIStudies/interface/OppositeSignInvariantMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/MassResolutionHist.hh"
 #include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
+#include "CIAnalysis/CIStudies/interface/ScaledMassHist.hh"
+#include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
+#include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
 
 int main(int argc, char** argv)
 {
@@ -45,7 +51,7 @@ int main(int argc, char** argv)
   std::string outputFile = parser.stringValue("output");
   if (outputFile.empty())
     {
-      outputFile = "muonResolution.root";
+      outputFile = "weakAlignBiasOutput.root";
     }
 
   std::cout << "This is the name of outputFile " << outputFile << std::endl;
@@ -55,7 +61,7 @@ int main(int argc, char** argv)
   Analyzer analyzer;
 
   GenSimIdentificationModule genSimMod;
-  RecoIdentificationModule recoMod;
+  RecoIdentificationModule recoMod(5);
   MatchingModule matchMod(genSimMod, recoMod);
   WeightingModule weightMod;
   LRWeightModule lrWeightMod;
@@ -101,8 +107,9 @@ int main(int argc, char** argv)
   analyzer.addProductionModule(&genSimMod);
   analyzer.addProductionModule(&recoMod);
   analyzer.addProductionModule(&matchMod);
-  analyzer.addProductionModule(&weightMod);
-  analyzer.addProductionModule(&lrWeightMod);
+  //analyzer.addProductionModule(&weightMod);
+  //analyzer.addProductionModule(&lrWeightMod);
+
   //analyzer.addFilterModule(&massFilter);
   //analyzer.addFilterModule(&csFilter);
   //analyzer.addFilterModule(&pileupFilter);
@@ -114,10 +121,11 @@ int main(int argc, char** argv)
   //analyzer.addAnalysisModule(&afbMod);
   //analyzer.addAnalysisModule(&unmatchedMod);
   analyzer.addAnalysisModule(&histMod);
+  //analyzer.addAnalysisModule(&leptonEfficiency);
 
   if (inputFile.empty())
     {
-      inputFile = "textfiles/pickFiles.txt";
+      inputFile = "textfiles/HiggsPickFiles.txt";
     }
 
   analyzer.run(inputFile, outputFile, outputEvery);
