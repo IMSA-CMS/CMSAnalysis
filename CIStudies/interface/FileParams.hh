@@ -20,6 +20,8 @@ public:
   static std::string Diboson() {return "Diboson";}
   static std::string top() {return "top";}
   static std::string QCD() {return "QCD";}
+  static std::string Higgs() {return "Higgs";}
+  static std::string LeptonJet() {return "LeptonJet";}
 
 protected:
   virtual void addMaps() override;

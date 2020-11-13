@@ -38,6 +38,20 @@ double ParticleCollection::getLeadingTransverseMomentum() const
     }
 }
 
+double ParticleCollection::calculateLeadingTransverseMomentum(Particle particle1, Particle particle2) const
+{
+  double pt1 = particle1.pt();
+  double pt2 = particle2.pt();
+  if (pt1 > pt2)
+    {
+      return pt1;
+    }
+  else
+    {
+      return pt2;
+    }
+}
+
 double ParticleCollection::getCollinsSoper() const
 {
   auto particlePair = chooseParticles();
@@ -103,11 +117,19 @@ bool ParticleCollection::isBE() const
 
 PartPair ParticleCollection::chooseParticles() const
 {
+  auto particlePair = chooseParticles(true); // opposite signs
   
+  if (!(particlePair.first.isNotNull() && particlePair.second.isNotNull()))  // If the particle pair is empty, then test same signs
+  {
+    particlePair = chooseParticles(false);
+  }
 
+  return particlePair;
+}
+
+PartPair ParticleCollection::chooseParticles(bool oppositeSigns) const
+{
   double maxInvariantMass = 0;
-  bool oppositeSigns = false;
-
   Particle iPointer(nullptr, Particle::LeptonType::None);
   Particle jPointer(nullptr, Particle::LeptonType::None);
 
@@ -115,18 +137,7 @@ PartPair ParticleCollection::chooseParticles() const
     {
       for (int j = i + 1; j < static_cast<int>(particles.size()); ++j)
 	{
-	  if (checkSigns(particles[i], particles[j]))
-	    {
-	      oppositeSigns = true;
-	      if (calculateInvariantMass(particles[i], particles[j]) > maxInvariantMass)
-		{
-		  maxInvariantMass = calculateInvariantMass(particles[i], particles[j]);
-		  iPointer = particles[i];
-		  jPointer = particles[j];
-		}
-	    }
-
-	  else if (!oppositeSigns)
+	  if (checkSigns(particles[i], particles[j]) == oppositeSigns)     // Check if the particle pairs' signs match with what we want
 	    {
 	      if (calculateInvariantMass(particles[i], particles[j]) > maxInvariantMass)
 		{
@@ -135,9 +146,8 @@ PartPair ParticleCollection::chooseParticles() const
 		  jPointer = particles[j];
 		}
 	    }
-	}
+         }
     }
-
   
   return {iPointer, jPointer};
 }
@@ -155,31 +165,67 @@ bool ParticleCollection::checkSigns(Particle particle1, Particle particle2) cons
 
 double ParticleCollection::calculateInvariantMass(Particle particle1, Particle particle2) const
 {
-  double product = 2 * particle1.pt() * particle2.pt(); 
-  double diff = cosh(particle1.eta() - particle2.eta()) - cos(particle1.phi() - particle2.phi()); 
-  double invariantMass = product * diff; 
-  if (invariantMass > 0)
-    {
-      return sqrt(invariantMass);
+  auto vec1 = particle1.fourVector();
+  auto vec2 = particle2.fourVector();
+
+  auto sum = vec1 + vec2;
+
+  // std::cout << sum.M() << '\n';
+
+  return sum.M();
+
+  //double product = 2 * particle1.pt() * particle2.pt(); 
+  //double diff = std::cosh(particle1.eta() - particle2.eta()) - std::cos(particle1.phi() - particle2.phi()); 
+  //double invariantMass = product * diff; 
+  //if (invariantMass > 0)
+  //  {
+  //    return std::sqrt(invariantMass);
+  //  }
+  //else
+  //  {
+  //    return 0; 
+  //  }
+}
+
+double ParticleCollection::calculateSameSignInvariantMass() const
+{
+  auto particlePair = chooseParticles(false);					// we want same sign particles with highest invariant mass
+  if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
+    {      
+      return calculateInvariantMass(particlePair.first, particlePair.second);
     }
   else
-    {
-      return 0; 
+    {     
+      return -1;
     }
 }
 
-double ParticleCollection::calculateLeadingTransverseMomentum(Particle particle1, Particle particle2) const
+double ParticleCollection::calculateOppositeSignInvariantMass() const
 {
-  double pt1 = particle1.pt();
-  double pt2 = particle2.pt();
-  if (pt1 > pt2)
-    {
-      return pt1;
+  auto particlePair = chooseParticles(true);					// we want opposite sign particles with highest invariant mass
+  if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
+    {      
+      return calculateInvariantMass(particlePair.first, particlePair.second);
     }
   else
-    {
-      return pt2;
+    {     
+      return -1;
     }
+}
+
+double ParticleCollection::calculateAllLeptonInvariantMass() const
+{
+  reco::Candidate::LorentzVector total;
+
+  for (auto particle : particles)
+  {
+    auto newVec = particle.fourVector();
+    total += newVec;
+  }
+
+  // std::cout << total.M() << '\n';
+
+  return total.M();
 }
 
 double ParticleCollection::calculateCollinsSoper(Particle particle, Particle antiparticle) const

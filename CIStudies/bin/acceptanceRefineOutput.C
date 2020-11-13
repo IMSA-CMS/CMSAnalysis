@@ -41,7 +41,7 @@ void acceptanceRefineOutput()// electronMuonOverlayer()
 {
 	std::cerr << "donut" << endl;        
 	int numberOfHists = 28;//Number of Bins
-  	string const inputFileName = "electron.root";  //old: "electron_16TeV_AccMig_MassRes.root"
+  	string const inputFileName = "genOutput.root";//"electron.root";  //old: "electron_16TeV_AccMig_MassRes.root"
   	string const inputFileName2 = "genOutput.root"; // old: "muon_16TeV_AccMig_MassRes.root"
   	string const canvasOutputName = "Muon_Electron_16TeV_Overlayed.root";
   
@@ -98,7 +98,7 @@ void acceptanceRefineOutput()// electronMuonOverlayer()
 
 	std::cerr << "crepe" << endl;
 
-        string elH = std::to_string(xMin) + "-" + std::to_string(xMax) + accH;
+        string elH = std::to_string(xMin) + "-" + std::to_string(xMax) + "GenSim Invariant Mass Pasted";
 
         inputFileTwo->GetObject(elH.c_str(), elecHists[i]);
 	inputFileTwo->GetObject(accH.c_str(), acceptanceFile2);

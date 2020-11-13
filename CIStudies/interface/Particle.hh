@@ -15,6 +15,7 @@ public:
   double phi() const;
   double et() const;
   double energy() const;
+  reco::Candidate::LorentzVector fourVector() const;
   int pdgId() const;
   int status() const;
   Particle mother() const;

@@ -24,23 +24,32 @@ bool GenSimIdentificationModule::process(const edm::EventBase& event)
 
   int targetCode = particle == "Electron" ? electronCode : muonCode;
 
+  //std::cerr << "particle = " << particle << std::endl;
+  //std::cerr << "targetCode = " << targetCode << std::endl;
+
   //Begin GEN looping
   //Loop through Particle list&
   for (const auto& p : *genParticlesHandle)
     {
-      if (particle == "Both" && (std::abs(p.pdgId()) == electronCode || std::abs(p.pdgId()) == muonCode))
+      //std::cerr << "genSim particle type = " << std::abs(p.pdgId()) << std::endl;
+      //std::cerr << "electronCode = " << electronCode << std::endl;
+      //std::cerr << "muonCode = " << muonCode << std::endl;
+      if (particle == "Muon" && (std::abs(p.pdgId()) == electronCode || std::abs(p.pdgId()) == muonCode))
 	{
 	  if (std::abs(p.pdgId()) == electronCode)
 	  {
 	    genParticles.addParticle(Particle(&p, Particle::LeptonType::Electron));
+	    //std::cerr << "added election" << std::endl;
 	  }
 	  else if (std::abs(p.pdgId()) == muonCode)
 	  {
 	    genParticles.addParticle(Particle(&p, Particle::LeptonType::Muon));
+	    //std::cerr << "added muon" << std::endl;
 	  }
 	  else
 	  {
 	    genParticles.addParticle(Particle(&p, Particle::LeptonType::None));
+	    //std::cerr << "added particle that's not election or muon" << std::endl;
 	  }
 	}
       //Check for (anti)muon or (anti)electron
@@ -49,19 +58,22 @@ bool GenSimIdentificationModule::process(const edm::EventBase& event)
 	  if (targetCode == electronCode)
 	  {
 	    genParticles.addParticle(Particle(&p, Particle::LeptonType::Electron));
+	    //std::cerr << "added election" << std::endl;
 	  }
 	  else if (targetCode == muonCode)
 	  {
 	    genParticles.addParticle(Particle(&p, Particle::LeptonType::Muon));
+	    //std::cerr << "added muon" << std::endl;
 	  }
 	  else
 	  {
 	    genParticles.addParticle(Particle(&p, Particle::LeptonType::None));
+	    //std::cerr << "added particle that's not election or muon" << std::endl;
 	  }
 	  
-	  //std::cout << genParticles.size() << std::endl;
 	}
     }
+  //std::cerr << "number of leptons = " << genParticles.getNumParticles() << std::endl;
   //std::cerr << "EXITING GenSimIdentificationModule" << std::endl;
  return true;
 }
@@ -72,8 +84,10 @@ bool GenSimIdentificationModule::isParticle(Particle p) const
   const int maxQuarkCode = 6;
   const int maxLeptonCode = 13; // More than this is not a practical particle
 
-  if (p.status() != finalStateParticleStatusCode || p.mother().status() == finalStateParticleStatusCode || p.pt() < ptCut)
-    return false;
+  if (p.status() != finalStateParticleStatusCode || p.mother().status() == finalStateParticleStatusCode)
+  {  
+    return false; 
+  }
 
   Particle nu = p.mother();
   int motherId = nu.pdgId();

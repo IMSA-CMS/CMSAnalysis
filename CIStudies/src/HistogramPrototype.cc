@@ -14,6 +14,7 @@ bool HistogramPrototype::shouldDraw(const edm::EventBase& event) const
       return false; // Return false if any filterString is empty
     }
   }
+
   return true;
 }
 
