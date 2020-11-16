@@ -61,7 +61,7 @@ int main(int argc, char** argv)
 
   Analyzer analyzer;
 
-  GenSimIdentificationModule genSimMod;
+  GenSimIdentificationModule genSimMod(9900041);
   RecoIdentificationModule recoMod(5);
   MatchingModule matchMod(genSimMod, recoMod);
   WeightingModule weightMod;

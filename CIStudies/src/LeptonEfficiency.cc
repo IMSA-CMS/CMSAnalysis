@@ -15,25 +15,25 @@ bool LeptonEfficiency::process(const edm::EventBase& event)
 {
   auto genSim = genSimModule.getGenParticles();
 
-  std::cout << "Looking at GenSim Particles" << std::endl;
+  //std::cout << "Looking at GenSim Particles" << std::endl;
   for(const auto &particle : genSim.getParticles())
     {
       auto type = particle.getLeptonType();
       if(type == Particle::LeptonType::Electron)
 	{
 	  genSimElectrons++;
-	  std::cout << "Electron" << std::endl;
+	  //std::cout << "Electron" << std::endl;
 	}
       else if(type == Particle::LeptonType::Muon)
 	{
 	  genSimMuons++;
-	  std::cout << "Muon" << std::endl;
+	  //std::cout << "Muon" << std::endl;
 	}
     }
 
   const MatchingPairCollection& matched = matchModule.getMatchingBestPairs();
 
-  std::cout << "Looking at Reco Particles" << std::endl;
+  //std::cout << "Looking at Reco Particles" << std::endl;
   for(const auto &particle : matched.getRecoParticles().getParticles())
     {
       if(particle.isNotNull())
@@ -43,12 +43,12 @@ bool LeptonEfficiency::process(const edm::EventBase& event)
 	  if(type == Particle::LeptonType::Electron)
 	    {
 	      recoElectrons++;
-	      std::cout << "Reco Electron" << std::endl;
+	      //std::cout << "Reco Electron" << std::endl;
 	    }
 	  else if(type == Particle::LeptonType::Muon)
 	    {
 	      recoMuons++;
-	      std::cout << "Reco Muon" << std::endl;
+	      //std::cout << "Reco Muon" << std::endl;
 	    }
 	}
       else
