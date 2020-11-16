@@ -89,17 +89,17 @@ int main(int argc, char** argv)
   PtHist recoPtHist(genSimMod, recoMod, false, "Reco Transverse Momentum Pasted", 54, 50, 1900);
 
   // GenSim All Lepton Invariant Mass Histogram
-  AllLeptonInvariantMassHist allLeptonGenSimInvMassHist(genSimMod, recoMod, true, "GenSim All Lepton Invariant Mass Pasted", 640, 0, 2000);
+  AllLeptonInvariantMassHist allLeptonGenSimInvMassHist(genSimMod, recoMod, true, "GenSim All Lepton Invariant Mass Pasted", 100, 0, 2000);
   // Reco All Lepton Invariant Mass Histogram
-  AllLeptonInvariantMassHist allLeptonRecoInvMassHist(genSimMod, recoMod, false, "Reco All Lepton Invariant Mass Pasted", 640, 0, 2000);
+  AllLeptonInvariantMassHist allLeptonRecoInvMassHist(genSimMod, recoMod, false, "Reco All Lepton Invariant Mass Pasted", 100, 0, 2000);
   // GenSim Same Sign Invariant Mass Histogram
-  SameSignInvariantMassHist sameSignGenSimInvMassHist(genSimMod, recoMod, true, "GenSim Same Sign Invariant Mass Pasted", 640, 0, 2000);
+  SameSignInvariantMassHist sameSignGenSimInvMassHist(genSimMod, recoMod, true, "GenSim Same Sign Invariant Mass Pasted", 100, 0, 2000);
   // Reco Same Sign Invariant Mass Histogram
-  SameSignInvariantMassHist sameSignRecoInvMassHist(genSimMod, recoMod, false, "Reco Same Sign Invariant Mass Pasted", 640, 0, 2000);
+  SameSignInvariantMassHist sameSignRecoInvMassHist(genSimMod, recoMod, false, "Reco Same Sign Invariant Mass Pasted", 100, 0, 2000);
   // GenSim Opposite Sign Invariant Mass Histogram
-  OppositeSignInvariantMassHist oppSignGenSimInvMassHist(genSimMod, recoMod, true, "GenSim Opposite Sign Invariant Mass Pasted", 640, 0, 2000);
+  OppositeSignInvariantMassHist oppSignGenSimInvMassHist(genSimMod, recoMod, true, "GenSim Opposite Sign Invariant Mass Pasted", 100, 0, 2000);
   // Reco Opposite Sign Invariant Mass Histogram
-  OppositeSignInvariantMassHist oppSignRecoInvMassHist(genSimMod, recoMod, false, "Reco Opposite Sign Invariant Mass Pasted", 640, 0, 2000);
+  OppositeSignInvariantMassHist oppSignRecoInvMassHist(genSimMod, recoMod, false, "Reco Opposite Sign Invariant Mass Pasted", 100, 0, 2000);
   
   // Mass resolution Histogram
   MassResolutionHist massResHist(genSimMod, recoMod, "Mass Resolution Pasted", 100, 500, 3100);
