@@ -1,4 +1,4 @@
-//#include "CIAnalysis/CIStudies/interface/MassRecoEfficiency.hh"
+#include "CIAnalysis/CIStudies/interface/MassRecoEfficiency.hh"
 #include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 
 MassRecoEfficiency::MassRecoEfficiency(const RecoIdentificationModule& iRecoModule, double iHiggsMass, double iWidth):
