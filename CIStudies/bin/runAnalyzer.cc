@@ -33,6 +33,7 @@
 #include "CIAnalysis/CIStudies/interface/ScaledMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
+#include "CIAnalysis/CIStudies/interface/MassRecoEfficiency.hh"
 
 int main(int argc, char** argv)
 {
@@ -62,7 +63,7 @@ int main(int argc, char** argv)
   Analyzer analyzer;
 
   GenSimIdentificationModule genSimMod(9900041);
-  RecoIdentificationModule recoMod(5);
+  RecoIdentificationModule recoMod(50);
   MatchingModule matchMod(genSimMod, recoMod);
   WeightingModule weightMod;
   LRWeightModule lrWeightMod;
@@ -78,6 +79,8 @@ int main(int argc, char** argv)
   AFBModule afbMod(genSimMod, recoMod, weightMod, lrWeightMod);
   UnmatchedParticleModule unmatchedMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
   HistogramOutputModule histMod(genSimMod, recoMod, weightMod, lrWeightMod);
+  LeptonEfficiency leptonEfficiency(matchMod, genSimMod);
+  MassRecoEfficiency massRecoEfficiency(recoMod, 200, 5);
 
   // GenSim Invariant Mass Histogram
   InvariantMassHist genSimInvMassHist(genSimMod, recoMod, true, "GenSim Invariant Mass Pasted", 29, 300, 3200);
@@ -106,8 +109,6 @@ int main(int argc, char** argv)
   
   // N Leptons Histogram
   NLeptonsHist nLeptonsHist(matchMod, "Number of Leptons", 10, 0 , 10);
-  // Lepton Efficiency output
-  LeptonEfficiency leptonEfficiency(matchMod, genSimMod);
  
   // GenSim Scaled Up Invariant Mass Histogram
   ScaledMassHist genSimScaledUpHist(matchMod, "GenSim Weak Alignment Bias Scaled Up Hist", 29, 300, 3200, true, false, true);
@@ -161,7 +162,7 @@ int main(int argc, char** argv)
   //analyzer.addFilterModule(&pileupFilter);
   //analyzer.addFilterModule(&barrelStateFilter);
   //analyzer.addFilterModule(&massBinFilter);
-  analyzer.addFilterModule(&nLeptonsFilter);
+  //analyzer.addFilterModule(&nLeptonsFilter);
 
   //analyzer.addAnalysisModule(&accMod);
   //analyzer.addAnalysisModule(&pTResMod);
@@ -170,6 +171,7 @@ int main(int argc, char** argv)
   //analyzer.addAnalysisModule(&unmatchedMod);
   analyzer.addAnalysisModule(&histMod);
   analyzer.addAnalysisModule(&leptonEfficiency);
+  analyzer.addAnalysisModule(&massRecoEfficiency);
 
   if (inputFile.empty())
     {

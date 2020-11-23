@@ -18,6 +18,8 @@ private:
   double width;     // Checks HiggsMass +/- width
   int passCount;
   int totalCount;
+  std::unordered_map<int, int> nLeptonPassCount;
+  std::unordered_map<int, int> nLeptonTotalCount;
 };
 
 #endif
