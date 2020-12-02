@@ -20,19 +20,19 @@ bool MassRecoEfficiency::process(const edm::EventBase& event)
   double min = HiggsMass - width;
   double max = HiggsMass + width;
 
-  // If there isn't an element in the unordered map with the key that is equal to the # of leptons make it
+  // If there isn't an element in the map with the key that is equal to the # of leptons make it
   if (nLeptonPassCount.find(size) == nLeptonTotalCount.end())
   {
     nLeptonPassCount.insert({size, 0});
   }
   
-  // Same thing here, but with the other unordered map
+  // Same thing here, but with the other leptons map
   if (nLeptonTotalCount.find(size) == nLeptonTotalCount.end())
   {
     nLeptonTotalCount.insert({size, 0});
   }
 
-  // Same thing with the other two
+  // Same thing with the muon maps
   if (muonsNLeptonPassCount.find(size) == muonsNLeptonPassCount.end())
   {
     muonsNLeptonPassCount.insert({size, {{nMuons, 0}}});
