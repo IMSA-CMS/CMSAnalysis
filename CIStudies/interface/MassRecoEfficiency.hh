@@ -18,8 +18,10 @@ private:
   double width;     // Checks HiggsMass +/- width
   int passCount;
   int totalCount;
-  std::unordered_map<int, int> nLeptonPassCount;
-  std::unordered_map<int, int> nLeptonTotalCount;
+  std::map<int, int> nLeptonPassCount;
+  std::map<int, int> nLeptonTotalCount;
+  std::map<int, std::map<int, int>> muonsNLeptonPassCount;   // NLeptons keys to <NMuons, count> 
+  std::map<int, std::map<int, int>> muonsNLeptonTotalCount;
 };
 
 #endif
