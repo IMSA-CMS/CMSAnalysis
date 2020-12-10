@@ -38,6 +38,35 @@ double ParticleCollection::getLeadingTransverseMomentum() const
     }
 }
 
+double ParticleCollection::getLeadingPt() const
+{
+  double highestPt = 0;
+  for (auto particle : particles)
+  {
+    double pt = particle.pt();
+    if (pt > highestPt)
+    {
+      pt = highestPt;
+    }
+  }
+
+  return highestPt;
+}
+
+Particle ParticleCollection::getLeadingPtLepton() const
+{
+  double highestPt = getLeadingPt();
+  for (auto part : particles)
+  {
+    if (part.pt() == highestPt)
+    {
+      return part;
+    }
+  }
+   
+  throw std::runtime_error("No leading pT lepton!");
+}
+
 double ParticleCollection::calculateLeadingTransverseMomentum(Particle particle1, Particle particle2) const
 {
   double pt1 = particle1.pt();

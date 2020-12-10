@@ -32,6 +32,8 @@
 #include "CIAnalysis/CIStudies/interface/ScaledMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
+#include "CIAnalysis/CIStudies/interface/LeptonJetReconstructionModule.hh"
+#include "CIAnalysis/CIStudies/interface/NLeptonJetHist.hh"
 
 int main(int argc, char** argv)
 {
@@ -75,6 +77,7 @@ int main(int argc, char** argv)
   MassResolutionModule massResMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
   AFBModule afbMod(genSimMod, recoMod, weightMod, lrWeightMod);
   UnmatchedParticleModule unmatchedMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
+  LeptonJetReconstructionModule lepRecoMod(recoMod);
   HistogramOutputModule histMod(genSimMod, recoMod, weightMod, lrWeightMod);
 
   // GenSim Invariant Mass Histogram
@@ -134,6 +137,8 @@ int main(int argc, char** argv)
   MassResolutionHist massResHist(genSimMod, recoMod, "Mass Resolution Pasted", 100, 500, 3100);
   // N Leptons Histogram
   NLeptonsHist nLeptonsHist(matchMod, "Number of Leptons", 10, 0 , 10);
+  // N Lepton Jet Histogram
+  NLeptonJetHist nLeptonJetHist(lepRecoMod, "Number of Lepton Jets", 10, 0, 10); // Would these be the right parameters?
   //Lepton Efficiency output
   LeptonEfficiency leptonEfficiency(matchMod, genSimMod);
   // GenSim All Lepton Invariant Mass Histogram
@@ -159,6 +164,7 @@ int main(int argc, char** argv)
   // histMod.addHistogram(&genSimPtHist);
   histMod.addHistogram(&recoPtHist);
   histMod.addHistogram(&nLeptonsHist);
+  histMod.addHistogram(&nLeptonJetHist);
   histMod.addHistogram(&allLeptonGenSimInvMassHist);
   histMod.addHistogram(&allLeptonRecoInvMassHist);
   histMod.addHistogram(&sameSignGenSimInvMassHist);
@@ -172,6 +178,7 @@ int main(int argc, char** argv)
   analyzer.addProductionModule(&matchMod);
   //analyzer.addProductionModule(&weightMod);
   //analyzer.addProductionModule(&lrWeightMod);
+  analyzer.addProductionModule(&lepRecoMod);
 
   //analyzer.addFilterModule(&massFilter);
   //analyzer.addFilterModule(&csFilter);
