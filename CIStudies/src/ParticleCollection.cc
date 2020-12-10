@@ -144,6 +144,20 @@ bool ParticleCollection::isBE() const
   return false;
 }
 
+int ParticleCollection::getLeptonTypeCount(Particle::LeptonType leptonType) const  // Finds the number of a certain lepton type (electrons/muons)
+{
+  int count = 0;
+  for (auto particle : particles)
+  {
+    if (particle.getLeptonType() == leptonType)
+    {
+      ++count;
+    }
+  }
+
+  return count;
+}
+
 PartPair ParticleCollection::chooseParticles() const
 {
   auto particlePair = chooseParticles(true); // opposite signs

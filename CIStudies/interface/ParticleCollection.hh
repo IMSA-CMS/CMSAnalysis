@@ -31,6 +31,8 @@ public:
   double calculateOppositeSignInvariantMass() const;
 
   Particle getLeadingPtLepton() const;
+  int getLeptonTypeCount(Particle::LeptonType leptonType) const;
+
 
   void clear() {particles.clear();}
 
