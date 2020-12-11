@@ -1,6 +1,8 @@
 #ifndef RESOLUTIONPROTOTYPE_HH
 #define RESOLUTIONPROTOTYPE_HH
 
+#include <memory>
+
 //#include "HistogramPrototype.hh"
 #include "CIAnalysis/CIStudies/interface/HistogramPrototype.hh"
 
@@ -11,7 +13,7 @@ class ParticleCollection;
 class ResolutionPrototype : public HistogramPrototype
 {
   public:
-    ResolutionPrototype(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const std::string& iname, int iNBins, double iminimum, double imaximum);
+    ResolutionPrototype(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, const std::string& iname, int iNBins, double iminimum, double imaximum);
     double value() const override;
     virtual ~ResolutionPrototype() {} //empty virtual destructor
 
@@ -19,8 +21,8 @@ class ResolutionPrototype : public HistogramPrototype
     virtual double getValue(const ParticleCollection& partColl) const = 0; //pure virtual
 
   private:
-    const GenSimIdentificationModule& genSim;
-    const RecoIdentificationModule& reco;
+    const std::shared_ptr<GenSimIdentificationModule> genSim;
+    const std::shared_ptr<RecoIdentificationModule> reco;
 };
 
 #endif

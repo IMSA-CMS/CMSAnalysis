@@ -5,6 +5,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <memory>
 
 #include "FileParams.hh"
 
@@ -19,15 +20,15 @@ class Analyzer
 public:
   // Add a production module, which is guaranteed to run before any analysis or filter
   // module (in the order added)
-  void addProductionModule(ProductionModule* module) 
+  void addProductionModule(std::shared_ptr<ProductionModule> module) 
   {productionModules.push_back(module);}
   // Add a filter module, which runs after production modules and before analysis
   // modules (in the order added)
-  void addFilterModule(FilterModule* module)
+  void addFilterModule(std::shared_ptr<FilterModule> module)
   {filterModules.push_back(module);}
   // Add an analysis module, which runs after all production and filter modules and
   // produces output (duplicated if filter modules cause multiple paths)
-  void addAnalysisModule(AnalysisModule* module) 
+  void addAnalysisModule(std::shared_ptr<AnalysisModule> module) 
   {analysisModules.push_back(module);}
 
   // Run the analysis for a given configuration file, a Root output file,
@@ -36,9 +37,9 @@ public:
 	   int outputEvery = 0);
 
 private:
-  std::vector<ProductionModule*> productionModules;
-  std::vector<FilterModule*> filterModules;
-  std::vector<AnalysisModule*> analysisModules;
+  std::vector<std::shared_ptr<ProductionModule>> productionModules;
+  std::vector<std::shared_ptr<FilterModule>> filterModules;
+  std::vector<std::shared_ptr<AnalysisModule>> analysisModules;
 
   // Parse one line of the the configuration file
   std::vector<std::string> parseLine(std::ifstream& txtFile) const;
@@ -46,7 +47,7 @@ private:
   std::vector<FileParams> inputFiles(const std::string& txtFile) const;
   // Simple utility function allowing an operation to be performed on all
   // moduels, regardless of type
-  std::vector<Module*> getAllModules() const;
+  std::vector<std::shared_ptr<Module>> getAllModules() const;
 };
 
 #endif
