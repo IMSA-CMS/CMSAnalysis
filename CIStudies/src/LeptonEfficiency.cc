@@ -34,7 +34,8 @@ bool LeptonEfficiency::process(const edm::EventBase& event)
   const MatchingPairCollection& matched = matchModule.getMatchingBestPairs();
 
   // std::cout << "Looking at Reco Particles" << std::endl;
-  for(const auto &particle : matched.getRecoParticles().getParticles())
+  auto particles = matched.getRecoParticles().getParticles();
+  for(const auto &particle : particles)
     {
       if(particle.isNotNull())
 	{
