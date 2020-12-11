@@ -21,6 +21,7 @@ public:
 
   double getInvariantMass() const;
   double getLeadingTransverseMomentum() const;
+  double getLeadingPt() const;
   double getCollinsSoper() const; 
   bool isBB() const;
   bool isBE() const;
@@ -28,6 +29,10 @@ public:
   double calculateAllLeptonInvariantMass() const;
   double calculateSameSignInvariantMass() const;
   double calculateOppositeSignInvariantMass() const;
+
+  Particle getLeadingPtLepton() const;
+  int getLeptonTypeCount(Particle::LeptonType leptonType) const;
+
 
   void clear() {particles.clear();}
 
