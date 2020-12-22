@@ -9,7 +9,8 @@
 
 GenSimIdentificationModule::GenSimIdentificationModule(int itargetPdgId):
   targetPdgId(itargetPdgId)
-{}
+{
+}
 
 bool GenSimIdentificationModule::process(const edm::EventBase& event)
 {
