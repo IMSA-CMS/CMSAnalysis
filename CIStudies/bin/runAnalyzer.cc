@@ -80,7 +80,11 @@ int main(int argc, char** argv)
   UnmatchedParticleModule unmatchedMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
   HistogramOutputModule histMod(genSimMod, recoMod, weightMod, lrWeightMod);
   LeptonEfficiency leptonEfficiency(matchMod, genSimMod);
-  MassRecoEfficiency massRecoEfficiency(recoMod, 200, 5);
+  MassRecoEfficiency massRecoEfficiency200(recoMod, 200, 10);
+  MassRecoEfficiency massRecoEfficiency500(recoMod, 500, 25);
+  MassRecoEfficiency massRecoEfficiency800(recoMod, 800, 40);
+  MassRecoEfficiency massRecoEfficiency1000(recoMod, 1000, 50);
+  MassRecoEfficiency massRecoEfficiency1300(recoMod, 1300, 65);
 
   // GenSim Invariant Mass Histogram
   InvariantMassHist genSimInvMassHist(genSimMod, recoMod, true, "GenSim Invariant Mass Pasted", 29, 300, 3200);
@@ -108,7 +112,9 @@ int main(int argc, char** argv)
   MassResolutionHist massResHist(genSimMod, recoMod, "Mass Resolution Pasted", 100, 500, 3100);
   
   // N Leptons Histogram
-  NLeptonsHist nLeptonsHist(matchMod, "Number of Leptons", 10, 0 , 10);
+  NLeptonsHist nLeptonsHist(matchMod, "Matched Leptons", 10, 0 , 10);
+  NLeptonsHist nElectronsHist(matchMod, "Matched Electrons", 10, 0 , 10, 11);
+  NLeptonsHist nMuonsHist(matchMod, "Matched Muons", 10, 0 , 10, 13);
  
   // GenSim Scaled Up Invariant Mass Histogram
   ScaledMassHist genSimScaledUpHist(matchMod, "GenSim Weak Alignment Bias Scaled Up Hist", 29, 300, 3200, true, false, true);
@@ -130,19 +136,20 @@ int main(int argc, char** argv)
   //recoPtHist.addFilter(&massBinFilter);
 
   // Add the histograms created above to histMod
-  histMod.addHistogram(&genSimInvMassHist);
-  histMod.addHistogram(&recoInvMassHist);
-  histMod.addHistogram(&genSimPtHist);
-  histMod.addHistogram(&recoPtHist);
-  histMod.addHistogram(&allLeptonGenSimInvMassHist);
-  histMod.addHistogram(&allLeptonRecoInvMassHist);
-  histMod.addHistogram(&sameSignGenSimInvMassHist);
-  histMod.addHistogram(&sameSignRecoInvMassHist);
-  histMod.addHistogram(&oppSignGenSimInvMassHist);
-  histMod.addHistogram(&oppSignRecoInvMassHist);
+  //histMod.addHistogram(&genSimInvMassHist);
+  //histMod.addHistogram(&recoInvMassHist);
+  //histMod.addHistogram(&genSimPtHist);
+  //histMod.addHistogram(&recoPtHist);
+  //histMod.addHistogram(&allLeptonGenSimInvMassHist);
+  //histMod.addHistogram(&allLeptonRecoInvMassHist);
+  //histMod.addHistogram(&sameSignGenSimInvMassHist);
+  //histMod.addHistogram(&sameSignRecoInvMassHist);
+  //histMod.addHistogram(&oppSignGenSimInvMassHist);
+  //histMod.addHistogram(&oppSignRecoInvMassHist);
   //histMod.addHistogram(&massResHist);
-  //histMod.addHistogram(&nLeptonsHist);
-  //histMod.addHistogram(&leptonEfficiency);
+  histMod.addHistogram(&nLeptonsHist);
+  histMod.addHistogram(&nMuonsHist);
+  histMod.addHistogram(&nElectronsHist);
   //histMod.addHistogram(&genSimScaledUpHist);
   //histMod.addHistogram(&recoScaledUpHist);
   //histMod.addHistogram(&genSimScaledDownHist);
@@ -171,7 +178,11 @@ int main(int argc, char** argv)
   //analyzer.addAnalysisModule(&unmatchedMod);
   analyzer.addAnalysisModule(&histMod);
   analyzer.addAnalysisModule(&leptonEfficiency);
-  analyzer.addAnalysisModule(&massRecoEfficiency);
+  analyzer.addAnalysisModule(&massRecoEfficiency200);
+  analyzer.addAnalysisModule(&massRecoEfficiency500);
+  analyzer.addAnalysisModule(&massRecoEfficiency800);
+  analyzer.addAnalysisModule(&massRecoEfficiency1000);
+  analyzer.addAnalysisModule(&massRecoEfficiency1300);
 
   if (inputFile.empty())
     {
