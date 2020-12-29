@@ -11,15 +11,15 @@ class WeightingModule;
 class AFBModule : public HistogramOutputModule
 {
 public:
-  AFBModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const LRWeightModule& lrWeightModule, int minMass = 300, int maxMass = 3200, int massInterval = 100);
+  AFBModule(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule, int minMass = 300, int maxMass = 3200, int massInterval = 100);
 
   virtual void initialize() override;
   virtual bool process(const edm::EventBase& event) override;
   virtual void finalize() override;
 
 private:
-  const GenSimIdentificationModule& genSim;
-  const RecoIdentificationModule& reco;
+  const std::shared_ptr<GenSimIdentificationModule> genSim;
+  const std::shared_ptr<RecoIdentificationModule> reco;
   int minMassCut;
   int maxMassCut;
   int interval;

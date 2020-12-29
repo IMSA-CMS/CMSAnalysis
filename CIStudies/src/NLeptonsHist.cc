@@ -1,7 +1,7 @@
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 #include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
 
-NLeptonsHist::NLeptonsHist(const MatchingModule& imatchModule, const std::string& iname, int iNBins, double iminimum, double imaximum, int itargetPdgId):
+NLeptonsHist::NLeptonsHist(const std::shared_ptr<MatchingModule> imatchModule, const std::string& iname, int iNBins, double iminimum, double imaximum, int itargetPdgId):
   HistogramPrototype(iname, iNBins, iminimum, imaximum),
   matchModule(imatchModule),
   targetPdgId(itargetPdgId)
@@ -10,7 +10,7 @@ NLeptonsHist::NLeptonsHist(const MatchingModule& imatchModule, const std::string
 
 double NLeptonsHist::value() const
 {
-  const MatchingPairCollection& pairs = matchModule.getMatchingBestPairs();
+  const MatchingPairCollection& pairs = matchModule->getMatchingBestPairs();
   std::cout << "TargetParticle: " << targetPdgId << " Number of Matched Particles: " << pairs.getSize() << "\n";
 
   if(targetPdgId == 0)

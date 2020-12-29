@@ -9,13 +9,13 @@ class GenSimIdentificationModule;
 class LeptonEfficiency : public AnalysisModule
 {
 public:
-  LeptonEfficiency(const MatchingModule& imatchModule, const GenSimIdentificationModule& igenSimModule);
+  LeptonEfficiency(const std::shared_ptr<MatchingModule> imatchModule, const std::shared_ptr<GenSimIdentificationModule> igenSimModule);
   bool process(const edm::EventBase& event) override;
   void finalize() override;
   void writeAll() override {}
 private:
-  const MatchingModule& matchModule;
-  const GenSimIdentificationModule& genSimModule;
+  const std::shared_ptr<MatchingModule> matchModule;
+  const std::shared_ptr<GenSimIdentificationModule> genSimModule;
   int recoMuons, genSimMuons, recoElectrons, genSimElectrons;
 };
 

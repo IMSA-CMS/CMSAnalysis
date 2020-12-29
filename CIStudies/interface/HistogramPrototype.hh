@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 namespace edm
 {
@@ -33,7 +34,7 @@ public:
 	bool shouldDraw(const edm::EventBase& event) const; // Bool switch to determine if a histogram is to be filled
 	std::string getFilteredName() const {return (getFilterString() + getName());}
 
-	void addFilter(FilterModule* filterMod) {filters.push_back(filterMod);} // Adds a FilterModule& to filters (the vector)
+	void addFilter(std::shared_ptr<FilterModule> filterMod) {filters.push_back(filterMod);} // Adds a FilterModule& to filters (the vector)
 
 	std::string getFilterString() const;
 
@@ -42,7 +43,7 @@ private:
 	int nBins;
 	double minimum;
 	double maximum;
-	std::vector<FilterModule*> filters; // Vector of FilterModule&'s
+	std::vector<std::shared_ptr<FilterModule>> filters; // Vector of FilterModule&'s
 };
 
 #endif
