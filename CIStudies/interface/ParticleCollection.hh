@@ -29,6 +29,8 @@ public:
   double calculateSameSignInvariantMass() const;
   double calculateOppositeSignInvariantMass() const;
 
+  int getLeptonTypeCount(Particle::LeptonType leptonType) const;
+
   void clear() {particles.clear();}
 
 private:
