@@ -63,7 +63,7 @@ int main(int argc, char** argv)
   Analyzer analyzer;
 
   GenSimIdentificationModule genSimMod(9900041);
-  RecoIdentificationModule recoMod(50);
+  RecoIdentificationModule recoMod(5);
   MatchingModule matchMod(genSimMod, recoMod);
   WeightingModule weightMod;
   LRWeightModule lrWeightMod;
@@ -80,7 +80,7 @@ int main(int argc, char** argv)
   UnmatchedParticleModule unmatchedMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
   HistogramOutputModule histMod(genSimMod, recoMod, weightMod, lrWeightMod);
   LeptonEfficiency leptonEfficiency(matchMod, genSimMod);
-  MassRecoEfficiency massRecoEfficiency(recoMod, 200, 5);
+  MassRecoEfficiency massRecoEfficiency(recoMod, 800, 40);
 
   // GenSim Invariant Mass Histogram
   InvariantMassHist genSimInvMassHist(genSimMod, recoMod, true, "GenSim Invariant Mass Pasted", 29, 300, 3200);
@@ -170,7 +170,7 @@ int main(int argc, char** argv)
   //analyzer.addAnalysisModule(&afbMod);
   //analyzer.addAnalysisModule(&unmatchedMod);
   analyzer.addAnalysisModule(&histMod);
-  analyzer.addAnalysisModule(&leptonEfficiency);
+  //analyzer.addAnalysisModule(&leptonEfficiency);
   analyzer.addAnalysisModule(&massRecoEfficiency);
 
   if (inputFile.empty())
