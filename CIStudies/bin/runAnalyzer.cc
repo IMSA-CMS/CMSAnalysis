@@ -62,8 +62,8 @@ int main(int argc, char** argv)
 
   Analyzer analyzer;
 
-  GenSimIdentificationModule genSimMod(9900041);
-  RecoIdentificationModule recoMod(50);
+  GenSimIdentificationModule genSimMod(0);
+  RecoIdentificationModule recoMod(5);
   MatchingModule matchMod(genSimMod, recoMod);
   WeightingModule weightMod;
   LRWeightModule lrWeightMod;
@@ -141,7 +141,7 @@ int main(int argc, char** argv)
   histMod.addHistogram(&oppSignGenSimInvMassHist);
   histMod.addHistogram(&oppSignRecoInvMassHist);
   //histMod.addHistogram(&massResHist);
-  //histMod.addHistogram(&nLeptonsHist);
+  histMod.addHistogram(&nLeptonsHist);
   //histMod.addHistogram(&leptonEfficiency);
   //histMod.addHistogram(&genSimScaledUpHist);
   //histMod.addHistogram(&recoScaledUpHist);
@@ -171,7 +171,7 @@ int main(int argc, char** argv)
   //analyzer.addAnalysisModule(&unmatchedMod);
   analyzer.addAnalysisModule(&histMod);
   analyzer.addAnalysisModule(&leptonEfficiency);
-  analyzer.addAnalysisModule(&massRecoEfficiency);
+  //analyzer.addAnalysisModule(&massRecoEfficiency);
 
   if (inputFile.empty())
     {
