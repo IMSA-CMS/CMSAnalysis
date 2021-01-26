@@ -1,6 +1,7 @@
 #ifndef BARRELSTATEFILTER_HH
 #define BARRELSTATEFILTER_HH
 
+#include <memory>
 #include "FilterModule.hh"
 
 class MatchingModule;
@@ -8,13 +9,13 @@ class MatchingModule;
 class BarrelStateFilter : public FilterModule
 {
 public:
-  BarrelStateFilter(const MatchingModule& matchingModule);
+  BarrelStateFilter(const std::shared_ptr<MatchingModule> matchingModule);
 
 protected:
   virtual std::string makeFilterString(const edm::EventBase& event) override;
 
 private:
-  const MatchingModule& matchMod;
+  const std::shared_ptr<MatchingModule> matchMod;
 };
 
 #endif

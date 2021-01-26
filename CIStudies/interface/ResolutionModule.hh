@@ -4,6 +4,7 @@
 #include "HistogramOutputModule.hh"
 #include <TGraphErrors.h>
 #include <vector>
+#include <memory>
 
 class GenSimIdentificationModule;
 class RecoIdentificationModule;
@@ -14,7 +15,7 @@ class MatchingPairCollection;
 class ResolutionModule : public HistogramOutputModule
 {
 public:
-  ResolutionModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const LRWeightModule& lrWeightModule, const MatchingModule& matchingModule, std::string bin, int min, int max, int intervalSize);
+  ResolutionModule(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule, const std::shared_ptr<MatchingModule> matchingModule, std::string bin, int min, int max, int intervalSize);
   virtual bool process(const edm::EventBase& event) override;
   virtual void initialize() override;
   virtual void finalize() override;
@@ -24,7 +25,7 @@ protected:
   std::string pickBin(double value) const;
 
 private:
-  const MatchingModule& matching;
+  const std::shared_ptr<MatchingModule> matching;
   const std::string binType;
   const int minCut;
   const int maxCut;

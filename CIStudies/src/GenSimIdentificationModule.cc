@@ -9,7 +9,8 @@
 
 GenSimIdentificationModule::GenSimIdentificationModule(int itargetPdgId):
   targetPdgId(itargetPdgId)
-{}
+{
+}
 
 bool GenSimIdentificationModule::process(const edm::EventBase& event)
 {
@@ -28,10 +29,16 @@ bool GenSimIdentificationModule::process(const edm::EventBase& event)
 
   int targetCode = particle == "Electron" ? electronCode : muonCode;
 
+  //std::cerr << "particle = " << particle << std::endl;
+  //std::cerr << "targetCode = " << targetCode << std::endl;
+
   //Begin GEN looping
   //Loop through Particle list&
   for (const auto& p : *genParticlesHandle)
     {
+      //std::cerr << "genSim particle type = " << std::abs(p.pdgId()) << std::endl;
+      //std::cerr << "electronCode = " << electronCode << std::endl;
+      //std::cerr << "muonCode = " << muonCode << std::endl;
       if(p.status() == 1 && isParticle(Particle(&p, Particle::LeptonType::None)))
 	{
 	  if (particle == "Both" && (std::abs(p.pdgId()) == electronCode || std::abs(p.pdgId()) == muonCode))
@@ -68,6 +75,7 @@ bool GenSimIdentificationModule::process(const edm::EventBase& event)
 	}
       //std::cout << "Number of particles: " << genParticles.getNumParticles() << std::endl;
     }
+  //std::cerr << "number of leptons = " << genParticles.getNumParticles() << std::endl;
   //std::cerr << "EXITING GenSimIdentificationModule" << std::endl;
  return true;
 }
