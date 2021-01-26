@@ -13,7 +13,7 @@
 
 #include "TH1.h"
 
-HistogramOutputModule::HistogramOutputModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const LRWeightModule& lrWeightModule) :
+HistogramOutputModule::HistogramOutputModule(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule) :
   genSim(genSimModule),
   reco(recoModule),
   weighting(weightingModule),
@@ -75,10 +75,7 @@ void HistogramOutputModule::addMassBinObject(std::string name, std::string massb
   }
   else
   {
-    // auto massBinVec = massBinMap[name];
-    // massBinVec.push_back(massbin);        // Add the mass bin string to the vector
-    // std::cout << "Adding Mass Bin: " << massbin << "\n";
-    massBinMap[name].push_back(massbin);
+    massBinMap[name].push_back(massbin);    // Add the mass bin string to the vector
   }
 }
 
@@ -88,7 +85,7 @@ void HistogramOutputModule::makeHistogram(const std::string& name, const std::st
   addObject(name, newHist);
 }
 
-void HistogramOutputModule::makeHistogram(HistogramPrototype* h)
+void HistogramOutputModule::makeHistogram(std::shared_ptr<HistogramPrototype> h)
 {
   const std::string& name = h->getFilteredName();
   // std::cout << "makeHistogram Name: " << name << '\n';
@@ -158,17 +155,21 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
   std::string massBin = getFileParams().getMassRange();
   std::string helicity = getFileParams().getHelicity();
 
+  //std::cerr << "plot contrivance" << std::endl;
+
   double eventWeight = 1.00;
   if (helicity == "LR")
     {
-      eventWeight = lrWeighting.getLRWeight();
+      eventWeight = lrWeighting->getLRWeight();
     }
   if (helicity == "RL")
     {
-      eventWeight = lrWeighting.getRLWeight();
+      eventWeight = lrWeighting->getRLWeight();
     }
 
-  for (HistogramPrototype* hist : histograms)
+  //std::cerr << "MS paint drawing" << std::endl;
+
+  for (auto hist : histograms)
   {
     bool draw = hist->shouldDraw(event); // call the shouldDraw function so we can call process on the FilterModules
     // std::cout << "shouldDraw returns: " << draw << '\n';
@@ -176,7 +177,7 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
     // If the mass bin is a new mass bin, then make the histograms for that mass bin
     if (isNewMassBin(massBin))
       {
-        auto weight = weighting.getWeight();
+        auto weight = weighting->getWeight();
         auto fileKey = getFileParams().getFileKey();
     
         massBins[massBin] = weight;
@@ -187,6 +188,8 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
     //    makeHistogram(hist->getFilteredName() + massBin, hist->getFilteredName() + massBin, hist->getNBins(), hist->getMinimum(), hist->getMaximum());
     //    addMassBinObject(hist->getFilteredName(), massBin);
         }
+
+    //std::cerr << "Shrek reference" << std::endl;
 
     // If the histogram with mass bin doesn't exist, make it
     if (baseObjects.find(hist->getFilteredName() + massBin) == baseObjects.end())
@@ -199,6 +202,8 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
         addMassBinObject(hist->getFilteredName(), massBin);
       }
 
+    //std::cerr << "2012 apocalypse" << std::endl;
+
     // If the histogram without mass bin doesn't exist, make it
     if (baseObjects.find(hist->getFilteredName()) == baseObjects.end())
       {
@@ -210,16 +215,26 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
       }
 
     // Fill the histogram if the filter string isn't empty
-    // if (hist->getName() != hist->getFilteredName()) // If the filter string is empty, then the name and the filtered name should be the same
+    if (hist->getName() != hist->getFilteredName()) // If the filter string is empty, then the name and the filtered name should be the same
+      {
+         //std::cout << "Name: " << hist->getName() << '\n';
+         //std::cout << "FilteredName: " << hist->getFilteredName() << '\n';
+         //std::cout << "Mass Bin: " << massBin << '\n';
+         //std::cout << "Histogram missing and made: " << hist->getFilteredName() << '\n';
+        makeHistogram(hist->getFilteredName(), hist->getFilteredName(), hist->getNBins(), hist->getMinimum(), hist->getMaximum()); 
+      }
+
+    //std::cerr << "value = " << hist->value() << std::endl;
 
     // Fill the histogram if shouldDraw(event) (draw) returns true
+    //std::cerr << "dunkin donuts" << std::endl;
     if (draw)
       {
         // std::cout << "Histogram Filled: " << hist->getFilteredName() + massBin << '\n' << "Value: " << hist->value() << '\n';
         fillHistogram(hist->getFilteredName() + massBin, hist->value(), eventWeight);
       }
   }
-
+  //std::cerr << "kumon: math, reading, success" << std::endl;
   return true;
 }
 

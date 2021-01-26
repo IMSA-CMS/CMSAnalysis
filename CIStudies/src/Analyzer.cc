@@ -228,9 +228,9 @@ std::vector<FileParams> Analyzer::inputFiles(const std::string& txtFile) const
   return params;
 }
 
-std::vector<Module*> Analyzer::getAllModules() const
+std::vector<std::shared_ptr<Module>> Analyzer::getAllModules() const
 {
-  std::vector<Module*> modules;
+  std::vector<std::shared_ptr<Module>> modules;
   for (auto mod : productionModules)
     {
       modules.push_back(mod);
