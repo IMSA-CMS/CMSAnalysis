@@ -5,7 +5,7 @@
 #include "DataFormats/FWLite/interface/Event.h"
 #include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 
-MassBinFilter::MassBinFilter(const MatchingModule& matchingModule, double iminimum, double imaximum, int iNBins) :
+MassBinFilter::MassBinFilter(const std::shared_ptr<MatchingModule> matchingModule, double iminimum, double imaximum, int iNBins) :
   matching(matchingModule),
   minimum(iminimum),
   maximum(imaximum),
@@ -15,7 +15,7 @@ MassBinFilter::MassBinFilter(const MatchingModule& matchingModule, double iminim
 
 std::string MassBinFilter::makeFilterString(const edm::EventBase& event)
 {
-  auto bestPairs = matching.getMatchingBestPairs();   // Get the matching pairs
+  auto bestPairs = matching->getMatchingBestPairs();   // Get the matching pairs
 
   if (bestPairs.getSize() < 2)  // If the pairs don't match
     {
