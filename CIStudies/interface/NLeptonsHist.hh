@@ -8,11 +8,12 @@ class MatchingModule;
 class NLeptonsHist : public HistogramPrototype
 {
   public:
-  NLeptonsHist(const MatchingModule& imatchModule, const std::string& iname, int iNBins, double iminimum, double imaximum);
+  NLeptonsHist(const std::shared_ptr<MatchingModule> imatchModule, const std::string& iname, int iNBins, double iminimum, double imaximum, int itargetPdgId = 0);
   double value() const override;
 
   private:
-  const MatchingModule& matchModule;
+  const std::shared_ptr<MatchingModule> matchModule;
+  int targetPdgId;
 };
 
 #endif

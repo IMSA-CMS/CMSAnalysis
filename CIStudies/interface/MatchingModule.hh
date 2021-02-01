@@ -18,14 +18,14 @@
 class MatchingModule : public ProductionModule
 {
 public:
-  MatchingModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, double deltaRCut = 0.1);
+  MatchingModule(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, double deltaRCut = 0.1);
   virtual bool process(const edm::EventBase& event) override;
 
   const MatchingPairCollection& getMatchingBestPairs() const {return matchingBestPairs;} 
 
 private:
-  const GenSimIdentificationModule& genSim;
-  const RecoIdentificationModule& reco;
+  const std::shared_ptr<GenSimIdentificationModule> genSim;
+  const std::shared_ptr<RecoIdentificationModule> reco;
 
   // matching fails if the deltaR between the gen sim/reco pair
   // does not lie under the deltaRCutoff

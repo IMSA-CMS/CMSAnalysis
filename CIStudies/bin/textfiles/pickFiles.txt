@@ -1,7 +1,7 @@
-Procs:	H++
-Year:	2020
-Lepton:	both
-Mass:	200
-Lambda:	200
+Procs:	CI
+Year:	2016
+Lepton:	Muon
+Mass:	M300	M800	M1300	M2000
+Lambda:	16
 Inter:	con
 Helic:	LL
