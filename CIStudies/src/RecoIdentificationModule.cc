@@ -54,11 +54,11 @@ bool RecoIdentificationModule::process(const edm::EventBase& event)
   return true;
 }
 
-ParticleCollection getRecoCandidates(Particle::LeptonType leptonType) const
+ParticleCollection RecoIdentificationModule::getRecoCandidates(Particle::LeptonType leptonType) const
 {
   ParticleCollection filteredCollection;
 
-  for (const auto& particle : recoCandidates)
+  for (const auto& particle : recoCandidates.getParticles())
   {
     if (particle.getLeptonType() == leptonType)
     {
