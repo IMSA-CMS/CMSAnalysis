@@ -3,7 +3,7 @@
 #include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 
 SingleMuonTrigger::SingleMuonTrigger(std::shared_ptr<RecoIdentificationModule> iRecoMod, double iPTCutoff) :
-  Trigger(iRecoMod),
+  Trigger("Single Muon Trigger", iRecoMod),
   pTCutoff(iPTCutoff)
 {
 }
@@ -11,15 +11,16 @@ SingleMuonTrigger::SingleMuonTrigger(std::shared_ptr<RecoIdentificationModule> i
 bool SingleMuonTrigger::checkTrigger(std::shared_ptr<RecoIdentificationModule> recoMod)
 {
   auto particles = recoMod->getRecoCandidates(Particle::LeptonType::Muon);
-  double pT = particles.getLeadingTransverseMomentum();
 
-  if (pT >= pTCutoff)  // The particle passes the trigger
-  {
-    return true;
-  }
-
-  else
+  // If there aren't enough muons, then automatically fail the trigger
+  if (particles.getNumParticles() < 1)
   {
     return false;
   }
+
+  double pT = particles.getLeadingTransverseMomentum();
+
+
+ 
+  return (pT >= pTCutoff);  // The particle passes the trigger if the transverse momentum is greater than the cutoff
 }
