@@ -33,7 +33,6 @@ public:
   Particle getLeadingPtLepton() const;
   int getLeptonTypeCount(Particle::LeptonType leptonType) const;
 
-
   void clear() {particles.clear();}
 
 private:
