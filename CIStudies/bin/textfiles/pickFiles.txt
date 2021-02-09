@@ -1,6 +1,6 @@
 Procs:	CI
 Year:	2016
-Lepton:	Muon
+Lepton:	E
 Mass:	M300	M800	M1300	M2000
 Lambda:	16
 Inter:	con
