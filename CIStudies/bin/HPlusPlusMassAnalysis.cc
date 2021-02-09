@@ -4,210 +4,70 @@
 #include "TSystem.h"
 
 #include "CIAnalysis/CIStudies/interface/Analyzer.hh"
-#include "FWCore/FWLite/interface/FWLiteEnabler.h"
-#include "PhysicsTools/FWLite/interface/CommandLineParser.h"
 
 #include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
-#include "CIAnalysis/CIStudies/interface/MassFilter.hh"
-#include "CIAnalysis/CIStudies/interface/CollinsSoperFilter.hh"
-#include "CIAnalysis/CIStudies/interface/PileupFilter.hh"
-#include "CIAnalysis/CIStudies/interface/BarrelStateFilter.hh"
-#include "CIAnalysis/CIStudies/interface/MassBinFilter.hh"
+#include "CIAnalysis/CIStudies/interface/TriggerModule.hh"
 #include "CIAnalysis/CIStudies/interface/NLeptonsFilter.hh"
-#include "CIAnalysis/CIStudies/interface/AcceptanceModule.hh"
-#include "CIAnalysis/CIStudies/interface/ResolutionModule.hh"
-#include "CIAnalysis/CIStudies/interface/PtResolutionModule.hh"
-#include "CIAnalysis/CIStudies/interface/MassResolutionModule.hh"
-#include "CIAnalysis/CIStudies/interface/AFBModule.hh"
-#include "CIAnalysis/CIStudies/interface/UnmatchedParticleModule.hh"
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
-#include "CIAnalysis/CIStudies/interface/InvariantMassHist.hh"
-#include "CIAnalysis/CIStudies/interface/PtHist.hh"
-#include "CIAnalysis/CIStudies/interface/AllLeptonInvariantMassHist.hh"
-#include "CIAnalysis/CIStudies/interface/SameSignInvariantMassHist.hh"
-#include "CIAnalysis/CIStudies/interface/OppositeSignInvariantMassHist.hh"
-#include "CIAnalysis/CIStudies/interface/MassResolutionHist.hh"
 #include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
-#include "CIAnalysis/CIStudies/interface/ScaledMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
+#include "CIAnalysis/CIStudies/interface/MassRecoEfficiency.hh"
+#include "CIAnalysis/CIStudies/interface/SingleMuonTrigger.hh"
+#include "CIAnalysis/CIStudies/interface/DoubleMuonTrigger.hh"
 
-int main(int argc, char** argv)
+
+Analyzer hPlusPlusMassAnalysis()
 {
-  gROOT->SetBatch(true);
-  gSystem->Load("libFWCoreFWLite");
-  FWLiteEnabler::enable();
-  gSystem->Load("libDataFormatsFWLite");
-
-  optutl::CommandLineParser parser ("Analyze FWLite Histograms");
-  parser.addOption("pileup", optutl::CommandLineParser::kString, "PileupLevel", "");
-  parser.addOption("output", optutl::CommandLineParser::kString, "Particle", "");
-  parser.addOption("input", optutl::CommandLineParser::kString, "Input", "");
-  parser.parseArguments (argc, argv);
-
-  std::string pileupLev = parser.stringValue("pileup");
-  std::string inputFile = parser.stringValue("input");
-  std::string outputFile = parser.stringValue("output");
-  if (outputFile.empty())
-    {
-      outputFile = "testHiggs.root";
-    }
-
-  std::cout << "This is the name of outputFile " << outputFile << std::endl;
-
-  unsigned outputEvery = parser.integerValue("outputEvery");
-
   Analyzer analyzer;
 
-  GenSimIdentificationModule genSimMod(9900041);
-  RecoIdentificationModule recoMod(5);
-  MatchingModule matchMod(genSimMod, recoMod);
-  WeightingModule weightMod;
-  LRWeightModule lrWeightMod;
-  MassFilter massFilter(genSimMod, 2000);
-  CollinsSoperFilter csFilter(genSimMod, .975);
-  PileupFilter pileupFilter(15, 35);
-  BarrelStateFilter barrelStateFilter(matchMod);
-  MassBinFilter massBinFilter(matchMod, 300, 3100, 28);
-  NLeptonsFilter nLeptonsFilter(matchMod);
-  AcceptanceModule accMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
-  PtResolutionModule pTResMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
-  MassResolutionModule massResMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
-  AFBModule afbMod(genSimMod, recoMod, weightMod, lrWeightMod);
-  UnmatchedParticleModule unmatchedMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
-  HistogramOutputModule histMod(genSimMod, recoMod, weightMod, lrWeightMod);
+  auto genSimMod = make_shared<GenSimIdentificationModule>(9900041);
+  auto recoMod = make_shared<RecoIdentificationModule>(50);
+  auto matchMod = make_shared<MatchingModule>(genSimMod, recoMod);
+  auto triggerMod = make_shared<TriggerModule>(recoMod);
+  auto weightMod = make_shared<WeightingModule>();
+  auto lrWeightMod = make_shared<LRWeightModule>();
 
-  // GenSim Invariant Mass Histogram
-<<<<<<< HEAD
-  //InvariantMassHist genSimInvMassHist(genSimMod, recoMod, true, "GenSim Invariant Mass Pasted", 640, 100, 3300);
-  // Reco Invariant Mass Histogram
-  //InvariantMassHist recoInvMassHist(genSimMod, recoMod, false, "Reco Invariant Mass Pasted", 640, 100, 3300);
-  // GenSim pT Histogram
-  //PtHist genSimPtHist(genSimMod, recoMod, true, "GenSim Transverse Momentum Pasted", 54, 50, 1900);
-  // Reco pT Histogram
-  //PtHist recoPtHist(genSimMod, recoMod, false, "Reco Transverse Momentum Pasted", 54, 50, 1900);
-  MassResolutionHist massResHist(genSimMod, recoMod, "Mass Resolution Pasted", 100, -1, 1);                 // Mass resolution Histogram
+  auto nLeptonsFilter = make_shared<NLeptonsFilter>(matchMod); //Needs to be updated with shared pointers
   
+  auto histMod = make_shared<HistogramOutputModule>(genSimMod, recoMod, weightMod, lrWeightMod);
+  auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
+  auto nElectronsHist = make_shared<NLeptonsHist>(matchMod, "Matched Electrons", 10, 0, 10, 11);
+  auto nMuonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
 
-  // Add the filter modules to the five histograms created above
-=======
-  InvariantMassHist genSimInvMassHist(genSimMod, recoMod, true, "GenSim Invariant Mass Pasted", 29, 300, 3200);
-  // Reco Invariant Mass Histogram
-  InvariantMassHist recoInvMassHist(genSimMod, recoMod, false, "Reco Invariant Mass Pasted", 29, 300, 3200);
-  // GenSim pT Histogram
-  PtHist genSimPtHist(genSimMod, recoMod, true, "GenSim Transverse Momentum Pasted", 54, 50, 1900);
-  // Reco pT Histogram
-  PtHist recoPtHist(genSimMod, recoMod, false, "Reco Transverse Momentum Pasted", 54, 50, 1900);
+  auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod, genSimMod);
+  auto massRecoEfficiency200 = make_shared<MassRecoEfficiency>(recoMod, 200, 10);
+  auto massRecoEfficiency500 = make_shared<MassRecoEfficiency>(recoMod, 500, 25);
+  auto massRecoEfficiency800 = make_shared<MassRecoEfficiency>(recoMod, 800, 40);
+  auto massRecoEfficiency1000 = make_shared<MassRecoEfficiency>(recoMod, 1000, 50);
+  auto massRecoEfficiency1300 = make_shared<MassRecoEfficiency>(recoMod, 1300, 65);
 
-  // GenSim All Lepton Invariant Mass Histogram
-  AllLeptonInvariantMassHist allLeptonGenSimInvMassHist(genSimMod, recoMod, true, "GenSim All Lepton Invariant Mass Pasted", 640, 0, 2000);
-  // Reco All Lepton Invariant Mass Histogram
-  AllLeptonInvariantMassHist allLeptonRecoInvMassHist(genSimMod, recoMod, false, "Reco All Lepton Invariant Mass Pasted", 640, 0, 2000);
-  // GenSim Same Sign Invariant Mass Histogram
-  SameSignInvariantMassHist sameSignGenSimInvMassHist(genSimMod, recoMod, true, "GenSim Same Sign Invariant Mass Pasted", 640, 0, 2000);
-  // Reco Same Sign Invariant Mass Histogram
-  SameSignInvariantMassHist sameSignRecoInvMassHist(genSimMod, recoMod, false, "Reco Same Sign Invariant Mass Pasted", 640, 0, 2000);
-  // GenSim Opposite Sign Invariant Mass Histogram
-  OppositeSignInvariantMassHist oppSignGenSimInvMassHist(genSimMod, recoMod, true, "GenSim Opposite Sign Invariant Mass Pasted", 640, 0, 2000);
-  // Reco Opposite Sign Invariant Mass Histogram
-  OppositeSignInvariantMassHist oppSignRecoInvMassHist(genSimMod, recoMod, false, "Reco Opposite Sign Invariant Mass Pasted", 640, 0, 2000);
+  // Add the histogram(s) created above to histMod
+  histMod->addHistogram(nLeptonsHist);
+  histMod->addHistogram(nElectronsHist);
+  histMod->addHistogram(nMuonsHist);
+
+  // Initialize triggers
+  auto singleMuonTrigger = make_shared<SingleMuonTrigger>(recoMod, 50);
+  auto doubleMuonTrigger = make_shared<DoubleMuonTrigger>(recoMod, 37, 27);
+
+  // Add triggers to the TriggerModule
+  triggerMod->addTrigger(singleMuonTrigger);
+  triggerMod->addTrigger(doubleMuonTrigger);
+
+  analyzer.addProductionModule(genSimMod);
+  analyzer.addProductionModule(recoMod);
+  analyzer.addProductionModule(matchMod);
+  analyzer.addProductionModule(triggerMod);
+
+  //analyzer.addAnalysisModule(leptonEfficiency);
+  //analyzer.addAnalysisModule(massRecoEfficiency200);
+  //analyzer.addAnalysisModule(massRecoEfficiency500);
+  //analyzer.addAnalysisModule(massRecoEfficiency800);
+  //analyzer.addAnalysisModule(massRecoEfficiency1000);
+  //analyzer.addAnalysisModule(massRecoEfficiency1300);
   
-  // Mass resolution Histogram
-  MassResolutionHist massResHist(genSimMod, recoMod, "Mass Resolution Pasted", 100, 500, 3100);
-  
-  // N Leptons Histogram
-  NLeptonsHist nLeptonsHist(matchMod, "Number of Leptons", 10, 0 , 10);
-  // Lepton Efficiency output
-  LeptonEfficiency leptonEfficiency(matchMod, genSimMod);
- 
-  // GenSim Scaled Up Invariant Mass Histogram
-  ScaledMassHist genSimScaledUpHist(matchMod, "GenSim Weak Alignment Bias Scaled Up Hist", 29, 300, 3200, true, false, true);
-  // Reco Scaled Up Invariant Mass Histogram
-  ScaledMassHist recoScaledUpHist(matchMod, "Reco Weak Alignment Bias Scaled Up Hist", 29, 300, 3200, true, false, false);
-  // GenSim Scaled Down Invariant Mass Histogram
-  ScaledMassHist genSimScaledDownHist(matchMod, "GenSim Weak Alignment Bias Scaled Down Hist", 29, 300, 3200, false, false, true);
-  // Reco Scaled Down Invariant Mass Histogram
-  ScaledMassHist recoScaledDownHist(matchMod, "Reco Weak Alignment Bias Scaled Down Hist", 29, 300, 3200, false, false, false);
-  // GenSim Mu Scaled Up AntiMu Scaled Down Invariant Mass Histogram
-  ScaledMassHist genSimScaledUpDownHist(matchMod, "GenSim Weak Alignment Bias Mu Scaled Up AntiMu Scaled Down Hist", 29, 300, 3200, false, true, true);
-  // Reco Mu Scaled Up AntiMu Scaled Down Invariant Mass Histogram
-  ScaledMassHist recoScaledUpDownHist(matchMod, "Reco Weak Alignment Bias Mu Scaled Up AntiMu Scaled Down Hist", 29, 300, 3200, false, true, false);
-
-  // Add the filter modules to the histograms created above
->>>>>>> 5b32d15f52341030918af98a5cce93d747fcaa40
-  //genSimInvMassHist.addFilter(&massBinFilter);
-  //recoInvMassHist.addFilter(&massBinFilter);
-  //genSimPtHist.addFilter(&massBinFilter);
-  //recoPtHist.addFilter(&massBinFilter);
-  massResHist.addFilter(&massBinFilter);
-  massResHist.addFilter(&barrelStateFilter);
-
-<<<<<<< HEAD
-  // Add the five histograms created above to histMod
-
-  //histMod.addHistogram(&genSimInvMassHist);
-  //histMod.addHistogram(&recoInvMassHist);
-  //histMod.addHistogram(&genSimPtHist);
-  //histMod.addHistogram(&recoPtHist);
-  histMod.addHistogram(&massResHist);
-=======
-  // Add the histograms created above to histMod
-  histMod.addHistogram(&genSimInvMassHist);
-  histMod.addHistogram(&recoInvMassHist);
-  histMod.addHistogram(&genSimPtHist);
-  histMod.addHistogram(&recoPtHist);
-  histMod.addHistogram(&allLeptonGenSimInvMassHist);
-  histMod.addHistogram(&allLeptonRecoInvMassHist);
-  histMod.addHistogram(&sameSignGenSimInvMassHist);
-  histMod.addHistogram(&sameSignRecoInvMassHist);
-  histMod.addHistogram(&oppSignGenSimInvMassHist);
-  histMod.addHistogram(&oppSignRecoInvMassHist);
-  //histMod.addHistogram(&massResHist);
-  //histMod.addHistogram(&nLeptonsHist);
-  //histMod.addHistogram(&leptonEfficiency);
-  //histMod.addHistogram(&genSimScaledUpHist);
-  //histMod.addHistogram(&recoScaledUpHist);
-  //histMod.addHistogram(&genSimScaledDownHist);
-  //histMod.addHistogram(&recoScaledDownHist);
-  //histMod.addHistogram(&genSimScaledUpDownHist);
-  //histMod.addHistogram(&recoScaledUpDownHist);
-
->>>>>>> 5b32d15f52341030918af98a5cce93d747fcaa40
-
-  analyzer.addProductionModule(&genSimMod);
-  analyzer.addProductionModule(&recoMod);
-  analyzer.addProductionModule(&matchMod);
-  //analyzer.addProductionModule(&weightMod);
-  //analyzer.addProductionModule(&lrWeightMod);
-
-  //analyzer.addFilterModule(&massFilter);
-  //analyzer.addFilterModule(&csFilter);
-  //analyzer.addFilterModule(&pileupFilter);
-<<<<<<< HEAD
-  analyzer.addFilterModule(&barrelStateFilter);
-  analyzer.addFilterModule(&massBinFilter);
-=======
-  //analyzer.addFilterModule(&barrelStateFilter);
-  //analyzer.addFilterModule(&massBinFilter);
-  analyzer.addFilterModule(&nLeptonsFilter);
-
->>>>>>> 5b32d15f52341030918af98a5cce93d747fcaa40
-  //analyzer.addAnalysisModule(&accMod);
-  //analyzer.addAnalysisModule(&pTResMod);
-  analyzer.addAnalysisModule(&massResMod);
-  //analyzer.addAnalysisModule(&afbMod);
-  //analyzer.addAnalysisModule(&unmatchedMod);
-  analyzer.addAnalysisModule(&histMod);
-  //analyzer.addAnalysisModule(&leptonEfficiency);
-
-  if (inputFile.empty())
-    {
-      inputFile = "textfiles/pickFiles.txt";
-    }
-
-  analyzer.run(inputFile, outputFile, outputEvery);
-  
-  return 0;
+  return analyzer;
 }

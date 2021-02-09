@@ -1,7 +1,7 @@
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
 
-LeptonEfficiency::LeptonEfficiency(const MatchingModule& imatchModule, const GenSimIdentificationModule& igenSimModule):
+LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<MatchingModule> imatchModule, const std::shared_ptr<GenSimIdentificationModule> igenSimModule):
   matchModule(imatchModule)
   ,genSimModule(igenSimModule)
   ,recoMuons(0)
@@ -13,7 +13,7 @@ LeptonEfficiency::LeptonEfficiency(const MatchingModule& imatchModule, const Gen
 
 bool LeptonEfficiency::process(const edm::EventBase& event)
 {
-  auto genSim = genSimModule.getGenParticles();
+  auto genSim = genSimModule->getGenParticles();
 
   // std::cout << "Looking at GenSim Particles" << std::endl;
   for(const auto &particle : genSim.getParticles())
@@ -31,7 +31,7 @@ bool LeptonEfficiency::process(const edm::EventBase& event)
 	}
     }
 
-  const MatchingPairCollection& matched = matchModule.getMatchingBestPairs();
+  const MatchingPairCollection& matched = matchModule->getMatchingBestPairs();
 
   // std::cout << "Looking at Reco Particles" << std::endl;
   auto particles = matched.getRecoParticles().getParticles();
@@ -62,6 +62,6 @@ bool LeptonEfficiency::process(const edm::EventBase& event)
 
 void LeptonEfficiency::finalize()
 {
-  // std::cout << "Muon efficiency: " << recoMuons / (double) genSimMuons << std::endl;
-  // std::cout << "Electron efficiency: " << recoElectrons / (double) genSimElectrons << std::endl;
+  std::cout << "Muon efficiency: " << recoMuons / (double) genSimMuons << std::endl;
+  std::cout << "Electron efficiency: " << recoElectrons / (double) genSimElectrons << std::endl;
 }

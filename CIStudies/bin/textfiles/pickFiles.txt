@@ -1,7 +1,7 @@
-Procs:	CI
-Year:	2016
-Lepton:	E
-Mass:	M300	M800	M1300	M2000
-Lambda:	16
+Procs:	H++
+Year:	2020
+Lepton:	Both
+Mass:	800
+Lambda:	M800
 Inter:	con
-Helic:	LL
+Helic:	Higgs++to2Leptons
