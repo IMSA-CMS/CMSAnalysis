@@ -27,7 +27,7 @@ int main(int argc, char** argv)
   std::string outputFile = parser.stringValue("output");
   if (outputFile.empty())
     {
-      outputFile = "muonResolution.root";
+      outputFile = "electronResolution.root";
     }
 
   std::cout << "This is the name of outputFile " << outputFile << std::endl;
