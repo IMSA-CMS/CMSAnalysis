@@ -7,13 +7,30 @@
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/FWLite/interface/Event.h"
 
+GenSimEventDumpModule::GenSimEventDumpModule(int inumOfEvents):
+  numOfEvents(inumOfEvents)
+{
+  int counter = 0;
+}
+
 bool GenSimEventDumpModule::process(const edm::EventBase& event)
 {
-	edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
-  	event.getByLabel(std::string("prunedGenParticles"), genParticlesHandle);
 
-	printGenParticleCollection(*genParticlesHandle);
-	return true;
+  if(counter < numOfEvents || numOfEvents == -1)
+  {
+    edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
+    event.getByLabel(std::string("prunedGenParticles"), genParticlesHandle);
+
+    printGenParticleCollection(*genParticlesHandle);
+    counter++;
+    return true;
+  }
+	
+  else
+  {
+    return true;
+  }
+
 }
 
 void GenSimEventDumpModule::writeAll()
@@ -31,6 +48,11 @@ void GenSimEventDumpModule::printGenParticleCollection(const reco::GenParticleCo
   int eventIndex = 0;
 
   //Format
+  std::cerr << "--------------------------------------------------------" << std::endl;
+  std::cerr << "EVENT #" << (counter + 1) << std::endl;
+  std::cerr << "--------------------------------------------------------" << std::endl;
+  std::cerr << " " << std::endl;
+
   std::cout << std::left << std::setw(10) << "index, " << std::setw(10) << "pdfId, "
    << std::setw(10) << "status; " << std::setw(10) << "mother1; "
    << std::setw(10) << "mother2; " << std::setw(10) << "daughter1; "
