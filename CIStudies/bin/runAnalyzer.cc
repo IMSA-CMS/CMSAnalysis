@@ -29,7 +29,7 @@ int main(int argc, char** argv)
   std::string outputFile = parser.stringValue("output");
   if (outputFile.empty())
     {
-      outputFile = "muonResolution.root";
+      outputFile = "electronResolution.root";
     }
 
   std::cout << "This is the name of outputFile " << outputFile << std::endl;
@@ -37,9 +37,8 @@ int main(int argc, char** argv)
   unsigned outputEvery = parser.integerValue("outputEvery");
 
   //Analyzer analyzer = massResolutionAnalysis();
-  //Analyzer analyzer = hPlusPlusMassAnalysis();
-  Analyzer analyzer = leptonJetReconstructionAnalysis();
-
+  Analyzer analyzer = hPlusPlusMassAnalysis();
+  //Analyzer analyzer = leptonJetReconstructionAnalysis();
 
   std::cout << "Notice: analyzer created" << std::endl;
 

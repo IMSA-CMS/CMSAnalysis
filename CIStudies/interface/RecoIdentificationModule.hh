@@ -26,6 +26,8 @@ public:
   const ParticleCollection& getRecoCandidates() const
   {return recoCandidates;}
 
+  ParticleCollection getRecoCandidates(Particle::LeptonType leptonType) const;      // Returns the Reco Candidates for a certain lepton type
+
 private:
   ParticleCollection recoCandidates;
   const double ptCut;
