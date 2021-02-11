@@ -8,12 +8,15 @@
 #include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
+#include "CIAnalysis/CIStudies/interface/TriggerModule.hh"
 #include "CIAnalysis/CIStudies/interface/NLeptonsFilter.hh"
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
 #include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
 #include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
 #include "CIAnalysis/CIStudies/interface/MassRecoEfficiency.hh"
+#include "CIAnalysis/CIStudies/interface/SingleMuonTrigger.hh"
+#include "CIAnalysis/CIStudies/interface/DoubleMuonTrigger.hh"
 
 
 Analyzer hPlusPlusMassAnalysis()
@@ -23,6 +26,7 @@ Analyzer hPlusPlusMassAnalysis()
   auto genSimMod = make_shared<GenSimIdentificationModule>(9900041);
   auto recoMod = make_shared<RecoIdentificationModule>(50);
   auto matchMod = make_shared<MatchingModule>(genSimMod, recoMod);
+  auto triggerMod = make_shared<TriggerModule>(recoMod);
   auto weightMod = make_shared<WeightingModule>();
   auto lrWeightMod = make_shared<LRWeightModule>();
 
@@ -45,16 +49,25 @@ Analyzer hPlusPlusMassAnalysis()
   histMod->addHistogram(nElectronsHist);
   histMod->addHistogram(nMuonsHist);
 
+  // Initialize triggers
+  auto singleMuonTrigger = make_shared<SingleMuonTrigger>(recoMod, 50);
+  auto doubleMuonTrigger = make_shared<DoubleMuonTrigger>(recoMod, 37, 27);
+
+  // Add triggers to the TriggerModule
+  triggerMod->addTrigger(singleMuonTrigger);
+  triggerMod->addTrigger(doubleMuonTrigger);
+
   analyzer.addProductionModule(genSimMod);
   analyzer.addProductionModule(recoMod);
   analyzer.addProductionModule(matchMod);
+  analyzer.addProductionModule(triggerMod);
 
-  analyzer.addAnalysisModule(leptonEfficiency);
-  analyzer.addAnalysisModule(massRecoEfficiency200);
-  analyzer.addAnalysisModule(massRecoEfficiency500);
-  analyzer.addAnalysisModule(massRecoEfficiency800);
-  analyzer.addAnalysisModule(massRecoEfficiency1000);
-  analyzer.addAnalysisModule(massRecoEfficiency1300);
+  //analyzer.addAnalysisModule(leptonEfficiency);
+  //analyzer.addAnalysisModule(massRecoEfficiency200);
+  //analyzer.addAnalysisModule(massRecoEfficiency500);
+  //analyzer.addAnalysisModule(massRecoEfficiency800);
+  //analyzer.addAnalysisModule(massRecoEfficiency1000);
+  //analyzer.addAnalysisModule(massRecoEfficiency1300);
   
   return analyzer;
 }

@@ -59,7 +59,7 @@ bool MassRecoEfficiency::process(const edm::EventBase& event)
 
 void MassRecoEfficiency::finalize()
 {
-  std::cout << "Mass Reconstruction Efficiency: " << passCount / (double) totalCount << std::endl;
+  std::cout << "Mass Reconstruction Efficiency for " << HiggsMass << "+-" << width << " GeV: " << passCount / (double) totalCount << std::endl;
 
   std::cout << '\n';  // For sanity's sake
 
