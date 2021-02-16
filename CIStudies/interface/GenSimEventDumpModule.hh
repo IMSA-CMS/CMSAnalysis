@@ -21,6 +21,8 @@ namespace reco
 class GenSimEventDumpModule : public AnalysisModule
 {
 public:
+  GenSimEventDumpModule(int inumOfEvents = -1);
+
   virtual bool process(const edm::EventBase& event) override;
   
   virtual void writeAll() override;
@@ -30,8 +32,10 @@ private:
   void printGenParticleCollection(const std::vector<reco::GenParticle>& genParts) const;
 
   int getIndexOf(const reco::Candidate* part, const std::vector<reco::GenParticle>& genParts) const;
-
+  int numOfEvents;
+  int counter;
 };
+
 
 #endif
 
