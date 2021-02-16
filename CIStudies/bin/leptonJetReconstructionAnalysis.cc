@@ -26,7 +26,7 @@ Analyzer leptonJetReconstructionAnalysis()
   auto matchMod = make_shared<MatchingModule>(genSimMod, recoMod);
   auto weightMod = make_shared<WeightingModule>();
   auto lrWeightMod = make_shared<LRWeightModule>();
-  auto genSimEventDumpMod = make_shared<GenSimEventDumpModule>();
+  auto genSimEventDumpMod = make_shared<GenSimEventDumpModule>(3);
 
   // Add the histogram(s) created above to histMod
   //histMod->addHistogram(nLeptonsHist);

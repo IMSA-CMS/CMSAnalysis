@@ -14,7 +14,7 @@ MatchingModule::MatchingModule(const std::shared_ptr<GenSimIdentificationModule>
 
 bool MatchingModule::process(const edm::EventBase& event)
 {
-  std::cerr << "ENTERING MatchingModule" << std::endl;
+  //std::cerr << "ENTERING MatchingModule" << std::endl;
   matchingBestPairs.clear();
 
   // Make a copy so we don't modify the original
@@ -62,13 +62,13 @@ bool MatchingModule::process(const edm::EventBase& event)
 		      MatchingPair pairCandidate(genParticle, recoParticle);
 
 			//std::cerr << "I'd like to do small things like rule the world" << std::endl;
-		      std::cerr << "Phi gen:" << pairCandidate.getGenParticle().phi() << std::endl;
-		      std::cerr << "Eta gen:" << pairCandidate.getGenParticle().eta() << std::endl;
-		      std::cerr << "pT gen:" << pairCandidate.getGenParticle().pt() << std::endl;
+		      //std::cerr << "Phi gen:" << pairCandidate.getGenParticle().phi() << std::endl;
+		      //std::cerr << "Eta gen:" << pairCandidate.getGenParticle().eta() << std::endl;
+		      //std::cerr << "pT gen:" << pairCandidate.getGenParticle().pt() << std::endl;
 
-		      std::cerr << "Phi reco:" << pairCandidate.getRecoParticle().phi() << std::endl;
-		      std::cerr << "Eta reco:" << pairCandidate.getRecoParticle().eta() << std::endl;
-		      std::cerr << "pT reco:" << pairCandidate.getRecoParticle().pt() << std::endl;
+		      //std::cerr << "Phi reco:" << pairCandidate.getRecoParticle().phi() << std::endl;
+		      //std::cerr << "Eta reco:" << pairCandidate.getRecoParticle().eta() << std::endl;
+		      //std::cerr << "pT reco:" << pairCandidate.getRecoParticle().pt() << std::endl;
 
 		      //if this delta R is better than the previous best one, keeps track of the information by assigning values ot pariDataList
 		      if (pairCandidate.getDeltaR() < deltaRMin)
@@ -112,26 +112,26 @@ bool MatchingModule::process(const edm::EventBase& event)
 	}
 
 // For each loop ends here
-	std::cerr << "for each loop ends" << std::endl;
+	//std::cerr << "for each loop ends" << std::endl;
       //makes an additional delta R cut and fills matching best pairs, resets values for the next loop
       //checks if the final (and best) delta R value for the matches passes the cut
       if(deltaRMin<deltaRCutoff)
 	{
-	  std::cerr << "between if statements" << std::endl;
+	  //std::cerr << "between if statements" << std::endl;
 	  //keeps track of that match by adding it to the vector that will be returned
 	  if(pairDataList.getGenParticle().isNotNull() && pairDataList.getRecoParticle().isNotNull())
 	  {
 	    matchingBestPairs.addMatchingPair(pairDataList);
-	    std::cerr << "New best match assigned // DeltaRMin: " << deltaRMin << std::endl;
+	    //std::cerr << "New best match assigned // DeltaRMin: " << deltaRMin << std::endl;
 	  }
 	  
  	}
       //added to check deltaR cutoff
-      else 
-	{
-	  std::cerr << "FAILED DELTA R CUTOFF // deltaR: " << deltaRMin << std::endl;
+      //else 
+	//{
+	  //std::cerr << "FAILED DELTA R CUTOFF // deltaR: " << deltaRMin << std::endl;
 	  
-	}
+	//}
       // else
       // 	{
       // 	  std::cout << "DeltaR Cutoff FAILED! Gen Sim CS = " + std::to_string(genSimCS) << std::endl;

@@ -15,10 +15,13 @@ public:
   virtual bool process(const edm::EventBase& event) override;
   virtual void finalize() override;
   void addTrigger(std::shared_ptr<Trigger> trigger) {triggers.push_back(trigger);}
+  void printOverallEfficiency();
 
 private:
   const std::shared_ptr<RecoIdentificationModule> recoMod;
   std::vector<std::shared_ptr<Trigger>> triggers;
+  int passAny;
+  int total;
 };
 
 #endif

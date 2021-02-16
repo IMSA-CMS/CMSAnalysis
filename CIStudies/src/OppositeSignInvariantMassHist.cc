@@ -8,14 +8,14 @@ double OppositeSignInvariantMassHist::protectedValue(bool typeGenSim) const
 {
   if (typeGenSim)          // typeGenSim == true, so we want the GenSim values
   {
-    auto genParticles = getGenSim().getGenParticles();
+    auto genParticles = getGenSim()->getGenParticles();
     auto genSimInv = genParticles.calculateOppositeSignInvariantMass();
     return genSimInv;
   }
 
   else                     // typeGenSim == false, so we want the Reco values
   {
-    auto recoParticles = getReco().getRecoCandidates();
+    auto recoParticles = getReco()->getRecoCandidates();
     auto recoInv = recoParticles.calculateOppositeSignInvariantMass();
     return recoInv;
   }
