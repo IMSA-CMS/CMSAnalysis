@@ -10,12 +10,11 @@
 GenSimEventDumpModule::GenSimEventDumpModule(int inumOfEvents):
   numOfEvents(inumOfEvents)
 {
-  int counter = 0;
+  counter = 0;
 }
 
 bool GenSimEventDumpModule::process(const edm::EventBase& event)
 {
-
   if(counter < numOfEvents || numOfEvents == -1)
   {
     edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
@@ -25,12 +24,10 @@ bool GenSimEventDumpModule::process(const edm::EventBase& event)
     counter++;
     return true;
   }
-	
   else
   {
     return true;
   }
-
 }
 
 void GenSimEventDumpModule::writeAll()
