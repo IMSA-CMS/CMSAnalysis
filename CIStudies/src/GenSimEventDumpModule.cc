@@ -36,81 +36,64 @@ void GenSimEventDumpModule::writeAll()
 
 void GenSimEventDumpModule::printGenParticleCollection(const reco::GenParticleCollection& genParts) const
 {
-  const reco::Candidate* daughter1 = nullptr;
-  const reco::Candidate* daughter2 = nullptr;
+  int eventElement = 1;
 
-  const reco::Candidate* mother1 = nullptr;
-  const reco::Candidate* mother2 = nullptr;
-
-  int eventIndex = 0;
-
-  //Format
+  // Format
   std::cerr << "--------------------------------------------------------" << std::endl;
   std::cerr << "EVENT #" << (counter + 1) << std::endl;
   std::cerr << "--------------------------------------------------------" << std::endl;
-  std::cerr << " " << std::endl;
 
-  std::cout << std::left << std::setw(10) << "index, " << std::setw(10) << "pdfId, "
-   << std::setw(10) << "status; " << std::setw(10) << "mother1; "
-   << std::setw(10) << "mother2; " << std::setw(10) << "daughter1; "
-   << std::setw(10) << "daughter2, " << std::setw(10) << "px, "
-   << std::setw(10) << "py, " << std::setw(10) << "pz, "
-   << std::setw(10) << "E, " << std::setw(5) << "mass\n";
+  std::cout << std::left << std::setw(8) << "element" << std::setw(11) << "| pdfId"
+   << std::setw(10) << "| status" << std::setw(10) << "| mother1"
+   << std::setw(10) << "| mother2" << std::setw(12) << "| daughter1"
+   << std::setw(12) << "| daughter2" << std::setw(15) << "| px"
+   << std::setw(15) << "| py" << std::setw(15) << "| pz"
+   << std::setw(15) << "| E" << std::setw(5) << "| mass\n";
 
   //Prints out all of the particles
   for(auto &part : genParts){
+    
+    // Event Elements
+    int daughter1 = 0;
+    int daughter2 = 0;
 
-    //Distinguishing Mothers
-    if(part.numberOfMothers() == 2)
-    {
-      mother1 = part.mother(0);
-      mother2 = part.mother(1);
-    }
-    else if(part.numberOfMothers() == 1)
-    {
-      mother1 = part.mother(0);
-      mother2 = part.mother(0);
-    }
-   
-    //Distinguishing Daughters (There can be more than 2 daughters, max of three)
-    if(part.numberOfDaughters() == 2)
-    {
-      daughter1 = part.daughter(0);
-      daughter2 = part.daughter(1);
-    }
-    else if(part.numberOfDaughters() == 1)
-    {
-      daughter1 = part.daughter(0);
-      daughter2 = part.daughter(0);
-    }
+    int mother1 = 0;
+    int mother2 = 0;
 
-    std::cout << std::setw(10) << eventIndex << ", " << std::setw(10) << part.pdgId() << ", " << std::setw(10) << part.status() << "; ";
-
+    // Distinguishing Mothers
     if(part.numberOfMothers() != 0)
     {
-      std::cout << std::setw(10) << getIndexOf(mother1, genParts) << "; " << std::setw(10) << getIndexOf(mother2, genParts) << "; ";
-    }
-    else
-    {
-      std::cout << std::setw(10) << 00 << "; " << std::setw(10) << 00 << "; ";
+      mother1 = 1 + getIndexOf(part.mother(0), genParts);
+      mother2 = 1 + getLatestIndexOfMothers(part, genParts);
     }
 
-    if(part.numberOfDaughters() != 0 && part.numberOfDaughters() != 3)
-    {
-      std::cout << std::setw(10) << getIndexOf(daughter1, genParts) << "; " << std::setw(10) << getIndexOf(daughter2, genParts) << "; ";
-    }
-    else
-    {
-      std::cout << std::setw(10) << 00 << "; " << std::setw(10) << 00 << "; ";
-    }
-
-    std::cout << std::setw(10) << part.px() << ", " << std::setw(10) << part.py() << ", " << std::setw(10) << part.pz() << ", " << std::setw(10) << part.energy() << ", " << std::setw(10) << part.mass() << "\n";
+    // Debug
+    //std::cout << part.numberOfMothers() << ", " << part.numberOfDaughters() << std::endl;
    
-    eventIndex++;
+    // Distinguishing Daughters
+    if(part.numberOfDaughters() != 0)
+    {
+      daughter1 = 1 + getIndexOf(part.daughter(0), genParts);
+      daughter2 = 1 + getLatestIndexOfDaughters(part, genParts);
+    }
+
+    // Standard info
+    std::cout << std::setw(8) << eventElement << "| " << std::setw(9) << part.pdgId() << "| " << std::setw(8) << part.status() << "| ";
+
+    // Print mothers
+    std::cout << std::setw(8) << mother1 << "| " << std::setw(8) << mother2 << "| ";
+
+    // Print daughters
+    std::cout << std::setw(10) << daughter1 << "| " << std::setw(10) << daughter2 << "| ";
+
+    // Particle properties
+    std::cout << std::setw(13) << part.px() << "| " << std::setw(13) << part.py() << "| " << std::setw(13) << part.pz() << "| " << std::setw(13) << part.energy() << "| " << std::setw(13) << part.mass() << "\n";
+   
+    eventElement++;
   }
 }
 
-int GenSimEventDumpModule::getIndexOf(const reco::Candidate* part, const reco::GenParticleCollection& genParts) const
+int GenSimEventDumpModule::getIndexOf(const reco::Candidate* part, const std::vector<reco::GenParticle>& genParts) const
 {
   int indexOf = 0;
   for(auto &possiblePart : genParts)
@@ -120,5 +103,35 @@ int GenSimEventDumpModule::getIndexOf(const reco::Candidate* part, const reco::G
     indexOf++;
   }
   return -1;
+}
+
+int GenSimEventDumpModule::getLatestIndexOfMothers(const reco::GenParticle& part, const std::vector<reco::GenParticle>& genParts) const
+{
+  int indexOf = -1;
+  for(int i = 0; i < (int) part.numberOfMothers(); i++)
+  {
+    int compareIndex = getIndexOf(part.mother(i), genParts);
+    if(compareIndex >= indexOf)
+    {
+      indexOf = compareIndex;
+    }
+  }
+
+  return indexOf;
+}
+
+int GenSimEventDumpModule::getLatestIndexOfDaughters(const reco::GenParticle& part, const std::vector<reco::GenParticle>& genParts) const
+{
+  int indexOf = -1;
+  for(int i = 0; i < (int) part.numberOfDaughters(); i++)
+  {
+    int compareIndex = getIndexOf(part.daughter(i), genParts);
+    if(compareIndex >= indexOf)
+    {
+      indexOf = compareIndex;
+    }
+  }
+
+  return indexOf;
 }
 
