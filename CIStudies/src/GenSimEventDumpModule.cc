@@ -57,35 +57,18 @@ void GenSimEventDumpModule::printGenParticleCollection(const reco::GenParticleCo
 
   //Prints out all of the particles
   for(auto &part : genParts){
-    
-    // Event Elements
-    std::string mothers = "";
-    std::string daughters = "";
-
-    for(int i = 0; i < (int) part.numberOfMothers(); i++)
-    {
-      mothers = mothers + (1 + getIndexOf(part.mother(i), genParts)) + " ";
-    }
 
     // Debug
     //std::cout << part.numberOfMothers() << ", " << part.numberOfDaughters() << std::endl;
-
-    for(int i = 0; i < (int) part.numberOfDaughters(); i++)
-    {
-      daughters = daughters + (1 + getIndexOf(part.daughter(i), genParts)) + " ";
-    }
-
-    // TODO: Write a method that formats daughter and mother output.
-    // From 1 2 3 4 7 to 1-4 7
 
     // Standard info
     std::cout << std::setw(8) << eventElement << "| " << std::setw(9) << part.pdgId() << "| " << std::setw(8) << part.status() << "| ";
 
     // Print mothers
-    std::cout << std::setw(motherColumnWidth - 2) << mothers << "| ";
+    std::cout << std::setw(motherColumnWidth - 2) << formatMotherParticles(part, genParts) << "| ";
 
     // Print daughters
-    std::cout << std::setw(daughterColumnWidth - 2) << daughters << "| ";
+    std::cout << std::setw(daughterColumnWidth - 2) << formatDaughterParticles(part, genParts) << "| ";
 
     // Particle properties
     std::cout << std::setw(13) << part.px() << "| " << std::setw(13) << part.py() << "| " << std::setw(13) << part.pz() << "| " << std::setw(13) << part.energy() << "| " << std::setw(13) << part.mass() << "\n";
@@ -134,5 +117,89 @@ int GenSimEventDumpModule::getLatestIndexOfDaughters(const reco::GenParticle& pa
   }
 
   return indexOf;
+}
+
+std::string GenSimEventDumpModule::formatMotherParticles(const reco::GenParticle& part, const std::vector<reco::GenParticle>& genParts) const
+{
+  std::string mothers = "";
+
+  int motherIndexes [(int) part.numberOfMothers()];
+
+  // Store all indexes
+  for(int i = 0; i < (int) part.numberOfMothers(); i++)
+  {
+    motherIndexes[i] = getIndexOf(part.mother(i), genParts);
+  }
+
+  // Create formatted string based on indexes
+  for(int i = 0; i < (int) part.numberOfMothers(); i++)
+  {
+    int start = i;
+    int end = start;
+
+    int x = start;
+    if(start < ((int) part.numberOfMothers() - 1))
+    {
+       while(motherIndexes[x] + 1 == motherIndexes[x + 1] && (x != ((int) part.numberOfMothers() - 1)))
+      {
+        x++;
+        i++;
+        end = x;
+      }
+    }
+      
+    if(start != end)
+    {
+      mothers = mothers + (1 + getIndexOf(part.mother(start), genParts)) + "-" + (1 + getIndexOf(part.mother(end), genParts)) + " ";
+    }
+    else
+    {
+      mothers = mothers + (1 + getIndexOf(part.mother(start), genParts)) + " ";
+    }
+  }
+
+  return mothers;
+}
+
+std::string GenSimEventDumpModule::formatDaughterParticles(const reco::GenParticle& part, const std::vector<reco::GenParticle>& genParts) const
+{
+  std::string daughters = "";
+
+  int daughterIndexes [(int) part.numberOfDaughters()];
+
+  // Store all indexes
+  for(int i = 0; i < (int) part.numberOfDaughters(); i++)
+  {
+    daughterIndexes[i] = getIndexOf(part.daughter(i), genParts);
+  }
+
+  // Create formatted string based on indexes
+  for(int i = 0; i < (int) part.numberOfDaughters(); i++)
+  {
+    int start = i;
+    int end = start;
+
+    int x = start;
+    if(start < ((int) part.numberOfDaughters() - 1))
+    {
+       while(daughterIndexes[x] + 1 == daughterIndexes[x + 1] && (x != ((int) part.numberOfDaughters() - 1)))
+      {
+        x++;
+        i++;
+        end = x;
+      }
+    }
+      
+    if(start != end)
+    {
+      daughters = daughters + (1 + getIndexOf(part.daughter(start), genParts)) + "-" + (1 + getIndexOf(part.daughter(end), genParts)) + " ";
+    }
+    else
+    {
+      daughters = daughters + (1 + getIndexOf(part.daughter(start), genParts)) + " ";
+    }
+  }
+
+  return daughters;
 }
 
