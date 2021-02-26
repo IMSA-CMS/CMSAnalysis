@@ -46,16 +46,13 @@ bool GenSimIdentificationModule::process(const edm::EventBase &event) {
     auto match = pdgToType.find(p.pdgId());
     Particle::LeptonType type;
     if (match == pdgToType.end()) {
-      type = Particle::LeptonType::None;
+      continue;
     } else {
       type = match->second;
     }
     genParticles.addParticle(Particle(&p, type));
   }
-  // std::cout << "Number of particles: " << genParticles.getNumParticles() <<
-  // std::endl;
-  // std::cerr << "number of leptons = " << genParticles.getNumParticles() <<
-  // std::endl; std::cerr << "EXITING GenSimIdentificationModule" << std::endl;
+  std::cout << "number of leptons = " << genParticles.getNumParticles() << "\n";
   return true;
 }
 
