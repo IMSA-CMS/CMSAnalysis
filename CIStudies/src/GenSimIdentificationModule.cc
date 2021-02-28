@@ -40,19 +40,23 @@ bool GenSimIdentificationModule::process(const edm::EventBase &event) {
   // Begin GEN looping
   // Loop through Particle list&
   for (const auto &p : *genParticlesHandle) {
-    // std::cerr << "genSim particle type = " << std::abs(p.pdgId()) <<
-    // std::endl; std::cerr << "electronCode = " << electronCode << std::endl;
-    // std::cerr << "muonCode = " << muonCode << std::endl;
-    auto match = pdgToType.find(p.pdgId());
-    Particle::LeptonType type;
-    if (match == pdgToType.end()) {
-      continue;
-    } else {
-      type = match->second;
+    if (p.status() == 1 &&
+        isParticle(Particle(&p, Particle::LeptonType::None))) {
+      // std::cerr << "genSim particle type = " << std::abs(p.pdgId()) <<
+      // std::endl; std::cerr << "electronCode = " << electronCode << std::endl;
+      // std::cerr << "muonCode = " << muonCode << std::endl;
+      auto match = pdgToType.find(p.pdgId());
+      Particle::LeptonType type;
+      if (match == pdgToType.end()) {
+        continue;
+      } else {
+        type = match->second;
+      }
+      genParticles.addParticle(Particle(&p, type));
     }
-    genParticles.addParticle(Particle(&p, type));
   }
-  std::cout << "number of leptons = " << genParticles.getNumParticles() << "\n";
+  // std::cout << "number of leptons = " << genParticles.getNumParticles() <<
+  // "\n";
   return true;
 }
 

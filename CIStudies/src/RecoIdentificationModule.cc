@@ -44,8 +44,8 @@ bool RecoIdentificationModule::process(const edm::EventBase &event) {
       //   }
     }
   }
-  std::cout << "number of leptons = " << recoCandidates.getNumParticles()
-            << "\n";
+  // std::cout << "number of leptons = " << recoCandidates.getNumParticles()
+  //           << "\n";
 
   // std::cerr << "EXITING RecoIdentificationModule" << std::endl;
   return true;
