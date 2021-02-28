@@ -76,7 +76,7 @@ Analyzer hPlusPlusMassAnalysis() {
 
   analyzer.addProductionModule(genSimMod);
   analyzer.addProductionModule(recoMod);
-  // analyzer.addProductionModule(matchMod);
+  analyzer.addProductionModule(matchMod);
   analyzer.addProductionModule(triggerMod);
 
   analyzer.addAnalysisModule(histMod);
