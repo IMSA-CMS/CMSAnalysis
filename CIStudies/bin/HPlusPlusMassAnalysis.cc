@@ -69,6 +69,7 @@ Analyzer hPlusPlusMassAnalysis()
   //analyzer.addProductionModule(matchMod);
   analyzer.addProductionModule(triggerMod);
 
+  analyzer.addAnalysisModule(histMod);
   //analyzer.addAnalysisModule(leptonEfficiency);
   //analyzer.addAnalysisModule(massRecoEfficiency200);
   //analyzer.addAnalysisModule(massRecoEfficiency500);
