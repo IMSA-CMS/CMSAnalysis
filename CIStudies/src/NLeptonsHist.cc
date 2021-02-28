@@ -1,34 +1,31 @@
-#include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 #include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
+#include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 
-NLeptonsHist::NLeptonsHist(const std::shared_ptr<MatchingModule> imatchModule, const std::string& iname, int iNBins, double iminimum, double imaximum, int itargetPdgId):
-  HistogramPrototype(iname, iNBins, iminimum, imaximum),
-  matchModule(imatchModule),
-  targetPdgId(itargetPdgId)
-{
-}
+#include <iostream>
 
-double NLeptonsHist::value() const
-{
-  const MatchingPairCollection& pairs = matchModule->getMatchingBestPairs();
-  //std::cout << "TargetParticle: " << targetPdgId << " Number of Matched Particles: " << pairs.getSize() << "\n";
+NLeptonsHist::NLeptonsHist(const std::shared_ptr<MatchingModule> imatchModule,
+                           const std::string &iname, int iNBins,
+                           double iminimum, double imaximum, int itargetPdgId)
+    : HistogramPrototype(iname, iNBins, iminimum, imaximum),
+      matchModule(imatchModule), targetPdgId(itargetPdgId) {}
 
-  if(targetPdgId == 0)
-    {
-      return pairs.getSize();
+double NLeptonsHist::value() const {
+  const MatchingPairCollection &pairs = matchModule->getMatchingBestPairs();
+  // std::cout << "TargetParticle: " << targetPdgId
+  //           << " Number of Matched Particles: " << pairs.getSize() << "\n";
+
+  if (targetPdgId == 0) {
+    std::cout << "\nParticles Found: " << pairs.getSize() << "\n";
+    return pairs.getSize();
+  } else {
+    int count = 0;
+    for (const auto &p : pairs.getPairs()) {
+      // std::cout << p.getRecoParticle().pdgId() << " ";
+      if (abs(p.getRecoParticle().pdgId()) == targetPdgId) {
+        count++;
+      }
     }
-  else
-    {
-      int count = 0;
-      for(const auto& p : pairs.getPairs())
-	{
-	  //std::cout << p.getRecoParticle().pdgId() << " ";
-	  if(abs(p.getRecoParticle().pdgId()) == targetPdgId)
-	    {
-	      count++;
-	    }
-	}
-      //std::cout << "\nParticles Found: " << count << std::endl;
-      return count;
-    }
+    std::cout << "\nParticles Found: " << count << "\n";
+    return count;
+  }
 }
