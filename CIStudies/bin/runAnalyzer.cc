@@ -10,6 +10,7 @@
 #include "CIAnalysis/CIStudies/bin/massResolutionAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/HPlusPlusMassAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/leptonJetReconstructionAnalysis.cc"
+#include "CIAnalysis/CIStudies/bin/displacedVertexAnalysis.cc"
 
 int main(int argc, char** argv)
 {
@@ -29,7 +30,7 @@ int main(int argc, char** argv)
   std::string outputFile = parser.stringValue("output");
   if (outputFile.empty())
     {
-      outputFile = "electronResolution.root";
+      outputFile = "displacedVertex.root";
     }
 
   std::cout << "This is the name of outputFile " << outputFile << std::endl;
@@ -37,8 +38,8 @@ int main(int argc, char** argv)
   unsigned outputEvery = parser.integerValue("outputEvery");
 
   //Analyzer analyzer = massResolutionAnalysis();
-  Analyzer analyzer = hPlusPlusMassAnalysis();
   //Analyzer analyzer = leptonJetReconstructionAnalysis();
+  Analyzer analyzer = displacedVertexAnalysis();
 
   std::cout << "Notice: analyzer created" << std::endl;
 
