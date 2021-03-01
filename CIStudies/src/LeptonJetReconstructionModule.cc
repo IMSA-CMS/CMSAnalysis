@@ -15,22 +15,15 @@ bool LeptonJetReconstructionModule::process(const edm::EventBase& event) // reco
   const ParticleCollection& recoCandidates = reco.getRecoCandidates();
   std::vector<Particle> recoLeptons = recoCandidates.getParticles();
 
-  // Particle highestPtLepton;
-  // LeptonJet jet;
-  // std::vector<Particle> initialLeptons;
-  
- // bool isNotEmpty = true;
-
   while (recoLeptons.size() != 0)
   {
-    // Particle highestPtLepton = recoCandidates.getLeadingPtLepton();
     Particle highestPtLepton = findHighestPtLepton(recoLeptons);
     LeptonJet jet = createLeptonJet(highestPtLepton);
     std::vector<Particle> initialLeptons = jet.getParticles();
 
     auto highestPtLeptonFourVector = highestPtLepton.fourVector();
     recoLeptons.erase(std::find(recoLeptons.begin(), recoLeptons.end(), highestPtLepton));
-    // for (auto lepton : recoLeptons)
+
     for (unsigned i = 0; i < recoLeptons.size(); ++i)
     {
       auto fourVector = recoLeptons[i].fourVector();
@@ -48,7 +41,7 @@ bool LeptonJetReconstructionModule::process(const edm::EventBase& event) // reco
       leptonJets.push_back(jet);
     }      
   }
-
+  findDeltaRValues();
   return true;
 }
 
@@ -81,7 +74,25 @@ Particle LeptonJetReconstructionModule::findHighestPtLepton(std::vector<Particle
   throw std::runtime_error("No highest pT lepton!");
 }
 
+void LeptonJetReconstructionModule::findDeltaRValues()
+{
+  deltaRValues.clear();
+  for (LeptonJet jet : leptonJets)
+  {
+    auto jetParticles = jet.getParticles();
 
-
-  
-
+    for (Particle particle : jetParticles)
+    {
+      auto initFourVector = particle.fourVector();
+      for (Particle part : jetParticles)
+      {
+        if (part != particle)
+        {
+          auto nextFourVector = part.fourVector();
+          double deltaR = reco::deltaR(initFourVector, nextFourVector);
+          deltaRValues.push_back(deltaR);
+        }
+      }
+    }
+  }
+}

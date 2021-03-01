@@ -5,48 +5,18 @@ LeptonJet::LeptonJet(const Particle particle)
   addParticle(particle);
 }
 
-std::vector<double> LeptonJet::getPt() const
+reco::Candidate::LorentzVector LeptonJet::getFourVector() const
 {
-  findPt();
-  return ptVector;
-}
-
-std::vector<double> LeptonJet::getPhi() const
-{
-  findPhi();
-  return phiVector;
-}
-
-std::vector<double> LeptonJet::getEta() const
-{
-  findEta();
-  return etaVector;
-}
-
-void LeptonJet::findPt() const
-{
+  reco::Candidate::LorentzVector vector;
   for (auto particle : leptonJetParticles)
   {
-    double particlePt = particle.pt();
-    // ptVector.push_back(particlePt);        
+    vector += particle.fourVector();
   }
+  return vector; // Does this have to be ROOT::Math::LorentzVector?
 }
 
-void LeptonJet::findPhi() const
+bool LeptonJet::operator==(LeptonJet userJet) const
 {
-  for (auto particle : leptonJetParticles)
-  {
-    double particlePhi = particle.phi();
-    // phiVector.push_back(particlePhi);        
-  }
+  std::vector<Particle> userParticles = userJet.getParticles();
+  return leptonJetParticles == userParticles;
 }
-
-void LeptonJet::findEta() const
-{
-  for (auto particle : leptonJetParticles)
-  {
-    double particleEta = particle.eta();
-    // etaVector.push_back(particleEta);        
-  }
-}
-
