@@ -8,6 +8,7 @@
 #include "PhysicsTools/FWLite/interface/CommandLineParser.h"
 
 #include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
+#include "CIAnalysis/CIStudies/interface/GenSimParticleModule.hh"
 #include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 #include "CIAnalysis/CIStudies/interface/MassFilter.hh"
@@ -32,10 +33,14 @@
 #include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
 #include "CIAnalysis/CIStudies/interface/ScaledMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
+#include "CIAnalysis/CIStudies/interface/DeltaRHist.hh"
+#include "CIAnalysis/CIStudies/interface/MatchingDeltaRHist.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonJetReconstructionModule.hh"
 #include "CIAnalysis/CIStudies/interface/NLeptonJetHist.hh"
+#include "CIAnalysis/CIStudies/interface/LeptonJetMatchingModule.hh"
 #include "CIAnalysis/CIStudies/interface/MassRecoEfficiency.hh"
+
 
 int main(int argc, char** argv)
 {
@@ -65,6 +70,7 @@ int main(int argc, char** argv)
   Analyzer analyzer;
 
   GenSimIdentificationModule genSimMod(9900041);
+  GenSimParticleModule genPartMod(1000022);
   RecoIdentificationModule recoMod(50);
   MatchingModule matchMod(genSimMod, recoMod);
   WeightingModule weightMod;
@@ -81,6 +87,7 @@ int main(int argc, char** argv)
   AFBModule afbMod(genSimMod, recoMod, weightMod, lrWeightMod);
   UnmatchedParticleModule unmatchedMod(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
   LeptonJetReconstructionModule lepRecoMod(recoMod);
+  LeptonJetMatchingModule lepMatchMod(genPartMod, lepRecoMod);
   HistogramOutputModule histMod(genSimMod, recoMod, weightMod, lrWeightMod);
   LeptonEfficiency leptonEfficiency(matchMod, genSimMod);
   MassRecoEfficiency massRecoEfficiency(recoMod, 200, 5);
@@ -114,6 +121,10 @@ int main(int argc, char** argv)
   NLeptonsHist nLeptonsHist(matchMod, "Number of Leptons", 10, 0 , 10);
   // N Lepton Jet Histogram
   NLeptonJetHist nLeptonJetHist(lepRecoMod, "Number of Lepton Jets", 10, 0, 10);
+  // Delta R Histogram
+  DeltaRHist deltaRHist(lepRecoMod, "Delta R Values", 100, 0, 0.5);
+  // Matching Delta R Histogram
+  MatchingDeltaRHist matchingDeltaRHist(lepMatchMod, "Differences in Delta R", 100, 0, 0.5);
  
   // GenSim Scaled Up Invariant Mass Histogram
   ScaledMassHist genSimScaledUpHist(matchMod, "GenSim Weak Alignment Bias Scaled Up Hist", 29, 300, 3200, true, false, true);
@@ -148,6 +159,8 @@ int main(int argc, char** argv)
   histMod.addHistogram(&recoPtHist);
   histMod.addHistogram(&nLeptonsHist);
   histMod.addHistogram(&nLeptonJetHist);
+  histMod.addHistogram(&deltaRHist);
+  histMod.addHistogram(&matchingDeltaRHist);
   histMod.addHistogram(&allLeptonGenSimInvMassHist);
   histMod.addHistogram(&allLeptonRecoInvMassHist);
   histMod.addHistogram(&sameSignGenSimInvMassHist);
@@ -166,11 +179,13 @@ int main(int argc, char** argv)
 
 
   analyzer.addProductionModule(&genSimMod);
+  analyzer.addProductionModule(&genPartMod);
   analyzer.addProductionModule(&recoMod);
   analyzer.addProductionModule(&matchMod);
   //analyzer.addProductionModule(&weightMod);
   //analyzer.addProductionModule(&lrWeightMod);
   analyzer.addProductionModule(&lepRecoMod);
+  analyzer.addProductionModule(&lepMatchMod);
 
   //analyzer.addFilterModule(&massFilter);
   //analyzer.addFilterModule(&csFilter);
