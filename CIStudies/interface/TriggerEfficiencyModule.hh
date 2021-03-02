@@ -14,6 +14,7 @@ class TriggerEfficiencyModule : public AnalysisModule
     TriggerEfficiencyModule(const std::shared_ptr<MatchingModule> iMatchMod, const std::shared_ptr<GenSimIdentificationModule> iGenSimMod, double iHiggsMass, double iWidth);
     bool process(const edm::EventBase& event) override;
     void finalize() override;
+    void writeAll() override {};
   private:
     const std::shared_ptr<MatchingModule> matchMod;
     const std::shared_ptr<GenSimIdentificationModule> genSimMod;

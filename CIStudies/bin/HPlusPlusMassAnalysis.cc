@@ -68,13 +68,13 @@ Analyzer hPlusPlusMassAnalysis()
 
   // Add triggers to the TriggerModule
   triggerMod->addTrigger(singleMuonTrigger);
-  triggerMod->addTrigger(doubleMuonTrigger);
-  triggerMod->addTrigger(tripleMuonTrigger);
+  //triggerMod->addTrigger(doubleMuonTrigger);
+  //triggerMod->addTrigger(tripleMuonTrigger);
 
   analyzer.addProductionModule(genSimMod);
   analyzer.addProductionModule(recoMod);
-  //analyzer.addProductionModule(matchMod);
-  //analyzer.addProductionModule(triggerMod);
+  analyzer.addProductionModule(matchMod);
+  analyzer.addProductionModule(triggerMod);
 
 
   analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
