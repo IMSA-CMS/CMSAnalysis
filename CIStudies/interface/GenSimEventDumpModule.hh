@@ -32,6 +32,11 @@ private:
   void printGenParticleCollection(const std::vector<reco::GenParticle>& genParts) const;
 
   int getIndexOf(const reco::Candidate* part, const std::vector<reco::GenParticle>& genParts) const;
+  int getLatestIndexOfMothers(const reco::GenParticle& part, const std::vector<reco::GenParticle>& genParts) const;
+  int getLatestIndexOfDaughters(const reco::GenParticle& part, const std::vector<reco::GenParticle>& genParts) const;
+  std::string formatMotherParticles(const reco::GenParticle& part, const std::vector<reco::GenParticle>& genParts) const;
+  std::string formatDaughterParticles(const reco::GenParticle& part, const std::vector<reco::GenParticle>& genParts) const;
+
   int numOfEvents;
   int counter;
 };

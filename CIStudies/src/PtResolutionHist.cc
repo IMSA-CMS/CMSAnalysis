@@ -8,5 +8,6 @@
 
 double PtResolutionHist::getValue(const ParticleCollection& partColl) const
 {
+  //std::cerr << "congrats you made it" << std::endl;
   return partColl.getLeadingTransverseMomentum();
 }
