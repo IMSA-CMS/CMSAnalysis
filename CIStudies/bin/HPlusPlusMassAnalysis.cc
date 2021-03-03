@@ -6,6 +6,7 @@
 #include "CIAnalysis/CIStudies/interface/Analyzer.hh"
 
 #include "CIAnalysis/CIStudies/interface/DoubleMuonTrigger.hh"
+#include "CIAnalysis/CIStudies/interface/GenSimEventDumpModule.hh"
 #include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
@@ -22,6 +23,8 @@
 
 Analyzer hPlusPlusMassAnalysis() {
   Analyzer analyzer;
+
+  auto eventDump = make_shared<GenSimEventDumpModule>(2);
 
   auto genSimMod = make_shared<GenSimIdentificationModule>(9900041);
   auto recoMod = make_shared<RecoIdentificationModule>(50);
@@ -76,10 +79,12 @@ Analyzer hPlusPlusMassAnalysis() {
 
   analyzer.addProductionModule(genSimMod);
   analyzer.addProductionModule(recoMod);
-  analyzer.addProductionModule(matchMod);
-  analyzer.addProductionModule(triggerMod);
+  // analyzer.addProductionModule(matchMod);
+  // analyzer.addProductionModule(triggerMod);
 
+  // Don't remove unless you don't want histograms
   analyzer.addAnalysisModule(histMod);
+  analyzer.addAnalysisModule(eventDump);
   // analyzer.addAnalysisModule(leptonEfficiency);
   // analyzer.addAnalysisModule(massRecoEfficiency200);
   // analyzer.addAnalysisModule(massRecoEfficiency500);
