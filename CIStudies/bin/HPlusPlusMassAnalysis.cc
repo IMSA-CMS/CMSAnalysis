@@ -67,7 +67,7 @@ Analyzer hPlusPlusMassAnalysis() {
   histMod->addHistogram(nLeptonsHist);
   histMod->addHistogram(nElectronsHist);
   histMod->addHistogram(nMuonsHist);
-  // histMod->addHistogram(recoThirdMuonPtHist);
+  histMod->addHistogram(recoThirdMuonPtHist);
 
   // Initialize triggers
   auto singleMuonTrigger = std::make_shared<SingleMuonTrigger>(recoMod, 50);
