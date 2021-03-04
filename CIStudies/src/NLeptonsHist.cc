@@ -11,7 +11,7 @@ NLeptonsHist::NLeptonsHist(const std::shared_ptr<MatchingModule> imatchModule,
 
 double NLeptonsHist::value() const {
   const MatchingPairCollection &pairs = matchModule->getMatchingBestPairs();
-  std::cout << " Number of Matched Particles: " << pairs.getSize() << "\n";
+  // std::cout << " Number of Matched Particles: " << pairs.getSize() << "\n";
 
   if (targetPdgId == 0) {
     std::cout << "\nParticles Found: " << pairs.getSize() << "\n";
