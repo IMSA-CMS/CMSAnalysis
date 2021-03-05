@@ -248,51 +248,40 @@ void HistogramOutputModule::finalize() {
   // std::cout << "Finalize\n";
 
   for (auto pair : massBinMap) {
+    auto name = pair.first;
+    auto bins = pair.second;
     // std::cout << pair.first << '\n';
     // std::cout << "Pair First: " << pair.first << "\t" << "Pair Second: " <<
     // pair.second << "\n";
 
-    for (auto massBin : massBins) {
-      // std::cout << "Mass Bin: " << massBin.first << '\n';
-      auto fileKey = fileKeys[massBin.first];
+    // std::cout << "Mass Bin: " << massBin.first << '\n';
+
+    // std::cout << "Pair Second Size: " << pair.second.size() << "\n";
+
+    for (auto bin : bins) {
+      auto weight = massBins[bin];
+      auto fileKey = fileKeys[bin];
       auto eventCount = getEventCount(fileKey);
 
-      // std::cout << "Pair Second Size: " << pair.second.size() << "\n";
-
-      for (auto bin : pair.second) {
-        // std::cout << "Bin: " << bin << "\t" << "Event Count: " << eventCount
-        // << "\n";
-        if (bin == massBin.first && eventCount != 0) {
-          // std::cout << "HISTOGRAM:: scale: " << massBin.second / eventCount
-          //           << "\n";
-
-          /*
-          if (massBin.second != 0) {
-            getHistogram(pair.first + bin)->Scale(1);
-            // ->Scale(massBin.second /
-            //         eventCount); // massBin.second is the scale
-          }
-          */
-
-          // for (int i = 1; i < getHistogram(pair.first)->GetNbinsX() ; ++i)
-          // {
-          // getHistogram(pair.first)->AddBinContent(i, getHistogram(pair.first
-          // + massBin.first)->GetBinContent(i));
-          // }
-          getHistogram(pair.first)
-              ->Add(getHistogram(pair.first + massBin.first));
-        }
+      /*
+      if (eventCount != 0) {
+        getHistogram(pair.first + bin)->Scale(1);
+        // ->Scale(weight /
+        //         eventCount); // massBin.second is the scale
       }
+      */
+
+      // for (int i = 1; i < getHistogram(pair.first)->GetNbinsX() ; ++i)
+      // {
+      // getHistogram(pair.first)->AddBinContent(i, getHistogram(pair.first
+      // + massBin.first)->GetBinContent(i));
+      // }
+      getHistogram(name)->Add(getHistogram(name + bin));
     }
   }
 }
 
 bool HistogramOutputModule::isNewMassBin(const std::string mass) {
-  for (auto massBin : massBins) {
-    if (mass == massBin.first) {
-      return false;
-    }
-  }
-
-  return true;
+  bool found = !(massBins.find(mass) == massBins.end());
+  return found;
 }
