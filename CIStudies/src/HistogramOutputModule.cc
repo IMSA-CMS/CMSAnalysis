@@ -263,18 +263,17 @@ void HistogramOutputModule::finalize() {
       auto fileKey = fileKeys[bin];
       auto eventCount = getEventCount(fileKey);
 
+      // weight is the scale
       /*
       if (eventCount != 0) {
-        getHistogram(pair.first + bin)->Scale(1);
-        // ->Scale(weight /
-        //         eventCount); // massBin.second is the scale
+        getHistogram(name + bin)->Scale(1);
+            // ->Scale(weight / eventCount);
       }
       */
 
-      // for (int i = 1; i < getHistogram(pair.first)->GetNbinsX() ; ++i)
-      // {
-      // getHistogram(pair.first)->AddBinContent(i, getHistogram(pair.first
-      // + massBin.first)->GetBinContent(i));
+      // for (int i = 1; i < getHistogram(name)->GetNbinsX(); ++i) {
+      //   getHistogram(name)->AddBinContent(
+      //       i, getHistogram(name + bin)->GetBinContent(i));
       // }
       getHistogram(name)->Add(getHistogram(name + bin));
     }
@@ -282,6 +281,6 @@ void HistogramOutputModule::finalize() {
 }
 
 bool HistogramOutputModule::isNewMassBin(const std::string mass) {
-  bool found = !(massBins.find(mass) == massBins.end());
-  return found;
+  bool isNew = (massBins.find(mass) == massBins.end());
+  return isNew;
 }
