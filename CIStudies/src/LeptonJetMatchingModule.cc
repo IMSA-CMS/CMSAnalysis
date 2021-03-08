@@ -3,7 +3,7 @@
 
 #include <limits>
 
-LeptonJetMatchingModule::LeptonJetMatchingModule(const GenSimParticleModule& genSimModule, const LeptonJetReconstructionModule& lepJetModule, double deltaRCut) :
+LeptonJetMatchingModule::LeptonJetMatchingModule(std::shared_ptr<GenSimParticleModule> genSimModule, std::shared_ptr<LeptonJetReconstructionModule> lepJetModule, double deltaRCut) :
   genSim(genSimModule),
   lepJet(lepJetModule),
   deltaRCutoff(deltaRCut)
@@ -13,8 +13,8 @@ LeptonJetMatchingModule::LeptonJetMatchingModule(const GenSimParticleModule& gen
 bool LeptonJetMatchingModule::process(const edm::EventBase& event)
 {
     matchingPairs.clear();
-    std::vector<Particle> genSimParticles(genSim.getGenParticles().getParticles());
-    std::vector<LeptonJet> recoLeptonJets(lepJet.getLeptonJets());
+    std::vector<Particle> genSimParticles(genSim->getGenParticles().getParticles());
+    std::vector<LeptonJet> recoLeptonJets(lepJet->getLeptonJets());
     std::cout << "Size of genSimParticles: " << genSimParticles.size() << "\n";
     std::cout << "Size of recoLeptonJets: " << recoLeptonJets.size() << "\n";
 

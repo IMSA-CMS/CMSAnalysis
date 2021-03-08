@@ -5,7 +5,7 @@
 
 #include <vector>
 
-MatchingDeltaRHist::MatchingDeltaRHist(const LeptonJetMatchingModule& iLeptonJetMatchingModule, const std::string& iname, int iNBins, double iminimum, double imaximum) :
+MatchingDeltaRHist::MatchingDeltaRHist(std::shared_ptr<LeptonJetMatchingModule> iLeptonJetMatchingModule, const std::string& iname, int iNBins, double iminimum, double imaximum) :
     HistogramPrototype(iname, iNBins, iminimum, imaximum),
     leptonJetMatchingModule(iLeptonJetMatchingModule)
 
@@ -13,7 +13,7 @@ MatchingDeltaRHist::MatchingDeltaRHist(const LeptonJetMatchingModule& iLeptonJet
 
 double MatchingDeltaRHist::value() const
 {
-    const auto& matchingPairs = leptonJetMatchingModule.getMatchingPairs();
+    const auto& matchingPairs = leptonJetMatchingModule->getMatchingPairs();
     if (matchingPairs.size() != 0)
     {
         std::cout << "MatchingPairs size not zero" << "\n";
