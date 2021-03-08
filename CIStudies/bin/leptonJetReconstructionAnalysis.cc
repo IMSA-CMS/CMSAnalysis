@@ -15,6 +15,13 @@
 #include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
 #include "CIAnalysis/CIStudies/interface/MassRecoEfficiency.hh"
 #include "CIAnalysis/CIStudies/interface/GenSimEventDumpModule.hh"
+#include "CIAnalysis/CIStudies/interface/LeptonJetReconstructionModule.hh"
+#include "CIAnalysis/CIStudies/interface/LeptonJetMatchingModule.hh"
+#include "CIAnalysis/CIStudies/interface/LeptonJet.hh"
+#include "CIAnalysis/CIStudies/interface/GenSimParticleModule.hh"
+#include "CIAnalysis/CIStudies/interface/HistogramOutputModule.hh"
+#include "CIAnalysis/CIStudies/interface/DeltaRHist.hh"
+#include "CIAnalysis/CIStudies/interface/MatchingDeltaRHist.hh"
 
 
 Analyzer leptonJetReconstructionAnalysis()
@@ -27,23 +34,24 @@ Analyzer leptonJetReconstructionAnalysis()
   auto weightMod = make_shared<WeightingModule>();
   auto lrWeightMod = make_shared<LRWeightModule>();
   auto genSimEventDumpMod = make_shared<GenSimEventDumpModule>(3);
+  auto lepRecoMod = make_shared<LeptonJetReconstructionModule>(recoMod);
+  auto genPartMod = make_shared<GenSimParticleModule>(1000022);
+  auto lepMatchMod = make_shared<LeptonJetMatchingModule>(genPartMod, lepRecoMod);
+  auto histOutputMod = make_shared<HistogramOutputModule>(genSimMod, recoMod, weightMod, lrWeightMod);
 
-  // Add the histogram(s) created above to histMod
-  //histMod->addHistogram(nLeptonsHist);
-  //histMod->addHistogram(nElectronsHist);
-  //histMod->addHistogram(nMuonsHist);
+  // Histograms
+  auto matchDeltaRHist = make_shared<MatchingDeltaRHist>(lepMatchMod, "Differences in Delta R for Matched Lepton Jets", 100, 0, 0.5);
+
+  histOutputMod->addHistogram(matchDeltaRHist);
 
   analyzer.addProductionModule(genSimMod);
   analyzer.addProductionModule(recoMod);
   analyzer.addProductionModule(matchMod);
+  analyzer.addProductionModule(lepRecoMod);
+  analyzer.addProductionModule(genPartMod);
+  analyzer.addProductionModule(lepMatchMod);
 
-  //analyzer.addAnalysisModule(leptonEfficiency);
-  //analyzer.addAnalysisModule(massRecoEfficiency200);
-  //analyzer.addAnalysisModule(massRecoEfficiency500);
-  //analyzer.addAnalysisModule(massRecoEfficiency800);
-  //analyzer.addAnalysisModule(massRecoEfficiency1000);
-  //analyzer.addAnalysisModule(massRecoEfficiency1300);
-  analyzer.addAnalysisModule(genSimEventDumpMod);
+  analyzer.addAnalysisModule(histOutputMod);
   
   return analyzer;
 }
