@@ -37,8 +37,8 @@ int main(int argc, char** argv)
   unsigned outputEvery = parser.integerValue("outputEvery");
 
   //Analyzer analyzer = massResolutionAnalysis();
-  Analyzer analyzer = hPlusPlusMassAnalysis();
-  //Analyzer analyzer = leptonJetReconstructionAnalysis();
+  //Analyzer analyzer = hPlusPlusMassAnalysis();
+  Analyzer analyzer = leptonJetReconstructionAnalysis();
 
   std::cout << "Notice: analyzer created" << std::endl;
 
