@@ -21,6 +21,7 @@ public:
 
   double getInvariantMass() const;
   double getLeadingTransverseMomentum() const;
+  double getNthHighestPt(int n) const;
   double getLeadingPt() const;
   double getCollinsSoper() const; 
   bool isBB() const;
@@ -32,7 +33,6 @@ public:
 
   Particle getLeadingPtLepton() const;
   int getLeptonTypeCount(Particle::LeptonType leptonType) const;
-
 
   void clear() {particles.clear();}
 

@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-AFBModule::AFBModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const LRWeightModule& lrWeightModule, int minMass, int maxMass, int massInterval) :
+AFBModule::AFBModule(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule, int minMass, int maxMass, int massInterval) :
   HistogramOutputModule(genSimModule, recoModule, weightingModule, lrWeightModule),
   genSim(genSimModule),
   reco(recoModule),
@@ -49,11 +49,11 @@ void AFBModule::finalize()
 
 bool AFBModule::process(const edm::EventBase& event)
 {
-  auto genParticles = genSim.getGenParticles();
+  auto genParticles = genSim->getGenParticles();
   auto genSimCS = genParticles.getCollinsSoper();
   auto genSimInvMass = genParticles.getInvariantMass();
 
-  auto recoParticles = reco.getRecoCandidates();
+  auto recoParticles = reco->getRecoCandidates();
   auto recoCS = recoParticles.getCollinsSoper();
   auto recoInvMass = recoParticles.getInvariantMass();
 

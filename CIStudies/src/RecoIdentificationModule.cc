@@ -48,9 +48,23 @@ bool RecoIdentificationModule::process(const edm::EventBase& event)
 	  //   }
 	}
     }
+  //std::cerr << "number of leptons = " << recoCandidates.getNumParticles() << std::endl;
 
   //std::cerr << "EXITING RecoIdentificationModule" << std::endl;
   return true;
 }
 
-  
+ParticleCollection RecoIdentificationModule::getRecoCandidates(Particle::LeptonType leptonType) const
+{
+  ParticleCollection filteredCollection;
+
+  for (const auto& particle : recoCandidates.getParticles())
+  {
+    if (particle.getLeptonType() == leptonType)
+    {
+      filteredCollection.addParticle(particle);
+    }
+  }
+
+  return filteredCollection;
+}

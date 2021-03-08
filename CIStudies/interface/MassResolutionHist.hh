@@ -7,7 +7,8 @@ class MassResolutionHist : public ResolutionPrototype
 {
   public:
     using ResolutionPrototype::ResolutionPrototype; //copies constructor over from ResolutionPrototype
-
+  protected:
+    double getValue(const ParticleCollection& partColl) const override;
 };
 
 #endif
