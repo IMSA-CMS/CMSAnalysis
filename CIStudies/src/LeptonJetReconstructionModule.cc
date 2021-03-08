@@ -2,7 +2,7 @@
 #include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "DataFormats/Math/interface/deltaR.h"
 
-LeptonJetReconstructionModule::LeptonJetReconstructionModule(const RecoIdentificationModule& recoModule, double deltaRCut) :
+LeptonJetReconstructionModule::LeptonJetReconstructionModule(std::shared_ptr<RecoIdentificationModule> recoModule, double deltaRCut) :
   reco(recoModule),
   DeltaRCut(deltaRCut)
 
@@ -12,7 +12,7 @@ LeptonJetReconstructionModule::LeptonJetReconstructionModule(const RecoIdentific
 bool LeptonJetReconstructionModule::process(const edm::EventBase& event) // reco::deltaR(v1, v2)
 {
   leptonJets.clear();
-  const ParticleCollection& recoCandidates = reco.getRecoCandidates();
+  const ParticleCollection& recoCandidates = reco->getRecoCandidates();
   std::vector<Particle> recoLeptons = recoCandidates.getParticles();
 
   while (recoLeptons.size() != 0)
