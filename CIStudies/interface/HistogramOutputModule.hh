@@ -19,12 +19,12 @@ class HistogramPrototype;
 class HistogramOutputModule : public AnalysisModule
 {
 public:
-  HistogramOutputModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const LRWeightModule& lrWeightModule);
+  HistogramOutputModule(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule);
   virtual void writeAll();
   virtual void initialize() override {};                                     // Empty function
   virtual bool process(const edm::EventBase& event) override;                // Fills the histograms
   virtual void finalize() override;                                          // Scales the histograms
-  void addHistogram(HistogramPrototype* hist) {histograms.push_back(hist);}; // Adds a HistogramPrototype* to histogram (the vector)
+  void addHistogram(std::shared_ptr<HistogramPrototype> hist) {histograms.push_back(hist);}; // Adds a HistogramPrototype* to histogram (the vector)
 
 protected:
   // This adds an object to the collection to be written.
@@ -53,7 +53,7 @@ protected:
   // void makeHistogram(HistogramPrototype* h);
 
   // Creates a histogram from a HistogramPrototype* and adds it to the collection.
-  void makeHistogram(HistogramPrototype* h);
+  void makeHistogram(std::shared_ptr<HistogramPrototype> h);
 
   // Convenient getter methods to access histograms
   TH1* getHistogram(const std::string& name) {return dynamic_cast<TH1*>(getObject(name));}
@@ -81,16 +81,16 @@ private:
   // be done before anyone can work profitably with the object
   void addObjectClone(const std::string& oldName, const std::string& newName) const;
 
-  const GenSimIdentificationModule& genSim;
-  const RecoIdentificationModule& reco;
-  const WeightingModule& weighting;
-  const LRWeightModule& lrWeighting;
+  const std::shared_ptr<GenSimIdentificationModule> genSim;
+  const std::shared_ptr<RecoIdentificationModule> reco;
+  const std::shared_ptr<WeightingModule> weighting;
+  const std::shared_ptr<LRWeightModule> lrWeighting;
 
   std::unordered_map<std::string, double> massBins;
   std::unordered_map<std::string, std::string> fileKeys;
 
   bool isNewMassBin(const std::string mass);
-  std::vector<HistogramPrototype*> histograms;
+  std::vector<std::shared_ptr<HistogramPrototype>> histograms;
 };
 
 #endif

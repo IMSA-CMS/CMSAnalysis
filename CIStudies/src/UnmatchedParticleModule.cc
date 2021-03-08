@@ -6,7 +6,7 @@
 #include <iostream>
 #include "TH2.h"
 
-UnmatchedParticleModule::UnmatchedParticleModule(const GenSimIdentificationModule& genSimModule, const RecoIdentificationModule& recoModule, const WeightingModule& weightingModule, const LRWeightModule& lrWeighting, const MatchingModule& matchingModule) :
+UnmatchedParticleModule::UnmatchedParticleModule(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeighting, const std::shared_ptr<MatchingModule> matchingModule) :
   HistogramOutputModule(genSimModule, recoModule, weightingModule, lrWeighting),
   genSim(genSimModule),
   matching(matchingModule)
@@ -31,11 +31,11 @@ void UnmatchedParticleModule::initialize()
 
 bool UnmatchedParticleModule::process(const edm::EventBase& event)
 {
-  auto genParticles = genSim.getGenParticles();
+  auto genParticles = genSim->getGenParticles();
   auto genParticlesVector = genParticles.getParticles();
 
 
-  auto matchingParticles = matching.getMatchingBestPairs().getGenParticles();
+  auto matchingParticles = matching->getMatchingBestPairs().getGenParticles();
   auto matchingParticlesVector = matchingParticles.getParticles();
 
 
