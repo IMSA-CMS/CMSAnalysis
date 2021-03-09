@@ -77,7 +77,7 @@ bool TriggerEfficiencyModule::process(const edm::EventBase& event)
 
 void TriggerEfficiencyModule::finalize()
 {
-  std::cout << "Expected GenSim Higgs: " << expectedHiggsCount << '\n';
+  std::cout << "Expected GenSim H++'s: " << expectedHiggsCount << '\n';
   std::cout << "Number of GenSim H++'s that fall into the mass window of the H++: " << genSimCount << '\n';
   std::cout << "Number of Reco H++'s that fall into the mass window of the H++: " << recoCount << '\n';
   std::cout << "Overall Generator Eficiency for H++: " << static_cast<double>(genSimCount) / expectedHiggsCount << '\n';
