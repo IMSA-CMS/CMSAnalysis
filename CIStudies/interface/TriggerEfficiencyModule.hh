@@ -7,6 +7,7 @@
 
 class MatchingModule;
 class GenSimIdentificationModule;
+class Particle;
 
 class TriggerEfficiencyModule : public AnalysisModule
 {
@@ -15,6 +16,7 @@ class TriggerEfficiencyModule : public AnalysisModule
     bool process(const edm::EventBase& event) override;
     void finalize() override;
     void writeAll() override {};
+    void printDebugLines(const Particle particle) const;
   private:
     const std::shared_ptr<MatchingModule> matchMod;
     const std::shared_ptr<GenSimIdentificationModule> genSimMod;
@@ -24,6 +26,7 @@ class TriggerEfficiencyModule : public AnalysisModule
 
     int recoCount = 0;
     int genSimCount = 0;
+    int expectedHiggsCount = 0;
 };
 
 #endif
