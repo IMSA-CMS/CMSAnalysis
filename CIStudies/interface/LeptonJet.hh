@@ -8,26 +8,22 @@ class LeptonJet
 {
 public:
   LeptonJet(const Particle particle);
-  std::vector<double> getPt() const; // Consider four vectors, change to doubles (task for later)
-  std::vector<double> getPhi() const;
-  std::vector<double> getEta() const;
+  double getPt() const {return getFourVector().Pt();}
+  double getPhi() const {return getFourVector().Phi();}
+  double getEta() const {return getFourVector().Eta();}
+  double getMass() const {return getFourVector().mass();}
+
+  bool operator==(LeptonJet userJet) const;
 
   const std::vector<Particle>& getParticles() const {return leptonJetParticles;}
   void addParticle(const Particle particle) {leptonJetParticles.push_back(particle);}
   int getNumParticles() const {return leptonJetParticles.size();}
 
+  // Adds four vectors (reco::Candidate::LorentzVector)
+  reco::Candidate::LorentzVector getFourVector() const;
 
 private:
   std::vector<Particle> leptonJetParticles;
-
-  std::vector<double> ptVector;
-  std::vector<double> phiVector;
-  std::vector<double> etaVector;
-
-  void findPt() const;
-  void findPhi() const;
-  void findEta() const;
 };
 
 #endif
-
