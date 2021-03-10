@@ -12,10 +12,10 @@
 #include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
 #include "CIAnalysis/CIStudies/interface/MassRecoEfficiency.hh"
-// #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
-// #include "CIAnalysis/CIStudies/interface/NLeptonsFilter.hh"
-// #include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
-// #include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
+#include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
+#include "CIAnalysis/CIStudies/interface/NLeptonsFilter.hh"
+#include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
+#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/SingleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/ThirdMuonPtHist.hh"
 #include "CIAnalysis/CIStudies/interface/TriggerEfficiencyModule.hh"
@@ -26,43 +26,44 @@
 Analyzer hPlusPlusMassAnalysis() {
   Analyzer analyzer;
 
-  auto eventDump = make_shared<GenSimEventDumpModule>(2);
+  auto eventDump = std::make_shared<GenSimEventDumpModule>(2);
 
-  auto genSimMod = make_shared<GenSimIdentificationModule>(9900041);
-  auto recoMod = make_shared<RecoIdentificationModule>(50);
-  auto matchMod = make_shared<MatchingModule>(genSimMod, recoMod);
-  auto triggerMod = make_shared<TriggerModule>(recoMod);
-  auto weightMod = make_shared<WeightingModule>();
-  auto lrWeightMod = make_shared<LRWeightModule>();
+  auto genSimMod = std::make_shared<GenSimIdentificationModule>(9900041);
+  auto recoMod = std::make_shared<RecoIdentificationModule>(50);
+  auto matchMod = std::make_shared<MatchingModule>(genSimMod, recoMod);
+  auto triggerMod = std::make_shared<TriggerModule>(recoMod);
+  auto weightMod = std::make_shared<WeightingModule>();
+  auto lrWeightMod = std::make_shared<LRWeightModule>();
 
-  auto nLeptonsFilter = make_shared<NLeptonsFilter>(
+  auto nLeptonsFilter = std::make_shared<NLeptonsFilter>(
       matchMod); // Needs to be updated with shared pointers
 
-  auto histMod = make_shared<HistogramOutputModule>(genSimMod, recoMod,
-                                                    weightMod, lrWeightMod);
+  auto histMod = std::make_shared<HistogramOutputModule>(
+      genSimMod, recoMod, weightMod, lrWeightMod);
   auto nLeptonsHist =
-      make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
-  auto nElectronsHist =
-      make_shared<NLeptonsHist>(matchMod, "Matched Electrons", 10, 0, 10, 11);
+      std::make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
+  auto nElectronsHist = std::make_shared<NLeptonsHist>(
+      matchMod, "Matched Electrons", 10, 0, 10, 11);
   auto nMuonsHist =
-      make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
+      std::make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
 
-  auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod, genSimMod);
+  auto leptonEfficiency =
+      std::make_shared<LeptonEfficiency>(matchMod, genSimMod);
   auto massRecoEfficiency200 =
-      make_shared<MassRecoEfficiency>(recoMod, 200, 10);
+      std::make_shared<MassRecoEfficiency>(recoMod, 200, 10);
   auto massRecoEfficiency500 =
-      make_shared<MassRecoEfficiency>(recoMod, 500, 25);
+      std::make_shared<MassRecoEfficiency>(recoMod, 500, 25);
   auto massRecoEfficiency800 =
-      make_shared<MassRecoEfficiency>(recoMod, 800, 40);
+      std::make_shared<MassRecoEfficiency>(recoMod, 800, 40);
   auto massRecoEfficiency1000 =
-      make_shared<MassRecoEfficiency>(recoMod, 1000, 50);
+      std::make_shared<MassRecoEfficiency>(recoMod, 1000, 50);
   auto massRecoEfficiency1300 =
-      make_shared<MassRecoEfficiency>(recoMod, 1300, 65);
+      std::make_shared<MassRecoEfficiency>(recoMod, 1300, 65);
 
   auto triggerEfficiencyMod =
-      make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 200, 10);
+      std::make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 200, 10);
 
-  auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(
+  auto recoThirdMuonPtHist = std::make_shared<ThirdMuonPtHist>(
       genSimMod, recoMod, false,
       std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
 
@@ -80,8 +81,8 @@ Analyzer hPlusPlusMassAnalysis() {
 
   // Add triggers to the TriggerModule
   triggerMod->addTrigger(singleMuonTrigger);
-  // triggerMod->addTrigger(doubleMuonTrigger);
-  // triggerMod->addTrigger(tripleMuonTrigger);
+  triggerMod->addTrigger(doubleMuonTrigger);
+  triggerMod->addTrigger(tripleMuonTrigger);
 
   analyzer.addProductionModule(genSimMod);
   analyzer.addProductionModule(recoMod);
