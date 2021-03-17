@@ -88,6 +88,8 @@ Analyzer hPlusPlusMassAnalysis() {
   analyzer.addProductionModule(recoMod);
   analyzer.addProductionModule(matchMod);
   analyzer.addProductionModule(triggerMod);
+  analyzer.addProductionModule(weightMod);
+  analyzer.addProductionModule(lrWeightMod);
 
   // Don't remove unless you don't want histograms
   analyzer.addAnalysisModule(histMod);
