@@ -264,12 +264,9 @@ void HistogramOutputModule::finalize() {
       auto eventCount = getEventCount(fileKey);
 
       // weight is the scale
-      /*
       if (eventCount != 0) {
-        getHistogram(name + bin)->Scale(1);
-            // ->Scale(weight / eventCount);
+        getHistogram(name + bin)->Scale(weight / eventCount);
       }
-      */
 
       // for (int i = 1; i < getHistogram(name)->GetNbinsX(); ++i) {
       //   getHistogram(name)->AddBinContent(
