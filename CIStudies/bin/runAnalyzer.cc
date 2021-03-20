@@ -10,6 +10,7 @@
 #include "CIAnalysis/CIStudies/bin/massResolutionAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/HPlusPlusMassAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/leptonJetReconstructionAnalysis.cc"
+#include "CIAnalysis/CIStudies/bin/MassAcceptanceAnalysis.cc"
 
 int main(int argc, char** argv)
 {
@@ -37,8 +38,9 @@ int main(int argc, char** argv)
   unsigned outputEvery = parser.integerValue("outputEvery");
 
   //Analyzer analyzer = massResolutionAnalysis();
-  Analyzer analyzer = hPlusPlusMassAnalysis();
+  //Analyzer analyzer = hPlusPlusMassAnalysis();
   //Analyzer analyzer = leptonJetReconstructionAnalysis();
+  Analyzer analyzer = mvaAnalysis();
 
   std::cout << "Notice: analyzer created" << std::endl;
 
