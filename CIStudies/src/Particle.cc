@@ -68,6 +68,21 @@ Particle Particle::mother() const
   return Particle(particle->mother(), Particle::LeptonType::None);
 }
 
+Particle Particle::uniqueMother() const
+{
+  checkIsNull();
+  // The mother that is not itself
+  auto mom = mother();
+  mom.checkIsNull();
+
+  if (mom.pdgId() == pdgId())
+  {
+    return mom.uniqueMother();  // Recursive back to itself, so it will keep going until it returns a mother that is not the particle
+  }
+
+  return mom;
+}
+
 Particle::LeptonType Particle::getLeptonType() const
 {
   checkIsNull();
