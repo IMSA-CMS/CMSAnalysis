@@ -20,14 +20,15 @@ int main(int argc, char** argv)
   gSystem->Load("libDataFormatsFWLite");
 
   optutl::CommandLineParser parser ("Analyze FWLite Histograms");
-  parser.addOption("pileup", optutl::CommandLineParser::kString, "PileupLevel", "");
   parser.addOption("output", optutl::CommandLineParser::kString, "Particle", "");
   parser.addOption("input", optutl::CommandLineParser::kString, "Input", "");
+  parser.addOption("numFiles", optutl::CommandLineParser::kInteger, "Number of Files", -1);
   parser.parseArguments (argc, argv);
-
-  std::string pileupLev = parser.stringValue("pileup");
+  
   std::string inputFile = parser.stringValue("input");
   std::string outputFile = parser.stringValue("output");
+  int numFiles = parser.integerValue("numFiles");
+
   if (outputFile.empty())
     {
       outputFile = "electronResolution.root";
@@ -51,7 +52,7 @@ int main(int argc, char** argv)
   std::cout << "Notice: input file selected" << std::endl;
   //error in line below
 
-  analyzer.run(inputFile, outputFile, outputEvery);
+  analyzer.run(inputFile, outputFile, outputEvery, numFiles);
 
   std::cout << "Notice: analyzer successfully ran" << std::endl;
   
