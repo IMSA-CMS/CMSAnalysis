@@ -13,15 +13,22 @@ TriggerEfficiencyModule::TriggerEfficiencyModule(const std::shared_ptr<MatchingM
 
 bool TriggerEfficiencyModule::process(const edm::EventBase& event)
 {
+  //std::cout << "New Event \n";
+
+  //double matchedCount = 0;
+
   auto genSimParticles = genSimMod->getGenParticles().getParticles();  // Vector of Particles
 
-  // std::cout << "Number of GenSim Particles: " << genSimParticles.size() << '\n';
+  //std::cout << "Number of GenSim Particles: " << genSimParticles.size() << '\n';
 
   for (size_t i = 0; i < genSimParticles.size(); ++i)
   {
+    auto genSimParticle1 = genSimParticles[i];
+    //std::cout << "GenSim Particle 1\n";
+    //printDebugLines(genSimParticle1);
+
     for (size_t j = i + 1; j < genSimParticles.size(); ++j)  // As to avoid overcounting
     {
-      auto genSimParticle1 = genSimParticles[i];
       auto genSimParticle2 = genSimParticles[j];
 
       //std::cout << "------------------------------------------------------------------------\n";
@@ -31,20 +38,27 @@ bool TriggerEfficiencyModule::process(const edm::EventBase& event)
       //std::cout << "GenSim Particle 2\n";
       //printDebugLines(genSimParticle2);
       //
-      //std::cout << "Higgs Mass: " << higgsMass << '\n';
+      // std::cout << "Higgs Mass: " << higgsMass << '\n';
 
-      if ((genSimParticle1 != genSimParticle2) && (genSimParticle1.uniqueMother() == genSimParticle2.uniqueMother()) && (genSimParticle1.charge() == genSimParticle2.charge()))
+      if ((genSimParticle1 != genSimParticle2) && (genSimParticle1.uniqueMother().pdgId() == genSimParticle2.uniqueMother().pdgId()) && (genSimParticle1.charge() == genSimParticle2.charge()) && genSimParticle1.isNotNull() && genSimParticle2.isNotNull())
       {
+        //++matchedCount;
+
         ParticleCollection genSimPair;
         genSimPair.addParticle(genSimParticle1);
         genSimPair.addParticle(genSimParticle2);
 
-        // std::cout << "Particle Pair Invariant Mass: " << genSimPair.getInvariantMass() << "\n\n";
+        //std::cout << "GenSim Particle 2\n";
+        //printDebugLines(genSimParticle2);
         
         ++expectedHiggsCount;
 
-        if (((higgsMass - width) <= genSimPair.getInvariantMass()) && (genSimPair.getInvariantMass() <= (higgsMass + width)))
+        if (((higgsMass - width) <= genSimPair.calculateSameSignInvariantMass()) && (genSimPair.calculateSameSignInvariantMass() <= (higgsMass + width)))
         {
+          
+
+          //std::cout << "GenSim Invariant Mass: " << genSimPair.calculateSameSignInvariantMass() << "\n";
+          
           ++genSimCount;
 
           ParticleCollection matchedReco;  // ParticleCollection that we will add the matched Reco particles to in a bit
@@ -56,14 +70,16 @@ bool TriggerEfficiencyModule::process(const edm::EventBase& event)
           for (auto pair : matchedPairs)
           {
             // std::cout << "Looping Through Pairs" << '\n';
-            if ((genSimParticle1 == pair.getGenParticle()) || (genSimParticle2 == pair.getGenParticle()))
+            if (((genSimParticle1 == pair.getGenParticle()) || (genSimParticle2 == pair.getGenParticle())) && pair.getGenParticle().isNotNull())
             {
               matchedReco.addParticle(pair.getRecoParticle());
               // std::cout << "GenSim Particle matched with Reco Particle" << '\n';
             }
           }
 
-          if (((higgsMass - width) <= matchedReco.getInvariantMass()) && (matchedReco.getInvariantMass() <= (higgsMass + width)))
+          //std::cout << "Reco Invariant Mass: " << matchedReco.calculateSameSignInvariantMass() << "\n\n";
+
+          if (((higgsMass - width) <= matchedReco.calculateSameSignInvariantMass()) && (matchedReco.calculateSameSignInvariantMass() <= (higgsMass + width)))
           {
             ++recoCount;
           }
@@ -71,6 +87,13 @@ bool TriggerEfficiencyModule::process(const edm::EventBase& event)
       }
     }
   }
+
+  //if (matchedCount != 2)
+  //{
+  //  std::cout << "*******************************************************************\n";
+  //}
+
+  //std::cout << matchedCount << '\n';
 
   return true;
 }
