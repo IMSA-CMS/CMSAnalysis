@@ -22,10 +22,12 @@ double MatchingDeltaRHist::value() const
         auto jetFourVector = pair.second.getFourVector();
         double deltaR = reco::deltaR(partFourVector, jetFourVector);
 
+        std::cout << "Matching Pair Delta R: " << deltaR << "\n";
+
         return deltaR;
     }
     else
     {
-        return 0;
+        return -1;
     }
 }
