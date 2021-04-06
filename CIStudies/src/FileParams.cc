@@ -29,11 +29,12 @@ void Process::addMaps()
 
 void Year::addMaps()
 {
-  addValuesToMap({"2016", "2017", "2018", "2020"});
+  addValuesToMap({"2016", "2017", "2018", "2020", "2021"});
   addAlternate("16", "2016");
   addAlternate("17", "2017");
   addAlternate("18", "2018");
   addAlternate("20", "2020");
+  addAlternate("21", "2021");
 }
 
 void Helicity::addMaps()
