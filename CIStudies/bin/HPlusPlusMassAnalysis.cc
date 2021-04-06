@@ -27,7 +27,7 @@ Analyzer hPlusPlusMassAnalysis()
 {
   Analyzer analyzer;
 
-  auto eventDump = make_shared<GenSimEventDumpModule>(2);
+  auto eventDump = make_shared<GenSimEventDumpModule>(3);
 
   auto genSimMod = make_shared<GenSimIdentificationModule>(9900041);
   auto recoMod = make_shared<RecoIdentificationModule>(50);
@@ -74,18 +74,18 @@ Analyzer hPlusPlusMassAnalysis()
   analyzer.addProductionModule(genSimMod);
   analyzer.addProductionModule(recoMod);
   analyzer.addProductionModule(matchMod);
-  analyzer.addProductionModule(triggerMod);
+  //analyzer.addProductionModule(triggerMod);
 
 
-  analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
-  analyzer.addAnalysisModule(triggerEfficiencyMod);
-  //analyzer.addAnalysisModule(eventDump);
+  //analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
+  //analyzer.addAnalysisModule(triggerEfficiencyMod);
+  analyzer.addAnalysisModule(eventDump);
   //analyzer.addAnalysisModule(leptonEfficiency);
-  //analyzer.addAnalysisModule(massRecoEfficiency200);
-  //analyzer.addAnalysisModule(massRecoEfficiency500);
-  //analyzer.addAnalysisModule(massRecoEfficiency800);
-  //analyzer.addAnalysisModule(massRecoEfficiency1000);
-  //analyzer.addAnalysisModule(massRecoEfficiency1300);
+  analyzer.addAnalysisModule(massRecoEfficiency200);
+  analyzer.addAnalysisModule(massRecoEfficiency500);
+  analyzer.addAnalysisModule(massRecoEfficiency800);
+  analyzer.addAnalysisModule(massRecoEfficiency1000);
+  analyzer.addAnalysisModule(massRecoEfficiency1300);
 
   return analyzer;
 }

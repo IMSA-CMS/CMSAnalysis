@@ -23,6 +23,9 @@
 #include "CIAnalysis/CIStudies/interface/HistogramOutputModule.hh"
 #include "CIAnalysis/CIStudies/interface/DeltaRHist.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingDeltaRHist.hh"
+#include "CIAnalysis/CIStudies/interface/MatchingPtHist.hh"
+#include "CIAnalysis/CIStudies/interface/MatchingPhiHist.hh"
+#include "CIAnalysis/CIStudies/interface/MatchingEtaHist.hh"
 #include "CIAnalysis/CIStudies/interface/SingleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/DoubleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
@@ -47,8 +50,14 @@ Analyzer leptonJetReconstructionAnalysis()
 
   // Histograms
   auto matchDeltaRHist = make_shared<MatchingDeltaRHist>(lepMatchMod, "Differences in Delta R for Matched Lepton Jets", 100, 0, 0.5);
+  auto matchPtHist = make_shared<MatchingPtHist>(lepMatchMod, "Differences in pT for Matched Lepton Jets", 100, -300, 300);
+  auto matchPhiHist = make_shared<MatchingPhiHist>(lepMatchMod, "Differences in Phi for Matched Lepton Jets", 100, 0, 3.15);
+  auto matchEtaHist = make_shared<MatchingEtaHist>(lepMatchMod, "Differences in Eta for Matched Lepton Jets", 100, -1, 1);
 
   histOutputMod->addHistogram(matchDeltaRHist);
+  histOutputMod->addHistogram(matchPtHist);
+  histOutputMod->addHistogram(matchPhiHist);
+  histOutputMod->addHistogram(matchEtaHist);
   //auto genSimEventDumpMod = make_shared<GenSimEventDumpModule>(3);
   auto triggerMod = make_shared<TriggerModule>(recoMod);
 
