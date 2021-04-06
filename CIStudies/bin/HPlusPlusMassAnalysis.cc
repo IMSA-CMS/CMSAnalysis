@@ -21,7 +21,6 @@
 #include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/ThirdMuonPtHist.hh"
 #include "CIAnalysis/CIStudies/interface/GenSimEventDumpModule.hh"
-#include "CIAnalysis/CIStudies/interface/MatchedRecoInvariantMassHist.hh"
 
 
 Analyzer hPlusPlusMassAnalysis()
@@ -55,14 +54,11 @@ Analyzer hPlusPlusMassAnalysis()
 
   auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
 
-  auto matchedRecoInvMassHist = make_shared<MatchedRecoInvariantMassHist>(matchMod, genSimMod, 200, 10, "Matched Reconstructed Invariant Mass", 50, 0, 3000);
-
   // Add the histogram(s) created above to histMod
-  //histMod->addHistogram(recoThirdMuonPtHist);
+  histMod->addHistogram(recoThirdMuonPtHist);
   //histMod->addHistogram(nLeptonsHist);
   //histMod->addHistogram(nElectronsHist);
   //histMod->addHistogram(nMuonsHist);
-  histMod->addHistogram(matchedRecoInvMassHist);
 
 
   // Initialize triggers
