@@ -3,11 +3,12 @@
 #include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/Particle.hh"
 
-TriggerEfficiencyModule::TriggerEfficiencyModule(const std::shared_ptr<MatchingModule> iMatchMod, const std::shared_ptr<GenSimIdentificationModule> iGenSimMod, double iHiggsMass, double iWidth) :
+TriggerEfficiencyModule::TriggerEfficiencyModule(const std::shared_ptr<MatchingModule> iMatchMod, const std::shared_ptr<GenSimIdentificationModule> iGenSimMod, double iHiggsMass, double iLowerWidth, double iUpperWidth) :
   matchMod(iMatchMod),
   genSimMod(iGenSimMod),
   higgsMass(iHiggsMass),
-  width(iWidth)
+  lowerWidth(iLowerWidth),
+  upperWidth(iUpperWidth)
 {
 }
 
@@ -43,7 +44,7 @@ bool TriggerEfficiencyModule::process(const edm::EventBase& event)
         
         ++expectedHiggsCount;
 
-        if (((higgsMass - width) <= genSimPair.getInvariantMass()) && (genSimPair.getInvariantMass() <= (higgsMass + width)))
+        if (((higgsMass - lowerWidth) <= genSimPair.getInvariantMass()) && (genSimPair.getInvariantMass() <= (higgsMass + upperWidth)))
         {
           ++genSimCount;
 
@@ -63,7 +64,7 @@ bool TriggerEfficiencyModule::process(const edm::EventBase& event)
             }
           }
 
-          if (((higgsMass - width) <= matchedReco.getInvariantMass()) && (matchedReco.getInvariantMass() <= (higgsMass + width)))
+          if (((higgsMass - lowerWidth) <= matchedReco.getInvariantMass()) && (matchedReco.getInvariantMass() <= (higgsMass + upperWidth)))
           {
             ++recoCount;
           }
