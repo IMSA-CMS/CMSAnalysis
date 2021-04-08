@@ -32,7 +32,6 @@ Analyzer leptonJetReconstructionAnalysis()
   auto matchMod = make_shared<MatchingModule>(genSimMod, recoMod);
   auto weightMod = make_shared<WeightingModule>();
   auto lrWeightMod = make_shared<LRWeightModule>();
-  //auto genSimEventDumpMod = make_shared<GenSimEventDumpModule>(3);
   auto triggerMod = make_shared<TriggerModule>(recoMod);
 
   auto nLeptonsFilter = make_shared<NLeptonsFilter>(matchMod); //Needs to be updated with shared pointers
@@ -52,12 +51,12 @@ Analyzer leptonJetReconstructionAnalysis()
   histMod->addHistogram(nMuonsHist);
   histMod->addHistogram(recoThirdMuonPtHist);
 
-  // Initialize triggers
+  // Initialize triggers -- put these back later
   auto singleMuonTrigger = make_shared<SingleMuonTrigger>(recoMod, 50);
   auto doubleMuonTrigger = make_shared<DoubleMuonTrigger>(recoMod, 37, 27);
   auto tripleMuonTrigger = make_shared<TripleMuonTrigger>(recoMod, 10, 5, 5);
 
-  // Add triggers to the TriggerModule
+  // Add triggers to the TriggerModule -- put these back later
   triggerMod->addTrigger(singleMuonTrigger);
   triggerMod->addTrigger(doubleMuonTrigger);
   triggerMod->addTrigger(tripleMuonTrigger);
