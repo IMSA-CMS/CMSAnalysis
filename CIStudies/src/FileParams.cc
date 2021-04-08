@@ -240,7 +240,7 @@ string FileParams::locateTextFile() const
     + massString + lambdaString + interferenceString
     + helicityString + ".txt";
 
-  std::cout << file;
+  //std::cout << file;
   return file;
 }
 
