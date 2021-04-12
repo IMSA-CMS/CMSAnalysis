@@ -4,7 +4,6 @@
 #include "TSystem.h"
 
 #include "CIAnalysis/CIStudies/interface/Analyzer.hh"
-
 #include "CIAnalysis/CIStudies/interface/DeltaRHist.hh"
 #include "CIAnalysis/CIStudies/interface/DoubleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/GenSimEventDumpModule.hh"
@@ -12,14 +11,17 @@
 #include "CIAnalysis/CIStudies/interface/GenSimParticleModule.hh"
 #include "CIAnalysis/CIStudies/interface/GetNthHighestPtHist.hh"
 #include "CIAnalysis/CIStudies/interface/HistogramOutputModule.hh"
-#include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonJet.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonJetMatchingModule.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonJetReconstructionModule.hh"
+#include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
 #include "CIAnalysis/CIStudies/interface/MassRecoEfficiency.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingDeltaRHist.hh"
+#include "CIAnalysis/CIStudies/interface/MatchingEtaHist.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
+#include "CIAnalysis/CIStudies/interface/MatchingPhiHist.hh"
+#include "CIAnalysis/CIStudies/interface/MatchingPtHist.hh"
 #include "CIAnalysis/CIStudies/interface/NLeptonsFilter.hh"
 #include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
 #include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
@@ -46,32 +48,25 @@ Analyzer leptonJetReconstructionAnalysis() {
       genSimMod, recoMod, weightMod, lrWeightMod);
 
   // Histograms
-  auto matchDeltaRHist = std::make_shared<MatchingDeltaRHist>(
-      lepMatchMod, "Differences in Delta R for Matched Lepton Jets", 100, 0,
-      0.5);
+  auto matchDeltaRHist = make_shared<MatchingDeltaRHist>(lepMatchMod, "Differences in Delta R for Matched Lepton Jets", 100, 0, 0.5);
+  auto matchPtHist = make_shared<MatchingPtHist>(lepMatchMod, "Differences in pT for Matched Lepton Jets", 100, -300, 300);
+  auto matchPhiHist = make_shared<MatchingPhiHist>(lepMatchMod, "Differences in Phi for Matched Lepton Jets", 100, 0, 3.15);
+  auto matchEtaHist = make_shared<MatchingEtaHist>(lepMatchMod, "Differences in Eta for Matched Lepton Jets", 100, -1, 1);
 
   histOutputMod->addHistogram(matchDeltaRHist);
-  // auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>(3);
-  auto triggerMod = std::make_shared<TriggerModule>(recoMod);
+  histOutputMod->addHistogram(matchPtHist);
+  histOutputMod->addHistogram(matchPhiHist);
+  histOutputMod->addHistogram(matchEtaHist);
+  //auto genSimEventDumpMod = make_shared<GenSimEventDumpModule>(3);
+  auto triggerMod = make_shared<TriggerModule>(recoMod);
 
-  auto nLeptonsFilter = std::make_shared<NLeptonsFilter>(
-      matchMod); // Needs to be updated with shared pointers
+  auto nLeptonsFilter = make_shared<NLeptonsFilter>(matchMod); //Needs to be updated with shared pointers
 
-  auto nLeptonsHist =
-      std::make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
-  auto nElectronsHist = std::make_shared<NLeptonsHist>(
-      matchMod, "Matched Electrons", 10, 0, 10, 11);
-  auto nMuonsHist =
-      std::make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
-  auto recoThirdMuonPtHist = std::make_shared<GetNthHighestPtHist>(
-      genSimMod, recoMod, false, "Reconstructed Third Muon Transverse Momentum",
-      50, 0, 100, 3);
-  // auto recoThirdMuonPtHist = std::make_shared<ThirdMuonPtHist>(genSimMod,
-  // recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"),
-  // 50, 0, 3000);
-
-  auto leptonEfficiency =
-      std::make_shared<LeptonEfficiency>(matchMod, genSimMod);
+  auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
+  auto nElectronsHist = make_shared<NLeptonsHist>(matchMod, "Matched Electrons", 10, 0, 10, 11);
+  auto nMuonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
+  auto recoThirdMuonPtHist = make_shared<GetNthHighestPtHist>(genSimMod, recoMod, false, "Reconstructed Third Muon Transverse Momentum", 50, 0, 100, 3);
+  //auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
 
   // Add the histogram(s) created above to histMod
   histOutputMod->addHistogram(nLeptonsHist);
