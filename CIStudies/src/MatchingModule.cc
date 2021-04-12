@@ -22,8 +22,7 @@ bool MatchingModule::process(const edm::EventBase &event) {
       reco->getRecoCandidates().getParticles());
 
   // loops through while there are still at least one gen and reco particle left
-  // that have not been matched and set to null std::cerr << "Hey, I'm in charge
-  // of names here" << std::endl;
+  // that have not been matched and set to null
   while (!checkIsNull(genSimParticles) && !checkIsNull(recoCandidates)) {
     // std::cerr << "Loop starts" << std::endl;
     // start with a high value, only really needs to be higher than the cutoff

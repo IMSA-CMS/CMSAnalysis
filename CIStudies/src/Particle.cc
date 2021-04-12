@@ -83,6 +83,32 @@ Particle Particle::uniqueMother() const
   return mom;
 }
 
+Particle Particle::daughter(int i) const
+{
+  checkIsNull();
+  auto daughter = particle->daughter(i);
+  Particle::LeptonType type;
+  switch (daughter->pdgId()) {
+  case 11:
+    type = Particle::LeptonType::Electron;
+    break;
+  case 13:
+    type = Particle::LeptonType::Muon;
+    break;
+  default:
+    type = Particle::LeptonType::None;
+    break;
+  }
+
+  return Particle(daughter, type);
+}
+
+int Particle::numberOfDaughters() const
+{
+  checkIsNull();
+  return particle->numberOfDaughters();
+}
+
 Particle::LeptonType Particle::getLeptonType() const
 {
   checkIsNull();
