@@ -1,7 +1,6 @@
 #include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
 
 #include <cmath>
-#include <map>
 #include <stdexcept>
 
 #include "DataFormats/Common/interface/Handle.h"
@@ -25,16 +24,6 @@ bool GenSimIdentificationModule::process(const edm::EventBase &event) {
 
   auto particle = getFileParams().getLeptonType();
 
-  std::map<int, Particle::LeptonType> pdgToType;
-
-  if (particle == "Electron" || particle == "Both") {
-    pdgToType[electronCode] = Particle::LeptonType::Electron;
-  }
-
-  if (particle == "Muon" || particle == "Both") {
-    pdgToType[muonCode] = Particle::LeptonType::Muon;
-  }
-
   // std::cerr << "particle = " << particle << std::endl;
 
   // Begin GEN looping
@@ -42,21 +31,31 @@ bool GenSimIdentificationModule::process(const edm::EventBase &event) {
   for (const auto &p : *genParticlesHandle) {
     if (p.status() == 1 &&
         isParticle(Particle(&p, Particle::LeptonType::None))) {
-      // std::cerr << "genSim particle type = " << std::abs(p.pdgId()) <<
-      // std::endl; std::cerr << "electronCode = " << electronCode << std::endl;
+      // std::cerr << "genSim particle type = " << std::abs(p.pdgId())
+      //           << std::endl;
+      // std::cerr << "electronCode = " << electronCode << std::endl;
       // std::cerr << "muonCode = " << muonCode << std::endl;
-      auto match = pdgToType.find(p.pdgId());
-      Particle::LeptonType type;
-      if (match == pdgToType.end()) {
-        continue;
-      } else {
-        type = match->second;
+      switch (std::abs(p.pdgId())) {
+      case electronCode:
+        if (particle == "Electron" || particle == "Both") {
+          genParticles.addParticle(
+              Particle(&p, Particle::LeptonType::Electron));
+        }
+        break;
+      case muonCode:
+        if (particle == "Muon" || particle == "Both") {
+          genParticles.addParticle(Particle(&p, Particle::LeptonType::Muon));
+        }
+        break;
       }
-      genParticles.addParticle(Particle(&p, type));
     }
   }
-  // std::cout << "number of leptons = " << genParticles.getNumParticles() <<
-  // "\n";
+  int len = genParticles.getNumParticles();
+  auto parts = genParticles.getParticles();
+  std::cout << "Length: " << len << "\n";
+  for (int i = 0; i < len; i++) {
+    std::cout << parts[i].pdgId() << "\n";
+  }
   return true;
 }
 
