@@ -38,7 +38,8 @@ bool GenSimIdentificationModule::process(const edm::EventBase &event) {
       if (std::abs(p.pdgId()) == electronCode) {
         if (particle == "Electron" || particle == "Both") {
           type = Particle::LeptonType::Electron;
-      } else if (std::abs(p.pdgid()) == muonCode) {
+        }
+      } else if (std::abs(p.pdgId()) == muonCode) {
         if (particle == "Muon" || particle == "Both") {
           type = Particle::LeptonType::Muon;
         }
