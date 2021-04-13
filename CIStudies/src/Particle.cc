@@ -109,6 +109,24 @@ int Particle::numberOfDaughters() const
   return particle->numberOfDaughters();
 }
 
+Particle Particle::finalDaughter()
+{
+  Particle current = Particle(particle, Particle::LeptonType::None);
+  while (current.status() != 1) {
+    int di = 0;
+    int dpt = 0;
+    for (int i = 0; i < current.numberOfDaughters(); ++i) {
+      Particle daughter = current.daughter(i);
+      if (daughter.pdgId() == current.pdgId() && daughter.pt() > dpt) {
+        di = i;
+        dpt = daughter.pt();
+      }
+    }
+    current = current.daughter(di);
+  }
+  return current;
+}
+
 Particle::LeptonType Particle::getLeptonType() const
 {
   checkIsNull();
