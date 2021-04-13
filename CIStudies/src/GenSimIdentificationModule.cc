@@ -85,14 +85,21 @@ bool GenSimIdentificationModule::isParticle(Particle p) const {
     if (p.isNotNull() && p.mother().isNotNull()) {
       auto mother = p.mother();
       if (std::abs(mother.pdgId()) == targetPdgId) {
+        // loop over mother's daughters (i.e. check siblings)
         for (int i = 0; i < mother.numberOfDaughters(); ++i) {
+          // if any are the same as the targetPdgId,
+          // then particle was emitted instead of
+          // being a direct product of decay
           if (std::abs(mother.daughter(i).pdgId()) == targetPdgId) {
             return false;
           }
         }
+        // if no siblings are the same as the parent,
+        // it is a true decay
         return true;
       }
     }
+    // particle/parent non existent or parent not matching pdgId
     return false;
     /*
         Particle currentMother = p;
