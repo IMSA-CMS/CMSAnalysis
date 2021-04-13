@@ -14,7 +14,7 @@ double NLeptonsHist::value() const {
   // std::cout << " Number of Matched Particles: " << pairs.getSize() << "\n";
 
   if (targetPdgId == 0) {
-    // std::cout << "\nParticles Found: " << pairs.getSize() << "\n";
+    std::cout << "\nParticles Found: " << pairs.getSize() << "\n";
     return pairs.getSize();
   } else {
     int count = 0;
