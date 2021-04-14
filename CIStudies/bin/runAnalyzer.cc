@@ -21,17 +21,18 @@ int main(int argc, char** argv)
 
   optutl::CommandLineParser parser ("Analyze FWLite Histograms");
   parser.addOption("pileup", optutl::CommandLineParser::kString, "PileupLevel", "");
-  parser.addOption("output", optutl::CommandLineParser::kString, "Particle", "");
+  parser.addOption("output-name", optutl::CommandLineParser::kString, "Particle", "");
   parser.addOption("input", optutl::CommandLineParser::kString, "Input", "");
   parser.parseArguments (argc, argv);
 
   std::string pileupLev = parser.stringValue("pileup");
   std::string inputFile = parser.stringValue("input");
-  std::string outputFile = parser.stringValue("output");
+  std::string outputFile = parser.stringValue("output-name");
   if (outputFile.empty())
     {
       outputFile = "displacedVertex.root";
     }
+  outputFile = "./output/" + outputFile;
 
   std::cout << "This is the name of outputFile " << outputFile << std::endl;
 
