@@ -4,7 +4,7 @@
 
 #include <vector>
 
-NLeptonJetHist::NLeptonJetHist(const LeptonJetReconstructionModule& iLeptonJetRecoModule, const std::string& iname, int iNBins, double iminimum, double imaximum) :
+NLeptonJetHist::NLeptonJetHist(std::shared_ptr<LeptonJetReconstructionModule> iLeptonJetRecoModule, const std::string& iname, int iNBins, double iminimum, double imaximum) :
   HistogramPrototype(iname, iNBins, iminimum, imaximum),
   leptonJetRecoModule(iLeptonJetRecoModule) 
   
@@ -13,6 +13,6 @@ NLeptonJetHist::NLeptonJetHist(const LeptonJetReconstructionModule& iLeptonJetRe
 
 double NLeptonJetHist::value() const
 {
-  const std::vector<LeptonJet>& leptonJets = leptonJetRecoModule.getLeptonJets();
+  const std::vector<LeptonJet>& leptonJets = leptonJetRecoModule->getLeptonJets();
   return leptonJets.size();
 }
