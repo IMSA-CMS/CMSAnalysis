@@ -14,8 +14,8 @@
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
 //#include "CIAnalysis/CIStudies/interface/MassResolutionHist.hh"
 //#include "CIAnalysis/CIStudies/interface/PtResolutionHist.hh"
-#include "CIAnalysis/CIStudies/interface/MassAcceptanceFirstHist.hh"
-#include "CIAnalysis/CIStudies/interface/MassAcceptanceSecondHist.hh"
+#include "CIAnalysis/CIStudies/interface/TotalEventsHist.hh"
+#include "CIAnalysis/CIStudies/interface/CIAcceptedEventsHist.hh"
 #include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
 
 using std::make_shared;
@@ -29,35 +29,25 @@ Analyzer massAcceptanceAnalysis()
   auto matchMod = make_shared<MatchingModule>(genSimMod, recoMod);
   auto weightMod = make_shared<WeightingModule>();
   auto lrWeightMod = make_shared<LRWeightModule>(); 
-  //auto barrelStateFilter = make_shared<BarrelStateFilter>(matchMod);
-  //auto massBinFilterForMass = make_shared<MassBinFilter>(matchMod, 300, 3100, 28);
-  //auto massBinFilterForPt = make_shared<MassBinFilter>(matchMod, 50, 1900, 37);
-  //auto massResMod = make_shared<MassResolutionModule>(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
+
   auto histMod = make_shared<HistogramOutputModule>(genSimMod, recoMod, weightMod, lrWeightMod);
-  auto massAcceptanceFirstHist = make_shared<MassAcceptanceFirstHist>(genSimMod, "Mass Acceptance First Hist", 100, 0, 1000);
+  auto totalEventsHist = make_shared<TotalEventsHist>(genSimMod, "Mass vs Total Events", 200, 0, 3000);
 
-  std::cerr << "no suspicious activity so far" << std::endl;
 
-  auto massAcceptanceSecondHist = make_shared<MassAcceptanceSecondHist>(matchMod, "Mass Acceptance Second Hist", 100, 0, 1000);
-
-  std::cerr << "phase one complete, initiate drone strike" << std::endl;
-
-  // Add the filter modules to the histogram(s) created above
-  //MVAFirstHist->addFilter(massBinFilterForMass);
-  //MVAFirstHist->addFilter(barrelStateFilter);
-  //MVASecondHist->addFilter(massBinFilterForPt);
-  //MVASecondHist->addFilter(barrelStateFilter);
+  auto acceptedEventsHist = make_shared<CIAcceptedEventsHist>(matchMod, genSimMod, "Mass vs Accepted Events", 200, 0, 3000);
+  auto acceptanceHistTemplate = make_shared<CIAcceptedEventsHist>(matchMod, genSimMod, "Mass vs Acceptance", 200, 0, 3000);
 
   // Add the histogram(s) created above to histMod
-  histMod->addHistogram(massAcceptanceFirstHist);
-  histMod->addHistogram(massAcceptanceSecondHist);
+  histMod->addHistogram(totalEventsHist);
+  histMod->addHistogram(acceptedEventsHist);
+  histMod->addHistogram(acceptanceHistTemplate);
 
   analyzer.addProductionModule(genSimMod);
   analyzer.addProductionModule(recoMod);
   analyzer.addProductionModule(matchMod);
+  analyzer.addProductionModule(weightMod);
+  analyzer.addProductionModule(lrWeightMod);
   
-  //analyzer.addAnalysisModule(massResMod);
-  //analyzer.addAnalysisModule(ptResMod);
   analyzer.addAnalysisModule(histMod);
   return analyzer;
 }
