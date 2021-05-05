@@ -7,8 +7,8 @@
 #include "DataFormats/FWLite/interface/Event.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 
-GenSimIdentificationModule::GenSimIdentificationModule(int itargetPdgId)
-    : targetPdgId(itargetPdgId) {}
+GenSimIdentificationModule::GenSimIdentificationModule(int itargetPdgId, bool iignoreRadiation)
+    : targetPdgId(itargetPdgId), ignoreRadiation(iignoreRadiation) {}
 
 bool GenSimIdentificationModule::process(const edm::EventBase &event) {
   // std::cerr << "ENTERING GenSimIdentificationModule" << std::endl;
@@ -88,12 +88,14 @@ bool GenSimIdentificationModule::isParticle(Particle p) const {
       auto mother = p.mother();
       if (std::abs(mother.pdgId()) == targetPdgId) {
         // loop over mother's daughters (i.e. check siblings)
-        for (int i = 0; i < mother.numberOfDaughters(); ++i) {
-          // if any are the same as the targetPdgId,
-          // then particle was emitted instead of
-          // being a direct product of decay
-          if (std::abs(mother.daughter(i).pdgId()) == targetPdgId) {
-            return false;
+        if (ignoreRadiation) {
+          for (int i = 0; i < mother.numberOfDaughters(); ++i) {
+            // if any are the same as the targetPdgId,
+            // then particle was emitted instead of
+            // being a direct product of decay
+            if (std::abs(mother.daughter(i).pdgId()) == targetPdgId) {
+              return false;
+            }
           }
         }
         // if no siblings are the same as the parent,
