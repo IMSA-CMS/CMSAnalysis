@@ -8,10 +8,8 @@
 #include "PhysicsTools/FWLite/interface/CommandLineParser.h"
 
 #include "CIAnalysis/CIStudies/bin/HPlusPlusMassAnalysis.cc"
-// #include "CIAnalysis/CIStudies/bin/displacedVertexAnalysis.cc"
-// #include "CIAnalysis/CIStudies/bin/leptonJetReconstructionAnalysis.cc"
-// #include "CIAnalysis/CIStudies/bin/massResolutionAnalysis.cc"
-// #include "CIAnalysis/CIStudies/bin/leptonJetReconstructionAnalysis.cc"
+#include "CIAnalysis/CIStudies/bin/leptonJetReconstructionAnalysis.cc"
+#include "CIAnalysis/CIStudies/bin/massAcceptanceAnalysis.cc"
 
 int main(int argc, char **argv) {
   gROOT->SetBatch(true);
@@ -37,10 +35,11 @@ int main(int argc, char **argv) {
 
   unsigned outputEvery = parser.integerValue("outputEvery");
 
+  // Analyzer analyzer = hPlusPlusMassAnalysis();
   // Analyzer analyzer = massResolutionAnalysis();
   // Analyzer analyzer = leptonJetReconstructionAnalysis();
   // Analyzer analyzer = displacedVertexAnalysis();
-  Analyzer analyzer = hPlusPlusMassAnalysis();
+  Analyzer analyzer = massAcceptanceAnalysis();
 
   std::cout << "Notice: analyzer created" << std::endl;
 
