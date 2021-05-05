@@ -68,6 +68,8 @@ void Interference::addMaps()
 
   addAlternates({"constructive", "CONSTRUCTIVE", "CON", "Con", "con"}, "Constructive");
   addAlternates({"destructive", "DESTRUCTIVE", "DES", "Des", "des"}, "Destructive");
+
+  addValuesToMap({"DisplacedVertex", "Prompt"});  // Dark Photon type
 }
 
 void MassRange::addMaps()
@@ -229,12 +231,20 @@ string FileParams::locateTextFile() const
 	}
     }
       
-  if (processString == "H++" || processString == "LeptonJet")
+  if (processString == "H++")
     {
       lambdaString = getLambda();
       leptonString = "";
       massString = "";
       interferenceString = "";
+    }
+
+  if (processString == "LeptonJet")
+    {
+      lambdaString = getLambda();
+      leptonString = "";
+      massString = "";
+      interferenceString = getInterference();
     }
 
   string file = "textfiles/" + yearString + "/" + processString + leptonString
