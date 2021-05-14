@@ -29,11 +29,12 @@ void Process::addMaps()
 
 void Year::addMaps()
 {
-  addValuesToMap({"2016", "2017", "2018", "2020"});
+  addValuesToMap({"2016", "2017", "2018", "2020", "2021"});
   addAlternate("16", "2016");
   addAlternate("17", "2017");
   addAlternate("18", "2018");
   addAlternate("20", "2020");
+  addAlternate("21", "2021");
 }
 
 void Helicity::addMaps()
@@ -71,7 +72,7 @@ void Interference::addMaps()
 
 void MassRange::addMaps()
 {
-  vector<string> massVals = {"M300", "M800", "M1300", "M1700", "M2000", "M50", "M120", "M200", "M400", "M800", "M1400", "M2300", "M3500", "M4500", "M6000", "M600", "M1200", "M2500", "M500", "M1200", "M1800"};
+  vector<string> massVals = {"M300", "M800", "M1000", "M1300", "M1700", "M2000", "M50", "M120", "M200", "M400", "M800", "M1400", "M2300", "M3500", "M4500", "M6000", "M600", "M1200", "M2500", "M500", "M1200", "M1800"};
   addValuesToMap(massVals);
   addValuesToMap({""});
   
@@ -93,7 +94,7 @@ void Lambda::addMaps()
   vector<string> lambdaVals = {"1", "3", "3.5", "4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "10", "16", "22", "24", "28", "32", "34", "40", "100k", "200", "500", "800", "1300"};//H++ after 100k
   addValuesToMap(lambdaVals);
 
-  vector<string> higgsMasses = {"M200", "M300", "M500", "M800", "M1300"};
+  vector<string> higgsMasses = {"M200", "M300", "M500", "M800", "M1000", "M1300"};
   addValuesToMap(higgsMasses);
 
   vector<string> darkPhotonMasses = {"M0_1", "M0_2", "M0_3", "M0_4", "M0_5", "M0_7", "M0_9", "M1", "M1_2", "M1_5", "M2_0"};

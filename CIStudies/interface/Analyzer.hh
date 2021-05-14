@@ -34,7 +34,7 @@ public:
   // Run the analysis for a given configuration file, a Root output file,
   // and an optional parameter to output with a certain event frequency
   void run(const std::string& configFile, const std::string& outputFile, 
-	   int outputEvery = 0);
+	   int outputEvery = 0, int nFiles = -1);
 
 private:
   std::vector<std::shared_ptr<ProductionModule>> productionModules;

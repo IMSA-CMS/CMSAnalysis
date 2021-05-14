@@ -263,6 +263,7 @@ void HistogramOutputModule::finalize()
             if (massBin.second != 0)
             {
               getHistogram(pair.first + bin)->Scale(massBin.second / eventCount);  // massBin.second is the scale
+	      std::cout << "Scale------ (massBin.second): " << massBin.second << "\n";
             }
 
             // for (int i = 1; i < getHistogram(pair.first)->GetNbinsX() ; ++i)
