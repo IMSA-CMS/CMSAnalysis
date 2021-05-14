@@ -13,7 +13,6 @@ WeightingModule::WeightingModule()
       throw std::runtime_error("Weights File not Found!");
     }
 
-  std::cout << "About to print out defs.py" << std::endl;
 
   while (weightsFile)
     {
@@ -57,6 +56,18 @@ void WeightingModule::findWeight(std::string key)
 {
   auto iterator = weights.find(key);
   if (iterator == weights.end())
-    throw std::runtime_error("Key " + key + " not found!");
-  weight = iterator->second;  
+  {
+    std::cerr << "Key " << key << " not found! " << std::endl;
+    weight = 1;
+    //throw std::runtime_error("Key " + key + " not found!");
+  }
+  else
+  {
+   weight = iterator->second;  
+  }
 }
+
+
+
+
+
