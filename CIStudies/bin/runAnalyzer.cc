@@ -18,12 +18,15 @@ int main(int argc, char **argv) {
   gSystem->Load("libDataFormatsFWLite");
 
   optutl::CommandLineParser parser ("Analyze FWLite Histograms");
+
   parser.addOption("output", optutl::CommandLineParser::kString, "Particle", "");
+
   parser.addOption("input", optutl::CommandLineParser::kString, "Input", "");
   parser.addOption("numFiles", optutl::CommandLineParser::kInteger, "Number of Files", -1);
   parser.parseArguments (argc, argv);
   
   std::string inputFile = parser.stringValue("input");
+
   std::string outputFile = parser.stringValue("output");
   int numFiles = parser.integerValue("numFiles");
 
@@ -31,15 +34,18 @@ int main(int argc, char **argv) {
     outputFile = "electronResolution.root";
   }
 
+
   std::cout << "This is the name of outputFile " << outputFile << std::endl;
 
   unsigned outputEvery = parser.integerValue("outputEvery");
+
 
   // Analyzer analyzer = hPlusPlusMassAnalysis();
   // Analyzer analyzer = massResolutionAnalysis();
   // Analyzer analyzer = leptonJetReconstructionAnalysis();
   // Analyzer analyzer = displacedVertexAnalysis();
   Analyzer analyzer = massAcceptanceAnalysis();
+
 
   std::cout << "Notice: analyzer created" << std::endl;
 
