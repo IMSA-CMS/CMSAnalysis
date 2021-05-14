@@ -3,11 +3,12 @@
 #include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/Particle.hh"
 
-TriggerEfficiencyModule::TriggerEfficiencyModule(const std::shared_ptr<MatchingModule> iMatchMod, const std::shared_ptr<GenSimIdentificationModule> iGenSimMod, double iHiggsMass, double iWidth) :
+TriggerEfficiencyModule::TriggerEfficiencyModule(const std::shared_ptr<MatchingModule> iMatchMod, const std::shared_ptr<GenSimIdentificationModule> iGenSimMod, double iHiggsMass, double iLowerWidth, double iUpperWidth) :
   matchMod(iMatchMod),
   genSimMod(iGenSimMod),
   higgsMass(iHiggsMass),
-  width(iWidth)
+  lowerWidth(iLowerWidth),
+  upperWidth(iUpperWidth)
 {
 }
 
@@ -43,7 +44,7 @@ bool TriggerEfficiencyModule::process(const edm::EventBase& event)
         
         ++expectedHiggsCount;
 
-        if (((higgsMass - width) <= genSimPair.getInvariantMass()) && (genSimPair.getInvariantMass() <= (higgsMass + width)))
+        if (((higgsMass - lowerWidth) <= genSimPair.getInvariantMass()) && (genSimPair.getInvariantMass() <= (higgsMass + upperWidth)))
         {
           ++genSimCount;
 
@@ -63,7 +64,7 @@ bool TriggerEfficiencyModule::process(const edm::EventBase& event)
             }
           }
 
-          if (((higgsMass - width) <= matchedReco.getInvariantMass()) && (matchedReco.getInvariantMass() <= (higgsMass + width)))
+          if (((higgsMass - lowerWidth) <= matchedReco.getInvariantMass()) && (matchedReco.getInvariantMass() <= (higgsMass + upperWidth)))
           {
             ++recoCount;
           }
@@ -80,6 +81,7 @@ void TriggerEfficiencyModule::finalize()
   std::cout << "Expected GenSim H++'s: " << expectedHiggsCount << '\n';
   std::cout << "Number of GenSim H++'s that fall into the mass window of the H++: " << genSimCount << '\n';
   std::cout << "Number of Reco H++'s that fall into the mass window of the H++: " << recoCount << '\n';
+  std::cout << "Fraction of H++'s that are reconstructed: " << static_cast<double>(recoCount) / expectedHiggsCount << '\n';
   std::cout << "Overall Generator Eficiency for H++: " << static_cast<double>(genSimCount) / expectedHiggsCount << '\n';
   std::cout << "Overall Trigger Efficiency for H++: " << static_cast<double>(recoCount) / genSimCount << '\n';
 }
