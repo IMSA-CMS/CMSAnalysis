@@ -33,7 +33,7 @@ bool TriggerEfficiencyModule::process(const edm::EventBase& event)
       //
       //std::cout << "Higgs Mass: " << higgsMass << '\n';
 
-      if ((genSimParticle1 != genSimParticle2) && (genSimParticle1.uniqueMother() == genSimParticle2.uniqueMother()) && (genSimParticle1.charge() == genSimParticle2.charge()))
+      if ((genSimParticle1 != genSimParticle2)  && (genSimParticle1.charge() == genSimParticle2.charge()))
       {
         ParticleCollection genSimPair;
         genSimPair.addParticle(genSimParticle1);
@@ -96,6 +96,6 @@ void TriggerEfficiencyModule::printDebugLines(Particle particle) const  // So I 
   }
   std::cout << "PDGID: " << particle.pdgId() << '\n';
   std::cout << "Charge: " << particle.charge() << '\n';
-  std::cout << "Mother PDGID: " << particle.uniqueMother().pdgId() << "\n\n";
+  //std::cout << "Mother PDGID: " << particle.uniqueMother().pdgId() << "\n\n";
 }
   
