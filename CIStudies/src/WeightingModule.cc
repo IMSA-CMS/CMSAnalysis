@@ -13,7 +13,6 @@ WeightingModule::WeightingModule()
       throw std::runtime_error("Weights File not Found!");
     }
 
-  std::cout << "About to print out defs.py" << std::endl;
 
   while (weightsFile)
     {

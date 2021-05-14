@@ -1,30 +1,32 @@
 #include <iostream>
+#include <memory>
 
 #include "TROOT.h"
 #include "TSystem.h"
 
 #include "CIAnalysis/CIStudies/interface/Analyzer.hh"
-
-#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
-#include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
-#include "CIAnalysis/CIStudies/interface/TriggerModule.hh"
-#include "CIAnalysis/CIStudies/interface/NLeptonsFilter.hh"
-#include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
-#include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
-#include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
-#include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
-#include "CIAnalysis/CIStudies/interface/MassRecoEfficiency.hh"
-#include "CIAnalysis/CIStudies/interface/TriggerEfficiencyModule.hh"
-#include "CIAnalysis/CIStudies/interface/SingleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/DoubleMuonTrigger.hh"
-#include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
-#include "CIAnalysis/CIStudies/interface/ThirdMuonPtHist.hh"
 #include "CIAnalysis/CIStudies/interface/GenSimEventDumpModule.hh"
+#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
+#include "CIAnalysis/CIStudies/interface/HistogramOutputModule.hh"
+#include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
+#include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
+#include "CIAnalysis/CIStudies/interface/MassRecoEfficiency.hh"
+#include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
+#include "CIAnalysis/CIStudies/interface/NLeptonsFilter.hh"
+#include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
+#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
+#include "CIAnalysis/CIStudies/interface/SameSignInvariantMassHist.hh"
+#include "CIAnalysis/CIStudies/interface/SingleMuonTrigger.hh"
+#include "CIAnalysis/CIStudies/interface/ThirdMuonPtHist.hh"
+#include "CIAnalysis/CIStudies/interface/TriggerEfficiencyModule.hh"
+#include "CIAnalysis/CIStudies/interface/TriggerModule.hh"
+#include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
+#include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
 
+using std::make_shared;
 
-Analyzer hPlusPlusMassAnalysis()
-{
+Analyzer hPlusPlusMassAnalysis() {
   Analyzer analyzer;
 
   auto eventDump = make_shared<GenSimEventDumpModule>(3);
@@ -50,16 +52,16 @@ Analyzer hPlusPlusMassAnalysis()
   auto massRecoEfficiency1000 = make_shared<MassRecoEfficiency>(recoMod, 1000, 50);
   auto massRecoEfficiency1300 = make_shared<MassRecoEfficiency>(recoMod, 1300, 65);
 
-  auto triggerEfficiencyMod = make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 200, 10);
+  auto triggerEfficiencyMod = make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 800, 80, 40);
 
   auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
+  auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
 
   // Add the histogram(s) created above to histMod
   histMod->addHistogram(recoThirdMuonPtHist);
-  //histMod->addHistogram(nLeptonsHist);
-  //histMod->addHistogram(nElectronsHist);
-  //histMod->addHistogram(nMuonsHist);
-
+  histMod->addHistogram(nLeptonsHist);
+  histMod->addHistogram(nElectronsHist);
+  histMod->addHistogram(nMuonsHist);
 
   // Initialize triggers
   auto singleMuonTrigger = make_shared<SingleMuonTrigger>(recoMod, 50);
@@ -68,24 +70,26 @@ Analyzer hPlusPlusMassAnalysis()
 
   // Add triggers to the TriggerModule
   triggerMod->addTrigger(singleMuonTrigger);
-  //triggerMod->addTrigger(doubleMuonTrigger);
-  //triggerMod->addTrigger(tripleMuonTrigger);
+  triggerMod->addTrigger(doubleMuonTrigger);
+  triggerMod->addTrigger(tripleMuonTrigger);
 
   analyzer.addProductionModule(genSimMod);
   analyzer.addProductionModule(recoMod);
   analyzer.addProductionModule(matchMod);
-  //analyzer.addProductionModule(triggerMod);
+  analyzer.addProductionModule(triggerMod);
+  analyzer.addProductionModule(weightMod);
+  analyzer.addProductionModule(lrWeightMod);
 
-
-  //analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
-  //analyzer.addAnalysisModule(triggerEfficiencyMod);
-  analyzer.addAnalysisModule(eventDump);
-  //analyzer.addAnalysisModule(leptonEfficiency);
-  analyzer.addAnalysisModule(massRecoEfficiency200);
-  analyzer.addAnalysisModule(massRecoEfficiency500);
-  analyzer.addAnalysisModule(massRecoEfficiency800);
-  analyzer.addAnalysisModule(massRecoEfficiency1000);
-  analyzer.addAnalysisModule(massRecoEfficiency1300);
+  // Don't remove unless you don't want histograms
+  analyzer.addAnalysisModule(histMod);
+  // analyzer.addAnalysisModule(triggerEfficiencyMod);
+  // analyzer.addAnalysisModule(eventDump);
+  // analyzer.addAnalysisModule(leptonEfficiency);
+  // analyzer.addAnalysisModule(massRecoEfficiency200);
+  // analyzer.addAnalysisModule(massRecoEfficiency500);
+  // analyzer.addAnalysisModule(massRecoEfficiency800);
+  // analyzer.addAnalysisModule(massRecoEfficiency1000);
+  // analyzer.addAnalysisModule(massRecoEfficiency1300);
 
   return analyzer;
 }

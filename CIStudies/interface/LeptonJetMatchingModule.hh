@@ -13,6 +13,7 @@ public:
     using MatchingPair = std::pair<Particle, LeptonJet>;
     LeptonJetMatchingModule(std::shared_ptr<GenSimParticleModule> genSimModule, std::shared_ptr<LeptonJetReconstructionModule> lepJetModule, double deltaRCut = 0.5);
     virtual bool process(const edm::EventBase& event) override;
+    void finalize() override;
     const std::vector<MatchingPair>& getMatchingPairs() const {return matchingPairs;}
 
 private:
@@ -22,6 +23,9 @@ private:
     std::shared_ptr<GenSimParticleModule> genSim;
     std::shared_ptr<LeptonJetReconstructionModule> lepJet;
     double deltaRCutoff;
+
+    int lepJetSize = 0;
+    int genSize = 0;
 };
 
 #endif
