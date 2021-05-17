@@ -14,19 +14,32 @@ LRWeightModule::LRWeightModule()
 
 bool LRWeightModule::process(const edm::EventBase& event)
 {
+  if (getFileParams().getProcess() != Process::CI())
+  {
+    return true;
+  }
   edm::Handle<std::vector<reco::GenParticle>> genParticles;
   event.getByLabel(std::string("prunedGenParticles"), genParticles);	
   edm::Handle<GenEventInfoProduct> genInfo;
   event.getByLabel(std::string("generator"), genInfo);
   
   std::string lambdaString = getFileParams().getLambda();
-  double lambda = lambdaString == "100k" ? 100000000 : std::stod(lambdaString) * 1000;
-  int interference = getFileParams().getInterference() == Interference::constructive() ? -1 : 1;
 
-  auto weights = calculateWeights(*genInfo, *genParticles, lambda, interference);
-  lrWeight = weights.first;
-  rlWeight = weights.second;
-  
+  try 
+  {
+    double lambda = lambdaString == "100k" ? 100000000 : std::stod(lambdaString) * 1000;
+    int interference = getFileParams().getInterference() == Interference::constructive() ? -1 : 1;
+
+    auto weights = calculateWeights(*genInfo, *genParticles, lambda, interference);
+    lrWeight = weights.first;
+    rlWeight = weights.second; 
+  }
+  catch (...)
+  {
+    lrWeight = 1;
+    rlWeight = 1;
+  }
+
   return true;
 }
 

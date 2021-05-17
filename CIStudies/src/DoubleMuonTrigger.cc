@@ -19,31 +19,8 @@ bool DoubleMuonTrigger::checkTrigger(std::shared_ptr<RecoIdentificationModule> r
     return false;
   }
 
-  auto particlesVec = particles.getParticles(); // Vector of Particles
-
   double highestPT = particles.getLeadingTransverseMomentum();
-  // At this point, I need to find the particle with this transverse momentum and remove it from particlesVec
+  double secondHighestPT = particles.getNthHighestPt(2);
 
-  // Create another ParticleCollection with the updated particlesVec and use it to get the secondHighestPT in the next line  
-  ParticleCollection particlesWithoutHighestPT;
-
-  for (auto particle : particlesVec)
-  {
-    if (particle.pt() != highestPT)
-    {
-      particlesWithoutHighestPT.addParticle(particle);
-    }
-  }
-
-  double secondHighestPT = particlesWithoutHighestPT.getLeadingTransverseMomentum();
-
-  if ((highestPT >= pTCutoff) && (secondHighestPT >= secondPTCutoff))  // The particle passes the trigger
-  {
-    return true;
-  }
-
-  else
-  {
-    return false;
-  }
+  return ((highestPT >= pTCutoff) && (secondHighestPT >= secondPTCutoff));  // The particle passes the trigger
 }

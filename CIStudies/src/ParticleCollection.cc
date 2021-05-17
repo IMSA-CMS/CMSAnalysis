@@ -38,6 +38,32 @@ double ParticleCollection::getLeadingTransverseMomentum() const
     }
 }
 
+double ParticleCollection::getNthHighestPt(int n) const
+{
+  if (n < 1)
+  {
+    throw std::invalid_argument("Not a positive integer");
+  }
+
+  if (n > getNumParticles())
+  {
+    return 0;   // If the nth highest pt particle doesn't exist, return 0
+  }
+
+  auto particlesVec = getParticles();  // Vector of Particles
+
+  // Sort the vector of particles by pt (greatest to least)
+  std::sort(particlesVec.begin(), particlesVec.end(), [](auto a, auto b){return a.pt() > b.pt();});
+
+  // for (auto particle : particlesVec)
+  // {
+  //  std::cout << particle.pt() << '\n';
+  // }
+  // std::cout << '\n';
+
+  return particlesVec[n - 1].pt();  // n-1 since the first element is 0, 2nd element is 1, etc.
+}
+
 double ParticleCollection::getLeadingPt() const
 {
   double highestPt = 0;

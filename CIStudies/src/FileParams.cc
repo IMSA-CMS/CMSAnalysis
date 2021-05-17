@@ -14,7 +14,7 @@ using std::vector;
 
 void Process::addMaps()
 {
-  addValuesToMap({"CI", "ADD", "ADD2", "DY", "Diboson", "top", "QCD", "Higgs", "LeptonJet"});
+  addValuesToMap({"CI", "ADD", "ADD2", "DY", "Diboson", "top", "bottom", "QCD", "Higgs", "LeptonJet"});
 
   addAlternates({"ci", "Ci", "cI"}, "CITo2");
   addAlternates({"add", "Add", "aDd", "adD", "aDD", "LED", "led"}, "ADD");
@@ -22,6 +22,7 @@ void Process::addMaps()
   addAlternates({"dy", "Drell Yan", "Drell-Yan"}, "DY");
   addAlternates({"diboson", "DB", "db"}, "Diboson");
   addAlternate("Top", "top");
+  addAlternates({"Bottom", "BBbar", "bbbar"}, "bottom");
   addAlternate("qcd", "QCD");
   addAlternates({"Doubly Charged Higgs", "H++", "Higgs ++", "Higgs++"}, "Higgs");
   addAlternates({"Lepton Jet", "leptonjet", "lepton jet"}, "LeptonJet");
@@ -29,11 +30,12 @@ void Process::addMaps()
 
 void Year::addMaps()
 {
-  addValuesToMap({"2016", "2017", "2018", "2020"});
+  addValuesToMap({"2016", "2017", "2018", "2020", "2021"});
   addAlternate("16", "2016");
   addAlternate("17", "2017");
   addAlternate("18", "2018");
   addAlternate("20", "2020");
+  addAlternate("21", "2021");
 }
 
 void Helicity::addMaps()
@@ -42,12 +44,14 @@ void Helicity::addMaps()
 
   vector<string> dibosons = {"WZ", "WZ3LNu", "WZ2L2Q", "ZZ", "ZZ2L2Nu", "ZZ2L2Q", "ZZ4L", "WW"};
   vector<string> tops = {"ttbar", "tW", "Wantitop"};
+  vector<string> bottom = {"BBbar"};
   vector<string> qcd = {"Wjets"};
   vector<string> doublyChargedHiggs = {"Higgs++to2Leptons", "Higgs++toWW"};  // Specifices Doubly Charged Higgs decay channels
   vector<string> leptonJet = {"SUSYPortal", "HiggsPortal"}; // Specifies Lepton Jet Processes
 
   addValuesToMap(dibosons);
   addValuesToMap(tops);
+  addValuesToMap(bottom);
   addValuesToMap(qcd);
   addValuesToMap(doublyChargedHiggs);
   addValuesToMap(leptonJet);
@@ -56,6 +60,7 @@ void Helicity::addMaps()
   addAlternate("lr", "LR");
   addAlternate("rl", "RL");
   addAlternate("rr", "RR");
+  addAlternate("bbbar", "BBbar");
 
   addAlternates({"2Leptons", "l+l-"}, "Higgs++to2Leptons");
   addAlternate("WW", "Higgs++toWW");
@@ -67,11 +72,13 @@ void Interference::addMaps()
 
   addAlternates({"constructive", "CONSTRUCTIVE", "CON", "Con", "con"}, "Constructive");
   addAlternates({"destructive", "DESTRUCTIVE", "DES", "Des", "des"}, "Destructive");
+
+  addValuesToMap({"DisplacedVertex", "Prompt"});  // Dark Photon type
 }
 
 void MassRange::addMaps()
 {
-  vector<string> massVals = {"M300", "M800", "M1300", "M1700", "M2000", "M50", "M120", "M200", "M400", "M800", "M1400", "M2300", "M3500", "M4500", "M6000", "M600", "M1200", "M2500", "M500", "M1200", "M1800"};
+  vector<string> massVals = {"M300", "M800", "M1000", "M1300", "M1700", "M2000", "M50", "M120", "M200", "M400", "M800", "M1400", "M2300", "M3500", "M4500", "M6000", "M600", "M1200", "M2500", "M500", "M1200", "M1800"};
   addValuesToMap(massVals);
   addValuesToMap({""});
   
@@ -93,7 +100,7 @@ void Lambda::addMaps()
   vector<string> lambdaVals = {"1", "3", "3.5", "4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "10", "16", "22", "24", "28", "32", "34", "40", "100k", "200", "500", "800", "1300"};//H++ after 100k
   addValuesToMap(lambdaVals);
 
-  vector<string> higgsMasses = {"M200", "M300", "M500", "M800", "M1300"};
+  vector<string> higgsMasses = {"M200", "M300", "M500", "M800", "M1000", "M1300"};
   addValuesToMap(higgsMasses);
 
   vector<string> darkPhotonMasses = {"M0_1", "M0_2", "M0_3", "M0_4", "M0_5", "M0_7", "M0_9", "M1", "M1_2", "M1_5", "M2_0"};
@@ -214,7 +221,7 @@ string FileParams::locateTextFile() const
       helicityString = "";
     }
 
-  if (processString == Process::Diboson() || processString == Process::top() || processString == Process::QCD())
+  if (processString == Process::Diboson() || processString == Process::top() || processString == Process::bottom() || processString == Process::QCD())
     {
       leptonString = "";
       interferenceString = "";
@@ -228,12 +235,20 @@ string FileParams::locateTextFile() const
 	}
     }
       
-  if (processString == "H++" || processString == "LeptonJet")
+  if (processString == "H++")
     {
       lambdaString = getLambda();
       leptonString = "";
       massString = "";
       interferenceString = "";
+    }
+
+  if (processString == "LeptonJet")
+    {
+      lambdaString = getLambda();
+      leptonString = "";
+      massString = "";
+      interferenceString = getInterference();
     }
 
   string file = "textfiles/" + yearString + "/" + processString + leptonString
