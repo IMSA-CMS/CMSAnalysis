@@ -19,6 +19,10 @@ public:
   int pdgId() const;
   int status() const;
   Particle mother() const;
+  Particle uniqueMother() const;
+  Particle daughter(int i) const;
+  int numberOfDaughters() const;
+  Particle finalDaughter();
   bool operator==(Particle userParticle) const {return userParticle.particle == particle;}
   bool operator!=(Particle userParticle) const {return userParticle.particle != particle;}
   bool isNotNull() const {return particle;}
