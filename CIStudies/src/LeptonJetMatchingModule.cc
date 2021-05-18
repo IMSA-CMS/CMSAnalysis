@@ -15,8 +15,11 @@ bool LeptonJetMatchingModule::process(const edm::EventBase& event)
     matchingPairs.clear();
     std::vector<Particle> genSimParticles(genSim->getGenParticles().getParticles());
     std::vector<LeptonJet> recoLeptonJets(lepJet->getLeptonJets());
-    std::cout << "Size of genSimParticles: " << genSimParticles.size() << "\n";
-    std::cout << "Size of recoLeptonJets: " << recoLeptonJets.size() << "\n";
+
+    genSize += genSimParticles.size();
+    // std::cout << "Size of genSimParticles: " << genSimParticles.size() << "\n";
+    lepJetSize += recoLeptonJets.size();
+    // std::cout << "Size of recoLeptonJets: " << recoLeptonJets.size() << "\n";
 
     double deltaRMin;
     // MatchingPair candidate;
@@ -46,7 +49,7 @@ bool LeptonJetMatchingModule::process(const edm::EventBase& event)
         }        
         if (deltaRMin < deltaRCutoff)
         {
-          std::cout << "Match found!" << "\n";
+          // std::cout << "Match found!" << "\n";
           matchingPairs.push_back(dataList);
           recoLeptonJets.erase(std::find(recoLeptonJets.begin(), recoLeptonJets.end(), dataList.second));          
         }
@@ -66,4 +69,11 @@ double LeptonJetMatchingModule::findMatchingPairDeltaR(MatchingPair pair)
   double deltaR = reco::deltaR(partFourVector, jetFourVector);
 
   return deltaR;
+}
+
+void LeptonJetMatchingModule::finalize()
+{
+  std::cout << "Lepton Jets Found: " << lepJetSize << "\n";
+  std::cout << "Number of Neutralinos: " << genSize << "\n";
+  std::cout << "Lepton Jet Matching Efficiency: " << (double) lepJetSize / genSize << "\n";
 }
