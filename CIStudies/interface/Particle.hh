@@ -25,6 +25,7 @@ public:
   bool isNotNull() const {return particle;}
   LeptonType getLeptonType() const;
   BarrelState getBarrelState() const;
+  bool isIsolated() const;
 	
 private:
   const reco::Candidate* particle;
