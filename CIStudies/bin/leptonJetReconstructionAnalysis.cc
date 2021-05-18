@@ -4,51 +4,50 @@
 #include "TSystem.h"
 
 #include "CIAnalysis/CIStudies/interface/Analyzer.hh"
-
-#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
-#include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
-#include "CIAnalysis/CIStudies/interface/TriggerModule.hh"
-#include "CIAnalysis/CIStudies/interface/NLeptonsFilter.hh"
-#include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
-#include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
-#include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
-#include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
-#include "CIAnalysis/CIStudies/interface/MassRecoEfficiency.hh"
-#include "CIAnalysis/CIStudies/interface/GenSimEventDumpModule.hh"
-#include "CIAnalysis/CIStudies/interface/LeptonJetReconstructionModule.hh"
-#include "CIAnalysis/CIStudies/interface/LeptonJetMatchingModule.hh"
-#include "CIAnalysis/CIStudies/interface/LeptonJet.hh"
-#include "CIAnalysis/CIStudies/interface/GenSimParticleModule.hh"
-#include "CIAnalysis/CIStudies/interface/HistogramOutputModule.hh"
 #include "CIAnalysis/CIStudies/interface/DeltaRHist.hh"
-#include "CIAnalysis/CIStudies/interface/MatchingDeltaRHist.hh"
-#include "CIAnalysis/CIStudies/interface/MatchingPtHist.hh"
-#include "CIAnalysis/CIStudies/interface/MatchingPhiHist.hh"
-#include "CIAnalysis/CIStudies/interface/MatchingEtaHist.hh"
-#include "CIAnalysis/CIStudies/interface/SingleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/DoubleMuonTrigger.hh"
-#include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
-#include "CIAnalysis/CIStudies/interface/ThirdMuonPtHist.hh"
+#include "CIAnalysis/CIStudies/interface/GenSimEventDumpModule.hh"
+#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
+#include "CIAnalysis/CIStudies/interface/GenSimParticleModule.hh"
 #include "CIAnalysis/CIStudies/interface/GetNthHighestPtHist.hh"
+#include "CIAnalysis/CIStudies/interface/HistogramOutputModule.hh"
+#include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonJetEfficiency.hh"
+#include "CIAnalysis/CIStudies/interface/LeptonJet.hh"
+#include "CIAnalysis/CIStudies/interface/LeptonJetMatchingModule.hh"
+#include "CIAnalysis/CIStudies/interface/LeptonJetReconstructionModule.hh"
+#include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
+#include "CIAnalysis/CIStudies/interface/MassRecoEfficiency.hh"
+#include "CIAnalysis/CIStudies/interface/MatchingDeltaRHist.hh"
+#include "CIAnalysis/CIStudies/interface/MatchingEtaHist.hh"
+#include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
+#include "CIAnalysis/CIStudies/interface/MatchingPhiHist.hh"
+#include "CIAnalysis/CIStudies/interface/MatchingPtHist.hh"
 #include "CIAnalysis/CIStudies/interface/NLeptonJetHist.hh"
+#include "CIAnalysis/CIStudies/interface/NLeptonsFilter.hh"
+#include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
+#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
+#include "CIAnalysis/CIStudies/interface/SingleMuonTrigger.hh"
+#include "CIAnalysis/CIStudies/interface/ThirdMuonPtHist.hh"
+#include "CIAnalysis/CIStudies/interface/TriggerModule.hh"
+#include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
+#include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
 
-
-Analyzer leptonJetReconstructionAnalysis()
-{
+Analyzer leptonJetReconstructionAnalysis() {
   Analyzer analyzer;
 
-  auto genSimMod = make_shared<GenSimIdentificationModule>(4900022);
-  auto recoMod = make_shared<RecoIdentificationModule>(5);
-  auto matchMod = make_shared<MatchingModule>(genSimMod, recoMod);
-  auto weightMod = make_shared<WeightingModule>();
-  auto lrWeightMod = make_shared<LRWeightModule>();
-  auto genSimEventDumpMod = make_shared<GenSimEventDumpModule>(3);
-  auto lepRecoMod = make_shared<LeptonJetReconstructionModule>(recoMod);
-  auto genPartMod = make_shared<GenSimParticleModule>(1000022);
-  auto lepMatchMod = make_shared<LeptonJetMatchingModule>(genPartMod, lepRecoMod);
-  auto histOutputMod = make_shared<HistogramOutputModule>(genSimMod, recoMod, weightMod, lrWeightMod);
+  auto genSimMod = std::make_shared<GenSimIdentificationModule>(4900022);
+  auto recoMod = std::make_shared<RecoIdentificationModule>(5);
+  auto matchMod = std::make_shared<MatchingModule>(genSimMod, recoMod);
+  auto weightMod = std::make_shared<WeightingModule>();
+  auto lrWeightMod = std::make_shared<LRWeightModule>();
+  auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>(3);
+  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(recoMod);
+  auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
+  auto lepMatchMod =
+      std::make_shared<LeptonJetMatchingModule>(genPartMod, lepRecoMod);
+  auto histOutputMod = std::make_shared<HistogramOutputModule>(
+      genSimMod, recoMod, weightMod, lrWeightMod);
 
   // Histograms
   auto deltaRHist = make_shared<DeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.5);
@@ -86,9 +85,10 @@ Analyzer leptonJetReconstructionAnalysis()
   // histOutputMod->addHistogram(recoThirdMuonPtHist);
 
   // Initialize triggers
-  auto singleMuonTrigger = make_shared<SingleMuonTrigger>(recoMod, 50);
-  auto doubleMuonTrigger = make_shared<DoubleMuonTrigger>(recoMod, 37, 27);
-  auto tripleMuonTrigger = make_shared<TripleMuonTrigger>(recoMod, 10, 5, 5);
+  auto singleMuonTrigger = std::make_shared<SingleMuonTrigger>(recoMod, 50);
+  auto doubleMuonTrigger = std::make_shared<DoubleMuonTrigger>(recoMod, 37, 27);
+  auto tripleMuonTrigger =
+      std::make_shared<TripleMuonTrigger>(recoMod, 10, 5, 5);
 
   // Add triggers to the TriggerModule
   triggerMod->addTrigger(singleMuonTrigger);
@@ -118,9 +118,3 @@ Analyzer leptonJetReconstructionAnalysis()
   
   return analyzer;
 }
-
-
-
-
-
-
