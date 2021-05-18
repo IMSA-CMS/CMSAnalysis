@@ -6,7 +6,7 @@
 #include "CIAnalysis/CIStudies/interface/Analyzer.hh"
 #include "FWCore/FWLite/interface/FWLiteEnabler.h"
 #include "PhysicsTools/FWLite/interface/CommandLineParser.h"
-
+#include "CIAnalysis/CIStudies/bin/displacedVertexAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/massResolutionAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/HPlusPlusMassAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/leptonJetReconstructionAnalysis.cc"
@@ -31,17 +31,17 @@ int main(int argc, char** argv)
 
   if (outputFile.empty())
     {
-      outputFile = "electronResolution.root";
+      outputFile = "displacedVertex.root";
     }
 
   std::cout << "This is the name of outputFile " << outputFile << std::endl;
 
   unsigned outputEvery = parser.integerValue("outputEvery");
 
-  Analyzer analyzer = hPlusPlusMassAnalysis();
+  //Analyzer analyzer = hPlusPlusMassAnalysis();
   //Analyzer analyzer = massResolutionAnalysis();
   //Analyzer analyzer = leptonJetReconstructionAnalysis();
-  //Analyzer analyzer = displacedVertexAnalysis();
+  Analyzer analyzer = displacedVertexAnalysis();
 
   std::cout << "Notice: analyzer created" << std::endl;
 

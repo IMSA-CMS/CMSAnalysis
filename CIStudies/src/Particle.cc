@@ -1,5 +1,5 @@
 #include "CIAnalysis/CIStudies/interface/Particle.hh"
-
+#include "DataFormats/MuonReco/interface/Muon.h"
 
 Particle::Particle(const reco::Candidate* iparticle, LeptonType iLeptonType): 
 particle(iparticle),
@@ -116,6 +116,22 @@ Particle::BarrelState Particle::getBarrelState() const
     }
   }
   return Particle::BarrelState::None;
+}
+
+bool Particle::isIsolated() const
+{
+  checkIsNull();
+  auto muon = dynamic_cast<const reco::Muon*>(particle);
+  if (!muon)
+  {
+    return false;
+  } 
+  auto isolation = muon->isolationR03();
+  if (isolation.sumPt < 0.1*muon->pt())
+  {
+    return true;
+  }
+  return false;
 }
 
 void Particle::checkIsNull() const
