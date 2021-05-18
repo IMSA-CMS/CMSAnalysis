@@ -21,6 +21,7 @@
 #include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/SameSignInvariantMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/ThirdMuonPtHist.hh"
+#include "CIAnalysis/CIStudies/interface/RecoveredInvariantMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/GenSimEventDumpModule.hh"
 
 
@@ -45,20 +46,35 @@ Analyzer hPlusPlusMassAnalysis()
   auto nMuonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
 
   auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod, genSimMod);
-  auto massRecoEfficiency200 = make_shared<MassRecoEfficiency>(recoMod, 200, 10);
-  auto massRecoEfficiency500 = make_shared<MassRecoEfficiency>(recoMod, 500, 25);
-  auto massRecoEfficiency800 = make_shared<MassRecoEfficiency>(recoMod, 800, 40);
-  auto massRecoEfficiency1000 = make_shared<MassRecoEfficiency>(recoMod, 1000, 50);
-  auto massRecoEfficiency1300 = make_shared<MassRecoEfficiency>(recoMod, 1300, 65);
+  //auto massRecoEfficiency200 = make_shared<MassRecoEfficiency>(recoMod, 200, 10);
+  //auto massRecoEfficiency500 = make_shared<MassRecoEfficiency>(recoMod, 500, 25);
+  //auto massRecoEfficiency800 = make_shared<MassRecoEfficiency>(recoMod, 800, 40);
+  //auto massRecoEfficiency1000 = make_shared<MassRecoEfficiency>(recoMod, 1000, 50);
+  //auto massRecoEfficiency1300 = make_shared<MassRecoEfficiency>(recoMod, 1300, 65);
 
-  auto triggerEfficiencyMod = make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 800, 80, 40);
+  auto massRecoEfficiency55 = make_shared<MassRecoEfficiency>(recoMod, 800, 5, 5);
+  auto massRecoEfficiency1010 = make_shared<MassRecoEfficiency>(recoMod, 800, 10, 10);
+  auto massRecoEfficiency4010 = make_shared<MassRecoEfficiency>(recoMod, 800, 40, 10);
+  auto massRecoEfficiency4040 = make_shared<MassRecoEfficiency>(recoMod, 800, 40, 40);
+  auto massRecoEfficiency8040 = make_shared<MassRecoEfficiency>(recoMod, 800, 80, 40);
+  auto massRecoEfficiency20080 = make_shared<MassRecoEfficiency>(recoMod, 800, 200, 80);
+
+  auto triggerEfficiencyMod4010 = make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 800, 40, 10);
+  auto triggerEfficiencyMod4040 = make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 800, 40, 40);
+  auto triggerEfficiencyMod8040 = make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 800, 80, 40);
+  auto triggerEfficiencyMod20080 = make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 800, 200, 80);
 
   auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
   auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
 
+  auto genSimRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3);
+  auto recoRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, false, "Reco Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3);
+
   // Add the histogram(s) created above to histMod
-  histMod->addHistogram(recoThirdMuonPtHist);
-  histMod->addHistogram(sameSignInvMassHist);
+  //histMod->addHistogram(recoThirdMuonPtHist);
+  //histMod->addHistogram(sameSignInvMassHist);
+  histMod->addHistogram(genSimRecoveredInvMassHist);
+  histMod->addHistogram(recoRecoveredInvMassHist);
   //histMod->addHistogram(nLeptonsHist);
   //histMod->addHistogram(nElectronsHist);
   //histMod->addHistogram(nMuonsHist);
@@ -83,7 +99,10 @@ Analyzer hPlusPlusMassAnalysis()
 
 
   analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
-  analyzer.addAnalysisModule(triggerEfficiencyMod);
+  //analyzer.addAnalysisModule(triggerEfficiencyMod4010);
+  //analyzer.addAnalysisModule(triggerEfficiencyMod4040);
+  //analyzer.addAnalysisModule(triggerEfficiencyMod8040);
+  //analyzer.addAnalysisModule(triggerEfficiencyMod20080);
   //analyzer.addAnalysisModule(eventDump);
   //analyzer.addAnalysisModule(leptonEfficiency);
   //analyzer.addAnalysisModule(massRecoEfficiency200);
@@ -91,6 +110,12 @@ Analyzer hPlusPlusMassAnalysis()
   //analyzer.addAnalysisModule(massRecoEfficiency800);
   //analyzer.addAnalysisModule(massRecoEfficiency1000);
   //analyzer.addAnalysisModule(massRecoEfficiency1300);
+  analyzer.addAnalysisModule(massRecoEfficiency55);
+  analyzer.addAnalysisModule(massRecoEfficiency1010);
+  //analyzer.addAnalysisModule(massRecoEfficiency4010);
+  //analyzer.addAnalysisModule(massRecoEfficiency4040);
+  //analyzer.addAnalysisModule(massRecoEfficiency8040);
+  //analyzer.addAnalysisModule(massRecoEfficiency20080);
 
   return analyzer;
 }
