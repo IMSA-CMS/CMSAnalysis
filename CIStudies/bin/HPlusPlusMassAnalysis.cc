@@ -1,32 +1,34 @@
 #include <iostream>
+#include <memory>
 
 #include "TROOT.h"
 #include "TSystem.h"
 
 #include "CIAnalysis/CIStudies/interface/Analyzer.hh"
-
-#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
-#include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
-#include "CIAnalysis/CIStudies/interface/TriggerModule.hh"
-#include "CIAnalysis/CIStudies/interface/NLeptonsFilter.hh"
-#include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
-#include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
-#include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
-#include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
-#include "CIAnalysis/CIStudies/interface/MassRecoEfficiency.hh"
-#include "CIAnalysis/CIStudies/interface/TriggerEfficiencyModule.hh"
-#include "CIAnalysis/CIStudies/interface/SingleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/DoubleMuonTrigger.hh"
-#include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
+#include "CIAnalysis/CIStudies/interface/GenSimEventDumpModule.hh"
+#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
+#include "CIAnalysis/CIStudies/interface/HistogramOutputModule.hh"
+#include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
+#include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
+#include "CIAnalysis/CIStudies/interface/MassRecoEfficiency.hh"
+#include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
+#include "CIAnalysis/CIStudies/interface/NLeptonsFilter.hh"
+#include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
+#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/SameSignInvariantMassHist.hh"
+#include "CIAnalysis/CIStudies/interface/SingleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/ThirdMuonPtHist.hh"
 #include "CIAnalysis/CIStudies/interface/RecoveredInvariantMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/GenSimEventDumpModule.hh"
+#include "CIAnalysis/CIStudies/interface/TriggerEfficiencyModule.hh"
+#include "CIAnalysis/CIStudies/interface/TriggerModule.hh"
+#include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
+#include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
 
+using std::make_shared;
 
-Analyzer hPlusPlusMassAnalysis()
-{
+Analyzer hPlusPlusMassAnalysis() {
   Analyzer analyzer;
 
   auto eventDump = make_shared<GenSimEventDumpModule>(3);
@@ -79,7 +81,6 @@ Analyzer hPlusPlusMassAnalysis()
   //histMod->addHistogram(nElectronsHist);
   //histMod->addHistogram(nMuonsHist);
 
-
   // Initialize triggers
   auto singleMuonTrigger = make_shared<SingleMuonTrigger>(recoMod, 50);
   auto doubleMuonTrigger = make_shared<DoubleMuonTrigger>(recoMod, 37, 27);
@@ -87,16 +88,15 @@ Analyzer hPlusPlusMassAnalysis()
 
   // Add triggers to the TriggerModule
   triggerMod->addTrigger(singleMuonTrigger);
-  //triggerMod->addTrigger(doubleMuonTrigger);
-  //triggerMod->addTrigger(tripleMuonTrigger);
+  triggerMod->addTrigger(doubleMuonTrigger);
+  triggerMod->addTrigger(tripleMuonTrigger);
 
   analyzer.addProductionModule(genSimMod);
   analyzer.addProductionModule(recoMod);
   analyzer.addProductionModule(matchMod);
+  analyzer.addProductionModule(triggerMod);
   analyzer.addProductionModule(weightMod);
   analyzer.addProductionModule(lrWeightMod);
-  //analyzer.addProductionModule(triggerMod);
-
 
   analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
   //analyzer.addAnalysisModule(triggerEfficiencyMod4010);

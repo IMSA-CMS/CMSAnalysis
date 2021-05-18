@@ -1,7 +1,7 @@
 Procs:  DY
 Year:   2018
 Lepton: M
-Mass:   M6000
+Mass:   M50
 Lambda: 200
 Inter:	Con
 Helic:	LL
