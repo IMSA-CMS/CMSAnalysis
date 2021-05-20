@@ -1,4 +1,4 @@
-<use name="root"/>
+cs<use name="root"/>
 <use   name="FWCore/FWLite"/>
 <use   name="DataFormats/FWLite"/>
 <use   name="DataFormats/Candidate"/>
@@ -7,6 +7,8 @@
 <use   name="DataFormats/PatCandidates"/>
 <use   name="clhep"/>
 <use   name="pythia8"/>
+<use   name="TrackingTools/GeomPropagators"/>
+<use   name="TrackingTools/TransientTrack"/>
 <export>
    <lib name="1"/>
 </export>

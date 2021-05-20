@@ -1,5 +1,5 @@
 #include "CIAnalysis/CIStudies/interface/Particle.hh"
-
+#include "DataFormats/MuonReco/interface/Muon.h"
 
 Particle::Particle(const reco::Candidate* iparticle, LeptonType iLeptonType): 
 particle(iparticle),
@@ -83,6 +83,50 @@ Particle Particle::uniqueMother() const
   return mom;
 }
 
+Particle Particle::daughter(int i) const
+{
+  checkIsNull();
+  auto daughter = particle->daughter(i);
+  Particle::LeptonType type;
+  switch (daughter->pdgId()) {
+  case 11:
+    type = Particle::LeptonType::Electron;
+    break;
+  case 13:
+    type = Particle::LeptonType::Muon;
+    break;
+  default:
+    type = Particle::LeptonType::None;
+    break;
+  }
+
+  return Particle(daughter, type);
+}
+
+int Particle::numberOfDaughters() const
+{
+  checkIsNull();
+  return particle->numberOfDaughters();
+}
+
+Particle Particle::finalDaughter()
+{
+  Particle current = Particle(particle, Particle::LeptonType::None);
+  while (current.status() != 1) {
+    int di = 0;
+    int dpt = 0;
+    for (int i = 0; i < current.numberOfDaughters(); ++i) {
+      Particle daughter = current.daughter(i);
+      if (daughter.pdgId() == current.pdgId() && daughter.pt() > dpt) {
+        di = i;
+        dpt = daughter.pt();
+      }
+    }
+    current = current.daughter(di);
+  }
+  return current;
+}
+
 Particle::LeptonType Particle::getLeptonType() const
 {
   checkIsNull();
@@ -116,6 +160,22 @@ Particle::BarrelState Particle::getBarrelState() const
     }
   }
   return Particle::BarrelState::None;
+}
+
+bool Particle::isIsolated() const
+{
+  checkIsNull();
+  auto muon = dynamic_cast<const reco::Muon*>(particle);
+  if (!muon)
+  {
+    return false;
+  } 
+  auto isolation = muon->isolationR03();
+  if (isolation.sumPt < 0.1*muon->pt())
+  {
+    return true;
+  }
+  return false;
 }
 
 void Particle::checkIsNull() const
