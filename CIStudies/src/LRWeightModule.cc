@@ -14,6 +14,10 @@ LRWeightModule::LRWeightModule()
 
 bool LRWeightModule::process(const edm::EventBase& event)
 {
+  if (getFileParams().getProcess() != Process::CI())
+  {
+    return true;
+  }
   edm::Handle<std::vector<reco::GenParticle>> genParticles;
   event.getByLabel(std::string("prunedGenParticles"), genParticles);	
   edm::Handle<GenEventInfoProduct> genInfo;
