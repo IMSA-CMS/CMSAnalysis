@@ -61,7 +61,7 @@ Analyzer leptonJetReconstructionAnalysis()
   //auto genSimEventDumpMod = make_shared<GenSimEventDumpModule>(3);
   auto triggerMod = make_shared<TriggerModule>(recoMod);
 
-  auto nLeptonsFilter = make_shared<NLeptonsFilter>(matchMod); //Needs to be updated with shared pointers
+  auto nLeptonsFilter = make_shared<NLeptonsFilter>(recoMod); //Needs to be updated with shared pointers
 
   auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
   auto nElectronsHist = make_shared<NLeptonsHist>(matchMod, "Matched Electrons", 10, 0, 10, 11);
