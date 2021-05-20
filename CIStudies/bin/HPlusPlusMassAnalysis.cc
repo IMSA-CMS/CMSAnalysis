@@ -21,13 +21,14 @@
 #include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/ThirdMuonPtHist.hh"
 #include "CIAnalysis/CIStudies/interface/GenSimEventDumpModule.hh"
+#include "CIAnalysis/CIStudies/interface/SameSignInvariantMassHist.hh"
 
 
 Analyzer hPlusPlusMassAnalysis()
 {
   Analyzer analyzer;
 
-  auto eventDump = make_shared<GenSimEventDumpModule>(3);
+  auto eventDump = make_shared<GenSimEventDumpModule>(10);
 
   auto genSimMod = make_shared<GenSimIdentificationModule>(9900041);
   auto recoMod = make_shared<RecoIdentificationModule>(50);
@@ -36,7 +37,7 @@ Analyzer hPlusPlusMassAnalysis()
   auto weightMod = make_shared<WeightingModule>();
   auto lrWeightMod = make_shared<LRWeightModule>();
 
-  auto nLeptonsFilter = make_shared<NLeptonsFilter>(matchMod); //Needs to be updated with shared pointers
+  auto nLeptonsFilter = make_shared<NLeptonsFilter>(recoMod); //Needs to be updated with shared pointers
   
   auto histMod = make_shared<HistogramOutputModule>(genSimMod, recoMod, weightMod, lrWeightMod);
   auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
@@ -53,12 +54,14 @@ Analyzer hPlusPlusMassAnalysis()
   auto triggerEfficiencyMod = make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 200, 10);
 
   auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
+  auto SSDLHIST = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, false, std::string("Same Sign Invariant Mass"), 200, 0, 1500);
 
-  // Add the histogram(s) created above to histMod
-  histMod->addHistogram(recoThirdMuonPtHist);
-  //histMod->addHistogram(nLeptonsHist);
-  //histMod->addHistogram(nElectronsHist);
-  //histMod->addHistogram(nMuonsHist);
+  // Add the histogram(s) created above to histMod  
+  //histMod->addHistogram(recoThirdMuonPtHist);
+  histMod->addHistogram(nLeptonsHist);
+  histMod->addHistogram(nElectronsHist);
+  histMod->addHistogram(nMuonsHist);
+  histMod->addHistogram(SSDLHIST);
 
 
   // Initialize triggers
@@ -67,25 +70,29 @@ Analyzer hPlusPlusMassAnalysis()
   auto tripleMuonTrigger = make_shared<TripleMuonTrigger>(recoMod, 10, 5, 5);
 
   // Add triggers to the TriggerModule
-  triggerMod->addTrigger(singleMuonTrigger);
+  //triggerMod->addTrigger(singleMuonTrigger);
   //triggerMod->addTrigger(doubleMuonTrigger);
   //triggerMod->addTrigger(tripleMuonTrigger);
 
   analyzer.addProductionModule(genSimMod);
   analyzer.addProductionModule(recoMod);
   analyzer.addProductionModule(matchMod);
+  analyzer.addProductionModule(weightMod);
+  analyzer.addProductionModule(lrWeightMod);
   //analyzer.addProductionModule(triggerMod);
 
+  analyzer.addFilterModule(nLeptonsFilter);
 
-  //analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
+
+  analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
   //analyzer.addAnalysisModule(triggerEfficiencyMod);
   analyzer.addAnalysisModule(eventDump);
   //analyzer.addAnalysisModule(leptonEfficiency);
-  analyzer.addAnalysisModule(massRecoEfficiency200);
-  analyzer.addAnalysisModule(massRecoEfficiency500);
-  analyzer.addAnalysisModule(massRecoEfficiency800);
-  analyzer.addAnalysisModule(massRecoEfficiency1000);
-  analyzer.addAnalysisModule(massRecoEfficiency1300);
+  //analyzer.addAnalysisModule(massRecoEfficiency200);
+  //analyzer.addAnalysisModule(massRecoEfficiency500);
+  //analyzer.addAnalysisModule(massRecoEfficiency800);
+  //analyzer.addAnalysisModule(massRecoEfficiency1000);
+  //analyzer.addAnalysisModule(massRecoEfficiency1300);
 
   return analyzer;
 }
