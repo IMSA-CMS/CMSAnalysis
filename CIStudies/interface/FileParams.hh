@@ -19,6 +19,7 @@ public:
   static std::string DY() {return "DY";}
   static std::string Diboson() {return "Diboson";}
   static std::string top() {return "top";}
+  static std::string bottom() {return "bottom";}
   static std::string QCD() {return "QCD";}
   static std::string Higgs() {return "Higgs";}
   static std::string LeptonJet() {return "LeptonJet";}

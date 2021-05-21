@@ -28,6 +28,8 @@ public:
   bool isNotNull() const {return particle;}
   LeptonType getLeptonType() const;
   BarrelState getBarrelState() const;
+  bool isIsolated() const;
+  const reco::Candidate* getUnderlyingParticle() const {return particle;}
 	
 private:
   const reco::Candidate* particle;

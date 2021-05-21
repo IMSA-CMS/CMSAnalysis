@@ -1,7 +1,8 @@
 #include "CIAnalysis/CIStudies/interface/Particle.hh"
+#include "DataFormats/MuonReco/interface/Muon.h"
 
-Particle::Particle(const reco::Candidate *iparticle, LeptonType iLeptonType)
-    : particle(iparticle), leptonType(iLeptonType) {}
+// Particle::Particle(const reco::Candidate *iparticle, LeptonType iLeptonType)
+//     : particle(iparticle), leptonType(iLeptonType) {}
 
 int Particle::charge() const {
   checkIsNull();
@@ -139,8 +140,26 @@ Particle::BarrelState Particle::getBarrelState() const {
   return Particle::BarrelState::None;
 }
 
-void Particle::checkIsNull() const {
-  if (!particle) {
-    throw std::runtime_error("attempted to use null pointer in Particle");
+bool Particle::isIsolated() const
+{
+  checkIsNull();
+  auto muon = dynamic_cast<const reco::Muon*>(particle);
+  if (!muon)
+  {
+    return false;
+  } 
+  auto isolation = muon->isolationR03();
+  if (isolation.sumPt < 0.1*muon->pt())
+  {
+    return true;
+  }
+  return false;
+}
+
+void Particle::checkIsNull() const
+{
+  if(!particle)
+  {
+    throw std::runtime_error("attempted to use null pointer in Particle");	
   }
 }
