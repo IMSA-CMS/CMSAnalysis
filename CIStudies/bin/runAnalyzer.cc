@@ -19,20 +19,34 @@ int main(int argc, char **argv) {
 
   optutl::CommandLineParser parser ("Analyze FWLite Histograms");
 
-  parser.addOption("output", optutl::CommandLineParser::kString, "Particle", "");
-
+  parser.addOption("output-path", optutl::CommandLineParser::kString, "Particle", "");
+  parser.addOption("output", optutl::CommandLineParser::kString)
+  
   parser.addOption("input", optutl::CommandLineParser::kString, "Input", "");
   parser.addOption("numFiles", optutl::CommandLineParser::kInteger, "Number of Files", -1);
   parser.parseArguments (argc, argv);
   
   std::string inputFile = parser.stringValue("input");
 
-  std::string outputFile = parser.stringValue("output");
-  int numFiles = parser.integerValue("numFiles");
-
-  if (outputFile.empty()) {
-    outputFile = "electronResolution.root";
+  if(!parser.stringValue("output").empty())
+  {
+    if(!parser.stringValue("output-path").empty())
+    {
+      std::cout << "Warning: Two output options selected. Option output-path will not be used.";
+    }
+    
+    outputFile = "./output/" + parser.stringValue("output");
   }
+  else if(!parser.stringValue("output-path").empty())
+  {
+    outputFile = parser.stringValue("output-path");
+  }
+  else
+  {
+    outputFile = "./output/electronResolution.root";
+  }
+  
+  int numFiles = parser.integerValue("numFiles");
 
 
   std::cout << "This is the name of outputFile " << outputFile << std::endl;
