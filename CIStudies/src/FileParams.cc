@@ -14,7 +14,7 @@ using std::vector;
 
 void Process::addMaps()
 {
-  addValuesToMap({"CI", "ADD", "ADD2", "DY", "Diboson", "top", "QCD", "Higgs", "LeptonJet"});
+  addValuesToMap({"CI", "ADD", "ADD2", "DY", "Diboson", "top", "bottom", "QCD", "Higgs", "LeptonJet"});
 
   addAlternates({"ci", "Ci", "cI"}, "CITo2");
   addAlternates({"add", "Add", "aDd", "adD", "aDD", "LED", "led"}, "ADD");
@@ -22,6 +22,7 @@ void Process::addMaps()
   addAlternates({"dy", "Drell Yan", "Drell-Yan"}, "DY");
   addAlternates({"diboson", "DB", "db"}, "Diboson");
   addAlternate("Top", "top");
+  addAlternates({"Bottom", "BBbar", "bbbar"}, "bottom");
   addAlternate("qcd", "QCD");
   addAlternates({"Doubly Charged Higgs", "H++", "Higgs ++", "Higgs++"}, "Higgs");
   addAlternates({"Lepton Jet", "leptonjet", "lepton jet"}, "LeptonJet");
@@ -43,12 +44,14 @@ void Helicity::addMaps()
 
   vector<string> dibosons = {"WZ", "WZ3LNu", "WZ2L2Q", "ZZ", "ZZ2L2Nu", "ZZ2L2Q", "ZZ4L", "WW"};
   vector<string> tops = {"ttbar", "tW", "Wantitop"};
+  vector<string> bottom = {"BBbar"};
   vector<string> qcd = {"Wjets"};
   vector<string> doublyChargedHiggs = {"Higgs++to2Leptons", "Higgs++toWW"};  // Specifices Doubly Charged Higgs decay channels
   vector<string> leptonJet = {"SUSYPortal", "HiggsPortal"}; // Specifies Lepton Jet Processes
 
   addValuesToMap(dibosons);
   addValuesToMap(tops);
+  addValuesToMap(bottom);
   addValuesToMap(qcd);
   addValuesToMap(doublyChargedHiggs);
   addValuesToMap(leptonJet);
@@ -57,6 +60,7 @@ void Helicity::addMaps()
   addAlternate("lr", "LR");
   addAlternate("rl", "RL");
   addAlternate("rr", "RR");
+  addAlternate("bbbar", "BBbar");
 
   addAlternates({"2Leptons", "l+l-"}, "Higgs++to2Leptons");
   addAlternate("WW", "Higgs++toWW");
@@ -217,7 +221,7 @@ string FileParams::locateTextFile() const
       helicityString = "";
     }
 
-  if (processString == Process::Diboson() || processString == Process::top() || processString == Process::QCD())
+  if (processString == Process::Diboson() || processString == Process::top() || processString == Process::bottom() || processString == Process::QCD())
     {
       leptonString = "";
       interferenceString = "";
