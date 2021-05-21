@@ -1,8 +1,8 @@
 #include "CIAnalysis/CIStudies/interface/Particle.hh"
 #include "DataFormats/MuonReco/interface/Muon.h"
 
-// Particle::Particle(const reco::Candidate *iparticle, LeptonType iLeptonType)
-//     : particle(iparticle), leptonType(iLeptonType) {}
+Particle::Particle(const reco::Candidate *iparticle, LeptonType iLeptonType)
+    : particle(iparticle), leptonType(iLeptonType) {}
 
 int Particle::charge() const {
   checkIsNull();
