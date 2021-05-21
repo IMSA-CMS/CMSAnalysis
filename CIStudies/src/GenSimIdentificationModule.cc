@@ -120,10 +120,15 @@ bool GenSimIdentificationModule::isParticle(Particle p) const {
         return false;
     */
   } else {
+    if (p.status() != finalStateParticleStatusCode ||
+        p.mother().status() == finalStateParticleStatusCode)
+      return false;
     Particle nu = p.mother();
-    if (!nu.isNotNull()) { return false; }
+    if (!nu.isNotNull()) {
+      return false;
+    }
     int motherId = nu.pdgId();
-    //bool isParticle = true;
+    // bool isParticle = true;
     // std::cout << "incheck\n";
 
     // std::cout << "Printing GenSim Mother P: pdgID: " << nu.pdgId() << ",
