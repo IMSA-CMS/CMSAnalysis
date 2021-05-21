@@ -1,90 +1,75 @@
 #include "CIAnalysis/CIStudies/interface/Particle.hh"
 
+Particle::Particle(const reco::Candidate *iparticle, LeptonType iLeptonType)
+    : particle(iparticle), leptonType(iLeptonType) {}
 
-Particle::Particle(const reco::Candidate* iparticle, LeptonType iLeptonType): 
-particle(iparticle),
-leptonType(iLeptonType)
-{
-}
-
-int Particle::charge() const 
-{
+int Particle::charge() const {
   checkIsNull();
   return particle->charge();
 }
 
-double Particle::pt() const
-{
+double Particle::pt() const {
   checkIsNull();
   return particle->pt();
 }
 
-double Particle::eta() const
-{
+double Particle::eta() const {
   checkIsNull();
   return particle->eta();
 }
 
-double Particle::phi() const
-{
+double Particle::phi() const {
   checkIsNull();
   return particle->phi();
 }
 
-double Particle::et() const
-{
+double Particle::et() const {
   checkIsNull();
   return particle->et();
 }
 
-double Particle::energy() const
-{
+double Particle::energy() const {
   checkIsNull();
   return particle->energy();
 }
 
-reco::Candidate::LorentzVector Particle::fourVector() const
-{
+reco::Candidate::LorentzVector Particle::fourVector() const {
   checkIsNull();
   return particle->p4();
 }
 
-int Particle::pdgId() const
-{
+int Particle::pdgId() const {
   checkIsNull();
   return particle->pdgId();
 }
 
-int Particle::status() const
-{
+int Particle::status() const {
   checkIsNull();
   return particle->status();
 }
 
-Particle Particle::mother() const
-{
+Particle Particle::mother() const {
   checkIsNull();
-  //mother of particle is often not electron/muon
+  // mother of particle is often not electron/muon
   return Particle(particle->mother(), Particle::LeptonType::None);
 }
 
-Particle Particle::uniqueMother() const
-{
+Particle Particle::uniqueMother() const {
   checkIsNull();
   // The mother that is not itself
   auto mom = mother();
   mom.checkIsNull();
 
-  if (mom.pdgId() == pdgId())
-  {
-    return mom.uniqueMother();  // Recursive back to itself, so it will keep going until it returns a mother that is not the particle
+  if (mom.pdgId() == pdgId()) {
+    return mom
+        .uniqueMother(); // Recursive back to itself, so it will keep going
+                         // until it returns a mother that is not the particle
   }
 
   return mom;
 }
 
-Particle Particle::daughter(int i) const
-{
+Particle Particle::daughter(int i) const {
   checkIsNull();
   auto daughter = particle->daughter(i);
   Particle::LeptonType type;
@@ -103,17 +88,15 @@ Particle Particle::daughter(int i) const
   return Particle(daughter, type);
 }
 
-int Particle::numberOfDaughters() const
-{
+int Particle::numberOfDaughters() const {
   checkIsNull();
   return particle->numberOfDaughters();
 }
 
-Particle Particle::finalDaughter()
-{
+Particle Particle::finalDaughter() {
   Particle current = Particle(particle, Particle::LeptonType::None);
   while (current.status() != 1) {
-    int di = 0;
+    int di = -1;
     int dpt = 0;
     for (int i = 0; i < current.numberOfDaughters(); ++i) {
       Particle daughter = current.daughter(i);
@@ -122,50 +105,42 @@ Particle Particle::finalDaughter()
         dpt = daughter.pt();
       }
     }
+    if (di == -1) {
+      std::cout << "OH NO!!!!!!!\n";
+      std::cout << current.pdgId() << '\n';
+      break;
+    }
     current = current.daughter(di);
   }
   return current;
 }
 
-Particle::LeptonType Particle::getLeptonType() const
-{
+Particle::LeptonType Particle::getLeptonType() const {
   checkIsNull();
   return leptonType;
 }
 
-Particle::BarrelState Particle::getBarrelState() const
-{
+Particle::BarrelState Particle::getBarrelState() const {
   checkIsNull();
   double etaValue = std::abs(eta());
-  if (leptonType == LeptonType::Muon)
-  {
-    if (etaValue < 1.2)
-    {
+  if (leptonType == LeptonType::Muon) {
+    if (etaValue < 1.2) {
       return Particle::BarrelState::Barrel;
-    }
-    else
-    {
+    } else {
       return Particle::BarrelState::Endcap;
     }
-  }
-  else if (leptonType == LeptonType::Electron)
-  {
-    if (etaValue < 1.4442)
-    {
+  } else if (leptonType == LeptonType::Electron) {
+    if (etaValue < 1.4442) {
       return Particle::BarrelState::Barrel;
-    }
-    else if (etaValue > 1.562)
-    {
+    } else if (etaValue > 1.562) {
       return Particle::BarrelState::Endcap;
     }
   }
   return Particle::BarrelState::None;
 }
 
-void Particle::checkIsNull() const
-{
-  if(!particle)
-  {
-    throw std::runtime_error("attempted to use null pointer in Particle");	
+void Particle::checkIsNull() const {
+  if (!particle) {
+    throw std::runtime_error("attempted to use null pointer in Particle");
   }
 }
