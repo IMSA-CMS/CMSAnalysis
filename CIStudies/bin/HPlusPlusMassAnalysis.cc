@@ -31,7 +31,7 @@ Analyzer hPlusPlusMassAnalysis() {
 
   auto eventDump = make_shared<GenSimEventDumpModule>(3);
 
-  auto genSimMod = make_shared<GenSimIdentificationModule>(9900041);
+  auto genSimMod = make_shared<GenSimIdentificationModule>(9900041, true);
   auto recoMod = make_shared<RecoIdentificationModule>(50);
   auto matchMod = make_shared<MatchingModule>(genSimMod, recoMod);
   auto triggerMod = make_shared<TriggerModule>(recoMod);
