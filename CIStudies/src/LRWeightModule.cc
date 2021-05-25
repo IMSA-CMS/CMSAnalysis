@@ -28,11 +28,14 @@ bool LRWeightModule::process(const edm::EventBase& event)
   try 
   {
     double lambda = lambdaString == "100k" ? 100000000 : std::stod(lambdaString) * 1000;
+    if (getFileParams().getProcess() == Process::CI())
+    {
     int interference = getFileParams().getInterference() == Interference::constructive() ? -1 : 1;
 
     auto weights = calculateWeights(*genInfo, *genParticles, lambda, interference);
     lrWeight = weights.first;
-    rlWeight = weights.second; 
+    rlWeight = weights.second;
+    }
   }
   catch (...)
   {
