@@ -69,14 +69,18 @@ Analyzer hPlusPlusMassAnalysis() {
   auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
   auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
 
-  auto genSimRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3);
-  auto recoRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, false, "Reco Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3);
+  auto genSimHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
+  auto recoHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, false, "Reco H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
+  auto genSimHMinusMinusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H-- Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, -9900041);
+  auto recoHMinusMinusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, false, "Reco H-- Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
 
   // Add the histogram(s) created above to histMod
   //histMod->addHistogram(recoThirdMuonPtHist);
   //histMod->addHistogram(sameSignInvMassHist);
-  histMod->addHistogram(genSimRecoveredInvMassHist);
-  histMod->addHistogram(recoRecoveredInvMassHist);
+  histMod->addHistogram(genSimHPlusPlusRecoveredInvMassHist);
+  histMod->addHistogram(recoHPlusPlusRecoveredInvMassHist);
+  histMod->addHistogram(genSimHMinusMinusRecoveredInvMassHist);
+  histMod->addHistogram(recoHMinusMinusRecoveredInvMassHist);
   //histMod->addHistogram(nLeptonsHist);
   //histMod->addHistogram(nElectronsHist);
   //histMod->addHistogram(nMuonsHist);
