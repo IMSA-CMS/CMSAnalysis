@@ -20,7 +20,6 @@
 #include "CIAnalysis/CIStudies/interface/SingleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/ThirdMuonPtHist.hh"
 #include "CIAnalysis/CIStudies/interface/RecoveredInvariantMassHist.hh"
-#include "CIAnalysis/CIStudies/interface/GenSimEventDumpModule.hh"
 #include "CIAnalysis/CIStudies/interface/TriggerEfficiencyModule.hh"
 #include "CIAnalysis/CIStudies/interface/TriggerModule.hh"
 #include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
@@ -31,7 +30,7 @@ using std::make_shared;
 Analyzer hPlusPlusMassAnalysis() {
   Analyzer analyzer;
 
-  auto eventDump = make_shared<GenSimEventDumpModule>(3);
+  auto eventDump = make_shared<GenSimEventDumpModule>(10);
 
   auto genSimMod = make_shared<GenSimIdentificationModule>(9900041);
   auto recoMod = make_shared<RecoIdentificationModule>(50);
@@ -40,7 +39,7 @@ Analyzer hPlusPlusMassAnalysis() {
   auto weightMod = make_shared<WeightingModule>();
   auto lrWeightMod = make_shared<LRWeightModule>();
 
-  auto nLeptonsFilter = make_shared<NLeptonsFilter>(matchMod); //Needs to be updated with shared pointers
+  auto nLeptonsFilter = make_shared<NLeptonsFilter>(recoMod); //Needs to be updated with shared pointers
   
   auto histMod = make_shared<HistogramOutputModule>(genSimMod, recoMod, weightMod, lrWeightMod);
   auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
@@ -102,18 +101,24 @@ Analyzer hPlusPlusMassAnalysis() {
   analyzer.addProductionModule(weightMod);
   analyzer.addProductionModule(lrWeightMod);
 
+  // Filters
+  //analyzer.addFilterModule(nLeptonsFilter);
+
   analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
+  //analyzer.addAnalysisModule(eventDump);
+  //analyzer.addAnalysisModule(leptonEfficiency);
+
   //analyzer.addAnalysisModule(triggerEfficiencyMod4010);
   //analyzer.addAnalysisModule(triggerEfficiencyMod4040);
   //analyzer.addAnalysisModule(triggerEfficiencyMod8040);
   //analyzer.addAnalysisModule(triggerEfficiencyMod20080);
-  //analyzer.addAnalysisModule(eventDump);
-  //analyzer.addAnalysisModule(leptonEfficiency);
+
   //analyzer.addAnalysisModule(massRecoEfficiency200);
   //analyzer.addAnalysisModule(massRecoEfficiency500);
   //analyzer.addAnalysisModule(massRecoEfficiency800);
   //analyzer.addAnalysisModule(massRecoEfficiency1000);
   //analyzer.addAnalysisModule(massRecoEfficiency1300);
+  
   analyzer.addAnalysisModule(massRecoEfficiency55);
   analyzer.addAnalysisModule(massRecoEfficiency1010);
   //analyzer.addAnalysisModule(massRecoEfficiency4010);
