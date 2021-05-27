@@ -15,6 +15,7 @@
 #include "CIAnalysis/CIStudies/interface/LeptonJetEfficiency.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonJet.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonJetMatchingModule.hh"
+#include "CIAnalysis/CIStudies/interface/LeptonJetPtHist.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonJetReconstructionModule.hh"
 #include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
 #include "CIAnalysis/CIStudies/interface/MassRecoEfficiency.hh"
@@ -50,13 +51,15 @@ Analyzer leptonJetReconstructionAnalysis() {
       genSimMod, recoMod, weightMod, lrWeightMod);
 
   // Histograms
-  auto deltaRHist = make_shared<DeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.5);
+  auto deltaRHist = make_shared<DeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.1);
+  auto pTHist = make_shared<LeptonJetPtHist>(lepRecoMod, "pT Values (Reconstructed Jets)", 100, 0, 200);
   // auto matchDeltaRHist = make_shared<MatchingDeltaRHist>(lepMatchMod, "Differences in Delta R for Matched Lepton Jets", 100, 0, 0.5);
   // auto matchPtHist = make_shared<MatchingPtHist>(lepMatchMod, "Differences in pT for Matched Lepton Jets", 100, -300, 300);
   // auto matchPhiHist = make_shared<MatchingPhiHist>(lepMatchMod, "Differences in Phi for Matched Lepton Jets", 100, 0, 3.15);
   // auto matchEtaHist = make_shared<MatchingEtaHist>(lepMatchMod, "Differences in Eta for Matched Lepton Jets", 100, -1, 1);
 
   histOutputMod->addHistogram(deltaRHist);
+  histOutputMod->addHistogram(pTHist);
   // histOutputMod->addHistogram(matchDeltaRHist);
   // histOutputMod->addHistogram(matchPtHist);
   // histOutputMod->addHistogram(matchPhiHist);
@@ -101,14 +104,14 @@ Analyzer leptonJetReconstructionAnalysis() {
   analyzer.addProductionModule(lrWeightMod);
   analyzer.addProductionModule(matchMod);
   analyzer.addProductionModule(lepRecoMod);
-  analyzer.addProductionModule(genPartMod);
+  // analyzer.addProductionModule(genPartMod);
   analyzer.addProductionModule(lepMatchMod);
 
   analyzer.addAnalysisModule(histOutputMod);
   // analyzer.addProductionModule(triggerMod);
 
   //analyzer.addAnalysisModule(leptonEfficiency);
-  analyzer.addAnalysisModule(leptonJetEfficiency);
+  // analyzer.addAnalysisModule(leptonJetEfficiency);
   //analyzer.addAnalysisModule(massRecoEfficiency200);
   //analyzer.addAnalysisModule(massRecoEfficiency500);
   //analyzer.addAnalysisModule(massRecoEfficiency800);
