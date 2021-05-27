@@ -53,6 +53,8 @@ Analyzer massResolutionAnalysis()
   analyzer.addProductionModule(genSimMod);
   analyzer.addProductionModule(recoMod);
   analyzer.addProductionModule(matchMod);
+  analyzer.addProductionModule(weightMod);
+  analyzer.addProductionModule(lrWeightMod);
   
   //analyzer.addAnalysisModule(massResMod);
   //analyzer.addAnalysisModule(ptResMod);
