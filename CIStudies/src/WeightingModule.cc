@@ -55,12 +55,18 @@ bool WeightingModule::process(const edm::EventBase& event)
 
 void WeightingModule::findWeight(std::string key)
 {
+  //std::cout << "Key: " << key << '\n';
   auto iterator = weights.find(key);
   if (iterator == weights.end())
   {
     std::cerr << "Key " << key << " not found! " << std::endl;
-    weight = 1;
+    weight = 0;
+  
     //throw std::runtime_error("Key " + key + " not found!");
+  }
+  else if (key == "")
+  {
+    weight = 0;
   }
   else
   {
