@@ -20,11 +20,19 @@ public:
   int status() const;
   Particle mother() const;
   Particle uniqueMother() const;
+  Particle daughter(int i) const;
+  int numberOfDaughters() const;
+  Particle finalDaughter();
+  Particle findMother(int motherPDGID);
+  static Particle sharedMother(int motherPDGID, Particle particle1, Particle particle2);
+  static Particle sharedMother(int motherPDGID, std::vector<Particle> particles);
   bool operator==(Particle userParticle) const {return userParticle.particle == particle;}
   bool operator!=(Particle userParticle) const {return userParticle.particle != particle;}
   bool isNotNull() const {return particle;}
   LeptonType getLeptonType() const;
   BarrelState getBarrelState() const;
+  bool isIsolated() const;
+  const reco::Candidate* getUnderlyingParticle() const {return particle;}
 	
 private:
   const reco::Candidate* particle;

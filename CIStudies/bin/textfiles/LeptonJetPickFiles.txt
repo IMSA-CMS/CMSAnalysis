@@ -3,5 +3,5 @@ Year:	2021
 Lepton:	muon
 Mass:	300
 Lambda:	M1
-Inter:	con
+Inter:	Prompt
 Helic:	SUSYPortal

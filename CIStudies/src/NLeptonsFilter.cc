@@ -1,14 +1,14 @@
 #include "CIAnalysis/CIStudies/interface/NLeptonsFilter.hh"
-#include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
+#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 
-NLeptonsFilter::NLeptonsFilter(const std::shared_ptr<MatchingModule> imatchModule) :
-  matchModule(imatchModule)
+NLeptonsFilter::NLeptonsFilter(const std::shared_ptr<RecoIdentificationModule> iRecoModule) :
+  recoModule(iRecoModule)
 {
 }
 
 std::string NLeptonsFilter::makeFilterString(const edm::EventBase& event)
 {
-  auto pairs = matchModule->getMatchingBestPairs();
+  double pairs = recoModule->getRecoCandidates().getNumParticles();
   //std::cout << pairs.getSize() << "\n";
-  return std::to_string(static_cast<int>(pairs.getSize()));
+  return std::to_string(static_cast<int>(pairs));
 }
