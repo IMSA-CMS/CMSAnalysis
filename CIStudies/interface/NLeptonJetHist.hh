@@ -8,11 +8,11 @@ class LeptonJetReconstructionModule;
 class NLeptonJetHist : public HistogramPrototype
 {
   public:
-  NLeptonJetHist(const LeptonJetReconstructionModule& iLeptonJetRecoModule, const std::string& iname, int iNBins, double iminimum, double imaximum);
+  NLeptonJetHist(std::shared_ptr<LeptonJetReconstructionModule> iLeptonJetRecoModule, const std::string& iname, int iNBins, double iminimum, double imaximum);
   double value() const override;
 
   private:
-  const LeptonJetReconstructionModule& leptonJetRecoModule;
+  std::shared_ptr<LeptonJetReconstructionModule> leptonJetRecoModule;
 };
 
 

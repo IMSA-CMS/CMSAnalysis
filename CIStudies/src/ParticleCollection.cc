@@ -4,6 +4,7 @@
 #include "TLorentzVector.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
 #include "CIAnalysis/CIStudies/interface/Particle.hh"
+#include "CIAnalysis/CIStudies/interface/Utility.hh"
 
 #include <iostream>
 
@@ -295,6 +296,56 @@ double ParticleCollection::calculateAllLeptonInvariantMass() const
   // std::cout << total.M() << '\n';
 
   return total.M();
+}
+
+double ParticleCollection::calculateRecoveredInvariantMass(int nLeptons, int motherPDGID) const
+{
+  double maxInvariantMass = 0;
+
+  if (nLeptons < 0)
+  {
+    throw std::out_of_range("Use a valid number of leptons");  // Use valid nLeptons number
+  }
+
+  else if (nLeptons > getNumParticles())
+  {
+    std::cout << "Not enough leptons; running on " << getNumParticles() << " leptons.\n";
+    return calculateRecoveredInvariantMass(getNumParticles(), motherPDGID);
+  }
+
+  auto allLeptons = getParticles();         // Vector of Particles
+  int allLeptonsSize = getNumParticles();   // Size of above vector
+
+  // Create a vector of ints that are the indices of allLeptons
+  std::vector<int> indices;
+  for (int i = 0; i < allLeptonsSize; i++)
+  {
+      indices.push_back(i);
+  }
+
+  std::vector<int> combination;
+  std::vector<std::vector<int>> totalCombinations;
+
+  Utility::getAllCombinations(0, nLeptons, combination, indices, totalCombinations);
+
+  for (auto leptonIndices : totalCombinations)
+  {
+      // Create a new ParticleCollection and add back the leptons
+      ParticleCollection leptons;
+      for (auto index : leptonIndices)
+      {
+          leptons.addParticle(allLeptons[index]);
+      }
+
+      bool daughterOfHPlusPlus = Particle::sharedMother(motherPDGID, leptons.getParticles()).isNotNull();  // If all of the particles map their mother to the specified mother particle, this is true
+
+      if ((leptons.calculateAllLeptonInvariantMass() > maxInvariantMass) && (daughterOfHPlusPlus))
+      {
+          maxInvariantMass = leptons.calculateAllLeptonInvariantMass();
+      }
+  }
+
+  return maxInvariantMass;
 }
 
 double ParticleCollection::calculateCollinsSoper(Particle particle, Particle antiparticle) const
