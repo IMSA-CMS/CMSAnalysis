@@ -13,5 +13,5 @@ bool Module::processEvent(const edm::EventBase& event)
   ++eventCount[fileKey];
   process(event);
 
-  return true;
+  return process(event);
 }

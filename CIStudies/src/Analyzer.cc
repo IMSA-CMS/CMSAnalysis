@@ -15,7 +15,7 @@
 #include "DataFormats/FWLite/interface/Event.h"
 #include "CIAnalysis/CIStudies/interface/Module.hh"
 
-void Analyzer::run(const std::string& configFile, const std::string& outputFile, int outputEvery)
+void Analyzer::run(const std::string& configFile, const std::string& outputFile, int outputEvery, int nFiles)
 {
   // This keeps the histograms separate from the files they came from, avoiding much silliness
   TH1::AddDirectory(kFALSE);
@@ -44,8 +44,12 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
       auto files = filepar.fileVector();
       std::cout << "# of root files: " << files.size() << std::endl;
 
+      int fileCounter = 0;
+
       for (auto& filename : files)
-	{
+	  {
+      fileCounter += 1;
+
 	  // Open files with rootxd
 	  const std::string eossrc = "root://cmsxrootd.fnal.gov//";
 
@@ -117,6 +121,11 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 	    }
 
 	  delete file;
+
+    if (nFiles != -1 && fileCounter >= nFiles)
+    {
+      break;
+    }
 	}
       std::cout << "Events Processed: " << numOfEvents << std::endl;
     }      

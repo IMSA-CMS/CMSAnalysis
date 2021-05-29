@@ -15,9 +15,11 @@
 #include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
 #include "CIAnalysis/CIStudies/interface/MassRecoEfficiency.hh"
+#include "CIAnalysis/CIStudies/interface/TriggerEfficiencyModule.hh"
 #include "CIAnalysis/CIStudies/interface/SingleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/DoubleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
+#include "CIAnalysis/CIStudies/interface/SameSignInvariantMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/ThirdMuonPtHist.hh"
 #include "CIAnalysis/CIStudies/interface/GenSimEventDumpModule.hh"
 
@@ -26,7 +28,7 @@ Analyzer hPlusPlusMassAnalysis()
 {
   Analyzer analyzer;
 
-  auto eventDump = make_shared<GenSimEventDumpModule>(2);
+  auto eventDump = make_shared<GenSimEventDumpModule>(3);
 
   auto genSimMod = make_shared<GenSimIdentificationModule>(9900041);
   auto recoMod = make_shared<RecoIdentificationModule>(50);
@@ -49,13 +51,18 @@ Analyzer hPlusPlusMassAnalysis()
   auto massRecoEfficiency1000 = make_shared<MassRecoEfficiency>(recoMod, 1000, 50);
   auto massRecoEfficiency1300 = make_shared<MassRecoEfficiency>(recoMod, 1300, 65);
 
+  auto triggerEfficiencyMod = make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 200, 10);
+
   auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
+  auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
 
   // Add the histogram(s) created above to histMod
-  histMod->addHistogram(nLeptonsHist);
-  histMod->addHistogram(nElectronsHist);
-  histMod->addHistogram(nMuonsHist);
   histMod->addHistogram(recoThirdMuonPtHist);
+  histMod->addHistogram(sameSignInvMassHist);
+  //histMod->addHistogram(nLeptonsHist);
+  //histMod->addHistogram(nElectronsHist);
+  //histMod->addHistogram(nMuonsHist);
+
 
   // Initialize triggers
   auto singleMuonTrigger = make_shared<SingleMuonTrigger>(recoMod, 50);
@@ -64,16 +71,20 @@ Analyzer hPlusPlusMassAnalysis()
 
   // Add triggers to the TriggerModule
   triggerMod->addTrigger(singleMuonTrigger);
-  triggerMod->addTrigger(doubleMuonTrigger);
-  triggerMod->addTrigger(tripleMuonTrigger);
+  //triggerMod->addTrigger(doubleMuonTrigger);
+  //triggerMod->addTrigger(tripleMuonTrigger);
 
   analyzer.addProductionModule(genSimMod);
   analyzer.addProductionModule(recoMod);
-  //analyzer.addProductionModule(matchMod);
+  analyzer.addProductionModule(matchMod);
+  analyzer.addProductionModule(weightMod);
+  analyzer.addProductionModule(lrWeightMod);
   //analyzer.addProductionModule(triggerMod);
 
+
   analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
-  analyzer.addAnalysisModule(eventDump);
+  analyzer.addAnalysisModule(triggerEfficiencyMod);
+  //analyzer.addAnalysisModule(eventDump);
   //analyzer.addAnalysisModule(leptonEfficiency);
   //analyzer.addAnalysisModule(massRecoEfficiency200);
   //analyzer.addAnalysisModule(massRecoEfficiency500);
