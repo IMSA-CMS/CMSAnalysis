@@ -18,7 +18,7 @@ WeightingModule::WeightingModule()
   std::string key;
   std::string valueString;
   double value = 0;
-  while (weightsFile.peek() != '@')
+  while (weightsFile)
   { 
     if ((weightsFile.peek() == '#') || (weightsFile.peek() == '\n'))
     {
