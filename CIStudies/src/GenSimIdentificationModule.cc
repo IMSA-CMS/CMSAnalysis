@@ -48,13 +48,12 @@ bool GenSimIdentificationModule::process(const edm::EventBase &event) {
           type = Particle::LeptonType::Muon;
         }
       } else {
-        // std::cout << "neither\n";
+        continue;
       }
-      Particle particle = Particle(&p, type);
-      genParticles.addParticle(particle.finalDaughter());
+      genParticles.addParticle(Particle(&p, type));
     }
   }
-  std::cout << "LENGTH: " << genParticles.getNumParticles() << "\n";
+  // std::cout << "LENGTH: " << genParticles.getNumParticles() << "\n";
   return true;
 }
 
@@ -80,34 +79,26 @@ bool GenSimIdentificationModule::isParticle(Particle p) const {
   const int maxLeptonCode = 13;
   const int maxBosonCode = 24;
 
-  /*
-    if (p.status() != finalStateParticleStatusCode ||
-        p.mother().status() == finalStateParticleStatusCode)
-      return false;
-  */
+  if (p.status() != finalStateParticleStatusCode ||
+      p.mother().status() == finalStateParticleStatusCode)
+    return false;
 
   if (targetPdgId != 0) {
-    if (p.isNotNull() && p.mother().isNotNull()) {
-      auto mother = p.mother();
-      if (std::abs(mother.pdgId()) == targetPdgId) {
-        // std::cout << "target found\n";
-        // loop over mother's daughters (i.e. check siblings)
+    Particle currentMother = p;
+    while (currentMother.mother().isNotNull()) {
+      Particle newMother = currentMother.mother();
+      if (std::abs(newMother.pdgId()) == targetPdgId) {
         if (ignoreRadiation) {
-          for (int i = 0; i < mother.numberOfDaughters(); ++i) {
-            // if any are the same as the targetPdgId,
-            // then particle was emitted instead of
-            // being a direct product of decay
-            if (std::abs(mother.daughter(i).pdgId()) == targetPdgId) {
+          for (int i = 0; i < newMother.numberOfDaughters(); ++i) {
+            if (std::abs(newMother.daughter(i).pdgId()) == targetPdgId) {
               return false;
             }
           }
         }
-        // if no siblings are the same as the parent,
-        // it is a true decay
         return true;
       }
+      currentMother = newMother;
     }
-    // particle/parent non existent or parent not matching pdgId
     return false;
     /*
         Particle currentMother = p;
@@ -120,19 +111,11 @@ bool GenSimIdentificationModule::isParticle(Particle p) const {
         return false;
     */
   } else {
-    if (p.status() != finalStateParticleStatusCode ||
-        p.mother().status() == finalStateParticleStatusCode)
-      return false;
     Particle nu = p.mother();
-    if (!nu.isNotNull()) {
-      return false;
-    }
     int motherId = nu.pdgId();
-    // bool isParticle = true;
-    // std::cout << "incheck\n";
+    bool isParticle = true;
 
-    // std::cout << "Printing GenSim Mother P: pdgID: " << nu.pdgId() << ",
-    // status: " << nu.status() << std::endl;
+    // std::cout << "Printing GenSim Mother P: pdgID: " << nu.pdgId() << ", status: " << nu.status() << std::endl;
 
     while (std::abs(motherId) > maxQuarkCode) // not a quark
     {
@@ -145,15 +128,15 @@ bool GenSimIdentificationModule::isParticle(Particle p) const {
           // isParticle = false;
           return false;
         }
-        // if (std::abs(motherId) <= maxQuarkCode) { // is a quark
-        //   isParticle = true;
-        // }
+        if (std::abs(motherId) <= maxQuarkCode) { // is a quark
+          isParticle = true;
+        }
       } else {
         // This is pretty weird behavior, but clearly not a good particle if it
         // gets here
         return false;
       }
     }
-    return true;
+    return isParticle;
   }
 }

@@ -74,9 +74,9 @@ Analyzer hPlusPlusMassAnalysis() {
   // Add the histogram(s) created above to histMod
   //histMod->addHistogram(recoThirdMuonPtHist);
   //histMod->addHistogram(sameSignInvMassHist);
-  histMod->addHistogram(genSimRecoveredInvMassHist);
-  histMod->addHistogram(recoRecoveredInvMassHist);
-  //histMod->addHistogram(nLeptonsHist);
+  // histMod->addHistogram(genSimRecoveredInvMassHist);
+  // histMod->addHistogram(recoRecoveredInvMassHist);
+  histMod->addHistogram(nLeptonsHist);
   //histMod->addHistogram(nElectronsHist);
   //histMod->addHistogram(nMuonsHist);
 
