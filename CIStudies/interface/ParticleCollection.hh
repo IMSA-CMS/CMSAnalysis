@@ -31,7 +31,7 @@ public:
   double calculateSameSignInvariantMass() const;
   double calculateOppositeSignInvariantMass() const;
 
-  double calculateRecoveredInvariantMass(int nLeptons) const;
+  double calculateRecoveredInvariantMass(int nLeptons, int motherPDGID) const;
 
   Particle getLeadingPtLepton() const;
   int getLeptonTypeCount(Particle::LeptonType leptonType) const;

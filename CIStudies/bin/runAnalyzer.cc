@@ -12,6 +12,7 @@
 #include "CIAnalysis/CIStudies/bin/displacedVertexAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/massAcceptanceAnalysis.cc"
 
+
 int main(int argc, char **argv) {
   gROOT->SetBatch(true);
   gSystem->Load("libFWCoreFWLite");
@@ -41,11 +42,17 @@ int main(int argc, char **argv) {
 
   unsigned outputEvery = parser.integerValue("outputEvery");
 
-  Analyzer analyzer = hPlusPlusMassAnalysis();
-  //Analyzer analyzer = massResolutionAnalysis();
+  //Analyzer analyzer = hPlusPlusMassAnalysis();
+  //Analyzer analyzer = leptonJetReconstructionAnalysis();
   //Analyzer analyzer = leptonJetReconstructionAnalysis();
   //Analyzer analyzer = displacedVertexAnalysis();
-  //Analyzer analyzer = massAcceptanceAnalysis();
+
+  // Analyzer analyzer = hPlusPlusMassAnalysis();
+  // Analyzer analyzer = massResolutionAnalysis();
+  //Analyzer analyzer = leptonJetReconstructionAnalysis();
+  // Analyzer analyzer = displacedVertexAnalysis();
+   Analyzer analyzer = massAcceptanceAnalysis();
+
 
   std::cout << "Notice: analyzer created" << std::endl;
 
