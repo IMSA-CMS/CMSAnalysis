@@ -298,7 +298,7 @@ double ParticleCollection::calculateAllLeptonInvariantMass() const
   return total.M();
 }
 
-double ParticleCollection::calculateRecoveredInvariantMass(int nLeptons) const
+double ParticleCollection::calculateRecoveredInvariantMass(int nLeptons, int motherPDGID) const
 {
   double maxInvariantMass = 0;
 
@@ -310,7 +310,7 @@ double ParticleCollection::calculateRecoveredInvariantMass(int nLeptons) const
   else if (nLeptons > getNumParticles())
   {
     std::cout << "Not enough leptons; running on " << getNumParticles() << " leptons.\n";
-    return calculateRecoveredInvariantMass(getNumParticles());
+    return calculateRecoveredInvariantMass(getNumParticles(), motherPDGID);
   }
 
   auto allLeptons = getParticles();         // Vector of Particles
@@ -337,7 +337,9 @@ double ParticleCollection::calculateRecoveredInvariantMass(int nLeptons) const
           leptons.addParticle(allLeptons[index]);
       }
 
-      if (leptons.calculateAllLeptonInvariantMass() > maxInvariantMass)
+      bool daughterOfHPlusPlus = Particle::sharedMother(motherPDGID, leptons.getParticles()).isNotNull();  // If all of the particles map their mother to the specified mother particle, this is true
+
+      if ((leptons.calculateAllLeptonInvariantMass() > maxInvariantMass) && (daughterOfHPlusPlus))
       {
           maxInvariantMass = leptons.calculateAllLeptonInvariantMass();
       }

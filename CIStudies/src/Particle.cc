@@ -116,7 +116,76 @@ Particle Particle::finalDaughter() {
   return current;
 }
 
-Particle::LeptonType Particle::getLeptonType() const {
+Particle Particle::findMother(int motherPDGID)
+{
+  bool foundMother = false;
+
+  Particle finalMother = Particle(nullptr, Particle::LeptonType::None);  // Null Particle
+
+  auto currentMother = mother();
+
+  while (!foundMother)
+  {
+    if (!currentMother.isNotNull())  // Return a null particle if we reach an initial particle
+    {
+      return Particle(nullptr, Particle::LeptonType::None);
+    }
+    else if (currentMother.pdgId() == motherPDGID)
+    {
+      finalMother = currentMother;
+      foundMother = true;
+    }
+    else
+    {
+      currentMother = currentMother.mother();
+    }
+  }
+
+  return finalMother;
+}
+
+Particle Particle::sharedMother(int motherPDGID, Particle particle1, Particle particle2)
+{
+  auto mother1 = particle1.findMother(motherPDGID);  // Define these here for convenience
+  auto mother2 = particle2.findMother(motherPDGID);
+
+  if ((mother1 == mother2) && (mother1.isNotNull()) && (mother2.isNotNull()))
+  {
+    return mother1;
+  }
+  else
+  {
+    return Particle(nullptr, Particle::LeptonType::None);
+  }
+}
+
+Particle Particle::sharedMother(int motherPDGID, std::vector<Particle> particles)
+{
+  if (particles.size() < 2)
+  {
+    return Particle(nullptr, Particle::LeptonType::None);
+  }
+
+  Particle finalMother = sharedMother(motherPDGID, particles[0], particles[1]);  // Shared mother between the first 2 particles
+
+  // Find the shared mother between all possible particle pairs.
+  // If they are all the same, then that is the shared mother.
+  // If they are different, then return a null particle, since there is no particle.
+  for (int i = 0; i < static_cast<int>(particles.size()); i++)
+  {
+    for (int j = i + 1; j < static_cast<int>(particles.size()); j++)
+    {
+      if (sharedMother(motherPDGID, particles[i], particles[j]) != finalMother)
+      {
+        return Particle(nullptr, Particle::LeptonType::None);
+      }
+    }
+  }
+  return finalMother;
+}
+
+Particle::LeptonType Particle::getLeptonType() const
+{
   checkIsNull();
   return leptonType;
 }
