@@ -68,7 +68,7 @@ Particle Particle::mother() const
   return Particle(particle->mother(), Particle::LeptonType::None);
 }
 
-/**Particle Particle::uniqueMother() const
+Particle Particle::uniqueMother() const
 {
   checkIsNull();
   // The mother that is not itself
@@ -82,9 +82,7 @@ Particle Particle::mother() const
 
   return mom;
 }
-<<<<<<< HEAD
-**/
-=======
+
 
 Particle Particle::daughter(int i) const
 {
@@ -130,7 +128,6 @@ Particle Particle::finalDaughter()
   return current;
 }
 
->>>>>>> dcb6cea430321418c8054654e5e672b1e00c520d
 Particle::LeptonType Particle::getLeptonType() const
 {
   checkIsNull();
