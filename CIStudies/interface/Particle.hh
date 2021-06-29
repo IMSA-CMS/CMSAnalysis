@@ -8,7 +8,7 @@ class Particle
 public:
   enum class LeptonType{Electron, Muon, None};
   enum class BarrelState{Barrel, Endcap, None};
-  explicit Particle(const reco::Candidate* iparticle, LeptonType iLeptonType);
+  explicit Particle(const reco::Candidate* iparticle);
   int charge() const;
   double pt() const;
   double eta() const;
