@@ -39,21 +39,21 @@ bool GenSimIdentificationModule::process(const edm::EventBase& event)
       //std::cerr << "genSim particle type = " << std::abs(p.pdgId()) << std::endl;
       //std::cerr << "electronCode = " << electronCode << std::endl;
       //std::cerr << "muonCode = " << muonCode << std::endl;
-      if(p.status() == 1 && isParticle(Particle(&p, Particle::LeptonType::None)))
+      if(p.status() == 1 && isParticle(Particle(&p)))
 	{
 	  if (particle == "Both" && (std::abs(p.pdgId()) == electronCode || std::abs(p.pdgId()) == muonCode))
 	    {
 	      if (std::abs(p.pdgId()) == electronCode)
 		{
-		  genParticles.addParticle(Particle(&p, Particle::LeptonType::Electron));
+		  genParticles.addParticle(Particle(&p));
 		}
 	      else if (std::abs(p.pdgId()) == muonCode)
 		{
-		  genParticles.addParticle(Particle(&p, Particle::LeptonType::Muon));
+		  genParticles.addParticle(Particle(&p));
 		}
 	      else
 		{
-		  genParticles.addParticle(Particle(&p, Particle::LeptonType::None));
+		  genParticles.addParticle(Particle(&p));
 		}
 	    }
 	  //Check for (anti)muon or (anti)electron
@@ -61,15 +61,15 @@ bool GenSimIdentificationModule::process(const edm::EventBase& event)
 	    { 
 	      if (targetCode == electronCode)
 		{
-		  genParticles.addParticle(Particle(&p, Particle::LeptonType::Electron));
+		  genParticles.addParticle(Particle(&p));
 		}
 	      else if (targetCode == muonCode)
 		{
-		  genParticles.addParticle(Particle(&p, Particle::LeptonType::Muon));
+		  genParticles.addParticle(Particle(&p));
 		}
 	      else
 		{
-		  genParticles.addParticle(Particle(&p, Particle::LeptonType::None));
+		  genParticles.addParticle(Particle(&p));
 		}
 	    }
 	}

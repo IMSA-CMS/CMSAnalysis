@@ -1,11 +1,10 @@
 #include "CIAnalysis/CIStudies/interface/Particle.hh"
 
 
-Particle::Particle(const reco::Candidate* iparticle, LeptonType iLeptonType): 
-particle(iparticle),
-leptonType(iLeptonType)
-{
-}
+Particle::Particle(const reco::Candidate* iparticle)://, LeptonType iLeptonType): 
+particle(iparticle)
+{}
+//leptonType(iLeptonType)
 
 int Particle::charge() const 
 {
@@ -16,7 +15,7 @@ int Particle::charge() const
 double Particle::pt() const
 {
   checkIsNull();
-  return particle->pt();
+  return particle->pt();cd
 }
 
 double Particle::eta() const
@@ -68,17 +67,46 @@ Particle Particle::mother() const
   return Particle(particle->mother(), Particle::LeptonType::None);
 }
 
-Particle::LeptonType Particle::getLeptonType() const
+Particle Particle::uniqueMother() const
 {
   checkIsNull();
-  return leptonType;
+  // The mother that is not itself
+  auto mom = mother();
+  mom.checkIsNull();
+
+  if (mom.pdgId() == pdgId())
+  {
+    return mom.uniqueMother(); //Recursive back to itself, so it will keep going until it returns a mother that is not the particle
+  }
+
+  return mom;
+}
+
+Particle::LeptonType Particle::getLeptonType() const //changed code
+{
+  checkIsNull();
+
+  if (dynamic_cast<const reco::Muon*>(particle))
+  {
+    return LeptonType::Muon;
+  }
+
+  else if (dynamic_cast<const reco::Electron*>(particle))
+  {
+    return LeptonType::Electron;
+  }
+
+  else
+  {
+    return LeptonType::None;
+  }
 }
 
 Particle::BarrelState Particle::getBarrelState() const
 {
   checkIsNull();
   double etaValue = std::abs(eta());
-  if (leptonType == LeptonType::Muon)
+  if (particle->getLeptonType() == LeptonType::Muon) //changed code
   {
     if (etaValue < 1.2)
     {
@@ -89,7 +117,7 @@ Particle::BarrelState Particle::getBarrelState() const
       return Particle::BarrelState::Endcap;
     }
   }
-  else if (leptonType == LeptonType::Electron)
+  else if (particle->getLeptonType() == LeptonType::Electron) //changed code
   {
     if (etaValue < 1.4442)
     {
@@ -110,3 +138,4 @@ void Particle::checkIsNull() const
     throw std::runtime_error("attempted to use null pointer in Particle");	
   }
 }
+

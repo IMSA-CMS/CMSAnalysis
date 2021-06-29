@@ -199,8 +199,8 @@ PartPair ParticleCollection::chooseParticles() const
 PartPair ParticleCollection::chooseParticles(bool oppositeSigns) const
 {
   double maxInvariantMass = 0;
-  Particle iPointer(nullptr, Particle::LeptonType::None);
-  Particle jPointer(nullptr, Particle::LeptonType::None);
+  Particle iPointer(nullptr);
+  Particle jPointer(nullptr);
 
   for (int i = 0; i < static_cast<int>(particles.size()) - 1; ++i)
     {
