@@ -1,10 +1,11 @@
 #include "CIAnalysis/CIStudies/interface/MassRecoEfficiency.hh"
 #include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 
-MassRecoEfficiency::MassRecoEfficiency(const std::shared_ptr<RecoIdentificationModule> iRecoModule, double iHiggsMass, double iWidth):
+MassRecoEfficiency::MassRecoEfficiency(const std::shared_ptr<RecoIdentificationModule> iRecoModule, double iHiggsMass, double iLowerWidth, double iUpperWidth):
   recoModule(iRecoModule),
   HiggsMass(iHiggsMass),
-  width(iWidth),
+  lowerWidth(iLowerWidth),
+  upperWidth(iUpperWidth),
   passCount(0),
   totalCount(0)
 {
@@ -17,8 +18,8 @@ bool MassRecoEfficiency::process(const edm::EventBase& event)
   int size = reco.getNumParticles();
   int nMuons = reco.getLeptonTypeCount(Particle::LeptonType::Muon);
 
-  double min = HiggsMass - width;
-  double max = HiggsMass + width;
+  double min = HiggsMass - lowerWidth;
+  double max = HiggsMass + upperWidth;
 
   // If there isn't an element in the map with the key that is equal to the # of leptons make it
   if (nLeptonPassCount.find(size) == nLeptonTotalCount.end())
@@ -59,7 +60,8 @@ bool MassRecoEfficiency::process(const edm::EventBase& event)
 
 void MassRecoEfficiency::finalize()
 {
-  std::cout << "Mass Reconstruction Efficiency for " << HiggsMass << "+-" << width << " GeV: " << passCount / (double) totalCount << std::endl;
+  std::cerr << "--------------------------------------------------------" << std::endl;
+  std::cout << "Mass Reconstruction Efficiency for " << HiggsMass << "-" << lowerWidth << "+" << upperWidth << " GeV: " << passCount / (double) totalCount << std::endl;
 
   std::cout << '\n';  // For sanity's sake
 

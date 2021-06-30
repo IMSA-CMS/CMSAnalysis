@@ -21,7 +21,7 @@ namespace reco
 class GenSimIdentificationModule : public ProductionModule
 {
 public:
-  GenSimIdentificationModule(int itargetPdgId = 0);
+  GenSimIdentificationModule(int itargetPdgId = 0 , bool ignoreRadiation = false);
   virtual bool process(const edm::EventBase& event) override;
 
   const ParticleCollection& getGenParticles() const
@@ -33,6 +33,7 @@ private:
 
   ParticleCollection genParticles;
   int targetPdgId;
+  const bool ignoreRadiation;
 };
 
 #endif

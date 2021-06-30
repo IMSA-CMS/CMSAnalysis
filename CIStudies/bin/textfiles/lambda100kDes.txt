@@ -1,0 +1,7 @@
+Procs: CI
+Year:	2017
+Lepton:	Mu
+Mass:	300	800	1300	2000
+Lambda:	100k
+Inter:	des
+Helic:	LR

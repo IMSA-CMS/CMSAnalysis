@@ -15,7 +15,7 @@ int Particle::charge() const
 double Particle::pt() const
 {
   checkIsNull();
-  return particle->pt();cd
+  return particle->pt();
 }
 
 double Particle::eta() const
@@ -64,7 +64,7 @@ Particle Particle::mother() const
 {
   checkIsNull();
   //mother of particle is often not electron/muon
-  return Particle(particle->mother(), Particle::LeptonType::None);
+  return Particle(particle->mother());
 }
 
 Particle Particle::uniqueMother() const

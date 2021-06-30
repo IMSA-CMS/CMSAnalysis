@@ -183,8 +183,9 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
         massBins[massBin] = weight;
         fileKeys[massBin] = fileKey;
 
-    //    // std::cout << "New Mass Bin: " << massBin << '\n';
-    //    // std::cout << "New Histogram Made: " << hist->getFilteredName() + massBin << '\n';
+        //std::cout << "New Mass Bin: " << massBin << '\n';
+        //std::cout << "New Histogram Made: " << hist->getFilteredName() + massBin << '\n';
+        //std::cout << "Weight " << weight << '\n';
     //    makeHistogram(hist->getFilteredName() + massBin, hist->getFilteredName() + massBin, hist->getNBins(), hist->getMinimum(), hist->getMaximum());
     //    addMassBinObject(hist->getFilteredName(), massBin);
         }
@@ -240,40 +241,43 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
 
 void HistogramOutputModule::finalize()
 {
+
   // std::cout << "Finalize\n";
 
-  for (auto pair : massBinMap)
-  {
-    // std::cout << pair.first << '\n';
-    // std::cout << "Pair First: " << pair.first << "\t" << "Pair Second: " << pair.second << "\n";
+    for (auto pair : massBinMap)
+    {
+      // std::cout << pair.first << '\n';
+      // std::cout << "Pair First: " << pair.first << "\t" << "Pair Second: " << pair.second << "\n";
 
-    for (auto massBin : massBins)
-      {
-        // std::cout << "Mass Bin: " << massBin.first << '\n';
-        auto fileKey = fileKeys[massBin.first];
-        auto eventCount = getEventCount(fileKey);
-
-        // std::cout << "Pair Second Size: " << pair.second.size() << "\n";
-
-        for (auto bin : pair.second)
+      for (auto massBin : massBins)
         {
-          // std::cout << "Bin: " << bin << "\t" << "Event Count: " << eventCount << "\n";
-          if (bin == massBin.first && eventCount != 0)
-          {
-            if (massBin.second != 0)
-            {
-              getHistogram(pair.first + bin)->Scale(massBin.second / eventCount);  // massBin.second is the scale
-            }
+          // std::cout << "Mass Bin: " << massBin.first << '\n';
+          auto fileKey = fileKeys[massBin.first];
+          auto eventCount = getEventCount(fileKey);
 
-            // for (int i = 1; i < getHistogram(pair.first)->GetNbinsX() ; ++i)
-            // {
-              // getHistogram(pair.first)->AddBinContent(i, getHistogram(pair.first + massBin.first)->GetBinContent(i));
-            // }
-            getHistogram(pair.first)->Add(getHistogram(pair.first + massBin.first));
+          // std::cout << "Pair Second Size: " << pair.second.size() << "\n";
+
+          for (auto bin : pair.second)
+          {
+            // std::cout << "Bin: " << bin << "\t" << "Event Count: " << eventCount << "\n";
+            if (bin == massBin.first && eventCount != 0)
+            {
+              if (massBin.second != 0)
+              {
+                getHistogram(pair.first + bin)->Scale(massBin.second / eventCount);  // massBin.second is the scale
+	        std::cout << "Scale------ (massBin.second): " << massBin.second << "\n";
+              }
+
+              // for (int i = 1; i < getHistogram(pair.first)->GetNbinsX() ; ++i)
+              // {
+                // getHistogram(pair.first)->AddBinContent(i, getHistogram(pair.first + massBin.first)->GetBinContent(i));
+              // }
+              getHistogram(pair.first)->Add(getHistogram(pair.first + massBin.first));
+            }
           }
-        }
-      }    
-  }
+        }    
+    }
+  
 }
 
 bool HistogramOutputModule::isNewMassBin(const std::string mass)
