@@ -15,6 +15,7 @@ double NLeptonsHist::value() const
 
   if(targetPdgId == 0)
     {
+      // std::cout << "Particles Found: " << pairs.getSize() << '\n';
       return pairs.getSize();
     }
   else
@@ -28,7 +29,7 @@ double NLeptonsHist::value() const
 	      count++;
 	    }
 	}
-      //std::cout << "\nParticles Found: " << count << std::endl;
+      // std::cout << "\nParticles Found: " << count << std::endl;
       return count;
     }
 }

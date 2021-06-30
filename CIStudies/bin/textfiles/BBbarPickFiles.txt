@@ -1,0 +1,7 @@
+Procs:  bottom
+Year:   2018
+Lepton: both
+Mass:   M500
+Lambda: M500
+Inter:  con
+Helic:  bbbar

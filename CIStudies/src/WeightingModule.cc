@@ -6,17 +6,38 @@
 
 WeightingModule::WeightingModule()
 {
-  std::ifstream weightsFile("../bin/defs.py");
+  std::ifstream weightsFile("../bin/crossSections.txt");
 
   if (!weightsFile)
     {
       throw std::runtime_error("Weights File not Found!");
     }
 
-  std::cout << "About to print out defs.py" << std::endl;
 
+  std::string line;
+  std::string key;
+  std::string valueString;
+  double value = 0;
   while (weightsFile)
+  { 
+    if ((weightsFile.peek() == '#') || (weightsFile.peek() == '\n'))
     {
+      std::getline(weightsFile, line);
+    }
+    else
+    {
+      std::getline(weightsFile, key, '\t');
+      boost::to_lower(key);
+      std::getline(weightsFile, valueString);  
+      value = std::stod(valueString);
+      //std::cout << "key: " + key + " " + "value: " + std::to_string(value) + "\n";
+      weights[key] = value;
+    }
+  }
+  weightsFile.close();
+}
+  
+    /* {
       std::string line;
       std::getline(weightsFile, line);
 
@@ -40,8 +61,7 @@ WeightingModule::WeightingModule()
 	  boost::to_lower(key);
 	  weights[key] = value;
 	}
-    }
-}
+    } */
 
 bool WeightingModule::process(const edm::EventBase& event)
 {
@@ -55,8 +75,26 @@ bool WeightingModule::process(const edm::EventBase& event)
 
 void WeightingModule::findWeight(std::string key)
 {
+  //std::cout << "Key: " << key << '\n';
   auto iterator = weights.find(key);
   if (iterator == weights.end())
-    throw std::runtime_error("Key " + key + " not found!");
-  weight = iterator->second;  
+  {
+    std::cerr << "Key " << key << " not found! " << std::endl;
+    weight = 0;
+  
+    //throw std::runtime_error("Key " + key + " not found!");
+  }
+  else if (key == "")
+  {
+    weight = 0;
+  }
+  else
+  {
+   weight = iterator->second;  
+  }
 }
+
+
+
+
+

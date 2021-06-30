@@ -1,7 +1,7 @@
 Procs:	H++
 Year:	2020
 Lepton:	Both
-Mass:	800
-Lambda:	M800
+Mass:	200
+Lambda:	M200
 Inter:	con
 Helic:	Higgs++to2Leptons
