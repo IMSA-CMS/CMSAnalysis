@@ -11,7 +11,6 @@ bool Module::processEvent(const edm::EventBase& event)
 {
   auto fileKey = currentParams.getFileKey();
   ++eventCount[fileKey];
-  process(event);
 
   return process(event);
 }
