@@ -30,7 +30,7 @@ bool GenSimParticleModule::process(const edm::EventBase& event)
       int numDaughters = p.numberOfDaughters();
       if (numDaughters == 0)
       {
-        genParticles.addParticle(Particle(&p, Particle::LeptonType::None));
+        genParticles.addParticle(Particle(&p));
       }
       else
       {
@@ -45,7 +45,7 @@ bool GenSimParticleModule::process(const edm::EventBase& event)
         }
         if (counter == 0)
         {
-          genParticles.addParticle(Particle(&p, Particle::LeptonType::None));
+          genParticles.addParticle(Particle(&p));
         }
       }
     }

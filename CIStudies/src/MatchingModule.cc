@@ -29,7 +29,7 @@ bool MatchingModule::process(const edm::EventBase& event)
       //start with a high value, only really needs to be higher than the cutoff delta R
       double deltaRMin = std::numeric_limits<double>::max();
 
-      Particle nullParticle(nullptr, Particle::LeptonType::None);
+      Particle nullParticle(nullptr);
 
       MatchingPair pairDataList(nullParticle, nullParticle);
 
