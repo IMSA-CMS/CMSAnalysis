@@ -11,15 +11,15 @@ LeptonJetPtHist::LeptonJetPtHist(std::shared_ptr<LeptonJetReconstructionModule> 
 {
 }
 
-double LeptonJetPtHist::value() const
+std::vector<double> LeptonJetPtHist::value() const
 {
   const std::vector<double>& pTValues = leptonJetRecoModule->getPtValues();
   if (pTValues.size() > 0)
   {
-    return pTValues[0];
+    return {pTValues[0]};
   }
   else
   {
-    return -1;
+    return {-1};
   }  
 }

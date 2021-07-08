@@ -11,19 +11,20 @@ RecoveredInvariantMassHist::RecoveredInvariantMassHist(const std::shared_ptr<Gen
 {
 }
 
-double RecoveredInvariantMassHist::protectedValue(bool typeGenSim) const
+std::vector<double> RecoveredInvariantMassHist::protectedValue(bool typeGenSim) const
 {
   if (typeGenSim)          // typeGenSim == true, so we want the GenSim values
   {
     auto genParticles = getGenSim()->getGenParticles();
     auto genSimInv = genParticles.calculateRecoveredInvariantMass(nLeptons, motherPDGID);
-    return genSimInv;
+    return 
+    {genSimInv};
   }
 
   else                     // typeGenSim == false, so we want the Reco values
   {
     auto recoParticles = getReco()->getRecoCandidates();
     auto recoInv = recoParticles.calculateRecoveredInvariantMass(nLeptons, motherPDGID);
-    return recoInv;
+    return {recoInv};
   }
 }

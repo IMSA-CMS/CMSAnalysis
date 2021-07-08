@@ -9,7 +9,7 @@ class MatchingEtaHist : public HistogramPrototype
 {
   public:
   MatchingEtaHist(std::shared_ptr<LeptonJetMatchingModule> iLeptonJetMatchingModule, const std::string& iname, int iNBins, double iminimum, double imaximum);
-  double value() const override;
+  std::vector<double> value() const override;
 
   private:
   std::shared_ptr<LeptonJetMatchingModule> leptonJetMatchingModule;

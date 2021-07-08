@@ -98,13 +98,17 @@ void HistogramOutputModule::makeHistogram(std::shared_ptr<HistogramPrototype> h)
   addObject(name, newHist);
 }
 
-void HistogramOutputModule::fillHistogram(const std::string& name, double number, double weight)
+void HistogramOutputModule::fillHistogram(const std::string& name, std::vector<double> vectors, double weight)
 {
   auto hist = getHistogram(name);
   if (!hist)
     throw std::runtime_error("Argument to getHistogram was not of TH1 type!  Name: " + name 
 			     + " and Root type: " + getObject(name)->ClassName());
-  hist->Fill(number, weight);
+  for(double currentNum: vectors)
+  {
+    hist->Fill(currentNum, weight);
+  }
+  
 }
 
 std::string HistogramOutputModule::getObjectName(const std::string& str) const

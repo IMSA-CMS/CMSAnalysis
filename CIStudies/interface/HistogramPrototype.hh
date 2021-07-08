@@ -24,7 +24,7 @@ public:
 
 	virtual ~HistogramPrototype() {} // Empty virtual destructor
 	
-	virtual double value() const = 0;
+	virtual std::vector<double> value() const = 0;
 
 	std::string getName() const {return name;}
 	int getNBins() const {return nBins;}

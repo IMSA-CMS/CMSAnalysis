@@ -25,11 +25,14 @@ public:
 
   const ParticleCollection& getRecoCandidates() const
   {return recoCandidates;}
+  const ParticleCollection& getPhotons() const
+  {return photons;}
 
   ParticleCollection getRecoCandidates(Particle::Type leptonType) const;      // Returns the Reco Candidates for a certain lepton type
 
 private:
   ParticleCollection recoCandidates;
+  ParticleCollection photons;
   const double ptCut;
 };
 

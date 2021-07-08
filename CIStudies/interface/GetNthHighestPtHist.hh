@@ -11,7 +11,7 @@ class GetNthHighestPtHist : public GenSimRecoPrototype
     
 
   protected:
-    double protectedValue(bool typeGenSim) const override;
+    std::vector<double> protectedValue(bool typeGenSim) const override;
 
   private:
     int nthMuon;

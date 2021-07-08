@@ -84,7 +84,9 @@ Particle Particle::uniqueMother() const
   return mom;
 }
 
-Particle Particle::daughter(int i) const {
+
+Particle Particle::daughter(int i) const
+{
   checkIsNull();
   auto daughter = particle->daughter(i);
 

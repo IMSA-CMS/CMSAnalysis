@@ -11,11 +11,11 @@ ResolutionPrototype::ResolutionPrototype(const std::shared_ptr<GenSimIdentificat
 {
 }
 
-double ResolutionPrototype::value() const
+std::vector<double> ResolutionPrototype::value() const
 {
   double genSimValue = getValue(genSim->getGenParticles());
   //std::cerr << "genSimValue = " << genSimValue << std::endl;
   double recoValue = getValue(reco->getRecoCandidates());
   //std::cerr << "recoValue = " << recoValue << std::endl;
-  return ((recoValue - genSimValue)/genSimValue);
+  return {((recoValue - genSimValue)/genSimValue)};
 }

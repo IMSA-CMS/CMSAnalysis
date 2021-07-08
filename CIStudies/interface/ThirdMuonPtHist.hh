@@ -8,7 +8,7 @@ class ThirdMuonPtHist : public GenSimRecoPrototype
   public:
     using GenSimRecoPrototype::GenSimRecoPrototype;
   protected:
-    double protectedValue(bool typeGenSim) const override;
+    std::vector<double> protectedValue(bool typeGenSim) const override;
 };
 
 #endif

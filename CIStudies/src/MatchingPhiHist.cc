@@ -11,7 +11,7 @@ MatchingPhiHist::MatchingPhiHist(std::shared_ptr<LeptonJetMatchingModule> iLepto
 
 {}
 
-double MatchingPhiHist::value() const
+std::vector<double> MatchingPhiHist::value() const
 {
     const auto& matchingPairs = leptonJetMatchingModule->getMatchingPairs();
     if (matchingPairs.size() != 0)
@@ -24,10 +24,10 @@ double MatchingPhiHist::value() const
         // std::cout << "Reco phi value: " << jetPhi << "\n";
         double deltaPhi = reco::deltaPhi(partPhi, jetPhi);
 
-        return deltaPhi;
+        return {deltaPhi};
     }
     else
     {
-        return -1;
+        return {-1};
     }
 }
