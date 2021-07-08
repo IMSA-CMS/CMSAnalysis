@@ -10,8 +10,8 @@ MassAcceptanceFirstHist::MassAcceptanceFirstHist(const std::shared_ptr<GenSimIde
 {
 }
 
-double MassAcceptanceFirstHist::value() const
+std::vector<double> MassAcceptanceFirstHist::value() const
 {
   const ParticleCollection leptonJets = genSimIdentification->getGenParticles();
-  return leptonJets.getInvariantMass();
+  return {leptonJets.getInvariantMass()};
 }

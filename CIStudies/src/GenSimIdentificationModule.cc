@@ -17,7 +17,7 @@ bool GenSimIdentificationModule::process(const edm::EventBase &event) {
 
   // Get Events Tree and create handle for GEN
 
-  edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
+  
   event.getByLabel(std::string("prunedGenParticles"), genParticlesHandle);
 
   const int electronCode = 11;
@@ -128,4 +128,20 @@ bool GenSimIdentificationModule::isParticle(Particle p) const {
     }
     return isParticle;
   }
+}
+
+std::vector<reco::GenParticle> GenSimIdentificationModule::getPhotons() const{
+  //isPhoton = 0;
+  // Get Events Tree and create handle for GEN
+
+  std::vector<reco::GenParticle> photonList;
+  // Begin GEN looping
+  // Loop through Particle list
+  for (const auto &p : *genParticlesHandle) {
+    if (p.pdgId() ==  22 && p.isPromptFinalState()) {
+      photonList.push_back(p);
+    }
+  }
+  //std::cout<<"The number of photons are: " << isPhoton << '\n';
+  return photonList;
 }

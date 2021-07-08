@@ -24,13 +24,14 @@
 #include "CIAnalysis/CIStudies/interface/TriggerModule.hh"
 #include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
+#include "CIAnalysis/CIStudies/interface/PhotonsHist.hh"
 
 using std::make_shared;
 
 Analyzer hPlusPlusMassAnalysis() {
   Analyzer analyzer;
 
-  auto eventDump = make_shared<GenSimEventDumpModule>(10);
+  auto eventDump = make_shared<GenSimEventDumpModule>(7);
 
   auto genSimMod = make_shared<GenSimIdentificationModule>(9900041, true);
   auto recoMod = make_shared<RecoIdentificationModule>(50);
@@ -73,6 +74,8 @@ Analyzer hPlusPlusMassAnalysis() {
   auto genSimHMinusMinusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H-- Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, -9900041);
   auto recoHMinusMinusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, false, "Reco H-- Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
 
+  auto photonHist = make_shared<PhotonsHist>(genSimMod, recoMod, true, "Photon Histogram", 100, 0, 1000);
+
   // Add the histogram(s) created above to histMod
   //histMod->addHistogram(recoThirdMuonPtHist);
   //histMod->addHistogram(sameSignInvMassHist);
@@ -80,7 +83,8 @@ Analyzer hPlusPlusMassAnalysis() {
   histMod->addHistogram(recoHPlusPlusRecoveredInvMassHist);
   histMod->addHistogram(genSimHMinusMinusRecoveredInvMassHist);
   histMod->addHistogram(recoHMinusMinusRecoveredInvMassHist);
-  //histMod->addHistogram(nLeptonsHist);
+  histMod->addHistogram(photonHist);
+  histMod->addHistogram(nLeptonsHist);
   //histMod->addHistogram(nElectronsHist);
   //histMod->addHistogram(nMuonsHist);
 

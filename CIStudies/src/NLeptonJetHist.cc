@@ -11,8 +11,8 @@ NLeptonJetHist::NLeptonJetHist(std::shared_ptr<LeptonJetReconstructionModule> iL
 {
 }
 
-double NLeptonJetHist::value() const
+std::vector<double> NLeptonJetHist::value() const
 {
   const std::vector<LeptonJet>& leptonJets = leptonJetRecoModule->getLeptonJets();
-  return leptonJets.size();
+  return {static_cast<double>(leptonJets.size())};
 }

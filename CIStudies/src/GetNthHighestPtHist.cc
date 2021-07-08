@@ -10,14 +10,14 @@ GetNthHighestPtHist::GetNthHighestPtHist(const std::shared_ptr<GenSimIdentificat
 {}
 
 
-double GetNthHighestPtHist::protectedValue(bool typeGenSim) const
+std::vector<double> GetNthHighestPtHist::protectedValue(bool typeGenSim) const
 {
   if (typeGenSim)          // typeGenSim == true, so we want the GenSim values
   {
     auto genParticles = getGenSim()->getGenParticles();
     auto genSimPt = genParticles.getNthHighestPt(nthMuon);
     //std::cerr << "GenSim pT: " << genSimPt << std::endl;
-    return genSimPt;
+    return {genSimPt};
   }
 
 
@@ -26,6 +26,6 @@ double GetNthHighestPtHist::protectedValue(bool typeGenSim) const
     auto recoParticles = getReco()->getRecoCandidates();
     auto recoPt = recoParticles.getNthHighestPt(nthMuon);
     //std::cerr << "Reco pT: " << recoPt << std::endl;
-    return recoPt;
+    return {recoPt};
   }
 }
