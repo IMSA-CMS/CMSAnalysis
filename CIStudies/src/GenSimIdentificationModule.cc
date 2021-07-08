@@ -33,24 +33,13 @@ bool GenSimIdentificationModule::process(const edm::EventBase &event) {
   // Loop through Particle list&
   for (const auto &p : *genParticlesHandle) {
     if (p.status() != 0 &&
-        isParticle(Particle(&p, Particle::LeptonType::None))) {
+        isParticle(Particle(&p))) {
       // std::cerr << "genSim particle type = " << std::abs(p.pdgId())
       //           << std::endl;
       // std::cerr << "electronCode = " << electronCode << std::endl;
       // std::cerr << "muonCode = " << muonCode << std::endl;
-      Particle::LeptonType type = Particle::LeptonType::None;
-      if (std::abs(p.pdgId()) == electronCode) {
-        if (particle == "Electron" || particle == "Both") {
-          type = Particle::LeptonType::Electron;
-        }
-      } else if (std::abs(p.pdgId()) == muonCode) {
-        if (particle == "Muon" || particle == "Both") {
-          type = Particle::LeptonType::Muon;
-        }
-      } else {
-        continue;
-      }
-      genParticles.addParticle(Particle(&p, type));
+
+      genParticles.addParticle(Particle(&p));
     }
   }
   // std::cout << "LENGTH: " << genParticles.getNumParticles() << "\n";

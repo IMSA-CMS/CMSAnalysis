@@ -10,7 +10,7 @@ SingleMuonTrigger::SingleMuonTrigger(std::shared_ptr<RecoIdentificationModule> i
 
 bool SingleMuonTrigger::checkTrigger(std::shared_ptr<RecoIdentificationModule> recoMod)
 {
-  auto particles = recoMod->getRecoCandidates(Particle::LeptonType::Muon);
+  auto particles = recoMod->getRecoCandidates(Particle::Type::Muon);
 
   // If there aren't enough muons, then automatically fail the trigger
   if (particles.getNumParticles() < 1)

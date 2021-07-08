@@ -160,8 +160,8 @@ bool ParticleCollection::isBE() const
 	  return true;
 	}
       //if both particles are muons, then EE counts as BE
-      if ((particlePair.first.getLeptonType() == Particle::LeptonType::Muon
-	   && particlePair.second.getLeptonType() == Particle::LeptonType::Muon)
+      if ((particlePair.first.getType() == Particle::Type::Muon
+	   && particlePair.second.getType() == Particle::Type::Muon)
 	   && (particlePair.first.getBarrelState() == Particle::BarrelState::Endcap
 	   && particlePair.second.getBarrelState() == Particle::BarrelState::Endcap))
 	{
@@ -171,12 +171,12 @@ bool ParticleCollection::isBE() const
   return false;
 }
 
-int ParticleCollection::getLeptonTypeCount(Particle::LeptonType leptonType) const  // Finds the number of a certain lepton type (electrons/muons)
+int ParticleCollection::getLeptonTypeCount(Particle::Type leptonType) const  // Finds the number of a certain lepton type (electrons/muons)
 {
   int count = 0;
   for (auto particle : particles)
   {
-    if (particle.getLeptonType() == leptonType)
+    if (particle.getType() == leptonType)
     {
       ++count;
     }

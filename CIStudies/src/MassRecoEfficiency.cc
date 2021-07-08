@@ -16,7 +16,7 @@ bool MassRecoEfficiency::process(const edm::EventBase& event)
   auto reco = recoModule->getRecoCandidates();
   double invMass = reco.calculateSameSignInvariantMass();
   int size = reco.getNumParticles();
-  int nMuons = reco.getLeptonTypeCount(Particle::LeptonType::Muon);
+  int nMuons = reco.getLeptonTypeCount(Particle::Type::Muon);
 
   double min = HiggsMass - lowerWidth;
   double max = HiggsMass + upperWidth;
