@@ -61,7 +61,7 @@ protected:
   {return dynamic_cast<const TH1*>(getObject(name));}
 
   // Convenient function to fill a histogram by name
-  void fillHistogram(const std::string& name, double number, double weight = 1.00);
+  void fillHistogram(const std::string& name, std::vector<double> vectors, double weight = 1.00);
 
 private:
   // This is a map of objects as they are seen by the user, by name

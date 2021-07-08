@@ -47,7 +47,7 @@ Analyzer massAcceptanceAnalysis()
   analyzer.addProductionModule(matchMod);
   analyzer.addProductionModule(weightMod);
   analyzer.addProductionModule(lrWeightMod);
-  
+
   analyzer.addAnalysisModule(histMod);
   return analyzer;
 }

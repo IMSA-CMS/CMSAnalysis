@@ -14,7 +14,7 @@ class ResolutionPrototype : public HistogramPrototype
 {
   public:
     ResolutionPrototype(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, const std::string& iname, int iNBins, double iminimum, double imaximum);
-    double value() const override;
+    std::vector<double> value() const override;
     virtual ~ResolutionPrototype() {} //empty virtual destructor
 
   protected:

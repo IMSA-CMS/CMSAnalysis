@@ -8,7 +8,7 @@ class InvariantMassHist : public GenSimRecoPrototype
   public:
     using GenSimRecoPrototype::GenSimRecoPrototype;  // Copies the constructor over from GenSimRecoPrototype
   protected:
-    double protectedValue(bool typeGenSim) const override;
+    std::vector<double> protectedValue(bool typeGenSim) const override;
 };
 
 #endif

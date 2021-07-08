@@ -62,11 +62,11 @@ bool UnmatchedParticleModule::process(const edm::EventBase& event)
 	  
 	  if (!isMatched)
 	    {
-	      fillHistogram("UnmatchedParticleEta", genParticle.eta());
+	      fillHistogram("UnmatchedParticleEta", {genParticle.eta()});
 	    }
 	  else
 	    {
-	      fillHistogram("MatchedParticleEta", genParticle.eta());
+	      fillHistogram("MatchedParticleEta", {genParticle.eta()});
 	    }
 	}
     }

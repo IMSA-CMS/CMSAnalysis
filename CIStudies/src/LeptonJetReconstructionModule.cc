@@ -42,6 +42,7 @@ bool LeptonJetReconstructionModule::process(const edm::EventBase& event) // reco
     }      
   }
   findDeltaRValues();
+  findPtValues();
   return true;
 }
 
@@ -93,6 +94,21 @@ void LeptonJetReconstructionModule::findDeltaRValues()
           deltaRValues.push_back(deltaR);
         }
       }
+    }
+  }
+}
+
+void LeptonJetReconstructionModule::findPtValues()
+{
+  pTValues.clear();
+  for (LeptonJet jet : leptonJets)
+  {
+    auto jetParticles = jet.getParticles();
+
+    for (Particle part : jetParticles)
+    {
+      double pT = part.pt();
+      pTValues.push_back(pT);
     }
   }
 }

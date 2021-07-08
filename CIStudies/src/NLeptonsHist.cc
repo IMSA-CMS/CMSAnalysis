@@ -8,14 +8,15 @@ NLeptonsHist::NLeptonsHist(const std::shared_ptr<MatchingModule> imatchModule, c
 {
 }
 
-double NLeptonsHist::value() const
+std::vector<double> NLeptonsHist::value() const
 {
   const MatchingPairCollection& pairs = matchModule->getMatchingBestPairs();
   //std::cout << "TargetParticle: " << targetPdgId << " Number of Matched Particles: " << pairs.getSize() << "\n";
 
   if(targetPdgId == 0)
     {
-      return pairs.getSize();
+      // std::cout << "Particles Found: " << pairs.getSize() << '\n';
+      return {pairs.getSize()};
     }
   else
     {
@@ -28,7 +29,7 @@ double NLeptonsHist::value() const
 	      count++;
 	    }
 	}
-      //std::cout << "\nParticles Found: " << count << std::endl;
-      return count;
+      // std::cout << "\nParticles Found: " << count << std::endl;
+      return {static_cast<double>(count)};
     }
 }

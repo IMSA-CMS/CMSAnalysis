@@ -11,7 +11,7 @@ MatchingDeltaRHist::MatchingDeltaRHist(std::shared_ptr<LeptonJetMatchingModule> 
 
 {}
 
-double MatchingDeltaRHist::value() const
+std::vector<double> MatchingDeltaRHist::value() const
 {
     const auto& matchingPairs = leptonJetMatchingModule->getMatchingPairs();
     if (matchingPairs.size() != 0)
@@ -24,10 +24,10 @@ double MatchingDeltaRHist::value() const
 
         std::cout << "Matching Pair Delta R: " << deltaR << "\n";
 
-        return deltaR;
+        return {deltaR};
     }
     else
     {
-        return -1;
+        return {-1};
     }
 }
