@@ -49,7 +49,7 @@ bool LeptonJetMatchingModule::process(const edm::EventBase& event)
         }        
         if (deltaRMin < deltaRCutoff)
         {
-          // std::cout << "Match found!" << "\n";
+          //std::cout << "Match found!" << "\n";
           matchingPairs.push_back(dataList);
           recoLeptonJets.erase(std::find(recoLeptonJets.begin(), recoLeptonJets.end(), dataList.second));          
         }

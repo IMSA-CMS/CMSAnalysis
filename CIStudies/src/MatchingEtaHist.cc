@@ -10,7 +10,7 @@ MatchingEtaHist::MatchingEtaHist(std::shared_ptr<LeptonJetMatchingModule> iLepto
 
 {}
 
-double MatchingEtaHist::value() const
+std::vector<double> MatchingEtaHist::value() const
 {
     const auto& matchingPairs = leptonJetMatchingModule->getMatchingPairs();
     if (matchingPairs.size() != 0)
@@ -24,10 +24,10 @@ double MatchingEtaHist::value() const
 
         double etaDiff = jetEta - partEta;
 
-        return etaDiff;
+        return {etaDiff};
     }
     else
     {
-        return -999;
+        return {-999};
     }
 }

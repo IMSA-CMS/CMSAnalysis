@@ -10,7 +10,7 @@ MatchingPtHist::MatchingPtHist(std::shared_ptr<LeptonJetMatchingModule> iLeptonJ
 
 {}
 
-double MatchingPtHist::value() const
+std::vector<double> MatchingPtHist::value() const
 {
     const auto& matchingPairs = leptonJetMatchingModule->getMatchingPairs();
     if (matchingPairs.size() != 0)
@@ -23,10 +23,10 @@ double MatchingPtHist::value() const
         double ptDiff = jetPt - partPt;
         std::cout << "Matching pair pT: " << ptDiff << "\n";
 
-        return ptDiff;
+        return {ptDiff};
     }
     else
     {
-        return -999;
+        return {-999};
     }
 }

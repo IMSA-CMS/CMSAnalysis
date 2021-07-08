@@ -16,11 +16,11 @@ CIAcceptedEventsHist::CIAcceptedEventsHist(const std::shared_ptr<MatchingModule>
 {
 }
 
-double CIAcceptedEventsHist::value() const
+std::vector<double> CIAcceptedEventsHist::value() const
 {
   const MatchingPairCollection& pairs = matchMod->getMatchingBestPairs();
   if(pairs.getSize() >= 2) {
-  return pairs.getGenParticles().getInvariantMass();
+  return {pairs.getGenParticles().getInvariantMass()};
   }
-  return -1;
+  return {-1};
 }

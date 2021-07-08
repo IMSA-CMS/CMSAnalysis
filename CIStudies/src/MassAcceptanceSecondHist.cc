@@ -14,11 +14,11 @@ MassAcceptanceSecondHist::MassAcceptanceSecondHist(const std::shared_ptr<Matchin
 {
 }
 
-double MassAcceptanceSecondHist::value() const
+std::vector<double> MassAcceptanceSecondHist::value() const
 {
   const MatchingPairCollection& pairs = matchMod->getMatchingBestPairs();
   if(pairs.getSize() >= 2) {
-  return pairs.getGenParticles().getInvariantMass();
+  return {pairs.getGenParticles().getInvariantMass()};
   }
-  return -1;
+  return {-1};
 }

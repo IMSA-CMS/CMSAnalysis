@@ -18,7 +18,7 @@ ScaledMassHist::ScaledMassHist(const MatchingModule& matchingModule, const std::
 
 {}
 
-double ScaledMassHist::value() const
+std::vector<double> ScaledMassHist::value() const
 {
   auto bestPairs = matching.getMatchingBestPairs();
 
@@ -35,18 +35,18 @@ double ScaledMassHist::value() const
       
       if (isGenSim)
   	{
-    	  return getScaledInvariantMass(genParticles, scaleUp, scaleUpDown);
+    	  return {getScaledInvariantMass(genParticles, scaleUp, scaleUpDown)};
   	}
 
       else
   	{
-          return getScaledInvariantMass(recoParticles, scaleUp, scaleUpDown);
+          return {getScaledInvariantMass(recoParticles, scaleUp, scaleUpDown)};
         }
     }
 
     else
     {
-      return 0;
+      return {0};
     }
 }
 

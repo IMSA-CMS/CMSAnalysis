@@ -15,6 +15,7 @@
 #include "CIAnalysis/CIStudies/interface/LeptonJetEfficiency.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonJet.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonJetMatchingModule.hh"
+#include "CIAnalysis/CIStudies/interface/LeptonJetPtHist.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonJetReconstructionModule.hh"
 #include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
 #include "CIAnalysis/CIStudies/interface/MassRecoEfficiency.hh"
@@ -50,21 +51,32 @@ Analyzer leptonJetReconstructionAnalysis() {
       genSimMod, recoMod, weightMod, lrWeightMod);
 
   // Histograms
-  auto deltaRHist = make_shared<DeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.5);
+  auto deltaRHist = make_shared<DeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.1);
+  auto pTHist = make_shared<LeptonJetPtHist>(lepRecoMod, "pT Values (Reconstructed Jets)", 100, 0, 200);
   // auto matchDeltaRHist = make_shared<MatchingDeltaRHist>(lepMatchMod, "Differences in Delta R for Matched Lepton Jets", 100, 0, 0.5);
   // auto matchPtHist = make_shared<MatchingPtHist>(lepMatchMod, "Differences in pT for Matched Lepton Jets", 100, -300, 300);
   // auto matchPhiHist = make_shared<MatchingPhiHist>(lepMatchMod, "Differences in Phi for Matched Lepton Jets", 100, 0, 3.15);
   // auto matchEtaHist = make_shared<MatchingEtaHist>(lepMatchMod, "Differences in Eta for Matched Lepton Jets", 100, -1, 1);
 
   histOutputMod->addHistogram(deltaRHist);
+  histOutputMod->addHistogram(pTHist);
   // histOutputMod->addHistogram(matchDeltaRHist);
   // histOutputMod->addHistogram(matchPtHist);
   // histOutputMod->addHistogram(matchPhiHist);
   // histOutputMod->addHistogram(matchEtaHist);
   //auto genSimEventDumpMod = make_shared<GenSimEventDumpModule>(3);
+
   auto triggerMod = make_shared<TriggerModule>(recoMod);
 
-  auto nLeptonsFilter = make_shared<NLeptonsFilter>(matchMod); //Needs to be updated with shared pointers
+  auto nLeptonsFilter = make_shared<NLeptonsFilter>(recoMod); //Needs to be updated with shared pointers
+
+
+  auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
+  auto nElectronsHist = make_shared<NLeptonsHist>(matchMod, "Matched Electrons", 10, 0, 10, 11);
+  auto nMuonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
+  auto recoThirdMuonPtHist = make_shared<GetNthHighestPtHist>(genSimMod, recoMod, false, "Reconstructed Third Muon Transverse Momentum", 50, 0, 100, 3);
+  auto recoSecondMuonPtHist = make_shared<GetNthHighestPtHist>(genSimMod, recoMod, false, "Reconstructed Second Muon Transverse Momentum", 50, 0, 100, 2);
+  auto recoFirstMuonPtHist = make_shared<GetNthHighestPtHist>(genSimMod, recoMod, false, "Reconstructed First Muon Transverse Momentum", 50, 0, 100, 1);
 
   // auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
   auto nLeptonJetHist = make_shared<NLeptonJetHist>(lepRecoMod, "Number of Lepton Jets", 10, 0, 10);
@@ -78,11 +90,12 @@ Analyzer leptonJetReconstructionAnalysis() {
   auto leptonJetEfficiency = make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
   
   // Add the histogram(s) created above to histMod
-  // histOutputMod->addHistogram(nLeptonsHist);
-  histOutputMod->addHistogram(nLeptonJetHist);
-  // histOutputMod->addHistogram(nElectronsHist);
-  // histOutputMod->addHistogram(nMuonsHist);
-  // histOutputMod->addHistogram(recoThirdMuonPtHist);
+  histOutputMod->addHistogram(nLeptonsHist);
+  histOutputMod->addHistogram(nElectronsHist);
+  histOutputMod->addHistogram(nMuonsHist);
+  histOutputMod->addHistogram(recoThirdMuonPtHist);
+  histOutputMod->addHistogram(recoSecondMuonPtHist);
+  histOutputMod->addHistogram(recoFirstMuonPtHist);
 
   // Initialize triggers
   auto singleMuonTrigger = std::make_shared<SingleMuonTrigger>(recoMod, 50);
@@ -90,7 +103,7 @@ Analyzer leptonJetReconstructionAnalysis() {
   auto tripleMuonTrigger =
       std::make_shared<TripleMuonTrigger>(recoMod, 10, 5, 5);
 
-  // Add triggers to the TriggerModule
+  // Add triggers to the TriggerModule -- put these back later
   triggerMod->addTrigger(singleMuonTrigger);
   triggerMod->addTrigger(doubleMuonTrigger);
   triggerMod->addTrigger(tripleMuonTrigger);
@@ -101,14 +114,14 @@ Analyzer leptonJetReconstructionAnalysis() {
   analyzer.addProductionModule(lrWeightMod);
   analyzer.addProductionModule(matchMod);
   analyzer.addProductionModule(lepRecoMod);
-  analyzer.addProductionModule(genPartMod);
+  // analyzer.addProductionModule(genPartMod);
   analyzer.addProductionModule(lepMatchMod);
 
   analyzer.addAnalysisModule(histOutputMod);
-  // analyzer.addProductionModule(triggerMod);
+  analyzer.addProductionModule(triggerMod);
 
   //analyzer.addAnalysisModule(leptonEfficiency);
-  analyzer.addAnalysisModule(leptonJetEfficiency);
+  // analyzer.addAnalysisModule(leptonJetEfficiency);
   //analyzer.addAnalysisModule(massRecoEfficiency200);
   //analyzer.addAnalysisModule(massRecoEfficiency500);
   //analyzer.addAnalysisModule(massRecoEfficiency800);

@@ -10,8 +10,8 @@ TotalEventsHist::TotalEventsHist(const std::shared_ptr<GenSimIdentificationModul
 {
 }
 
-double TotalEventsHist::value() const
+std::vector<double> TotalEventsHist::value() const
 {
   const ParticleCollection leptonJets = genSimIdentification->getGenParticles();
-  return leptonJets.getInvariantMass();
+  return {leptonJets.getInvariantMass()};
 }
