@@ -1,70 +1,84 @@
 #include "CIAnalysis/CIStudies/interface/Particle.hh"
-#include "DataFormats/MuonReco/interface/Muon.h"
+#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 
-Particle::Particle(const reco::Candidate *iparticle, LeptonType iLeptonType)
-    : particle(iparticle), leptonType(iLeptonType) {}
+#include "DataFormats/PatCandidates/interface/Muon.h"
+#include "DataFormats/PatCandidates/interface/Electron.h"
 
-int Particle::charge() const {
+Particle::Particle(const reco::Candidate* iparticle):
+particle(iparticle)
+{}
+
+int Particle::charge() const 
+{
   checkIsNull();
   return particle->charge();
 }
 
-double Particle::pt() const {
+double Particle::pt() const
+{
   checkIsNull();
   return particle->pt();
 }
 
-double Particle::eta() const {
+double Particle::eta() const
+{
   checkIsNull();
   return particle->eta();
 }
 
-double Particle::phi() const {
+double Particle::phi() const
+{
   checkIsNull();
   return particle->phi();
 }
 
-double Particle::et() const {
+double Particle::et() const
+{
   checkIsNull();
   return particle->et();
 }
 
-double Particle::energy() const {
+double Particle::energy() const
+{
   checkIsNull();
   return particle->energy();
 }
 
-reco::Candidate::LorentzVector Particle::fourVector() const {
+reco::Candidate::LorentzVector Particle::fourVector() const
+{
   checkIsNull();
   return particle->p4();
 }
 
-int Particle::pdgId() const {
+int Particle::pdgId() const
+{
   checkIsNull();
   return particle->pdgId();
 }
 
-int Particle::status() const {
+int Particle::status() const
+{
   checkIsNull();
   return particle->status();
 }
 
-Particle Particle::mother() const {
+Particle Particle::mother() const
+{
   checkIsNull();
-  // mother of particle is often not electron/muon
-  return Particle(particle->mother(), Particle::LeptonType::None);
+  //mother of particle is often not electron/muon
+  return Particle(particle->mother());
 }
 
-Particle Particle::uniqueMother() const {
+Particle Particle::uniqueMother() const
+{
   checkIsNull();
   // The mother that is not itself
   auto mom = mother();
   mom.checkIsNull();
 
-  if (mom.pdgId() == pdgId()) {
-    return mom
-        .uniqueMother(); // Recursive back to itself, so it will keep going
-                         // until it returns a mother that is not the particle
+  if (mom.pdgId() == pdgId())
+  {
+    return mom.uniqueMother(); //Recursive back to itself, so it will keep going until it returns a mother that is not the particle
   }
 
   return mom;
@@ -75,20 +89,25 @@ Particle Particle::daughter(int i) const
 {
   checkIsNull();
   auto daughter = particle->daughter(i);
-  Particle::LeptonType type;
+
+/*
+
+  Particle::Type type;
   switch (daughter->pdgId()) {
   case 11:
-    type = Particle::LeptonType::Electron;
+    type = Particle::Type::Electron;
     break;
   case 13:
-    type = Particle::LeptonType::Muon;
+    type = Particle::Type::Muon;
     break;
   default:
-    type = Particle::LeptonType::None;
+    type = Particle::Type::None;
     break;
   }
 
-  return Particle(daughter, type);
+*/
+
+  return Particle(daughter);
 }
 
 int Particle::numberOfDaughters() const {
@@ -97,7 +116,7 @@ int Particle::numberOfDaughters() const {
 }
 
 Particle Particle::finalDaughter() {
-  Particle current = Particle(particle, Particle::LeptonType::None);
+  Particle current = Particle(particle);
   while (current.status() != 1) {
     int di = -1;
     int dpt = 0;
@@ -122,7 +141,7 @@ Particle Particle::findMother(int motherPDGID)
 {
   bool foundMother = false;
 
-  Particle finalMother = Particle(nullptr, Particle::LeptonType::None);  // Null Particle
+  Particle finalMother = Particle(nullptr);  // Null Particle
 
   auto currentMother = mother();
 
@@ -130,7 +149,7 @@ Particle Particle::findMother(int motherPDGID)
   {
     if (!currentMother.isNotNull())  // Return a null particle if we reach an initial particle
     {
-      return Particle(nullptr, Particle::LeptonType::None);
+      return Particle(nullptr);
     }
     else if (currentMother.pdgId() == motherPDGID)
     {
@@ -157,7 +176,7 @@ Particle Particle::sharedMother(int motherPDGID, Particle particle1, Particle pa
   }
   else
   {
-    return Particle(nullptr, Particle::LeptonType::None);
+    return Particle(nullptr);
   }
 }
 
@@ -165,7 +184,7 @@ Particle Particle::sharedMother(int motherPDGID, std::vector<Particle> particles
 {
   if (particles.size() < 2)
   {
-    return Particle(nullptr, Particle::LeptonType::None);
+    return Particle(nullptr);
   }
 
   Particle finalMother = sharedMother(motherPDGID, particles[0], particles[1]);  // Shared mother between the first 2 particles
@@ -179,32 +198,81 @@ Particle Particle::sharedMother(int motherPDGID, std::vector<Particle> particles
     {
       if (sharedMother(motherPDGID, particles[i], particles[j]) != finalMother)
       {
-        return Particle(nullptr, Particle::LeptonType::None);
+        return Particle(nullptr);
       }
     }
   }
   return finalMother;
 }
 
-Particle::LeptonType Particle::getLeptonType() const
+Particle::Type Particle::getType() const
 {
-  checkIsNull();
-  return leptonType;
+
+  if (!particle)
+  {
+    return Type::None;
+  }
+
+  if (dynamic_cast<const pat::Muon*>(particle))
+  {
+    return Type::Muon;
+  }
+
+  else if (dynamic_cast<const pat::Electron*>(particle))
+  {
+    return Type::Electron;
+  }
+
+  else if (auto genp = dynamic_cast<const reco::GenParticle*>(particle))
+  {
+    double particleId = genp->pdgId();
+
+    if (particleId == 11 || particleId == -11)
+    {
+      return Type::Electron;
+    }
+
+    else if (particleId == 13 || particleId == -13)
+    {
+      return Type::Muon;
+    }
+
+    else
+    {
+      return Type::None;
+    }
+  }
+
+  else
+  {
+    return Type::None;
+  }
+
 }
 
-Particle::BarrelState Particle::getBarrelState() const {
+Particle::BarrelState Particle::getBarrelState() const
+{
   checkIsNull();
   double etaValue = std::abs(eta());
-  if (leptonType == LeptonType::Muon) {
-    if (etaValue < 1.2) {
+  if (getType() == Type::Muon)
+  {
+    if (etaValue < 1.2)
+    {
       return Particle::BarrelState::Barrel;
-    } else {
+    }
+    else
+    {
       return Particle::BarrelState::Endcap;
     }
-  } else if (leptonType == LeptonType::Electron) {
-    if (etaValue < 1.4442) {
+  }
+  else if (getType() == Type::Electron)
+  {
+    if (etaValue < 1.4442)
+    {
       return Particle::BarrelState::Barrel;
-    } else if (etaValue > 1.562) {
+    }
+    else if (etaValue > 1.562)
+    {
       return Particle::BarrelState::Endcap;
     }
   }
@@ -234,3 +302,4 @@ void Particle::checkIsNull() const
     throw std::runtime_error("attempted to use null pointer in Particle");	
   }
 }
+

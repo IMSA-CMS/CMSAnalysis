@@ -88,11 +88,11 @@ void TriggerEfficiencyModule::finalize()
 
 void TriggerEfficiencyModule::printDebugLines(Particle particle) const  // So I know why the code is not working
 {
-  if (particle.getLeptonType() == Particle::LeptonType::Electron)
+  if (particle.getType() == Particle::Type::Electron)
   {
     std::cout << "Type: Electron\n";
   }
-  else if (particle.getLeptonType() == Particle::LeptonType::Muon)
+  else if (particle.getType() == Particle::Type::Muon)
   {
     std::cout << "Type: Muon\n";
   }

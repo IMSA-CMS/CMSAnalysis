@@ -11,7 +11,7 @@ DoubleElectronTrigger::DoubleElectronTrigger(std::shared_ptr<RecoIdentificationM
 
 bool DoubleElectronTrigger::checkTrigger(std::shared_ptr<RecoIdentificationModule> recoMod)
 {
-  auto particles = recoMod->getRecoCandidates(Particle::LeptonType::Electron);
+  auto particles = recoMod->getRecoCandidates(Particle::Type::Electron);
 
   // If there aren't enough electrons, then automatically fail the trigger
   if (particles.getNumParticles() < 2)

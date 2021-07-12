@@ -23,7 +23,7 @@ bool LeptonJetMatchingModule::process(const edm::EventBase& event)
 
     double deltaRMin;
     // MatchingPair candidate;
-    Particle nullParticle(nullptr, Particle::LeptonType::None);
+    Particle nullParticle(nullptr);
     LeptonJet nullJet(nullParticle);
 
     while (genSimParticles.size() != 0 && recoLeptonJets.size() != 0)
