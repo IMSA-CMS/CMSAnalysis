@@ -34,7 +34,7 @@ public:
   double calculateRecoveredInvariantMass(int nLeptons, int motherPDGID) const;
 
   Particle getLeadingPtLepton() const;
-  int getLeptonTypeCount(Particle::LeptonType leptonType) const;
+  int getLeptonTypeCount(Particle::Type leptonType) const;
 
   void clear() {particles.clear();}
 

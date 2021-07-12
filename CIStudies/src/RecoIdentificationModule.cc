@@ -26,7 +26,7 @@ bool RecoIdentificationModule::process(const edm::EventBase& event)
 	{       
 	  if (p.pt() > ptCut)
 	    {
-	      recoCandidates.addParticle(Particle(&p, Particle::LeptonType::Electron)); 
+	      recoCandidates.addParticle(Particle(&p)); 
 	    }
 	}
     }
@@ -40,7 +40,7 @@ bool RecoIdentificationModule::process(const edm::EventBase& event)
 	{       
 	  if (p.pt() > ptCut)
 	    {
-	      recoCandidates.addParticle(Particle(&p, Particle::LeptonType::Muon)); 
+	      recoCandidates.addParticle(Particle(&p)); 
 	    }
 	  // else 
 	  //   {
@@ -71,13 +71,13 @@ bool RecoIdentificationModule::process(const edm::EventBase& event)
   return true;
 }
 
-ParticleCollection RecoIdentificationModule::getRecoCandidates(Particle::LeptonType leptonType) const
+ParticleCollection RecoIdentificationModule::getRecoCandidates(Particle::Type leptonType) const
 {
   ParticleCollection filteredCollection;
 
   for (const auto& particle : recoCandidates.getParticles())
   {
-    if (particle.getLeptonType() == leptonType)
+    if (particle.getType() == leptonType)
     {
       filteredCollection.addParticle(particle);
     }
