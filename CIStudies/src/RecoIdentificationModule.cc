@@ -2,6 +2,7 @@
 
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
+#include "DataFormats/PatCandidates/interface/Photon.h"
 
 #include "DataFormats/Common/interface/Handle.h"
 
@@ -48,6 +49,22 @@ bool RecoIdentificationModule::process(const edm::EventBase& event)
 	  //   }
 	}
     }
+  if (particle == "Photon" || particle == "Both")
+    {
+      edm::Handle<std::vector<pat::Photon>> photons;
+      event.getByLabel(std::string("slimmedPhotons"), photons);
+
+      for (const auto& p : *photons)
+	      {       
+	        if (p.pt() > ptCut)
+	          {
+	            recoCandidates.addParticle(Particle(&p, Particle::LeptonType::None)); 
+	          }
+
+	      }
+    }
+    
+  
   //std::cerr << "number of leptons = " << recoCandidates.getNumParticles() << std::endl;
 
   //std::cerr << "EXITING RecoIdentificationModule" << std::endl;
