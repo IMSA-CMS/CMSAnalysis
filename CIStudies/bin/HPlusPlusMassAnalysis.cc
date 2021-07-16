@@ -15,16 +15,18 @@
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 #include "CIAnalysis/CIStudies/interface/NLeptonsFilter.hh"
 #include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
+#include "CIAnalysis/CIStudies/interface/PhotonsHist.hh"
 #include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
+#include "CIAnalysis/CIStudies/interface/RecoveredInvariantMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/SameSignInvariantMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/SingleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/ThirdMuonPtHist.hh"
-#include "CIAnalysis/CIStudies/interface/RecoveredInvariantMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/TriggerEfficiencyModule.hh"
 #include "CIAnalysis/CIStudies/interface/TriggerModule.hh"
 #include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
+#include "CIAnalysis/CIStudies/interface/UnusualFinalStateFilter.hh"
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
-#include "CIAnalysis/CIStudies/interface/PhotonsHist.hh"
+
 
 using std::make_shared;
 
@@ -41,6 +43,8 @@ Analyzer hPlusPlusMassAnalysis() {
   auto lrWeightMod = make_shared<LRWeightModule>();
 
   auto nLeptonsFilter = make_shared<NLeptonsFilter>(recoMod); //Needs to be updated with shared pointers
+
+  auto unusualFinalStateFilter = make_shared<UnusualFinalStateFilter>(recoMod);
   
   auto histMod = make_shared<HistogramOutputModule>(genSimMod, recoMod, weightMod, lrWeightMod);
   auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
@@ -67,7 +71,8 @@ Analyzer hPlusPlusMassAnalysis() {
   auto triggerEfficiencyMod20080 = make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 800, 200, 80);
 
   auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
-  auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
+  auto genSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
+  auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Same Sign Invariant Mass", 100, 0, 1000);
 
   auto genSimHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
   auto recoHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, false, "Reco H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
@@ -78,13 +83,13 @@ Analyzer hPlusPlusMassAnalysis() {
 
   // Add the histogram(s) created above to histMod
   //histMod->addHistogram(recoThirdMuonPtHist);
-  //histMod->addHistogram(sameSignInvMassHist);
-  histMod->addHistogram(genSimHPlusPlusRecoveredInvMassHist);
-  histMod->addHistogram(recoHPlusPlusRecoveredInvMassHist);
-  histMod->addHistogram(genSimHMinusMinusRecoveredInvMassHist);
-  histMod->addHistogram(recoHMinusMinusRecoveredInvMassHist);
-  histMod->addHistogram(photonHist);
-  histMod->addHistogram(nLeptonsHist);
+  histMod->addHistogram(recoSameSignInvMassHist);
+  //histMod->addHistogram(genSimHPlusPlusRecoveredInvMassHist);
+  //histMod->addHistogram(recoHPlusPlusRecoveredInvMassHist);
+  //histMod->addHistogram(genSimHMinusMinusRecoveredInvMassHist);
+  //histMod->addHistogram(recoHMinusMinusRecoveredInvMassHist);
+  //histMod->addHistogram(photonHist);
+  //histMod->addHistogram(nLeptonsHist);
   //histMod->addHistogram(nElectronsHist);
   //histMod->addHistogram(nMuonsHist);
 
@@ -107,6 +112,7 @@ Analyzer hPlusPlusMassAnalysis() {
 
   // Filters
   //analyzer.addFilterModule(nLeptonsFilter);
+  analyzer.addFilterModule(unusualFinalStateFilter);
 
   analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
   //analyzer.addAnalysisModule(eventDump);
@@ -123,8 +129,8 @@ Analyzer hPlusPlusMassAnalysis() {
   //analyzer.addAnalysisModule(massRecoEfficiency1000);
   //analyzer.addAnalysisModule(massRecoEfficiency1300);
   
-  analyzer.addAnalysisModule(massRecoEfficiency55);
-  analyzer.addAnalysisModule(massRecoEfficiency1010);
+  //analyzer.addAnalysisModule(massRecoEfficiency55);
+  //analyzer.addAnalysisModule(massRecoEfficiency1010);
   //analyzer.addAnalysisModule(massRecoEfficiency4010);
   //analyzer.addAnalysisModule(massRecoEfficiency4040);
   //analyzer.addAnalysisModule(massRecoEfficiency8040);
