@@ -28,7 +28,8 @@ public:
   bool isBE() const;
   
   double calculateAllLeptonInvariantMass() const;
-  double calculateSameSignInvariantMass() const;
+  double calculateSameSignInvariantMass(bool usingPhi = false) const;
+  std::vector<double> calculateSameSignInvariantMasses(bool usingPhi = false) const;
   double calculateOppositeSignInvariantMass() const;
 
   double calculateRecoveredInvariantMass(int nLeptons, int motherPDGID) const;
@@ -41,8 +42,9 @@ public:
 private:
   std::vector<Particle> particles;
 
-  std::pair<Particle, Particle> chooseParticles() const; //picks particles with greatest invariant mass
+  std::pair<Particle, Particle> chooseParticles() const; // picks particles with greatest invariant mass
   std::pair<Particle, Particle> chooseParticles(bool oppositeSigns) const; // picks particles given if they are opposite signs or not
+  std::pair<Particle, Particle> chooseParticlesByPhi(bool oppositeSigns) const; // picks particles by the Phi angle
 
   bool checkSigns(Particle particle1, Particle particle2) const;
 

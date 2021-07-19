@@ -74,6 +74,10 @@ Analyzer hPlusPlusMassAnalysis() {
   auto genSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
   auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Same Sign Invariant Mass", 100, 0, 1000);
 
+  auto recoPhiSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Same Sign Invariant Mass (by Phi)", 100, 0, 1000, true);
+  auto recoMultSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Same Sign Invariant Masses", 100, 0, 1000, false, true);
+  auto recoPhiMultSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Same Sign Invariant Masses (by Phi)", 100, 0, 1000, true, true);
+
   auto genSimHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
   auto recoHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, false, "Reco H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
   auto genSimHMinusMinusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H-- Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, -9900041);
@@ -83,7 +87,7 @@ Analyzer hPlusPlusMassAnalysis() {
 
   // Add the histogram(s) created above to histMod
   //histMod->addHistogram(recoThirdMuonPtHist);
-  histMod->addHistogram(recoSameSignInvMassHist);
+  //histMod->addHistogram(recoSameSignInvMassHist);
   //histMod->addHistogram(genSimHPlusPlusRecoveredInvMassHist);
   //histMod->addHistogram(recoHPlusPlusRecoveredInvMassHist);
   //histMod->addHistogram(genSimHMinusMinusRecoveredInvMassHist);
@@ -92,6 +96,9 @@ Analyzer hPlusPlusMassAnalysis() {
   //histMod->addHistogram(nLeptonsHist);
   //histMod->addHistogram(nElectronsHist);
   //histMod->addHistogram(nMuonsHist);
+  histMod->addHistogram(recoPhiSameSignInvMassHist);
+  histMod->addHistogram(recoMultSameSignInvMassHist);
+  histMod->addHistogram(recoPhiMultSameSignInvMassHist);
 
   // Initialize triggers
   auto singleMuonTrigger = make_shared<SingleMuonTrigger>(recoMod, 50);
@@ -112,7 +119,7 @@ Analyzer hPlusPlusMassAnalysis() {
 
   // Filters
   //analyzer.addFilterModule(nLeptonsFilter);
-  analyzer.addFilterModule(unusualFinalStateFilter);
+  //analyzer.addFilterModule(unusualFinalStateFilter);
 
   analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
   //analyzer.addAnalysisModule(eventDump);
