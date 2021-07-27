@@ -47,7 +47,7 @@ void AFBModule::finalize()
   AnalysisModule::finalize();
 }
 
-bool AFBModule::process(const edm::EventBase& event)
+bool AFBModule::process()
 {
   auto genParticles = genSim->getGenParticles();
   auto genSimCS = genParticles.getCollinsSoper();

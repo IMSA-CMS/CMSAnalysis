@@ -12,7 +12,7 @@ MatchingModule::MatchingModule(const std::shared_ptr<GenSimIdentificationModule>
 {
 }
 
-bool MatchingModule::process(const edm::EventBase& event)
+bool MatchingModule::process()
 {
   //std::cerr << "ENTERING MatchingModule" << std::endl;
   matchingBestPairs.clear();

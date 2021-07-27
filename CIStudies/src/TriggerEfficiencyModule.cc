@@ -12,7 +12,7 @@ TriggerEfficiencyModule::TriggerEfficiencyModule(const std::shared_ptr<MatchingM
 {
 }
 
-bool TriggerEfficiencyModule::process(const edm::EventBase& event)
+bool TriggerEfficiencyModule::process()
 {
   auto genSimParticles = genSimMod->getGenParticles().getParticles();  // Vector of Particles
 

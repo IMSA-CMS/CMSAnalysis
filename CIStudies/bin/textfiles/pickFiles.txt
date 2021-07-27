@@ -1,6 +1,6 @@
-Procs:	H++
+Procs:	Higgs
 Year:	2020
-Lepton:	Both
+Lepton:	both
 Mass:	800
 Lambda:	M800
 Inter:	con

@@ -22,7 +22,7 @@ class GenSimIdentificationModule : public ProductionModule
 {
 public:
   GenSimIdentificationModule(int itargetPdgId = 0); //, bool ignoreRadiation = true);
-  virtual bool process(const edm::EventBase& event) override;
+  virtual bool process() override;
 
   const ParticleCollection& getGenParticles() const
   {return genParticles;}

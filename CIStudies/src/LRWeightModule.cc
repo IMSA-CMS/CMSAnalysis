@@ -12,7 +12,8 @@
 LRWeightModule::LRWeightModule()
 {}
 
-bool LRWeightModule::process(const edm::EventBase& event)
+// update to remove event
+bool LRWeightModule::process()
 {
   if (getFileParams().getProcess() != Process::CI())
   {

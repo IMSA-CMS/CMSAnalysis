@@ -20,7 +20,7 @@ class DisplacedVertexModule : public ProductionModule
 {
 public:
   DisplacedVertexModule(const std::shared_ptr<RecoIdentificationModule> recoModule);
-  virtual bool process(const edm::EventBase& event) override;
+  virtual bool process() override;
 
   void propagateTrack(reco::TrackRef track);
 

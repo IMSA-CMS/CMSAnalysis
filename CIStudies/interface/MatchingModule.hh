@@ -19,7 +19,7 @@ class MatchingModule : public ProductionModule
 {
 public:
   MatchingModule(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, double deltaRCut = 0.1);
-  virtual bool process(const edm::EventBase& event) override;
+  virtual bool process() override;
 
   const MatchingPairCollection& getMatchingBestPairs() const {return matchingBestPairs;} 
 

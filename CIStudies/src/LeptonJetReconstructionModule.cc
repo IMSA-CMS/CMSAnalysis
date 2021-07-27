@@ -9,7 +9,7 @@ LeptonJetReconstructionModule::LeptonJetReconstructionModule(std::shared_ptr<Rec
 {
 }
 
-bool LeptonJetReconstructionModule::process(const edm::EventBase& event) // reco::deltaR(v1, v2)
+bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
 {
   leptonJets.clear();
   const ParticleCollection& recoCandidates = reco->getRecoCandidates();

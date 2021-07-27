@@ -29,7 +29,7 @@ DisplacedVertexModule::DisplacedVertexModule(const std::shared_ptr<RecoIdentific
 {
 }
 
-bool DisplacedVertexModule::process(const edm::EventBase& event)
+bool DisplacedVertexModule::process()
 {
   std::vector<Particle> recoCandidates(reco->getRecoCandidates().getParticles());
 

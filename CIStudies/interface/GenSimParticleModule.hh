@@ -20,7 +20,7 @@ class GenSimParticleModule : public ProductionModule
 {
 public:
   GenSimParticleModule(int itargetPdgId = 0);
-  virtual bool process(const edm::EventBase& event) override;
+  virtual bool process() override;
 
   const ParticleCollection& getGenParticles() const
   {return genParticles;}

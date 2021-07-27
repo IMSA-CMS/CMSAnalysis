@@ -10,7 +10,7 @@ LeptonJetMatchingModule::LeptonJetMatchingModule(std::shared_ptr<GenSimParticleM
 
 {}
 
-bool LeptonJetMatchingModule::process(const edm::EventBase& event)
+bool LeptonJetMatchingModule::process()
 {
     matchingPairs.clear();
     std::vector<Particle> genSimParticles(genSim->getGenParticles().getParticles());

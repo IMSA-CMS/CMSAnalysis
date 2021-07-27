@@ -9,6 +9,7 @@ RecoIdentificationModule::RecoIdentificationModule(double iptCut) :
   ptCut(iptCut)
 {}
 
+//update to remove event parameter
 bool RecoIdentificationModule::process(const edm::EventBase& event)
 {
   //std::cerr << "ENTERING RecoIdentificationModule" << std::endl;
@@ -33,7 +34,7 @@ bool RecoIdentificationModule::process(const edm::EventBase& event)
   if (particle == "Muon" || particle == "Both")
     {
       edm::Handle<std::vector<pat::Muon>> muons;
-      event.getByLabel(std::string("slimmedMuons"), muons);
+      event.getByLabel(edm::InputTag("slimmedMuons"), muons);
 
       for (const auto& p : *muons)
 	{       

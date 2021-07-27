@@ -19,7 +19,7 @@ ResolutionModule::ResolutionModule(const std::shared_ptr<GenSimIdentificationMod
 {
 }
 
-bool ResolutionModule::process(const edm::EventBase& event)
+bool ResolutionModule::process()
 {
   //std::cerr << "ENTERING ResolutionModule" << std::endl;
   auto bestPairs = matching->getMatchingBestPairs();

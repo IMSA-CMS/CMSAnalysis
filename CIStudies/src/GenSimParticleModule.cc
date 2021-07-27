@@ -11,6 +11,7 @@ GenSimParticleModule::GenSimParticleModule(int itargetPdgId):
   targetPdgId(itargetPdgId)
 {}
 
+//update to remove event parameter
 bool GenSimParticleModule::process(const edm::EventBase& event)
 {
   //std::cerr << "ENTERING GenSimParticleModule" << std::endl;

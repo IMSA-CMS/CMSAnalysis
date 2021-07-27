@@ -11,6 +11,7 @@
 #include "CIAnalysis/CIStudies/interface/AnalysisModule.hh"
 #include "CIAnalysis/CIStudies/interface/FilterModule.hh"
 #include "CIAnalysis/CIStudies/interface/ProductionModule.hh"
+#include "CIAnalysis/CIStudies/interface/EventLoader.hh"
 #include "FWCore/Framework/interface/Event.h"
 #include "DataFormats/FWLite/interface/Event.h"
 #include "CIAnalysis/CIStudies/interface/Module.hh"
@@ -61,7 +62,45 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 	      continue;
 	    } 
 
-	  // Extract events
+    MiniAODEventLoader eventLoader(outputEvery);
+    eventLoader.changeFile(file);
+    while(!eventLoader.isDone())
+    {
+      eventLoader.getLeptons();
+      bool continueProcessing = true;
+      for (auto module : productionModules)
+      {
+        if (!module->processEvent())
+        {
+          continueProcessing = false;
+          std::cout << "continueProcessing: " << continueProcessing << "\n" << std::endl;
+          break
+        }
+      }
+      std::string filterString;
+      for (auto module : filterModules)  
+      {
+        if (!module->processEvent())
+        {
+          continueProcessing = false;
+          break
+        }
+        else
+        {
+          filterString += module->getFilterString;
+        }
+      }
+      if (!continueProcessing)
+        continue;
+      filterNames.insert(filterString);
+      for (auto module : analysisModules)
+      {
+        module->setFilterString(filterString);
+        module->process();
+      }
+    }
+
+	 /*  // Extract events
 	  fwlite::Event ev(file);
 
 	  std::cerr << "Events: " << ev.size() << std::endl;
@@ -118,7 +157,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 		  module->setFilterString(filterString);
 		  module->processEvent(event);
 		}
-	    }
+	    } */
 
 	  delete file;
 

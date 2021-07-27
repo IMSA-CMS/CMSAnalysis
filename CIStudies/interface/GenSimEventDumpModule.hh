@@ -23,7 +23,7 @@ class GenSimEventDumpModule : public AnalysisModule
 public:
   GenSimEventDumpModule(int inumOfEvents = -1);
 
-  virtual bool process(const edm::EventBase& event) override;
+  virtual bool process() override;
   
   virtual void writeAll() override;
 
