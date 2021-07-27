@@ -10,7 +10,7 @@ TriggerModule::TriggerModule(std::shared_ptr<RecoIdentificationModule> iRecoMod)
 {
 }
 
-bool TriggerModule::process(const edm::EventBase& event)
+bool TriggerModule::process()
 {
   bool passAnyTrigger = false;       // True if the event passes any of the triggers
   bool passCurrentTrigger;           // True if the event passes the current trigger

@@ -22,7 +22,7 @@ public:
   HistogramOutputModule(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule);
   virtual void writeAll();
   virtual void initialize() override {};                                     // Empty function
-  virtual bool process(const edm::EventBase& event) override;                // Fills the histograms
+  virtual bool process() override;                // Fills the histograms
   virtual void finalize() override;                                          // Scales the histograms
   void addHistogram(std::shared_ptr<HistogramPrototype> hist) {histograms.push_back(hist);}; // Adds a HistogramPrototype* to histogram (the vector)
 

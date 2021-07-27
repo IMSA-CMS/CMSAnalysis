@@ -148,7 +148,7 @@ void HistogramOutputModule::addObjectClone(const std::string& oldName,
   objects.insert({newName, clone});
 }
 
-bool HistogramOutputModule::process(const edm::EventBase& event)
+bool HistogramOutputModule::process()
 {
   // std::cout << "Process\n";
 

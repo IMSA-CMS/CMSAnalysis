@@ -16,7 +16,7 @@ class ResolutionModule : public HistogramOutputModule
 {
 public:
   ResolutionModule(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule, const std::shared_ptr<MatchingModule> matchingModule, std::string bin, int min, int max, int intervalSize);
-  virtual bool process(const edm::EventBase& event) override;
+  virtual bool process() override;
   virtual void initialize() override;
   virtual void finalize() override;
 

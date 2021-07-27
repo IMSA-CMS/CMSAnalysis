@@ -21,7 +21,7 @@ class RecoIdentificationModule : public ProductionModule
 public:
   RecoIdentificationModule(double iptCut = 50);
 
-  virtual bool process(const edm::EventBase& event) override;
+  virtual bool process() override;
 
   const ParticleCollection& getRecoCandidates() const
   {return recoCandidates;}

@@ -29,7 +29,7 @@ void UnmatchedParticleModule::initialize()
 
 }
 
-bool UnmatchedParticleModule::process(const edm::EventBase& event)
+bool UnmatchedParticleModule::process()
 {
   auto genParticles = genSim->getGenParticles();
   auto genParticlesVector = genParticles.getParticles();

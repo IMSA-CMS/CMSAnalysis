@@ -12,7 +12,7 @@ GenSimIdentificationModule::GenSimIdentificationModule(int itargetPdgId):
 {
 }
 
-bool GenSimIdentificationModule::process(const edm::EventBase& event)
+bool GenSimIdentificationModule::process()
 {
   //std::cerr << "ENTERING GenSimIdentificationModule" << std::endl;
   genParticles.clear();

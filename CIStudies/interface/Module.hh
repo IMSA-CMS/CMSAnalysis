@@ -40,7 +40,7 @@ public:
   static void setFileParams(FileParams params) {currentParams = params;}
   static FileParams getFileParams() {return currentParams;}
 
-  bool processEvent(const edm::EventBase& event);
+  bool processEvent();
 
 protected:
   // This is called once per event, with the event object passed in.
@@ -48,7 +48,7 @@ protected:
   // Return false to stop execution on this event, which should only be done
   // if you are deliberately filtering events.
   // In most cases, you should return true.
-  virtual bool process(const edm::EventBase& event) = 0;
+  virtual bool process() = 0;
 
 private:
   static std::unordered_map<std::string, double> parameters;

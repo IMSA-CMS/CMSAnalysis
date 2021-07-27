@@ -13,6 +13,7 @@ GenSimEventDumpModule::GenSimEventDumpModule(int inumOfEvents):
   counter = 0;
 }
 
+//update this to remove event parameter
 bool GenSimEventDumpModule::process(const edm::EventBase& event)
 {
   if(counter < numOfEvents || numOfEvents == -1)

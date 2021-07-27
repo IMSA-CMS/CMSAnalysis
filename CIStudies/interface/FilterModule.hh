@@ -17,7 +17,7 @@ class FilterModule : public Module
 public:
   // In general, this should not be overridden again.  If it must be,
   // make sure to call the base class version at the end
-  virtual bool process(const edm::EventBase& event) override;
+  virtual bool process() override;
 
   // Gets the (already decided) filter string for later use
   std::string getFilterString() const {return filterString;}
