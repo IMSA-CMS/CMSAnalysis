@@ -11,6 +11,42 @@
 //using Particle = const reco::Candidate*;
 using PartPair = std::pair<Particle, Particle>;
 
+ParticleCollection ParticleCollection::getPosParticles() const
+{
+  ParticleCollection positives;  // All of the positively-charged particles in the ParticleCollection
+
+  for (auto particle : getParticles())
+  {
+    if (particle.charge() > 0)
+    {
+      // std::cout << "Added positive particle with charge " << particle.charge() << " to positive collection.\n";
+      positives.addParticle(particle);  // Add all of the positively-charged particles to positives
+    }
+  }
+
+  // std::cout << "Number of Positive Particles: " << positives.getNumParticles() << '\n';
+
+  return positives;
+}
+
+ParticleCollection ParticleCollection::getNegParticles() const
+{
+  ParticleCollection negatives;  // All of the negatively-charged particles in the ParticleCollection
+
+  for (auto particle : getParticles())
+  {
+    if (particle.charge() < 0)
+    {
+      // std::cout << "Added negative particle with charge " << particle.charge() << " to negative collection.\n";
+      negatives.addParticle(particle);  // Add all of the negatively-charged particles to negatives
+    }
+  }
+
+  // std::cout << "Number of Negative Particles: " << negatives.getNumParticles() << '\n';
+
+  return negatives;
+}
+
 double ParticleCollection::getInvariantMass() const
 {
   auto particlePair = chooseParticles();
@@ -304,42 +340,35 @@ double ParticleCollection::calculateSameSignInvariantMass(bool usingPhi) const
   }
 
   if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
-  {      
+  {
     return calculateInvariantMass(particlePair.first, particlePair.second);
   }
   else
-  {     
+  {
     return -1;
   }
 }
 
 std::vector<double> ParticleCollection::calculateSameSignInvariantMasses(bool usingPhi) const
 {
-  ParticleCollection positives;  // All of the positively-charged particles in the ParticleCollection
-  ParticleCollection negatives;  // All of the negatively-charged particles in the ParticleCollection
-
-  for (auto particle : getParticles())
-  {
-    if (particle.charge() > 0)
-    {
-      positives.addParticle(particle);  // Add all of the positively-charged particles to positives
-    }
-    else if (particle.charge() < 0)
-    {
-      negatives.addParticle(particle);  // Add all of the negatively-charged particles to negatives
-    }
-  }
-
   std::vector<double> sameSignInvariantMasses;
 
-  if (positives.getNumParticles() >= 2)
+  if (getPosParticles().getNumParticles() >= 2)
   {
-    sameSignInvariantMasses.push_back(positives.calculateSameSignInvariantMass(usingPhi));
+    sameSignInvariantMasses.push_back(getPosParticles().calculateSameSignInvariantMass(usingPhi));
+  }
+  else
+  {
+    sameSignInvariantMasses.push_back(0);
   }
 
-  if (negatives.getNumParticles() >= 2)
+  if (getNegParticles().getNumParticles() >= 2)
   {
-    sameSignInvariantMasses.push_back(negatives.calculateSameSignInvariantMass(usingPhi));
+    sameSignInvariantMasses.push_back(getNegParticles().calculateSameSignInvariantMass(usingPhi));
+  }
+  else
+  {
+    sameSignInvariantMasses.push_back(0);
   }
 
   return sameSignInvariantMasses;
@@ -349,13 +378,13 @@ double ParticleCollection::calculateOppositeSignInvariantMass() const
 {
   auto particlePair = chooseParticles(true);					// we want opposite sign particles with highest invariant mass
   if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
-    {      
-      return calculateInvariantMass(particlePair.first, particlePair.second);
-    }
+  {      
+    return calculateInvariantMass(particlePair.first, particlePair.second);
+  }
   else
-    {     
-      return -1;
-    }
+  {     
+    return -1;
+  }
 }
 
 double ParticleCollection::calculateAllLeptonInvariantMass() const
