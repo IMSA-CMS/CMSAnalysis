@@ -12,6 +12,7 @@
 #include <stdexcept>
 
 #include "TH1.h"
+#include "TH2.h"
 
 HistogramOutputModule::HistogramOutputModule(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule) :
   genSim(genSimModule),
@@ -57,6 +58,8 @@ void HistogramOutputModule::addObject(const std::string& name, TObject* obj)
   else
     baseObjects[name] = obj;
 
+  //std::cout << "Histogram added: " << name << '\n';
+
   // If this is called during finalize(), it needs to be added explicitly/
   // The filter name is set properly during calls to finalize(), so 
   // this will work.
@@ -81,40 +84,64 @@ void HistogramOutputModule::addMassBinObject(std::string name, std::string massb
 
 void HistogramOutputModule::makeHistogram(const std::string& name, const std::string& title, int nbins, double min, double max)
 {
+  throw std::runtime_error("Don't use this function!");
+
   auto newHist = new TH1F(name.c_str(), title.c_str(), nbins, min, max);
   addObject(name, newHist);
 }
 
 void HistogramOutputModule::makeHistogram(std::shared_ptr<HistogramPrototype> h)
 {
-  const std::string& name = h->getFilteredName();
-  // std::cout << "makeHistogram Name: " << name << '\n';
-  auto title = name;
-  int nbins = h->getNBins();
-  double min = h->getMinimum();
-  double max = h->getMaximum();
-  
-  auto newHist = new TH1F(name.c_str(), title.c_str(), nbins, min, max);
-  addObject(name, newHist);
+  addObject(h->getFilteredName(), h->makeHistogram());
 }
 
-void HistogramOutputModule::fillHistogram(const std::string& name, std::vector<double> vectors, double weight)
+void HistogramOutputModule::makeHistogram(std::shared_ptr<HistogramPrototype> h, std::string name)
+{
+  addObject(name, h->makeHistogram(name, name));
+}
+
+void HistogramOutputModule::fillHistogram(const std::string& name, std::vector<double> values, double weight)
 {
   auto hist = getHistogram(name);
   if (!hist)
     throw std::runtime_error("Argument to getHistogram was not of TH1 type!  Name: " + name 
 			     + " and Root type: " + getObject(name)->ClassName());
-  for(double currentNum: vectors)
+
+  if (auto hist2D = dynamic_cast<TH2*>(hist))  // If the hist is 2D hist
   {
-    hist->Fill(currentNum, weight);
+    if (values.size() % 2 == 1) // If the size of values is odd
+    {
+      throw std::runtime_error("Number of values in values vector is not even!");
+    }
+
+    for (int x = 0; x < static_cast<int>(values.size()); x += 2)
+    {
+      // Since x and y values are just inputed into the values vector as {x, y, x, y, x, y, ...}
+      // The for loop loops through every other element in values (i.e. every x value)
+      // The y value is then the element immediately after the x element
+      hist2D->Fill(values[x], values[x + 1], weight);
+    }
   }
-  
+
+  else  // If the hist is 1D hist
+  {
+    for(double currentNum: values)
+    {
+      hist->Fill(currentNum, weight);
+    }
+  }
 }
 
 std::string HistogramOutputModule::getObjectName(const std::string& str) const
 {
   std::string newName = getFilter() + str;
-  // std::cout << "Histogram Got: " << newName << '\n';
+  //std::cout << "Histogram Got: " << newName << '\n';
+
+  //for (auto pair : objects)
+  //{
+    //std::cout << "test\n";
+    //std::cout << pair.first << '\n';
+  //}
 
   // If the map has this already, great!
   if (objects.find(newName) == objects.end()) 
@@ -203,7 +230,7 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
         // std::cout << "FilteredName: " << hist->getFilteredName() << '\n';
         // std::cout << "Mass Bin: " << massBin << '\n';
         // std::cout << "Histogram missing and made (with Mass Bin): " << hist->getFilteredName() + massBin << '\n';
-        makeHistogram(hist->getFilteredName() + massBin, hist->getFilteredName() + massBin, hist->getNBins(), hist->getMinimum(), hist->getMaximum()); 
+        makeHistogram(hist, hist->getFilteredName() + massBin);
         addMassBinObject(hist->getFilteredName(), massBin);
       }
 
@@ -216,7 +243,7 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
         // std::cout << "FilteredName: " << hist->getFilteredName() << '\n';
         // std::cout << "Mass Bin: " << massBin << '\n';
         // std::cout << "Histogram missing and made (without Mass Bin): " << hist->getFilteredName() << '\n';
-        makeHistogram(hist->getFilteredName(), hist->getFilteredName(), hist->getNBins(), hist->getMinimum(), hist->getMaximum()); 
+        makeHistogram(hist, hist->getFilteredName()); 
       }
 
     // Fill the histogram if the filter string isn't empty
@@ -226,7 +253,7 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
          //std::cout << "FilteredName: " << hist->getFilteredName() << '\n';
          //std::cout << "Mass Bin: " << massBin << '\n';
          //std::cout << "Histogram missing and made: " << hist->getFilteredName() << '\n';
-        makeHistogram(hist->getFilteredName(), hist->getFilteredName(), hist->getNBins(), hist->getMinimum(), hist->getMaximum()); 
+        makeHistogram(hist, hist->getFilteredName()); 
       }
 
     //std::cerr << "value = " << hist->value() << std::endl;
