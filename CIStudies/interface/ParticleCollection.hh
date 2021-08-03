@@ -19,6 +19,11 @@ public:
   const std::vector<Particle>& getParticles() const {return particles;}
   double getNumParticles() const {return particles.size();}
 
+  ParticleCollection getPosParticles() const;  // ParticleCollection of just the positively charged particles
+  ParticleCollection getNegParticles() const;  // ParticleCollection of just the negatively charged particles
+  double getNumPosParticles() const {return getPosParticles().getNumParticles();}
+  double getNumNegParticles() const {return getNegParticles().getNumParticles();}
+
   double getInvariantMass() const;
   double getLeadingTransverseMomentum() const;
   double getNthHighestPt(int n) const;
