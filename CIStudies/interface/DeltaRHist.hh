@@ -1,11 +1,11 @@
 #ifndef DELTARHIST_HH
 #define DELTARHIST_HH
 
-#include "HistogramPrototype.hh"
+#include "HistogramPrototype1D.hh"
 
 class LeptonJetReconstructionModule;
 
-class DeltaRHist : public HistogramPrototype
+class DeltaRHist : public HistogramPrototype1D
 {
   public:
   DeltaRHist(std::shared_ptr<LeptonJetReconstructionModule> iLeptonJetRecoModule, const std::string& iname, int iNBins, double iminimum, double imaximum);
