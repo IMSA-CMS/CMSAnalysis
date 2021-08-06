@@ -24,6 +24,7 @@
 #include "CIAnalysis/CIStudies/interface/TriggerEfficiencyModule.hh"
 #include "CIAnalysis/CIStudies/interface/TriggerModule.hh"
 #include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
+#include "CIAnalysis/CIStudies/interface/TwoInvariantMassesHist.hh"
 #include "CIAnalysis/CIStudies/interface/UnusualFinalStateFilter.hh"
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
 
@@ -52,11 +53,6 @@ Analyzer hPlusPlusMassAnalysis() {
   auto nMuonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
 
   auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod, genSimMod);
-  //auto massRecoEfficiency200 = make_shared<MassRecoEfficiency>(recoMod, 200, 10);
-  //auto massRecoEfficiency500 = make_shared<MassRecoEfficiency>(recoMod, 500, 25);
-  //auto massRecoEfficiency800 = make_shared<MassRecoEfficiency>(recoMod, 800, 40);
-  //auto massRecoEfficiency1000 = make_shared<MassRecoEfficiency>(recoMod, 1000, 50);
-  //auto massRecoEfficiency1300 = make_shared<MassRecoEfficiency>(recoMod, 1300, 65);
 
   auto massRecoEfficiency55 = make_shared<MassRecoEfficiency>(recoMod, 800, 5, 5);
   auto massRecoEfficiency1010 = make_shared<MassRecoEfficiency>(recoMod, 800, 10, 10);
@@ -85,6 +81,8 @@ Analyzer hPlusPlusMassAnalysis() {
 
   auto photonHist = make_shared<PhotonsHist>(genSimMod, recoMod, true, "Photon Histogram", 100, 0, 1000);
 
+  auto positiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Reco ZZ Invariant Mass Background", 100, 100, 0, 0, 1000, 1000, recoMod);
+
   // Add the histogram(s) created above to histMod
   //histMod->addHistogram(recoThirdMuonPtHist);
   //histMod->addHistogram(recoSameSignInvMassHist);
@@ -96,9 +94,10 @@ Analyzer hPlusPlusMassAnalysis() {
   //histMod->addHistogram(nLeptonsHist);
   //histMod->addHistogram(nElectronsHist);
   //histMod->addHistogram(nMuonsHist);
-  histMod->addHistogram(recoPhiSameSignInvMassHist);
-  histMod->addHistogram(recoMultSameSignInvMassHist);
-  histMod->addHistogram(recoPhiMultSameSignInvMassHist);
+  //histMod->addHistogram(recoPhiSameSignInvMassHist);
+  //histMod->addHistogram(recoMultSameSignInvMassHist);
+  //histMod->addHistogram(recoPhiMultSameSignInvMassHist);
+  histMod->addHistogram(positiveNegativeInvMassHist);
 
   // Initialize triggers
   auto singleMuonTrigger = make_shared<SingleMuonTrigger>(recoMod, 50);
