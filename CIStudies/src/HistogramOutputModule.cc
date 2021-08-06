@@ -304,9 +304,15 @@ void HistogramOutputModule::finalize()
                 // getHistogram(pair.first)->AddBinContent(i, getHistogram(pair.first + massBin.first)->GetBinContent(i));
               // }
               getHistogram(pair.first)->Add(getHistogram(pair.first + massBin.first));
+
+              //std::cout << pair.first + massBin.first << '\n';
+
+              delete getObject(pair.first + massBin.first);   // Remove the extra "name+M___" histograms from the root file
+              objects.erase(pair.first + massBin.first);      // Remove the pointer in the objects map
+              baseObjects.erase(pair.first + massBin.first);  // Remove the pointer in the baseObjects map
             }
           }
-        }    
+        }
     }
   
 }
