@@ -47,11 +47,11 @@ int main(int argc, char **argv) {
   //Analyzer analyzer = leptonJetReconstructionAnalysis();
   //Analyzer analyzer = displacedVertexAnalysis();
 
-  // Analyzer analyzer = hPlusPlusMassAnalysis();
+  Analyzer analyzer = hPlusPlusMassAnalysis();
   // Analyzer analyzer = massResolutionAnalysis();
   //Analyzer analyzer = leptonJetReconstructionAnalysis();
   // Analyzer analyzer = displacedVertexAnalysis();
-   Analyzer analyzer = massAcceptanceAnalysis();
+  //Analyzer analyzer = massAcceptanceAnalysis();
 
 
   std::cout << "Notice: analyzer created" << std::endl;
