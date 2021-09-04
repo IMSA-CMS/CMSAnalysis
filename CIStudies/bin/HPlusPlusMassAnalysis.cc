@@ -68,7 +68,8 @@ Analyzer hPlusPlusMassAnalysis() {
 
   auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
   auto genSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
-  auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Same Sign Invariant Mass", 100, 0, 1000);
+  // Go up to 2000 - Andy, 09/02 - and make more bins. Modifications also made for picking files
+  auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Same Sign Invariant Mass", 1000, 0, 2000);
 
   auto recoPhiSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Same Sign Invariant Mass (by Phi)", 100, 0, 1000, true);
   auto recoMultSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Same Sign Invariant Masses", 100, 0, 1000, false, true);
@@ -85,7 +86,7 @@ Analyzer hPlusPlusMassAnalysis() {
 
   // Add the histogram(s) created above to histMod
   //histMod->addHistogram(recoThirdMuonPtHist);
-  //histMod->addHistogram(recoSameSignInvMassHist);
+  histMod->addHistogram(recoSameSignInvMassHist);
   //histMod->addHistogram(genSimHPlusPlusRecoveredInvMassHist);
   //histMod->addHistogram(recoHPlusPlusRecoveredInvMassHist);
   //histMod->addHistogram(genSimHMinusMinusRecoveredInvMassHist);
@@ -97,7 +98,7 @@ Analyzer hPlusPlusMassAnalysis() {
   //histMod->addHistogram(recoPhiSameSignInvMassHist);
   //histMod->addHistogram(recoMultSameSignInvMassHist);
   //histMod->addHistogram(recoPhiMultSameSignInvMassHist);
-  histMod->addHistogram(positiveNegativeInvMassHist);
+  // histMod->addHistogram(positiveNegativeInvMassHist);
 
   // Initialize triggers
   auto singleMuonTrigger = make_shared<SingleMuonTrigger>(recoMod, 50);
@@ -112,7 +113,7 @@ Analyzer hPlusPlusMassAnalysis() {
   analyzer.addProductionModule(genSimMod);
   analyzer.addProductionModule(recoMod);
   analyzer.addProductionModule(matchMod);
-  analyzer.addProductionModule(triggerMod);
+  // analyzer.addProductionModule(triggerMod);
   analyzer.addProductionModule(weightMod);
   analyzer.addProductionModule(lrWeightMod);
 
