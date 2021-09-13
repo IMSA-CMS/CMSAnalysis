@@ -3,7 +3,7 @@
 #include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 
 DoubleElectronTrigger::DoubleElectronTrigger(std::shared_ptr<RecoIdentificationModule> iRecoMod, double iPTCutoff, double iSecondPTCutoff) :
-  Trigger("Double Electron Trigger", iRecoMod),
+  RecoTrigger("Double Electron Trigger", iRecoMod),
   pTCutoff(iPTCutoff),
   secondPTCutoff(iSecondPTCutoff)
 {

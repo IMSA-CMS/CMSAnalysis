@@ -44,17 +44,24 @@ int main(int argc, char **argv) {
 
   unsigned outputEvery = parser.integerValue("outputEvery");
 
+<<<<<<< HEAD
   // Analyzer analyzer = hPlusPlusMassAnalysis();
   // Analyzer analyzer = leptonJetReconstructionAnalysis();
   // Analyzer analyzer = leptonJetReconstructionAnalysis();
   // Analyzer analyzer = displacedVertexAnalysis();
 
   // Analyzer analyzer = hPlusPlusMassAnalysis();
+=======
+  Analyzer analyzer = hPlusPlusMassAnalysis();
+>>>>>>> d115da5f8e64f8cbbf1de921d18df5eafc7cbe66
   // Analyzer analyzer = massResolutionAnalysis();
   // Analyzer analyzer = leptonJetReconstructionAnalysis();
   // Analyzer analyzer = displacedVertexAnalysis();
   // Analyzer analyzer = massAcceptanceAnalysis();
+<<<<<<< HEAD
   Analyzer analyzer = triggerAnalysis();
+=======
+>>>>>>> d115da5f8e64f8cbbf1de921d18df5eafc7cbe66
 
 
   std::cout << "Notice: analyzer created" << std::endl;
