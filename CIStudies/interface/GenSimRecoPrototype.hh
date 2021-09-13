@@ -1,14 +1,14 @@
 #ifndef GENSIMRECOPROTOTYPE_HH
 #define GENSIMRECOPROTOTYPE_HH
 
-#include "HistogramPrototype.hh"
+#include "HistogramPrototype1D.hh"
 
 #include <string>
 
 class GenSimIdentificationModule;
 class RecoIdentificationModule;
 
-class GenSimRecoPrototype : public HistogramPrototype
+class GenSimRecoPrototype : public HistogramPrototype1D
 {
   public:
     GenSimRecoPrototype(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, const bool typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum);

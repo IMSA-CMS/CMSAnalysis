@@ -3,7 +3,7 @@
 #include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 
 SingleMuonTrigger::SingleMuonTrigger(std::shared_ptr<RecoIdentificationModule> iRecoMod, double iPTCutoff) :
-  Trigger("Single Muon Trigger", iRecoMod),
+  RecoTrigger("Single Muon Trigger", iRecoMod),
   pTCutoff(iPTCutoff)
 {
 }

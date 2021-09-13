@@ -5,7 +5,7 @@
 #include <vector>
 
 LeptonJetPtHist::LeptonJetPtHist(std::shared_ptr<LeptonJetReconstructionModule> iLeptonJetRecoModule, const std::string& iname, int iNBins, double iminimum, double imaximum) :
-  HistogramPrototype(iname, iNBins, iminimum, imaximum),
+  HistogramPrototype1D(iname, iNBins, iminimum, imaximum),
   leptonJetRecoModule(iLeptonJetRecoModule) 
   
 {

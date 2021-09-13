@@ -1,11 +1,11 @@
 #ifndef LEPTONJETPTHIST_HH
 #define LEPTONJETPTHIST_HH
 
-#include "HistogramPrototype.hh"
+#include "HistogramPrototype1D.hh"
 
 class LeptonJetReconstructionModule;
 
-class LeptonJetPtHist : public HistogramPrototype
+class LeptonJetPtHist : public HistogramPrototype1D
 {
   public:
   LeptonJetPtHist(std::shared_ptr<LeptonJetReconstructionModule> iLeptonJetRecoModule, const std::string& iname, int iNBins, double iminimum, double imaximum);
