@@ -27,6 +27,7 @@
 #include "CIAnalysis/CIStudies/interface/TwoInvariantMassesHist.hh"
 #include "CIAnalysis/CIStudies/interface/UnusualFinalStateFilter.hh"
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
+#include "CIAnalysis/CIStudies/interface/SignFlipModule.hh"
 
 
 using std::make_shared;
@@ -39,7 +40,7 @@ Analyzer hPlusPlusMassAnalysis() {
   auto genSimMod = make_shared<GenSimIdentificationModule>(9900041, true);
   auto recoMod = make_shared<RecoIdentificationModule>(50);
   auto matchMod = make_shared<MatchingModule>(genSimMod, recoMod);
-  auto triggerMod = make_shared<TriggerModule>(recoMod);
+  auto triggerMod = make_shared<TriggerModule>();
   auto weightMod = make_shared<WeightingModule>();
   auto lrWeightMod = make_shared<LRWeightModule>();
 
@@ -53,6 +54,7 @@ Analyzer hPlusPlusMassAnalysis() {
   auto nMuonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
 
   auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod, genSimMod);
+  auto signFlip = make_shared<SignFlipModule>(matchMod);
 
   auto massRecoEfficiency55 = make_shared<MassRecoEfficiency>(recoMod, 800, 5, 5);
   auto massRecoEfficiency1010 = make_shared<MassRecoEfficiency>(recoMod, 800, 10, 10);
@@ -122,6 +124,7 @@ Analyzer hPlusPlusMassAnalysis() {
   //analyzer.addFilterModule(unusualFinalStateFilter);
 
   analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
+  analyzer.addAnalysisModule(signFlip);
   //analyzer.addAnalysisModule(eventDump);
   //analyzer.addAnalysisModule(leptonEfficiency);
 
