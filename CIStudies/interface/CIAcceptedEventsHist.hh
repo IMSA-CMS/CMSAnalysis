@@ -1,12 +1,12 @@
 #ifndef CIACCEPTEDHIST_HH
 #define CIACCEPTEDHIST_HH
 
-#include "HistogramPrototype.hh"
+#include "HistogramPrototype1D.hh"
 
 class MatchingModule;
 class GenSimIdentificationModule;
 
-class CIAcceptedEventsHist : public HistogramPrototype
+class CIAcceptedEventsHist : public HistogramPrototype1D
 {
   public:
   CIAcceptedEventsHist(const std::shared_ptr<MatchingModule> iMatchingModule, const std::shared_ptr<GenSimIdentificationModule> iGenSimIdentificationModule, const std::string iname, int iNBins, double iminimum, double imaximum);
