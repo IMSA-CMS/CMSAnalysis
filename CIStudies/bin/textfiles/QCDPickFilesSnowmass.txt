@@ -1,0 +1,7 @@
+Procs:  QCD
+Year:   Snowmass2021
+Lepton: both
+Mass:   M50    M100    M200    M500    M700    M1000    M1500    M2000
+Lambda: 200
+Inter:	Con
+Helic:	LL

@@ -11,25 +11,20 @@ namespace edm
 }
 
 class FilterModule;
+class TH1;
 
 class HistogramPrototype
 {
 public:
-	HistogramPrototype(const std::string& iname, int inBins, double iminimum, double imaximum) :
-		name(iname),
-		nBins(inBins),
-		minimum(iminimum),
-		maximum(imaximum)
+	HistogramPrototype(const std::string& iname) :
+		name(iname)
 	{}
 
 	virtual ~HistogramPrototype() {} // Empty virtual destructor
 	
 	virtual std::vector<double> value() const = 0;
 
-	std::string getName() const {return name;}
-	int getNBins() const {return nBins;}
-	double getMinimum() const {return minimum;}
-	double getMaximum() const {return maximum;}
+        std::string getName() const {return name;}
 
 	bool shouldDraw(const edm::EventBase& event) const; // Bool switch to determine if a histogram is to be filled
 	std::string getFilteredName() const {return (getFilterString() + getName());}
@@ -38,11 +33,11 @@ public:
 
 	std::string getFilterString() const;
 
+	virtual TH1* makeHistogram() const = 0;
+        virtual TH1* makeHistogram(std::string name, std::string title) const = 0; // Makes the histogram with a modified name & title
+
 private:
 	std::string name;
-	int nBins;
-	double minimum;
-	double maximum;
 	std::vector<std::shared_ptr<FilterModule>> filters; // Vector of FilterModule&'s
 };
 
