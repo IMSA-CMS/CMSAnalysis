@@ -5,7 +5,7 @@
 
 
 DoubleIsolatedMuonTrigger::DoubleIsolatedMuonTrigger(std::shared_ptr<RecoIdentificationModule> iRecoMod, double iPTCutoff, double iSecondPTCutoff) :
-  Trigger("Double Isolated Muon Trigger", iRecoMod),
+  RecoTrigger("Double Isolated Muon Trigger", iRecoMod),
   pTCutoff(iPTCutoff),
   secondPTCutoff(iSecondPTCutoff)
 {
