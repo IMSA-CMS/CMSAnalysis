@@ -1,18 +1,17 @@
 #include "CIAnalysis/CIStudies/interface/Trigger.hh"
 
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
-
-Trigger::Trigger(std::string iName, std::shared_ptr<RecoIdentificationModule> iRecoMod) :
-  name(iName),
-  recoMod(iRecoMod)
+Trigger::Trigger(std::string iName) :
+  name(iName)
 {
 }
 
-bool Trigger::checkEvent(std::shared_ptr<RecoIdentificationModule> recoMod)
+bool Trigger::checkEvent()
 {
+  //std::cerr << "Notice: Trigger::checkEvent is running\n";
+
   ++total;
   
-  if (checkTrigger(recoMod))
+  if (checkTrigger())
   {
     ++pass;
     return true;

@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <typeinfo> // (TEMPORARY, TYPE CHECKING)
 
 #include "TH1.h"
 #include "TH2.h"
@@ -200,6 +201,7 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
 
   //std::cerr << "MS paint drawing" << std::endl;
 
+
   for (auto hist : histograms)
   {
     bool draw = hist->shouldDraw(event); // call the shouldDraw function so we can call process on the FilterModules
@@ -214,8 +216,8 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
         massBins[massBin] = weight;
         fileKeys[massBin] = fileKey;
 
-        //std::cout << "New Mass Bin: " << massBin << '\n';
-        //std::cout << "New Histogram Made: " << hist->getFilteredName() + massBin << '\n';
+        // std::cout << "New Mass Bin: " << massBin << '\n';
+        // std::cout << "New Histogram Made: " << hist->getFilteredName() + massBin << '\n';
         //std::cout << "Weight " << weight << '\n';
     //    makeHistogram(hist->getFilteredName() + massBin, hist->getFilteredName() + massBin, hist->getNBins(), hist->getMinimum(), hist->getMaximum());
     //    addMassBinObject(hist->getFilteredName(), massBin);
@@ -226,6 +228,7 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
     // If the histogram with mass bin doesn't exist, make it
     if (baseObjects.find(hist->getFilteredName() + massBin) == baseObjects.end())
       {
+        // Uncommented two lines to debug
         // std::cout << "Name: " << hist->getName() << '\n';
         // std::cout << "FilteredName: " << hist->getFilteredName() << '\n';
         // std::cout << "Mass Bin: " << massBin << '\n';
@@ -275,9 +278,10 @@ void HistogramOutputModule::finalize()
 
   // std::cout << "Finalize\n";
 
+
     for (auto pair : massBinMap)
     {
-      // std::cout << pair.first << '\n';
+      // std::cout << "PAIR: " << pair.first << '\n';
       // std::cout << "Pair First: " << pair.first << "\t" << "Pair Second: " << pair.second << "\n";
 
       for (auto massBin : massBins)
@@ -307,9 +311,43 @@ void HistogramOutputModule::finalize()
 
               //std::cout << pair.first + massBin.first << '\n';
 
-              delete getObject(pair.first + massBin.first);   // Remove the extra "name+M___" histograms from the root file
+              for (auto pair : objects) 
+              {
+                // Temporary testing, comment when done[09/25/21]
+                // std::cout << "Type: " << typeid(pair.first).name() << "\n";
+                // std::cout << pair.first << "\n";
+              }
+
+              std::cout << "Erasing " << pair.first + massBin.first << "\n";
+            
+              auto len = (pair.first).length();
+              // std::cout << len << std::endl;
+
+              // Quick hack: if we erase the filtered things in objects will it work with filters?
+              for (auto pair2 : objects)
+              {
+                auto len2 = pair2.first.length();
+                /* std::cout << pair2.first << std::endl;
+                if(len2 >= len) {
+                  std::cout << pair2.first.substr(len2 - len) << std::endl;
+                } */
+
+                if(len2 >= len && (pair2.first.substr(len2 - len) + massBin.first) 
+                  == (pair.first + massBin.first)) {
+                  // Should only be triggered by filtered things
+                  // std::cout << len2 - len << "!\n";
+                  objects.erase(pair2.first + massBin.first);
+                  // std::cout << pair2.first << "!\n";
+                }
+              }
+
+              // IF YOU UNCOMMENT THIS IT WILL EXPLODE SO PLEASE DONT
+              // I KNOW THIS IS BAD PRACTICE AND I DONT CARE
+              // delete getObject(pair.first + massBin.first);   // Remove the extra "name+M___" histograms from the root file
+              // Should only work for non-filtered things: therefore everything necessary is erased
               objects.erase(pair.first + massBin.first);      // Remove the pointer in the objects map
               baseObjects.erase(pair.first + massBin.first);  // Remove the pointer in the baseObjects map
+
             }
           }
         }

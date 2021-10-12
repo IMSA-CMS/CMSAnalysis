@@ -79,14 +79,14 @@ void WeightingModule::findWeight(std::string key)
   auto iterator = weights.find(key);
   if (key == "")
   {
-    weight = 0;
+    weight = 0;	  
   }
   else if (iterator == weights.end())
   {
-    std::cerr << "Key " << key << " not found! " << std::endl;
-    weight = 0;
+    //std::cerr << "Key " << key << " not found! " << std::endl;
+    //weight = 0;
   
-    //throw std::runtime_error("Key " + key + " not found!");
+    throw std::runtime_error("Key " + key + " not found!");
   }
   
   else

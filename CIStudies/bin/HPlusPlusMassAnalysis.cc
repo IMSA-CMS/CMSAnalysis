@@ -34,6 +34,8 @@
 #include "CIAnalysis/CIStudies/interface/PtHist.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
 #include "CIAnalysis/CIStudies/interface/METTrigger.hh"
+#include "CIAnalysis/CIStudies/interface/SignFlipModule.hh"
+
 
 using std::make_shared;
 
@@ -45,7 +47,7 @@ Analyzer hPlusPlusMassAnalysis() {
   auto genSimMod = make_shared<GenSimIdentificationModule>();
   auto recoMod = make_shared<RecoIdentificationModule>(50);
   auto matchMod = make_shared<MatchingModule>(genSimMod, recoMod);
-  auto triggerMod = make_shared<TriggerModule>(recoMod);
+  auto triggerMod = make_shared<TriggerModule>();
   auto weightMod = make_shared<WeightingModule>();
   auto lrWeightMod = make_shared<LRWeightModule>();
   auto mETMod = make_shared<METModule>();
@@ -59,6 +61,7 @@ Analyzer hPlusPlusMassAnalysis() {
   auto nMuonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
 
   auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod, genSimMod);
+  auto signFlip = make_shared<SignFlipModule>(matchMod);
 
   auto massRecoEfficiency55 = make_shared<MassRecoEfficiency>(recoMod, 800, 5, 5);
   auto massRecoEfficiency1010 = make_shared<MassRecoEfficiency>(recoMod, 800, 10, 10);
@@ -74,7 +77,8 @@ Analyzer hPlusPlusMassAnalysis() {
 
   auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
   auto genSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
-  auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Same Sign Invariant Mass", 100, 0, 1000);
+  // Go up to 2000 - Andy, 09/02 - and make more bins. Modifications also made for picking files
+  auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Same Sign Invariant Mass", 1000, 0, 2000);
 
   auto recoPhiSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Same Sign Invariant Mass (by Phi)", 100, 0, 1000, true);
   auto recoMultSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Same Sign Invariant Masses", 100, 0, 1000, false, true);
@@ -134,7 +138,7 @@ Analyzer hPlusPlusMassAnalysis() {
   analyzer.addProductionModule(genSimMod);
   analyzer.addProductionModule(recoMod);
   analyzer.addProductionModule(matchMod);
-  analyzer.addProductionModule(triggerMod);
+  // analyzer.addProductionModule(triggerMod);
   analyzer.addProductionModule(weightMod);
   analyzer.addProductionModule(lrWeightMod);
   analyzer.addProductionModule(mETMod);
@@ -144,6 +148,7 @@ Analyzer hPlusPlusMassAnalysis() {
   //analyzer.addFilterModule(unusualFinalStateFilter);
 
   analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
+  analyzer.addAnalysisModule(signFlip);
   //analyzer.addAnalysisModule(eventDump);
   analyzer.addAnalysisModule(leptonEfficiency);
 
