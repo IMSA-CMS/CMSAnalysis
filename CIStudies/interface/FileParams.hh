@@ -23,6 +23,7 @@ public:
   static std::string QCD() {return "QCD";}
   static std::string Higgs() {return "Higgs";}
   static std::string LeptonJet() {return "LeptonJet";}
+  static std::string Data() {return "Data";}
 
 protected:
   virtual void addMaps() override;

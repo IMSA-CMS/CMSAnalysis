@@ -14,7 +14,7 @@ using std::vector;
 
 void Process::addMaps()
 {
-  addValuesToMap({"CI", "ADD", "ADD2", "DY", "Diboson", "top", "bottom", "QCD", "Higgs", "LeptonJet"});
+  addValuesToMap({"CI", "ADD", "ADD2", "DY", "Diboson", "top", "bottom", "QCD", "Higgs", "LeptonJet", "Data"});
 
   addAlternates({"ci", "Ci", "cI"}, "CITo2");
   addAlternates({"add", "Add", "aDd", "adD", "aDD", "LED", "led"}, "ADD");
@@ -249,6 +249,14 @@ string FileParams::locateTextFile() const
       leptonString = "";
       massString = "";
       interferenceString = getInterference();
+    }
+
+  if (processString == "Data")
+    {
+      interferenceString = "";
+      massString = "";
+      lambdaString = "";
+      helicityString = "";
     }
 
   string file = "textfiles/" + yearString + "/" + processString + leptonString
