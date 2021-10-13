@@ -17,7 +17,7 @@ bool SignFlipModule::process(const edm::EventBase& event)
 	  if(particlePair.getGenParticle().charge() != particlePair.getRecoParticle().charge()) {
 		  nSignFlips++;
 	  }
-	  
+  }
   return true;
 }
 void SignFlipModule::finalize()
