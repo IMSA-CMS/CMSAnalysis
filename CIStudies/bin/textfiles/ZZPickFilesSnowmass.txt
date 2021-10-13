@@ -1,0 +1,7 @@
+Procs:  Diboson
+Year:   Snowmass2021
+Lepton: M   E
+Mass:   M4
+Lambda: 200
+Inter:  con
+Helic:  ZZ4L
