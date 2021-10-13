@@ -32,7 +32,7 @@ Analyzer displacedVertexAnalysis()
 
   auto recoMod = make_shared<RecoIdentificationModule>(5);
   auto metMod = make_shared<METModule>();
-  auto triggerMod = make_shared<TriggerModule>(recoMod);
+  auto triggerMod = make_shared<TriggerModule>();
 
   // Initialize triggers
   auto metTrigger = make_shared<METTrigger>(metMod, 120);
