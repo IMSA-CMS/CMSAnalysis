@@ -66,7 +66,7 @@ Analyzer leptonJetReconstructionAnalysis() {
   // histOutputMod->addHistogram(matchEtaHist);
   //auto genSimEventDumpMod = make_shared<GenSimEventDumpModule>(3);
 
-  auto triggerMod = make_shared<TriggerModule>(recoMod);
+  auto triggerMod = make_shared<TriggerModule>();
 
   auto nLeptonsFilter = make_shared<NLeptonsFilter>(recoMod); //Needs to be updated with shared pointers
 
