@@ -12,7 +12,7 @@
 #include "CIAnalysis/CIStudies/bin/displacedVertexAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/massAcceptanceAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/triggerAnalysis.cc"
-#include "CIAnalysis/CIStudies/bin/invariantMassAnalysis.cc"
+// #include "CIAnalysis/CIStudies/bin/invariantMassAnalysis.cc"
 
 
 int main(int argc, char **argv) {
