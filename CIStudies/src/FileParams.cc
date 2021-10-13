@@ -14,7 +14,7 @@ using std::vector;
 
 void Process::addMaps()
 {
-  addValuesToMap({"CI", "ADD", "ADD2", "DY", "Diboson", "top", "bottom", "QCD", "Higgs", "LeptonJet", "Data"});
+  addValuesToMap({"CI", "ADD", "ADD2", "DY", "Diboson", "top", "bottom", "QCD", "Higgs", "LeptonJet", "Data", "TTBar", "ZZ", "DarkPhoton"});
 
   addAlternates({"ci", "Ci", "cI"}, "CITo2");
   addAlternates({"add", "Add", "aDd", "adD", "aDD", "LED", "led"}, "ADD");
@@ -26,11 +26,13 @@ void Process::addMaps()
   addAlternate("qcd", "QCD");
   addAlternates({"Doubly Charged Higgs", "H++", "Higgs ++", "Higgs++"}, "Higgs");
   addAlternates({"Lepton Jet", "leptonjet", "lepton jet"}, "LeptonJet");
+  addAlternates({"ttbar", "TTbar", "ttBar"}, "TTBar");
+  addAlternates({"zZ", "zz", "Zz"}, "ZZ");
 }
 
 void Year::addMaps()
 {
-  addValuesToMap({"2016", "2017", "2018", "2020", "2021"});
+  addValuesToMap({"2016", "2017", "2018", "2020", "2021", "Snowmass2021"});
   addAlternate("16", "2016");
   addAlternate("17", "2017");
   addAlternate("18", "2018");
@@ -46,7 +48,7 @@ void Helicity::addMaps()
   vector<string> tops = {"ttbar", "tW", "Wantitop"};
   vector<string> bottom = {"BBbar"};
   vector<string> qcd = {"Wjets"};
-  vector<string> doublyChargedHiggs = {"Higgs++to2Leptons", "Higgs++toWW"};  // Specifices Doubly Charged Higgs decay channels
+  vector<string> doublyChargedHiggs = {"Higgs++to2Leptons", "Higgs++toWW", "Higgs++toTauTau"};  // Specifices Doubly Charged Higgs decay channels
   vector<string> leptonJet = {"SUSYPortal", "HiggsPortal"}; // Specifies Lepton Jet Processes
 
   addValuesToMap(dibosons);
@@ -78,7 +80,8 @@ void Interference::addMaps()
 
 void MassRange::addMaps()
 {
-  vector<string> massVals = {"M300", "M800", "M1000", "M1300", "M1700", "M2000", "M50", "M120", "M200", "M400", "M800", "M1400", "M2300", "M3500", "M4500", "M6000", "M600", "M1200", "M2500", "M500", "M1200", "M1800"};
+  vector<string> massVals = {"M4", "M10", "M50", "M80", "M100", "M170", "M300", "M470", "M700", "M800", "M1000", "M1300", "M1500", "M1700", "M2000", "M50", "M120", "M200", "M400", 
+  "M700", "M800", "M1400", "M2300", "M3500", "M4500", "M6000", "M600", "M1200", "M2500", "M500", "M1200", "M1800"};
   addValuesToMap(massVals);
   addValuesToMap({""});
   
@@ -100,7 +103,7 @@ void Lambda::addMaps()
   vector<string> lambdaVals = {"1", "3", "3.5", "4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "10", "16", "22", "24", "28", "32", "34", "40", "100k", "200", "500", "800", "1300"};//H++ after 100k
   addValuesToMap(lambdaVals);
 
-  vector<string> higgsMasses = {"M200", "M300", "M500", "M800", "M1000", "M1300"};
+  vector<string> higgsMasses = {"M200", "M300", "M500", "M700", "M800", "M900", "M1000", "M1100", "M1300"};
   addValuesToMap(higgsMasses);
 
   vector<string> darkPhotonMasses = {"M0_1", "M0_2", "M0_3", "M0_4", "M0_5", "M0_7", "M0_9", "M1", "M1_2", "M1_5", "M2_0"};
@@ -221,7 +224,7 @@ string FileParams::locateTextFile() const
       helicityString = "";
     }
 
-  if (processString == Process::Diboson() || processString == Process::top() || processString == Process::bottom() || processString == Process::QCD())
+  if (processString == Process::Diboson() || processString == Process::top() || processString == Process::bottom())
     {
       leptonString = "";
       interferenceString = "";
@@ -229,7 +232,7 @@ string FileParams::locateTextFile() const
       lambdaString = "";
       processString = "";
 
-      if (helicityString == "WW" || helicityString == "ttbar")
+      if (helicityString == "WW")
 	{
 	  massString = massCutStringBackgrounds();
 	}
@@ -241,6 +244,23 @@ string FileParams::locateTextFile() const
       leptonString = "";
       massString = "";
       interferenceString = "";
+    }
+
+  if (processString == "QCD")
+    {
+      lambdaString = "";
+      leptonString = "";
+      interferenceString = "";
+      helicityString = "";
+    }
+
+  if (processString == "DarkPhoton")
+    {
+      lambdaString = getLambda();
+      massString = "";
+      leptonString = "";
+      interferenceString = "";
+      helicityString = "";
     }
 
   if (processString == "LeptonJet")
@@ -285,8 +305,12 @@ string FileParams::massCutString20172018() const
 string FileParams::massCutStringDY() const
 {
   string mass = getMassRange();
-  if (mass == "M50")
-    return "M50to120";
+  if (mass == "M4")
+    return "M4to10";
+  else if (mass == "M10")
+    return "M10to50";
+  else if (mass == "M50")
+    return "M50toInf";
   else if (mass == "M120")
     return "M120to200";
   else if (mass == "M200")
@@ -294,7 +318,38 @@ string FileParams::massCutStringDY() const
   else if (mass == "M400")
     return "M400to800";
   else if (mass == "M800")
-    return "M800to1400";
+    return "M800to1000"; //modified for new DY files
+  else if (mass == "M1400")
+    return "M1400to2300";
+  else if (mass == "M2300")
+    return "M2300to3500";
+  else if (mass == "M3500")
+    return "M3500to4500";
+  else if (mass == "M4500")
+    return "M4500to6000";
+  else if (mass == "M6000")
+    return "M6000toInf";
+
+  throw std::runtime_error(mass + " Invalid mass type!");
+}
+
+string FileParams::massCutStringQCD() const
+{
+  string mass = getMassRange();
+  if (mass == "M4")
+    return "M4to10";
+  else if (mass == "M10")
+    return "M10to50";
+  else if (mass == "M50")
+    return "M50toInf";
+  else if (mass == "M120")
+    return "M120to200";
+  else if (mass == "M200")
+    return "M200to400";
+  else if (mass == "M400")
+    return "M400to800";
+  else if (mass == "M800")
+    return "M800to1000"; 
   else if (mass == "M1400")
     return "M1400to2300";
   else if (mass == "M2300")
@@ -312,24 +367,22 @@ string FileParams::massCutStringDY() const
 string FileParams::massCutStringBackgrounds() const
 {
   string mass = getMassRange();
-  if (mass == "M500")
-    return "M500to800";
-  else if (mass == "M800")
-    return "M800to1200";
-  else if (mass == "M1200")
-    return "M1200to1800";
-  else if (mass == "M1800")
-    return "M1800toInf";
-
-  if (mass == "M200")
-    return "M200to600";
+  if (mass == "M50")
+    return "M50to80";
+  else if (mass == "M120")
+    return "M120to170";
+  else if (mass == "M170")
+    return "M170to300";
+  else if (mass == "M300")
+    return "M300to470";
+  else if (mass == "M470")
+    return "M470to600";
   else if (mass == "M600")
-    return "M600to1200";
-  else if (mass == "M1200")
-    return "M1200to2500";
-  else if (mass == "M2500")
-    return "M2500toInf";
-
+    return "M600to800";
+  else if (mass == "M800")
+    return "M800to1000";
+  else if (mass == "M1000")
+    return "M1000toInf";
   throw std::runtime_error(mass + "Invalid mass type!");
 }
 

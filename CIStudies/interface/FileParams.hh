@@ -146,6 +146,7 @@ public:
   // Public just in case someone else needs it
   std::string massCutString20172018() const;
   std::string massCutStringDY() const;
+  std::string massCutStringQCD() const;
   std::string massCutStringBackgrounds() const;
 
 
