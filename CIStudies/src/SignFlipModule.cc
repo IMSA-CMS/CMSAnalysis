@@ -17,7 +17,7 @@ bool SignFlipModule::process(const edm::EventBase& event)
     auto particleType = particlePair.getGenParticle().getType();
 
     // This variable is to make sure the pointers don't break the code.
-    int trashBinEvent = 0;
+    int trashBin = 0;
 
     auto eventPointer = &trashBin;
     auto flipPointer = &trashBin;
