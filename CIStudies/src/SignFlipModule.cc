@@ -42,7 +42,6 @@ void SignFlipModule::finalize()
 {
   std::cout << "Number of Events: " << nEvents << std::endl;
   std::cout << "Number of Sign Flips: " << nSignFlips << std::endl;
-  std::cout << "Overall Efficiency: " << (1 - (double) nSignFlips / nEvents) << std::endl;
-  std::cout << "Electron Efficiency: " << (1 - (double) nElectronFlips / nElectronEvents) << std::endl;
-  std::cout << "Muon Efficiency: " << (1 - (double) nMuonFlips / nMuonEvents) << std::endl;
+  std::cout << "Electron Sign Efficiency: " << (1 - (double) nElectronFlips / nElectronEvents) << std::endl;
+  std::cout << "Muon Sign Efficiency: " << (1 - (double) nMuonFlips / nMuonEvents) << std::endl;
 }
