@@ -1,16 +1,14 @@
 #include "CIAnalysis/CIStudies/interface/SingleElectronTrigger.hh"
 
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
-
-SingleElectronTrigger::SingleElectronTrigger(std::shared_ptr<RecoIdentificationModule> iRecoMod, double iPTCutoff) :
-  Trigger("Single Electron Trigger", iRecoMod),
+SingleElectronTrigger::SingleElectronTrigger(double iPTCutoff) :
+  Trigger("Single Electron Trigger"),
   pTCutoff(iPTCutoff)
 {
 }
 
-bool SingleElectronTrigger::checkTrigger(std::shared_ptr<RecoIdentificationModule> recoMod)
+bool SingleElectronTrigger::checkTrigger(std::shared_ptr<InputModule> input)
 {
-  auto particles = recoMod->getRecoCandidates(Particle::LeptonType::Electron);
+  auto particles = input->getParticles(InputModule::RecoLevel::Reco, Particle::Type::Electron);
 
   // If there aren't enough electrons, then automatically fail the trigger
   if (particles.getNumParticles() < 1)

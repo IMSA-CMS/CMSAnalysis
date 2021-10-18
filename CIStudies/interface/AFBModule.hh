@@ -3,23 +3,23 @@
 
 #include "HistogramOutputModule.hh"
 
-class GenSimIdentificationModule;
-class RecoIdentificationModule;
+//class GenSimIdentificationModule;
+//class RecoIdentificationModule;
 class WeightingModule;
 
 // AFBModule fills forward and backward histograms for both gen sim and reco and uses those histograms to calculate the value of Afb at the end
 class AFBModule : public HistogramOutputModule
 {
 public:
-  AFBModule(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule, int minMass = 300, int maxMass = 3200, int massInterval = 100);
+  AFBModule(const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule, int minMass = 300, int maxMass = 3200, int massInterval = 100);
 
   virtual void initialize() override;
   virtual bool process() override;
   virtual void finalize() override;
 
 private:
-  const std::shared_ptr<GenSimIdentificationModule> genSim;
-  const std::shared_ptr<RecoIdentificationModule> reco;
+  // const std::shared_ptr<GenSimIdentificationModule> genSim;
+  // const std::shared_ptr<RecoIdentificationModule> reco;
   int minMassCut;
   int maxMassCut;
   int interval;

@@ -11,7 +11,7 @@ class LeptonJetMatchingModule : public ProductionModule
 {
 public:
     using MatchingPair = std::pair<Particle, LeptonJet>;
-    LeptonJetMatchingModule(std::shared_ptr<GenSimParticleModule> genSimModule, std::shared_ptr<LeptonJetReconstructionModule> lepJetModule, double deltaRCut = 0.5);
+    LeptonJetMatchingModule(std::shared_ptr<LeptonJetReconstructionModule> lepJetModule, double deltaRCut = 0.5);
     virtual bool process() override;
     void finalize() override;
     const std::vector<MatchingPair>& getMatchingPairs() const {return matchingPairs;}

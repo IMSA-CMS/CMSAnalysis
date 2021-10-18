@@ -1,8 +1,8 @@
 #include "CIAnalysis/CIStudies/interface/FilterModule.hh"
 
 //update this to remove event parameter
-bool FilterModule::process(const edm::EventBase& event)
+bool FilterModule::process()
 {
-  filterString = makeFilterString(event);
+  filterString = makeFilterString();
   return !filterString.empty();
 }

@@ -1,9 +1,9 @@
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
 
-LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<MatchingModule> imatchModule, const std::shared_ptr<GenSimIdentificationModule> igenSimModule):
+LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<MatchingModule> imatchModule):
   matchModule(imatchModule)
-  ,genSimModule(igenSimModule)
+  //,genSimModule(igenSimModule)
   ,recoMuons(0)
   ,genSimMuons(0)
   ,recoElectrons(0)
@@ -11,20 +11,20 @@ LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<MatchingModule> imatchM
 {
 }
 
-bool LeptonEfficiency::process(const edm::EventBase& event)
+bool LeptonEfficiency::process()
 {
-  auto genSim = genSimModule->getGenParticles();
+  auto genSim = getInput()->getParticles(InputModule::RecoLevel::GenSim);
 
   // std::cout << "Looking at GenSim Particles" << std::endl;
   for(const auto &particle : genSim.getParticles())
     {
-      auto type = particle.getLeptonType();
-      if(type == Particle::LeptonType::Electron)
+      auto type = particle.getType();
+      if(type == Particle::Type::Electron)
 	{
 	  genSimElectrons++;
 	  // std::cout << "Electron" << std::endl;
 	}
-      else if(type == Particle::LeptonType::Muon)
+      else if(type == Particle::Type::Muon)
 	{
 	  genSimMuons++;
 	  // std::cout << "Muon" << std::endl;
@@ -39,14 +39,14 @@ bool LeptonEfficiency::process(const edm::EventBase& event)
     {
       if(particle.isNotNull())
 	{
-	  auto type = particle.getLeptonType();
+	  auto type = particle.getType();
 
-	  if(type == Particle::LeptonType::Electron)
+	  if(type == Particle::Type::Electron)
 	    {
 	      recoElectrons++;
 	      // std::cout << "Reco Electron" << std::endl;
 	    }
-	  else if(type == Particle::LeptonType::Muon)
+	  else if(type == Particle::Type::Muon)
 	    {
 	      recoMuons++;
 	      // std::cout << "Reco Muon" << std::endl;
@@ -59,7 +59,6 @@ bool LeptonEfficiency::process(const edm::EventBase& event)
     }
   return true;
 }
-
 void LeptonEfficiency::finalize()
 {
   std::cout << "Muon efficiency: " << recoMuons / (double) genSimMuons << std::endl;

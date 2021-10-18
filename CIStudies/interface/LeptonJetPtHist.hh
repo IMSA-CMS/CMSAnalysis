@@ -9,7 +9,7 @@ class LeptonJetPtHist : public HistogramPrototype
 {
   public:
   LeptonJetPtHist(std::shared_ptr<LeptonJetReconstructionModule> iLeptonJetRecoModule, const std::string& iname, int iNBins, double iminimum, double imaximum);
-  double value() const override;
+  std::vector<double> value() const override;
 
   private:
   std::shared_ptr<LeptonJetReconstructionModule> leptonJetRecoModule;

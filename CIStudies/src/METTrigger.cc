@@ -2,13 +2,13 @@
 #include "CIAnalysis/CIStudies/interface/METModule.hh"
 
 METTrigger::METTrigger(std::shared_ptr<METModule> iMETMod, const double iMETCutoff) :
-  Trigger("MET Trigger", nullptr),
+  Trigger("MET Trigger"),
   mETMod(iMETMod),
   mETCutoff(iMETCutoff)
 {
 }
 
-bool METTrigger::checkTrigger(std::shared_ptr<RecoIdentificationModule>)
+bool METTrigger::checkTrigger(std::shared_ptr<InputModule> input)
 {
   auto mET = mETMod->getMet();
 

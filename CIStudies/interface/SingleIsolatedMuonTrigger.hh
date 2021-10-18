@@ -8,10 +8,10 @@ class RecoIdentificationModule;
 class SingleIsolatedMuonTrigger : public Trigger
 {
   public:
-    SingleIsolatedMuonTrigger(std::shared_ptr<RecoIdentificationModule> iRecoMod, const double iPTCutoff = 24);
+    SingleIsolatedMuonTrigger(const double iPTCutoff = 24);
   
   protected:
-    bool checkTrigger(std::shared_ptr<RecoIdentificationModule> recoMod) override;
+    bool checkTrigger(std::shared_ptr<InputModule> input) override;
 
   private:
     const double pTCutoff;

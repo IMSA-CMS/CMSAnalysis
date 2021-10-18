@@ -4,6 +4,7 @@
 #include <string>
 
 #include "Module.hh"
+#include "InputModule.hh"
 
 namespace edm
 {
@@ -29,7 +30,7 @@ protected:
   // from the AnalysisModules.
   // Return an empty string to reject the event - that will cause the event
   // not to be recorded at all.
-  virtual std::string makeFilterString(const edm::EventBase& event) = 0;
+  virtual std::string makeFilterString() = 0;
 
 private:
   std::string filterString;

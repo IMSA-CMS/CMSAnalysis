@@ -17,7 +17,7 @@ class ScaledMassHist : public HistogramPrototype
 {
 public:
   ScaledMassHist(const MatchingModule& matchingModule, const std::string& iname, int nBins, int minMass, int maxMass, bool scaledUp, bool scaledUpDown, bool typeSwitch);
-  double value() const override;
+  std::vector<double> value() const override;
   virtual ~ScaledMassHist() {}
 
 private:

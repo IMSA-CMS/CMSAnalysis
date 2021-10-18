@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include "CIAnalysis/CIStudies/interface/InputModule.hh"
 
 namespace edm
 {
@@ -22,23 +23,29 @@ public:
 		maximum(imaximum)
 	{}
 
+	void setInput(std::shared_ptr<InputModule> iInput) {input = iInput;}
+
 	virtual ~HistogramPrototype() {} // Empty virtual destructor
 	
-	virtual double value() const = 0;
+	virtual std::vector<double> value() const = 0;
 
 	std::string getName() const {return name;}
 	int getNBins() const {return nBins;}
 	double getMinimum() const {return minimum;}
 	double getMaximum() const {return maximum;}
 
-	bool shouldDraw(const edm::EventBase& event) const; // Bool switch to determine if a histogram is to be filled
+	bool shouldDraw() const; // Bool switch to determine if a histogram is to be filled
 	std::string getFilteredName() const {return (getFilterString() + getName());}
 
 	void addFilter(std::shared_ptr<FilterModule> filterMod) {filters.push_back(filterMod);} // Adds a FilterModule& to filters (the vector)
 
 	std::string getFilterString() const;
 
+protected:
+	std::shared_ptr<InputModule> getInput() const {return input;}
+
 private:
+	std::shared_ptr<InputModule> input;
 	std::string name;
 	int nBins;
 	double minimum;

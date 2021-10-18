@@ -11,15 +11,15 @@ DeltaRHist::DeltaRHist(std::shared_ptr<LeptonJetReconstructionModule> iLeptonJet
 {
 }
 
-double DeltaRHist::value() const
+std::vector<double> DeltaRHist::value() const
 {
   const std::vector<double>& deltaRValues = leptonJetRecoModule->getDeltaRValues();
   if (deltaRValues.size() > 0)
   {
-      return deltaRValues[0];
+      return {deltaRValues[0]};
   }
   else
   {
-      return -1;
+      return {-1};
   }  
 }

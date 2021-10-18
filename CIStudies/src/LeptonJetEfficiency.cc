@@ -8,13 +8,13 @@ LeptonJetEfficiency::LeptonJetEfficiency(const std::shared_ptr<LeptonJetReconstr
 
 {}
 
-bool LeptonJetEfficiency::process(const edm::EventBase& event)
+bool LeptonJetEfficiency::process()
 {
     auto recoLeptonJets = lepRecoMod->getLeptonJets();
-    numRecoJets = recoLeptonJets.size();
+    numRecoJets += recoLeptonJets.size();
 
     auto matchingPairs = lepMatchMod->getMatchingPairs();
-    numMatchedJets = matchingPairs.size();
+    numMatchedJets += matchingPairs.size();
 
     return true;
 }

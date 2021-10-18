@@ -11,7 +11,7 @@ class METTrigger : public Trigger
     METTrigger(std::shared_ptr<METModule> iMETMod, const double iMETCutoff = 120);
 
   protected:
-    bool checkTrigger(std::shared_ptr<RecoIdentificationModule>) override;
+    bool checkTrigger(std::shared_ptr<InputModule> input) override;
 
   private:
     const std::shared_ptr<METModule> mETMod;

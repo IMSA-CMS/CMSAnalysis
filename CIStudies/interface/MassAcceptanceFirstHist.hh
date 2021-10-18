@@ -8,11 +8,8 @@ class GenSimIdentificationModule;
 class MassAcceptanceFirstHist : public HistogramPrototype
 {
   public:
-  MassAcceptanceFirstHist(const std::shared_ptr<GenSimIdentificationModule> iGenSimIdentificationModule, const std::string iname, int iNBins, double iminimum, double imaximum);
-  double value() const override;
-
-  private:
-  const std::shared_ptr<GenSimIdentificationModule> genSimIdentification;
+  MassAcceptanceFirstHist(const std::string iname, int iNBins, double iminimum, double imaximum);
+  std::vector<double> value() const override;
 };
 
 

@@ -1,8 +1,8 @@
 #include "CIAnalysis/CIStudies/interface/HistogramOutputModule.hh"
 #include "CIAnalysis/CIStudies/interface/HistogramPrototype.hh"
 
-#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
+//#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
+//#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
 #include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
 #include "CIAnalysis/CIStudies/interface/PtResolutionModule.hh"
@@ -13,9 +13,9 @@
 
 #include "TH1.h"
 
-HistogramOutputModule::HistogramOutputModule(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule) :
-  genSim(genSimModule),
-  reco(recoModule),
+HistogramOutputModule::HistogramOutputModule(const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule) :
+  //genSim(genSimModule),
+  //reco(recoModule),
   weighting(weightingModule),
   lrWeighting(lrWeightModule)
 {
@@ -48,6 +48,15 @@ void HistogramOutputModule::writeAll()
     {
       entry.second->Write();
     }
+}
+
+void HistogramOutputModule::setInput(std::shared_ptr<InputModule> iInput)
+{
+  Module::setInput(iInput);
+  for (auto hist : histograms)
+  {
+    hist->setInput(iInput);
+  }
 }
 
 void HistogramOutputModule::addObject(const std::string& name, TObject* obj)
@@ -98,13 +107,17 @@ void HistogramOutputModule::makeHistogram(std::shared_ptr<HistogramPrototype> h)
   addObject(name, newHist);
 }
 
-void HistogramOutputModule::fillHistogram(const std::string& name, double number, double weight)
+void HistogramOutputModule::fillHistogram(const std::string& name, std::vector<double> vectors, double weight)
 {
   auto hist = getHistogram(name);
   if (!hist)
     throw std::runtime_error("Argument to getHistogram was not of TH1 type!  Name: " + name 
 			     + " and Root type: " + getObject(name)->ClassName());
-  hist->Fill(number, weight);
+  for(double currentNum: vectors)
+  {
+    hist->Fill(currentNum, weight);
+  }
+  
 }
 
 std::string HistogramOutputModule::getObjectName(const std::string& str) const
@@ -158,7 +171,7 @@ bool HistogramOutputModule::process()
   //std::cerr << "plot contrivance" << std::endl;
 
   double eventWeight = 1.00;
-  if (helicity == "LR")
+  /*if (helicity == "LR")
     {
       eventWeight = lrWeighting->getLRWeight();
     }
@@ -166,12 +179,12 @@ bool HistogramOutputModule::process()
     {
       eventWeight = lrWeighting->getRLWeight();
     }
-
+  */
   //std::cerr << "MS paint drawing" << std::endl;
 
   for (auto hist : histograms)
   {
-    bool draw = hist->shouldDraw(event); // call the shouldDraw function so we can call process on the FilterModules
+    bool draw = hist->shouldDraw(); // call the shouldDraw function so we can call process on the FilterModules
     // std::cout << "shouldDraw returns: " << draw << '\n';
     
     // If the mass bin is a new mass bin, then make the histograms for that mass bin

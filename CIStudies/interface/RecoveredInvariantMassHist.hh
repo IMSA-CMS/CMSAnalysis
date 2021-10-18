@@ -6,9 +6,9 @@
 class RecoveredInvariantMassHist : public GenSimRecoPrototype
 {
   public:
-    RecoveredInvariantMassHist(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, const bool typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum, int iNLeptons, int iMotherPDGID);
+    RecoveredInvariantMassHist(const bool typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum, int iNLeptons, int iMotherPDGID);
   protected:
-    double protectedValue(bool typeGenSim) const override;
+    std::vector<double> protectedValue(bool typeGenSim) const override;
   private:
     int nLeptons;  // # of leptons to be calculated in calculateRecoveredInvariantMass() function
     int motherPDGID;  // the PDGID of the mother particle
