@@ -22,16 +22,17 @@ bool SignFlipModule::process(const edm::EventBase& event)
     auto eventPointer = &trashBin;
     auto flipPointer = &trashBin;
     if(particleType == Particle::Type::Electron) {
-      eventPointer = &nElectronEvents;
-      flipPointer = &nElectronFlips;
+      nElectronEvents++;
     } else if(particleType == Particle::Type::Muon) {
-      eventPointer = &nMuonEvents;
-      flipPointer = &nMuonFlips;
+      nMuonEvents++;
     }
 
 	  if(particlePair.getGenParticle().charge() != particlePair.getRecoParticle().charge()) {
-      *eventPointer++;
-      *flipPointer++;
+      if(particleType == Particle::Type::Electron) {
+        nElectronFlips++;
+      } else if(particleType == Particle::Type::Muon) {
+        nMuonFlips++;
+      }
 		  nSignFlips++;
 	  }
   }
@@ -41,7 +42,7 @@ void SignFlipModule::finalize()
 {
   std::cout << "Number of Events: " << nEvents << std::endl;
   std::cout << "Number of Sign Flips: " << nSignFlips << std::endl;
-  std::cout << "Overall Sign Efficiency: " << (1 - (double) nSignFlips / nEvents) << std::endl;
-  std::cout << "Electron Efficiency: " << (1 - (double) nElectronFlips / nEvents) << std::endl;
-  std::cout << "Muon Efficiency: " << (1 - (double) nMuonFlips / nEvents) << std::endl;
+  std::cout << "Overall Efficiency: " << (1 - (double) nSignFlips / nEvents) << std::endl;
+  std::cout << "Electron Efficiency: " << (1 - (double) nElectronFlips / nElectronEvents) << std::endl;
+  std::cout << "Muon Efficiency: " << (1 - (double) nMuonFlips / nMuonEvents) << std::endl;
 }
