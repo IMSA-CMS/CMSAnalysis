@@ -14,14 +14,24 @@ bool SignFlipModule::process(const edm::EventBase& event)
     {
 	  nEvents++;
 	  
-	  if(particlePair.getGenParticle().charge() != particlePair.getRecoParticle().charge()) {
-      switch(particlePair.getGenParticle().getType()) {
-        case(Type::Electron):
-          nElectronFlips++;
+    auto particleType = particlePair.getGenParticle().getType();
 
-        case(Type::Muon):
-          nMuonFlips++;
-      }
+    // This variable is to make sure the pointers don't break the code.
+    int trashBinEvent = 0;
+
+    auto eventPointer = &trashBin;
+    auto flipPointer = &trashBin;
+    if(particleType == Particle::Type::Electron) {
+      eventPointer = &nElectronEvents;
+      flipPointer = &nElectronFlips;
+    } else if(particleType == Particle::Type::Muon) {
+      eventPointer = &nMuonEvents;
+      flipPointer = &nMuonFlips;
+    }
+
+	  if(particlePair.getGenParticle().charge() != particlePair.getRecoParticle().charge()) {
+      *eventPointer++;
+      *flipPointer++;
 		  nSignFlips++;
 	  }
   }
