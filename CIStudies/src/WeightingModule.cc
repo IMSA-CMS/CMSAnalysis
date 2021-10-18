@@ -82,7 +82,7 @@ void WeightingModule::findWeight(std::string key)
     std::cerr << "Key " << key << " not found! " << std::endl;
     weight = 0;
   
-    throw std::runtime_error("Key " + key + " not found!");
+    //throw std::runtime_error("Key " + key + " not found!");
   }
   else if (key == "")
   {

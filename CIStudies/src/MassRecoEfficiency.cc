@@ -1,8 +1,8 @@
 #include "CIAnalysis/CIStudies/interface/MassRecoEfficiency.hh"
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
+//#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 
-MassRecoEfficiency::MassRecoEfficiency(const std::shared_ptr<RecoIdentificationModule> iRecoModule, double iHiggsMass, double iLowerWidth, double iUpperWidth):
-  recoModule(iRecoModule),
+MassRecoEfficiency::MassRecoEfficiency(double iHiggsMass, double iLowerWidth, double iUpperWidth):
+//  recoModule(iRecoModule),
   HiggsMass(iHiggsMass),
   lowerWidth(iLowerWidth),
   upperWidth(iUpperWidth),
@@ -11,12 +11,12 @@ MassRecoEfficiency::MassRecoEfficiency(const std::shared_ptr<RecoIdentificationM
 {
 }
 
-bool MassRecoEfficiency::process(const edm::EventBase& event)
+bool MassRecoEfficiency::process()
 {
-  auto reco = recoModule->getRecoCandidates();
+  auto reco = getInput()->getParticles(InputModule::RecoLevel::Reco);
   double invMass = reco.calculateSameSignInvariantMass();
   int size = reco.getNumParticles();
-  int nMuons = reco.getLeptonTypeCount(Particle::LeptonType::Muon);
+  int nMuons = reco.getLeptonTypeCount(Particle::Type::Muon);
 
   double min = HiggsMass - lowerWidth;
   double max = HiggsMass + upperWidth;

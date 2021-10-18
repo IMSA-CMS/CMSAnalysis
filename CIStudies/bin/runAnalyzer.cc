@@ -6,11 +6,12 @@
 #include "CIAnalysis/CIStudies/interface/Analyzer.hh"
 #include "FWCore/FWLite/interface/FWLiteEnabler.h"
 #include "PhysicsTools/FWLite/interface/CommandLineParser.h"
-#include "CIAnalysis/CIStudies/bin/massResolutionAnalysis.cc"
-#include "CIAnalysis/CIStudies/bin/HPlusPlusMassAnalysis.cc"
-#include "CIAnalysis/CIStudies/bin/leptonJetReconstructionAnalysis.cc"
-#include "CIAnalysis/CIStudies/bin/displacedVertexAnalysis.cc"
-#include "CIAnalysis/CIStudies/bin/massAcceptanceAnalysis.cc"
+// #include "CIAnalysis/CIStudies/bin/massResolutionAnalysis.cc"
+ #include "CIAnalysis/CIStudies/bin/HPlusPlusMassAnalysis.cc"
+// #include "CIAnalysis/CIStudies/bin/leptonJetReconstructionAnalysis.cc"
+// #include "CIAnalysis/CIStudies/bin/displacedVertexAnalysis.cc"
+// #include "CIAnalysis/CIStudies/bin/massAcceptanceAnalysis.cc"
+//#include "CIAnalysis/CIStudies/bin/FilestripAnalysis.cc"
 
 
 int main(int argc, char **argv) {
@@ -47,11 +48,12 @@ int main(int argc, char **argv) {
   //Analyzer analyzer = leptonJetReconstructionAnalysis();
   //Analyzer analyzer = displacedVertexAnalysis();
 
-  // Analyzer analyzer = hPlusPlusMassAnalysis();
+   Analyzer analyzer = hPlusPlusMassAnalysis();
   // Analyzer analyzer = massResolutionAnalysis();
   //Analyzer analyzer = leptonJetReconstructionAnalysis();
-  // Analyzer analyzer = displacedVertexAnalysis();
-   Analyzer analyzer = massAcceptanceAnalysis();
+  //Analyzer analyzer = displacedVertexAnalysis();
+  // Analyzer analyzer = massAcceptanceAnalysis();
+  //Analyzer analyzer = filestripAnalysis();
 
 
   std::cout << "Notice: analyzer created" << std::endl;

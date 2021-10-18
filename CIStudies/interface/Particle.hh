@@ -3,12 +3,17 @@
 
 #include "DataFormats/Candidate/interface/Candidate.h"
 
+namespace reco
+{
+  class GenParticle;
+}
+
 class Particle
 {
 public:
-  enum class LeptonType{Electron, Muon, None};
+  enum class Type{Electron, Muon, Photon, None};
   enum class BarrelState{Barrel, Endcap, None};
-  explicit Particle(const reco::Candidate* iparticle, LeptonType iLeptonType);
+  explicit Particle(const reco::Candidate* iparticle);
   int charge() const;
   double pt() const;
   double eta() const;
@@ -29,15 +34,17 @@ public:
   bool operator==(Particle userParticle) const {return userParticle.particle == particle;}
   bool operator!=(Particle userParticle) const {return userParticle.particle != particle;}
   bool isNotNull() const {return particle;}
-  LeptonType getLeptonType() const;
+  Type getType() const;
   BarrelState getBarrelState() const;
   bool isIsolated() const;
   const reco::Candidate* getUnderlyingParticle() const {return particle;}
+  bool isFinalState() const;
+  bool isGenSim() const;
 	
 private:
   const reco::Candidate* particle;
   void checkIsNull() const;
-  LeptonType leptonType;
+  const reco::GenParticle* getGenParticle() const;
 };
 
 #endif

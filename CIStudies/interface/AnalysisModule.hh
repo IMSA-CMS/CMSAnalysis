@@ -4,6 +4,7 @@
 #include <string>
 
 #include "Module.hh"
+#include "InputModule.hh"
 
 // This is a class that creates output.
 // It should go at the end of a chain of ProductionModules and FilterModules.

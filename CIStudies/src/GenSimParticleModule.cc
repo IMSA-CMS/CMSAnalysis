@@ -12,26 +12,25 @@ GenSimParticleModule::GenSimParticleModule(int itargetPdgId):
 {}
 
 //update to remove event parameter
-bool GenSimParticleModule::process(const edm::EventBase& event)
+bool GenSimParticleModule::process()
 {
   //std::cerr << "ENTERING GenSimParticleModule" << std::endl;
   genParticles.clear();
 
   //Get Events Tree and create handle for GEN
 
-  edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
-  event.getByLabel(std::string("prunedGenParticles"), genParticlesHandle);
+  auto rawGenParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim).getParticles();
  
   //Begin GEN looping
   //Loop through Particle list&
-  for (const auto& p : *genParticlesHandle)
+  for (auto p : rawGenParticles)
   {
     if (p.pdgId() == targetPdgId)
     {
       int numDaughters = p.numberOfDaughters();
       if (numDaughters == 0)
       {
-        genParticles.addParticle(Particle(&p, Particle::LeptonType::None));
+        genParticles.addParticle(p);
       }
       else
       {
@@ -39,14 +38,14 @@ bool GenSimParticleModule::process(const edm::EventBase& event)
         for (int i = 0; i < numDaughters; ++i)
         {
           auto partDaughter = p.daughter(i);
-          if (p.pdgId() == partDaughter->pdgId())
+          if (p.pdgId() == partDaughter.pdgId())
           {
             counter += 1;
           }
         }
         if (counter == 0)
         {
-          genParticles.addParticle(Particle(&p, Particle::LeptonType::None));
+          genParticles.addParticle(p);
         }
       }
     }

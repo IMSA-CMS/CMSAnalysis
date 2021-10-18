@@ -1,10 +1,9 @@
 #include "CIAnalysis/CIStudies/interface/TriggerModule.hh"
 
 #include "CIAnalysis/CIStudies/interface/Trigger.hh"
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 
-TriggerModule::TriggerModule(std::shared_ptr<RecoIdentificationModule> iRecoMod) :
-  recoMod(iRecoMod),
+TriggerModule::TriggerModule() :
+  //recoMod(iRecoMod),
   passAny(0),
   total(0)
 {
@@ -20,7 +19,7 @@ bool TriggerModule::process()
 
   for (auto trigger : triggers)
   {
-    passCurrentTrigger = trigger->checkEvent(recoMod);
+    passCurrentTrigger = trigger->checkEvent(getInput());
 
     // Set passAnyTrigger to true once the event passes one trigger
     // Since passAnyTrigger is automatically false, if the event doesn't pass any triggers, passAnyTrigger remains false

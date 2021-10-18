@@ -12,6 +12,7 @@
 #include "CIAnalysis/CIStudies/interface/FilterModule.hh"
 #include "CIAnalysis/CIStudies/interface/ProductionModule.hh"
 #include "CIAnalysis/CIStudies/interface/EventLoader.hh"
+#include "CIAnalysis/CIStudies/interface/MiniAODEventLoader.hh"
 #include "FWCore/Framework/interface/Event.h"
 #include "DataFormats/FWLite/interface/Event.h"
 #include "CIAnalysis/CIStudies/interface/Module.hh"
@@ -24,10 +25,12 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 
   // Get a list of FileParams objects
   auto fileparams = inputFiles(configFile);
-
+  auto eventLoader = std::make_shared<MiniAODEventLoader> (outputEvery);
+  auto input = std::make_shared<InputModule> (eventLoader);
   // Initialize all modules
   for (auto module : getAllModules())
     {
+      module->setInput(input);
       module->initialize();
     }
 
@@ -60,13 +63,17 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 	    {
 	      std::cout << "File " << fileStr << " not found!\n";
 	      continue;
-	    } 
-
-    MiniAODEventLoader eventLoader(outputEvery);
-    eventLoader.changeFile(file);
-    while(!eventLoader.isDone())
+	    }
+    
+    eventLoader->changeFile(file);
+    while(true)
     {
-      eventLoader.getLeptons();
+      if (eventLoader->isDone())
+      {
+        break;
+      }
+      ++numOfEvents;
+      // eventLoader.getLeptons();
       bool continueProcessing = true;
       for (auto module : productionModules)
       {
@@ -74,7 +81,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
         {
           continueProcessing = false;
           std::cout << "continueProcessing: " << continueProcessing << "\n" << std::endl;
-          break
+          break;
         }
       }
       std::string filterString;
@@ -83,21 +90,23 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
         if (!module->processEvent())
         {
           continueProcessing = false;
-          break
+          break;
         }
         else
         {
-          filterString += module->getFilterString;
+          filterString += module->getFilterString();
         }
       }
-      if (!continueProcessing)
-        continue;
-      filterNames.insert(filterString);
-      for (auto module : analysisModules)
+      if (continueProcessing)
       {
-        module->setFilterString(filterString);
-        module->process();
+        filterNames.insert(filterString);
+        for (auto module : analysisModules)
+        {
+          module->setFilterString(filterString);
+          module->processEvent();
+        }
       }
+      eventLoader->nextEvent();
     }
 
 	 /*  // Extract events

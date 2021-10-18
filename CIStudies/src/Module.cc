@@ -7,11 +7,10 @@ std::unordered_map<std::string, double> Module::parameters;
 FileParams Module::currentParams = FileParams();
 
 //Event Counter that calls virtual process function
-bool Module::processEvent(const edm::EventBase& event)
+bool Module::processEvent()
 {
   auto fileKey = currentParams.getFileKey();
   ++eventCount[fileKey];
-  process(event);
 
-  return process(event);
+  return process();
 }

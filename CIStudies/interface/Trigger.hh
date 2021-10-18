@@ -2,27 +2,30 @@
 #define TRIGGER_HH
 
 #include <memory>
+#include "InputModule.hh"
 
 class RecoIdentificationModule;
+
+class InputModule;
 
 class Trigger
 {
   public:
-    Trigger(std::string iName, std::shared_ptr<RecoIdentificationModule> iRecoMod);
+    Trigger(std::string iName);
     std::string getName() const {return name;}
-    bool checkEvent(std::shared_ptr<RecoIdentificationModule> recoMod);                  // Calls checkTrigger() and increments pass and total
+    bool checkEvent(std::shared_ptr<InputModule> input);                  // Calls checkTrigger() and increments pass and total
     double passRatio() const {return static_cast<double>(pass) / total;}
     void printTriggerResult();
     virtual ~Trigger() {};
 
   protected:
-    virtual bool checkTrigger(std::shared_ptr<RecoIdentificationModule> recoMod) = 0;    // Returns true if the trigger is passed
+    virtual bool checkTrigger(std::shared_ptr<InputModule> input) = 0;    // Returns true if the trigger is passed
 
   private:
     const std::string name;
     int pass = 0;
     int total = 0;
-    std::shared_ptr<RecoIdentificationModule> recoMod;
+    // std::shared_ptr<RecoIdentificationModule> recoMod;
 };
 
 #endif

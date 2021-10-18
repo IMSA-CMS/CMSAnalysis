@@ -42,24 +42,6 @@ Analyzer leptonJetReconstructionAnalysis() {
   // auto weightMod = make_shared<WeightingModule>();
   // auto lrWeightMod = make_shared<LRWeightModule>();
 
-
-
-  // //auto genSimEventDumpMod = make_shared<GenSimEventDumpModule>(3);
-  // auto lepRecoMod = make_shared<LeptonJetReconstructionModule>(recoMod);
-  // auto genPartMod = make_shared<GenSimParticleModule>(1000022);
-  // auto lepMatchMod = make_shared<LeptonJetMatchingModule>(genPartMod, lepRecoMod);
-  // auto histOutputMod = make_shared<HistogramOutputModule>(genSimMod, recoMod, weightMod, lrWeightMod);
-
-  // Histograms
-  //auto matchDeltaRHist = make_shared<MatchingDeltaRHist>(lepMatchMod, "Differences in Delta R for Matched Lepton Jets", 100, 0, 0.5);
-  //auto matchPtHist = make_shared<MatchingPtHist>(lepMatchMod, "Differences in pT for Matched Lepton Jets", 100, -300, 300);
-  //auto matchPhiHist = make_shared<MatchingPhiHist>(lepMatchMod, "Differences in Phi for Matched Lepton Jets", 100, 0, 3.15);
-  //auto matchEtaHist = make_shared<MatchingEtaHist>(lepMatchMod, "Differences in Eta for Matched Lepton Jets", 100, -1, 1);
-
-  //histOutputMod->addHistogram(matchDeltaRHist);
-  //histOutputMod->addHistogram(matchPtHist);
-  //histOutputMod->addHistogram(matchPhiHist);
-  //histOutputMod->addHistogram(matchEtaHist);
   auto genSimMod = std::make_shared<GenSimIdentificationModule>(4900022);
   auto recoMod = std::make_shared<RecoIdentificationModule>(5);
   auto matchMod = std::make_shared<MatchingModule>(genSimMod, recoMod);
@@ -119,17 +101,6 @@ Analyzer leptonJetReconstructionAnalysis() {
   histOutputMod->addHistogram(recoThirdMuonPtHist);
   histOutputMod->addHistogram(recoSecondMuonPtHist);
   histOutputMod->addHistogram(recoFirstMuonPtHist);
-
-  // Initialize triggers -- put these back later
-  // auto singleMuonTrigger = make_shared<SingleMuonTrigger>(recoMod, 50);
-  // auto doubleMuonTrigger = make_shared<DoubleMuonTrigger>(recoMod, 37, 27);
-  // auto tripleMuonTrigger = make_shared<TripleMuonTrigger>(recoMod, 10, 5, 5);
-
-  // histOutputMod->addHistogram(nLeptonsHist);
-  histOutputMod->addHistogram(nLeptonJetHist);
-  // histOutputMod->addHistogram(nElectronsHist);
-  // histOutputMod->addHistogram(nMuonsHist);
-  // histOutputMod->addHistogram(recoThirdMuonPtHist);
 
   // Initialize triggers
   auto singleMuonTrigger = std::make_shared<SingleMuonTrigger>(recoMod, 50);

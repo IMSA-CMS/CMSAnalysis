@@ -1,11 +1,11 @@
 #include "CIAnalysis/CIStudies/interface/TriggerEfficiencyModule.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
-#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
+//#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/Particle.hh"
 
-TriggerEfficiencyModule::TriggerEfficiencyModule(const std::shared_ptr<MatchingModule> iMatchMod, const std::shared_ptr<GenSimIdentificationModule> iGenSimMod, double iHiggsMass, double iLowerWidth, double iUpperWidth) :
+TriggerEfficiencyModule::TriggerEfficiencyModule(const std::shared_ptr<MatchingModule> iMatchMod, double iHiggsMass, double iLowerWidth, double iUpperWidth) :
   matchMod(iMatchMod),
-  genSimMod(iGenSimMod),
+  //genSimMod(iGenSimMod),
   higgsMass(iHiggsMass),
   lowerWidth(iLowerWidth),
   upperWidth(iUpperWidth)
@@ -14,7 +14,7 @@ TriggerEfficiencyModule::TriggerEfficiencyModule(const std::shared_ptr<MatchingM
 
 bool TriggerEfficiencyModule::process()
 {
-  auto genSimParticles = genSimMod->getGenParticles().getParticles();  // Vector of Particles
+  auto genSimParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim).getParticles();  // Vector of Particles
 
   // std::cout << "Number of GenSim Particles: " << genSimParticles.size() << '\n';
 
@@ -34,7 +34,7 @@ bool TriggerEfficiencyModule::process()
       //
       //std::cout << "Higgs Mass: " << higgsMass << '\n';
 
-      if ((genSimParticle1 != genSimParticle2) && (genSimParticle1.uniqueMother() == genSimParticle2.uniqueMother()) && (genSimParticle1.charge() == genSimParticle2.charge()))
+      if ((genSimParticle1 != genSimParticle2)  && (genSimParticle1.charge() == genSimParticle2.charge()))
       {
         ParticleCollection genSimPair;
         genSimPair.addParticle(genSimParticle1);
@@ -88,16 +88,16 @@ void TriggerEfficiencyModule::finalize()
 
 void TriggerEfficiencyModule::printDebugLines(Particle particle) const  // So I know why the code is not working
 {
-  if (particle.getLeptonType() == Particle::LeptonType::Electron)
+  if (particle.getType() == Particle::Type::Electron)
   {
     std::cout << "Type: Electron\n";
   }
-  else if (particle.getLeptonType() == Particle::LeptonType::Muon)
+  else if (particle.getType() == Particle::Type::Muon)
   {
     std::cout << "Type: Muon\n";
   }
   std::cout << "PDGID: " << particle.pdgId() << '\n';
   std::cout << "Charge: " << particle.charge() << '\n';
-  std::cout << "Mother PDGID: " << particle.uniqueMother().pdgId() << "\n\n";
+  //std::cout << "Mother PDGID: " << particle.uniqueMother().pdgId() << "\n\n";
 }
   

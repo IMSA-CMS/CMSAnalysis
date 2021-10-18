@@ -6,6 +6,7 @@
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/FWLite/interface/Event.h"
+#include "CIAnalysis/CIStudies/interface/InputModule.hh"
 
 GenSimEventDumpModule::GenSimEventDumpModule(int inumOfEvents):
   numOfEvents(inumOfEvents)
@@ -14,14 +15,14 @@ GenSimEventDumpModule::GenSimEventDumpModule(int inumOfEvents):
 }
 
 //update this to remove event parameter
-bool GenSimEventDumpModule::process(const edm::EventBase& event)
+bool GenSimEventDumpModule::process()
 {
   if(counter < numOfEvents || numOfEvents == -1)
   {
-    edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
-    event.getByLabel(std::string("prunedGenParticles"), genParticlesHandle);
+    ParticleCollection genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim);
 
-    printGenParticleCollection(*genParticlesHandle);
+    //TODO this line needs to be fixed and put back in
+    //printGenParticleCollection(genParticles);
     counter++;
     return true;
   }

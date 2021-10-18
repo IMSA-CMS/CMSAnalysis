@@ -1,3 +1,4 @@
+/*
 #ifndef FILESTRIPMODULE_HH
 #define FILESTRIPMODULE_HH
 
@@ -16,7 +17,7 @@ class FilestripModule : public AnalysisModule
     public:
         FilestripModule();
 
-        virtual bool process(const edm::EventBase& event) override;
+        virtual bool process() override;
         virtual void writeAll() override;
     private:
          TFile* file;
@@ -28,3 +29,4 @@ class FilestripModule : public AnalysisModule
 };
 
 #endif
+*/

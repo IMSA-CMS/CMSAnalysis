@@ -3,6 +3,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <memory>
 
 #include "FileParams.hh"
 
@@ -10,6 +11,8 @@ namespace edm
 {
   class EventBase;
 }
+
+class InputModule;
 
 // The base class for all modules used in the Analyzer framework
 class Module
@@ -41,6 +44,7 @@ public:
   static FileParams getFileParams() {return currentParams;}
 
   bool processEvent();
+  virtual void setInput(std::shared_ptr<InputModule> iInput) {input = iInput;}
 
 protected:
   // This is called once per event, with the event object passed in.
@@ -49,11 +53,13 @@ protected:
   // if you are deliberately filtering events.
   // In most cases, you should return true.
   virtual bool process() = 0;
+  std::shared_ptr<InputModule> getInput() const {return input;}
 
 private:
   static std::unordered_map<std::string, double> parameters;
   std::unordered_map<std::string, int> eventCount; 
   static FileParams currentParams;
+  std::shared_ptr<InputModule> input = nullptr;
 };
 
 #endif
