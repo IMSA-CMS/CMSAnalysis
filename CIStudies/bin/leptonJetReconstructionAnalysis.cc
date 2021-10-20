@@ -88,7 +88,7 @@ Analyzer leptonJetReconstructionAnalysis() {
   // Efficiency Modules
   auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod, genSimMod);
   auto leptonJetEfficiency = make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
-  
+
   // Add the histogram(s) created above to histMod
   histOutputMod->addHistogram(nLeptonsHist);
   histOutputMod->addHistogram(nElectronsHist);
@@ -114,20 +114,20 @@ Analyzer leptonJetReconstructionAnalysis() {
   analyzer.addProductionModule(lrWeightMod);
   analyzer.addProductionModule(matchMod);
   analyzer.addProductionModule(lepRecoMod);
-  // analyzer.addProductionModule(genPartMod);
+  analyzer.addProductionModule(genPartMod);
   analyzer.addProductionModule(lepMatchMod);
 
-  analyzer.addAnalysisModule(histOutputMod);
-  analyzer.addProductionModule(triggerMod);
+  // analyzer.addAnalysisModule(histOutputMod);
+  // analyzer.addProductionModule(triggerMod);
 
-  //analyzer.addAnalysisModule(leptonEfficiency);
-  // analyzer.addAnalysisModule(leptonJetEfficiency);
+  analyzer.addAnalysisModule(leptonEfficiency);
+  analyzer.addAnalysisModule(leptonJetEfficiency);
   //analyzer.addAnalysisModule(massRecoEfficiency200);
   //analyzer.addAnalysisModule(massRecoEfficiency500);
   //analyzer.addAnalysisModule(massRecoEfficiency800);
   //analyzer.addAnalysisModule(massRecoEfficiency1000);
   //analyzer.addAnalysisModule(massRecoEfficiency1300);
   //analyzer.addAnalysisModule(genSimEventDumpMod);
-  
+
   return analyzer;
 }
