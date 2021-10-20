@@ -3,14 +3,13 @@
 
 #include <memory>
 
-//#include "HistogramPrototype.hh"
-#include "CIAnalysis/CIStudies/interface/HistogramPrototype.hh"
+#include "CIAnalysis/CIStudies/interface/HistogramPrototype1D.hh"
 
 class GenSimIdentificationModule;
 class RecoIdentificationModule;
 class ParticleCollection;
 
-class ResolutionPrototype : public HistogramPrototype
+class ResolutionPrototype : public HistogramPrototype1D
 {
   public:
     ResolutionPrototype(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, const std::string& iname, int iNBins, double iminimum, double imaximum);

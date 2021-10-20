@@ -10,7 +10,7 @@
 #include <string>
 
 ScaledMassHist::ScaledMassHist(const MatchingModule& matchingModule, const std::string& iname, int nBins, int minMass, int maxMass, bool scaledUp, bool scaledUpDown, bool typeSwitch) :
-  HistogramPrototype(iname, nBins, minMass, maxMass),
+  HistogramPrototype1D(iname, nBins, minMass, maxMass),
   matching(matchingModule),
   scaleUp(scaledUp),
   scaleUpDown(scaledUpDown),

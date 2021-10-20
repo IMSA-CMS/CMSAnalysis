@@ -11,6 +11,8 @@
 #include "CIAnalysis/CIStudies/bin/leptonJetReconstructionAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/displacedVertexAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/massAcceptanceAnalysis.cc"
+#include "CIAnalysis/CIStudies/bin/triggerAnalysis.cc"
+// #include "CIAnalysis/CIStudies/bin/invariantMassAnalysis.cc"
 
 
 int main(int argc, char **argv) {
@@ -39,19 +41,17 @@ int main(int argc, char **argv) {
 
 
   std::cout << "This is the name of outputFile " << outputFile << std::endl;
+  std::cout << "This is the name of inputFile " << inputFile << std::endl;
 
   unsigned outputEvery = parser.integerValue("outputEvery");
 
   Analyzer analyzer = hPlusPlusMassAnalysis();
-  //Analyzer analyzer = leptonJetReconstructionAnalysis();
-  //Analyzer analyzer = leptonJetReconstructionAnalysis();
-  //Analyzer analyzer = displacedVertexAnalysis();
-
-  // Analyzer analyzer = hPlusPlusMassAnalysis();
   // Analyzer analyzer = massResolutionAnalysis();
-  //Analyzer analyzer = leptonJetReconstructionAnalysis();
+  // Analyzer analyzer = leptonJetReconstructionAnalysis();
   // Analyzer analyzer = displacedVertexAnalysis();
   // Analyzer analyzer = massAcceptanceAnalysis();
+  // Analyzer analyzer = triggerAnalysis();
+  // Analyzer analyzer = invariantMassAnalysis();
 
 
   std::cout << "Notice: analyzer created" << std::endl;

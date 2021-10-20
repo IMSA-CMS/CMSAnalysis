@@ -234,7 +234,7 @@ std::vector<FileParams> Analyzer::inputFiles(const std::string& txtFile) const
 	  }
       }
       
-
+  std::cout << params[0].getFileKey() << std::endl;
   return params;
 }
 
