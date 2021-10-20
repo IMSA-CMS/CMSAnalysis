@@ -1,11 +1,11 @@
 #ifndef DOUBLEMUONTRIGGER_HH
 #define DOUBLEMUONTRIGGER_HH
 
-#include "Trigger.hh"
+#include "RecoTrigger.hh"
 
 class RecoIdentificationModule;
 
-class DoubleMuonTrigger : public Trigger
+class DoubleMuonTrigger : public RecoTrigger
 {
   public:
     DoubleMuonTrigger(std::shared_ptr<RecoIdentificationModule> iRecoMod, const double iPTCutoff = 37, const double iSecondPTCutoff = 27);
