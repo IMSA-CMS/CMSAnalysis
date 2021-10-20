@@ -110,7 +110,7 @@ Analyzer hPlusPlusMassAnalysis() {
 
   analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
   //analyzer.addAnalysisModule(eventDump);
-  //analyzer.addAnalysisModule(leptonEfficiency);
+  analyzer.addAnalysisModule(leptonEfficiency);
 
   //analyzer.addAnalysisModule(triggerEfficiencyMod4010);
   //analyzer.addAnalysisModule(triggerEfficiencyMod4040);
@@ -123,8 +123,8 @@ Analyzer hPlusPlusMassAnalysis() {
   //analyzer.addAnalysisModule(massRecoEfficiency1000);
   //analyzer.addAnalysisModule(massRecoEfficiency1300);
   
-  analyzer.addAnalysisModule(massRecoEfficiency55);
-  analyzer.addAnalysisModule(massRecoEfficiency1010);
+//  analyzer.addAnalysisModule(massRecoEfficiency55);
+//  analyzer.addAnalysisModule(massRecoEfficiency1010);
   //analyzer.addAnalysisModule(massRecoEfficiency4010);
   //analyzer.addAnalysisModule(massRecoEfficiency4040);
   //analyzer.addAnalysisModule(massRecoEfficiency8040);
