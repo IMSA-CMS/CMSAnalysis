@@ -2,9 +2,10 @@
 #include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "DataFormats/Math/interface/deltaR.h"
 
-LeptonJetReconstructionModule::LeptonJetReconstructionModule(std::shared_ptr<RecoIdentificationModule> recoModule, double deltaRCut) :
+LeptonJetReconstructionModule::LeptonJetReconstructionModule(std::shared_ptr<RecoIdentificationModule> recoModule, double deltaRCut, double iHadETCut) :
   reco(recoModule),
-  DeltaRCut(deltaRCut)
+  DeltaRCut(deltaRCut),
+  hadETCut(iHadETCut)
 
 {
 }
@@ -14,6 +15,22 @@ bool LeptonJetReconstructionModule::process(const edm::EventBase& event) // reco
   leptonJets.clear();
   const ParticleCollection& recoCandidates = reco->getRecoCandidates();
   std::vector<Particle> recoLeptons = recoCandidates.getParticles();
+
+  /*
+  static int ev = 0;
+
+  ev++;
+  std::cout << "EVENT " << ev << "\n";
+
+  for (Particle particle : recoLeptons) {
+    std::cout << particle.pt() << ":"
+              << particle.fourVector() << ":"
+              << particle.hadEt() << ":"
+              << particle.hoEt() << ":"
+              << particle.hadVetoEt()
+              << "\n";
+  }
+  */
 
   while (recoLeptons.size() != 0)
   {
@@ -32,17 +49,18 @@ bool LeptonJetReconstructionModule::process(const edm::EventBase& event) // reco
       {
         jet.addParticle(recoLeptons[i]);
         recoLeptons.erase(recoLeptons.begin() + i);
-        --i;           
+        --i;
       }
     }
 
     if (jet.getNumParticles() > 1)
     {
       leptonJets.push_back(jet);
-    }      
+    }
   }
   findDeltaRValues();
   findPtValues();
+  // std::cout << "LJ:" << leptonJets.size() << "\n";
   return true;
 }
 
@@ -60,12 +78,12 @@ Particle LeptonJetReconstructionModule::findHighestPtLepton(std::vector<Particle
     double pt = lepton.pt();
     if (pt > highestPt)
     {
-      highestPt = pt;      
+      highestPt = pt;
     }
   }
 
   for (auto lep : leptons)
-  {    
+  {
     if (lep.pt() == highestPt)
     {
        return lep;
