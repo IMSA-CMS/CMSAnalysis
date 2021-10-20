@@ -3,6 +3,9 @@
 #include <cmath>
 #include <stdexcept>
 
+#include "DataFormats/MuonReco/interface/Muon.h"
+#include "DataFormats/PatCandidates/interface/Muon.h"
+
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/FWLite/interface/Event.h"
@@ -72,7 +75,7 @@ void GenSimEventDumpModule::printGenParticleCollection(const reco::GenParticleCo
 
     // Particle properties
     std::cout << std::setw(13) << part.px() << "| " << std::setw(13) << part.py() << "| " << std::setw(13) << part.pz() << "| " << std::setw(13) << part.energy() << "| " << std::setw(13) << part.mass() << "\n";
-   
+
     eventElement++;
   }
 }

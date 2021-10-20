@@ -22,6 +22,8 @@ private:
 
     int numRecoJets = 0;
     int numMatchedJets = 0;
+    int recoZeroAnyVeto = 0;
+    int recoZeroAllVeto = 0;
 };
 
 

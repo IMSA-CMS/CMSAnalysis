@@ -16,10 +16,24 @@ bool LeptonJetEfficiency::process(const edm::EventBase& event)
     auto matchingPairs = lepMatchMod->getMatchingPairs();
     numMatchedJets += matchingPairs.size();
 
+    bool any = false;
+    bool all = true;
+    for (auto jet : recoLeptonJets) {
+        for (auto particle : jet.getParticles()) {
+            bool zero = particle.hadVetoEt() == 0;
+            any |= zero;
+            all &= zero;
+        }
+    }
+    recoZeroAnyVeto += any;
+    recoZeroAllVeto += all;
+
     return true;
 }
 
 void LeptonJetEfficiency::finalize()
 {
     std::cout << "Lepton Jet Efficiency: " << (double) numMatchedJets / numRecoJets << "\n";
+    std::cout << "Zero Any Lepton Jet Efficiency: " << (double) recoZeroAnyVeto / numRecoJets << "\n";
+    std::cout << "Zero All Lepton Jet Efficiency: " << (double) recoZeroAllVeto / numRecoJets << "\n";
 }

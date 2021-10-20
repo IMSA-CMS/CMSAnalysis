@@ -23,6 +23,7 @@
 #include "CIAnalysis/CIStudies/interface/MatchingEtaHist.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingPhiHist.hh"
+#include "CIAnalysis/CIStudies/interface/MatchedLeptonJetHist.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingPtHist.hh"
 #include "CIAnalysis/CIStudies/interface/NLeptonJetHist.hh"
 #include "CIAnalysis/CIStudies/interface/NLeptonsFilter.hh"
@@ -42,8 +43,8 @@ Analyzer leptonJetReconstructionAnalysis() {
   auto matchMod = std::make_shared<MatchingModule>(genSimMod, recoMod);
   auto weightMod = std::make_shared<WeightingModule>();
   auto lrWeightMod = std::make_shared<LRWeightModule>();
-  auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>(3);
-  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(recoMod);
+  auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>();
+  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(recoMod, .05);
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
   auto lepMatchMod =
       std::make_shared<LeptonJetMatchingModule>(genPartMod, lepRecoMod);
@@ -53,6 +54,8 @@ Analyzer leptonJetReconstructionAnalysis() {
   // Histograms
   auto deltaRHist = make_shared<DeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.1);
   auto pTHist = make_shared<LeptonJetPtHist>(lepRecoMod, "pT Values (Reconstructed Jets)", 100, 0, 200);
+  auto matchedLeptonJetHist = make_shared<MatchedLeptonJetHist>("Matched Lepton Jet Hist HadET", 100, 0, 1, lepMatchMod, lepRecoMod, true);
+  auto unmatchedLeptonJetHist = make_shared<MatchedLeptonJetHist>("Unmatched Lepton Jet Hist HadET", 100, 0, 1, lepMatchMod, lepRecoMod, false);
   // auto matchDeltaRHist = make_shared<MatchingDeltaRHist>(lepMatchMod, "Differences in Delta R for Matched Lepton Jets", 100, 0, 0.5);
   // auto matchPtHist = make_shared<MatchingPtHist>(lepMatchMod, "Differences in pT for Matched Lepton Jets", 100, -300, 300);
   // auto matchPhiHist = make_shared<MatchingPhiHist>(lepMatchMod, "Differences in Phi for Matched Lepton Jets", 100, 0, 3.15);
@@ -60,6 +63,8 @@ Analyzer leptonJetReconstructionAnalysis() {
 
   histOutputMod->addHistogram(deltaRHist);
   histOutputMod->addHistogram(pTHist);
+  histOutputMod->addHistogram(matchedLeptonJetHist);
+  histOutputMod->addHistogram(unmatchedLeptonJetHist);
   // histOutputMod->addHistogram(matchDeltaRHist);
   // histOutputMod->addHistogram(matchPtHist);
   // histOutputMod->addHistogram(matchPhiHist);
@@ -88,7 +93,7 @@ Analyzer leptonJetReconstructionAnalysis() {
   // Efficiency Modules
   auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod, genSimMod);
   auto leptonJetEfficiency = make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
-  
+
   // Add the histogram(s) created above to histMod
   histOutputMod->addHistogram(nLeptonsHist);
   histOutputMod->addHistogram(nElectronsHist);
@@ -96,6 +101,7 @@ Analyzer leptonJetReconstructionAnalysis() {
   histOutputMod->addHistogram(recoThirdMuonPtHist);
   histOutputMod->addHistogram(recoSecondMuonPtHist);
   histOutputMod->addHistogram(recoFirstMuonPtHist);
+  histOutputMod->addHistogram(nLeptonJetHist);
 
   // Initialize triggers
   auto singleMuonTrigger = std::make_shared<SingleMuonTrigger>(recoMod, 50);
@@ -114,20 +120,20 @@ Analyzer leptonJetReconstructionAnalysis() {
   analyzer.addProductionModule(lrWeightMod);
   analyzer.addProductionModule(matchMod);
   analyzer.addProductionModule(lepRecoMod);
-  // analyzer.addProductionModule(genPartMod);
+  analyzer.addProductionModule(genPartMod);
   analyzer.addProductionModule(lepMatchMod);
 
   analyzer.addAnalysisModule(histOutputMod);
-  analyzer.addProductionModule(triggerMod);
+  //analyzer.addProductionModule(triggerMod);
 
-  //analyzer.addAnalysisModule(leptonEfficiency);
-  // analyzer.addAnalysisModule(leptonJetEfficiency);
+  // analyzer.addAnalysisModule(leptonEfficiency);
+  analyzer.addAnalysisModule(leptonJetEfficiency);
   //analyzer.addAnalysisModule(massRecoEfficiency200);
   //analyzer.addAnalysisModule(massRecoEfficiency500);
   //analyzer.addAnalysisModule(massRecoEfficiency800);
   //analyzer.addAnalysisModule(massRecoEfficiency1000);
   //analyzer.addAnalysisModule(massRecoEfficiency1300);
   //analyzer.addAnalysisModule(genSimEventDumpMod);
-  
+
   return analyzer;
 }
