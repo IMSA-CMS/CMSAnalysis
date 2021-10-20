@@ -1,7 +1,11 @@
 #include "CIAnalysis/CIStudies/interface/GenSimParticleModule.hh"
-
+#include "TText.h"
+#include "TCanvas.h"
+#include "TF1.h"
 #include <cmath>
 #include <stdexcept>
+#include "TPad.h"
+#include "TFile.h"
 
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
@@ -13,11 +17,6 @@ GenSimParticleModule::GenSimParticleModule(int itargetPdgId):
 
 bool GenSimParticleModule::process(const edm::EventBase& event)
 {
-  //std::cerr << "ENTERING GenSimParticleModule" << std::endl;
-  genParticles.clear();
-
-  //Get Events Tree and create handle for GEN
-
   edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
   event.getByLabel(std::string("prunedGenParticles"), genParticlesHandle);
  
