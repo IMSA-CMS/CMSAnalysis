@@ -44,7 +44,7 @@ Analyzer hPlusPlusMassAnalysis() {
   auto weightMod = make_shared<WeightingModule>();
   auto lrWeightMod = make_shared<LRWeightModule>();
 
-  auto nLeptonsFilter = make_shared<NLeptonsFilter>(recoMod); //Needs to be updated with shared pointers
+  auto nLeptonsFilter = make_shared<NLeptonsFilter>(recoMod);
 
   auto unusualFinalStateFilter = make_shared<UnusualFinalStateFilter>(recoMod);
   
@@ -120,7 +120,8 @@ Analyzer hPlusPlusMassAnalysis() {
   analyzer.addProductionModule(lrWeightMod);
 
   // Filters
-  //analyzer.addFilterModule(nLeptonsFilter);
+  // 09/12: Add nLeptons filer 
+  analyzer.addFilterModule(nLeptonsFilter);
   //analyzer.addFilterModule(unusualFinalStateFilter);
 
   analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
