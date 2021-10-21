@@ -8,6 +8,8 @@
 #include "PhysicsTools/FWLite/interface/CommandLineParser.h"
 #include "CIAnalysis/CIStudies/bin/massResolutionAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/HPlusPlusMassAnalysis.cc"
+// Include copy that isn't going to be changed -- FIX once work is done [09/17]
+#include "CIAnalysis/CIStudies/bin/BackgroundEstimateAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/leptonJetReconstructionAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/displacedVertexAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/massAcceptanceAnalysis.cc"
@@ -44,7 +46,9 @@ int main(int argc, char **argv) {
 
   unsigned outputEvery = parser.integerValue("outputEvery");
 
-  Analyzer analyzer = hPlusPlusMassAnalysis();
+  // USING ANALYER FOR H++ THAT WON'T CHANGE: CHANGE BACK
+  // TO hPlusPlusMassAnalysis() when ready -- [09/17]
+  Analyzer analyzer = backgroundEstimateAnalysis();
   // Analyzer analyzer = massResolutionAnalysis();
   // Analyzer analyzer = leptonJetReconstructionAnalysis();
   // Analyzer analyzer = displacedVertexAnalysis();
