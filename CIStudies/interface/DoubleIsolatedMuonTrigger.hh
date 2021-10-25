@@ -1,11 +1,11 @@
 #ifndef DOUBLEISOLATEDMUONTRIGGER_HH
 #define DOUBLEISOLATEDMUONTRIGGER_HH
 
-#include "Trigger.hh"
+#include "RecoTrigger.hh"
 
 //class RecoIdentificationModule;
 
-class DoubleIsolatedMuonTrigger : public Trigger
+class DoubleIsolatedMuonTrigger : public RecoTrigger
 {
   public:
     DoubleIsolatedMuonTrigger(const double iPTCutoff = 17, const double iSecondPTCutoff = 8);

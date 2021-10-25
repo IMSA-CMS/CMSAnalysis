@@ -10,6 +10,8 @@ Trigger::Trigger(std::string iName):
 
 bool Trigger::checkEvent(std::shared_ptr<InputModule> input)
 {
+  //std::cerr << "Notice: Trigger::checkEvent is running\n";
+
   ++total;
   
   if (checkTrigger(input))

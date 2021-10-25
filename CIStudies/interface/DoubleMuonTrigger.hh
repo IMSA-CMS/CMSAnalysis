@@ -3,10 +3,11 @@
 
 #include "Trigger.hh"
 #include "InputModule.hh"
+#include "RecoTrigger.hh"
 
 //class RecoIdentificationModule;
 
-class DoubleMuonTrigger : public Trigger
+class DoubleMuonTrigger : public RecoTrigger
 {
   public:
     DoubleMuonTrigger(const double iPTCutoff = 37, const double iSecondPTCutoff = 27);

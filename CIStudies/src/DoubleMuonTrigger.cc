@@ -1,6 +1,6 @@
 #include "CIAnalysis/CIStudies/interface/DoubleMuonTrigger.hh"
 DoubleMuonTrigger::DoubleMuonTrigger(double iPTCutoff, double iSecondPTCutoff) :
-  Trigger("Double Muon Trigger"),
+  RecoTrigger("Double Muon Trigger"),
   pTCutoff(iPTCutoff),
   secondPTCutoff(iSecondPTCutoff)
 {

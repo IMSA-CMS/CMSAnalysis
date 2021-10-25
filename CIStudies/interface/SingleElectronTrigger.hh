@@ -1,11 +1,11 @@
 #ifndef SINGLEELECTRONTRIGGER_HH
 #define SINGLEELECTRONTRIGGER_HH
 
-#include "Trigger.hh"
+#include "RecoTrigger.hh"
 
 //class RecoIdentificationModule;
 
-class SingleElectronTrigger : public Trigger
+class SingleElectronTrigger : public RecoTrigger
 {
   public:
     SingleElectronTrigger(const double iPTCutoff = 28);

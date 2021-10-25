@@ -2,7 +2,7 @@
 #define SCALEDMASSHIST_HH
 
 #include <string>
-#include "HistogramPrototype.hh"
+#include "HistogramPrototype1D.hh"
 #include "CIAnalysis/CIStudies/interface/Particle.hh"
 
 namespace reco
@@ -13,7 +13,7 @@ namespace reco
 class MatchingModule;
 class ParticleCollection;
 
-class ScaledMassHist : public HistogramPrototype
+class ScaledMassHist : public HistogramPrototype1D
 {
 public:
   ScaledMassHist(const MatchingModule& matchingModule, const std::string& iname, int nBins, int minMass, int maxMass, bool scaledUp, bool scaledUpDown, bool typeSwitch);

@@ -6,7 +6,7 @@
 
 
 GenSimRecoPrototype::GenSimRecoPrototype(const bool typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum) :
-  HistogramPrototype(iname, iNBins, iminimum, imaximum),  // Initialize the base class
+  HistogramPrototype1D(iname, iNBins, iminimum, imaximum),  // Initialize the base class
   //genSim(genSimModule),
   //reco(recoModule),
   typeGenSim(typeSwitch)

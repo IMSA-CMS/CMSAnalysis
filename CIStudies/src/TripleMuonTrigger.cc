@@ -1,7 +1,7 @@
 #include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
 
 TripleMuonTrigger::TripleMuonTrigger(double iPTCutoff, double iSecondPTCutoff, double iThirdPTCutoff) :
-  Trigger("Triple Muon Trigger"),
+  RecoTrigger("Triple Muon Trigger"),
   pTCutoff(iPTCutoff),
   secondPTCutoff(iSecondPTCutoff),
   thirdPTCutoff(iThirdPTCutoff)

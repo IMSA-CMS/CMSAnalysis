@@ -1,7 +1,7 @@
 #include "CIAnalysis/CIStudies/interface/SingleMuonTrigger.hh"
 
 SingleMuonTrigger::SingleMuonTrigger(double iPTCutoff) :
-  Trigger("Single Muon Trigger"),
+  RecoTrigger("Single Muon Trigger"),
   pTCutoff(iPTCutoff)
 {
 }

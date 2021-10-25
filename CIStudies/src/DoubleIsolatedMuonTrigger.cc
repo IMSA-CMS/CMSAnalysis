@@ -5,7 +5,7 @@
 
 
 DoubleIsolatedMuonTrigger::DoubleIsolatedMuonTrigger(double iPTCutoff, double iSecondPTCutoff) :
-  Trigger("Double Isolated Muon Trigger"),
+  RecoTrigger("Double Isolated Muon Trigger"),
   pTCutoff(iPTCutoff),
   secondPTCutoff(iSecondPTCutoff)
 {

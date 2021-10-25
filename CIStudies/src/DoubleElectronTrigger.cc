@@ -1,7 +1,7 @@
 #include "CIAnalysis/CIStudies/interface/DoubleElectronTrigger.hh"
 
 DoubleElectronTrigger::DoubleElectronTrigger(double iPTCutoff, double iSecondPTCutoff) :
-  Trigger("Double Electron Trigger"),
+  RecoTrigger("Double Electron Trigger"),
   pTCutoff(iPTCutoff),
   secondPTCutoff(iSecondPTCutoff)
 {

@@ -11,6 +11,42 @@
 //using Particle = const reco::Candidate*;
 using PartPair = std::pair<Particle, Particle>;
 
+ParticleCollection ParticleCollection::getPosParticles() const
+{
+  ParticleCollection positives;  // All of the positively-charged particles in the ParticleCollection
+
+  for (auto particle : getParticles())
+  {
+    if (particle.charge() > 0)
+    {
+      // std::cout << "Added positive particle with charge " << particle.charge() << " to positive collection.\n";
+      positives.addParticle(particle);  // Add all of the positively-charged particles to positives
+    }
+  }
+
+  // std::cout << "Number of Positive Particles: " << positives.getNumParticles() << '\n';
+
+  return positives;
+}
+
+ParticleCollection ParticleCollection::getNegParticles() const
+{
+  ParticleCollection negatives;  // All of the negatively-charged particles in the ParticleCollection
+
+  for (auto particle : getParticles())
+  {
+    if (particle.charge() < 0)
+    {
+      // std::cout << "Added negative particle with charge " << particle.charge() << " to negative collection.\n";
+      negatives.addParticle(particle);  // Add all of the negatively-charged particles to negatives
+    }
+  }
+
+  // std::cout << "Number of Negative Particles: " << negatives.getNumParticles() << '\n';
+
+  return negatives;
+}
+
 double ParticleCollection::getInvariantMass() const
 {
   auto particlePair = chooseParticles();
@@ -197,7 +233,7 @@ PartPair ParticleCollection::chooseParticles() const
   return particlePair;
 }
 
-PartPair ParticleCollection::chooseParticles(bool oppositeSigns) const
+PartPair ParticleCollection::chooseParticles(bool oppositeSigns) const  // oppositeSigns is true when the particles have opposite sign charge
 {
   double maxInvariantMass = 0;
   Particle iPointer(nullptr);
@@ -218,6 +254,37 @@ PartPair ParticleCollection::chooseParticles(bool oppositeSigns) const
 	    }
          }
     }
+  
+  return {iPointer, jPointer};
+}
+
+PartPair ParticleCollection::chooseParticlesByPhi(bool oppositeSigns) const
+{
+  double bestAngle = 0;  // We want the two particles whose phi angle difference is closest to 180, since that's what H++ decay leptons do
+  Particle iPointer(nullptr);
+  Particle jPointer(nullptr);
+
+  for (int i = 0; i < static_cast<int>(particles.size()) - 1; ++i)
+  {
+    for (int j = i + 1; j < static_cast<int>(particles.size()); ++j)
+    {
+      if (checkSigns(particles[i], particles[j]) == oppositeSigns)     // Check if the particle pairs' signs match with what we want
+      {
+        double angleDifference = abs(particles[i].phi() - particles[j].phi());
+        if (angleDifference > 180)
+        {
+          angleDifference = 360 - angleDifference;
+        }
+
+        if (angleDifference > bestAngle)
+        {
+          bestAngle = angleDifference;
+          iPointer = particles[i];
+          jPointer = particles[j];
+        }
+      }
+    }
+  }
   
   return {iPointer, jPointer};
 }
@@ -257,30 +324,67 @@ double ParticleCollection::calculateInvariantMass(Particle particle1, Particle p
   //  }
 }
 
-double ParticleCollection::calculateSameSignInvariantMass() const
+double ParticleCollection::calculateSameSignInvariantMass(bool usingPhi) const
 {
-  auto particlePair = chooseParticles(false);					// we want same sign particles with highest invariant mass
-  if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
-    {      
-      return calculateInvariantMass(particlePair.first, particlePair.second);
-    }
+  Particle iPointer(nullptr);
+  Particle jPointer(nullptr);
+  PartPair particlePair = {iPointer, jPointer};
+
+  if (usingPhi)
+  {
+    particlePair = chooseParticlesByPhi(false);  // we want same sign particles with best phi angle
+  }
   else
-    {     
-      return -1;
-    }
+  {
+    particlePair = chooseParticles(false);  // we want same sign particles with highest invariant mass
+  }
+
+  if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
+  {
+    return calculateInvariantMass(particlePair.first, particlePair.second);
+  }
+  else
+  {
+    return -1;
+  }
+}
+
+std::vector<double> ParticleCollection::calculateSameSignInvariantMasses(bool usingPhi) const
+{
+  std::vector<double> sameSignInvariantMasses;
+
+  if (getPosParticles().getNumParticles() >= 2)
+  {
+    sameSignInvariantMasses.push_back(getPosParticles().calculateSameSignInvariantMass(usingPhi));
+  }
+  else
+  {
+    sameSignInvariantMasses.push_back(0);
+  }
+
+  if (getNegParticles().getNumParticles() >= 2)
+  {
+    sameSignInvariantMasses.push_back(getNegParticles().calculateSameSignInvariantMass(usingPhi));
+  }
+  else
+  {
+    sameSignInvariantMasses.push_back(0);
+  }
+
+  return sameSignInvariantMasses;
 }
 
 double ParticleCollection::calculateOppositeSignInvariantMass() const
 {
   auto particlePair = chooseParticles(true);					// we want opposite sign particles with highest invariant mass
   if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
-    {      
-      return calculateInvariantMass(particlePair.first, particlePair.second);
-    }
+  {      
+    return calculateInvariantMass(particlePair.first, particlePair.second);
+  }
   else
-    {     
-      return -1;
-    }
+  {     
+    return -1;
+  }
 }
 
 double ParticleCollection::calculateAllLeptonInvariantMass() const

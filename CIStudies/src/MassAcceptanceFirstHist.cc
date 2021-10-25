@@ -4,7 +4,7 @@
 #include <vector>
 
 MassAcceptanceFirstHist::MassAcceptanceFirstHist(const std::string iname, int iNBins, double iminimum, double imaximum) :
-  HistogramPrototype(iname, iNBins, iminimum, imaximum)
+  HistogramPrototype1D(iname, iNBins, iminimum, imaximum)
 {
 }
 

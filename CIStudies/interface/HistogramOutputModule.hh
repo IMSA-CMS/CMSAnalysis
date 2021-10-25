@@ -6,6 +6,7 @@
 
 #include "AnalysisModule.hh"
 #include "TH1.h"
+#include "TH2.h"
 
 class TObject;
 //class GenSimIdentificationModule;
@@ -56,6 +57,7 @@ protected:
 
   // Creates a histogram from a HistogramPrototype* and adds it to the collection.
   void makeHistogram(std::shared_ptr<HistogramPrototype> h);
+  void makeHistogram(std::shared_ptr<HistogramPrototype> h, std::string name);
 
   // Convenient getter methods to access histograms
   TH1* getHistogram(const std::string& name) {return dynamic_cast<TH1*>(getObject(name));}
