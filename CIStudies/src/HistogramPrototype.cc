@@ -1,5 +1,6 @@
 #include "CIAnalysis/CIStudies/interface/HistogramPrototype.hh"
 #include "CIAnalysis/CIStudies/interface/FilterModule.hh"
+#include "TH1.h"
 
 #include <string>
 

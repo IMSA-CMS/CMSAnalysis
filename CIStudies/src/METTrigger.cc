@@ -2,7 +2,7 @@
 #include "CIAnalysis/CIStudies/interface/METModule.hh"
 
 METTrigger::METTrigger(std::shared_ptr<METModule> iMETMod, const double iMETCutoff) :
-  Trigger("MET Trigger"),
+  RecoTrigger("MET Trigger"),
   mETMod(iMETMod),
   mETCutoff(iMETCutoff)
 {

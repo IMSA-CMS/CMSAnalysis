@@ -5,9 +5,7 @@ MassRecoEfficiency::MassRecoEfficiency(double iHiggsMass, double iLowerWidth, do
 //  recoModule(iRecoModule),
   HiggsMass(iHiggsMass),
   lowerWidth(iLowerWidth),
-  upperWidth(iUpperWidth),
-  passCount(0),
-  totalCount(0)
+  upperWidth(iUpperWidth)
 {
 }
 
@@ -17,6 +15,8 @@ bool MassRecoEfficiency::process()
   double invMass = reco.calculateSameSignInvariantMass();
   int size = reco.getNumParticles();
   int nMuons = reco.getLeptonTypeCount(Particle::Type::Muon);
+
+  auto invMasses = reco.calculateSameSignInvariantMasses();
 
   double min = HiggsMass - lowerWidth;
   double max = HiggsMass + upperWidth;
@@ -49,6 +49,52 @@ bool MassRecoEfficiency::process()
     ++passCount;                            // Passes, increment the pass count
     ++nLeptonPassCount[size];               // Passes, increment the pass count for the count specific to the number of leptons
     ++muonsNLeptonPassCount[size][nMuons];
+  }
+
+  if (reco.getNumPosParticles() >= 2)  // More than 2 positive particles (otherwise we won't have an invariant mass)
+  {
+    ++posTotalCount;
+
+    if (invMasses[0] > min && invMasses[0] < max)
+    {
+      ++posPassCount;
+    }
+
+    if (reco.getNumNegParticles() >= 2)
+    {
+      ++negTotalCount;
+      
+      //std::cout << invMasses[1] << '\n';
+
+      if (invMasses[1] > min && invMasses[1] < max)  // If the positive invariant mass is calculated, it is in the 0th index; negative is in the 1st
+      {
+        ++negPassCount;
+      }
+
+      //std::cout << "Negatives Passed: " << negPassCount << '\n';
+      //std::cout << "Total Negatives: " << negTotalCount << '\n';
+    }
+  }
+
+  else
+  {
+    //std::cout << "# of Positive Particles: " << reco.getNumPosParticles() << '\n';
+    //std::cout << "# of Negative Particles: " << reco.getNumNegParticles() << '\n';
+
+    if (reco.getNumNegParticles() >= 2)
+    {
+      ++negTotalCount;
+
+      //std::cout << invMasses[0] << '\n';
+
+      if (invMasses[0] > min && invMasses[0] < max)  // Since the positive invariant mass is not calculated, negative is in the 0th index (if calculated)
+      {
+        ++negPassCount;
+      }
+
+      //std::cout << "Negatives Passed: " << negPassCount << '\n';
+      //std::cout << "Total Negatives: " << negTotalCount << '\n';
+    }
   }
 
   ++totalCount;
@@ -85,7 +131,11 @@ void MassRecoEfficiency::finalize()
       std::cout << "Mass Reconstruction Efficiency for " << totalCount.first << " muons out of " << muonCountPairs.first << " muons: " << pass / (double) total << std::endl;
     }  
 
-  std::cout << '\n';  // Yet again, for sanity's sake
-
+    std::cout << "\n\n";  // Yet again, for sanity's sake
   }
+
+  std::cout << "Mass Reconstruction Efficiency for H++ for " << HiggsMass << "-" << lowerWidth << "+" << upperWidth << " GeV: " << posPassCount / (double) posTotalCount << std::endl;
+  std::cout << "Mass Reconstruction Efficiency for H-- for " << HiggsMass << "-" << lowerWidth << "+" << upperWidth << " GeV: " << negPassCount / (double) negTotalCount << std::endl;
+
+  std::cout << "\n\n\n";  // Once again, for sanity's sake
 }

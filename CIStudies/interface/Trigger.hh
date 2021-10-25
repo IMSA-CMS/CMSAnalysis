@@ -3,6 +3,7 @@
 
 #include <memory>
 #include "InputModule.hh"
+#include <iostream>
 
 class RecoIdentificationModule;
 
@@ -25,7 +26,6 @@ class Trigger
     const std::string name;
     int pass = 0;
     int total = 0;
-    // std::shared_ptr<RecoIdentificationModule> recoMod;
 };
 
 #endif

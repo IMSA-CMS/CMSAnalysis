@@ -1,7 +1,7 @@
 #include "CIAnalysis/CIStudies/interface/SingleElectronTrigger.hh"
 
 SingleElectronTrigger::SingleElectronTrigger(double iPTCutoff) :
-  Trigger("Single Electron Trigger"),
+  RecoTrigger("Single Electron Trigger"),
   pTCutoff(iPTCutoff)
 {
 }

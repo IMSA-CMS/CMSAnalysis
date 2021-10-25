@@ -1,4 +1,5 @@
 #include "CIAnalysis/CIStudies/interface/TriggerModule.hh"
+#include "CIAnalysis/CIStudies/interface/Utility.hh"
 
 #include "CIAnalysis/CIStudies/interface/Trigger.hh"
 
@@ -11,6 +12,8 @@ TriggerModule::TriggerModule() :
 
 bool TriggerModule::process()
 {
+  //std::cerr << "Notice: TriggerModule::process is running\n";
+
   bool passAnyTrigger = false;       // True if the event passes any of the triggers
   bool passCurrentTrigger;           // True if the event passes the current trigger
 
@@ -109,7 +112,7 @@ void TriggerModule::callTriggerCombo()
   //find combinations for n-1 combos, where n is total num of triggers
   for (int i = 1; i < total; ++i)
   {
-    triggerCombinations(0, i, combination, nTriggers);
+    Utility::getAllCombinations(0, i, combination, nTriggers, trigCombos);
   }
 }
 

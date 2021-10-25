@@ -7,6 +7,8 @@
 #include "ParticleCollection.hh"
 #include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
 #include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
+#include "DataFormats/Common/interface/TriggerResults.h"
+#include "FWCore/Common/interface/TriggerNames.h"
 
 class TFile;
 class EventLoader;
@@ -25,6 +27,8 @@ class InputModule
         ParticleCollection getParticles(RecoLevel level, Particle::Type particleType = Particle::Type::None) const;
         //std::vector<PileupSummaryInfo> getPileupInfo() const;
         GenEventInfoProduct getGenInfo() const;
+        // edm::TriggerResults getTriggerResults(std::string subProcess) const;
+        // edm::TriggerNames getTriggerNames(std::string subProcess) const;
         double getMET() const;
     protected:
         // const edm::EventBase& getEvent();
