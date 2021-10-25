@@ -46,6 +46,8 @@ public:
   bool processEvent();
   virtual void setInput(std::shared_ptr<InputModule> iInput) {input = iInput;}
 
+  void writeText(std::string par, std::string name) const;
+
 protected:
   // This is called once per event, with the event object passed in.
   // Most of the work should happen here.

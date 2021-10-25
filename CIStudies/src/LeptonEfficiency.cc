@@ -1,3 +1,11 @@
+//#define _GLIBCXX_USE_CXX11_ABI 0
+//#include "TROOT.h"
+//#include "TSystem.h"
+
+#include <iostream>
+
+//#include "CIAnalysis/CIStudies/interface/TDisplayText.h"
+
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
 
@@ -61,6 +69,9 @@ bool LeptonEfficiency::process()
 }
 void LeptonEfficiency::finalize()
 {
-  std::cout << "Muon efficiency: " << recoMuons / (double) genSimMuons << std::endl;
-  std::cout << "Electron efficiency: " << recoElectrons / (double) genSimElectrons << std::endl;
+  std::string muonOutputString = std::to_string(recoMuons/(double)genSimMuons);
+  writeText(muonOutputString, "Muon Efficiency");
+
+  std::string electronOutputString = std::to_string(recoElectrons/(double)genSimElectrons);
+  writeText(electronOutputString, "Electron Efficiency");
 }

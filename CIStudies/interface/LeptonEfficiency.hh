@@ -12,7 +12,7 @@ public:
   LeptonEfficiency(const std::shared_ptr<MatchingModule> imatchModule);
   bool process() override;
   void finalize() override;
-  void writeAll() override {}
+  void writeAll() override{}
 private:
   const std::shared_ptr<MatchingModule> matchModule;
   //const std::shared_ptr<GenSimIdentificationModule> genSimModule;

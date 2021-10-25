@@ -1,7 +1,11 @@
 #include "CIAnalysis/CIStudies/interface/GenSimParticleModule.hh"
-
+#include "TText.h"
+#include "TCanvas.h"
+#include "TF1.h"
 #include <cmath>
 #include <stdexcept>
+#include "TPad.h"
+#include "TFile.h"
 
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
