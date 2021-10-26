@@ -27,6 +27,13 @@
 #include "CIAnalysis/CIStudies/interface/TwoInvariantMassesHist.hh"
 #include "CIAnalysis/CIStudies/interface/UnusualFinalStateFilter.hh"
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
+#include "CIAnalysis/CIStudies/interface/PhotonsHist.hh"
+#include "CIAnalysis/CIStudies/interface/METModule.hh"
+#include "CIAnalysis/CIStudies/interface/METHist.hh"
+#include "CIAnalysis/CIStudies/interface/OppositeSignInvariantMassHist.hh"
+#include "CIAnalysis/CIStudies/interface/PtHist.hh"
+#include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
+#include "CIAnalysis/CIStudies/interface/METTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/SignFlipModule.hh"
 
 
@@ -37,16 +44,16 @@ Analyzer hPlusPlusMassAnalysis() {
 
   auto eventDump = make_shared<GenSimEventDumpModule>(7);
 
-  auto genSimMod = make_shared<GenSimIdentificationModule>(9900041, true);
+  auto genSimMod = make_shared<GenSimIdentificationModule>();
   auto recoMod = make_shared<RecoIdentificationModule>(50);
   auto matchMod = make_shared<MatchingModule>(genSimMod, recoMod);
   auto triggerMod = make_shared<TriggerModule>();
   auto weightMod = make_shared<WeightingModule>();
   auto lrWeightMod = make_shared<LRWeightModule>();
+  auto mETMod = make_shared<METModule>();
 
-  auto nLeptonsFilter = make_shared<NLeptonsFilter>(recoMod);
-
-  auto unusualFinalStateFilter = make_shared<UnusualFinalStateFilter>(recoMod);
+  auto nLeptonsFilter = make_shared<NLeptonsFilter>(recoMod); //Needs to be updated with shared pointers
+  //auto METFilter = make_shared<METFilter>(recoMod);
   
   auto histMod = make_shared<HistogramOutputModule>(genSimMod, recoMod, weightMod, lrWeightMod);
   auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
@@ -84,33 +91,49 @@ Analyzer hPlusPlusMassAnalysis() {
 
   auto photonHist = make_shared<PhotonsHist>(genSimMod, recoMod, true, "Photon Histogram", 100, 0, 1000);
 
-  auto positiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Reco ZZ Invariant Mass Background", 100, 100, 0, 0, 1000, 1000, recoMod);
+  auto missingEtHist = make_shared<METHist>(mETMod, "Missing Et", 100, 0, 1000);
+  auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Same Sign Invariant Mass", 100, 0, 1000);
+  auto oppositeSignInvMassHist = make_shared<OppositeSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Opposite Sign Invariant Mass", 100, 0, 1000);
+  auto ptHist = make_shared<PtHist>(genSimMod, recoMod, false, std::string("Transverse Momentum"), 50, 0, 3000);
+  //auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod, genSimMod);
+  //auto triggerEfficiencyMod = make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 800, 200, 80);
+
 
   // Add the histogram(s) created above to histMod
   //histMod->addHistogram(recoThirdMuonPtHist);
-  histMod->addHistogram(recoSameSignInvMassHist);
+  //histMod->addHistogram(sameSignInvMassHist);
   //histMod->addHistogram(genSimHPlusPlusRecoveredInvMassHist);
   //histMod->addHistogram(recoHPlusPlusRecoveredInvMassHist);
   //histMod->addHistogram(genSimHMinusMinusRecoveredInvMassHist);
   //histMod->addHistogram(recoHMinusMinusRecoveredInvMassHist);
   //histMod->addHistogram(photonHist);
   //histMod->addHistogram(nLeptonsHist);
+  
+  histMod->addHistogram(sameSignInvMassHist);
+  histMod->addHistogram(missingEtHist);
+  histMod->addHistogram(oppositeSignInvMassHist);
+  histMod->addHistogram(ptHist);
+  
+
+  
   //histMod->addHistogram(nElectronsHist);
   //histMod->addHistogram(nMuonsHist);
   //histMod->addHistogram(recoPhiSameSignInvMassHist);
   //histMod->addHistogram(recoMultSameSignInvMassHist);
   //histMod->addHistogram(recoPhiMultSameSignInvMassHist);
-  // histMod->addHistogram(positiveNegativeInvMassHist);
+  //histMod->addHistogram(positiveNegativeInvMassHist);
 
   // Initialize triggers
   auto singleMuonTrigger = make_shared<SingleMuonTrigger>(recoMod, 50);
   auto doubleMuonTrigger = make_shared<DoubleMuonTrigger>(recoMod, 37, 27);
   auto tripleMuonTrigger = make_shared<TripleMuonTrigger>(recoMod, 10, 5, 5);
+  auto mETTrigger = make_shared<METTrigger>(mETMod, 120);
 
   // Add triggers to the TriggerModule
   triggerMod->addTrigger(singleMuonTrigger);
   triggerMod->addTrigger(doubleMuonTrigger);
   triggerMod->addTrigger(tripleMuonTrigger);
+  triggerMod->addTrigger(mETTrigger);
 
   analyzer.addProductionModule(genSimMod);
   analyzer.addProductionModule(recoMod);
@@ -118,6 +141,7 @@ Analyzer hPlusPlusMassAnalysis() {
   // analyzer.addProductionModule(triggerMod);
   analyzer.addProductionModule(weightMod);
   analyzer.addProductionModule(lrWeightMod);
+  analyzer.addProductionModule(mETMod);
 
   // Filters
   // 09/12: Add nLeptons filer 
@@ -127,12 +151,12 @@ Analyzer hPlusPlusMassAnalysis() {
   analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
   analyzer.addAnalysisModule(signFlip);
   //analyzer.addAnalysisModule(eventDump);
-  //analyzer.addAnalysisModule(leptonEfficiency);
+  analyzer.addAnalysisModule(leptonEfficiency);
 
-  //analyzer.addAnalysisModule(triggerEfficiencyMod4010);
-  //analyzer.addAnalysisModule(triggerEfficiencyMod4040);
-  //analyzer.addAnalysisModule(triggerEfficiencyMod8040);
-  //analyzer.addAnalysisModule(triggerEfficiencyMod20080);
+  analyzer.addAnalysisModule(triggerEfficiencyMod4010);
+  analyzer.addAnalysisModule(triggerEfficiencyMod4040);
+  analyzer.addAnalysisModule(triggerEfficiencyMod8040);
+  analyzer.addAnalysisModule(triggerEfficiencyMod20080);
 
   //analyzer.addAnalysisModule(massRecoEfficiency200);
   //analyzer.addAnalysisModule(massRecoEfficiency500);

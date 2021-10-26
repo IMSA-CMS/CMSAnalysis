@@ -2,6 +2,8 @@
 
 #include <cmath>
 #include <stdexcept>
+#include "TCanvas.h"
+#include "TFile.h"
 
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/FWLite/interface/Event.h"
@@ -12,6 +14,7 @@ GenSimIdentificationModule::GenSimIdentificationModule(int itargetPdgId,
     : targetPdgId(itargetPdgId), ignoreRadiation(iignoreRadiation) {}
 
 bool GenSimIdentificationModule::process(const edm::EventBase &event) {
+  
   // std::cerr << "ENTERING GenSimIdentificationModule" << std::endl;
   genParticles.clear();
 

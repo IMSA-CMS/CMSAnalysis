@@ -16,6 +16,10 @@ public:
 private:
   const std::shared_ptr<MatchingModule> matchModule;
   int nSignFlips = 0;
+  int nElectronFlips = 0;
+  int nElectronEvents = 0;
+  int nMuonFlips = 0;
+  int nMuonEvents = 0;
   int nEvents = 0;
 };
 
