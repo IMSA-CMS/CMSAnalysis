@@ -88,6 +88,7 @@ void WeightingModule::findWeight(std::string key)
   
     throw std::runtime_error("Key " + key + " not found!");
   }
+  
   else
   {
    weight = iterator->second;  

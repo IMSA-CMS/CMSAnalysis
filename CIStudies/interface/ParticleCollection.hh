@@ -44,6 +44,16 @@ public:
 
   void clear() {particles.clear();}
 
+  Particle& operator[] (int i) {return particles.at(i);}
+  const Particle& operator[] (int i) const {return particles.at(i);}
+
+  auto begin() {return particles.begin();}
+  auto end() {return particles.end();}
+  auto cbegin() const {return particles.begin();}
+  auto cend() const {return particles.end();}
+  auto begin() const {return cbegin();}
+  auto end() const {return cend();}
+
 private:
   std::vector<Particle> particles;
 

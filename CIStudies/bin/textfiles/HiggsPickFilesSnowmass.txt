@@ -1,0 +1,7 @@
+Procs:	Higgs
+Year:	Snowmass2021
+Lepton:	both
+Mass:	800
+Lambda:	M300    M500    M700    M900    M1100   M1300
+Inter:	con
+Helic:	LL

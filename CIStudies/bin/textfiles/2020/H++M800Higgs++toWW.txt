@@ -1,0 +1,17 @@
+/store/user/ardas/GEN_Hpp_NEW_test/RunIISummer20UL18_MiniAOD/210312_031934/0000/MiniAOD_1.root
+/store/user/ardas/GEN_Hpp_NEW_test/RunIISummer20UL18_MiniAOD/210312_031934/0000/MiniAOD_2.root
+/store/user/ardas/GEN_Hpp_NEW_test/RunIISummer20UL18_MiniAOD/210312_031934/0000/MiniAOD_3.root
+/store/user/ardas/GEN_Hpp_NEW_test/RunIISummer20UL18_MiniAOD/210312_031934/0000/MiniAOD_4.root
+/store/user/ardas/GEN_Hpp_NEW_test/RunIISummer20UL18_MiniAOD/210312_031934/0000/MiniAOD_5.root
+/store/user/ardas/GEN_Hpp_NEW_test/RunIISummer20UL18_MiniAOD/210312_031934/0000/MiniAOD_6.root
+/store/user/ardas/GEN_Hpp_NEW_test/RunIISummer20UL18_MiniAOD/210312_031934/0000/MiniAOD_7.root
+/store/user/ardas/GEN_Hpp_NEW_test/RunIISummer20UL18_MiniAOD/210312_031934/0000/MiniAOD_8.root
+/store/user/ardas/GEN_Hpp_NEW_test/RunIISummer20UL18_MiniAOD/210312_031934/0000/MiniAOD_9.root
+/store/user/ardas/GEN_Hpp_NEW_test/RunIISummer20UL18_MiniAOD/210312_031934/0000/MiniAOD_10.root
+/store/user/ardas/GEN_Hpp_NEW_test/RunIISummer20UL18_MiniAOD/210312_031934/0000/MiniAOD_11.root
+/store/user/ardas/GEN_Hpp_NEW_test/RunIISummer20UL18_MiniAOD/210312_031934/0000/MiniAOD_12.root
+/store/user/ardas/GEN_Hpp_NEW_test/RunIISummer20UL18_MiniAOD/210312_031934/0000/MiniAOD_13.root
+/store/user/ardas/GEN_Hpp_NEW_test/RunIISummer20UL18_MiniAOD/210312_031934/0000/MiniAOD_14.root
+/store/user/ardas/GEN_Hpp_NEW_test/RunIISummer20UL18_MiniAOD/210312_031934/0000/MiniAOD_15.root
+/store/user/ardas/GEN_Hpp_NEW_test/RunIISummer20UL18_MiniAOD/210312_031934/0000/MiniAOD_16.root
+/store/user/ardas/GEN_Hpp_NEW_test/RunIISummer20UL18_MiniAOD/210312_031934/0000/MiniAOD_17.root
