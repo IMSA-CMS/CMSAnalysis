@@ -20,26 +20,28 @@ bool GenSimIdentificationModule::process(const edm::EventBase &event) {
   
   event.getByLabel(std::string("prunedGenParticles"), genParticlesHandle);
 
-  const int electronCode = 11;
-  const int muonCode = 13;
+  // const int electronCode = 11;
+  // const int muonCode = 13;
 
   auto particle = getFileParams().getLeptonType();
 
-  int targetCode = particle == "Electron" ? electronCode : muonCode;
+  //int targetCode = particle == "Electron" ? electronCode : muonCode;
 
   // std::cerr << "particle = " << particle << std::endl;
 
   // Begin GEN looping
   // Loop through Particle list&
   for (const auto &p : *genParticlesHandle) {
-    if (p.status() != 0 &&
-        isParticle(Particle(&p))) {
+    // std::cout << "One\n";
+    if (p.status() != 0 && isParticle(Particle(&p))) {
+      // std::cout << "Two\n";
       // std::cerr << "genSim particle type = " << std::abs(p.pdgId())
       //           << std::endl;
       // std::cerr << "electronCode = " << electronCode << std::endl;
       // std::cerr << "muonCode = " << muonCode << std::endl;
 
       genParticles.addParticle(Particle(&p));
+      // std::cout << "Three\n";
     }
   }
   // std::cout << "LENGTH: " << genParticles.getNumParticles() << "\n";
@@ -62,7 +64,7 @@ bool GenSimIdentificationModule::isParticle(Particle p) const {
      21-24: gluon, photon, z0, w+
      25, 32-37: less comon boson
   */
-
+  // std::cout << "Four\n";
   const int finalStateParticleStatusCode = 1;
   const int maxQuarkCode = 6;
   const int maxLeptonCode = 13;
@@ -73,13 +75,17 @@ bool GenSimIdentificationModule::isParticle(Particle p) const {
     return false;
 
   if (targetPdgId != 0) {
+    // std::cout << "Five\n";
     Particle currentMother = p;
     while (currentMother.mother().isNotNull()) {
       Particle newMother = currentMother.mother();
+      // std::cout << newMother.isNotNull()<<"\n";
       if (std::abs(newMother.pdgId()) == targetPdgId) {
+        // std::cout << "pdgId One\n";
         if (ignoreRadiation) {
           for (int i = 0; i < newMother.numberOfDaughters(); ++i) {
             if (std::abs(newMother.daughter(i).pdgId()) == targetPdgId) {
+              // std::cout << "pdgId One\n";
               return false;
             }
           }
@@ -104,7 +110,7 @@ bool GenSimIdentificationModule::isParticle(Particle p) const {
     int motherId = nu.pdgId();
     bool isParticle = true;
 
-    // std::cout << "Printing GenSim Mother P: pdgID: " << nu.pdgId() << ", status: " << nu.status() << std::endl;
+    // std::cout << "Printing GenSim Mother P: pdgID: " << std::endl;
 
     while (std::abs(motherId) > maxQuarkCode) // not a quark
     {
@@ -130,16 +136,17 @@ bool GenSimIdentificationModule::isParticle(Particle p) const {
   }
 }
 
-std::vector<reco::GenParticle> GenSimIdentificationModule::getPhotons() const{
+ParticleCollection GenSimIdentificationModule::getPhotons() const{
   //isPhoton = 0;
   // Get Events Tree and create handle for GEN
-
-  std::vector<reco::GenParticle> photonList;
+  ParticleCollection photonList;
   // Begin GEN looping
   // Loop through Particle list
   for (const auto &p : *genParticlesHandle) {
     if (p.pdgId() ==  22 && p.isPromptFinalState()) {
-      photonList.push_back(p);
+      if (p.status() != 0 && isParticle(Particle(&p))) {
+        photonList.addParticle(Particle(&p));
+    }
     }
   }
   //std::cout<<"The number of photons are: " << isPhoton << '\n';

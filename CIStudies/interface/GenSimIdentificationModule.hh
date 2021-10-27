@@ -25,14 +25,14 @@ public:
 
   const ParticleCollection& getGenParticles() const
   {return genParticles;}
-  std::vector<reco::GenParticle> getPhotons() const;
+  ParticleCollection getPhotons() const;
 private:
   // checks if the gen particles originates from the hard scatter process
   bool isParticle(Particle p) const;
   
 
   ParticleCollection genParticles;
-  ParticleCollection photonList;
+  
   int targetPdgId;
   const bool ignoreRadiation;
   int photonNum;

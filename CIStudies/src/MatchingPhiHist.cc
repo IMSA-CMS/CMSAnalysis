@@ -18,7 +18,7 @@ std::vector<double> MatchingPhiHist::value() const
     {
         // std::cout << "MatchingPairs size not zero" << "\n";
         auto pair = matchingPairs[0];
-        auto partPhi = pair.first.fourVector().Phi();
+        auto partPhi = pair.first.getFourVector().Phi();
         // std::cout << "MC phi value: " << partPhi << "\n";
         auto jetPhi = pair.second.getFourVector().Phi();
         // std::cout << "Reco phi value: " << jetPhi << "\n";

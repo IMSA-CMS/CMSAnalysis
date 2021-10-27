@@ -26,11 +26,11 @@ bool DoubleIsolatedMuonTrigger::checkTrigger(std::shared_ptr<RecoIdentificationM
 
   for (const auto &particle : particles.getParticles())
   {
-    if (particle.pt() >= pTCutoff && particle.isIsolated())
+    if (particle.getPt() >= pTCutoff && particle.isIsolated())
     {
       passedFirstCut = true;
     }
-    else if (particle.pt() >= secondPTCutoff && particle.isIsolated())
+    else if (particle.getPt() >= secondPTCutoff && particle.isIsolated())
     {
       passedSecondCut = true;
     }

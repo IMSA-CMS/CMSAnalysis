@@ -17,7 +17,7 @@ std::vector<double> MatchingEtaHist::value() const
     {
         // std::cout << "MatchingPairs size not zero" << "\n";
         auto pair = matchingPairs[0];
-        double partEta = pair.first.eta();
+        double partEta = pair.first.getEta();
         std::cout << "MC eta value: " << partEta << "\n";
         double jetEta = pair.second.getEta();
         std::cout << "Reco eta value: " << jetEta << "\n";

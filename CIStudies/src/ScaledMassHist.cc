@@ -59,8 +59,8 @@ double ScaledMassHist::getScaledInvariantMass(const ParticleCollection& bestPart
   {
     if (scaleUpDown == true)
     {
-      double scaledPt1 = changePtUp(particles[0].pt(), kappa);
-      double scaledPt2 = changePtDown(particles[1].pt(), kappa);
+      double scaledPt1 = changePtUp(particles[0].getPt(), kappa);
+      double scaledPt2 = changePtDown(particles[1].getPt(), kappa);
       return calculateScaledInvariantMass(particles[0], particles[1], scaledPt1, scaledPt2);
     }
     
@@ -68,15 +68,15 @@ double ScaledMassHist::getScaledInvariantMass(const ParticleCollection& bestPart
     {
       if (scaleUp == true)
       {
-        double scaledPt1 = changePtUp(particles[0].pt(), kappa);
-        double scaledPt2 = changePtUp(particles[1].pt(), kappa);
+        double scaledPt1 = changePtUp(particles[0].getPt(), kappa);
+        double scaledPt2 = changePtUp(particles[1].getPt(), kappa);
         return calculateScaledInvariantMass(particles[0], particles[1], scaledPt1, scaledPt2);
       }
       
       else
       {
-        double scaledPt1 = changePtDown(particles[0].pt(), kappa);
-        double scaledPt2 = changePtDown(particles[1].pt(), kappa);
+        double scaledPt1 = changePtDown(particles[0].getPt(), kappa);
+        double scaledPt2 = changePtDown(particles[1].getPt(), kappa);
         return calculateScaledInvariantMass(particles[0], particles[1], scaledPt1, scaledPt2);
       }
     }
@@ -92,7 +92,7 @@ double ScaledMassHist::getScaledInvariantMass(const ParticleCollection& bestPart
 double ScaledMassHist::calculateScaledInvariantMass(const Particle particle1, const Particle particle2, double scaledPt1, double scaledPt2) const
 {
   double product = 2 * scaledPt1 * scaledPt2; 
-  double diff = cosh(particle1.eta() - particle2.eta()) - cos(particle1.phi() - particle2.phi()); 
+  double diff = cosh(particle1.getEta() - particle2.getEta()) - cos(particle1.getPhi() - particle2.getPhi()); 
   double invariantMass = product * diff; 
   if (invariantMass > 0)
     {

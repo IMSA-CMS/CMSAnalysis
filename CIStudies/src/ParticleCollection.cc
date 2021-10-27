@@ -54,7 +54,7 @@ double ParticleCollection::getNthHighestPt(int n) const
   auto particlesVec = getParticles();  // Vector of Particles
 
   // Sort the vector of particles by pt (greatest to least)
-  std::sort(particlesVec.begin(), particlesVec.end(), [](auto a, auto b){return a.pt() > b.pt();});
+  std::sort(particlesVec.begin(), particlesVec.end(), [](auto a, auto b){return a.getPt() > b.getPt();});
 
   // for (auto particle : particlesVec)
   // {
@@ -62,7 +62,7 @@ double ParticleCollection::getNthHighestPt(int n) const
   // }
   // std::cout << '\n';
 
-  return particlesVec[n - 1].pt();  // n-1 since the first element is 0, 2nd element is 1, etc.
+  return particlesVec[n - 1].getPt();  // n-1 since the first element is 0, 2nd element is 1, etc.
 }
 
 double ParticleCollection::getLeadingPt() const
@@ -70,7 +70,7 @@ double ParticleCollection::getLeadingPt() const
   double highestPt = 0;
   for (auto particle : particles)
   {
-    double pt = particle.pt();
+    double pt = particle.getPt();
     if (pt > highestPt)
     {
       pt = highestPt;
@@ -85,7 +85,7 @@ Particle ParticleCollection::getLeadingPtLepton() const
   double highestPt = getLeadingPt();
   for (auto part : particles)
   {
-    if (part.pt() == highestPt)
+    if (part.getPt() == highestPt)
     {
       return part;
     }
@@ -96,8 +96,8 @@ Particle ParticleCollection::getLeadingPtLepton() const
 
 double ParticleCollection::calculateLeadingTransverseMomentum(Particle particle1, Particle particle2) const
 {
-  double pt1 = particle1.pt();
-  double pt2 = particle2.pt();
+  double pt1 = particle1.getPt();
+  double pt2 = particle2.getPt();
   if (pt1 > pt2)
     {
       return pt1;
@@ -235,8 +235,8 @@ bool ParticleCollection::checkSigns(Particle particle1, Particle particle2) cons
 
 double ParticleCollection::calculateInvariantMass(Particle particle1, Particle particle2) const
 {
-  auto vec1 = particle1.fourVector();
-  auto vec2 = particle2.fourVector();
+  auto vec1 = particle1.getFourVector();
+  auto vec2 = particle2.getFourVector();
 
   auto sum = vec1 + vec2;
 
@@ -289,7 +289,7 @@ double ParticleCollection::calculateAllLeptonInvariantMass() const
 
   for (auto particle : particles)
   {
-    auto newVec = particle.fourVector();
+    auto newVec = particle.getFourVector();
     total += newVec;
   }
 
@@ -361,12 +361,12 @@ double ParticleCollection::calculateCollinsSoper(Particle particle, Particle ant
   TLorentzVector Ele;
   TLorentzVector Elebar;
 
-  float Et1 = particle.et();
-  float Et2 = antiparticle.et();
-  float Eta1 = particle.eta();
-  float Eta2 = antiparticle.eta();
-  float Phi1 = particle.phi();
-  float Phi2 = antiparticle.phi();
+  float Et1 = particle.getEt();
+  float Et2 = antiparticle.getEt();
+  float Eta1 = particle.getEta();
+  float Eta2 = antiparticle.getEta();
+  float Phi1 = particle.getPhi();
+  float Phi2 = antiparticle.getPhi();
   float En1 = particle.energy();
   float En2 = antiparticle.energy();
   Ele.SetPtEtaPhiE(Et1,Eta1,Phi1,En1);
@@ -393,7 +393,7 @@ double ParticleCollection::calculateCosTheta(TLorentzVector Ele, TLorentzVector 
 
 bool ParticleCollection::lowEtaFlip(Particle particle, Particle antiparticle) const
 {
-  if (std::abs(particle.eta()) < std::abs(antiparticle.eta()))
+  if (std::abs(particle.getEta()) < std::abs(antiparticle.getEta()))
     {
       if (particle.charge() < 0)
 	{
