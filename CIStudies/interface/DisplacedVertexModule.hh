@@ -2,8 +2,8 @@
 #define DISPLACEDVERTEXMODULE_HH
 
 #include "ProductionModule.hh"
-#include "GenSimIdentificationModule.hh"
-#include "RecoIdentificationModule.hh"
+//#include "GenSimIdentificationModule.hh"
+//#include "RecoIdentificationModule.hh"
 #include "MatchingPairCollection.hh"
 
 #include "TLorentzVector.h"
@@ -19,13 +19,13 @@
 class DisplacedVertexModule : public ProductionModule
 {
 public:
-  DisplacedVertexModule(const std::shared_ptr<RecoIdentificationModule> recoModule);
-  virtual bool process(const edm::EventBase& event) override;
+  DisplacedVertexModule();
+  virtual bool process() override;
 
   void propagateTrack(reco::TrackRef track);
 
 private:
-  const std::shared_ptr<RecoIdentificationModule> reco; 
+  // const std::shared_ptr<RecoIdentificationModule> reco; 
 };
 
 #endif

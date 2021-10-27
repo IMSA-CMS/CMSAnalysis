@@ -24,7 +24,7 @@ public:
 
   LRWeightModule();
 
-  virtual bool process(const edm::EventBase& event) override;
+  virtual bool process() override;
   double getLRWeight() const {return lrWeight;}
   double getRLWeight() const {return rlWeight;}
 

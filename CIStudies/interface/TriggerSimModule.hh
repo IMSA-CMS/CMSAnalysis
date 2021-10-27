@@ -27,17 +27,17 @@ public:
 
   // Methods for use as production module
   virtual void finalize() override;
-  bool processEvent(const edm::EventBase& event) {return process(event);} // Event Counter that calls virtual process function
+  bool processEvent() {return process();} // Event Counter that calls virtual process function
   bool checkTrigger(EnumTriggers name);
 
   // Methods for use as trigger object
   // [Defunct]
-  virtual std::map<std::string, bool> checkEvent(const edm::EventBase& event);
+  virtual std::map<std::string, bool> checkEvent(std::shared_ptr<InputModule> input);
   virtual std::vector<std::string> getNames() {return triggerNames;}
   // [/Defunct]
 
 protected:
-  virtual bool process(const edm::EventBase& event) override;
+  virtual bool process() override;
 
 private:
   struct PassTotal

@@ -4,16 +4,16 @@
 #include <memory>
 #include "FilterModule.hh"
 
-class RecoIdentificationModule;
+//class RecoIdentificationModule;
 
 class NLeptonsFilter : public FilterModule
 {
   public:
-  NLeptonsFilter(const std::shared_ptr<RecoIdentificationModule> iRecoModule);
+  NLeptonsFilter();
   protected:
-    virtual std::string makeFilterString(const edm::EventBase& event) override;
+    virtual std::string makeFilterString() override;
   private:
-    const std::shared_ptr<RecoIdentificationModule> recoModule;
+    // const std::shared_ptr<RecoIdentificationModule> recoModule;
 };
 
 #endif

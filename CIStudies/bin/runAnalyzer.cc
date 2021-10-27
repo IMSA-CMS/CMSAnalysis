@@ -6,15 +6,13 @@
 #include "CIAnalysis/CIStudies/interface/Analyzer.hh"
 #include "FWCore/FWLite/interface/FWLiteEnabler.h"
 #include "PhysicsTools/FWLite/interface/CommandLineParser.h"
-#include "CIAnalysis/CIStudies/bin/massResolutionAnalysis.cc"
+// #include "CIAnalysis/CIStudies/bin/massResolutionAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/HPlusPlusMassAnalysis.cc"
-// Include copy that isn't going to be changed -- FIX once work is done [09/17]
-#include "CIAnalysis/CIStudies/bin/LeptonJetBackgroundAnalysis.cc"
-#include "CIAnalysis/CIStudies/bin/leptonJetReconstructionAnalysis.cc"
-#include "CIAnalysis/CIStudies/bin/displacedVertexAnalysis.cc"
-#include "CIAnalysis/CIStudies/bin/massAcceptanceAnalysis.cc"
-#include "CIAnalysis/CIStudies/bin/triggerAnalysis.cc"
-// #include "CIAnalysis/CIStudies/bin/invariantMassAnalysis.cc"
+#include "CIAnalysis/CIStudies/bin/leptonJetBackgroundAnalysis.cc"
+// #include "CIAnalysis/CIStudies/bin/leptonJetReconstructionAnalysis.cc"
+// #include "CIAnalysis/CIStudies/bin/displacedVertexAnalysis.cc"
+// #include "CIAnalysis/CIStudies/bin/massAcceptanceAnalysis.cc"
+//#include "CIAnalysis/CIStudies/bin/FilestripAnalysis.cc"
 
 
 int main(int argc, char **argv) {

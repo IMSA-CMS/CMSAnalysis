@@ -4,19 +4,13 @@
 #include <memory>
 #include "Trigger.hh"
 
-class RecoIdentificationModule;
-
 class RecoTrigger : public Trigger
 {
   public:
-    RecoTrigger(std::string iName, std::shared_ptr<RecoIdentificationModule> iRecoMod);
+    RecoTrigger(std::string iName);
 
   protected:
-    virtual bool checkTrigger(std::shared_ptr<RecoIdentificationModule> recoMod) = 0;    // Returns true if the trigger is passed
-    virtual bool checkTrigger() override {return checkTrigger(recoMod);}
-
-  private:
-    std::shared_ptr<RecoIdentificationModule> recoMod;
+    virtual bool checkTrigger(std::shared_ptr<InputModule> input) = 0;    // Returns true if the trigger is passed
 };
 
 #endif
