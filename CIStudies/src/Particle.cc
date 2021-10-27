@@ -331,3 +331,23 @@ void Particle::checkIsNull() const
   }
 }
 
+bool Particle::isFinalState() const
+{
+  checkIsNull();
+  if(isGenSim())
+  {
+    return getGenParticle()->isPromptFinalState();
+  }
+  return true;
+}
+
+bool Particle::isGenSim() const
+{
+  return getGenParticle();
+}
+
+const reco::GenParticle* Particle::getGenParticle() const
+{
+  checkIsNull();
+  return dynamic_cast<const reco::GenParticle*> (particle);
+}

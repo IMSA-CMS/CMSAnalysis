@@ -3,8 +3,8 @@
 
 #include "CIAnalysis/CIStudies/interface/Analyzer.hh"
 
-#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
+//#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
+//#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 #include "CIAnalysis/CIStudies/interface/MassFilter.hh"
 #include "CIAnalysis/CIStudies/interface/BarrelStateFilter.hh"
@@ -16,7 +16,7 @@
 //#include "CIAnalysis/CIStudies/interface/PtResolutionHist.hh"
 #include "CIAnalysis/CIStudies/interface/TotalEventsHist.hh"
 #include "CIAnalysis/CIStudies/interface/CIAcceptedEventsHist.hh"
-#include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
+//#include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
 
 using std::make_shared;
 
@@ -24,8 +24,8 @@ Analyzer massAcceptanceAnalysis()
 {
   Analyzer analyzer;
 
-  auto genSimMod = make_shared<GenSimIdentificationModule>();
-  auto recoMod = make_shared<RecoIdentificationModule>(50);
+  //auto genSimMod = make_shared<GenSimIdentificationModule>();
+  //auto recoMod = make_shared<RecoIdentificationModule>(50);
   auto matchMod = make_shared<MatchingModule>(genSimMod, recoMod);
   auto weightMod = make_shared<WeightingModule>();
   auto lrWeightMod = make_shared<LRWeightModule>(); 

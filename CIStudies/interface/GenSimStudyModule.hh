@@ -21,7 +21,7 @@ class GenSimStudyModule : public ProductionModule
 {
 public:
   GenSimStudyModule();
-  virtual bool process(const edm::EventBase &event) override;
+  virtual bool process() override;
 private:
     int isPhoton;
 };

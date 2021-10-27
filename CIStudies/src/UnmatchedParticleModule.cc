@@ -1,14 +1,12 @@
 #include "CIAnalysis/CIStudies/interface/UnmatchedParticleModule.hh" 
-
-#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 
 #include <iostream>
 #include "TH2.h"
 
-UnmatchedParticleModule::UnmatchedParticleModule(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeighting, const std::shared_ptr<MatchingModule> matchingModule) :
-  HistogramOutputModule(genSimModule, recoModule, weightingModule, lrWeighting),
-  genSim(genSimModule),
+UnmatchedParticleModule::UnmatchedParticleModule(const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeighting, const std::shared_ptr<MatchingModule> matchingModule) :
+  HistogramOutputModule(weightingModule, lrWeighting),
+  //genSim(genSimModule),
   matching(matchingModule)
 {
 }
@@ -29,9 +27,9 @@ void UnmatchedParticleModule::initialize()
 
 }
 
-bool UnmatchedParticleModule::process(const edm::EventBase& event)
+bool UnmatchedParticleModule::process()
 {
-  auto genParticles = genSim->getGenParticles();
+  auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim);
   auto genParticlesVector = genParticles.getParticles();
 
 
