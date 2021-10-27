@@ -1,18 +1,17 @@
 #include "CIAnalysis/CIStudies/interface/LeptonJetReconstructionModule.hh"
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "DataFormats/Math/interface/deltaR.h"
 
-LeptonJetReconstructionModule::LeptonJetReconstructionModule(std::shared_ptr<RecoIdentificationModule> recoModule, double deltaRCut) :
-  reco(recoModule),
+LeptonJetReconstructionModule::LeptonJetReconstructionModule(double deltaRCut) :
+  //reco(recoModule),
   DeltaRCut(deltaRCut)
 
 {
 }
 
-bool LeptonJetReconstructionModule::process(const edm::EventBase& event) // reco::deltaR(v1, v2)
+bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
 {
   leptonJets.clear();
-  const ParticleCollection& recoCandidates = reco->getRecoCandidates();
+  const ParticleCollection& recoCandidates = getInput()->getParticles(InputModule::RecoLevel::Reco);
   std::vector<Particle> recoLeptons = recoCandidates.getParticles();
 
   while (recoLeptons.size() != 0)

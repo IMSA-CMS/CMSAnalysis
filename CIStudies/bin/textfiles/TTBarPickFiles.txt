@@ -1,7 +1,7 @@
 Procs:  top
 Year:   2018
-Lepton: 
+Lepton: both
 Mass:   M500
 Lambda: M500
-Inter:  
+Inter:  con
 Helic:  ttbar

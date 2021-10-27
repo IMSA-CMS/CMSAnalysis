@@ -2,7 +2,7 @@
 #include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
 
 NLeptonsHist::NLeptonsHist(const std::shared_ptr<MatchingModule> imatchModule, const std::string& iname, int iNBins, double iminimum, double imaximum, int itargetPdgId):
-  HistogramPrototype(iname, iNBins, iminimum, imaximum),
+  HistogramPrototype1D(iname, iNBins, iminimum, imaximum),
   matchModule(imatchModule),
   targetPdgId(itargetPdgId)
 {

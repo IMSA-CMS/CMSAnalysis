@@ -26,7 +26,7 @@ public:
   virtual bool isNotNull() const = 0;
   bool isIsolated() {throw std::runtime_error("error");};
   // virtual const reco::Candidate* getUnderlyingParticle() const = 0;
-
+  virtual bool isFinalState() const = 0;
 
   virtual bool operator==(const ParticleImplementation& userJet) const =0;
 

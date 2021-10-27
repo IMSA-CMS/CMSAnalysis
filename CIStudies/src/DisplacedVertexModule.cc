@@ -24,14 +24,13 @@ using Cylinder::RotationType;
 //typedef Surface::Cylinder Cylinder;
 */
 
-DisplacedVertexModule::DisplacedVertexModule(const std::shared_ptr<RecoIdentificationModule> recoModule) :
-  reco(recoModule)
+DisplacedVertexModule::DisplacedVertexModule()
 {
 }
 
-bool DisplacedVertexModule::process(const edm::EventBase& event)
+bool DisplacedVertexModule::process()
 {
-//   std::vector<Particle> recoCandidates(reco->getRecoCandidates().getParticles());
+  std::vector<Particle> recoCandidates(getInput()->getParticles(InputModule::RecoLevel::Reco).getParticles());
 
 //   for (auto& part : recoCandidates)
 //   {

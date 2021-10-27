@@ -204,3 +204,12 @@ void CandidateImplementation::checkIsNull() const
   }
 }
 
+bool CandidateImplementation::isFinalState() const 
+{
+    checkIsNull();
+    if(auto gen = dynamic_cast<const reco::GenParticle*>(particle))
+    {
+      return gen->isPromptFinalState();
+    }
+    return true;
+}

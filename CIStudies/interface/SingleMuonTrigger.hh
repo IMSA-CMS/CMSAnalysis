@@ -1,17 +1,16 @@
 #ifndef SINGLEMUONTRIGGER_HH
 #define SINGLEMUONTRIGGER_HH
 
-#include "Trigger.hh"
+#include "RecoTrigger.hh"
 
-class RecoIdentificationModule;
 
-class SingleMuonTrigger : public Trigger
+class SingleMuonTrigger : public RecoTrigger
 {
   public:
-    SingleMuonTrigger(std::shared_ptr<RecoIdentificationModule> iRecoMod, const double iPTCutoff = 50);
+    SingleMuonTrigger(const double iPTCutoff = 50);
   
   protected:
-    bool checkTrigger(std::shared_ptr<RecoIdentificationModule> recoMod) override;
+    bool checkTrigger(std::shared_ptr<InputModule> input) override;
 
   private:
     const double pTCutoff;

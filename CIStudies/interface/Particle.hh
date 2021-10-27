@@ -41,6 +41,10 @@ class Particle
     reco::Candidate::LorentzVector getFourVector() const;
     Particle mother() const;
     Particle::Type getType() const;
+
+    
+    // bool isGenSim() const;
+    bool isFinalState() const;
 	
   private:
     std::shared_ptr<ParticleImplementation> particle;

@@ -1,14 +1,14 @@
 #include "CIAnalysis/CIStudies/interface/CollinsSoperFilter.hh"
-#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
+//#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
 
-CollinsSoperFilter::CollinsSoperFilter(const GenSimIdentificationModule& genSimModule, double hiCut) :
-  genSim(genSimModule),
+CollinsSoperFilter::CollinsSoperFilter(double hiCut) :
+  //genSim(genSimModule),
   highCutoff(hiCut)
 {}
 
-std::string CollinsSoperFilter::makeFilterString(const edm::EventBase& event)
+std::string CollinsSoperFilter::makeFilterString()
 {
-  double collinsSoper = genSim.getGenParticles().getCollinsSoper();
+  double collinsSoper = getInput()->getParticles(InputModule::RecoLevel::GenSim).getCollinsSoper();
 
   if (abs(collinsSoper) > highCutoff)
     return "HighCS";

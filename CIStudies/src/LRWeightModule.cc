@@ -12,27 +12,26 @@
 LRWeightModule::LRWeightModule()
 {}
 
-bool LRWeightModule::process(const edm::EventBase& event)
+// update to remove event
+bool LRWeightModule::process()
 {
-  if (getFileParams().getProcess() != Process::CI())
+  /*if (getFileParams().getProcess() != Process::CI())
   {
     return true;
   }
-  edm::Handle<std::vector<reco::GenParticle>> genParticles;
-  event.getByLabel(std::string("prunedGenParticles"), genParticles);	
-  edm::Handle<GenEventInfoProduct> genInfo;
-  event.getByLabel(std::string("generator"), genInfo);
+  ParticleCollection genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim);	
+  GenEventInfoProduct genInfo = getInput()->getGenInfo();
   
   std::string lambdaString = getFileParams().getLambda();
 
-  try 
+ try 
   {
     double lambda = lambdaString == "100k" ? 100000000 : std::stod(lambdaString) * 1000;
     if (getFileParams().getProcess() == Process::CI())
     {
     int interference = getFileParams().getInterference() == Interference::constructive() ? -1 : 1;
 
-    auto weights = calculateWeights(*genInfo, *genParticles, lambda, interference);
+    auto weights = calculateWeights(genInfo, genParticles.getParticles(), lambda, interference);
     lrWeight = weights.first;
     rlWeight = weights.second;
     }
@@ -41,7 +40,7 @@ bool LRWeightModule::process(const edm::EventBase& event)
   {
     lrWeight = 1;
     rlWeight = 1;
-  }
+  }*/
 
   return true;
 }
@@ -49,7 +48,7 @@ bool LRWeightModule::process(const edm::EventBase& event)
 double LRWeightModule::findAf(int idAbs) const
 {
   double af = 0.000;
-  int evenTest = idAbs % 2;
+  /*int evenTest = idAbs % 2;
   if (evenTest == 0)
   {
     af = 1.000;
@@ -57,7 +56,7 @@ double LRWeightModule::findAf(int idAbs) const
   else
   {
     af = -1.000;
-  }
+  }*/
   
   return af;
 }
@@ -65,7 +64,7 @@ double LRWeightModule::findAf(int idAbs) const
 double LRWeightModule::findVf(int idAbs) const
 {
   double vf = 0.000;
-  int evenTest = idAbs % 2;
+  /*int evenTest = idAbs % 2;
   if (idAbs <= 8 and evenTest == 0)
   {
     vf = 0.383;
@@ -81,7 +80,7 @@ double LRWeightModule::findVf(int idAbs) const
   else if (idAbs >= 11 and evenTest == 1)
   {
     vf = -0.074;
-  }
+  }*/
   
   return vf;
 }
@@ -89,7 +88,7 @@ double LRWeightModule::findVf(int idAbs) const
 double LRWeightModule::findEf(int idAbs) const
 {
   double ef = 0.000;
-  int evenTest = idAbs % 2;
+  /*int evenTest = idAbs % 2;
   if (idAbs <= 8 and evenTest == 0)
   {
     ef = 0.66666666666667;
@@ -105,9 +104,9 @@ double LRWeightModule::findEf(int idAbs) const
   else if (idAbs >= 11 and evenTest == 1)
   {
     ef = -1.000;
-  }
+  } */
   
-  return ef;
+  return ef; 
 }
 
 // Jarvis' code
@@ -116,7 +115,7 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
 							   const std::vector<reco::GenParticle>& gen,
 							   double lam, int inter) const
 { 
-  double sH,tH,uH, sH2, tH2, uH2;
+  /*double sH,tH,uH, sH2, tH2, uH2;
 
   const reco::Candidate* boson = nullptr;
   const reco::Candidate* leptons;
@@ -174,7 +173,7 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
 	{
 	//Trying to store particle into final state lepton by changing its type from genParticle into Reco::Candidate
 	
-	muMinus = particle.clone();	
+	muMinus = particle.clone;
 	
 	if (muMinus == nullptr)
 	  {
@@ -322,7 +321,7 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
         }
 
       if (leptons != nullptr){
-        muPlus = particle.clone();
+        muPlus = particle.clone;
 
 	if (!muPlus){
 	}
@@ -571,9 +570,9 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
 
   if (denomPropZ == 0)
     {
-      std::cout << "Zero value of denomPropZ!\n";
+      std::cout << "Zero value of denomPropZ!\n"; */
       return {0, 0};
-    }
+    /*}
 
  //Third term:4. * M_PI * qCetaLR / qCLambda2;                                  
  // Amplitudes, M = gamma + Z + CI.                                             
@@ -619,12 +618,12 @@ std::pair<double, double> LRWeightModule::calculateWeights(const GenEventInfoPro
       double fracRL = sigmaNewRL / sigmaOld;
 
       //Set the weighting values 
-      return {fracLR, fracRL};
+      return {fracLR, fracRL};*/
 }
 
 const reco::Candidate* LRWeightModule::getBosonMother(const reco::GenParticle& p) const
 {
-  const reco::Candidate* firstMother = nullptr;
+  /*const reco::Candidate* firstMother = nullptr;
   const reco::Candidate* muonMother = nullptr;
   const reco::Candidate* tempMother = nullptr;
   const reco::Candidate* firstMotherdaughter = nullptr;
@@ -686,12 +685,13 @@ const reco::Candidate* LRWeightModule::getBosonMother(const reco::GenParticle& p
   else{
   }// end of checking
 
-  return muonMother;
+  return muonMother;*/
+  return nullptr;
 }
 		       
 const reco::Candidate* LRWeightModule::getLeptonMother(const reco::GenParticle& p, bool second) const
 {
-  const reco::Candidate*  firstMother=nullptr;
+  /*const reco::Candidate*  firstMother=nullptr;
   const reco::Candidate*  muonMother=nullptr;
   const reco::Candidate* tempMother=nullptr;
   int motherID;
@@ -762,5 +762,6 @@ const reco::Candidate* LRWeightModule::getLeptonMother(const reco::GenParticle& 
   else{
   }// end of checking
 
-  return muonMother;
+  return muonMother;*/
+  return nullptr;
 }

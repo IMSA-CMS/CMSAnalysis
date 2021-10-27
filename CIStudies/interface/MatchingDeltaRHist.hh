@@ -1,11 +1,11 @@
 #ifndef MATCHINGDELTARHIST_HH
 #define MATCHINGDELTARHIST_HH
 
-#include "HistogramPrototype.hh"
+#include "HistogramPrototype1D.hh"
 
 class LeptonJetMatchingModule;
 
-class MatchingDeltaRHist : public HistogramPrototype
+class MatchingDeltaRHist : public HistogramPrototype1D
 {
   public:
   MatchingDeltaRHist(std::shared_ptr<LeptonJetMatchingModule> iLeptonJetMatchingModule, const std::string& iname, int iNBins, double iminimum, double imaximum);

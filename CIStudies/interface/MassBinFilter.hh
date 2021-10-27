@@ -11,7 +11,7 @@ class MassBinFilter : public FilterModule
   public:
     MassBinFilter(const std::shared_ptr<MatchingModule> matchingModule, double iminimum, double imaximum, int iNBins);
   protected:
-    virtual std::string makeFilterString(const edm::EventBase& event) override;
+    virtual std::string makeFilterString() override;
   private:
     const std::shared_ptr<MatchingModule> matching;
     double minimum;

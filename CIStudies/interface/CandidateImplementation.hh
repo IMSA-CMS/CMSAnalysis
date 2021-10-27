@@ -25,6 +25,7 @@ public:
   virtual Particle::Type getType() const override;
   // virtual bool isIsolated() const override;
   const reco::Candidate* getUnderlyingParticle() const {return particle;}
+  bool isFinalState() const override;
 
 private:
   const reco::Candidate* particle;

@@ -1,14 +1,14 @@
 #include "CIAnalysis/CIStudies/interface/AFBModule.hh"
 
-#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
+//#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
+//#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 
 #include <iostream>
 
-AFBModule::AFBModule(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule, int minMass, int maxMass, int massInterval) :
-  HistogramOutputModule(genSimModule, recoModule, weightingModule, lrWeightModule),
-  genSim(genSimModule),
-  reco(recoModule),
+AFBModule::AFBModule(const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule, int minMass, int maxMass, int massInterval) :
+  HistogramOutputModule(weightingModule, lrWeightModule),
+  // genSim(genSimModule),
+  // reco(recoModule),
   minMassCut(minMass),
   maxMassCut(maxMass),
   interval(massInterval)
@@ -47,13 +47,13 @@ void AFBModule::finalize()
   AnalysisModule::finalize();
 }
 
-bool AFBModule::process(const edm::EventBase& event)
+bool AFBModule::process()
 {
-  auto genParticles = genSim->getGenParticles();
+  auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim);
   auto genSimCS = genParticles.getCollinsSoper();
   auto genSimInvMass = genParticles.getInvariantMass();
 
-  auto recoParticles = reco->getRecoCandidates();
+  auto recoParticles = getInput()->getParticles(InputModule::RecoLevel::Reco);
   auto recoCS = recoParticles.getCollinsSoper();
   auto recoInvMass = recoParticles.getInvariantMass();
 

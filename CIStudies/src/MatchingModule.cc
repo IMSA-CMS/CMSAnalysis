@@ -5,21 +5,21 @@
 
 #include <limits>
 
-MatchingModule::MatchingModule(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, double deltaRCut) :
-  genSim(genSimModule),
-  reco(recoModule),
+MatchingModule::MatchingModule(double deltaRCut) :
+  //genSim(genSimModule),
+  //reco(recoModule),
   deltaRCutoff(deltaRCut)
 {
 }
 
-bool MatchingModule::process(const edm::EventBase& event)
+bool MatchingModule::process()
 {
   //std::cerr << "ENTERING MatchingModule" << std::endl;
   matchingBestPairs.clear();
 
   // Make a copy so we don't modify the original
-  std::vector<Particle> genSimParticles(genSim->getGenParticles().getParticles());
-  std::vector<Particle> recoCandidates(reco->getRecoCandidates().getParticles());
+  std::vector<Particle> genSimParticles(getInput()->getParticles(InputModule::RecoLevel::GenSim).getParticles());
+  std::vector<Particle> recoCandidates(getInput()->getParticles(InputModule::RecoLevel::Reco).getParticles());
 
   //loops through while there are still at least one gen and reco particle left that have not been matched and set to null
   //std::cerr << "Hey, I'm in charge of names here" << std::endl;

@@ -21,6 +21,7 @@ class SimpleImplementation : public ParticleImplementation
         virtual int numberOfDaughters() const override{throw std::runtime_error("error");}
         virtual Particle::Type getType() const  override{throw std::runtime_error("error");}
         virtual bool isNotNull() const override {return true;}
+        virtual bool isFinalState() const override {return true;}
         // virtual Particle::BarrelState getBarrelState() const override {throw std::runtime_error("error");}
         // virtual bool isIsolated() const  override{throw std::runtime_error("error");};
 
