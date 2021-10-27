@@ -53,12 +53,13 @@ bool RecoIdentificationModule::process(const edm::EventBase& event)
     {
       edm::Handle<std::vector<pat::Photon>> photons;
       event.getByLabel(std::string("slimmedPhotons"), photons);
-
+      std::cout << "Num of photons " << photons->size() << "\n";
       for (const auto& p : *photons)
-	      {       
+	      {  
+          std::cout << "Pt: " << p.pt() << "\n";     
 	        if (p.pt() > ptCut)
 	          {
-	            recoCandidates.addParticle(Particle(&p, Particle::LeptonType::None)); 
+	            recoCandidates.addParticle(Particle(&p)); 
 	          }
 
 	      }
