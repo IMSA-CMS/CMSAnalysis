@@ -1,3 +1,4 @@
+/*
 #include "CIAnalysis/CIStudies/interface/PileupFilter.hh"
 
 #include "DataFormats/FWLite/interface/Event.h"
@@ -11,12 +12,11 @@ PileupFilter::PileupFilter(double loCut, double hiCut) :
   highCutoff(hiCut)
 {}
 
-std::string PileupFilter::makeFilterString(const edm::EventBase& event)
+std::string PileupFilter::makeFilterString()
 {
-  edm::Handle<std::vector<PileupSummaryInfo>> pileup;
-  event.getByLabel(std::string("slimmedAddPileupInfo"), pileup);
+  std::vector<PileupSummaryInfo> pileup = getInput()->getPileupInfo();
 
-  int interactions = (*pileup)[0].getPU_NumInteractions();
+  int interactions = (pileup)[0].getPU_NumInteractions();
 
   if (interactions < lowCutoff)
     return "LowPileup";
@@ -25,3 +25,4 @@ std::string PileupFilter::makeFilterString(const edm::EventBase& event)
   else
     return "";
 }
+*/

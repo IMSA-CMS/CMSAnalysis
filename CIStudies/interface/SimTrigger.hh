@@ -12,7 +12,7 @@ class SimTrigger : public Trigger
     virtual std::vector<std::string> getNames() const {return simMod->getNames();}
 
   protected:
-    virtual bool checkTrigger() override {return simMod->checkTrigger(triggerEnum);} // Returns true if the trigger is passed
+    virtual bool checkTrigger(std::shared_ptr<InputModule> input) override {return simMod->checkTrigger(triggerEnum);} // Returns true if the trigger is passed
 
   private:
     TriggerSimModule::EnumTriggers triggerEnum;

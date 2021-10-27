@@ -1,14 +1,16 @@
 #include "CIAnalysis/CIStudies/interface/TriggerModule.hh"
 #include "CIAnalysis/CIStudies/interface/Utility.hh"
 
+#include "CIAnalysis/CIStudies/interface/Trigger.hh"
 
 TriggerModule::TriggerModule() :
+  //recoMod(iRecoMod),
   passAny(0),
   total(0)
 {
 }
 
-bool TriggerModule::process(const edm::EventBase& event)
+bool TriggerModule::process()
 {
   //std::cerr << "Notice: TriggerModule::process is running\n";
 
@@ -20,7 +22,7 @@ bool TriggerModule::process(const edm::EventBase& event)
 
   for (auto trigger : triggers)
   {
-    passCurrentTrigger = trigger->checkEvent();
+    passCurrentTrigger = trigger->checkEvent(getInput());
 
     // Set passAnyTrigger to true once the event passes one trigger
     // Since passAnyTrigger is automatically false, if the event doesn't pass any triggers, passAnyTrigger remains false

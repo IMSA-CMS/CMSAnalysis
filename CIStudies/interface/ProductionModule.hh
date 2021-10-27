@@ -3,6 +3,8 @@
 
 #include "Module.hh"
 
+#include "InputModule.hh"
+
 // This class is used for intermediate, "stepping-stone" modules that perform
 // tasks that are used by the AnalysisModules (or other ProductionModules).
 // The class type designates it for use by Analyzer but provides no additional
