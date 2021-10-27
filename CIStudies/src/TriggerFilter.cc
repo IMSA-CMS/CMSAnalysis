@@ -6,8 +6,8 @@ TriggerFilter::TriggerFilter(const std::shared_ptr<Trigger> iTrigger) :
 {
 }
 
-std::string TriggerFilter::makeFilterString(const edm::EventBase& event)
+std::string TriggerFilter::makeFilterString()
 {
-  std::cout << trigger->checkEvent() << " : " << trigger->checkEvent() ? trigger->getName() : "";
-  return trigger->checkEvent() ? trigger->getName() : "";
+  std::cout << trigger->checkEvent(getInput()) << " : " << trigger->checkEvent(getInput()) ? trigger->getName() : "";
+  return trigger->checkEvent(getInput()) ? trigger->getName() : "";
 }
