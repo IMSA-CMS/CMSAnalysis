@@ -1,10 +1,5 @@
 #include "CIAnalysis/CIStudies/interface/PhotonsHist.hh"
-
 #include "CIAnalysis/CIStudies/interface/GenSimRecoPrototype.hh"
-#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
-#include "DataFormats/Math/interface/deltaR.h"
-#include "DataFormats/Math/interface/normalizedPhi.h"
 
 #include <vector>
 
@@ -13,8 +8,7 @@ std::vector<double> PhotonsHist::protectedValue(bool typeGenSim) const
   if (typeGenSim)          // typeGenSim == true, so we want the GenSim values
   {
     ParticleCollection finalPhotons;
-    auto leptons = getGenSim()->getGenParticles();
-    auto lepVector = leptons.getParticles();
+    auto lepVector = getInput()->getParticles(InputModule::RecoLevel::GenSim, Particle::Type::Photon).getParticles();
     ParticleCollection posSignLep;
     ParticleCollection oppSignLep;
 
@@ -29,8 +23,8 @@ std::vector<double> PhotonsHist::protectedValue(bool typeGenSim) const
     auto particleVectorPosSign = posSignLep.getParticles();
     auto particleVectorOppSign = oppSignLep.getParticles();
    
-    auto genPhotons = getGenSim()->getPhotons();
-    auto photons = genPhotons.getParticles();
+    auto photons = getInput()->getParticles(InputModule::RecoLevel::GenSim, Particle::Type::Photon).getParticles();
+    
 
    
    for(auto current:photons){
@@ -61,41 +55,42 @@ std::vector<double> PhotonsHist::protectedValue(bool typeGenSim) const
   }
   else                     // typeGenSim == false, so we want the Reco values
   {
-    std::vector<double> ptVector;
-    ParticleCollection leptons;
-    ParticleCollection posSignLep;
-    ParticleCollection oppSignLep;
-    auto recoPhotonParticles = getReco()->getRecoCandidates(Particle::Type::Photon);
-    leptons = getReco()->getRecoCandidates();
-    auto particleVectorLep = leptons.getParticles();
+    // std::vector<double> ptVector;
+    // ParticleCollection leptons;
+    // ParticleCollection posSignLep;
+    // ParticleCollection oppSignLep;
+    // auto recoPhotonParticles = 
+    // leptons = getInput()->getParticles(InputModule::RecoLevel::GenSim, Particle::Type::Lepton).getParticles();
+    // auto particleVectorLep = leptons.getParticles();
 
-    for(auto currentParticle : particleVectorLep)
-    {
-      if(currentParticle.charge() == 1)
-      {posSignLep.addParticle(currentParticle);}
-      else if(currentParticle.charge() == -1)
-      {oppSignLep.addParticle(currentParticle);}
-    }
+    // for(auto currentParticle : particleVectorLep)
+    // {
+    //   if(currentParticle.charge() == 1)
+    //   {posSignLep.addParticle(currentParticle);}
+    //   else if(currentParticle.charge() == -1)
+    //   {oppSignLep.addParticle(currentParticle);}
+    // }
 
-    auto particleVectorPosSign = posSignLep.getParticles();
-    auto particleVectorOppSign = oppSignLep.getParticles();
-    auto photons = recoPhotonParticles.getParticles();
-    // std::cout << photons.size();
-    for(auto currentParticle:photons)
-    {
-      addPhotonUsingPhi(posSignLep, oppSignLep, currentParticle);
-    }
+    // auto particleVectorPosSign = posSignLep.getParticles();
+    // auto particleVectorOppSign = oppSignLep.getParticles();
+    // auto photons = recoPhotonParticles.getParticles();
+    // // std::cout << photons.size();
+    // for(auto currentParticle:photons)
+    // {
+    //   addPhotonUsingPhi(posSignLep, oppSignLep, currentParticle);
+    // }
 
-    auto posSignIv = posSignLep.calculateAllLeptonInvariantMass();
-    auto oppSignIv = oppSignLep.calculateAllLeptonInvariantMass();
-    if(posSignIv > oppSignIv)
-    {
-      return {posSignIv};
-    }
-    else
-    {
-      return{oppSignIv};
-    }
+    // auto posSignIv = posSignLep.calculateAllLeptonInvariantMass();
+    // auto oppSignIv = oppSignLep.calculateAllLeptonInvariantMass();
+    // if(posSignIv > oppSignIv)
+    // {
+    //   return {posSignIv};
+    // }
+    // else
+    // {
+    //   return{oppSignIv};
+    // }
+    return {true};
     
   }
 
@@ -127,50 +122,50 @@ void PhotonsHist::addPhotonUsingIM (ParticleCollection& pc1, ParticleCollection&
 
 void PhotonsHist::addPhotonUsingDR(ParticleCollection& pc1, ParticleCollection& pc2, Particle photon) const
 {
-  ParticleCollection particleCollectOne(pc1);
-  ParticleCollection particleCollectTwo(pc2);
-  std::vector<double> deltaRValuesP1;
-  std::vector<double> deltaRValuesP2;
-  double lowestDRp1 = 1000;
-  double lowestDRp2 = 1000;
+  // ParticleCollection particleCollectOne(pc1);
+  // ParticleCollection particleCollectTwo(pc2);
+  // std::vector<double> deltaRValuesP1;
+  // std::vector<double> deltaRValuesP2;
+  // double lowestDRp1 = 1000;
+  // double lowestDRp2 = 1000;
 
-  auto pc1Particles = particleCollectOne.getParticles();
-  auto pc2Particles = particleCollectTwo.getParticles();
-  for(auto currentParticle:pc1Particles)
-  {
-    auto fourVectorLep = currentParticle.getFourVector();
-    auto fourVectorPhoton = photon.getFourVector();
-    double deltaR = reco::deltaR(fourVectorLep, fourVectorPhoton);
-    deltaRValuesP1.push_back(deltaR);
-  }
-  if(!deltaRValuesP1.empty())
-  {
-    std::sort(deltaRValuesP1.begin(), deltaRValuesP1.end(), [](auto a, auto b){return a < b;});
-    lowestDRp1 = deltaRValuesP1[0];
-  }
+  // auto pc1Particles = particleCollectOne.getParticles();
+  // auto pc2Particles = particleCollectTwo.getParticles();
+  // for(auto currentParticle:pc1Particles)
+  // {
+  //   auto fourVectorLep = currentParticle.getFourVector();
+  //   auto fourVectorPhoton = photon.getFourVector();
+  //   double deltaR = reco::deltaR(fourVectorLep, fourVectorPhoton);
+  //   deltaRValuesP1.push_back(deltaR);
+  // }
+  // if(!deltaRValuesP1.empty())
+  // {
+  //   std::sort(deltaRValuesP1.begin(), deltaRValuesP1.end(), [](auto a, auto b){return a < b;});
+  //   lowestDRp1 = deltaRValuesP1[0];
+  // }
   
 
-  for(auto currentParticle:pc2Particles)
-  {
-    auto fourVectorLep = currentParticle.getFourVector();
-    auto fourVectorPhoton = photon.getFourVector();
-    double deltaR = reco::deltaR(fourVectorLep, fourVectorPhoton);
-    deltaRValuesP2.push_back(deltaR);
-  }
-  if(!deltaRValuesP2.empty()) 
-  {
-    std::sort(deltaRValuesP2.begin(), deltaRValuesP2.end(), [](auto a, auto b){return a < b;});
-    lowestDRp2 = deltaRValuesP2[0];
-  }
+  // for(auto currentParticle:pc2Particles)
+  // {
+  //   auto fourVectorLep = currentParticle.getFourVector();
+  //   auto fourVectorPhoton = photon.getFourVector();
+  //   double deltaR = reco::deltaR(fourVectorLep, fourVectorPhoton);
+  //   deltaRValuesP2.push_back(deltaR);
+  // }
+  // if(!deltaRValuesP2.empty()) 
+  // {
+  //   std::sort(deltaRValuesP2.begin(), deltaRValuesP2.end(), [](auto a, auto b){return a < b;});
+  //   lowestDRp2 = deltaRValuesP2[0];
+  // }
   
-  if(lowestDRp1 > lowestDRp2) 
-  {
-    pc2.addParticle(photon);
-  }
-  else
-  {
-    pc1.addParticle(photon);
-  }
+  // if(lowestDRp1 > lowestDRp2) 
+  // {
+  //   pc2.addParticle(photon);
+  // }
+  // else
+  // {
+  //   pc1.addParticle(photon);
+  // }
 }
 void PhotonsHist::addPhotonUsingPt(ParticleCollection& pc1, ParticleCollection& pc2, Particle photon) const
 {

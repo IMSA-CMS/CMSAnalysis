@@ -1,17 +1,15 @@
 #include "CIAnalysis/CIStudies/interface/DoubleElectronTrigger.hh"
 
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
-
-DoubleElectronTrigger::DoubleElectronTrigger(std::shared_ptr<RecoIdentificationModule> iRecoMod, double iPTCutoff, double iSecondPTCutoff) :
-  Trigger("Double Electron Trigger", iRecoMod),
+DoubleElectronTrigger::DoubleElectronTrigger(double iPTCutoff, double iSecondPTCutoff) :
+  RecoTrigger("Double Electron Trigger"),
   pTCutoff(iPTCutoff),
   secondPTCutoff(iSecondPTCutoff)
 {
 }
 
-bool DoubleElectronTrigger::checkTrigger(std::shared_ptr<RecoIdentificationModule> recoMod)
+bool DoubleElectronTrigger::checkTrigger(std::shared_ptr<InputModule> input)
 {
-  auto particles = recoMod->getRecoCandidates(Particle::Type::Electron);
+  auto particles = input->getParticles(InputModule::RecoLevel::Reco, Particle::Type::Electron);
 
   // If there aren't enough electrons, then automatically fail the trigger
   if (particles.getNumParticles() < 2)

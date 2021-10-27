@@ -1,17 +1,19 @@
 #include "CIAnalysis/CIStudies/interface/TriggerModule.hh"
+#include "CIAnalysis/CIStudies/interface/Utility.hh"
 
 #include "CIAnalysis/CIStudies/interface/Trigger.hh"
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 
-TriggerModule::TriggerModule(std::shared_ptr<RecoIdentificationModule> iRecoMod) :
-  recoMod(iRecoMod),
+TriggerModule::TriggerModule() :
+  //recoMod(iRecoMod),
   passAny(0),
   total(0)
 {
 }
 
-bool TriggerModule::process(const edm::EventBase& event)
+bool TriggerModule::process()
 {
+  //std::cerr << "Notice: TriggerModule::process is running\n";
+
   bool passAnyTrigger = false;       // True if the event passes any of the triggers
   bool passCurrentTrigger;           // True if the event passes the current trigger
 
@@ -20,7 +22,7 @@ bool TriggerModule::process(const edm::EventBase& event)
 
   for (auto trigger : triggers)
   {
-    passCurrentTrigger = trigger->checkEvent(recoMod);
+    passCurrentTrigger = trigger->checkEvent(getInput());
 
     // Set passAnyTrigger to true once the event passes one trigger
     // Since passAnyTrigger is automatically false, if the event doesn't pass any triggers, passAnyTrigger remains false
@@ -110,7 +112,7 @@ void TriggerModule::callTriggerCombo()
   //find combinations for n-1 combos, where n is total num of triggers
   for (int i = 1; i < total; ++i)
   {
-    triggerCombinations(0, i, combination, nTriggers);
+    Utility::getAllCombinations(0, i, combination, nTriggers, trigCombos);
   }
 }
 

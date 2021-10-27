@@ -291,3 +291,8 @@ Particle Particle::daughter(int i) const
 
   return Particle(daughter);
 }
+bool Particle::isFinalState() const
+{
+  return particle->isFinalState();
+}
+

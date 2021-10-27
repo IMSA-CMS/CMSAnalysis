@@ -1,4 +1,5 @@
-cs<use name="root"/>
+<use   name="rootcore"/>
+<use   name="root"/>
 <use   name="FWCore/FWLite"/>
 <use   name="DataFormats/FWLite"/>
 <use   name="DataFormats/Candidate"/>
@@ -9,6 +10,10 @@ cs<use name="root"/>
 <use   name="pythia8"/>
 <use   name="TrackingTools/GeomPropagators"/>
 <use   name="TrackingTools/TransientTrack"/>
+<use   name="TText"/>
+<use   name="rootgraphics"/>
+<use   name="TPad"/>
+<use   name="TCanvas"/>
 <export>
    <lib name="1"/>
 </export>

@@ -1,17 +1,14 @@
 #include "CIAnalysis/CIStudies/interface/DoubleMuonTrigger.hh"
-
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
-
-DoubleMuonTrigger::DoubleMuonTrigger(std::shared_ptr<RecoIdentificationModule> iRecoMod, double iPTCutoff, double iSecondPTCutoff) :
-  Trigger("Double Muon Trigger", iRecoMod),
+DoubleMuonTrigger::DoubleMuonTrigger(double iPTCutoff, double iSecondPTCutoff) :
+  RecoTrigger("Double Muon Trigger"),
   pTCutoff(iPTCutoff),
   secondPTCutoff(iSecondPTCutoff)
 {
 }
 
-bool DoubleMuonTrigger::checkTrigger(std::shared_ptr<RecoIdentificationModule> recoMod)
+bool DoubleMuonTrigger::checkTrigger(std::shared_ptr<InputModule> input)
 {
-  auto particles = recoMod->getRecoCandidates(Particle::Type::Muon);
+  auto particles = input->getParticles(InputModule::RecoLevel::Reco, Particle::Type::Muon);
 
   // If there aren't enough muons, then automatically fail the trigger
   if (particles.getNumParticles() < 2)
