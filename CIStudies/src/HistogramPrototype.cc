@@ -12,6 +12,7 @@ bool HistogramPrototype::shouldDraw(const edm::EventBase& event) const
     
     if (filterMod->getFilterString() == "")
     {
+      std::cout << filterMod->getFilterString() << "\n";
       return false; // Return false if any filterString is empty
     }
   }
