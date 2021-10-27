@@ -46,12 +46,12 @@ bool LeptonJetMatchingModule::process(const edm::EventBase& event)
               deltaRMin = pairDeltaR;
             }
           }
-        }        
+        }
         if (deltaRMin < deltaRCutoff)
         {
           //std::cout << "Match found!" << "\n";
           matchingPairs.push_back(dataList);
-          recoLeptonJets.erase(std::find(recoLeptonJets.begin(), recoLeptonJets.end(), dataList.second));          
+          recoLeptonJets.erase(std::find(recoLeptonJets.begin(), recoLeptonJets.end(), dataList.second));
         }
         genSimParticles.erase(std::find(genSimParticles.begin(), genSimParticles.end(), dataList.first));
     }
