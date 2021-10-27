@@ -3,6 +3,11 @@
 
 #include "DataFormats/Candidate/interface/Candidate.h"
 
+namespace reco
+{
+  class GenParticle;
+}
+
 class Particle
 {
 public:
@@ -33,10 +38,13 @@ public:
   BarrelState getBarrelState() const;
   bool isIsolated() const;
   const reco::Candidate* getUnderlyingParticle() const {return particle;}
+  bool isFinalState() const;
+  bool isGenSim() const;
 	
 private:
   const reco::Candidate* particle;
   void checkIsNull() const;
+  const reco::GenParticle* getGenParticle() const;
 };
 
 #endif

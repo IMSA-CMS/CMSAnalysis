@@ -1,3 +1,4 @@
+/*
 #ifndef PILEUPFILTER_HH
 #define PILEUPFILTER_HH
 
@@ -9,7 +10,7 @@ public:
   PileupFilter(double loCut, double hiCut);
 
 protected:
-  virtual std::string makeFilterString(const edm::EventBase& event);
+  virtual std::string makeFilterString();
 
 private:
   double lowCutoff;
@@ -17,3 +18,4 @@ private:
 };
 
 #endif
+*/

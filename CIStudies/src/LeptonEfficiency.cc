@@ -4,14 +4,14 @@
 
 #include <iostream>
 
-#include "CIAnalysis/CIStudies/interface/TDisplayText.h"
+//#include "CIAnalysis/CIStudies/interface/TDisplayText.h"
 
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
 
-LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<MatchingModule> imatchModule, const std::shared_ptr<GenSimIdentificationModule> igenSimModule):
+LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<MatchingModule> imatchModule):
   matchModule(imatchModule)
-  ,genSimModule(igenSimModule)
+  //,genSimModule(igenSimModule)
   ,recoMuons(0)
   ,genSimMuons(0)
   ,recoElectrons(0)
@@ -19,9 +19,9 @@ LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<MatchingModule> imatchM
 {
 }
 
-bool LeptonEfficiency::process(const edm::EventBase& event)
+bool LeptonEfficiency::process()
 {
-  auto genSim = genSimModule->getGenParticles();
+  auto genSim = getInput()->getParticles(InputModule::RecoLevel::GenSim);
 
   // std::cout << "Looking at GenSim Particles" << std::endl;
   for(const auto &particle : genSim.getParticles())
