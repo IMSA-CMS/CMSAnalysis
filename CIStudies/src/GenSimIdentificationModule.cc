@@ -39,7 +39,10 @@ bool GenSimIdentificationModule::process(const edm::EventBase &event) {
       // std::cerr << "electronCode = " << electronCode << std::endl;
       // std::cerr << "muonCode = " << muonCode << std::endl;
 
-      genParticles.addParticle(Particle(&p));
+      if (p.pdgId() == 11 && (particle == "Electron" || particle == "Both")
+          || p.pdgId() == 13 && (particle == "Muon" || particle == "Both")) {
+        genParticles.addParticle(Particle(&p));
+      }
     }
   }
   // std::cout << "LENGTH: " << genParticles.getNumParticles() << "\n";

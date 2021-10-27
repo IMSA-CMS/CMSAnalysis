@@ -31,9 +31,13 @@ public:
   bool isNotNull() const {return particle;}
   Type getType() const;
   BarrelState getBarrelState() const;
+  double hadEt() const;
+  double hoEt() const;
+  double hadVetoEt() const;
+  double trackerVetoPt() const;
   bool isIsolated() const;
   const reco::Candidate* getUnderlyingParticle() const {return particle;}
-	
+
 private:
   const reco::Candidate* particle;
   void checkIsNull() const;
