@@ -66,25 +66,29 @@ Analyzer hPlusPlusMassAnalysis() {
   auto triggerEfficiencyMod8040 = make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 800, 80, 40);
   auto triggerEfficiencyMod20080 = make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 800, 200, 80);
 
-  auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
-  auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
+  // auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
+  auto sameSignInvMassHistGen = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, true, "Gen Same Sign Invariant Mass", 100, 0, 1000);
+  auto sameSignInvMassHistReco = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Same Sign Invariant Mass", 100, 0, 1000);
 
-  auto genSimHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
-  auto recoHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, false, "Reco H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
-  auto genSimHMinusMinusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H-- Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, -9900041);
-  auto recoHMinusMinusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, false, "Reco H-- Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
+  // auto genSimHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
+  // auto recoHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, false, "Reco H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
+  // auto genSimHMinusMinusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H-- Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, -9900041);
+  // auto recoHMinusMinusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, false, "Reco H-- Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
 
-  auto photonHist = make_shared<PhotonsHist>(genSimMod, recoMod, true, "Photon Histogram", 100, 0, 1000);
+  auto genSimPhotonHist = make_shared<PhotonsHist>(genSimMod, recoMod, true, "Gen Sim Photon Histogram", 100, 0, 1000);
+  auto recoPhotonHist = make_shared<PhotonsHist>(genSimMod, recoMod, false, "Reco Photon Histogram", 100, 0, 1000);
 
   // Add the histogram(s) created above to histMod
   //histMod->addHistogram(recoThirdMuonPtHist);
-  //histMod->addHistogram(sameSignInvMassHist);
-  histMod->addHistogram(genSimHPlusPlusRecoveredInvMassHist);
-  histMod->addHistogram(recoHPlusPlusRecoveredInvMassHist);
-  histMod->addHistogram(genSimHMinusMinusRecoveredInvMassHist);
-  histMod->addHistogram(recoHMinusMinusRecoveredInvMassHist);
-  histMod->addHistogram(photonHist);
-  histMod->addHistogram(nLeptonsHist);
+  histMod->addHistogram(sameSignInvMassHistGen);
+  //histMod->addHistogram(sameSignInvMassHistReco);
+  // histMod->addHistogram(genSimHPlusPlusRecoveredInvMassHist);
+  // histMod->addHistogram(recoHPlusPlusRecoveredInvMassHist);
+  // histMod->addHistogram(genSimHMinusMinusRecoveredInvMassHist);
+  // histMod->addHistogram(recoHMinusMinusRecoveredInvMassHist);
+  histMod->addHistogram(genSimPhotonHist);
+  //histMod->addHistogram(recoPhotonHist);
+  // histMod->addHistogram(nLeptonsHist);
   //histMod->addHistogram(nElectronsHist);
   //histMod->addHistogram(nMuonsHist);
 
@@ -101,7 +105,7 @@ Analyzer hPlusPlusMassAnalysis() {
   analyzer.addProductionModule(genSimMod);
   analyzer.addProductionModule(recoMod);
   analyzer.addProductionModule(matchMod);
-  analyzer.addProductionModule(triggerMod);
+  // analyzer.addProductionModule(triggerMod); 
   analyzer.addProductionModule(weightMod);
   analyzer.addProductionModule(lrWeightMod);
 
