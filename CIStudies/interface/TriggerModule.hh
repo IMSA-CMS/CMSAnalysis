@@ -10,7 +10,7 @@ class TriggerModule : public ProductionModule
 {
 public:
   TriggerModule();
-  virtual bool process(const edm::EventBase& event) override;
+  virtual bool process() override;
   virtual void finalize() override;
   void addTrigger(std::shared_ptr<Trigger> trigger) {triggers.push_back(trigger);}
   void printComboEfficiency(int passCombo, std::vector<int> trigIndices);

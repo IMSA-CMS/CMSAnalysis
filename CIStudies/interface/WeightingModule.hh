@@ -9,7 +9,7 @@ class WeightingModule : public ProductionModule
 {
 public:
   WeightingModule();
-  virtual bool process(const edm::EventBase& event) override;
+  virtual bool process() override;
   double getWeight() const {return weight;}
 
 private:

@@ -7,7 +7,6 @@
 #include "CIAnalysis/CIStudies/interface/Analyzer.hh"
 #include "CIAnalysis/CIStudies/interface/DoubleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/GenSimEventDumpModule.hh"
-#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/HistogramOutputModule.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
 #include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
@@ -16,7 +15,6 @@
 #include "CIAnalysis/CIStudies/interface/NLeptonsFilter.hh"
 #include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
 #include "CIAnalysis/CIStudies/interface/PhotonsHist.hh"
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/RecoveredInvariantMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/SameSignInvariantMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/SingleMuonTrigger.hh"
@@ -44,57 +42,56 @@ Analyzer hPlusPlusMassAnalysis() {
 
   auto eventDump = make_shared<GenSimEventDumpModule>(7);
 
-  auto genSimMod = make_shared<GenSimIdentificationModule>();
-  auto recoMod = make_shared<RecoIdentificationModule>(50);
-  auto matchMod = make_shared<MatchingModule>(genSimMod, recoMod);
+  //auto genSimMod = make_shared<GenSimIdentificationModule>(9900041, true);
+  //auto recoMod = make_shared<RecoIdentificationModule>(50);
+  auto matchMod = make_shared<MatchingModule>();
   auto triggerMod = make_shared<TriggerModule>();
   auto weightMod = make_shared<WeightingModule>();
   auto lrWeightMod = make_shared<LRWeightModule>();
   auto mETMod = make_shared<METModule>();
 
-  auto nLeptonsFilter = make_shared<NLeptonsFilter>(recoMod); //Needs to be updated with shared pointers
-  //auto METFilter = make_shared<METFilter>(recoMod);
+  auto nLeptonsFilter = make_shared<NLeptonsFilter>(); //Needs to be updated with shared pointers
   
-  auto histMod = make_shared<HistogramOutputModule>(genSimMod, recoMod, weightMod, lrWeightMod);
+  auto histMod = make_shared<HistogramOutputModule>(weightMod, lrWeightMod);
   auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
   auto nElectronsHist = make_shared<NLeptonsHist>(matchMod, "Matched Electrons", 10, 0, 10, 11);
   auto nMuonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
 
-  auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod, genSimMod);
+  auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod);
   auto signFlip = make_shared<SignFlipModule>(matchMod);
 
-  auto massRecoEfficiency55 = make_shared<MassRecoEfficiency>(recoMod, 800, 5, 5);
-  auto massRecoEfficiency1010 = make_shared<MassRecoEfficiency>(recoMod, 800, 10, 10);
-  auto massRecoEfficiency4010 = make_shared<MassRecoEfficiency>(recoMod, 800, 40, 10);
-  auto massRecoEfficiency4040 = make_shared<MassRecoEfficiency>(recoMod, 800, 40, 40);
-  auto massRecoEfficiency8040 = make_shared<MassRecoEfficiency>(recoMod, 800, 80, 40);
-  auto massRecoEfficiency20080 = make_shared<MassRecoEfficiency>(recoMod, 800, 200, 80);
+  auto massRecoEfficiency55 = make_shared<MassRecoEfficiency>(800, 5, 5);
+  auto massRecoEfficiency1010 = make_shared<MassRecoEfficiency>(800, 10, 10);
+  auto massRecoEfficiency4010 = make_shared<MassRecoEfficiency>(800, 40, 10);
+  auto massRecoEfficiency4040 = make_shared<MassRecoEfficiency>(800, 40, 40);
+  auto massRecoEfficiency8040 = make_shared<MassRecoEfficiency>(800, 80, 40);
+  auto massRecoEfficiency20080 = make_shared<MassRecoEfficiency>(800, 200, 80);
 
-  auto triggerEfficiencyMod4010 = make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 800, 40, 10);
-  auto triggerEfficiencyMod4040 = make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 800, 40, 40);
-  auto triggerEfficiencyMod8040 = make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 800, 80, 40);
-  auto triggerEfficiencyMod20080 = make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 800, 200, 80);
+  auto triggerEfficiencyMod4010 = make_shared<TriggerEfficiencyModule>(matchMod, 800, 40, 10);
+  auto triggerEfficiencyMod4040 = make_shared<TriggerEfficiencyModule>(matchMod, 800, 40, 40);
+  auto triggerEfficiencyMod8040 = make_shared<TriggerEfficiencyModule>(matchMod, 800, 80, 40);
+  auto triggerEfficiencyMod20080 = make_shared<TriggerEfficiencyModule>(matchMod, 800, 200, 80);
 
-  auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
-  auto genSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
+  auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
+  auto genSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
   // Go up to 2000 - Andy, 09/02 - and make more bins. Modifications also made for picking files
-  auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Same Sign Invariant Mass", 1000, 0, 2000);
+  auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "Reco Same Sign Invariant Mass", 1000, 0, 2000);
 
-  auto recoPhiSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Same Sign Invariant Mass (by Phi)", 100, 0, 1000, true);
-  auto recoMultSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Same Sign Invariant Masses", 100, 0, 1000, false, true);
-  auto recoPhiMultSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Same Sign Invariant Masses (by Phi)", 100, 0, 1000, true, true);
+  auto recoPhiSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "Reco Same Sign Invariant Mass (by Phi)", 100, 0, 1000, true);
+  auto recoMultSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "Reco Same Sign Invariant Masses", 100, 0, 1000, false, true);
+  auto recoPhiMultSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "Reco Same Sign Invariant Masses (by Phi)", 100, 0, 1000, true, true);
 
-  auto genSimHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
-  auto recoHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, false, "Reco H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
-  auto genSimHMinusMinusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H-- Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, -9900041);
-  auto recoHMinusMinusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, false, "Reco H-- Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
+  auto genSimHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(true, "GenSim H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
+  auto recoHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(false, "Reco H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
+  auto genSimHMinusMinusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(true, "GenSim H-- Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, -9900041);
+  auto recoHMinusMinusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(false, "Reco H-- Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
 
-  auto photonHist = make_shared<PhotonsHist>(genSimMod, recoMod, true, "Photon Histogram", 100, 0, 1000);
+  auto photonHist = make_shared<PhotonsHist>(true, "Photon Histogram", 100, 0, 1000);
 
   auto missingEtHist = make_shared<METHist>(mETMod, "Missing Et", 100, 0, 1000);
-  auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Same Sign Invariant Mass", 100, 0, 1000);
-  auto oppositeSignInvMassHist = make_shared<OppositeSignInvariantMassHist>(genSimMod, recoMod, false, "Reco Opposite Sign Invariant Mass", 100, 0, 1000);
-  auto ptHist = make_shared<PtHist>(genSimMod, recoMod, false, std::string("Transverse Momentum"), 50, 0, 3000);
+  auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "Reco Same Sign Invariant Mass", 100, 0, 1000);
+  auto oppositeSignInvMassHist = make_shared<OppositeSignInvariantMassHist>(false, "Reco Opposite Sign Invariant Mass", 100, 0, 1000);
+  auto ptHist = make_shared<PtHist>(false, std::string("Transverse Momentum"), 50, 0, 3000);
   //auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod, genSimMod);
   //auto triggerEfficiencyMod = make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 800, 200, 80);
 
@@ -124,9 +121,9 @@ Analyzer hPlusPlusMassAnalysis() {
   //histMod->addHistogram(positiveNegativeInvMassHist);
 
   // Initialize triggers
-  auto singleMuonTrigger = make_shared<SingleMuonTrigger>(recoMod, 50);
-  auto doubleMuonTrigger = make_shared<DoubleMuonTrigger>(recoMod, 37, 27);
-  auto tripleMuonTrigger = make_shared<TripleMuonTrigger>(recoMod, 10, 5, 5);
+  auto singleMuonTrigger = make_shared<SingleMuonTrigger>(50);
+  auto doubleMuonTrigger = make_shared<DoubleMuonTrigger>(37, 27);
+  auto tripleMuonTrigger = make_shared<TripleMuonTrigger>(10, 5, 5);
   auto mETTrigger = make_shared<METTrigger>(mETMod, 120);
 
   // Add triggers to the TriggerModule
@@ -135,10 +132,10 @@ Analyzer hPlusPlusMassAnalysis() {
   triggerMod->addTrigger(tripleMuonTrigger);
   triggerMod->addTrigger(mETTrigger);
 
-  analyzer.addProductionModule(genSimMod);
-  analyzer.addProductionModule(recoMod);
+  //analyzer.addProductionModule(genSimMod);
+  //analyzer.addProductionModule(recoMod);
   analyzer.addProductionModule(matchMod);
-  // analyzer.addProductionModule(triggerMod);
+  //analyzer.addProductionModule(triggerMod);
   analyzer.addProductionModule(weightMod);
   analyzer.addProductionModule(lrWeightMod);
   analyzer.addProductionModule(mETMod);

@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include "CIAnalysis/CIStudies/interface/InputModule.hh"
 
 namespace edm
 {
@@ -20,13 +21,15 @@ public:
 		name(iname)
 	{}
 
+	void setInput(std::shared_ptr<InputModule> iInput) {input = iInput;}
+
 	virtual ~HistogramPrototype() {} // Empty virtual destructor
 	
 	virtual std::vector<double> value() const = 0;
 
         std::string getName() const {return name;}
 
-	bool shouldDraw(const edm::EventBase& event) const; // Bool switch to determine if a histogram is to be filled
+	bool shouldDraw() const; // Bool switch to determine if a histogram is to be filled
 	std::string getFilteredName() const {return (getFilterString() + getName());}
 
 	void addFilter(std::shared_ptr<FilterModule> filterMod) {filters.push_back(filterMod);} // Adds a FilterModule& to filters (the vector)
@@ -34,9 +37,13 @@ public:
 	std::string getFilterString() const;
 
 	virtual TH1* makeHistogram() const = 0;
-        virtual TH1* makeHistogram(std::string name, std::string title) const = 0; // Makes the histogram with a modified name & title
+    virtual TH1* makeHistogram(std::string name, std::string title) const = 0; // Makes the histogram with a modified name & title
 
+
+protected:
+	std::shared_ptr<InputModule> getInput() const {return input;}
 private:
+	std::shared_ptr<InputModule> input;
 	std::string name;
 	std::vector<std::shared_ptr<FilterModule>> filters; // Vector of FilterModule&'s
 };

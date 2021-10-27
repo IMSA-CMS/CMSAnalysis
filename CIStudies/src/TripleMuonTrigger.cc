@@ -1,18 +1,16 @@
 #include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
 
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
-
-TripleMuonTrigger::TripleMuonTrigger(std::shared_ptr<RecoIdentificationModule> iRecoMod, double iPTCutoff, double iSecondPTCutoff, double iThirdPTCutoff) :
-  RecoTrigger("Triple Muon Trigger", iRecoMod),
+TripleMuonTrigger::TripleMuonTrigger(double iPTCutoff, double iSecondPTCutoff, double iThirdPTCutoff) :
+  RecoTrigger("Triple Muon Trigger"),
   pTCutoff(iPTCutoff),
   secondPTCutoff(iSecondPTCutoff),
   thirdPTCutoff(iThirdPTCutoff)
 {
 }
 
-bool TripleMuonTrigger::checkTrigger(std::shared_ptr<RecoIdentificationModule> recoMod)
+bool TripleMuonTrigger::checkTrigger(std::shared_ptr<InputModule> input)
 {
-  auto particles = recoMod->getRecoCandidates(Particle::Type::Muon);
+  auto particles = input->getParticles(InputModule::RecoLevel::Reco, Particle::Type::Muon);
 
   // If there aren't enough muons, then automatically fail the trigger
   if (particles.getNumParticles() < 3)
