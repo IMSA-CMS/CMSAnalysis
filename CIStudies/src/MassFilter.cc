@@ -1,16 +1,15 @@
 #include "CIAnalysis/CIStudies/interface/MassFilter.hh"
-#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
+//#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
 
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/FWLite/interface/Event.h"
 #include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 
-MassFilter::MassFilter(const GenSimIdentificationModule& genSimModule, double hiCut) :
-  genSim(genSimModule),
+MassFilter::MassFilter(double hiCut) :
   highCutoff(hiCut)
 {}
 
-std::string MassFilter::makeFilterString(const edm::EventBase& event)
+std::string MassFilter::makeFilterString()
 {
   // double invariantMass = genSim.getGenParticles().getInvariantMass();
 
@@ -33,9 +32,10 @@ std::string MassFilter::makeFilterString(const edm::EventBase& event)
   else if (massBinNumber == 2000)
     massBinUpperCutoff = 5000;
 
-  edm::Handle<GenEventInfoProduct> genEvtInfo;
-  event.getByLabel(std::string("generator"), genEvtInfo);
-  double qScale = genEvtInfo->pdf()->scalePDF;
+  // edm::Handle<GenEventInfoProduct> genEventInfo;
+  // event.getByLabel(std::string("generator"), genEvtInfo);
+  auto genEventInfo = getInput()->getGenInfo();
+  double qScale = genEventInfo.pdf()->scalePDF;
   
   if (qScale <= massBinUpperCutoff)
      return "Included";
