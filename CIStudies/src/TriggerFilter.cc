@@ -1,5 +1,5 @@
 #include "CIAnalysis/CIStudies/interface/TriggerFilter.hh"
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
+
 
 TriggerFilter::TriggerFilter(const std::shared_ptr<Trigger> iTrigger) :
   trigger(iTrigger)
