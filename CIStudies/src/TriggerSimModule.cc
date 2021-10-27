@@ -44,6 +44,67 @@ void TriggerSimModule::addTrigger(const std::vector<std::string> _triggerNames)
   }
 }
 
+bool TriggerSimModule::removeTrigger(const EnumTriggers triggerNameEnum)
+{
+  bool passed = true;
+
+  std::vector<std::string> tmp_nameVector = triggerEnumNameMap.find(triggerNameEnum)->second;
+  for (std::string tmp_triggerName : tmp_nameVector)
+  {
+    if (!removeTrigger(tmp_triggerName))
+    {
+      passed = false;
+    }
+  }
+
+  return passed;
+}
+
+bool TriggerSimModule::removeTrigger(const std::vector<EnumTriggers> triggerNameEnums)
+{
+  bool passed = true;
+  
+  for (EnumTriggers triggerEnum : triggerNameEnums)
+  {
+    if (!removeTrigger(triggerEnum))
+    {
+      passed = false;
+    }
+  }
+
+  return passed;
+}
+
+bool TriggerSimModule::removeTrigger(const std::string _triggerName)
+{
+  // Removes the trigger, if it's listed
+  auto located_iterator = std::find(triggerNames.begin(), triggerNames.end(), _triggerName);
+  if (located_iterator != triggerNames.end())
+  {
+    triggerNames.erase(located_iterator);
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+bool TriggerSimModule::removeTrigger(const std::vector<std::string> _triggerNames)
+{
+  bool passed;
+
+  for (std::string trigger : _triggerNames)
+  {
+    if (!removeTrigger(trigger))
+    {
+      passed = false;
+    }
+  }
+
+  return passed;
+}
+
 // For use as a production module
 void TriggerSimModule::finalize()
 {
@@ -99,6 +160,7 @@ bool TriggerSimModule::process(const edm::EventBase& event)
       if (passCurrentTrigger) 
       {
         passAnyTrigger = true;
+        passedTriggers.push_back(names.triggerName(i));
       }
       
       if (triggerResultsData.find(names.triggerName(i)) == triggerResultsData.end())
@@ -111,11 +173,6 @@ bool TriggerSimModule::process(const edm::EventBase& event)
         // if in there, just increment 1 if it passed
         triggerResultsData[names.triggerName(i)].passed += (int)passCurrentTrigger;
         ++triggerResultsData[names.triggerName(i)].total;
-      }
-
-      if (passCurrentTrigger)
-      {
-        passedTriggers.push_back(names.triggerName(i));
       }
     }
   }
