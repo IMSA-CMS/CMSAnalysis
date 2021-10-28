@@ -63,6 +63,8 @@ Analyzer invariantMassAnalysis()
   analyzer.addProductionModule(lrWeightMod);
   analyzer.addProductionModule(trigSimMod);
 
+  analyzer.addFilterModule(triggerFilter);
+
   // Hopefully doesn't break
   analyzer.addAnalysisModule(histMod);
   return analyzer;

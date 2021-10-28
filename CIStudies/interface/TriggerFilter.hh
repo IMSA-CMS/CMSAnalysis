@@ -5,8 +5,6 @@
 #include "FilterModule.hh"
 #include "Trigger.hh"
 
-class RecoIdentificationModule;
-
 class TriggerFilter : public FilterModule
 {
   public:
