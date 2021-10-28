@@ -43,7 +43,7 @@ Analyzer leptonJetReconstructionAnalysis() {
   auto weightMod = std::make_shared<WeightingModule>();
   auto lrWeightMod = std::make_shared<LRWeightModule>();
   auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>(3);
-  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(recoMod);
+  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(recoMod, 0.05);
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
   auto lepMatchMod =
       std::make_shared<LeptonJetMatchingModule>(genPartMod, lepRecoMod);
@@ -86,8 +86,8 @@ Analyzer leptonJetReconstructionAnalysis() {
   //auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
 
   // Efficiency Modules
-  auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod, genSimMod);
-  auto leptonJetEfficiency = make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
+  auto leptonEfficiency = make_shared<LeptonEfficiency>(weightMod, matchMod, genSimMod);
+  auto leptonJetEfficiency = make_shared<LeptonJetEfficiency>(weightMod, lepRecoMod, lepMatchMod);
   
   // Add the histogram(s) created above to histMod
   histOutputMod->addHistogram(nLeptonsHist);
@@ -114,14 +114,14 @@ Analyzer leptonJetReconstructionAnalysis() {
   analyzer.addProductionModule(lrWeightMod);
   analyzer.addProductionModule(matchMod);
   analyzer.addProductionModule(lepRecoMod);
-  // analyzer.addProductionModule(genPartMod);
+  analyzer.addProductionModule(genPartMod);
   analyzer.addProductionModule(lepMatchMod);
 
   analyzer.addAnalysisModule(histOutputMod);
-  analyzer.addProductionModule(triggerMod);
+  //analyzer.addProductionModule(triggerMod);
 
-  //analyzer.addAnalysisModule(leptonEfficiency);
-  // analyzer.addAnalysisModule(leptonJetEfficiency);
+  analyzer.addAnalysisModule(leptonEfficiency);
+  analyzer.addAnalysisModule(leptonJetEfficiency);
   //analyzer.addAnalysisModule(massRecoEfficiency200);
   //analyzer.addAnalysisModule(massRecoEfficiency500);
   //analyzer.addAnalysisModule(massRecoEfficiency800);
