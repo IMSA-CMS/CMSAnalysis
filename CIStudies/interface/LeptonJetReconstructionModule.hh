@@ -10,7 +10,8 @@ class RecoIdentificationModule;
 class LeptonJetReconstructionModule : public ProductionModule
 {
 public:
-  LeptonJetReconstructionModule(std::shared_ptr<RecoIdentificationModule> recoModule, double deltaRCut = 0.5);
+  LeptonJetReconstructionModule(std::shared_ptr<RecoIdentificationModule> recoModule, 
+    double deltaRCut = 0.5, double pTCut = 5);
   virtual bool process(const edm::EventBase& event) override;
   const std::vector<LeptonJet>& getLeptonJets() const {return leptonJets;}
   const std::vector<double>& getDeltaRValues() const {return deltaRValues;}
@@ -28,6 +29,7 @@ private:
   std::vector<double> pTValues;
 
   double DeltaRCut;
+  double pTCut;
 
 };
 

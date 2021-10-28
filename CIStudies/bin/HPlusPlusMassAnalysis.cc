@@ -47,19 +47,19 @@ Analyzer hPlusPlusMassAnalysis() {
   auto nElectronsHist = make_shared<NLeptonsHist>(matchMod, "Matched Electrons", 10, 0, 10, 11);
   auto nMuonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
 
-  auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod, genSimMod);
+  //auto leptonEfficiency = make_shared<LeptonEfficiency>(weightingMod, matchMod, genSimMod);
   //auto massRecoEfficiency200 = make_shared<MassRecoEfficiency>(recoMod, 200, 10);
   //auto massRecoEfficiency500 = make_shared<MassRecoEfficiency>(recoMod, 500, 25);
   //auto massRecoEfficiency800 = make_shared<MassRecoEfficiency>(recoMod, 800, 40);
   //auto massRecoEfficiency1000 = make_shared<MassRecoEfficiency>(recoMod, 1000, 50);
   //auto massRecoEfficiency1300 = make_shared<MassRecoEfficiency>(recoMod, 1300, 65);
 
-  auto massRecoEfficiency55 = make_shared<MassRecoEfficiency>(recoMod, 800, 5, 5);
-  auto massRecoEfficiency1010 = make_shared<MassRecoEfficiency>(recoMod, 800, 10, 10);
-  auto massRecoEfficiency4010 = make_shared<MassRecoEfficiency>(recoMod, 800, 40, 10);
-  auto massRecoEfficiency4040 = make_shared<MassRecoEfficiency>(recoMod, 800, 40, 40);
-  auto massRecoEfficiency8040 = make_shared<MassRecoEfficiency>(recoMod, 800, 80, 40);
-  auto massRecoEfficiency20080 = make_shared<MassRecoEfficiency>(recoMod, 800, 200, 80);
+  // auto massRecoEfficiency55 = make_shared<MassRecoEfficiency>(weightMod, recoMod, 800, 5, 5);
+  // auto massRecoEfficiency1010 = make_shared<MassRecoEfficiency>(weightMod, recoMod, 800, 10, 10);
+  // auto massRecoEfficiency4010 = make_shared<MassRecoEfficiency>(weightMod, recoMod, 800, 40, 10);
+  // auto massRecoEfficiency4040 = make_shared<MassRecoEfficiency>(weightMod, recoMod, 800, 40, 40);
+  // auto massRecoEfficiency8040 = make_shared<MassRecoEfficiency>(weightMod, recoMod, 800, 80, 40);
+  // auto massRecoEfficiency20080 = make_shared<MassRecoEfficiency>(weightMod, recoMod, 800, 200, 80);
 
   auto triggerEfficiencyMod4010 = make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 800, 40, 10);
   auto triggerEfficiencyMod4040 = make_shared<TriggerEfficiencyModule>(matchMod, genSimMod, 800, 40, 40);
@@ -123,8 +123,8 @@ Analyzer hPlusPlusMassAnalysis() {
   //analyzer.addAnalysisModule(massRecoEfficiency1000);
   //analyzer.addAnalysisModule(massRecoEfficiency1300);
   
-  analyzer.addAnalysisModule(massRecoEfficiency55);
-  analyzer.addAnalysisModule(massRecoEfficiency1010);
+  //analyzer.addAnalysisModule(massRecoEfficiency55);
+  //analyzer.addAnalysisModule(massRecoEfficiency1010);
   //analyzer.addAnalysisModule(massRecoEfficiency4010);
   //analyzer.addAnalysisModule(massRecoEfficiency4040);
   //analyzer.addAnalysisModule(massRecoEfficiency8040);

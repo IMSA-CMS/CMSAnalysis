@@ -2,10 +2,10 @@
 #include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "DataFormats/Math/interface/deltaR.h"
 
-LeptonJetReconstructionModule::LeptonJetReconstructionModule(std::shared_ptr<RecoIdentificationModule> recoModule, double deltaRCut) :
+LeptonJetReconstructionModule::LeptonJetReconstructionModule(std::shared_ptr<RecoIdentificationModule> recoModule, double deltaRCut, double ipTCut) :
   reco(recoModule),
-  DeltaRCut(deltaRCut)
-
+  DeltaRCut(deltaRCut),
+  pTCut(ipTCut)
 {
 }
 
@@ -38,8 +38,11 @@ bool LeptonJetReconstructionModule::process(const edm::EventBase& event) // reco
 
     if (jet.getNumParticles() > 1)
     {
-      leptonJets.push_back(jet);
-    }      
+      //if (jet.getMass() < 50)
+      {
+        leptonJets.push_back(jet);
+      }
+    }
   }
   findDeltaRValues();
   findPtValues();
