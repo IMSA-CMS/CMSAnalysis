@@ -4,7 +4,7 @@
 #include <vector>
 #include "CIAnalysis/CIStudies/interface/Particle.hh"
 
-class LeptonJet
+class LeptonJet : public Particle
 {
 public:
   LeptonJet(const Particle particle);

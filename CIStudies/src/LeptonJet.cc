@@ -10,7 +10,7 @@ reco::Candidate::LorentzVector LeptonJet::getFourVector() const
   reco::Candidate::LorentzVector vector;
   for (auto particle : leptonJetParticles)
   {
-    vector += particle.fourVector();
+    vector += particle.getFourVector();
   }
   return vector; // Does this have to be ROOT::Math::LorentzVector?
 }

@@ -17,7 +17,7 @@ std::vector<double> MatchingPtHist::value() const
     {
         // std::cout << "MatchingPairs size not zero" << "\n";
         auto pair = matchingPairs[0];
-        double partPt = pair.first.pt();
+        double partPt = pair.first.getPt();
         double jetPt = pair.second.getPt();
 
         double ptDiff = jetPt - partPt;

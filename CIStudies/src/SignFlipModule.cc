@@ -15,7 +15,7 @@ bool SignFlipModule::process()
 	  nTotalEvents++;
 	  
     auto particleType = particlePair.getGenParticle().getType();
-    auto particlePt = particlePair.getGenParticle().pt();
+    auto particlePt = particlePair.getGenParticle().getPt();
 
     if(particleType == Particle::Type::Electron) {
       if(particlePt > signFlipPtCut) {
