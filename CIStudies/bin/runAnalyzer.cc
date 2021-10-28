@@ -64,7 +64,7 @@ int main(int argc, char **argv) {
   }
 
   std::cout << "Notice: input file selected" << std::endl;
-  // error in line below
+  // Potential error in line below
 
   analyzer.run(inputFile, outputFile, outputEvery, numFiles);
 
