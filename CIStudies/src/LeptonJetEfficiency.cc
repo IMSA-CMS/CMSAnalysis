@@ -16,15 +16,6 @@ bool LeptonJetEfficiency::process()
     auto matchingPairs = lepMatchMod->getMatchingPairs();
     numMatchedJets += matchingPairs.size();
 
-    for (auto jet : recoLeptonJets) {
-        auto particles = jet.getParticles();
-        auto zero = [](auto p){return p.hadVetoEt() == 0;};
-        bool any = std::any_of(particles.begin(), particles.end(), zero);
-        bool all = std::all_of(particles.begin(), particles.end(), zero);
-        recoZeroAnyVeto += any;
-        recoZeroAllVeto += all;
-    }
-
     return true;
 }
 

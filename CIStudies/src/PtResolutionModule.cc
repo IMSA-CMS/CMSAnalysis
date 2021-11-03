@@ -12,7 +12,7 @@ void PtResolutionModule::fillError(const MatchingPairCollection& bestPairs)
 {
   for (auto matchingPair : bestPairs.getPairs())
     {
-      double genSimPt = matchingPair.getGenParticle().pt();
+      double genSimPt = matchingPair.getGenParticle().getPt();
       std::string pTBin = pickBin(genSimPt);
       fillHistogram("pTResolutionHistBin" + pTBin, {matchingPair.getPtError()});
     }
