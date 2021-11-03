@@ -16,6 +16,7 @@
 #include "FWCore/Framework/interface/Event.h"
 #include "DataFormats/FWLite/interface/Event.h"
 #include "CIAnalysis/CIStudies/interface/Module.hh"
+#include "CIAnalysis/CIStudies/interface/DelphesEventLoader.hh"
 
 void Analyzer::run(const std::string& configFile, const std::string& outputFile, int outputEvery, int nFiles)
 {
@@ -25,7 +26,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 
   // Get a list of FileParams objects
   auto fileparams = inputFiles(configFile);
-  auto eventLoader = std::make_shared<MiniAODEventLoader> (outputEvery);
+  auto eventLoader = std::make_shared<DelphesEventLoader> (outputEvery);
   auto input = std::make_shared<InputModule> (eventLoader);
   // Initialize all modules
   for (auto module : getAllModules())
