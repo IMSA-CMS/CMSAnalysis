@@ -25,12 +25,12 @@ ParticleCollection InputModule::getParticles(RecoLevel level, Particle::Type par
 {
     ParticleCollection particleList;
     if (level == RecoLevel::GenSim)
-    {    
+    {
         auto particles = eventLoader->getGenSimParticles().getParticles();
-        for (const auto &p : particles) 
+        for (const auto &p : particles)
         {
-            if ((p.getType() == particleType || particleType == Particle::Type::None) && p.isFinalState()) 
-            {    
+            if ((p.getType() == particleType || particleType == Particle::Type::None) && p.isFinalState())
+            {
                 particleList.addParticle(p);
             }
         }
@@ -49,6 +49,8 @@ ParticleCollection InputModule::getParticles(RecoLevel level, Particle::Type par
     return particleList;
 }
 
+/* TODO: getJets */
+
 /*
 std::vector<PileupSummaryInfo> InputModule::getPileupInfo() const
 {
@@ -64,7 +66,7 @@ GenEventInfoProduct InputModule::getGenInfo() const
 double InputModule::getMET() const
 {
     return eventLoader->getMET();
-}       
+}
 // edm::TriggerResults InputModule::getTriggerResults(std::string subProcess) const
 // {
 //     return eventLoader->getTriggerResults(subProcess);

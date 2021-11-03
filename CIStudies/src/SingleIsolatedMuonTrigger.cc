@@ -20,7 +20,7 @@ bool SingleIsolatedMuonTrigger::checkTrigger(std::shared_ptr<InputModule> input)
 
   for (const auto &particle : particles.getParticles())
   {
-    if (particle.pt() >= pTCutoff && particle.isIsolated())
+    if (particle.getPt() >= pTCutoff && particle.isIsolated())
     {
       return true;
     }
