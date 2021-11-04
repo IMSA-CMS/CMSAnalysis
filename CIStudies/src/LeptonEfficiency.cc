@@ -1,10 +1,18 @@
+//#define _GLIBCXX_USE_CXX11_ABI 0
+//#include "TROOT.h"
+//#include "TSystem.h"
+
+#include <iostream>
+
+//#include "CIAnalysis/CIStudies/interface/TDisplayText.h"
+
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
 
-LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<WeightingModule> weightMod, const std::shared_ptr<MatchingModule> imatchModule, const std::shared_ptr<GenSimIdentificationModule> igenSimModule):
+LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<WeightingModule> weightMod, const std::shared_ptr<MatchingModule> imatchModule):
   EfficiencyModule(weightMod),
   matchModule(imatchModule)
-  ,genSimModule(igenSimModule)
+  //,genSimModule(igenSimModule)
   ,recoMuons(0)
   ,genSimMuons(0)
   ,recoElectrons(0)
@@ -12,9 +20,9 @@ LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<WeightingModule> weight
 {
 }
 
-bool LeptonEfficiency::process(const edm::EventBase& event) 
+bool LeptonEfficiency::process()
 {
-  auto genSim = genSimModule->getGenParticles();
+  auto genSim = getInput()->getParticles(InputModule::RecoLevel::GenSim);
 
   // std::cout << "Looking at GenSim Particles" << std::endl;
   for(const auto &particle : genSim.getParticles())
@@ -62,6 +70,9 @@ bool LeptonEfficiency::process(const edm::EventBase& event)
 }
 void LeptonEfficiency::finalize()
 {
-  std::cout << "Muon efficiency: " << recoMuons / (double) genSimMuons << std::endl;
-  std::cout << "Electron efficiency: " << recoElectrons / (double) genSimElectrons << std::endl;
+  std::string muonOutputString = std::to_string(recoMuons/(double)genSimMuons);
+  writeText(muonOutputString, "Muon Efficiency");
+
+  std::string electronOutputString = std::to_string(recoElectrons/(double)genSimElectrons);
+  writeText(electronOutputString, "Electron Efficiency");
 }

@@ -15,7 +15,7 @@ void EfficiencyModule::finalize()
     }
 }
 
-bool EfficiencyModule::process (const edm::EventBase& event)
+bool EfficiencyModule::process ()
 {
     if (isNewFile())
     {

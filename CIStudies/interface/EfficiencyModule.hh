@@ -18,7 +18,7 @@ class EfficiencyModule : public AnalysisModule
     void incrementCounter(std::string name, double increment = 1);
     double getCounter(std::string name) const;
     double getEfficiency(std::string name) const;
-    bool process(const edm::EventBase& event) override;
+    bool process();
     virtual void doCounters() = 0; 
 
     private:

@@ -11,6 +11,42 @@
 //using Particle = const reco::Candidate*;
 using PartPair = std::pair<Particle, Particle>;
 
+ParticleCollection ParticleCollection::getPosParticles() const
+{
+  ParticleCollection positives;  // All of the positively-charged particles in the ParticleCollection
+
+  for (auto particle : getParticles())
+  {
+    if (particle.charge() > 0)
+    {
+      // std::cout << "Added positive particle with charge " << particle.charge() << " to positive collection.\n";
+      positives.addParticle(particle);  // Add all of the positively-charged particles to positives
+    }
+  }
+
+  // std::cout << "Number of Positive Particles: " << positives.getNumParticles() << '\n';
+
+  return positives;
+}
+
+ParticleCollection ParticleCollection::getNegParticles() const
+{
+  ParticleCollection negatives;  // All of the negatively-charged particles in the ParticleCollection
+
+  for (auto particle : getParticles())
+  {
+    if (particle.charge() < 0)
+    {
+      // std::cout << "Added negative particle with charge " << particle.charge() << " to negative collection.\n";
+      negatives.addParticle(particle);  // Add all of the negatively-charged particles to negatives
+    }
+  }
+
+  // std::cout << "Number of Negative Particles: " << negatives.getNumParticles() << '\n';
+
+  return negatives;
+}
+
 double ParticleCollection::getInvariantMass() const
 {
   auto particlePair = chooseParticles();
@@ -54,7 +90,7 @@ double ParticleCollection::getNthHighestPt(int n) const
   auto particlesVec = getParticles();  // Vector of Particles
 
   // Sort the vector of particles by pt (greatest to least)
-  std::sort(particlesVec.begin(), particlesVec.end(), [](auto a, auto b){return a.pt() > b.pt();});
+  std::sort(particlesVec.begin(), particlesVec.end(), [](auto a, auto b){return a.getPt() > b.getPt();});
 
   // for (auto particle : particlesVec)
   // {
@@ -62,7 +98,7 @@ double ParticleCollection::getNthHighestPt(int n) const
   // }
   // std::cout << '\n';
 
-  return particlesVec[n - 1].pt();  // n-1 since the first element is 0, 2nd element is 1, etc.
+  return particlesVec[n - 1].getPt();  // n-1 since the first element is 0, 2nd element is 1, etc.
 }
 
 double ParticleCollection::getLeadingPt() const
@@ -70,7 +106,7 @@ double ParticleCollection::getLeadingPt() const
   double highestPt = 0;
   for (auto particle : particles)
   {
-    double pt = particle.pt();
+    double pt = particle.getPt();
     if (pt > highestPt)
     {
       pt = highestPt;
@@ -85,7 +121,7 @@ Particle ParticleCollection::getLeadingPtLepton() const
   double highestPt = getLeadingPt();
   for (auto part : particles)
   {
-    if (part.pt() == highestPt)
+    if (part.getPt() == highestPt)
     {
       return part;
     }
@@ -96,8 +132,8 @@ Particle ParticleCollection::getLeadingPtLepton() const
 
 double ParticleCollection::calculateLeadingTransverseMomentum(Particle particle1, Particle particle2) const
 {
-  double pt1 = particle1.pt();
-  double pt2 = particle2.pt();
+  double pt1 = particle1.getPt();
+  double pt2 = particle2.getPt();
   if (pt1 > pt2)
     {
       return pt1;
@@ -197,7 +233,7 @@ PartPair ParticleCollection::chooseParticles() const
   return particlePair;
 }
 
-PartPair ParticleCollection::chooseParticles(bool oppositeSigns) const
+PartPair ParticleCollection::chooseParticles(bool oppositeSigns) const  // oppositeSigns is true when the particles have opposite sign charge
 {
   double maxInvariantMass = 0;
   Particle iPointer(nullptr);
@@ -222,6 +258,37 @@ PartPair ParticleCollection::chooseParticles(bool oppositeSigns) const
   return {iPointer, jPointer};
 }
 
+PartPair ParticleCollection::chooseParticlesByPhi(bool oppositeSigns) const
+{
+  double bestAngle = 0;  // We want the two particles whose phi angle difference is closest to 180, since that's what H++ decay leptons do
+  Particle iPointer(nullptr);
+  Particle jPointer(nullptr);
+
+  for (int i = 0; i < static_cast<int>(particles.size()) - 1; ++i)
+  {
+    for (int j = i + 1; j < static_cast<int>(particles.size()); ++j)
+    {
+      if (checkSigns(particles[i], particles[j]) == oppositeSigns)     // Check if the particle pairs' signs match with what we want
+      {
+        double angleDifference = abs(particles[i].getPhi() - particles[j].getPhi());
+        if (angleDifference > 180)
+        {
+          angleDifference = 360 - angleDifference;
+        }
+
+        if (angleDifference > bestAngle)
+        {
+          bestAngle = angleDifference;
+          iPointer = particles[i];
+          jPointer = particles[j];
+        }
+      }
+    }
+  }
+  
+  return {iPointer, jPointer};
+}
+
 //returns true if particle1 and particle2 have opposite signs
 bool ParticleCollection::checkSigns(Particle particle1, Particle particle2) const
 {
@@ -235,8 +302,8 @@ bool ParticleCollection::checkSigns(Particle particle1, Particle particle2) cons
 
 double ParticleCollection::calculateInvariantMass(Particle particle1, Particle particle2) const
 {
-  auto vec1 = particle1.fourVector();
-  auto vec2 = particle2.fourVector();
+  auto vec1 = particle1.getFourVector();
+  auto vec2 = particle2.getFourVector();
 
   auto sum = vec1 + vec2;
 
@@ -257,30 +324,67 @@ double ParticleCollection::calculateInvariantMass(Particle particle1, Particle p
   //  }
 }
 
-double ParticleCollection::calculateSameSignInvariantMass() const
+double ParticleCollection::calculateSameSignInvariantMass(bool usingPhi) const
 {
-  auto particlePair = chooseParticles(false);					// we want same sign particles with highest invariant mass
-  if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
-    {      
-      return calculateInvariantMass(particlePair.first, particlePair.second);
-    }
+  Particle iPointer(nullptr);
+  Particle jPointer(nullptr);
+  PartPair particlePair = {iPointer, jPointer};
+
+  if (usingPhi)
+  {
+    particlePair = chooseParticlesByPhi(false);  // we want same sign particles with best phi angle
+  }
   else
-    {     
-      return -1;
-    }
+  {
+    particlePair = chooseParticles(false);  // we want same sign particles with highest invariant mass
+  }
+
+  if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
+  {
+    return calculateInvariantMass(particlePair.first, particlePair.second);
+  }
+  else
+  {
+    return -1;
+  }
+}
+
+std::vector<double> ParticleCollection::calculateSameSignInvariantMasses(bool usingPhi) const
+{
+  std::vector<double> sameSignInvariantMasses;
+
+  if (getPosParticles().getNumParticles() >= 2)
+  {
+    sameSignInvariantMasses.push_back(getPosParticles().calculateSameSignInvariantMass(usingPhi));
+  }
+  else
+  {
+    sameSignInvariantMasses.push_back(0);
+  }
+
+  if (getNegParticles().getNumParticles() >= 2)
+  {
+    sameSignInvariantMasses.push_back(getNegParticles().calculateSameSignInvariantMass(usingPhi));
+  }
+  else
+  {
+    sameSignInvariantMasses.push_back(0);
+  }
+
+  return sameSignInvariantMasses;
 }
 
 double ParticleCollection::calculateOppositeSignInvariantMass() const
 {
   auto particlePair = chooseParticles(true);					// we want opposite sign particles with highest invariant mass
   if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
-    {      
-      return calculateInvariantMass(particlePair.first, particlePair.second);
-    }
+  {      
+    return calculateInvariantMass(particlePair.first, particlePair.second);
+  }
   else
-    {     
-      return -1;
-    }
+  {     
+    return -1;
+  }
 }
 
 double ParticleCollection::calculateAllLeptonInvariantMass() const
@@ -289,7 +393,7 @@ double ParticleCollection::calculateAllLeptonInvariantMass() const
 
   for (auto particle : particles)
   {
-    auto newVec = particle.fourVector();
+    auto newVec = particle.getFourVector();
     total += newVec;
   }
 
@@ -361,12 +465,12 @@ double ParticleCollection::calculateCollinsSoper(Particle particle, Particle ant
   TLorentzVector Ele;
   TLorentzVector Elebar;
 
-  float Et1 = particle.et();
-  float Et2 = antiparticle.et();
-  float Eta1 = particle.eta();
-  float Eta2 = antiparticle.eta();
-  float Phi1 = particle.phi();
-  float Phi2 = antiparticle.phi();
+  float Et1 = particle.getEt();
+  float Et2 = antiparticle.getEt();
+  float Eta1 = particle.getEta();
+  float Eta2 = antiparticle.getEta();
+  float Phi1 = particle.getPhi();
+  float Phi2 = antiparticle.getPhi();
   float En1 = particle.energy();
   float En2 = antiparticle.energy();
   Ele.SetPtEtaPhiE(Et1,Eta1,Phi1,En1);
@@ -393,7 +497,7 @@ double ParticleCollection::calculateCosTheta(TLorentzVector Ele, TLorentzVector 
 
 bool ParticleCollection::lowEtaFlip(Particle particle, Particle antiparticle) const
 {
-  if (std::abs(particle.eta()) < std::abs(antiparticle.eta()))
+  if (std::abs(particle.getEta()) < std::abs(antiparticle.getEta()))
     {
       if (particle.charge() < 0)
 	{

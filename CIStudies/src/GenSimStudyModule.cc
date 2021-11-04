@@ -17,18 +17,19 @@ GenSimStudyModule::GenSimStudyModule()
 {
   
 }
-bool GenSimStudyModule::process(const edm::EventBase &event) {
+bool GenSimStudyModule::process() {
   isPhoton = 0;
   // Get Events Tree and create handle for GEN
 
-  edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
-  event.getByLabel(std::string("prunedGenParticles"), genParticlesHandle);
+  //edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
+  //event.getByLabel(std::string("prunedGenParticles"), genParticlesHandle);
+  auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim).getParticles();
 
   
   // Begin GEN looping
   // Loop through Particle list
-  for (const auto &p : *genParticlesHandle) {
-    if (p.pdgId() ==  22 && p.isPromptFinalState()) {
+  for (const auto &p : genParticles) {
+    if (p.pdgId() ==  22 && p.isFinalState()) {
       isPhoton++;
     }
   }
