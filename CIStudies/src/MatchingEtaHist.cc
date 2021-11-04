@@ -5,7 +5,7 @@
 #include <vector>
 
 MatchingEtaHist::MatchingEtaHist(std::shared_ptr<LeptonJetMatchingModule> iLeptonJetMatchingModule, const std::string& iname, int iNBins, double iminimum, double imaximum) :
-    HistogramPrototype(iname, iNBins, iminimum, imaximum),
+    HistogramPrototype1D(iname, iNBins, iminimum, imaximum),
     leptonJetMatchingModule(iLeptonJetMatchingModule)
 
 {}
@@ -17,7 +17,7 @@ std::vector<double> MatchingEtaHist::value() const
     {
         // std::cout << "MatchingPairs size not zero" << "\n";
         auto pair = matchingPairs[0];
-        double partEta = pair.first.eta();
+        double partEta = pair.first.getEta();
         std::cout << "MC eta value: " << partEta << "\n";
         double jetEta = pair.second.getEta();
         std::cout << "Reco eta value: " << jetEta << "\n";

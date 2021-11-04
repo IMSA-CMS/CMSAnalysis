@@ -6,7 +6,7 @@
 #include <vector>
 
 MatchingDeltaRHist::MatchingDeltaRHist(std::shared_ptr<LeptonJetMatchingModule> iLeptonJetMatchingModule, const std::string& iname, int iNBins, double iminimum, double imaximum) :
-    HistogramPrototype(iname, iNBins, iminimum, imaximum),
+    HistogramPrototype1D(iname, iNBins, iminimum, imaximum),
     leptonJetMatchingModule(iLeptonJetMatchingModule)
 
 {}
@@ -18,7 +18,7 @@ std::vector<double> MatchingDeltaRHist::value() const
     {
         std::cout << "MatchingPairs size not zero" << "\n";
         auto pair = matchingPairs[0];
-        auto partFourVector = pair.first.fourVector();
+        auto partFourVector = pair.first.getFourVector();
         auto jetFourVector = pair.second.getFourVector();
         double deltaR = reco::deltaR(partFourVector, jetFourVector);
 

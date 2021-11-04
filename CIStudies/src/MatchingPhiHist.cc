@@ -6,7 +6,7 @@
 #include <vector>
 
 MatchingPhiHist::MatchingPhiHist(std::shared_ptr<LeptonJetMatchingModule> iLeptonJetMatchingModule, const std::string& iname, int iNBins, double iminimum, double imaximum) :
-    HistogramPrototype(iname, iNBins, iminimum, imaximum),
+    HistogramPrototype1D(iname, iNBins, iminimum, imaximum),
     leptonJetMatchingModule(iLeptonJetMatchingModule)
 
 {}
@@ -18,7 +18,7 @@ std::vector<double> MatchingPhiHist::value() const
     {
         // std::cout << "MatchingPairs size not zero" << "\n";
         auto pair = matchingPairs[0];
-        auto partPhi = pair.first.fourVector().Phi();
+        auto partPhi = pair.first.getFourVector().Phi();
         // std::cout << "MC phi value: " << partPhi << "\n";
         auto jetPhi = pair.second.getFourVector().Phi();
         // std::cout << "Reco phi value: " << jetPhi << "\n";

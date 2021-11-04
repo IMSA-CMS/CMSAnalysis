@@ -1,17 +1,17 @@
 #ifndef DOUBLEELECTRONTRIGGER_HH
 #define DOUBLEELECTRONTRIGGER_HH
 
-#include "Trigger.hh"
+#include "RecoTrigger.hh"
 
-class RecoIdentificationModule;
+//class RecoIdentificationModule;
 
-class DoubleElectronTrigger : public Trigger
+class DoubleElectronTrigger : public RecoTrigger
 {
   public:
-    DoubleElectronTrigger(std::shared_ptr<RecoIdentificationModule> iRecoMod, const double iPTCutoff = 25, const double iSecondPTCutoff = 25);
+    DoubleElectronTrigger(const double iPTCutoff = 25, const double iSecondPTCutoff = 25);
   
   protected:
-    bool checkTrigger(std::shared_ptr<RecoIdentificationModule> recoMod) override;
+    bool checkTrigger(std::shared_ptr<InputModule> input) override;
 
   private:
     const double pTCutoff;

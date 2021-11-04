@@ -9,7 +9,7 @@ LeptonJetEfficiency::LeptonJetEfficiency(const std::shared_ptr<WeightingModule> 
 
 {}
 
-void LeptonJetEfficiency::doCounters()
+bool LeptonJetEfficiency::doCounters()
 {
     auto recoLeptonJets = lepRecoMod->getLeptonJets();
     incrementCounter("Number of Reconstructed Jets", recoLeptonJets.size());

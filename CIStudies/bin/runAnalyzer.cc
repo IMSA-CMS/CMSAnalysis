@@ -6,11 +6,14 @@
 #include "CIAnalysis/CIStudies/interface/Analyzer.hh"
 #include "FWCore/FWLite/interface/FWLiteEnabler.h"
 #include "PhysicsTools/FWLite/interface/CommandLineParser.h"
-#include "CIAnalysis/CIStudies/bin/massResolutionAnalysis.cc"
-#include "CIAnalysis/CIStudies/bin/HPlusPlusMassAnalysis.cc"
+//#include "CIAnalysis/CIStudies/bin/massResolutionAnalysis.cc"
+//#include "CIAnalysis/CIStudies/bin/HPlusPlusMassAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/leptonJetReconstructionAnalysis.cc"
-#include "CIAnalysis/CIStudies/bin/displacedVertexAnalysis.cc"
-#include "CIAnalysis/CIStudies/bin/massAcceptanceAnalysis.cc"
+//#include "CIAnalysis/CIStudies/bin/displacedVertexAnalysis.cc"
+//#include "CIAnalysis/CIStudies/bin/massAcceptanceAnalysis.cc"
+//#include "CIAnalysis/CIStudies/bin/triggerAnalysis.cc"
+#include "CIAnalysis/CIStudies/bin/invariantMassAnalysis.cc"
+//#include "CIAnalysis/CIStudies/bin/FilestripAnalysis.cc"
 
 
 int main(int argc, char **argv) {
@@ -39,19 +42,19 @@ int main(int argc, char **argv) {
 
 
   std::cout << "This is the name of outputFile " << outputFile << std::endl;
+  std::cout << "This is the name of inputFile " << inputFile << std::endl;
 
   unsigned outputEvery = parser.integerValue("outputEvery");
 
   //Analyzer analyzer = hPlusPlusMassAnalysis();
-  //Analyzer analyzer = leptonJetReconstructionAnalysis();
-  //Analyzer analyzer = leptonJetReconstructionAnalysis();
+  //Analyzer analyzer = massResolutionAnalysis();
   //Analyzer analyzer = displacedVertexAnalysis();
 
-  // Analyzer analyzer = hPlusPlusMassAnalysis();
-  // Analyzer analyzer = massResolutionAnalysis();
   Analyzer analyzer = leptonJetReconstructionAnalysis();
-  // Analyzer analyzer = displacedVertexAnalysis();
   // Analyzer analyzer = massAcceptanceAnalysis();
+  //Analyzer analyzer = massAcceptanceAnalysis();
+  //Analyzer analyzer = triggerAnalysis();
+  //Analyzer analyzer = invariantMassAnalysis();
 
 
   std::cout << "Notice: analyzer created" << std::endl;
@@ -62,7 +65,7 @@ int main(int argc, char **argv) {
   }
 
   std::cout << "Notice: input file selected" << std::endl;
-  // error in line below
+  // Potential error in line below
 
   analyzer.run(inputFile, outputFile, outputEvery, numFiles);
 

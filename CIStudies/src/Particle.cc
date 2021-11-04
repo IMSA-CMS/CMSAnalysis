@@ -3,70 +3,30 @@
 
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
+#include "DataFormats/PatCandidates/interface/Photon.h"
+#include "CIAnalysis/CIStudies/interface/ParticleImplementation.hh"
+#include "CIAnalysis/CIStudies/interface/CandidateImplementation.hh"
+#include "CIAnalysis/CIStudies/interface/SimpleImplementation.hh"
+
 
 Particle::Particle(const reco::Candidate* iparticle):
-particle(iparticle)
-{}
-
-int Particle::charge() const 
+particle(std::make_shared<CandidateImplementation>(iparticle))
 {
-  checkIsNull();
-  return particle->charge();
+  //std::cout << "Got to Particle\n" << particle << "\n";
 }
 
-double Particle::pt() const
+Particle::Particle(const Particle& particle1):
+particle(particle1.particle){}
+
+Particle& Particle::operator = (const Particle& particle2)
 {
-  checkIsNull();
-  return particle->pt();
+  particle = particle2.particle;
+  return *this;
 }
 
-double Particle::eta() const
+bool Particle::operator == (const Particle& p1) const
 {
-  checkIsNull();
-  return particle->eta();
-}
-
-double Particle::phi() const
-{
-  checkIsNull();
-  return particle->phi();
-}
-
-double Particle::et() const
-{
-  checkIsNull();
-  return particle->et();
-}
-
-double Particle::energy() const
-{
-  checkIsNull();
-  return particle->energy();
-}
-
-reco::Candidate::LorentzVector Particle::fourVector() const
-{
-  checkIsNull();
-  return particle->p4();
-}
-
-int Particle::pdgId() const
-{
-  checkIsNull();
-  return particle->pdgId();
-}
-
-int Particle::status() const
-{
-  checkIsNull();
-  return particle->status();
-}
-
-Particle Particle::mother() const
-{
-  checkIsNull();
-  //mother of particle is often not electron/muon
-  return Particle(particle->mother());
+  return *particle == *(p1.particle);
 }
 
 Particle Particle::uniqueMother() const
@@ -85,46 +45,16 @@ Particle Particle::uniqueMother() const
 }
 
 
-Particle Particle::daughter(int i) const
-{
-  checkIsNull();
-  auto daughter = particle->daughter(i);
-
-/*
-
-  Particle::Type type;
-  switch (daughter->pdgId()) {
-  case 11:
-    type = Particle::Type::Electron;
-    break;
-  case 13:
-    type = Particle::Type::Muon;
-    break;
-  default:
-    type = Particle::Type::None;
-    break;
-  }
-
-*/
-
-  return Particle(daughter);
-}
-
-int Particle::numberOfDaughters() const {
-  checkIsNull();
-  return particle->numberOfDaughters();
-}
-
 Particle Particle::finalDaughter() {
-  Particle current = Particle(particle);
+  Particle current = Particle(*this);
   while (current.status() != 1) {
     int di = -1;
     int dpt = 0;
     for (int i = 0; i < current.numberOfDaughters(); ++i) {
       Particle daughter = current.daughter(i);
-      if (daughter.pdgId() == current.pdgId() && daughter.pt() > dpt) {
+      if (daughter.pdgId() == current.pdgId() && daughter.getPt() > dpt) {
         di = i;
-        dpt = daughter.pt();
+        dpt = daughter.getPt();
       }
     }
     if (di == -1) {
@@ -205,56 +135,59 @@ Particle Particle::sharedMother(int motherPDGID, std::vector<Particle> particles
   return finalMother;
 }
 
-Particle::Type Particle::getType() const
+bool Particle::isNotNull() const 
 {
+  return particle->isNotNull();
+}
 
-  if (!particle)
+void Particle::checkIsNull() const
+{
+  // std::cout << "This is check is null (particle)\n" << particle << "\n";
+  if(!particle->isNotNull())
   {
-    return Type::None;
+    throw std::runtime_error("attempted to use null pointer in Particle (Particle)");	
   }
+}
 
-  if (dynamic_cast<const pat::Muon*>(particle))
-  {
-    return Type::Muon;
-  }
+double Particle::getPt() const
+{
+  checkIsNull();
+  return particle->getFourVector().Pt();
+}
 
-  else if (dynamic_cast<const pat::Electron*>(particle))
-  {
-    return Type::Electron;
-  }
+double Particle::getPhi() const
+{
+  checkIsNull();
+  return particle->getFourVector().Phi();
+}
 
-  else if (auto genp = dynamic_cast<const reco::GenParticle*>(particle))
-  {
-    double particleId = genp->pdgId();
+double Particle::getEta() const
+{
+  checkIsNull();
+  return particle->getFourVector().Eta();
+}
+double Particle::getEt() const
+{
+  checkIsNull();
+  return particle->getFourVector().Et();
+}
 
-    if (particleId == 11 || particleId == -11)
-    {
-      return Type::Electron;
-    }
-
-    else if (particleId == 13 || particleId == -13)
-    {
-      return Type::Muon;
-    }
-
-    else
-    {
-      return Type::None;
-    }
-  }
-
-  else
-  {
-    return Type::None;
-  }
-
+double Particle::energy() const
+{
+  checkIsNull();
+  return particle->energy();
+}
+double Particle::getMass() const
+{
+  checkIsNull();
+  return particle->getFourVector().mass();
 }
 
 Particle::BarrelState Particle::getBarrelState() const
 {
   checkIsNull();
-  double etaValue = std::abs(eta());
-  if (getType() == Type::Muon)
+  double etaValue = std::abs(getEta());
+  if (getType() == Particle::Type::Muon)
   {
     if (etaValue < 1.2)
     {
@@ -265,7 +198,7 @@ Particle::BarrelState Particle::getBarrelState() const
       return Particle::BarrelState::Endcap;
     }
   }
-  else if (getType() == Type::Electron)
+  else if (getType() == Particle::Type::Electron)
   {
     if (etaValue < 1.4442)
     {
@@ -279,27 +212,87 @@ Particle::BarrelState Particle::getBarrelState() const
   return Particle::BarrelState::None;
 }
 
-bool Particle::isIsolated() const
+Particle::Type Particle::getType() const{
+    checkIsNull();
+    return particle->getType();
+}
+// bool Particle::isIsolated() const
+// {
+//   checkIsNull();
+//   auto muon = dynamic_cast<const reco::Muon*>(particle);
+//   if (!muon)
+//   {
+//     return false;
+//   } 
+//   auto isolation = muon->isolationR03();
+//   if (isolation.sumPt < 0.1*muon->pt())
+//   {
+//     return true;
+//   }
+//   return false;
+// }
+int Particle::charge() const 
 {
   checkIsNull();
-  auto muon = dynamic_cast<const reco::Muon*>(particle);
-  if (!muon)
-  {
-    return false;
-  } 
-  auto isolation = muon->isolationR03();
-  if (isolation.sumPt < 0.1*muon->pt())
-  {
-    return true;
-  }
-  return false;
+  return particle->charge();
 }
 
-void Particle::checkIsNull() const
+int Particle::status() const
 {
-  if(!particle)
-  {
-    throw std::runtime_error("attempted to use null pointer in Particle");	
+  checkIsNull();
+  return particle->status();
+}
+
+Particle Particle::mother() const
+{
+  checkIsNull();
+  //mother of particle is often not electron/muon
+  return Particle(particle->mother());
+}
+
+reco::Candidate::LorentzVector Particle::getFourVector() const
+{
+  checkIsNull();
+  return particle->getFourVector();
+}
+
+int Particle::pdgId() const
+{
+  checkIsNull();
+  return particle->pdgId();
+}
+
+int Particle::numberOfDaughters() const {
+  checkIsNull();
+  return particle->numberOfDaughters();
+}
+
+Particle Particle::daughter(int i) const
+{
+  checkIsNull();
+  auto daughter = particle->daughter(i);
+
+/*
+
+  Particle::Type type;
+  switch (daughter->pdgId()) {
+  case 11:
+    type = Particle::Type::Electron;
+    break;
+  case 13:
+    type = Particle::Type::Muon;
+    break;
+  default:
+    type = Particle::Type::None;
+    break;
   }
+
+*/
+
+  return Particle(daughter);
+}
+bool Particle::isFinalState() const
+{
+  return particle->isFinalState();
 }
 

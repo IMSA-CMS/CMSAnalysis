@@ -1,17 +1,17 @@
 #ifndef DOUBLEISOLATEDMUONTRIGGER_HH
 #define DOUBLEISOLATEDMUONTRIGGER_HH
 
-#include "Trigger.hh"
+#include "RecoTrigger.hh"
 
-class RecoIdentificationModule;
+//class RecoIdentificationModule;
 
-class DoubleIsolatedMuonTrigger : public Trigger
+class DoubleIsolatedMuonTrigger : public RecoTrigger
 {
   public:
-    DoubleIsolatedMuonTrigger(std::shared_ptr<RecoIdentificationModule> iRecoMod, const double iPTCutoff = 17, const double iSecondPTCutoff = 8);
+    DoubleIsolatedMuonTrigger(const double iPTCutoff = 17, const double iSecondPTCutoff = 8);
   
   protected:
-    bool checkTrigger(std::shared_ptr<RecoIdentificationModule> recoMod) override;
+    bool checkTrigger(std::shared_ptr<InputModule> input) override;
 
   private:
     const double pTCutoff;
