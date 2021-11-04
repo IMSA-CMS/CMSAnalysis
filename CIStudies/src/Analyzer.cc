@@ -17,6 +17,7 @@
 #include "DataFormats/FWLite/interface/Event.h"
 #include "CIAnalysis/CIStudies/interface/Module.hh"
 #include "CIAnalysis/CIStudies/interface/DelphesEventLoader.hh"
+#include "CIAnalysis/CIStudies/interface/TDisplayText.h"
 
 void Analyzer::run(const std::string& configFile, const std::string& outputFile, int outputEvery, int nFiles)
 {
@@ -204,6 +205,10 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
       // Write the output
       module->writeAll();
     }
+
+  // Write total number of events
+  auto eventsText = new TDisplayText(std::to_string(numOfEvents).c_str());
+  eventsText->Write("NEvents");
 
   // Clean up
   outputRootFile->Close();
