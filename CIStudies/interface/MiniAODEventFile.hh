@@ -6,16 +6,17 @@
 #include "FWCore/Framework/interface/Event.h"
 #include "DataFormats/FWLite/interface/Event.h"
 
-class MiniAODEventLoader : public EventLoader
+class TFile;
+
+class MiniAODEventFile : public EventFile
 {
     public:
-        MiniAODEventLoader(int outputEvery);
+        MiniAODEventFile(TFile* ifile);
         // maybe just ++event
         virtual void nextEvent() override;
         
         virtual bool isDone() const override;
     protected:
-        virtual void newFile(TFile* ifile) override;
         //virtual void getLeptons(RecoLevel level) override;
         virtual ParticleCollection getGenSimParticles() const override;
         virtual ParticleCollection getRecoParticles() const override;
