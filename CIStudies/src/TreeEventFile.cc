@@ -11,6 +11,7 @@
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Photon.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
+#include "DataFormats/Math/interface/LorentzVector.h"
 
 TreeEventFile::TreeEventFile(TFile* ifile) : 
 EventFile(ifile) {}
@@ -95,9 +96,13 @@ ParticleCollection TreeEventFile::getRecoParticles() const
         
     for(int i = 0; i < elec_size; i++) {
         // Lorentz four-vector
+        /* if(i == 0) {
+            std::cout << elec_pt[i] << " " << elec_eta[i] << " " <<
+             elec_phi[i] << " " << elec_mass[i] << std::endl;
+        } */
         recoParticles.addParticle(Particle(
-            reco::Candidate::LorentzVector(elec_pt[i], elec_eta[i], 
-            elec_phi[i], elec_mass[i]), elec_charge[i], Particle::Type::Electron));        
+            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i], 
+            elec_eta[i], elec_phi[i], elec_mass[i])), elec_charge[i], Particle::Type::Electron));        
     }
 
 
@@ -105,8 +110,8 @@ ParticleCollection TreeEventFile::getRecoParticles() const
     {       
         // Lorentz four-vector
         recoParticles.addParticle(Particle(
-            reco::Candidate::LorentzVector(muon_pt[i], muon_eta[i], 
-            muon_phi[i], muon_mass[i]), muon_charge[i], Particle::Type::Muon));        
+            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i], 
+            muon_eta[i], muon_phi[i], muon_mass[i])), muon_charge[i], Particle::Type::Muon));        
     }
 
     return recoParticles;
