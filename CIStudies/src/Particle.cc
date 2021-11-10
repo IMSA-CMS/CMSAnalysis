@@ -296,3 +296,7 @@ bool Particle::isFinalState() const
   return particle->isFinalState();
 }
 
+double Particle::getDeltaR(Particle part) const
+{
+  return reco::deltaR(part.getFourVector(), getFourVector());
+}

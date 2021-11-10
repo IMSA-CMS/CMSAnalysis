@@ -2,7 +2,7 @@
 #include "CIAnalysis/CIStudies/interface/ParticleCollection.hh"
 #include "CIAnalysis/CIStudies/interface/EventLoader.hh"
 
-InputModule::InputModule(std::shared_ptr<EventLoader> iEventLoader) : eventLoader(iEventLoader)
+InputModule::InputModule(const EventLoader* iEventLoader) : eventLoader(iEventLoader)
 {}
 
 ParticleCollection InputModule::getLeptons(RecoLevel level) const
@@ -23,25 +23,36 @@ ParticleCollection InputModule::getLeptons(RecoLevel level) const
 
 ParticleCollection InputModule::getParticles(RecoLevel level, Particle::Type particleType) const
 {
+    
+    // std::cerr << "Input Module Test" << "\n";
+    // std::cerr << eventLoader << "\n";
+    // std::cerr << "Input Module Test 2" << "\n";
     ParticleCollection particleList;
     if (level == RecoLevel::GenSim)
-    {    
+    {  
         auto particles = eventLoader->getGenSimParticles().getParticles();
+        // std::cout << "Event Loader One \n";
         for (const auto &p : particles) 
-        {
+        {   
+            // std::cout << "Four loop One \n";
             if ((p.getType() == particleType || particleType == Particle::Type::None) && p.isFinalState()) 
-            {    
+            {   
+                //  std::cout << "If One \n";
                 particleList.addParticle(p);
             }
         }
     }
     else if (level == RecoLevel::Reco)
     {
+        // std::cout << "Reco (next eventLoader->getrecoParticle())\n";
         auto particles = eventLoader->getRecoParticles().getParticles();
+        // std::cout << "Event Loader Two \n";
         for (const auto &p : particles)
         {
+            // std::cout << "Four loop Two \n";
             if (p.getType() == particleType || particleType == Particle::Type::None)
             {
+                // std::cout << "If Two \n";
                 particleList.addParticle(p);
             }
         }
