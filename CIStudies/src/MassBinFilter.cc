@@ -13,7 +13,7 @@ MassBinFilter::MassBinFilter(const std::shared_ptr<MatchingModule> matchingModul
 {
 }
 
-std::string MassBinFilter::makeFilterString(const edm::EventBase& event)
+std::string MassBinFilter::makeFilterString()
 {
   auto bestPairs = matching->getMatchingBestPairs();   // Get the matching pairs
 

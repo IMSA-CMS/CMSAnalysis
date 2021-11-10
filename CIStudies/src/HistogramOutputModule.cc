@@ -1,8 +1,8 @@
 #include "CIAnalysis/CIStudies/interface/HistogramOutputModule.hh"
 #include "CIAnalysis/CIStudies/interface/HistogramPrototype.hh"
 
-#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
+//#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
+//#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
 #include "CIAnalysis/CIStudies/interface/LRWeightModule.hh"
 #include "CIAnalysis/CIStudies/interface/PtResolutionModule.hh"
@@ -10,13 +10,14 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <typeinfo> // (TEMPORARY, TYPE CHECKING)
 
 #include "TH1.h"
 #include "TH2.h"
 
-HistogramOutputModule::HistogramOutputModule(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule) :
-  genSim(genSimModule),
-  reco(recoModule),
+HistogramOutputModule::HistogramOutputModule(const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule) :
+  //genSim(genSimModule),
+  //reco(recoModule),
   weighting(weightingModule),
   lrWeighting(lrWeightModule)
 {
@@ -49,6 +50,15 @@ void HistogramOutputModule::writeAll()
     {
       entry.second->Write();
     }
+}
+
+void HistogramOutputModule::setInput(std::shared_ptr<InputModule> iInput)
+{
+  Module::setInput(iInput);
+  for (auto hist : histograms)
+  {
+    hist->setInput(iInput);
+  }
 }
 
 void HistogramOutputModule::addObject(const std::string& name, TObject* obj)
@@ -179,7 +189,7 @@ void HistogramOutputModule::addObjectClone(const std::string& oldName,
   objects.insert({newName, clone});
 }
 
-bool HistogramOutputModule::process(const edm::EventBase& event)
+bool HistogramOutputModule::process()
 {
   // std::cout << "Process\n";
 
@@ -189,7 +199,7 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
   //std::cerr << "plot contrivance" << std::endl;
 
   double eventWeight = 1.00;
-  if (helicity == "LR")
+  /*if (helicity == "LR")
     {
       eventWeight = lrWeighting->getLRWeight();
     }
@@ -197,12 +207,13 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
     {
       eventWeight = lrWeighting->getRLWeight();
     }
-
+  */
   //std::cerr << "MS paint drawing" << std::endl;
+
 
   for (auto hist : histograms)
   {
-    bool draw = hist->shouldDraw(event); // call the shouldDraw function so we can call process on the FilterModules
+    bool draw = hist->shouldDraw(); // call the shouldDraw function so we can call process on the FilterModules
     // std::cout << "shouldDraw returns: " << draw << '\n';
     
     // If the mass bin is a new mass bin, then make the histograms for that mass bin
@@ -214,8 +225,8 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
         massBins[massBin] = weight;
         fileKeys[massBin] = fileKey;
 
-        //std::cout << "New Mass Bin: " << massBin << '\n';
-        //std::cout << "New Histogram Made: " << hist->getFilteredName() + massBin << '\n';
+        // std::cout << "New Mass Bin: " << massBin << '\n';
+        // std::cout << "New Histogram Made: " << hist->getFilteredName() + massBin << '\n';
         //std::cout << "Weight " << weight << '\n';
     //    makeHistogram(hist->getFilteredName() + massBin, hist->getFilteredName() + massBin, hist->getNBins(), hist->getMinimum(), hist->getMaximum());
     //    addMassBinObject(hist->getFilteredName(), massBin);
@@ -226,6 +237,7 @@ bool HistogramOutputModule::process(const edm::EventBase& event)
     // If the histogram with mass bin doesn't exist, make it
     if (baseObjects.find(hist->getFilteredName() + massBin) == baseObjects.end())
       {
+        // Uncommented two lines to debug
         // std::cout << "Name: " << hist->getName() << '\n';
         // std::cout << "FilteredName: " << hist->getFilteredName() << '\n';
         // std::cout << "Mass Bin: " << massBin << '\n';
@@ -275,9 +287,10 @@ void HistogramOutputModule::finalize()
 
   // std::cout << "Finalize\n";
 
+
     for (auto pair : massBinMap)
     {
-      // std::cout << pair.first << '\n';
+      // std::cout << "PAIR: " << pair.first << '\n';
       // std::cout << "Pair First: " << pair.first << "\t" << "Pair Second: " << pair.second << "\n";
 
       for (auto massBin : massBins)
@@ -307,9 +320,43 @@ void HistogramOutputModule::finalize()
 
               //std::cout << pair.first + massBin.first << '\n';
 
-              delete getObject(pair.first + massBin.first);   // Remove the extra "name+M___" histograms from the root file
+              for (auto pair : objects) 
+              {
+                // Temporary testing, comment when done[09/25/21]
+                // std::cout << "Type: " << typeid(pair.first).name() << "\n";
+                // std::cout << pair.first << "\n";
+              }
+
+              std::cout << "Erasing " << pair.first + massBin.first << "\n";
+            
+              auto len = (pair.first).length();
+              // std::cout << len << std::endl;
+
+              // Quick hack: if we erase the filtered things in objects will it work with filters?
+              for (auto pair2 : objects)
+              {
+                auto len2 = pair2.first.length();
+                /* std::cout << pair2.first << std::endl;
+                if(len2 >= len) {
+                  std::cout << pair2.first.substr(len2 - len) << std::endl;
+                } */
+
+                if(len2 >= len && (pair2.first.substr(len2 - len) + massBin.first) 
+                  == (pair.first + massBin.first)) {
+                  // Should only be triggered by filtered things
+                  // std::cout << len2 - len << "!\n";
+                  objects.erase(pair2.first + massBin.first);
+                  // std::cout << pair2.first << "!\n";
+                }
+              }
+
+              // IF YOU UNCOMMENT THIS IT WILL EXPLODE SO PLEASE DONT
+              // I KNOW THIS IS BAD PRACTICE AND I DONT CARE
+              // delete getObject(pair.first + massBin.first);   // Remove the extra "name+M___" histograms from the root file
+              // Should only work for non-filtered things: therefore everything necessary is erased
               objects.erase(pair.first + massBin.first);      // Remove the pointer in the objects map
               baseObjects.erase(pair.first + massBin.first);  // Remove the pointer in the baseObjects map
+
             }
           }
         }

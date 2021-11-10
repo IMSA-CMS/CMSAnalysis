@@ -1,42 +1,55 @@
 #ifndef PARTICLE_HH
 #define PARTICLE_HH
 
+#include <vector>
 #include "DataFormats/Candidate/interface/Candidate.h"
+
+class ParticleImplementation;
 
 class Particle
 {
-public:
-  enum class Type{Electron, Muon, Photon, None};
-  enum class BarrelState{Barrel, Endcap, None};
-  explicit Particle(const reco::Candidate* iparticle);
-  int charge() const;
-  double pt() const;
-  double eta() const;
-  double phi() const;
-  double et() const;
-  double energy() const;
-  reco::Candidate::LorentzVector fourVector() const;
-  int pdgId() const;
-  int status() const;
-  Particle mother() const;
-  Particle uniqueMother() const;
-  Particle daughter(int i) const;
-  int numberOfDaughters() const;
-  Particle finalDaughter();
-  Particle findMother(int motherPDGID);
-  static Particle sharedMother(int motherPDGID, Particle particle1, Particle particle2);
-  static Particle sharedMother(int motherPDGID, std::vector<Particle> particles);
-  bool operator==(Particle userParticle) const {return userParticle.particle == particle;}
-  bool operator!=(Particle userParticle) const {return userParticle.particle != particle;}
-  bool isNotNull() const {return particle;}
-  Type getType() const;
-  BarrelState getBarrelState() const;
-  bool isIsolated() const;
-  const reco::Candidate* getUnderlyingParticle() const {return particle;}
+  public:
+  
+    enum class Type{Electron, Muon, Photon, LeptonJet, None};
+    enum class BarrelState{Barrel, Endcap, None};
+    Particle(const reco::Candidate* iparticle = nullptr);
+    Particle(const Particle& particle1);
+    Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type);
+    Particle& operator = (const Particle& particle2);
+    double getPt() const;
+    double getPhi() const;
+    double getEta() const;
+    double getEt() const;
+    double energy() const;
+    double getMass() const;
+    Particle uniqueMother() const;
+    Particle finalDaughter();
+    Particle findMother(int motherPDGID);
+    static Particle sharedMother(int motherPDGID, Particle particle1, Particle particle2);
+    static Particle sharedMother(int motherPDGID, std::vector<Particle> particles);
+    bool isNotNull() const;
+    bool operator == (const Particle& p1) const;
+    bool operator != (const Particle& p1) const {return !(*this == p1);}
+    bool isIsolated() const {throw std::runtime_error("error");};
+    int numberOfDaughters() const;
+    Particle daughter(int i) const;
+    // const reco::Candidate getUnderlyingParticle() const {return particle;}
+  
+    int pdgId() const;
+    int status() const;
+    int charge() const;
+    Particle::BarrelState getBarrelState() const;
+    reco::Candidate::LorentzVector getFourVector() const;
+    Particle mother() const;
+    Particle::Type getType() const;
+
+    
+    // bool isGenSim() const;
+    bool isFinalState() const;
 	
-private:
-  const reco::Candidate* particle;
-  void checkIsNull() const;
+  private:
+    std::shared_ptr<ParticleImplementation> particle;
+    void checkIsNull() const;
 };
 
 #endif

@@ -1,18 +1,16 @@
 #include "CIAnalysis/CIStudies/interface/UnusualFinalStateFilter.hh"
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/FWLite/interface/Event.h"
 #include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 
-UnusualFinalStateFilter::UnusualFinalStateFilter(const std::shared_ptr<RecoIdentificationModule> iReco) :
-  reco(iReco)
+UnusualFinalStateFilter::UnusualFinalStateFilter()
 {
 }
 
-std::string UnusualFinalStateFilter::makeFilterString(const edm::EventBase& event)
+std::string UnusualFinalStateFilter::makeFilterString()
 {
-  auto recoParticles = reco->getRecoCandidates();
+  auto recoParticles = getInput()->getParticles(InputModule::RecoLevel::Reco);
 
   if (recoParticles.getNumParticles() > 4)  // Keep all of the events with more than 4 final state leptons
   {

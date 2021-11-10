@@ -1,11 +1,11 @@
 #include "CIAnalysis/CIStudies/interface/RecoveredInvariantMassHist.hh"
 
 #include "CIAnalysis/CIStudies/interface/GenSimRecoPrototype.hh"
-#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
+//#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
+//#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 
-RecoveredInvariantMassHist::RecoveredInvariantMassHist(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, const bool typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum, int iNLeptons, int iMotherPDGID) :
-  GenSimRecoPrototype(genSimModule, recoModule, typeSwitch, iname, iNBins, iminimum, imaximum),
+RecoveredInvariantMassHist::RecoveredInvariantMassHist(const bool typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum, int iNLeptons, int iMotherPDGID) :
+  GenSimRecoPrototype(typeSwitch, iname, iNBins, iminimum, imaximum),
   nLeptons(iNLeptons),
   motherPDGID(iMotherPDGID)
 {
@@ -15,7 +15,7 @@ std::vector<double> RecoveredInvariantMassHist::protectedValue(bool typeGenSim) 
 {
   if (typeGenSim)          // typeGenSim == true, so we want the GenSim values
   {
-    auto genParticles = getGenSim()->getGenParticles();
+    auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim);
     auto genSimInv = genParticles.calculateRecoveredInvariantMass(nLeptons, motherPDGID);
     return 
     {genSimInv};
@@ -23,7 +23,7 @@ std::vector<double> RecoveredInvariantMassHist::protectedValue(bool typeGenSim) 
 
   else                     // typeGenSim == false, so we want the Reco values
   {
-    auto recoParticles = getReco()->getRecoCandidates();
+    auto recoParticles = getInput()->getParticles(InputModule::RecoLevel::Reco);
     auto recoInv = recoParticles.calculateRecoveredInvariantMass(nLeptons, motherPDGID);
     return {recoInv};
   }

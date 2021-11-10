@@ -11,9 +11,13 @@
 #include "CIAnalysis/CIStudies/interface/AnalysisModule.hh"
 #include "CIAnalysis/CIStudies/interface/FilterModule.hh"
 #include "CIAnalysis/CIStudies/interface/ProductionModule.hh"
+#include "CIAnalysis/CIStudies/interface/EventLoader.hh"
+#include "CIAnalysis/CIStudies/interface/MiniAODEventLoader.hh"
 #include "FWCore/Framework/interface/Event.h"
 #include "DataFormats/FWLite/interface/Event.h"
 #include "CIAnalysis/CIStudies/interface/Module.hh"
+#include "CIAnalysis/CIStudies/interface/DelphesEventLoader.hh"
+#include "CIAnalysis/CIStudies/interface/TDisplayText.h"
 
 void Analyzer::run(const std::string& configFile, const std::string& outputFile, int outputEvery, int nFiles)
 {
@@ -23,10 +27,12 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 
   // Get a list of FileParams objects
   auto fileparams = inputFiles(configFile);
-
+  auto eventLoader = std::make_shared<DelphesEventLoader> (outputEvery);
+  auto input = std::make_shared<InputModule> (eventLoader);
   // Initialize all modules
   for (auto module : getAllModules())
     {
+      module->setInput(input);
       module->initialize();
     }
 
@@ -59,9 +65,53 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 	    {
 	      std::cout << "File " << fileStr << " not found!\n";
 	      continue;
-	    } 
+	    }
+    
+    eventLoader->changeFile(file);
+    while(true)
+    {
+      if (eventLoader->isDone())
+      {
+        break;
+      }
+      ++numOfEvents;
+      // eventLoader.getLeptons();
+      bool continueProcessing = true;
+      for (auto module : productionModules)
+      {
+        if (!module->processEvent())
+        {
+          continueProcessing = false;
+          std::cout << "continueProcessing: " << continueProcessing << "\n" << std::endl;
+          break;
+        }
+      }
+      std::string filterString;
+      for (auto module : filterModules)  
+      {
+        if (!module->processEvent())
+        {
+          continueProcessing = false;
+          break;
+        }
+        else
+        {
+          filterString += module->getFilterString();
+        }
+      }
+      if (continueProcessing)
+      {
+        filterNames.insert(filterString);
+        for (auto module : analysisModules)
+        {
+          module->setFilterString(filterString);
+          module->processEvent();
+        }
+      }
+      eventLoader->nextEvent();
+    }
 
-	  // Extract events
+	 /*  // Extract events
 	  fwlite::Event ev(file);
 
 	  std::cerr << "Events: " << ev.size() << std::endl;
@@ -118,7 +168,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 		  module->setFilterString(filterString);
 		  module->processEvent(event);
 		}
-	    }
+	    } */
 
 	  delete file;
 
@@ -155,6 +205,10 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
       // Write the output
       module->writeAll();
     }
+
+  // Write total number of events
+  auto eventsText = new TDisplayText(std::to_string(numOfEvents).c_str());
+  eventsText->Write("NEvents");
 
   // Clean up
   outputRootFile->Close();
@@ -234,7 +288,7 @@ std::vector<FileParams> Analyzer::inputFiles(const std::string& txtFile) const
 	  }
       }
       
-
+  std::cout << params[0].getFileKey() << std::endl;
   return params;
 }
 

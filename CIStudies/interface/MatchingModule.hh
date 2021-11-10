@@ -2,8 +2,8 @@
 #define MATCHINGMODULE_HH
 
 #include "ProductionModule.hh"
-#include "GenSimIdentificationModule.hh"
-#include "RecoIdentificationModule.hh"
+//#include "GenSimIdentificationModule.hh"
+//#include "RecoIdentificationModule.hh"
 #include "MatchingPairCollection.hh"
 
 #include "TLorentzVector.h"
@@ -18,14 +18,14 @@
 class MatchingModule : public ProductionModule
 {
 public:
-  MatchingModule(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, double deltaRCut = 0.1);
-  virtual bool process(const edm::EventBase& event) override;
+  MatchingModule(double deltaRCut = 0.1);
+  virtual bool process() override;
 
   const MatchingPairCollection& getMatchingBestPairs() const {return matchingBestPairs;} 
 
 private:
-  const std::shared_ptr<GenSimIdentificationModule> genSim;
-  const std::shared_ptr<RecoIdentificationModule> reco;
+  //const std::shared_ptr<GenSimIdentificationModule> genSim;
+  //const std::shared_ptr<RecoIdentificationModule> reco;
 
   // matching fails if the deltaR between the gen sim/reco pair
   // does not lie under the deltaRCutoff
