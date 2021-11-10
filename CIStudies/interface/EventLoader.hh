@@ -21,6 +21,7 @@ class EventLoader
         // simply dumps gensim particles from event into ParticleCollection
         virtual ParticleCollection getGenSimParticles() const = 0;
         virtual ParticleCollection getRecoParticles() const = 0;
+        virtual ParticleCollection getRecoJets() const = 0;
         //virtual std::vector<PileupSummaryInfo> getPileupInfo() const = 0;
         virtual GenEventInfoProduct getGenInfo() const = 0;
         // virtual edm::TriggerResults getTriggerResults(std::string subProcess) const = 0;

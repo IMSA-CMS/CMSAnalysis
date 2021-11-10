@@ -9,6 +9,12 @@
 #include "CIAnalysis/CIStudies/interface/CandidateImplementation.hh"
 #include "CIAnalysis/CIStudies/interface/SimpleImplementation.hh"
 
+Particle::Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type): 
+particle(std::make_shared<SimpleImplementation>(vec, charge, type))
+{
+  
+}
+
 Particle::Particle(const reco::Candidate* iparticle):
 particle(std::make_shared<CandidateImplementation>(iparticle))
 {
