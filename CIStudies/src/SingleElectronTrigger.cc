@@ -6,7 +6,7 @@ SingleElectronTrigger::SingleElectronTrigger(double iPTCutoff) :
 {
 }
 
-bool SingleElectronTrigger::checkTrigger(std::shared_ptr<InputModule> input)
+bool SingleElectronTrigger::checkTrigger(const InputModule* input)
 {
   auto particles = input->getParticles(InputModule::RecoLevel::Reco, Particle::Type::Electron);
 

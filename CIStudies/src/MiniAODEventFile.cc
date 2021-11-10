@@ -1,4 +1,4 @@
-#include "CIAnalysis/CIStudies/interface/MiniAODEventLoader.hh"
+#include "CIAnalysis/CIStudies/interface/MiniAODEventFile.hh"
 #include "CIAnalysis/CIStudies/interface/InputModule.hh"
 #include "CIAnalysis/CIStudies/interface/Particle.hh"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
@@ -7,21 +7,16 @@
 #include "DataFormats/PatCandidates/interface/Photon.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
 
-MiniAODEventLoader::MiniAODEventLoader(int outputEvery) : 
-EventLoader(outputEvery)
+MiniAODEventFile::MiniAODEventFile(TFile* ifile) : 
+EventFile(ifile)
 {
-    // std::cout << "made it to MiniAOD \n";
-}
-
-void MiniAODEventLoader::newFile(TFile* ifile)
-{
-    event = std::make_shared<fwlite::Event> (ifile);
+    event = std::make_shared<fwlite::Event> (getFile());
     std::cerr << "Events: " << event->size() << std::endl;
     setNumOfEvents(getNumOfEvents() + event->size());
     event->toBegin();
 }
 
-void MiniAODEventLoader::nextEvent()
+void MiniAODEventFile::nextEvent()
 {
     auto& eventRef = *event;
     ++(eventRef);
@@ -38,14 +33,14 @@ std::vector<PileupSummaryInfo> MiniAODEventLoader::getPileupInfo() const
 }
 */
 
-GenEventInfoProduct MiniAODEventLoader::getGenInfo() const
+GenEventInfoProduct MiniAODEventFile::getGenInfo() const
 {
     edm::Handle<GenEventInfoProduct> genInfo;
     event->getByLabel(std::string("generator"), genInfo);
     return *genInfo;
 }
 
-ParticleCollection MiniAODEventLoader::getGenSimParticles() const
+ParticleCollection MiniAODEventFile::getGenSimParticles() const
 {
     ParticleCollection genParticles;
     edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
@@ -57,7 +52,7 @@ ParticleCollection MiniAODEventLoader::getGenSimParticles() const
     return genParticles;
 }
 
-ParticleCollection MiniAODEventLoader::getRecoParticles() const
+ParticleCollection MiniAODEventFile::getRecoParticles() const
 {
     // std::cout << "get reco particles \n";
     ParticleCollection recoParticles;
@@ -91,7 +86,7 @@ ParticleCollection MiniAODEventLoader::getRecoParticles() const
         return recoParticles;
 }
 
-double MiniAODEventLoader::getMET() const
+double MiniAODEventFile::getMET() const
 {
     edm::Handle<std::vector<pat::MET>> mets;
     event->getByLabel(edm::InputTag("slimmedMETs"), mets);
@@ -115,7 +110,7 @@ double MiniAODEventLoader::getMET() const
 //     return event->triggerNames(*getTriggerResults(subProcess));
 // }
 
-bool MiniAODEventLoader::isDone() const
+bool MiniAODEventFile::isDone() const
 {
     return event->atEnd();
 }

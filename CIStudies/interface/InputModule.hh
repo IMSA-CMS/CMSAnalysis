@@ -22,9 +22,9 @@ class InputModule
         {
             Reco, GenSim
         };
-        ParticleCollection getLeptons(RecoLevel level) const;
+  ParticleCollection getLeptons(RecoLevel level, double pTCut = 0) const;
         // not sure this works
-        ParticleCollection getParticles(RecoLevel level, Particle::Type particleType = Particle::Type::None) const;
+  ParticleCollection getParticles(RecoLevel level, Particle::Type particleType = Particle::Type::None, double pTCut = 0) const;
         //std::vector<PileupSummaryInfo> getPileupInfo() const;
         GenEventInfoProduct getGenInfo() const;
         // edm::TriggerResults getTriggerResults(std::string subProcess) const;

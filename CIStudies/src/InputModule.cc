@@ -5,11 +5,11 @@
 InputModule::InputModule(const EventLoader* iEventLoader) : eventLoader(iEventLoader)
 {}
 
-ParticleCollection InputModule::getLeptons(RecoLevel level) const
+ParticleCollection InputModule::getLeptons(RecoLevel level, double pTcut) const
 {
     ParticleCollection leptons;
-    auto electrons = getParticles(level, Particle::Type::Electron).getParticles();
-    auto muons = getParticles(level, Particle::Type::Muon).getParticles();
+    auto electrons = getParticles(level, Particle::Type::Electron, pTcut).getParticles();
+    auto muons = getParticles(level, Particle::Type::Muon, pTcut).getParticles();
     for (const auto& p : electrons)
     {
         leptons.addParticle(p);
@@ -21,7 +21,7 @@ ParticleCollection InputModule::getLeptons(RecoLevel level) const
     return leptons;
 }
 
-ParticleCollection InputModule::getParticles(RecoLevel level, Particle::Type particleType) const
+ParticleCollection InputModule::getParticles(RecoLevel level, Particle::Type particleType, double pTcut) const
 {
     
     // std::cerr << "Input Module Test" << "\n";
@@ -29,28 +29,22 @@ ParticleCollection InputModule::getParticles(RecoLevel level, Particle::Type par
     // std::cerr << "Input Module Test 2" << "\n";
     ParticleCollection particleList;
     if (level == RecoLevel::GenSim)
-    {  
-        auto particles = eventLoader->getGenSimParticles().getParticles();
-        // std::cout << "Event Loader One \n";
+    {    
+        auto particles = eventLoader->getFile()->getGenSimParticles().getParticles();
         for (const auto &p : particles) 
-        {   
-            // std::cout << "Four loop One \n";
-            if ((p.getType() == particleType || particleType == Particle::Type::None) && p.isFinalState()) 
-            {   
-                //  std::cout << "If One \n";
+        {
+	  if ((p.getType() == particleType || particleType == Particle::Type::None) && p.isFinalState() && p.getPt() >= pTcut) 
+            {    
                 particleList.addParticle(p);
             }
         }
     }
     else if (level == RecoLevel::Reco)
     {
-        // std::cout << "Reco (next eventLoader->getrecoParticle())\n";
-        auto particles = eventLoader->getRecoParticles().getParticles();
-        // std::cout << "Event Loader Two \n";
+        auto particles = eventLoader->getFile()->getRecoParticles().getParticles();
         for (const auto &p : particles)
         {
-            // std::cout << "Four loop Two \n";
-            if (p.getType() == particleType || particleType == Particle::Type::None)
+	  if ((p.getType() == particleType || particleType == Particle::Type::None) && p.getPt() >= pTcut)
             {
                 // std::cout << "If Two \n";
                 particleList.addParticle(p);
@@ -69,12 +63,12 @@ std::vector<PileupSummaryInfo> InputModule::getPileupInfo() const
 
 GenEventInfoProduct InputModule::getGenInfo() const
 {
-    return eventLoader->getGenInfo();
+    return eventLoader->getFile()->getGenInfo();
 }
 
 double InputModule::getMET() const
 {
-    return eventLoader->getMET();
+    return eventLoader->getFile()->getMET();
 }       
 // edm::TriggerResults InputModule::getTriggerResults(std::string subProcess) const
 // {
