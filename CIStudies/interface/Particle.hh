@@ -10,11 +10,12 @@ class Particle
 {
   public:
   
-    Particle(const reco::Candidate* iparticle = nullptr);
-    Particle(const Particle& particle1);
-    Particle& operator = (const Particle& particle2);
     enum class Type{Electron, Muon, Photon, LeptonJet, None};
     enum class BarrelState{Barrel, Endcap, None};
+    Particle(const reco::Candidate* iparticle = nullptr);
+    Particle(const Particle& particle1);
+    Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type);
+    Particle& operator = (const Particle& particle2);
     double getPt() const;
     double getPhi() const;
     double getEta() const;
