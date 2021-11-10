@@ -36,6 +36,11 @@
 
 Analyzer leptonJetReconstructionAnalysis() {
   Analyzer analyzer;
+  // auto genSimMod = make_shared<GenSimIdentificationModule>(4900022);
+  // auto recoMod = make_shared<RecoIdentificationModule>(5);
+  // auto matchMod = make_shared<MatchingModule>(genSimMod, recoMod);
+  // auto weightMod = make_shared<WeightingModule>();
+  // auto lrWeightMod = make_shared<LRWeightModule>();
 
   auto genSimMod = std::make_shared<GenSimIdentificationModule>(4900022);
   auto recoMod = std::make_shared<RecoIdentificationModule>(5);
@@ -66,7 +71,7 @@ Analyzer leptonJetReconstructionAnalysis() {
   // histOutputMod->addHistogram(matchEtaHist);
   //auto genSimEventDumpMod = make_shared<GenSimEventDumpModule>(3);
 
-  auto triggerMod = make_shared<TriggerModule>(recoMod);
+  auto triggerMod = make_shared<TriggerModule>();
 
   auto nLeptonsFilter = make_shared<NLeptonsFilter>(recoMod); //Needs to be updated with shared pointers
 

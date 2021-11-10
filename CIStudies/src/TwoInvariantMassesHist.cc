@@ -1,16 +1,13 @@
 #include "CIAnalysis/CIStudies/interface/TwoInvariantMassesHist.hh"
 
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
-
-TwoInvariantMassesHist::TwoInvariantMassesHist(const std::string& iname, int iNBinsX, int iNBinsY, double iMinX, double iMinY, double iMaxX, double iMaxY, const std::shared_ptr<RecoIdentificationModule> iRecoModule) :
-  HistogramPrototype2D(iname, iNBinsX, iNBinsY, iMinX, iMinY, iMaxX, iMaxY),
-  recoModule(iRecoModule)
+TwoInvariantMassesHist::TwoInvariantMassesHist(const std::string& iname, int iNBinsX, int iNBinsY, double iMinX, double iMinY, double iMaxX, double iMaxY) :
+  HistogramPrototype2D(iname, iNBinsX, iNBinsY, iMinX, iMinY, iMaxX, iMaxY)
 {
 }
 
 std::vector<std::pair<double, double>> TwoInvariantMassesHist::value2D() const
 {
-  auto invMasses = recoModule->getRecoCandidates().calculateSameSignInvariantMasses();
+  auto invMasses = getInput()->getParticles(InputModule::RecoLevel::Reco).calculateSameSignInvariantMasses();
 
   if (invMasses.size() != 2)
   {

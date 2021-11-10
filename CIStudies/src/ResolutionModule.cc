@@ -9,8 +9,8 @@
 #include <vector>
 #include <TF1.h>
 
-ResolutionModule::ResolutionModule(const std::shared_ptr<GenSimIdentificationModule> genSimModule, const std::shared_ptr<RecoIdentificationModule> recoModule, const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule, const std::shared_ptr<MatchingModule> matchingModule, std::string bin, int min, int max, int intervalSize) :
-  HistogramOutputModule(genSimModule, recoModule, weightingModule, lrWeightModule),
+ResolutionModule::ResolutionModule(const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule, const std::shared_ptr<MatchingModule> matchingModule, std::string bin, int min, int max, int intervalSize) :
+  HistogramOutputModule(weightingModule, lrWeightModule),
   matching(matchingModule),
   binType(bin),
   minCut(min),
@@ -19,7 +19,7 @@ ResolutionModule::ResolutionModule(const std::shared_ptr<GenSimIdentificationMod
 {
 }
 
-bool ResolutionModule::process(const edm::EventBase& event)
+bool ResolutionModule::process()
 {
   //std::cerr << "ENTERING ResolutionModule" << std::endl;
   auto bestPairs = matching->getMatchingBestPairs();

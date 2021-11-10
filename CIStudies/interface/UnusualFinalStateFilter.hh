@@ -9,11 +9,10 @@ class RecoIdentificationModule;
 class UnusualFinalStateFilter : public FilterModule
 {
   public:
-    UnusualFinalStateFilter(const std::shared_ptr<RecoIdentificationModule> iReco);
+    UnusualFinalStateFilter();
   protected:
-    virtual std::string makeFilterString(const edm::EventBase& event) override;
+    virtual std::string makeFilterString() override;
   private:
-    const std::shared_ptr<RecoIdentificationModule> reco;
 };
 
 #endif

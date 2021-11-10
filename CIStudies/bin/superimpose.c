@@ -117,83 +117,90 @@ void superImposePlots(Image configuration);
   own configurations.
  */
 void superimpose(){
-  string file1 = "leftHiggsVEV5Analyzed.root";
-  string file2 = "rightHiggsVEV5Analyzed.root";
+  // string file1 = "leftHiggsVEV5Analyzed.root";
+  // string file2 = "rightHiggsVEV5Analyzed.root";
 
-  string file3 = "leftHiggsVEV5Mass300GeVAnalyzed.root";
-  string file4 = "leftHiggsVEV5Mass800GeVAnalyzed.root";
-  string file5 = "leftHiggsVEV5Mass1300GeVAnalyzed.root";
+  // string file3 = "leftHiggsVEV5Mass300GeVAnalyzed.root";
+  // string file4 = "leftHiggsVEV5Mass800GeVAnalyzed.root";
+  // string file5 = "leftHiggsVEV5Mass1300GeVAnalyzed.root";
 
-  string file6 = "leftHiggsVEV0Mass200SameFlavorPairsAnalyzed.root";
+  // string file6 = "leftHiggsVEV0Mass200SameFlavorPairsAnalyzed.root";
 
-  string file7 = "leftHiggsVEV0Mass200SameFlavorPairsQuadLeptonAnalyzed.root";
-  string file8 = "leftHiggsVEV0Mass300SameFlavorPairsQuadLeptonAnalyzed.root";
-  string file9 = "leftHiggsVEV0Mass500SameFlavorPairsQuadLeptonAnalyzed.root";
-  string file10 = "leftHiggsVEV0Mass800SameFlavorPairsQuadLeptonAnalyzed.root";
-  string file11 = "leftHiggsVEV0Mass1300SameFlavorPairsQuadLeptonAnalyzed.root";
+  // string file7 = "leftHiggsVEV0Mass200SameFlavorPairsQuadLeptonAnalyzed.root";
+  // string file8 = "leftHiggsVEV0Mass300SameFlavorPairsQuadLeptonAnalyzed.root";
+  // string file9 = "leftHiggsVEV0Mass500SameFlavorPairsQuadLeptonAnalyzed.root";
+  // string file10 = "leftHiggsVEV0Mass800SameFlavorPairsQuadLeptonAnalyzed.root";
+  // string file11 = "leftHiggsVEV0Mass1300SameFlavorPairsQuadLeptonAnalyzed.root";
 
-  string file12 = "leftHiggsVEV0Mass200SameFlavorPairsAnalyzed.root";
-  string file13 = "leftHiggsVEV0Mass300SameFlavorPairsAnalyzed.root";
-  string file14 = "leftHiggsVEV0Mass500SameFlavorPairsAnalyzed.root";
-  string file15 = "leftHiggsVEV0Mass800SameFlavorPairsAnalyzed.root";
-  string file16 = "leftHiggsVEV0Mass1300SameFlavorPairsAnalyzed.root";
+  // string file12 = "leftHiggsVEV0Mass200SameFlavorPairsAnalyzed.root";
+  // string file13 = "leftHiggsVEV0Mass300SameFlavorPairsAnalyzed.root";
+  // string file14 = "leftHiggsVEV0Mass500SameFlavorPairsAnalyzed.root";
+  // string file15 = "leftHiggsVEV0Mass800SameFlavorPairsAnalyzed.root";
+  // string file16 = "leftHiggsVEV0Mass1300SameFlavorPairsAnalyzed.root";
+
+  // string file17 = "PhotonsHist.root";
+  string file18 = "output.root";
   
 
-  string hist1 = "Dimuon/Muon+ pt High";
-  string hist2 = "Dimuon/Muon+ pt Low";
+  // string hist1 = "Dimuon/Muon+ pt High";
+  // string hist2 = "Dimuon/Muon+ pt Low";
 
-  string hist3 = "Dimuon/Invariant mass";
-  string hist4 = "Dimuon/Four Lepton Invariant mass";
+  // string hist3 = "Dimuon/Invariant mass";
+  // string hist4 = "Dimuon/Four Lepton Invariant mass";
 
-  string hist5 = "Dimuon/Leading Lepton pT";
-  string hist6 = "Dimuon/Second Leading Lepton pT";
-  string hist10 = "Dimuon/Third Leading Lepton pT";
-  string hist11 = "Dimuon/Fourth Leading Lepton pT";
+  // string hist5 = "Dimuon/Leading Lepton pT";
+  // string hist6 = "Dimuon/Second Leading Lepton pT";
+  // string hist10 = "Dimuon/Third Leading Lepton pT";
+  // string hist11 = "Dimuon/Fourth Leading Lepton pT";
 
-  string hist7 = "Dimuon/Electron+ eta";
-  string hist12 = "Dimuon/delta r";
+  // string hist7 = "Dimuon/Electron+ eta";
+  // string hist12 = "Dimuon/delta r";
 
-  string hist8 = "Quadlepton/Invariant mass";
-  string hist9 = "Quadlepton/Invariant mass OSDL";
+  // string hist8 = "Quadlepton/Invariant mass";
+  // string hist9 = "Quadlepton/Invariant mass OSDL";
 
+  string hist10 = "Reco Photon Histogram";
+  string hist11 = "Reco Same Sign Invariant Mass";
+  string hist12 = "Gen Sim Photon Histogram";
+  string hist13 = "Gen Same Sign Invariant Mass";
+
+ 
   
   vector<Image> images
     {
-      Image(.4, "GeV", "Events", "Reconstructed SSDL Doubly Charged Higgs Mass", kCool
+      Image(.4, "GeV", "Events", "Invariant Mass Hist", kCool
 	    ,vector<Plot> {
-	      Plot(file7, hist8, kRed, "200 GeV Boson")
-		,Plot(file8, hist8, kBlue, "300 GeV Boson")
-		,Plot(file9, hist8, kGreen, "500 GeV Boson")
-		,Plot(file10, hist8, kOrange, "800 GeV Boson")
-		,Plot(file11, hist8, kBlack, "1300 GeV Boson")
-		})
-	,Image(.4, "GeV", "Events", "Reconstructed OSDL Doubly Charged Higgs Mass", kCool
-	      ,vector<Plot> {
-		Plot(file7, hist9, kRed, "200 GeV Boson")
-		  ,Plot(file8, hist9, kBlue, "300 GeV Boson")
-		  ,Plot(file9, hist9, kGreen, "500 GeV Boson")
-		  ,Plot(file10, hist9, kOrange, "800 GeV Boson")
-		  ,Plot(file11, hist9, kBlack, "1300 GeV Boson")
-		  })
-	,Image(.4, "pT GeV", "Events", "Sorted Lepton pT GeV for 200 GeV Higgs", kCool
-	       ,vector<Plot> {
-		 Plot(file6, hist5, kBlack, "Leading Lepton pT")
-		   ,Plot(file6, hist6, kRed, "Second Leading Lepton pT")
-		   ,Plot(file6, hist10, kBlue, "Third Leading Lepton pT")
-		   ,Plot(file6, hist11, kGreen, "Fourth Leading Lepton pT")
-		   })
-	,Image(.4, " ", "Events", "Eta", kOcean
-	      ,vector<Plot> {
-		 Plot(file6, hist7, kRed, "200 GeV Higgs")
-		   ,Plot(file4, hist7, kBlue, "800 GeV Higgs")
-		   ,Plot(file5, hist7, kGreen, "1300 GeV Higgs")
-		   })
-	,Image(.4, " ", "Events", "delta r", kOcean
-	       ,vector<Plot> {
-		 Plot(file12, hist12, kRed, "200 GeV Higgs")
-		   ,Plot(file15, hist12, kBlue, "800 GeV Higgs")
-		   ,Plot(file16, hist12, kGreen, "1300 GeV Higgs")
-		   })
+		Plot(file18, hist13, kBlue, "Same Sign Invariant Mass Hist (Gen)")
+		,Plot(file18, hist12, kRed, "Photons Hist Using Delta Phi (Gen)")
+   })
+	//  ,Image(.4, "GeV", "Events", "Invariant Mass Hist", kCool
+	//        ,vector<Plot> {
+	//  	   Plot(file18, hist13, kBlue, "Same Sign Invarient Mass Hist (Gen)")
+	// 	   ,Plot(file18, hist12, kRed, "Photons Hist Using Delta Phi (Gen)")
+  //     })
+  //   ,Image(.4, "GeV", "Events", "Invariant Mass Hist", kCool
+	//        ,vector<Plot> {
+	//  	   Plot(file18, hist13, kBlue, "Same Sign Invarient Mass Hist (Gen)")
+	// 	  })
+	// ,Image(.4, "pT GeV", "Events", "Sorted Lepton pT GeV for 200 GeV Higgs", kCool
+	//        ,vector<Plot> {
+	// 	 Plot(file6, hist5, kBlack, "Leading Lepton pT")
+	// 	   ,Plot(file6, hist6, kRed, "Second Leading Lepton pT")
+	// 	   ,Plot(file6, hist10, kBlue, "Third Leading Lepton pT")
+	// 	   ,Plot(file6, hist11, kGreen, "Fourth Leading Lepton pT")
+	// 	   })
+	// ,Image(.4, " ", "Events", "Eta", kOcean
+	//       ,vector<Plot> {
+	// 	 Plot(file6, hist7, kRed, "200 GeV Higgs")
+	// 	   ,Plot(file4, hist7, kBlue, "800 GeV Higgs")
+	// 	   ,Plot(file5, hist7, kGreen, "1300 GeV Higgs")
+	// 	   })
+	// ,Image(.4, " ", "Events", "delta r", kOcean
+	//        ,vector<Plot> {
+	// 	 Plot(file12, hist12, kRed, "200 GeV Higgs")
+	// 	   ,Plot(file15, hist12, kBlue, "800 GeV Higgs")
+	// 	   ,Plot(file16, hist12, kGreen, "1300 GeV Higgs")
+	// 	   })
   /*
       Image(.4, "Leading Lepton pT GeV", "Events", "Leading Lepton pT", kCool
 	    ,vector<Plot> {
@@ -203,7 +210,7 @@ void superimpose(){
 	      ,vector<Plot> {
 		Plot(file7, hist8, kBlue, "200 GeV Boson")
 		  })
-	/*,Image(.4, "Lepton GeV", "Events", "Leading pt", kDarkRainBow
+	  ,Image(.4, "Lepton GeV", "Events", "Leading pt", kDarkRainBow
 	       ,std::vector<Plot> {
 		 Plot(file3, hist5, kRed, "300 GeV Higgs")
 		   ,Plot(file4, hist5, kBlue, "800 GeV Higgs")
@@ -257,6 +264,7 @@ void superimpose(){
 		  ,Plot(file4, hist3, kBlack, "800")
 		  ,Plot(file5, hist3, "1300")
 		  })
+    
 	};
   */
 

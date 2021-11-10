@@ -4,14 +4,15 @@
 
 #include <string>
 
-bool HistogramPrototype::shouldDraw(const edm::EventBase& event) const
+bool HistogramPrototype::shouldDraw() const
 {
   for (std::shared_ptr<FilterModule> filterMod : filters)
   {
-    filterMod->process(event); // Calls process and makes the filter string
+    filterMod->process(); // Calls process and makes the filter string
     
     if (filterMod->getFilterString() == "")
     {
+      std::cout << filterMod->getFilterString() << "\n";
       return false; // Return false if any filterString is empty
     }
   }

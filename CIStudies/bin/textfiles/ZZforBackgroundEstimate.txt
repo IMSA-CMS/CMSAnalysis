@@ -1,0 +1,7 @@
+Procs:  Diboson
+Year:   2021
+Lepton: M   E
+Mass:   200
+Lambda: 200
+Inter:  con
+Helic:  ZZ4L

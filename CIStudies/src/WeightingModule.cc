@@ -63,7 +63,7 @@ WeightingModule::WeightingModule()
 	}
     } */
 
-bool WeightingModule::process(const edm::EventBase& event)
+bool WeightingModule::process()
 {
   //std::cerr << "ENTERING WeightingModule" << std::endl;
   auto keyname = getFileParams().getFileKey();
@@ -77,17 +77,18 @@ void WeightingModule::findWeight(std::string key)
 {
   //std::cout << "Key: " << key << '\n';
   auto iterator = weights.find(key);
-  if (iterator == weights.end())
+  if (key == "")
   {
-    std::cerr << "Key " << key << " not found! " << std::endl;
-    weight = 0;
+    weight = 0;	  
+  }
+  else if (iterator == weights.end())
+  {
+    //std::cerr << "Key " << key << " not found! " << std::endl;
+    //weight = 0;
   
-    //throw std::runtime_error("Key " + key + " not found!");
+    throw std::runtime_error("Key " + key + " not found!");
   }
-  else if (key == "")
-  {
-    weight = 0;
-  }
+  
   else
   {
    weight = iterator->second;  

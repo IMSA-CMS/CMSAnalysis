@@ -5,6 +5,8 @@
 
 #include "ProductionModule.hh"
 
+#include "ParticleCollection.hh"
+
 namespace edm
 {
   class EventBase;
@@ -13,7 +15,7 @@ namespace edm
 class METModule : public ProductionModule
 {
 public:
-  virtual bool process(const edm::EventBase& event) override;
+  virtual bool process() override;
 
   double getMet() const {return met;}
   double getPhi() const {return phi;}

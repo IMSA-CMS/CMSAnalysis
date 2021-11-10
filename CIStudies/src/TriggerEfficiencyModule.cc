@@ -1,20 +1,20 @@
 #include "CIAnalysis/CIStudies/interface/TriggerEfficiencyModule.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
-#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
+//#include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/Particle.hh"
 
-TriggerEfficiencyModule::TriggerEfficiencyModule(const std::shared_ptr<MatchingModule> iMatchMod, const std::shared_ptr<GenSimIdentificationModule> iGenSimMod, double iHiggsMass, double iLowerWidth, double iUpperWidth) :
+TriggerEfficiencyModule::TriggerEfficiencyModule(const std::shared_ptr<MatchingModule> iMatchMod, double iHiggsMass, double iLowerWidth, double iUpperWidth) :
   matchMod(iMatchMod),
-  genSimMod(iGenSimMod),
+  //genSimMod(iGenSimMod),
   higgsMass(iHiggsMass),
   lowerWidth(iLowerWidth),
   upperWidth(iUpperWidth)
 {
 }
 
-bool TriggerEfficiencyModule::process(const edm::EventBase& event)
+bool TriggerEfficiencyModule::process()
 {
-  auto genSimParticles = genSimMod->getGenParticles().getParticles();  // Vector of Particles
+  auto genSimParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim).getParticles();  // Vector of Particles
 
   // std::cout << "Number of GenSim Particles: " << genSimParticles.size() << '\n';
 

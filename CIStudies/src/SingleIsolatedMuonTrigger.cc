@@ -1,16 +1,14 @@
 #include "CIAnalysis/CIStudies/interface/SingleIsolatedMuonTrigger.hh"
 
-#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
-
-SingleIsolatedMuonTrigger::SingleIsolatedMuonTrigger(std::shared_ptr<RecoIdentificationModule> iRecoMod, double iPTCutoff) :
-  Trigger("Single Isolated Muon Trigger", iRecoMod),
+SingleIsolatedMuonTrigger::SingleIsolatedMuonTrigger(double iPTCutoff) :
+  RecoTrigger("Single Isolated Muon Trigger"),
   pTCutoff(iPTCutoff)
 {
 }
 
-bool SingleIsolatedMuonTrigger::checkTrigger(std::shared_ptr<RecoIdentificationModule> recoMod)
+bool SingleIsolatedMuonTrigger::checkTrigger(std::shared_ptr<InputModule> input)
 {
-  auto particles = recoMod->getRecoCandidates(Particle::Type::Muon);
+  auto particles = input->getParticles(InputModule::RecoLevel::Reco, Particle::Type::Muon);
 
   // If there aren't enough muons, then automatically fail the trigger
   if (particles.getNumParticles() < 1)
@@ -22,7 +20,7 @@ bool SingleIsolatedMuonTrigger::checkTrigger(std::shared_ptr<RecoIdentificationM
 
   for (const auto &particle : particles.getParticles())
   {
-    if (particle.pt() >= pTCutoff && particle.isIsolated())
+    if (particle.getPt() >= pTCutoff && particle.isIsolated())
     {
       return true;
     }

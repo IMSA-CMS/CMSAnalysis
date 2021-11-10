@@ -158,10 +158,10 @@ void ComputationalFunction(Parameters param, std::ostream& out_file)
         outout << backgroundest;
         outout << "\n";
 
-        if (param.sumSwitch == 1)
-            oneSum = (backgroundest + oneSum);
-        if (param.sumSwitch == 2)
-            twoSum = (backgroundest + twoSum);
+        // if (param.sumSwitch == 1)
+        //     oneSum = (backgroundest + oneSum);
+        // if (param.sumSwitch == 2)
+        //     twoSum = (backgroundest + twoSum);
 
 
         //f->Close();
@@ -247,14 +247,14 @@ void SignalFunction(Parameters param, std::ostream& out_file)
     outout << signalest;
     outout << "\n";
 
-    if (param.sumSwitch == 1)
-        oneSum = (signalest + oneSum);
-    if (param.sumSwitch == 2)
-        twoSum = (signalest + twoSum);
+    // if (param.sumSwitch == 1)
+    //     oneSum = (signalest + oneSum);
+    // if (param.sumSwitch == 2)
+    //     twoSum = (signalest + twoSum);
         
 }
 
-void InvariantMassFitScript()
+int main()
 {
     //Defines my text file with my events data as eventfilename
     const string eventfilename = "eventfiles.txt";
@@ -263,8 +263,7 @@ void InvariantMassFitScript()
     //Reads from the file
     std::ifstream masssrc(massfilename);
 
-    sumOne = 0;
-    sumTwo = 0;
+    
 
     //Output file
     std::ofstream out_file;
@@ -320,9 +319,9 @@ void InvariantMassFitScript()
 
         }
     out_file.close();
-    outout << "\nSum of One Estimates\t"
-    outout << sumOne;
-    outout << "\nSum of Two Estimates\t"
-    outout << sumTwo;
+    // outout << "\nSum of One Estimates\t";
+    // outout << sumOne;
+    // outout << "\nSum of Two Estimates\t";
+    // outout << sumTwo;
 }
 
