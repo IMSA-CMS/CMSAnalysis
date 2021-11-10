@@ -19,6 +19,7 @@ class MiniAODEventLoader : public EventLoader
         //virtual void getLeptons(RecoLevel level) override;
         virtual ParticleCollection getGenSimParticles() const override;
         virtual ParticleCollection getRecoParticles() const override;
+        virtual ParticleCollection getRecoJets() const override;
         //virtual std::vector<PileupSummaryInfo> getPileupInfo() const override;
         virtual GenEventInfoProduct getGenInfo() const override;
         virtual double getMET() const override;

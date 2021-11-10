@@ -5,6 +5,7 @@
 #include "DataFormats/PatCandidates/interface/Electron.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Photon.h"
+#include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
 
 MiniAODEventLoader::MiniAODEventLoader(int outputEvery) : 
@@ -82,6 +83,20 @@ ParticleCollection MiniAODEventLoader::getRecoParticles() const
         for (const auto& p : *photons)
 	    {       
 	        recoParticles.addParticle(Particle(&p));
+        }
+        return recoParticles;
+}
+
+ParticleCollection MiniAODEventLoader::getRecoJets() const
+{
+    ParticleCollection recoParticles;
+
+        edm::Handle<std::vector<pat::Jet>> jets;
+        event->getByLabel(edm::InputTag("slimmedJets"), jets);
+
+        for (const auto& j : *jets)
+	    {       
+	        recoParticles.addParticle(Particle(&j));
         }
         return recoParticles;
 }

@@ -1,3 +1,5 @@
+// Does nothing right now
+
 #include "CIAnalysis/CIStudies/interface/MatchedLeptonJetHist.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonJetMatchingModule.hh"
 #include "DataFormats/Math/interface/deltaR.h"
@@ -40,7 +42,7 @@ std::vector<double> MatchedLeptonJetHist::value() const
       }
     }
     if (min > 0 && ((min < 0.1) == matched)) {
-      out.push_back(lj.getParticles()[0].hadVetoEt() / lj4.pt());
+      // out.push_back(lj.getParticles()[0].hadVetoEt() / lj4.pt());
     }
   }
 
