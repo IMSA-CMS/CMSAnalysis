@@ -6,27 +6,35 @@
 #include "DataFormats/PatCandidates/interface/Electron.h"
 #include "DataFormats/PatCandidates/interface/Photon.h"
 
-SimpleImplementation::SimpleImplementation(const reco::Candidate::LorentzVector* lorentzVec)
+SimpleImplementation::SimpleImplementation(reco::Candidate::LorentzVector vec, int ch, Particle::Type type):
+lorentzVec(vec), 
+particleCharge(ch),
+particleType(type)
 {
+
   //std::cout << "Got to SI\n";
-  }
+}
+
+bool SimpleImplementation::operator== (const ParticleImplementation& other) const 
+{
+    try
+    {
+      auto otherImp = dynamic_cast<const SimpleImplementation&>(other);
+      return otherImp.lorentzVec == lorentzVec && otherImp.particleCharge == particleCharge;
+    }
+    catch(std::bad_cast&)
+    {
+      return false;
+    }
+}
 
 reco::Candidate::LorentzVector SimpleImplementation::getFourVector() const
 {
-  checkIsNull();
-  return particle->p4();
+  return lorentzVec;
 }
 
 int SimpleImplementation::charge() const 
 {
-  checkIsNull();
-  return particle->charge();
+  return particleCharge;
 }
 
-void SimpleImplementation::checkIsNull() const
-{
-  if(!particle)
-  {
-    throw std::runtime_error("attempted to use null pointer in Particle (SI)");	
-  }
-}
