@@ -1,5 +1,5 @@
-#ifndef MINIAODEVENTLOADER_HH
-#define MINIAODEVENTLOADER_HH
+#ifndef MINIAODEVENTFILE_HH
+#define MINIAODEVENTFILE_HH
 
 #include "EventLoader.hh"
 #include "ParticleCollection.hh"
