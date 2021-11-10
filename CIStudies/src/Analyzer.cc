@@ -25,12 +25,12 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 
   // Get a list of FileParams objects
   auto fileparams = inputFiles(configFile);
-  auto eventLoader = std::make_shared<MiniAODEventLoader> (outputEvery);
-  auto input = std::make_shared<InputModule> (eventLoader);
+  auto eventLoader = std::make_unique<MiniAODEventLoader> (outputEvery);
+  InputModule input(eventLoader.get());
   // Initialize all modules
   for (auto module : getAllModules())
     {
-      module->setInput(input);
+      module->setInput(&input);
       module->initialize();
     }
 

@@ -33,7 +33,7 @@ class Particle
     int numberOfDaughters() const;
     Particle daughter(int i) const;
     // const reco::Candidate getUnderlyingParticle() const {return particle;}
-  
+    double getDeltaR(Particle particle) const;
     int pdgId() const;
     int status() const;
     int charge() const;

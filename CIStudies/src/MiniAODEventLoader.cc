@@ -9,7 +9,9 @@
 
 MiniAODEventLoader::MiniAODEventLoader(int outputEvery) : 
 EventLoader(outputEvery)
-{}
+{
+    // std::cout << "made it to MiniAOD \n";
+}
 
 void MiniAODEventLoader::newFile(TFile* ifile)
 {
@@ -24,6 +26,7 @@ void MiniAODEventLoader::nextEvent()
     auto& eventRef = *event;
     ++(eventRef);
     setEventCount(getEventCount() + 1);
+    // std::cout << "next Event \n";
 }
 
 /*
@@ -56,9 +59,10 @@ ParticleCollection MiniAODEventLoader::getGenSimParticles() const
 
 ParticleCollection MiniAODEventLoader::getRecoParticles() const
 {
+    // std::cout << "get reco particles \n";
     ParticleCollection recoParticles;
     //This seems problematic
-    
+        
 
         edm::Handle<std::vector<pat::Electron>> electrons;
         event->getByLabel(std::string("slimmedElectrons"), electrons);
@@ -83,6 +87,7 @@ ParticleCollection MiniAODEventLoader::getRecoParticles() const
 	    {       
 	        recoParticles.addParticle(Particle(&p));
         }
+        // std::cout << "made it through mini aod reco particles \n";
         return recoParticles;
 }
 
