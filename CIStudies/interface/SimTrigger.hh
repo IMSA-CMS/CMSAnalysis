@@ -15,7 +15,7 @@ class SimTrigger : public Trigger
     void enableAllTriggers() {trigSimMod->enableAllTriggers();}
 
   protected:
-    virtual bool checkTrigger(std::shared_ptr<InputModule> input) override {return trigSimMod->checkTrigger(triggerEnum);} // Returns true if the trigger is passed
+    virtual bool checkTrigger(const InputModule* input) override {return trigSimMod->checkTrigger(triggerEnum);} // Returns true if the trigger is passed
 
   private:
     TriggerSimModule::EnumTriggers triggerEnum;

@@ -1,14 +1,14 @@
-#ifndef TREEEVENTLOADER_HH
-#define TREEEVENTLOADER_HH
+#ifndef TREEEVENTFILE_HH
+#define TREEEVENTFILE_HH
 
-#include "EventLoader.hh"
+#include "EventFile.hh"
 
 class TTree;
 
-class TreeEventLoader : public EventLoader
+class TreeEventFile : public EventFile
 {
     public:
-        using EventLoader::EventLoader;
+        TreeEventFile(TFile* ifile);
         virtual void nextEvent() override;
         virtual bool isDone() const override;
         // simply dumps gensim particles from event into ParticleCollection
@@ -17,7 +17,6 @@ class TreeEventLoader : public EventLoader
         virtual GenEventInfoProduct getGenInfo() const override;
         virtual double getMET() const override;
     protected:
-        virtual void newFile(TFile* ifile) override;
         struct BranchNames
         {
             std::string elecSize;
@@ -41,6 +40,7 @@ class TreeEventLoader : public EventLoader
         
         virtual std::string getTreeName() = 0;
         virtual BranchNames getTreeBranches() = 0;
+        virtual void initialize();
     private:
         // Next time: fill in names from struct - make a protected abstract function =0
         // that just fills in and returns this struct

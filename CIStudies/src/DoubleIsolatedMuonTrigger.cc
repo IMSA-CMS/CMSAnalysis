@@ -11,7 +11,7 @@ DoubleIsolatedMuonTrigger::DoubleIsolatedMuonTrigger(double iPTCutoff, double iS
 {
 }
 
-bool DoubleIsolatedMuonTrigger::checkTrigger(std::shared_ptr<InputModule> input)
+bool DoubleIsolatedMuonTrigger::checkTrigger(const InputModule* input)
 {
   auto particles = input->getParticles(InputModule::RecoLevel::Reco, Particle::Type::Muon);
 
