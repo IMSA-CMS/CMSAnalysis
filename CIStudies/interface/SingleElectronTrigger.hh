@@ -11,7 +11,7 @@ class SingleElectronTrigger : public RecoTrigger
     SingleElectronTrigger(const double iPTCutoff = 28);
   
   protected:
-    bool checkTrigger(std::shared_ptr<InputModule> input) override;
+    bool checkTrigger(const InputModule* input) override;
 
   private:
     const double pTCutoff;

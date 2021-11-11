@@ -21,7 +21,7 @@ public:
 		name(iname)
 	{}
 
-	void setInput(std::shared_ptr<InputModule> iInput) {input = iInput;}
+	void setInput(const InputModule* iInput);
 
 	virtual ~HistogramPrototype() {} // Empty virtual destructor
 	
@@ -41,9 +41,9 @@ public:
 
 
 protected:
-	std::shared_ptr<InputModule> getInput() const {return input;}
+	const InputModule* getInput() const {return input;}
 private:
-	std::shared_ptr<InputModule> input;
+	const InputModule* input;
 	std::string name;
 	std::vector<std::shared_ptr<FilterModule>> filters; // Vector of FilterModule&'s
 };
