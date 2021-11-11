@@ -221,7 +221,7 @@ bool HistogramOutputModule::process()
     // If the mass bin is a new mass bin, then make the histograms for that mass bin
     if (isNewMassBin(massBin))
       {
-        std::cout << "Process if one\n";
+        //std::cout << "Process if one\n";
         auto weight = weighting->getWeight();
         auto fileKey = getFileParams().getFileKey();
     
