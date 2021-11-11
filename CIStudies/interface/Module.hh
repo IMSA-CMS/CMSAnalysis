@@ -18,7 +18,7 @@ class InputModule;
 class Module
 {
 public:
-  virtual ~Module() {}
+  virtual ~Module();
 
   // This is called once before any files are accessed
   // Used to set up objects such as histograms
