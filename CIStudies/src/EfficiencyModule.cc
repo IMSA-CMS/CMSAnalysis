@@ -15,6 +15,8 @@ void EfficiencyModule::finalize()
     }
 }
 
+void EfficiencyModule::writeAll() {}
+
 bool EfficiencyModule::process ()
 {
     if (isNewFile())

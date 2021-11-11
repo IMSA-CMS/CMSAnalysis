@@ -126,7 +126,8 @@ Analyzer hPlusPlusMassAnalysis() {
   analyzer.addProductionModule(mETMod);
 
   // Filters
-  //analyzer.addFilterModule(nLeptonsFilter);
+  // 09/12: Add nLeptons filer 
+  analyzer.addFilterModule(nLeptonsFilter);
   //analyzer.addFilterModule(unusualFinalStateFilter);
 
   analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms

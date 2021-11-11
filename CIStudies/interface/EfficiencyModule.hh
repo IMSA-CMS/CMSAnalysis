@@ -12,13 +12,13 @@ class EfficiencyModule : public AnalysisModule
     public:
     EfficiencyModule(const std::shared_ptr<WeightingModule> WeightingModule);
     void finalize() override;
-    virtual void writeAll() override{}
+    virtual void writeAll() override;
 
     protected:
     void incrementCounter(std::string name, double increment = 1);
     double getCounter(std::string name) const;
     double getEfficiency(std::string name) const;
-    bool process();
+    bool process() override;
     virtual void doCounters() = 0; 
 
     private:

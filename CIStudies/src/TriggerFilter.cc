@@ -1,6 +1,5 @@
 #include "CIAnalysis/CIStudies/interface/TriggerFilter.hh"
 
-
 TriggerFilter::TriggerFilter(const std::shared_ptr<Trigger> iTrigger) :
   trigger(iTrigger)
 {
