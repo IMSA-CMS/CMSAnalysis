@@ -3,7 +3,7 @@
 // Andy, [10/06/21]
 
 #include "TTree.h"
-#include "CIAnalysis/CIStudies/interface/TreeEventLoader.hh"
+#include "CIAnalysis/CIStudies/interface/TreeEventFile.hh"
 #include "CIAnalysis/CIStudies/interface/InputModule.hh"
 #include "CIAnalysis/CIStudies/interface/Particle.hh"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
@@ -13,11 +13,12 @@
 #include "DataFormats/PatCandidates/interface/MET.h"
 #include "DataFormats/Math/interface/LorentzVector.h"
 
+TreeEventFile::TreeEventFile(TFile* ifile) : 
+EventFile(ifile) {}
 
-void TreeEventLoader::newFile(TFile* ifile)
+void TreeEventFile::initialize()
 {
-    tree = ifile->Get<TTree>(getTreeName().c_str());
-
+    tree = getFile()->Get<TTree>(getTreeName().c_str());
     // Set branch addresses immediately
     tree->SetBranchAddress(getTreeBranches().elecSize.c_str(), &elec_size);
     tree->SetBranchAddress(getTreeBranches().elecEta.c_str(), &elec_eta);
@@ -49,7 +50,7 @@ void TreeEventLoader::newFile(TFile* ifile)
     } */
 }
 
-void TreeEventLoader::nextEvent()
+void TreeEventFile::nextEvent()
 {
     // Need to call tree->GetEntry(new #)
     // std::cout << counter << std::endl;
@@ -59,7 +60,7 @@ void TreeEventLoader::nextEvent()
     setEventCount(getEventCount() + 1);
 }
 
-GenEventInfoProduct TreeEventLoader::getGenInfo() const
+GenEventInfoProduct TreeEventFile::getGenInfo() const
 {
     throw std::runtime_error("Not yet implemented: getGenInfo()");
 
@@ -70,7 +71,7 @@ GenEventInfoProduct TreeEventLoader::getGenInfo() const
     */
 }
 
-ParticleCollection TreeEventLoader::getGenSimParticles() const
+ParticleCollection TreeEventFile::getGenSimParticles() const
 {
     throw std::runtime_error("Not yet implemented: getGenSimParticles()");
 
@@ -86,7 +87,7 @@ ParticleCollection TreeEventLoader::getGenSimParticles() const
     */
 }
 
-ParticleCollection TreeEventLoader::getRecoParticles() const
+ParticleCollection TreeEventFile::getRecoParticles() const
 {
     ParticleCollection recoParticles;
     //This seems problematic
@@ -116,12 +117,12 @@ ParticleCollection TreeEventLoader::getRecoParticles() const
     return recoParticles;
 }
 
-double TreeEventLoader::getMET() const
+double TreeEventFile::getMET() const
 {
     return static_cast<double>(met_pt[0]);
 }
 
-bool TreeEventLoader::isDone() const
+bool TreeEventFile::isDone() const
 {
     return counter >= tree->GetEntries();
 }

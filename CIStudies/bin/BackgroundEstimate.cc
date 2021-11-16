@@ -42,7 +42,7 @@ struct Parameters
             std::getline(str, signalSwitchString, '\t');
             std::getline(str, analysisName, '\t');
             std::getline(str, nickname, '\t');
-            std::getline(str, sumSwitch, '\t');
+            std::getline(str, sumSwitchString, '\t');
             
             massTarget = std::stod(massTargetString);
             totalEvents = std::stod(eventsString);
@@ -257,9 +257,9 @@ void SignalFunction(Parameters param, std::ostream& out_file)
 int main()
 {
     //Defines my text file with my events data as eventfilename
-    const string eventfilename = "eventfiles.txt";
+    const std::string eventfilename = "eventfiles.txt";
     //Defines my mass text file as massfilename
-    const string massfilename = "masses.txt";
+    const std::string massfilename = "masses.txt";
     //Reads from the file
     std::ifstream masssrc(massfilename);
 
@@ -273,8 +273,8 @@ int main()
         while (masssrc)
         {
             std::ifstream eventsrc(eventfilename);
-            string massholder;
-            string masslinenotarget;
+            std::string massholder;
+            std::string masslinenotarget;
 
             //Finds just the mass value and defines it massholder
             getline(masssrc, massholder, '\t');   
@@ -295,7 +295,7 @@ int main()
             {
 
                 //Defines a string holder 
-                string holder;
+                std::string holder;
                 //Gets a line from my events file and assigns it to holder
                 getline(eventsrc, holder);
                 //If the line is empty, end the loop

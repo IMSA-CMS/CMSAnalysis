@@ -10,7 +10,7 @@ class SingleIsolatedMuonTrigger : public RecoTrigger
     SingleIsolatedMuonTrigger(const double iPTCutoff = 24);
   
   protected:
-    bool checkTrigger(std::shared_ptr<InputModule> input) override;
+    bool checkTrigger(const InputModule* input) override;
 
   private:
     const double pTCutoff;
