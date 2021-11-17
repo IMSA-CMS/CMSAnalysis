@@ -21,10 +21,6 @@ bool LeptonJetEfficiency::process()
 
 void LeptonJetEfficiency::finalize()
 {
-    std::cout << "Lepton Jet Efficiency: " << (double) numMatchedJets / numRecoJets << "\n";
-    std::cout << "Zero Any Lepton Jet Efficiency: " << (double) numMatchedJets / recoZeroAnyVeto << "\n";
-    std::cout << "Zero All Lepton Jet Efficiency: " << (double) numMatchedJets / recoZeroAllVeto << "\n";
-    std::cout << "total, numMatched, zeroAny, zeroAll\n";
-    std::cout << numRecoJets << ", " << numMatchedJets << ", "
-        << recoZeroAnyVeto << ", " << recoZeroAllVeto << "\n";
+    std::cout << "Lepton Jet Efficiency: " << (double) numMatchedJets / numRecoJets << "("
+              << numMatchedJets << "/" << numRecoJets << ")\n";
 }
