@@ -22,8 +22,8 @@ class MiniAODEventLoader : public EventLoader
         //virtual std::vector<PileupSummaryInfo> getPileupInfo() const override;
         virtual GenEventInfoProduct getGenInfo() const override;
         virtual double getMET() const override;
-        // virtual edm::TriggerResults getTriggerResults(std::string subProcess) const override;
-        // virtual edm::TriggerNames getTriggerNames(std::string subProcess) const override;
+        virtual edm::Handle<edm::TriggerResults> getTriggerResults(std::string subProcess) const override;
+        virtual edm::TriggerNames getTriggerNames(std::string subProcess) const override;
     private:
         std::shared_ptr<fwlite::Event> event = nullptr;
 };

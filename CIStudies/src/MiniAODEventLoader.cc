@@ -98,17 +98,17 @@ double MiniAODEventLoader::getMET() const
 
 }
 
-// edm::TriggerResults MiniAODEventLoader::getTriggerResults(std::string subProcess) const
-// {
-//     edm::Handle<edm::TriggerResults> triggerResults;
-//     event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
-//     return triggerResults;
-// }
+edm::Handle<edm::TriggerResults> MiniAODEventLoader::getTriggerResults(std::string subProcess) const
+{
+    edm::Handle<edm::TriggerResults> triggerResults;
+    event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
+    return triggerResults;
+}
 
-// edm::TriggerNames MiniAODEventLoader::getTriggerNames(std::string subProcess) const
-// {
-//     return event->triggerNames(*getTriggerResults(subProcess));
-// }
+edm::TriggerNames MiniAODEventLoader::getTriggerNames(std::string subProcess) const
+{
+    return event->triggerNames(*getTriggerResults(subProcess));
+}
 
 bool MiniAODEventLoader::isDone() const
 {
