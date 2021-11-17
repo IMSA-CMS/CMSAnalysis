@@ -11,7 +11,7 @@
 //#include "CIAnalysis/CIStudies/bin/leptonJetReconstructionAnalysis.cc"
 //#include "CIAnalysis/CIStudies/bin/displacedVertexAnalysis.cc"
 //#include "CIAnalysis/CIStudies/bin/massAcceptanceAnalysis.cc"
-//#include "CIAnalysis/CIStudies/bin/triggerAnalysis.cc"
+#include "CIAnalysis/CIStudies/bin/triggerAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/invariantMassAnalysis.cc"
 //#include "CIAnalysis/CIStudies/bin/FilestripAnalysis.cc"
 

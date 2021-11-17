@@ -23,8 +23,8 @@ class EventLoader
         virtual ParticleCollection getRecoParticles() const = 0;
         //virtual std::vector<PileupSummaryInfo> getPileupInfo() const = 0;
         virtual GenEventInfoProduct getGenInfo() const = 0;
-        // virtual edm::TriggerResults getTriggerResults(std::string subProcess) const = 0;
-        // virtual edm::TriggerNames getTriggerNames(std::string subProcess) const = 0;
+        virtual edm::Handle<edm::TriggerResults> getTriggerResults(std::string subProcess) const = 0;
+        virtual edm::TriggerNames getTriggerNames(std::string subProcess) const = 0;
         virtual double getMET() const = 0;
     protected:
         TFile* getFile() {return file;}
