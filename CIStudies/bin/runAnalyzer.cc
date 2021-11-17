@@ -14,7 +14,7 @@
 //#include "CIAnalysis/CIStudies/bin/triggerAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/invariantMassAnalysis.cc"
 //#include "CIAnalysis/CIStudies/bin/FilestripAnalysis.cc"
-
+#include "CIAnalysis/CIStudies/bin/LeptonJetBackgroundAnalysis.cc"
 
 int main(int argc, char **argv) {
   gROOT->SetBatch(true);
@@ -50,7 +50,8 @@ int main(int argc, char **argv) {
   //Analyzer analyzer = massResolutionAnalysis();
   //Analyzer analyzer = displacedVertexAnalysis();
 
-  Analyzer analyzer = leptonJetReconstructionAnalysis();
+  //Analyzer analyzer = leptonJetReconstructionAnalysis();
+  Analyzer analyzer = leptonJetBackgroundAnalysis();
   // Analyzer analyzer = massAcceptanceAnalysis();
   //Analyzer analyzer = massAcceptanceAnalysis();
   //Analyzer analyzer = triggerAnalysis();
