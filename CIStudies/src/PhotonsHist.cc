@@ -5,6 +5,7 @@
 
 std::vector<double> PhotonsHist::protectedValue(bool typeGenSim) const
 {
+  // std::cerr << "photons hist " << EventLoader.use_count() << "\n";
   if (typeGenSim)          // typeGenSim == true, so we want the GenSim values
   {
     ParticleCollection finalPhotons;
@@ -90,7 +91,7 @@ std::vector<double> PhotonsHist::protectedValue(bool typeGenSim) const
     // {
     //   return{oppSignIv};
     // }
-    return {true};
+    return {0};
     
   }
 
@@ -122,50 +123,46 @@ void PhotonsHist::addPhotonUsingIM (ParticleCollection& pc1, ParticleCollection&
 
 void PhotonsHist::addPhotonUsingDR(ParticleCollection& pc1, ParticleCollection& pc2, Particle photon) const
 {
-  // ParticleCollection particleCollectOne(pc1);
-  // ParticleCollection particleCollectTwo(pc2);
-  // std::vector<double> deltaRValuesP1;
-  // std::vector<double> deltaRValuesP2;
-  // double lowestDRp1 = 1000;
-  // double lowestDRp2 = 1000;
+  ParticleCollection particleCollectOne(pc1);
+  ParticleCollection particleCollectTwo(pc2);
+  std::vector<double> deltaRValuesP1;
+  std::vector<double> deltaRValuesP2;
+  double lowestDRp1 = 1000;
+  double lowestDRp2 = 1000;
 
-  // auto pc1Particles = particleCollectOne.getParticles();
-  // auto pc2Particles = particleCollectTwo.getParticles();
-  // for(auto currentParticle:pc1Particles)
-  // {
-  //   auto fourVectorLep = currentParticle.getFourVector();
-  //   auto fourVectorPhoton = photon.getFourVector();
-  //   double deltaR = reco::deltaR(fourVectorLep, fourVectorPhoton);
-  //   deltaRValuesP1.push_back(deltaR);
-  // }
-  // if(!deltaRValuesP1.empty())
-  // {
-  //   std::sort(deltaRValuesP1.begin(), deltaRValuesP1.end(), [](auto a, auto b){return a < b;});
-  //   lowestDRp1 = deltaRValuesP1[0];
-  // }
+  auto pc1Particles = particleCollectOne.getParticles();
+  auto pc2Particles = particleCollectTwo.getParticles();
+  for(auto currentParticle:pc1Particles)
+  {
+    double deltaR = currentParticle.getDeltaR(photon);
+    deltaRValuesP1.push_back(deltaR);
+  }
+  if(!deltaRValuesP1.empty())
+  {
+    std::sort(deltaRValuesP1.begin(), deltaRValuesP1.end(), [](auto a, auto b){return a < b;});
+    lowestDRp1 = deltaRValuesP1[0];
+  }
   
 
-  // for(auto currentParticle:pc2Particles)
-  // {
-  //   auto fourVectorLep = currentParticle.getFourVector();
-  //   auto fourVectorPhoton = photon.getFourVector();
-  //   double deltaR = reco::deltaR(fourVectorLep, fourVectorPhoton);
-  //   deltaRValuesP2.push_back(deltaR);
-  // }
-  // if(!deltaRValuesP2.empty()) 
-  // {
-  //   std::sort(deltaRValuesP2.begin(), deltaRValuesP2.end(), [](auto a, auto b){return a < b;});
-  //   lowestDRp2 = deltaRValuesP2[0];
-  // }
+  for(auto currentParticle:pc2Particles)
+  {
+    double deltaR = currentParticle.getDeltaR(photon);
+    deltaRValuesP2.push_back(deltaR);
+  }
+  if(!deltaRValuesP2.empty()) 
+  {
+    std::sort(deltaRValuesP2.begin(), deltaRValuesP2.end(), [](auto a, auto b){return a < b;});
+    lowestDRp2 = deltaRValuesP2[0];
+  }
   
-  // if(lowestDRp1 > lowestDRp2) 
-  // {
-  //   pc2.addParticle(photon);
-  // }
-  // else
-  // {
-  //   pc1.addParticle(photon);
-  // }
+  if(lowestDRp1 > lowestDRp2) 
+  {
+    pc2.addParticle(photon);
+  }
+  else
+  {
+    pc1.addParticle(photon);
+  }
 }
 void PhotonsHist::addPhotonUsingPt(ParticleCollection& pc1, ParticleCollection& pc2, Particle photon) const
 {

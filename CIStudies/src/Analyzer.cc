@@ -12,11 +12,9 @@
 #include "CIAnalysis/CIStudies/interface/FilterModule.hh"
 #include "CIAnalysis/CIStudies/interface/ProductionModule.hh"
 #include "CIAnalysis/CIStudies/interface/EventLoader.hh"
-#include "CIAnalysis/CIStudies/interface/MiniAODEventLoader.hh"
 #include "FWCore/Framework/interface/Event.h"
 #include "DataFormats/FWLite/interface/Event.h"
 #include "CIAnalysis/CIStudies/interface/Module.hh"
-#include "CIAnalysis/CIStudies/interface/DelphesEventLoader.hh"
 #include "CIAnalysis/CIStudies/interface/TDisplayText.h"
 
 void Analyzer::run(const std::string& configFile, const std::string& outputFile, int outputEvery, int nFiles)
@@ -27,12 +25,12 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 
   // Get a list of FileParams objects
   auto fileparams = inputFiles(configFile);
-  auto eventLoader = std::make_shared<DelphesEventLoader> (outputEvery);
-  auto input = std::make_shared<InputModule> (eventLoader);
+  EventLoader eventLoader (outputEvery);
+  InputModule input(&eventLoader);
   // Initialize all modules
   for (auto module : getAllModules())
     {
-      module->setInput(input);
+      module->setInput(&input);
       module->initialize();
     }
 
@@ -67,10 +65,10 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 	      continue;
 	    }
     
-    eventLoader->changeFile(file);
+    eventLoader.changeFile(file);
     while(true)
     {
-      if (eventLoader->isDone())
+      if (eventLoader.getFile()->isDone())
       {
         break;
       }
@@ -108,7 +106,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
           module->processEvent();
         }
       }
-      eventLoader->nextEvent();
+      eventLoader.getFile()->nextEvent();
     }
 
 	 /*  // Extract events

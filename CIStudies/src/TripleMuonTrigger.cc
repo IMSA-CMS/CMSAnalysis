@@ -8,7 +8,7 @@ TripleMuonTrigger::TripleMuonTrigger(double iPTCutoff, double iSecondPTCutoff, d
 {
 }
 
-bool TripleMuonTrigger::checkTrigger(std::shared_ptr<InputModule> input)
+bool TripleMuonTrigger::checkTrigger(const InputModule* input)
 {
   auto particles = input->getParticles(InputModule::RecoLevel::Reco, Particle::Type::Muon);
 
