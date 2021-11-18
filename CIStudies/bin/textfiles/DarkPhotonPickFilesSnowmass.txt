@@ -2,6 +2,6 @@ Procs:  DarkPhoton
 Year:   Snowmass2021
 Lepton: M
 Mass:   800
-Lambda: M0_5    M0_9    M2_0
+Lambda: M0_5
 Inter:  con
 Helic:  LL

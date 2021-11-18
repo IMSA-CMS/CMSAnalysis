@@ -8,7 +8,7 @@ Trigger::Trigger(std::string iName):
 {
 }
 
-bool Trigger::checkEvent(std::shared_ptr<InputModule> input)
+bool Trigger::checkEvent(const InputModule* input)
 {
   //std::cerr << "Notice: Trigger::checkEvent is running\n";
 
