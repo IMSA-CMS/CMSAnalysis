@@ -16,7 +16,7 @@ class EventLoader;
 class InputModule
 {
     public:
-        InputModule(const std::shared_ptr<EventLoader> iEventLoader);
+        InputModule(const EventLoader* iEventLoader);
         // void setFile(TFile* tfile) {file = tfile;}
         enum class RecoLevel
         {
@@ -34,7 +34,7 @@ class InputModule
         // const edm::EventBase& getEvent();
         // TFile* getFile(); //{return file;}
     private:
-        const std::shared_ptr<EventLoader> eventLoader;
+        const EventLoader* eventLoader;
 };
 
 

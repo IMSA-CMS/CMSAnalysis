@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <boost/algorithm/string.hpp>
+#include <sstream>
 
 WeightingModule::WeightingModule()
 {
@@ -26,10 +27,10 @@ WeightingModule::WeightingModule()
     }
     else
     {
-      std::getline(weightsFile, key, '\t');
+      std::getline(weightsFile, line);
+      std::istringstream str(line);
+      str>>key>>value;
       boost::to_lower(key);
-      std::getline(weightsFile, valueString);  
-      value = std::stod(valueString);
       //std::cout << "key: " + key + " " + "value: " + std::to_string(value) + "\n";
       weights[key] = value;
     }

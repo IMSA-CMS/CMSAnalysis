@@ -1,14 +1,14 @@
-#ifndef TREEEVENTLOADER_HH
-#define TREEEVENTLOADER_HH
+#ifndef TREEEVENTFILE_HH
+#define TREEEVENTFILE_HH
 
-#include "EventLoader.hh"
+#include "EventFile.hh"
 
 class TTree;
 
-class TreeEventLoader : public EventLoader
+class TreeEventFile : public EventFile
 {
     public:
-        using EventLoader::EventLoader;
+        TreeEventFile(TFile* ifile);
         virtual void nextEvent() override;
         virtual bool isDone() const override;
         // simply dumps gensim particles from event into ParticleCollection
@@ -17,7 +17,6 @@ class TreeEventLoader : public EventLoader
         virtual GenEventInfoProduct getGenInfo() const override;
         virtual double getMET() const override;
     protected:
-        virtual void newFile(TFile* ifile) override;
         struct BranchNames
         {
             std::string elecSize;
@@ -37,16 +36,26 @@ class TreeEventLoader : public EventLoader
             std::string metSize;
             std::string metPhi;
             std::string metPT;
+
+            std::string genSize;
+            std::string genPid;
+            std::string genStatus;
+            std::string genEta;
+            std::string genPhi;
+            std::string genMass;
+            std::string genPt;
         };
         
         virtual std::string getTreeName() = 0;
         virtual BranchNames getTreeBranches() = 0;
+        virtual void initialize();
     private:
         // Next time: fill in names from struct - make a protected abstract function =0
         // that just fills in and returns this struct
         // advantage of struct is that you need to name the things to put in the struct
         // new function (or the same) that includes the tree name
         static const Int_t MAXMEC = 100;
+        static const Int_t MAXMC = 10000;
         TTree* tree;
         
         // Not sure if this is correct
@@ -70,6 +79,14 @@ class TreeEventLoader : public EventLoader
         Int_t met_size;
         Float_t met_phi[MAXMEC];
         Float_t met_pt[MAXMEC];
+
+        Int_t gen_size;
+        Int_t gen_pid[MAXMC];
+        Int_t gen_status[MAXMC];
+        Float_t gen_eta[MAXMC];
+        Float_t gen_phi[MAXMC];
+        Float_t gen_mass[MAXMC];
+        Float_t gen_pt[MAXMC];
 };
 
 

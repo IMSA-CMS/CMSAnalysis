@@ -11,5 +11,7 @@ std::string NLeptonsFilter::makeFilterString()
 {
   double pairs = getInput()->getLeptons(InputModule::RecoLevel::Reco, pTMin).getNumParticles();  //recoModule->getRecoCandidates().getNumParticles();
   //std::cout << pairs.getSize() << "\n";
+  // std::cout << " Made it through NLeptonsFilter\n";
   return std::to_string(static_cast<int>(pairs));
+
 }

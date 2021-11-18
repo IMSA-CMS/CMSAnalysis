@@ -1,14 +1,14 @@
 #ifndef DELPHESEVENTLOADER_HH
 #define DELPHESEVENTLOADER_HH
 
-#include "TreeEventLoader.hh"
+#include "TreeEventFile.hh"
 
 class TTree;
 
-class DelphesEventLoader : public TreeEventLoader
+class DelphesEventFile : public TreeEventFile
 {
     public:
-        using TreeEventLoader::TreeEventLoader;
+        DelphesEventFile(TFile* ifile);
     protected:
         virtual std::string getTreeName() override;
         virtual BranchNames getTreeBranches() override;
