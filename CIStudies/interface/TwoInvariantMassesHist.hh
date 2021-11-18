@@ -8,9 +8,11 @@ class RecoIdentificationModule;
 class TwoInvariantMassesHist : public HistogramPrototype2D
 {
   public:
-    TwoInvariantMassesHist(const std::string& iname, int iNBinsX, int iNBinsY, double iMinX, double iMinY, double iMaxX, double iMaxY);
+    TwoInvariantMassesHist(const std::string& iname, int iNBinsX, int iNBinsY, double iMinX, double iMinY, double iMaxX, double iMaxY, double pTCut = 0);
   protected:
     std::vector<std::pair<double, double>> value2D() const override;
+  private:
+    double pTMin;
 };
 
 #endif
