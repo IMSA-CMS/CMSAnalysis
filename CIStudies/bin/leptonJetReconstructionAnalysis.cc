@@ -45,7 +45,7 @@ Analyzer leptonJetReconstructionAnalysis() {
   auto weightMod = std::make_shared<WeightingModule>();
   auto lrWeightMod = std::make_shared<LRWeightModule>();
   auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>(3);
-  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(0.05);
+  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(0.05, 5);
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
   auto lepMatchMod = std::make_shared<LeptonJetMatchingModule>(lepRecoMod);
   auto histOutputMod = std::make_shared<HistogramOutputModule>(weightMod, lrWeightMod);

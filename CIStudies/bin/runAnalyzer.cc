@@ -50,8 +50,8 @@ int main(int argc, char **argv) {
   //Analyzer analyzer = massResolutionAnalysis();
   //Analyzer analyzer = displacedVertexAnalysis();
 
-  //Analyzer analyzer = leptonJetReconstructionAnalysis();
-  Analyzer analyzer = leptonJetBackgroundAnalysis();
+  Analyzer analyzer = leptonJetReconstructionAnalysis();
+  //Analyzer analyzer = leptonJetBackgroundAnalysis();
   // Analyzer analyzer = massAcceptanceAnalysis();
   //Analyzer analyzer = massAcceptanceAnalysis();
   //Analyzer analyzer = triggerAnalysis();
