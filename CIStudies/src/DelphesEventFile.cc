@@ -2,7 +2,7 @@
 // SO FAR I JUST COPIED FROM MINIAODEVENTLOADER
 // Andy, [10/06/21]
 
-#include "CIAnalysis/CIStudies/interface/DelphesEventLoader.hh"
+#include "CIAnalysis/CIStudies/interface/DelphesEventFile.hh"
 #include "CIAnalysis/CIStudies/interface/InputModule.hh"
 #include "CIAnalysis/CIStudies/interface/Particle.hh"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
@@ -12,11 +12,16 @@
 #include "DataFormats/PatCandidates/interface/MET.h"
 
 
-std::string DelphesEventLoader::getTreeName() {
+DelphesEventFile::DelphesEventFile(TFile* ifile) : TreeEventFile(ifile) 
+{
+    initialize();
+}
+
+std::string DelphesEventFile::getTreeName() {
     return "myana/mytree";
 }
 
-DelphesEventLoader::BranchNames DelphesEventLoader::getTreeBranches() {
+DelphesEventFile::BranchNames DelphesEventFile::getTreeBranches() {
     BranchNames delphesBranches;
 
     delphesBranches.elecSize = "elec_size";
