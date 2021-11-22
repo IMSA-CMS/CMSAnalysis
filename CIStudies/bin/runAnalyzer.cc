@@ -46,8 +46,8 @@ int main(int argc, char **argv) {
   unsigned outputEvery = parser.integerValue("outputEvery");
 
   // USING ANALYER FOR H++ THAT WON'T CHANGE: CHANGE BACK
-  // TO hPlusPlusMassAnalysis() when ready -- [09/17]
-  Analyzer analyzer = leptonJetBackgroundAnalysis();
+   Analyzer analyzer = hPlusPlusMassAnalysis();
+  //Analyzer analyzer = leptonJetBackgroundAnalysis();
   // Analyzer analyzer = massResolutionAnalysis();
   // Analyzer analyzer = leptonJetReconstructionAnalysis();
   // Analyzer analyzer = displacedVertexAnalysis();
