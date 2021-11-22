@@ -5,12 +5,10 @@
 #include "ProductionModule.hh"
 #include "LeptonJet.hh"
 
-//class RecoIdentificationModule;
-
 class LeptonJetReconstructionModule : public ProductionModule
 {
 public:
-  LeptonJetReconstructionModule(double deltaRCut = 0.5);
+  LeptonJetReconstructionModule(double deltaRCut = 0.5, double pTCut = 5);
   virtual bool process() override;
   const std::vector<LeptonJet>& getLeptonJets() const {return leptonJets;}
   const std::vector<double>& getDeltaRValues() const {return deltaRValues;}
@@ -22,12 +20,12 @@ private:
   void findDeltaRValues();
   void findPtValues();
 
-  //std::shared_ptr<RecoIdentificationModule> reco;
   std::vector<LeptonJet> leptonJets;
   std::vector<double> deltaRValues;
   std::vector<double> pTValues;
 
   double DeltaRCut;
+  double pTCut;
 
 };
 

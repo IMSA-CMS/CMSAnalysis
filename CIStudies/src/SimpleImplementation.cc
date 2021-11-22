@@ -30,6 +30,8 @@ bool SimpleImplementation::operator== (const ParticleImplementation& other) cons
 
 reco::Candidate::LorentzVector SimpleImplementation::getFourVector() const
 {
+  // HELP WHY ARE THE MASSES NEGATIVE [ATANG, 11/07]
+  // std::cout << lorentzVec.mass() << std::endl;
   return lorentzVec;
 }
 
