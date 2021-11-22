@@ -1,8 +1,9 @@
 #include <iostream>
 #include <memory>
-
+#include <functional>
 #include "TROOT.h"
 #include "TSystem.h"
+
 
 #include "CIAnalysis/CIStudies/interface/Analyzer.hh"
 #include "CIAnalysis/CIStudies/interface/DoubleMuonTrigger.hh"
@@ -33,6 +34,7 @@
 #include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
 #include "CIAnalysis/CIStudies/interface/METTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/SignFlipModule.hh"
+#include "CIAnalysis/CIStudies/interface/HistogramPrototype1DGeneral.hh"
 
 
 using std::make_shared;
@@ -73,13 +75,17 @@ Analyzer hPlusPlusMassAnalysis() {
   auto triggerEfficiencyMod20080 = make_shared<TriggerEfficiencyModule>(matchMod, 800, 200, 80);
 
   auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
-  auto genSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
+  //auto genSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
   // Go up to 2000 - Andy, 09/02 - and make more bins. Modifications also made for picking files
-  auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "Reco Same Sign Invariant Mass", 1000, 0, 2000);
+  //auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "Reco Same Sign Invariant Mass", 1000, 0, 2000);
 
   // auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
   // 
+  auto genSimSameSignInvMassHist = make_shared<HistogramPrototype1DGeneral>("GenSim Same Sign Invariant Mass", 100, 0, 1000,
+[](const InputModule* input){return std::vector<double>{input -> getParticles(InputModule::RecoLevel::GenSim).calculateSameSignInvariantMass()};});
 
+  auto recoSameSignInvMassHist = make_shared<HistogramPrototype1DGeneral>("Reco Same Sign Invariant Mass", 100, 0, 1000,
+  [](const InputModule* input){return std::vector<double>{input -> getParticles(InputModule::RecoLevel::Reco).calculateSameSignInvariantMass()};});
   // auto genSimHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
   // auto recoHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, false, "Reco H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
   // auto genSimHMinusMinusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H-- Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, -9900041);
@@ -104,6 +110,8 @@ Analyzer hPlusPlusMassAnalysis() {
   //histMod->addHistogram(recoMultSameSignInvMassHist);
   //histMod->addHistogram(recoPhiMultSameSignInvMassHist);
   //histMod->addHistogram(positiveNegativeInvMassHist);
+  histMod->addHistogram(genSimSameSignInvMassHist);
+  histMod->addHistogram(recoSameSignInvMassHist);
 
   // Initialize triggers
   auto singleMuonTrigger = make_shared<SingleMuonTrigger>(50);
