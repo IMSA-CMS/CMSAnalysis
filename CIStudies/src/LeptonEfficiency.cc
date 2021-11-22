@@ -9,7 +9,8 @@
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
 
-LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<MatchingModule> imatchModule):
+LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<WeightingModule> weightMod, const std::shared_ptr<MatchingModule> imatchModule):
+  EfficiencyModule(weightMod),
   matchModule(imatchModule)
   //,genSimModule(igenSimModule)
   ,recoMuons(0)
