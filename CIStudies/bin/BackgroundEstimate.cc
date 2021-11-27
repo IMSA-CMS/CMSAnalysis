@@ -1,14 +1,13 @@
 #include <iostream>
-#include <TH1.h>
-#include <TCanvas.h>
-#include <TF1.h>
-#include <TFile.h>
-#include <TH1F.h>
-#include <TAxis.h>
+#include "TH1.h"
+#include "TCanvas.h"
+#include "TF1.h"
+#include "TFile.h"
+#include "TH1F.h"
+#include "TAxis.h"
 #include <sstream>
 #include <fstream>
 #include <array>
-#include "cstdio"
 #include <iostream>
 #include <string>
 #include <cstdlib>
@@ -373,7 +372,6 @@ int main()
 
             
             std::vector<Parameters> eventArray;
-            int eventnumRead = 0;
 
             eventArray.push_back(Parameters(massholder + '\t' + masslinenotarget));
             SignalFunction(eventArray.back(), out_file);
