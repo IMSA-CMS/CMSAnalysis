@@ -14,7 +14,8 @@
 
 using std::make_shared;
 
-Analyzer leptonJetBackgroundAnalysis() {
+Analyzer leptonJetBackgroundAnalysis() 
+{
   Analyzer analyzer;
 
   // auto genSimMod = make_shared<GenSimIdentificationModule>(1000022, true);

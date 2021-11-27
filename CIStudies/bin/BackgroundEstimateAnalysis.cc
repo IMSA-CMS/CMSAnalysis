@@ -48,7 +48,7 @@ Analyzer backgroundEstimateAnalysis() {
   auto nElectronsHist = make_shared<NLeptonsHist>(matchMod, "Matched Electrons", 10, 0, 10, 11);
   auto nMuonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
 
-  auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod);
+  auto leptonEfficiency = make_shared<LeptonEfficiency>(weightMod, matchMod);
 
   // auto genSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
   // Go up to 2000 - Andy, 09/02 - and make more bins. Modifications also made for picking files
