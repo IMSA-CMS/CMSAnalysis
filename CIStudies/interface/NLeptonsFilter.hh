@@ -9,10 +9,11 @@
 class NLeptonsFilter : public FilterModule
 {
   public:
-  NLeptonsFilter();
+  NLeptonsFilter(double pTCut = 0);
   protected:
     virtual std::string makeFilterString() override;
   private:
+    double pTMin; 
     // const std::shared_ptr<RecoIdentificationModule> recoModule;
 };
 

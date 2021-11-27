@@ -17,6 +17,8 @@ bool Module::processEvent()
   return process();
 }
 
+Module::~Module() {}
+
 void Module::writeText(std::string par, std::string name) const
 {
   // TDisplayText *printPar = new TDisplayText(par.c_str());
