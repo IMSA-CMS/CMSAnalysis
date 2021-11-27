@@ -12,10 +12,55 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
-#include "../interface/TDisplayText.h"
-//swap out_file to cout if you want to print to terminal. 
-#define outout out_file
+// #include <cmath>
 
+// #include "Minuit2/Minuit2Minimizer.h"
+ 
+// #include "Math/IFunction.h"
+// #include "Math/IOptions.h"
+ 
+// #include "Fit/ParameterSettings.h"
+ 
+// #include "Minuit2/FCNAdapter.h"
+// #include "Minuit2/FumiliFCNAdapter.h"
+// #include "Minuit2/FCNGradAdapter.h"
+// #include "Minuit2/FunctionMinimum.h"
+// #include "Minuit2/MnMigrad.h"
+// #include "Minuit2/MnMinos.h"
+// #include "Minuit2/MinosError.h"
+// #include "Minuit2/MnHesse.h"
+// #include "Minuit2/MinuitParameter.h"
+// #include "Minuit2/MnUserFcn.h"
+// #include "Minuit2/MnPrint.h"
+// #include "Minuit2/VariableMetricMinimizer.h"
+// #include "Minuit2/SimplexMinimizer.h"
+// #include "Minuit2/CombinedMinimizer.h"
+// #include "Minuit2/ScanMinimizer.h"
+// #include "Minuit2/FumiliMinimizer.h"
+// #include "Minuit2/MnParameterScan.h"
+// #include "Minuit2/MnContours.h"
+// #include "Minuit2/MnTraceObject.h"
+// #include "Minuit2/MinimumBuilder.h"
+ 
+// #include <cassert>
+// #include <iostream>
+// #include <algorithm>
+// #include <functional>
+// #include "TROOT.h"
+// #include "TMinuit2TraceObject.h"
+//#include "MinimizerOptions.h"
+#include "../interface/TDisplayText.h"
+
+
+
+
+//swap out_file to cout if you want to print to terminal. 
+#define outout std::cout//out_file
+
+
+double g_sumOne = 0;
+double g_sumTwo = 0;
+int histcounter = 0;
 struct Parameters
     {
         
@@ -57,41 +102,62 @@ struct Parameters
 
 void ComputationalFunction(Parameters param, std::ostream& out_file)
     {
+        //auto min_opts = ROOT::Math::MinimizerOptions();
+
+        //min_opts.SetMinimizerAlgorithm("Fumili");
+        
+        // ROOT::Math::MinimizerOptions::SetMinimizerAlgorithm("Fumili");
 
         //Opens my file, assigns it f
         TFile *f = new TFile(param.fileName.c_str()); //Change this for different files
         // outout << param.fileName;
-        outout << param.nickname;
-        outout << " ";
-        TDisplayText *totalevents = f->Get<TDisplayText>("NEvents");
+        if (param.sumSwitch == 0)
+            outout << param.nickname;
+            outout << " ";
         
+        TDisplayText *totalevents = f->Get<TDisplayText>("NEvents");
+        std::string totalEventsStr = totalevents->GetString().Data();
+        int totalEventsInt = std::stoi(totalEventsStr);
 
         //Takes the histogram wanted from the file, assigns it hist
         TH1 *hist = dynamic_cast<TH1*>(f->Get(param.histograms.c_str())); //Change this for different fit 
         if (!hist)
-            throw std::runtime_error ("Hist not found");
+            throw std::runtime_error ("Fit hist not found in file " + param.fileName);
 
         //Creates a power law fit function
-        TF1 *fitfunc = new TF1("fitfunc", "[0]*pow(x, [1])", 200, 1300);
+        TF1 *fitfunc = new TF1("fitfunc", "[0]*exp(x*[1]) + [2]", 200, 1300);
+
+        fitfunc->SetParLimits(0, 0, 1e12);
+        fitfunc->SetParLimits(1, -1e3, 0);
+        fitfunc->SetParLimits(2, 0, 1e4);
+
+        fitfunc->SetParameter(0, 1e9);
+        fitfunc->SetParameter(1, -3);
+        fitfunc->SetParameter(2, 100);
 
         //Fits the histogram with the fit function
-        hist->Fit(fitfunc, "Q0", "", 200, 1300);
+        hist->Fit(fitfunc, "RB", "", 200, 1300);
+
+        //TCanvas *canvas = new TCanvas((histcounter + "Canvas"), "dCanvas", 1000,1000);
+        // histcounter = histcounter + 1;
 
         //Finds the number of events in the analyzed hist
         TH1F *histanalysis = (TH1F*)f->Get(param.analysisName.c_str()); //Change this for different hist analysis
+        if (!histanalysis)
+            throw std::runtime_error ("Analysis hist not found in file " + param.fileName);
         double eventsanalysishist = histanalysis->GetEntries();
-        // outout << "\neventsanalysishist \n";
-        // outout << eventsanalysishist;
+         outout << "\neventsanalysishist \n";
+         outout << eventsanalysishist;
 
         //Finds number of events ran total (from spreadsheet)
-        double totaleventsran = param.totalEvents; //Change this for different event numbers
-        // outout << "\ntotaleventsran \n";
-        // outout << totaleventsran;
+        double totaleventsran = totalEventsInt; //Change this for different event numbers
+        outout << "\ntotaleventsran \n";
+        outout << totaleventsran;
 
         //Finds lepton hist fraction
-        double efficiency = eventsanalysishist/totaleventsran;
-        // outout << "\nefficiency \n";
-        // outout << efficiency;
+        double efficiency = exp(log(eventsanalysishist)-log(totaleventsran));
+        outout << "\nefficiency \n";
+        outout << efficiency;
 
         //Finds the integral of the fit from the mass target range +-5%
         double acceptedCenter = param.massTarget;
@@ -101,34 +167,39 @@ void ComputationalFunction(Parameters param, std::ostream& out_file)
         double masshighaccepted = acceptedCenter + (acceptedCenter * .05);
         double acceptedfitintegral = fitfunc->Integral(masslowaccepted, masshighaccepted);
         // outout << "\nacceptedfitintegral \n";
-        // outout << acceptedfitintegral;
+        //BAD BAD BAD!
+        outout << "\nAcceptedFitIntegral\n";
+        outout << acceptedfitintegral;
         
         //Finds the integral of the fit from 150-1300
         double rangefitintegral = fitfunc->Integral(150, 1300);
         // outout << "\nrangefitintegral \n";
-        // outout << rangefitintegral;
+        outout << "\nRangeFitInt\n";
+        outout << rangefitintegral;
 
         //Finds the integral of the analysis histogram from 0-1500
         double totalanalysishistintegral = histanalysis->Integral();
-        // outout << "\ntotalanalysishistintegral \n";
-        // outout << totalanalysishistintegral;
+        outout << "\nTotalAnalysisHistInt \n";
+        outout << totalanalysishistintegral;
 
         //Finds the # of 4L events in the fit range
         double analysis150bin = histanalysis->FindBin(150);
         double analysis1300bin = histanalysis->FindBin(1300);
-        double eventanalysisfitrange = (histanalysis->Integral(analysis150bin, analysis1300bin)/totalanalysishistintegral);
-        // outout << "\neventanalysisfitrange \n";
-        // outout << eventanalysisfitrange;
+        double eventanalysisfitrange = exp(log(histanalysis->Integral(analysis150bin, analysis1300bin))-log(totalanalysishistintegral));
+        outout << "\neventanalysisfitrange \n";
+
+        outout << eventanalysisfitrange;
 
         //Calculates ratio between both fit integrals
-        double fitratio = acceptedfitintegral/rangefitintegral;
-        // outout << "\nfitratio \n";
-        // outout << fitratio;
+        double fitratio = exp(log(acceptedfitintegral)-log(rangefitintegral));
+        outout << "\nfitratio \n";
+
+        outout << fitratio;
 
         //Finds the integral of the fit histogram from 0-1500
         double totalhistintegral = hist->Integral(0, 1500);
-        // outout << "\ntotalhistintegral \n";
-        // outout << totalhistintegral;
+        outout << "\ntotalhistintegral \n";
+        outout << totalhistintegral;
 
         // //Finds the integral of the fit histogram from 150-1300
         // double bin150 = hist->FindBin(150);
@@ -138,30 +209,43 @@ void ComputationalFunction(Parameters param, std::ostream& out_file)
         // outout << rangehistintegral;
 
         //Finds histogram fraction
-        double histfraction = fitratio*(eventanalysisfitrange);
-        // outout << "\nhistfraction \n";
-        // outout << histfraction;
+        double histfraction = exp(log(fitratio)+log(eventanalysisfitrange));
+        outout << "\nhistfraction \n";
+        outout << histfraction;
 
         //Finds luminosity (from spreadsheet)
-        double luminosity = 137;
-        // outout << "\nluminosity \n";
-        // outout << luminosity;
+        double luminosity = 3000;
+        outout << "\nluminosity \n";
+        outout << luminosity;
 
         //Finds crosssection (from spreadsheet)
         double crosssection = param.crossSection; //Change this for different cross section
-        // outout << "\ncrosssection \n";
-        // outout << crosssection;     
+        outout << "\ncrosssection \n";
+        outout << crosssection; 
+        outout << "\n";    
 
+        //hist->Draw("Hist");
+        //canvas->Draw("Canvas");
 
         //Finds backgroundest
-        double backgroundest = efficiency*crosssection*1000*luminosity*histfraction;
-        outout << backgroundest;
-        outout << "\n";
+        double backgroundest = exp(log(efficiency)+log(crosssection)+log(1000)+log(luminosity)+log(histfraction));
+        if (param.sumSwitch == 0)
+            {
+            outout << backgroundest;
+            outout << "\n";
+            }
+         outout << param.nickname;
+         outout << "\n";
+         outout << backgroundest;
+         outout << "\n";
 
-        // if (param.sumSwitch == 1)
-        //     oneSum = (backgroundest + oneSum);
-        // if (param.sumSwitch == 2)
-        //     twoSum = (backgroundest + twoSum);
+        if (param.sumSwitch == 1)
+             g_sumOne = (g_sumOne + backgroundest);
+            
+
+        if (param.sumSwitch == 2)
+            g_sumTwo = (g_sumTwo + backgroundest);
+
 
 
         //f->Close();
@@ -185,21 +269,25 @@ void SignalFunction(Parameters param, std::ostream& out_file)
     if (!hist)
         throw std::runtime_error ("Hist not found");
 
+    TDisplayText *totalevents = f->Get<TDisplayText>("NEvents");
+    std::string totalEventsStr = totalevents->GetString().Data();
+    int totalEventsInt = std::stoi(totalEventsStr);
+
     //Finds the number of events in the analyzed hist
     TH1F *histanalysis = (TH1F*)f->Get(param.analysisName.c_str()); //Change this for different hist analysis
     double eventsanalysishist = histanalysis->GetEntries();
     // outout << "\neventsanalysishist \n";
-    // outout << eventsanalysishist;
+    //outout << eventsanalysishist;
 
     //Finds number of events ran total (from spreadsheet)
-    double totaleventsran = param.totalEvents; //Change this for different event numbers
+    double totaleventsran = totalEventsInt; //Change this for different event numbers
     // outout << "\ntotaleventsran \n";
-    // outout << totaleventsran;
+    //outout << totaleventsran;
 
     //Finds lepton hist fraction
     double efficiency = eventsanalysishist/totaleventsran;
     // outout << "\nefficiency \n";
-    // outout << efficiency;
+    //outout << efficiency;
 
     //Finds the integral of the analysis histogram from 0-1500
     double totalanalysishistintegral = histanalysis->Integral();
@@ -218,7 +306,7 @@ void SignalFunction(Parameters param, std::ostream& out_file)
     //Finds crosssection (from spreadsheet)
     double crosssection = param.crossSection; //Change this for different cross section
     // outout << "\ncrosssection \n";
-    // outout << crosssection;
+    //outout << crosssection;
 
     //Finds the # of 4L events in the fit range
     double analysislowboundbin = histanalysis->FindBin(masslowaccepted);
@@ -280,8 +368,8 @@ int main()
             getline(masssrc, massholder, '\t');   
             //Finds the rest of line and calls it masslinenotarget         
             getline(masssrc, masslinenotarget);
-            if (massholder.empty())
-                break;
+            if (massholder.empty() || massholder[0] == '#')
+                continue;
 
             
             std::vector<Parameters> eventArray;
@@ -299,13 +387,22 @@ int main()
                 //Gets a line from my events file and assigns it to holder
                 getline(eventsrc, holder);
                 //If the line is empty, end the loop
-                if (holder.empty())
-                    break;
+                if (holder.empty() || holder[0] == '#')
+                    continue;
                 //Adds the line to my event array in the first 
                 eventArray.push_back(Parameters(massholder + '\t' + holder));
                 ComputationalFunction(eventArray.back(), out_file);
                 
+                
             }
+
+            outout << "ZtoLL Inclusive ";
+            outout << g_sumOne;
+            outout << "\nQCD Inclusive ";
+            outout << g_sumTwo;
+            outout << "\n";
+            g_sumOne = 0;
+            g_sumTwo = 0;
 
             if (eventArray.empty())
                 throw std::runtime_error("eventArray empty");
