@@ -59,20 +59,8 @@ Analyzer hPlusPlusMassAnalysis() {
   auto nElectronsHist = make_shared<NLeptonsHist>(matchMod, "Matched Electrons", 10, 0, 10, 11);
   auto nMuonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
 
-  auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod);
+  auto leptonEfficiency = make_shared<LeptonEfficiency>(weightMod, matchMod);
   auto signFlip = make_shared<SignFlipModule>(matchMod);
-
-  auto massRecoEfficiency55 = make_shared<MassRecoEfficiency>(800, 5, 5);
-  auto massRecoEfficiency1010 = make_shared<MassRecoEfficiency>(800, 10, 10);
-  auto massRecoEfficiency4010 = make_shared<MassRecoEfficiency>(800, 40, 10);
-  auto massRecoEfficiency4040 = make_shared<MassRecoEfficiency>(800, 40, 40);
-  auto massRecoEfficiency8040 = make_shared<MassRecoEfficiency>(800, 80, 40);
-  auto massRecoEfficiency20080 = make_shared<MassRecoEfficiency>(800, 200, 80);
-
-  auto triggerEfficiencyMod4010 = make_shared<TriggerEfficiencyModule>(matchMod, 800, 40, 10);
-  auto triggerEfficiencyMod4040 = make_shared<TriggerEfficiencyModule>(matchMod, 800, 40, 40);
-  auto triggerEfficiencyMod8040 = make_shared<TriggerEfficiencyModule>(matchMod, 800, 80, 40);
-  auto triggerEfficiencyMod20080 = make_shared<TriggerEfficiencyModule>(matchMod, 800, 200, 80);
 
   auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
   //auto genSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
@@ -143,23 +131,7 @@ Analyzer hPlusPlusMassAnalysis() {
   //analyzer.addAnalysisModule(eventDump);
   analyzer.addAnalysisModule(leptonEfficiency);
 
-  analyzer.addAnalysisModule(triggerEfficiencyMod4010);
-  analyzer.addAnalysisModule(triggerEfficiencyMod4040);
-  analyzer.addAnalysisModule(triggerEfficiencyMod8040);
-  analyzer.addAnalysisModule(triggerEfficiencyMod20080);
-
-  //analyzer.addAnalysisModule(massRecoEfficiency200);
-  //analyzer.addAnalysisModule(massRecoEfficiency500);
-  //analyzer.addAnalysisModule(massRecoEfficiency800);
-  //analyzer.addAnalysisModule(massRecoEfficiency1000);
-  //analyzer.addAnalysisModule(massRecoEfficiency1300);
   
-  //analyzer.addAnalysisModule(massRecoEfficiency55);
-  //analyzer.addAnalysisModule(massRecoEfficiency1010);
-  //analyzer.addAnalysisModule(massRecoEfficiency4010);
-  //analyzer.addAnalysisModule(massRecoEfficiency4040);
-  //analyzer.addAnalysisModule(massRecoEfficiency8040);
-  //analyzer.addAnalysisModule(massRecoEfficiency20080);
 
   return analyzer;
 }
