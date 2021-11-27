@@ -128,11 +128,12 @@ void ComputationalFunction(Parameters param, std::ostream &out_file)
     // Root's fitting is lousy, so we have to do it again and again
     // One would think a minimization algorithm could do this itself?
     double func = std::numeric_limits<double>::max();
+    const double tolerance = .1;
     while (true)
     {
         auto result = hist->Fit(fitfunc, "RBSQ0", "", 150, 1300);
         double newVal = result->MinFcnValue();
-        if (newVal < func)
+        if (func - newVal > tolerance)
         {
             func = newVal;
         }
