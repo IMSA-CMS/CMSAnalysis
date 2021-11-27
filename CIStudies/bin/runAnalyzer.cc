@@ -15,7 +15,6 @@
 #include "CIAnalysis/CIStudies/bin/displacedVertexAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/massAcceptanceAnalysis.cc"
 #include "CIAnalysis/CIStudies/bin/FilestripAnalysis.cc"
-#include "CIAnalysis/CIStudies/bin/LeptonJetBackgroundAnalysis.cc"
 
 int main(int argc, char **argv) {
   gROOT->SetBatch(true);
