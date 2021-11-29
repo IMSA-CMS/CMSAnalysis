@@ -14,7 +14,8 @@
 
 using std::make_shared;
 
-Analyzer leptonJetBackgroundAnalysis() {
+Analyzer leptonJetBackgroundAnalysis() 
+{
   Analyzer analyzer;
 
   // auto genSimMod = make_shared<GenSimIdentificationModule>(1000022, true);
@@ -22,7 +23,7 @@ Analyzer leptonJetBackgroundAnalysis() {
   auto weightMod = make_shared<WeightingModule>();
   auto lrWeightMod = make_shared<LRWeightModule>();
   
-  auto leptonJetRecoModule = make_shared<LeptonJetReconstructionModule>(0.05);
+  auto leptonJetRecoModule = make_shared<LeptonJetReconstructionModule>(0.05, 5);
   
   auto nLeptonJetsHist = make_shared<NLeptonJetHist>(leptonJetRecoModule, "Number of Lepton Jets", 10, 0, 10);
   auto histMod = make_shared<HistogramOutputModule>(weightMod, lrWeightMod);
