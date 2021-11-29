@@ -70,11 +70,11 @@ double InputModule::getMET() const
 {
     return eventLoader->getFile()->getMET();
 }       
-edm::Handle<edm::TriggerResults> InputModule::getTriggerResults(std::string subProcess) const
+std::vector<bool> InputModule::getTriggerResults(std::string subProcess) const
 {
     return eventLoader->getTriggerResults(subProcess);
 }
-edm::TriggerNames InputModule::getTriggerNames(std::string subProcess) const
+std::vector<std::string> InputModule::getTriggerNames(std::string subProcess) const
 {
     return eventLoader->getTriggerNames(subProcess);
 }

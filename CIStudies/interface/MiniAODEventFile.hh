@@ -23,8 +23,8 @@ class MiniAODEventFile : public EventFile
         //virtual std::vector<PileupSummaryInfo> getPileupInfo() const override;
         virtual GenEventInfoProduct getGenInfo() const override;
         virtual double getMET() const override;
-        virtual edm::Handle<edm::TriggerResults> getTriggerResults(std::string subProcess) const override;
-        virtual edm::TriggerNames getTriggerNames(std::string subProcess) const override;
+        virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
+        virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;
     private:
         std::shared_ptr<fwlite::Event> event = nullptr;
 };
