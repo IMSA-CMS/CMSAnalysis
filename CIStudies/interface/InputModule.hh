@@ -27,8 +27,8 @@ class InputModule
   ParticleCollection getParticles(RecoLevel level, Particle::Type particleType = Particle::Type::None, double pTCut = 0) const;
         //std::vector<PileupSummaryInfo> getPileupInfo() const;
         GenEventInfoProduct getGenInfo() const;
-        edm::Handle<edm::TriggerResults> getTriggerResults(std::string subProcess) const;
-        edm::TriggerNames getTriggerNames(std::string subProcess) const;
+        std::vector<bool> getTriggerResults(std::string subProcess) const;
+        std::vector<std::string> getTriggerNames(std::string subProcess) const;
         double getMET() const;
     protected:
         // const edm::EventBase& getEvent();
