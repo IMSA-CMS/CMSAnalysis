@@ -36,6 +36,14 @@ class TreeEventFile : public EventFile
             std::string metSize;
             std::string metPhi;
             std::string metPT;
+
+            std::string genSize;
+            std::string genPid;
+            std::string genStatus;
+            std::string genEta;
+            std::string genPhi;
+            std::string genMass;
+            std::string genPt;
         };
         
         virtual std::string getTreeName() = 0;
@@ -47,6 +55,7 @@ class TreeEventFile : public EventFile
         // advantage of struct is that you need to name the things to put in the struct
         // new function (or the same) that includes the tree name
         static const Int_t MAXMEC = 100;
+        static const Int_t MAXMC = 10000;
         TTree* tree;
         
         // Not sure if this is correct
@@ -70,6 +79,14 @@ class TreeEventFile : public EventFile
         Int_t met_size;
         Float_t met_phi[MAXMEC];
         Float_t met_pt[MAXMEC];
+
+        Int_t gen_size;
+        Int_t gen_pid[MAXMC];
+        Int_t gen_status[MAXMC];
+        Float_t gen_eta[MAXMC];
+        Float_t gen_phi[MAXMC];
+        Float_t gen_mass[MAXMC];
+        Float_t gen_pt[MAXMC];
 };
 
 

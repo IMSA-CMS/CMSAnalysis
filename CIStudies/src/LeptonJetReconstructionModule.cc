@@ -1,10 +1,10 @@
 #include "CIAnalysis/CIStudies/interface/LeptonJetReconstructionModule.hh"
 #include "DataFormats/Math/interface/deltaR.h"
 
-LeptonJetReconstructionModule::LeptonJetReconstructionModule(double deltaRCut) :
+LeptonJetReconstructionModule::LeptonJetReconstructionModule(double deltaRCut, double ipTCut) :
+  DeltaRCut(deltaRCut),
+  pTCut(ipTCut)
   //reco(recoModule),
-  DeltaRCut(deltaRCut)
-
 {
 }
 
@@ -37,8 +37,11 @@ bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
 
     if (jet.getNumParticles() > 1)
     {
-      leptonJets.push_back(jet);
-    }      
+      //if (jet.getMass() < 50)
+      {
+        leptonJets.push_back(jet);
+      }
+    }
   }
   findDeltaRValues();
   findPtValues();

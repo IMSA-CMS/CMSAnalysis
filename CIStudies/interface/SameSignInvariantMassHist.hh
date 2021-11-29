@@ -12,6 +12,7 @@ class SameSignInvariantMassHist : public GenSimRecoPrototype
   private:
     bool usingPhi;
     bool multipleMasses;
+
 };
 
 #endif
