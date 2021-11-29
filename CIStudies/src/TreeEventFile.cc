@@ -45,6 +45,14 @@ void TreeEventFile::initialize()
     tree->SetBranchAddress(getTreeBranches().jetMass.c_str(), &jet_mass);
     tree->SetBranchAddress(getTreeBranches().jetPT.c_str(), &jet_pt);
 
+    tree->SetBranchAddress(getTreeBranches().genSize.c_str(), &gen_size);
+    tree->SetBranchAddress(getTreeBranches().genPid.c_str(), &gen_pid);
+    tree->SetBranchAddress(getTreeBranches().genStatus.c_str(), &gen_status);
+    tree->SetBranchAddress(getTreeBranches().genEta.c_str(), &gen_eta);
+    tree->SetBranchAddress(getTreeBranches().genPhi.c_str(), &gen_phi);
+    tree->SetBranchAddress(getTreeBranches().genMass.c_str(), &gen_mass);
+    tree->SetBranchAddress(getTreeBranches().genPt.c_str(), &gen_pt);
+
     counter = 0;
     tree->GetEntry(counter);
     ++(counter);
@@ -79,18 +87,41 @@ GenEventInfoProduct TreeEventFile::getGenInfo() const
 
 ParticleCollection TreeEventFile::getGenSimParticles() const
 {
-    throw std::runtime_error("Not yet implemented: getGenSimParticles()");
-
-    /*
     ParticleCollection genParticles;
-    edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
-    event->getByLabel(std::string("prunedGenParticles"), genParticlesHandle);
-    for (const auto &p : *genParticlesHandle) 
-    {
-        genParticles.addParticle(Particle(&p));
+    //This seems problematic
+    // std::cout << gen_size << std::endl; 
+    // std::cout << gen_size << std::endl; 
+        
+    for(int i = 0; i < gen_size; i++) {
+        // Lorentz four-vector
+        /* if(i == 0) {
+            std::cout << elec_pt[i] << " " << elec_eta[i] << " " <<
+             elec_phi[i] << " " << elec_mass[i] << std::endl;
+        } */
+        int charge = 1;
+        if(gen_pid[i] < 0)
+        {
+            charge = -1;
+        }
+        if(gen_pid[i] == 21 || gen_pid[i] == 22)
+        {
+            charge = 0;
+        }
+        Particle::Type type = Particle::Type::None;
+        if(std::abs(gen_pid[i]) == 11)
+        {
+            type = Particle::Type::Electron;
+        }
+        else if(std::abs(gen_pid[i]) == 13)
+        {
+            type = Particle::Type::Muon;
+        }
+        genParticles.addParticle(Particle(
+            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i], 
+            gen_eta[i], gen_phi[i], gen_mass[i])), charge, type));        
     }
+    
     return genParticles;
-    */
 }
 
 ParticleCollection TreeEventFile::getRecoParticles() const

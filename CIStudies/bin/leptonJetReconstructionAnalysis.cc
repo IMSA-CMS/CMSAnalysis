@@ -33,6 +33,7 @@
 #include "CIAnalysis/CIStudies/interface/TriggerModule.hh"
 #include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
+using std::make_shared;
 
 Analyzer leptonJetReconstructionAnalysis() {
   Analyzer analyzer;
@@ -79,7 +80,6 @@ Analyzer leptonJetReconstructionAnalysis() {
 
   auto nLeptonsFilter = std::make_shared<NLeptonsFilter>(); // Needs to be updated with shared pointers
 
-
   auto nLeptonsHist = std::make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
   auto nElectronsHist = std::make_shared<NLeptonsHist>(matchMod, "Matched Electrons", 10, 0, 10, 11);
   auto nMuonsHist = std::make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
@@ -95,8 +95,8 @@ Analyzer leptonJetReconstructionAnalysis() {
   // auto recoThirdMuonPtHist = std::make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
 
   // Efficiency Modules
-  auto leptonEfficiency = std::make_shared<LeptonEfficiency>(matchMod);
-  auto leptonJetEfficiency = std::make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
+  auto leptonEfficiency = std::make_shared<LeptonEfficiency>(weightMod, matchMod);
+  auto leptonJetEfficiency = std::make_shared<LeptonJetEfficiency>(weightMod, lepRecoMod, lepMatchMod);
 
   // Add the histogram(s) created above to histMod
   histOutputMod->addHistogram(nLeptonsHist);
@@ -109,10 +109,13 @@ Analyzer leptonJetReconstructionAnalysis() {
 
   // Initialize triggers
   /*
+=======
+>>>>>>> 9e4a6547dc2ca9574745f986d47434e78997bc06
   auto singleMuonTrigger = std::make_shared<SingleMuonTrigger>(50);
   auto doubleMuonTrigger = std::make_shared<DoubleMuonTrigger>(37, 27);
   auto tripleMuonTrigger =
       std::make_shared<TripleMuonTrigger>(10, 5, 5);
+<<<<<<< HEAD
       */
 
   // Add triggers to the TriggerModule -- put these back later
@@ -143,5 +146,17 @@ Analyzer leptonJetReconstructionAnalysis() {
   // analyzer.addAnalysisModule(massRecoEfficiency1300);
   // analyzer.addAnalysisModule(genSimEventDumpMod);
 
+  analyzer.addAnalysisModule(histOutputMod);
+  //analyzer.addProductionModule(triggerMod);
+
+  analyzer.addAnalysisModule(leptonEfficiency);
+  analyzer.addAnalysisModule(leptonJetEfficiency);
+  //analyzer.addAnalysisModule(massRecoEfficiency200);
+  //analyzer.addAnalysisModule(massRecoEfficiency500);
+  //analyzer.addAnalysisModule(massRecoEfficiency800);
+  //analyzer.addAnalysisModule(massRecoEfficiency1000);
+  //analyzer.addAnalysisModule(massRecoEfficiency1300);
+  //analyzer.addAnalysisModule(genSimEventDumpMod);
+  
   return analyzer;
 }

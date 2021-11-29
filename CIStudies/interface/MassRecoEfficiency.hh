@@ -2,19 +2,19 @@
 #define MASSRECOEFFICIENCY_HH
 
 #include <memory>
-#include "AnalysisModule.hh"
+#include "EfficiencyModule.hh"
 
 //class RecoIdentificationModule;
 
-class MassRecoEfficiency : public AnalysisModule
+class MassRecoEfficiency : public EfficiencyModule
 {
 public:
-  MassRecoEfficiency(double iHiggsMass, double iLowerWidth, double iUpperWidth);
+  MassRecoEfficiency(const std::shared_ptr<WeightingModule> weightMod, double iHiggsMass, double iLowerWidth, double iUpperWidth);
   bool process() override;
   void finalize() override;
   void writeAll() override {}
+
 private:
-  //const std::shared_ptr<RecoIdentificationModule> recoModule;
   double HiggsMass;
   double lowerWidth;     // Checks HiggsMass - lowerWidth, HiggsMass + higherWidth
   double upperWidth;
@@ -28,6 +28,9 @@ private:
   int posTotalCount = 0;
   int negPassCount = 0;
   int negTotalCount = 0;
+
+  protected:
+  void doCounters() override {}
 };
 
 #endif
