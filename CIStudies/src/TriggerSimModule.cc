@@ -129,7 +129,7 @@ bool TriggerSimModule::process()
   // Get the triggers regarding the event
   const auto triggerResults = getInput()->getTriggerResults(subProcess);
     
-  const edm::TriggerNames names = getInput()->getTriggerNames(subProcess);
+  const auto names = getInput()->getTriggerNames(subProcess);
 
 /*
   // Example code from the twiki on trigger bits
@@ -146,14 +146,14 @@ bool TriggerSimModule::process()
   bool passAnyTrigger = false;       // True if the event passes any of the triggers
   bool passCurrentTrigger;           // True if the event passes the current trigger
 
-  for (unsigned int i = 0, n = triggerResults->size(); i < n; ++i)
+  for (unsigned int i = 0, n = triggerResults.size(); i < n; ++i)
   {
     // Checks if the current trigger is meant to be analyzed
-    if (enableAll || std::find(triggerNames.begin(), triggerNames.end(), names.triggerName(i))
+    if (enableAll || std::find(triggerNames.begin(), triggerNames.end(), names[i])
         != triggerNames.end())
     {
       // This line is where the trigger is actually checked
-      passCurrentTrigger = triggerResults->accept(i);
+      passCurrentTrigger = triggerResults[i];
 
       // Set passAnyTrigger to true once the event passes one trigger
       // Since passAnyTrigger is automatically false, if the event doesn't pass any triggers
@@ -163,21 +163,21 @@ bool TriggerSimModule::process()
         passAnyTrigger = true;
       }
       
-      if (triggerResultsData.find(names.triggerName(i)) == triggerResultsData.end())
+      if (triggerResultsData.find(names[i]) == triggerResultsData.end())
       {
         // if not in there, add a log to the map, make value 1 if it passed
-        triggerResultsData.insert({names.triggerName(i), {(int)passCurrentTrigger, 1}}); 
+        triggerResultsData.insert({names[i], {(int)passCurrentTrigger, 1}}); 
       }
       else
       {
         // if in there, just increment 1 if it passed
-        triggerResultsData[names.triggerName(i)].passed += (int)passCurrentTrigger;
-        ++triggerResultsData[names.triggerName(i)].total;
+        triggerResultsData[names[i]].passed += (int)passCurrentTrigger;
+        ++triggerResultsData[names[i]].total;
       }
 
       if (passCurrentTrigger)
       {
-        passedTriggers.push_back(names.triggerName(i));
+        passedTriggers.push_back(names[i]);
       }
     }
   }

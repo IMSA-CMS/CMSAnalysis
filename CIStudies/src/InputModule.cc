@@ -75,9 +75,9 @@ double InputModule::getMET() const
 }       
 std::vector<bool> InputModule::getTriggerResults(std::string subProcess) const
 {
-    return eventLoader->getTriggerResults(subProcess);
+    return eventLoader->getFile()->getTriggerResults(subProcess);
 }
 std::vector<std::string> InputModule::getTriggerNames(std::string subProcess) const
 {
-    return eventLoader->getTriggerNames(subProcess);
+    return eventLoader->getFile()->getTriggerNames(subProcess);
 }
