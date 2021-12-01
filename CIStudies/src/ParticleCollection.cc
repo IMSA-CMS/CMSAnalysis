@@ -239,12 +239,19 @@ PartPair ParticleCollection::chooseParticles(bool oppositeSigns) const  // oppos
   Particle iPointer(nullptr);
   Particle jPointer(nullptr);
 
+  if(particles.size() > 0) {
+    // std::cout << "!" << particles[0].getMass() << std::endl;
+  }
+
   for (int i = 0; i < static_cast<int>(particles.size()) - 1; ++i)
     {
       for (int j = i + 1; j < static_cast<int>(particles.size()); ++j)
 	{
+    if (particles[i].getType() == particles[j].getType()) {
+      
 	  if (checkSigns(particles[i], particles[j]) == oppositeSigns)     // Check if the particle pairs' signs match with what we want
 	    {
+        // std::cout << calculateInvariantMass(particles[i], particles[j]) << std::endl;
 	      if (calculateInvariantMass(particles[i], particles[j]) > maxInvariantMass)
 		{
 		  maxInvariantMass = calculateInvariantMass(particles[i], particles[j]);
@@ -253,6 +260,7 @@ PartPair ParticleCollection::chooseParticles(bool oppositeSigns) const  // oppos
 		}
 	    }
          }
+    }
     }
   
   return {iPointer, jPointer};
@@ -305,10 +313,16 @@ double ParticleCollection::calculateInvariantMass(Particle particle1, Particle p
   auto vec1 = particle1.getFourVector();
   auto vec2 = particle2.getFourVector();
 
+  // std::cout << vec1.M() << std::endl;
+  // std::cout << vec2.M() << std::endl;
+
   auto sum = vec1 + vec2;
 
   // std::cout << sum.M() << '\n';
 
+  // USED TO BE POSITIVE, JUST WANTED TO SEE WHAT HAPPENED MAY GOD HAVE MERCY
+  // I APOLOGIZE TO THE FLYING SPAGHETTI MONSTER FOR THIS BLASPHEMY [ATANG, 11/07]
+  // Problem solved :)
   return sum.M();
 
   //double product = 2 * particle1.pt() * particle2.pt(); 

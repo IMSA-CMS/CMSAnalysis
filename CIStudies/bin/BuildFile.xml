@@ -11,7 +11,7 @@
 <use   name="SimDataFormats/GeneratorProducts"/>
 <use   name="pythia8"/>
 <environment>
-  <bin   file="runAnalyzer.cc">
+  <bin   file="runAnalyzer.cc"/>
+  <bin   file="BackgroundEstimate.cc"/>
 <use name="CIAnalysis/CIStudies"/>
-</bin>
 </environment>

@@ -8,17 +8,25 @@
 #include "CIAnalysis/CIStudies/interface/ParticleImplementation.hh"
 #include "CIAnalysis/CIStudies/interface/CandidateImplementation.hh"
 #include "CIAnalysis/CIStudies/interface/SimpleImplementation.hh"
+#include "CIAnalysis/CIStudies/interface/LeptonJet.hh"
+#include "CIAnalysis/CIStudies/interface/LeptonJetImplementation.hh"
 
-Particle::Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type): 
+Particle::Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type):
 particle(std::make_shared<SimpleImplementation>(vec, charge, type))
 {
-  
+
 }
 
 Particle::Particle(const reco::Candidate* iparticle):
 particle(std::make_shared<CandidateImplementation>(iparticle))
 {
   //std::cout << "Got to Particle\n" << particle << "\n";
+}
+
+Particle::Particle(const LeptonJet& leptonjet):
+  particle(std::make_shared<LeptonJetImplementation>(
+        std::make_shared<LeptonJet>(leptonjet)))
+{
 }
 
 Particle::Particle(const Particle& particle1):
