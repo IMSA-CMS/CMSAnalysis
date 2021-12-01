@@ -22,13 +22,13 @@ class EventFile
         virtual GenEventInfoProduct getGenInfo() const = 0;
         virtual double getMET() const = 0;
         TFile* getFile() {return file;}
+        virtual std::vector<bool> getTriggerResults(std::string subProcess) const = 0;
+        virtual std::vector<std::string> getTriggerNames(std::string subProcess) const = 0;
     protected:
         int getNumOfEvents() const {return numOfEvents;}
         void setNumOfEvents(int newNum) {numOfEvents = newNum;}
         int getEventCount() const {return eventCount;}
         void setEventCount(int newNum) {eventCount = newNum;}
-        virtual std::vector<bool> getTriggerResults(std::string subProcess) const = 0;
-        virtual std::vector<std::string> getTriggerNames(std::string subProcess) const = 0;
     private:
         TFile* file;
         int numOfEvents;
