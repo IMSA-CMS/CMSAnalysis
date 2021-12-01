@@ -113,17 +113,30 @@ double MiniAODEventFile::getMET() const
 
 }
 
-// edm::TriggerResults MiniAODEventLoader::getTriggerResults(std::string subProcess) const
-// {
-//     edm::Handle<edm::TriggerResults> triggerResults;
-//     event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
-//     return triggerResults;
-// }
+std::vector<bool> MiniAODEventFile::getTriggerResults(std::string subProcess) const
+{
+    edm::Handle<edm::TriggerResults> triggerResults;
+    event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
+    std::vector<bool> v_results = {};
+    for (unsigned int i = 0; i < triggerResults->size(); i++)
+    {
+        v_results.push_back(triggerResults->accept(i));
+    }
+    return v_results;
+}
 
-// edm::TriggerNames MiniAODEventLoader::getTriggerNames(std::string subProcess) const
-// {
-//     return event->triggerNames(*getTriggerResults(subProcess));
-// }
+std::vector<std::string> MiniAODEventFile::getTriggerNames(std::string subProcess) const
+{
+    edm::Handle<edm::TriggerResults> triggerResults;
+    event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
+    const edm::TriggerNames names = event->triggerNames(*triggerResults);
+    std::vector<std::string> v_names = {};
+    for (unsigned int i = 0; i < names.size(); i++)
+    {
+        v_names.push_back(names.triggerName(i));
+    }
+    return v_names;
+}
 
 bool MiniAODEventFile::isDone() const
 {

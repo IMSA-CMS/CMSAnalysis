@@ -175,3 +175,13 @@ bool TreeEventFile::isDone() const
 {
     return counter >= tree->GetEntries();
 }
+
+std::vector<bool> TreeEventFile::getTriggerResults(std::string subProcess) const
+{
+    throw std::runtime_error("Trigger is not implemented for this file type");
+}
+
+std::vector<std::string> TreeEventFile::getTriggerNames(std::string subProcess) const
+{
+    throw std::runtime_error("Trigger is not implemented for this file type");
+}

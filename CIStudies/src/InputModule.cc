@@ -101,12 +101,12 @@ GenEventInfoProduct InputModule::getGenInfo() const
 double InputModule::getMET() const
 {
     return eventLoader->getFile()->getMET();
+}       
+std::vector<bool> InputModule::getTriggerResults(std::string subProcess) const
+{
+    return eventLoader->getFile()->getTriggerResults(subProcess);
 }
-// edm::TriggerResults InputModule::getTriggerResults(std::string subProcess) const
-// {
-//     return eventLoader->getTriggerResults(subProcess);
-// }
-// edm::TriggerNames InputModule::getTriggerNames(std::string subProcess) const
-// {
-//     return eventLoader->getTriggerNames(subProcess);
-// }
+std::vector<std::string> InputModule::getTriggerNames(std::string subProcess) const
+{
+    return eventLoader->getFile()->getTriggerNames(subProcess);
+}
