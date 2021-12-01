@@ -8,12 +8,8 @@
 
 class NLeptonsFilter : public FilterModule
 {
-  public:
-  NLeptonsFilter();
-  protected:
-    virtual std::string makeFilterString() override;
-  private:
-    // const std::shared_ptr<RecoIdentificationModule> recoModule;
+protected:
+  virtual std::string makeFilterString() override;
 };
 
 #endif

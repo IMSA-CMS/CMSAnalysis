@@ -1,41 +1,49 @@
 #include "CIAnalysis/CIStudies/interface/InputModule.hh"
 #include "CIAnalysis/CIStudies/interface/ParticleCollection.hh"
 #include "CIAnalysis/CIStudies/interface/EventLoader.hh"
+#include "CIAnalysis/CIStudies/interface/Selector.hh"
 
-InputModule::InputModule(const EventLoader* iEventLoader) : eventLoader(iEventLoader)
-{}
+InputModule::InputModule(const EventLoader *iEventLoader) : eventLoader(iEventLoader)
+{
+}
 
-ParticleCollection InputModule::getLeptons(RecoLevel level, double pTcut) const
+ParticleCollection InputModule::getLeptons(RecoLevel level, std::shared_ptr<Selector> selector) const
 {
     ParticleCollection leptons;
-    auto electrons = getParticles(level, Particle::Type::Electron, pTcut).getParticles();
-    auto muons = getParticles(level, Particle::Type::Muon, pTcut).getParticles();
-    for (const auto& p : electrons)
+    auto chosenSelector = selector ? selector : leptonSelector;
+    auto electrons = getParticles(level, Particle::Type::Electron).getParticles();
+    auto muons = getParticles(level, Particle::Type::Muon).getParticles();
+    for (const auto &p : electrons)
     {
-        leptons.addParticle(p);
+        if (!chosenSelector || chosenSelector->checkParticle(p))
+        {
+            leptons.addParticle(p);
+        }
     }
-    for (const auto& p : muons)
+    for (const auto &p : muons)
     {
-        leptons.addParticle(p);
+        if (!chosenSelector || chosenSelector->checkParticle(p))
+        {
+            leptons.addParticle(p);
+        }
     }
     return leptons;
 }
 
-ParticleCollection InputModule::getParticles(RecoLevel level, Particle::Type particleType, double pTcut) const
+ParticleCollection InputModule::getParticles(RecoLevel level, Particle::Type particleType,  std::shared_ptr<Selector> selector) const
 {
-    
-    // std::cerr << "Input Module Test" << "\n";
-    // std::cerr << eventLoader << "\n";
-    // std::cerr << "Input Module Test 2" << "\n";
     ParticleCollection particleList;
     if (level == RecoLevel::GenSim)
-    {    
+    {
         auto particles = eventLoader->getFile()->getGenSimParticles().getParticles();
-        for (const auto &p : particles) 
+        for (const auto &p : particles)
         {
-	  if ((p.getType() == particleType || particleType == Particle::Type::None) && p.isFinalState() && p.getPt() >= pTcut) 
-            {    
-                particleList.addParticle(p);
+            if ((p.getType() == particleType || particleType == Particle::Type::None) && p.isFinalState())
+            {
+                if (!selector || selector->checkParticle(p))
+                {
+                    particleList.addParticle(p);
+                }
             }
         }
     }
@@ -44,10 +52,12 @@ ParticleCollection InputModule::getParticles(RecoLevel level, Particle::Type par
         auto particles = eventLoader->getFile()->getRecoParticles().getParticles();
         for (const auto &p : particles)
         {
-	  if ((p.getType() == particleType || particleType == Particle::Type::None) && p.getPt() >= pTcut)
+            if ((p.getType() == particleType || particleType == Particle::Type::None))
             {
-                // std::cout << "If Two \n";
-                particleList.addParticle(p);
+                if (!selector || selector->checkParticle(p))
+                {
+                    particleList.addParticle(p);
+                }
             }
         }
     }
@@ -91,7 +101,7 @@ GenEventInfoProduct InputModule::getGenInfo() const
 double InputModule::getMET() const
 {
     return eventLoader->getFile()->getMET();
-}       
+}
 // edm::TriggerResults InputModule::getTriggerResults(std::string subProcess) const
 // {
 //     return eventLoader->getTriggerResults(subProcess);

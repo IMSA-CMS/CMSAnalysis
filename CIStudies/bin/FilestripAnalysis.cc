@@ -11,9 +11,9 @@ Analyzer filestripAnalysis()
 {
     Analyzer analyzer;
 
-    auto filestripMod = make_shared<FilestripModule>();
+    //auto filestripMod = make_shared<FilestripModule>();
 
-    analyzer.addAnalysisModule(filestripMod);
+    //analyzer.addAnalysisModule(filestripMod);
     
     return analyzer;
 }
