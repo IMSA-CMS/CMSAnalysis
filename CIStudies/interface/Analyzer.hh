@@ -7,7 +7,9 @@
 #include <vector>
 #include <memory>
 
+#include "EventLoader.hh"
 #include "FileParams.hh"
+#include "InputModule.hh"
 
 class AnalysisModule;
 class FilterModule;
@@ -18,6 +20,11 @@ class ProductionModule;
 class Analyzer
 {
 public:
+  Analyzer();
+
+InputModule& getInputModule() {return input;}
+const InputModule& getInputModule() const {return input;}
+
   // Add a production module, which is guaranteed to run before any analysis or filter
   // module (in the order added)
   void addProductionModule(std::shared_ptr<ProductionModule> module) 
@@ -40,6 +47,9 @@ private:
   std::vector<std::shared_ptr<ProductionModule>> productionModules;
   std::vector<std::shared_ptr<FilterModule>> filterModules;
   std::vector<std::shared_ptr<AnalysisModule>> analysisModules;
+
+  EventLoader eventLoader;
+  InputModule input;
 
   // Parse one line of the the configuration file
   std::vector<std::string> parseLine(std::ifstream& txtFile) const;

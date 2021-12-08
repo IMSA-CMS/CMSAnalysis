@@ -13,8 +13,7 @@
 #include "DataFormats/PatCandidates/interface/MET.h"
 #include "DataFormats/Math/interface/LorentzVector.h"
 
-TreeEventFile::TreeEventFile(TFile* ifile) : 
-EventFile(ifile) {}
+TreeEventFile::TreeEventFile(TFile *ifile) : EventFile(ifile) {}
 
 void TreeEventFile::initialize()
 {
@@ -34,7 +33,6 @@ void TreeEventFile::initialize()
     tree->SetBranchAddress(getTreeBranches().muonCharge.c_str(), &muon_charge);
     tree->SetBranchAddress(getTreeBranches().muonPT.c_str(), &muon_pt);
 
-    
     tree->SetBranchAddress(getTreeBranches().metSize.c_str(), &met_size);
     tree->SetBranchAddress(getTreeBranches().metPhi.c_str(), &met_phi);
     tree->SetBranchAddress(getTreeBranches().metPT.c_str(), &met_pt);
@@ -46,6 +44,9 @@ void TreeEventFile::initialize()
     tree->SetBranchAddress(getTreeBranches().genPhi.c_str(), &gen_phi);
     tree->SetBranchAddress(getTreeBranches().genMass.c_str(), &gen_mass);
     tree->SetBranchAddress(getTreeBranches().genPt.c_str(), &gen_pt);
+
+    tree->SetBranchAddress(getTreeBranches().elecIdpass.c_str(), &elec_idpass);
+    tree->SetBranchAddress(getTreeBranches().muonIdpass.c_str(), &muon_idpass);
 
     counter = 0;
     tree->GetEntry(counter);
@@ -72,7 +73,7 @@ GenEventInfoProduct TreeEventFile::getGenInfo() const
 {
     throw std::runtime_error("Not yet implemented: getGenInfo()");
 
-    /* 
+    /*
     edm::Handle<GenEventInfoProduct> genInfo;
     event->getByLabel(std::string("generator"), genInfo);
     return *genInfo;
@@ -82,67 +83,77 @@ GenEventInfoProduct TreeEventFile::getGenInfo() const
 ParticleCollection TreeEventFile::getGenSimParticles() const
 {
     ParticleCollection genParticles;
-    //This seems problematic
-    // std::cout << gen_size << std::endl; 
-    // std::cout << gen_size << std::endl; 
-        
-    for(int i = 0; i < gen_size; i++) {
+    // This seems problematic
+    //  std::cout << gen_size << std::endl;
+    //  std::cout << gen_size << std::endl;
+
+    for (int i = 0; i < gen_size; i++)
+    {
         // Lorentz four-vector
         /* if(i == 0) {
             std::cout << elec_pt[i] << " " << elec_eta[i] << " " <<
              elec_phi[i] << " " << elec_mass[i] << std::endl;
         } */
         int charge = 1;
-        if(gen_pid[i] < 0)
+        if (gen_pid[i] < 0)
         {
             charge = -1;
         }
-        if(gen_pid[i] == 21 || gen_pid[i] == 22)
+        if (gen_pid[i] == 21 || gen_pid[i] == 22)
         {
             charge = 0;
         }
         Particle::Type type = Particle::Type::None;
-        if(std::abs(gen_pid[i]) == 11)
+        if (std::abs(gen_pid[i]) == 11)
         {
             type = Particle::Type::Electron;
         }
-        else if(std::abs(gen_pid[i]) == 13)
+        else if (std::abs(gen_pid[i]) == 13)
         {
             type = Particle::Type::Muon;
         }
         genParticles.addParticle(Particle(
-            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i], 
-            gen_eta[i], gen_phi[i], gen_mass[i])), charge, type));        
+            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i],
+                                                                        gen_eta[i], gen_phi[i], gen_mass[i])),
+            charge, type));
     }
-    
+
     return genParticles;
 }
 
 ParticleCollection TreeEventFile::getRecoParticles() const
 {
     ParticleCollection recoParticles;
-    //This seems problematic
-    // std::cout << elec_size << std::endl; 
-    // std::cout << muon_size << std::endl; 
-        
-    for(int i = 0; i < elec_size; i++) {
-        // Lorentz four-vector
-        /* if(i == 0) {
-            std::cout << elec_pt[i] << " " << elec_eta[i] << " " <<
-             elec_phi[i] << " " << elec_mass[i] << std::endl;
-        } */
-        recoParticles.addParticle(Particle(
-            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i], 
-            elec_eta[i], elec_phi[i], elec_mass[i])), elec_charge[i], Particle::Type::Electron));        
+    // This seems problematic
+    //  std::cout << elec_size << std::endl;
+    //  std::cout << muon_size << std::endl;
+
+    for (int i = 0; i < elec_size; i++)
+    {
+        if (elec_idpass[i] & 7)
+        {
+            // Lorentz four-vector
+            /* if(i == 0) {
+                std::cout << elec_pt[i] << " " << elec_eta[i] << " " <<
+                elec_phi[i] << " " << elec_mass[i] << std::endl;
+             } */
+            recoParticles.addParticle(Particle(
+                reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],
+                                                                            elec_eta[i], elec_phi[i], elec_mass[i])),
+                elec_charge[i], Particle::Type::Electron));
+        }
     }
 
-
-    for(int i = 0; i < muon_size; i++)
-    {       
-        // Lorentz four-vector
-        recoParticles.addParticle(Particle(
-            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i], 
-            muon_eta[i], muon_phi[i], muon_mass[i])), muon_charge[i], Particle::Type::Muon));        
+    for (int i = 0; i < muon_size; i++)
+    {
+        if (muon_idpass[i] & 7)
+        {
+            // Lorentz four-vector
+            recoParticles.addParticle(Particle(
+                reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],
+                                                                            muon_eta[i], muon_phi[i], muon_mass[i])),
+                muon_charge[i], Particle::Type::Muon));
+        }
     }
 
     return recoParticles;

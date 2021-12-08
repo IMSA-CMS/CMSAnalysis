@@ -12,31 +12,34 @@
 
 class TFile;
 class EventLoader;
+class Selector;
 
 class InputModule
 {
-    public:
-        InputModule(const EventLoader* iEventLoader);
-        // void setFile(TFile* tfile) {file = tfile;}
-        enum class RecoLevel
-        {
-            Reco, GenSim
-        };
-  ParticleCollection getLeptons(RecoLevel level, double pTCut = 0) const;
-        // not sure this works
-  ParticleCollection getParticles(RecoLevel level, Particle::Type particleType = Particle::Type::None, double pTCut = 0) const;
-        //std::vector<PileupSummaryInfo> getPileupInfo() const;
-        GenEventInfoProduct getGenInfo() const;
-        // edm::TriggerResults getTriggerResults(std::string subProcess) const;
-        // edm::TriggerNames getTriggerNames(std::string subProcess) const;
-        double getMET() const;
-    protected:
-        // const edm::EventBase& getEvent();
-        // TFile* getFile(); //{return file;}
-    private:
-        const EventLoader* eventLoader;
+public:
+    InputModule(const EventLoader *iEventLoader);
+
+    enum class RecoLevel
+    {
+        Reco,
+        GenSim
+    };
+
+    void setLeptonSelector(std::shared_ptr<Selector> selector) {leptonSelector = selector;}
+
+    ParticleCollection getLeptons(RecoLevel level, std::shared_ptr<Selector> selector = nullptr) const;
+    // not sure this works
+    ParticleCollection getParticles(RecoLevel level, Particle::Type particleType = Particle::Type::None,
+    std::shared_ptr<Selector> selector = nullptr) const;
+
+    GenEventInfoProduct getGenInfo() const;
+    // edm::TriggerResults getTriggerResults(std::string subProcess) const;
+    // edm::TriggerNames getTriggerNames(std::string subProcess) const;
+    double getMET() const;
+
+private:
+    const EventLoader *eventLoader;
+    std::shared_ptr<Selector> leptonSelector;
 };
-
-
 
 #endif

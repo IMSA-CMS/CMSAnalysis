@@ -31,6 +31,7 @@
 #include "CIAnalysis/CIStudies/interface/TriggerModule.hh"
 #include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
+#include "CIAnalysis/CIStudies/interface/SnowmassLeptonSelector.hh"
 using std::make_shared;
 
 Analyzer leptonJetReconstructionAnalysis() {
@@ -96,6 +97,7 @@ Analyzer leptonJetReconstructionAnalysis() {
   histOutputMod->addHistogram(recoThirdMuonPtHist);
   histOutputMod->addHistogram(recoSecondMuonPtHist);
   histOutputMod->addHistogram(recoFirstMuonPtHist);
+  histOutputMod->addHistogram(nLeptonJetHist);
 
   // Initialize triggers
   auto singleMuonTrigger = std::make_shared<SingleMuonTrigger>(50);
@@ -110,22 +112,23 @@ Analyzer leptonJetReconstructionAnalysis() {
 
   analyzer.addProductionModule(weightMod);
   analyzer.addProductionModule(lrWeightMod);
-  analyzer.addProductionModule(matchMod);
+  //analyzer.addProductionModule(matchMod);
   analyzer.addProductionModule(lepRecoMod);
-  analyzer.addProductionModule(genPartMod);
-  analyzer.addProductionModule(lepMatchMod);
+  //analyzer.addProductionModule(genPartMod);
+  //analyzer.addProductionModule(lepMatchMod);
 
   analyzer.addAnalysisModule(histOutputMod);
   //analyzer.addProductionModule(triggerMod);
 
-  analyzer.addAnalysisModule(leptonEfficiency);
-  analyzer.addAnalysisModule(leptonJetEfficiency);
+  //analyzer.addAnalysisModule(leptonEfficiency);
+  //analyzer.addAnalysisModule(leptonJetEfficiency);
   //analyzer.addAnalysisModule(massRecoEfficiency200);
   //analyzer.addAnalysisModule(massRecoEfficiency500);
   //analyzer.addAnalysisModule(massRecoEfficiency800);
   //analyzer.addAnalysisModule(massRecoEfficiency1000);
   //analyzer.addAnalysisModule(massRecoEfficiency1300);
   //analyzer.addAnalysisModule(genSimEventDumpMod);
-  
+  auto selector = make_shared<SnowmassLeptonSelector>(5);
+  analyzer.getInputModule().setLeptonSelector(selector);
   return analyzer;
 }

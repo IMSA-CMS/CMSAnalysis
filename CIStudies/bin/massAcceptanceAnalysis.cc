@@ -26,24 +26,22 @@ Analyzer massAcceptanceAnalysis()
 
   //auto genSimMod = make_shared<GenSimIdentificationModule>();
   //auto recoMod = make_shared<RecoIdentificationModule>(50);
-  auto matchMod = make_shared<MatchingModule>(genSimMod, recoMod);
+  auto matchMod = make_shared<MatchingModule>();
   auto weightMod = make_shared<WeightingModule>();
   auto lrWeightMod = make_shared<LRWeightModule>(); 
 
-  auto histMod = make_shared<HistogramOutputModule>(genSimMod, recoMod, weightMod, lrWeightMod);
-  auto totalEventsHist = make_shared<TotalEventsHist>(genSimMod, "Mass vs Total Events", 200, 0, 3000);
+  auto histMod = make_shared<HistogramOutputModule>(weightMod, lrWeightMod);
+  auto totalEventsHist = make_shared<TotalEventsHist>("Mass vs Total Events", 200, 0, 3000);
 
 
-  auto acceptedEventsHist = make_shared<CIAcceptedEventsHist>(matchMod, genSimMod, "Mass vs Accepted Events", 200, 0, 3000);
-  auto acceptanceHistTemplate = make_shared<CIAcceptedEventsHist>(matchMod, genSimMod, "Mass vs Acceptance", 200, 0, 3000);
+  auto acceptedEventsHist = make_shared<CIAcceptedEventsHist>(matchMod,  "Mass vs Accepted Events", 200, 0, 3000);
+  auto acceptanceHistTemplate = make_shared<CIAcceptedEventsHist>(matchMod, "Mass vs Acceptance", 200, 0, 3000);
 
   // Add the histogram(s) created above to histMod
   histMod->addHistogram(totalEventsHist);
   histMod->addHistogram(acceptedEventsHist);
   histMod->addHistogram(acceptanceHistTemplate);
 
-  analyzer.addProductionModule(genSimMod);
-  analyzer.addProductionModule(recoMod);
   analyzer.addProductionModule(matchMod);
   analyzer.addProductionModule(weightMod);
   analyzer.addProductionModule(lrWeightMod);
