@@ -8,7 +8,7 @@ CollinsSoperFilter::CollinsSoperFilter(double hiCut) :
 
 std::string CollinsSoperFilter::makeFilterString()
 {
-  double collinsSoper = getInput()->getParticles(InputModule::RecoLevel::GenSim).getCollinsSoper();
+  double collinsSoper = getInput()->getLeptons(InputModule::RecoLevel::GenSim).getCollinsSoper();
 
   if (abs(collinsSoper) > highCutoff)
     return "HighCS";
