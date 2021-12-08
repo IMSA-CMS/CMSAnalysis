@@ -16,7 +16,7 @@ bool LeptonJetMatchingModule::process()
     std::vector<Particle> genSimParticles(getInput()->getParticles(InputModule::RecoLevel::GenSim).getParticles());
     std::vector<LeptonJet> recoLeptonJets(lepJet->getLeptonJets());
     std::vector<Particle> lJets;
-    foreach(LeptonJet lJet:recoLeptonJets)
+    for (LeptonJet lJet:recoLeptonJets)
     {
       lJets.push_back(lJet);
     }

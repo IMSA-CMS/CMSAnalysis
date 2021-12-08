@@ -44,6 +44,9 @@ class TreeEventFile : public EventFile
             std::string genPhi;
             std::string genMass;
             std::string genPt;
+
+            std::string elecIdpass;
+            std::string muonIdpass;
         };
         
         virtual std::string getTreeName() = 0;
@@ -68,6 +71,7 @@ class TreeEventFile : public EventFile
         Float_t elec_phi[MAXMEC];
         Float_t elec_mass[MAXMEC];
         Float_t elec_pt[MAXMEC];
+        Int_t elec_idpass[MAXMEC];
 
         Int_t muon_size;
         Int_t muon_charge[MAXMEC];
@@ -75,6 +79,7 @@ class TreeEventFile : public EventFile
         Float_t muon_phi[MAXMEC];
         Float_t muon_mass[MAXMEC];
         Float_t muon_pt[MAXMEC];
+        Int_t muon_idpass[MAXMEC];
 
         Int_t met_size;
         Float_t met_phi[MAXMEC];
@@ -87,6 +92,7 @@ class TreeEventFile : public EventFile
         Float_t gen_phi[MAXMC];
         Float_t gen_mass[MAXMC];
         Float_t gen_pt[MAXMC];
+        
 };
 
 

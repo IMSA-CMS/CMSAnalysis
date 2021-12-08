@@ -3,8 +3,6 @@
 
 #include "CIAnalysis/CIStudies/interface/Analyzer.hh"
 
-// #include "CIAnalysis/CIStudies/interface/GenSimIdentificationModule.hh"
-// #include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 #include "CIAnalysis/CIStudies/interface/MassFilter.hh"
 #include "CIAnalysis/CIStudies/interface/BarrelStateFilter.hh"
@@ -22,21 +20,19 @@ Analyzer massResolutionAnalysis()
 {
   Analyzer analyzer;
 
-  auto genSimMod = make_shared<GenSimIdentificationModule>();
-  auto recoMod = make_shared<RecoIdentificationModule>(5);
-  auto matchMod = make_shared<MatchingModule>(genSimMod, recoMod);
+  auto matchMod = make_shared<MatchingModule>();
   auto weightMod = make_shared<WeightingModule>();
   auto lrWeightMod = make_shared<LRWeightModule>(); 
   auto barrelStateFilter = make_shared<BarrelStateFilter>(matchMod);
   auto massBinFilterForMass = make_shared<MassBinFilter>(matchMod, 300, 3100, 28);
   auto massBinFilterForPt = make_shared<MassBinFilter>(matchMod, 50, 1900, 37);
   //auto massResMod = make_shared<MassResolutionModule>(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
-  auto histMod = make_shared<HistogramOutputModule>(genSimMod, recoMod, weightMod, lrWeightMod);
-  auto massResHist = make_shared<MassResolutionHist>(genSimMod, recoMod, "Mass Resolution Pasted", 100, -1, 1);
+  auto histMod = make_shared<HistogramOutputModule>(weightMod, lrWeightMod);
+  auto massResHist = make_shared<MassResolutionHist>("Mass Resolution Pasted", 100, -1, 1);
 
   std::cerr << "no suspicious activity so far" << std::endl;
 
-  auto ptResHist = make_shared<PtResolutionHist>(genSimMod, recoMod, "Pt Resolution Pasted", 100, -1, 1);
+  auto ptResHist = make_shared<PtResolutionHist>("Pt Resolution Pasted", 100, -1, 1);
 
   std::cerr << "phase one complete, initiate drone strike" << std::endl;
 
@@ -50,8 +46,6 @@ Analyzer massResolutionAnalysis()
   histMod->addHistogram(massResHist);
   histMod->addHistogram(ptResHist);
 
-  analyzer.addProductionModule(genSimMod);
-  analyzer.addProductionModule(recoMod);
   analyzer.addProductionModule(matchMod);
   analyzer.addProductionModule(weightMod);
   analyzer.addProductionModule(lrWeightMod);
