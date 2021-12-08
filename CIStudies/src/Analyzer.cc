@@ -85,7 +85,6 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
         if (!module->processEvent())
         {
           continueProcessing = false;
-          std::cout << "continueProcessing: " << continueProcessing << "\n" << std::endl;
           break;
         }
       }
