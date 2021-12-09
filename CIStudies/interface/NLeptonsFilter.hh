@@ -4,12 +4,18 @@
 #include <memory>
 #include "FilterModule.hh"
 
-//class RecoIdentificationModule;
+class Selector;
 
 class NLeptonsFilter : public FilterModule
 {
+public:
+  NLeptonsFilter(std::shared_ptr<Selector> selector = nullptr);
+
 protected:
   virtual std::string makeFilterString() override;
+
+private:
+  std::shared_ptr<Selector> leptonSelector;
 };
 
 #endif
