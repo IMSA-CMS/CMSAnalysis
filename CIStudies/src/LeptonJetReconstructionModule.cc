@@ -1,18 +1,19 @@
 #include "CIAnalysis/CIStudies/interface/LeptonJetReconstructionModule.hh"
 #include "DataFormats/Math/interface/deltaR.h"
+#include "CIAnalysis/CIStudies/interface/Selector.hh"
 #include <iostream>
 
-LeptonJetReconstructionModule::LeptonJetReconstructionModule(double deltaRCut, double ipTCut) :
+LeptonJetReconstructionModule::LeptonJetReconstructionModule(double deltaRCut, std::shared_ptr<Selector> selector) :
   DeltaRCut(deltaRCut),
-  pTCut(ipTCut)
-  //reco(recoModule),
+  leptonSelector(selector)
 {
 }
 
 bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
 {
   leptonJets.clear();
-  const ParticleCollection& recoCandidates = getInput()->getLeptons(InputModule::RecoLevel::Reco);
+  //std::cout << "Lepton jet selector: " << leptonSelector << '\n';
+  const ParticleCollection& recoCandidates = getInput()->getLeptons(InputModule::RecoLevel::Reco, leptonSelector);
   std::vector<Particle> recoLeptons = recoCandidates.getParticles();
 
   while (recoLeptons.size() != 0) {
@@ -35,7 +36,6 @@ bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
 
     if (jet.getNumParticles() > 1)
     {
-      // leptonJets.push_back(jet);
       auto inputJets = getInput()->getJets(InputModule::RecoLevel::Reco);
       bool close = false;
       for (auto iJet : inputJets) {

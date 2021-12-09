@@ -15,7 +15,7 @@ std::vector<double> RecoveredInvariantMassHist::protectedValue(bool typeGenSim) 
 {
   if (typeGenSim)          // typeGenSim == true, so we want the GenSim values
   {
-    auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim);
+    auto genParticles = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
     auto genSimInv = genParticles.calculateRecoveredInvariantMass(nLeptons, motherPDGID);
     return 
     {genSimInv};
@@ -23,7 +23,7 @@ std::vector<double> RecoveredInvariantMassHist::protectedValue(bool typeGenSim) 
 
   else                     // typeGenSim == false, so we want the Reco values
   {
-    auto recoParticles = getInput()->getParticles(InputModule::RecoLevel::Reco);
+    auto recoParticles = getInput()->getLeptons(InputModule::RecoLevel::Reco);
     auto recoInv = recoParticles.calculateRecoveredInvariantMass(nLeptons, motherPDGID);
     return {recoInv};
   }

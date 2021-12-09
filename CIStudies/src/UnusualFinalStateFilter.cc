@@ -10,7 +10,7 @@ UnusualFinalStateFilter::UnusualFinalStateFilter()
 
 std::string UnusualFinalStateFilter::makeFilterString()
 {
-  auto recoParticles = getInput()->getParticles(InputModule::RecoLevel::Reco);
+  auto recoParticles = getInput()->getLeptons(InputModule::RecoLevel::Reco);
 
   if (recoParticles.getNumParticles() > 4)  // Keep all of the events with more than 4 final state leptons
   {
