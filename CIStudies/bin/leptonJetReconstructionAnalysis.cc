@@ -34,6 +34,9 @@
 #include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
 #include "CIAnalysis/CIStudies/interface/SnowmassLeptonSelector.hh"
+
+#include "CIAnalysis/CIStudies/interface/RelIsoHist.hh"
+
 using std::make_shared;
 
 Analyzer leptonJetReconstructionAnalysis() {
@@ -66,11 +69,13 @@ Analyzer leptonJetReconstructionAnalysis() {
   // auto matchPtHist = std::make_shared<MatchingPtHist>(lepMatchMod, "Differences in pT for Matched Lepton Jets", 100, -300, 300);
   // auto matchPhiHist = std::make_shared<MatchingPhiHist>(lepMatchMod, "Differences in Phi for Matched Lepton Jets", 100, 0, 3.15);
   // auto matchEtaHist = std::make_shared<MatchingEtaHist>(lepMatchMod, "Differences in Eta for Matched Lepton Jets", 100, -1, 1);
+  auto relIsoHist = std::make_shared<RelIsoHist>("RelIso of Leptons", 100, 0, 0.5);
 
   histOutputMod->addHistogram(deltaRHist);
   histOutputMod->addHistogram(pTHist);
   histOutputMod->addHistogram(matchedLeptonJetHist);
   histOutputMod->addHistogram(unmatchedLeptonJetHist);
+  histOutputMod->addHistogram(relIsoHist);
   // histOutputMod->addHistogram(matchDeltaRHist);
   // histOutputMod->addHistogram(matchPtHist);
   // histOutputMod->addHistogram(matchPhiHist);

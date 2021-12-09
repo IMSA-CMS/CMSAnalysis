@@ -35,7 +35,7 @@ bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
 
     if (jet.getNumParticles() > 1)
     {
-      leptonJets.push_back(jet);
+      // leptonJets.push_back(jet);
       auto inputJets = getInput()->getJets(InputModule::RecoLevel::Reco);
       bool close = false;
       for (auto iJet : inputJets) {
