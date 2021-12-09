@@ -26,6 +26,7 @@ void TreeEventFile::initialize()
     tree->SetBranchAddress(getTreeBranches().elecMass.c_str(), &elec_mass);
     tree->SetBranchAddress(getTreeBranches().elecCharge.c_str(), &elec_charge);
     tree->SetBranchAddress(getTreeBranches().elecPT.c_str(), &elec_pt);
+    tree->SetBranchAddress(getTreeBranches().elecRelIso.c_str(), &elec_reliso);
 
     tree->SetBranchAddress(getTreeBranches().muonSize.c_str(), &muon_size);
     tree->SetBranchAddress(getTreeBranches().muonEta.c_str(), &muon_eta);
@@ -33,6 +34,7 @@ void TreeEventFile::initialize()
     tree->SetBranchAddress(getTreeBranches().muonMass.c_str(), &muon_mass);
     tree->SetBranchAddress(getTreeBranches().muonCharge.c_str(), &muon_charge);
     tree->SetBranchAddress(getTreeBranches().muonPT.c_str(), &muon_pt);
+    tree->SetBranchAddress(getTreeBranches().muonRelIso.c_str(), &muon_reliso);
 
     
     tree->SetBranchAddress(getTreeBranches().metSize.c_str(), &met_size);
@@ -139,7 +141,7 @@ ParticleCollection TreeEventFile::getRecoParticles() const
         } */
         recoParticles.addParticle(Particle(
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i], 
-            elec_eta[i], elec_phi[i], elec_mass[i])), elec_charge[i], Particle::Type::Electron));        
+            elec_eta[i], elec_phi[i], elec_mass[i])), elec_charge[i], Particle::Type::Electron, elec_reliso[i]));        
     }
 
 
@@ -148,7 +150,7 @@ ParticleCollection TreeEventFile::getRecoParticles() const
         // Lorentz four-vector
         recoParticles.addParticle(Particle(
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i], 
-            muon_eta[i], muon_phi[i], muon_mass[i])), muon_charge[i], Particle::Type::Muon));        
+            muon_eta[i], muon_phi[i], muon_mass[i])), muon_charge[i], Particle::Type::Muon, muon_reliso[i]));        
     }
 
     return recoParticles;

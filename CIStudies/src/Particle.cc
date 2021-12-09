@@ -11,10 +11,9 @@
 #include "CIAnalysis/CIStudies/interface/LeptonJet.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonJetImplementation.hh"
 
-Particle::Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type):
-particle(std::make_shared<SimpleImplementation>(vec, charge, type))
+Particle::Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, double relIso):
+particle(std::make_shared<SimpleImplementation>(vec, charge, type, relIso))
 {
-
 }
 
 Particle::Particle(const reco::Candidate* iparticle):
@@ -195,6 +194,12 @@ double Particle::getMass() const
 {
   checkIsNull();
   return particle->getFourVector().mass();
+}
+
+double Particle::getIsolation() const
+{
+  checkIsNull();
+  return particle->isolation();
 }
 
 Particle::BarrelState Particle::getBarrelState() const
