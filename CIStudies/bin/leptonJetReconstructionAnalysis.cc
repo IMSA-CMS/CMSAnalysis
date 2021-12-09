@@ -31,6 +31,8 @@
 #include "CIAnalysis/CIStudies/interface/SingleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/ThirdMuonPtHist.hh"
 #include "CIAnalysis/CIStudies/interface/TriggerModule.hh"
+#include "CIAnalysis/CIStudies/interface/METTrigger.hh"
+#include "CIAnalysis/CIStudies/interface/METModule.hh"
 #include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
 #include "CIAnalysis/CIStudies/interface/SnowmassLeptonSelector.hh"
@@ -56,6 +58,7 @@ Analyzer leptonJetReconstructionAnalysis() {
       std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.5);
   auto histOutputMod = std::make_shared<HistogramOutputModule>(
       weightMod, lrWeightMod);
+    auto metMod = std::make_shared<METModule>();
 
   // Histograms
   auto deltaRHist = std::make_shared<DeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.1);
@@ -77,7 +80,7 @@ Analyzer leptonJetReconstructionAnalysis() {
   // histOutputMod->addHistogram(matchEtaHist);
   // auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>(3);
 
-  // auto triggerMod = std::make_shared<TriggerModule>();
+  auto triggerMod = std::make_shared<TriggerModule>();
 
   auto nLeptonsFilter = std::make_shared<NLeptonsFilter>(); // Needs to be updated with shared pointers
 
@@ -117,6 +120,8 @@ Analyzer leptonJetReconstructionAnalysis() {
       */
 
   // Add triggers to the TriggerModule -- put these back later
+  auto metTrigger = std::make_shared<METTrigger>(metMod, 50);
+  triggerMod->addTrigger(metTrigger);
   /*
   triggerMod->addTrigger(singleMuonTrigger);
   triggerMod->addTrigger(doubleMuonTrigger);
@@ -133,7 +138,8 @@ Analyzer leptonJetReconstructionAnalysis() {
   // analyzer.addProductionModule(lepMatchMod);
 
   // analyzer.addAnalysisModule(histOutputMod);
-  // analyzer.addProductionModule(triggerMod);
+  analyzer.addProductionModule(metMod);
+  analyzer.addProductionModule(triggerMod);
 
   // analyzer.addAnalysisModule(leptonEfficiency);
   // analyzer.addAnalysisModule(leptonJetEfficiency);
