@@ -17,7 +17,7 @@ class Particle
     Particle(const reco::Candidate* iparticle = nullptr);
     Particle(const Particle& particle1);
     Particle(const LeptonJet& leptonjet);
-    Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type);
+    Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, double relIso = -999);
     Particle& operator = (const Particle& particle2);
     double getPt() const;
     double getPhi() const;
@@ -25,6 +25,7 @@ class Particle
     double getEt() const;
     double energy() const;
     double getMass() const;
+    double getIsolation() const;
     Particle uniqueMother() const;
     Particle finalDaughter();
     Particle findMother(int motherPDGID);

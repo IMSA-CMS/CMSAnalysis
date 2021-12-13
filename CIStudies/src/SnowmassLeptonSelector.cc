@@ -1,13 +1,14 @@
 #include "CIAnalysis/CIStudies/interface/SnowmassLeptonSelector.hh"
 #include "CIAnalysis/CIStudies/interface/Particle.hh"
 
-SnowmassLeptonSelector::SnowmassLeptonSelector(double iptCut) :
-    ptCut(iptCut)
+SnowmassLeptonSelector::SnowmassLeptonSelector(double iptCut, double iisoCut) :
+    ptCut(iptCut),
+    isoCut(iisoCut)
 {}
 
 bool SnowmassLeptonSelector::checkParticle(const Particle &particle) const
 {
-    if (particle.getPt() < ptCut)
+    if (particle.getPt() < ptCut || particle.getIsolation() > isoCut)
     {
         return false;
     }
