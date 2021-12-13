@@ -23,7 +23,7 @@ bool GenSimStudyModule::process() {
 
   //edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
   //event.getByLabel(std::string("prunedGenParticles"), genParticlesHandle);
-  auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim).getParticles();
+  auto genParticles = getInput()->getLeptons(InputModule::RecoLevel::GenSim).getParticles();
 
   
   // Begin GEN looping

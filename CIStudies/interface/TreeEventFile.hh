@@ -14,8 +14,11 @@ class TreeEventFile : public EventFile
         // simply dumps gensim particles from event into ParticleCollection
         virtual ParticleCollection getGenSimParticles() const override;
         virtual ParticleCollection getRecoParticles() const override;
+        virtual ParticleCollection getRecoJets() const override;
         virtual GenEventInfoProduct getGenInfo() const override;
         virtual double getMET() const override;
+        virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
+        virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;
     protected:
         struct BranchNames
         {
@@ -36,6 +39,12 @@ class TreeEventFile : public EventFile
             std::string metSize;
             std::string metPhi;
             std::string metPT;
+
+            std::string jetSize;
+            std::string jetEta;
+            std::string jetPhi;
+            std::string jetMass;
+            std::string jetPT;
 
             std::string genSize;
             std::string genPid;
@@ -85,6 +94,12 @@ class TreeEventFile : public EventFile
         Float_t met_phi[MAXMEC];
         Float_t met_pt[MAXMEC];
 
+        Int_t jet_size;
+        Float_t jet_eta[MAXMEC];
+        Float_t jet_phi[MAXMEC];
+        Float_t jet_mass[MAXMEC];
+        Float_t jet_pt[MAXMEC];
+
         Int_t gen_size;
         Int_t gen_pid[MAXMC];
         Int_t gen_status[MAXMC];
@@ -94,7 +109,5 @@ class TreeEventFile : public EventFile
         Float_t gen_pt[MAXMC];
         
 };
-
-
 
 #endif

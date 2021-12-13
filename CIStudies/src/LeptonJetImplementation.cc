@@ -2,7 +2,8 @@
 #include "CIAnalysis/CIStudies/interface/LeptonJet.hh"
 
 
-LeptonJetImplementation::LeptonJetImplementation(std::shared_ptr<LeptonJet>)
+LeptonJetImplementation::LeptonJetImplementation(std::shared_ptr<LeptonJet> iLJet) :
+  lJet(iLJet)
 {
   // std::cout << "Got to LJI\n";
 }
@@ -13,7 +14,7 @@ reco::Candidate::LorentzVector LeptonJetImplementation::getFourVector() const
   return lJet->getFourVector(); // Does this have to be ROOT::Math::LorentzVector?
 }
 
-bool LeptonJetImplementation::operator==(const ParticleImplementation& userParticle) const 
+bool LeptonJetImplementation::operator==(const ParticleImplementation& userParticle) const
 {
     try
     {

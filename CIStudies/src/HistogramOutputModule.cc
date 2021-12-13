@@ -334,7 +334,7 @@ void HistogramOutputModule::finalize()
                 // std::cout << pair.first << "\n";
               }
 
-              std::cout << "Erasing " << pair.first + massBin.first << "\n";
+              //std::cout << "Erasing " << pair.first + massBin.first << "\n";
             
               auto len = (pair.first).length();
               // std::cout << len << std::endl;

@@ -1,21 +1,22 @@
 #include "CIAnalysis/CIStudies/interface/LeptonJetReconstructionModule.hh"
 #include "DataFormats/Math/interface/deltaR.h"
+#include "CIAnalysis/CIStudies/interface/Selector.hh"
+#include <iostream>
 
-LeptonJetReconstructionModule::LeptonJetReconstructionModule(double deltaRCut, double ipTCut) :
+LeptonJetReconstructionModule::LeptonJetReconstructionModule(double deltaRCut, std::shared_ptr<Selector> selector) :
   DeltaRCut(deltaRCut),
-  pTCut(ipTCut)
-  //reco(recoModule),
+  leptonSelector(selector)
 {
 }
 
 bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
 {
   leptonJets.clear();
-  const ParticleCollection& recoCandidates = getInput()->getParticles(InputModule::RecoLevel::Reco);
+  //std::cout << "Lepton jet selector: " << leptonSelector << '\n';
+  const ParticleCollection& recoCandidates = getInput()->getLeptons(InputModule::RecoLevel::Reco, leptonSelector);
   std::vector<Particle> recoLeptons = recoCandidates.getParticles();
 
-  while (recoLeptons.size() != 0)
-  {
+  while (recoLeptons.size() != 0) {
     Particle highestPtLepton = findHighestPtLepton(recoLeptons);
     LeptonJet jet = createLeptonJet(highestPtLepton);
     std::vector<Particle> initialLeptons = jet.getParticles();
@@ -23,28 +24,34 @@ bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
     auto highestPtLeptonFourVector = highestPtLepton.getFourVector();
     recoLeptons.erase(std::find(recoLeptons.begin(), recoLeptons.end(), highestPtLepton));
 
-    for (unsigned i = 0; i < recoLeptons.size(); ++i)
-    {
+    for (unsigned i = 0; i < recoLeptons.size(); ++i) {
       auto fourVector = recoLeptons[i].getFourVector();
       double deltaR = reco::deltaR(highestPtLeptonFourVector, fourVector);
-      if (deltaR < DeltaRCut)
-      {
+      if (deltaR < DeltaRCut) {
         jet.addParticle(recoLeptons[i]);
         recoLeptons.erase(recoLeptons.begin() + i);
-        --i;           
+        --i;
       }
     }
 
     if (jet.getNumParticles() > 1)
     {
-      //if (jet.getMass() < 50)
-      {
+      auto inputJets = getInput()->getJets(InputModule::RecoLevel::Reco);
+      bool close = false;
+      for (auto iJet : inputJets) {
+        if (iJet.getDeltaR(jet) < .5) {
+          close = true;
+          break;
+        }
+      }
+      if (!close) {
         leptonJets.push_back(jet);
       }
     }
   }
   findDeltaRValues();
   findPtValues();
+  // std::cout << "LJ:" << leptonJets.size() << "\n";
   return true;
 }
 
@@ -62,12 +69,12 @@ Particle LeptonJetReconstructionModule::findHighestPtLepton(std::vector<Particle
     double pt = lepton.getPt();
     if (pt > highestPt)
     {
-      highestPt = pt;      
+      highestPt = pt;
     }
   }
 
   for (auto lep : leptons)
-  {    
+  {
     if (lep.getPt() == highestPt)
     {
        return lep;

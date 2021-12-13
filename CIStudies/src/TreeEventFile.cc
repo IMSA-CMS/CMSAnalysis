@@ -37,6 +37,12 @@ void TreeEventFile::initialize()
     tree->SetBranchAddress(getTreeBranches().metPhi.c_str(), &met_phi);
     tree->SetBranchAddress(getTreeBranches().metPT.c_str(), &met_pt);
 
+    tree->SetBranchAddress(getTreeBranches().jetSize.c_str(), &jet_size);
+    tree->SetBranchAddress(getTreeBranches().jetEta.c_str(), &jet_eta);
+    tree->SetBranchAddress(getTreeBranches().jetPhi.c_str(), &jet_phi);
+    tree->SetBranchAddress(getTreeBranches().jetMass.c_str(), &jet_mass);
+    tree->SetBranchAddress(getTreeBranches().jetPT.c_str(), &jet_pt);
+
     tree->SetBranchAddress(getTreeBranches().genSize.c_str(), &gen_size);
     tree->SetBranchAddress(getTreeBranches().genPid.c_str(), &gen_pid);
     tree->SetBranchAddress(getTreeBranches().genStatus.c_str(), &gen_status);
@@ -159,6 +165,18 @@ ParticleCollection TreeEventFile::getRecoParticles() const
     return recoParticles;
 }
 
+ParticleCollection TreeEventFile::getRecoJets() const
+{
+    ParticleCollection recoParticles;
+    for(int i = 0; i < jet_size; i++) {
+        // Lorentz four-vector
+        recoParticles.addParticle(Particle(
+            reco::Candidate::LorentzVector(jet_pt[i], jet_eta[i], 
+            jet_phi[i], jet_mass[i]), 0, Particle::Type::Jet));        
+    }
+    return recoParticles;
+}
+
 double TreeEventFile::getMET() const
 {
     return static_cast<double>(met_pt[0]);
@@ -167,4 +185,14 @@ double TreeEventFile::getMET() const
 bool TreeEventFile::isDone() const
 {
     return counter >= tree->GetEntries();
+}
+
+std::vector<bool> TreeEventFile::getTriggerResults(std::string subProcess) const
+{
+    throw std::runtime_error("Trigger is not implemented for this file type");
+}
+
+std::vector<std::string> TreeEventFile::getTriggerNames(std::string subProcess) const
+{
+    throw std::runtime_error("Trigger is not implemented for this file type");
 }

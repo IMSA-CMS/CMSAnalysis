@@ -8,9 +8,9 @@ ResolutionPrototype::ResolutionPrototype(const std::string& iname, int iNBins, d
 
 std::vector<double> ResolutionPrototype::value() const
 {
-  double genSimValue = getValue(getInput()->getParticles(InputModule::RecoLevel::GenSim));
+  double genSimValue = getValue(getInput()->getLeptons(InputModule::RecoLevel::GenSim));
   //std::cerr << "genSimValue = " << genSimValue << std::endl;
-  double recoValue = getValue(getInput()->getParticles(InputModule::RecoLevel::Reco));
+  double recoValue = getValue(getInput()->getLeptons(InputModule::RecoLevel::Reco));
   //std::cerr << "recoValue = " << recoValue << std::endl;
   return {((recoValue - genSimValue)/genSimValue)};
 }

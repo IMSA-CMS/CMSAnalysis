@@ -44,6 +44,12 @@ DelphesEventFile::BranchNames DelphesEventFile::getTreeBranches() {
     delphesBranches.metPT = "metpuppi_pt";
     delphesBranches.metPhi = "metpuppi_phi";
 
+    delphesBranches.jetSize = "jetpuppi_size";
+    delphesBranches.jetEta = "jetpuppi_eta";
+    delphesBranches.jetPhi = "jetpuppi_phi";
+    delphesBranches.jetPT = "jetpuppi_pt";
+    delphesBranches.jetMass = "jetpuppi_mass";
+
     delphesBranches.genSize = "genpart_size";
     delphesBranches.genPid = "genpart_pid";
     delphesBranches.genStatus = "genpart_status";
