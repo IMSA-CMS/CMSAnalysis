@@ -25,6 +25,7 @@ void TreeEventFile::initialize()
     tree->SetBranchAddress(getTreeBranches().elecMass.c_str(), &elec_mass);
     tree->SetBranchAddress(getTreeBranches().elecCharge.c_str(), &elec_charge);
     tree->SetBranchAddress(getTreeBranches().elecPT.c_str(), &elec_pt);
+    tree->SetBranchAddress(getTreeBranches().elecRelIso.c_str(), &elec_reliso);
 
     tree->SetBranchAddress(getTreeBranches().muonSize.c_str(), &muon_size);
     tree->SetBranchAddress(getTreeBranches().muonEta.c_str(), &muon_eta);
@@ -32,6 +33,7 @@ void TreeEventFile::initialize()
     tree->SetBranchAddress(getTreeBranches().muonMass.c_str(), &muon_mass);
     tree->SetBranchAddress(getTreeBranches().muonCharge.c_str(), &muon_charge);
     tree->SetBranchAddress(getTreeBranches().muonPT.c_str(), &muon_pt);
+    tree->SetBranchAddress(getTreeBranches().muonRelIso.c_str(), &muon_reliso);
 
     tree->SetBranchAddress(getTreeBranches().metSize.c_str(), &met_size);
     tree->SetBranchAddress(getTreeBranches().metPhi.c_str(), &met_phi);
@@ -130,25 +132,8 @@ ParticleCollection TreeEventFile::getGenSimParticles() const
 ParticleCollection TreeEventFile::getRecoParticles() const
 {
     ParticleCollection recoParticles;
-    // This seems problematic
     //  std::cout << elec_size << std::endl;
     //  std::cout << muon_size << std::endl;
-
-    for (int i = 0; i < elec_size; i++)
-    {
-        if (elec_idpass[i] & 7)
-        {
-            // Lorentz four-vector
-            /* if(i == 0) {
-                std::cout << elec_pt[i] << " " << elec_eta[i] << " " <<
-                elec_phi[i] << " " << elec_mass[i] << std::endl;
-             } */
-            recoParticles.addParticle(Particle(
-                reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],
-                                                                            elec_eta[i], elec_phi[i], elec_mass[i])),
-                elec_charge[i], Particle::Type::Electron));
-        }
-    }
 
     for (int i = 0; i < muon_size; i++)
     {

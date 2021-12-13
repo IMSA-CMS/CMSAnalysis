@@ -17,6 +17,7 @@ class LeptonJetImplementation : public ParticleImplementation
   virtual int charge() const override {throw std::__throw_runtime_error;}
   virtual double et() const override {throw std::__throw_runtime_error;}
   virtual double energy() const override;
+  virtual double isolation() const override {throw std::runtime_error("Isolation not implemented.");}
   // double getPt() const override {return getFourVector().Pt();}
   // double getPhi() const override {return getFourVector().Phi();}
   // double getEta() const override {return getFourVector().Eta();}
