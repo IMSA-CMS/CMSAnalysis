@@ -64,6 +64,35 @@ ParticleCollection InputModule::getParticles(RecoLevel level, Particle::Type par
     return particleList;
 }
 
+/* TODO: getJets */
+ParticleCollection InputModule::getJets(RecoLevel level, double pTcut) const
+{
+    ParticleCollection particleList;
+    if (level == RecoLevel::GenSim)
+    {
+        throw std::runtime_error("GenSim Jets not implemented");
+    }
+    else if (level == RecoLevel::Reco)
+    {
+        auto particles = eventLoader->getFile()->getRecoJets().getParticles();
+        for (const auto &p : particles)
+        {
+	  if (p.getPt() >= pTcut)
+            {
+                particleList.addParticle(p);
+            }
+        }
+    }
+    return particleList;
+}
+
+/*
+std::vector<PileupSummaryInfo> InputModule::getPileupInfo() const
+{
+    return eventLoader->getPileupInfo();
+}
+*/
+
 GenEventInfoProduct InputModule::getGenInfo() const
 {
     return eventLoader->getFile()->getGenInfo();
@@ -72,12 +101,12 @@ GenEventInfoProduct InputModule::getGenInfo() const
 double InputModule::getMET() const
 {
     return eventLoader->getFile()->getMET();
+}       
+std::vector<bool> InputModule::getTriggerResults(std::string subProcess) const
+{
+    return eventLoader->getFile()->getTriggerResults(subProcess);
 }
-// edm::TriggerResults InputModule::getTriggerResults(std::string subProcess) const
-// {
-//     return eventLoader->getTriggerResults(subProcess);
-// }
-// edm::TriggerNames InputModule::getTriggerNames(std::string subProcess) const
-// {
-//     return eventLoader->getTriggerNames(subProcess);
-// }
+std::vector<std::string> InputModule::getTriggerNames(std::string subProcess) const
+{
+    return eventLoader->getFile()->getTriggerNames(subProcess);
+}
