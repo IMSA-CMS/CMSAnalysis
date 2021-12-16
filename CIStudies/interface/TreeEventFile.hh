@@ -28,6 +28,7 @@ class TreeEventFile : public EventFile
             std::string elecPhi;
             std::string elecMass;
             std::string elecPT;
+            std::string elecRelIso;
 
             std::string muonSize;
             std::string muonCharge;
@@ -35,6 +36,7 @@ class TreeEventFile : public EventFile
             std::string muonPhi;
             std::string muonMass;
             std::string muonPT;
+            std::string muonRelIso;
 
             std::string metSize;
             std::string metPhi;
@@ -77,6 +79,7 @@ class TreeEventFile : public EventFile
         Float_t elec_phi[MAXMEC];
         Float_t elec_mass[MAXMEC];
         Float_t elec_pt[MAXMEC];
+        Float_t elec_reliso[MAXMEC];
 
         Int_t muon_size;
         Int_t muon_charge[MAXMEC];
@@ -84,6 +87,7 @@ class TreeEventFile : public EventFile
         Float_t muon_phi[MAXMEC];
         Float_t muon_mass[MAXMEC];
         Float_t muon_pt[MAXMEC];
+        Float_t muon_reliso[MAXMEC];
 
         Int_t met_size;
         Float_t met_phi[MAXMEC];

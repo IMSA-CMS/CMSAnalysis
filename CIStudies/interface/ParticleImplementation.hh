@@ -16,6 +16,7 @@ public:
   virtual double et() const = 0;
   // virtual double eta() const = 0;
   virtual double energy() const = 0;
+  virtual double isolation() const = 0;
   virtual reco::Candidate::LorentzVector getFourVector() const = 0;
   virtual int pdgId() const = 0;
   virtual int status() const = 0;

@@ -10,6 +10,6 @@ MassAcceptanceFirstHist::MassAcceptanceFirstHist(const std::string iname, int iN
 
 std::vector<double> MassAcceptanceFirstHist::value() const
 {
-  const ParticleCollection leptonJets = getInput()->getParticles(InputModule::RecoLevel::GenSim);
+  const ParticleCollection leptonJets = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
   return {leptonJets.getInvariantMass()};
 }

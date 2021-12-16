@@ -19,7 +19,7 @@ bool LRWeightModule::process()
   {
     return true;
   }
-  ParticleCollection genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim);	
+  ParticleCollection genParticles = getInput()->getLeptons(InputModule::RecoLevel::GenSim);	
   GenEventInfoProduct genInfo = getInput()->getGenInfo();
   
   std::string lambdaString = getFileParams().getLambda();

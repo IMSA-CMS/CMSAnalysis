@@ -30,6 +30,7 @@ DelphesEventFile::BranchNames DelphesEventFile::getTreeBranches() {
     delphesBranches.elecPT = "elec_pt";
     delphesBranches.elecMass = "elec_mass";
     delphesBranches.elecCharge = "elec_charge";
+    delphesBranches.elecRelIso = "elec_reliso";
 
     delphesBranches.muonSize = "muon_size";
     delphesBranches.muonEta = "muon_eta";
@@ -37,6 +38,7 @@ DelphesEventFile::BranchNames DelphesEventFile::getTreeBranches() {
     delphesBranches.muonPT = "muon_pt";
     delphesBranches.muonMass = "muon_mass";
     delphesBranches.muonCharge = "muon_charge";
+    delphesBranches.muonRelIso = "muon_reliso";
     
     delphesBranches.metSize = "metpuppi_size";
     delphesBranches.metPT = "metpuppi_pt";

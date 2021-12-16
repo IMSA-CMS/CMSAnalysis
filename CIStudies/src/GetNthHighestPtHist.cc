@@ -14,7 +14,7 @@ std::vector<double> GetNthHighestPtHist::protectedValue(bool typeGenSim) const
 {
   if (typeGenSim)          // typeGenSim == true, so we want the GenSim values
   {
-    auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim);
+    auto genParticles = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
     auto genSimPt = genParticles.getNthHighestPt(nthMuon);
     //std::cerr << "GenSim pT: " << genSimPt << std::endl;
     return {genSimPt};
@@ -23,7 +23,7 @@ std::vector<double> GetNthHighestPtHist::protectedValue(bool typeGenSim) const
 
   else                     // typeGenSim == false, so we want the Reco values
   {
-    auto recoParticles = getInput()->getParticles(InputModule::RecoLevel::Reco);
+    auto recoParticles = getInput()->getLeptons(InputModule::RecoLevel::Reco);
     auto recoPt = recoParticles.getNthHighestPt(nthMuon);
     //std::cerr << "Reco pT: " << recoPt << std::endl;
     return {recoPt};
