@@ -49,11 +49,11 @@ void AFBModule::finalize()
 
 bool AFBModule::process()
 {
-  auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim);
+  auto genParticles = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
   auto genSimCS = genParticles.getCollinsSoper();
   auto genSimInvMass = genParticles.getInvariantMass();
 
-  auto recoParticles = getInput()->getParticles(InputModule::RecoLevel::Reco);
+  auto recoParticles = getInput()->getLeptons(InputModule::RecoLevel::Reco);
   auto recoCS = recoParticles.getCollinsSoper();
   auto recoInvMass = recoParticles.getInvariantMass();
 

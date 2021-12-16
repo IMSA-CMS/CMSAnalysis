@@ -11,6 +11,6 @@ TotalEventsHist::TotalEventsHist(const std::string iname, int iNBins, double imi
 
 std::vector<double> TotalEventsHist::value() const
 {
-  const ParticleCollection leptonJets = getInput()->getParticles(InputModule::RecoLevel::GenSim);
+  const ParticleCollection leptonJets = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
   return {leptonJets.getInvariantMass()};
 }

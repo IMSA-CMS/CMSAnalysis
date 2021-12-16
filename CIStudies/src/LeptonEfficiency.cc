@@ -22,7 +22,7 @@ LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<WeightingModule> weight
 
 bool LeptonEfficiency::process()
 {
-  auto genSim = getInput()->getParticles(InputModule::RecoLevel::GenSim);
+  auto genSim = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
 
   // std::cout << "Looking at GenSim Particles" << std::endl;
   for(const auto &particle : genSim.getParticles())

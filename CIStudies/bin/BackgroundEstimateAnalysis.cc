@@ -15,6 +15,7 @@
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 #include "CIAnalysis/CIStudies/interface/NLeptonsFilter.hh"
 #include "CIAnalysis/CIStudies/interface/NLeptonsHist.hh"
+#include "CIAnalysis/CIStudies/interface/NLeptonJetHist.hh"
 #include "CIAnalysis/CIStudies/interface/PhotonsHist.hh"
 #include "CIAnalysis/CIStudies/interface/RecoveredInvariantMassHist.hh"
 #include "CIAnalysis/CIStudies/interface/SameSignInvariantMassHist.hh"
@@ -34,12 +35,16 @@ using std::make_shared;
 Analyzer backgroundEstimateAnalysis() {
   Analyzer analyzer;
 
+  auto higgsSelector = std::make_shared<SnowmassLeptonSelector>(50);
+  auto leptonJetSelector = std::make_shared<SnowmassLeptonSelector>(5);
+
   auto matchMod = make_shared<MatchingModule>();
   auto triggerMod = make_shared<TriggerModule>();
   auto weightMod = make_shared<WeightingModule>();
   auto lrWeightMod = make_shared<LRWeightModule>();
+  auto leptonJetRecoMod = make_shared<LeptonJetReconstructionModule>(.05, leptonJetSelector); 
 
-  auto nLeptonsFilter = make_shared<NLeptonsFilter>();
+  auto nLeptonsFilter = make_shared<NLeptonsFilter>(higgsSelector);
 
   auto unusualFinalStateFilter = make_shared<UnusualFinalStateFilter>();
   
@@ -48,17 +53,23 @@ Analyzer backgroundEstimateAnalysis() {
   auto nElectronsHist = make_shared<NLeptonsHist>(matchMod, "Matched Electrons", 10, 0, 10, 11);
   auto nMuonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
 
+  auto nLeptonJetHist = make_shared<NLeptonJetHist>(leptonJetRecoMod, "NLeptonJets", 10, 0, 10);
+
   auto leptonEfficiency = make_shared<LeptonEfficiency>(weightMod, matchMod);
 
   // auto genSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
   // Go up to 2000 - Andy, 09/02 - and make more bins. Modifications also made for picking files
-  auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "Reco Same Sign Invariant Mass", 1000, 0, 2000);
+  auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "Reco Same Sign Invariant Mass", 1000, 0, 2000, false, false, higgsSelector);
 
-  auto positiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Reco Invariant Mass Background", 100, 100, 0, 0, 1000, 1000);
+  auto positiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000, higgsSelector);
+
+  recoSameSignInvMassHist->addFilter(nLeptonsFilter);
+  positiveNegativeInvMassHist->addFilter(nLeptonsFilter);
 
   // Add the histogram(s) created above to histMod
   histMod->addHistogram(recoSameSignInvMassHist);
   histMod->addHistogram(positiveNegativeInvMassHist);
+  histMod->addHistogram(nLeptonJetHist);
 
   // Initialize triggers
   auto singleMuonTrigger = make_shared<SingleMuonTrigger>(50);
@@ -73,21 +84,19 @@ Analyzer backgroundEstimateAnalysis() {
   triggerMod->addTrigger(doubleElectronTrigger);
 
   // analyzer.addProductionModule(matchMod);
-  analyzer.addProductionModule(triggerMod);
+  //  analyzer.addProductionModule(triggerMod);
   analyzer.addProductionModule(weightMod);
   analyzer.addProductionModule(lrWeightMod);
+  analyzer.addProductionModule(leptonJetRecoMod);
 
   // Filters
   // 09/12: Add nLeptons filer 
-  analyzer.addFilterModule(nLeptonsFilter);
+  //analyzer.addFilterModule(nLeptonsFilter);
   //analyzer.addFilterModule(unusualFinalStateFilter);
 
   analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
   //analyzer.addAnalysisModule(eventDump);
   //analyzer.addAnalysisModule(leptonEfficiency);
-
-  auto selector = std::make_shared<SnowmassLeptonSelector>(50);
-  analyzer.getInputModule().setLeptonSelector(selector);
 
   return analyzer;
 }
