@@ -1,4 +1,4 @@
-//#include "CIAnalysis/CIStudies/interface/TDisplayText.h"
+#include "CIAnalysis/CIStudies/interface/TDisplayText.h"
 #include <iostream>
 #include "TObjString.h"
 #include "TDialogCanvas.h"
@@ -14,20 +14,21 @@ in module.cc,
 */
 
 
-// void TDisplayText::Browse(TBrowser* tb)
-// {    
-//     char const* value = GetString().Data();
+void TDisplayText::Browse(TBrowser* tb)
+{    
+    char const* value = GetString().Data();
 
-//     TPaveText *newString = new TPaveText(0, 0, 1, 1);
-//     std::string x = value;
+    TPaveText *newString = new TPaveText(0, 0, 1, 1);
+    std::string x = value;
 
-//     newString->AddText(x.c_str());
-//     newString->SetTextAlign(13);
-//     newString->SetTextColor(kBlack);
-//     newString->SetTextFont(82);
-//     newString->Draw();
-    
-    
-    
-    
-// }
+    //newString->Clear();
+    newString->AddText(x.c_str());
+    newString->SetTextAlign(13);
+    newString->SetTextColor(kBlack);
+    newString->SetTextFont(82);
+    newString->Draw();
+
+
+
+
+}
