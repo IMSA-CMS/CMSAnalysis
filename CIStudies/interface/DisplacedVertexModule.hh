@@ -5,6 +5,7 @@
 //#include "GenSimIdentificationModule.hh"
 //#include "RecoIdentificationModule.hh"
 #include "MatchingPairCollection.hh"
+#include "DataFormats/GeometrySurface/interface/Surface.h"
 
 #include "TLorentzVector.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
@@ -22,7 +23,9 @@ public:
   DisplacedVertexModule();
   virtual bool process() override;
 
-  void propagateTrack(reco::TrackRef track);
+  Surface::GlobalPoint propagateTrack(reco::TrackRef& track, float rmin);
+
+  double closestApproach(reco::TrackRef& t1, reco::TrackRef& t2);
 
 private:
   // const std::shared_ptr<RecoIdentificationModule> reco; 
