@@ -27,7 +27,7 @@ public:
 
     void setLeptonSelector(std::shared_ptr<Selector> selector) {leptonSelector = selector;}
 
-    ParticleCollection getLeptons(RecoLevel level, std::shared_ptr<Selector> selector = nullptr) const;
+    ParticleCollection getLeptons(RecoLevel level) const;
     // not sure this works
     ParticleCollection getParticles(RecoLevel level, Particle::Type particleType = Particle::Type::None,
     std::shared_ptr<Selector> selector = nullptr) const;

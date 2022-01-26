@@ -3,9 +3,8 @@
 #include "CIAnalysis/CIStudies/interface/Selector.hh"
 #include <iostream>
 
-LeptonJetReconstructionModule::LeptonJetReconstructionModule(double deltaRCut, std::shared_ptr<Selector> selector) :
-  DeltaRCut(deltaRCut),
-  leptonSelector(selector)
+LeptonJetReconstructionModule::LeptonJetReconstructionModule(double deltaRCut) :
+  DeltaRCut(deltaRCut)
 {
 }
 
@@ -13,7 +12,7 @@ bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
 {
   leptonJets.clear();
   //std::cout << "Lepton jet selector: " << leptonSelector << '\n';
-  const ParticleCollection& recoCandidates = getInput()->getLeptons(InputModule::RecoLevel::Reco, leptonSelector);
+  const ParticleCollection& recoCandidates = getInput()->getLeptons(InputModule::RecoLevel::Reco);
   std::vector<Particle> recoLeptons = recoCandidates.getParticles();
 
   while (recoLeptons.size() != 0) {
