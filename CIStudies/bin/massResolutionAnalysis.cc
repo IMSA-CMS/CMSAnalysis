@@ -8,7 +8,7 @@
 #include "CIAnalysis/CIStudies/interface/BarrelStateFilter.hh"
 #include "CIAnalysis/CIStudies/interface/MassBinFilter.hh"
 #include "CIAnalysis/CIStudies/interface/ResolutionModule.hh"
-//#include "CIAnalysis/CIStudies/interface/MassResolutionModule.hh"
+#include "CIAnalysis/CIStudies/interface/MassResolutionModule.hh"
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
 #include "CIAnalysis/CIStudies/interface/MassResolutionHist.hh"
 #include "CIAnalysis/CIStudies/interface/PtResolutionHist.hh"

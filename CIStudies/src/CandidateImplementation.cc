@@ -28,6 +28,12 @@ double CandidateImplementation::et() const
   return particle->et();
 }
 
+ double CandidateImplementation::isolation() const 
+ {
+   //This needs to be fixed
+   return 0;
+ }
+
 // double CandidateImplementation::eta() const
 // {
 //   checkIsNull();

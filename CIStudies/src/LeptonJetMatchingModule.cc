@@ -15,6 +15,11 @@ bool LeptonJetMatchingModule::process()
     matchingPairs.clear();
     std::vector<Particle> genSimParticles(getInput()->getLeptons(InputModule::RecoLevel::GenSim).getParticles());
     std::vector<LeptonJet> recoLeptonJets(lepJet->getLeptonJets());
+    std::vector<Particle> lJets;
+    for (LeptonJet lJet:recoLeptonJets)
+    {
+      lJets.push_back(lJet);
+    }
 
     genSize += genSimParticles.size();
     // std::cout << "Size of genSimParticles: " << genSimParticles.size() << "\n";
