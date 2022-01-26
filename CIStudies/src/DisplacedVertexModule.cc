@@ -14,6 +14,10 @@
 
 #include <iostream> 
 
+// TODO: Write distance(Muon m1, Muon m2, double radius) function
+// Radius is radius of the cylinder, find the distance between the two muons as they hit the cylinder.
+// Add radius parameters to the module 
+
 // --- Not currently working --- //
 
 /*
@@ -34,68 +38,96 @@ bool DisplacedVertexModule::process()
 
   for (auto& part : recoCandidates)
   {
-    auto particle = part.getUnderlyingParticle();
-    
-    auto muon = dynamic_cast<const pat::Muon*>(particle);
-
-    if (muon)
+    for(auto& part2 : recoCandidates)
     {
-      auto muonTrack = muon->track();
-      // auto muonTrack = muon->outerTrack();
-
-      if (!muonTrack) 
+      if(part2 == part)
       {
-        std::cout << "NO TRACK" << std::endl;
+        continue;
       }
       else
       {
-        propagateTrack(muonTrack);
+        auto particle = part.getUnderlyingParticle();
+        auto particle2 = part2.getUnderlyingParticle();
+    
+        auto muon = dynamic_cast<const pat::Muon*>(particle);
+        auto muon2 = dynamic_cast<const pat::Muon*>(particle2);
+
+        if (muon && muon2)
+        {
+          auto muonTrack = muon->track();
+          auto muonTrack2 = muon2->track();
+          // auto muonTrack = muon->outerTrack();
+
+          if (!muonTrack || !muonTrack2) 
+          {
+            std::cout << "NO TRACK" << std::endl;
+          }
+          else
+          {
+            try
+            {
+              muonTrack->innerPosition();
+              std::cout << "Closest Approach: " << closestApproach(muonTrack, muonTrack2) /* <-- exceptions */ << std::endl;
+            }
+            catch(edm::Exception& ex)
+            {
+              std::cout << "Something broke" << std::endl;
+              std::cout << ex.what() << std::endl;
+            }
+          }
+        }
+        else
+        {
+          // std::cout << "NOT A MUON" << std::endl; // Commented this line because it gets really annoying to look at.
+        }
       }
-    }
-    else
-    {
-      std::cout << "NOT A MUON" << std::endl;
     }
   }
 
   return true; 
 }
 
-void DisplacedVertexModule::propagateTrack(reco::TrackRef track)
+Surface::GlobalPoint DisplacedVertexModule::propagateTrack(reco::TrackRef& track, float rmin)
 {
+  Surface::GlobalPoint bestPoint;
+  std::cout << "Propagating Track." << std::endl;
   Surface::GlobalVector magneticFieldVector(0, 0, 4); // wrong magnetic field
-  
+  // std::cout << "Magnetic Field Vector" << std::endl;
+
   // Everything seems to need a regular Magnetic Field, but that's an abstract class?
   const UniformMagneticField* magneticField = new UniformMagneticField(magneticFieldVector);
-
+  // std::cout << "Magnetic field." << std::endl;
   /*
-  auto& outerPoint = track->outerPosition(); // should I be using this or referencePosition?
+  auto& outerPoint = track->outerPosition();
   auto& outerMomentum = track->outerMomentum();
 
   Surface::GlobalPoint trackPoint(outerPoint.x(), outerPoint.y(), outerPoint.z());
   Surface::GlobalVector trackMomentum(outerMomentum.x(), outerMomentum.y(), outerMomentum.z());
   */
 
-  auto& innerPoint = track->innerPosition(); // should I be using this or referencePosition?
+  auto& innerPoint = track->innerPosition(); // causes errors
+  std::cout << "Inner Position made." << std::endl;
   auto& innerMomentum = track->innerMomentum();
+  std::cout << "Position and momentum set." << std::endl;
 
   Surface::GlobalPoint trackPoint(innerPoint.x(), innerPoint.y(), innerPoint.z());
   Surface::GlobalVector trackMomentum(innerMomentum.x(), innerMomentum.y(), innerMomentum.z());
 
   std::cout << "INNER POINT --> " << innerPoint.x() << " " << innerPoint.y() << std::endl;
 
-  TrackCharge trackCharge = 1; // I assume this or -1?
+  TrackCharge trackCharge = 1; // I assume this or -1? Why assume in the first place?
 
   FreeTrajectoryState* muonTrajectory = new FreeTrajectoryState(trackPoint, trackMomentum, trackCharge, magneticField);
   std::cout << "fts X --> " << muonTrajectory->position().x() << std::endl;
-
+  
   AnalyticalPropagator* propagator = new AnalyticalPropagator(magneticField, oppositeToMomentum);
 
+  
+  
   const Cylinder::PositionType cylinderPos(0, 0, 0);
   const Cylinder::RotationType cylinderRot(1, 0, 0, 0, 1, 0, 0, 0, 1); // fix these, these types are confusing
   
-  float rmin = 2;
-  float rmax = 2.2;
+  float rmax = rmin + 0.1;
   float zmin = -50;
   float zmax = 50;
 
@@ -109,8 +141,65 @@ void DisplacedVertexModule::propagateTrack(reco::TrackRef track)
 
   // std::cout << "TSOS Position --> " << propagateWithPathTSOS.second << std::endl;
 
-  std::cout << "TSOS Position --> " << propagateWithPathTSOS.first.globalPosition().x() << " " << propagateWithPathTSOS.first.globalPosition().y() << std::endl; // seg faults
+  // To stop the segfaults, we just ignore the path and return a default each time it isn't valid.
+  if(!propagateWithPathTSOS.first.isValid()) {
+    std::cout << "Invalid Path" << std::endl;
+    return Surface::GlobalPoint();
+  }
+
+  std::cout << "TSOS Position --> " << /* seg faults here -> */ propagateWithPathTSOS.first.globalPosition().x() << " " << propagateWithPathTSOS.first.globalPosition().y() << std::endl;
+  bestPoint = propagateWithPathTSOS.first.globalPosition();
   // std::cout << "TSOS Position --> " << propagateWithPathTSOS.first.data() << std::endl;
+
+  return bestPoint;
+}
+
+double DisplacedVertexModule::closestApproach(reco::TrackRef& t1, reco::TrackRef& t2) {
+  std::vector<Surface::GlobalPoint> p1Tracks, p2Tracks;
+
+  double rmin = 2;
+
+  while(rmin > 0) {
+    Surface::GlobalPoint p1Add = propagateTrack(t1, rmin);
+    Surface::GlobalPoint p2Add = propagateTrack(t2, rmin);
+
+    // Since I'm not sure if there's a more efficient way to check this, to see if a
+    // track needs to be removed, we just check that it isn't the same as the default
+    // value of the propagateTrack method.
+    // 
+    // Note: != is not defined as an operator on Surface::GlobalPoint, while == is. Thus,
+    // the negation is performed as a separate operation.
+    if(!(p1Add == Surface::GlobalPoint()))
+    {
+      p1Tracks.push_back(p1Add);
+    }
+    else
+    {
+      std::cout << "Skipped p1 track. Radius: " << rmin << std::endl;
+    }
+
+    if(!(p2Add == Surface::GlobalPoint()))
+    {
+      p2Tracks.push_back(p2Add);
+    }
+    else
+    {
+      std::cout << "Skipped p2 track. Radius: " << rmin << std::endl;
+    }
+    
+    rmin -= 0.1;
+  }
+
+  double closestApproach = 100000;
+  for(Surface::GlobalPoint p1Track : p1Tracks) {
+    for(Surface::GlobalPoint p2Track : p2Tracks) {
+      double approach = (p1Track - p2Track).mag();
+      if(approach < closestApproach) {
+        closestApproach = approach;
+      }
+    }
+  }
+  return closestApproach;
 }
 
 /*
