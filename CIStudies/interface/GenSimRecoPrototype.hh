@@ -5,9 +5,6 @@
 
 #include <string>
 
-//class GenSimIdentificationModule;
-//class RecoIdentificationModule;
-
 class GenSimRecoPrototype : public HistogramPrototype1D
 {
   public:

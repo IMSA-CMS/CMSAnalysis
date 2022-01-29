@@ -131,6 +131,18 @@ ParticleCollection TreeEventFile::getRecoParticles() const
     //  std::cout << elec_size << std::endl;
     //  std::cout << muon_size << std::endl;
 
+    for (int i = 0; i < elec_size; i++)
+    {
+        if (elec_idpass[i] & 7)
+        {
+            // Lorentz four-vector
+            recoParticles.addParticle(Particle(
+                reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],
+                                                                            elec_eta[i], elec_phi[i], elec_mass[i])),
+                elec_charge[i], Particle::Type::Electron, elec_reliso[i]));
+        }
+    }
+
     for (int i = 0; i < muon_size; i++)
     {
         if (muon_idpass[i] & 4)
@@ -139,7 +151,7 @@ ParticleCollection TreeEventFile::getRecoParticles() const
             recoParticles.addParticle(Particle(
                 reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],
                                                                             muon_eta[i], muon_phi[i], muon_mass[i])),
-                muon_charge[i], Particle::Type::Muon));
+                muon_charge[i], Particle::Type::Muon, muon_reliso[i]));
         }
     }
 
