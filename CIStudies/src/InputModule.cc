@@ -7,22 +7,21 @@ InputModule::InputModule(const EventLoader *iEventLoader) : eventLoader(iEventLo
 {
 }
 
-ParticleCollection InputModule::getLeptons(RecoLevel level, std::shared_ptr<Selector> selector) const
+ParticleCollection InputModule::getLeptons(RecoLevel level) const
 {
     ParticleCollection leptons;
-    auto chosenSelector = selector ? selector : leptonSelector;
     auto electrons = getParticles(level, Particle::Type::Electron).getParticles();
     auto muons = getParticles(level, Particle::Type::Muon).getParticles();
     for (const auto &p : electrons)
     {
-        if (!chosenSelector || chosenSelector->checkParticle(p))
+        if (!leptonSelector || leptonSelector->checkParticle(p))
         {
             leptons.addParticle(p);
         }
     }
     for (const auto &p : muons)
     {
-        if (!chosenSelector || chosenSelector->checkParticle(p))
+        if (!leptonSelector || leptonSelector->checkParticle(p))
         {
             leptons.addParticle(p);
         }
