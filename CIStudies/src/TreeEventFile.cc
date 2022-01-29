@@ -102,28 +102,24 @@ ParticleCollection TreeEventFile::getGenSimParticles() const
             std::cout << elec_pt[i] << " " << elec_eta[i] << " " <<
              elec_phi[i] << " " << elec_mass[i] << std::endl;
         } */
-        int charge = 1;
-        if (gen_pid[i] < 0)
+        if(elec_idpass[i] & 4)
         {
-            charge = -1;
-        }
-        if (gen_pid[i] == 21 || gen_pid[i] == 22)
-        {
-            charge = 0;
-        }
-        Particle::Type type = Particle::Type::None;
-        if (std::abs(gen_pid[i]) == 11)
-        {
-            type = Particle::Type::Electron;
-        }
-        else if (std::abs(gen_pid[i]) == 13)
-        {
-            type = Particle::Type::Muon;
-        }
-        genParticles.addParticle(Particle(
+            int charge = 1;
+            if (gen_pid[i] < 0)
+            {
+                charge = -1;
+            }
+            if (gen_pid[i] == 21 || gen_pid[i] == 22)
+            {
+                charge = 0;
+            }
+                //std::cout << "Tree Event File: about to add particles\n";
+            genParticles.addParticle(Particle(
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i],
                                                                         gen_eta[i], gen_phi[i], gen_mass[i])),
-            charge, type));
+            charge, Particle::identifyType(gen_pid[i])));
+            //std::cout << "Tree Event File:" << genParticles.getNumParticles() << "\n";
+        }
     }
 
     return genParticles;
@@ -137,7 +133,7 @@ ParticleCollection TreeEventFile::getRecoParticles() const
 
     for (int i = 0; i < muon_size; i++)
     {
-        if (muon_idpass[i] & 7)
+        if (muon_idpass[i] & 4)
         {
             // Lorentz four-vector
             recoParticles.addParticle(Particle(

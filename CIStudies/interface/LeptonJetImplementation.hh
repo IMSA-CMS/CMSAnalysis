@@ -29,7 +29,7 @@ class LeptonJetImplementation : public ParticleImplementation
   // virtual bool isIsolated() const override {throw std::__throw_runtime_error;};
   virtual int pdgId() const override {throw std::__throw_runtime_error;};
   virtual int status() const override {throw std::__throw_runtime_error;};
-  virtual bool isNotNull() const override {return lJet != nullptr;}
+  virtual bool isNotNull() const override {return true;}//lJet;}
   virtual bool isFinalState() const override {return true;}
 
 

@@ -5,7 +5,7 @@
 LeptonJetImplementation::LeptonJetImplementation(std::shared_ptr<LeptonJet> iLJet) :
   lJet(iLJet)
 {
-  // std::cout << "Got to LJI\n";
+  //std::cout << "Got to LJI\n";
 }
 
 
@@ -16,9 +16,11 @@ reco::Candidate::LorentzVector LeptonJetImplementation::getFourVector() const
 
 bool LeptonJetImplementation::operator==(const ParticleImplementation& userParticle) const
 {
+    std::cout << "operator\n";
     try
     {
       auto candidateImp = dynamic_cast<const LeptonJetImplementation&>(userParticle);
+      std::cout << "operator try\n";
       return candidateImp.lJet == lJet;
     }
     catch(std::bad_cast&)
@@ -34,7 +36,7 @@ double LeptonJetImplementation::energy() const
 
 Particle::Type LeptonJetImplementation::getType() const
 {
-
+  std::cout << "LJI get type\n";
   return Particle::Type::LeptonJet;
 
 }
