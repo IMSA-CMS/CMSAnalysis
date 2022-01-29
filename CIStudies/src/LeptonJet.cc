@@ -11,6 +11,7 @@ reco::Candidate::LorentzVector LeptonJet::getFourVector() const
   for (auto particle : leptonJetParticles)
   {
     vector += particle.getFourVector();
+    //std::cout << "Lepton Jet:" << leptonJetParticles.size() << "\n";
   }
   return vector; // Does this have to be ROOT::Math::LorentzVector?
 }

@@ -27,9 +27,10 @@ bool MatchingModule::process()
   //std::cerr << "Hey, I'm in charge of names here" << std::endl;
 bool MatchingModule::match(std::vector<Particle> genSimParticles, std::vector<Particle> recoCandidates)
 {
+  std::cout << "Matching\n";
   while (!checkIsNull(genSimParticles) && !checkIsNull(recoCandidates))
     {
-      //std::cerr << "Loop starts" << std::endl;
+      std::cerr << "Loop starts" << std::endl;
       //start with a high value, only really needs to be higher than the cutoff delta R
       double deltaRMin = std::numeric_limits<double>::max();
 
@@ -171,10 +172,10 @@ bool MatchingModule::checkIsNull(std::vector<Particle> matching) const
   {
     if(particle.isNotNull())
     {
-      //std::cerr << "Particle is not null" << std::endl;
+      std::cerr << "Particle is not null" << std::endl;
       return false;
     }
   }  
-  //std::cerr << "Particle is null" << std::endl;
+  std::cerr << "Particle is null" << std::endl;
   return true;
 }

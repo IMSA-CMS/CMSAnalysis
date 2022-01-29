@@ -135,7 +135,7 @@ Analyzer leptonJetReconstructionAnalysis() {
   //analyzer.addProductionModule(matchMod);
   analyzer.addProductionModule(lepRecoMod);
   //analyzer.addProductionModule(genPartMod);
-  //analyzer.addProductionModule(lepMatchMod);
+  analyzer.addProductionModule(lepMatchMod);
 
   analyzer.addAnalysisModule(histOutputMod);
   //analyzer.addProductionModule(triggerMod);
