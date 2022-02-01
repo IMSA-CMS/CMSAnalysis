@@ -11,7 +11,7 @@ DoubleIsolatedMuonTrigger::DoubleIsolatedMuonTrigger(double iPTCutoff, double iS
 {
 }
 
-bool DoubleIsolatedMuonTrigger::checkTrigger(std::shared_ptr<InputModule> input)
+bool DoubleIsolatedMuonTrigger::checkTrigger(const InputModule* input)
 {
   auto particles = input->getParticles(InputModule::RecoLevel::Reco, Particle::Type::Muon);
 
@@ -26,11 +26,11 @@ bool DoubleIsolatedMuonTrigger::checkTrigger(std::shared_ptr<InputModule> input)
 
   for (const auto &particle : particles.getParticles())
   {
-    if (particle.pt() >= pTCutoff && particle.isIsolated())
+    if (particle.getPt() >= pTCutoff && particle.isIsolated())
     {
       passedFirstCut = true;
     }
-    else if (particle.pt() >= secondPTCutoff && particle.isIsolated())
+    else if (particle.getPt() >= secondPTCutoff && particle.isIsolated())
     {
       passedSecondCut = true;
     }

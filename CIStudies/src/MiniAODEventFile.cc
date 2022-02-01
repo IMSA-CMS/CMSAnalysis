@@ -1,29 +1,28 @@
-#include "CIAnalysis/CIStudies/interface/MiniAODEventLoader.hh"
+#include "CIAnalysis/CIStudies/interface/MiniAODEventFile.hh"
 #include "CIAnalysis/CIStudies/interface/InputModule.hh"
 #include "CIAnalysis/CIStudies/interface/Particle.hh"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Photon.h"
+#include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
 
-MiniAODEventLoader::MiniAODEventLoader(int outputEvery) : 
-EventLoader(outputEvery)
-{}
-
-void MiniAODEventLoader::newFile(TFile* ifile)
+MiniAODEventFile::MiniAODEventFile(TFile* ifile) : 
+EventFile(ifile)
 {
-    event = std::make_shared<fwlite::Event> (ifile);
+    event = std::make_shared<fwlite::Event> (getFile());
     std::cerr << "Events: " << event->size() << std::endl;
     setNumOfEvents(getNumOfEvents() + event->size());
     event->toBegin();
 }
 
-void MiniAODEventLoader::nextEvent()
+void MiniAODEventFile::nextEvent()
 {
     auto& eventRef = *event;
     ++(eventRef);
     setEventCount(getEventCount() + 1);
+    // std::cout << "next Event \n";
 }
 
 /*
@@ -35,14 +34,14 @@ std::vector<PileupSummaryInfo> MiniAODEventLoader::getPileupInfo() const
 }
 */
 
-GenEventInfoProduct MiniAODEventLoader::getGenInfo() const
+GenEventInfoProduct MiniAODEventFile::getGenInfo() const
 {
     edm::Handle<GenEventInfoProduct> genInfo;
     event->getByLabel(std::string("generator"), genInfo);
     return *genInfo;
 }
 
-ParticleCollection MiniAODEventLoader::getGenSimParticles() const
+ParticleCollection MiniAODEventFile::getGenSimParticles() const
 {
     ParticleCollection genParticles;
     edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
@@ -54,11 +53,12 @@ ParticleCollection MiniAODEventLoader::getGenSimParticles() const
     return genParticles;
 }
 
-ParticleCollection MiniAODEventLoader::getRecoParticles() const
+ParticleCollection MiniAODEventFile::getRecoParticles() const
 {
+    // std::cout << "get reco particles \n";
     ParticleCollection recoParticles;
     //This seems problematic
-    
+        
 
         edm::Handle<std::vector<pat::Electron>> electrons;
         event->getByLabel(std::string("slimmedElectrons"), electrons);
@@ -83,10 +83,25 @@ ParticleCollection MiniAODEventLoader::getRecoParticles() const
 	    {       
 	        recoParticles.addParticle(Particle(&p));
         }
+        // std::cout << "made it through mini aod reco particles \n";
         return recoParticles;
 }
 
-double MiniAODEventLoader::getMET() const
+ParticleCollection MiniAODEventFile::getRecoJets() const
+{
+    ParticleCollection recoParticles;
+
+        edm::Handle<std::vector<pat::Jet>> jets;
+        event->getByLabel(edm::InputTag("slimmedJets"), jets);
+
+        for (const auto& j : *jets)
+	    {       
+	        recoParticles.addParticle(Particle(&j));
+        }
+        return recoParticles;
+}
+
+double MiniAODEventFile::getMET() const
 {
     edm::Handle<std::vector<pat::MET>> mets;
     event->getByLabel(edm::InputTag("slimmedMETs"), mets);
@@ -98,19 +113,32 @@ double MiniAODEventLoader::getMET() const
 
 }
 
-// edm::TriggerResults MiniAODEventLoader::getTriggerResults(std::string subProcess) const
-// {
-//     edm::Handle<edm::TriggerResults> triggerResults;
-//     event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
-//     return triggerResults;
-// }
+std::vector<bool> MiniAODEventFile::getTriggerResults(std::string subProcess) const
+{
+    edm::Handle<edm::TriggerResults> triggerResults;
+    event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
+    std::vector<bool> v_results = {};
+    for (unsigned int i = 0; i < triggerResults->size(); i++)
+    {
+        v_results.push_back(triggerResults->accept(i));
+    }
+    return v_results;
+}
 
-// edm::TriggerNames MiniAODEventLoader::getTriggerNames(std::string subProcess) const
-// {
-//     return event->triggerNames(*getTriggerResults(subProcess));
-// }
+std::vector<std::string> MiniAODEventFile::getTriggerNames(std::string subProcess) const
+{
+    edm::Handle<edm::TriggerResults> triggerResults;
+    event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
+    const edm::TriggerNames names = event->triggerNames(*triggerResults);
+    std::vector<std::string> v_names = {};
+    for (unsigned int i = 0; i < names.size(); i++)
+    {
+        v_names.push_back(names.triggerName(i));
+    }
+    return v_names;
+}
 
-bool MiniAODEventLoader::isDone() const
+bool MiniAODEventFile::isDone() const
 {
     return event->atEnd();
 }

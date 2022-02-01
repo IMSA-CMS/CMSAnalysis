@@ -9,7 +9,8 @@
 #include "CIAnalysis/CIStudies/interface/MatchingModule.hh"
 #include "CIAnalysis/CIStudies/interface/LeptonEfficiency.hh"
 
-LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<MatchingModule> imatchModule):
+LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<WeightingModule> weightMod, const std::shared_ptr<MatchingModule> imatchModule):
+  EfficiencyModule(weightMod),
   matchModule(imatchModule)
   //,genSimModule(igenSimModule)
   ,recoMuons(0)
@@ -21,7 +22,7 @@ LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<MatchingModule> imatchM
 
 bool LeptonEfficiency::process()
 {
-  auto genSim = getInput()->getParticles(InputModule::RecoLevel::GenSim);
+  auto genSim = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
 
   // std::cout << "Looking at GenSim Particles" << std::endl;
   for(const auto &particle : genSim.getParticles())

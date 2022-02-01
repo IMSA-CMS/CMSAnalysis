@@ -5,8 +5,6 @@
 #include "ProductionModule.hh"
 #include "LeptonJet.hh"
 
-//class RecoIdentificationModule;
-
 class LeptonJetReconstructionModule : public ProductionModule
 {
 public:
@@ -16,19 +14,17 @@ public:
   const std::vector<double>& getDeltaRValues() const {return deltaRValues;}
   const std::vector<double>& getPtValues() const {return pTValues;}
 
-private:  
+private:
   LeptonJet createLeptonJet(Particle highestPtLepton) const;
   Particle findHighestPtLepton(std::vector<Particle> particles) const;
   void findDeltaRValues();
   void findPtValues();
 
-  //std::shared_ptr<RecoIdentificationModule> reco;
   std::vector<LeptonJet> leptonJets;
   std::vector<double> deltaRValues;
   std::vector<double> pTValues;
 
   double DeltaRCut;
-
 };
 
 #endif

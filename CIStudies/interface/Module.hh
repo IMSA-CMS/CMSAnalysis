@@ -18,7 +18,7 @@ class InputModule;
 class Module
 {
 public:
-  virtual ~Module() {}
+  virtual ~Module();
 
   // This is called once before any files are accessed
   // Used to set up objects such as histograms
@@ -44,7 +44,7 @@ public:
   static FileParams getFileParams() {return currentParams;}
 
   bool processEvent();
-  virtual void setInput(std::shared_ptr<InputModule> iInput) {input = iInput;}
+  virtual void setInput(const InputModule* iInput) {input = iInput;}
 
   void writeText(std::string par, std::string name) const;
 
@@ -55,13 +55,13 @@ protected:
   // if you are deliberately filtering events.
   // In most cases, you should return true.
   virtual bool process() = 0;
-  std::shared_ptr<InputModule> getInput() const {return input;}
+  const InputModule* getInput() const {return input;}
 
 private:
   static std::unordered_map<std::string, double> parameters;
   std::unordered_map<std::string, int> eventCount; 
   static FileParams currentParams;
-  std::shared_ptr<InputModule> input = nullptr;
+  const InputModule* input = nullptr;
 };
 
 #endif

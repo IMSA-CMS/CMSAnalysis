@@ -14,8 +14,8 @@ MatchingPair::MatchingPair(Particle bestGenParticle, Particle bestRecoParticle) 
 
 double MatchingPair::getDeltaPhi() const
 {
-  double recoPhi = recoParticle.phi();
-  double genPhi = genParticle.phi();
+  double recoPhi = recoParticle.getPhi();
+  double genPhi = genParticle.getPhi();
   const double pi = 3.1415926535897932384;
 
   double actualPhiDif = recoPhi - genPhi;
@@ -32,8 +32,8 @@ double MatchingPair::getDeltaPhi() const
 
 double MatchingPair::getDeltaR() const
 {
-  double recoEta = recoParticle.eta();
-  double genEta = genParticle.eta();
+  double recoEta = recoParticle.getEta();
+  double genEta = genParticle.getEta();
   double etaDif = recoEta - genEta;
 
   double phiDif = getDeltaPhi();
@@ -43,12 +43,12 @@ double MatchingPair::getDeltaR() const
 
 double MatchingPair::getPtError() const
 {
-  return calculateError(recoParticle.pt(), genParticle.pt());
+  return calculateError(recoParticle.getPt(), genParticle.getPt());
 }
 
 double MatchingPair::getEtaError() const
 {
-  return calculateError(recoParticle.eta(), genParticle.eta());
+  return calculateError(recoParticle.getEta(), genParticle.getEta());
 }
 
 double MatchingPair::calculateError(double exp, double theo) const

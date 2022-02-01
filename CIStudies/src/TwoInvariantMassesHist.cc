@@ -1,4 +1,5 @@
 #include "CIAnalysis/CIStudies/interface/TwoInvariantMassesHist.hh"
+#include "CIAnalysis/CIStudies/interface/Selector.hh"
 
 TwoInvariantMassesHist::TwoInvariantMassesHist(const std::string& iname, int iNBinsX, int iNBinsY, double iMinX, double iMinY, double iMaxX, double iMaxY) :
   HistogramPrototype2D(iname, iNBinsX, iNBinsY, iMinX, iMinY, iMaxX, iMaxY)
@@ -7,7 +8,7 @@ TwoInvariantMassesHist::TwoInvariantMassesHist(const std::string& iname, int iNB
 
 std::vector<std::pair<double, double>> TwoInvariantMassesHist::value2D() const
 {
-  auto invMasses = getInput()->getParticles(InputModule::RecoLevel::Reco).calculateSameSignInvariantMasses();
+  auto invMasses = getInput()->getLeptons(InputModule::RecoLevel::Reco).calculateSameSignInvariantMasses();
 
   if (invMasses.size() != 2)
   {
