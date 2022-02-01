@@ -29,7 +29,7 @@ void UnmatchedParticleModule::initialize()
 
 bool UnmatchedParticleModule::process()
 {
-  auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim);
+  auto genParticles = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
   auto genParticlesVector = genParticles.getParticles();
 
 
@@ -44,7 +44,7 @@ bool UnmatchedParticleModule::process()
 	  bool isMatched = false;
 
 	  auto collinsSoper = genParticles.getCollinsSoper();
-	  auto eta = genParticle.eta();
+	  auto eta = genParticle.getEta();
 
 	  auto EtaCSHist = dynamic_cast<TH2*>(getObject("EtaCSHist"));
 	  EtaCSHist->Fill(collinsSoper, eta);
@@ -60,11 +60,11 @@ bool UnmatchedParticleModule::process()
 	  
 	  if (!isMatched)
 	    {
-	      fillHistogram("UnmatchedParticleEta", {genParticle.eta()});
+	      fillHistogram("UnmatchedParticleEta", {genParticle.getEta()});
 	    }
 	  else
 	    {
-	      fillHistogram("MatchedParticleEta", {genParticle.eta()});
+	      fillHistogram("MatchedParticleEta", {genParticle.getEta()});
 	    }
 	}
     }

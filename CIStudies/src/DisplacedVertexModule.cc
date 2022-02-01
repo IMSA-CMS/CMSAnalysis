@@ -30,33 +30,33 @@ DisplacedVertexModule::DisplacedVertexModule()
 
 bool DisplacedVertexModule::process()
 {
-  std::vector<Particle> recoCandidates(getInput()->getParticles(InputModule::RecoLevel::Reco).getParticles());
+  std::vector<Particle> recoCandidates(getInput()->getLeptons(InputModule::RecoLevel::Reco).getParticles());
 
-  for (auto& part : recoCandidates)
-  {
-    auto particle = part.getUnderlyingParticle();
+//   for (auto& part : recoCandidates)
+//   {
+//     auto particle = part.getUnderlyingParticle();
     
-    auto muon = dynamic_cast<const pat::Muon*>(particle);
+//     auto muon = dynamic_cast<const pat::Muon*>(particle);
 
-    if (muon)
-    {
-      auto muonTrack = muon->track();
-      // auto muonTrack = muon->outerTrack();
+//     if (muon)
+//     {
+//       auto muonTrack = muon->track();
+//       // auto muonTrack = muon->outerTrack();
 
-      if (!muonTrack) 
-      {
-        std::cout << "NO TRACK" << std::endl;
-      }
-      else
-      {
-        propagateTrack(muonTrack);
-      }
-    }
-    else
-    {
-      std::cout << "NOT A MUON" << std::endl;
-    }
-  }
+//       if (!muonTrack) 
+//       {
+//         std::cout << "NO TRACK" << std::endl;
+//       }
+//       else
+//       {
+//         propagateTrack(muonTrack);
+//       }
+//     }
+//     else
+//     {
+//       std::cout << "NOT A MUON" << std::endl;
+//     }
+//   }
 
   return true; 
 }

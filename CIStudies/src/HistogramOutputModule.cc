@@ -21,6 +21,7 @@ HistogramOutputModule::HistogramOutputModule(const std::shared_ptr<WeightingModu
   weighting(weightingModule),
   lrWeighting(lrWeightModule)
 {
+  // std::cout << " Made it to Histogram output module\n";
 }
 
 void HistogramOutputModule::writeAll()
@@ -52,7 +53,7 @@ void HistogramOutputModule::writeAll()
     }
 }
 
-void HistogramOutputModule::setInput(std::shared_ptr<InputModule> iInput)
+void HistogramOutputModule::setInput(const InputModule* iInput)
 {
   Module::setInput(iInput);
   for (auto hist : histograms)
@@ -191,6 +192,7 @@ void HistogramOutputModule::addObjectClone(const std::string& oldName,
 
 bool HistogramOutputModule::process()
 {
+  // std::cout << " Made it to HOM process\n";
   // std::cout << "Process\n";
 
   std::string massBin = getFileParams().getMassRange();
@@ -219,6 +221,7 @@ bool HistogramOutputModule::process()
     // If the mass bin is a new mass bin, then make the histograms for that mass bin
     if (isNewMassBin(massBin))
       {
+        //std::cout << "Process if one\n";
         auto weight = weighting->getWeight();
         auto fileKey = getFileParams().getFileKey();
     
@@ -237,6 +240,7 @@ bool HistogramOutputModule::process()
     // If the histogram with mass bin doesn't exist, make it
     if (baseObjects.find(hist->getFilteredName() + massBin) == baseObjects.end())
       {
+        // std::cout << "Process if two\n";
         // Uncommented two lines to debug
         // std::cout << "Name: " << hist->getName() << '\n';
         // std::cout << "FilteredName: " << hist->getFilteredName() << '\n';
@@ -251,6 +255,7 @@ bool HistogramOutputModule::process()
     // If the histogram without mass bin doesn't exist, make it
     if (baseObjects.find(hist->getFilteredName()) == baseObjects.end())
       {
+        // std::cout << "Process if 3\n";
         // std::cout << "Name: " << hist->getName() << '\n';
         // std::cout << "FilteredName: " << hist->getFilteredName() << '\n';
         // std::cout << "Mass Bin: " << massBin << '\n';
@@ -261,6 +266,7 @@ bool HistogramOutputModule::process()
     // Fill the histogram if the filter string isn't empty
     if (hist->getName() != hist->getFilteredName()) // If the filter string is empty, then the name and the filtered name should be the same
       {
+        // std::cout << "process if 4\n";
          //std::cout << "Name: " << hist->getName() << '\n';
          //std::cout << "FilteredName: " << hist->getFilteredName() << '\n';
          //std::cout << "Mass Bin: " << massBin << '\n';
@@ -274,6 +280,7 @@ bool HistogramOutputModule::process()
     //std::cerr << "dunkin donuts" << std::endl;
     if (draw)
       {
+        // std::cout << "Process if 5\n";
         // std::cout << "Histogram Filled: " << hist->getFilteredName() + massBin << '\n' << "Value: " << hist->value() << '\n';
         fillHistogram(hist->getFilteredName() + massBin, hist->value(), eventWeight);
       }
@@ -327,7 +334,7 @@ void HistogramOutputModule::finalize()
                 // std::cout << pair.first << "\n";
               }
 
-              std::cout << "Erasing " << pair.first + massBin.first << "\n";
+              //std::cout << "Erasing " << pair.first + massBin.first << "\n";
             
               auto len = (pair.first).length();
               // std::cout << len << std::endl;
