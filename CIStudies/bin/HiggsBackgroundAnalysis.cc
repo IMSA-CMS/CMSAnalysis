@@ -23,6 +23,8 @@
 #include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
 #include "CIAnalysis/CIStudies/interface/TwoInvariantMassesHist.hh"
 #include "CIAnalysis/CIStudies/interface/WeightingModule.hh"
+#include "CIAnalysis/CIStudies/interface/BJetFilter.hh"
+
 
 using std::make_shared;
 
@@ -35,6 +37,7 @@ Analyzer higgsBackgroundAnalysis()
   auto weightMod = make_shared<WeightingModule>();
   auto lrWeightMod = make_shared<LRWeightModule>();
   auto metMod = make_shared<METModule>();
+  auto bJetFilter = make_shared<BJetFilter>();
 
   auto nLeptonsFilter = make_shared<NLeptonsFilter>();
  
@@ -72,6 +75,7 @@ Analyzer higgsBackgroundAnalysis()
   analyzer.addProductionModule(weightMod);
   analyzer.addProductionModule(lrWeightMod);
   analyzer.addProductionModule(metMod);
+  analyzer.addFilterModule(bJetFilter);
 
   analyzer.addFilterModule(nLeptonsFilter);
 

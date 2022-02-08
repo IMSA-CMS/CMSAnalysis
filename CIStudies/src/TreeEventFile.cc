@@ -44,6 +44,7 @@ void TreeEventFile::initialize()
     tree->SetBranchAddress(getTreeBranches().jetPhi.c_str(), &jet_phi);
     tree->SetBranchAddress(getTreeBranches().jetMass.c_str(), &jet_mass);
     tree->SetBranchAddress(getTreeBranches().jetPT.c_str(), &jet_pt);
+    tree->SetBranchAddress(getTreeBranches().bJet.c_str(), &bJet);
 
     tree->SetBranchAddress(getTreeBranches().genSize.c_str(), &gen_size);
     tree->SetBranchAddress(getTreeBranches().genPid.c_str(), &gen_pid);
@@ -102,24 +103,23 @@ ParticleCollection TreeEventFile::getGenSimParticles() const
             std::cout << elec_pt[i] << " " << elec_eta[i] << " " <<
              elec_phi[i] << " " << elec_mass[i] << std::endl;
         } */
-        if(elec_idpass[i] & 4)
+        
+        int charge = 1;
+        if (gen_pid[i] < 0)
         {
-            int charge = 1;
-            if (gen_pid[i] < 0)
-            {
-                charge = -1;
-            }
-            if (gen_pid[i] == 21 || gen_pid[i] == 22)
-            {
-                charge = 0;
-            }
+            charge = -1;
+        }
+        if (gen_pid[i] == 21 || gen_pid[i] == 22)
+        {
+            charge = 0;
+        }
                 //std::cout << "Tree Event File: about to add particles\n";
-            genParticles.addParticle(Particle(
-            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i],
+        genParticles.addParticle(Particle(
+        reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i],
                                                                         gen_eta[i], gen_phi[i], gen_mass[i])),
             charge, Particle::identifyType(gen_pid[i])));
             //std::cout << "Tree Event File:" << genParticles.getNumParticles() << "\n";
-        }
+        
     }
 
     return genParticles;
@@ -145,7 +145,7 @@ ParticleCollection TreeEventFile::getRecoParticles() const
 
     for (int i = 0; i < muon_size; i++)
     {
-        if (muon_idpass[i] & 4)
+        if (muon_idpass[i] & 7)
         {
             // Lorentz four-vector
             recoParticles.addParticle(Particle(
@@ -161,11 +161,14 @@ ParticleCollection TreeEventFile::getRecoParticles() const
 ParticleCollection TreeEventFile::getRecoJets() const
 {
     ParticleCollection recoParticles;
+    //There are better ways to do this, change later
     for(int i = 0; i < jet_size; i++) {
+        if(bJet[i] > 0){
         // Lorentz four-vector
-        recoParticles.addParticle(Particle(
+            recoParticles.addParticle(Particle(
             reco::Candidate::LorentzVector(jet_pt[i], jet_eta[i], 
-            jet_phi[i], jet_mass[i]), 0, Particle::Type::Jet));        
+            jet_phi[i], jet_mass[i]), 0, Particle::Type::Jet));    
+        }    
     }
     return recoParticles;
 }
