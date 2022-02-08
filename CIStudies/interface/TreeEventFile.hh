@@ -47,6 +47,7 @@ class TreeEventFile : public EventFile
             std::string jetPhi;
             std::string jetMass;
             std::string jetPT;
+            std::string bJet;
 
             std::string genSize;
             std::string genPid;
@@ -103,6 +104,7 @@ class TreeEventFile : public EventFile
         Float_t jet_phi[MAXMEC];
         Float_t jet_mass[MAXMEC];
         Float_t jet_pt[MAXMEC];
+        Int_t bJet[MAXMEC];
 
         Int_t gen_size;
         Int_t gen_pid[MAXMC];
