@@ -23,7 +23,7 @@ class EventLoaderInputModule : public InputModule
 
         virtual ParticleCollection getLeptons(RecoLevel level) const override;
         virtual ParticleCollection getParticles(RecoLevel level, Particle::Type particleType = Particle::Type::None,
-        virtual std::shared_ptr<Selector> selector = nullptr) const override;
+        std::shared_ptr<Selector> selector = nullptr) const override;
         virtual ParticleCollection getJets(RecoLevel level, double pTCut = 0) const override;
 
         virtual GenEventInfoProduct getGenInfo() const override;
