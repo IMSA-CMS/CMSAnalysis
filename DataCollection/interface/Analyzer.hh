@@ -49,7 +49,7 @@ private:
   std::vector<std::shared_ptr<AnalysisModule>> analysisModules;
 
   EventLoader eventLoader;
-  InputModule input;
+  EventLoaderInputModule input;
 
   // Parse one line of the the configuration file
   std::vector<std::string> parseLine(std::ifstream& txtFile) const;
