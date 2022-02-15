@@ -12,6 +12,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include "CIAnalysis/CIStudies/interface/TDisplayText.h"
 // #include <cmath>
 
 // #include "Minuit2/Minuit2Minimizer.h"

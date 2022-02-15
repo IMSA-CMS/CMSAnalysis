@@ -1,5 +1,6 @@
 #include "CIAnalysis/CIStudies/interface/PhotonsHist.hh"
 #include "CIAnalysis/CIStudies/interface/GenSimRecoPrototype.hh"
+#include "DataFormats/Math/interface/deltaPhi.h"
 
 #include <vector>
 

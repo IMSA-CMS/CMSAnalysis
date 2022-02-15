@@ -14,7 +14,6 @@ Analyzer filestripAnalysis()
     Analyzer analyzer;
 
     //auto filestripMod = make_shared<FilestripModule>();
-<<<<<<< HEAD
     auto leptonJetRecoModule = make_shared<LeptonJetReconstructionModule>(0.05);
     auto leptonJetMatchModule = make_shared<LeptonJetMatchingModule>(leptonJetRecoModule, 0.05);
     auto dataStripModule = make_shared<DataStripModule>("LeptonJetData.root", leptonJetRecoModule, leptonJetMatchModule);
@@ -24,10 +23,6 @@ Analyzer filestripAnalysis()
     analyzer.addProductionModule(leptonJetRecoModule);
     analyzer.addProductionModule(leptonJetMatchModule);
     analyzer.addAnalysisModule(dataStripModule);
-=======
-
-    //analyzer.addAnalysisModule(filestripMod);
->>>>>>> 24c4256d1208cc385a5999832387c253248dfd04
     
     return analyzer;
 }

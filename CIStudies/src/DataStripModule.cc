@@ -26,6 +26,9 @@ matchmod(iMatchmod)
         treeId->Branch("phi", &phi, "phi/F");
         treeId->Branch("eta", &eta, "eta/F");
         treeId->Branch("mass", &mass, "mass/F");
+        treeId->Branch("deltaR", &deltaR, "deltaR/F");
+        //add delta R
+
         std::cout << treeId->GetListOfBranches();
     }
 }
@@ -46,6 +49,7 @@ bool DataStripModule::process()
 {
     auto leptonJets = recomod->getLeptonJets();
     auto matchedLeptonJets = matchmod->getMatchingPairs();
+
     int jetIterator = 0;
 
     for(const auto& leptonJet : leptonJets)
@@ -56,6 +60,14 @@ bool DataStripModule::process()
             phi = leptonJet.getPhi();
             eta = leptonJet.getEta();
             mass = leptonJet.getMass();
+
+            double drAvg = 0;
+            for (Particle p : leptonJet.getParticles())
+            {
+                drAvg += leptonJet.getDeltaR(p);
+            }
+            drAvg /= leptonJet.getNumParticles();
+            deltaR = drAvg;
 
             bool isMatched = false;
             for(const auto& matchedJet : matchedLeptonJets)
@@ -79,4 +91,5 @@ bool DataStripModule::process()
 
     //std::cout<<std::to_string(leptonJets.size()).length();
     return true;
+    
 }
