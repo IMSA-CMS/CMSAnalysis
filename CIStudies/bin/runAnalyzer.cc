@@ -53,28 +53,22 @@ int main(int argc, char **argv) {
 
   unsigned outputEvery = parser.integerValue("outputEvery");
 
-<<<<<<< HEAD
   //Analyzer analyzer = hPlusPlusMassAnalysis();
-=======
   // USING ANALYER FOR H++ THAT WON'T CHANGE: CHANGE BACK
   // TO hPlusPlusMassAnalysis() when ready -- [09/17]
   //Analyzer analyzer = leptonJetBackgroundAnalysis();
->>>>>>> 24c4256d1208cc385a5999832387c253248dfd04
   // Analyzer analyzer = massResolutionAnalysis();
   //Analyzer analyzer = leptonJetReconstructionAnalysis();
   // Analyzer analyzer = displacedVertexAnalysis();
   // Analyzer analyzer = massAcceptanceAnalysis();
-<<<<<<< HEAD
   // Analyzer analyzer = triggerAnalysis();
   // Analyzer analyzer = invariantMassAnalysis();
   Analyzer analyzer = filestripAnalysis();
 
-=======
   //Analyzer analyzer = massAcceptanceAnalysis();
   //Analyzer analyzer = triggerAnalysis();
   //Analyzer analyzer = invariantMassAnalysis();
-  Analyzer analyzer = higgsBackgroundAnalysis();
->>>>>>> 24c4256d1208cc385a5999832387c253248dfd04
+  //Analyzer analyzer = higgsBackgroundAnalysis();
 
   if (inputFile.empty())
   {

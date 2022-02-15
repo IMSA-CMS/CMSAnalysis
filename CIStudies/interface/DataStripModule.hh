@@ -32,6 +32,7 @@ class DataStripModule : public AnalysisModule
         Float_t phi;
         Float_t eta;
         Float_t mass;
+        Float_t deltaR;
 
         const std::shared_ptr<LeptonJetReconstructionModule> recomod;
         const std::shared_ptr<LeptonJetMatchingModule> matchmod;
