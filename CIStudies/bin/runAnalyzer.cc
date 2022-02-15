@@ -11,9 +11,10 @@
 //#include "CIAnalysis/CIStudies/bin/leptonJetReconstructionAnalysis.cc"
 //#include "CIAnalysis/CIStudies/bin/displacedVertexAnalysis.cc"
 //#include "CIAnalysis/CIStudies/bin/massAcceptanceAnalysis.cc"
-#include "CIAnalysis/CIStudies/bin/triggerAnalysis.cc"
-#include "CIAnalysis/CIStudies/bin/invariantMassAnalysis.cc"
+//#include "CIAnalysis/CIStudies/bin/triggerAnalysis.cc"
+//#include "CIAnalysis/CIStudies/bin/invariantMassAnalysis.cc"
 //#include "CIAnalysis/CIStudies/bin/FilestripAnalysis.cc"
+#include "CIAnalysis/CIStudies/bin/BackgroundEstimateAnalysis.cc"
 
 int main(int argc, char **argv) {
   gROOT->SetBatch(true);
@@ -53,9 +54,10 @@ int main(int argc, char **argv) {
   //Analyzer analyzer = displacedVertexAnalysis();
   //Analyzer analyzer = massAcceptanceAnalysis();
   //Analyzer analyzer = massAcceptanceAnalysis();
-  Analyzer analyzer = triggerAnalysis();
+  //Analyzer analyzer = triggerAnalysis();
   //Analyzer analyzer = invariantMassAnalysis();
   //Analyzer analyzer = backgroundEstimateAnalysis();
+  Analyzer analyzer = backgroundEstimateAnalysis();
 
   std::cout << "Notice: analyzer created" << std::endl;
 
