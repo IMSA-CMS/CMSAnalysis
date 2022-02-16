@@ -42,7 +42,6 @@ Analyzer displacedVertexAnalysis()
   auto singleIsolatedMuonTrigger = make_shared<SingleIsolatedMuonTrigger>(24);
   auto doubleIsolatedMuonTrigger = make_shared<DoubleIsolatedMuonTrigger>(17, 8);
 
-
   // Add Triggers to the TriggerModule
   triggerMod->addTrigger(metTrigger);
   triggerMod->addTrigger(singleMuonTrigger);
