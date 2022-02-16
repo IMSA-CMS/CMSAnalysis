@@ -136,10 +136,10 @@ void superimpose(){
   // string file13 = "leftHiggsVEV0Mass300SameFlavorPairsAnalyzed.root";
   // string file14 = "leftHiggsVEV0Mass500SameFlavorPairsAnalyzed.root";
   // string file15 = "leftHiggsVEV0Mass800SameFlavorPairsAnalyzed.root";
-  // string file16 = "leftHiggsVEV0Mass1300SameFlavorPairsAnalyzed.root";
+  string file16 = "a.root";
 
-  // string file17 = "PhotonsHist.root";
-  string file18 = "output.root";
+  string file17 = "b.root";
+  string file18 = "c.root";
   
 
   // string hist1 = "Dimuon/Muon+ pt High";
@@ -159,10 +159,10 @@ void superimpose(){
   // string hist8 = "Quadlepton/Invariant mass";
   // string hist9 = "Quadlepton/Invariant mass OSDL";
 
-  string hist10 = "Reco Photon Histogram";
-  string hist11 = "Reco Same Sign Invariant Mass";
-  string hist12 = "Gen Sim Photon Histogram";
-  string hist13 = "Gen Same Sign Invariant Mass";
+  //string hist10 = "Reco Photon Histogram";
+  string hist11 = "4same_Sign_Invariant_Mass";
+  string hist12 = "2same_Sign_Invariant_Mass";
+  string hist13 = "2same_Sign_Invariant_Mass";
 
  
   
@@ -170,8 +170,8 @@ void superimpose(){
     {
       Image(.4, "GeV", "Events", "Invariant Mass Hist", kCool
 	    ,vector<Plot> {
-		Plot(file18, hist13, kBlue, "Same Sign Invariant Mass Hist (Gen)")
-		,Plot(file18, hist12, kRed, "Photons Hist Using Delta Phi (Gen)")
+		Plot(file16, hist11, kBlue, "Same Sign Invariant Mass Higgs1100")
+		,Plot(file17, hist12, kRed, "Same Sign Invariant Mass DY50"),Plot(file18, hist13, kGreen, "Same Sign Invariant Mass QCD2000")
    })
 	//  ,Image(.4, "GeV", "Events", "Invariant Mass Hist", kCool
 	//        ,vector<Plot> {
