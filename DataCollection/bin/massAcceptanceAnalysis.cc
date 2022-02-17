@@ -29,22 +29,19 @@ Analyzer massAcceptanceAnalysis()
   auto matchMod = make_shared<MatchingModule>();
   auto weightMod = make_shared<WeightingModule>();
   auto lrWeightMod = make_shared<LRWeightModule>(); 
+  auto signFlipMod = make_shared<SignFlipModule>(matchMod);
 
   auto histMod = make_shared<HistogramOutputModule>(weightMod, lrWeightMod);
   auto totalEventsHist = make_shared<TotalEventsHist>("Mass vs Total Events", 200, 0, 3000);
 
 
-  auto acceptedEventsHist = make_shared<CIAcceptedEventsHist>(matchMod,  "Mass vs Accepted Events", 200, 0, 3000);
-  auto acceptanceHistTemplate = make_shared<CIAcceptedEventsHist>(matchMod, "Mass vs Acceptance", 200, 0, 3000);
-
   // Add the histogram(s) created above to histMod
   histMod->addHistogram(totalEventsHist);
-  histMod->addHistogram(acceptedEventsHist);
-  histMod->addHistogram(acceptanceHistTemplate);
 
   analyzer.addProductionModule(matchMod);
   analyzer.addProductionModule(weightMod);
   analyzer.addProductionModule(lrWeightMod);
+  analyzer.addAnalysisModule(signFlipMod);
 
   analyzer.addAnalysisModule(histMod);
   return analyzer;
