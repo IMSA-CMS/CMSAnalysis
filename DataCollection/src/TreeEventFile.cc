@@ -102,10 +102,14 @@ ParticleCollection TreeEventFile::getGenSimParticles() const
             std::cout << elec_pt[i] << " " << elec_eta[i] << " " <<
              elec_phi[i] << " " << elec_mass[i] << std::endl;
         } */
-        int charge = 1;
+
+        // This is specific to leptons
+        // NEEDS TO BE CHANGED TO BE MORE ROBUST
+
+        int charge = -1;
         if (gen_pid[i] < 0)
         {
-            charge = -1;
+            charge = 1;
         }
         if (gen_pid[i] == 21 || gen_pid[i] == 22)
         {

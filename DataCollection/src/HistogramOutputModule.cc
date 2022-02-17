@@ -290,25 +290,25 @@ bool HistogramOutputModule::process()
 void HistogramOutputModule::finalize()
 {
 
-   std::cout << "Finalize\n";
+  // std::cout << "Finalize\n";
 
 
     for (auto pair : massBinMap)
     {
-       std::cout << "PAIR: " << pair.first << '\n';
+      // std::cout << "PAIR: " << pair.first << '\n';
       
 
       for (auto massBin : massBins)
         {
-           std::cout << "Mass Bin: " << massBin.first << '\n';
+          // std::cout << "Mass Bin: " << massBin.first << '\n';
           auto fileKey = fileKeys[massBin.first];
           auto eventCount = getEventCount(fileKey);
 
-           std::cout << "Pair Second Size: " << pair.second.size() << "\n";
+           //std::cout << "Pair Second Size: " << pair.second.size() << "\n";
 
           for (auto bin : pair.second)
           {
-             std::cout << "Bin: " << bin << "\t" << "Event Count: " << eventCount << "\n";
+            // std::cout << "Bin: " << bin << "\t" << "Event Count: " << eventCount << "\n";
             if (bin == massBin.first && eventCount != 0)
             {
               if (massBin.second != 0)
@@ -317,7 +317,7 @@ void HistogramOutputModule::finalize()
                 {
                 
                 getHistogram(pair.first + bin)->Scale(massBin.second / eventCount);  // massBin.second is the scale
-	        std::cout << "Scale------ (massBin.second): " << massBin.second << "\n";
+	        //std::cout << "Scale------ (massBin.second): " << massBin.second << "\n";
                 }
                 catch(const std::exception& e)
                 {
