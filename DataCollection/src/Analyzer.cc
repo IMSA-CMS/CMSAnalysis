@@ -71,6 +71,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 	    }
     
     eventLoader.changeFile(file);
+
     while(true)
     {
       if (eventLoader.getFile()->isDone())
@@ -182,6 +183,9 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
       std::cout << "Events Processed: " << numOfEvents << std::endl;
     }      
   
+    // Create the output file
+  TFile* outputRootFile = new TFile(outputFile.c_str(), "RECREATE");
+
   // Finalize the modules
   for (auto module : productionModules)
     {
@@ -191,8 +195,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
     {
       module->finalize();
     }
-  TFile* outputRootFile = new TFile(outputFile.c_str(), "RECREATE");
-
+ 
   // Finalize separately for each filterString, to be safe
   for (auto module : analysisModules)
     {
