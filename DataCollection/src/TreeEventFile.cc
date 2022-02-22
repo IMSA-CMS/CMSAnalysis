@@ -143,11 +143,24 @@ ParticleCollection TreeEventFile::getRecoParticles() const
     {
         if (elec_idpass[i] & 7)
         {
+            int charge = elec_charge[i];
+            // Kludge to simulate charge mismeasurement
+            // if ((int)(elec_pt[i] * 100) % 10 == 0)
+            //     charge = -charge;
+            // if ((int)(elec_pt[i]) % 2)
+            // {
+            //     charge = 1;
+            // }
+            // else
+            // {
+            //     charge = -1;
+            // }
+
             // Lorentz four-vector
             recoParticles.addParticle(Particle(
                 reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],
                                                                             elec_eta[i], elec_phi[i], elec_mass[i])),
-                elec_charge[i], Particle::Type::Electron, elec_reliso[i]));
+                charge, Particle::Type::Electron, elec_reliso[i]));
         }
     }
 
@@ -155,11 +168,24 @@ ParticleCollection TreeEventFile::getRecoParticles() const
     {
         if (muon_idpass[i] & 7)
         {
+            int charge = muon_charge[i];
+            // Kludge to simulate charge mismeasurement
+            // if ((int)(muon_pt[i] * 100) % 10 == 0)
+            //     charge = -charge;
+            // if ((int)(muon_pt[i]) % 2)
+            // {
+            //     charge = 1;
+            // }
+            // else
+            // {
+            //     charge = -1;
+            // }
+
             // Lorentz four-vector
             recoParticles.addParticle(Particle(
                 reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],
                                                                             muon_eta[i], muon_phi[i], muon_mass[i])),
-                muon_charge[i], Particle::Type::Muon, muon_reliso[i]));
+                charge, Particle::Type::Muon, muon_reliso[i]));
         }
     }
 
