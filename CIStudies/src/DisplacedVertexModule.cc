@@ -46,6 +46,13 @@ bool DisplacedVertexModule::process()
       }
       else
       {
+
+        // TODO: fix getUnderlyingParticle function call. The function does not exist anymore.
+        // getUnderLyingParticle used to return a Candidate pointer that could be casted into a muon.
+
+        // Particle class has particle implementation, and Candidate is below that. This is what
+        // we want to find.
+
         auto particle = part.getUnderlyingParticle();
         auto particle2 = part2.getUnderlyingParticle();
     
