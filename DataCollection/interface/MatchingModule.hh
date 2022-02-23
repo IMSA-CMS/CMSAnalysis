@@ -17,14 +17,16 @@
 // MatchingModule creates a MatchingPairCollection by matching the gen sim particles with the reco particles 
 class MatchingModule : public ProductionModule
 {
-public:
+  public:
   MatchingModule(double deltaRCut = 0.1);
   virtual bool process() override;
 
   const MatchingPairCollection& getMatchingBestPairs() const {return matchingBestPairs;} 
-protected:
+  
+  protected:
   virtual bool match(std::vector<Particle>genSimparticles, std::vector<Particle> recoCandidates);
-private:
+
+  private:
   //const std::shared_ptr<GenSimIdentificationModule> genSim;
   //const std::shared_ptr<RecoIdentificationModule> reco;
 
