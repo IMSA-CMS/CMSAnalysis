@@ -31,7 +31,6 @@ Analyzer invariantMassAnalysis()
   Analyzer analyzer;
 
   // Create base module(s)
-  auto matchMod = make_shared<MatchingModule>();
   auto weightMod = make_shared<WeightingModule>();
   auto lrWeightMod = make_shared<LRWeightModule>();
 
@@ -41,8 +40,8 @@ Analyzer invariantMassAnalysis()
   auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "same_Sign_Invariant_Mass", 300, 0, 300);
 
   // Create necessary module(s) for the filter(s)
-  auto trigSimMod = make_shared<TriggerSimModule>();
-  auto simTrigger = make_shared<SimTrigger>("filter_trigger", TriggerSimModule::EnumTriggers::debug, trigSimMod);
+  auto trigSimMod = make_shared<TriggerSimModule>("HLT");
+  auto simTrigger = make_shared<SimTrigger>("filter_trigger", TriggerSimModule::EnumTriggers::doubleElectronTriggers, trigSimMod);
 
   // Create necessary filter(s)
   auto nLeptonsFilter = make_shared<NLeptonsFilter>();
@@ -58,7 +57,7 @@ Analyzer invariantMassAnalysis()
   histMod->addHistogram(invMassHist);
   histMod->addHistogram(sameSignInvMassHist);
 
-  analyzer.addProductionModule(matchMod);
+  // Add production modules
   analyzer.addProductionModule(weightMod);
   analyzer.addProductionModule(lrWeightMod);
   analyzer.addProductionModule(trigSimMod);

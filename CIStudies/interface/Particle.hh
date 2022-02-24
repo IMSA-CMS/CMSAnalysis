@@ -4,17 +4,20 @@
 #include <vector>
 #include "DataFormats/Candidate/interface/Candidate.h"
 
+class LeptonJet;
+
 class ParticleImplementation;
 
 class Particle
 {
   public:
-  
-    enum class Type{Electron, Muon, Photon, LeptonJet, None};
+
+    enum class Type{Electron, Muon, Photon, LeptonJet, Jet, None};
     enum class BarrelState{Barrel, Endcap, None};
     Particle(const reco::Candidate* iparticle = nullptr);
     Particle(const Particle& particle1);
-    Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type);
+    Particle(const LeptonJet& leptonjet);
+    Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, double relIso = -999);
     Particle& operator = (const Particle& particle2);
     double getPt() const;
     double getPhi() const;
@@ -22,6 +25,7 @@ class Particle
     double getEt() const;
     double energy() const;
     double getMass() const;
+    double getIsolation() const;
     Particle uniqueMother() const;
     Particle finalDaughter();
     Particle findMother(int motherPDGID);
@@ -43,10 +47,10 @@ class Particle
     Particle mother() const;
     Particle::Type getType() const;
 
-    
+
     // bool isGenSim() const;
     bool isFinalState() const;
-	
+
   private:
     std::shared_ptr<ParticleImplementation> particle;
     void checkIsNull() const;

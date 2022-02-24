@@ -22,7 +22,8 @@ public:
   virtual bool process() override;
 
   const MatchingPairCollection& getMatchingBestPairs() const {return matchingBestPairs;} 
-
+protected:
+  virtual bool match(std::vector<Particle>genSimparticles, std::vector<Particle> recoCandidates);
 private:
   //const std::shared_ptr<GenSimIdentificationModule> genSim;
   //const std::shared_ptr<RecoIdentificationModule> reco;

@@ -1,17 +1,12 @@
 #include "CIAnalysis/CIStudies/interface/NLeptonsFilter.hh"
-//#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
+#include "CIAnalysis/CIStudies/interface/Selector.hh"
 
-NLeptonsFilter::NLeptonsFilter(double pTCut):
-pTMin(pTCut)
-{
+NLeptonsFilter::NLeptonsFilter()
+{}
 
-}
 
 std::string NLeptonsFilter::makeFilterString()
 {
-  double pairs = getInput()->getLeptons(InputModule::RecoLevel::Reco, pTMin).getNumParticles();  //recoModule->getRecoCandidates().getNumParticles();
-  //std::cout << pairs.getSize() << "\n";
-  // std::cout << " Made it through NLeptonsFilter\n";
-  return std::to_string(static_cast<int>(pairs));
-
+  int num = getInput()->getLeptons(InputModule::RecoLevel::Reco).getNumParticles(); 
+  return std::to_string(num);
 }

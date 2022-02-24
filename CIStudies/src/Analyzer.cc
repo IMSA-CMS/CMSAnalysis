@@ -17,6 +17,11 @@
 #include "CIAnalysis/CIStudies/interface/Module.hh"
 #include "CIAnalysis/CIStudies/interface/TDisplayText.h"
 
+Analyzer::Analyzer() :
+  eventLoader(),
+  input(&eventLoader)
+  {}
+
 void Analyzer::run(const std::string& configFile, const std::string& outputFile, int outputEvery, int nFiles)
 {
   // This keeps the histograms separate from the files they came from, avoiding much silliness
@@ -25,8 +30,8 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 
   // Get a list of FileParams objects
   auto fileparams = inputFiles(configFile);
-  EventLoader eventLoader (outputEvery);
-  InputModule input(&eventLoader);
+  eventLoader.setOutputEvery(outputEvery);
+
   // Initialize all modules
   for (auto module : getAllModules())
     {
@@ -80,7 +85,6 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
         if (!module->processEvent())
         {
           continueProcessing = false;
-          std::cout << "continueProcessing: " << continueProcessing << "\n" << std::endl;
           break;
         }
       }

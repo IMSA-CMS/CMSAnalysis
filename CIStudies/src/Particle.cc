@@ -1,23 +1,31 @@
 #include "CIAnalysis/CIStudies/interface/Particle.hh"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 
+#include "DataFormats/MuonReco/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
 #include "DataFormats/PatCandidates/interface/Photon.h"
 #include "CIAnalysis/CIStudies/interface/ParticleImplementation.hh"
 #include "CIAnalysis/CIStudies/interface/CandidateImplementation.hh"
 #include "CIAnalysis/CIStudies/interface/SimpleImplementation.hh"
+#include "CIAnalysis/CIStudies/interface/LeptonJet.hh"
+#include "CIAnalysis/CIStudies/interface/LeptonJetImplementation.hh"
 
-Particle::Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type): 
-particle(std::make_shared<SimpleImplementation>(vec, charge, type))
+Particle::Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, double relIso):
+particle(std::make_shared<SimpleImplementation>(vec, charge, type, relIso))
 {
-  
 }
 
 Particle::Particle(const reco::Candidate* iparticle):
 particle(std::make_shared<CandidateImplementation>(iparticle))
 {
   //std::cout << "Got to Particle\n" << particle << "\n";
+}
+
+Particle::Particle(const LeptonJet& leptonjet):
+  particle(std::make_shared<LeptonJetImplementation>(
+        std::make_shared<LeptonJet>(leptonjet)))
+{
 }
 
 Particle::Particle(const Particle& particle1):
@@ -140,7 +148,7 @@ Particle Particle::sharedMother(int motherPDGID, std::vector<Particle> particles
   return finalMother;
 }
 
-bool Particle::isNotNull() const 
+bool Particle::isNotNull() const
 {
   return particle->isNotNull();
 }
@@ -150,7 +158,7 @@ void Particle::checkIsNull() const
   // std::cout << "This is check is null (particle)\n" << particle << "\n";
   if(!particle->isNotNull())
   {
-    throw std::runtime_error("attempted to use null pointer in Particle (Particle)");	
+    throw std::runtime_error("attempted to use null pointer in Particle (Particle)");
   }
 }
 
@@ -188,6 +196,12 @@ double Particle::getMass() const
   return particle->getFourVector().mass();
 }
 
+double Particle::getIsolation() const
+{
+  checkIsNull();
+  return particle->isolation();
+}
+
 Particle::BarrelState Particle::getBarrelState() const
 {
   checkIsNull();
@@ -217,6 +231,49 @@ Particle::BarrelState Particle::getBarrelState() const
   return Particle::BarrelState::None;
 }
 
+/*
+double Particle::hadEt() const {
+  checkIsNull();
+  auto muon = dynamic_cast<const reco::Muon*>(particle);
+  if (!muon) {
+    return -1;
+  }
+  return muon->isolationR03().hadEt;
+}
+
+double Particle::hoEt() const {
+  checkIsNull();
+  auto muon = dynamic_cast<const reco::Muon*>(particle);
+  return muon->isolationR03().hoEt;
+}
+
+double Particle::hadVetoEt() const {
+  checkIsNull();
+  auto muon = dynamic_cast<const reco::Muon*>(particle);
+  return (!muon) ? -1 : muon->isolationR05().sumPt;
+}
+
+double Particle::trackerVetoPt() const {
+  checkIsNull();
+  auto muon = dynamic_cast<const reco::Muon*>(particle);
+  return muon->isolationR03().trackerVetoPt;
+}
+
+bool Particle::isIsolated() const
+{
+  checkIsNull();
+  auto muon = dynamic_cast<const reco::Muon*>(particle);
+  if (!muon)
+  {
+    return false;
+  }
+  auto isolation = muon->isolationR03();
+  if (isolation.sumPt < 0.1*muon->pt())
+  {
+    return true;
+  }
+  return false;
+*/
 Particle::Type Particle::getType() const{
     checkIsNull();
     return particle->getType();
@@ -228,7 +285,7 @@ Particle::Type Particle::getType() const{
 //   if (!muon)
 //   {
 //     return false;
-//   } 
+//   }
 //   auto isolation = muon->isolationR03();
 //   if (isolation.sumPt < 0.1*muon->pt())
 //   {
@@ -236,7 +293,7 @@ Particle::Type Particle::getType() const{
 //   }
 //   return false;
 // }
-int Particle::charge() const 
+int Particle::charge() const
 {
   checkIsNull();
   return particle->charge();
