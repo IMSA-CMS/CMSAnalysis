@@ -15,7 +15,7 @@ public:
   enum class EnumTriggers {singleMuonTriggers, doubleMuonTriggers, singleElectronTriggers, doubleElectronTriggers,
     isoSingleMuonTriggers, isoDoubleMuonTriggers, isoSingleElectronTriggers, isoDoubleElectronTriggers, debug};
 
-  TriggerSimModule(std::string _subProcess = "HLT"); // Defaults to HLT -- There are three main sub processes: HLT, SIM, and RECO
+  TriggerSimModule(std::string _subProcess = "HLT"); // Defaults to HLT -- There are three main sub processes: HLT, SIM, and RECO. In data files, SIM is replaced with PAT
 
   // Methods to only enable specific triggers
   void addTrigger(const EnumTriggers triggerNameEnum);
@@ -101,7 +101,7 @@ private:
         ""} },
     { EnumTriggers::debug, {
         "HLT_IsoMu22_v2",
-        "",
+        "HLT_BTagMu_Jet300_Mu5_v2",
         "",
         ""} }
   };

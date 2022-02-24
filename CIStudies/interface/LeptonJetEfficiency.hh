@@ -20,6 +20,11 @@ protected:
 private:
     const std::shared_ptr<LeptonJetReconstructionModule> lepRecoMod;
     const std::shared_ptr<LeptonJetMatchingModule> lepMatchMod;
+
+    int numRecoJets = 0;
+    int numMatchedJets = 0;
+    int recoZeroAnyVeto = 0;
+    int recoZeroAllVeto = 0;
 };
 
 

@@ -8,13 +8,13 @@
 class LeptonJetReconstructionModule : public ProductionModule
 {
 public:
-  LeptonJetReconstructionModule(double deltaRCut = 0.5, double pTCut = 5);
+  LeptonJetReconstructionModule(double deltaRCut = 0.5);
   virtual bool process() override;
   const std::vector<LeptonJet>& getLeptonJets() const {return leptonJets;}
   const std::vector<double>& getDeltaRValues() const {return deltaRValues;}
   const std::vector<double>& getPtValues() const {return pTValues;}
 
-private:  
+private:
   LeptonJet createLeptonJet(Particle highestPtLepton) const;
   Particle findHighestPtLepton(std::vector<Particle> particles) const;
   void findDeltaRValues();
@@ -25,8 +25,6 @@ private:
   std::vector<double> pTValues;
 
   double DeltaRCut;
-  double pTCut;
-
 };
 
 #endif

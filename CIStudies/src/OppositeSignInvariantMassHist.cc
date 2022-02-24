@@ -6,14 +6,14 @@ std::vector<double> OppositeSignInvariantMassHist::protectedValue(bool typeGenSi
 {
   if (typeGenSim)          // typeGenSim == true, so we want the GenSim values
   {
-    auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim);
+    auto genParticles = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
     auto genSimInv = genParticles.calculateOppositeSignInvariantMass();
     return {genSimInv};
   }
 
   else                     // typeGenSim == false, so we want the Reco values
   {
-    auto recoParticles = getInput()->getParticles(InputModule::RecoLevel::Reco);
+    auto recoParticles = getInput()->getLeptons(InputModule::RecoLevel::Reco);
     auto recoInv = recoParticles.calculateOppositeSignInvariantMass();
     return {recoInv};
   }

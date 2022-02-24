@@ -14,8 +14,11 @@ class TreeEventFile : public EventFile
         // simply dumps gensim particles from event into ParticleCollection
         virtual ParticleCollection getGenSimParticles() const override;
         virtual ParticleCollection getRecoParticles() const override;
+        virtual ParticleCollection getRecoJets() const override;
         virtual GenEventInfoProduct getGenInfo() const override;
         virtual double getMET() const override;
+        virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
+        virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;
     protected:
         struct BranchNames
         {
@@ -25,6 +28,7 @@ class TreeEventFile : public EventFile
             std::string elecPhi;
             std::string elecMass;
             std::string elecPT;
+            std::string elecRelIso;
 
             std::string muonSize;
             std::string muonCharge;
@@ -32,10 +36,17 @@ class TreeEventFile : public EventFile
             std::string muonPhi;
             std::string muonMass;
             std::string muonPT;
+            std::string muonRelIso;
 
             std::string metSize;
             std::string metPhi;
             std::string metPT;
+
+            std::string jetSize;
+            std::string jetEta;
+            std::string jetPhi;
+            std::string jetMass;
+            std::string jetPT;
 
             std::string genSize;
             std::string genPid;
@@ -44,6 +55,9 @@ class TreeEventFile : public EventFile
             std::string genPhi;
             std::string genMass;
             std::string genPt;
+
+            std::string elecIdpass;
+            std::string muonIdpass;
         };
         
         virtual std::string getTreeName() = 0;
@@ -68,6 +82,8 @@ class TreeEventFile : public EventFile
         Float_t elec_phi[MAXMEC];
         Float_t elec_mass[MAXMEC];
         Float_t elec_pt[MAXMEC];
+        Int_t elec_idpass[MAXMEC];
+        Float_t elec_reliso[MAXMEC];
 
         Int_t muon_size;
         Int_t muon_charge[MAXMEC];
@@ -75,10 +91,18 @@ class TreeEventFile : public EventFile
         Float_t muon_phi[MAXMEC];
         Float_t muon_mass[MAXMEC];
         Float_t muon_pt[MAXMEC];
+        Int_t muon_idpass[MAXMEC];
+        Float_t muon_reliso[MAXMEC];
 
         Int_t met_size;
         Float_t met_phi[MAXMEC];
         Float_t met_pt[MAXMEC];
+
+        Int_t jet_size;
+        Float_t jet_eta[MAXMEC];
+        Float_t jet_phi[MAXMEC];
+        Float_t jet_mass[MAXMEC];
+        Float_t jet_pt[MAXMEC];
 
         Int_t gen_size;
         Int_t gen_pid[MAXMC];
@@ -87,8 +111,7 @@ class TreeEventFile : public EventFile
         Float_t gen_phi[MAXMC];
         Float_t gen_mass[MAXMC];
         Float_t gen_pt[MAXMC];
+        
 };
-
-
 
 #endif

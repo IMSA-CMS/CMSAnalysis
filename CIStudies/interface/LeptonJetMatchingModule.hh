@@ -5,9 +5,10 @@
 
 #include "ProductionModule.hh"
 #include "GenSimParticleModule.hh"
+#include "MatchingModule.hh"
 #include "LeptonJetReconstructionModule.hh"
 
-class LeptonJetMatchingModule : public ProductionModule
+class LeptonJetMatchingModule : public MatchingModule
 {
 public:
     using MatchingPair = std::pair<Particle, LeptonJet>;

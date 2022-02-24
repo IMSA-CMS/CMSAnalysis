@@ -12,7 +12,7 @@ MassRecoEfficiency::MassRecoEfficiency(const std::shared_ptr<WeightingModule> we
 
 bool MassRecoEfficiency::process()
 {
-  auto reco = getInput()->getParticles(InputModule::RecoLevel::Reco);
+  auto reco = getInput()->getLeptons(InputModule::RecoLevel::Reco);
   double invMass = reco.calculateSameSignInvariantMass();
   int size = reco.getNumParticles();
   int nMuons = reco.getLeptonTypeCount(Particle::Type::Muon);

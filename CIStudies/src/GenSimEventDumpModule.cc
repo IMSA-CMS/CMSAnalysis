@@ -3,6 +3,9 @@
 #include <cmath>
 #include <stdexcept>
 
+#include "DataFormats/MuonReco/interface/Muon.h"
+#include "DataFormats/PatCandidates/interface/Muon.h"
+
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/FWLite/interface/Event.h"
@@ -19,7 +22,7 @@ bool GenSimEventDumpModule::process()
 {
   if(counter < numOfEvents || numOfEvents == -1)
   {
-    ParticleCollection genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim);
+    ParticleCollection genParticles = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
 
     //TODO this line needs to be fixed and put back in
     //printGenParticleCollection(genParticles);
@@ -74,7 +77,7 @@ void GenSimEventDumpModule::printGenParticleCollection(const reco::GenParticleCo
 
     // Particle properties
     std::cout << std::setw(13) << part.px() << "| " << std::setw(13) << part.py() << "| " << std::setw(13) << part.pz() << "| " << std::setw(13) << part.energy() << "| " << std::setw(13) << part.mass() << "\n";
-   
+
     eventElement++;
   }
 }

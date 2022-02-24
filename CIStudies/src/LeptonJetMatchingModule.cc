@@ -13,8 +13,13 @@ LeptonJetMatchingModule::LeptonJetMatchingModule(std::shared_ptr<LeptonJetRecons
 bool LeptonJetMatchingModule::process()
 {
     matchingPairs.clear();
-    std::vector<Particle> genSimParticles(getInput()->getParticles(InputModule::RecoLevel::GenSim).getParticles());
+    std::vector<Particle> genSimParticles(getInput()->getLeptons(InputModule::RecoLevel::GenSim).getParticles());
     std::vector<LeptonJet> recoLeptonJets(lepJet->getLeptonJets());
+    std::vector<Particle> lJets;
+    for (LeptonJet lJet:recoLeptonJets)
+    {
+      lJets.push_back(lJet);
+    }
 
     genSize += genSimParticles.size();
     // std::cout << "Size of genSimParticles: " << genSimParticles.size() << "\n";
@@ -46,12 +51,12 @@ bool LeptonJetMatchingModule::process()
               deltaRMin = pairDeltaR;
             }
           }
-        }        
+        }
         if (deltaRMin < deltaRCutoff)
         {
           //std::cout << "Match found!" << "\n";
           matchingPairs.push_back(dataList);
-          recoLeptonJets.erase(std::find(recoLeptonJets.begin(), recoLeptonJets.end(), dataList.second));          
+          recoLeptonJets.erase(std::find(recoLeptonJets.begin(), recoLeptonJets.end(), dataList.second));
         }
         genSimParticles.erase(std::find(genSimParticles.begin(), genSimParticles.end(), dataList.first));
     }

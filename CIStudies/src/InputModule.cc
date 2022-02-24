@@ -1,41 +1,48 @@
 #include "CIAnalysis/CIStudies/interface/InputModule.hh"
 #include "CIAnalysis/CIStudies/interface/ParticleCollection.hh"
 #include "CIAnalysis/CIStudies/interface/EventLoader.hh"
+#include "CIAnalysis/CIStudies/interface/Selector.hh"
 
-InputModule::InputModule(const EventLoader* iEventLoader) : eventLoader(iEventLoader)
-{}
+InputModule::InputModule(const EventLoader *iEventLoader) : eventLoader(iEventLoader)
+{
+}
 
-ParticleCollection InputModule::getLeptons(RecoLevel level, double pTcut) const
+ParticleCollection InputModule::getLeptons(RecoLevel level) const
 {
     ParticleCollection leptons;
-    auto electrons = getParticles(level, Particle::Type::Electron, pTcut).getParticles();
-    auto muons = getParticles(level, Particle::Type::Muon, pTcut).getParticles();
-    for (const auto& p : electrons)
+    auto electrons = getParticles(level, Particle::Type::Electron).getParticles();
+    auto muons = getParticles(level, Particle::Type::Muon).getParticles();
+    for (const auto &p : electrons)
     {
-        leptons.addParticle(p);
+        if (!leptonSelector || leptonSelector->checkParticle(p))
+        {
+            leptons.addParticle(p);
+        }
     }
-    for (const auto& p : muons)
+    for (const auto &p : muons)
     {
-        leptons.addParticle(p);
+        if (!leptonSelector || leptonSelector->checkParticle(p))
+        {
+            leptons.addParticle(p);
+        }
     }
     return leptons;
 }
 
-ParticleCollection InputModule::getParticles(RecoLevel level, Particle::Type particleType, double pTcut) const
+ParticleCollection InputModule::getParticles(RecoLevel level, Particle::Type particleType,  std::shared_ptr<Selector> selector) const
 {
-    
-    // std::cerr << "Input Module Test" << "\n";
-    // std::cerr << eventLoader << "\n";
-    // std::cerr << "Input Module Test 2" << "\n";
     ParticleCollection particleList;
     if (level == RecoLevel::GenSim)
-    {    
+    {
         auto particles = eventLoader->getFile()->getGenSimParticles().getParticles();
-        for (const auto &p : particles) 
+        for (const auto &p : particles)
         {
-	  if ((p.getType() == particleType || particleType == Particle::Type::None) && p.isFinalState() && p.getPt() >= pTcut) 
-            {    
-                particleList.addParticle(p);
+            if ((p.getType() == particleType || particleType == Particle::Type::None) && p.isFinalState())
+            {
+                if (!selector || selector->checkParticle(p))
+                {
+                    particleList.addParticle(p);
+                }
             }
         }
     }
@@ -44,9 +51,33 @@ ParticleCollection InputModule::getParticles(RecoLevel level, Particle::Type par
         auto particles = eventLoader->getFile()->getRecoParticles().getParticles();
         for (const auto &p : particles)
         {
-	  if ((p.getType() == particleType || particleType == Particle::Type::None) && p.getPt() >= pTcut)
+            if ((p.getType() == particleType || particleType == Particle::Type::None))
             {
-                // std::cout << "If Two \n";
+                if (!selector || selector->checkParticle(p))
+                {
+                    particleList.addParticle(p);
+                }
+            }
+        }
+    }
+    return particleList;
+}
+
+/* TODO: getJets */
+ParticleCollection InputModule::getJets(RecoLevel level, double pTcut) const
+{
+    ParticleCollection particleList;
+    if (level == RecoLevel::GenSim)
+    {
+        throw std::runtime_error("GenSim Jets not implemented");
+    }
+    else if (level == RecoLevel::Reco)
+    {
+        auto particles = eventLoader->getFile()->getRecoJets().getParticles();
+        for (const auto &p : particles)
+        {
+	  if (p.getPt() >= pTcut)
+            {
                 particleList.addParticle(p);
             }
         }
@@ -70,11 +101,11 @@ double InputModule::getMET() const
 {
     return eventLoader->getFile()->getMET();
 }       
-// edm::TriggerResults InputModule::getTriggerResults(std::string subProcess) const
-// {
-//     return eventLoader->getTriggerResults(subProcess);
-// }
-// edm::TriggerNames InputModule::getTriggerNames(std::string subProcess) const
-// {
-//     return eventLoader->getTriggerNames(subProcess);
-// }
+std::vector<bool> InputModule::getTriggerResults(std::string subProcess) const
+{
+    return eventLoader->getFile()->getTriggerResults(subProcess);
+}
+std::vector<std::string> InputModule::getTriggerNames(std::string subProcess) const
+{
+    return eventLoader->getFile()->getTriggerNames(subProcess);
+}
