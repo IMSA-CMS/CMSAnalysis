@@ -2,7 +2,7 @@
 #include "TFile.h"
 
 RootFileInput::RootFileInput(std::string fileName) :
-	file(TFile::Open(fileName.c_str())) 
+	file(TFile::Open(fileName.c_str(), "read")) 
 	{
 		if(!file)
 		{
