@@ -42,112 +42,6 @@ bool Particle::operator == (const Particle& p1) const
   return *particle == *(p1.particle);
 }
 
-Particle Particle::uniqueMother() const
-{
-  checkIsNull();
-  // The mother that is not itself
-  auto mom = mother();
-  mom.checkIsNull();
-
-  if (mom.pdgId() == pdgId())
-  {
-    return mom.uniqueMother(); //Recursive back to itself, so it will keep going until it returns a mother that is not the particle
-  }
-
-  return mom;
-}
-
-
-Particle Particle::finalDaughter() {
-  Particle current = Particle(*this);
-  while (current.status() != 1) {
-    int di = -1;
-    int dpt = 0;
-    for (int i = 0; i < current.numberOfDaughters(); ++i) {
-      Particle daughter = current.daughter(i);
-      if (daughter.pdgId() == current.pdgId() && daughter.getPt() > dpt) {
-        di = i;
-        dpt = daughter.getPt();
-      }
-    }
-    if (di == -1) {
-      std::cout << "OH NO!!!!!!!\n";
-      std::cout << current.pdgId() << '\n';
-      break;
-    }
-    current = current.daughter(di);
-  }
-  return current;
-}
-
-Particle Particle::findMother(int motherPDGID)
-{
-  bool foundMother = false;
-
-  Particle finalMother = Particle(nullptr);  // Null Particle
-
-  auto currentMother = mother();
-
-  while (!foundMother)
-  {
-    if (!currentMother.isNotNull())  // Return a null particle if we reach an initial particle
-    {
-      return Particle(nullptr);
-    }
-    else if (currentMother.pdgId() == motherPDGID)
-    {
-      finalMother = currentMother;
-      foundMother = true;
-    }
-    else
-    {
-      currentMother = currentMother.mother();
-    }
-  }
-
-  return finalMother;
-}
-
-Particle Particle::sharedMother(int motherPDGID, Particle particle1, Particle particle2)
-{
-  auto mother1 = particle1.findMother(motherPDGID);  // Define these here for convenience
-  auto mother2 = particle2.findMother(motherPDGID);
-
-  if ((mother1 == mother2) && (mother1.isNotNull()) && (mother2.isNotNull()))
-  {
-    return mother1;
-  }
-  else
-  {
-    return Particle(nullptr);
-  }
-}
-
-Particle Particle::sharedMother(int motherPDGID, std::vector<Particle> particles)
-{
-  if (particles.size() < 2)
-  {
-    return Particle(nullptr);
-  }
-
-  Particle finalMother = sharedMother(motherPDGID, particles[0], particles[1]);  // Shared mother between the first 2 particles
-
-  // Find the shared mother between all possible particle pairs.
-  // If they are all the same, then that is the shared mother.
-  // If they are different, then return a null particle, since there is no particle.
-  for (int i = 0; i < static_cast<int>(particles.size()); i++)
-  {
-    for (int j = i + 1; j < static_cast<int>(particles.size()); j++)
-    {
-      if (sharedMother(motherPDGID, particles[i], particles[j]) != finalMother)
-      {
-        return Particle(nullptr);
-      }
-    }
-  }
-  return finalMother;
-}
-
 bool Particle::isNotNull() const
 {
   return particle->isNotNull();
@@ -196,11 +90,11 @@ double Particle::getMass() const
   return particle->getFourVector().mass();
 }
 
-double Particle::getIsolation() const
-{
-  checkIsNull();
-  return particle->isolation();
-}
+// double Particle::getIsolation() const
+// {
+//   checkIsNull();
+//   return particle->isolation();
+// }
 
 Particle::BarrelState Particle::getBarrelState() const
 {
@@ -299,18 +193,8 @@ int Particle::charge() const
   return particle->charge();
 }
 
-int Particle::status() const
-{
-  checkIsNull();
-  return particle->status();
-}
 
-Particle Particle::mother() const
-{
-  checkIsNull();
-  //mother of particle is often not electron/muon
-  return Particle(particle->mother());
-}
+
 
 reco::Candidate::LorentzVector Particle::getFourVector() const
 {
@@ -318,45 +202,6 @@ reco::Candidate::LorentzVector Particle::getFourVector() const
   return particle->getFourVector();
 }
 
-int Particle::pdgId() const
-{
-  checkIsNull();
-  return particle->pdgId();
-}
-
-int Particle::numberOfDaughters() const {
-  checkIsNull();
-  return particle->numberOfDaughters();
-}
-
-Particle Particle::daughter(int i) const
-{
-  checkIsNull();
-  auto daughter = particle->daughter(i);
-
-/*
-
-  Particle::Type type;
-  switch (daughter->pdgId()) {
-  case 11:
-    type = Particle::Type::Electron;
-    break;
-  case 13:
-    type = Particle::Type::Muon;
-    break;
-  default:
-    type = Particle::Type::None;
-    break;
-  }
-
-*/
-
-  return Particle(daughter);
-}
-bool Particle::isFinalState() const
-{
-  return particle->isFinalState();
-}
 
 double Particle::getDeltaR(Particle part) const
 {

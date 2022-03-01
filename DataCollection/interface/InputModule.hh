@@ -18,7 +18,6 @@ class InputModule
 {
 public:
     virtual ~InputModule(){}
-    InputModule(const EventLoader *iEventLoader);
 
     enum class RecoLevel
     {
@@ -40,7 +39,6 @@ public:
     virtual double getMET() const = 0;
 
 private:
-    const EventLoader *eventLoader;
     std::shared_ptr<Selector> leptonSelector;
 };
 

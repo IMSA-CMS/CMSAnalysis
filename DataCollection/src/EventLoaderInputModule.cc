@@ -4,7 +4,8 @@
 #include "CMSAnalysis/DataCollection/interface/EventLoader.hh"
 #include "CMSAnalysis/DataCollection/interface/Selector.hh"
 
-EventLoaderInputModule::EventLoaderInputModule(const EventLoader *iEventLoader)
+EventLoaderInputModule::EventLoaderInputModule(const EventLoader *iEventLoader):
+eventLoader(iEventLoader)
 {
 }
 
