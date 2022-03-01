@@ -59,7 +59,7 @@ Analyzer hPlusPlusMassAnalysis() {
   auto nElectronsHist = make_shared<NLeptonsHist>(matchMod, "Matched Electrons", 10, 0, 10, 11);
   auto nMuonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
 
-  auto leptonEfficiency = make_shared<LeptonEfficiency>(weightMod, matchMod);
+  auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod);
   auto signFlip = make_shared<SignFlipModule>(matchMod);
 
   auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);

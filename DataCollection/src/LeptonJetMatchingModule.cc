@@ -25,7 +25,15 @@ bool LeptonJetMatchingModule::process()
     MatchingModule::match(genSimParticles, lJets);
     lepJetSize += getMatchingPairs().size();
     genSize += genSimParticles.size();
-    return true;
+    // std::cout << "Size of genSimParticles: " << genSimParticles.size() << "\n";
+    lepJetSize += recoLeptonJets.size();
+    // std::cout << "Size of recoLeptonJets: " << recoLeptonJets.size() << "\n";
+
+    // MatchingPair candidate;
+    Particle nullParticle(nullptr);
+    LeptonJet nullJet(nullParticle);
+
+    return match(genSimParticles, lJets);
 }
 
 double LeptonJetMatchingModule::findMatchingPairDeltaR(MatchingPair pair)

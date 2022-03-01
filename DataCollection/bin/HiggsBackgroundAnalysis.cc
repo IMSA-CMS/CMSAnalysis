@@ -9,6 +9,7 @@
 #include "CMSAnalysis/DataCollection/interface/DoubleMuonTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/InvariantMassHist.hh"
+#include "CMSAnalysis/DataCollection/interface/LeptonFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/LRWeightModule.hh"
 #include "CMSAnalysis/DataCollection/interface/METHist.hh"
 #include "CMSAnalysis/DataCollection/interface/METModule.hh"
@@ -17,6 +18,7 @@
 #include "CMSAnalysis/DataCollection/interface/SameSignInvariantMassHist.hh"
 #include "CMSAnalysis/DataCollection/interface/SingleElectronTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/SingleMuonTrigger.hh"
+#include "CMSAnalysis/DataCollection/interface/SnowmassCutFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/SnowmassLeptonSelector.hh"
 #include "CMSAnalysis/DataCollection/interface/ThirdMuonPtHist.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerModule.hh"
@@ -59,28 +61,36 @@ Analyzer higgsBackgroundAnalysis()
   histMod->addHistogram(recoInvMass);
   histMod->addHistogram(metHist);
 
-  // Initialize triggers
-  auto singleMuonTrigger = make_shared<SingleMuonTrigger>(50);
-  auto doubleMuonTrigger = make_shared<DoubleMuonTrigger>(37, 27);
-  auto singleElectronTrigger = make_shared<SingleElectronTrigger>(28);
-  auto doubleElectronTrigger = make_shared<DoubleElectronTrigger>(25, 25);
+  auto elecRecoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "Electron Reco Same Sign Invariant Mass", 1000, 0, 2000, false, false);
+  auto elecPositiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Electron Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);
+  auto muonRecoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "Muon Reco Same Sign Invariant Mass", 1000, 0, 2000, false, false);
+  auto muonPositiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Muon Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);
 
-  // Add triggers to the TriggerModule
-  triggerMod->addTrigger(singleMuonTrigger);
-  triggerMod->addTrigger(doubleMuonTrigger);
-  triggerMod->addTrigger(singleElectronTrigger);
-  triggerMod->addTrigger(doubleElectronTrigger);
+  auto elecFilter = make_shared<LeptonFilter>(Particle::Type::Electron, 4, "Electron");
+  auto muonFilter = make_shared<LeptonFilter>(Particle::Type::Muon, 4, "Muon");
+  auto snowmassCut = make_shared<SnowmassCutFilter>();
+
+  elecRecoSameSignInvMassHist->addFilter(elecFilter);
+  elecPositiveNegativeInvMassHist->addFilter(elecFilter);
+  muonRecoSameSignInvMassHist->addFilter(muonFilter);
+  muonPositiveNegativeInvMassHist->addFilter(muonFilter);
+
+  histMod->addHistogram(elecRecoSameSignInvMassHist);
+  histMod->addHistogram(elecPositiveNegativeInvMassHist);
+  histMod->addHistogram(muonRecoSameSignInvMassHist);
+  histMod->addHistogram(muonPositiveNegativeInvMassHist);
 
   analyzer.addProductionModule(weightMod);
   analyzer.addProductionModule(lrWeightMod);
   analyzer.addProductionModule(metMod);
   analyzer.addFilterModule(bJetFilter);
 
+  analyzer.addFilterModule(snowmassCut);
   analyzer.addFilterModule(nLeptonsFilter);
-
+  
   analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
 
-  auto leptonSelector = std::make_shared<SnowmassLeptonSelector>(50, .05);
+  auto leptonSelector = std::make_shared<SnowmassLeptonSelector>(50);
   analyzer.getInputModule().setLeptonSelector(leptonSelector);
 
   return analyzer;

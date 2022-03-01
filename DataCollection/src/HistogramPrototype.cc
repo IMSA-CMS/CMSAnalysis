@@ -13,9 +13,6 @@ bool HistogramPrototype::shouldDraw() const
     
     if (filterMod->getFilterString() == "")
     {
-      std::cout << "empty filter string\n";
-      std::cout << " Getting filter string\n";
-      std::cout << filterMod->getFilterString() << "\n";
       return false; // Return false if any filterString is empty
     }
   }

@@ -1,8 +1,8 @@
 #include "CMSAnalysis/DataCollection/interface/MassRecoEfficiency.hh"
 //#include "CMSAnalysis/DataCollection/interface/RecoIdentificationModule.hh"
 
-MassRecoEfficiency::MassRecoEfficiency(const std::shared_ptr<WeightingModule> weightMod, double iHiggsMass, double iLowerWidth, double iUpperWidth):
-  EfficiencyModule(weightMod),
+MassRecoEfficiency::MassRecoEfficiency(double iHiggsMass, double iLowerWidth, double iUpperWidth):
+  EfficiencyModule(),
   //recoModule(iRecoModule),
   HiggsMass(iHiggsMass),
   lowerWidth(iLowerWidth),

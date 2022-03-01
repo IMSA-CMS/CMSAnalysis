@@ -10,7 +10,6 @@
 class EfficiencyModule : public AnalysisModule
 {
     public:
-    EfficiencyModule(const std::shared_ptr<WeightingModule> WeightingModule);
     void finalize() override;
     virtual void writeAll() override;
 
@@ -24,11 +23,6 @@ class EfficiencyModule : public AnalysisModule
     private:
     std::unordered_map<std::string, std::vector<double>> counters;
     std::vector<double> total;
-    bool isNewFile()const;
-    std::string currentFileKey;
-    std::vector<double> weights;
-    const std::shared_ptr<WeightingModule> weighting;
-
 };
 
 #endif

@@ -17,7 +17,7 @@ bool METTrigger::checkTrigger(const InputModule* input)
   {
     return false;
   }
-
+  
   //passes trigger if missing transverse energy is greater than the cutoff
   return (mET > mETCutoff);
 }

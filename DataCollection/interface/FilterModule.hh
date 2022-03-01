@@ -2,6 +2,7 @@
 #define FILTERMODULE_HH
 
 #include <string>
+#include <map>
 
 #include "Module.hh"
 #include "InputModule.hh"
@@ -17,8 +18,12 @@ class FilterModule : public Module
 {
 public:
   // In general, this should not be overridden again.  If it must be,
-  // make sure to call the base class version at the end
+  // make sure to call the base class version at the end.
   virtual bool process() override;
+
+  // Probably this does not need to be overridden either.  If it must be,
+  // the base class version should be called at the end.
+  virtual void finalize() override;
 
   // Gets the (already decided) filter string for later use
   std::string getFilterString() const {return filterString;}
@@ -34,6 +39,8 @@ protected:
 
 private:
   std::string filterString;
+
+  std::map<std::string, int> counterMap;
 };
 
 #endif
