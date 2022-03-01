@@ -2,12 +2,22 @@
 #include "Analysis/interface/Process.hh"
 #include "THStack.h"
 
-THStack* Channel.makeStack()
+THStack* Channel::makeStack(std::string label)
 {
 	THStack* superPlot = new THStack(name.c_string(), name.c_string())
-	for (Process* process : processes)
+	if (categoeryName == "")
 	{
-		superPlot->Add(process->getHist());
+		for (Process* process : processes)
+		{
+			superPlot->Add(process->getHist());
+		}
+	}
+	else
+	{
+		for (Process* process : map[label])
+		{
+			superPlot->Add(process->getHist());
+		}
 	}
 	return superPlot;
 }
