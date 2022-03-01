@@ -101,8 +101,8 @@ Analyzer leptonJetReconstructionAnalysis() {
   // auto recoThirdMuonPtHist = std::make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
 
   // Efficiency Modules
-  auto leptonEfficiency = std::make_shared<LeptonEfficiency>(weightMod, matchMod);
-  auto leptonJetEfficiency = std::make_shared<LeptonJetEfficiency>(weightMod, lepRecoMod, lepMatchMod);
+  auto leptonEfficiency = std::make_shared<LeptonEfficiency>(matchMod); 
+  auto leptonJetEfficiency = std::make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
 
   // Add the histogram(s) created above to histMod
   histOutputMod->addHistogram(nLeptonsHist);
@@ -141,7 +141,7 @@ Analyzer leptonJetReconstructionAnalysis() {
   //analyzer.addProductionModule(triggerMod);
 
   //analyzer.addAnalysisModule(leptonEfficiency);
-  //analyzer.addAnalysisModule(leptonJetEfficiency);
+  analyzer.addAnalysisModule(leptonJetEfficiency);
   //analyzer.addAnalysisModule(massRecoEfficiency200);
   //analyzer.addAnalysisModule(massRecoEfficiency500);
   //analyzer.addAnalysisModule(massRecoEfficiency800);

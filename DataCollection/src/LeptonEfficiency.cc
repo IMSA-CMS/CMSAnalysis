@@ -9,8 +9,8 @@
 #include "CMSAnalysis/DataCollection/interface/MatchingModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonEfficiency.hh"
 
-LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<WeightingModule> weightMod, const std::shared_ptr<MatchingModule> imatchModule):
-  EfficiencyModule(weightMod),
+LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<MatchingModule> imatchModule):
+  EfficiencyModule(),
   matchModule(imatchModule)
   //,genSimModule(igenSimModule)
   ,recoMuons(0)

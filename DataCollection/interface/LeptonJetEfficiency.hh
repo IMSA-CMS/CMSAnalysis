@@ -11,7 +11,7 @@ class LeptonJetMatchingModule;
 class LeptonJetEfficiency : public EfficiencyModule 
 {
 public:
-    LeptonJetEfficiency(const std::shared_ptr<WeightingModule> weightMod, const std::shared_ptr<LeptonJetReconstructionModule> iLepRecoMod, const std::shared_ptr<LeptonJetMatchingModule> iLepMatchMod);
+    LeptonJetEfficiency(const std::shared_ptr<LeptonJetReconstructionModule> iLepRecoMod, const std::shared_ptr<LeptonJetMatchingModule> iLepMatchMod);
     void finalize() override;
 
 protected:

@@ -18,8 +18,8 @@ bool MatchingModule::process()
   matchingBestPairs.clear();
 
   // Make a copy so we don't modify the original
-  std::vector<Particle> genSimParticles(getInput()->getParticles(InputModule::RecoLevel::GenSim).getParticles());
-  std::vector<Particle> recoCandidates(getInput()->getParticles(InputModule::RecoLevel::Reco).getParticles());
+  std::vector<Particle> genSimParticles(getInput()->getLeptons(InputModule::RecoLevel::GenSim).getParticles());
+  std::vector<Particle> recoCandidates(getInput()->getLeptons(InputModule::RecoLevel::Reco).getParticles());
   return match(genSimParticles, recoCandidates);
 }
   
@@ -120,7 +120,7 @@ bool MatchingModule::match(std::vector<Particle> genSimParticles, std::vector<Pa
 	//std::cerr << "for each loop ends" << std::endl;
       //makes an additional delta R cut and fills matching best pairs, resets values for the next loop
       //checks if the final (and best) delta R value for the matches passes the cut
-      if(deltaRMin<deltaRCutoff)
+      if(deltaRMin < deltaRCutoff)
 	{
 	  //std::cerr << "between if statements" << std::endl;
 	  //keeps track of that match by adding it to the vector that will be returned

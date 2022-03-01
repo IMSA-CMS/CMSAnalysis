@@ -16,8 +16,6 @@
 #include "TH2.h"
 
 HistogramOutputModule::HistogramOutputModule(const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule) :
-  //genSim(genSimModule),
-  //reco(recoModule),
   weighting(weightingModule),
   lrWeighting(lrWeightModule)
 {
@@ -298,7 +296,7 @@ void HistogramOutputModule::finalize()
     for (auto pair : massBinMap)
     {
       // std::cout << "PAIR: " << pair.first << '\n';
-      // std::cout << "Pair First: " << pair.first << "\t" << "Pair Second: " << pair.second << "\n";
+      
 
       for (auto massBin : massBins)
         {
@@ -306,7 +304,7 @@ void HistogramOutputModule::finalize()
           auto fileKey = fileKeys[massBin.first];
           auto eventCount = getEventCount(fileKey);
 
-          // std::cout << "Pair Second Size: " << pair.second.size() << "\n";
+           //std::cout << "Pair Second Size: " << pair.second.size() << "\n";
 
           for (auto bin : pair.second)
           {
@@ -315,15 +313,33 @@ void HistogramOutputModule::finalize()
             {
               if (massBin.second != 0)
               {
+                try
+                {
+                
                 getHistogram(pair.first + bin)->Scale(massBin.second / eventCount);  // massBin.second is the scale
-	        std::cout << "Scale------ (massBin.second): " << massBin.second << "\n";
+	        //std::cout << "Scale------ (massBin.second): " << massBin.second << "\n";
+                }
+                catch(const std::exception& e)
+                {
+                  std::cerr << e.what() << '\n';
+                }
+
               }
 
               // for (int i = 1; i < getHistogram(pair.first)->GetNbinsX() ; ++i)
               // {
                 // getHistogram(pair.first)->AddBinContent(i, getHistogram(pair.first + massBin.first)->GetBinContent(i));
               // }
+              try
+              {
+              
               getHistogram(pair.first)->Add(getHistogram(pair.first + massBin.first));
+              }
+              catch(const std::exception& e)
+              {
+                std::cerr << e.what() << '\n';
+              }
+
 
               //std::cout << pair.first + massBin.first << '\n';
 
