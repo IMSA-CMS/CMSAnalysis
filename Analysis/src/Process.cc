@@ -21,6 +21,6 @@ TH1* Process::getHist()
 	{
 		hist->Add(*(singleProcess->getHist()));
 	}
-	hist-SetFillColor(color);
+	hist->SetFillColor(color);
 	return hist;
 }
