@@ -1,4 +1,4 @@
-#include "CIAnalysis/CIStudies/interface/RootFileInput.hh"
+#include "CMSAnalysis/Analysis/interface/RootFileInput.hh"
 #include "TFile.h"
 
 RootFileInput::RootFileInput(std::string fileName) :
