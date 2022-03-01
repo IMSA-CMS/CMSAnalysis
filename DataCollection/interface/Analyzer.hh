@@ -21,9 +21,10 @@ class Analyzer
 {
 public:
   Analyzer();
+  ~Analyzer();
 
-InputModule& getInputModule() {return input;}
-const InputModule& getInputModule() const {return input;}
+InputModule* getInputModule() {return input;}
+const InputModule* getInputModule() const {return input;}
 
   // Add a production module, which is guaranteed to run before any analysis or filter
   // module (in the order added)
@@ -49,7 +50,7 @@ private:
   std::vector<std::shared_ptr<AnalysisModule>> analysisModules;
 
   EventLoader eventLoader;
-  EventLoaderInputModule input;
+  InputModule* input;
 
   // Parse one line of the the configuration file
   std::vector<std::string> parseLine(std::ifstream& txtFile) const;
