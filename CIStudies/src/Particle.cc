@@ -362,3 +362,7 @@ double Particle::getDeltaR(Particle part) const
 {
   return reco::deltaR(part.getFourVector(), getFourVector());
 }
+
+std::shared_ptr<ParticleImplementation> Particle::getParticleImplementation() {
+  return particle;
+}
