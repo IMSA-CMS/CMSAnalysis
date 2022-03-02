@@ -1,0 +1,7 @@
+Procs: CI
+Year:	2017
+Lepton:	Mu  E
+Mass:	300	800	1300	2000
+Lambda:	16
+Inter:	con
+Helic:	LL

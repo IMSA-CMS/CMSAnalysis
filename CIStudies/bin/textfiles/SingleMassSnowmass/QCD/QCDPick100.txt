@@ -1,7 +1,0 @@
-Procs:  QCD
-Year:   Snowmass2021
-Lepton: both
-Mass:	M100
-Lambda: 200
-Inter:	Con
-Helic:	LL
