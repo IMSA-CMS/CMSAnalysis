@@ -2,19 +2,9 @@
 
 #include "CMSAnalysis/DataCollection/interface/GenSimRecoPrototype.hh"
 
-std::vector<double> PtHist::protectedValue(bool typeGenSim) const
+std::vector<double> PtHist::protectedValue(InputModule::RecoLevel level) const
 {
-  if (typeGenSim)          // typeGenSim == true, so we want the GenSim values
-  {
-    auto genParticles = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
+    auto genParticles = getInput()->getLeptons(level);
     auto genSimPt = genParticles.getLeadingTransverseMomentum();
     return {genSimPt};
-  }
-
-  else                     // typeGenSim == false, so we want the Reco values
-  {
-    auto recoParticles = getInput()->getLeptons(InputModule::RecoLevel::Reco);
-    auto recoPt = recoParticles.getLeadingTransverseMomentum();
-    return {recoPt};
-  }
 }
