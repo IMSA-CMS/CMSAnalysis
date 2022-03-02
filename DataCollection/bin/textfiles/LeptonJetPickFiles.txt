@@ -1,0 +1,7 @@
+Procs:	LeptonJet
+Year:	2021
+Lepton:	muon
+Mass:	300
+Lambda:	M1
+Inter:	Prompt
+Helic:	SUSYPortal

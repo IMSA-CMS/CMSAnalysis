@@ -1,0 +1,7 @@
+Procs:  DY
+Year:   2018
+Lepton: M
+Mass:   M800
+Lambda: 200
+Inter:	Con
+Helic:	LL
