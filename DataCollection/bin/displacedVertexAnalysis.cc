@@ -12,17 +12,17 @@
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
 
 //#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
-#include "CIAnalysis/CIStudies/interface/METModule.hh"
-#include "CIAnalysis/CIStudies/interface/TriggerModule.hh"
-#include "CIAnalysis/CIStudies/interface/METTrigger.hh"
-#include "CIAnalysis/CIStudies/interface/SingleMuonTrigger.hh"
-#include "CIAnalysis/CIStudies/interface/DoubleMuonTrigger.hh"
-#include "CIAnalysis/CIStudies/interface/TripleMuonTrigger.hh"
-#include "CIAnalysis/CIStudies/interface/SingleElectronTrigger.hh"
-#include "CIAnalysis/CIStudies/interface/DoubleElectronTrigger.hh"
-#include "CIAnalysis/CIStudies/interface/SingleIsolatedMuonTrigger.hh"
-#include "CIAnalysis/CIStudies/interface/DoubleIsolatedMuonTrigger.hh"
-#include "CIAnalysis/CIStudies/interface/DisplacedVertexModule.hh"
+#include "CMSAnalysis/DataCollection/interface/METModule.hh"
+#include "CMSAnalysis/DataCollection/interface/TriggerModule.hh"
+#include "CMSAnalysis/DataCollection/interface/METTrigger.hh"
+#include "CMSAnalysis/DataCollection/interface/SingleMuonTrigger.hh"
+#include "CMSAnalysis/DataCollection/interface/DoubleMuonTrigger.hh"
+#include "CMSAnalysis/DataCollection/interface/TripleMuonTrigger.hh"
+#include "CMSAnalysis/DataCollection/interface/SingleElectronTrigger.hh"
+#include "CMSAnalysis/DataCollection/interface/DoubleElectronTrigger.hh"
+#include "CMSAnalysis/DataCollection/interface/SingleIsolatedMuonTrigger.hh"
+#include "CMSAnalysis/DataCollection/interface/DoubleIsolatedMuonTrigger.hh"
+#include "CMSAnalysis/DataCollection/interface/DisplacedVertexModule.hh"
 
 using std::make_shared;
 
