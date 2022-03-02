@@ -7,6 +7,9 @@
 #include "DataFormats/GeometrySurface/interface/Cylinder.h"
 #include <limits>
 
+#include "CIAnalysis/CIStudies/interface/CandidateImplementation.hh"
+#include "CIAnalysis/CIStudies/interface/ParticleImplementation.hh"
+
 #include <algorithm>
 #include <cmath>
 #include <tuple>
@@ -36,10 +39,12 @@ bool DisplacedVertexModule::process()
 {
   std::vector<Particle> recoCandidates(getInput()->getLeptons(InputModule::RecoLevel::Reco).getParticles());
 
-  for (auto& part : recoCandidates)
+  for (auto& inputPart : recoCandidates)
   {
-    for(auto& part2 : recoCandidates)
+    auto part = std::dynamic_pointer_cast<CandidateImplementation>(inputPart.getParticleImplementation());
+    for(auto& inputPart2 : recoCandidates)
     {
+      auto part2 = std::dynamic_pointer_cast<CandidateImplementation>(inputPart2.getParticleImplementation());
       if(part2 == part)
       {
         continue;
@@ -48,13 +53,13 @@ bool DisplacedVertexModule::process()
       {
 
         // TODO: fix getUnderlyingParticle function call. The function does not exist anymore.
-        // getUnderLyingParticle used to return a Candidate pointer that could be casted into a muon.
+        // getUnderlyingParticle used to return a Candidate pointer that could be casted into a muon.
 
         // Particle class has particle implementation, and Candidate is below that. This is what
         // we want to find.
 
-        auto particle = part.getUnderlyingParticle();
-        auto particle2 = part2.getUnderlyingParticle();
+        auto particle = part->getUnderlyingParticle();
+        auto particle2 = part2->getUnderlyingParticle();
     
         auto muon = dynamic_cast<const pat::Muon*>(particle);
         auto muon2 = dynamic_cast<const pat::Muon*>(particle2);
