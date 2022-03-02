@@ -2,6 +2,7 @@
 #define GENSIMRECOPROTOTYPE_HH
 
 #include "HistogramPrototype1D.hh"
+#include "InputModule.hh"
 
 #include <string>
 
@@ -16,10 +17,10 @@ class GenSimRecoPrototype : public HistogramPrototype1D
     //const std::shared_ptr<GenSimIdentificationModule> getGenSim() const {return genSim;}   // Getter for genSim
     //const std::shared_ptr<RecoIdentificationModule> getReco() const {return reco;}         // Getter for reco
     bool getDataType() const {return typeGenSim;}                          // Getter for typeGenSim
-    virtual std::vector<double> protectedValue(bool typeSwitch) const = 0;              // Virtual function that is overridden in InvariantMassHist and PtHist
+  virtual std::vector<double> protectedValue(InputModule::RecoLevel level) const = 0;              // Virtual function that is overridden in InvariantMassHist and PtHist
     
   private:
-    bool typeGenSim;                            // Switch between GenSim and Reco: value is true for GenSim, false for Reco                       
+  InputModule::RecoLevel typeGenSim;                            // Switch between GenSim and Reco: value is true for GenSim, false for Reco                       
 };          
 
 #endif
