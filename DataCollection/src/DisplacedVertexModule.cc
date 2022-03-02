@@ -7,8 +7,8 @@
 #include "DataFormats/GeometrySurface/interface/Cylinder.h"
 #include <limits>
 
-#include "CIAnalysis/CIStudies/interface/CandidateImplementation.hh"
-#include "CIAnalysis/CIStudies/interface/ParticleImplementation.hh"
+#include "CMSAnalysis/DataCollection/interface/CandidateImplementation.hh"
+#include "CMSAnalysis/DataCollection/interface/ParticleImplementation.hh"
 
 #include <algorithm>
 #include <cmath>
