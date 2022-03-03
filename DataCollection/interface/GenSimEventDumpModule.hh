@@ -29,13 +29,11 @@ public:
 
 private:
   // prints information to the screen
-  void printGenParticleCollection(const std::vector<reco::GenParticle>& genParts) const;
+  void printGenParticleCollection(const ParticleCollection& genParts) const;
 
-  int getIndexOf(const reco::Candidate* part, const std::vector<reco::GenParticle>& genParts) const;
-  int getLatestIndexOfMothers(const reco::GenParticle& part, const std::vector<reco::GenParticle>& genParts) const;
-  int getLatestIndexOfDaughters(const reco::GenParticle& part, const std::vector<reco::GenParticle>& genParts) const;
-  std::string formatMotherParticles(const reco::GenParticle& part, const std::vector<reco::GenParticle>& genParts) const;
-  std::string formatDaughterParticles(const reco::GenParticle& part, const std::vector<reco::GenParticle>& genParts) const;
+  int getIndexOf(const Particle& part, const std::vector<Particle>& genParts) const;
+  int getLatestIndexOfDaughters(const Particle& part, const std::vector<Particle>& genParts) const;
+  std::string formatDaughterParticles(const Particle& part, const std::vector<Particle>& genParts) const;
 
   int numOfEvents;
   int counter;
