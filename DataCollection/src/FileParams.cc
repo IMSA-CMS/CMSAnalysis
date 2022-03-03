@@ -44,8 +44,11 @@ void Helicity::addMaps()
 {
   addValuesToMap({"LL", "LR", "RL", "RR"});
 
-  vector<string> dibosons = {"WZ", "WZ3LNu", "WZ2L2Q", "ZZ", "ZZ2L2Nu", "ZZ2L2Q", "ZZ4L", "WW"};
-  vector<string> tops = {"ttbar", "tW", "Wantitop"};
+  // TODO: Check if WWZ really should be in dibosons [ATANG 01/31/22]
+  // Also figure out a way to overhaul this, added starting from WWZ
+  vector<string> dibosons = {"WZ", "WZ3LNu", "WZ2L2Q", "ZZ", "ZZ2L2Nu", "ZZ2L2Q", "ZZ4L", "WW", "WWZ", "WWW"};
+  // added the tt stuff
+  vector<string> tops = {"ttbar", "tW", "Wantitop", "ttH_mumu", "ttH_ZZ", "ttH_bb", "ttZ"};
   vector<string> bottom = {"BBbar"};
   vector<string> qcd = {"Wjets"};
   vector<string> doublyChargedHiggs = {"Higgs++to2Leptons", "Higgs++toWW", "Higgs++toTauTau"};  // Specifices Doubly Charged Higgs decay channels

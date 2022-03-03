@@ -26,6 +26,7 @@
 #include "CMSAnalysis/DataCollection/interface/TwoInvariantMassesHist.hh"
 #include "CMSAnalysis/DataCollection/interface/WeightingModule.hh"
 #include "CMSAnalysis/DataCollection/interface/BJetFilter.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimEventDumpModule.hh"
 
 using std::make_shared;
 
@@ -39,6 +40,10 @@ Analyzer higgsBackgroundAnalysis()
   auto lrWeightMod = make_shared<LRWeightModule>();
   auto metMod = make_shared<METModule>();
   auto bJetFilter = make_shared<BJetFilter>();
+
+  auto dump = GenSimEventDumpModule();
+  dump.process();
+  
 
   auto nLeptonsFilter = make_shared<NLeptonsFilter>();
  
@@ -65,6 +70,7 @@ Analyzer higgsBackgroundAnalysis()
   auto elecPositiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Electron Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);
   auto muonRecoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "Muon Reco Same Sign Invariant Mass", 1000, 0, 2000, false, false);
   auto muonPositiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Muon Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);
+  
 
   auto elecFilter = make_shared<LeptonFilter>(Particle::Type::Electron, 4, "Electron");
   auto muonFilter = make_shared<LeptonFilter>(Particle::Type::Muon, 4, "Muon");

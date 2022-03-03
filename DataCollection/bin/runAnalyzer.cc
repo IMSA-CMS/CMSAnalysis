@@ -44,17 +44,18 @@ int main(int argc, char **argv) {
   std::cout << "Reading input file " << inputFile << std::endl;
 
   unsigned outputEvery = parser.integerValue("outputEvery");
+  
 
   // USING ANALYER FOR H++ THAT WON'T CHANGE: CHANGE BACK
   // TO hPlusPlusMassAnalysis() when ready -- [09/17]
   //Analyzer analyzer = leptonJetBackgroundAnalysis();
   // Analyzer analyzer = massResolutionAnalysis();
   //Analyzer analyzer = leptonJetReconstructionAnalysis();
-  Analyzer analyzer = displacedVertexAnalysis();
+  //Analyzer analyzer = displacedVertexAnalysis();
   // Analyzer analyzer = massAcceptanceAnalysis();
   //Analyzer analyzer = triggerAnalysis();
   //Analyzer analyzer = invariantMassAnalysis();
-  // Analyzer analyzer = higgsBackgroundAnalysis();
+   Analyzer analyzer = higgsBackgroundAnalysis();
 
   if (inputFile.empty())
   {
