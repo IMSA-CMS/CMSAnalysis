@@ -38,9 +38,7 @@ Analyzer higgsBackgroundAnalysis()
   auto triggerMod = make_shared<TriggerModule>();
   auto metMod = make_shared<METModule>();
   auto bJetFilter = make_shared<BJetFilter>();
-
-  auto dump = GenSimEventDumpModule();
-  dump.process();
+  auto dump = make_shared<GenSimEventDumpModule>();
   
 
   auto nLeptonsFilter = make_shared<NLeptonsFilter>();
@@ -85,11 +83,15 @@ Analyzer higgsBackgroundAnalysis()
   histMod->addHistogram(muonPositiveNegativeInvMassHist);
 
   analyzer.addProductionModule(metMod);
-  analyzer.addFilterModule(bJetFilter);
 
-  analyzer.addFilterModule(snowmassCut);
-  analyzer.addFilterModule(nLeptonsFilter);
+  //----Removed Filters for the moment in order to better analyze event signatures
+
+  //analyzer.addFilterModule(bJetFilter);
+
+  //analyzer.addFilterModule(snowmassCut);
+  //analyzer.addFilterModule(nLeptonsFilter);
   
+  analyzer.addAnalysisModule(dump);
   analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
 
   auto leptonSelector = std::make_shared<SnowmassLeptonSelector>(50);
