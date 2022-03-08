@@ -1,9 +1,5 @@
-#ifndef SUPERPLOT_HH
-#define SUPERPLOT_HH
-
-class SuperPlot
+int main()
 {
 	
-};
-
-#endif
+	return 0;
+}

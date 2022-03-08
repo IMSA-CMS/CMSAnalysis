@@ -2,24 +2,30 @@
 #define CHANNEL_HH
 
 #include <vector>
+#include <string>
+#include <unordered_map>
 
 class Process;
 class THStack;
 
-public class Channel
+class Channel
 {
 	public:
-		Channel(std::string name, std::vector<Process*> processes) : name(name), processes(processes) {}
+		Channel(std::string name, std::vector<const Process*> processes) : name(name), processes(processes) {}
 
-		THStack* getStack(std::string label = "");
+		THStack* getStack(std::string label = "") const;
 
-		void labelProcess(std::string label, Process* process) {map[label].push_back(process);}
+		Process* findProcess(std::string processName) const;
+		
+		void labelProcess(std::string label, std::string processName)
+		
+		void labelProcess(std::string label, const Process* process);
 
-		void addProcessLabel(std::string label, std::vector<Process*> processes) {map[label] = processes;}
+		void addProcessLabel(std::string label, std::vector<const Process*> processes);
 
 	private: 
-		std::vector<Process*> processes;
-		std::unordered_map<Process*> map;
+		std::vector<const Process*> processes;
+		std::unordered_map<std::string, const Process*> map;
 		std::string name;
 };
 
