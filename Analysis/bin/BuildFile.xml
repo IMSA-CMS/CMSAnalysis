@@ -12,5 +12,6 @@
 <use   name="pythia8"/>
 <environment>
   <bin   file="BackgroundEstimate.cc"/>
+  <bin   file="SuperPlot.cc"/>
 <use name="CMSAnalysis/Analysis"/>
 </environment>
