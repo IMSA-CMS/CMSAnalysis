@@ -46,6 +46,8 @@ public:
   bool processEvent();
   virtual void setInput(const InputModule* iInput) {input = iInput;}
 
+  // Writes text to screen and to Root file
+  // par is the text itself while name is the name of the variable in the Root file
   void writeText(std::string par, std::string name) const;
 
 protected:

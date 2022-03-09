@@ -17,10 +17,10 @@ bool MatchingModule::process()
 	//std::cerr << "ENTERING MatchingModule" << std::endl;
 	matchingBestPairs.clear();
 
-	// Make a copy so we don't modify the original
-	std::vector<Particle> genSimParticles(getInput()->getParticles(InputModule::RecoLevel::GenSim).getParticles());
-	std::vector<Particle> recoCandidates(getInput()->getParticles(InputModule::RecoLevel::Reco).getParticles());
-	return match(genSimParticles, recoCandidates);
+  // Make a copy so we don't modify the original
+  std::vector<Particle> genSimParticles(getInput()->getLeptons(InputModule::RecoLevel::GenSim).getParticles());
+  std::vector<Particle> recoCandidates(getInput()->getLeptons(InputModule::RecoLevel::Reco).getParticles());
+  return match(genSimParticles, recoCandidates);
 }
   
 //loops through while there are still at least one gen and reco particle left that have not been matched and set to null
