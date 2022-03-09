@@ -293,6 +293,34 @@ Particle::Type Particle::getType() const{
 //   }
 //   return false;
 // }
+
+Particle::Type Particle::identifyType(int pdgid)
+{
+    if (pdgid == 11 || pdgid == -11)
+    {
+      return Particle::Type::Electron;
+    }
+
+    else if (pdgid == 13 || pdgid == -13)
+    {
+      return Particle::Type::Muon;
+    }
+    else if (pdgid == 22)
+    {
+      return Particle::Type::Photon;
+    }
+    else if (pdgid == 4900022)
+    {
+      //std::cout << "Dark Photon\n";
+      return Particle::Type::DarkPhoton;
+    }
+
+    else
+    {
+      //std::cout << "Type: None\n";
+      return Particle::Type::None;
+    }
+}
 int Particle::charge() const
 {
   checkIsNull();
@@ -361,4 +389,8 @@ bool Particle::isFinalState() const
 double Particle::getDeltaR(Particle part) const
 {
   return reco::deltaR(part.getFourVector(), getFourVector());
+}
+
+std::shared_ptr<ParticleImplementation> Particle::getParticleImplementation() {
+  return particle;
 }

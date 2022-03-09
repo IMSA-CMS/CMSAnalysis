@@ -1,0 +1,1 @@
+/store/mc/RunIISummer16MiniAODv2/ADDGravToLL_LambdaT-7000_M-1700_13TeV-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/120000/1019DB5E-61D0-E611-8B3F-549F3525DD6C.root

@@ -156,26 +156,8 @@ Particle::Type CandidateImplementation::getType() const
 
   else if (auto genp = dynamic_cast<const reco::GenParticle*>(particle))
   {
-    double particleId = genp->pdgId();
-
-    if (particleId == 11 || particleId == -11)
-    {
-      return Particle::Type::Electron;
-    }
-
-    else if (particleId == 13 || particleId == -13)
-    {
-      return Particle::Type::Muon;
-    }
-    else if (particleId == 22)
-    {
-      return Particle::Type::Photon;
-    }
-
-    else
-    {
-      return Particle::Type::None;
-    }
+    //std::cout << "CI call identify type\n";
+    return Particle::identifyType(genp->pdgId());
   }
 
   else
