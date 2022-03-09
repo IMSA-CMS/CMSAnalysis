@@ -18,7 +18,7 @@ public:
   virtual int pdgId() const override;
   virtual int status() const override;
   virtual double energy() const override;
-  virtual double isolation() const override {throw std::runtime_error("Isolation not implemented.");}
+  virtual double isolation() const override;
   virtual Particle mother() const override;
   virtual Particle daughter(int i) const override;
   virtual int numberOfDaughters() const override;

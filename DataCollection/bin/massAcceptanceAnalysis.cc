@@ -11,12 +11,10 @@
 #include "CMSAnalysis/DataCollection/interface/MassBinFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/ResolutionModule.hh"
 //#include "CMSAnalysis/DataCollection/interface/MassResolutionModule.hh"
-#include "CMSAnalysis/DataCollection/interface/WeightingModule.hh"
 //#include "CMSAnalysis/DataCollection/interface/MassResolutionHist.hh"
 //#include "CMSAnalysis/DataCollection/interface/PtResolutionHist.hh"
 #include "CMSAnalysis/DataCollection/interface/TotalEventsHist.hh"
 #include "CMSAnalysis/DataCollection/interface/CIAcceptedEventsHist.hh"
-//#include "CMSAnalysis/DataCollection/interface/LRWeightModule.hh"
 
 using std::make_shared;
 
@@ -27,10 +25,8 @@ Analyzer massAcceptanceAnalysis()
   //auto genSimMod = make_shared<GenSimIdentificationModule>();
   //auto recoMod = make_shared<RecoIdentificationModule>(50);
   auto matchMod = make_shared<MatchingModule>();
-  auto weightMod = make_shared<WeightingModule>();
-  auto lrWeightMod = make_shared<LRWeightModule>(); 
 
-  auto histMod = make_shared<HistogramOutputModule>(weightMod, lrWeightMod);
+  auto histMod = make_shared<HistogramOutputModule>();
   auto totalEventsHist = make_shared<TotalEventsHist>("Mass vs Total Events", 200, 0, 3000);
 
 
@@ -43,8 +39,6 @@ Analyzer massAcceptanceAnalysis()
   histMod->addHistogram(acceptanceHistTemplate);
 
   analyzer.addProductionModule(matchMod);
-  analyzer.addProductionModule(weightMod);
-  analyzer.addProductionModule(lrWeightMod);
 
   analyzer.addAnalysisModule(histMod);
   return analyzer;
