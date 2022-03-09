@@ -27,11 +27,12 @@ bool MatchingModule::process()
 //std::cerr << "Hey, I'm in charge of names here" << std::endl;
 bool MatchingModule::match(std::vector<Particle> genSimParticles, std::vector<Particle> recoCandidates)
 {
-  	while (!checkIsNull(genSimParticles) && !checkIsNull(recoCandidates))
+  std::cout << "Matching\n";
+  while (!checkIsNull(genSimParticles) && !checkIsNull(recoCandidates))
     {
-		//std::cerr << "Loop starts" << std::endl;
-		//start with a high value, only really needs to be higher than the cutoff delta R
-		double deltaRMin = std::numeric_limits<double>::max();
+      std::cerr << "Loop starts" << std::endl;
+      //start with a high value, only really needs to be higher than the cutoff delta R
+      double deltaRMin = std::numeric_limits<double>::max();
 
 		Particle nullParticle(nullptr);
 
@@ -167,14 +168,14 @@ bool MatchingModule::match(std::vector<Particle> genSimParticles, std::vector<Pa
 
 bool MatchingModule::checkIsNull(std::vector<Particle> matching) const
 {
-	for (auto& particle : matching)
-	{
-		if(particle.isNotNull())
-		{
-			//std::cerr << "Particle is not null" << std::endl;
-			return false;
-		}
-	}  
-	//std::cerr << "Particle is null" << std::endl;
-	return true;
+  	for (auto& particle : matching)
+  	{
+    	if(particle.isNotNull())
+    	{
+      	std::cerr << "Particle is not null" << std::endl;
+      	return false;
+    	}
+  	}	  
+  	std::cerr << "Particle is null" << std::endl;
+  	return true;
 }
