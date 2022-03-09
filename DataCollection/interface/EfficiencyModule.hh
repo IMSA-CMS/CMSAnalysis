@@ -1,7 +1,6 @@
 #ifndef EFFICIENCYMODULE_HH
 #define EFFICIENCYMODULE_HH
 #include "AnalysisModule.hh"
-#include "WeightingModule.hh"
 #include <unordered_map>
 #include <string>
 #include <vector>
@@ -10,7 +9,7 @@
 class EfficiencyModule : public AnalysisModule
 {
     public:
-    EfficiencyModule(const std::shared_ptr<WeightingModule> WeightingModule);
+    EfficiencyModule();
     void finalize() override;
     virtual void writeAll() override;
 
@@ -26,8 +25,6 @@ class EfficiencyModule : public AnalysisModule
     std::vector<double> total;
     bool isNewFile()const;
     std::string currentFileKey;
-    std::vector<double> weights;
-    const std::shared_ptr<WeightingModule> weighting;
 
 };
 

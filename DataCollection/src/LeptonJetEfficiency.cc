@@ -2,8 +2,8 @@
 #include "CMSAnalysis/DataCollection/interface/LeptonJetReconstructionModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJetMatchingModule.hh"
 
-LeptonJetEfficiency::LeptonJetEfficiency(const std::shared_ptr<WeightingModule> weightMod, const std::shared_ptr<LeptonJetReconstructionModule> iLepRecoMod, const std::shared_ptr<LeptonJetMatchingModule> iLepMatchMod):
-    EfficiencyModule(weightMod),
+LeptonJetEfficiency::LeptonJetEfficiency(const std::shared_ptr<LeptonJetReconstructionModule> iLepRecoMod, const std::shared_ptr<LeptonJetMatchingModule> iLepMatchMod):
+    EfficiencyModule(),
     lepRecoMod(iLepRecoMod),
     lepMatchMod(iLepMatchMod)
 

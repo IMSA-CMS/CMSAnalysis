@@ -1,10 +1,6 @@
 #include "CMSAnalysis/DataCollection/interface/EfficiencyModule.hh"
 
-EfficiencyModule::EfficiencyModule(const std::shared_ptr<WeightingModule> weightingModule): 
-weighting(weightingModule)
-{
-
-}
+EfficiencyModule::EfficiencyModule() {}
 
 void EfficiencyModule::finalize()
 {
@@ -27,7 +23,6 @@ bool EfficiencyModule::process ()
 
         }
         total.push_back(0);
-        weights.push_back(weighting->getWeight());
         currentFileKey = getFileParams().getFileKey();
     }
     doCounters();
@@ -59,21 +54,21 @@ void EfficiencyModule::incrementCounter(std::string name, double increment)
 
 double EfficiencyModule::getCounter(std::string name) const
 {
-    double weightedCounters = 0; 
+    double count = 0; 
     for (size_t i = 0; i < counters.at(name).size(); i++)
     {
-        weightedCounters += counters.at(name)[i] * weights[i];
+        count += counters.at(name)[i];
     }
-    return weightedCounters;
+    return count;
 }
 
 double EfficiencyModule::getEfficiency(std::string name) const
 {
-    double weightedTotal = 0;
+    double sum = 0;
     for (size_t i = 0; i < total.size(); i++)
     {
-        weightedTotal += total[i] * weights[i];
+        sum += total[i];
     }
-    return getCounter(name)/weightedTotal;
+    return getCounter(name)/sum;
 }
 

@@ -9,8 +9,8 @@
 #include <vector>
 #include <TF1.h>
 
-ResolutionModule::ResolutionModule(const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule, const std::shared_ptr<MatchingModule> matchingModule, std::string bin, int min, int max, int intervalSize) :
-  HistogramOutputModule(weightingModule, lrWeightModule),
+ResolutionModule::ResolutionModule(const std::shared_ptr<MatchingModule> matchingModule, std::string bin, int min, int max, int intervalSize) :
+  HistogramOutputModule(),
   matching(matchingModule),
   binType(bin),
   minCut(min),

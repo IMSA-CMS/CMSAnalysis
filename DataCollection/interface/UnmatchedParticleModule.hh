@@ -5,14 +5,12 @@
 
 class GenSimIdentificationModule;
 class RecoIdentificationModule;
-class WeightingModule;
-class LRWeightModule;
 class MatchingModule;
 
 class UnmatchedParticleModule : public HistogramOutputModule
 {
 public:
-  UnmatchedParticleModule(const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeighting, const std::shared_ptr<MatchingModule> matchingModule);
+  UnmatchedParticleModule(const std::shared_ptr<MatchingModule> matchingModule);
 
   virtual void initialize() override;
   virtual bool process() override;
