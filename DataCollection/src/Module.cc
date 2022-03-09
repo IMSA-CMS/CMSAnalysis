@@ -1,5 +1,5 @@
 #include "CMSAnalysis/DataCollection/interface/Module.hh"
-//#include "CMSAnalysis/DataCollection/interface/TDisplayText.h"
+#include "CMSAnalysis/DataCollection/interface/TDisplayText.h"
 
 // Static initialization
 std::unordered_map<std::string, double> Module::parameters;
@@ -21,9 +21,9 @@ Module::~Module() {}
 
 void Module::writeText(std::string par, std::string name) const
 {
-  // TDisplayText *printPar = new TDisplayText(par.c_str());
+  TDisplayText *printPar = new TDisplayText(par.c_str());
 
-  // printPar->Write(name.c_str());
+  printPar->Write(name.c_str());
   
-  // std::cout << name << " : " << par << std::endl;
+  std::cout << name << " : " << par << std::endl;
 }

@@ -44,9 +44,7 @@ Analyzer leptonJetReconstructionAnalysis() {
   // auto genSimMod = std::make_shared<GenSimIdentificationModule>(4900022);
   // auto recoMod = std::make_shared<RecoIdentificationModule>(5);
   // auto matchMod = std::make_shared<MatchingModule>(genSimMod, recoMod);
-  // auto weightMod = std::make_shared<WeightingModule>();
-  // auto lrWeightMod = std::make_shared<LRWeightModule>();
-
+  
   // auto genSimMod = std::make_shared<GenSimIdentificationModule>(4900022);
   // auto recoMod = std::make_shared<RecoIdentificationModule>(5);
   auto matchMod = std::make_shared<MatchingModule>();

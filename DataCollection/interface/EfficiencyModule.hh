@@ -21,8 +21,8 @@ class EfficiencyModule : public AnalysisModule
     virtual void doCounters() = 0; 
 
     private:
-    std::unordered_map<std::string, std::vector<double>> counters;
-    std::vector<double> total;
+    std::unordered_map<std::string, double> counters;
+    double total;
 };
 
 #endif
