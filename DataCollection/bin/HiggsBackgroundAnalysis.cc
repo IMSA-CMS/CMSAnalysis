@@ -1,5 +1,6 @@
 #include <iostream>
 #include <memory>
+#include <fstream>
 
 #include "TROOT.h"
 #include "TSystem.h"
@@ -92,10 +93,12 @@ Analyzer higgsBackgroundAnalysis()
   //analyzer.addFilterModule(nLeptonsFilter);
   
   analyzer.addAnalysisModule(dump);
-  analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
+  //analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
 
   auto leptonSelector = std::make_shared<SnowmassLeptonSelector>(50);
   analyzer.getInputModule().setLeptonSelector(leptonSelector);
+
+
 
   return analyzer;
 }
