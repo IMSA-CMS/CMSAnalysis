@@ -19,8 +19,15 @@ GenSimEventDumpModule::GenSimEventDumpModule(int inumOfEvents):
 }
 
 //update this to remove event parameter
+bool clearlatch = true; 
 bool GenSimEventDumpModule::process()
 {
+  std::ofstream my_file;
+  if (clearlatch) 
+  {
+    my_file.open("EventDumpWWW.txt", std::ofstream::out | std::ofstream::trunc);
+    clearlatch = false;
+  }
   if(counter < numOfEvents || numOfEvents == -1)
   {
     ParticleCollection genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim,Particle::Type::None,nullptr);
@@ -28,7 +35,6 @@ bool GenSimEventDumpModule::process()
     //Input Module is GenSim to match printGenParticleCollection
     if( getInput()->getLeptons(InputModule::RecoLevel::GenSim).getNumParticles() == 4)
     {
-      std::ofstream my_file;
       my_file.open("EventDumpWWW.txt", std::ios::app);
       printGenParticleCollection(genParticles, my_file);
       //std::cout << "\nAn event was printed";
@@ -47,6 +53,9 @@ void GenSimEventDumpModule::writeAll()
 {
 }
 
+//just to keep track of the ammount of events
+int selectedcounter = 1;
+
 void GenSimEventDumpModule::printGenParticleCollection(const ParticleCollection& genParts,std::ofstream& my_file ) const
 {
   int eventElement = 1;
@@ -58,7 +67,7 @@ void GenSimEventDumpModule::printGenParticleCollection(const ParticleCollection&
   //}
   // Format
   my_file << "--------------------------------------------------------" << std::endl;
-  my_file << "EVENT #" << (counter + 1) << std::endl;
+  my_file << "EVENT #" << (counter + 1) << ":" << selectedcounter <<std::endl;
   my_file << "--------------------------------------------------------" << std::endl;
 
   my_file << std::left << std::setw(8) << "element" << std::setw(11) << "| pdfId"
@@ -70,7 +79,6 @@ void GenSimEventDumpModule::printGenParticleCollection(const ParticleCollection&
    << std::setw(15) << "| Phi"
    << std::setw(15) << "| E"
    << std::setw(5) << "| mass\n";
-
   //Prints out all of the particles
   for(auto &part : particleGroup){
 
@@ -89,6 +97,7 @@ void GenSimEventDumpModule::printGenParticleCollection(const ParticleCollection&
     my_file << std::setw(13) << part.getPt() << "| " << std::setw(13) << part.getEta() << "| " << std::setw(13) << part.getPhi() << "| " << std::setw(13) << part.energy() << "| " << std::setw(13) << part.getMass() << "\n";
     eventElement++;
     }
+  selectedcounter++;
 }
 
 int GenSimEventDumpModule::getIndexOf(const Particle& part, const std::vector<Particle>& genParts) const
