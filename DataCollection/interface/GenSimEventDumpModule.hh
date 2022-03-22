@@ -29,7 +29,7 @@ public:
 
 private:
   // prints information to the screen
-  void printGenParticleCollection(const ParticleCollection& genParts) const;
+  void printGenParticleCollection(const ParticleCollection& genParts, std::ofstream& my_file) const;
 
   int getIndexOf(const Particle& part, const std::vector<Particle>& genParts) const;
   int getLatestIndexOfDaughters(const Particle& part, const std::vector<Particle>& genParts) const;
