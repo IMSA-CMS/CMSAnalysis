@@ -29,6 +29,10 @@ ParticleCollection InputModule::getLeptons(RecoLevel level) const
             //std::cout << std::setw(13) << p.getPt() << "| " << std::setw(13) << p.getEta() << "| " << std::setw(13) << p.getPhi() << "| " << std::setw(13) << p.energy() << "| " << std::setw(13) << p.getMass() << "\n";
 
         }
+        //my_file <<"\n";
+        //my_file <<counter;
+        //my_file <<"\n";
+        //my_file.close();
     }
     // if(leptons.getNumParticles()==4){
     //     std::ofstream my_file;
