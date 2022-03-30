@@ -9,7 +9,7 @@
 class GenSimRecoPrototype : public HistogramPrototype1D
 {
   public:
-    GenSimRecoPrototype(const bool typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum);
+    GenSimRecoPrototype(InputModule::RecoLevel type, const std::string& iname, int iNBins, double iminimum, double imaximum);
     std::vector<double> value() const override {return {protectedValue(typeGenSim)};}     // Overloads value() and calls protectedValue(typeGenSim)
     virtual ~GenSimRecoPrototype() {} // Empty virtual destructor
 
@@ -20,7 +20,7 @@ class GenSimRecoPrototype : public HistogramPrototype1D
   virtual std::vector<double> protectedValue(InputModule::RecoLevel level) const = 0;              // Virtual function that is overridden in InvariantMassHist and PtHist
     
   private:
-  InputModule::RecoLevel typeGenSim;                            // Switch between GenSim and Reco: value is true for GenSim, false for Reco                       
+  InputModule::RecoLevel typeGenSim;                         // Switch between GenSim and Reco: value is true for GenSim, false for Reco                       
 };          
 
 #endif
