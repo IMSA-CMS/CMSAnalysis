@@ -71,7 +71,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 	    }
     
     eventLoader.changeFile(file);
-
+    
     while(true)
     {
       if (eventLoader.getFile()->isDone())
@@ -306,6 +306,7 @@ std::vector<std::shared_ptr<Module>> Analyzer::getAllModules() const
     }
   for (auto mod : filterModules)
     {
+      //std::cout<<"Filter"<<mod<<std::endl;
       modules.push_back(mod);
     }
   for (auto mod : analysisModules)

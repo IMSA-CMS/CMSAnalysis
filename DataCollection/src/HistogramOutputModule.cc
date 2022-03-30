@@ -399,4 +399,3 @@ bool HistogramOutputModule::isNewMassBin(const std::string mass)
   
   return true;
 }
-
