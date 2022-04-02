@@ -23,6 +23,12 @@ double CandidateImplementation::et() const {
   return particle->et();
 }
 
+ double CandidateImplementation::isolation() const 
+ {
+   //This needs to be fixed
+   return 0;
+ }
+
 // double CandidateImplementation::eta() const
 // {
 //   checkIsNull();
@@ -137,25 +143,11 @@ Particle::Type CandidateImplementation::getType() const {
   } else if (dynamic_cast<const pat::Photon *>(particle)) {
     return Particle::Type::Photon;
   }
-
-  else if (auto genp = dynamic_cast<const reco::GenParticle *>(particle)) {
-    double particleId = genp->pdgId();
-
-    if (particleId == 11 || particleId == -11) {
-      return Particle::Type::Electron;
-    }
-
-    else if (particleId == 13 || particleId == -13) {
-      return Particle::Type::Muon;
-    } else if (particleId == 22) {
-      return Particle::Type::Photon;
-    }
-
-    else {
-      return Particle::Type::None;
-    }
+  else if (auto genp = dynamic_cast<const reco::GenParticle*>(particle))
+  {
+    //std::cout << "CI call identify type\n";
+    return Particle::identifyType(genp->pdgId());
   }
-
   else {
     return Particle::Type::None;
   }

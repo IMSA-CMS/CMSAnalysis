@@ -100,8 +100,8 @@ private:
         "",
         ""} },
     { EnumTriggers::debug, {
-        "HLT_IsoMu22_v2",
-        "HLT_BTagMu_Jet300_Mu5_v2",
+        "DST_Physics_v2",
+        "",
         "",
         ""} }
   };

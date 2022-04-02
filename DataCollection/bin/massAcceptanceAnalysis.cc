@@ -25,20 +25,17 @@ Analyzer massAcceptanceAnalysis()
   //auto genSimMod = make_shared<GenSimIdentificationModule>();
   //auto recoMod = make_shared<RecoIdentificationModule>(50);
   auto matchMod = make_shared<MatchingModule>();
+  auto signFlipMod = make_shared<SignFlipModule>(matchMod);
 
   auto histMod = make_shared<HistogramOutputModule>();
   auto totalEventsHist = make_shared<TotalEventsHist>("Mass vs Total Events", 200, 0, 3000);
 
 
-  auto acceptedEventsHist = make_shared<CIAcceptedEventsHist>(matchMod,  "Mass vs Accepted Events", 200, 0, 3000);
-  auto acceptanceHistTemplate = make_shared<CIAcceptedEventsHist>(matchMod, "Mass vs Acceptance", 200, 0, 3000);
-
   // Add the histogram(s) created above to histMod
   histMod->addHistogram(totalEventsHist);
-  histMod->addHistogram(acceptedEventsHist);
-  histMod->addHistogram(acceptanceHistTemplate);
 
   analyzer.addProductionModule(matchMod);
+  analyzer.addAnalysisModule(signFlipMod);
 
   analyzer.addAnalysisModule(histMod);
   return analyzer;
