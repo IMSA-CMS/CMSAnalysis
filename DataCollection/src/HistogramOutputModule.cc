@@ -94,51 +94,16 @@ void HistogramOutputModule::fillHistogram(const std::string &name,
 
 std::string HistogramOutputModule::getObjectName(const std::string &str) const {
   std::string newName = getFilter() + str;
-  // std::cout << "Histogram Got: " << newName << '\n';
-
-  /*
-    std::cout << "OBJECTS\n";
-    for (auto pair : objects) {
-      std::cout << pair.first << '\n';
-    }
-    std::cout << "BASE OBJECTS\n";
-    for (auto pair : baseObjects) {
-      std::cout << pair.first << '\n';
-    }
-  */
-
   return newName;
 }
 
 bool HistogramOutputModule::process() {
-  // std::cout << " Made it to HOM process\n";
-  // std::cout << "Process\n";
-
   for (auto hist : histograms) {
     bool draw = hist->shouldDraw(); // call the shouldDraw function so we can
                                     // call process on the FilterModules
-    // std::cout << "shouldDraw returns: " << draw << '\n';
-
-    // If the mass bin is a new mass bin, then make the histograms for that mass
-    // std::cerr << "Shrek reference" << std::endl;
-
-    // If the histogram with mass bin doesn't exist, make it
-//     if (baseObjects.find(hist->getFilteredName()) ==
-//         baseObjects.end()) {
-//       makeHistogram(hist, hist->getFilteredName());
-//       // addMassBinObject(hist->getFilteredName(), massBin);
-//     }
-
-    // std::cerr << "2012 apocalypse" << std::endl;
 
     // If the histogram without mass bin doesn't exist, make it
     if (baseObjects.find(hist->getFilteredName()) == baseObjects.end()) {
-      // std::cout << "Process if 3\n";
-      // std::cout << "Name: " << hist->getName() << '\n';
-      // std::cout << "FilteredName: " << hist->getFilteredName() << '\n';
-      // std::cout << "Mass Bin: " << massBin << '\n';
-      // std::cout << "Histogram missing and made (without Mass Bin): " <<
-      // hist->getFilteredName() << '\n';
       makeHistogram(hist, hist->getFilteredName());
     }
 
@@ -147,26 +112,13 @@ bool HistogramOutputModule::process() {
         hist->getFilteredName()) // If the filter string is empty, then the name
                                  // and the filtered name should be the same
     {
-      // std::cout << "process if 4\n";
-      // std::cout << "Name: " << hist->getName() << '\n';
-      // std::cout << "FilteredName: " << hist->getFilteredName() << '\n';
-      // std::cout << "Mass Bin: " << massBin << '\n';
-      // std::cout << "Histogram missing and made: " << hist->getFilteredName()
-      // << '\n';
       makeHistogram(hist, hist->getFilteredName());
     }
 
-    // std::cerr << "value = " << hist->value() << std::endl;
-
     // Fill the histogram if shouldDraw(event) (draw) returns true
-    // std::cerr << "dunkin donuts" << std::endl;
     if (draw) {
-      // std::cout << "Process if 5\n";
-      // std::cout << "Histogram Filled: " << hist->getFilteredName() + massBin
-      // << '\n' << "Value: " << hist->value() << '\n';
       fillHistogram(hist->getFilteredName(), hist->value());
     }
   }
-  // std::cerr << "kumon: math, reading, success" << std::endl;
   return true;
 }
