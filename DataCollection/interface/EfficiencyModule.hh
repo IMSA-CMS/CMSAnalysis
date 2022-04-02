@@ -25,7 +25,6 @@ class EfficiencyModule : public AnalysisModule
     std::vector<double> total;
     bool isNewFile()const;
     std::string currentFileKey;
-
 };
 
 #endif

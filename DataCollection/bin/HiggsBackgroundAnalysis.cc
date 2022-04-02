@@ -25,6 +25,7 @@
 #include "CMSAnalysis/DataCollection/interface/TriggerModule.hh"
 #include "CMSAnalysis/DataCollection/interface/TripleMuonTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/TwoInvariantMassesHist.hh"
+#include "CMSAnalysis/DataCollection/interface/BJetFilter.hh"
 
 using std::make_shared;
 
@@ -35,6 +36,7 @@ Analyzer higgsBackgroundAnalysis()
   auto matchMod = make_shared<MatchingModule>();
   auto triggerMod = make_shared<TriggerModule>();
   auto metMod = make_shared<METModule>();
+  auto bJetFilter = make_shared<BJetFilter>();
 
   auto nLeptonsFilter = make_shared<NLeptonsFilter>();
  
@@ -77,6 +79,7 @@ Analyzer higgsBackgroundAnalysis()
   histMod->addHistogram(muonPositiveNegativeInvMassHist);
 
   analyzer.addProductionModule(metMod);
+  analyzer.addFilterModule(bJetFilter);
 
   analyzer.addFilterModule(snowmassCut);
   analyzer.addFilterModule(nLeptonsFilter);

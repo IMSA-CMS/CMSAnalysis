@@ -12,12 +12,13 @@ class Particle
 {
   public:
 
-    enum class Type{Electron, Muon, Photon, LeptonJet, Jet, None};
+    enum class Type{Electron, Muon, Photon, LeptonJet, Jet, DarkPhoton, None};
     enum class BarrelState{Barrel, Endcap, None};
     Particle(const reco::Candidate* iparticle = nullptr);
     Particle(const Particle& particle1);
     Particle(const LeptonJet& leptonjet);
     Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, double relIso = -999);
+    std::shared_ptr<ParticleImplementation> getParticleImplementation();
     Particle& operator = (const Particle& particle2);
     double getPt() const;
     double getPhi() const;
@@ -46,6 +47,7 @@ class Particle
     reco::Candidate::LorentzVector getFourVector() const;
     Particle mother() const;
     Particle::Type getType() const;
+    static Particle::Type identifyType(int pdgid); 
 
 
     // bool isGenSim() const;
