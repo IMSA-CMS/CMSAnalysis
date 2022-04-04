@@ -9,7 +9,6 @@
 class EfficiencyModule : public AnalysisModule
 {
     public:
-    EfficiencyModule();
     void finalize() override;
     virtual void writeAll() override;
 
@@ -21,10 +20,8 @@ class EfficiencyModule : public AnalysisModule
     virtual void doCounters() = 0; 
 
     private:
-    std::unordered_map<std::string, std::vector<double>> counters;
-    std::vector<double> total;
-    bool isNewFile()const;
-    std::string currentFileKey;
+    std::unordered_map<std::string, double> counters;
+    double total;
 };
 
 #endif

@@ -23,18 +23,6 @@ double CandidateImplementation::et() const {
   return particle->et();
 }
 
- double CandidateImplementation::isolation() const 
- {
-   //This needs to be fixed
-   return 0;
- }
-
-// double CandidateImplementation::eta() const
-// {
-//   checkIsNull();
-//   return particle->eta();
-// }
-
 double CandidateImplementation::isolation() const {
   if (getType() == Particle::Type::Muon) {
     auto muon = dynamic_cast<const reco::Muon *>(particle);
@@ -46,6 +34,13 @@ double CandidateImplementation::isolation() const {
 
   return -1;
 }
+
+// double CandidateImplementation::eta() const
+// {
+//   checkIsNull();
+//   return particle->eta();
+// }
+
 
 double CandidateImplementation::energy() const {
   // std::cout << "energy\n";
