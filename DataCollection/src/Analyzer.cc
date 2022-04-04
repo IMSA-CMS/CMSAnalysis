@@ -57,129 +57,57 @@ void Analyzer::run(const std::string &configFile, const std::string &outputFile,
       // Open files with rootxd
       const std::string eossrc = "root://cmsxrootd.fnal.gov//";
 
-	  std::string fileStr = eossrc + filename;
-	  TFile* file = TFile::Open(fileStr.c_str(), "READ");
-	  if (!file)
-	    {
-	      std::cout << "File " << fileStr << " not found!\n";
-	      continue;
-	    }
-    
-    eventLoader.changeFile(file);
-
-    while(true)
-    {
-      if (eventLoader.getFile()->isDone())
+      std::string fileStr = eossrc + filename;
+      TFile* file = TFile::Open(fileStr.c_str(), "READ");
+      if (!file)
       {
-        break;
+        std::cout << "File " << fileStr << " not found!\n";
+        continue;
       }
-    }
-    std::cout << "Events Processed: " << numOfEvents << std::endl;
-  }
+    
+      eventLoader.changeFile(file);
 
-	 /*  // Extract events
-	  fwlite::Event ev(file);
-
-	  std::cerr << "Events: " << ev.size() << std::endl;
-
-	  numOfEvents += ev.size();
-      
-	  int ievt = 0;
-
-	  for (ev.toBegin(); !ev.atEnd(); ++ev, ++ievt)
-	    {
-	      const edm::EventBase& event = ev;
-
-	      if (outputEvery != 0 && ievt > 0 && ievt % outputEvery == 0) 
-		std::cout << "Processing event: " << ievt << std::endl; 
-
-	      // Run all production modules
-	      bool continueProcessing = true;
-	      for (auto module : productionModules)
-		{
-		  if (!module->processEvent(event))
-		    {
-		      continueProcessing = false;
-		      //std::cout << "continueProcessing: " << continueProcessing << "\n" << std::endl; 
-		      break;
-		    }
-		}
-
-	      // Run all filter modules and get filter string
-	      std::string filterString;
-	      for (auto module : filterModules)
-		{
-		  if (!module->processEvent(event))
-		    {
-		      continueProcessing = false;
-		      break;
-		    }
-		  else
-		    {
-		      filterString += module->getFilterString();
-		    }
-		}
-
-	      if (!continueProcessing)
-		continue;
-
-	      // Keep track of the filters we are using (multiple insertions
-	      // will cause no effect on a map)
-	      filterNames.insert(filterString);
-
-	      // Run all analysis modules
-	      for (auto module : analysisModules)
-		{
-		  // Set the filter string first
-		  module->setFilterString(filterString);
-		  module->processEvent(event);
-		}
-	    } */
-
-	  delete file;
-
-    if (nFiles != -1 && fileCounter >= nFiles)
-    {
-      break;
-    }
-	}
+      while(true)
+      {
+        if (eventLoader.getFile()->isDone())
+        {
+          break;
+        }
+      }
       std::cout << "Events Processed: " << numOfEvents << std::endl;
-    }      
-  
-    // Create the output file
-  TFile* outputRootFile = new TFile(outputFile.c_str(), "RECREATE");
-
-  // Finalize the modules
-  for (auto module : productionModules)
-    {
-      module->finalize();
-    }
-  for (auto module : filterModules)
-    {
-      module->finalize();
-    }
- 
-  // Finalize separately for each filterString, to be safe
-  for (auto module : analysisModules) {
-    module->doneProcessing();
-
-    for (auto &str : filterNames) {
-      module->setFilterString(str);
-      module->finalize();
     }
 
-    // Write the output
-    module->writeAll();
+    // Finalize the modules
+    for (auto module : productionModules) {
+      module->finalize();
+    }
+    for (auto module : filterModules) {
+      module->finalize();
+    }
+    TFile *outputRootFile = new TFile(outputFile.c_str(), "RECREATE");
+
+    // Finalize separately for each filterString, to be safe
+    for (auto module : analysisModules) {
+      module->doneProcessing();
+
+      for (auto &str : filterNames) {
+        module->setFilterString(str);
+        module->finalize();
+      }
+
+      // Write the output
+      module->writeAll();
+    }
+
+    // Write total number of events
+    auto eventsText = new TDisplayText(std::to_string(numOfEvents).c_str());
+    eventsText->Write("NEvents");
+
+    // Clean up
+    outputRootFile->Close();
+
+    delete outputRootFile;
   }
-
-  // Write total number of events
-  auto eventsText = new TDisplayText(std::to_string(numOfEvents).c_str());
-  eventsText->Write("NEvents");
-
-  // Clean up
-  outputRootFile->Close();
-
-  delete outputRootFile;
 }
 
 std::vector<std::string> Analyzer::parseLine(std::ifstream &txtFile) const {
