@@ -44,7 +44,6 @@ Analyzer higgsBackgroundAnalysis()
   auto dump = make_shared<GenSimEventDumpModule>();
 
   auto nLeptonsFilter = make_shared<NLeptonsFilter>();
-  std::cout<<"NleptonsFilter address "<<nLeptonsFilter<<std::endl;
  
   auto histMod = make_shared<HistogramOutputModule>(weightMod, lrWeightMod);
   auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);

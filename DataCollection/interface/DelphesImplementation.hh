@@ -24,7 +24,7 @@ class DelphesImplementation : public ParticleImplementation
         virtual int numberOfDaughters() const override{return daughtersVec.size();}
         virtual Particle::Type getType() const  override{ return particleType; }
         virtual bool isNotNull() const override {return true;}
-        virtual bool isFinalState() const override {return true;}
+        virtual bool isFinalState() const override {return status()==1}
         virtual bool operator== (const ParticleImplementation& other) const override;
         // virtual Particle::BarrelState getBarrelState() const override {throw std::runtime_error("error");}
         // virtual bool isIsolated() const  override{throw std::runtime_error("error");};
