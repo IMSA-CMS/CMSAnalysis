@@ -92,10 +92,20 @@ void GenSimEventDumpModule::printGenParticleCollection(const ParticleCollection&
 
     // Print daughters
     //formatDaughterParticles(part, particleGroup) was replaced by function not working string
-    my_file << std::setw(daughterColumnWidth - 2) << "FUNCTION DOES NOT WORK" << "| ";
-
+    try{
+      my_file << std::setw(daughterColumnWidth - 2) << formatDaughterParticles(part, particleGroup) << "| ";
+    }
+    catch(const std::exception& e){
+      my_file << std::setw(daughterColumnWidth - 2) << "Not Available"<< "| ";
+    }
     // Particle properties
-    my_file << std::setw(13) << part.getPt() << "| " << std::setw(13) << part.getEta() << "| " << std::setw(13) << part.getPhi() << "| " << std::setw(13) << "part.energy()" << "| " << std::setw(13) << part.getMass() << "\n";
+    my_file << std::setw(13) << part.getPt() << "| " << std::setw(13) << part.getEta() << "| " << std::setw(13) << part.getPhi() << "| ";
+    try{
+      my_file << std::setw(13) << part.energy() << "| " << std::setw(13) << part.getMass() << "\n";
+    }
+    catch(const std::exception& e){
+      my_file << std::setw(13) << "N/A" << "| " << std::setw(13) << part.getMass() << "\n";
+    }
     eventElement++;
     }
   selectedcounter++;
