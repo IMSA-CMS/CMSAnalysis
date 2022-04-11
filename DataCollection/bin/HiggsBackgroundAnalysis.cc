@@ -40,7 +40,10 @@ Analyzer higgsBackgroundAnalysis()
   auto metMod = make_shared<METModule>();
   auto bJetFilter = make_shared<BJetFilter>();
   auto dump = make_shared<GenSimEventDumpModule>();
+<<<<<<< HEAD
   
+=======
+>>>>>>> 329f87b236be733c55c24baac55c568308804aa2
 
   auto nLeptonsFilter = make_shared<NLeptonsFilter>();
  
@@ -49,11 +52,15 @@ Analyzer higgsBackgroundAnalysis()
 
   // auto genSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
   // Go up to 2000 - Andy, 09/02 - and make more bins. Modifications also made for picking files
+<<<<<<< HEAD
   auto genSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(true, "GenSim Same Sign Invariant Mass", 1000, 0, 2000, false, false);
+=======
+  auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(true, "Reco Same Sign Invariant Mass", 1000, 0, 5000, false, false);
+>>>>>>> 329f87b236be733c55c24baac55c568308804aa2
   auto positiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);
 
   auto recoPt = make_shared<PtHist>(false, "Leading lepton pT", 500, 0, 1000);
-  auto recoInvMass = make_shared<InvariantMassHist>(false, "Opposite-sign dilepton mass", 1000, 0, 2000);
+  auto recoInvMass = make_shared<InvariantMassHist>(false, "Gen Sim Opposite-sign dilepton mass", 1000, 0, 5000);
   auto metHist = make_shared<METHist>(metMod, "MET", 500, 0, 1000);
 
   // Add the histogram(s) created above to histMod
@@ -63,9 +70,9 @@ Analyzer higgsBackgroundAnalysis()
   histMod->addHistogram(recoInvMass);
   histMod->addHistogram(metHist);
 
-  auto elecRecoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "Electron Reco Same Sign Invariant Mass", 1000, 0, 2000, false, false);
+  auto elecRecoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "Electron Reco Same Sign Invariant Mass", 5000, 0, 10000, false, false);
   auto elecPositiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Electron Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);
-  auto muonRecoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "Muon Reco Same Sign Invariant Mass", 1000, 0, 2000, false, false);
+  auto muonRecoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "Muon Reco Same Sign Invariant Mass", 5000, 0, 10000, false, false);
   auto muonPositiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Muon Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);
   
 

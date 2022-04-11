@@ -12,9 +12,13 @@
 #include "DataFormats/PatCandidates/interface/Photon.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
 #include "DataFormats/Math/interface/LorentzVector.h"
+#include <iostream>
+#include <vector>
+#include <fstream>
 
 TreeEventFile::TreeEventFile(TFile *ifile) : EventFile(ifile) {}
-
+int otherCounter = 0;
+int otherotherCounter =1;
 void TreeEventFile::initialize()
 {
     tree = getFile()->Get<TTree>(getTreeName().c_str());
@@ -53,19 +57,25 @@ void TreeEventFile::initialize()
     tree->SetBranchAddress(getTreeBranches().genPhi.c_str(), &gen_phi);
     tree->SetBranchAddress(getTreeBranches().genMass.c_str(), &gen_mass);
     tree->SetBranchAddress(getTreeBranches().genPt.c_str(), &gen_pt);
+    tree->SetBranchAddress(getTreeBranches().gend1.c_str(), &gen_d1);
+    tree->SetBranchAddress(getTreeBranches().gend2.c_str(), &gen_d2);
+    tree->SetBranchAddress(getTreeBranches().genm1.c_str(), &gen_m1);
+    tree->SetBranchAddress(getTreeBranches().genm2.c_str(), &gen_m2);
 
     tree->SetBranchAddress(getTreeBranches().elecIdpass.c_str(), &elec_idpass);
     tree->SetBranchAddress(getTreeBranches().muonIdpass.c_str(), &muon_idpass);
 
+    //tree->Show();
+    //nextEvent();
     counter = 0;
     tree->GetEntry(counter);
     ++(counter);
 
-    /* // Now loop through by index to collect everything??
-    Int_t nentries = (Int_t)t1->GetEntries();
-    for(int i = 0; i < nentries; i++) {
-        // Loop through using getEntry
-    } */
+    // // Now loop through by index to collect everything??
+    // Int_t nentries = (Int_t)t1->GetEntries();
+    // for(int i = 0; i < nentries; i++) {
+    //     nextEvent();
+    // }
 }
 
 void TreeEventFile::nextEvent()
@@ -92,12 +102,43 @@ GenEventInfoProduct TreeEventFile::getGenInfo() const
 ParticleCollection TreeEventFile::getGenSimParticles() const
 {
     ParticleCollection genParticles;
+    //int motherColumnWidth = 20;
+    //int daughterColumnWidth = 20;
     // This seems problematic
     //  std::cout << gen_size << std::endl;
     //  std::cout << gen_size << std::endl;
+    //int leptonCount = 0;
+    //int element = 1;
+    //std::vector<std::vector<int>> leptonInfo;
+    // std::cout << "--------------------------------------------------------" << std::endl;
+    // std::cout << "EVENT #" << (otherCounter + 1)<<std::endl;
+    // std::cout << "--------------------------------------------------------" << std::endl;
 
+    // std::cout << std::left << std::setw(8) << "element" << std::setw(11) << "| pdfId"
+    // << std::setw(10) << "| status"
+    // << std::setw(motherColumnWidth) << "| mothers"
+    // << std::setw(daughterColumnWidth) << "| daughters"
+    // << std::setw(15) << "| pT"
+    // << std::setw(15) << "| Eta"
+    // << std::setw(15) << "| Phi"
+    // //<< std::setw(15) << "| E"
+    // << std::setw(5) << "| mass\n";
     for (int i = 0; i < gen_size; i++)
     {
+        //std::cout<< std::setw(8) << i+1 << "| " << std::setw(9) << gen_pid[i] << "| " << std::setw(8) << gen_status[i] << "| ";
+
+        // fix formatMotherParticles function
+        // Print mothers
+        //std::cout << std::setw(motherColumnWidth - 2) << "0" << "| ";
+        //my_file << std::setw(motherColumnWidth - 2) << formatMotherParticles(part, genParts) << "| ";
+
+        // Print daughters
+        //formatDaughterParticles(part, particleGroup)
+        //std::cout << std::setw(daughterColumnWidth - 2) << "A"<< "| ";
+
+        // Particle properties
+        //std::cout << std::setw(13) << gen_m1[i]<<""<<gen_m2[i]<<"| "<<std::setw(13)<< gen_d1[i]<<""<<gen_d2[i]<<"| "<<std::setw(13)<<gen_pt[i] << "| " << std::setw(13) << gen_eta[i] << "| " << std::setw(13) << gen_phi[i] << "| " << std::setw(13) << gen_mass[i] << "\n";
+        //std::cout<<"elec_idpass "<<elec_idpass[i]<<std::endl;
         // Lorentz four-vector
         /* if(i == 0) {
             std::cout << elec_pt[i] << " " << elec_eta[i] << " " <<
@@ -120,11 +161,64 @@ ParticleCollection TreeEventFile::getGenSimParticles() const
         genParticles.addParticle(Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i],
                                                                         gen_eta[i], gen_phi[i], gen_mass[i])),
-            charge, Particle::identifyType(gen_pid[i])));
+            charge, Particle::identifyType(gen_pid[i]),gen_pid[i],gen_status[i],gen_m1[i],gen_m2[i],gen_d1[i],gen_d2[i],0)); //not sure if relIso, last parameter, should be set to 0
             //std::cout << "Tree Event File:" << genParticles.getNumParticles() << "\n";
-        
+        // if((gen_pid[i]==13 || gen_pid[i]==-13 ||gen_pid[i]==11 || gen_pid[i]==-11) && gen_pt[i]>=50 && gen_status[i] == 1){
+        //     leptonCount++;
+        //     std::vector<int> lepton;
+        //     lepton.emplace_back(i+1);
+        //     lepton.emplace_back(gen_pt[i]);
+        //     lepton.emplace_back(gen_eta[i]);
+        //     lepton.emplace_back(gen_mass[i]);
+        //     lepton.emplace_back(gen_pid[i]);
+        //     leptonInfo.emplace_back(lepton);
+        // }   
     }
-
+    // bool fourLepton = false;
+    // int totalPt = 0;
+    // //std::cout<<leptonCount<<std::endl;
+    // if (leptonInfo.size() ==4){
+    //     std::cout<<std::endl;
+    //     for (size_t i = 0; i < 4; i++)
+    //     {
+    //         std::cout<<"ID"<<leptonInfo[i][0]<<" "<<leptonInfo[i][1]<<" "<<leptonInfo[i][2] <<" "<<leptonInfo[i][3]<<leptonInfo[i][4]<<std::endl;
+    //         totalPt += leptonInfo[i][1];
+    //     }
+    //     std::cout<<std::endl;
+    //     fourLepton = true;
+    // }
+    // std::ofstream my_file;
+    // my_file.open("EventDumpAndyWWZ3000#2.txt", std::ios::app);
+    // if(fourLepton && totalPt >= 3000){
+    //     my_file << "--------------------------------------------------------" << std::endl;
+    //     my_file << "EVENT #" << (otherCounter + 1)<<" "<< otherotherCounter<<"ab" <<std::endl;
+    //     my_file << "--------------------------------------------------------" << std::endl;
+    //     my_file << std::left << std::setw(8) << "element" << std::setw(11) << "| pdfId"
+    //         << std::setw(10) << "| status"
+    //         << std::setw(motherColumnWidth) << "| mothers"
+    //         << std::setw(daughterColumnWidth) << "| daughters"
+    //         << std::setw(15) << "| pT"
+    //         << std::setw(15) << "| Eta"
+    //         << std::setw(15) << "| Phi"
+    //         //<< std::setw(15) << "| E"
+    //         << std::setw(5) << "| mass\n";
+    //     for (int i = 0; i < gen_size; i++)
+    //     {
+    //         my_file<< std::setw(8) << i+1 << "| " << std::setw(9) << gen_pid[i] << "| " << std::setw(8) << gen_status[i] << "| ";
+    //         my_file << std::setw(13) << gen_m1[i]<<""<<gen_m2[i]<<"| "<<std::setw(13)<< gen_d1[i]<<""<<gen_d2[i]<<"| "<<std::setw(13)<<gen_pt[i] << "| " << std::setw(13) << gen_eta[i] << "| " << std::setw(13) << gen_phi[i] << "| " << std::setw(13) << gen_mass[i] << "\n";
+    //     }
+    //     my_file<<std::endl;
+    //     for (size_t i = 0; i < 4; i++)
+    //     {
+    //         my_file<<leptonInfo[i][0]<<" "<<leptonInfo[i][1]<<" "<<leptonInfo[i][2] <<" "<<leptonInfo[i][3]<<std::endl;
+    //     }
+    //     my_file<<std::endl;
+    //     otherotherCounter++;
+    // }
+    // my_file.close();
+    // fourLepton = false;
+    // otherCounter++;
+    //std::cout<< "Size of GenParticles "<< genParticles.getNumParticles()<<std::endl;
     return genParticles;
 }
 
@@ -138,6 +232,7 @@ ParticleCollection TreeEventFile::getRecoParticles() const
     {
         if (elec_idpass[i] & 7)
         {
+            //std::cout<<"elec_idpass "<<elec_idpass[i]<<std::endl;
             int charge = elec_charge[i];
             // Kludge to simulate charge mismeasurement
             // if ((int)(elec_pt[i] * 100) % 10 == 0)
@@ -183,7 +278,7 @@ ParticleCollection TreeEventFile::getRecoParticles() const
                 charge, Particle::Type::Muon, muon_reliso[i]));
         }
     }
-
+    //std::cout<< "Size of RecoParticles "<< recoParticles.getNumParticles()<<std::endl;
     return recoParticles;
 }
 
