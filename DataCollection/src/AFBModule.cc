@@ -5,8 +5,8 @@
 
 #include <iostream>
 
-AFBModule::AFBModule(const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule, int minMass, int maxMass, int massInterval) :
-  HistogramOutputModule(weightingModule, lrWeightModule),
+AFBModule::AFBModule(int minMass, int maxMass, int massInterval) :
+  HistogramOutputModule(),
   // genSim(genSimModule),
   // reco(recoModule),
   minMassCut(minMass),
