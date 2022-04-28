@@ -3,8 +3,8 @@
 
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 
-MassResolutionModule::MassResolutionModule(const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeightModule, const std::shared_ptr<MatchingModule> matchingModule, std::string bin, const int minMass, const int maxMass, const int massIntervalSize) :
-  ResolutionModule(weightingModule, lrWeightModule, matchingModule, bin, minMass, maxMass, massIntervalSize)
+MassResolutionModule::MassResolutionModule(const std::shared_ptr<MatchingModule> matchingModule, std::string bin, const int minMass, const int maxMass, const int massIntervalSize) :
+  ResolutionModule(matchingModule, bin, minMass, maxMass, massIntervalSize)
 {
 }
 
