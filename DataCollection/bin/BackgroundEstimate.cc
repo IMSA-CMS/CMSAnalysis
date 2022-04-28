@@ -34,14 +34,14 @@ struct Parameters
     std::string analysisName;
     std::string nickname;
     double sumSwitch;
-    std::string analysis5LName;
+    std::string fitFile;
     std::string d1fitName;
     double dimensionSwitch; 
 
     Parameters(std::string line)
     {
         //Parameter bank which is used to insert parameters from my file into the code where needed
-        std::string eventsString, massTargetString, crossSectionString, fitSwitchString, sumSwitchString, dimensionSwitchString;
+        std::string eventsString, massTargetString, crossSectionString, fitSwitchString, sumSwitchString, fitFileString, dimensionSwitchString;
         std::istringstream str(line);
         std::getline(str, massTargetString, '\t');
         std::getline(str, fileName, '\t');
@@ -52,7 +52,7 @@ struct Parameters
         std::getline(str, analysisName, '\t');
         std::getline(str, nickname, '\t');
         std::getline(str, sumSwitchString, '\t');
-        std::getline(str, analysis5LName, '\t');
+        std::getline(str, fitFile, '\t');
         std::getline(str, d1fitName, '\t');
         std::getline(str, dimensionSwitchString, '\t');
 
@@ -72,8 +72,11 @@ struct Parameters
 //Background estimate finding function
 void ComputationalFunction(Parameters param, std::ostream &out_file)
 {
+    
     //Opens my file, assigns it f
     TFile *f = new TFile(param.fileName.c_str()); //Change this for different files
+
+    TFile *fitfile = new TFile(param.fitFile.c_str());
 
     //Reads out name if not an inclusive background
     if (param.sumSwitch == 0)
@@ -91,15 +94,22 @@ void ComputationalFunction(Parameters param, std::ostream &out_file)
     int totalEventsInt = std::stoi(totalEventsStr);
 
     //Takes the fit histogram wanted from the file, assigns it hist
-    TH1 *hist = dynamic_cast<TH1 *>(f->Get(param.histograms.c_str())); //Change this for different fit
-    if (!hist)
-        throw std::runtime_error("Fit hist not found in file " + param.fileName);
+    TH2 *hist2D = dynamic_cast<TH2 *>(fitfile->Get(param.histograms.c_str())); //Change this for different fit
+    if (!hist2D)
+    {
+        //outout << "Fit hist not found in file " << param.fitFile;
+        //outout << "\n";
+        return;
+    }
+    TH1 *hist = hist2D->ProjectionX("_px", 0, -1, "E");
 
     //Creates a power law fit function
-    TF1 *fitfunc = new TF1("fitfunc", "[0]*pow((x + [2]), [1])", 150, 1300);
+    // TF1 *fitfunc = new TF1("fitfunc", "[0]*pow((x + [2]), [1])", 150, 3000);
+    TF1 *fitfunc = new TF1("fitfunc", "[0] * pow(x, [1])", 150, 3000);
 
     //Root says to initialize these
-    fitfunc->SetParameters(1e9, -3, 100);
+    //fitfunc->SetParameters(1e9, -3, 100);
+    //fitfunc->SetParLimits(0, 0, 1e100);
 
     //Fits the histogram with the fit function
     // Root's fitting is lousy, so we have to do it again and again
@@ -107,8 +117,8 @@ void ComputationalFunction(Parameters param, std::ostream &out_file)
     double func = std::numeric_limits<double>::max();
     const double tolerance = .1;
     while (true)
-    {
-        auto result = hist->Fit(fitfunc, "RBSQ0", "", 150, 1300);
+    { //Removed Q
+        auto result = hist->Fit(fitfunc, "RBSLQ0", "", 150, 3000);
         double newVal = result->MinFcnValue();
         if (func - newVal > tolerance)
         {
@@ -121,14 +131,16 @@ void ComputationalFunction(Parameters param, std::ostream &out_file)
     }
 
     //Pulls analysis hist from file
-    TH1 *histanalysis = (TH1 *)f->Get(param.analysisName.c_str()); //Change this for different hist analysis
-    if (!histanalysis)
+    TH2 *histanalysis2D = (TH2 *)f->Get(param.analysisName.c_str()); //Change this for different hist analysis
+    if (!histanalysis2D)
     {
         //outout << "Analysis hist not found in file " << param.fileName;
         //outout << "\n";
         return;
     }
 
+    TH1 *histanalysis = histanalysis2D->ProjectionX("_px", 0, -1, "E");
+    
     //Finds number of events ran total (from spreadsheet)
     double totaleventsran = totalEventsInt; //Change this for different event numbers
 
@@ -136,29 +148,54 @@ void ComputationalFunction(Parameters param, std::ostream &out_file)
         {
         //Takes the integral of the analysis hist
         double eventsanalysishist = histanalysis->GetEntries();
+        outout << eventsanalysishist;
+        outout << "\n";
+        
 
         //Defines out mass range and takes the integral of the fit for that range
         double acceptedCenter = param.massTarget;
         double masslowaccepted = acceptedCenter - (acceptedCenter * .05);
         double masshighaccepted = acceptedCenter + (acceptedCenter * .05);
         double acceptedfitintegral = fitfunc->Integral(masslowaccepted, masshighaccepted);
+        outout << acceptedfitintegral;
+        outout << "\n";
 
         //Finds the integral of the fit from 150-1300
-        double rangefitintegral = fitfunc->Integral(150, 1700);
-
+        double rangefitintegral = fitfunc->Integral(150, 2000);
+        // if (rangefitintegral <= 0);
+        //     rangefitintegral ;
+        
+        
         //Finds the integral of the analysis histogram from 0-1500
         double totalanalysishistintegral = histanalysis->Integral();
+        outout << "Total analysis int ";
+        outout << totalanalysishistintegral;
+        outout << "\n";
 
         //Finds the # of 4L events in the fit range divided by total events in the analysis hist
         double analysis150bin = histanalysis->FindBin(150);
-        double analysis1300bin = histanalysis->FindBin(1700);
-        double eventanalysisfitrange = exp(log(histanalysis->Integral(analysis150bin, analysis1300bin)) - log(totalanalysishistintegral));
-    
+        double analysis1700bin = histanalysis->FindBin(2000);
+        double eventanalysisfitrange = exp(log(histanalysis->Integral(analysis150bin, analysis1700bin)) - log(totalanalysishistintegral));
+        outout << histanalysis->Integral(analysis150bin, analysis1700bin);
+        outout << "\n";
+        //  outout << "\n";
+        // outout << "Rangefitint ";
+        // outout << rangefitintegral;
+        
         //Calculates ratio between both fit integrals
         double fitratio = exp(log(acceptedfitintegral) - log(rangefitintegral));
 
+        //  outout << "\n";
+        // outout << "Fit Ratio ";
+        // outout << fitratio;
+
         //Finds histogram fraction
         double histfraction = exp(log(fitratio) + log(eventanalysisfitrange));
+
+        //  outout << "\n";
+        // outout << "Histfraction ";
+        // outout << histfraction;
+
 
         //Finds luminosity (from spreadsheet)
         double luminosity = 3000;
@@ -170,7 +207,7 @@ void ComputationalFunction(Parameters param, std::ostream &out_file)
         double crosssection = param.crossSection; //Change this for different cross section
 
         //Finds background
-        double backgroundest = exp(log(efficiency) + log(1000) + log(crosssection) + log(luminosity) + (2 * log(histfraction/2)));
+        double backgroundest = exp(log(efficiency) + log(1000) + log(crosssection) + log(luminosity) + (2 * log(histfraction)));
         //For efficiency lose: log(1000) + log(crosssection) + log(luminosity)
 
         // double effnumb = exp(log(efficiency) + (2 * log(histfraction/2)));
@@ -201,15 +238,26 @@ void ComputationalFunction(Parameters param, std::ostream &out_file)
         // outout << "\n";
 
         //Deletes leftovers
-        delete histanalysis;
-        delete fitfunc;
-        delete hist;
-        delete f;
+        // delete histanalysis;
+        // delete fitfunc;
+        // delete hist;
+        // delete f;
         }
 
     if (param.fitSwitch == 1)
     {
         auto newAnalysis = dynamic_cast<TH2*>(histanalysis);
+
+        if (!newAnalysis)
+        {
+            // outout << "WWZ analysis hist not found in file " << param.fileName;
+            // outout << "\n";
+
+            outout << "Not Found";
+            outout << "\n";
+
+            return;
+        }
         //Takes the integral of the analysis hist
         double eventsinanalysishist = newAnalysis->GetEntries();
 
@@ -238,11 +286,12 @@ void ComputationalFunction(Parameters param, std::ostream &out_file)
 
         //Finds background
         double backgroundest = exp(log(efficiency) + log(1000) + log(crosssection) + log(luminosity) + log(histfraction));
+        //Take out for efficiency + log(1000) + log(crosssection) + log(luminosity)
 
         // double effnumb = efficiency * histfraction;
         // outout << effnumb;
         // outout << "\n";
-
+        outout << " ";
         outout << backgroundest;
         outout << "\n";
     }
@@ -267,7 +316,7 @@ void SignalFunction(Parameters param, std::ostream &out_file)
    
     //Changes the 4 to a 5 for my analysis hist so we have the 5 lepton hist as a variable
     std::string analysis4L = param.analysisName;
-    std::string analysis5L = param.analysis5LName;
+    //std::string analysis5L = param.analysis5LName;
     // outout << analysis4L; 
     // outout << "\n";
     // outout << analysis5L; 
@@ -277,12 +326,12 @@ void SignalFunction(Parameters param, std::ostream &out_file)
     TH2 *histanalysis = (TH2F *)f->Get(analysis4L.c_str()); //Change this for different hist analysis
     if (!histanalysis)
         throw std::runtime_error("4L Hist " +  param.analysisName + " not found");
-    TH2 *histanalysis5L = (TH2F *)f->Get(analysis5L.c_str()); //Change this for different hist analysis
-    if (!histanalysis5L)
-        throw std::runtime_error("5L Hist " +  param.analysis5LName + " not found");
+    // TH2 *histanalysis5L = (TH2F *)f->Get(analysis5L.c_str()); //Change this for different hist analysis
+    // if (!histanalysis5L)
+    //     throw std::runtime_error("5L Hist " +  param.analysis5LName + " not found");
    
-    //Adds the 4 lepton and 5 lepton bin hists together
-    histanalysis->Add(histanalysis5L);
+    // //Adds the 4 lepton and 5 lepton bin hists together
+    // histanalysis->Add(histanalysis5L);
 
     //Finds the integral of the analysis histogram from 0-1500
     double eventsanalysishist = histanalysis->GetEntries();
