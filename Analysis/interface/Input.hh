@@ -8,7 +8,8 @@ class TH1;
 class Input
 {
 	public:
-		virtual TH1* getInput(std::string name) = 0;
+		virtual TH1* getInput(std::string name) const = 0;
+		virtual ~Input() {}
 };
 
 #endif
