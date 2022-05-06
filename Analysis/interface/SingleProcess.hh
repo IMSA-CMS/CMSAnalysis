@@ -1,9 +1,9 @@
 #ifndef SINGLEPROCESS_HH
 #define SINGLEPROCESS_HH
 
+#include "Input.hh"
 #include <string>
 #include <vector>
-#include "Analysis/interface/Input.hh"
 
 class Estimator;
 
@@ -11,8 +11,9 @@ class Estimator;
 class SingleProcess
 {
 public:
+    SingleProcess(std::string iName, double iCrossSection, const Input* iInput) : name(iName), crossSection(iCrossSection), input(iInput) {}
     std::string getName() const {return name;} //Inlining
-    double crossSection() const {return crossSection;}
+    double getCrossSection() const {return crossSection;}
     TH1* getHist() const {return input->getInput(name);}
 
 private:
