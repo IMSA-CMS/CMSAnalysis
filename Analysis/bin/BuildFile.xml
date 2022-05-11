@@ -10,6 +10,7 @@
 <use   name="PhysicsTools/SelectorUtils"/>
 <use   name="SimDataFormats/GeneratorProducts"/>
 <use   name="pythia8"/>
+<use   name="CMSAnalysis/DataCollection"/>
 <environment>
   <bin   file="BackgroundEstimate.cc"/>
   <bin   file="SuperPlot.cc"/>
