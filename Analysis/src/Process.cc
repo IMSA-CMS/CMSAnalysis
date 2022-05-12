@@ -1,25 +1,25 @@
-#include "Analysis/interface/Process.hh"
-#include "TH1.h"
+#include "CMSAnalysis/Analysis/interface/Process.hh"
+#include "TH1F.h"
 
-TH1* Process::getHist()
+TH1* Process::getHist() const
 {
 	int maxBinNum = 0;
 	double maxBarWidth = 0.0;
-	for (Process* singleProcess : processes)
+	for (const auto& singleProcess : processes)
 	{
-		if (singleProcess->getHist()->GetMaximumBin() > maxBinNum)
+		if (singleProcess.getHist()->GetMaximumBin() > maxBinNum)
 		{
-			maxGBin = singleProcess->getHist()->GetMaximumBin();
+			maxBinNum = singleProcess.getHist()->GetMaximumBin();
 		}
-		if (singleProcess->getHist()->GetBarWidth() > maxBarWidth)
+		if (singleProcess.getHist()->GetBarWidth() > maxBarWidth)
 		{
-			maxBarWidth = singleProcess->getHist()->GetBarWidth();
+			maxBarWidth = singleProcess.getHist()->GetBarWidth();
 		}
 	}
-	TH1* hist = new TH1(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * maxBarWidth)
-	for (Process* singleProcess : processes)
+	TH1* hist = new TH1F(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * maxBarWidth);
+	for (const auto& singleProcess : processes)
 	{
-		hist->Add(*(singleProcess->getHist()));
+		hist->Add(*(singleProcess.getHist()));
 	}
 	hist->SetFillColor(color);
 	return hist;
