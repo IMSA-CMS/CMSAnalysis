@@ -1,19 +1,10 @@
-<<<<<<< HEAD
-#include "CMSAnalysis/Analysis/interface/Channel.hh"
-#include "CMSAnalysis/Analysis/interface/Process.hh"
-=======
 #include "CMSAnalysis/Analysis/interface/Process.hh"
 #include "CMSAnalysis/Analysis/interface/Channel.hh"
->>>>>>> ded437d466687e45b887622f5bbcba68c17918c1
 #include "THStack.h"
 
 #include <algorithm>
 
-<<<<<<< HEAD
-Process* Channel::findProcess(std::string processName) const
-=======
 const Process* Channel::findProcess(std::string processName) const
->>>>>>> ded437d466687e45b887622f5bbcba68c17918c1
 {
 	for (auto process : processes)
 	{

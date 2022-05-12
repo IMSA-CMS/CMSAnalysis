@@ -7,7 +7,8 @@ class Estimator
 public: 
 	virtual double getExpectedYield(double luminosity) const = 0;
 
-
+protected: 
+	SingleProcess* getProcess() const {return process;}
 private: 
 	SingleProcess* process;
 	
