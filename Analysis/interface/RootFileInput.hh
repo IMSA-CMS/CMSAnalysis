@@ -1,9 +1,9 @@
 #ifndef ROOTFILEINPUT_HH
-#define FOOTFILEINPUT_HH
+#define ROOTFILEINPUT_HH
 
 #include "Input.hh"
 
-class TFile
+class TFile;
 
 class RootFileInput : public Input
 {
@@ -11,7 +11,7 @@ class RootFileInput : public Input
 		TFile* file;
 	public:
 		RootFileInput(std::string fileName);
-		TH1* GetInput(std::string name) override;
+		TH1* getInput(std::string name) const override;
 };
 
 
