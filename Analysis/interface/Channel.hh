@@ -27,12 +27,7 @@ class Channel
 	private: 
 		std::string name;
 		std::vector<const Process*> processes;
-<<<<<<< HEAD
-		std::unordered_map<std::string, const Process*> map;
-		
-=======
 		std::unordered_map<std::string, std::vector<const Process*>> map;
->>>>>>> ded437d466687e45b887622f5bbcba68c17918c1
 };
 
 

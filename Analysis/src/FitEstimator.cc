@@ -1,5 +1,22 @@
 #include "CMSAnalysis/Analysis/interface/FitEstimator.hh"
 #include "CMSAnalysis/Analysis/interface/SingleProcess.hh"
+#include "CMSAnalysis/Analysis/interface/Process.hh"
+#include <iostream>
+#include "TH1.h"
+#include "TCanvas.h"
+#include "TF1.h"
+#include "TFile.h"
+#include "TH1F.h"
+#include "TAxis.h"
+#include "TFitResult.h"
+#include <sstream>
+#include <fstream>
+#include <array>
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include "TH2.h"
+#include "TH2F.h"
 #include "TFile.h"
 
 double FitEstimator::getExpectedYield(double luminosity, const SingleProcess* process) const 
@@ -10,12 +27,12 @@ double FitEstimator::getExpectedYield(double luminosity, const SingleProcess* pr
     TFile *fitfile = new TFile(process->getFitName().c_str());
 
     //Find total events from file
-    TDisplayText *totalevents = f->Get<TDisplayText>("NEvents");
-    std::string totalEventsStr = totalEvents()->GetString().Data();
+    //TDisplayText *totalevents = f->Get<TDisplayText>("NEvents");
+    std::string totalEventsStr = process->getEventsExpected()->GetString().Data();
     int totalEventsInt = std::stoi(totalEventsStr);
 
     //Takes the fit histogram wanted from the file, assigns it hist
-    TH2 *hist2D = dynamic_cast<TH2 *>(fitfile->Get(process->getFitHist().c_str())); //Change this for different fit
+    TH2 *hist2D = dynamic_cast<TH2 *>(fitfile->Get(process->getFitHist())); //Change this for different fit
 
     TH1 *hist = hist2D->ProjectionX("_px", 0, -1, "E");
 
@@ -43,7 +60,7 @@ double FitEstimator::getExpectedYield(double luminosity, const SingleProcess* pr
     }
 
     //Pulls analysis hist from file
-    TH2 *histanalysis2D = (TH2 *)f->Get(process->getHist().c_str()); //Change this for different hist analysis
+    TH2 *histanalysis2D = (TH2 *)f->Get(process->getHist()); //Change this for different hist analysis
 
     TH1 *histanalysis = histanalysis2D->ProjectionX("_px", 0, -1, "E");
     
@@ -54,7 +71,13 @@ double FitEstimator::getExpectedYield(double luminosity, const SingleProcess* pr
     double eventsanalysishist = histanalysis->GetEntries();
 
     //Defines out mass range and takes the integral of the fit for that range
-    double acceptedCenter = massTarget();
+
+
+
+    double acceptedCenter = massTarget(); //POINTER!!! WHICH ONE?????? DONT MISS
+
+
+
     double masslowaccepted = acceptedCenter - (acceptedCenter * .05);
     double masshighaccepted = acceptedCenter + (acceptedCenter * .05);
     double acceptedfitintegral = fitfunc->Integral(masslowaccepted, masshighaccepted);
@@ -76,14 +99,11 @@ double FitEstimator::getExpectedYield(double luminosity, const SingleProcess* pr
     //Finds histogram fraction
     double histfraction = exp(log(fitratio) + log(eventanalysisfitrange));
 
-    //Finds luminosity (from spreadsheet)
-    double luminosity = 3000;
-
     //Finds efficiency
     double efficiency = exp(log(eventsanalysishist) - log(totaleventsran));
 
     //Finds crosssection (from spreadsheet)
-    double crosssection = process->crossSection(); //Change this for different cross section
+    double crosssection = process->getCrossSection(); //Change this for different cross section
 
     //Finds background
     double backgroundest = exp(log(efficiency) + log(1000) + log(crosssection) + log(luminosity) + (2 * log(histfraction)));

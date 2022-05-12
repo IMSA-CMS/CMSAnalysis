@@ -5,7 +5,7 @@ class FitEstimator
 {
 
 public: 
-	virtual double getExpectedYield(double luminosity, const SingleProcess* process) const override; 
+	virtual double getExpectedYield(double luminosity) const override; 
 	int massTarget() const {return masstarget;}
 private: 
 	const int masstarget;
