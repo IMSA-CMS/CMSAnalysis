@@ -12,8 +12,8 @@ class Process
 {
     public:
         std::string getName() const {return name;}
-        double eventsExpected() const {return eventsExpected;}
-        bool signalSwitch() const {return signalSwitch;}
+        double getEventsExpected() const {return eventsExpected;}
+        bool getSignalSwitch() const {return signalSwitch;}
         int getColor() const {return color;}
         TH1* getHist() const;
 

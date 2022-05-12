@@ -1,10 +1,10 @@
-#include "Analysis/interface/Channel.hh"
-#include "Analysis/interface/Process.hh"
+#include "CMSAnalysis/Analysis/interface/Channel.hh"
+#include "CMSAnalysis/Analysis/interface/Process.hh"
 #include "THStack.h"
 
 #include <algorithm>
 
-Process* Channel::findProcess(std::string processName)
+Process* Channel::findProcess(std::string processName) const
 {
 
 }
