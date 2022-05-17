@@ -51,9 +51,10 @@ int main(int argc, char **argv) {
   //Analyzer analyzer = higgsBackgroundAnalysis();
   //Analyzer analyzer = invariantMassAnalysis();
   //Analyzer analyzer = leptonJetBackgroundAnalysis();
-  Analyzer analyzer = leptonJetReconstructionAnalysis();
-  //Analyzer analyzer = massAcceptanceAnalysis();
-  //Analyzer analyzer = massResolutionAnalysis();
+  Analyzer analyzer = massResolutionAnalysis();
+  //Analyzer analyzer = leptonJetReconstructionAnalysis();
+  // Analyzer analyzer = displacedVertexAnalysis();
+  // Analyzer analyzer = massAcceptanceAnalysis();
   //Analyzer analyzer = triggerAnalysis();
 
   if (inputFile.empty())
