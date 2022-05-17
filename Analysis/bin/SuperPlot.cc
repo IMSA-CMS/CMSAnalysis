@@ -4,6 +4,7 @@
 #include "CMSAnalysis/Analysis/interface/RootFileInput.hh"
 #include "THStack.h"
 #include <iostream>
+#include <fstream>
 
 int main()
 {
