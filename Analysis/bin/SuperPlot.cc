@@ -2,6 +2,7 @@
 #include "CMSAnalysis/Analysis/interface/Process.hh"
 #include "CMSAnalysis/Analysis/interface/SingleProcess.hh"
 #include "CMSAnalysis/Analysis/interface/RootFileInput.hh"
+#include <fstream>
 #include "THStack.h"
 #include <iostream>
 #include <fstream>

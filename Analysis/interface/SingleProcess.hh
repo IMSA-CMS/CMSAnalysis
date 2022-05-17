@@ -11,14 +11,18 @@ class Estimator;
 class SingleProcess
 {
 public:
-    SingleProcess(std::string iName, double iCrossSection, const Input* iInput) : name(iName), crossSection(iCrossSection), input(iInput) {}
+    SingleProcess(std::string iName, const Input* iInput) : name(iName), input(iInput) {}
     std::string getName() const {return name;} //Inlining
-    double getCrossSection() const {return crossSection;}
+    std::string getFitName() const {return fitname;} //Inlining
     TH1* getHist() const {return input->getInput(name);}
+    TH1* getFitHist() const {return input->getInput(fitname);}
+
+
 
 private:
     const std::string name;
-    const double crossSection;
+    const std::string nickname;
+    const std::string fitname;
     const Input* input;
     Estimator* estimator; 
 
