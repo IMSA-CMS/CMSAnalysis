@@ -16,7 +16,7 @@ class GenSimRecoPrototype : public HistogramPrototype1D
   protected:
     //const std::shared_ptr<GenSimIdentificationModule> getGenSim() const {return genSim;}   // Getter for genSim
     //const std::shared_ptr<RecoIdentificationModule> getReco() const {return reco;}         // Getter for reco
-    bool getDataType() const {return typeGenSim;}                          // Getter for typeGenSim
+    InputModule::RecoLevel getDataType() const {return typeGenSim;}                          // Getter for typeGenSim
   virtual std::vector<double> protectedValue(InputModule::RecoLevel level) const = 0;              // Virtual function that is overridden in InvariantMassHist and PtHist
     
   private:

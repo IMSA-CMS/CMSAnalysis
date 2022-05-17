@@ -11,7 +11,7 @@ class PhotonsHist : public GenSimRecoPrototype
   public:
     using GenSimRecoPrototype::GenSimRecoPrototype;  // Copies the constructor over from GenSimRecoPrototype
   protected:
-    std::vector<double> protectedValue(bool typeGenSim) const override;
+    std::vector<double> protectedValue(InputModule::RecoLevel typeGenSim) const override;
   private:
   void addPhotonUsingIM (ParticleCollection& pc1, ParticleCollection& pc2, Particle photon) const;
   void addPhotonUsingDR (ParticleCollection& pc1, ParticleCollection& pc2, Particle photon) const;
