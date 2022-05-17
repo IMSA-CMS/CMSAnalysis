@@ -29,8 +29,8 @@ Analyzer leptonJetBackgroundAnalysis()
   auto nLeptonJetsHist = make_shared<NLeptonJetHist>(leptonJetRecoModule, "Number of Lepton Jets", 10, 0, 10);
   auto histMod = make_shared<HistogramOutputModule>(weightMod, lrWeightMod);
 
-  auto recoPt = make_shared<PtHist>(false, "Leading lepton pT", 500, 0, 1000);
-  auto recoInvMass = make_shared<InvariantMassHist>(false, "Opposite-sign dilepton mass", 1000, 0, 2000);
+  auto recoPt = make_shared<PtHist>(InputModule::RecoLevel::Reco, "Leading lepton pT", 500, 0, 1000);
+  auto recoInvMass = make_shared<InvariantMassHist>(InputModule::RecoLevel::Reco, "Opposite-sign dilepton mass", 1000, 0, 2000);
   auto metHist = make_shared<METHist>(metMod, "MET", 500, 0, 1000);
 
   // Add the histogram(s) created above to histMod

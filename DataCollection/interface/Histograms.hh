@@ -2,83 +2,91 @@
 #define HISTOGRAMS_HH
 
 #include "GenSimRecoPrototype.hh"
+#include "ResolutionPrototype.hh"
 
-class AllLeptonInvariantMassHist : GenSimRecoPrototype {
+// This file was created by Liam Nelson, IMSA class of 2022.
+// Last updated 05/17/2022
+// 
+// This is a unified file containing all of our simplest histograms to
+// reduce the amount of files in our codebase. Histogram classes with
+// constructors are left out.
+
+class AllLeptonInvariantMassHist : public GenSimRecoPrototype L{
   using GenSimRecoPrototype::GenSimRecoPrototype;
 
-  std::vector<double> protectedValue(InputModule::RecoLevel level)
+  std::vector<double> protectedValue(InputModule::RecoLevel level) const
   {
     auto particles = getInput()->getLeptons(level);
-    auto inv = genParticles.calculateAllLeptonInvariantMass();
+    auto inv = particles.calculateAllLeptonInvariantMass();
     return {inv};
   }
 };
 
-class InvariantMassHist : GenSimRecoPrototype
+class InvariantMassHist : public GenSimRecoPrototype
 {
   using GenSimRecoPrototype::GenSimRecoPrototype;
 
-  std::vector<double> protectedValue(InputModule::RecoLevel level)
+  std::vector<double> protectedValue(InputModule::RecoLevel level) const
   {
     auto particles = getInput()->getLeptons(level);
-    auto inv = genParticles.getInvariantMass();
+    auto inv = particles.getInvariantMass();
     return {inv};
   }
 };
 
-class MassResolutionHist : ResolutionPrototype
+class MassResolutionHist : public ResolutionPrototype
 {
   using ResolutionPrototype::ResolutionPrototype;
 
-  double MassResolutionHist::getValue(const ParticleCollection& partColl) const
+  double getValue(const ParticleCollection& partColl) const
   {
     return partColl.getInvariantMass();
   }
 };
 
-class OppositeSignInvariantMass : GenSimRecoPrototype
+class OppositeSignInvariantMassHist : public GenSimRecoPrototype
 {
   using GenSimRecoPrototype::GenSimRecoPrototype;
 
-  std::vector<double> protectedValue(InputModule::RecoLevel level)
+  std::vector<double> protectedValue(InputModule::RecoLevel level) const
   {
     auto particles = getInput()->getLeptons(level);
-    auto inv = genParticles.calculateOppositeSignInvariantMass();
+    auto inv = particles.calculateOppositeSignInvariantMass();
     return {inv};
   }
 };
 
-class PtHist : GenSimRecoPrototype
+class PtHist : public GenSimRecoPrototype
 {
   using GenSimRecoPrototype::GenSimRecoPrototype;
 
-  std::vector<double> PtHist::protectedValue(InputModule::RecoLevel level) const
+  std::vector<double> protectedValue(InputModule::RecoLevel level) const
   {
-    auto genParticles = getInput()->getLeptons(level);
-    auto genSimPt = genParticles.getLeadingTransverseMomentum();
-    return {genSimPt};
+    auto particles = getInput()->getLeptons(level);
+    auto Pt = particles.getLeadingTransverseMomentum();
+    return {Pt};
   }
 };
 
-class PtResolutionHist : ResolutionPrototype
+class PtResolutionHist : public ResolutionPrototype
 {
   using ResolutionPrototype::ResolutionPrototype;
 
-  double PtResolutionHist::getValue(const ParticleCollection& partColl) const
+  double getValue(const ParticleCollection& partColl) const
   {
     //std::cerr << "congrats you made it" << std::endl;
     return partColl.getLeadingTransverseMomentum();
   }
 };
 
-class ThirdMuonPtHist : GenSimRecoPrototype
+class ThirdMuonPtHist : public GenSimRecoPrototype
 {
   using GenSimRecoPrototype::GenSimRecoPrototype;
 
-  double ThirdMuonPtHist::protectedValue(InputModule::RecoLevel level)
+  std::vector<double> protectedValue(InputModule::RecoLevel level) const
   {
-    auto genParticles = getInput()->getLeptons(level);
-    auto Pt = genParticles.getNthHighestPt(3);
+    auto particles = getInput()->getLeptons(level);
+    auto Pt = particles.getNthHighestPt(3);
     return {Pt};
   }
 };
