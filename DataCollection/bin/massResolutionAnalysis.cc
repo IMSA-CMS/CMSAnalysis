@@ -9,8 +9,7 @@
 #include "CMSAnalysis/DataCollection/interface/MassBinFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/ResolutionModule.hh"
 #include "CMSAnalysis/DataCollection/interface/MassResolutionModule.hh"
-#include "CMSAnalysis/DataCollection/interface/MassResolutionHist.hh"
-#include "CMSAnalysis/DataCollection/interface/PtResolutionHist.hh"
+#include "CMSAnalysis/DataCollection/interface/Histograms.hh"
 
 using std::make_shared;
 

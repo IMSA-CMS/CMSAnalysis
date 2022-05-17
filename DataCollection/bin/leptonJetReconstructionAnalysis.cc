@@ -28,7 +28,7 @@
 #include "CMSAnalysis/DataCollection/interface/NLeptonsFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/NLeptonsHist.hh"
 #include "CMSAnalysis/DataCollection/interface/SingleMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/ThirdMuonPtHist.hh"
+#include "CMSAnalysis/DataCollection/interface/Histograms.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerModule.hh"
 #include "CMSAnalysis/DataCollection/interface/TripleMuonTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/SnowmassLeptonSelector.hh"
@@ -76,9 +76,9 @@ Analyzer leptonJetReconstructionAnalysis() {
   auto nLeptonsHist = std::make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
   auto nElectronsHist = std::make_shared<NLeptonsHist>(matchMod, "Matched Electrons", 10, 0, 10, 11);
   auto nMuonsHist = std::make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
-  auto recoThirdMuonPtHist = std::make_shared<GetNthHighestPtHist>(false, "Reconstructed Third Muon Transverse Momentum", 50, 0, 100, 3);
-  auto recoSecondMuonPtHist = std::make_shared<GetNthHighestPtHist>(false, "Reconstructed Second Muon Transverse Momentum", 50, 0, 100, 2);
-  auto recoFirstMuonPtHist = std::make_shared<GetNthHighestPtHist>(false, "Reconstructed First Muon Transverse Momentum", 50, 0, 100, 1);
+  auto recoThirdMuonPtHist = std::make_shared<GetNthHighestPtHist>(InputModule::RecoLevel::Reco, "Reconstructed Third Muon Transverse Momentum", 50, 0, 100, 3);
+  auto recoSecondMuonPtHist = std::make_shared<GetNthHighestPtHist>(InputModule::RecoLevel::Reco, "Reconstructed Second Muon Transverse Momentum", 50, 0, 100, 2);
+  auto recoFirstMuonPtHist = std::make_shared<GetNthHighestPtHist>(InputModule::RecoLevel::Reco, "Reconstructed First Muon Transverse Momentum", 50, 0, 100, 1);
 
   // auto nLeptonsHist = std::make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
   auto nLeptonJetHist = std::make_shared<NLeptonJetHist>(lepRecoMod, "Number of Lepton Jets", 10, 0, 10);
