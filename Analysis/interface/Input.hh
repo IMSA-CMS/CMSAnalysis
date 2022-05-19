@@ -10,6 +10,7 @@ class Input
 	public:
 		virtual TH1* getInput(std::string name) const = 0;
 		virtual ~Input() {}
+		virtual int getTotalEvents() const = 0;
 };
 
 #endif

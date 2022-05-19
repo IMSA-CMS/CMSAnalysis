@@ -1,4 +1,5 @@
 #include "CMSAnalysis/Analysis/interface/RootFileInput.hh"
+#include "CMSAnalysis/DataCollection/interface/TDisplayText.h"
 #include "TFile.h"
 #include "TH1.h"
 
@@ -14,4 +15,10 @@ RootFileInput::RootFileInput(std::string fileName) :
 TH1* RootFileInput::getInput(std::string name) const
 {
 	return dynamic_cast<TH1*>(file->Get(name.c_str()));
+}
+
+int RootFileInput::getTotalEvents() const
+{
+	TDisplayText *totalevents = file->Get<TDisplayText>("NEvents");
+	return std::stoi(totalevents->GetString().Data());
 }

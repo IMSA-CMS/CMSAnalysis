@@ -12,6 +12,7 @@ class RootFileInput : public Input
 	public:
 		RootFileInput(std::string fileName);
 		TH1* getInput(std::string name) const override;
+		int getTotalEvents() const override;
 };
 
 

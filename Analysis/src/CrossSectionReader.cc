@@ -1,5 +1,9 @@
 #include "CMSAnalysis/Analysis/interface/CrossSectionReader.hh"
 
+#include <sstream>
+#include <fstream>
+#include "boost/algorithm/string.hpp"
+
 CrossSectionReader::CrossSectionReader(std::string fileAddress)
 {
 	std::ifstream weightsFile(fileAddress);
@@ -33,7 +37,7 @@ CrossSectionReader::CrossSectionReader(std::string fileAddress)
   weightsFile.close();
 }
 
-double CrossSectionReader::getWeight(std::string key) const
+double CrossSectionReader::getCrossSection(std::string key) const
 {
 	auto iterator = weights.find(key);
 	if (iterator == weights.end())
