@@ -43,4 +43,20 @@ inline std::vector<std::vector<T>> Utility::getAllCombinations(int nCombo, std::
   return totalCombinations;
 }
 
+std::string substitute(std::string original, std::string target, std::string subs)
+{
+  size_t start_pos = 0;
+  while((start_pos = original.find(target, start_pos)) != std::string::npos) {
+      original.replace(start_pos, target.length(), subs);
+      start_pos += subs.length(); 
+  }
+  return original;
+  
+  //taken from stackoverflow
+
+  //assignment:
+  // while the string contains target, then replace target with subs (call string::find, if it fails, it calls string::npos)
+  // look up string member functions - replace, find, etc. 
+  // used to clean up spaces to then make a good file name. this is a general purpose function
+}
 #endif
