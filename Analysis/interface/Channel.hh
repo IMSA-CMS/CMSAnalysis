@@ -12,8 +12,8 @@ class THStack;
 class Channel
 {
 	public:
-		Channel(std::string name, std::vector<const Process*> processes) : name(name), processes(processes) {}
-
+		Channel(std::string name, std::vector<Process*> iProcesses);
+		
 		THStack* getStack(std::string label = "") const;
 
 		const Process* findProcess(std::string processName) const;

@@ -4,6 +4,14 @@
 
 #include <algorithm>
 
+Channel::Channel(std::string name, std::vector<Process*> iProcesses) : name(name)
+{
+	for (auto process : iProcesses)
+	{
+		processes.push_back(process);
+	}
+}
+
 const Process* Channel::findProcess(std::string processName) const
 {
 	for (auto process : processes)
