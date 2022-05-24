@@ -22,9 +22,9 @@
 double FitEstimator::getExpectedYield(double luminosity) const 
 {
 //Opens my file, assigns it f
-    TFile *f = new TFile(getProcess()->getName().c_str()); //Analysis filename //Change this for different files
+    //TFile *f = new TFile(getProcess()->getName().c_str()); //Analysis filename //Change this for different files
 
-    TFile *fitfile = new TFile(getProcess()->getFitName().c_str());
+    //TFile *fitfile = new TFile(getProcess()->getFitName().c_str());
 
     //Find total events from file
     //TDisplayText *totalevents = f->Get<TDisplayText>("NEvents");
@@ -76,7 +76,7 @@ double FitEstimator::getExpectedYield(double luminosity) const
 
 
 
-    double acceptedCenter = massTarget(); //POINTER!!! WHICH ONE?????? DONT MISS
+    double acceptedCenter = massTarget;
 
 
 
