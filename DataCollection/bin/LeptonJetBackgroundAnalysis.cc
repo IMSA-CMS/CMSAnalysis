@@ -6,10 +6,8 @@
 
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
 #include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
-#include "CMSAnalysis/DataCollection/interface/LRWeightModule.hh"
 #include "CMSAnalysis/DataCollection/interface/NLeptonJetHist.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJetReconstructionModule.hh"
-#include "CMSAnalysis/DataCollection/interface/WeightingModule.hh"
 #include "CMSAnalysis/DataCollection/interface/SnowmassLeptonSelector.hh"
 
 using std::make_shared;
@@ -20,17 +18,15 @@ Analyzer leptonJetBackgroundAnalysis()
 
   // auto genSimMod = make_shared<GenSimIdentificationModule>(1000022, true);
   // auto recoMod = make_shared<RecoIdentificationModule>(5);
-  auto weightMod = make_shared<WeightingModule>();
-  auto lrWeightMod = make_shared<LRWeightModule>();
   auto metMod = make_shared<METModule>();
 
   auto leptonJetRecoModule = make_shared<LeptonJetReconstructionModule>(0.05);
   
   auto nLeptonJetsHist = make_shared<NLeptonJetHist>(leptonJetRecoModule, "Number of Lepton Jets", 10, 0, 10);
-  auto histMod = make_shared<HistogramOutputModule>(weightMod, lrWeightMod);
+  auto histMod = make_shared<HistogramOutputModule>();
 
-  auto recoPt = make_shared<PtHist>(false, "Leading lepton pT", 500, 0, 1000);
-  auto recoInvMass = make_shared<InvariantMassHist>(false, "Opposite-sign dilepton mass", 1000, 0, 2000);
+  auto recoPt = make_shared<PtHist>(InputModule::RecoLevel::Reco, "Leading lepton pT", 500, 0, 1000);
+  auto recoInvMass = make_shared<InvariantMassHist>(InputModule::RecoLevel::Reco, "Opposite-sign dilepton mass", 1000, 0, 2000);
   auto metHist = make_shared<METHist>(metMod, "MET", 500, 0, 1000);
 
   // Add the histogram(s) created above to histMod
@@ -42,8 +38,6 @@ Analyzer leptonJetBackgroundAnalysis()
   // analyzer.addProductionModule(genSimMod);
   // analyzer.addProductionModule(recoMod);
   analyzer.addProductionModule(leptonJetRecoModule);
-  analyzer.addProductionModule(weightMod);
-  analyzer.addProductionModule(lrWeightMod);
   analyzer.addProductionModule(metMod);
 
   analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms

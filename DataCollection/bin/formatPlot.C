@@ -12,6 +12,7 @@
 #include "TLine.h"
 #include "TBox.h"
 #include "TASImage.h"
+#include "TPaveStats.h"
 #include "TFitResult.h"
 
 #include <iostream>
@@ -454,8 +455,8 @@ TCanvas* finalPlot( int iPeriod, int iPos )
   canv->SetTickx(0);
   canv->SetTicky(0);
 
-  auto file = TFile::Open("/uscms/homes/a/aytang/RecoWidth/CMSSW_11_0_2/src/CMSAnalysis/DataCollection/bin/BackgroundRunCuts/QCD2000.root");
-  auto h = file->Get<TH1>("Cut2Reco Same Sign Invariant Mass");
+  auto file = TFile::Open("/uscms/home/aytang/RecoWidth/CMSSW_11_0_2/src/CMSAnalysis/DataCollection/bin/BackgroundRunCuts/DY50.root");
+  auto h = file->Get<TH1>("Cut3Reco Same Sign Invariant Mass");
 
   h->GetXaxis()->SetNdivisions(6,5,0);
   //h->GetXaxis()->SetTitle("m_{\\ell^{+}\\ell^{+}} \\text{(GeV)}");
@@ -468,8 +469,9 @@ TCanvas* finalPlot( int iPeriod, int iPos )
   //  h->SetMaximum( 260 );
   if( iPos==1 ) h->SetMaximum( 300 );
  // h->Scale(5711);
- // h->SetMaximum(1e3);
+  h->SetMaximum(.004);
   h->Draw("HIST");
+
 
       TF1 *fitfunc = new TF1("fitfunc", "[0]*pow((x + [2]), [1])", 150, 1700);
 
@@ -492,8 +494,15 @@ double func = std::numeric_limits<double>::max();
     }
     fitfunc->SetLineWidth(3);
     fitfunc->Draw("SAME");
-    canv->SetLogy();
-    gStyle->SetOptFit(0);
+    //canv->SetLogy();
+    gStyle->SetStatColor(kWhite);
+    gStyle->SetOptFit(1111);
+
+    auto stats =  dynamic_cast<TPaveStats*>(h->GetListOfFunctions()->FindObject("stats"));
+    stats->SetX1NDC(.645);
+    stats->SetY1NDC(.9);
+    stats->SetX2NDC(.945);
+    stats->SetY2NDC(.7);
 
   int histLineColor = kOrange+7;
   int histFillColor = kOrange-2;
