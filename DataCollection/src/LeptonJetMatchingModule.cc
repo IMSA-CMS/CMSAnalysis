@@ -22,12 +22,12 @@ bool LeptonJetMatchingModule::process()
       lJets.push_back(lJet);
       std::cout << "LJet Matching: lJet list size:" << lJets.size() << "\n";
     }
+    std::cout << "Size of genSimParticles: " << genSimParticles.size() << "\n";
+    std::cout << "Size of recoLeptonJets: " << recoLeptonJets.size() << "\n";
     MatchingModule::match(genSimParticles, lJets);
     lepJetSize += getMatchingPairs().size();
     genSize += genSimParticles.size();
-    // std::cout << "Size of genSimParticles: " << genSimParticles.size() << "\n";
     lepJetSize += recoLeptonJets.size();
-    // std::cout << "Size of recoLeptonJets: " << recoLeptonJets.size() << "\n";
 
     // MatchingPair candidate;
     Particle nullParticle(nullptr);

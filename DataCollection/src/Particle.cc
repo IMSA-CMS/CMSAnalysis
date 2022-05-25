@@ -314,7 +314,10 @@ Particle::Type Particle::identifyType(int pdgid)
       //std::cout << "Dark Photon\n";
       return Particle::Type::DarkPhoton;
     }
-
+    else if (pdgid == 1000022)
+    {
+      return Particle::Type::Neutralino;
+    }
     else
     {
       //std::cout << "Type: None\n";

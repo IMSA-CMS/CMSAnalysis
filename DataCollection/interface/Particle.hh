@@ -12,7 +12,7 @@ class Particle
 {
   public:
 
-    enum class Type{Electron, Muon, Photon, LeptonJet, Jet, DarkPhoton, None};
+    enum class Type{Electron, Muon, Photon, LeptonJet, Jet, DarkPhoton, Neutralino, None};
     enum class BarrelState{Barrel, Endcap, None};
     Particle(const reco::Candidate* iparticle = nullptr);
     Particle(const Particle& particle1);
