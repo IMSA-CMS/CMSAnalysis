@@ -107,6 +107,9 @@ ParticleCollection TreeEventFile::getGenSimParticles() const
         // This is specific to leptons
         // NEEDS TO BE CHANGED TO BE MORE ROBUST
 
+        if (gen_status[i] != 1)
+            continue;
+
         int charge = -1;
         if (gen_pid[i] < 0)
         {

@@ -43,11 +43,17 @@ GenEventInfoProduct MiniAODEventFile::getGenInfo() const
 
 ParticleCollection MiniAODEventFile::getGenSimParticles() const
 {
+    
     ParticleCollection genParticles;
     edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
     event->getByLabel(std::string("prunedGenParticles"), genParticlesHandle);
+    
     for (const auto &p : *genParticlesHandle) 
     {
+        if (p.pdgId() == 4900022)
+        {
+            std::cout << "dark photon found\n";
+        }
         genParticles.addParticle(Particle(&p));
     }
     return genParticles;

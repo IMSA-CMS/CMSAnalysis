@@ -90,7 +90,7 @@ Analyzer higgsBackgroundAnalysis()
   
   analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
 
-  auto leptonSelector = std::make_shared<SnowmassLeptonSelector>(50);
+  auto leptonSelector = std::make_shared<SnowmassLeptonSelector>(10);
   analyzer.getInputModule().setLeptonSelector(leptonSelector);
 
   return analyzer;
