@@ -3,10 +3,10 @@
 
 #include <vector>
 
-std::vector<double> PhotonsHist::protectedValue(bool typeGenSim) const
+std::vector<double> PhotonsHist::protectedValue(InputModule::RecoLevel typeGenSim) const
 {
   // std::cerr << "photons hist " << EventLoader.use_count() << "\n";
-  if (typeGenSim)          // typeGenSim == true, so we want the GenSim values
+  if (typeGenSim == InputModule::RecoLevel::GenSim)          // typeGenSim == true, so we want the GenSim values
   {
     ParticleCollection finalPhotons;
     auto lepVector = getInput()->getParticles(InputModule::RecoLevel::GenSim, Particle::Type::Photon).getParticles();
@@ -54,6 +54,8 @@ std::vector<double> PhotonsHist::protectedValue(bool typeGenSim) const
 
   
   }
+  // NOTE: When redoing the histogram files, everything in the else statement was commented out. So, I
+  // left it commented out and left the if statement intact. If this is wrong, please change it.
   else                     // typeGenSim == false, so we want the Reco values
   {
     // std::vector<double> ptVector;

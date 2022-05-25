@@ -1,0 +1,3 @@
+0.5	/uscms/home/aytang/RecoWidth/CMSSW_11_0_2/src/CMSAnalysis/DataCollection/bin/BackgroundRunCuts/PhotonPick0_5.root	1	Number of Lepton Jets	1	0	Number of Lepton Jets	Photon0_5	0	Number of Lepton Jets	Number of Lepton Jets	1	
+0.9	/uscms/home/aytang/RecoWidth/CMSSW_11_0_2/src/CMSAnalysis/DataCollection/bin/BackgroundRunCuts/PhotonPick0_9.root	1	Number of Lepton Jets	1	0	Number of Lepton Jets	Photon0_9	0	Number of Lepton Jets	Number of Lepton Jets	1	
+2.0	/uscms/home/aytang/RecoWidth/CMSSW_11_0_2/src/CMSAnalysis/DataCollection/bin/BackgroundRunCuts/PhotonPick2_0.root	1	Number of Lepton Jets	1	0	Number of Lepton Jets	Photon2_0	0	Number of Lepton Jets	Number of Lepton Jets	1	

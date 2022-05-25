@@ -37,4 +37,3 @@ double EfficiencyModule::getEfficiency(std::string name) const
 {
     return getCounter(name)/total;
 }
-

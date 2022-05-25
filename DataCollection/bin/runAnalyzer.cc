@@ -47,6 +47,9 @@ int main(int argc, char **argv) {
 
   // USING ANALYER FOR H++ THAT WON'T CHANGE: CHANGE BACK
   // TO hPlusPlusMassAnalysis() when ready -- [09/17]
+  //Analyzer analyzer = displacedVertexAnalysis();
+  //Analyzer analyzer = higgsBackgroundAnalysis();
+  //Analyzer analyzer = invariantMassAnalysis();
   //Analyzer analyzer = leptonJetBackgroundAnalysis();
   // Analyzer analyzer = massResolutionAnalysis();
   Analyzer analyzer = leptonJetReconstructionAnalysis();

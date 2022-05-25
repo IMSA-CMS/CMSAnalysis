@@ -1,7 +1,6 @@
 #ifndef EFFICIENCYMODULE_HH
 #define EFFICIENCYMODULE_HH
 #include "AnalysisModule.hh"
-#include "WeightingModule.hh"
 #include <unordered_map>
 #include <string>
 #include <vector>
