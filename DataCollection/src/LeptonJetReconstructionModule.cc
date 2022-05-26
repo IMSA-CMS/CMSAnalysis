@@ -26,13 +26,14 @@ bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
     for (unsigned i = 0; i < recoLeptons.size(); ++i) {
       auto fourVector = recoLeptons[i].getFourVector();
       double deltaR = reco::deltaR(highestPtLeptonFourVector, fourVector);
+      std::cout << "delta r: " << deltaR << " delta r cut: " << DeltaRCut << "\n";
       if (deltaR < DeltaRCut) {
         jet.addParticle(recoLeptons[i]);
         recoLeptons.erase(recoLeptons.begin() + i);
         --i;
       }
     }
-
+  std::cout << "numParticles: " << jet.getNumParticles() << "\n";
     if (jet.getNumParticles() > 1)
     {
       auto inputJets = getInput()->getJets(InputModule::RecoLevel::Reco);
@@ -44,6 +45,7 @@ bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
         }
       }
       if (!close) {
+        std::cout << "adding jet\n";
         leptonJets.push_back(jet);
       }
     }
