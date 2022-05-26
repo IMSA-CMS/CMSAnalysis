@@ -10,7 +10,6 @@
 #include "CMSAnalysis/DataCollection/interface/GenSimEventDumpModule.hh"
 #include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonEfficiency.hh"
-#include "CMSAnalysis/DataCollection/interface/LRWeightModule.hh"
 #include "CMSAnalysis/DataCollection/interface/MassRecoEfficiency.hh"
 #include "CMSAnalysis/DataCollection/interface/MatchingModule.hh"
 #include "CMSAnalysis/DataCollection/interface/NLeptonsFilter.hh"
@@ -19,18 +18,15 @@
 #include "CMSAnalysis/DataCollection/interface/RecoveredInvariantMassHist.hh"
 #include "CMSAnalysis/DataCollection/interface/SameSignInvariantMassHist.hh"
 #include "CMSAnalysis/DataCollection/interface/SingleMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/ThirdMuonPtHist.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerEfficiencyModule.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerModule.hh"
 #include "CMSAnalysis/DataCollection/interface/TripleMuonTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/TwoInvariantMassesHist.hh"
 #include "CMSAnalysis/DataCollection/interface/UnusualFinalStateFilter.hh"
-#include "CMSAnalysis/DataCollection/interface/WeightingModule.hh"
 #include "CMSAnalysis/DataCollection/interface/PhotonsHist.hh"
 #include "CMSAnalysis/DataCollection/interface/METModule.hh"
 #include "CMSAnalysis/DataCollection/interface/METHist.hh"
-#include "CMSAnalysis/DataCollection/interface/OppositeSignInvariantMassHist.hh"
-#include "CMSAnalysis/DataCollection/interface/PtHist.hh"
+#include "CMSAnalysis/DataCollection/interface/Histograms.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonEfficiency.hh"
 #include "CMSAnalysis/DataCollection/interface/METTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/SignFlipModule.hh"
@@ -48,13 +44,11 @@ Analyzer hPlusPlusMassAnalysis() {
   //auto recoMod = make_shared<RecoIdentificationModule>(50);
   auto matchMod = make_shared<MatchingModule>();
   auto triggerMod = make_shared<TriggerModule>();
-  auto weightMod = make_shared<WeightingModule>();
-  auto lrWeightMod = make_shared<LRWeightModule>();
   auto mETMod = make_shared<METModule>();
 
   auto nLeptonsFilter = make_shared<NLeptonsFilter>(); //Needs to be updated with shared pointers
   
-  auto histMod = make_shared<HistogramOutputModule>(weightMod, lrWeightMod);
+  auto histMod = make_shared<HistogramOutputModule>();
   auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
   auto nElectronsHist = make_shared<NLeptonsHist>(matchMod, "Matched Electrons", 10, 0, 10, 11);
   auto nMuonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
@@ -62,7 +56,7 @@ Analyzer hPlusPlusMassAnalysis() {
   auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod);
   auto signFlip = make_shared<SignFlipModule>(matchMod);
 
-  auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
+  auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(InputModule::RecoLevel::Reco, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
   //auto genSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
   // Go up to 2000 - Andy, 09/02 - and make more bins. Modifications also made for picking files
   //auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "Reco Same Sign Invariant Mass", 1000, 0, 2000);
@@ -117,8 +111,6 @@ Analyzer hPlusPlusMassAnalysis() {
   //analyzer.addProductionModule(recoMod);
   analyzer.addProductionModule(matchMod);
   // analyzer.addProductionModule(triggerMod); 
-  analyzer.addProductionModule(weightMod);
-  analyzer.addProductionModule(lrWeightMod);
   analyzer.addProductionModule(mETMod);
 
   // Filters

@@ -1,7 +1,6 @@
 #ifndef EFFICIENCYMODULE_HH
 #define EFFICIENCYMODULE_HH
 #include "AnalysisModule.hh"
-#include "WeightingModule.hh"
 #include <unordered_map>
 #include <string>
 #include <vector>
@@ -21,8 +20,8 @@ class EfficiencyModule : public AnalysisModule
     virtual void doCounters() = 0; 
 
     private:
-    std::unordered_map<std::string, std::vector<double>> counters;
-    std::vector<double> total;
+    std::unordered_map<std::string, double> counters;
+    double total;
 };
 
 #endif

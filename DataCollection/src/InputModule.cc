@@ -37,7 +37,7 @@ ParticleCollection InputModule::getParticles(RecoLevel level, Particle::Type par
         auto particles = eventLoader->getFile()->getGenSimParticles().getParticles();
         for (const auto &p : particles)
         {
-            if ((p.getType() == particleType || particleType == Particle::Type::None) && p.isFinalState())
+            if (p.getType() == particleType || particleType == Particle::Type::None)
             {
                 if (!selector || selector->checkParticle(p))
                 {

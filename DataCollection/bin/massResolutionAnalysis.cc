@@ -9,10 +9,7 @@
 #include "CMSAnalysis/DataCollection/interface/MassBinFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/ResolutionModule.hh"
 #include "CMSAnalysis/DataCollection/interface/MassResolutionModule.hh"
-#include "CMSAnalysis/DataCollection/interface/WeightingModule.hh"
-#include "CMSAnalysis/DataCollection/interface/MassResolutionHist.hh"
-#include "CMSAnalysis/DataCollection/interface/PtResolutionHist.hh"
-#include "CMSAnalysis/DataCollection/interface/LRWeightModule.hh"
+#include "CMSAnalysis/DataCollection/interface/Histograms.hh"
 
 using std::make_shared;
 
@@ -21,13 +18,11 @@ Analyzer massResolutionAnalysis()
   Analyzer analyzer;
 
   auto matchMod = make_shared<MatchingModule>();
-  auto weightMod = make_shared<WeightingModule>();
-  auto lrWeightMod = make_shared<LRWeightModule>(); 
   auto barrelStateFilter = make_shared<BarrelStateFilter>(matchMod);
   auto massBinFilterForMass = make_shared<MassBinFilter>(matchMod, 300, 3100, 28);
   auto massBinFilterForPt = make_shared<MassBinFilter>(matchMod, 50, 1900, 37);
   //auto massResMod = make_shared<MassResolutionModule>(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
-  auto histMod = make_shared<HistogramOutputModule>(weightMod, lrWeightMod);
+  auto histMod = make_shared<HistogramOutputModule>();
   auto massResHist = make_shared<MassResolutionHist>("Mass Resolution Pasted", 100, -1, 1);
 
   std::cerr << "no suspicious activity so far" << std::endl;
@@ -47,8 +42,6 @@ Analyzer massResolutionAnalysis()
   histMod->addHistogram(ptResHist);
 
   analyzer.addProductionModule(matchMod);
-  analyzer.addProductionModule(weightMod);
-  analyzer.addProductionModule(lrWeightMod);
   
   //analyzer.addAnalysisModule(massResMod);
   //analyzer.addAnalysisModule(ptResMod);
