@@ -12,15 +12,15 @@ class THStack;
 class Channel
 {
 	public:
-		Channel(std::string name, std::vector<Process*> processes) : name(name), processes(processes) {}
-
+		Channel(std::string name, std::vector<Process*> iProcesses);
+		
 		THStack* getStack(std::string label = "") const;
 
-		std::vector<const Process*> findProcess(std::string processName) const;
+		const Process* findProcess(std::string processName) const;
 		
 		void labelProcess(std::string label, std::string processName);
 		
-		void labelProcess(std::string label, std::vector<const Process*> process);
+		void labelProcess(std::string label, const Process* process);
 
 		void addProcessLabel(std::string label, std::vector<const Process*> processes);
 

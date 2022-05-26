@@ -19,7 +19,7 @@ TH1* Process::getHist() const
 	TH1* hist = new TH1F(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * maxBarWidth);
 	for (const auto& singleProcess : processes)
 	{
-		hist->Add((singleProcess.getHist()));
+		hist->Add(singleProcess.getHist());
 	}
 	hist->SetFillColor(color);
 	return hist;

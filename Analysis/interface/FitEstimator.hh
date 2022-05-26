@@ -1,18 +1,19 @@
 #ifndef FITESTIMATOR_HH
 #define FITESTIMATOR_HH
+
+#include "Estimator.hh"
+
 class SingleProcess;
-class FitEstimator 
+
+class FitEstimator : public Estimator
 {
-
 public: 
-	virtual double getExpectedYield(double luminosity) const override; 
-	int massTarget() const {return masstarget;}
+	FitEstimator(SingleProcess* process, double massTarget) : Estimator(process), massTarget(massTarget)
+	{}
+	double getExpectedYield(double luminosity) const override; 
+	double getMassTarget() const {return massTarget;}
 private: 
-	const int masstarget;
-
-
-
-
+	const double massTarget;
 };
 
 
