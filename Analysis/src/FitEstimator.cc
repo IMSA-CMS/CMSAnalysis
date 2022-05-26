@@ -19,20 +19,20 @@
 #include "TH2F.h"
 #include "TFile.h"
 
-double FitEstimator::getExpectedYield(double luminosity, const SingleProcess* process) const 
+double FitEstimator::getExpectedYield(double luminosity) const 
 {
 //Opens my file, assigns it f
-    TFile *f = new TFile(process->getName().c_str()); //Analysis filename //Change this for different files
+    //TFile *f = new TFile(getProcess()->getName().c_str()); //Analysis filename //Change this for different files
 
-    TFile *fitfile = new TFile(process->getFitName().c_str());
+    //TFile *fitfile = new TFile(getProcess()->getFitName().c_str());
 
     //Find total events from file
     //TDisplayText *totalevents = f->Get<TDisplayText>("NEvents");
-    std::string totalEventsStr = process->getEventsExpected()->GetString().Data();
-    int totalEventsInt = std::stoi(totalEventsStr);
+    //std::string totalEventsStr = getProcess()->getEventsExpected()->GetString().Data();
+    int totalEventsInt = getProcess()->getTotalEvents();
 
     //Takes the fit histogram wanted from the file, assigns it hist
-    TH2 *hist2D = dynamic_cast<TH2 *>(fitfile->Get(process->getFitHist())); //Change this for different fit
+    TH2 *hist2D = dynamic_cast<TH2 *>(getProcess()->getFitHist()); //Change this for different fit
 
     TH1 *hist = hist2D->ProjectionX("_px", 0, -1, "E");
 
@@ -60,8 +60,10 @@ double FitEstimator::getExpectedYield(double luminosity, const SingleProcess* pr
     }
 
     //Pulls analysis hist from file
-    TH2 *histanalysis2D = (TH2 *)f->Get(process->getHist()); //Change this for different hist analysis
+    //TH2 *histanalysis2D = (TH2 *)f->Get(getProcess()->getHist()); //Change this for different hist analysis
 
+    TH2* histanalysis2D = dynamic_cast<TH2 *>(getProcess()->getHist());
+    
     TH1 *histanalysis = histanalysis2D->ProjectionX("_px", 0, -1, "E");
     
     //Finds number of events ran total (from spreadsheet)
@@ -74,7 +76,7 @@ double FitEstimator::getExpectedYield(double luminosity, const SingleProcess* pr
 
 
 
-    double acceptedCenter = massTarget(); //POINTER!!! WHICH ONE?????? DONT MISS
+    double acceptedCenter = massTarget;
 
 
 
@@ -103,10 +105,11 @@ double FitEstimator::getExpectedYield(double luminosity, const SingleProcess* pr
     double efficiency = exp(log(eventsanalysishist) - log(totaleventsran));
 
     //Finds crosssection (from spreadsheet)
-    double crosssection = process->getCrossSection(); //Change this for different cross section
+    double crosssection = getProcess()->getCrossSection(); //Change this for different cross section
 
     //Finds background
     double backgroundest = exp(log(efficiency) + log(1000) + log(crosssection) + log(luminosity) + (2 * log(histfraction)));
+    return backgroundest;
     //For efficiency lose: log(1000) + log(crosssection) + log(luminosity)
 
 }
