@@ -71,7 +71,7 @@ Particle Particle::finalDaughter() {
       }
     }
     if (di == -1) {
-      std::cout << "OH NO!!!!!!!\n";
+      std::cout << "OH NO!!!!!!!\n"; //bro who wrote this
       std::cout << current.pdgId() << '\n';
       break;
     }
