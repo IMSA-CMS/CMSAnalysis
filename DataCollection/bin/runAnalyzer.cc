@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
   Analyzer analyzer = leptonJetReconstructionAnalysis();
   // Analyzer analyzer = displacedVertexAnalysis();
   // Analyzer analyzer = massAcceptanceAnalysis();
-  Analyzer analyzer = triggerAnalysis();
+  //Analyzer analyzer = triggerAnalysis();
   //Analyzer analyzer = invariantMassAnalysis();
   //Analyzer analyzer = higgsBackgroundAnalysis();
 
