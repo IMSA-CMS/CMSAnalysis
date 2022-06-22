@@ -15,8 +15,8 @@ public:
   const std::vector<double>& getPtValues() const {return pTValues;}
 
 private:
-  LeptonJet createLeptonJet(Particle highestPtLepton) const;
-  Particle findHighestPtLepton(std::vector<Particle> particles) const;
+  LeptonJet createLeptonJet(Lepton highestPtLepton) const;
+  Particle findHighestPtLepton(std::vector<Lepton> particles) const;
   void findDeltaRValues();
   void findPtValues();
 

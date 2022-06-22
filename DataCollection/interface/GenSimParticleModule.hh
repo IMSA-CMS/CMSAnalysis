@@ -22,11 +22,11 @@ public:
   GenSimParticleModule(int itargetPdgId = 0);
   virtual bool process() override;
 
-  const ParticleCollection& getGenParticles() const 
+  const ParticleCollection<GenSimParticle>& getGenParticles() const 
   {return genParticles;}
 
 private:
-  ParticleCollection genParticles;
+  ParticleCollection<GenSimParticle> genParticles;
   int targetPdgId;
 };
 

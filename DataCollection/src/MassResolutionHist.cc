@@ -4,7 +4,7 @@
 #include "CMSAnalysis/DataCollection/interface/HistogramPrototype.hh"
 //#include "CMSAnalysis/DataCollection/interface/ParticleCollection.hh"
 
-double MassResolutionHist::getValue(const ParticleCollection& partColl) const
+double MassResolutionHist::getValue(const ParticleCollection<Lepton>& partColl) const
 {
   return partColl.getInvariantMass();
 }

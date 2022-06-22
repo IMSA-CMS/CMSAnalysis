@@ -36,7 +36,7 @@ bool TriggerEfficiencyModule::process()
 
       if ((genSimParticle1 != genSimParticle2)  && (genSimParticle1.charge() == genSimParticle2.charge()))
       {
-        ParticleCollection genSimPair;
+        ParticleCollection<GenSimParticle> genSimPair;
         genSimPair.addParticle(genSimParticle1);
         genSimPair.addParticle(genSimParticle2);
 
@@ -48,7 +48,7 @@ bool TriggerEfficiencyModule::process()
         {
           ++genSimCount;
 
-          ParticleCollection matchedReco;  // ParticleCollection that we will add the matched Reco particles to in a bit
+          ParticleCollection<Particle> matchedReco;  // ParticleCollection that we will add the matched Reco particles to in a bit
 
           auto matchedPairs = matchMod->getMatchingBestPairs().getPairs();  // This is a vector of Matched Pairs
 
@@ -96,7 +96,7 @@ void TriggerEfficiencyModule::printDebugLines(Particle particle) const  // So I 
   {
     std::cout << "Type: Muon\n";
   }
-  std::cout << "PDGID: " << particle.pdgId() << '\n';
+  std::cout << "PDGID: " << GenSimParticle(particle).pdgId() << '\n';
   std::cout << "Charge: " << particle.charge() << '\n';
   //std::cout << "Mother PDGID: " << particle.uniqueMother().pdgId() << "\n\n";
 }

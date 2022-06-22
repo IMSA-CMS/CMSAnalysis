@@ -10,6 +10,7 @@
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
+#include "CMSAnalysis/DataCollection/interface/Lepton.hh"
 class TFile;
 class EventLoader;
 class Selector;
@@ -21,10 +22,10 @@ class EventLoaderInputModule : public InputModule
         EventLoaderInputModule(const EventLoader *iEventLoader);
         virtual void setLeptonSelector(std::shared_ptr<Selector> selector) {leptonSelector = selector;}
 
-        virtual ParticleCollection getLeptons(RecoLevel level) const override;
-        virtual ParticleCollection getParticles(RecoLevel level, Particle::Type particleType = Particle::Type::None,
+        virtual ParticleCollection<Lepton> getLeptons(RecoLevel level) const override;
+        virtual ParticleCollection<Particle> getParticles(RecoLevel level, Particle::Type particleType = Particle::Type::None,
         std::shared_ptr<Selector> selector = nullptr) const override;
-        virtual ParticleCollection getJets(RecoLevel level, double pTCut = 0) const override;
+        virtual ParticleCollection<Particle> getJets(RecoLevel level, double pTCut = 0) const override;
 
         virtual GenEventInfoProduct getGenInfo() const override;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;

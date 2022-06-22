@@ -8,7 +8,7 @@ class PtResolutionHist : public ResolutionPrototype
   public:
     using ResolutionPrototype::ResolutionPrototype; //copies constructor over from ResolutionPrototype
   protected:
-    double getValue(const ParticleCollection& partColl) const override;
+    double getValue(const ParticleCollection<Lepton>& partColl) const override;
 };
 
 #endif

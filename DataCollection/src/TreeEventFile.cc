@@ -88,9 +88,9 @@ GenEventInfoProduct TreeEventFile::getGenInfo() const
     */
 }
 
-ParticleCollection TreeEventFile::getGenSimParticles() const
+ParticleCollection<GenSimParticle> TreeEventFile::getGenSimParticles() const
 {
-    ParticleCollection genParticles;
+    ParticleCollection<GenSimParticle> genParticles;
     // This seems problematic
     //  std::cout << gen_size << std::endl;
     //  std::cout << gen_size << std::endl;
@@ -129,9 +129,9 @@ ParticleCollection TreeEventFile::getGenSimParticles() const
     return genParticles;
 }
 
-ParticleCollection TreeEventFile::getRecoParticles() const
+ParticleCollection<Particle> TreeEventFile::getRecoParticles() const
 {
-    ParticleCollection recoParticles;
+    ParticleCollection<Particle> recoParticles;
     //  std::cout << elec_size << std::endl;
     //  std::cout << muon_size << std::endl;
 
@@ -162,9 +162,9 @@ ParticleCollection TreeEventFile::getRecoParticles() const
     return recoParticles;
 }
 
-ParticleCollection TreeEventFile::getRecoJets() const
+ParticleCollection<Particle> TreeEventFile::getRecoJets() const
 {
-    ParticleCollection recoParticles;
+    ParticleCollection<Particle> recoParticles;
     for(int i = 0; i < jet_size; i++) {
         // Lorentz four-vector
         recoParticles.addParticle(Particle(

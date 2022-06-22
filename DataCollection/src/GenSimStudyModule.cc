@@ -29,7 +29,8 @@ bool GenSimStudyModule::process() {
   // Begin GEN looping
   // Loop through Particle list
   for (const auto &p : genParticles) {
-    if (p.pdgId() ==  22 && p.isFinalState()) {
+    auto particle  = GenSimParticle(p);
+    if (particle.pdgId() ==  22 && particle.isFinalState()) {
       isPhoton++;
     }
   }

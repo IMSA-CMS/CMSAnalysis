@@ -16,9 +16,9 @@ class EventFile
         virtual ~EventFile() {}
         virtual void nextEvent() = 0;
         virtual bool isDone() const = 0;
-        virtual ParticleCollection getGenSimParticles() const = 0;
-        virtual ParticleCollection getRecoParticles() const = 0;
-        virtual ParticleCollection getRecoJets() const = 0;
+        virtual ParticleCollection<GenSimParticle> getGenSimParticles() const = 0;
+        virtual ParticleCollection<Particle> getRecoParticles() const = 0;
+        virtual ParticleCollection<Particle> getRecoJets() const = 0;
         //These two functions should be removed at some point
         virtual GenEventInfoProduct getGenInfo() const = 0;
         virtual double getMET() const = 0;
