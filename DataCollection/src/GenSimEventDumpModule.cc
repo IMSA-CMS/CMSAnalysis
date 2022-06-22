@@ -22,7 +22,12 @@ bool GenSimEventDumpModule::process()
 {
   if(counter < numOfEvents || numOfEvents == -1)
   {
-    ParticleCollection genParticles = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
+    auto genVec = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
+    ParticleCollection<GenSimParticle> genParticles;
+    for (auto particle : genVec) 
+    {
+      genParticles.addParticle(GenSimParticle(particle));
+    }
 
     //TODO this line needs to be fixed and put back in
     //printGenParticleCollection(genParticles);

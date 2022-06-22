@@ -4,6 +4,7 @@
 #include <string>
 #include "HistogramPrototype1D.hh"
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
+#include "CMSAnalysis/DataCollection/interface/ParticleCollection.hh"
 
 namespace reco
 {
@@ -11,7 +12,7 @@ namespace reco
 }
 
 class MatchingModule;
-class ParticleCollection;
+
 
 class ScaledMassHist : public HistogramPrototype1D
 {
@@ -30,7 +31,8 @@ private:
   double changePtUp(double pt, double kappa) const {return (pt/(1-(pt*kappa)));}
   double changePtDown(double pt, double kappa) const {return (pt/(1+(pt*kappa)));}
 
-  double getScaledInvariantMass(const ParticleCollection& bestParticles, bool scaleUp, bool scaleUpDown) const;
+  double getScaledInvariantMass(const ParticleCollection<Particle>& bestParticles, bool scaleUp, bool scaleUpDown) const;
+  //double getScaledInvariantMass(const ParticleCollection<GenSimParticle>& bestParticles, bool scaleUp, bool scaleUpDown) const;
   double calculateScaledInvariantMass(const Particle particle1, const Particle particle2, double scaledPt1, double scaledPt2) const;
 
   

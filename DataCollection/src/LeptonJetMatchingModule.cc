@@ -13,7 +13,8 @@ LeptonJetMatchingModule::LeptonJetMatchingModule(std::shared_ptr<LeptonJetRecons
 bool LeptonJetMatchingModule::process()
 {
     matchingPairs.clear();
-    std::vector<Particle> genSimParticles(getInput()->getLeptons(InputModule::RecoLevel::GenSim).getParticles());
+    std::vector<Lepton> temp(getInput()->getLeptons(InputModule::RecoLevel::GenSim).getParticles());
+    std::vector<Particle> genSimParticles(temp.begin(), temp.end());
     std::vector<LeptonJet> recoLeptonJets(lepJet->getLeptonJets());
     std::vector<Particle> lJets;
     for (LeptonJet lJet:recoLeptonJets)

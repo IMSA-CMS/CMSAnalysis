@@ -9,9 +9,9 @@ eventLoader(iEventLoader)
 {
 }
 
-ParticleCollection EventLoaderInputModule::getLeptons(RecoLevel level) const
+ParticleCollection<Lepton> EventLoaderInputModule::getLeptons(RecoLevel level) const
 {
-    ParticleCollection leptons;
+    ParticleCollection<Lepton> leptons;
     auto electrons = getParticles(level, Particle::Type::Electron).getParticles();
     auto muons = getParticles(level, Particle::Type::Muon).getParticles();
     for (const auto &p : electrons)
@@ -31,9 +31,9 @@ ParticleCollection EventLoaderInputModule::getLeptons(RecoLevel level) const
     return leptons;
 }
 
-ParticleCollection EventLoaderInputModule::getParticles(RecoLevel level, Particle::Type particleType,  std::shared_ptr<Selector> selector) const
+ParticleCollection<Particle> EventLoaderInputModule::getParticles(RecoLevel level, Particle::Type particleType,  std::shared_ptr<Selector> selector) const
 {
-    ParticleCollection particleList;
+    ParticleCollection<Particle> particleList;
     if (level == RecoLevel::GenSim)
     {
         auto particles = eventLoader->getFile()->getGenSimParticles().getParticles();
@@ -66,9 +66,9 @@ ParticleCollection EventLoaderInputModule::getParticles(RecoLevel level, Particl
 }
 
 /* TODO: getJets */
-ParticleCollection EventLoaderInputModule::getJets(RecoLevel level, double pTcut) const
+ParticleCollection<Particle> EventLoaderInputModule::getJets(RecoLevel level, double pTcut) const
 {
-    ParticleCollection particleList;
+    ParticleCollection<Particle> particleList;
     if (level == RecoLevel::GenSim)
     {
         throw std::runtime_error("GenSim Jets not implemented");

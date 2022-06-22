@@ -1,6 +1,7 @@
 #include "CMSAnalysis/DataCollection/interface/TotalEventsHist.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJet.hh"
 #include "CMSAnalysis/DataCollection/interface/ParticleCollection.hh"
+#include "CMSAnalysis/DataCollection/interface/Lepton.hh"
 #include <vector>
 
 TotalEventsHist::TotalEventsHist(const std::string iname, int iNBins, double iminimum, double imaximum) :
@@ -11,6 +12,6 @@ TotalEventsHist::TotalEventsHist(const std::string iname, int iNBins, double imi
 
 std::vector<double> TotalEventsHist::value() const
 {
-  const ParticleCollection leptonJets = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
+  const auto leptonJets = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
   return {leptonJets.getInvariantMass()};
 }

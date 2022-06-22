@@ -11,6 +11,12 @@
 #include "CMSAnalysis/DataCollection/interface/LeptonJet.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJetImplementation.hh"
 
+GenSimParticle::GenSimParticle(const Particle& particle){
+    auto pParticle = getParticle();
+    //Particle *pParticle = &particle; 
+    //^^ this doesnt work and also the variable was unused anyways? (should be "std::shared_ptr<ParticleImplementation> pParticle = &particle"?)
+    //in Lepton particle is an argument
+}
 
 int GenSimParticle::pdgId() const
 {
@@ -19,17 +25,18 @@ int GenSimParticle::pdgId() const
 }
 
 
+
 int GenSimParticle::status() const
 {
   checkIsNull();
   return getParticle()->status();
 }
 
-Particle GenSimParticle::mother() const
+GenSimParticle GenSimParticle::mother() const
 {
   checkIsNull();
   //mother of particle is often not electron/muon
-  return Particle(getParticle()->mother());
+  return GenSimParticle(getParticle()->mother());
 }
 
 int GenSimParticle::numberOfDaughters() const {
@@ -83,7 +90,8 @@ GenSimParticle GenSimParticle::uniqueMother() const
   return mom;
 }
 
-GenSimParticle GenSimParticle::finalDaughter() {
+GenSimParticle GenSimParticle::finalDaughter() const
+{
   GenSimParticle current = GenSimParticle(*this);
   while (current.status() != 1) {
     int di = -1;
@@ -105,7 +113,7 @@ GenSimParticle GenSimParticle::finalDaughter() {
   return current;
 }
 
-GenSimParticle GenSimParticle::findMother(int motherPDGID)
+GenSimParticle GenSimParticle::findMother(int motherPDGID) const
 {
   bool foundMother = false;
 
@@ -133,7 +141,7 @@ GenSimParticle GenSimParticle::findMother(int motherPDGID)
   return finalMother;
 }
 
-GenSimParticle GenSimParticle::sharedMother(int motherPDGID, Particle particle1, Particle particle2)
+GenSimParticle GenSimParticle::sharedMother(int motherPDGID, GenSimParticle particle1, GenSimParticle particle2)
 {
   auto mother1 = particle1.findMother(motherPDGID);  // Define these here for convenience
   auto mother2 = particle2.findMother(motherPDGID);

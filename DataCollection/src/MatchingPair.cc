@@ -6,7 +6,7 @@
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
 
 
-MatchingPair::MatchingPair(Particle bestGenParticle, Particle bestRecoParticle) :
+MatchingPair::MatchingPair(GenSimParticle bestGenParticle, Particle bestRecoParticle) :
   genParticle(bestGenParticle),
   recoParticle(bestRecoParticle)
 {
