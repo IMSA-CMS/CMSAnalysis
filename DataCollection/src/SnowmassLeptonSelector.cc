@@ -9,6 +9,7 @@ SnowmassLeptonSelector::SnowmassLeptonSelector(double iptCut, double iisoCut) :
 
 bool SnowmassLeptonSelector::checkParticle(const Lepton &particle) const
 {
+    //std::cout << "checking particle \n"; 
     
     if (particle.getPt() < ptCut || particle.getIsolation() > isoCut)
     {

@@ -11,9 +11,10 @@
 #include "CMSAnalysis/DataCollection/interface/LeptonJet.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJetImplementation.hh"
 
-Lepton::Lepton(const Particle &particle){
-  auto lepton = particle;
-  Particle* pParticle = &lepton;
+Lepton::Lepton(const Particle &pParticle):
+Particle(pParticle)
+{
+
 }
 double Lepton::getIsolation() const
 {

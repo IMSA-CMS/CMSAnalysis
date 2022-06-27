@@ -14,12 +14,13 @@
 Particle::Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, double relIso):
 particle(std::make_shared<SimpleImplementation>(vec, charge, type, relIso))
 {
+
 }
 
 Particle::Particle(const reco::Candidate* iparticle):
 particle(std::make_shared<CandidateImplementation>(iparticle))
 {
-  //std::cout << "Got to Particle\n" << particle << "\n";
+
 }
 
 Particle::Particle(const LeptonJet& leptonjet):
@@ -29,7 +30,10 @@ Particle::Particle(const LeptonJet& leptonjet):
 }
 
 Particle::Particle(const Particle& particle1):
-particle(particle1.particle){}
+particle(particle1.particle)
+{
+
+}
 
 Particle& Particle::operator = (const Particle& particle2)
 {
@@ -49,7 +53,7 @@ bool Particle::isNotNull() const
 
 void Particle::checkIsNull() const
 {
-  // std::cout << "This is check is null (particle)\n" << particle << "\n";
+  //std::cout << "This is check is null (particle)\n" << particle << "\n" << typeid(*particle).name() << "\n";
   if(!particle->isNotNull())
   {
     throw std::runtime_error("attempted to use null pointer in Particle (Particle)");

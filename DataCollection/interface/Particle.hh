@@ -40,6 +40,7 @@ class Particle
     // bool isGenSim() const;
     //bool isFinalState() const;
   protected:
+    Particle(std::shared_ptr<ParticleImplementation> particle);
     std::shared_ptr<ParticleImplementation> getParticle(){return particle;}
     const std::shared_ptr<ParticleImplementation> getParticle() const {return particle;}
     void checkIsNull() const;
