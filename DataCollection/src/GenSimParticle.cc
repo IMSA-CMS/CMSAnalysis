@@ -11,11 +11,10 @@
 #include "CMSAnalysis/DataCollection/interface/LeptonJet.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJetImplementation.hh"
 
-GenSimParticle::GenSimParticle(const Particle& particle){
-    auto pParticle = getParticle();
-    //Particle *pParticle = &particle; 
-    //^^ this doesnt work and also the variable was unused anyways? (should be "std::shared_ptr<ParticleImplementation> pParticle = &particle"?)
-    //in Lepton particle is an argument
+GenSimParticle::GenSimParticle(const Particle& particle):
+Particle(particle)
+{
+
 }
 
 int GenSimParticle::pdgId() const

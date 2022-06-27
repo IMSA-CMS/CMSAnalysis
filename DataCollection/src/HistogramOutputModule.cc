@@ -277,15 +277,15 @@ bool HistogramOutputModule::process()
     //std::cerr << "value = " << hist->value() << std::endl;
 
     // Fill the histogram if shouldDraw(event) (draw) returns true
-    //std::cerr << "dunkin donuts" << std::endl;
+    // std::cerr << "dunkin donuts" << std::endl;
     if (draw)
       {
         // std::cout << "Process if 5\n";
-        // std::cout << "Histogram Filled: " << hist->getFilteredName() + massBin << '\n' << "Value: " << hist->value() << '\n';
+        // std::cout << "Histogram Filled: " << hist->getFilteredName() + massBin << '\n' << "Value: " << hist->value()[0] << '\n';
         fillHistogram(hist->getFilteredName() + massBin, hist->value(), eventWeight);
       }
   }
-  //std::cerr << "kumon: math, reading, success" << std::endl;
+  // std::cerr << "kumon: math, reading, success" << std::endl;
   return true;
 }
 
