@@ -4,8 +4,8 @@
 #include <iostream>
 #include "TH2.h"
 
-UnmatchedParticleModule::UnmatchedParticleModule(const std::shared_ptr<WeightingModule> weightingModule, const std::shared_ptr<LRWeightModule> lrWeighting, const std::shared_ptr<MatchingModule> matchingModule) :
-  HistogramOutputModule(weightingModule, lrWeighting),
+UnmatchedParticleModule::UnmatchedParticleModule(const std::shared_ptr<MatchingModule> matchingModule) :
+  HistogramOutputModule(),
   //genSim(genSimModule),
   matching(matchingModule)
 {

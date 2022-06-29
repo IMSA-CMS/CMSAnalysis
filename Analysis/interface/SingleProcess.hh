@@ -4,7 +4,24 @@
 #include <string>
 #include <vector>
 
-class Estimator;
+class Estimator
+{
+public: 
+
+    std::string getFileName() const {return fileName;}
+    double getFileName() const {return fileName;}
+
+private:
+    const std::string fileName;
+    const double massTarget;
+    const double totalEvents;
+    const std::string histogramName;
+    const double crossSection;
+    const bool signalSwitch;
+    const std::string analysisName; 
+    const std::string nickname;
+    const double sumSwitch;
+};
 class ProcessInput;
 
 //SingleProcess Class

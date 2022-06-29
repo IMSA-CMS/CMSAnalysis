@@ -48,7 +48,11 @@ int main(int argc, char **argv) {
 
   // USING ANALYER FOR H++ THAT WON'T CHANGE: CHANGE BACK
   // TO hPlusPlusMassAnalysis() when ready -- [09/17]
+  //Analyzer analyzer = displacedVertexAnalysis();
+  //Analyzer analyzer = higgsBackgroundAnalysis();
+  //Analyzer analyzer = invariantMassAnalysis();
   //Analyzer analyzer = leptonJetBackgroundAnalysis();
+<<<<<<< HEAD
   // Analyzer analyzer = massResolutionAnalysis();
   //Analyzer analyzer = leptonJetReconstructionAnalysis();
   //Analyzer analyzer = displacedVertexAnalysis();
@@ -56,6 +60,12 @@ int main(int argc, char **argv) {
   //Analyzer analyzer = triggerAnalysis();
   //Analyzer analyzer = invariantMassAnalysis();
    Analyzer analyzer = higgsBackgroundAnalysis();
+=======
+  Analyzer analyzer = leptonJetReconstructionAnalysis();
+  //Analyzer analyzer = massAcceptanceAnalysis();
+  //Analyzer analyzer = massResolutionAnalysis();
+  //Analyzer analyzer = triggerAnalysis();
+>>>>>>> d069d13167738edb074236bb5364a405d1c89be0
 
   if (inputFile.empty())
   {

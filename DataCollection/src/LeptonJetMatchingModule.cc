@@ -45,7 +45,7 @@ double LeptonJetMatchingModule::findMatchingPairDeltaR(MatchingPair pair)
   auto jetFourVector = jet.getFourVector();
 
   double deltaR = reco::deltaR(partFourVector, jetFourVector);
-
+  
   return deltaR;
 }
 
