@@ -10,7 +10,6 @@
 #include "CMSAnalysis/DataCollection/interface/GenSimEventDumpModule.hh"
 #include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonEfficiency.hh"
-#include "CMSAnalysis/DataCollection/interface/LRWeightModule.hh"
 #include "CMSAnalysis/DataCollection/interface/MassRecoEfficiency.hh"
 #include "CMSAnalysis/DataCollection/interface/MatchingModule.hh"
 #include "CMSAnalysis/DataCollection/interface/NLeptonsFilter.hh"
@@ -25,7 +24,6 @@
 #include "CMSAnalysis/DataCollection/interface/TripleMuonTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/TwoInvariantMassesHist.hh"
 #include "CMSAnalysis/DataCollection/interface/UnusualFinalStateFilter.hh"
-#include "CMSAnalysis/DataCollection/interface/WeightingModule.hh"
 #include "CMSAnalysis/DataCollection/interface/PhotonsHist.hh"
 #include "CMSAnalysis/DataCollection/interface/METModule.hh"
 #include "CMSAnalysis/DataCollection/interface/METHist.hh"
@@ -48,13 +46,11 @@ Analyzer hPlusPlusMassAnalysis() {
   //auto recoMod = make_shared<RecoIdentificationModule>(50);
   auto matchMod = make_shared<MatchingModule>();
   auto triggerMod = make_shared<TriggerModule>();
-  auto weightMod = make_shared<WeightingModule>();
-  auto lrWeightMod = make_shared<LRWeightModule>();
   auto mETMod = make_shared<METModule>();
 
   auto nLeptonsFilter = make_shared<NLeptonsFilter>(); //Needs to be updated with shared pointers
   
-  auto histMod = make_shared<HistogramOutputModule>(weightMod, lrWeightMod);
+  auto histMod = make_shared<HistogramOutputModule>();
   auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
   auto nElectronsHist = make_shared<NLeptonsHist>(matchMod, "Matched Electrons", 10, 0, 10, 11);
   auto nMuonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
@@ -117,8 +113,6 @@ Analyzer hPlusPlusMassAnalysis() {
   //analyzer.addProductionModule(recoMod);
   analyzer.addProductionModule(matchMod);
   // analyzer.addProductionModule(triggerMod); 
-  analyzer.addProductionModule(weightMod);
-  analyzer.addProductionModule(lrWeightMod);
   analyzer.addProductionModule(mETMod);
 
   // Filters

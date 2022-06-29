@@ -44,7 +44,7 @@ void TreeEventFile::initialize()
     tree->SetBranchAddress(getTreeBranches().jetPhi.c_str(), &jet_phi);
     tree->SetBranchAddress(getTreeBranches().jetMass.c_str(), &jet_mass);
     tree->SetBranchAddress(getTreeBranches().jetPT.c_str(), &jet_pt);
-    tree->SetBranchAddress(getTreeBranches().bJet.c_str(), &bJet);
+    //tree->SetBranchAddress(getTreeBranches().bJet.c_str(), &bJet);
 
     tree->SetBranchAddress(getTreeBranches().genSize.c_str(), &gen_size);
     tree->SetBranchAddress(getTreeBranches().genPid.c_str(), &gen_pid);
