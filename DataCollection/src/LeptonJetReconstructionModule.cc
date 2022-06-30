@@ -12,11 +12,11 @@ bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
 {
   leptonJets.clear();
   //std::cout << "Lepton jet selector: " << leptonSelector << '\n';
-  const ParticleCollection& recoCandidates = getInput()->getLeptons(InputModule::RecoLevel::Reco);
-  std::vector<Particle> recoLeptons = recoCandidates.getParticles();
+  const auto & recoCandidates = getInput()->getLeptons(InputModule::RecoLevel::Reco);
+  auto recoLeptons = recoCandidates.getParticles();
 
   while (recoLeptons.size() != 0) {
-    Particle highestPtLepton = findHighestPtLepton(recoLeptons);
+    Lepton highestPtLepton = findHighestPtLepton(recoLeptons);
     LeptonJet jet = createLeptonJet(highestPtLepton);
     std::vector<Particle> initialLeptons = jet.getParticles();
 
@@ -26,14 +26,14 @@ bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
     for (unsigned i = 0; i < recoLeptons.size(); ++i) {
       auto fourVector = recoLeptons[i].getFourVector();
       double deltaR = reco::deltaR(highestPtLeptonFourVector, fourVector);
-      std::cout << "delta r: " << deltaR << " delta r cut: " << DeltaRCut << "\n";
+      //std::cout << "delta r: " << deltaR << " delta r cut: " << DeltaRCut << "\n";
       if (deltaR < DeltaRCut) {
         jet.addParticle(recoLeptons[i]);
         recoLeptons.erase(recoLeptons.begin() + i);
         --i;
       }
     }
-  std::cout << "numParticles: " << jet.getNumParticles() << "\n";
+  //std::cout << "numParticles: " << jet.getNumParticles() << "\n";
     if (jet.getNumParticles() > 1)
     {
       auto inputJets = getInput()->getJets(InputModule::RecoLevel::Reco);
@@ -45,7 +45,7 @@ bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
         }
       }
       if (!close) {
-        std::cout << "adding jet\n";
+        //std::cout << "adding jet\n";
         leptonJets.push_back(jet);
       }
     }
@@ -56,13 +56,13 @@ bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
   return true;
 }
 
-LeptonJet LeptonJetReconstructionModule::createLeptonJet(Particle highestPtLepton) const
+LeptonJet LeptonJetReconstructionModule::createLeptonJet(Lepton highestPtLepton) const
 {
   LeptonJet leptonJet(highestPtLepton);
   return leptonJet;
 }
 
-Particle LeptonJetReconstructionModule::findHighestPtLepton(std::vector<Particle> leptons) const
+Particle LeptonJetReconstructionModule::findHighestPtLepton(std::vector<Lepton> leptons) const
 {
   double highestPt = 0;
   for (auto lepton : leptons)

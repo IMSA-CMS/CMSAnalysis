@@ -13,8 +13,8 @@ public:
   void addMatchingPair(const MatchingPair pair) {matchingPairCollection.push_back(pair);}
   
   const std::vector<MatchingPair>& getPairs() const {return matchingPairCollection;}
-  ParticleCollection getGenParticles() const;
-  ParticleCollection getRecoParticles() const;
+  ParticleCollection<GenSimParticle> getGenParticles() const;
+  ParticleCollection<Particle> getRecoParticles() const;
   double getSize() const {return matchingPairCollection.size();}
   void clear() {matchingPairCollection.clear();}
 

@@ -17,20 +17,20 @@ bool MatchingModule::process()
 	//std::cerr << "ENTERING MatchingModule" << std::endl;
 	matchingBestPairs.clear();
 
-    // Make a copy so we don't modify the original
-  	std::vector<Particle> genSimParticles(getInput()->getLeptons(InputModule::RecoLevel::GenSim).getParticles());
-  	std::vector<Particle> recoCandidates(getInput()->getLeptons(InputModule::RecoLevel::Reco).getParticles());
-  	return match(genSimParticles, recoCandidates);
+  // Make a copy so we don't modify the original
+  std::vector<Particle> GenSimParticle(getInput()->getParticles(InputModule::RecoLevel::GenSim).getParticles());
+  std::vector<Particle> recoCandidates(getInput()->getParticles(InputModule::RecoLevel::Reco).getParticles());
+  return match(GenSimParticle, recoCandidates);
 }
   
 //loops through while there are still at least one gen and reco particle left that have not been matched and set to null
 //std::cerr << "Hey, I'm in charge of names here" << std::endl;
 bool MatchingModule::match(std::vector<Particle> genSimParticles, std::vector<Particle> recoCandidates)
 {
-  std::cout << "Matching\n";
+  // std::cout << "Matching\n";
   while (!checkIsNull(genSimParticles) && !checkIsNull(recoCandidates))
     {
-      std::cerr << "Loop starts" << std::endl;
+      // std::cerr << "Loop starts" << std::endl;
       //start with a high value, only really needs to be higher than the cutoff delta R
       double deltaRMin = std::numeric_limits<double>::max();
 
@@ -172,10 +172,10 @@ bool MatchingModule::checkIsNull(std::vector<Particle> matching) const
   	{
     	if(particle.isNotNull())
     	{
-      	std::cerr << "Particle is not null" << std::endl;
+      	//std::cerr << "Particle is not null" << std::endl;
       	return false;
     	}
   	}	  
-  	std::cerr << "Particle is null" << std::endl;
+  	//std::cerr << "Particle is null" << std::endl;
   	return true;
 }

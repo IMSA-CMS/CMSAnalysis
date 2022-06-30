@@ -38,7 +38,7 @@ class MassResolutionHist : public ResolutionPrototype
 {
   using ResolutionPrototype::ResolutionPrototype;
 
-  double getValue(const ParticleCollection& partColl) const
+  virtual double getValue(const ParticleCollection<Lepton>& partColl) const
   {
     return partColl.getInvariantMass();
   }
@@ -72,7 +72,7 @@ class PtResolutionHist : public ResolutionPrototype
 {
   using ResolutionPrototype::ResolutionPrototype;
 
-  double getValue(const ParticleCollection& partColl) const
+  virtual double getValue(const ParticleCollection<Lepton>& partColl) const
   {
     //std::cerr << "congrats you made it" << std::endl;
     return partColl.getLeadingTransverseMomentum();
