@@ -8,25 +8,25 @@ std::vector<double> PhotonsHist::protectedValue(InputModule::RecoLevel typeGenSi
   // std::cerr << "photons hist " << EventLoader.use_count() << "\n";
   if (typeGenSim == InputModule::RecoLevel::GenSim)          // typeGenSim == true, so we want the GenSim values
   {
-    ParticleCollection finalPhotons;
+    ParticleCollection<GenSimParticle> finalPhotons;
     auto lepVector = getInput()->getParticles(InputModule::RecoLevel::GenSim, Particle::Type::Photon).getParticles();
-    ParticleCollection posSignLep;
-    ParticleCollection oppSignLep;
-
-    for(auto currentParticle:lepVector)
-      {
-        if(currentParticle.charge() == 1)
-          {posSignLep.addParticle(currentParticle);}
-        else if(currentParticle.charge() == -1)
-          {oppSignLep.addParticle(currentParticle);}
+    ParticleCollection<GenSimParticle> lepCollection;
+    for (auto lepton : lepVector){
+      lepCollection.addParticle(GenSimParticle(lepton));
     }
+    ParticleCollection<GenSimParticle> posSignLep = lepCollection.getPosParticles();
+    ParticleCollection<GenSimParticle> oppSignLep = lepCollection.getNegParticles();
+
+   
 
     auto particleVectorPosSign = posSignLep.getParticles();
     auto particleVectorOppSign = oppSignLep.getParticles();
    
-    auto photons = getInput()->getParticles(InputModule::RecoLevel::GenSim, Particle::Type::Photon).getParticles();
-    
-
+    auto tempPhotons = getInput()->getParticles(InputModule::RecoLevel::GenSim, Particle::Type::Photon).getParticles();
+    std::vector<GenSimParticle> photons(0);
+    for (auto photon : tempPhotons){
+      photons.push_back(GenSimParticle(photon));
+    }
    
    for(auto current:photons){
       if(current.findMother(11).isNotNull() || current.findMother(-11).isNotNull() || current.findMother(13).isNotNull()|| current.findMother(-13).isNotNull())
@@ -99,10 +99,10 @@ std::vector<double> PhotonsHist::protectedValue(InputModule::RecoLevel typeGenSi
 
 }
 
-void PhotonsHist::addPhotonUsingIM (ParticleCollection& pc1, ParticleCollection& pc2, Particle photon) const
+void PhotonsHist::addPhotonUsingIM (ParticleCollection<Particle>& pc1, ParticleCollection<Particle>& pc2, Particle photon) const
 {
-  ParticleCollection particleCollectOne(pc1);
-  ParticleCollection particleCollectTwo(pc2);
+  ParticleCollection<Particle> particleCollectOne(pc1);
+  ParticleCollection<Particle> particleCollectTwo(pc2);
   // auto og1 = particleCollectOne.calculateAllLeptonInvariantMass();
   // auto og2 = particleCollectTwo.calculateAllLeptonInvariantMass();
   // std::cout << "Original positive: " << og1 << "/n";
@@ -123,10 +123,10 @@ void PhotonsHist::addPhotonUsingIM (ParticleCollection& pc1, ParticleCollection&
   }
 }
 
-void PhotonsHist::addPhotonUsingDR(ParticleCollection& pc1, ParticleCollection& pc2, Particle photon) const
+void PhotonsHist::addPhotonUsingDR(ParticleCollection<Particle>& pc1, ParticleCollection<Particle>& pc2, Particle photon) const
 {
-  ParticleCollection particleCollectOne(pc1);
-  ParticleCollection particleCollectTwo(pc2);
+  ParticleCollection<Particle> particleCollectOne(pc1);
+  ParticleCollection<Particle> particleCollectTwo(pc2);
   std::vector<double> deltaRValuesP1;
   std::vector<double> deltaRValuesP2;
   double lowestDRp1 = 1000;
@@ -166,10 +166,10 @@ void PhotonsHist::addPhotonUsingDR(ParticleCollection& pc1, ParticleCollection& 
     pc1.addParticle(photon);
   }
 }
-void PhotonsHist::addPhotonUsingPt(ParticleCollection& pc1, ParticleCollection& pc2, Particle photon) const
+void PhotonsHist::addPhotonUsingPt(ParticleCollection<Particle>& pc1, ParticleCollection<Particle>& pc2, Particle photon) const
 {
-  ParticleCollection particleCollectOne(pc1);
-  ParticleCollection particleCollectTwo(pc2);
+  ParticleCollection<Particle> particleCollectOne(pc1);
+  ParticleCollection<Particle> particleCollectTwo(pc2);
   
   auto highestPt1 = particleCollectOne.getNthHighestPt(1);
   auto highestPt2 = particleCollectTwo.getNthHighestPt(1);
@@ -184,10 +184,10 @@ void PhotonsHist::addPhotonUsingPt(ParticleCollection& pc1, ParticleCollection& 
   }
 
 }
-void PhotonsHist::addPhotonUsingPhi(ParticleCollection& pc1, ParticleCollection& pc2, Particle photon) const
+void PhotonsHist::addPhotonUsingPhi(ParticleCollection<Particle>& pc1, ParticleCollection<Particle>& pc2, Particle photon) const
 {
-  ParticleCollection particleCollectOne(pc1);
-  ParticleCollection particleCollectTwo(pc2);
+  ParticleCollection<Particle> particleCollectOne(pc1);
+  ParticleCollection<Particle> particleCollectTwo(pc2);
   std::vector<double> phiValuesP1;
   std::vector<double> phiValuesP2;
   double highestPhip2 = 0; 
@@ -235,10 +235,10 @@ void PhotonsHist::addPhotonUsingPhi(ParticleCollection& pc1, ParticleCollection&
 }
 
 
-void PhotonsHist::addPhotonUsingEta(ParticleCollection& pc1, ParticleCollection& pc2, Particle photon) const
+void PhotonsHist::addPhotonUsingEta(ParticleCollection<Particle>& pc1, ParticleCollection<Particle>& pc2, Particle photon) const
 {
-  ParticleCollection particleCollectOne(pc1);
-  ParticleCollection particleCollectTwo(pc2);
+  ParticleCollection<Particle> particleCollectOne(pc1);
+  ParticleCollection<Particle> particleCollectTwo(pc2);
   std::vector<double> etaValuesP1;
   std::vector<double> etaValuesP2;
   double lowestDifP1 = 1000;
@@ -285,10 +285,10 @@ void PhotonsHist::addPhotonUsingEta(ParticleCollection& pc1, ParticleCollection&
 }
 
 
-void PhotonsHist::addPhotonUsingIMIs800 (ParticleCollection& pc1, ParticleCollection& pc2, Particle photon) const
+void PhotonsHist::addPhotonUsingIMIs800 (ParticleCollection<Particle>& pc1, ParticleCollection<Particle>& pc2, Particle photon) const
 {
-  ParticleCollection particleCollectOne(pc1);
-  ParticleCollection particleCollectTwo(pc2);
+  ParticleCollection<Particle> particleCollectOne(pc1);
+  ParticleCollection<Particle> particleCollectTwo(pc2);
 
   particleCollectOne.addParticle(photon);
   particleCollectTwo.addParticle(photon);
@@ -303,10 +303,10 @@ void PhotonsHist::addPhotonUsingIMIs800 (ParticleCollection& pc1, ParticleCollec
   }
 }
 
-void PhotonsHist::addPhotonUsingMother (ParticleCollection& pc1, ParticleCollection& pc2, Particle photon) const
+void PhotonsHist::addPhotonUsingMother (ParticleCollection<GenSimParticle>& pc1, ParticleCollection<GenSimParticle>& pc2, GenSimParticle& photon) const
 {
-  ParticleCollection particleCollectOne(pc1);
-  ParticleCollection particleCollectTwo(pc2);
+  ParticleCollection<GenSimParticle> particleCollectOne(pc1);
+  ParticleCollection<GenSimParticle> particleCollectTwo(pc2);
 
   auto pc1Particles = pc1.getParticles();
   auto pc2Particles = pc2.getParticles();

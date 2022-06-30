@@ -1,5 +1,5 @@
 #include "CMSAnalysis/DataCollection/interface/SingleIsolatedMuonTrigger.hh"
-
+#include "CMSAnalysis/DataCollection/interface/Lepton.hh"
 SingleIsolatedMuonTrigger::SingleIsolatedMuonTrigger(double iPTCutoff) :
   RecoTrigger("Single Isolated Muon Trigger"),
   pTCutoff(iPTCutoff)
@@ -20,7 +20,8 @@ bool SingleIsolatedMuonTrigger::checkTrigger(const InputModule* input)
 
   for (const auto &particle : particles.getParticles())
   {
-    if (particle.getPt() >= pTCutoff && particle.isIsolated())
+    const auto lepton = Lepton(particle);
+    if (particle.getPt() >= pTCutoff && lepton.isIsolated())
     {
       return true;
     }
