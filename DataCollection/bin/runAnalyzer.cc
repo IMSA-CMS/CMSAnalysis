@@ -10,7 +10,6 @@
 #include "CMSAnalysis/DataCollection/interface/DataCollectionPlan.hh"
 
 #include "CMSAnalysis/DataCollection/interface/DisplacedVertexPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/FilestripPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/HiggsBackgroundPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/HPlusPlusMassPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/InvariantMassPlan.hh"
@@ -78,7 +77,7 @@ int main(int argc, char **argv) {
   {
     throw std::runtime_error("selected analysis does not exist");
   }
-  
+
   analysisPlans[analysisType]->runAnalyzer(inputFile, outputFile, outputEvery, numFiles);
   
   /* HiggsBackgroundPlan plan;
