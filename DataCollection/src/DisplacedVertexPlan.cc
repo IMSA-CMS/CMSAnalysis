@@ -1,4 +1,7 @@
+#include "CMSAnalysis/DataCollection/interface/DisplacedVertexPlan.hh"
+
 #include <iostream>
+#include <memory>
 
 #include "TROOT.h"
 #include "TSystem.h"
@@ -6,11 +9,7 @@
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
 
 #include "CMSAnalysis/DataCollection/interface/DisplacedVertexModule.hh"
-
-#include <memory>
-
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
-
 //#include "CIAnalysis/CIStudies/interface/RecoIdentificationModule.hh"
 #include "CMSAnalysis/DataCollection/interface/METModule.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerModule.hh"
@@ -26,13 +25,12 @@
 
 using std::make_shared;
 
-Analyzer displacedVertexAnalysis()
+DisplacedVertexPlan::DisplacedVertexPlan()
 {
-  Analyzer analyzer;
+  Analyzer& analyzer = getAnalyzer();
 
   auto dispVerMod = make_shared<DisplacedVertexModule>();
 
   analyzer.addProductionModule(dispVerMod);
-  
-  return analyzer;
+
 }

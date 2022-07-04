@@ -22,8 +22,13 @@ Analyzer::Analyzer() :
   eventLoader(),
   input(new EventLoaderInputModule(&eventLoader))
   {}
+Analyzer::Analyzer(const Analyzer& analyzer) {
+  eventLoader = analyzer.eventLoader;
+  input = analyzer.input;
+}
 Analyzer::~Analyzer()
 {
+  std::cout << input << "\n";
   delete input;
 }
 void Analyzer::run(const std::string& configFile, const std::string& outputFile, int outputEvery, int nFiles)

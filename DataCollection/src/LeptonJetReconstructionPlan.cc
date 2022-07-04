@@ -1,3 +1,5 @@
+#include "CMSAnalysis/DataCollection/interface/LeptonJetReconstructionPlan.hh"
+
 #include <iostream>
 #include <memory>
 
@@ -36,8 +38,8 @@
 
 using std::make_shared;
 
-Analyzer leptonJetReconstructionAnalysis() {
-  Analyzer analyzer;
+LeptonJetReconstructionPlan::LeptonJetReconstructionPlan() {
+  Analyzer& analyzer = getAnalyzer();
   auto matchMod = std::make_shared<MatchingModule>();
   auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>();
   auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
@@ -134,5 +136,4 @@ Analyzer leptonJetReconstructionAnalysis() {
   //analyzer.addAnalysisModule(genSimEventDumpMod);
   auto selector = make_shared<SnowmassLeptonSelector>(5);
   analyzer.getInputModule()->setLeptonSelector(selector);
-  return analyzer;
 }
