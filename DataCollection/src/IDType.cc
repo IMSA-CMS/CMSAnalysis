@@ -1,6 +1,13 @@
 #include "CMSAnalysis/DataCollection/interface/IDType.hh"
 #include <vector>
 
+IDType::IDType(std::string iname, std::vector<std::string> icategories):
+name(iname),
+categories(icategories)
+{
+  
+}
+
 // input "Mass 300 Lepton E Helicity 400" type is mass, lepton, helicity, value is 300, e, 400. 
 std::string IDType::getName() const
 {
@@ -22,6 +29,6 @@ bool IDType::checkCategory(std::string category) const
           return true;
         }
     }
-  return false;
+  return false; 
   // loop through vector of categories and see if it's equal. if it is, return true. if not at end, return false. 
 }

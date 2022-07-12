@@ -1,7 +1,4 @@
-Procs:	Higgs
-Year:	Snowmass2021
-Lepton:	both
-Mass:	800
-Lambda:	M700
-Inter:	con
-Helic:	LL
+H++toLL
+Mass:	700
+Format:	Delphes
+Lepton:	LL	EMu

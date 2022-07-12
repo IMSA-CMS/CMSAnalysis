@@ -16,12 +16,13 @@
 #include "DataFormats/FWLite/interface/Event.h"
 #include "CMSAnalysis/DataCollection/interface/Module.hh"
 #include "CMSAnalysis/DataCollection/interface/TDisplayText.h"
+#include "CMSAnalysis/DataCollection/interface/ProcessDictionary.hh"
 
 Analyzer::Analyzer() :
   eventLoader(),
   input(&eventLoader)
   {
-    dictionary.loadProcesses("filename.txt");
+    dictionary.loadProcesses("textfiles/processes.txt");
   }
 
 void Analyzer::run(const std::string& configFile, const std::string& outputFile, int outputEvery, int nFiles)
