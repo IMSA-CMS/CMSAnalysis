@@ -1,7 +1,2 @@
-Procs:  top
-Year:   Snowmass2021
-Lepton: both
-Mass:   M500
-Lambda: M500
-Inter:  con
-Helic:  ttbar
+TTbartoLL
+Format:	Delphes

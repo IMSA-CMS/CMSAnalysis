@@ -10,6 +10,7 @@
 #include "EventLoader.hh"
 #include "FileParams.hh"
 #include "InputModule.hh"
+#include "ProcessDictionary.hh"
 
 //#include "ProductionModule.hh"
 
@@ -23,7 +24,7 @@ class Analyzer
 {
 public:
   Analyzer();
-  Analyzer(const Analyzer& analyzer1); // = delete;
+  Analyzer(const Analyzer& analyzer1) = delete;
   ~Analyzer();
 
 InputModule* getInputModule() {return input;}
@@ -54,11 +55,12 @@ private:
 
   EventLoader eventLoader;
   InputModule* input;
+  ProcessDictionary dictionary;
 
   // Parse one line of the the configuration file
-  std::vector<std::string> parseLine(std::ifstream& txtFile) const;
+  //std::vector<std::string> parseLine(std::ifstream& txtFile) const;
   // Find all input files from the configuration files, stored as FileParams objects
-  std::vector<FileParams> inputFiles(const std::string& txtFile) const;
+  //std::vector<FileParams> inputFiles(const std::string& txtFile) const;
   // Simple utility function allowing an operation to be performed on all
   // moduels, regardless of type
   std::vector<std::shared_ptr<Module>> getAllModules() const;

@@ -1,7 +1,0 @@
-Procs:  Diboson
-Year:   2018
-Lepton: both
-Mass:   200
-Lambda: 200
-Inter:  con
-Helic:  ZZ4L
