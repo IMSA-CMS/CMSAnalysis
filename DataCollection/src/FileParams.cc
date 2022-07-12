@@ -3,16 +3,26 @@
 #include <sstream>
 #include <fstream>
 
+FileParams::FileParams(std::string iprocess, std::map<std::string, std::string> iparameters):
+process(iprocess),
+parameters(iparameters)
+{
+
+}
+
 std::string FileParams::getFileName() const
 {
     std::ostringstream stream;
-    stream << process;
+    stream << "textfiles/" << process << "/" << process;
     for (auto parameter : parameters) 
     {
         stream << "_" << parameter.first << "_" << parameter.second;
     }
+    stream << ".txt";
     std::string fileName = stream.str();
-    return substitute(fileName, " ", "_");
+    fileName = Utility::substitute(fileName, " ", "_");
+    std::cout << "Filename: " << fileName << '\n';
+    return fileName;
 }
 
 std::vector<std::string> FileParams::getFileList() const

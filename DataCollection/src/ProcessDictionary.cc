@@ -15,24 +15,29 @@ void ProcessDictionary::loadProcesses(std::string filename)
   std::ifstream textfile(filename);
   std::string processName;
   std::unordered_map<std::string, std::vector<std::string>> idTypes;
-  
+
   while (std::getline(textfile, line))  // splitting pickfiles by tab
   {
     std::vector<std::string> tokens; 
     if (line.empty()) 
     {
-      continue;
+      continue; //Go to next line if the line is empty
     }
-    std::istringstream iss(line);
-    std::string token;
+    std::istringstream iss(line);   
+    std::string token; 
     while (std::getline(iss, token, '\t'))
     {
-      tokens.push_back(token);
+      tokens.push_back(token);  
+      // std::cout << token << '\n';
     }
     if (tokens.size() == 1) 
     {
-      Process newProcess(processName, idTypes);
-      processes.push_back(newProcess);
+      if (!(processName.empty()))
+      {
+        // std::cout << "site 1 created a process with name: " << processName << '\n';
+        Process newProcess(processName, idTypes);
+        processes.push_back(newProcess);
+      }
       processName = tokens[0];
       idTypes.clear();
       continue;
@@ -43,8 +48,19 @@ void ProcessDictionary::loadProcesses(std::string filename)
     //    IDType idType(type, tokens);
     idTypes.insert({type, tokens});
   }
+  // for (const auto& aType : idTypes)
+  // {
+  //   // std::cout << "IDType " << aType.first << "\n";
+  //   // std::cout << "Values:\n";
+  //   for (const auto& value : aType.second)
+  //   {
+  //     std::cout << value << "\n";
+  //   }
+  // }
   Process newProcess(processName, idTypes);
   processes.push_back(newProcess);
+  // std::cout << "site 2 created a process with name: " << processName << '\n';
+  // std::cout << "It has " << newProcess.getIDTypes().size() << " IDTypes\n";
 }
 
 std::vector<FileParams> ProcessDictionary::readFile(std::string filename)
@@ -55,15 +71,16 @@ std::vector<FileParams> ProcessDictionary::readFile(std::string filename)
   std::vector<std::string> values;
   std::unordered_map<std::string, std::vector<std::string>> idTypes; 
   std::vector<FileParams> fileParamsVector;
+  std::vector<Process> pickfileProcesses;
 
   while (std::getline(textfile, line))  // splitting pickfiles by tab
   {
-    if (!(line.find("/t") != std::string::npos))
+    if ((line.find("\t") == std::string::npos))  // if tab is not found
     {
       if (!process.empty())
       {
         Process newProcess(process, idTypes);
-        processes.push_back(newProcess);
+        pickfileProcesses.push_back(newProcess);
         idTypes.clear();
         process.clear();
       }
@@ -94,7 +111,7 @@ std::vector<FileParams> ProcessDictionary::readFile(std::string filename)
   if (!process.empty())
       {
         Process newProcess(process, idTypes);
-        processes.push_back(newProcess);
+        pickfileProcesses.push_back(newProcess);
       }
   std::vector<int> indices (idTypes.size(), 0);
   while(true)
@@ -105,6 +122,7 @@ std::vector<FileParams> ProcessDictionary::readFile(std::string filename)
     {
       auto newProcess = findProcess(process);
       auto fileParams = getFileparams(newProcess, idTypes, indices);
+      checkIDTypes(newProcess.getIDTypes(), idTypes);
       fileParamsVector.push_back(fileParams);
       if(changeIndex)
       {
@@ -132,16 +150,56 @@ std::vector<FileParams> ProcessDictionary::readFile(std::string filename)
 // idTypes.insert({type, tokens});
 // Write code that assumes there's one for each. Search through vectors, find process, call getParams. 
 
-Process& ProcessDictionary::findProcess(std::string processName) // fill in these functions
+Process& ProcessDictionary::findProcess(std::string newProcess) // fill in these functions
 {
   for (auto& process : processes)
   {
-    if (process.getName() == processName)
+    if (process.getName() == newProcess)
     {
+      // std::cout << "I selected a process named " << process.getName() << "\n";
+      // std::cout << "It has " << process.getIDTypes().size() << " idtypes\n";
       return process;
     }
   }
-  throw std::runtime_error("Cannot find process " + processName  + " in findProcess()");
+  // the process is not found in processes
+  throw std::runtime_error("Cannot find process named " + newProcess + " in findProcess()!") ;
+}
+
+void ProcessDictionary::checkIDTypes(std::vector<IDType> idtypes, std::unordered_map<std::string, std::vector<std::string>> typesToCheck)
+{
+  for (auto& typeToCheck : typesToCheck)
+  {
+    bool checkTypeName = false;
+    for (auto& idtype : idtypes)
+    {
+      if (idtype.getName() == typeToCheck.first)
+      {
+        checkTypeName = true;
+        for (auto& categoryToCheck : typeToCheck.second)
+        {
+          bool checkCategory = false;
+          for (auto& category : idtype.getCategories())
+          {
+            if (category == categoryToCheck)
+            {
+              checkCategory = true;
+              break;
+            }
+          }
+          if (checkCategory == false)
+          {
+            throw std::runtime_error("Category " + categoryToCheck + " is not found in the idtype "
+            + idtype.getName() + " in processes!");
+          }
+        }
+        break;
+      }
+    }
+    if (checkTypeName == false)
+    {
+      throw std::runtime_error("IDType name " + typeToCheck.first + " is not found in processes.");
+    }
+  }
 }
 
 FileParams ProcessDictionary::makeFileparams(Process& processName, std::vector<std::pair<std::string, std::string>> pairs) 
