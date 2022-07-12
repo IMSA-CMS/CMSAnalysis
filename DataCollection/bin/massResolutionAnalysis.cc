@@ -4,7 +4,7 @@
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
 
 #include "CMSAnalysis/DataCollection/interface/MatchingModule.hh"
-#include "CMSAnalysis/DataCollection/interface/MassFilter.hh"
+// #include "CMSAnalysis/DataCollection/interface/MassFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/BarrelStateFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/MassBinFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/ResolutionModule.hh"
