@@ -1,25 +1,16 @@
 #ifndef ESTIMATOR_HH
 #define ESTIMATOR_HH
 
+#include <memory>
 class SingleProcess;
 
 class Estimator 
 {
 
 public: 
-	Estimator(SingleProcess* process) : process(process) {}
-
 	virtual ~Estimator() {}
 	
-	virtual double getExpectedYield(double luminosity) const = 0;
-
-protected: 
-	SingleProcess* getProcess() const {return process;}
-private: 
-	SingleProcess* process;
-	
-
-
+	virtual double getExpectedYield(const SingleProcess* process, double luminosity) const = 0;
 };
 
 

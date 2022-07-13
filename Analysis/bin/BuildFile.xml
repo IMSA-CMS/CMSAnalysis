@@ -13,6 +13,5 @@
 <use   name="CMSAnalysis/DataCollection"/>
 <environment>
   <bin   file="BackgroundEstimate.cc"/>
-  <bin   file="SuperPlot.cc"/>
 <use name="CMSAnalysis/Analysis"/>
 </environment>

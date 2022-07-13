@@ -14,7 +14,8 @@ class Process
         Process(std::string name, int color) : name(name), color(color) {}
         std::string getName() const {return name;}
         int getColor() const {return color;}
-        TH1* getHist() const;
+        std::vector<SingleProcess> getProcesses() const {return processes;}
+        TH1* getHist(bool scaleToExpected = false) const;
         void addProcess(SingleProcess process) {processes.push_back(process);}
 
     private:

@@ -5,6 +5,10 @@
 #include "CrossSectionReader.hh"
 #include <string>
 #include <vector>
+#include <iostream>
+#include <memory>
+#include "Estimator.hh"
+#include "FitEstimator.hh"
 
 class Estimator;
 
@@ -12,24 +16,23 @@ class Estimator;
 class SingleProcess
 {
 public:
-    SingleProcess(std::string iName, const Input* iInput, const CrossSectionReader* iCrossSectionReader) : 
-    name(iName), input(iInput), reader(iCrossSectionReader) {}
-    std::string getName() const {return name;} //Inlining
-    std::string getFitName() const {return fitname;} //Inlining
-    TH1* getHist() const {return input->getInput(name);}
-    TH1* getFitHist() const {return input->getInput(fitname);}
-    int getTotalEvents() const {return input->getTotalEvents();}
-    double getCrossSection() const {return reader->getCrossSection(name);}
-
+    SingleProcess(std::string iCrossSectionName, const std::shared_ptr<Input> iInput, const std::shared_ptr<CrossSectionReader> iCrossSectionReader, const std::shared_ptr<Estimator> iEstimator, const double iLuminosity) : 
+    crossSectionName(iCrossSectionName), input(iInput), reader(iCrossSectionReader), estimator(iEstimator), luminosity(iLuminosity) {}
+    std::string getName() const {return crossSectionName;} //Inlining
+    TH1* getHist(bool scaleToExpected = false) const;
+    int getTotalEvents() const;
+    double getCrossSection() const {return reader->getCrossSection(crossSectionName);}
+    double getExpectedYield() const;
+    double getLuminosity() const {return luminosity;}
+    std::shared_ptr<Input> getInput() const {return input;}
 
 private:
-    const std::string name;
     const std::string nickname;
-    const std::string fitname;
-    const Input* input;
-    const Estimator* estimator; 
-    const CrossSectionReader* reader;
-
+    const std::string crossSectionName;
+    const std::shared_ptr<Input> input;
+    const std::shared_ptr<CrossSectionReader> reader;
+    const std::shared_ptr<Estimator> estimator; 
+    const double luminosity;
 };
 
 

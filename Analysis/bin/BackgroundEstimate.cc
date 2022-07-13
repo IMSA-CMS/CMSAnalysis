@@ -202,7 +202,7 @@ void ComputationalFunction(Parameters param, std::ostream &out_file)
     //outout << fitratio;
 
     //Finds the integral of the fit histogram from 0-1500
-    double totalhistintegral = hist->Integral(0, 1500);
+    //double totalhistintegral = hist->Integral(0, 1500);
     //outout << "\ntotalhistintegral \n";
     //outout << totalhistintegral;
 

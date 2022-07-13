@@ -7,12 +7,15 @@ class TFile;
 
 class RootFileInput : public Input
 {
-	private:
-		TFile* file;
 	public:
-		RootFileInput(std::string fileName);
-		TH1* getInput(std::string name) const override;
+		RootFileInput(std::string fileName, std::string iName);
+		TH1* getHist() const override;
 		int getTotalEvents() const override;
+		TFile* getFile() const {return file;}
+		std::string getName() const override {return name;}
+	private:
+		std::string name;
+		TFile* file;
 };
 
 
