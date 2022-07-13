@@ -10,36 +10,50 @@ bool SignFlipModule::process()
 {
   const auto matched = matchModule->getMatchingBestPairs().getPairs();
 
-  for(const auto &particlePair : matched)
+  //std::cout << "Number of matched pairs: " << matched.size() << '\n';
+  for (const auto &particlePair : matched)
   {
 	  nTotalEvents++;
 	  
     auto particleType = particlePair.getGenParticle().getType();
     auto particlePt = particlePair.getGenParticle().getPt();
 
-    if(particleType == Particle::Type::Electron) {
-      if(particlePt > signFlipPtCut) {
+    if (particleType == Particle::Type::Electron) 
+    {
+      if (particlePt > signFlipPtCut) 
+      {
         nHighPtElectronEvents++;
       }
       nElectronEvents++;
-    } else if(particleType == Particle::Type::Muon) {
-      if(particlePt > signFlipPtCut) {
+    } 
+    else if (particleType == Particle::Type::Muon)
+    {
+      if(particlePt > signFlipPtCut)
+      {
         nHighPtMuonEvents++;
       }
       nMuonEvents++;
     }
 
-	  if(particlePair.getGenParticle().charge() != particlePair.getRecoParticle().charge()) {
-      if(particleType == Particle::Type::Electron) {
+    //std::cout << "Gen charge: " << particlePair.getGenParticle().charge() << "  Reco charge: " << particlePair.getRecoParticle().charge() << '\n';
+
+	  if (particlePair.getGenParticle().charge() != particlePair.getRecoParticle().charge()) 
+    {
+      if (particleType == Particle::Type::Electron) 
+      {
         nElectronFlips++;
 
-        if(particlePt > signFlipPtCut) {
+        if (particlePt > signFlipPtCut) 
+        {
           nHighPtElectronFlips++;
         }
-      } else if(particleType == Particle::Type::Muon) {
+      } 
+      else if (particleType == Particle::Type::Muon) 
+      {
         nMuonFlips++;
 
-        if(particlePt > signFlipPtCut) {
+        if (particlePt > signFlipPtCut) 
+        {
           nHighPtElectronFlips++;
         }
       }

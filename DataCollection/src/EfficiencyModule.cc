@@ -13,13 +13,8 @@ void EfficiencyModule::writeAll() {}
 
 bool EfficiencyModule::process ()
 {
-    for (auto pair:counters)
-    {
-        pair.second.push_back(0);
-    }
-    total.push_back(0);
     doCounters();
-    total.back()++;
+    ++total;
     return true;
 }
 
@@ -27,30 +22,18 @@ void EfficiencyModule::incrementCounter(std::string name, double increment)
 {
     if(counters.find(name) == counters.end())
     {
-        std::vector<double> newCounter;
-        newCounter.resize(total.size());
+        double newCounter = 0;
         counters.insert({name,newCounter});
     }
-    counters[name].back() += increment;
+    counters[name] += increment;
 }
 
 double EfficiencyModule::getCounter(std::string name) const
 {
-    double totalCounters = 0; 
-    for (size_t i = 0; i < counters.at(name).size(); i++)
-    {
-        totalCounters += counters.at(name)[i];
-    }
-    return totalCounters;
+    return counters.at(name);
 }
 
 double EfficiencyModule::getEfficiency(std::string name) const
 {
-    double totalCounters = 0;
-    for (size_t i = 0; i < total.size(); i++)
-    {
-        totalCounters += total[i];
-    }
-    return getCounter(name)/totalCounters;
+    return getCounter(name)/total;
 }
-

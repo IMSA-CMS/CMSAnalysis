@@ -16,12 +16,21 @@
 #include "DataFormats/FWLite/interface/Event.h"
 #include "CMSAnalysis/DataCollection/interface/Module.hh"
 #include "CMSAnalysis/DataCollection/interface/TDisplayText.h"
+#include "CMSAnalysis/DataCollection/interface/EventLoaderInputModule.hh"
 
 Analyzer::Analyzer() :
   eventLoader(),
-  input(&eventLoader)
+  input(new EventLoaderInputModule(&eventLoader))
   {}
-
+Analyzer::Analyzer(const Analyzer& analyzer) {
+  eventLoader = analyzer.eventLoader;
+  input = analyzer.input;
+}
+Analyzer::~Analyzer()
+{
+  std::cout << input << "\n";
+  delete input;
+}
 void Analyzer::run(const std::string& configFile, const std::string& outputFile, int outputEvery, int nFiles)
 {
   // This keeps the histograms separate from the files they came from, avoiding much silliness
@@ -35,7 +44,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
   // Initialize all modules
   for (auto module : getAllModules())
     {
-      module->setInput(&input);
+      module->setInput(input);
       module->initialize();
     }
 
@@ -71,6 +80,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 	    }
     
     eventLoader.changeFile(file);
+
     while(true)
     {
       if (eventLoader.getFile()->isDone())
@@ -182,6 +192,9 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
       std::cout << "Events Processed: " << numOfEvents << std::endl;
     }      
   
+    // Create the output file
+  TFile* outputRootFile = new TFile(outputFile.c_str(), "RECREATE");
+
   // Finalize the modules
   for (auto module : productionModules)
     {
@@ -191,8 +204,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
     {
       module->finalize();
     }
-  TFile* outputRootFile = new TFile(outputFile.c_str(), "RECREATE");
-
+ 
   // Finalize separately for each filterString, to be safe
   for (auto module : analysisModules)
     {

@@ -17,7 +17,6 @@
 #include "CMSAnalysis/DataCollection/interface/LeptonJetMatchingModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJetPtHist.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJetReconstructionModule.hh"
-#include "CMSAnalysis/DataCollection/interface/LRWeightModule.hh"
 #include "CMSAnalysis/DataCollection/interface/MassRecoEfficiency.hh"
 #include "CMSAnalysis/DataCollection/interface/MatchingDeltaRHist.hh"
 #include "CMSAnalysis/DataCollection/interface/MatchingEtaHist.hh"
@@ -29,36 +28,23 @@
 #include "CMSAnalysis/DataCollection/interface/NLeptonsFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/NLeptonsHist.hh"
 #include "CMSAnalysis/DataCollection/interface/SingleMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/ThirdMuonPtHist.hh"
+#include "CMSAnalysis/DataCollection/interface/Histograms.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerModule.hh"
 #include "CMSAnalysis/DataCollection/interface/TripleMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/WeightingModule.hh"
 #include "CMSAnalysis/DataCollection/interface/SnowmassLeptonSelector.hh"
-
 #include "CMSAnalysis/DataCollection/interface/RelIsoHist.hh"
 
 using std::make_shared;
 
 Analyzer leptonJetReconstructionAnalysis() {
   Analyzer analyzer;
-  // auto genSimMod = std::make_shared<GenSimIdentificationModule>(4900022);
-  // auto recoMod = std::make_shared<RecoIdentificationModule>(5);
-  // auto matchMod = std::make_shared<MatchingModule>(genSimMod, recoMod);
-  // auto weightMod = std::make_shared<WeightingModule>();
-  // auto lrWeightMod = std::make_shared<LRWeightModule>();
-
-  // auto genSimMod = std::make_shared<GenSimIdentificationModule>(4900022);
-  // auto recoMod = std::make_shared<RecoIdentificationModule>(5);
   auto matchMod = std::make_shared<MatchingModule>();
-  auto weightMod = std::make_shared<WeightingModule>();
-  auto lrWeightMod = std::make_shared<LRWeightModule>();
   auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>();
-  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.05);
+  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
   auto lepMatchMod =
       std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.5);
-  auto histOutputMod = std::make_shared<HistogramOutputModule>(
-      weightMod, lrWeightMod);
+  auto histOutputMod = std::make_shared<HistogramOutputModule>();
 
   // Histograms
   auto deltaRHist = std::make_shared<DeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.1);
@@ -89,9 +75,9 @@ Analyzer leptonJetReconstructionAnalysis() {
   auto nLeptonsHist = std::make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
   auto nElectronsHist = std::make_shared<NLeptonsHist>(matchMod, "Matched Electrons", 10, 0, 10, 11);
   auto nMuonsHist = std::make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
-  auto recoThirdMuonPtHist = std::make_shared<GetNthHighestPtHist>(false, "Reconstructed Third Muon Transverse Momentum", 50, 0, 100, 3);
-  auto recoSecondMuonPtHist = std::make_shared<GetNthHighestPtHist>(false, "Reconstructed Second Muon Transverse Momentum", 50, 0, 100, 2);
-  auto recoFirstMuonPtHist = std::make_shared<GetNthHighestPtHist>(false, "Reconstructed First Muon Transverse Momentum", 50, 0, 100, 1);
+  auto recoThirdMuonPtHist = std::make_shared<GetNthHighestPtHist>(InputModule::RecoLevel::Reco, "Reconstructed Third Muon Transverse Momentum", 50, 0, 100, 3);
+  auto recoSecondMuonPtHist = std::make_shared<GetNthHighestPtHist>(InputModule::RecoLevel::Reco, "Reconstructed Second Muon Transverse Momentum", 50, 0, 100, 2);
+  auto recoFirstMuonPtHist = std::make_shared<GetNthHighestPtHist>(InputModule::RecoLevel::Reco, "Reconstructed First Muon Transverse Momentum", 50, 0, 100, 1);
 
   // auto nLeptonsHist = std::make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
   auto nLeptonJetHist = std::make_shared<NLeptonJetHist>(lepRecoMod, "Number of Lepton Jets", 10, 0, 10);
@@ -101,7 +87,7 @@ Analyzer leptonJetReconstructionAnalysis() {
   // auto recoThirdMuonPtHist = std::make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
 
   // Efficiency Modules
-  auto leptonEfficiency = std::make_shared<LeptonEfficiency>(matchMod); 
+  auto leptonEfficiency = std::make_shared<LeptonEfficiency>(matchMod);
   auto leptonJetEfficiency = std::make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
 
   // Add the histogram(s) created above to histMod
@@ -130,8 +116,6 @@ Analyzer leptonJetReconstructionAnalysis() {
 
   // analyzer.addProductionModule(genSimMod);
   // analyzer.addProductionModule(recoMod);
-  analyzer.addProductionModule(weightMod);
-  analyzer.addProductionModule(lrWeightMod);
   //analyzer.addProductionModule(matchMod);
   analyzer.addProductionModule(lepRecoMod);
   //analyzer.addProductionModule(genPartMod);
@@ -149,6 +133,6 @@ Analyzer leptonJetReconstructionAnalysis() {
   //analyzer.addAnalysisModule(massRecoEfficiency1300);
   //analyzer.addAnalysisModule(genSimEventDumpMod);
   auto selector = make_shared<SnowmassLeptonSelector>(5);
-  analyzer.getInputModule().setLeptonSelector(selector);
+  analyzer.getInputModule()->setLeptonSelector(selector);
   return analyzer;
 }
