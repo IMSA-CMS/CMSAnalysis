@@ -44,6 +44,7 @@ void TreeEventFile::initialize()
     tree->SetBranchAddress(getTreeBranches().jetPhi.c_str(), &jet_phi);
     tree->SetBranchAddress(getTreeBranches().jetMass.c_str(), &jet_mass);
     tree->SetBranchAddress(getTreeBranches().jetPT.c_str(), &jet_pt);
+    //tree->SetBranchAddress(getTreeBranches().bJet.c_str(), &bJet);
 
     tree->SetBranchAddress(getTreeBranches().genSize.c_str(), &gen_size);
     tree->SetBranchAddress(getTreeBranches().genPid.c_str(), &gen_pid);
@@ -88,9 +89,9 @@ GenEventInfoProduct TreeEventFile::getGenInfo() const
     */
 }
 
-ParticleCollection TreeEventFile::getGenSimParticles() const
+ParticleCollection<GenSimParticle> TreeEventFile::getGenSimParticles() const
 {
-    ParticleCollection genParticles;
+    ParticleCollection<GenSimParticle> genParticles;
     // This seems problematic
     //  std::cout << gen_size << std::endl;
     //  std::cout << gen_size << std::endl;
@@ -102,36 +103,37 @@ ParticleCollection TreeEventFile::getGenSimParticles() const
             std::cout << elec_pt[i] << " " << elec_eta[i] << " " <<
              elec_phi[i] << " " << elec_mass[i] << std::endl;
         } */
-        int charge = 1;
+
+        // This is specific to leptons
+        // NEEDS TO BE CHANGED TO BE MORE ROBUST
+
+        if (gen_status[i] != 1)
+            continue;
+
+        int charge = -1;
         if (gen_pid[i] < 0)
         {
-            charge = -1;
+            charge = 1;
         }
         if (gen_pid[i] == 21 || gen_pid[i] == 22)
         {
             charge = 0;
         }
-        Particle::Type type = Particle::Type::None;
-        if (std::abs(gen_pid[i]) == 11)
-        {
-            type = Particle::Type::Electron;
-        }
-        else if (std::abs(gen_pid[i]) == 13)
-        {
-            type = Particle::Type::Muon;
-        }
+                //std::cout << "Tree Event File: about to add particles\n";
         genParticles.addParticle(Particle(
-            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i],
+        reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i],
                                                                         gen_eta[i], gen_phi[i], gen_mass[i])),
-            charge, type));
+            charge, Particle::identifyType(gen_pid[i])));
+            //std::cout << "Tree Event File:" << genParticles.getNumParticles() << "\n";
+        
     }
 
     return genParticles;
 }
 
-ParticleCollection TreeEventFile::getRecoParticles() const
+ParticleCollection<Particle> TreeEventFile::getRecoParticles() const
 {
-    ParticleCollection recoParticles;
+    ParticleCollection<Particle> recoParticles;
     //  std::cout << elec_size << std::endl;
     //  std::cout << muon_size << std::endl;
 
@@ -139,11 +141,24 @@ ParticleCollection TreeEventFile::getRecoParticles() const
     {
         if (elec_idpass[i] & 7)
         {
+            int charge = elec_charge[i];
+            // Kludge to simulate charge mismeasurement
+            // if ((int)(elec_pt[i] * 100) % 10 == 0)
+            //     charge = -charge;
+            // if ((int)(elec_pt[i]) % 2)
+            // {
+            //     charge = 1;
+            // }
+            // else
+            // {
+            //     charge = -1;
+            // }
+
             // Lorentz four-vector
             recoParticles.addParticle(Particle(
                 reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],
                                                                             elec_eta[i], elec_phi[i], elec_mass[i])),
-                elec_charge[i], Particle::Type::Electron, elec_reliso[i]));
+                charge, Particle::Type::Electron, elec_reliso[i]));
         }
     }
 
@@ -151,25 +166,40 @@ ParticleCollection TreeEventFile::getRecoParticles() const
     {
         if (muon_idpass[i] & 7)
         {
+            int charge = muon_charge[i];
+            // Kludge to simulate charge mismeasurement
+            // if ((int)(muon_pt[i] * 100) % 10 == 0)
+            //     charge = -charge;
+            // if ((int)(muon_pt[i]) % 2)
+            // {
+            //     charge = 1;
+            // }
+            // else
+            // {
+            //     charge = -1;
+            // }
+
             // Lorentz four-vector
             recoParticles.addParticle(Particle(
                 reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],
                                                                             muon_eta[i], muon_phi[i], muon_mass[i])),
-                muon_charge[i], Particle::Type::Muon, muon_reliso[i]));
+                charge, Particle::Type::Muon, muon_reliso[i]));
         }
     }
 
     return recoParticles;
 }
 
-ParticleCollection TreeEventFile::getRecoJets() const
+ParticleCollection<Particle> TreeEventFile::getRecoJets() const
 {
-    ParticleCollection recoParticles;
+    ParticleCollection<Particle> recoParticles;
     for(int i = 0; i < jet_size; i++) {
+        if(bJet[i] > 0){
         // Lorentz four-vector
-        recoParticles.addParticle(Particle(
+            recoParticles.addParticle(Particle(
             reco::Candidate::LorentzVector(jet_pt[i], jet_eta[i], 
-            jet_phi[i], jet_mass[i]), 0, Particle::Type::Jet));        
+            jet_phi[i], jet_mass[i]), 0, Particle::Type::Jet));    
+        }    
     }
     return recoParticles;
 }

@@ -126,27 +126,27 @@ void superimpose(){
 
   // string file6 = "leftHiggsVEV0Mass200SameFlavorPairsAnalyzed.root";
 
-  //string file7 = "leftHiggsVEV0Mass200SameFlavorPairsQuadLeptonAnalyzed.root";
-  //string file8 = "leftHiggsVEV0Mass300SameFlavorPairsQuadLeptonAnalyzed.root";
-  /*string file9 = "higgsMass.root";
-  string file10 = "QCDMass.root";
-  string file11 = "DYMass.root";*/
+  // string file7 = "leftHiggsVEV0Mass200SameFlavorPairsQuadLeptonAnalyzed.root";
+  // string file8 = "leftHiggsVEV0Mass300SameFlavorPairsQuadLeptonAnalyzed.root";
+  // string file9 = "leftHiggsVEV0Mass500SameFlavorPairsQuadLeptonAnalyzed.root";
+  // string file10 = "leftHiggsVEV0Mass800SameFlavorPairsQuadLeptonAnalyzed.root";
+  // string file11 = "leftHiggsVEV0Mass1300SameFlavorPairsQuadLeptonAnalyzed.root";
 
-  string file12 = "QCDMET2.root";
-  string file13 = "QCDMET3.root";
-  string file14 = "higgsMET.root";
-  string file15 = "QCDMET.root";
-  string file16 = "DYMET.root";
+  // string file12 = "leftHiggsVEV0Mass200SameFlavorPairsAnalyzed.root";
+  // string file13 = "leftHiggsVEV0Mass300SameFlavorPairsAnalyzed.root";
+  // string file14 = "leftHiggsVEV0Mass500SameFlavorPairsAnalyzed.root";
+  // string file15 = "leftHiggsVEV0Mass800SameFlavorPairsAnalyzed.root";
+  // string file16 = "leftHiggsVEV0Mass1300SameFlavorPairsAnalyzed.root";
 
-  string file17 = "TTBarMET.root";
-  string file18 = "ZZMET.root";
-  /* 
-    higgsMET.root
-    QCDMET.root
-    DYMET.root
-    TTBarMET.root
-    ZZMET.root
-  */
+  // string file17 = "PhotonsHist.root";
+  string file18 = "output.root";
+  string file19 = "Higgs300.root";
+  string file20 = "Higgs500.root";
+  string file21 = "Higgs700.root";
+  string file22 = "Higgs900.root";
+  string file23 = "Higgs1100.root";
+  string file24 = "Higgs1300.root";
+
   // string hist1 = "Dimuon/Muon+ pt High";
   // string hist2 = "Dimuon/Muon+ pt Low";
 
@@ -162,37 +162,30 @@ void superimpose(){
   //string hist12 = "Cut0MET";
   //string hist13 = "Cut0MET";
 
-  /*
-  Cut4MET
-  Cut0MET
-  Cut0MET
-  Cut0MET
-  Cut0MET
-  test for saving
-  */
+  // string hist7 = "Dimuon/Electron+ eta";
+  // string hist12 = "Dimuon/delta r";
+
+  // string hist8 = "Quadlepton/Invariant mass";
+  // string hist9 = "Quadlepton/Invariant mass OSDL";
+
+  string hist10 = "Cut4Reco Same Sign Invariant Mass";
+  // string hist11 = "Reco Same Sign Invariant Mass";
+  // string hist12 = "Gen Sim Photon Histogram";
+  // string hist13 = "Gen Same Sign Invariant Mass";
+
+ 
   
   vector<Image> images
     {
-      Image(.4, "GeV", "Events", "Leading Lepton pT", kCool
+      Image(.4, "Same-Sign Invariant Mass [GeV]", "Events", "", kCool
 	    ,vector<Plot> {
-		Plot(file14, hist9, kBlue, "Higgs WW")
-		,Plot(file15, hist10, kRed, "QCD 2000")
-    ,Plot(file16, hist10, kGreen, "DY")
-    ,Plot(file17, hist10, kBlack , "TTbar")
-    ,Plot(file18, hist10, kOrange, "ZZ")
-    ,Plot(file12, hist8, kRed, "QCD 1500")
-    ,Plot(file13, hist8, kRed, "QCD 1000")
-   }
-   /*{
-      Image(.4, "GeV", "Events", "Same-Sign Invariant Hist", kCool
-	    ,vector<Plot> {
-		Plot(file9, hist4, kBlue, "Same-Sign Invariant Mass Higgs WW")
-		,Plot(file10, hist5, kRed, "Same-Sign Invariant Mass QCD")
-    ,Plot(file11, hist6, kGreen, "Same-Sign Invariant Mass DY")
-    ,Plot(file12, hist7, kBlack, "Same-Sign Invariant Mass TTbar")
-    ,Plot(file13, hist8, kBlack, "Same-Sign Invariant Mass ZZ")
-   }*/
-   )
+		Plot(file19, hist10, kBlue, "m = 300 GeV")
+		,Plot(file20, hist10, kRed, "m = 500 Gev")
+    ,Plot(file21, hist10, kGreen, "m = 700 GeV")
+    ,Plot(file22, hist10, kOrange, "m = 900 GeV")
+    ,Plot(file23, hist10, kViolet, "m = 1100 GeV")
+    ,Plot(file24, hist10, kBlack, "m = 1300 GeV")
+   })
 	//  ,Image(.4, "GeV", "Events", "Invariant Mass Hist", kCool
 	//        ,vector<Plot> {
 	//  	   Plot(file18, hist13, kBlue, "Same Sign Invarient Mass Hist (Gen)")
@@ -335,7 +328,7 @@ void superImposePlots(Image config)
 {
   TCanvas* c1 = new TCanvas();
   c1->SetWindowSize(1920, 1080);
-  auto legend = new TLegend(config.legendLeftSide, .8, config.legendLeftSide + .3, .9);
+  auto legend = new TLegend(config.legendLeftSide, .8, config.legendLeftSide + .05, .9);
 
   gStyle->SetPalette(config.palette);
 

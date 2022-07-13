@@ -4,10 +4,11 @@
 #include <memory>
 
 #include "CMSAnalysis/DataCollection/interface/HistogramPrototype1D.hh"
+#include "CMSAnalysis/DataCollection/interface/ParticleCollection.hh"
 
 class GenSimIdentificationModule;
 class RecoIdentificationModule;
-class ParticleCollection;
+//class ParticleCollection;
 
 class ResolutionPrototype : public HistogramPrototype1D
 {
@@ -17,7 +18,7 @@ class ResolutionPrototype : public HistogramPrototype1D
     virtual ~ResolutionPrototype() {} //empty virtual destructor
 
   protected:
-    virtual double getValue(const ParticleCollection& partColl) const = 0; //pure virtual
+    virtual double getValue(const ParticleCollection<Lepton>& partColl) const = 0; //pure virtual
 };
 
 #endif

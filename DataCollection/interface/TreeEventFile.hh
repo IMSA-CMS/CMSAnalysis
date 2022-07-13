@@ -12,9 +12,9 @@ class TreeEventFile : public EventFile
         virtual void nextEvent() override;
         virtual bool isDone() const override;
         // simply dumps gensim particles from event into ParticleCollection
-        virtual ParticleCollection getGenSimParticles() const override;
-        virtual ParticleCollection getRecoParticles() const override;
-        virtual ParticleCollection getRecoJets() const override;
+        virtual ParticleCollection<GenSimParticle> getGenSimParticles() const override;
+        virtual ParticleCollection<Particle> getRecoParticles() const override;
+        virtual ParticleCollection<Particle> getRecoJets() const override;
         virtual GenEventInfoProduct getGenInfo() const override;
         virtual double getMET() const override;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
@@ -47,6 +47,7 @@ class TreeEventFile : public EventFile
             std::string jetPhi;
             std::string jetMass;
             std::string jetPT;
+            std::string bJet;
 
             std::string genSize;
             std::string genPid;
@@ -103,6 +104,7 @@ class TreeEventFile : public EventFile
         Float_t jet_phi[MAXMEC];
         Float_t jet_mass[MAXMEC];
         Float_t jet_pt[MAXMEC];
+        Int_t bJet[MAXMEC];
 
         Int_t gen_size;
         Int_t gen_pid[MAXMC];
