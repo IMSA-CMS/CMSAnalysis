@@ -96,7 +96,7 @@ double FitEstimator::getExpectedYield(const SingleProcess* process, double lumin
     double acceptedfitintegral = fitfunc->Integral(masslowaccepted, masshighaccepted);
 
     //Finds the integral of the fit from 150-1300
-    double rangefitintegral = fitfunc->Integral(150, 2000); //Possibly where this goes wrong
+    double rangefitintegral = fitfunc->Integral(150, 2000); 
     //Finds the integral of the analysis histogram from 0-1500
     double totalanalysishistintegral = histanalysis->Integral();
     //Finds the # of 4L events in the fit range divided by total events in the analysis hist

@@ -6,6 +6,8 @@
 #include "TH1F.h"
 #include "TAxis.h"
 #include "TFitResult.h"
+#include "TH2F.h"
+#include "TH2.h"
 #include <sstream>
 #include <fstream>
 #include <array>
@@ -35,8 +37,9 @@ double WindowEstimator::getExpectedYield(const SingleProcess* process, double lu
     int totalEventsInt = process->getTotalEvents();
 
     //Finds the number of events in the analyzed hist
-    TH1F *histanalysis = (TH1F *)process->getHist(); //Change this for different hist analysis
+    TH2 *histanalysis = (TH2F *)process->get2DHist(); //Change this for different hist analysis
     double eventsanalysishist = histanalysis->GetEntries();
+
     // outout << "\neventsanalysishist \n";
     //outout << eventsanalysishist;
     //std::cout << "GetEntries is " << std::to_string(eventsanalysishist) << std::endl;
@@ -71,11 +74,21 @@ double WindowEstimator::getExpectedYield(const SingleProcess* process, double lu
     //outout << crosssection;
     //std::cout << "crosssection" << crosssection << std::endl;
     //Finds the # of 4L events in the fit range
-    double analysislowboundbin = histanalysis->FindBin(masslowaccepted);
+    double analysisXlowboundbin = histanalysis->GetXaxis()->FindBin(masslowaccepted);
     //std::cout << "low bin " << analysislowboundbin << std::endl;
-    double analysisupboundbin = histanalysis->FindBin(masshighaccepted);
+    double analysisXupboundbin = histanalysis->GetXaxis()->FindBin(masshighaccepted);
+    double analysisYlowboundbin = histanalysis->GetYaxis()->FindBin(masslowaccepted);
+    double analysisYupboundbin = histanalysis->GetYaxis()->FindBin(masshighaccepted);
+    //std::cout << analysisXlowboundbin << std::endl;
+    //std::cout << analysisXupboundbin << std::endl;
+    //std::cout << analysisYlowboundbin << std::endl;
+    //std::cout << analysisYupboundbin << std::endl;
     //std::cout << "high bin " << analysisupboundbin << std::endl;
-    double fraction4l = (histanalysis->Integral(analysislowboundbin, analysisupboundbin) / totalanalysishistintegral);
+    //std::cout << "test 1" << std::endl;
+    //std::cout << totalanalysishistintegral << std::endl;
+    double fraction4l = (histanalysis->Integral(analysisXlowboundbin, analysisXupboundbin, analysisYlowboundbin, analysisYupboundbin) / totalanalysishistintegral);
+    //std::cout << histanalysis->Integral(analysisXlowboundbin, analysisXupboundbin, analysisYlowboundbin, analysisYupboundbin) << std::endl;
+    //std::cout << fraction4l << std::endl;
     //std::cout << "within window" << std::to_string(histanalysis->Integral(analysislowboundbin, analysisupboundbin)) << std::endl;
     //std::cout << "fraction within window" << std::to_string(fraction4l) << std::endl;
     // outout << "hist integral thing";
@@ -97,8 +110,10 @@ double WindowEstimator::getExpectedYield(const SingleProcess* process, double lu
 
     //Finds signalest
     double signalest = efficiency * crosssection * 1000 * luminosity * fraction4l;
+    double signalest4 = signalest * 4;
     //outout << "\nH++ Signal ";
-    return signalest;
+    //std::cout << "test 2" << std::endl;
+    return signalest4;
     //outout << "\n";
 
     // if (param.sumSwitch == 1)

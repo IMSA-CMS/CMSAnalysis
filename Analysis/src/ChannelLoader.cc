@@ -69,7 +69,6 @@ SingleProcess ChannelLoader::makeSignalProcess(std::string histogramName, std::s
     //fileName may just be the file name, but it has to be the rest of the file's path
     auto inputFile = std::make_shared<RootFileInput>(filePathway + fileName, histogramName);
     //Makes the estimator
-    auto fitInput = std::make_shared<RootFileInput>(filePathway + fitFileName, histogramName);
     auto histEstimator = std::make_shared<WindowEstimator>(massTarget - (massTarget * .05), massTarget + (massTarget * .05));
     return SingleProcess(crossSectionName, inputFile, crossReader, histEstimator, luminosity);
 }
