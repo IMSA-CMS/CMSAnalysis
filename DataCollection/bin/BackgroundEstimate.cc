@@ -72,7 +72,8 @@ struct Parameters
 //Background estimate finding function
 void ComputationalFunction(Parameters param, std::ostream &out_file)
 {
-    
+    std::cout << "fitSwitch" << param.fitSwitch << std::endl;
+    std::cout << "sumSwitch" << param.sumSwitch << std::endl;
     //Opens my file, assigns it f
     TFile *f = new TFile(param.fileName.c_str()); //Change this for different files
 
@@ -143,12 +144,12 @@ void ComputationalFunction(Parameters param, std::ostream &out_file)
     
     //Finds number of events ran total (from spreadsheet)
     double totaleventsran = totalEventsInt; //Change this for different event numbers
-
+    std::cout << "totaleventsran " << std::endl;
     if (param.fitSwitch == 0)
         {
         //Takes the integral of the analysis hist
         double eventsanalysishist = histanalysis->GetEntries();
-        outout << eventsanalysishist;
+        outout << "eventsanalysishist " << eventsanalysishist;
         outout << "\n";
         
 
@@ -157,11 +158,13 @@ void ComputationalFunction(Parameters param, std::ostream &out_file)
         double masslowaccepted = acceptedCenter - (acceptedCenter * .05);
         double masshighaccepted = acceptedCenter + (acceptedCenter * .05);
         double acceptedfitintegral = fitfunc->Integral(masslowaccepted, masshighaccepted);
-        outout << acceptedfitintegral;
+        outout << "acceptedfitintegral " << acceptedfitintegral;
         outout << "\n";
 
         //Finds the integral of the fit from 150-1300
         double rangefitintegral = fitfunc->Integral(150, 2000);
+        outout << "rangefitintegral " << rangefitintegral;
+        outout << "\n";
         // if (rangefitintegral <= 0);
         //     rangefitintegral ;
         
@@ -176,7 +179,9 @@ void ComputationalFunction(Parameters param, std::ostream &out_file)
         double analysis150bin = histanalysis->FindBin(150);
         double analysis1700bin = histanalysis->FindBin(2000);
         double eventanalysisfitrange = exp(log(histanalysis->Integral(analysis150bin, analysis1700bin)) - log(totalanalysishistintegral));
-        outout << histanalysis->Integral(analysis150bin, analysis1700bin);
+        outout << "eventanalysisfitrange " << eventanalysisfitrange;
+
+        //outout << histanalysis->Integral(analysis150bin, analysis1700bin);
         outout << "\n";
         //  outout << "\n";
         // outout << "Rangefitint ";
@@ -184,14 +189,14 @@ void ComputationalFunction(Parameters param, std::ostream &out_file)
         
         //Calculates ratio between both fit integrals
         double fitratio = exp(log(acceptedfitintegral) - log(rangefitintegral));
-
+        outout << "fitratio " << fitratio << "\n";
         //  outout << "\n";
         // outout << "Fit Ratio ";
         // outout << fitratio;
 
         //Finds histogram fraction
         double histfraction = exp(log(fitratio) + log(eventanalysisfitrange));
-
+        outout << "histfraction " << histfraction << "\n";
         //  outout << "\n";
         // outout << "Histfraction ";
         // outout << histfraction;
@@ -202,7 +207,7 @@ void ComputationalFunction(Parameters param, std::ostream &out_file)
 
         //Finds efficiency
         double efficiency = exp(log(eventsanalysishist) - log(totaleventsran));
-
+        outout << "efficiency " << efficiency << "\n";
         //Finds crosssection (from spreadsheet)
         double crosssection = param.crossSection; //Change this for different cross section
 
@@ -231,11 +236,11 @@ void ComputationalFunction(Parameters param, std::ostream &out_file)
             g_sumTwo = (g_sumTwo + backgroundest);
         }
 
-        // outout << "\n";
-        // outout << param.nickname;
-        // outout << "\n";
-        // outout << backgroundest;
-        // outout << "\n";
+        outout << "\n";
+        outout << param.nickname;
+        outout << "\n";
+        outout << "Expected yield is " << backgroundest;
+        outout << "\n";
 
         //Deletes leftovers
         // delete histanalysis;
@@ -335,13 +340,13 @@ void SignalFunction(Parameters param, std::ostream &out_file)
 
     //Finds the integral of the analysis histogram from 0-1500
     double eventsanalysishist = histanalysis->GetEntries();
-    std::cout << "eventanalysishist" << eventsanalysishist << std::endl;
+    //std::cout << "eventanalysishist" << eventsanalysishist << std::endl;
     //Finds number of events ran total (from file)
     double totaleventsran = totalEventsInt; 
-    std::cout << "totalevents ran" << totaleventsran << std::endl;
+    //std::cout << "totalevents ran" << totaleventsran << std::endl;
     //Finds efficiency
     double efficiency = eventsanalysishist / totaleventsran;
-    std::cout << "efficiency" << efficiency << std::endl;
+    //std::cout << "efficiency" << efficiency << std::endl;
     //Finds luminosity (from spreadsheet)
     double luminosity = 3000;
 
@@ -355,24 +360,24 @@ void SignalFunction(Parameters param, std::ostream &out_file)
     // outout << "\n";
     //Finds crosssection (from spreadsheet)
     double crosssection = param.crossSection; //Change this for different cross section
-    std::cout << "crossSec" << crosssection << std::endl;
+    //std::cout << "crossSec" << crosssection << std::endl;
     //Finds the # of 4L events in the fit range divided by total # of events
     Int_t binlowx = histanalysis->GetXaxis()->FindBin(masslowaccepted); 
-    std::cout << "binlowx" << binlowx << std::endl;
+    //std::cout << "binlowx" << binlowx << std::endl;
     // outout << "\n";
     // outout << binlowx;
     // outout << "\n";
     Int_t binlowy = histanalysis->GetYaxis()->FindBin(masslowaccepted); 
-    std::cout << "binlowy" << binlowy << std::endl;
+    //std::cout << "binlowy" << binlowy << std::endl;
     // outout << binlowy;
     // outout << "\n";
 
     Int_t binhighx = histanalysis->GetXaxis()->FindBin(masshighaccepted); 
-    std::cout << "binhighx" << binhighx << std::endl;
+    //std::cout << "binhighx" << binhighx << std::endl;
     // outout << binhighx;
     // outout << "\n";
     Int_t binhighy = histanalysis->GetYaxis()->FindBin(masshighaccepted); 
-    std::cout << "binhighy" << binhighy << std::endl;
+    //std::cout << "binhighy" << binhighy << std::endl;
     // outout << binhighy;
     // outout << "\n";
 
@@ -383,8 +388,8 @@ void SignalFunction(Parameters param, std::ostream &out_file)
     //     binhighy ++;
 
     double fraction4l = ((histanalysis->Integral(binlowx, binhighx, binlowy, binhighy)) / eventsanalysishist);
-    std::cout << "2DIntegral" << histanalysis->Integral(binlowx, binhighx, binlowy, binhighy) << std::endl;
-    std::cout << "fraction4l" << fraction4l << std::endl;
+    //std::cout << "2DIntegral" << histanalysis->Integral(binlowx, binhighx, binlowy, binhighy) << std::endl;
+    //std::cout << "fraction4l" << fraction4l << std::endl;
     //double fraction4l = ((histanalysis->Integral()) / eventsanalysishist);
     
     //Reads out mass
@@ -396,7 +401,7 @@ void SignalFunction(Parameters param, std::ostream &out_file)
     double signalest4 = signalest * 4;
 
     //Finds the other efficiency
-    double effnumb = efficiency * fraction4l;
+    //double effnumb = efficiency * fraction4l;
     //Reads out Efficiency Numbers
     // outout << "\nH++ Signal ";
     // outout << effnumb;
