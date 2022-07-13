@@ -42,6 +42,7 @@ struct Plot
   {
     file = TFile::Open(filePath.c_str());
     plot = getHist(histPath.c_str(), file);
+    //std::cout << plot << std::endl;
     plot->SetLineColor(color);
     legend = ilegend;
     drawArgs = "9";
@@ -139,7 +140,7 @@ void superimpose(){
   // string file16 = "leftHiggsVEV0Mass1300SameFlavorPairsAnalyzed.root";
 
   // string file17 = "PhotonsHist.root";
-  string file18 = "output.root";
+  string file18 = "higgsMass.root";
   
 
   // string hist1 = "Dimuon/Muon+ pt High";
@@ -159,19 +160,17 @@ void superimpose(){
   // string hist8 = "Quadlepton/Invariant mass";
   // string hist9 = "Quadlepton/Invariant mass OSDL";
 
-  string hist10 = "Reco Photon Histogram";
-  string hist11 = "Reco Same Sign Invariant Mass";
-  string hist12 = "Gen Sim Photon Histogram";
-  string hist13 = "Gen Same Sign Invariant Mass";
+  //string hist10 = "Reco Photon Histogram";
+  //string hist11 = "Reco Same Sign Invariant Mass";
+  //string hist12 = "Gen Sim Photon Histogram";
+  string hist13 = "4invariant_Mass";
 
- 
-  
   vector<Image> images
     {
       Image(.4, "GeV", "Events", "Invariant Mass Hist", kCool
 	    ,vector<Plot> {
 		Plot(file18, hist13, kBlue, "Same Sign Invariant Mass Hist (Gen)")
-		,Plot(file18, hist12, kRed, "Photons Hist Using Delta Phi (Gen)")
+		/*,Plot(file18, hist12, kRed, "Photons Hist Using Delta Phi (Gen)")*/
    })
 	//  ,Image(.4, "GeV", "Events", "Invariant Mass Hist", kCool
 	//        ,vector<Plot> {
