@@ -9,6 +9,7 @@ class Input
 {
 	public:
 		virtual TH1* getHist() const = 0;
+		virtual TH1* get2DHist() const = 0;
 		virtual ~Input() {}
 		virtual int getTotalEvents() const = 0;
 		virtual std::string getName() const = 0;

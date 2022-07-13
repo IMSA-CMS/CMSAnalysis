@@ -20,6 +20,7 @@ public:
     crossSectionName(iCrossSectionName), input(iInput), reader(iCrossSectionReader), estimator(iEstimator), luminosity(iLuminosity) {}
     std::string getName() const {return crossSectionName;} //Inlining
     TH1* getHist(bool scaleToExpected = false) const;
+    TH1* get2DHist() const;
     int getTotalEvents() const;
     double getCrossSection() const {return reader->getCrossSection(crossSectionName);}
     double getExpectedYield() const;

@@ -30,6 +30,11 @@ TH1* SingleProcess::getHist(bool scaleToExpected) const
     }
 }
 
+TH1* SingleProcess::get2DHist() const
+{
+    return input->get2DHist();
+}
+
 int SingleProcess::getTotalEvents() const
 {
     return input->getTotalEvents();
