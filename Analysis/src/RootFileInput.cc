@@ -2,8 +2,11 @@
 #include "CMSAnalysis/DataCollection/interface/TDisplayText.h"
 #include "TFile.h"
 #include "TH1.h"
+#include <iostream>
+#include "TH2.h"
+#include "TH2F.h"
 
-RootFileInput::RootFileInput(std::string fileName) :
+RootFileInput::RootFileInput(std::string fileName, std::string iName) : name(iName),
 	file(TFile::Open(fileName.c_str(), "read")) 
 	{
 		if(!file)
@@ -12,9 +15,16 @@ RootFileInput::RootFileInput(std::string fileName) :
 		}
 	}
 
-TH1* RootFileInput::getInput(std::string name) const
+
+TH1* RootFileInput::getHist() const
 {
-	return dynamic_cast<TH1*>(file->Get(name.c_str()));
+	TH1* hist = dynamic_cast<TH1*>(file->Get(name.c_str()));
+	if(dynamic_cast<TH2 *>(hist) != 0) {
+        TH2* hist2D = dynamic_cast<TH2 *>(hist);
+        TH1 *newhist = hist2D->ProjectionX("_px", 0, -1, "E");
+        return newhist;
+    }
+	return hist;
 }
 
 int RootFileInput::getTotalEvents() const

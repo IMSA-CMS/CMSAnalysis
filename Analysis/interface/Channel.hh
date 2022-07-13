@@ -5,6 +5,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 class Process;
 class THStack;
@@ -12,22 +13,22 @@ class THStack;
 class Channel
 {
 	public:
-		Channel(std::string name, std::vector<Process*> iProcesses);
+		Channel(std::string name, std::vector<std::shared_ptr<Process>> iProcesses);
 		
-		THStack* getStack(std::string label = "") const;
+		THStack* getStack(std::string label = "", bool scaleToExpected = false) const;
 
-		const Process* findProcess(std::string processName) const;
+		const std::shared_ptr<Process> findProcess(std::string processName) const;
 		
 		void labelProcess(std::string label, std::string processName);
 		
-		void labelProcess(std::string label, const Process* process);
+		void labelProcess(std::string label, std::shared_ptr<Process> process);
 
-		void addProcessLabel(std::string label, std::vector<const Process*> processes);
+		void addProcessLabel(std::string label, std::vector<std::shared_ptr<Process>> processes);
 
 	private: 
 		std::string name;
-		std::vector<const Process*> processes;
-		std::unordered_map<std::string, std::vector<const Process*>> map;
+		std::vector<std::shared_ptr<Process>> processes;
+		std::unordered_map<std::string, std::vector<std::shared_ptr<Process>>> map;
 };
 
 
