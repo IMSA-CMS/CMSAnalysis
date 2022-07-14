@@ -15,10 +15,10 @@
 TH1* SingleProcess::getHist(bool scaleToExpected) const
 {
     if(scaleToExpected) {
+        std::cout << "Process: " << crossSectionName << std::endl;
         TH1* hist = input->getHist();
         double yield = getExpectedYield();
         double events = hist->Integral();
-        std::cout << "Process: " << crossSectionName << std::endl;
         //std::cout << "Expected yield: " << yield << std::endl;
         //std::cout << "Generated events: " << events << std::endl;
         //std::cout << "Scaling by: " << yield/events << std::endl;

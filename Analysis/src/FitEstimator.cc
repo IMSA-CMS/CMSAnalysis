@@ -85,7 +85,7 @@ double FitEstimator::getExpectedYield(const SingleProcess* process, double lumin
     //Takes the integral of the analysis hist
     double eventsanalysishist = histanalysis->GetEntries();
     //Defines out mass range and takes the integral of the fit for that range
-
+    //std::cout << "eventsanalysishist " << eventsanalysishist << std::endl;
 
 
     double acceptedCenter = massTarget;
@@ -94,30 +94,36 @@ double FitEstimator::getExpectedYield(const SingleProcess* process, double lumin
     double masslowaccepted = acceptedCenter - (acceptedCenter * .05);
     double masshighaccepted = acceptedCenter + (acceptedCenter * .05);
     double acceptedfitintegral = fitfunc->Integral(masslowaccepted, masshighaccepted);
-
+    //std::cout << "acceptedfitintegral " << acceptedfitintegral << std::endl;
     //Finds the integral of the fit from 150-1300
     double rangefitintegral = fitfunc->Integral(150, 2000); 
+    //std::cout << "rangefitintegral " << rangefitintegral << std::endl;
     //Finds the integral of the analysis histogram from 0-1500
     double totalanalysishistintegral = histanalysis->Integral();
+    //std::cout << "totalanalysishistintegral " << totalanalysishistintegral << std::endl;
     //Finds the # of 4L events in the fit range divided by total events in the analysis hist
     double analysis150bin = histanalysis->FindBin(150);
     double analysis1700bin = histanalysis->FindBin(2000);
     double eventanalysisfitrange = exp(log(histanalysis->Integral(analysis150bin, analysis1700bin)) - log(totalanalysishistintegral));
+    //std::cout << "eventanalysisfitrange " << eventanalysisfitrange << std::endl; 
     // std::cout << histanalysis->Integral(analysis150bin, analysis1700bin) << std::endl;
     // std::cout << totalanalysishistintegral << std::endl;
     // std::cout << eventanalysisfitrange << std::endl;
     //Calculates ratio between both fit integrals
     double fitratio = exp(log(acceptedfitintegral) - log(rangefitintegral));
-
+    //std::cout << "fitratio " << fitratio << std::endl;
     //Finds histogram fraction
     double histfraction = exp(log(fitratio) + log(eventanalysisfitrange));
+    //std::cout << "histfraction " << histfraction << std::endl;
     //Finds efficiency
     double efficiency = exp(log(eventsanalysishist) - log(totaleventsran));
+    //std::cout << "efficiency " << efficiency << std::endl;
     //Finds crosssection (from spreadsheet)
     double crosssection = process->getCrossSection(); //Change this for different cross section
-
+    //std::cout << "crossSection " << crosssection << std::endl;
     //Finds background
     double backgroundest = exp(log(efficiency) + log(1000) + log(crosssection) + log(luminosity) + (2 * log(histfraction)));
+    //std::cout << "expected yield " << backgroundest << std::endl;
     return backgroundest;
     //For efficiency lose: log(1000) + log(crosssection) + log(luminosity)
 
