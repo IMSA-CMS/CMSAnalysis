@@ -110,10 +110,10 @@ double WindowEstimator::getExpectedYield(const SingleProcess* process, double lu
 
     //Finds signalest
     double signalest = efficiency * crosssection * 1000 * luminosity * fraction4l;
-    double signalest4 = signalest * 4;
+    //double signalest4 = signalest * 4;
     //outout << "\nH++ Signal ";
     //std::cout << "test 2" << std::endl;
-    return signalest4;
+    return signalest;
     //outout << "\n";
 
     // if (param.sumSwitch == 1)
