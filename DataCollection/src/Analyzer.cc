@@ -17,6 +17,7 @@
 #include "CMSAnalysis/DataCollection/interface/Module.hh"
 #include "CMSAnalysis/DataCollection/interface/TDisplayText.h"
 #include "CMSAnalysis/DataCollection/interface/ProcessDictionary.hh"
+#include "CMSAnalysis/DataCollection/interface/EventLoaderInputModule.hh"
 
 Analyzer::Analyzer() :
   eventLoader(),
@@ -24,10 +25,10 @@ Analyzer::Analyzer() :
   {
     dictionary.loadProcesses("textfiles/processes.txt");
   }
-// Analyzer::Analyzer(const Analyzer& analyzer) {
-//   eventLoader = analyzer.eventLoader;
-//   input = analyzer.input;
-// }
+Analyzer::Analyzer(const Analyzer& analyzer) {
+  eventLoader = analyzer.eventLoader;
+  input = analyzer.input;
+}
 Analyzer::~Analyzer()
 {
   delete input;

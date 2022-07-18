@@ -24,7 +24,7 @@ class Analyzer
 {
 public:
   Analyzer();
-  Analyzer(const Analyzer& analyzer1) = delete;
+  Analyzer(const Analyzer& analyzer1);
   ~Analyzer();
 
 InputModule* getInputModule() {return input;}
