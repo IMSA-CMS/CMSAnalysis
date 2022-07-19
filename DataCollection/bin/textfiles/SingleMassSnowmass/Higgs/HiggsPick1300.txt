@@ -1,4 +1,4 @@
 H++toLL
 Mass:	1300
 Format:	Delphes
-Lepton:	LL	EMu
+Lepton:	LL
