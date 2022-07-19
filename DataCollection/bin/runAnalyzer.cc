@@ -37,7 +37,9 @@ bool checkInput(std::string input, std::vector<std::string> list);
 std::string takeInput();
 
 // A function that prompts for the user's input, and returns a pair with the user's input and corresponding category
-std::pair<std::string, std::string> promptInput(IDType type);
+std::pair<std::string, std::string> promptInput(std::string name, std::vector<std::string> categories);
+
+void makePickfile(std::map<std::string, std::string> info);
 
 int main(int argc, char **argv) {
   gROOT->SetBatch(true);
@@ -83,9 +85,7 @@ int main(int argc, char **argv) {
   {
     // inputFile = "textfiles/pickFiles.txt";
     // Ask for process name
-
-    IDType names("Process", processNames());
-    std::pair<std::string, std::string> processName = promptInput(names);
+    std::pair<std::string, std::string> processName = promptInput("Process", processNames());
     std::map<std::string, std::string> pickfileInfo;
     pickfileInfo.insert(processName);
 
@@ -93,22 +93,37 @@ int main(int argc, char **argv) {
     std::vector<IDType> idtypes = findProcessIDTypes(processName.second);
     for (auto& idtype : idtypes)
     {
-      std::pair<std::string, std::string> newCategory = promptInput(idtype);
+      std::pair<std::string, std::string> newCategory = promptInput(idtype.getName(), idtype.getCategories());
       pickfileInfo.insert(newCategory);
     }
 
     // Ask for the filename
-    std::cout << "Enter a filename (with the .txt) \n\n";
+    std::cout << "Enter a filename (with the .txt) and its path from the bin folder \n filename: bin/";
     std::string filename = takeInput();
+    std::string anamethatiwouldliketotest = "filename";
+    pickfileInfo.insert(anamethatiwouldliketotest, filename);
+    // add something that checks if it is actually a text file
 
     // Print current status, ask for any changes
-    std::cout << "This is the current information entered: \n";
+    std::cout << "Here is the current information entered: \n";
+    std::vector<std::string> namesVector;
     for (const auto& item : pickfileInfo)
     {
       std::cout << item.first << ": " << item.second << "\n";
+      namesVector.push_back(item.first);
     }
-    std::cout << "Would you like to make any changes? (Y or N) \n\n";
-    
+
+    std::cout << "Would you like to change anything? If no, the pickfile will be generated. \n (Y or N):";
+    std::string change;
+    std::cin >> change;
+    if (change == "Y")
+    {
+      // Come back to this
+    }
+    else if (change == "N")
+    {
+      
+    }
   }
 
   analyzer.run(inputFile, outputFile, outputEvery, numFiles);
@@ -176,7 +191,7 @@ std::vector<IDType> findProcessIDTypes(std::string process)
   std::ifstream textfile("processes.txt");
   std::string line;
   bool foundProcess = false;
-  std::vector<std::string> categories;
+  std::vector<std::string> IDCategories;
 
   // Reading processes.txt line by line
   while (getline(textfile, line))
@@ -208,13 +223,14 @@ std::vector<IDType> findProcessIDTypes(std::string process)
       // Separate the line by tabs and add each chunk to the categories vector
       while (getline(typeStream, category, '\t'))
       {
-        categories.push_back(category);
+        IDCategories.push_back(category);
       }
 
       // Add the new idtype to the vector of idtypes.
-      IDType newType(name, categories);
+      IDType newType(name, IDCategories);
       idtypes.push_back(newType);
-      categories.clear();
+      
+      IDCategories.clear();
     }
     else if (line == process)
     {
@@ -245,21 +261,48 @@ std::string takeInput()
   return input;
 }
 
-std::pair<std::string, std::string> promptInput(IDType type)
+std::pair<std::string, std::string> promptInput(std::string name, std::vector<std::string> categories)
 {
   bool processInput = false;
   std::string selected;
   while (processInput == false)
   {
-    std::cout << "Please choose a" << type.getName() << " from the following: \n";
-    std::cout << separateVector(type.getCategories(), '\t') <<"\n\n";
+    std::cout << "Please choose a" << name << " from the following: \n";
+    std::cout << separateVector(categories, '\t') <<"\n\n";
     selected = takeInput();
-    processInput = checkInput(selected, type.getCategories());
+    processInput = checkInput(selected, categories);
     if (processInput == false)
     {
-      std::cout << '\'' << selected << "\' is not found in processes.txt. Please try again. \n";
+      std::cout << '\'' << selected << "\' is not found in an entry from the list. Please try again. \n";
     }
   }
-  std::pair<std::string, std::string> inputToReturn(type.getName(), selected);
+  std::pair<std::string, std::string> inputToReturn(name, selected);
   return inputToReturn;
+}
+
+void makePickfile(std::map<std::string, std::string> info)
+{
+  std::string name = info.at("filename");
+
+  // create the textfile
+  std::ofstream pickfile(name); 
+  
+  // find the process name and write it into the file
+  name = info.at("Process");
+  pickfile << name << '\n';
+
+  // write each idtype into the file
+
+  info.erase("filename");
+  info.erase("Process");
+
+  // Without filename and process, the map is now full of only idtypes
+  std::ostringstream types;
+  for (auto& item : info)
+  {
+    types << item.first << ": " << item.second << "\n";
+  }
+
+  pickfile << types.str() << "\n";
+  pickfile.close();
 }
