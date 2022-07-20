@@ -5,8 +5,6 @@ This packages is designed to perform GEN-only private MC productions using the C
 # Updated Instructions to Run EventGenerator
 These instructions were most recently updated by George Bayliss on 7/18/22.
 
-Everything from this point on assumes you have already cloned the repository. If you haven't, do that first.
-
 All commands should be run from MCGeneration/test.
 
 Try running the generator executable using cmsRun.
