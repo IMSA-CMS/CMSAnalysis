@@ -1,7 +1,3 @@
-// MORE CHANGES NEEDED FOR IT TO WORK
-// SO FAR I JUST COPIED FROM MINIAODEVENTLOADER
-// Andy, [10/06/21]
-
 #include "CMSAnalysis/DataCollection/interface/DelphesEventFile.hh"
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
