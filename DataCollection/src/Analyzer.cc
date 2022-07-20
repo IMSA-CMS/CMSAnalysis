@@ -39,38 +39,32 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
   // This keeps the histograms separate from the files they came from, avoiding much silliness
   TH1::AddDirectory(kFALSE);
   TH1::SetDefaultSumw2(kTRUE);
-
   // Get a list of FileParams objects
   auto fileparams = dictionary.readFile(configFile);
   eventLoader.setOutputEvery(outputEvery);
-
   // Initialize all modules
   for (auto module : getAllModules())
     {
       module->setInput(input);
       module->initialize();
     }
-
   // A list of all the filters we used
   std::unordered_set<std::string> filterNames;
 
   int numOfEvents = 0;
-
   for (auto& filepar : fileparams)
     {
       // Get a list of Root files
       auto files = filepar.getFileList();
       std::cout << "# of root files: " << files.size() << std::endl;
-
+      
       int fileCounter = 0;
-
       for (auto& filename : files)
 	  {
       fileCounter += 1;
 
 	  // Open files with rootxd
 	  const std::string eossrc = "root://cmsxrootd.fnal.gov//";
-
 	  std::string fileStr = eossrc + filename;
 	  TFile* file = TFile::Open(fileStr.c_str(), "READ");
 	  if (!file)
@@ -78,9 +72,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 	      std::cout << "File " << fileStr << " not found!\n";
 	      continue;
 	    }
-    
     eventLoader.changeFile(file);
-
     while(true)
     {
       if (eventLoader.getFile()->isDone())
@@ -315,6 +307,7 @@ std::vector<std::shared_ptr<Module>> Analyzer::getAllModules() const
     }
   for (auto mod : filterModules)
     {
+      //std::cout<<"Filter"<<mod<<std::endl;
       modules.push_back(mod);
     }
   for (auto mod : analysisModules)

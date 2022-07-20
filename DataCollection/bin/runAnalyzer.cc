@@ -56,7 +56,6 @@ int main(int argc, char **argv) {
   std::cout << "Reading input file " << inputFile << std::endl;
 
   unsigned outputEvery = parser.integerValue("outputEvery");
-  
 
 /* 
   Selection of data collection plan has moved to command line argument "analysis"
