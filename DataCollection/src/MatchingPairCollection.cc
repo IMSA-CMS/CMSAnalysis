@@ -3,9 +3,9 @@
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/RecoCandidate/interface/RecoCandidate.h"
 
-ParticleCollection MatchingPairCollection::getGenParticles() const
+ParticleCollection<GenSimParticle> MatchingPairCollection::getGenParticles() const
 {
-  ParticleCollection genParticles;
+  ParticleCollection<GenSimParticle> genParticles;
 
   for (auto& matchingPair : matchingPairCollection)
     {
@@ -15,9 +15,9 @@ ParticleCollection MatchingPairCollection::getGenParticles() const
   return genParticles;
 }
 
-ParticleCollection MatchingPairCollection::getRecoParticles() const
+ParticleCollection<Particle> MatchingPairCollection::getRecoParticles() const
 {
-  ParticleCollection recoParticles;
+  ParticleCollection<Particle> recoParticles;
 
   for (auto& matchingPair : matchingPairCollection)
     {

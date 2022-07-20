@@ -16,11 +16,23 @@
 #include "DataFormats/FWLite/interface/Event.h"
 #include "CMSAnalysis/DataCollection/interface/Module.hh"
 #include "CMSAnalysis/DataCollection/interface/TDisplayText.h"
+#include "CMSAnalysis/DataCollection/interface/ProcessDictionary.hh"
+#include "CMSAnalysis/DataCollection/interface/EventLoaderInputModule.hh"
 
 Analyzer::Analyzer() :
   eventLoader(),
-  input(&eventLoader)
-  {}
+  input(new EventLoaderInputModule(&eventLoader))
+  {
+    dictionary.loadProcesses("textfiles/processes.txt");
+  }
+Analyzer::Analyzer(const Analyzer& analyzer) {
+  eventLoader = analyzer.eventLoader;
+  input = analyzer.input;
+}
+Analyzer::~Analyzer()
+{
+  delete input;
+}
 
 void Analyzer::run(const std::string& configFile, const std::string& outputFile, int outputEvery, int nFiles)
 {
@@ -29,13 +41,13 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
   TH1::SetDefaultSumw2(kTRUE);
 
   // Get a list of FileParams objects
-  auto fileparams = inputFiles(configFile);
+  auto fileparams = dictionary.readFile(configFile);
   eventLoader.setOutputEvery(outputEvery);
 
   // Initialize all modules
   for (auto module : getAllModules())
     {
-      module->setInput(&input);
+      module->setInput(input);
       module->initialize();
     }
 
@@ -46,11 +58,8 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 
   for (auto& filepar : fileparams)
     {
-      // Set the static FileParams object so the modules know the file parameters
-      Module::setFileParams(filepar);
-
       // Get a list of Root files
-      auto files = filepar.fileVector();
+      auto files = filepar.getFileList();
       std::cout << "# of root files: " << files.size() << std::endl;
 
       int fileCounter = 0;
@@ -221,81 +230,81 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
   delete outputRootFile;
 }
 
-std::vector<std::string> Analyzer::parseLine(std::ifstream& txtFile) const
-{
-  std::string line;
-  std::getline(txtFile,line);
+// std::vector<std::string> Analyzer::parseLine(std::ifstream& txtFile) const
+// {
+//   std::string line;
+//   std::getline(txtFile,line);
   
-  //seperates each line by whitespace (tabs)
-  std::istringstream stream(line);
+//   //seperates each line by whitespace (tabs)
+//   std::istringstream stream(line);
 
-  std::vector<std::string> category;
+//   std::vector<std::string> category;
 
-  int counter = 0; 
-  while (stream)
-    {
-      std::string word;
-      stream >> word;
+//   int counter = 0; 
+//   while (stream)
+//     {
+//       std::string word;
+//       stream >> word;
       
-      //occasionally added empty strings to the vector which caused a runtime error
-      if (counter > 0 and word.size() > 0)
-	{
-	  category.push_back(word);
-	}
-      ++counter;
-    }
+//       //occasionally added empty strings to the vector which caused a runtime error
+//       if (counter > 0 and word.size() > 0)
+// 	{
+// 	  category.push_back(word);
+// 	}
+//       ++counter;
+//     }
 
-  return category;
-}
+//   return category;
+// }
 
-std::vector<FileParams> Analyzer::inputFiles(const std::string& txtFile) const
-{
-  std::ifstream inputFiles(txtFile);
+// std::vector<FileParams> Analyzer::inputFiles(const std::string& txtFile) const
+// {
+//   std::ifstream inputFiles(txtFile);
 
-  if (!inputFiles)
-    {
-      throw std::runtime_error("File " + txtFile + " not found!");
-    }
+//   if (!inputFiles)
+//     {
+//       throw std::runtime_error("File " + txtFile + " not found!");
+//     }
   
-  //each vector contains the options selected in "pickFiles.txt"
-  // Configuration file must be in this order
-  auto process = parseLine(inputFiles);
-  auto year = parseLine(inputFiles);
-  auto lepton = parseLine(inputFiles);
-  auto mass = parseLine(inputFiles);
-  auto lambda = parseLine(inputFiles);
-  auto interference = parseLine(inputFiles);
-  auto helicity = parseLine(inputFiles);
+//   //each vector contains the options selected in "pickFiles.txt"
+//   // Configuration file must be in this order
+//   auto process = parseLine(inputFiles);
+//   auto year = parseLine(inputFiles);
+//   auto lepton = parseLine(inputFiles);
+//   auto mass = parseLine(inputFiles);
+//   auto lambda = parseLine(inputFiles);
+//   auto interference = parseLine(inputFiles);
+//   auto helicity = parseLine(inputFiles);
 
-  std::vector<FileParams> params;
+//   std::vector<FileParams> params;
 
-  //adds all of the files to a larger vector that is seperated by mass cuts
-  for (auto& processStr : process)
-    for (auto& yearStr : year)
-      {
-	for (auto& leptonStr : lepton)
-	  {
-	    for (auto& lambdaStr : lambda)
-	      {
-		for (auto& interferenceStr : interference)
-		  {
-		    for (auto& helicityStr : helicity)
-		      {
-			for (auto& massStr : mass)
-			  {
-			    //based on the options selected, it adds the respective files following the standard naming system
-			    params.push_back(FileParams(processStr, yearStr, helicityStr, interferenceStr, massStr, 
-							lambdaStr, leptonStr));
-			  }
-		      }
-		  }
-	      }
-	  }
-      }
+//   //adds all of the files to a larger vector that is seperated by mass cuts
+//   for (auto& processStr : process)
+//     for (auto& yearStr : year)
+//       {
+// 	for (auto& leptonStr : lepton)
+// 	  {
+// 	    for (auto& lambdaStr : lambda)
+// 	      {
+// 		for (auto& interferenceStr : interference)
+// 		  {
+// 		    for (auto& helicityStr : helicity)
+// 		      {
+// 			for (auto& massStr : mass)
+// 			  {
+// 			    //based on the options selected, it adds the respective files following the standard naming system
+// 			    params.push_back(FileParams(processStr, yearStr, helicityStr, interferenceStr, massStr, 
+// 							lambdaStr, leptonStr));
+// 			  }
+// 		      }
+// 		  }
+// 	      }
+// 	  }
+//       }
       
-  std::cout << params[0].getFileKey() << std::endl;
-  return params;
-}
+//   std::cout << params[0].getFileKey() << std::endl;
+//   return params;
+// }
 
 std::vector<std::shared_ptr<Module>> Analyzer::getAllModules() const
 {
