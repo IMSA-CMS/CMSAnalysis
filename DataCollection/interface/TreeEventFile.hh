@@ -56,6 +56,10 @@ class TreeEventFile : public EventFile
             std::string genPhi;
             std::string genMass;
             std::string genPt;
+            std::string gend1;
+            std::string gend2;
+            std::string genm1;
+            std::string genm2;
 
             std::string elecIdpass;
             std::string muonIdpass;
@@ -113,6 +117,10 @@ class TreeEventFile : public EventFile
         Float_t gen_phi[MAXMC];
         Float_t gen_mass[MAXMC];
         Float_t gen_pt[MAXMC];
+        Int_t gen_d1[MAXMC];
+        Int_t gen_d2[MAXMC];
+        Int_t gen_m1[MAXMC];
+        Int_t gen_m2[MAXMC];
         
 };
 

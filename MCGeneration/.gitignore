@@ -1,8 +1,10 @@
 # How to setup .gitignore https://www.atlassian.com/git/tutorials/saving-changes/gitignore
 
 # Python
-*__init__.py
 *.pyc
+*__init__.py
+
+*BuildFile*
 
 # Emacs autosave files
 *~
@@ -17,17 +19,6 @@
 *.d
 *.pcm
 
-# Text Files
-**/bin/*.txt
-
-# Keep all textfiles in textfiles
-!CIStudies/bin/textfiles/*.txt
-!CIStudies/bin/textfiles/*/*.txt
-
-#Remove temporary backups
-*backup.txt
-*backupshort.txt
-
 # Log Files
 *.log
 
@@ -36,5 +27,9 @@
 *.orig
 
 # Files to always include
-!*.cc
+!*.py
 !*.h
+!*.cc
+!*.spc
+!*dpPythiaParameters.txt
+!*hppPythiaParameters.txt

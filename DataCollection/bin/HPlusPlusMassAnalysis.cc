@@ -110,7 +110,7 @@ Analyzer hPlusPlusMassAnalysis() {
   //analyzer.addProductionModule(genSimMod);
   //analyzer.addProductionModule(recoMod);
   analyzer.addProductionModule(matchMod);
-  // analyzer.addProductionModule(triggerMod); 
+  //analyzer.addProductionModule(triggerMod); 
   analyzer.addProductionModule(mETMod);
 
   // Filters
