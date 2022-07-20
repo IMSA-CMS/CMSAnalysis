@@ -52,20 +52,17 @@ int main(int argc, char **argv) {
   //Analyzer analyzer = higgsBackgroundAnalysis();
   //Analyzer analyzer = invariantMassAnalysis();
   //Analyzer analyzer = leptonJetBackgroundAnalysis();
-<<<<<<< HEAD
   // Analyzer analyzer = massResolutionAnalysis();
   //Analyzer analyzer = leptonJetReconstructionAnalysis();
   //Analyzer analyzer = displacedVertexAnalysis();
-  // Analyzer analyzer = massAcceptanceAnalysis();
+  //Analyzer analyzer = massAcceptanceAnalysis();
   //Analyzer analyzer = triggerAnalysis();
   //Analyzer analyzer = invariantMassAnalysis();
-   Analyzer analyzer = higgsBackgroundAnalysis();
-=======
-  Analyzer analyzer = leptonJetReconstructionAnalysis();
+  Analyzer analyzer = higgsBackgroundAnalysis();
+  //Analyzer analyzer = leptonJetReconstructionAnalysis();
   //Analyzer analyzer = massAcceptanceAnalysis();
   //Analyzer analyzer = massResolutionAnalysis();
   //Analyzer analyzer = triggerAnalysis();
->>>>>>> d069d13167738edb074236bb5364a405d1c89be0
 
   if (inputFile.empty())
   {
