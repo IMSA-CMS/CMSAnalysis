@@ -27,8 +27,8 @@ std::vector<double> ScaledMassHist::value() const
 
   if (bestPairs.getSize() == 2)
     {
-      const ParticleCollection& genParticles = bestPairs.getGenParticles();
-      const ParticleCollection& recoParticles = bestPairs.getRecoParticles();
+      const ParticleCollection<GenSimParticle>& genParticles = bestPairs.getGenParticles();
+      const ParticleCollection<Particle>& recoParticles = bestPairs.getRecoParticles();
       // genParticles = bestPairs.getGenParticles();
       // recoParticles = bestPairs.getRecoParticles();
       // double eventWeight = 1.000;
@@ -51,7 +51,7 @@ std::vector<double> ScaledMassHist::value() const
 }
 
 
-double ScaledMassHist::getScaledInvariantMass(const ParticleCollection& bestParticles, bool scaleUp, bool scaleUpDown) const
+double ScaledMassHist::getScaledInvariantMass(const ParticleCollection<Particle>& bestParticles, bool scaleUp, bool scaleUpDown) const
 {
   auto particles = bestParticles.getParticles();
   const double kappa = 0.00005;
@@ -88,6 +88,45 @@ double ScaledMassHist::getScaledInvariantMass(const ParticleCollection& bestPart
   }
   
 }
+
+/*double ScaledMassHist::getScaledInvariantMass(const ParticleCollection<GenSimParticle>& bestParticles, bool scaleUp, bool scaleUpDown) const
+//the exact same as the ParticleCollection<Particle> version
+{
+  auto particles = bestParticles.getParticles();
+  const double kappa = 0.00005;
+  if (!particles.empty())
+  {
+    if (scaleUpDown == true)
+    {
+      double scaledPt1 = changePtUp(particles[0].getPt(), kappa);
+      double scaledPt2 = changePtDown(particles[1].getPt(), kappa);
+      return calculateScaledInvariantMass(particles[0], particles[1], scaledPt1, scaledPt2);
+    }
+    
+    else
+    {
+      if (scaleUp == true)
+      {
+        double scaledPt1 = changePtUp(particles[0].getPt(), kappa);
+        double scaledPt2 = changePtUp(particles[1].getPt(), kappa);
+        return calculateScaledInvariantMass(particles[0], particles[1], scaledPt1, scaledPt2);
+      }
+      
+      else
+      {
+        double scaledPt1 = changePtDown(particles[0].getPt(), kappa);
+        double scaledPt2 = changePtDown(particles[1].getPt(), kappa);
+        return calculateScaledInvariantMass(particles[0], particles[1], scaledPt1, scaledPt2);
+      }
+    }
+  }
+
+  else
+  {
+    return -1.000;
+  }
+  
+}*/
 
 double ScaledMassHist::calculateScaledInvariantMass(const Particle particle1, const Particle particle2, double scaledPt1, double scaledPt2) const
 {

@@ -11,12 +11,10 @@
 #include "CMSAnalysis/DataCollection/interface/MassBinFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/ResolutionModule.hh"
 //#include "CMSAnalysis/DataCollection/interface/MassResolutionModule.hh"
-#include "CMSAnalysis/DataCollection/interface/WeightingModule.hh"
-//#include "CMSAnalysis/DataCollection/interface/MassResolutionHist.hh"
-//#include "CMSAnalysis/DataCollection/interface/PtResolutionHist.hh"
+// #include "CMSAnalysis/DataCollection/interface/WeightingModule.hh"
+//#include "CMSAnalysis/DataCollection/interface/Histograms.hh"
 #include "CMSAnalysis/DataCollection/interface/MassAcceptanceFirstHist.hh"
 #include "CMSAnalysis/DataCollection/interface/MassAcceptanceSecondHist.hh"
-#include "CMSAnalysis/DataCollection/interface/LRWeightModule.hh"
 
 using std::make_shared;
 
@@ -27,13 +25,11 @@ Analyzer mvaAnalysis()
   auto genSimMod = make_shared<GenSimIdentificationModule>();
   auto recoMod = make_shared<RecoIdentificationModule>(50);
   auto matchMod = make_shared<MatchingModule>(genSimMod, recoMod);
-  auto weightMod = make_shared<WeightingModule>();
-  auto lrWeightMod = make_shared<LRWeightModule>(); 
   //auto barrelStateFilter = make_shared<BarrelStateFilter>(matchMod);
   //auto massBinFilterForMass = make_shared<MassBinFilter>(matchMod, 300, 3100, 28);
   //auto massBinFilterForPt = make_shared<MassBinFilter>(matchMod, 50, 1900, 37);
   //auto massResMod = make_shared<MassResolutionModule>(genSimMod, recoMod, weightMod, lrWeightMod, matchMod);
-  auto histMod = make_shared<HistogramOutputModule>(genSimMod, recoMod, weightMod, lrWeightMod);
+  auto histMod = make_shared<HistogramOutputModule>();
   auto mvaHist = make_shared<MassAcceptanceFirstHist>(genSimMod, "MVA Hist 1", 100, 0, 1000);
 
   std::cerr << "no suspicious activity so far" << std::endl;
@@ -55,7 +51,7 @@ Analyzer mvaAnalysis()
   analyzer.addProductionModule(genSimMod);
   analyzer.addProductionModule(recoMod);
   analyzer.addProductionModule(matchMod);
-  
+
   //analyzer.addAnalysisModule(massResMod);
   //analyzer.addAnalysisModule(ptResMod);
   analyzer.addAnalysisModule(histMod);
