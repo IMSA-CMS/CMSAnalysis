@@ -30,28 +30,23 @@ ParticleCollection InputModule::getLeptons(RecoLevel level) const
 
         }
     }
+    
     if(leptons.getNumParticles()==4){
         std::ofstream my_file;
         my_file.open("EventDumpWWZ.txt", std::ios::app);
         for(const auto &p :leptons){
+            try{
             my_file << std::setw(13)<< p.pdgId()<<"| " << std::setw(13) << p.getPt() << "| " << std::setw(13) << p.getEta() << "| " << std::setw(13) << p.getPhi() << "| " << std::setw(13) << p.energy() << "| " << std::setw(13) << p.getMass() << "\n";
+            } catch(const std::exception& e){
+                my_file << std::setw(13)<< p.pdgId()<<"| " << std::setw(13) << p.getPt() << "| " << std::setw(13) << p.getEta() << "| " << std::setw(13) << p.getPhi() << "| " << std::setw(13) << 0 << "| " << std::setw(13) << p.getMass() << "\n";
+            }
         }
+
         my_file <<"\n";
         //my_file <<counter;
         //my_file <<"\n";
         my_file.close();
     }
-    // if(leptons.getNumParticles()==4){
-    //     std::ofstream my_file;
-    //     my_file.open("EventDumpWWZ.txt", std::ios::app);
-    //     for(const auto &p :leptons){
-    //         my_file << std::setw(13)<< p.pdgId()<<"| " << std::setw(13) << p.getPt() << "| " << std::setw(13) << p.getEta() << "| " << std::setw(13) << p.getPhi() << "| " << std::setw(13) << p.energy() << "| " << std::setw(13) << p.getMass() << "\n";
-    //     }
-    //     my_file <<"\n";
-    //     //my_file <<counter;
-    //     //my_file <<"\n";
-    //     my_file.close();
-    // }
     return leptons;
 }
 
