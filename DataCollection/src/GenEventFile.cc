@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/MiniAODEventFile.hh"
+#include "CMSAnalysis/DataCollection/interface/GenEventFile.hh"
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
@@ -8,7 +8,7 @@
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
 
-MiniAODEventFile::MiniAODEventFile(TFile* ifile) : 
+GenEventFile::GenEventFile(TFile* ifile) : 
 EventFile(ifile)
 {
     event = std::make_shared<fwlite::Event> (getFile());
@@ -17,7 +17,7 @@ EventFile(ifile)
     event->toBegin();
 }
 
-void MiniAODEventFile::nextEvent()
+void GenEventFile::nextEvent()
 {
     auto& eventRef = *event;
     ++(eventRef);
@@ -34,18 +34,18 @@ std::vector<PileupSummaryInfo> MiniAODEventLoader::getPileupInfo() const
 }
 */
 
-GenEventInfoProduct MiniAODEventFile::getGenInfo() const
+GenEventInfoProduct GenEventFile::getGenInfo() const
 {
     edm::Handle<GenEventInfoProduct> genInfo;
     event->getByLabel(std::string("generator"), genInfo);
     return *genInfo;
 }
 
-ParticleCollection MiniAODEventFile::getGenSimParticles() const
+ParticleCollection GenEventFile::getGenSimParticles() const
 {
     ParticleCollection genParticles;
     edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
-    event->getByLabel(std::string("prunedGenParticles"), genParticlesHandle);
+    event->getByLabel(std::string("genParticles"), genParticlesHandle);
     for (const auto &p : *genParticlesHandle) 
     {
         genParticles.addParticle(Particle(&p));
@@ -53,66 +53,68 @@ ParticleCollection MiniAODEventFile::getGenSimParticles() const
     return genParticles;
 }
 
-ParticleCollection MiniAODEventFile::getRecoParticles() const
+ParticleCollection GenEventFile::getRecoParticles() const
 {
-    // std::cout << "get reco particles \n";
-    ParticleCollection recoParticles;
-    //This seems problematic
+    throw std::runtime_error("Cannot run Reco from GenEventFile");
+    // // std::cout << "get reco particles \n";
+    // ParticleCollection recoParticles;
+    // //This seems problematic
         
 
-        edm::Handle<std::vector<pat::Electron>> electrons;
-        event->getByLabel(std::string("slimmedElectrons"), electrons);
+    //     edm::Handle<std::vector<pat::Electron>> electrons;
+    //     event->getByLabel(std::string("slimmedElectrons"), electrons);
 
-        for (const auto& p : *electrons)
-	    {       
-	        recoParticles.addParticle(Particle(&p)); 
-	    }
+    //     for (const auto& p : *electrons)
+	//     {       
+	//         recoParticles.addParticle(Particle(&p)); 
+	//     }
 
-        edm::Handle<std::vector<pat::Muon>> muons;
-        event->getByLabel(edm::InputTag("slimmedMuons"), muons);
+    //     edm::Handle<std::vector<pat::Muon>> muons;
+    //     event->getByLabel(edm::InputTag("slimmedMuons"), muons);
 
-        for (const auto& p : *muons)
-	    {       
-	        recoParticles.addParticle(Particle(&p));
-        }
+    //     for (const auto& p : *muons)
+	//     {       
+	//         recoParticles.addParticle(Particle(&p));
+    //     }
 
-        edm::Handle<std::vector<pat::Photon>> photons;
-        event->getByLabel(edm::InputTag("slimmedPhotons"), photons);
+    //     edm::Handle<std::vector<pat::Photon>> photons;
+    //     event->getByLabel(edm::InputTag("slimmedPhotons"), photons);
 
-        for (const auto& p : *photons)
-	    {       
-	        recoParticles.addParticle(Particle(&p));
-        }
-        // std::cout << "made it through mini aod reco particles \n";
-        return recoParticles;
+    //     for (const auto& p : *photons)
+	//     {       
+	//         recoParticles.addParticle(Particle(&p));
+    //     }
+    //     // std::cout << "made it through mini aod reco particles \n";
+    //     return recoParticles;
 }
 
-ParticleCollection MiniAODEventFile::getRecoJets() const
+ParticleCollection GenEventFile::getRecoJets() const
 {
-    ParticleCollection recoParticles;
+    throw std::runtime_error("Cannot run Reco from GenEventFile");
+    // ParticleCollection recoParticles;
 
-        edm::Handle<std::vector<pat::Jet>> jets;
-        event->getByLabel(edm::InputTag("slimmedJets"), jets);
+    //     edm::Handle<std::vector<pat::Jet>> jets;
+    //     event->getByLabel(edm::InputTag("slimmedJets"), jets);
 
-        for (const auto& j : *jets)
-	    {       
-	        recoParticles.addParticle(Particle(&j));
-        }
-        return recoParticles;
+    //     for (const auto& j : *jets)
+	//     {       
+	//         recoParticles.addParticle(Particle(&j));
+    //     }
+    //     return recoParticles;
 }
 
-double MiniAODEventFile::getMET() const
+double GenEventFile::getMET() const
 {
-    edm::Handle<std::vector<pat::MET>> mets;
-    event->getByLabel(edm::InputTag("slimmedMETs"), mets);
+    edm::Handle<std::vector<reco::GenMET>> mets;
+    event->getByLabel(edm::InputTag("genMetTrue"), mets);
     for (const auto& p : *mets)
     {
-        return p.corPt(pat::MET::METCorrectionLevel::Type1);
+        return std::sqrt(p.p4().Perp2()); 
     }
     throw std::runtime_error("There are no MET objects found");
 }
 
-std::vector<bool> MiniAODEventFile::getTriggerResults(std::string subProcess) const
+std::vector<bool> GenEventFile::getTriggerResults(std::string subProcess) const
 {
     edm::Handle<edm::TriggerResults> triggerResults;
     event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
@@ -124,7 +126,7 @@ std::vector<bool> MiniAODEventFile::getTriggerResults(std::string subProcess) co
     return v_results;
 }
 
-std::vector<std::string> MiniAODEventFile::getTriggerNames(std::string subProcess) const
+std::vector<std::string> GenEventFile::getTriggerNames(std::string subProcess) const
 {
     edm::Handle<edm::TriggerResults> triggerResults;
     event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
@@ -137,7 +139,7 @@ std::vector<std::string> MiniAODEventFile::getTriggerNames(std::string subProces
     return v_names;
 }
 
-bool MiniAODEventFile::isDone() const
+bool GenEventFile::isDone() const
 {
     return event->atEnd();
 }

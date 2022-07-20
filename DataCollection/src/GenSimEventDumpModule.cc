@@ -25,7 +25,7 @@ bool GenSimEventDumpModule::process()
   std::ofstream my_file;
   if (clearlatch) 
   {
-    my_file.open("Testing.txt", std::ofstream::out | std::ofstream::trunc);
+    my_file.open("EventDumpWWW.txt", std::ofstream::out | std::ofstream::trunc);
     clearlatch = false;
   }
   if(counter < numOfEvents || numOfEvents == -1)
@@ -35,7 +35,7 @@ bool GenSimEventDumpModule::process()
     //Input Module is GenSim to match printGenParticleCollection
     if( getInput()->getLeptons(InputModule::RecoLevel::GenSim).getNumParticles() == 4)
     {
-      my_file.open("Testing.txt", std::ios::app);
+      my_file.open("EventDumpWWW.txt", std::ios::app);
       printGenParticleCollection(genParticles, my_file);
       //std::cout << "\nAn event was printed";
       my_file.close();
@@ -67,11 +67,7 @@ void GenSimEventDumpModule::printGenParticleCollection(const ParticleCollection&
   //}
   // Format
   my_file << "--------------------------------------------------------" << std::endl;
-<<<<<<< HEAD
-  my_file << "EVENT #" << (counter + 1) << ":" << selectedcounter <<std::endl;
-=======
   my_file << "EVENT #" << (counter + 1) << ":" << selectedcounter << "ab" <<std::endl;
->>>>>>> 329f87b236be733c55c24baac55c568308804aa2
   my_file << "--------------------------------------------------------" << std::endl;
 
   my_file << std::left << std::setw(8) << "element" << std::setw(11) << "| pdfId"
@@ -95,12 +91,6 @@ void GenSimEventDumpModule::printGenParticleCollection(const ParticleCollection&
     //my_file << std::setw(motherColumnWidth - 2) << formatMotherParticles(part, genParts) << "| ";
 
     // Print daughters
-<<<<<<< HEAD
-    my_file << std::setw(daughterColumnWidth - 2) << formatDaughterParticles(part, particleGroup) << "| ";
-
-    // Particle properties
-    my_file << std::setw(13) << part.getPt() << "| " << std::setw(13) << part.getEta() << "| " << std::setw(13) << part.getPhi() << "| " << std::setw(13) << part.energy() << "| " << std::setw(13) << part.getMass() << "\n";
-=======
     //formatDaughterParticles(part, particleGroup) was replaced by function not working string
     try{
       my_file << std::setw(daughterColumnWidth - 2) << formatDaughterParticles(part, particleGroup) << "| ";
@@ -116,7 +106,6 @@ void GenSimEventDumpModule::printGenParticleCollection(const ParticleCollection&
     catch(const std::exception& e){
       my_file << std::setw(13) << "N/A" << "| " << std::setw(13) << part.getMass() << "\n";
     }
->>>>>>> 329f87b236be733c55c24baac55c568308804aa2
     eventElement++;
     }
   selectedcounter++;
