@@ -55,52 +55,12 @@ ParticleCollection<GenSimParticle> GenEventFile::getGenSimParticles() const
 
 ParticleCollection<Particle> GenEventFile::getRecoParticles() const
 {
-    throw std::runtime_error("Cannot run Reco from GenEventFile");
-    // // std::cout << "get reco particles \n";
-    // ParticleCollection recoParticles;
-    // //This seems problematic
-        
-
-    //     edm::Handle<std::vector<pat::Electron>> electrons;
-    //     event->getByLabel(std::string("slimmedElectrons"), electrons);
-
-    //     for (const auto& p : *electrons)
-	//     {       
-	//         recoParticles.addParticle(Particle(&p)); 
-	//     }
-
-    //     edm::Handle<std::vector<pat::Muon>> muons;
-    //     event->getByLabel(edm::InputTag("slimmedMuons"), muons);
-
-    //     for (const auto& p : *muons)
-	//     {       
-	//         recoParticles.addParticle(Particle(&p));
-    //     }
-
-    //     edm::Handle<std::vector<pat::Photon>> photons;
-    //     event->getByLabel(edm::InputTag("slimmedPhotons"), photons);
-
-    //     for (const auto& p : *photons)
-	//     {       
-	//         recoParticles.addParticle(Particle(&p));
-    //     }
-    //     // std::cout << "made it through mini aod reco particles \n";
-    //     return recoParticles;
+    throw std::runtime_error("Cannot run Reco on GenSim file");
 }
 
 ParticleCollection<Particle> GenEventFile::getRecoJets() const
 {
-    throw std::runtime_error("Cannot run Reco from GenEventFile");
-    // ParticleCollection recoParticles;
-
-    //     edm::Handle<std::vector<pat::Jet>> jets;
-    //     event->getByLabel(edm::InputTag("slimmedJets"), jets);
-
-    //     for (const auto& j : *jets)
-	//     {       
-	//         recoParticles.addParticle(Particle(&j));
-    //     }
-    //     return recoParticles;
+    throw std::runtime_error("Cannot run Reco on GenSim file");
 }
 
 double GenEventFile::getMET() const
