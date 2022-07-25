@@ -1,0 +1,3 @@
+QCD
+HTCut:	2000-inf
+Format:	Delphes

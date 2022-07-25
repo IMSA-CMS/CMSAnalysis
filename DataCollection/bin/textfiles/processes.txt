@@ -20,4 +20,3 @@ Format:	MiniAOD	Delphes
 DarkPhotonSUSY
 Mass:	0_1	0_2	0_3	0_4	0_5	0_7	0_9	1_2	1_5	2_0	2_5
 Format: MiniAOD	Delphes
-
