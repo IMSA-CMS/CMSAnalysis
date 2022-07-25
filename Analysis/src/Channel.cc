@@ -4,6 +4,7 @@
 #include <iostream>
 #include <algorithm>
 #include <memory>
+#include <vector>
 
 Channel::Channel(std::string name, std::vector<std::shared_ptr<Process>> iProcesses) : name(name)
 {
@@ -49,14 +50,46 @@ void Channel::addProcessLabel(std::string label, std::vector<std::shared_ptr<Pro
 	}
 }
 
+std::vector<double> Channel::getYields() const
+{
+	std::vector<double> yields;
+	for(auto process : processes)
+	{
+		yields.push_back(process->getYield());
+	}
+	return yields;
+}
+
+std::vector<std::string> Channel::getNames() const
+{
+	std::vector<std::string> names;
+	for(auto process: processes)
+	{
+		names.push_back(process->getName());
+	}
+	return names;
+}
+
+/*std::vector<std::vector<std::string>> Channel::getData() const
+{
+	std::vector<std::vector<std::string>> data;
+	for(auto process : processes)
+	{
+		for(std::vector<std::string> entry : process->getData())
+		{
+			data.push_back(entry);
+		}
+	}
+	return data;
+}*/
+
 THStack* Channel::getStack(std::string label, bool scaleToExpected) const
 {
 	THStack* superPlot = new THStack(name.c_str(), name.c_str());
 	if (label == "")
 	{
 		for (auto process : processes)
-		{
-			std::cout << "New process" << std::endl;			
+		{	
 			superPlot->Add(process->getHist(scaleToExpected));
 		}
 	}

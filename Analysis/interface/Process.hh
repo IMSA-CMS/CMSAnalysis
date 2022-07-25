@@ -15,8 +15,13 @@ class Process
         std::string getName() const {return name;}
         int getColor() const {return color;}
         std::vector<SingleProcess> getProcesses() const {return processes;}
+        //Gets the hists from all the singleProcesses as one hist
         TH1* getHist(bool scaleToExpected = false) const;
         void addProcess(SingleProcess process) {processes.push_back(process);}
+        //Gets the total yield of all singleProcesses
+        double getYield() const;
+        //Returns table format data of all singleProcesses
+        //std::vector<std::vector<std::string>> getData() const;
 
     private:
         const std::string name;

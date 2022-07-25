@@ -14,6 +14,7 @@ class WindowEstimator : public Estimator
 	public: 
 		WindowEstimator(double low, double high) : lowBound(low), highBound(high) {}
 		double getExpectedYield(const SingleProcess* process, double luminosity) const override;
+		double getMassTarget() const override;
 	private:
 		double lowBound;
 		double highBound;

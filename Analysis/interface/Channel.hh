@@ -13,10 +13,15 @@ class THStack;
 class Channel
 {
 	public:
-		Channel(std::string name, std::vector<std::shared_ptr<Process>> iProcesses);
-		
-		THStack* getStack(std::string label = "", bool scaleToExpected = false) const;
 
+		Channel(std::string name, std::vector<std::shared_ptr<Process>> iProcesses);
+		//Gets data from all processes in the format needed to make table
+		//std::vector<std::vector<std::string>> getData() const;
+		std::vector<double> getYields() const;
+		std::vector<std::string> getNames() const;
+		//Makes stacked histogram
+		THStack* getStack(std::string label = "", bool scaleToExpected = false) const;
+		
 		const std::shared_ptr<Process> findProcess(std::string processName) const;
 		
 		void labelProcess(std::string label, std::string processName);

@@ -21,9 +21,11 @@
 
 std::shared_ptr<Channel> ChannelLoader::makeChannel(std::string channelName, double massTarget)
 {
+    //For new channels, make new if statements with channelNames
     if(channelName == "default")
     {
         auto reader = std::make_shared<CrossSectionReader>("crossSections.txt");
+        //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
         const std::string filePath = "/uscms/home/aytang/RecoWidth/CMSSW_11_0_2/src/CMSAnalysis/DataCollection/bin/";
         const std::string histName = "Cut4MuonMuon Reco Invariant Mass Background";
         const std::string fitHistName = "Cut4Reco Invariant Mass Background";
@@ -42,8 +44,7 @@ std::shared_ptr<Channel> ChannelLoader::makeChannel(std::string channelName, dou
         qcdBackground->addProcess(makeSingleProcess(histName, fitHistName, filePath, "BackgroundRunCuts/QCD1500.root", "30SelectBackgroundRuns/QCD1500.root", "qcd1500to2000", reader, massTarget, luminosity));
         qcdBackground->addProcess(makeSingleProcess(histName, fitHistName, filePath, "BackgroundRunCuts/QCD2000.root", "30SelectBackgroundRuns/QCD2000.root", "qcd2000toinf", reader, massTarget, luminosity));
         auto higgsSignal = std::make_shared<Process>("Higgs Signal", 5);
-        higgsSignal->addProcess(makeSignalProcess(histName, filePath, "HiggsRunCuts/Higgs" + std::to_string((int) massTarget) + ".root", "30SelectHiggsRuns/Higgs" + std::to_string((int) massTarget) + "Run.root",
-            "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
+        higgsSignal->addProcess(makeSignalProcess(histName, filePath, "HiggsRunCuts/Higgs" + std::to_string((int) massTarget) + ".root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
         std::vector<std::shared_ptr<Process>> backgroundProcesses = { ttbarBackground, zzBackground, dyBackground, qcdBackground, higgsSignal };
         auto leptonBackgrounds = std::make_shared<Channel>("Lepton Jet Backgrounds", backgroundProcesses);
         return leptonBackgrounds;
@@ -55,21 +56,15 @@ std::shared_ptr<Channel> ChannelLoader::makeChannel(std::string channelName, dou
 
 SingleProcess ChannelLoader::makeSingleProcess(std::string histogramName, std::string fitHistogramName, std::string filePathway, std::string fileName, std::string fitFileName, std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, int massTarget, double luminosity) 
 {
-    //Makes the RootFileInput
-    //fileName may just be the file name, but it has to be the rest of the file's path
     auto inputFile = std::make_shared<RootFileInput>(filePathway + fileName, histogramName);
-    //Makes the estimator
     auto fitInput = std::make_shared<RootFileInput>(filePathway + fitFileName, fitHistogramName);
     auto histEstimator = std::make_shared<FitEstimator>(massTarget, fitInput);
     return SingleProcess(crossSectionName, inputFile, crossReader, histEstimator, luminosity);
 }
 
-SingleProcess ChannelLoader::makeSignalProcess(std::string histogramName, std::string filePathway, std::string fileName, std::string fitFileName, std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, int massTarget, double luminosity) 
+SingleProcess ChannelLoader::makeSignalProcess(std::string histogramName, std::string filePathway, std::string fileName, std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, int massTarget, double luminosity) 
 {
-    //Makes the RootFileInput
-    //fileName may just be the file name, but it has to be the rest of the file's path
     auto inputFile = std::make_shared<RootFileInput>(filePathway + fileName, histogramName);
-    //Makes the estimator
     auto histEstimator = std::make_shared<WindowEstimator>(massTarget - (massTarget * .05), massTarget + (massTarget * .05));
     return SingleProcess(crossSectionName, inputFile, crossReader, histEstimator, luminosity);
 }
