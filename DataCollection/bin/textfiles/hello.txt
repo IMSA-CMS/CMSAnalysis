@@ -1,4 +1,0 @@
-QCD
-HTCut:	1500-2000
-Format:	Delphes
-Filename:	textfiles/hello.txt
