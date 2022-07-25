@@ -4,6 +4,7 @@
 #include <fstream>
 #include "boost/algorithm/string.hpp"
 
+//For some reason the .txt files (for now) have to be included in src folder for CrossSectionReader to see them
 CrossSectionReader::CrossSectionReader(std::string fileAddress)
 {
 	std::ifstream weightsFile(fileAddress);
@@ -30,7 +31,6 @@ CrossSectionReader::CrossSectionReader(std::string fileAddress)
       std::istringstream str(line);
       str>>key>>value;
       boost::to_lower(key);
-      //std::cout << "key: " + key + " " + "value: " + std::to_string(value) + "\n";
       weights[key] = value;
     }
   }
@@ -42,9 +42,6 @@ double CrossSectionReader::getCrossSection(std::string key) const
 	auto iterator = weights.find(key);
 	if (iterator == weights.end())
 	{
-		//std::cerr << "Key " << key << " not found! " << std::endl;
-		//weight = 0;
-	
 		throw std::runtime_error("Key " + key + " not found!");
 	}
 	
