@@ -7,6 +7,6 @@ NLeptonsFilter::NLeptonsFilter()
 
 std::string NLeptonsFilter::makeFilterString()
 {
-  int num = getInput()->getLeptons(InputModule::RecoLevel::GenSim).getNumParticles(); 
+  int num = getInput()->getLeptons(InputModule::RecoLevel::Reco).getNumParticles(); 
   return std::to_string(num);
 }

@@ -6,7 +6,6 @@
 
 bool HistogramPrototype::shouldDraw() const
 {
-  // std::cout << " Made it to Histogram Prototype\n";
   for (std::shared_ptr<FilterModule> filterMod : filters)
   {
     filterMod->process(); // Calls process and makes the filter string

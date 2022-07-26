@@ -1,7 +1,3 @@
-Procs:  DY
-Year:   Snowmass2021
-Lepton: both
-Mass:   M50
-Lambda: 200
-Inter:	Con
-Helic:	LL
+Drell-Yan
+MassCut:	50-inf
+Format:	Delphes

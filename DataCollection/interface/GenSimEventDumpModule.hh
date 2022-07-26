@@ -5,16 +5,7 @@
 
 #include "AnalysisModule.hh"
 #include "ParticleCollection.hh"
-
-namespace edm
-{
-  class EventBase;
-}
-
-namespace reco
-{
-  class GenParticle;
-}
+#include "GenSimParticle.hh"
 
 // GenSimIdentificationModule creates a Particle Collection
 // of gen sim particles that will be used in MatchingModule 
@@ -29,13 +20,11 @@ public:
 
 private:
   // prints information to the screen
-  void printGenParticleCollection(const std::vector<reco::GenParticle>& genParts) const;
+  void printGenSimParticleCollection(const ParticleCollection<GenSimParticle>& genParts, std::ofstream& my_file) const;
 
-  int getIndexOf(const reco::Candidate* part, const std::vector<reco::GenParticle>& genParts) const;
-  int getLatestIndexOfMothers(const reco::GenParticle& part, const std::vector<reco::GenParticle>& genParts) const;
-  int getLatestIndexOfDaughters(const reco::GenParticle& part, const std::vector<reco::GenParticle>& genParts) const;
-  std::string formatMotherParticles(const reco::GenParticle& part, const std::vector<reco::GenParticle>& genParts) const;
-  std::string formatDaughterParticles(const reco::GenParticle& part, const std::vector<reco::GenParticle>& genParts) const;
+  int getIndexOf(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts) const;
+  int getLatestIndexOfDaughters(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts) const;
+  std::string formatDaughterParticles(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts) const;
 
   int numOfEvents;
   int counter;

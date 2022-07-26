@@ -20,12 +20,21 @@ int CandidateImplementation::charge() const {
 double CandidateImplementation::isolation() const {
   if (getType() == Particle::Type::Muon) {
     auto muon = dynamic_cast<const reco::Muon *>(particle);
+    if (!muon)
+    {
+      return -1;
+    }
     return muon->isolationR03().sumPt / particle->pt();
-  } else if (getType() == Particle::Type::Electron) {
+  } 
+  else if (getType() == Particle::Type::Electron) 
+  {
     auto elec = dynamic_cast<const reco::GsfElectron *>(particle);
+        if (!elec)
+    {
+      return -1;
+    }
     return elec->dr03TkSumPt() / particle->pt();
   }
-
   return -1;
 }
 

@@ -22,6 +22,7 @@ class Particle
     Particle(const Particle& particle1);
     Particle(const LeptonJet& leptonjet);
     Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, double relIso = -999);
+    Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, int pid, int status, int m1, int m2,int d1, int d2, double relIso);
     std::shared_ptr<ParticleImplementation> getParticleImplementation();
     Particle& operator = (const Particle& particle2);
     double getPt() const;
