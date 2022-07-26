@@ -5,6 +5,8 @@
 //#include "CMSAnalysis/DataCollection/interface/RecoIdentificationModule.hh"
 #include "CMSAnalysis/DataCollection/interface/FileParams.hh"
 #include "CMSAnalysis/DataCollection/interface/PtResolutionModule.hh"
+#include "CMSAnalysis/DataCollection/interface/Module.hh"
+#include "CMSAnalysis/DataCollection/interface/AnalysisModule.hh"
 
 #include <iostream>
 #include <stdexcept>
@@ -22,10 +24,19 @@ void HistogramOutputModule::writeAll() {
   }
 }
 
+void HistogramOutputModule::addHistogram(std::shared_ptr<HistogramPrototype> hist)
+{
+  hist->setInput(getInput());
+  histograms.push_back(hist);
+}
+
 void HistogramOutputModule::setInput(const InputModule *iInput) {
-  Module::setInput(iInput);
-  for (auto hist : histograms) {
-    hist->setInput(iInput);
+  if (!getInput())
+  {
+    Module::setInput(iInput);
+    for (auto hist : histograms) {
+      hist->setInput(iInput);
+    }
   }
 }
 
@@ -105,6 +116,7 @@ std::string HistogramOutputModule::getObjectName(const std::string &str) const {
 }
 
 bool HistogramOutputModule::process() {
+  //std::cout << "HistOutMod running \n";
   for (auto hist : histograms) {
     bool draw = hist->shouldDraw(); // call the shouldDraw function so we can
                                     // call process on the FilterModules

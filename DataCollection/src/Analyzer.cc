@@ -117,7 +117,11 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
         for (auto module : analysisModules)
         {
           module->setFilterString(filterString);
-          module->processEvent();
+          if (!module->processEvent())
+          {
+            continueProcessing = false;
+            break;
+          }
         }
       }
       eventLoader.getFile()->nextEvent();

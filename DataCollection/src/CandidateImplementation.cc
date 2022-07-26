@@ -17,12 +17,6 @@ int CandidateImplementation::charge() const {
   return particle->charge();
 }
 
-double CandidateImplementation::et() const {
-  // std::cout << "et\n";
-  checkIsNull();
-  return particle->et();
-}
-
 double CandidateImplementation::isolation() const {
   if (getType() == Particle::Type::Muon) {
     auto muon = dynamic_cast<const reco::Muon *>(particle);
@@ -41,12 +35,6 @@ double CandidateImplementation::isolation() const {
 //   return particle->eta();
 // }
 
-
-double CandidateImplementation::energy() const {
-  // std::cout << "energy\n";
-  checkIsNull();
-  return particle->energy();
-}
 
 reco::Candidate::LorentzVector CandidateImplementation::getFourVector() const {
   // std::cout << "get four vec\n";

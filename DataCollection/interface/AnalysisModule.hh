@@ -3,13 +3,13 @@
 
 #include <string>
 
-#include "Module.hh"
-#include "InputModule.hh"
+#include "CMSAnalysis/DataCollection/interface/Module.hh"
+#include "CMSAnalysis/DataCollection/interface/InputModule.hh"
+
 
 // This is a class that creates output.
 // It should go at the end of a chain of ProductionModules and FilterModules.
 // You can include several of them in one Analyzer job.
-
 class AnalysisModule : public Module
 {
 public:

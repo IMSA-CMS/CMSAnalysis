@@ -1,3 +1,4 @@
+/*
 #include "CMSAnalysis/DataCollection/interface/SnowmassLeptonSelector.hh"
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
 #include "CMSAnalysis/DataCollection/interface/Lepton.hh"
@@ -31,3 +32,4 @@ bool SnowmassLeptonSelector::checkParticle(const Lepton &particle) const
         return false;
     }
 }
+*/
