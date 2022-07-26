@@ -18,6 +18,7 @@
 #include "CMSAnalysis/DataCollection/interface/MassAcceptancePlan.hh"
 #include "CMSAnalysis/DataCollection/interface/MassResolutionPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerPlan.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimAnalysisPlan.hh"
 
 
 int main(int argc, char **argv) {
@@ -72,6 +73,7 @@ int main(int argc, char **argv) {
   analysisPlans["LeptonJetReconstruction"] = new LeptonJetReconstructionPlan();
   analysisPlans["MassAcceptance"] = new MassAcceptancePlan();
   analysisPlans["Trigger"] = new TriggerPlan();
+  analysisPlans["GenSimAnalysis"] = new GenSimAnalysisPlan(); 
 
   if (analysisPlans.find(analysisType)==analysisPlans.end())
   {

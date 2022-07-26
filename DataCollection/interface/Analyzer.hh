@@ -6,10 +6,12 @@
 #include <unordered_map>
 #include <vector>
 #include <memory>
+#include <unordered_set>
 
 #include "EventLoader.hh"
 #include "FileParams.hh"
 #include "InputModule.hh"
+#include "ProcessDictionary.hh"
 
 //#include "ProductionModule.hh"
 
@@ -23,7 +25,7 @@ class Analyzer
 {
 public:
   Analyzer();
-  Analyzer(const Analyzer& analyzer1); // = delete;
+  Analyzer(const Analyzer& analyzer1);
   ~Analyzer();
 
 InputModule* getInputModule() {return input;}
@@ -51,17 +53,27 @@ private:
   std::vector<std::shared_ptr<ProductionModule>> productionModules;
   std::vector<std::shared_ptr<FilterModule>> filterModules;
   std::vector<std::shared_ptr<AnalysisModule>> analysisModules;
+  std::unordered_set<std::string> filterNames;
+
+  int numOfEvents = 0;
+
+  std::vector<std::string> files;
 
   EventLoader eventLoader;
   InputModule* input;
+  ProcessDictionary dictionary;
 
   // Parse one line of the the configuration file
-  std::vector<std::string> parseLine(std::ifstream& txtFile) const;
+  //std::vector<std::string> parseLine(std::ifstream& txtFile) const;
   // Find all input files from the configuration files, stored as FileParams objects
-  std::vector<FileParams> inputFiles(const std::string& txtFile) const;
+  //std::vector<FileParams> inputFiles(const std::string& txtFile) const;
   // Simple utility function allowing an operation to be performed on all
   // moduels, regardless of type
   std::vector<std::shared_ptr<Module>> getAllModules() const;
+  void setupFiles(const std::string& configFile);
+  void process(int outputEvery, int nFiles);
+  void finalize(const std::string& outputFile);
+
 };
 
 #endif

@@ -1,7 +1,0 @@
-Procs:  DY
-Year:   2021
-Lepton: M   E
-Mass:   M10  M50
-Lambda: 200
-Inter:	Con
-Helic:	LL
