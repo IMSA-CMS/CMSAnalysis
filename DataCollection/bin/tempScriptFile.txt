@@ -1,0 +1,7 @@
+Procs:  Higgs
+Year:   2020
+Lepton: both
+Mass:   1300
+Lambda: M1300
+Inter:  con
+Helic:  Higgs++to2Leptons

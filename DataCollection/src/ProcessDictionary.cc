@@ -34,7 +34,6 @@ void ProcessDictionary::loadProcesses(std::string filename)
     {
       if (!(processName.empty()))
       {
-        // std::cout << "site 1 created a process with name: " << processName << '\n';
         Process newProcess(processName, idTypes);
         processes.push_back(newProcess);
       }
@@ -48,19 +47,8 @@ void ProcessDictionary::loadProcesses(std::string filename)
     //    IDType idType(type, tokens);
     idTypes.insert({type, tokens});
   }
-  // for (const auto& aType : idTypes)
-  // {
-  //   // std::cout << "IDType " << aType.first << "\n";
-  //   // std::cout << "Values:\n";
-  //   for (const auto& value : aType.second)
-  //   {
-  //     std::cout << value << "\n";
-  //   }
-  // }
   Process newProcess(processName, idTypes);
   processes.push_back(newProcess);
-  // std::cout << "site 2 created a process with name: " << processName << '\n';
-  // std::cout << "It has " << newProcess.getIDTypes().size() << " IDTypes\n";
 }
 
 std::vector<FileParams> ProcessDictionary::readFile(std::string filename)
@@ -114,19 +102,22 @@ std::vector<FileParams> ProcessDictionary::readFile(std::string filename)
         pickfileProcesses.push_back(newProcess);
       }
   std::vector<int> indices (idTypes.size(), 0);
+
   while(true)
   {
+    auto newProcess = findProcess(process); // check function
+    auto fileParams = getFileparams(newProcess, idTypes, indices); // Makes a file param with given data
+    checkIDTypes(newProcess.getIDTypes(), idTypes); // check function
+    fileParamsVector.push_back(fileParams); // adds the fileparams to a fileparams vector
+
     auto indexIterator = indices.begin();
     bool changeIndex = true;
     for(auto mapIterator = idTypes.begin(); mapIterator != idTypes.end(); ++mapIterator, ++indexIterator)
     {
-      auto newProcess = findProcess(process);
-      auto fileParams = getFileparams(newProcess, idTypes, indices);
-      checkIDTypes(newProcess.getIDTypes(), idTypes);
-      fileParamsVector.push_back(fileParams);
       if(changeIndex)
       {
         ++(*indexIterator); // add 1 to whatever row you're on
+
         if(*indexIterator >= static_cast<int>(mapIterator->second.size())) // name is first, list is second. 
         {
           *indexIterator = 0;
@@ -156,8 +147,6 @@ Process& ProcessDictionary::findProcess(std::string newProcess) // fill in these
   {
     if (process.getName() == newProcess)
     {
-      // std::cout << "I selected a process named " << process.getName() << "\n";
-      // std::cout << "It has " << process.getIDTypes().size() << " idtypes\n";
       return process;
     }
   }
@@ -224,6 +213,7 @@ FileParams ProcessDictionary::getFileparams(Process& processName, std::unordered
     std::pair<std::string, std::string> pair; // makes a pair out of name and value
     pair.first = name;
     pair.second = category;
+    // std::cout << pair.first << ", " << pair.second << '\n';
     parameters.push_back(pair); // pushes pair to parameters vector
     counter++;
   }

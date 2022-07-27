@@ -13,21 +13,21 @@ LeptonJetMatchingModule::LeptonJetMatchingModule(std::shared_ptr<LeptonJetRecons
 bool LeptonJetMatchingModule::process()
 {
     matchingPairs.clear();
-    std::vector<Particle> genSimParticles(getInput()->getParticles(InputModule::RecoLevel::GenSim, Particle::Type::DarkPhoton).getParticles());
-    //std::cout << "Ljet matching (GenSim).\n";
+    std::vector<Lepton> temp(getInput()->getLeptons(InputModule::RecoLevel::GenSim).getParticles());
+    std::vector<Particle> genSimParticles(temp.begin(), temp.end());
     std::vector<LeptonJet> recoLeptonJets(lepJet->getLeptonJets());
     std::vector<Particle> lJets;
     for (LeptonJet lJet:recoLeptonJets)
     {
       lJets.push_back(lJet);
-      std::cout << "LJet Matching: lJet list size:" << lJets.size() << "\n";
+      //std::cout << "LJet Matching: lJet list size:" << lJets.size() << "\n";
     }
+    //std::cout << "Size of genSimParticles: " << genSimParticles.size() << "\n";
+    //std::cout << "Size of recoLeptonJets: " << recoLeptonJets.size() << "\n";
     MatchingModule::match(genSimParticles, lJets);
     lepJetSize += getMatchingPairs().size();
     genSize += genSimParticles.size();
-    // std::cout << "Size of genSimParticles: " << genSimParticles.size() << "\n";
     lepJetSize += recoLeptonJets.size();
-    // std::cout << "Size of recoLeptonJets: " << recoLeptonJets.size() << "\n";
 
     // MatchingPair candidate;
     Particle nullParticle(nullptr);

@@ -140,7 +140,12 @@ void superimpose(){
 
   // string file17 = "PhotonsHist.root";
   string file18 = "output.root";
-  
+  string file19 = "Higgs300.root";
+  string file20 = "Higgs500.root";
+  string file21 = "Higgs700.root";
+  string file22 = "Higgs900.root";
+  string file23 = "Higgs1100.root";
+  string file24 = "Higgs1300.root";
 
   // string hist1 = "Dimuon/Muon+ pt High";
   // string hist2 = "Dimuon/Muon+ pt Low";
@@ -159,19 +164,23 @@ void superimpose(){
   // string hist8 = "Quadlepton/Invariant mass";
   // string hist9 = "Quadlepton/Invariant mass OSDL";
 
-  string hist10 = "Reco Photon Histogram";
-  string hist11 = "Reco Same Sign Invariant Mass";
-  string hist12 = "Gen Sim Photon Histogram";
-  string hist13 = "Gen Same Sign Invariant Mass";
+  string hist10 = "Cut4Reco Same Sign Invariant Mass";
+  // string hist11 = "Reco Same Sign Invariant Mass";
+  // string hist12 = "Gen Sim Photon Histogram";
+  // string hist13 = "Gen Same Sign Invariant Mass";
 
  
   
   vector<Image> images
     {
-      Image(.4, "GeV", "Events", "Invariant Mass Hist", kCool
+      Image(.4, "Same-Sign Invariant Mass [GeV]", "Events", "", kCool
 	    ,vector<Plot> {
-		Plot(file18, hist13, kBlue, "Same Sign Invariant Mass Hist (Gen)")
-		,Plot(file18, hist12, kRed, "Photons Hist Using Delta Phi (Gen)")
+		Plot(file19, hist10, kBlue, "m = 300 GeV")
+		,Plot(file20, hist10, kRed, "m = 500 Gev")
+    ,Plot(file21, hist10, kGreen, "m = 700 GeV")
+    ,Plot(file22, hist10, kOrange, "m = 900 GeV")
+    ,Plot(file23, hist10, kViolet, "m = 1100 GeV")
+    ,Plot(file24, hist10, kBlack, "m = 1300 GeV")
    })
 	//  ,Image(.4, "GeV", "Events", "Invariant Mass Hist", kCool
 	//        ,vector<Plot> {
@@ -315,7 +324,7 @@ void superImposePlots(Image config)
 {
   TCanvas* c1 = new TCanvas();
   c1->SetWindowSize(1920, 1080);
-  auto legend = new TLegend(config.legendLeftSide, .8, config.legendLeftSide + .3, .9);
+  auto legend = new TLegend(config.legendLeftSide, .8, config.legendLeftSide + .05, .9);
 
   gStyle->SetPalette(config.palette);
 
