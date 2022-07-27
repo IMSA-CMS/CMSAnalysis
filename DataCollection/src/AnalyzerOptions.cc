@@ -57,7 +57,7 @@ std::vector<std::string> AnalyzerOptions::processNames()
   std::ifstream textfile("textfiles/processes.txt");
   if (!(textfile))
   {
-    throw std::runtime_error("Make sure there is a file called processes.txt in the folder textfiles.");
+    throw std::runtime_error("Make sure there is a file called processes.txt in the folder textfiles. Also, make sure you're running from the bin folder");
   }
   std::string line;
 
