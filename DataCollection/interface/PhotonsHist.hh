@@ -3,7 +3,7 @@
 
 #include "CMSAnalysis/DataCollection/interface/GenSimRecoPrototype.hh"
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
-class ParticleCollection;
+#include "CMSAnalysis/DataCollection/interface/ParticleCollection.hh"
 
 
 class PhotonsHist : public GenSimRecoPrototype
@@ -11,15 +11,15 @@ class PhotonsHist : public GenSimRecoPrototype
   public:
     using GenSimRecoPrototype::GenSimRecoPrototype;  // Copies the constructor over from GenSimRecoPrototype
   protected:
-    std::vector<double> protectedValue(bool typeGenSim) const override;
+    std::vector<double> protectedValue(InputModule::RecoLevel typeGenSim) const override;
   private:
-  void addPhotonUsingIM (ParticleCollection& pc1, ParticleCollection& pc2, Particle photon) const;
-  void addPhotonUsingDR (ParticleCollection& pc1, ParticleCollection& pc2, Particle photon) const;
-  void addPhotonUsingPt (ParticleCollection& pc1, ParticleCollection& pc2, Particle photon) const;
-  void addPhotonUsingPhi (ParticleCollection& pc1, ParticleCollection& pc2, Particle photon) const;
-  void addPhotonUsingEta (ParticleCollection& pc1, ParticleCollection& pc2, Particle photon) const;
-  void addPhotonUsingIMIs800 (ParticleCollection& pc1, ParticleCollection& pc2, Particle photon) const;
-  void addPhotonUsingMother (ParticleCollection& pc1, ParticleCollection& pc2, Particle photon) const;
+  void addPhotonUsingIM (ParticleCollection<Particle>& pc1, ParticleCollection<Particle>& pc2, Particle photon) const;
+  void addPhotonUsingDR (ParticleCollection<Particle>& pc1, ParticleCollection<Particle>& pc2, Particle photon) const;
+  void addPhotonUsingPt (ParticleCollection<Particle>& pc1, ParticleCollection<Particle>& pc2, Particle photon) const;
+  void addPhotonUsingPhi (ParticleCollection<Particle>& pc1, ParticleCollection<Particle>& pc2, Particle photon) const;
+  void addPhotonUsingEta (ParticleCollection<Particle>& pc1, ParticleCollection<Particle>& pc2, Particle photon) const;
+  void addPhotonUsingIMIs800 (ParticleCollection<Particle>& pc1, ParticleCollection<Particle>& pc2, Particle photon) const;
+  void addPhotonUsingMother (ParticleCollection<GenSimParticle>& pc1, ParticleCollection<GenSimParticle>& pc2, GenSimParticle& photon) const;
 };
 
 #endif

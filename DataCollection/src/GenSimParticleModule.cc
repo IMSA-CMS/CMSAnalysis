@@ -29,27 +29,28 @@ bool GenSimParticleModule::process()
   //Loop through Particle list&
   for (auto p : rawGenParticles)
   {
-    if (p.pdgId() == targetPdgId)
+    auto genSimP = GenSimParticle(p);
+    if (genSimP.pdgId() == targetPdgId)
     {
-      int numDaughters = p.numberOfDaughters();
+      int numDaughters = genSimP.numberOfDaughters();
       if (numDaughters == 0)
       {
-        genParticles.addParticle(p);
+        genParticles.addParticle(genSimP);
       }
       else
       {
         int counter = 0;
         for (int i = 0; i < numDaughters; ++i)
         {
-          auto partDaughter = p.daughter(i);
-          if (p.pdgId() == partDaughter.pdgId())
+          auto partDaughter = genSimP.daughter(i);
+          if (genSimP.pdgId() == partDaughter.pdgId())
           {
             counter += 1;
           }
         }
         if (counter == 0)
         {
-          genParticles.addParticle(p);
+          genParticles.addParticle(genSimP);
         }
       }
     }

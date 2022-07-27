@@ -2,4 +2,3 @@ H++toLL
 Mass:	500
 Format:	Delphes
 Lepton:	LL
-

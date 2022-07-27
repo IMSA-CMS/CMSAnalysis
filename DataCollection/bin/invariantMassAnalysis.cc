@@ -3,7 +3,7 @@
 
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
 
-#include "CMSAnalysis/DataCollection/interface/InvariantMassHist.hh"
+#include "CMSAnalysis/DataCollection/interface/Histograms.hh"
 #include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
 
 //#include "CMSAnalysis/DataCollection/interface/GenSimIdentificationModule.hh"
@@ -14,8 +14,6 @@
 #include "CMSAnalysis/DataCollection/interface/MassBinFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/ResolutionModule.hh"
 //#include "CMSAnalysis/DataCollection/interface/MassResolutionModule.hh"
-#include "CMSAnalysis/DataCollection/interface/MassResolutionHist.hh"
-#include "CMSAnalysis/DataCollection/interface/PtResolutionHist.hh"
 #include "CMSAnalysis/DataCollection/interface/SameSignInvariantMassHist.hh"
 #include "CMSAnalysis/DataCollection/interface/NLeptonsFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerFilter.hh"
@@ -30,8 +28,8 @@ Analyzer invariantMassAnalysis()
 
   // Create necessary histogram(s), as well as histMod
   auto histMod = make_shared<HistogramOutputModule>();
-  auto invMassHist = make_shared<InvariantMassHist>(false, "invariant_Mass", 100, 0, 100);
-  auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "same_Sign_Invariant_Mass", 300, 0, 300);
+  auto invMassHist = make_shared<InvariantMassHist>(InputModule::RecoLevel::Reco, "invariant_Mass", 100, 0, 100);
+  auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "same_Sign_Invariant_Mass", 300, 0, 300);
 
   // Create necessary module(s) for the filter(s)
   auto trigSimMod = make_shared<TriggerSimModule>("HLT");

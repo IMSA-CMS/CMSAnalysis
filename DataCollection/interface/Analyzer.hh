@@ -12,6 +12,8 @@
 #include "InputModule.hh"
 #include "ProcessDictionary.hh"
 
+//#include "ProductionModule.hh"
+
 class AnalysisModule;
 class FilterModule;
 class Module;
@@ -22,14 +24,16 @@ class Analyzer
 {
 public:
   Analyzer();
+  Analyzer(const Analyzer& analyzer1);
+  ~Analyzer();
 
-InputModule& getInputModule() {return input;}
-const InputModule& getInputModule() const {return input;}
+InputModule* getInputModule() {return input;}
+const InputModule* getInputModule() const {return input;}
 
   // Add a production module, which is guaranteed to run before any analysis or filter
   // module (in the order added)
   void addProductionModule(std::shared_ptr<ProductionModule> module) 
-  {productionModules.push_back(module);}
+  {productionModules.push_back(module);} //std::cout << typeid(*module).name() << "\n"; 
   // Add a filter module, which runs after production modules and before analysis
   // modules (in the order added)
   void addFilterModule(std::shared_ptr<FilterModule> module)
@@ -50,7 +54,7 @@ private:
   std::vector<std::shared_ptr<AnalysisModule>> analysisModules;
 
   EventLoader eventLoader;
-  InputModule input;
+  InputModule* input;
   ProcessDictionary dictionary;
 
   // Parse one line of the the configuration file

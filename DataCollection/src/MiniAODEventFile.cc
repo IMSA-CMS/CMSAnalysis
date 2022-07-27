@@ -41,22 +41,23 @@ GenEventInfoProduct MiniAODEventFile::getGenInfo() const
     return *genInfo;
 }
 
-ParticleCollection MiniAODEventFile::getGenSimParticles() const
+ParticleCollection<GenSimParticle> MiniAODEventFile::getGenSimParticles() const
 {
-    ParticleCollection genParticles;
+    ParticleCollection<GenSimParticle> genParticles;
     edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
     event->getByLabel(std::string("prunedGenParticles"), genParticlesHandle);
+    
     for (const auto &p : *genParticlesHandle) 
     {
-        genParticles.addParticle(Particle(&p));
+        genParticles.addParticle(GenSimParticle(&p));
     }
     return genParticles;
 }
 
-ParticleCollection MiniAODEventFile::getRecoParticles() const
+ParticleCollection<Particle> MiniAODEventFile::getRecoParticles() const
 {
     // std::cout << "get reco particles \n";
-    ParticleCollection recoParticles;
+    ParticleCollection<Particle> recoParticles;
     //This seems problematic
         
 
@@ -87,9 +88,9 @@ ParticleCollection MiniAODEventFile::getRecoParticles() const
         return recoParticles;
 }
 
-ParticleCollection MiniAODEventFile::getRecoJets() const
+ParticleCollection<Particle> MiniAODEventFile::getRecoJets() const
 {
-    ParticleCollection recoParticles;
+    ParticleCollection<Particle> recoParticles;
 
         edm::Handle<std::vector<pat::Jet>> jets;
         event->getByLabel(edm::InputTag("slimmedJets"), jets);

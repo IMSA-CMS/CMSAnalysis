@@ -9,8 +9,7 @@
 #include "CMSAnalysis/DataCollection/interface/MassBinFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/ResolutionModule.hh"
 #include "CMSAnalysis/DataCollection/interface/MassResolutionModule.hh"
-#include "CMSAnalysis/DataCollection/interface/MassResolutionHist.hh"
-#include "CMSAnalysis/DataCollection/interface/PtResolutionHist.hh"
+#include "CMSAnalysis/DataCollection/interface/Histograms.hh"
 
 using std::make_shared;
 
@@ -26,11 +25,11 @@ Analyzer massResolutionAnalysis()
   auto histMod = make_shared<HistogramOutputModule>();
   auto massResHist = make_shared<MassResolutionHist>("Mass Resolution Pasted", 100, -1, 1);
 
-  std::cerr << "no suspicious activity so far" << std::endl;
+  //std::cerr << "no suspicious activity so far" << std::endl;
 
   auto ptResHist = make_shared<PtResolutionHist>("Pt Resolution Pasted", 100, -1, 1);
 
-  std::cerr << "phase one complete, initiate drone strike" << std::endl;
+  //std::cerr << "phase one complete, initiate drone strike" << std::endl;
 
   // Add the filter modules to the histogram(s) created above
   massResHist->addFilter(massBinFilterForMass);
