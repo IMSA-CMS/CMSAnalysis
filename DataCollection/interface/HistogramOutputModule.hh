@@ -4,7 +4,8 @@
 #include <map>
 #include <string>
 
-#include "AnalysisModule.hh"
+#include "CMSAnalysis/DataCollection/interface/AnalysisModule.hh"
+#include "CMSAnalysis/DataCollection/interface/Module.hh"
 #include "TH1.h"
 #include "TH2.h"
 
@@ -22,7 +23,7 @@ public:
   virtual void writeAll();
   virtual void initialize() override {};                                     // Empty function
   virtual bool process() override;                // Fills the histograms
-  void addHistogram(std::shared_ptr<HistogramPrototype> hist) {histograms.push_back(hist);}; // Adds a HistogramPrototype* to histogram (the vector)
+  void addHistogram(std::shared_ptr<HistogramPrototype> hist); // Adds a HistogramPrototype* to histogram (the vector)
   virtual void setInput(const InputModule* iInput) override;
 
 protected:

@@ -8,6 +8,7 @@
 #include "CMSAnalysis/DataCollection/interface/ParticleImplementation.hh"
 #include "CMSAnalysis/DataCollection/interface/CandidateImplementation.hh"
 #include "CMSAnalysis/DataCollection/interface/SimpleImplementation.hh"
+#include "CMSAnalysis/DataCollection/interface/DelphesImplementation.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJet.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJetImplementation.hh"
 
@@ -28,6 +29,12 @@ Particle::Particle(const LeptonJet& leptonjet):
         std::make_shared<LeptonJet>(leptonjet)))
 {
 }
+
+Particle::Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, int pid, int status, int m1, int m2,int d1, int d2, double relIso):
+particle(std::make_shared<DelphesImplementation>(vec,charge,type,pid,status,m1,m2,d1,d2,relIso))
+{
+}
+
 
 Particle::Particle(const Particle& particle1):
 particle(particle1.particle)
@@ -83,10 +90,10 @@ double Particle::getEt() const
   return particle->getFourVector().Et();
 }
 
-double Particle::energy() const
+double Particle::getEnergy() const
 {
   checkIsNull();
-  return particle->energy();
+  return particle->getFourVector().E();
 }
 double Particle::getMass() const
 {
@@ -222,7 +229,7 @@ Particle::Type Particle::identifyType(int pdgid)
       return Particle::Type::None;
     }
 }
-int Particle::charge() const
+int Particle::getCharge() const
 {
   checkIsNull();
   return particle->charge();

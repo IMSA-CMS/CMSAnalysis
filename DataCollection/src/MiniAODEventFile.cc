@@ -111,7 +111,6 @@ double MiniAODEventFile::getMET() const
         return p.corPt(pat::MET::METCorrectionLevel::Type1);
     }
     throw std::runtime_error("There are no MET objects found");
-
 }
 
 std::vector<bool> MiniAODEventFile::getTriggerResults(std::string subProcess) const

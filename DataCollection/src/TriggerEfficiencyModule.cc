@@ -34,7 +34,7 @@ bool TriggerEfficiencyModule::process()
       //
       //std::cout << "Higgs Mass: " << higgsMass << '\n';
 
-      if ((genSimParticle1 != genSimParticle2)  && (genSimParticle1.charge() == genSimParticle2.charge()))
+      if ((genSimParticle1 != genSimParticle2)  && (genSimParticle1.getCharge() == genSimParticle2.getCharge()))
       {
         ParticleCollection<GenSimParticle> genSimPair;
         genSimPair.addParticle(genSimParticle1);
@@ -97,7 +97,7 @@ void TriggerEfficiencyModule::printDebugLines(Particle particle) const  // So I 
     std::cout << "Type: Muon\n";
   }
   std::cout << "PDGID: " << GenSimParticle(particle).pdgId() << '\n';
-  std::cout << "Charge: " << particle.charge() << '\n';
+  std::cout << "Charge: " << particle.getCharge() << '\n';
   //std::cout << "Mother PDGID: " << particle.uniqueMother().pdgId() << "\n\n";
 }
   
