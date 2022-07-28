@@ -19,10 +19,12 @@ std::vector<double> SameSignInvariantMassHist::protectedValue(InputModule::RecoL
     // std::cout << "2" << recoParticles.getNumParticles() << std::endl;
     auto inv = particles.calculateSameSignInvariantMasses(usingPhi);
     return {inv};
+  } 
+  else 
+  {
+    auto particles = getInput()->getLeptons(typeGenSim);
+    // std::cout << "4-" << recoParticles.calculateSameSignInvariantMass() << std::endl;
+    auto inv = particles.calculateSameSignInvariantMass();
+    return {inv};
   }
-
-  auto particles = getInput()->getLeptons(InputModule::RecoLevel::Reco);
-  // std::cout << "4-" << recoParticles.calculateSameSignInvariantMass() << std::endl;
-  auto inv = particles.calculateSameSignInvariantMass();
-  return {inv};
 }

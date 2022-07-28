@@ -14,6 +14,6 @@ class Lepton : public Particle
         using Particle::Particle;
         Lepton(const Particle &particle);
         double getIsolation() const;
-        bool isIsolated() const {throw std::runtime_error("error");};
+        bool isIsolated() const {throw std::runtime_error("error: Lepton::isIsolated() not implemented");};
 };
 #endif
