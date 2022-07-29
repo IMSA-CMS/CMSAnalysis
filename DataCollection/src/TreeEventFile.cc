@@ -3,6 +3,9 @@
 // Andy, [10/06/21]
 
 #include "TTree.h"
+#include "TTreeReader.h"
+#include "TTreeReaderValue.h"
+#include "TTreeReaderArray.h"
 #include "CMSAnalysis/DataCollection/interface/TreeEventFile.hh"
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
@@ -16,60 +19,103 @@
 #include <vector>
 #include <fstream>
 
-TreeEventFile::TreeEventFile(TFile *ifile) : EventFile(ifile) {}
+TreeEventFile::TreeEventFile(TFile *ifile, const BranchNames& branchNames) : 
+    EventFile(ifile), 
+    elec_size(treeReader, branchNames.elecSize.c_str()),
+    elec_eta(treeReader, branchNames.elecEta.c_str()),
+    elec_phi(treeReader, branchNames.elecPhi.c_str()),
+    elec_mass(treeReader, branchNames.elecMass.c_str()),
+    elec_charge(treeReader, branchNames.elecCharge.c_str()),
+    elec_pt(treeReader, branchNames.elecPT.c_str()),
+    elec_reliso(treeReader, branchNames.elecRelIso.c_str()),
+    muon_size(treeReader, branchNames.muonSize.c_str()),
+    muon_eta(treeReader, branchNames.muonEta.c_str()),
+    muon_phi(treeReader, branchNames.muonPhi.c_str()),
+    muon_mass(treeReader, branchNames.muonMass.c_str()),
+    muon_charge(treeReader, branchNames.muonCharge.c_str()),
+    muon_pt(treeReader, branchNames.muonPT.c_str()),
+    muon_reliso(treeReader, branchNames.muonRelIso.c_str()),
+    met_size(treeReader, branchNames.metSize.c_str()),
+    met_phi(treeReader, branchNames.metPhi.c_str()),
+    met_pt(treeReader, branchNames.metPT.c_str()),
+    jet_size(treeReader, branchNames.jetSize.c_str()),
+    jet_eta(treeReader, branchNames.jetEta.c_str()),
+    jet_phi(treeReader, branchNames.jetPhi.c_str()),
+    jet_mass(treeReader, branchNames.jetMass.c_str()),
+    jet_pt(treeReader, branchNames.jetPT.c_str()),
+    //bJet(treeReader, branchNames.bJet.c_str()),
+    gen_size(treeReader, branchNames.genSize.c_str()),
+    gen_pid(treeReader, branchNames.genPid.c_str()),
+    gen_status(treeReader, branchNames.genStatus.c_str()),
+    gen_eta(treeReader, branchNames.genEta.c_str()),
+    gen_phi(treeReader, branchNames.genPhi.c_str()),
+    gen_mass(treeReader, branchNames.genMass.c_str()),
+    gen_pt(treeReader, branchNames.genPt.c_str()),
+    gen_d1(treeReader, branchNames.gend1.c_str()),
+    gen_d2(treeReader, branchNames.gend2.c_str()),
+    gen_m1(treeReader, branchNames.genm1.c_str()),
+    gen_m2(treeReader, branchNames.genm2.c_str()),
+    elec_idpass(treeReader, branchNames.elecIdpass.c_str()),
+    muon_idpass(treeReader, branchNames.muonIdpass.c_str())
+{
+
+}
+
 int otherCounter = 0;
 int otherotherCounter =1;
 void TreeEventFile::initialize()
 {
     tree = getFile()->Get<TTree>(getTreeName().c_str());
+    treeReader.SetTree(tree);
+
     // Set branch addresses immediately
-    tree->SetBranchAddress(getTreeBranches().elecSize.c_str(), &elec_size);
-    tree->SetBranchAddress(getTreeBranches().elecEta.c_str(), &elec_eta);
-    tree->SetBranchAddress(getTreeBranches().elecPhi.c_str(), &elec_phi);
-    tree->SetBranchAddress(getTreeBranches().elecMass.c_str(), &elec_mass);
-    tree->SetBranchAddress(getTreeBranches().elecCharge.c_str(), &elec_charge);
-    tree->SetBranchAddress(getTreeBranches().elecPT.c_str(), &elec_pt);
-    tree->SetBranchAddress(getTreeBranches().elecRelIso.c_str(), &elec_reliso);
+    // tree->SetBranchAddress(branchNames.elecSize.c_str(), &elec_size);
+    // tree->SetBranchAddress(branchNames.elecEta.c_str(), &elec_eta);
+    // tree->SetBranchAddress(branchNames.elecPhi.c_str(), &elec_phi);
+    // tree->SetBranchAddress(branchNames.elecMass.c_str(), &elec_mass);
+    // tree->SetBranchAddress(branchNames.elecCharge.c_str(), &elec_charge); //int
+    // tree->SetBranchAddress(branchNames.elecPT.c_str(), &elec_pt);
+    // tree->SetBranchAddress(branchNames.elecRelIso.c_str(), &elec_reliso);
 
-    tree->SetBranchAddress(getTreeBranches().muonSize.c_str(), &muon_size);
-    tree->SetBranchAddress(getTreeBranches().muonEta.c_str(), &muon_eta);
-    tree->SetBranchAddress(getTreeBranches().muonPhi.c_str(), &muon_phi);
-    tree->SetBranchAddress(getTreeBranches().muonMass.c_str(), &muon_mass);
-    tree->SetBranchAddress(getTreeBranches().muonCharge.c_str(), &muon_charge);
-    tree->SetBranchAddress(getTreeBranches().muonPT.c_str(), &muon_pt);
-    tree->SetBranchAddress(getTreeBranches().muonRelIso.c_str(), &muon_reliso);
+    // tree->SetBranchAddress(branchNames.muonSize.c_str(), &muon_size);
+    // tree->SetBranchAddress(branchNames.muonEta.c_str(), &muon_eta);
+    // tree->SetBranchAddress(branchNames.muonPhi.c_str(), &muon_phi);
+    // tree->SetBranchAddress(branchNames.muonMass.c_str(), &muon_mass);
+    // tree->SetBranchAddress(branchNames.muonCharge.c_str(), &muon_charge); //int
+    // tree->SetBranchAddress(branchNames.muonPT.c_str(), &muon_pt);
+    // tree->SetBranchAddress(branchNames.muonRelIso.c_str(), &muon_reliso);
 
-    tree->SetBranchAddress(getTreeBranches().metSize.c_str(), &met_size);
-    tree->SetBranchAddress(getTreeBranches().metPhi.c_str(), &met_phi);
-    tree->SetBranchAddress(getTreeBranches().metPT.c_str(), &met_pt);
+    // tree->SetBranchAddress(branchNames.metSize.c_str(), &met_size); //int
+    // tree->SetBranchAddress(branchNames.metPhi.c_str(), &met_phi); //float array
+    // tree->SetBranchAddress(branchNames.metPT.c_str(), &met_pt); //float array
 
-    tree->SetBranchAddress(getTreeBranches().jetSize.c_str(), &jet_size);
-    tree->SetBranchAddress(getTreeBranches().jetEta.c_str(), &jet_eta);
-    tree->SetBranchAddress(getTreeBranches().jetPhi.c_str(), &jet_phi);
-    tree->SetBranchAddress(getTreeBranches().jetMass.c_str(), &jet_mass);
-    tree->SetBranchAddress(getTreeBranches().jetPT.c_str(), &jet_pt);
-    //tree->SetBranchAddress(getTreeBranches().bJet.c_str(), &bJet);
+    // tree->SetBranchAddress(branchNames.jetSize.c_str(), &jet_size); //int
+    // tree->SetBranchAddress(branchNames.jetEta.c_str(), &jet_eta); //float array \/
+    // tree->SetBranchAddress(branchNames.jetPhi.c_str(), &jet_phi);
+    // tree->SetBranchAddress(branchNames.jetMass.c_str(), &jet_mass);
+    // tree->SetBranchAddress(branchNames.jetPT.c_str(), &jet_pt);
+    //tree->SetBranchAddress(branchNames.bJet.c_str(), &bJet);
 
-    tree->SetBranchAddress(getTreeBranches().genSize.c_str(), &gen_size);
-    tree->SetBranchAddress(getTreeBranches().genPid.c_str(), &gen_pid);
-    tree->SetBranchAddress(getTreeBranches().genStatus.c_str(), &gen_status);
-    tree->SetBranchAddress(getTreeBranches().genEta.c_str(), &gen_eta);
-    tree->SetBranchAddress(getTreeBranches().genPhi.c_str(), &gen_phi);
-    tree->SetBranchAddress(getTreeBranches().genMass.c_str(), &gen_mass);
-    tree->SetBranchAddress(getTreeBranches().genPt.c_str(), &gen_pt);
-    tree->SetBranchAddress(getTreeBranches().gend1.c_str(), &gen_d1);
-    tree->SetBranchAddress(getTreeBranches().gend2.c_str(), &gen_d2);
-    tree->SetBranchAddress(getTreeBranches().genm1.c_str(), &gen_m1);
-    tree->SetBranchAddress(getTreeBranches().genm2.c_str(), &gen_m2);
+    // tree->SetBranchAddress(branchNames.genSize.c_str(), &gen_size); //int
+    // tree->SetBranchAddress(branchNames.genPid.c_str(), &gen_pid); //int array
+    // tree->SetBranchAddress(branchNames.genStatus.c_str(), &gen_status); //int array
+    // tree->SetBranchAddress(branchNames.genEta.c_str(), &gen_eta); //float array
+    // tree->SetBranchAddress(branchNames.genPhi.c_str(), &gen_phi);
+    // tree->SetBranchAddress(branchNames.genMass.c_str(), &gen_mass);
+    // tree->SetBranchAddress(branchNames.genPt.c_str(), &gen_pt);
+    // tree->SetBranchAddress(branchNames.gend1.c_str(), &gen_d1); //int array
+    // tree->SetBranchAddress(branchNames.gend2.c_str(), &gen_d2);
+    // tree->SetBranchAddress(branchNames.genm1.c_str(), &gen_m1);
+    // tree->SetBranchAddress(branchNames.genm2.c_str(), &gen_m2);
 
-    tree->SetBranchAddress(getTreeBranches().elecIdpass.c_str(), &elec_idpass);
-    tree->SetBranchAddress(getTreeBranches().muonIdpass.c_str(), &muon_idpass);
-
+    // tree->SetBranchAddress(branchNames.elecIdpass.c_str(), &elec_idpass);
+    // tree->SetBranchAddress(branchNames.muonIdpass.c_str(), &muon_idpass);
     //tree->Show();
     //nextEvent();
     counter = 0;
-    tree->GetEntry(counter);
-    ++(counter);
+    treeReader.Next(); 
+    //tree->GetEntry(counter);
+    //++(counter);
 
     // // Now loop through by index to collect everything??
     // Int_t nentries = (Int_t)t1->GetEntries();
@@ -80,24 +126,26 @@ void TreeEventFile::initialize()
 
 void TreeEventFile::nextEvent()
 {
+    treeReader.Next(); 
+
     // Need to call tree->GetEntry(new #)
     // std::cout << counter << std::endl;
-    tree->GetEntry(counter);
+    //tree->GetEntry(counter);
     // std::cout << "got entry" << std::endl;
     ++(counter);
     setEventCount(getEventCount() + 1);
 }
 
-GenEventInfoProduct TreeEventFile::getGenInfo() const
-{
-    throw std::runtime_error("Not yet implemented: getGenInfo()");
+// GenEventInfoProduct TreeEventFile::getGenInfo() const
+// {
+//     throw std::runtime_error("Not yet implemented: getGenInfo()");
 
-    /*
-    edm::Handle<GenEventInfoProduct> genInfo;
-    event->getByLabel(std::string("generator"), genInfo);
-    return *genInfo;
-    */
-}
+//     /*
+//     edm::Handle<GenEventInfoProduct> genInfo;
+//     event->getByLabel(std::string("generator"), genInfo);
+//     return *genInfo;
+//     */
+// }
 
 ParticleCollection<GenSimParticle> TreeEventFile::getGenSimParticles() const
 {
@@ -121,7 +169,7 @@ ParticleCollection<GenSimParticle> TreeEventFile::getGenSimParticles() const
     // << std::setw(15) << "| Phi"
     // //<< std::setw(15) << "| E"
     // << std::setw(5) << "| mass\n";
-    for (int i = 0; i < gen_size; i++)
+    for (int i = 0; i < *gen_size; i++)
     {
         //std::cout<< std::setw(8) << i+1 << "| " << std::setw(9) << gen_pid[i] << "| " << std::setw(8) << gen_status[i] << "| ";
 
@@ -145,7 +193,6 @@ ParticleCollection<GenSimParticle> TreeEventFile::getGenSimParticles() const
 
         // This is specific to leptons
         // NEEDS TO BE CHANGED TO BE MORE ROBUST
-
         if (gen_status[i] != 1)
             continue;
 
@@ -229,7 +276,7 @@ ParticleCollection<Particle> TreeEventFile::getRecoParticles() const
     //  std::cout << elec_size << std::endl;
     //  std::cout << muon_size << std::endl;
 
-    for (int i = 0; i < elec_size; i++)
+    for (int i = 0; i < *elec_size; i++)
     {
         if (elec_idpass[i] & 7)
         {
@@ -255,7 +302,7 @@ ParticleCollection<Particle> TreeEventFile::getRecoParticles() const
         }
     }
 
-    for (int i = 0; i < muon_size; i++)
+    for (int i = 0; i < *muon_size; i++)
     {
         if (muon_idpass[i] & 7)
         {
@@ -286,13 +333,13 @@ ParticleCollection<Particle> TreeEventFile::getRecoParticles() const
 ParticleCollection<Particle> TreeEventFile::getRecoJets() const
 {
     ParticleCollection<Particle> recoParticles;
-    for(int i = 0; i < jet_size; i++) {
-        if(bJet[i] > 0){
+    for(int i = 0; i < *jet_size; i++) {
+        //if(bJet[i] > 0){
         // Lorentz four-vector
             recoParticles.addParticle(Particle(
             reco::Candidate::LorentzVector(jet_pt[i], jet_eta[i], 
             jet_phi[i], jet_mass[i]), 0, Particle::Type::Jet));    
-        }    
+        //}    
     }
     return recoParticles;
 }

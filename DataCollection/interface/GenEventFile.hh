@@ -18,7 +18,7 @@ class GenEventFile : public EventFile
         virtual ParticleCollection<GenSimParticle> getGenSimParticles() const override;
         virtual ParticleCollection<Particle> getRecoParticles() const override;
         virtual ParticleCollection<Particle> getRecoJets() const override;
-        virtual GenEventInfoProduct getGenInfo() const override;
+        //virtual GenEventInfoProduct getGenInfo() const override;
         virtual double getMET() const override;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;

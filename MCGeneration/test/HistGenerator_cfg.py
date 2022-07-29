@@ -34,7 +34,7 @@ inputFile = cms.untracked.string("0")
 if options.inputFileName != inputFile:
     inputFile = str(options.inputFileName)
 else: 
-     inputFile = str(raw_input("Please enter an input file name: \n(Format: \"fileName.root\")\n"))
+     inputFile = str(input("Please enter an input file name: \n(Format: \"fileName.root\")\n"))
 process.source = cms.Source("PoolSource",
                         fileNames = cms.untracked.vstring('file:'+ inputFile)
                             )
@@ -48,7 +48,7 @@ dimuonPlugin = cms.untracked.string("0")
 if options.dimuonPluginName != dimuonPlugin:
     dimuonPlugin = str(options.inputFileName)
 else: 
-     dimuonPlugin = str(raw_input("Please enter the dimuon plugin name: \n"))
+     dimuonPlugin = str(input("Please enter the dimuon plugin name: \n"))
 
 dimuon = GetDimuon(dimuonPlugin)
 process.Dimuon=dimuon.clone()
