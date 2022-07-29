@@ -13,14 +13,18 @@ namespace reco
 {
   class Candidate;
 }
-
+// Particle container. Essentially holds them within a vector,
+// but allows numerous useful operations on them
 template<typename T=Particle>
 class ParticleCollection
 {
 public:
   ParticleCollection() {}
+
+  // Copy/conversion constructor
   template <typename U>
   ParticleCollection(ParticleCollection<U> pc1);
+
   void addParticle(T particle) {particles.push_back(particle);}
   const std::vector<T>& getParticles() const {return particles;}
   double getNumParticles() const {return particles.size();}
@@ -87,7 +91,7 @@ template<typename T>
 
     for (auto particle : getParticles())
     {
-      if (particle.charge() > 0)
+      if (particle.getCharge() > 0)
       {
         // std::cout << "Added positive particle with charge " << particle.charge() << " to positive collection.\n";
         positives.addParticle(particle);  // Add all of the positively-charged particles to positives
@@ -106,7 +110,7 @@ template<typename T>
 
     for (auto particle : getParticles())
     {
-      if (particle.charge() < 0)
+      if (particle.getCharge() < 0)
       {
         // std::cout << "Added negative particle with charge " << particle.charge() << " to negative collection.\n";
         negatives.addParticle(particle);  // Add all of the negatively-charged particles to negatives
@@ -200,7 +204,7 @@ template<typename T>
     //if both particles have the same sign (i.e. electrons), the situation is solved at the start of calculateCollinsSoper()
     if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
       {
-        if (particlePair.first.charge() < 0) //no flip
+        if (particlePair.first.getCharge() < 0) //no flip
     {
       
       return calculateCollinsSoper(particlePair.first, particlePair.second);
@@ -499,7 +503,7 @@ template<typename T>
   template<typename T>
   inline bool ParticleCollection<T>::checkSigns(T particle1, T particle2) const
   {
-    if (particle1.charge() != particle2.charge())
+    if (particle1.getCharge() != particle2.getCharge())
       {
         return true;
       }
@@ -527,7 +531,7 @@ template<typename T>
   {
     if (std::abs(particle.getEta()) < std::abs(antiparticle.getEta()))
       {
-        if (particle.charge() < 0)
+        if (particle.getCharge() < 0)
     {
       return true;
     }
@@ -535,7 +539,7 @@ template<typename T>
 
     else 
       {
-        if (antiparticle.charge() > 0)
+        if (antiparticle.getCharge() > 0)
     {
       return true;
     }
@@ -563,8 +567,8 @@ template<typename T>
     float Eta2 = antiparticle.getEta();
     float Phi1 = particle.getPhi();
     float Phi2 = antiparticle.getPhi();
-    float En1 = particle.energy();
-    float En2 = antiparticle.energy();
+    float En1 = particle.getEnergy();
+    float En2 = antiparticle.getEnergy();
     Ele.SetPtEtaPhiE(Et1,Eta1,Phi1,En1);
     Elebar.SetPtEtaPhiE(Et2,Eta2,Phi2,En2);
 

@@ -134,6 +134,7 @@ LeptonJetReconstructionPlan::LeptonJetReconstructionPlan() {
   //analyzer.addAnalysisModule(massRecoEfficiency1000);
   //analyzer.addAnalysisModule(massRecoEfficiency1300);
   //analyzer.addAnalysisModule(genSimEventDumpMod);
-  auto selector = make_shared<SnowmassLeptonSelector>(5);
+  /* auto selector = make_shared<SnowmassLeptonSelector>(5);
   analyzer.getInputModule()->setLeptonSelector(selector);
+  */
 }
