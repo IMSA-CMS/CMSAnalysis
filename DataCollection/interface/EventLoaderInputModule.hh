@@ -27,7 +27,7 @@ class EventLoaderInputModule : public InputModule
         std::shared_ptr<Selector> selector = nullptr) const override;
         virtual ParticleCollection<Particle> getJets(RecoLevel level, double pTCut = 0) const override;
 
-        virtual GenEventInfoProduct getGenInfo() const override;
+        //virtual GenEventInfoProduct getGenInfo() const override;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;
         virtual double getMET() const override;

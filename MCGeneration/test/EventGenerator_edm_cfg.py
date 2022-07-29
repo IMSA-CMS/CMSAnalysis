@@ -80,7 +80,7 @@ process.MessageLogger.cerr.FwkReport = cms.untracked.PSet(
 
 # Sets the max events and prompts the user if no value was provided
 if options.maxEvents == -1:
-    maxEvents = int(raw_input("Please enter the maximum ammount of events:\n"))
+    maxEvents = int(input("Please enter the maximum ammount of events:\n"))
 else: 
     maxEvents = options.maxEvents
 process.maxEvents = cms.untracked.PSet(
@@ -103,22 +103,15 @@ process.RandomNumberGeneratorService.generator.initialSeed = options.seed*10000
 #Sets up global tag
 globalTagName = options.globalTagName
 globalTag = "0"
-tagsList = [['Run3','120X_mcRun3_2021_realistic_v18'],
-            ['Run2','106X_dataRun2_v24']] #add more global tags here
+tagsList = dict({'Run3' : '124X_mcRun3_2022_realistic_v9', 'Run2' : '106X_mcRun2_asymptotic_v13'}) #add more global tags here
 tagsLatch = True
 while (tagsLatch):
     if (globalTagName != "0"):
-        for tag in tagsList:
-            if (tag[0] == globalTagName):
-                globalTag = tag[1]
+            globalTag = tagsList[globalTagName]
     if (globalTag != "0"):
         tagsLatch = False
     else: 
-        tagString = ""
-        for tag in tagsList:
-            tagString += tag[0] + ", "   
-        tagString = tagString[:-2]
-        globalTagName = str(raw_input("Please enter a global tag. \nThe options are: " + tagString + "\n"))
+        globalTagName = str(input("Please enter a global tag:\n"))
         
 # Other statements
 process.genstepfilter.triggerConditions=cms.vstring("generation_step")
@@ -130,7 +123,7 @@ pythiasettingsFile = cms.untracked.string("0")
 if options.pythiaSettingsFileName != pythiasettingsFile:
     pythiasettingsFile = options.pythiasettingsFileName
 else: 
-    pythiasettingsFile = str(raw_input("Please enter a pythia settings file name: \n(Format: \"fileName.txt\")\n"))
+    pythiasettingsFile = str(input("Please enter a pythia settings file name: \n(Format: \"fileName.txt\")\n"))
 pythiaparams = FileUtils.loadListFromFile (pythiasettingsFile) 
 
 # Sets up all the pythia stuff
@@ -175,7 +168,7 @@ outputFile = cms.untracked.string("0")
 if options.outputFilename != outputFile:
     outputFile = cms.untracked.string(str(options.outputFilename))
 else:
-    outputString = str(raw_input("Please enter an output file name: \n(Format: \"fileName.root\")\n"))
+    outputString = str(input("Please enter an output file name: \n(Format: \"fileName.root\")\n"))
     outputFile = cms.untracked.string('file:' + outputString)
 
     #For automatically generated filename

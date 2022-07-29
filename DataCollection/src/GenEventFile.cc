@@ -34,12 +34,12 @@ std::vector<PileupSummaryInfo> MiniAODEventLoader::getPileupInfo() const
 }
 */
 
-GenEventInfoProduct GenEventFile::getGenInfo() const
-{
-    edm::Handle<GenEventInfoProduct> genInfo;
-    event->getByLabel(std::string("generator"), genInfo);
-    return *genInfo;
-}
+// GenEventInfoProduct GenEventFile::getGenInfo() const
+// {
+//     edm::Handle<GenEventInfoProduct> genInfo;
+//     event->getByLabel(std::string("generator"), genInfo);
+//     return *genInfo;
+// }
 
 ParticleCollection<GenSimParticle> GenEventFile::getGenSimParticles() const
 {
@@ -79,9 +79,12 @@ std::vector<bool> GenEventFile::getTriggerResults(std::string subProcess) const
     edm::Handle<edm::TriggerResults> triggerResults;
     event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
     std::vector<bool> v_results = {};
-    for (unsigned int i = 0; i < triggerResults->size(); i++)
+    if (triggerResults) 
     {
+        for (unsigned int i = 0; i < triggerResults->size(); i++)
+        {
         v_results.push_back(triggerResults->accept(i));
+        }
     }
     return v_results;
 }

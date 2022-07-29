@@ -36,7 +36,7 @@ public:
     std::shared_ptr<Selector> selector = nullptr) const = 0;
     virtual ParticleCollection<Particle> getJets(RecoLevel level, double pTCut = 0) const = 0;
 
-    virtual GenEventInfoProduct getGenInfo() const = 0;
+    //virtual GenEventInfoProduct getGenInfo() const = 0;
     virtual std::vector<bool> getTriggerResults(std::string subProcess) const = 0;
     virtual std::vector<std::string> getTriggerNames(std::string subProcess) const=0;
     virtual double getMET() const = 0;
