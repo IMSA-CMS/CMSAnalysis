@@ -1,4 +1,4 @@
-#ifndef SNOWMASSLEPTONSELECTOR_HH
+/*#ifndef SNOWMASSLEPTONSELECTOR_HH
 #define SNOWMASSLEPTONSELECTOR_HH
 
 #include "Selector.hh"
@@ -15,4 +15,4 @@ private:
     const double isoCut;
 };
 
-#endif
+#endif*/

@@ -131,7 +131,11 @@ void Analyzer::process(int outputEvery, int nFiles)
         for (auto module : analysisModules)
         {
           module->setFilterString(filterString);
-          module->processEvent();
+          if (!module->processEvent())
+          {
+            continueProcessing = false;
+            break;
+          }
         }
       }
       eventLoader.getFile()->nextEvent();

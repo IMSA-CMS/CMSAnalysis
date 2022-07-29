@@ -90,10 +90,10 @@ double Particle::getEt() const
   return particle->getFourVector().Et();
 }
 
-double Particle::energy() const
+double Particle::getEnergy() const
 {
   checkIsNull();
-  return particle->energy();
+  return particle->getFourVector().E();
 }
 double Particle::getMass() const
 {
@@ -229,7 +229,7 @@ Particle::Type Particle::identifyType(int pdgid)
       return Particle::Type::None;
     }
 }
-int Particle::charge() const
+int Particle::getCharge() const
 {
   checkIsNull();
   return particle->charge();

@@ -35,9 +35,9 @@ bool SignFlipModule::process()
       nMuonEvents++;
     }
 
-    //std::cout << "Gen charge: " << particlePair.getGenParticle().charge() << "  Reco charge: " << particlePair.getRecoParticle().charge() << '\n';
+    //std::cout << "Gen charge: " << particlePair.getGenParticle().getCharge() << "  Reco charge: " << particlePair.getRecoParticle().getCharge() << '\n';
 
-	  if (particlePair.getGenParticle().charge() != particlePair.getRecoParticle().charge()) 
+	  if (particlePair.getGenParticle().getCharge() != particlePair.getRecoParticle().getCharge()) 
     {
       if (particleType == Particle::Type::Electron) 
       {

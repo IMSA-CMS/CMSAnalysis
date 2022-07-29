@@ -28,13 +28,9 @@ public:
         GenSim
     };
 
-    virtual void setLeptonSelector(std::shared_ptr<Selector> selector) {leptonSelector = selector;}
-
     virtual ParticleCollection<Lepton> getLeptons(RecoLevel level) const = 0;
-    // not sure this works
-    virtual ParticleCollection<Particle> getParticles(RecoLevel level, Particle::Type particleType = Particle::Type::None,
-    std::shared_ptr<Selector> selector = nullptr) const = 0;
-    virtual ParticleCollection<Particle> getJets(RecoLevel level, double pTCut = 0) const = 0;
+    virtual ParticleCollection<Particle> getParticles(RecoLevel level, Particle::Type particleType = Particle::Type::None) const = 0;
+    virtual ParticleCollection<Particle> getJets(RecoLevel level) const = 0;
 
     //virtual GenEventInfoProduct getGenInfo() const = 0;
     virtual std::vector<bool> getTriggerResults(std::string subProcess) const = 0;
@@ -42,7 +38,6 @@ public:
     virtual double getMET() const = 0;
 
 private:
-    std::shared_ptr<Selector> leptonSelector;
 };
 
 #endif

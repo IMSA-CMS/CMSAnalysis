@@ -30,7 +30,7 @@ bool GenSimEventDumpModule::process()
   }
   if(counter < numOfEvents || numOfEvents == -1)
   {
-    auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim,Particle::Type::None,nullptr);
+    auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim, Particle::Type::None);
     //TODO this line needs to be fixed and put back in
     //Input Module is GenSim to match printGenSimParticleCollection
     if( getInput()->getLeptons(InputModule::RecoLevel::GenSim).getNumParticles() == 4)
@@ -101,7 +101,7 @@ void GenSimEventDumpModule::printGenSimParticleCollection(const ParticleCollecti
     // Particle properties
     my_file << std::setw(13) << part.getPt() << "| " << std::setw(13) << part.getEta() << "| " << std::setw(13) << part.getPhi() << "| ";
     try{
-      my_file << std::setw(13) << part.energy() << "| " << std::setw(13) << part.getMass() << "\n";
+      my_file << std::setw(13) << part.getEnergy() << "| " << std::setw(13) << part.getMass() << "\n";
     }
     catch(const std::exception& e){
       my_file << std::setw(13) << "N/A" << "| " << std::setw(13) << part.getMass() << "\n";
