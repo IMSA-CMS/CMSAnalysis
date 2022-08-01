@@ -1,23 +1,20 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include <filesystem>
 
 #include "TROOT.h"
 #include "TSystem.h"
 
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
+#include "CMSAnalysis/DataCollection/interface/IDType.hh"
 #include "FWCore/FWLite/interface/FWLiteEnabler.h"
 #include "PhysicsTools/FWLite/interface/CommandLineParser.h"
 
 #include "CMSAnalysis/DataCollection/interface/DataCollectionPlan.hh"
-
-#include "CMSAnalysis/DataCollection/interface/DisplacedVertexPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/HiggsBackgroundPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/HPlusPlusMassPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/InvariantMassPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonJetBackgroundPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonJetReconstructionPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/MassAcceptancePlan.hh"
-#include "CMSAnalysis/DataCollection/interface/MassResolutionPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/TriggerPlan.hh"
+#include "CMSAnalysis/DataCollection/interface/AnalyzerOptions.hh"
 
 
 int main(int argc, char **argv) {
@@ -42,9 +39,11 @@ int main(int argc, char **argv) {
   int numFiles = parser.integerValue("numFiles");
   std::string analysisType = parser.stringValue("analysis");
 
+  AnalyzerOptions options;
   if (inputFile.empty())
   {
-    inputFile = "textfiles/pickFiles.txt";
+    inputFile = options.pickfileInterface();
+    //inputFile = "textfiles/pickFiles.txt";
   }
 
   if (outputFile.empty())
@@ -52,33 +51,23 @@ int main(int argc, char **argv) {
     outputFile = "default.root";
   }
 
-
-  std::cout << "Reading input file " << inputFile << std::endl;
-
   unsigned outputEvery = parser.integerValue("outputEvery");
 
 /* 
   Selection of data collection plan has moved to command line argument "analysis"
-  The key for each Plan can be found in the insertions below
+  The key for each Plan can now be found in AnalyzerOptions.cc
   
   e.g. runAnalyzer input=input.txt output=output.root analysis=DisplacedVertex
 */
-  std::unordered_map<std::string, DataCollectionPlan*> analysisPlans;
-  analysisPlans["DisplacedVertex"] = new DisplacedVertexPlan();
-  analysisPlans["HiggsBackground"] = new HiggsBackgroundPlan();
-  analysisPlans["InvariantMass"] = new InvariantMassPlan();
-  analysisPlans["LeptonJetBackground"] = new LeptonJetBackgroundPlan();
-  analysisPlans["MassResolution"] = new MassResolutionPlan();
-  analysisPlans["LeptonJetReconstruction"] = new LeptonJetReconstructionPlan();
-  analysisPlans["MassAcceptance"] = new MassAcceptancePlan();
-  analysisPlans["Trigger"] = new TriggerPlan();
 
-  if (analysisPlans.find(analysisType)==analysisPlans.end())
-  {
-    throw std::runtime_error("selected analysis does not exist");
-  }
+  std::string analysis = options.checkSelectedAnalysis(analysisType);
+  std::cout << "Reading input file " << inputFile << std::endl;
+  // analyzer.run(inputFile, outputFile, outputEvery, numFiles);
 
-  analysisPlans[analysisType]->runAnalyzer(inputFile, outputFile, outputEvery, numFiles);
+  // analysisPlans[analysisType]->runAnalyzer(inputFile, outputFile, outputEvery, numFiles);
+
+  DataCollectionPlan* plan = options.getAnalysisPlans().at(analysis);
+  plan->runAnalyzer(inputFile, outputFile, outputEvery, numFiles);
   
   /* HiggsBackgroundPlan plan;
   plan.runAnalyzer(inputFile, outputFile, outputEvery, numFiles); // */

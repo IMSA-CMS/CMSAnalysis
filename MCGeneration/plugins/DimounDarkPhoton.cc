@@ -46,10 +46,10 @@ Implementation:
 
 // std::cout << "Made it to line" << __LINE__ << std::endl;
 
-class Dimuon : public edm::EDAnalyzer {
+class DimuonDarkPhoton : public edm::EDAnalyzer {
 public:
-  explicit Dimuon(const edm::ParameterSet&);
-  ~Dimuon();
+  explicit DimuonDarkPhoton(const edm::ParameterSet&);
+  ~DimuonDarkPhoton();
 
   static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
@@ -191,7 +191,7 @@ private:
 };
 
 
-void Dimuon::beginJob()
+void DimuonDarkPhoton::beginJob()
 {
   std::cout << "Made it (in beginJob) to line" << __LINE__ << std::endl;
 
@@ -402,7 +402,7 @@ void Dimuon::beginJob()
 //
 // constructors and destructor
 //
-Dimuon::Dimuon(const edm::ParameterSet& iConfig)
+DimuonDarkPhoton::DimuonDarkPhoton(const edm::ParameterSet& iConfig)
 
 {
 
@@ -420,7 +420,7 @@ Dimuon::Dimuon(const edm::ParameterSet& iConfig)
 }
 
 
-Dimuon::~Dimuon()
+DimuonDarkPhoton::~DimuonDarkPhoton()
 {
  
   // do anything here that needs to be done at desctruction time
@@ -435,7 +435,7 @@ Dimuon::~Dimuon()
 
 // ------------ method called for each event  ------------
 void
-Dimuon::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
+DimuonDarkPhoton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
 
   std::cout << "Made it (in analyze) to line" << __LINE__ << std::endl;
@@ -1014,7 +1014,7 @@ Dimuon::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   tree_->Fill();  
 }
 
-bool Dimuon::isBoson(int pid)
+bool DimuonDarkPhoton::isBoson(int pid)
 {
   if(pid==23 || abs(pid)==22 || pid==32){
     if(debug_ > 0) std::cout << "\n\nFound Boson\n";
@@ -1023,7 +1023,7 @@ bool Dimuon::isBoson(int pid)
   else return false;
 }
 
-bool Dimuon::isMuon(int pid){
+bool DimuonDarkPhoton::isMuon(int pid){
   if(abs(pid)==11 || abs(pid) ==13){
     if(debug_ > 0) std::cout << "\n\nFound A Muon!\n";
     return true;
@@ -1031,7 +1031,7 @@ bool Dimuon::isMuon(int pid){
   else return false;
 }
 
-bool Dimuon::checkBosonStatus( const reco::GenParticleCollection& genParts){
+bool DimuonDarkPhoton::checkBosonStatus( const reco::GenParticleCollection& genParts){
   const reco::Candidate* boson = getBoson(genParts);
   if(boson == nullptr){
     if(debug_ > 0) std::cout << "\nBoson is: "  << boson;
@@ -1046,7 +1046,7 @@ bool Dimuon::checkBosonStatus( const reco::GenParticleCollection& genParts){
   return true;
 }
 
-const reco::Candidate* Dimuon::getBoson( const reco::GenParticleCollection& genParts)
+const reco::Candidate* DimuonDarkPhoton::getBoson( const reco::GenParticleCollection& genParts)
 {
   for(auto &part : genParts){
     if(isBoson(part.pdgId())){
@@ -1064,7 +1064,7 @@ const reco::Candidate* Dimuon::getBoson( const reco::GenParticleCollection& genP
 //if the daughter's pdgId matches the parent particle id, then it returns that particle as the last daughter particle, otherwise it will return the particle itself
 //essentially, it gets the most final state particle (the last generation) from any particle
 //would this not cause a recursive loop?
-const reco::Candidate* Dimuon::getLastDaughter(const reco::Candidate* part, int pid)
+const reco::Candidate* DimuonDarkPhoton::getLastDaughter(const reco::Candidate* part, int pid)
 {
   for(size_t partNr = 0; part && partNr < part->numberOfDaughters(); partNr++){
     if(part->daughter(partNr)->pdgId() == pid)
@@ -1073,7 +1073,7 @@ const reco::Candidate* Dimuon::getLastDaughter(const reco::Candidate* part, int 
   return part;
 }
        
-const reco::Candidate* Dimuon::getDaughter(const reco::Candidate* part,int pid)
+const reco::Candidate* DimuonDarkPhoton::getDaughter(const reco::Candidate* part,int pid)
 {  
   for(size_t partNr = 0; part && partNr<part->numberOfDaughters(); partNr++)
   {
@@ -1082,7 +1082,7 @@ const reco::Candidate* Dimuon::getDaughter(const reco::Candidate* part,int pid)
   return nullptr;
 }
 
-const reco::Candidate* Dimuon::getMother(const reco::Candidate* part, int pid)
+const reco::Candidate* DimuonDarkPhoton::getMother(const reco::Candidate* part, int pid)
 {
   for(size_t partNr = 0; part && partNr < part->numberOfMothers(); partNr++){
     if(part->mother(partNr)->pdgId() == pid) return getMother(part->mother(partNr),pid);
@@ -1098,7 +1098,7 @@ const reco::Candidate* Dimuon::getMother(const reco::Candidate* part, int pid)
   
 }
 
-const int Dimuon::getIndexOf(const reco::Candidate* part, const reco::GenParticleCollection& genParts)
+const int DimuonDarkPhoton::getIndexOf(const reco::Candidate* part, const reco::GenParticleCollection& genParts)
 {
   int indexOf = 0;
   for(auto &possiblePart : genParts)
@@ -1109,7 +1109,7 @@ const int Dimuon::getIndexOf(const reco::Candidate* part, const reco::GenParticl
   }
   return -1;
 }
-const void Dimuon::printGenParticleCollection(const reco::GenParticleCollection& genParts)
+const void DimuonDarkPhoton::printGenParticleCollection(const reco::GenParticleCollection& genParts)
 {
   const reco::Candidate* daughter1 = nullptr;
   const reco::Candidate* daughter2 = nullptr;
@@ -1179,7 +1179,7 @@ const void Dimuon::printGenParticleCollection(const reco::GenParticleCollection&
     eventIndex++;
   }
 }
-const void Dimuon::fillOSDLHistograms(const reco::Candidate* dileptons[])
+const void DimuonDarkPhoton::fillOSDLHistograms(const reco::Candidate* dileptons[])
 {
   //Assumed that OSDL cannot be made from flavour mixing. 
   //Assumed Lepton Order in array: mu1Plus, mu2Plus, mu1Minus, mu2Minus,
@@ -1316,7 +1316,7 @@ const void Dimuon::fillOSDLHistograms(const reco::Candidate* dileptons[])
 
 // ------------ method called once each job just after ending the event loop  ------------
 void 
-Dimuon::endJob() 
+DimuonDarkPhoton::endJob() 
 {
 }
 
@@ -1338,7 +1338,7 @@ Dimuon::endJob()
 // ------------ method called when ending the processing of a run  ------------
 
 void 
-Dimuon::endRun(edm::Run const& iRun, edm::EventSetup const& iEventSetup)
+DimuonDarkPhoton::endRun(edm::Run const& iRun, edm::EventSetup const& iEventSetup)
 {
   edm::Handle< GenRunInfoProduct > genInfoProduct;
   iRun.getByToken(genInfoProductToken_, genInfoProduct );
@@ -1365,7 +1365,7 @@ Dimuon::endRun(edm::Run const& iRun, edm::EventSetup const& iEventSetup)
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 void
-Dimuon::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+DimuonDarkPhoton::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   //The following says we do not know what parameters are allowed so do no validation
   // Please change this to state exactly what you do use, even if it is no parameters
   edm::ParameterSetDescription desc;
@@ -1374,4 +1374,4 @@ Dimuon::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
 }
 
 //define this as a plug-in
-DEFINE_FWK_MODULE(Dimuon);
+DEFINE_FWK_MODULE(DimuonDarkPhoton);

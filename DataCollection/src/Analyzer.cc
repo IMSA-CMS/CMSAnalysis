@@ -36,42 +36,64 @@ Analyzer::~Analyzer()
 
 void Analyzer::run(const std::string& configFile, const std::string& outputFile, int outputEvery, int nFiles)
 {
+  setupFiles(configFile);
+  
+  process(outputEvery, nFiles);
+  
+  finalize(outputFile);
+}
+
+void Analyzer::setupFiles(const std::string& configFile)
+{
+  auto localSwitch = configFile.find(".root");
+  if (localSwitch != std::string::npos)
+  {
+    files.push_back(configFile);
+  } 
+  else 
+  {
+     auto fileparams = dictionary.readFile(configFile);
+
+    for (auto& filepar : fileparams)
+    {
+      // Get a list of Root files
+      auto tempFiles = filepar.getFileList();
+      files.insert(files.end(), tempFiles.begin(), tempFiles.end());
+    }
+    for (auto& filename : files)
+    {
+    const std::string eossrc = "root://cmsxrootd.fnal.gov//";
+	  filename = eossrc + filename;
+    }
+  }
+  std::cout << "# of root files: " << files.size() << std::endl;
+}
+
+void Analyzer::process(int outputEvery, int nFiles)
+{
   // This keeps the histograms separate from the files they came from, avoiding much silliness
   TH1::AddDirectory(kFALSE);
   TH1::SetDefaultSumw2(kTRUE);
+
   // Get a list of FileParams objects
-  auto fileparams = dictionary.readFile(configFile);
   eventLoader.setOutputEvery(outputEvery);
-  // Initialize all modules
+
+    // Initialize all modules
   for (auto module : getAllModules())
-    {
-      module->setInput(input);
-      module->initialize();
-    }
-  // A list of all the filters we used
-  std::unordered_set<std::string> filterNames;
-
-  int numOfEvents = 0;
-  for (auto& filepar : fileparams)
-    {
-      // Get a list of Root files
-      auto files = filepar.getFileList();
-      std::cout << "# of root files: " << files.size() << std::endl;
-      
-      int fileCounter = 0;
-      for (auto& filename : files)
-	  {
-      fileCounter += 1;
-
-	  // Open files with rootxd
-	  const std::string eossrc = "root://cmsxrootd.fnal.gov//";
-	  std::string fileStr = eossrc + filename;
-	  TFile* file = TFile::Open(fileStr.c_str(), "READ");
+  {
+    module->setInput(input);
+    module->initialize();
+  }
+  int fileCounter = 0;
+  for (auto& filename : files)
+  {
+    ++fileCounter;
+    TFile* file = TFile::Open(filename.c_str(), "READ");
 	  if (!file)
-	    {
-	      std::cout << "File " << fileStr << " not found!\n";
-	      continue;
-	    }
+	  {
+	   std::cout << "File " << filename << " not found!\n";
+	   continue;
+    }
     eventLoader.changeFile(file);
     while(true)
     {
@@ -109,108 +131,54 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
         for (auto module : analysisModules)
         {
           module->setFilterString(filterString);
-          module->processEvent();
+          if (!module->processEvent())
+          {
+            continueProcessing = false;
+            break;
+          }
         }
       }
       eventLoader.getFile()->nextEvent();
     }
-
-	 /*  // Extract events
-	  fwlite::Event ev(file);
-
-	  std::cerr << "Events: " << ev.size() << std::endl;
-
-	  numOfEvents += ev.size();
-      
-	  int ievt = 0;
-
-	  for (ev.toBegin(); !ev.atEnd(); ++ev, ++ievt)
-	    {
-	      const edm::EventBase& event = ev;
-
-	      if (outputEvery != 0 && ievt > 0 && ievt % outputEvery == 0) 
-		std::cout << "Processing event: " << ievt << std::endl; 
-
-	      // Run all production modules
-	      bool continueProcessing = true;
-	      for (auto module : productionModules)
-		{
-		  if (!module->processEvent(event))
-		    {
-		      continueProcessing = false;
-		      //std::cout << "continueProcessing: " << continueProcessing << "\n" << std::endl; 
-		      break;
-		    }
-		}
-
-	      // Run all filter modules and get filter string
-	      std::string filterString;
-	      for (auto module : filterModules)
-		{
-		  if (!module->processEvent(event))
-		    {
-		      continueProcessing = false;
-		      break;
-		    }
-		  else
-		    {
-		      filterString += module->getFilterString();
-		    }
-		}
-
-	      if (!continueProcessing)
-		continue;
-
-	      // Keep track of the filters we are using (multiple insertions
-	      // will cause no effect on a map)
-	      filterNames.insert(filterString);
-
-	      // Run all analysis modules
-	      for (auto module : analysisModules)
-		{
-		  // Set the filter string first
-		  module->setFilterString(filterString);
-		  module->processEvent(event);
-		}
-	    } */
-
 	  delete file;
 
     if (nFiles != -1 && fileCounter >= nFiles)
     {
       break;
     }
-	}
-      std::cout << "Events Processed: " << numOfEvents << std::endl;
-    }      
-  
-    // Create the output file
+  }
+  std::cout << "Events Processed: " << numOfEvents << std::endl;
+}
+
+void Analyzer::finalize(const std::string& outputFile)
+{
+   // Create the output file
   TFile* outputRootFile = new TFile(outputFile.c_str(), "RECREATE");
 
   // Finalize the modules
   for (auto module : productionModules)
-    {
-      module->finalize();
-    }
+  {
+    module->finalize();
+  }
   for (auto module : filterModules)
-    {
-      module->finalize();
-    }
+  {
+    module->finalize();
+  }
  
   // Finalize separately for each filterString, to be safe
   for (auto module : analysisModules)
-    {
-      module->doneProcessing();
+  {
+    module->doneProcessing();
 
-      for (auto& str : filterNames)
-	{
-	  module->setFilterString(str);
-	  module->finalize();
-	}
+    for (auto& str : filterNames)
+	  {
+	    module->setFilterString(str);
+	    module->finalize();
+	  }
 
       // Write the output
       module->writeAll();
-    }
+  }
 
   // Write total number of events
   auto eventsText = new TDisplayText(std::to_string(numOfEvents).c_str());
@@ -221,82 +189,6 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
 
   delete outputRootFile;
 }
-
-// std::vector<std::string> Analyzer::parseLine(std::ifstream& txtFile) const
-// {
-//   std::string line;
-//   std::getline(txtFile,line);
-  
-//   //seperates each line by whitespace (tabs)
-//   std::istringstream stream(line);
-
-//   std::vector<std::string> category;
-
-//   int counter = 0; 
-//   while (stream)
-//     {
-//       std::string word;
-//       stream >> word;
-      
-//       //occasionally added empty strings to the vector which caused a runtime error
-//       if (counter > 0 and word.size() > 0)
-// 	{
-// 	  category.push_back(word);
-// 	}
-//       ++counter;
-//     }
-
-//   return category;
-// }
-
-// std::vector<FileParams> Analyzer::inputFiles(const std::string& txtFile) const
-// {
-//   std::ifstream inputFiles(txtFile);
-
-//   if (!inputFiles)
-//     {
-//       throw std::runtime_error("File " + txtFile + " not found!");
-//     }
-  
-//   //each vector contains the options selected in "pickFiles.txt"
-//   // Configuration file must be in this order
-//   auto process = parseLine(inputFiles);
-//   auto year = parseLine(inputFiles);
-//   auto lepton = parseLine(inputFiles);
-//   auto mass = parseLine(inputFiles);
-//   auto lambda = parseLine(inputFiles);
-//   auto interference = parseLine(inputFiles);
-//   auto helicity = parseLine(inputFiles);
-
-//   std::vector<FileParams> params;
-
-//   //adds all of the files to a larger vector that is seperated by mass cuts
-//   for (auto& processStr : process)
-//     for (auto& yearStr : year)
-//       {
-// 	for (auto& leptonStr : lepton)
-// 	  {
-// 	    for (auto& lambdaStr : lambda)
-// 	      {
-// 		for (auto& interferenceStr : interference)
-// 		  {
-// 		    for (auto& helicityStr : helicity)
-// 		      {
-// 			for (auto& massStr : mass)
-// 			  {
-// 			    //based on the options selected, it adds the respective files following the standard naming system
-// 			    params.push_back(FileParams(processStr, yearStr, helicityStr, interferenceStr, massStr, 
-// 							lambdaStr, leptonStr));
-// 			  }
-// 		      }
-// 		  }
-// 	      }
-// 	  }
-//       }
-      
-//   std::cout << params[0].getFileKey() << std::endl;
-//   return params;
-// }
 
 std::vector<std::shared_ptr<Module>> Analyzer::getAllModules() const
 {

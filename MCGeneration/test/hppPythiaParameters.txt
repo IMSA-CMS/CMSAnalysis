@@ -62,6 +62,6 @@ WeakZ0:gmZmode = 2
 #Turn on in order to only have Electrons
 #23:onIfAll = 11 11
 
-Higgs Values
+#Higgs Values
 9900041:m0 = 200
 9900042:m0 = 200
