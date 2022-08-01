@@ -55,6 +55,10 @@ DelphesEventFile::BranchNames DelphesEventFile::getTreeBranches() {
     delphesBranches.genPhi = "genpart_phi";
     delphesBranches.genMass = "genpart_mass";
     delphesBranches.genPt = "genpart_pt";
+    delphesBranches.gend1 = "genpart_d1";
+    delphesBranches.gend2 = "genpart_d2";
+    delphesBranches.genm1 = "genpart_m1";
+    delphesBranches.genm2 = "genpart_m2";
 
     return delphesBranches;
 }

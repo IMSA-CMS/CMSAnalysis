@@ -36,13 +36,6 @@ public:
   static double getValue(const std::string& type) {return parameters[type];}
   int getEventCount(const std::string massBin) {return eventCount[massBin];}
 
-  // This sets the FileParams object that the current event is using
-  // Note that this is (dangerously) set to a default value before events are accessed
-  // So it is generally not safe to access this except during process()
-  // The set function should only be called by Analyzer!
-  static void setFileParams(FileParams params) {currentParams = params;}
-  static FileParams getFileParams() {return currentParams;}
-
   bool processEvent();
   virtual void setInput(const InputModule* iInput) {input = iInput;}
 
@@ -62,7 +55,6 @@ protected:
 private:
   static std::unordered_map<std::string, double> parameters;
   std::unordered_map<std::string, int> eventCount; 
-  static FileParams currentParams;
   const InputModule* input = nullptr;
 };
 

@@ -12,9 +12,9 @@ class TreeEventFile : public EventFile
         virtual void nextEvent() override;
         virtual bool isDone() const override;
         // simply dumps gensim particles from event into ParticleCollection
-        virtual ParticleCollection getGenSimParticles() const override;
-        virtual ParticleCollection getRecoParticles() const override;
-        virtual ParticleCollection getRecoJets() const override;
+        virtual ParticleCollection<GenSimParticle> getGenSimParticles() const override;
+        virtual ParticleCollection<Particle> getRecoParticles() const override;
+        virtual ParticleCollection<Particle> getRecoJets() const override;
         virtual GenEventInfoProduct getGenInfo() const override;
         virtual double getMET() const override;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
@@ -56,6 +56,10 @@ class TreeEventFile : public EventFile
             std::string genPhi;
             std::string genMass;
             std::string genPt;
+            std::string gend1;
+            std::string gend2;
+            std::string genm1;
+            std::string genm2;
 
             std::string elecIdpass;
             std::string muonIdpass;
@@ -77,7 +81,7 @@ class TreeEventFile : public EventFile
         Int_t counter;
 
         // Annoying variables, may God have mercy on my soul
-        Int_t elec_size;
+        UInt_t elec_size;
         Int_t elec_charge[MAXMEC];
         Float_t elec_eta[MAXMEC];
         Float_t elec_phi[MAXMEC];
@@ -86,7 +90,7 @@ class TreeEventFile : public EventFile
         Int_t elec_idpass[MAXMEC];
         Float_t elec_reliso[MAXMEC];
 
-        Int_t muon_size;
+        UInt_t muon_size;
         Int_t muon_charge[MAXMEC];
         Float_t muon_eta[MAXMEC];
         Float_t muon_phi[MAXMEC];
@@ -95,24 +99,28 @@ class TreeEventFile : public EventFile
         Int_t muon_idpass[MAXMEC];
         Float_t muon_reliso[MAXMEC];
 
-        Int_t met_size;
+        Float_t met_size;
         Float_t met_phi[MAXMEC];
         Float_t met_pt[MAXMEC];
 
-        Int_t jet_size;
+        UInt_t jet_size;
         Float_t jet_eta[MAXMEC];
         Float_t jet_phi[MAXMEC];
         Float_t jet_mass[MAXMEC];
         Float_t jet_pt[MAXMEC];
         Int_t bJet[MAXMEC];
 
-        Int_t gen_size;
+        UInt_t gen_size;
         Int_t gen_pid[MAXMC];
         Int_t gen_status[MAXMC];
         Float_t gen_eta[MAXMC];
         Float_t gen_phi[MAXMC];
         Float_t gen_mass[MAXMC];
         Float_t gen_pt[MAXMC];
+        Int_t gen_d1[MAXMC];
+        Int_t gen_d2[MAXMC];
+        Int_t gen_m1[MAXMC];
+        Int_t gen_m2[MAXMC];
         
 };
 

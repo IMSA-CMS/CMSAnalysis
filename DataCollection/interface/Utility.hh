@@ -2,6 +2,7 @@
 #define UTILITY_HH
 
 #include <vector>
+#include <string>
 
 namespace Utility
 {
@@ -9,6 +10,7 @@ namespace Utility
   void getAllCombinations(int offset, int nCombo, std::vector<T>& combination, std::vector<T>& indices, std::vector<std::vector<T>>& totalCombinations);
   template <typename T>
   std::vector<std::vector<T>> getAllCombinations(int nCombo, std::vector<T>& indices);
+  std::string substitute(std::string original, std::string target, std::string subs);
 }
 
 template <typename T>
@@ -42,5 +44,6 @@ inline std::vector<std::vector<T>> Utility::getAllCombinations(int nCombo, std::
 
   return totalCombinations;
 }
+
 
 #endif

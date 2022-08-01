@@ -1,13 +1,16 @@
 #include "CMSAnalysis/DataCollection/interface/SnowmassLeptonSelector.hh"
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
+#include "CMSAnalysis/DataCollection/interface/Lepton.hh"
 
 SnowmassLeptonSelector::SnowmassLeptonSelector(double iptCut, double iisoCut) :
     ptCut(iptCut),
     isoCut(iisoCut)
 {}
 
-bool SnowmassLeptonSelector::checkParticle(const Particle &particle) const
+bool SnowmassLeptonSelector::checkParticle(const Lepton &particle) const
 {
+    //std::cout << "checking particle \n"; 
+    
     if (particle.getPt() < ptCut || particle.getIsolation() > isoCut)
     {
         return false;
