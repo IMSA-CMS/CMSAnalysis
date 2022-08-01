@@ -12,8 +12,6 @@ class DelphesImplementation : public ParticleImplementation
         DelphesImplementation(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, int pid, int status, int m1, int m2,int d1, int d2,double iIsolation = -999);
         virtual reco::Candidate::LorentzVector getFourVector() const override;
         virtual int charge() const override{return particleCharge;}
-        virtual double et() const override {throw std::runtime_error("et() error");}
-        virtual double energy() const override{throw std::runtime_error("energy() error");}
         virtual double isolation() const override {return particleIsolation;}
         virtual int pdgId() const override{return particleID;}
         virtual int status() const override{return statusCode;}

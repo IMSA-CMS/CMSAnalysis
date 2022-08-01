@@ -9,6 +9,11 @@ options.register ('inputFileName',
                   VarParsing.VarParsing.multiplicity.singleton,
                   VarParsing.VarParsing.varType.string,
                   "input file name")
+options.register ('dimuonPluginName',
+                  "0",
+                  VarParsing.VarParsing.multiplicity.singleton,
+                  VarParsing.VarParsing.varType.string,
+                  "dimoun plugin name")
 
 options.parseArguments()
 
@@ -39,6 +44,13 @@ import sys
 sys.path.append('..')
 from python.HistGenerator_cfi import *
 
+dimuonPlugin = cms.untracked.string("0")
+if options.dimuonPluginName != dimuonPlugin:
+    dimuonPlugin = str(options.inputFileName)
+else: 
+     dimuonPlugin = str(raw_input("Please enter the dimuon plugin name: \n"))
+
+dimuon = GetDimuon(dimuonPlugin)
 process.Dimuon=dimuon.clone()
 #process.Dimuon.isCI=False
 process.Dimuon.debug=False

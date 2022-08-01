@@ -14,10 +14,8 @@ public:
   // virtual double eta() const override;
   virtual bool operator == (const ParticleImplementation& p1) const override;
   virtual int charge() const override;
-  virtual double et() const override;
   virtual int pdgId() const override;
   virtual int status() const override;
-  virtual double energy() const override;
   virtual double isolation() const override;
   virtual Particle mother() const override;
   virtual Particle daughter(int i) const override;

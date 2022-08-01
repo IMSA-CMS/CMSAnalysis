@@ -12,8 +12,6 @@ class SimpleImplementation : public ParticleImplementation
         SimpleImplementation(reco::Candidate::LorentzVector vec, int ch, Particle::Type type, double iIsolation = -999);
         virtual reco::Candidate::LorentzVector getFourVector() const override;
         virtual int charge() const override;
-        virtual double et() const override {throw std::runtime_error("et() error");}
-        virtual double energy() const override{throw std::runtime_error("energy() error");}
         virtual double isolation() const override {return particleIsolation;}
         virtual int pdgId() const override{throw std::runtime_error("pdgId() error");}
         virtual int status() const override{throw std::runtime_error("status() error");}

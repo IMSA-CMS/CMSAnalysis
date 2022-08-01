@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <vector>
 #include <memory>
+#include <unordered_set>
 
 #include "EventLoader.hh"
 #include "FileParams.hh"
@@ -52,6 +53,11 @@ private:
   std::vector<std::shared_ptr<ProductionModule>> productionModules;
   std::vector<std::shared_ptr<FilterModule>> filterModules;
   std::vector<std::shared_ptr<AnalysisModule>> analysisModules;
+  std::unordered_set<std::string> filterNames;
+
+  int numOfEvents = 0;
+
+  std::vector<std::string> files;
 
   EventLoader eventLoader;
   InputModule* input;
@@ -64,6 +70,10 @@ private:
   // Simple utility function allowing an operation to be performed on all
   // moduels, regardless of type
   std::vector<std::shared_ptr<Module>> getAllModules() const;
+  void setupFiles(const std::string& configFile);
+  void process(int outputEvery, int nFiles);
+  void finalize(const std::string& outputFile);
+
 };
 
 #endif
