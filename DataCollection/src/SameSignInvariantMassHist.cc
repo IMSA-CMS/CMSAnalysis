@@ -3,7 +3,7 @@
 #include "CMSAnalysis/DataCollection/interface/Selector.hh"
 
 
-SameSignInvariantMassHist::SameSignInvariantMassHist(const bool typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum, 
+SameSignInvariantMassHist::SameSignInvariantMassHist(InputModule::RecoLevel typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum, 
   bool iUsingPhi, bool iMultipleMasses) :
   GenSimRecoPrototype(typeSwitch, iname, iNBins, iminimum, imaximum),
   usingPhi(iUsingPhi),
@@ -11,40 +11,18 @@ SameSignInvariantMassHist::SameSignInvariantMassHist(const bool typeSwitch, cons
 {
 }
 
-std::vector<double> SameSignInvariantMassHist::protectedValue(bool typeGenSim) const
+std::vector<double> SameSignInvariantMassHist::protectedValue(InputModule::RecoLevel typeGenSim) const
 {
   if (multipleMasses)
   {
-    if (typeGenSim)        // typeGenSim == true, so we want the GenSim values
-    {
-      auto genParticles = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
-      // std::cout << genParticles.getNumParticles() << std::endl;
-      auto genSimInv = genParticles.calculateSameSignInvariantMasses(usingPhi);
-      return {genSimInv};
-    }
-
-    else                   // typeGenSim == false, so we want the Reco values
-    {
-      auto recoParticles = getInput()->getLeptons(InputModule::RecoLevel::Reco);
-      // std::cout << "2" << recoParticles.getNumParticles() << std::endl;
-      auto recoInv = recoParticles.calculateSameSignInvariantMasses(usingPhi);
-      return {recoInv};
-    }
+    auto particles = getInput()->getLeptons(typeGenSim);
+    // std::cout << "2" << recoParticles.getNumParticles() << std::endl;
+    auto inv = particles.calculateSameSignInvariantMasses(usingPhi);
+    return {inv};
   }
 
-  if (typeGenSim)          // typeGenSim == true, so we want the GenSim values
-  {
-    auto genParticles = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
-    // std::cout << "3" << genParticles.getNumParticles() << std::endl;
-    auto genSimInv = genParticles.calculateSameSignInvariantMass();
-    return {genSimInv};
-  }
-
-  else                     // typeGenSim == false, so we want the Reco values
-  {
-    auto recoParticles = getInput()->getLeptons(InputModule::RecoLevel::Reco);
-    // std::cout << "4-" << recoParticles.calculateSameSignInvariantMass() << std::endl;
-    auto recoInv = recoParticles.calculateSameSignInvariantMass();
-    return {recoInv};
-  }
+  auto particles = getInput()->getLeptons(InputModule::RecoLevel::Reco);
+  // std::cout << "4-" << recoParticles.calculateSameSignInvariantMass() << std::endl;
+  auto inv = particles.calculateSameSignInvariantMass();
+  return {inv};
 }

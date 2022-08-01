@@ -30,10 +30,12 @@ void HistogramOutputModule::setInput(const InputModule *iInput) {
 }
 
 void HistogramOutputModule::addObject(const std::string &name, TObject *obj) {
+  // std::cout << "adding object " << name << " " << obj->ClassName() << "\n";
   if (baseObjects.find(name) == baseObjects.end()) {
     baseObjects.insert({name, obj});
   } else {
     baseObjects[name] = obj;
+    
   }
 
   // std::cout << "Histogram added: " << name << '\n';
@@ -50,12 +52,16 @@ void HistogramOutputModule::makeHistogram(const std::string &name,
 
 void HistogramOutputModule::makeHistogram(
     std::shared_ptr<HistogramPrototype> h) {
-  addObject(h->getFilteredName(), h->makeHistogram());
+  //std::cout << "first makeHistogram \n";
+  //addObject(getObjectName(h->getFilteredName()), h->makeHistogram());
+  //just calls the other makeHistogram()
+  makeHistogram(h, h->getFilteredName());
 }
 
 void HistogramOutputModule::makeHistogram(std::shared_ptr<HistogramPrototype> h,
                                           std::string name) {
-  addObject(name, h->makeHistogram(name, name));
+                                            //std::cout << "second makeHistogram: " << name  + " // " + getObjectName(name) << "\n";
+  addObject(getObjectName(name), h->makeHistogram(getObjectName(name), getObjectName(name)));
 }
 
 void HistogramOutputModule::fillHistogram(const std::string &name,
@@ -64,8 +70,8 @@ void HistogramOutputModule::fillHistogram(const std::string &name,
   auto hist = getHistogram(name);
   if (!hist)
     throw std::runtime_error(
-        "Argument to getHistogram was not of TH1 type!  Name: " + name +
-        " and Root type: " + getObject(name)->ClassName());
+        "Argument to getHistogram was not of TH1 type!  Name: " + name + "&! \n");
+        // " and Root type: " + getObject(name)->ClassName());
 
   if (auto hist2D = dynamic_cast<TH2 *>(hist)) // If the hist is 2D hist
   {
@@ -94,6 +100,7 @@ void HistogramOutputModule::fillHistogram(const std::string &name,
 
 std::string HistogramOutputModule::getObjectName(const std::string &str) const {
   std::string newName = getFilter() + str;
+  //std::cout << "get object name: " << newName << "\n";
   return newName;
 }
 
@@ -101,22 +108,27 @@ bool HistogramOutputModule::process() {
   for (auto hist : histograms) {
     bool draw = hist->shouldDraw(); // call the shouldDraw function so we can
                                     // call process on the FilterModules
-
-    // If the histogram without mass bin doesn't exist, make it
-    if (baseObjects.find(hist->getFilteredName()) == baseObjects.end()) {
-      makeHistogram(hist, hist->getFilteredName());
-    }
-
-    // Fill the histogram if the filter string isn't empty
-    if (hist->getName() !=
-        hist->getFilteredName()) // If the filter string is empty, then the name
-                                 // and the filtered name should be the same
+    if(draw)
     {
-      makeHistogram(hist, hist->getFilteredName());
-    }
+      // If the histogram without mass bin doesn't exist, make it
+      if (baseObjects.find(getObjectName(hist->getFilteredName())) == baseObjects.end()) {
+        //std::cout << hist->getFilteredName() << "\n";
+        makeHistogram(hist, hist->getFilteredName());
+      }
 
-    // Fill the histogram if shouldDraw(event) (draw) returns true
-    if (draw) {
+      // Fill the histogram if the filter string isn't empty
+      /*
+      if (hist->getName() !=
+          hist->getFilteredName()) // If the filter string is empty, then the name
+                                  // and the filtered name should be the same
+                                  //|| hist->getFilteredName() != getObjectName(hist->getFilteredName())
+      {
+        makeHistogram(hist, hist->getFilteredName());
+      }
+      */
+
+      // Fill the histogram if shouldDraw(event) (draw) returns true
+      //if (draw) {
       fillHistogram(hist->getFilteredName(), hist->value());
     }
   }

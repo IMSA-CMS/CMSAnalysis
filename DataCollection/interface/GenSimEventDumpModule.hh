@@ -5,16 +5,7 @@
 
 #include "AnalysisModule.hh"
 #include "ParticleCollection.hh"
-
-namespace edm
-{
-  class EventBase;
-}
-
-namespace reco
-{
-  class GenParticle;
-}
+#include "GenSimParticle.hh"
 
 // GenSimIdentificationModule creates a Particle Collection
 // of gen sim particles that will be used in MatchingModule 
@@ -29,11 +20,11 @@ public:
 
 private:
   // prints information to the screen
-  void printGenParticleCollection(const ParticleCollection& genParts, std::ofstream& my_file) const;
+  void printGenSimParticleCollection(const ParticleCollection<GenSimParticle>& genParts, std::ofstream& my_file) const;
 
-  int getIndexOf(const Particle& part, const std::vector<Particle>& genParts) const;
-  int getLatestIndexOfDaughters(const Particle& part, const std::vector<Particle>& genParts) const;
-  std::string formatDaughterParticles(const Particle& part, const std::vector<Particle>& genParts) const;
+  int getIndexOf(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts) const;
+  int getLatestIndexOfDaughters(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts) const;
+  std::string formatDaughterParticles(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts) const;
 
   int numOfEvents;
   int counter;
