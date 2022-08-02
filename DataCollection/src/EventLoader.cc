@@ -2,6 +2,7 @@
 #include "CMSAnalysis/DataCollection/interface/MiniAODEventFile.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimEventFile.hh"
 #include "CMSAnalysis/DataCollection/interface/DelphesEventFile.hh"
+#include "CMSAnalysis/DataCollection/interface/NanoAODEventFile.hh"
 #include "TFile.h"
 #include "TTree.h"
 #include <iostream>
@@ -22,11 +23,14 @@ void EventLoader::changeFileFormat(TFile* ifile)
     {
         file = std::make_shared<GenSimEventFile> (ifile);
     }
+    else if (eventsBranch && eventsBranch->GetBranch("nElectron"))
+    {
+        file = std::make_shared<NanoAODEventFile> (ifile);
+    }
     else
     {
         throw std::runtime_error ("File format not recognized");
     }
 }
-
 
 
