@@ -28,7 +28,6 @@
 #include "CMSAnalysis/DataCollection/interface/BJetFilter.hh"
 
 #include "CMSAnalysis/DataCollection/interface/EventModule.hh"
-#include "CMSAnalysis/DataCollection/interface/DarkPhotonGenSimSelector.hh"
 
 using std::make_shared;
 
@@ -36,11 +35,6 @@ GenSimPlan::GenSimPlan()
 {
 
     Analyzer& analyzer = getAnalyzer();
-
-    auto eventMod = make_shared<EventModule>();
-    auto darkPhotonSelector = make_shared<DarkPhotonGenSimSelector>();
-    eventMod->addSelector(darkPhotonSelector);
-    analyzer.addAnalysisModule(eventMod); //testing Dark Photon Selector
 
     auto matchMod = make_shared<MatchingModule>();
     auto triggerMod = make_shared<TriggerModule>();
