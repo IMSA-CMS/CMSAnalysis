@@ -1,5 +1,5 @@
-#ifndef GENEVENTFILE_HH
-#define GENEVENTFILE_HH
+#ifndef GENSIMEVENTFILE_HH
+#define GENSIMEVENTFILE_HH
 
 #include "EventLoader.hh"
 #include "ParticleCollection.hh"
@@ -8,10 +8,10 @@
 
 class TFile;
 
-class GenEventFile : public EventFile
+class GenSimEventFile : public EventFile
 {
     public:
-        GenEventFile(TFile* ifile);
+        GenSimEventFile(TFile* ifile);
         virtual void nextEvent() override;
         virtual bool isDone() const override;
         // simply dumps gensim particles from event into ParticleCollection

@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/GenSimAnalysisPlan.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimPlan.hh"
 
 #include <iostream>
 #include <memory>
@@ -27,13 +27,21 @@
 #include "CMSAnalysis/DataCollection/interface/TwoInvariantMassesHist.hh"
 #include "CMSAnalysis/DataCollection/interface/BJetFilter.hh"
 
+#include "CMSAnalysis/DataCollection/interface/EventModule.hh"
+#include "CMSAnalysis/DataCollection/interface/DarkPhotonGenSimSelector.hh"
+
 using std::make_shared;
 
-GenSimAnalysisPlan::GenSimAnalysisPlan()
+GenSimPlan::GenSimPlan()
 {
 
     Analyzer& analyzer = getAnalyzer();
-    
+
+    auto eventMod = make_shared<EventModule>();
+    auto darkPhotonSelector = make_shared<DarkPhotonGenSimSelector>();
+    eventMod->addSelector(darkPhotonSelector);
+    analyzer.addAnalysisModule(eventMod); //testing Dark Photon Selector
+
     auto matchMod = make_shared<MatchingModule>();
     auto triggerMod = make_shared<TriggerModule>();
     auto metMod = make_shared<METModule>();

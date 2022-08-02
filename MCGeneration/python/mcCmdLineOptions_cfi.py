@@ -1,6 +1,5 @@
 import FWCore.ParameterSet.VarParsing as VarParsing
-
-def registerDefaultMCOptions(options):
+def registerMcCmndLineOptions(options):
     options.register ('minMass',
                       -1,
                       VarParsing.VarParsing.multiplicity.singleton,
@@ -11,7 +10,6 @@ def registerDefaultMCOptions(options):
                       VarParsing.VarParsing.multiplicity.singleton,
                       VarParsing.VarParsing.varType.float,          
                       "max mass")
-
     options.register ('mass',
                       1000, 
                       VarParsing.VarParsing.multiplicity.singleton,
@@ -32,7 +30,6 @@ def registerDefaultMCOptions(options):
                       VarParsing.VarParsing.multiplicity.singleton,
                       VarParsing.VarParsing.varType.float,
                       "pTMin")
-
     options.register ('pTMax',
                       0,
                       VarParsing.VarParsing.multiplicity.singleton,
@@ -73,7 +70,6 @@ def registerDefaultMCOptions(options):
                       VarParsing.VarParsing.multiplicity.singleton,
                       VarParsing.VarParsing.varType.int,
                       "Particle ID")
-
     options.register ('ISR',
                       "on",
                       VarParsing.VarParsing.multiplicity.singleton,

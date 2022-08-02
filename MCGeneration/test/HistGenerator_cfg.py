@@ -1,9 +1,10 @@
 import FWCore.ParameterSet.Config as cms
 
-# Allows user to enter an input file
+# Needed to implement command line input parameters
 import FWCore.ParameterSet.VarParsing as VarParsing
 options = VarParsing.VarParsing ('analysis')
 
+# Takes command line input parameters from user
 options.register ('inputFileName',
                   "0",
                   VarParsing.VarParsing.multiplicity.singleton,
@@ -14,10 +15,18 @@ options.register ('dimuonPluginName',
                   VarParsing.VarParsing.multiplicity.singleton,
                   VarParsing.VarParsing.varType.string,
                   "dimoun plugin name")
-
 options.parseArguments()
 
-# Defines the process and loads the message logger
+# Prompts the user to enter input dimuonPluginName and inputFileName if they weren't already entered.
+dimuonPluginName = options.dimuonPluginName
+if dimuonPluginName == "0":
+    dimuonPluginName = str(input("Please enter the dimuon plugin name: \n"))
+
+inputFile = options.inputFileName
+if inputFile == "0":
+    inputFile = str(input("Please enter an input file name: \n(Format: \"fileName.root\")\n"))
+
+# Definitions
 process = cms.Process("Demo")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
@@ -27,39 +36,22 @@ process.MessageLogger.cerr.FwkReport = cms.untracked.PSet(
     limit = cms.untracked.int32(10000000)
 )
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10000) )
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(2147483647))
 
-# Sets input file as the source and prompts user if none was provided
-inputFile = cms.untracked.string("0")
-if options.inputFileName != inputFile:
-    inputFile = str(options.inputFileName)
-else: 
-     inputFile = str(input("Please enter an input file name: \n(Format: \"fileName.root\")\n"))
 process.source = cms.Source("PoolSource",
-                        fileNames = cms.untracked.vstring('file:'+ inputFile)
-                            )
-
-# Attaches EDanalyzer (HistGenerator_cfi)
-import sys
-sys.path.append('..')
-from python.HistGenerator_cfi import *
-
-dimuonPlugin = cms.untracked.string("0")
-if options.dimuonPluginName != dimuonPlugin:
-    dimuonPlugin = str(options.inputFileName)
-else: 
-     dimuonPlugin = str(input("Please enter the dimuon plugin name: \n"))
-
-dimuon = GetDimuon(dimuonPlugin)
-process.Dimuon=dimuon.clone()
-#process.Dimuon.isCI=False
-process.Dimuon.debug=False
-#process.Dimuon.status=23
-
-# Defines output file
-process.TFileService = cms.Service("TFileService",
-                                   fileName = cms.string('histograms_'+ inputFile)
+    fileNames = cms.untracked.vstring('file:'+ inputFile)
 )
 
-# Defines the path
+dimuon = cms.EDAnalyzer(dimuonPluginName,
+                      genPartsTag=cms.InputTag("genParticles"),
+                      genInfoProduct=cms.InputTag("generator"),
+                      decayParticlePID=cms.int32(13),
+                      debug=cms.int32(0))
+process.Dimuon=dimuon.clone()
+process.Dimuon.debug=False
+
+process.TFileService = cms.Service("TFileService",
+    fileName = cms.string('histograms_'+ inputFile)
+)
+
 process.p = cms.Path(process.Dimuon)
