@@ -14,6 +14,7 @@ EventFile(ifile)
     event = std::make_shared<fwlite::Event> (getFile());
     std::cerr << "Events: " << event->size() << std::endl;
     setNumOfEvents(getNumOfEvents() + event->size());
+    setEventCount(1);
     event->toBegin();
 }
 

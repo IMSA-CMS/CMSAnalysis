@@ -15,6 +15,7 @@
 #include "CMSAnalysis/DataCollection/interface/MassAcceptancePlan.hh"
 #include "CMSAnalysis/DataCollection/interface/MassResolutionPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerPlan.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimPlan.hh"
 
 AnalyzerOptions::AnalyzerOptions()
 {
@@ -26,6 +27,7 @@ AnalyzerOptions::AnalyzerOptions()
 	analysisPlans["LeptonJetReconstruction"] = new LeptonJetReconstructionPlan();
 	analysisPlans["MassAcceptance"] = new MassAcceptancePlan();
 	analysisPlans["Trigger"] = new TriggerPlan();
+  analysisPlans["GenSim"] = new GenSimPlan();
 }
 
 std::string AnalyzerOptions::pickfileInterface()
