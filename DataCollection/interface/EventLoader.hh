@@ -13,7 +13,7 @@ class TFile;
 class EventLoader
 {
     public:
-        void changeFile(TFile* ifile);
+        void changeFileFormat(TFile* ifile);
         std::shared_ptr<EventFile> getFile() const {return file;} 
         void setOutputEvery(int output) {outputEvery = output;}
 
