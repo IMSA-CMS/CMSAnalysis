@@ -12,7 +12,7 @@
 #include "DataFormats/PatCandidates/interface/MET.h"
 
 
-NanoAODEventFile::NanoAODEventFile(TFile* ifile) : TreeEventFile(ifile) 
+NanoAODEventFile::NanoAODEventFile(TFile* ifile) : TreeEventFile(ifile, getTreeBranches()) 
 {
     initialize();
 }
