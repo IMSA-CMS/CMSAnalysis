@@ -88,7 +88,7 @@ void TreeEventFile::nextEvent()
 ParticleCollection<GenSimParticle> TreeEventFile::getGenSimParticles() const
 {
     ParticleCollection<GenSimParticle> genParticles;
-    for (unsigned int i = 0; i < *gen_size; i++)
+    for (int i = 0; i < *gen_size; i++)
     {
         if (gen_status[i] != 1)
         {
@@ -116,7 +116,7 @@ ParticleCollection<GenSimParticle> TreeEventFile::getGenSimParticles() const
 ParticleCollection<Particle> TreeEventFile::getRecoParticles() const
 {
     ParticleCollection<Particle> recoParticles;
-    for (unsigned int i = 0; i < *elec_size; i++)
+    for (int i = 0; i < *elec_size; i++)
     {
         if (elec_idpass[i] & 7)
         {
@@ -129,7 +129,7 @@ ParticleCollection<Particle> TreeEventFile::getRecoParticles() const
                     elec_reliso[i]));
         }
     }
-    for (unsigned int i = 0; i < *muon_size; i++)
+    for (int i = 0; i < *muon_size; i++)
     {
         if (muon_idpass[i] & 7)
         {
