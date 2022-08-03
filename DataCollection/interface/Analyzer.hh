@@ -57,7 +57,7 @@ private:
 
   int numOfEvents = 0;
 
-  std::vector<std::string> files;
+  std::vector<std::string> rootFiles;
 
   EventLoader eventLoader;
   InputModule* input;
@@ -70,9 +70,9 @@ private:
   // Simple utility function allowing an operation to be performed on all
   // moduels, regardless of type
   std::vector<std::shared_ptr<Module>> getAllModules() const;
-  void setupFiles(const std::string& configFile);
-  void process(int outputEvery, int nFiles);
-  void finalize(const std::string& outputFile);
+  void fetchRootFiles(const std::string& configFile);
+  void processRootFiles(int outputEvery, int nFiles);
+  void writeOutputFile(const std::string& outputFile);
 
 };
 

@@ -79,10 +79,10 @@ std::vector<PileupSummaryInfo> InputModule::getPileupInfo() const
 }
 */
 
-GenEventInfoProduct EventLoaderInputModule::getGenInfo() const
-{
-    return eventLoader->getFile()->getGenInfo();
-}
+// GenEventInfoProduct EventLoaderInputModule::getGenInfo() const
+// {
+//     return eventLoader->getFile()->getGenInfo();
+// }
 
 double EventLoaderInputModule::getMET() const
 {

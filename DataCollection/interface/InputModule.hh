@@ -32,7 +32,7 @@ public:
     virtual ParticleCollection<Particle> getParticles(RecoLevel level, Particle::Type particleType = Particle::Type::None) const = 0;
     virtual ParticleCollection<Particle> getJets(RecoLevel level) const = 0;
 
-    virtual GenEventInfoProduct getGenInfo() const = 0;
+    //virtual GenEventInfoProduct getGenInfo() const = 0;
     virtual std::vector<bool> getTriggerResults(std::string subProcess) const = 0;
     virtual std::vector<std::string> getTriggerNames(std::string subProcess) const=0;
     virtual double getMET() const = 0;

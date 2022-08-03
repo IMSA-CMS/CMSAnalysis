@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.VarParsing as VarParsing
-#Large Extra Dimenions (LED)
-def ledRegisterDefaultMCOptions(options):
+#led = Large Extra Dimenions 
+def registerLedMcCmndLineOptions(options):
     options.register ('t',
                       "1",
                       VarParsing.VarParsing.multiplicity.singleton,
