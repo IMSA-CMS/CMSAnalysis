@@ -6,11 +6,12 @@
 #include "DataFormats/PatCandidates/interface/Electron.h"
 #include "DataFormats/PatCandidates/interface/Photon.h"
 
-SimpleImplementation::SimpleImplementation(reco::Candidate::LorentzVector vec, int ch, Particle::Type type, double iIsolation):
+SimpleImplementation::SimpleImplementation(reco::Candidate::LorentzVector vec, int ch, Particle::Type type, double iIsolation, Lepton::SelectionFit fit):
 lorentzVec(vec), 
 particleCharge(ch),
 particleType(type),
-particleIsolation(iIsolation)
+particleIsolation(iIsolation),
+selectionFit(fit)
 {
 
   //std::cout << "Got to SI\n";

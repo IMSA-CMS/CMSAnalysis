@@ -22,3 +22,20 @@ double Lepton::getIsolation() const
   return getParticle()->isolation();
 }
 
+bool Lepton::isTight() const
+{
+    checkIsNull();
+    return getParticle()->getSelectionFit() == Particle::SelectionFit::Tight;
+}
+
+bool Lepton::isMedium() const
+{
+    checkIsNull();
+    return isTight() || getParticle()->getSelectionFit() == Particle::SelectionFit::Medium;
+}
+
+bool Lepton::isLoose() const
+{
+    checkIsNull();
+    return isMedium() || getParticle()->getSelectionFit() == Particle::SelectionFit::Loose;
+}

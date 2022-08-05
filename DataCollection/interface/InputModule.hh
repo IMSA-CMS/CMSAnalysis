@@ -31,6 +31,7 @@ public:
     virtual ParticleCollection<Lepton> getLeptons(RecoLevel level) const = 0;
     virtual ParticleCollection<Particle> getParticles(RecoLevel level, Particle::Type particleType = Particle::Type::None) const = 0;
     virtual ParticleCollection<Particle> getJets(RecoLevel level) const = 0;
+    virtual Particle getSpecial(std::string name) const = 0;
 
     virtual GenEventInfoProduct getGenInfo() const = 0;
     virtual std::vector<bool> getTriggerResults(std::string subProcess) const = 0;

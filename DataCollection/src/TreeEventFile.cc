@@ -6,6 +6,7 @@
 #include "CMSAnalysis/DataCollection/interface/TreeEventFile.hh"
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
+#include "CMSAnalysis/DataCollection/interface/Lepton.hh"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
@@ -231,53 +232,57 @@ ParticleCollection<Particle> TreeEventFile::getRecoParticles() const
 
     for (int i = 0; i < elec_size; i++)
     {
-        if (elec_idpass[i] & 7)
+        
+        //std::cout<<"elec_idpass "<<elec_idpass[i]<<std::endl;
+        int charge = elec_charge[i];
+        
+        Particle::SelectionFit fit;
+        if (elec_idpass[i] & 4) 
         {
-            //std::cout<<"elec_idpass "<<elec_idpass[i]<<std::endl;
-            int charge = elec_charge[i];
-            // Kludge to simulate charge mismeasurement
-            // if ((int)(elec_pt[i] * 100) % 10 == 0)
-            //     charge = -charge;
-            // if ((int)(elec_pt[i]) % 2)
-            // {
-            //     charge = 1;
-            // }
-            // else
-            // {
-            //     charge = -1;
-            // }
-
-            // Lorentz four-vector
-            recoParticles.addParticle(Particle(
-                reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],
-                                                                            elec_eta[i], elec_phi[i], elec_mass[i])),
-                charge, Particle::Type::Electron, elec_reliso[i]));
+            fit = Particle::SelectionFit::Tight;
+        } else if (elec_idpass[i] & 2) 
+        {
+            fit = Particle::SelectionFit::Medium;
+        } else if (elec_idpass[i] & 1) 
+        {
+            fit = Particle::SelectionFit::Loose;
+        } else {
+            continue;
         }
+
+
+        // Lorentz four-vector
+        recoParticles.addParticle(Particle(
+            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],
+                                                                        elec_eta[i], elec_phi[i], elec_mass[i])),
+            charge, Particle::Type::Electron, elec_reliso[i], fit));
+        
     }
 
     for (int i = 0; i < muon_size; i++)
     {
-        if (muon_idpass[i] & 7)
+        
+        int charge = muon_charge[i];
+        
+        Particle::SelectionFit fit;
+        if (muon_idpass[i] & 4) 
         {
-            int charge = muon_charge[i];
-            // Kludge to simulate charge mismeasurement
-            // if ((int)(muon_pt[i] * 100) % 10 == 0)
-            //     charge = -charge;
-            // if ((int)(muon_pt[i]) % 2)
-            // {
-            //     charge = 1;
-            // }
-            // else
-            // {
-            //     charge = -1;
-            // }
-
-            // Lorentz four-vector
-            recoParticles.addParticle(Particle(
-                reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],
-                                                                            muon_eta[i], muon_phi[i], muon_mass[i])),
-                charge, Particle::Type::Muon, muon_reliso[i]));
+            fit = Particle::SelectionFit::Tight;
+        } else if (muon_idpass[i] & 2) 
+        {
+            fit = Particle::SelectionFit::Medium;
+        } else if (muon_idpass[i] & 1) 
+        {
+            fit = Particle::SelectionFit::Loose;
+        } else {
+            continue;
         }
+        // Lorentz four-vector
+        recoParticles.addParticle(Particle(
+            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],
+                                                                        muon_eta[i], muon_phi[i], muon_mass[i])),
+            charge, Particle::Type::Muon, muon_reliso[i], fit));
+        
     }
     //std::cout<< "Size of RecoParticles "<< recoParticles.getNumParticles()<<std::endl;
     return recoParticles;
