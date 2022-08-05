@@ -58,11 +58,11 @@ std::vector<PileupSummaryInfo> InputModule::getPileupInfo() const
 }
 */
 
-GenEventInfoProduct LocalEventInputModule::getGenInfo() const
-{
-    throw std::runtime_error("calling getGenEventInfoProduct() on a local event doesn't make sense");
-    return GenEventInfoProduct();
-}
+// GenEventInfoProduct LocalEventInputModule::getGenInfo() const
+// {
+//     throw std::runtime_error("calling getGenEventInfoProduct() on a local event doesn't make sense");
+//     return GenEventInfoProduct();
+// }
 
 double LocalEventInputModule::getMET() const
 {

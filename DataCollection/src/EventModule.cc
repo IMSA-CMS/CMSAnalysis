@@ -39,7 +39,6 @@ void EventModule::finalize()
     for (int i = 0; i < int(cuts.size()); i++) {
         std::cout << "Dependent efficiency of " << typeid(*(cuts[i])).name() << ": " << cuts[i]->getDependentEfficiency() << "\n";
         std::cout << "Independent efficiency of " << typeid(*(cuts[i])).name() << ": " << cuts[i]->getIndependentEfficiency() << "\n";
-        // std::cout << "tight particle Count: " << tightCount << "\n";
     }
 }
 
