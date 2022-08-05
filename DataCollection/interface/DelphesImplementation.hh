@@ -21,6 +21,7 @@ class DelphesImplementation : public ParticleImplementation
         virtual std::vector<int> daughters() const{return daughtersVec;}
         virtual int numberOfDaughters() const override{return daughtersVec.size();}
         virtual Particle::Type getType() const  override{ return particleType; }
+        virtual Particle::SelectionFit getSelectionFit() const override {throw std::runtime_error("getSelectionFit not implemented");};
         virtual bool isNotNull() const override {return true;}
         virtual bool isFinalState() const override {return status()==1;}
         virtual bool operator== (const ParticleImplementation& other) const override;

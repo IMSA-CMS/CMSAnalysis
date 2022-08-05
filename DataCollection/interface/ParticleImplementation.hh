@@ -22,6 +22,7 @@ public:
   virtual Particle daughter(int i) const = 0;
   virtual int numberOfDaughters() const = 0;
   virtual Particle::Type getType() const = 0;
+  virtual Particle::SelectionFit getSelectionFit() const = 0;
   virtual bool isNotNull() const = 0;
   bool isIsolated() {throw std::runtime_error("error");};
   // virtual const reco::Candidate* getUnderlyingParticle() const = 0;

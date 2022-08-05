@@ -22,6 +22,7 @@ public:
   virtual int numberOfDaughters() const override;
   virtual bool isNotNull() const override {return particle;}
   virtual Particle::Type getType() const override;
+  virtual Particle::SelectionFit getSelectionFit() const override {throw std::runtime_error("getSelectionFit not implemented");};
   // virtual bool isIsolated() const override;
   const reco::Candidate* getUnderlyingParticle() const {return particle;}
   bool isFinalState() const override;
