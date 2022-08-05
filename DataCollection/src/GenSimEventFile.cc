@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/GenEventFile.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimEventFile.hh"
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
@@ -8,16 +8,17 @@
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
 
-GenEventFile::GenEventFile(TFile* ifile) : 
+GenSimEventFile::GenSimEventFile(TFile* ifile) : 
 EventFile(ifile)
 {
     event = std::make_shared<fwlite::Event> (getFile());
     std::cerr << "Events: " << event->size() << std::endl;
     setNumOfEvents(getNumOfEvents() + event->size());
+    setEventCount(1);
     event->toBegin();
 }
 
-void GenEventFile::nextEvent()
+void GenSimEventFile::nextEvent()
 {
     auto& eventRef = *event;
     ++(eventRef);
@@ -34,14 +35,14 @@ std::vector<PileupSummaryInfo> MiniAODEventLoader::getPileupInfo() const
 }
 */
 
-GenEventInfoProduct GenEventFile::getGenInfo() const
-{
-    edm::Handle<GenEventInfoProduct> genInfo;
-    event->getByLabel(std::string("generator"), genInfo);
-    return *genInfo;
-}
+// GenEventInfoProduct GenEventFile::getGenInfo() const
+// {
+//     edm::Handle<GenEventInfoProduct> genInfo;
+//     event->getByLabel(std::string("generator"), genInfo);
+//     return *genInfo;
+// }
 
-ParticleCollection<GenSimParticle> GenEventFile::getGenSimParticles() const
+ParticleCollection<GenSimParticle> GenSimEventFile::getGenSimParticles() const
 {
     ParticleCollection<GenSimParticle> genParticles;
     edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
@@ -53,17 +54,17 @@ ParticleCollection<GenSimParticle> GenEventFile::getGenSimParticles() const
     return genParticles;
 }
 
-ParticleCollection<Particle> GenEventFile::getRecoParticles() const
+ParticleCollection<Particle> GenSimEventFile::getRecoParticles() const
 {
     throw std::runtime_error("Cannot run Reco on GenSim file");
 }
 
-ParticleCollection<Particle> GenEventFile::getRecoJets() const
+ParticleCollection<Particle> GenSimEventFile::getRecoJets() const
 {
     throw std::runtime_error("Cannot run Reco on GenSim file");
 }
 
-double GenEventFile::getMET() const
+double GenSimEventFile::getMET() const
 {
     edm::Handle<std::vector<reco::GenMET>> mets;
     event->getByLabel(edm::InputTag("genMetTrue"), mets);
@@ -74,19 +75,22 @@ double GenEventFile::getMET() const
     throw std::runtime_error("There are no MET objects found");
 }
 
-std::vector<bool> GenEventFile::getTriggerResults(std::string subProcess) const
+std::vector<bool> GenSimEventFile::getTriggerResults(std::string subProcess) const
 {
     edm::Handle<edm::TriggerResults> triggerResults;
     event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
     std::vector<bool> v_results = {};
-    for (unsigned int i = 0; i < triggerResults->size(); i++)
+    if (triggerResults) 
     {
+        for (unsigned int i = 0; i < triggerResults->size(); i++)
+        {
         v_results.push_back(triggerResults->accept(i));
+        }
     }
     return v_results;
 }
 
-std::vector<std::string> GenEventFile::getTriggerNames(std::string subProcess) const
+std::vector<std::string> GenSimEventFile::getTriggerNames(std::string subProcess) const
 {
     edm::Handle<edm::TriggerResults> triggerResults;
     event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
@@ -99,7 +103,7 @@ std::vector<std::string> GenEventFile::getTriggerNames(std::string subProcess) c
     return v_names;
 }
 
-bool GenEventFile::isDone() const
+bool GenSimEventFile::isDone() const
 {
     return event->atEnd();
 }

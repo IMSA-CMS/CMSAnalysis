@@ -8,7 +8,8 @@
 #include "DataFormats/PatCandidates/interface/MET.h"
 
 
-DelphesEventFile::DelphesEventFile(TFile* ifile) : TreeEventFile(ifile) 
+DelphesEventFile::DelphesEventFile(TFile* ifile) : 
+    TreeEventFile(ifile, getTreeBranches()) 
 {
     initialize();
 }
