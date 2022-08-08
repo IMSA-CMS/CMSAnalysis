@@ -1,7 +1,3 @@
-// MORE CHANGES NEEDED
-// SO FAR JUST MIRRORS DelphesEventFile
-// Dheeran, [07/04/22]
-
 #ifndef NANOAODEVENTLOADER_HH
 #define NANOAODEVENTLOADER_HH
 
@@ -9,7 +5,7 @@
 
 class TTree;
 
-class NanoAODEventFile : public TreeEventFile
+class NanoAODEventFile : public TreeEventFile<UInt_t, Int_t, Bool_t> // sets which types to use for nanoAOD files: <size, elecIdpass, muonIdpass>
 {
     public:
         NanoAODEventFile(TFile* ifile);

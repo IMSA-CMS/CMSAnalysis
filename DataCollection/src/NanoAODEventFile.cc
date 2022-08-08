@@ -1,7 +1,3 @@
-// MORE CHANGES NEEDED
-// SO FAR JUST MIRRORS DelphesEventFile
-// Dheeran, [07/04/22]
-
 #include "CMSAnalysis/DataCollection/interface/NanoAODEventFile.hh"
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
@@ -42,7 +38,7 @@ NanoAODEventFile::BranchNames NanoAODEventFile::getTreeBranches() {
     nanoAODBranches.muonIdpass = "Muon_looseId";
     nanoAODBranches.muonRelIso = "Muon_miniPFRelIso_all";
     
-    nanoAODBranches.metSize = "MET_sumEt"; // This is not needed
+    //nanoAODBranches.metSize = "MET_sumEt"; // useless variable
     nanoAODBranches.metPT = "MET_pt";
     nanoAODBranches.metPhi = "MET_phi";
 
@@ -59,10 +55,10 @@ NanoAODEventFile::BranchNames NanoAODEventFile::getTreeBranches() {
     nanoAODBranches.genPhi = "GenPart_phi";
     nanoAODBranches.genMass = "GenPart_mass";
     nanoAODBranches.genPt = "GenPart_pt";
-    nanoAODBranches.gend1 = "Generator_id1"; // missing variable
-    nanoAODBranches.gend2 = "Generator_id2"; // Find proper branch address
+    nanoAODBranches.gend1 = "Generator_id1"; // missing proper branch address
+    nanoAODBranches.gend2 = "Generator_id2"; // missing proper branch address
     nanoAODBranches.genm1 = "GenPart_genPartIdxMother";
-    nanoAODBranches.genm2 = "GenVisTau_genPartIdxMother"; // Find proper branch address
+    nanoAODBranches.genm2 = "GenVisTau_genPartIdxMother"; // missing variable, should be fine
 
     return nanoAODBranches;
 }
