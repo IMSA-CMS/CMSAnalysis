@@ -1,6 +1,8 @@
 #include "CMSAnalysis/Analysis/interface/Process.hh"
 #include "CMSAnalysis/Analysis/interface/Channel.hh"
+#include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include "THStack.h"
+#include "TStyle.h"
 #include <iostream>
 #include <algorithm>
 #include <memory>
@@ -50,12 +52,12 @@ void Channel::addProcessLabel(std::string label, std::vector<std::shared_ptr<Pro
 	}
 }
 
-std::vector<double> Channel::getYields() const
+std::vector<double> Channel::getYields(HistVariable dataType) const
 {
 	std::vector<double> yields;
 	for(auto process : processes)
 	{
-		yields.push_back(process->getYield());
+		yields.push_back(process->getYield(dataType));
 	}
 	return yields;
 }
@@ -70,34 +72,26 @@ std::vector<std::string> Channel::getNames() const
 	return names;
 }
 
-/*std::vector<std::vector<std::string>> Channel::getData() const
-{
-	std::vector<std::vector<std::string>> data;
-	for(auto process : processes)
-	{
-		for(std::vector<std::string> entry : process->getData())
-		{
-			data.push_back(entry);
-		}
-	}
-	return data;
-}*/
-
-THStack* Channel::getStack(std::string label, bool scaleToExpected) const
+THStack* Channel::getStack(HistVariable histType, std::string label, bool scaleToExpected) const
 {
 	THStack* superPlot = new THStack(name.c_str(), name.c_str());
 	if (label == "")
 	{
 		for (auto process : processes)
 		{	
-			superPlot->Add(process->getHist(scaleToExpected));
+			superPlot->Add(process->getHist(histType, scaleToExpected));
 		}
 	}
 	else
 	{
 		for (const auto& process : map.find(label)->second)
 		{
-			superPlot->Add(process->getHist(scaleToExpected));
+			TH1* hist = process->getHist(histType, scaleToExpected);
+			if(label == "signal") {
+				hist->SetLineColor(kRed);
+				hist->SetFillColor(kWhite);
+			}
+			superPlot->Add(hist);
 		}
 	}
 	return superPlot;

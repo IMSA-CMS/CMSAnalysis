@@ -16,6 +16,7 @@ class TableData
         void addEntry(std::vector<std::string> entry);
         void addEntry(int rowIndex, int colIndex, std::string entry);
         template<typename T>
+        //Adds entry of any data type
         void addEntry(int rowIndex, int colIndex, T entry);
 
     private:

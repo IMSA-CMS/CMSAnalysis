@@ -5,8 +5,11 @@
 #include <iostream>
 #include "TH2.h"
 #include "TH2F.h"
+#include <memory>
+#include "CMSAnalysis/Analysis/interface/HistogramFinder.hh"
+#include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 
-RootFileInput::RootFileInput(std::string fileName, std::string iName) : name(iName), 
+RootFileInput::RootFileInput(std::string fileName, std::shared_ptr<HistogramFinder> iHistFinder) : histFinder(iHistFinder), fileSource(fileName),
 	file(TFile::Open(fileName.c_str(), "read")) 
 	{
 		if(!file)
@@ -16,8 +19,9 @@ RootFileInput::RootFileInput(std::string fileName, std::string iName) : name(iNa
 	}
 
 
-TH1* RootFileInput::getHist() const
+TH1* RootFileInput::getHist(HistVariable histType) const
 {
+	std::string name = histFinder->getHistName(histType);
 	TH1* hist = dynamic_cast<TH1*>(file->Get(name.c_str()));
 	if(dynamic_cast<TH2 *>(hist) != 0) {
 		TH2* hist2D = dynamic_cast<TH2 *>(hist);
@@ -27,12 +31,14 @@ TH1* RootFileInput::getHist() const
 	return hist;
 }
 
-TH1* RootFileInput::get2DHist() const
+TH1* RootFileInput::get2DHist(HistVariable histType) const
 {
+	std::string name = histFinder->getHistName(histType);
 	TH1* hist = dynamic_cast<TH1*>(file->Get(name.c_str()));
-	if(dynamic_cast<TH2 *>(hist) == 0) {
-		throw std::runtime_error("no 2D hist");
-	}
+	//Since only windowEstimator uses this, windowEstimator will proceed with using 1D hists instead of 2D if no 2D hist.
+	//if(dynamic_cast<TH2 *>(hist) == 0) {
+	//	throw std::runtime_error("No 2D hist of name " + name + " in file " + fileSource);
+	//}
 	return hist;
 }
 

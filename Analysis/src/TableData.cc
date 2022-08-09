@@ -15,11 +15,6 @@ TableData::TableData(std::vector<std::vector<std::string>> outputs)
             addColumn(output.at(0));
         }
     }
-    /*for(std::vector<std::string> row : entries) {
-        for(std::string entry : row) {
-            std::cout << "entry" << std::endl;
-        }
-    }*/
     for(std::vector<std::string> output : outputs) {
         addEntry(output);
     }
@@ -51,6 +46,7 @@ void TableData::addEntry(std::vector<std::string> entry)
     addEntry(rowIndex, columnIndex, entry.at(2));
 }
 
+//Overriding (first addEntry calls this one)
 void TableData::addEntry(int rowIndex, int colIndex, std::string entry) 
 {
     entries.at(rowIndex).at(colIndex) = entry;
