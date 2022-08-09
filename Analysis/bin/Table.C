@@ -10,6 +10,8 @@
 #include "CMSAnalysis/Analysis/interface/TextTable.hh"
 #include "CMSAnalysis/Analysis/interface/HTMLTable.hh"
 #include "CMSAnalysis/Analysis/interface/LatexTable.hh"
+#include "CMSAnalysis/Analysis/interface/PowerpointTable.hh"
+#include "CMSAnalysis/Analysis/interface/HiggsPlusPlusAnalysis.hh"
 #include <fstream>
 #include "THStack.h"
 #include <iostream>
@@ -20,33 +22,22 @@
 #include <vector>
 #include <sstream>
 #include <iomanip>
+#include <string>
 
-std::string roundDoubleString(std::string doub, int digits) 
+//Rounds doubles when converted to strings to get rid of trailing zeroes
+std::string roundDoubleString(double doub, int digits) 
 {
-    bool doneCutting = false;
-	//Removes zeroes that happen when converting double to string
-	for(int index = doub.length() - 1; index >= 0; index--) {
-		if((doub.at(index) == '0' || doub.at(index) == '.') && doneCutting == false) {
-			if(doub.at(index) == '.') {
-				doneCutting = true;
-			}
-			doub.pop_back();
-		}
-		else {
-			doneCutting = true;
-		}
-	}
-    std::string out = doub;
-    /*std::stringstream rounder;
+    std::ostringstream rounder;
     rounder << std::setprecision(digits);
     rounder << doub;
-    std::string out = rounder.str() */
+    std::string out = rounder.str();
     return out;
 }
 
-std::vector<std::vector<std::string>> makeTableInput(std::vector<std::vector<std::string>> oldInput, std::shared_ptr<Channel> channel, double massTarget)
+//Converts channel data to something TableData can work with
+std::vector<std::vector<std::string>> makeTableInput(std::vector<std::vector<std::string>> oldInput, HistVariable dataType, std::shared_ptr<Channel> channel, double massTarget)
 {
-    std::vector<double> yields = channel->getYields();
+    std::vector<double> yields = channel->getYields(dataType);
     std::vector<std::string> names = channel->getNames();
     std::vector<std::vector<std::string>> newInput = oldInput;
     std::vector<std::string> toAdd(3, "");
@@ -55,7 +46,7 @@ std::vector<std::vector<std::string>> makeTableInput(std::vector<std::vector<std
     {
         toAdd.at(0) = names.at(count);
         toAdd.at(1) = std::to_string((int) massTarget);
-        toAdd.at(2) = roundDoubleString(std::to_string(yields.at(count)), 2);
+        toAdd.at(2) = roundDoubleString(yields.at(count), 4);
         newInput.push_back(toAdd);
         count++;
     }
@@ -64,14 +55,22 @@ std::vector<std::vector<std::string>> makeTableInput(std::vector<std::vector<std
 
 void Table() 
 {
-    double massTarget = 700;
-    std::shared_ptr<Channel> leptonBackgrounds = ChannelLoader::makeChannel("default", massTarget);
     std::vector<std::vector<std::string>> input;
-    input = makeTableInput(input, leptonBackgrounds, massTarget);
-    massTarget = 900;
-    std::shared_ptr<Channel> leptonBackgrounds2 = ChannelLoader::makeChannel("default", massTarget);
-    input = makeTableInput(input, leptonBackgrounds2, massTarget);
-    auto tableInput = std::make_shared<TableData>(input);
-    auto table = std::make_shared<LatexTable>();
-    table->makeTable(tableInput, std::cout);
+    //Change what branching ratio particles you are looking at here
+    std::vector<std::string> channels = {"Muon", "Electron"};
+    //List massTargets here
+    std::vector<double> massTargets = {300, 500, 700, 900, 1100, 1300};
+    //Change particle type here
+    auto higgsAnalysis = std::make_shared<HiggsPlusPlusAnalysis>();
+    for(std::string channel : channels) {
+        input.clear();
+        for(double massTarget : massTargets) {
+            //Change the histVariable to analyze different properties
+            input = makeTableInput(input, HistVariable::MET, higgsAnalysis->getChannel(channel + std::to_string((int) massTarget)), massTarget);
+        }
+        auto tableInput = std::make_shared<TableData>(input);
+        auto table = std::make_shared<TextTable>();
+        table->makeTable(tableInput, std::cout);
+        std::cout << "\n" << std::endl;
+    }
 }

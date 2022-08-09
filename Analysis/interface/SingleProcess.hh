@@ -9,6 +9,7 @@
 #include <memory>
 #include "Estimator.hh"
 #include "FitEstimator.hh"
+#include "HistVariable.hh"
 
 class Estimator;
 
@@ -19,14 +20,16 @@ public:
     SingleProcess(std::string iCrossSectionName, const std::shared_ptr<Input> iInput, const std::shared_ptr<CrossSectionReader> iCrossSectionReader, const std::shared_ptr<Estimator> iEstimator, const double iLuminosity) : 
     crossSectionName(iCrossSectionName), input(iInput), reader(iCrossSectionReader), estimator(iEstimator), luminosity(iLuminosity) {}
     std::string getName() const {return crossSectionName;}
-    TH1* getHist(bool scaleToExpected = false) const;
-    TH1* get2DHist() const;
+    TH1* getHist(HistVariable histType, bool scaleToExpected = false) const;
+    TH1* get2DHist(HistVariable histType) const;
     int getTotalEvents() const;
     double getCrossSection() const {return reader->getCrossSection(crossSectionName);}
-    double getExpectedYield() const;
+    double getExpectedYield(HistVariable dataType) const;
     double getLuminosity() const {return luminosity;}
     double getMassTarget() const {return estimator->getMassTarget();}
     std::shared_ptr<Input> getInput() const {return input;}
+    //Makes sure that the process contains all of the hists that will be needed
+    bool checkValidity();
 
 private:
     const std::string nickname;

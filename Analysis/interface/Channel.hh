@@ -2,7 +2,7 @@
 #define CHANNEL_HH
 
 #include <unordered_map>
-
+#include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include <string>
 #include <vector>
 #include <memory>
@@ -16,11 +16,11 @@ class Channel
 
 		Channel(std::string name, std::vector<std::shared_ptr<Process>> iProcesses);
 		//Gets data from all processes in the format needed to make table
-		//std::vector<std::vector<std::string>> getData() const;
-		std::vector<double> getYields() const;
+		std::vector<double> getYields(HistVariable dataType) const;
 		std::vector<std::string> getNames() const;
+		std::string getName() {return name;}
 		//Makes stacked histogram
-		THStack* getStack(std::string label = "", bool scaleToExpected = false) const;
+		THStack* getStack(HistVariable histType, std::string label = "", bool scaleToExpected = false) const;
 		
 		const std::shared_ptr<Process> findProcess(std::string processName) const;
 		
