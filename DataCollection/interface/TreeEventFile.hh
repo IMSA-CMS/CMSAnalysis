@@ -231,32 +231,60 @@ inline ParticleCollection<Particle> TreeEventFile<S, E, M>::getRecoParticles() c
     ParticleCollection<Particle> recoParticles;
     for (S i = 0; i < *elec_size; i++)
     {
-        if (elec_idpass[i] & 7)
+        
+        //std::cout<<"elec_idpass "<<elec_idpass[i]<<std::endl;
+        int charge = elec_charge[i];
+        
+        Particle::SelectionFit fit;
+        if (elec_idpass[i] & 4) 
         {
-            int charge = elec_charge[i];
-            recoParticles.addParticle(
-                Particle(
-                    reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],elec_eta[i], elec_phi[i], elec_mass[i])),
-                    charge, 
-                    Particle::Type::Electron, 
-                    elec_reliso[i]));
+            fit = Particle::SelectionFit::Tight;
+        } else if (elec_idpass[i] & 2) 
+        {
+            fit = Particle::SelectionFit::Medium;
+        } else if (elec_idpass[i] & 1) 
+        {
+            fit = Particle::SelectionFit::Loose;
+        } else {
+            continue;
         }
+
+
+        // Lorentz four-vector
+        recoParticles.addParticle(Particle(
+            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],
+                                                                        elec_eta[i], elec_phi[i], elec_mass[i])),
+            charge, Particle::Type::Electron, elec_reliso[i], fit));
+        
     }
     for (S i = 0; i < *muon_size; i++)
     {
-        if (muon_idpass[i] & 7)
+        
+        int charge = muon_charge[i];
+        
+        Particle::SelectionFit fit;
+        if (muon_idpass[i] & 4) 
         {
-            int charge = muon_charge[i];
-            recoParticles.addParticle(
-                Particle(
-                    reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],muon_eta[i], muon_phi[i], muon_mass[i])),
-                    charge, 
-                    Particle::Type::Muon, 
-                    muon_reliso[i]));
+            fit = Particle::SelectionFit::Tight;
+        } else if (muon_idpass[i] & 2) 
+        {
+            fit = Particle::SelectionFit::Medium;
+        } else if (muon_idpass[i] & 1) 
+        {
+            fit = Particle::SelectionFit::Loose;
+        } else {
+            continue;
         }
+        // Lorentz four-vector
+        recoParticles.addParticle(Particle(
+            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],
+                                                                        muon_eta[i], muon_phi[i], muon_mass[i])),
+            charge, Particle::Type::Muon, muon_reliso[i], fit));
+        
     }
     return recoParticles;
 }
+
 
 template <typename S, typename E, typename M>
 inline ParticleCollection<Particle> TreeEventFile<S, E, M>::getRecoJets() const
