@@ -21,7 +21,7 @@ class Event
         const ParticleCollection<Photon>& getPhotons() const {return photons;};
         const ParticleCollection<Jet>& getJets() const {return jets;};
         const double& getMET() const {return MET;};
-        const std::unordered_map<std::string, Particle>& getSpecials() {return specialObjects;};
+        const std::unordered_map<std::string, Particle>& getSpecials() const {return specialObjects;};
 
         ParticleCollection<Particle> getParticles() const;
 

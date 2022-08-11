@@ -23,6 +23,7 @@ class EventLoaderInputModule : public InputModule
         virtual ParticleCollection<Lepton> getLeptons(RecoLevel level) const override;
         virtual ParticleCollection<Particle> getParticles(RecoLevel level, Particle::Type particleType = Particle::Type::None) const override;
         virtual ParticleCollection<Particle> getJets(RecoLevel level) const override;
+        virtual Particle getSpecial(std::string name) const override {throw std::runtime_error("getSpecial not implemented in EventLoaderInputModule");}
 
         //virtual GenEventInfoProduct getGenInfo() const override;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
