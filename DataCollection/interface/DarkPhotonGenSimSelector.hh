@@ -11,7 +11,9 @@ class InputModule;
 class DarkPhotonGenSimSelector : public Selector
 {
     public:
-        std::vector<Particle> selectParticles(const InputModule* input) const override;
+        void selectParticles(const InputModule* input, Event& event) override;
+    private:
+        std::vector<Particle> checkJet(GenSimParticle part) const;
 };
 
 #endif

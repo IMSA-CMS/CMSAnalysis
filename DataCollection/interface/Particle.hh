@@ -13,7 +13,7 @@ class Particle
 {
   public:
     // specifies particle type
-    enum class Type{Electron, Muon, Photon, LeptonJet, Jet, DarkPhoton, Neutralino, None};
+    enum class Type{Electron, Muon, Photon, LeptonJet, Jet, DarkPhoton, Neutralino, LeftHiggs, RightHiggs, ZBoson, None};
 
     // specifies barrel state
     enum class BarrelState{Barrel, Endcap, None};

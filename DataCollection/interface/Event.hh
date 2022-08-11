@@ -21,7 +21,8 @@ class Event
         const ParticleCollection<Photon>& getPhotons() const {return photons;};
         const ParticleCollection<Jet>& getJets() const {return jets;};
         const double& getMET() const {return MET;};
-        const std::unordered_map<std::string, Particle>& getSpecials() {return specialObjects;};
+        //const std::unordered_map<std::string, Particle>& getSpecials() {return specialObjects;};
+        const std::unordered_map<int, ParticleCollection<Particle>>& getSpecials() {return specialObjects;};
 
         ParticleCollection<Particle> getParticles() const;
 
@@ -29,7 +30,13 @@ class Event
         void addMuon(Muon muon) {muons.addParticle(muon);};
         void addPhoton(Photon photon) {photons.addParticle(photon);};
         void addJet(Jet jet){jets.addParticle(jet);};
-        void addSpecialObject(std::string key, Particle obj) {specialObjects[key] = obj;}
+        //void addSpecialObject(std::string key, Particle obj) {specialObjects[key] = obj;}
+        void addSpecialObject(Particle obj) 
+        {
+            GenSimParticle gensimobj = GenSimParticle(obj);
+            int key = gensimobj.pdgId();
+            specialObjects[key].addParticle(obj);
+        }
         void setMET(double newMET) {MET = newMET;}
 
         void sortElectrons() {std::sort(electrons.begin(), electrons.end());}
@@ -49,6 +56,6 @@ class Event
         ParticleCollection<Photon> photons;
         ParticleCollection<Jet> jets;
         double MET;
-        std::unordered_map<std::string, Particle> specialObjects;
+        std::unordered_map<int, ParticleCollection<Particle>> specialObjects;
 };
 #endif

@@ -74,17 +74,6 @@ void TreeEventFile::nextEvent()
     setEventCount(getEventCount() + 1);
 }
 
-// GenEventInfoProduct TreeEventFile::getGenInfo() const
-// {
-//     throw std::runtime_error("Not yet implemented: getGenInfo()");
-
-//     /*
-//     edm::Handle<GenEventInfoProduct> genInfo;
-//     event->getByLabel(std::string("generator"), genInfo);
-//     return *genInfo;
-//     */
-// }
-
 ParticleCollection<GenSimParticle> TreeEventFile::getGenSimParticles() const
 {
     ParticleCollection<GenSimParticle> genParticles;

@@ -25,7 +25,7 @@ class LocalEventInputModule : public InputModule
         virtual ParticleCollection<Particle> getJets(RecoLevel level) const override;
         //virtual ParticleCollection<Particle> getSpecials(Recolevel level) const;
 
-        //virtual GenEventInfoProduct getGenInfo() const override;
+
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;
         virtual double getMET() const override;

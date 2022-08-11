@@ -24,7 +24,6 @@ class EventLoaderInputModule : public InputModule
         virtual ParticleCollection<Particle> getParticles(RecoLevel level, Particle::Type particleType = Particle::Type::None) const override;
         virtual ParticleCollection<Particle> getJets(RecoLevel level) const override;
 
-        //virtual GenEventInfoProduct getGenInfo() const override;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;
         virtual double getMET() const override;

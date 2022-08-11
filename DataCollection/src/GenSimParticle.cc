@@ -103,8 +103,6 @@ GenSimParticle GenSimParticle::finalDaughter() const
       }
     }
     if (di == -1) {
-      std::cout << "OH NO!!!!!!!\n";
-      std::cout << current.pdgId() << '\n';
       break;
     }
     current = current.daughter(di);
