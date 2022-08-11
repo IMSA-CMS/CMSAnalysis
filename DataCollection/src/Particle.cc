@@ -12,8 +12,8 @@
 #include "CMSAnalysis/DataCollection/interface/LeptonJet.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJetImplementation.hh"
 
-Particle::Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, double relIso):
-particle(std::make_shared<SimpleImplementation>(vec, charge, type, relIso))
+Particle::Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, double relIso, Particle::SelectionFit fit):
+particle(std::make_shared<SimpleImplementation>(vec, charge, type, relIso, fit))
 {
 
 }
@@ -183,6 +183,8 @@ Particle::Type Particle::getType() const{
     checkIsNull();
     return particle->getType();
 }
+
+
 // bool Particle::isIsolated() const
 // {
 //   checkIsNull();

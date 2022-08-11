@@ -31,6 +31,7 @@
 #include "CMSAnalysis/DataCollection/interface/PASSelector.hh"
 #include "CMSAnalysis/DataCollection/interface/QuarkoniaCut.hh"
 #include "CMSAnalysis/DataCollection/interface/ZVetoCut.hh"
+#include "CMSAnalysis/DataCollection/interface/FourLeptonCut.hh"
 
 using std::make_shared;
 
@@ -41,10 +42,13 @@ HiggsBackgroundPlan::HiggsBackgroundPlan()
     
     auto eventMod = make_shared<EventModule>();
     auto pasSelector = make_shared<PASSelector>();
+    auto fourLeptonCut = make_shared<FourLeptonCut>();
     auto zVetoCut = make_shared<ZVetoCut>();
     auto quarkoniaCut = make_shared<QuarkoniaCut>();
+    
 
     eventMod->addSelector(pasSelector);
+    eventMod->addCut(fourLeptonCut);
     eventMod->addCut(zVetoCut);
     eventMod->addCut(quarkoniaCut);
 

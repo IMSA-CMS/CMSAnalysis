@@ -15,13 +15,15 @@ class Particle
     // specifies particle type
     enum class Type{Electron, Muon, Photon, LeptonJet, Jet, DarkPhoton, Neutralino, None};
 
+    enum class SelectionFit{Tight, Medium, Loose};
+
     // specifies barrel state
     enum class BarrelState{Barrel, Endcap, None};
     
     Particle(const reco::Candidate* iparticle = nullptr); 
     Particle(const Particle& particle1);
     Particle(const LeptonJet& leptonjet);
-    Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, double relIso = -999);
+    Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, double relIso = -999, Particle::SelectionFit fit = Particle::SelectionFit::Tight);
     Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, int pid, int status, int m1, int m2,int d1, int d2, double relIso);
     std::shared_ptr<ParticleImplementation> getParticleImplementation();
     Particle& operator = (const Particle& particle2);

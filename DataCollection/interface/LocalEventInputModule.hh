@@ -23,7 +23,7 @@ class LocalEventInputModule : public InputModule
         virtual ParticleCollection<Lepton> getLeptons(RecoLevel level) const override;
         virtual ParticleCollection<Particle> getParticles(RecoLevel level, Particle::Type particleType = Particle::Type::None) const override;
         virtual ParticleCollection<Particle> getJets(RecoLevel level) const override;
-        //virtual ParticleCollection<Particle> getSpecials(Recolevel level) const;
+        virtual Particle getSpecial(std::string name) const override {return (event->getSpecials()).at(name);};
 
         //virtual GenEventInfoProduct getGenInfo() const override;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;

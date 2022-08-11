@@ -37,8 +37,8 @@ void EventModule::addCut(std::shared_ptr<Cut> cut)
 void EventModule::finalize()
 {
     for (int i = 0; i < int(cuts.size()); i++) {
-        std::cout << "Dependent efficiency of " << typeid(*(cuts[i])).name() << ": " << cuts[i]->getDependentEfficiency() << "\n";\
-        std::cout << "Independent efficiency of " << typeid(*(cuts[i])).name() << ": " << cuts[i]->getIndependentEfficiency() << "\n";\
+        std::cout << "Dependent efficiency of " << typeid(*(cuts[i])).name() << ": " << cuts[i]->getDependentEfficiency() << "\n";
+        std::cout << "Independent efficiency of " << typeid(*(cuts[i])).name() << ": " << cuts[i]->getIndependentEfficiency() << "\n";
     }
 }
 
@@ -53,9 +53,14 @@ bool EventModule::process ()
     int jetCount = 0;
     // static int counter = 0;
     // std::cout << "Event# " <<  counter << "\n";
+    // static int tightCount = 0;
     for (auto selector : selectors) {
         for (auto particle : selector->selectParticles(getInput()))
         {
+            // if (particle.getSelectionFit() == Particle::SelectionFit::Tight)
+            // {
+            //     tightCount++;
+            // }
             switch (particle.getType()) 
             {
                 case Particle::Type::Electron:
