@@ -3,7 +3,6 @@
 #include "CMSAnalysis/DataCollection/interface/Module.hh"
 #include "CMSAnalysis/DataCollection/interface/ParticleCollection.hh"
 #include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
-#include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
@@ -57,12 +56,6 @@ std::vector<PileupSummaryInfo> InputModule::getPileupInfo() const
     return eventLoader->getPileupInfo();
 }
 */
-
-// GenEventInfoProduct LocalEventInputModule::getGenInfo() const
-// {
-//     throw std::runtime_error("calling getGenEventInfoProduct() on a local event doesn't make sense");
-//     return GenEventInfoProduct();
-// }
 
 double LocalEventInputModule::getMET() const
 {

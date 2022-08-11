@@ -11,7 +11,7 @@ class InputModule;
 class HPlusPlusGenSimSelector : public Selector
 {
     public:
-        std::vector<Particle> selectParticles(const InputModule* input) const override;
+        void selectParticles(const InputModule* input, Event& event) override;
 };
 
 #endif

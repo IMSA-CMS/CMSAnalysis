@@ -92,11 +92,6 @@
 // }
 // */
 
-// GenEventInfoProduct InputModule::getGenInfo() const
-// {
-//     return eventLoader->getFile()->getGenInfo();
-// }
-
 // double InputModule::getMET() const
 // {
 //     return eventLoader->getFile()->getMET();

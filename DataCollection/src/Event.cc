@@ -47,6 +47,13 @@ ParticleCollection<Particle> Event::getParticles() const
     {
         particleList.addParticle(Particle(p));
     }
+    for (auto& [key,value] : specialObjects)
+    {
+        for (const auto& p: value.getParticles())
+        {
+           particleList.addParticle(Particle(p)); 
+        }
+    }
     return particleList;
 }
 

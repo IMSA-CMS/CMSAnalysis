@@ -223,6 +223,18 @@ Particle::Type Particle::identifyType(int pdgid)
     {
       return Particle::Type::Neutralino;
     }
+    else if (abs(pdgid == 9900041))
+    {
+      return Particle::Type::LeftHiggs;
+    }
+    else if (abs(pdgid == 9900042))
+    {
+      return Particle::Type::RightHiggs;
+    }
+    else if (pdgid == 23)
+    {
+      return Particle::Type::ZBoson;
+    }
     else
     {
       //std::cout << "Type: None\n";

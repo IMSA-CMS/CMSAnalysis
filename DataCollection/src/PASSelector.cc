@@ -6,7 +6,7 @@
 #include "CMSAnalysis/DataCollection/interface/Lepton.hh"
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
 
-std::vector<Particle> PASSelector::selectParticles(const InputModule* input) const
+void PASSelector::selectParticles(const InputModule* input, Event& event)
 {
     std::vector<Particle> selected(0);
     // std::vector<Particle> posElecs(0);
@@ -23,7 +23,7 @@ std::vector<Particle> PASSelector::selectParticles(const InputModule* input) con
     for (const auto& particle : particles)
     {
         if (particle.getType() == Particle::Type::Electron && particle.getPt() > 50 && std::abs(particle.getEta()) < 3) {
-            selected.push_back(particle);
+           event.addElectron(Electron(particle));
             // electronCount++;
 
             // if (particle.getCharge() > 0) {
@@ -35,7 +35,7 @@ std::vector<Particle> PASSelector::selectParticles(const InputModule* input) con
         }
         if (particle.getType() == Particle::Type::Muon && particle.getPt() > 50 && std::abs(particle.getEta()) < 2.8) 
         {
-            selected.push_back(particle);
+            event.addMuon(Muon(particle));
             // if (particle.getCharge() > 0) {
             //     posMuonCount++;
             //     posMuons.push_back(Particle(particle));
@@ -135,5 +135,5 @@ std::vector<Particle> PASSelector::selectParticles(const InputModule* input) con
     //     return std::vector<Particle>(0);
     // }
 
-    return selected;
+    //return selected;
 }

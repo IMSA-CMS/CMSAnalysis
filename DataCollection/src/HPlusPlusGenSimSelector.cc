@@ -7,28 +7,60 @@
 #include "CMSAnalysis/DataCollection/interface/Lepton.hh"
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
 
-std::vector<Particle> HPlusPlusGenSimSelector::selectParticles(const InputModule* input) const
+void HPlusPlusGenSimSelector::selectParticles(const InputModule* input, Event& event)
 {
     std::vector<Particle> selected(0);
+    ParticleCollection<Particle> leftHiggsPlus;
+    ParticleCollection<Particle> leftHiggsMinus;
+    ParticleCollection<Particle> rightHiggsPlus;
+    ParticleCollection<Particle> rightHiggsMinus;
+    ParticleCollection<Particle> zBoson;
+
 
     auto particles = input->getParticles(InputModule::RecoLevel::GenSim);
 
     for (const auto& particle : particles)
     {
         GenSimParticle genSimParticle = GenSimParticle(particle);
-        if (abs(genSimParticle.pdgId() == 9900041) || abs(genSimParticle.pdgId() == 9900042)) //H++
+        if ((abs(genSimParticle.pdgId() == 9900041) || abs(genSimParticle.pdgId() == 9900042)) && genSimParticle == genSimParticle.finalDaughter()) //H++
         {
-            genSimParticle = genSimParticle.finalDaughter();
-            GenSimParticle daughter1 = genSimParticle.daughter(0);
-            GenSimParticle daughter2 = genSimParticle.daughter(1);
-            selected.push_back(genSimParticle);
-            selected.push_back(daughter1);
-            selected.push_back(daughter2);
+            if (genSimParticle.numberOfDaughters() == 2 && 
+            (abs(genSimParticle.daughter(0).pdgId()) == 13 || abs(genSimParticle.daughter(0).pdgId()) == 11) && 
+            (abs(genSimParticle.daughter(1).pdgId()) == 13 || abs(genSimParticle.daughter(1).pdgId()) == 11))
+                {
+                    if (genSimParticle.pdgId() == 9900041)
+                    {
+                        event.addSpecialObject(genSimParticle);   
+                    }
+                    else if (genSimParticle.pdgId() == -9900041)
+                    {
+                        event.addSpecialObject(genSimParticle);
+                    }
+                    else if (genSimParticle.pdgId() == 9900042)
+                    {
+                        event.addSpecialObject(genSimParticle);
+                    }
+                    else if (genSimParticle.pdgId() == -9900042)
+                    {
+                        event.addSpecialObject(genSimParticle);
+                    }
+                    for (int i = 0; i < 2; i++)
+                    {
+                        if (genSimParticle.daughter(i).getType() == Particle::Type::Electron)
+                        {
+                            event.addElectron(genSimParticle.daughter(i));
+                        } 
+                        else if (genSimParticle.daughter(i).getType() == Particle::Type::Muon)
+                        {
+                            event.addMuon(genSimParticle.daughter(i));
+                        }
+                        
+                    }
+                }
         }
-        if (abs(genSimParticle.pdgId() == 23)) //Z Boson
+        if (abs(genSimParticle.pdgId() == 23) && genSimParticle == genSimParticle.finalDaughter()) //Z Boson
         {
-            selected.push_back(particle);
+            event.addSpecialObject(genSimParticle);
         }
     }
-    return selected;
 }

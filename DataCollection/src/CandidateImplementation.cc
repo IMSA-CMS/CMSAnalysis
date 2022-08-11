@@ -1,4 +1,5 @@
 #include "CMSAnalysis/DataCollection/interface/CandidateImplementation.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimParticle.hh"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 
 #include "DataFormats/PatCandidates/interface/Electron.h"
@@ -121,7 +122,6 @@ int CandidateImplementation::numberOfDaughters() const {
 }
 
 Particle::Type CandidateImplementation::getType() const {
-
   if (!particle) {
     return Particle::Type::None;
   }
