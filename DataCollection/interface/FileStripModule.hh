@@ -1,0 +1,62 @@
+#ifndef FILESTRIPMODULE_HH
+#define FILESTRIPMODULE_HH
+
+#include "AnalysisModule.hh"
+#include "TTree.h"
+#include <vector>
+
+class FileStripModule : public AnalysisModule
+{
+    public:
+	FileStripModule(std::string name);
+    virtual void writeAll() override;
+
+    protected:
+    bool process() override;
+
+    private:
+    TFile* file;
+    TTree* tree;
+
+	UInt_t elecSize;
+	std::vector<float> elecEta;
+	std::vector<float> elecPhi;
+    std::vector<float> elecMass;
+    std::vector<int> elecCharge;
+    std::vector<float> elecPt;
+    std::vector<float> elecReliso;
+
+    UInt_t muonSize;
+    std::vector<float> muonPhi;
+    std::vector<float> muonEta;
+    std::vector<float> muonMass;
+    std::vector<int> muonCharge;
+    std::vector<float> muonPt;
+    std::vector<float> muonReliso;
+
+    std::vector<float> metPhi;
+    std::vector<float> metPt;
+
+    UInt_t jetSize;
+    std::vector<float> jetEta;
+    std::vector<float> jetPhi;
+    std::vector<float> jetMass;
+    std::vector<float> jetPt;
+
+    UInt_t genSize;
+    std::vector<int> genPID;
+    std::vector<int> genStatus;
+    std::vector<float> genEta;
+    std::vector<float> genPhi;
+    std::vector<float> genMass;
+    std::vector<float> genPt;
+    std::vector<int> genD1;
+    std::vector<int> genD2;
+    std::vector<int> genM1;
+    std::vector<int> genM2;
+
+    std::vector<int> elecIDPass;
+    std::vector<int> muonIDPass;
+};
+
+#endif

@@ -16,6 +16,7 @@
 #include "CMSAnalysis/DataCollection/interface/MassResolutionPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimPlan.hh"
+#include "CMSAnalysis/DataCollection/interface/FileStripPlan.hh"
 
 AnalyzerOptions::AnalyzerOptions()
 {
@@ -28,6 +29,7 @@ AnalyzerOptions::AnalyzerOptions()
 	analysisPlans["MassAcceptance"] = new MassAcceptancePlan();
 	analysisPlans["Trigger"] = new TriggerPlan();
   analysisPlans["GenSim"] = new GenSimPlan();
+  analysisPlans["FileStrip"] = new FileStripPlan();
 }
 
 std::string AnalyzerOptions::pickfileInterface()
