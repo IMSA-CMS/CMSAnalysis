@@ -8,6 +8,7 @@
 #include "CMSAnalysis/Analysis/interface/FullAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsPlusPlusAnalysis.hh"
+#include "CMSAnalysis/Analysis/interface/PlotFormatter.hh"
 #include <fstream>
 #include "THStack.h"
 #include <iostream>
@@ -31,13 +32,13 @@ void SuperPlot()
 			leptonBackgrounds->labelProcess("signal", processName);
 		}
 	}
+
 	THStack* hist1 = leptonBackgrounds->getStack(HistVariable::MET, "background", true);
 	THStack* hist2 = leptonBackgrounds->getStack(HistVariable::MET, "signal", true);
-	TCanvas *cs = new TCanvas("cs", "cs", 10, 10, 700, 900);
-	cs->SetWindowSize(1920, 1080);
-	//Draw whichever hist has largest Y axis first
-	hist2->Draw("HIST");
-	hist1->Draw("HIST SAME");
-	cs->Update();
-	//cs->SaveAs("SuperPlot.png");
+	
+	//Put the THStack with larger y axis first (if graph is cut off when drawn switch the order)
+	TCanvas *canvas = PlotFormatter::formatPlot(hist2, hist1);
+	
+	//Uncomment to save a png picture in your bin folder
+	//canvas->SaveAs("SuperPlot.png");
 }
