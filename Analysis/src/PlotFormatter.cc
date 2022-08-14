@@ -2,6 +2,7 @@
 #include "TH1.h"
 #include "TH1F.h"
 #include "TF1.h"
+#include "THStack.h"
 #include "TCanvas.h"
 #include "TString.h"
 #include "TFile.h"
@@ -10,6 +11,7 @@
 #include "TPad.h"
 #include "TPad.h"
 #include "TLatex.h"
+#include "TLegend.h"
 #include "TLine.h"
 #include "TBox.h"
 #include "TASImage.h"
@@ -50,10 +52,22 @@ TCanvas* PlotFormatter::formatPlot(THStack* first, THStack* second)
     first->Draw("HIST");
     
     //Change axis titles here
-    first->GetHistogram()->GetXaxis()->SetTitle("GeV");
+    first->GetHistogram()->GetXaxis()->SetTitle("MET [GeV]");
     first->GetHistogram()->GetYaxis()->SetTitle("Events");
     
+    //Draws the other histogram     
     second->Draw("HIST SAME");
+
+    //Draws the legend
+    auto legend = new TLegend(.45, 0.75-(top/height), .55, 1-(top/height));
+    legend->SetTextSize(0.02);
+    for(const auto&& obj : *first->GetHists()) {
+        legend->AddEntry(obj, " name", "L");
+    }
+    for(const auto&& obj2 : *second->GetHists()) {
+        legend->AddEntry(obj2, " name", "L");
+    }
+    legend->Draw();
 
     canvas->Update();
     return canvas;
