@@ -11,6 +11,7 @@
 #include "CMSAnalysis/Analysis/interface/PlotFormatter.hh"
 #include <fstream>
 #include "THStack.h"
+#include "TString.h"
 #include <iostream>
 #include <memory>	
 #include "TCanvas.h"
@@ -36,8 +37,12 @@ void SuperPlot()
 	THStack* hist1 = leptonBackgrounds->getStack(HistVariable::MET, "background", true);
 	THStack* hist2 = leptonBackgrounds->getStack(HistVariable::MET, "signal", true);
 	
+	//Write an extra text for the graph here
+	TString extraText = "Preliminary";
+
 	//Put the THStack with larger y axis first (if graph is cut off when drawn switch the order)
-	TCanvas *canvas = PlotFormatter::formatPlot(hist2, hist1);
+	//This formats the plot, to change things like axis titles edit PlotFormatter.cc
+	TCanvas *canvas = PlotFormatter::formatPlot(hist2, hist1, true, extraText);
 	
 	//Uncomment to save a png picture in your bin folder
 	//canvas->SaveAs("SuperPlot.png");
