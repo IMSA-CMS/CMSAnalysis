@@ -114,30 +114,29 @@ TCanvas* PlotFormatter::formatPlot(std::shared_ptr<Channel> processes, HistVaria
     float posY_ = 0.95 - (top/height);
  
     if(drawLogo) {
-        // float xl_0 = posX_;
-        // float yl_0 = posY_ - 0.15;
-        // float xl_1 = posX_ + 0.15*height/width;
-        // float yl_1 = posY_;
-        // TASImage* CMS_logo = new TASImage("CMS-BW-label.png");
-        // TPad* pad_logo = new TPad("logo","logo", xl_0, yl_0, xl_1, yl_1 );
-        // pad_logo->Draw();
-        // pad_logo->cd();
-        // CMS_logo->Draw("X");
-        // pad_logo->Modified();
-        // canvas->cd();
+        float xl_0 = posX_;
+        float yl_0 = posY_ - 0.15;
+        float xl_1 = posX_ + 0.15*height/width;
+        float yl_1 = posY_;
+        TASImage* CMS_logo = new TASImage("/uscms/home/fciancio/practice/CMSSW_11_0_2/src/CMSAnalysis/Analysis/bin/cmslogo.png");
+        TPad* pad_logo = new TPad("logo","logo", xl_0, yl_0, xl_1, yl_1 );
+        pad_logo->Draw();
+        pad_logo->cd();
+        CMS_logo->Draw("X");
+        pad_logo->Modified();
+        canvas->cd();
     }
     else {
         latex.SetTextFont(61);
         latex.SetTextSize(0.055);
         latex.SetTextAlign(align_);
         latex.DrawLatex(posX_, posY_, "CMS");
- 
-        if(extraText != "") {
-            latex.SetTextFont(52);
-            latex.SetTextAlign(align_);
-            latex.SetTextSize(0.04);
-            latex.DrawLatex(posX_, posY_ - 0.05, extraText);
-        }
+    }
+    if(extraText != "") {
+        latex.SetTextFont(52);
+        latex.SetTextAlign(align_);
+        latex.SetTextSize(0.04);
+        latex.DrawLatex(posX_, posY_ - 0.05, extraText);
     }
    
     //Draws the other histogram    
