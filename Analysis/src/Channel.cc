@@ -28,6 +28,16 @@ const std::shared_ptr<Process> Channel::findProcess(std::string processName) con
 	throw std::runtime_error("No process found with the inputted name.");
 }
 
+std::vector<std::string> Channel::getNamesWithLabel(std::string label)
+{
+	std::vector<std::string> names;
+	for (const auto& process : map.find(label)->second)
+	{
+		names.push_back(process->getName());
+	}
+	return names;
+}
+
 void Channel::labelProcess(std::string label, std::string processName)
 {
 	auto process = findProcess(processName);

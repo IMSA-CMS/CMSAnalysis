@@ -19,6 +19,7 @@ class Channel
 		std::vector<double> getYields(HistVariable dataType) const;
 		std::vector<std::string> getNames() const;
 		std::string getName() {return name;}
+		std::vector<std::string> getNamesWithLabel(std::string label);
 		//Makes stacked histogram
 		THStack* getStack(HistVariable histType, std::string label = "", bool scaleToExpected = false) const;
 		

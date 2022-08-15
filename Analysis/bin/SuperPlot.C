@@ -33,16 +33,16 @@ void SuperPlot()
 			leptonBackgrounds->labelProcess("signal", processName);
 		}
 	}
-
-	THStack* hist1 = leptonBackgrounds->getStack(HistVariable::MET, "background", true);
-	THStack* hist2 = leptonBackgrounds->getStack(HistVariable::MET, "signal", true);
 	
 	//Write an extra text for the graph here
 	TString extraText = "Preliminary";
 
-	//Put the THStack with larger y axis first (if graph is cut off when drawn switch the order)
-	//This formats the plot, to change things like axis titles edit PlotFormatter.cc
-	TCanvas *canvas = PlotFormatter::formatPlot(hist2, hist1, true, extraText);
+	//Write axis titles here
+	TString xAxisTitle = "MET [GeV]";
+	TString yAxisTitle = "Events";
+
+	//Creates the graph; to change the quality edit the HistVariable
+	TCanvas *canvas = PlotFormatter::formatPlot(leptonBackgrounds, HistVariable::MET, false, extraText, xAxisTitle, yAxisTitle);
 	
 	//Uncomment to save a png picture in your bin folder
 	//canvas->SaveAs("SuperPlot.png");
