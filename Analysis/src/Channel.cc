@@ -3,11 +3,15 @@
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include "THStack.h"
 #include "TStyle.h"
+#include "TH1.h"
+#include "TAxis.h"
+#include "TStyle.h"
 #include <iostream>
 #include <algorithm>
 #include <memory>
 #include <vector>
 
+//Channel::Channel(std::string name, std::string iYAxisName, std::vector<std::shared_ptr<Process>> iProcesses) : name(name), yAxisName(iYAxisName)
 Channel::Channel(std::string name, std::vector<std::shared_ptr<Process>> iProcesses) : name(name)
 {
 	for (auto process : iProcesses)
@@ -101,6 +105,7 @@ THStack* Channel::getStack(HistVariable histType, std::string label, bool scaleT
 				hist->SetLineColor(kRed);
 				hist->SetFillColor(kWhite);
 			}
+			//hist->GetYaxis()->SetTitle(yAxisName.c_str());
 			superPlot->Add(hist);
 		}
 	}

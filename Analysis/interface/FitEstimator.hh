@@ -16,6 +16,7 @@ class FitEstimator : public Estimator
 		double getExpectedYield(const SingleProcess* process, HistVariable dataType, double luminosity) const override; 
 		double getMassTarget() const override; 
 		TH1* getFitHist(HistVariable histType) const;
+		
 	private: 
 		const double massTarget;
 		const std::shared_ptr<Input> fitInput;
