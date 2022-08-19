@@ -14,6 +14,7 @@ class Channel
 {
 	public:
 
+		//Channel(std::string name, std::string iYAxisName, std::vector<std::shared_ptr<Process>> iProcesses);
 		Channel(std::string name, std::vector<std::shared_ptr<Process>> iProcesses);
 		//Gets data from all processes in the format needed to make table
 		std::vector<double> getYields(HistVariable dataType) const;
@@ -31,8 +32,11 @@ class Channel
 
 		void addProcessLabel(std::string label, std::vector<std::shared_ptr<Process>> processes);
 
+		std::vector<std::shared_ptr<Process>> getProcesses() {return processes;}
+
 	private: 
 		std::string name;
+		//std::string yAxisName;
 		std::vector<std::shared_ptr<Process>> processes;
 		std::unordered_map<std::string, std::vector<std::shared_ptr<Process>>> map;
 };

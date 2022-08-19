@@ -33,6 +33,9 @@ void SuperPlot()
 			leptonBackgrounds->labelProcess("signal", processName);
 		}
 	}
+
+	//This is for making single hist graphs. Just change the process name to the one you want. Not all processes or qualities allow 2D hists.
+	std::shared_ptr<Process> process = leptonBackgrounds->findProcess("Higgs Signal");
 	
 	//Write an extra text for the graph here
 	TString extraText = "Preliminary";
@@ -41,9 +44,15 @@ void SuperPlot()
 	TString xAxisTitle = "MET [GeV]";
 	TString yAxisTitle = "Events";
 
-	//Creates the graph; to change the quality edit the HistVariable
-	TCanvas *canvas = PlotFormatter::formatPlot(leptonBackgrounds, HistVariable::MET, false, extraText, xAxisTitle, yAxisTitle);
-	
+	//Creates the graph; to change the quality you've looking at edit the HistVariable
+	//For now, don't set drawLogo to true as it's not working yet
+	TCanvas *canvas = PlotFormatter::superImposedStackHistogram(leptonBackgrounds, HistVariable::MET, false, extraText, xAxisTitle, yAxisTitle);
+	//TCanvas *canvas = PlotFormatter::simple1DHist(process, HistVariable::MET, true, false, extraText, xAxisTitle, yAxisTitle);
+	//TCanvas *canvas = PlotFormatter::simple2DHist(process, HistVariable::InvariantMass, false, extraText, xAxisTitle, yAxisTitle);
+	//TCanvas *canvas = PlotFormatter::simpleStackHist(leptonBackgrounds, HistVariable::MET, false, extraText, xAxisTitle, yAxisTitle);
+	//TCanvas *canvas = PlotFormatter::superImposedHist(leptonBackgrounds, HistVariable::MET, true, false, extraText, xAxisTitle, yAxisTitle);
+
+
 	//Uncomment to save a png picture in your bin folder
 	//canvas->SaveAs("SuperPlot.png");
 }

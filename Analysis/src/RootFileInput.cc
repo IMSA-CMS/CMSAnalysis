@@ -34,7 +34,7 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 TH1* RootFileInput::get2DHist(HistVariable histType) const
 {
 	std::string name = histFinder->getHistName(histType);
-	TH1* hist = dynamic_cast<TH1*>(file->Get(name.c_str()));
+	TH1* hist = (TH2F *)file->Get(name.c_str());
 	//Since only windowEstimator uses this, windowEstimator will proceed with using 1D hists instead of 2D if no 2D hist.
 	//if(dynamic_cast<TH2 *>(hist) == 0) {
 	//	throw std::runtime_error("No 2D hist of name " + name + " in file " + fileSource);
