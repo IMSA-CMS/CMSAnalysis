@@ -12,6 +12,5 @@
 <use   name="pythia8"/>
 <environment>
   <bin   file="runAnalyzer.cc"/>
-  <bin   file="BackgroundEstimate.cc"/>
 <use name="CMSAnalysis/DataCollection"/>
 </environment>
