@@ -5,13 +5,13 @@
 
 class TTree;
 
-class DelphesEventFile : public TreeEventFile
+class DelphesEventFile : public TreeEventFile<Int_t, UInt_t, UInt_t> // sets which types to use for Delphes files: <size, elecIdpass, muonIdpass>
 {
     public:
         DelphesEventFile(TFile* ifile);
     protected:
         virtual std::string getTreeName() override;
-        virtual BranchNames getTreeBranches() override;
+        static BranchNames getTreeBranches();
 };
 
 #endif

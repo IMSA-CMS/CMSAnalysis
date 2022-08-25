@@ -25,7 +25,7 @@ class MiniAODEventFile : public EventFile
         virtual ParticleCollection<Particle> getRecoParticles() const override;
         virtual ParticleCollection<Particle> getRecoJets() const override;
         //virtual std::vector<PileupSummaryInfo> getPileupInfo() const override;
-        virtual GenEventInfoProduct getGenInfo() const override;
+        //virtual GenEventInfoProduct getGenInfo() const override;
         virtual double getMET() const override;
     private:
         std::shared_ptr<fwlite::Event> event = nullptr;

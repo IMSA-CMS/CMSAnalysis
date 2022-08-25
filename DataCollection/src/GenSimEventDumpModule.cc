@@ -2,7 +2,7 @@
 
 #include <cmath>
 #include <stdexcept>
-
+#include <fstream>
 #include "DataFormats/MuonReco/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
 
@@ -10,6 +10,7 @@
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/FWLite/interface/Event.h"
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
+#include "CMSAnalysis/DataCollection/interface/ParticleCollection.hh"
 
 GenSimEventDumpModule::GenSimEventDumpModule(int inumOfEvents):
   numOfEvents(inumOfEvents)
@@ -18,19 +19,28 @@ GenSimEventDumpModule::GenSimEventDumpModule(int inumOfEvents):
 }
 
 //update this to remove event parameter
+bool clearlatch = true; 
 bool GenSimEventDumpModule::process()
 {
+  std::ofstream my_file;
+  if (clearlatch) 
+  {
+    my_file.open("GenSimEventDump.txt", std::ofstream::out | std::ofstream::trunc);
+    clearlatch = false;
+  }
+  
   if(counter < numOfEvents || numOfEvents == -1)
   {
-    auto genVec = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
-    ParticleCollection<GenSimParticle> genParticles;
-    for (auto particle : genVec) 
-    {
-      genParticles.addParticle(GenSimParticle(particle));
-    }
-
+    auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim, Particle::Type::None);
     //TODO this line needs to be fixed and put back in
-    //printGenParticleCollection(genParticles);
+    //Input Module is GenSim to match printGenSimParticleCollection
+    // if( getInput()->getLeptons(InputModule::RecoLevel::GenSim).getNumParticles() == 4)
+    // {
+      my_file.open("GenSimEventDump.txt", std::ios::app);
+      printGenSimParticleCollection(genParticles, my_file);
+      //std::cout << "\nAn event was printed";
+      my_file.close();
+    // }
     counter++;
     return true;
   }
@@ -44,77 +54,77 @@ void GenSimEventDumpModule::writeAll()
 {
 }
 
-void GenSimEventDumpModule::printGenParticleCollection(const reco::GenParticleCollection& genParts) const
+//just to keep track of the ammount of events
+int selectedcounter = 1;
+
+void GenSimEventDumpModule::printGenSimParticleCollection(const ParticleCollection<GenSimParticle>& genParts,std::ofstream& my_file ) const
 {
   int eventElement = 1;
   int motherColumnWidth = 20;
   int daughterColumnWidth = 20;
-
+  const auto& particleGroup = genParts.getParticles();
+  //if(counter>= 10){
+    //return;
+  //}
   // Format
-  std::cerr << "--------------------------------------------------------" << std::endl;
-  std::cerr << "EVENT #" << (counter + 1) << std::endl;
-  std::cerr << "--------------------------------------------------------" << std::endl;
+  my_file << "--------------------------------------------------------" << std::endl;
+  my_file << "EVENT #" << (counter + 1) << ":" << selectedcounter << "ab" <<std::endl;
+  my_file << "--------------------------------------------------------" << std::endl;
 
-  std::cout << std::left << std::setw(8) << "element" << std::setw(11) << "| pdfId"
+  my_file << std::left << std::setw(8) << "element" << std::setw(11) << "| pdfId"
    << std::setw(10) << "| status"
    << std::setw(motherColumnWidth) << "| mothers"
    << std::setw(daughterColumnWidth) << "| daughters"
-   << std::setw(15) << "| px"
-   << std::setw(15) << "| py"
-   << std::setw(15) << "| pz"
+   << std::setw(15) << "| pT"
+   << std::setw(15) << "| Eta"
+   << std::setw(15) << "| Phi"
    << std::setw(15) << "| E"
    << std::setw(5) << "| mass\n";
-
   //Prints out all of the particles
-  for(auto &part : genParts){
-
-    // Debug
-    //std::cout << part.numberOfMothers() << ", " << part.numberOfDaughters() << std::endl;
+  for(auto &part : particleGroup){
 
     // Standard info
-    std::cout << std::setw(8) << eventElement << "| " << std::setw(9) << part.pdgId() << "| " << std::setw(8) << part.status() << "| ";
+    my_file << std::setw(8) << eventElement << "| " << std::setw(9) << part.pdgId() << "| " << std::setw(8) << part.status() << "| ";
 
+    // fix formatMotherParticles function
     // Print mothers
-    std::cout << std::setw(motherColumnWidth - 2) << formatMotherParticles(part, genParts) << "| ";
+    my_file << std::setw(motherColumnWidth - 2) << "0" << "| ";
+    //my_file << std::setw(motherColumnWidth - 2) << formatMotherParticles(part, genParts) << "| ";
 
     // Print daughters
-    std::cout << std::setw(daughterColumnWidth - 2) << formatDaughterParticles(part, genParts) << "| ";
-
+    //formatDaughterParticles(part, particleGroup) was replaced by function not working string
+    try{
+      my_file << std::setw(daughterColumnWidth - 2) << formatDaughterParticles(part, particleGroup) << "| ";
+    }
+    catch(const std::exception& e){
+      my_file << std::setw(daughterColumnWidth - 2) << "Not Available"<< "| ";
+    }
     // Particle properties
-    std::cout << std::setw(13) << part.px() << "| " << std::setw(13) << part.py() << "| " << std::setw(13) << part.pz() << "| " << std::setw(13) << part.energy() << "| " << std::setw(13) << part.mass() << "\n";
-
+    my_file << std::setw(13) << part.getPt() << "| " << std::setw(13) << part.getEta() << "| " << std::setw(13) << part.getPhi() << "| ";
+    try{
+      my_file << std::setw(13) << part.getEnergy() << "| " << std::setw(13) << part.getMass() << "\n";
+    }
+    catch(const std::exception& e){
+      my_file << std::setw(13) << "N/A" << "| " << std::setw(13) << part.getMass() << "\n";
+    }
     eventElement++;
-  }
+    }
+  selectedcounter++;
 }
 
-int GenSimEventDumpModule::getIndexOf(const reco::Candidate* part, const std::vector<reco::GenParticle>& genParts) const
+int GenSimEventDumpModule::getIndexOf(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts) const
 {
   int indexOf = 0;
-  for(auto &possiblePart : genParts)
+  for(auto possiblePart : genParts)
   {
-    if(&possiblePart == part)
+    if(possiblePart == part)
       return indexOf;
     indexOf++;
   }
   return -1;
 }
 
-int GenSimEventDumpModule::getLatestIndexOfMothers(const reco::GenParticle& part, const std::vector<reco::GenParticle>& genParts) const
-{
-  int indexOf = -1;
-  for(int i = 0; i < (int) part.numberOfMothers(); i++)
-  {
-    int compareIndex = getIndexOf(part.mother(i), genParts);
-    if(compareIndex >= indexOf)
-    {
-      indexOf = compareIndex;
-    }
-  }
-
-  return indexOf;
-}
-
-int GenSimEventDumpModule::getLatestIndexOfDaughters(const reco::GenParticle& part, const std::vector<reco::GenParticle>& genParts) const
+int GenSimEventDumpModule::getLatestIndexOfDaughters(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts) const
 {
   int indexOf = -1;
   for(int i = 0; i < (int) part.numberOfDaughters(); i++)
@@ -129,49 +139,7 @@ int GenSimEventDumpModule::getLatestIndexOfDaughters(const reco::GenParticle& pa
   return indexOf;
 }
 
-std::string GenSimEventDumpModule::formatMotherParticles(const reco::GenParticle& part, const std::vector<reco::GenParticle>& genParts) const
-{
-  std::string mothers = "";
-
-  int motherIndexes [(int) part.numberOfMothers()];
-
-  // Store all indexes
-  for(int i = 0; i < (int) part.numberOfMothers(); i++)
-  {
-    motherIndexes[i] = getIndexOf(part.mother(i), genParts);
-  }
-
-  // Create formatted string based on indexes
-  for(int i = 0; i < (int) part.numberOfMothers(); i++)
-  {
-    int start = i;
-    int end = start;
-
-    int x = start;
-    if(start < ((int) part.numberOfMothers() - 1))
-    {
-       while(motherIndexes[x] + 1 == motherIndexes[x + 1] && (x != ((int) part.numberOfMothers() - 1)))
-      {
-        x++;
-        i++;
-        end = x;
-      }
-    }
-      
-    if(start != end)
-    {
-      mothers = mothers + (1 + getIndexOf(part.mother(start), genParts)) + "-" + (1 + getIndexOf(part.mother(end), genParts)) + " ";
-    }
-    else
-    {
-      mothers = mothers + (1 + getIndexOf(part.mother(start), genParts)) + " ";
-    }
-  }
-
-  return mothers;
-}
-
-std::string GenSimEventDumpModule::formatDaughterParticles(const reco::GenParticle& part, const std::vector<reco::GenParticle>& genParts) const
+std::string GenSimEventDumpModule::formatDaughterParticles(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts) const
 {
   std::string daughters = "";
 

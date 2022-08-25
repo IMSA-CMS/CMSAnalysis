@@ -16,22 +16,16 @@ ParticleCollection<Lepton> EventLoaderInputModule::getLeptons(RecoLevel level) c
     auto muons = getParticles(level, Particle::Type::Muon).getParticles();
     for (const auto &p : electrons)
     {
-        if (!leptonSelector || leptonSelector->checkParticle(p))
-        {
-            leptons.addParticle(p);
-        }
+        leptons.addParticle(p);
     }
     for (const auto &p : muons)
     {
-        if (!leptonSelector || leptonSelector->checkParticle(p))
-        {
-            leptons.addParticle(p);
-        }
+        leptons.addParticle(p);
     }
     return leptons;
 }
 
-ParticleCollection<Particle> EventLoaderInputModule::getParticles(RecoLevel level, Particle::Type particleType,  std::shared_ptr<Selector> selector) const
+ParticleCollection<Particle> EventLoaderInputModule::getParticles(RecoLevel level, Particle::Type particleType) const
 {
     ParticleCollection<Particle> particleList;
     if (level == RecoLevel::GenSim)
@@ -41,10 +35,7 @@ ParticleCollection<Particle> EventLoaderInputModule::getParticles(RecoLevel leve
         {
             if ((p.getType() == particleType || particleType == Particle::Type::None) && p.isFinalState())
             {
-                if (!selector || selector->checkParticle(p))
-                {
-                    particleList.addParticle(p);
-                }
+                particleList.addParticle(p);
             }
         }
     }
@@ -55,10 +46,7 @@ ParticleCollection<Particle> EventLoaderInputModule::getParticles(RecoLevel leve
         {
             if ((p.getType() == particleType || particleType == Particle::Type::None))
             {
-                if (!selector || selector->checkParticle(p))
-                {
-                    particleList.addParticle(p);
-                }
+                particleList.addParticle(p);
             }
         }
     }
@@ -66,7 +54,7 @@ ParticleCollection<Particle> EventLoaderInputModule::getParticles(RecoLevel leve
 }
 
 /* TODO: getJets */
-ParticleCollection<Particle> EventLoaderInputModule::getJets(RecoLevel level, double pTcut) const
+ParticleCollection<Particle> EventLoaderInputModule::getJets(RecoLevel level) const
 {
     ParticleCollection<Particle> particleList;
     if (level == RecoLevel::GenSim)
@@ -78,10 +66,7 @@ ParticleCollection<Particle> EventLoaderInputModule::getJets(RecoLevel level, do
         auto particles = eventLoader->getFile()->getRecoJets().getParticles();
         for (const auto &p : particles)
         {
-	  if (p.getPt() >= pTcut)
-            {
-                particleList.addParticle(p);
-            }
+            particleList.addParticle(p);
         }
     }
     return particleList;
@@ -94,10 +79,10 @@ std::vector<PileupSummaryInfo> InputModule::getPileupInfo() const
 }
 */
 
-GenEventInfoProduct EventLoaderInputModule::getGenInfo() const
-{
-    return eventLoader->getFile()->getGenInfo();
-}
+// GenEventInfoProduct EventLoaderInputModule::getGenInfo() const
+// {
+//     return eventLoader->getFile()->getGenInfo();
+// }
 
 double EventLoaderInputModule::getMET() const
 {

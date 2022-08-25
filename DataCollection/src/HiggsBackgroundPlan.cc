@@ -10,6 +10,7 @@
 #include "CMSAnalysis/DataCollection/interface/DoubleElectronTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/DoubleMuonTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
+#include "CMSAnalysis/DataCollection/interface/LocalEventInputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/MatchingModule.hh"
 #include "CMSAnalysis/DataCollection/interface/METHist.hh"
@@ -26,6 +27,11 @@
 #include "CMSAnalysis/DataCollection/interface/TripleMuonTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/TwoInvariantMassesHist.hh"
 #include "CMSAnalysis/DataCollection/interface/BJetFilter.hh"
+#include "CMSAnalysis/DataCollection/interface/EventModule.hh"
+#include "CMSAnalysis/DataCollection/interface/PASSelector.hh"
+#include "CMSAnalysis/DataCollection/interface/QuarkoniaCut.hh"
+#include "CMSAnalysis/DataCollection/interface/ZVetoCut.hh"
+#include "CMSAnalysis/DataCollection/interface/FourLeptonCut.hh"
 
 using std::make_shared;
 
@@ -34,6 +40,18 @@ HiggsBackgroundPlan::HiggsBackgroundPlan()
 
     Analyzer& analyzer = getAnalyzer();
     
+    auto eventMod = make_shared<EventModule>();
+    auto pasSelector = make_shared<PASSelector>();
+    auto fourLeptonCut = make_shared<FourLeptonCut>();
+    auto zVetoCut = make_shared<ZVetoCut>();
+    auto quarkoniaCut = make_shared<QuarkoniaCut>();
+    
+
+    eventMod->addSelector(pasSelector);
+    eventMod->addCut(fourLeptonCut);
+    eventMod->addCut(zVetoCut);
+    eventMod->addCut(quarkoniaCut);
+
     auto matchMod = make_shared<MatchingModule>();
     auto triggerMod = make_shared<TriggerModule>();
     auto metMod = make_shared<METModule>();
@@ -42,11 +60,17 @@ HiggsBackgroundPlan::HiggsBackgroundPlan()
     auto nLeptonsFilter = make_shared<NLeptonsFilter>();
     
     auto histMod = make_shared<HistogramOutputModule>();
+    
+
     auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
 
     auto genSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::GenSim, "GenSim Same Sign Invariant Mass", 100, 0, 1000, false, false);
     auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "Reco Same Sign Invariant Mass", 1000, 0, 2000, false, false);
     auto positiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);
+
+    auto eventHistMod = eventMod->getHistogramModule();
+    
+    eventHistMod->addHistogram(recoSameSignInvMassHist);
 
     auto recoPt = make_shared<PtHist>(InputModule::RecoLevel::Reco, "Leading lepton pT", 500, 0, 1000);
     auto recoInvMass = make_shared<InvariantMassHist>(InputModule::RecoLevel::Reco, "Opposite-sign dilepton mass", 1000, 0, 2000);
@@ -81,12 +105,17 @@ HiggsBackgroundPlan::HiggsBackgroundPlan()
     analyzer.addProductionModule(metMod);
 
 
-    analyzer.addFilterModule(bJetFilter);
+    /*analyzer.addFilterModule(bJetFilter);
     analyzer.addFilterModule(snowmassCut);
-    analyzer.addFilterModule(nLeptonsFilter);
+    analyzer.addFilterModule(nLeptonsFilter);*/
 
+    
     analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
+    analyzer.addAnalysisModule(eventMod);
+    analyzer.addAnalysisModule(eventHistMod);
 
+    /*
     auto leptonSelector = std::make_shared<SnowmassLeptonSelector>(10);
     analyzer.getInputModule()->setLeptonSelector(leptonSelector);
+    */
 }

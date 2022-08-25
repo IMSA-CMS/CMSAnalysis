@@ -28,11 +28,6 @@ bool LeptonJetImplementation::operator==(const ParticleImplementation& userParti
       return false;
     }
 }
-double LeptonJetImplementation::energy() const
-{
-  return lJet->getFourVector().E();
-
-}
 
 Particle::Type LeptonJetImplementation::getType() const
 {

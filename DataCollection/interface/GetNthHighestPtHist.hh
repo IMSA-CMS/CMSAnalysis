@@ -2,11 +2,12 @@
 #define GETNTHHIGHESTPTHIST_HH
 
 #include "CMSAnalysis/DataCollection/interface/GenSimRecoPrototype.hh"
+#include "CMSAnalysis/DataCollection/interface/Particle.hh"
 
 class GetNthHighestPtHist : public GenSimRecoPrototype
 {
   public:
-    GetNthHighestPtHist(InputModule::RecoLevel typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum, int inthMuon = 1);
+    GetNthHighestPtHist(InputModule::RecoLevel typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum, int inthMuon = 1, Particle::Type parType = Particle::Type::None);
     using GenSimRecoPrototype::GenSimRecoPrototype;
     
 
@@ -15,6 +16,7 @@ class GetNthHighestPtHist : public GenSimRecoPrototype
 
   private:
     int nthMuon;
+    Particle::Type particleType;
 };
 
 #endif

@@ -19,8 +19,8 @@ std::string UnusualFinalStateFilter::makeFilterString()
 
   else if (recoParticles.getNumParticles() == 3)  // Keep all of the events with 3 final state leptons of all the same-sign charge
   {
-    if ((recoParticles.getParticles()[0].charge() == recoParticles.getParticles()[1].charge()) &&
-      (recoParticles.getParticles()[0].charge() == recoParticles.getParticles()[2].charge()))
+    if ((recoParticles.getParticles()[0].getCharge() == recoParticles.getParticles()[1].getCharge()) &&
+      (recoParticles.getParticles()[0].getCharge() == recoParticles.getParticles()[2].getCharge()))
     {
       return "SameSign3-lepton";
     }
@@ -33,11 +33,11 @@ std::string UnusualFinalStateFilter::makeFilterString()
 
     for (auto lepton : recoParticles.getParticles())
     {
-      if (lepton.charge() > 0)
+      if (lepton.getCharge() > 0)
       {
         pos++;
       }
-      else if (lepton.charge() < 0)
+      else if (lepton.getCharge() < 0)
       {
         neg++;
       }

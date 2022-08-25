@@ -1,0 +1,35 @@
+# How to setup .gitignore https://www.atlassian.com/git/tutorials/saving-changes/gitignore
+
+# Python
+*.pyc
+*__init__.py
+
+*BuildFile*
+
+# Emacs autosave files
+*~
+*#
+
+# Output files
+*.root
+*.png
+
+# Root Build Files
+*.so
+*.d
+*.pcm
+
+# Log Files
+*.log
+
+# Other
+*.pdf
+*.orig
+
+# Files to always include
+!*.py
+!*.h
+!*.cc
+!*.spc
+!*dpPythiaParameters.txt
+!*hppPythiaParameters.txt
