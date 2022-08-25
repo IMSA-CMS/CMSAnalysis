@@ -13,7 +13,7 @@ class PlotFormatter
 {
     public:
         //Superimposed stacks
-        static TCanvas* superImposedStackHistogram(std::shared_ptr<Channel> processes, HistVariable histvariable, bool drawLogo, TString extraText, TString xAxisTitle, TString yAxisTitle);
+        static TCanvas* superImposedStackHist(std::shared_ptr<Channel> processes, HistVariable histvariable, bool drawLogo, TString extraText, TString xAxisTitle, TString yAxisTitle);
         //Superimposed hist
         static TCanvas* superImposedHist(std::shared_ptr<Channel> processes, HistVariable histvariable, bool scaleToExpected, bool drawLogo, TString extraText, TString xAxisTitle, TString yAxisTitle);
         //Single 1D hist

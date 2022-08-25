@@ -25,7 +25,7 @@
 #include <memory>
 #include <vector>
  
-TCanvas* PlotFormatter::superImposedStackHistogram(std::shared_ptr<Channel> processes, HistVariable histvariable, bool drawLogo, TString extraText, TString xAxisTitle, TString yAxisTitle)
+TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes, HistVariable histvariable, bool drawLogo, TString extraText, TString xAxisTitle, TString yAxisTitle)
 {
     THStack* background = processes->getStack(histvariable, "background", true);
 	THStack* signal = processes->getStack(histvariable, "signal", true);
@@ -200,7 +200,7 @@ TCanvas* PlotFormatter::simple2DHist(std::shared_ptr<Process> process, HistVaria
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
 
     //Draws the histogram
-    hist->Draw("HIST");
+    hist->Draw("COLZ");
    
  
     //Change axis and graph titles here
