@@ -16,80 +16,99 @@
 #include "DataFormats/FWLite/interface/Event.h"
 #include "CMSAnalysis/DataCollection/interface/Module.hh"
 #include "CMSAnalysis/DataCollection/interface/TDisplayText.h"
+#include "CMSAnalysis/DataCollection/interface/ProcessDictionary.hh"
 #include "CMSAnalysis/DataCollection/interface/EventLoaderInputModule.hh"
 
 Analyzer::Analyzer() :
   eventLoader(),
   input(new EventLoaderInputModule(&eventLoader))
-  {}
-Analyzer::Analyzer(const Analyzer& analyzer) {
+{
+  dictionary.loadProcesses("textfiles/processes.txt");
+}
+
+Analyzer::Analyzer(const Analyzer& analyzer) 
+{
   eventLoader = analyzer.eventLoader;
   input = analyzer.input;
 }
+
 Analyzer::~Analyzer()
 {
-  std::cout << input << "\n";
   delete input;
 }
+
 void Analyzer::run(const std::string& configFile, const std::string& outputFile, int outputEvery, int nFiles)
 {
-  // This keeps the histograms separate from the files they came from, avoiding much silliness
+  fetchRootFiles(configFile);
+  
+  processRootFiles(outputEvery, nFiles);
+  
+  writeOutputFile(outputFile);
+}
+
+void Analyzer::fetchRootFiles(const std::string& configFile)
+{
+  auto substringFound = configFile.find(".root");
+  bool isLocalFile = substringFound != std::string::npos;
+  if (isLocalFile)
+  {
+    rootFiles.push_back(configFile);
+  } 
+  else 
+  {
+    auto fileparams = dictionary.readFile(configFile);
+    for (auto& filepar : fileparams)
+    {
+      // Get a list of Root files for each filpar object
+      auto tempFiles = filepar.getFileList();
+      rootFiles.insert(rootFiles.end(), tempFiles.begin(), tempFiles.end());
+    }
+    for (auto& fileName : rootFiles)
+    {
+      // Adds prefix necessary to read remote files
+      const std::string eossrc = "root://cmsxrootd.fnal.gov//";
+	    fileName = eossrc + fileName;
+    }
+  }
+  std::cout << "# of root files: " << rootFiles.size() << std::endl;
+}
+
+void Analyzer::processRootFiles(int outputEvery, int nFiles)
+{
+  // This keeps the histograms separate from the files they came from, avoiding errors
   TH1::AddDirectory(kFALSE);
   TH1::SetDefaultSumw2(kTRUE);
-
   // Get a list of FileParams objects
-  auto fileparams = inputFiles(configFile);
   eventLoader.setOutputEvery(outputEvery);
-
   // Initialize all modules
   for (auto module : getAllModules())
-    {
-      module->setInput(input);
-      module->initialize();
-    }
-
-  // A list of all the filters we used
-  std::unordered_set<std::string> filterNames;
-
-  int numOfEvents = 0;
-
-  for (auto& filepar : fileparams)
-    {
-      // Set the static FileParams object so the modules know the file parameters
-      Module::setFileParams(filepar);
-
-      // Get a list of Root files
-      auto files = filepar.fileVector();
-      std::cout << "# of root files: " << files.size() << std::endl;
-
-      int fileCounter = 0;
-
-      for (auto& filename : files)
-	  {
-      fileCounter += 1;
-
-	  // Open files with rootxd
-	  const std::string eossrc = "root://cmsxrootd.fnal.gov//";
-
-	  std::string fileStr = eossrc + filename;
-	  TFile* file = TFile::Open(fileStr.c_str(), "READ");
+  {
+    module->setInput(input);
+    module->initialize();
+  }
+  // Loops through every file
+  int fileCounter = 0;
+  for (auto& fileName : rootFiles)
+  {
+    ++fileCounter;
+    TFile* file = TFile::Open(fileName.c_str(), "READ");
 	  if (!file)
-	    {
-	      std::cout << "File " << fileStr << " not found!\n";
-	      continue;
-	    }
-    
-    eventLoader.changeFile(file);
-
+	  {
+	   std::cout << "File " << fileName << " not found!\n";
+	   continue;
+    }
+    eventLoader.changeFileFormat(file); //Makes a GenSimEventFile, DelphesEventFile or MiniAODFile shared pointer
+    // Loops through every event in the file
     while(true)
     {
       if (eventLoader.getFile()->isDone())
       {
+        numOfEvents += eventLoader.getFile()->getEventCount() - 1; //-1 is necessary to not count the last event which is invalid
         break;
-      }
-      ++numOfEvents;
-      // eventLoader.getLeptons();
+      }   
       bool continueProcessing = true;
+      std::string filterString;
+      // Processes event through production modules
       for (auto module : productionModules)
       {
         if (!module->processEvent())
@@ -98,7 +117,7 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
           break;
         }
       }
-      std::string filterString;
+      // Processes event through filter modules
       for (auto module : filterModules)  
       {
         if (!module->processEvent())
@@ -111,199 +130,63 @@ void Analyzer::run(const std::string& configFile, const std::string& outputFile,
           filterString += module->getFilterString();
         }
       }
+      // Processes event through analysis modules
       if (continueProcessing)
       {
         filterNames.insert(filterString);
         for (auto module : analysisModules)
         {
           module->setFilterString(filterString);
-          module->processEvent();
+          if (!module->processEvent())
+          {
+            continueProcessing = false;
+            break;
+          }
         }
       }
       eventLoader.getFile()->nextEvent();
     }
-
-	 /*  // Extract events
-	  fwlite::Event ev(file);
-
-	  std::cerr << "Events: " << ev.size() << std::endl;
-
-	  numOfEvents += ev.size();
-      
-	  int ievt = 0;
-
-	  for (ev.toBegin(); !ev.atEnd(); ++ev, ++ievt)
-	    {
-	      const edm::EventBase& event = ev;
-
-	      if (outputEvery != 0 && ievt > 0 && ievt % outputEvery == 0) 
-		std::cout << "Processing event: " << ievt << std::endl; 
-
-	      // Run all production modules
-	      bool continueProcessing = true;
-	      for (auto module : productionModules)
-		{
-		  if (!module->processEvent(event))
-		    {
-		      continueProcessing = false;
-		      //std::cout << "continueProcessing: " << continueProcessing << "\n" << std::endl; 
-		      break;
-		    }
-		}
-
-	      // Run all filter modules and get filter string
-	      std::string filterString;
-	      for (auto module : filterModules)
-		{
-		  if (!module->processEvent(event))
-		    {
-		      continueProcessing = false;
-		      break;
-		    }
-		  else
-		    {
-		      filterString += module->getFilterString();
-		    }
-		}
-
-	      if (!continueProcessing)
-		continue;
-
-	      // Keep track of the filters we are using (multiple insertions
-	      // will cause no effect on a map)
-	      filterNames.insert(filterString);
-
-	      // Run all analysis modules
-	      for (auto module : analysisModules)
-		{
-		  // Set the filter string first
-		  module->setFilterString(filterString);
-		  module->processEvent(event);
-		}
-	    } */
-
 	  delete file;
-
+    // Checks that the correct number of files are processed
     if (nFiles != -1 && fileCounter >= nFiles)
     {
       break;
     }
-	}
-      std::cout << "Events Processed: " << numOfEvents << std::endl;
-    }      
-  
-    // Create the output file
-  TFile* outputRootFile = new TFile(outputFile.c_str(), "RECREATE");
+  }
+  std::cout << "Events Processed: " << numOfEvents << std::endl;
+}
 
+void Analyzer::writeOutputFile(const std::string& outputFile)
+{
+   // Create the output file
+  TFile* outputRootFile = new TFile(outputFile.c_str(), "RECREATE");
   // Finalize the modules
   for (auto module : productionModules)
-    {
-      module->finalize();
-    }
+  {
+    module->finalize();
+  }
   for (auto module : filterModules)
-    {
-      module->finalize();
-    }
- 
-  // Finalize separately for each filterString, to be safe
+  {
+    module->finalize();
+  }
+  // Finalize separately for each filterString
   for (auto module : analysisModules)
-    {
-      module->doneProcessing();
-
-      for (auto& str : filterNames)
-	{
-	  module->setFilterString(str);
-	  module->finalize();
-	}
-
+  {
+    module->doneProcessing();
+    for (auto& str : filterNames)
+	  {
+	    module->setFilterString(str);
+	    module->finalize();
+	  }
       // Write the output
       module->writeAll();
-    }
-
+  }
   // Write total number of events
   auto eventsText = new TDisplayText(std::to_string(numOfEvents).c_str());
   eventsText->Write("NEvents");
-
   // Clean up
   outputRootFile->Close();
-
   delete outputRootFile;
-}
-
-std::vector<std::string> Analyzer::parseLine(std::ifstream& txtFile) const
-{
-  std::string line;
-  std::getline(txtFile,line);
-  
-  //seperates each line by whitespace (tabs)
-  std::istringstream stream(line);
-
-  std::vector<std::string> category;
-
-  int counter = 0; 
-  while (stream)
-    {
-      std::string word;
-      stream >> word;
-      
-      //occasionally added empty strings to the vector which caused a runtime error
-      if (counter > 0 and word.size() > 0)
-	{
-	  category.push_back(word);
-	}
-      ++counter;
-    }
-
-  return category;
-}
-
-std::vector<FileParams> Analyzer::inputFiles(const std::string& txtFile) const
-{
-  std::ifstream inputFiles(txtFile);
-
-  if (!inputFiles)
-    {
-      throw std::runtime_error("File " + txtFile + " not found!");
-    }
-  
-  //each vector contains the options selected in "pickFiles.txt"
-  // Configuration file must be in this order
-  auto process = parseLine(inputFiles);
-  auto year = parseLine(inputFiles);
-  auto lepton = parseLine(inputFiles);
-  auto mass = parseLine(inputFiles);
-  auto lambda = parseLine(inputFiles);
-  auto interference = parseLine(inputFiles);
-  auto helicity = parseLine(inputFiles);
-
-  std::vector<FileParams> params;
-
-  //adds all of the files to a larger vector that is seperated by mass cuts
-  for (auto& processStr : process)
-    for (auto& yearStr : year)
-      {
-	for (auto& leptonStr : lepton)
-	  {
-	    for (auto& lambdaStr : lambda)
-	      {
-		for (auto& interferenceStr : interference)
-		  {
-		    for (auto& helicityStr : helicity)
-		      {
-			for (auto& massStr : mass)
-			  {
-			    //based on the options selected, it adds the respective files following the standard naming system
-			    params.push_back(FileParams(processStr, yearStr, helicityStr, interferenceStr, massStr, 
-							lambdaStr, leptonStr));
-			  }
-		      }
-		  }
-	      }
-	  }
-      }
-      
-  std::cout << params[0].getFileKey() << std::endl;
-  return params;
 }
 
 std::vector<std::shared_ptr<Module>> Analyzer::getAllModules() const

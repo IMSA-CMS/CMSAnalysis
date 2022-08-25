@@ -13,26 +13,23 @@
 #include "CMSAnalysis/DataCollection/interface/Lepton.hh"
 class TFile;
 class EventLoader;
-class Selector;
 
 
 class EventLoaderInputModule : public InputModule
 {
     public:
         EventLoaderInputModule(const EventLoader *iEventLoader);
-        virtual void setLeptonSelector(std::shared_ptr<Selector> selector) {leptonSelector = selector;}
 
         virtual ParticleCollection<Lepton> getLeptons(RecoLevel level) const override;
-        virtual ParticleCollection<Particle> getParticles(RecoLevel level, Particle::Type particleType = Particle::Type::None,
-        std::shared_ptr<Selector> selector = nullptr) const override;
-        virtual ParticleCollection<Particle> getJets(RecoLevel level, double pTCut = 0) const override;
+        virtual ParticleCollection<Particle> getParticles(RecoLevel level, Particle::Type particleType = Particle::Type::None) const override;
+        virtual ParticleCollection<Particle> getJets(RecoLevel level) const override;
+        virtual Particle getSpecial(std::string name) const override {throw std::runtime_error("getSpecial not implemented in EventLoaderInputModule");}
 
-        virtual GenEventInfoProduct getGenInfo() const override;
+        //virtual GenEventInfoProduct getGenInfo() const override;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;
         virtual double getMET() const override;
     private:
         const EventLoader *eventLoader;
-        std::shared_ptr<Selector> leptonSelector;
 };
 #endif

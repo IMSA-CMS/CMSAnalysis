@@ -1,0 +1,22 @@
+H++toLL
+Mass:	300	500	700	900	1100	1300	1500	1700
+Format:	MiniAOD	Delphes
+Lepton:	LL	EMu	
+
+Drell-Yan
+MassCut:	4-10	10-50	50-inf
+Format:	MiniAOD	Delphes
+
+QCD
+HTCut:	50-100	100-200	200-300	300-500	500-700	700-1000	1000-1500	1500-2000	2000-inf
+Format:	MiniAOD	Delphes
+
+TTbartoLL
+Format:	MiniAOD	Delphes
+
+ZZto4L
+Format:	MiniAOD	Delphes
+
+DarkPhotonSUSY
+Mass:	0_1	0_2	0_3	0_4	0_5	0_7	0_9	1_2	1_5	2_0	2_5
+Format:	MiniAOD	Delphes

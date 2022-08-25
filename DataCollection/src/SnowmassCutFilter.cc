@@ -36,5 +36,5 @@ bool SnowmassCutFilter::checkFlavor(Particle p1, Particle p2)
 
 bool SnowmassCutFilter::checkSign(Particle p1, Particle p2)
 {
-    return p1.charge() != p2.charge();
+    return p1.getCharge() != p2.getCharge();
 }

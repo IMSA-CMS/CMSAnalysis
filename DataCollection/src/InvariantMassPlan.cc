@@ -19,8 +19,12 @@
 #include "CMSAnalysis/DataCollection/interface/SameSignInvariantMassHist.hh"
 #include "CMSAnalysis/DataCollection/interface/NLeptonsFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerFilter.hh"
+#include "CMSAnalysis/DataCollection/interface/SameSignInvariantMassFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/SimTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerSimModule.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimEventDumpModule.hh"
+#include "CMSAnalysis/DataCollection/interface/RecoEventDumpModule.hh"
+#include "CMSAnalysis/DataCollection/interface/EventModule.hh"
 
 using std::make_shared;
 

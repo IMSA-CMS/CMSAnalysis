@@ -1,7 +1,0 @@
-Procs:  QCD
-Year:   2021
-Lepton: M   E
-Mass:   M50    M80    M120    M170    M300    M470    M600    M800    M1000
-Lambda: 200
-Inter:	Con
-Helic:	LL

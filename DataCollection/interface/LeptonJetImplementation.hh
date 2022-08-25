@@ -15,8 +15,6 @@ class LeptonJetImplementation : public ParticleImplementation
   virtual reco::Candidate::LorentzVector getFourVector() const override;
   virtual bool operator == (const ParticleImplementation& userParticle) const override;
   virtual int charge() const override {throw std::__throw_runtime_error;}
-  virtual double et() const override {throw std::__throw_runtime_error;}
-  virtual double energy() const override;
   virtual double isolation() const override {throw std::runtime_error("Isolation not implemented.");}
   // double getPt() const override {return getFourVector().Pt();}
   // double getPhi() const override {return getFourVector().Phi();}
@@ -26,6 +24,7 @@ class LeptonJetImplementation : public ParticleImplementation
   virtual Particle daughter(int i) const override {throw std::__throw_runtime_error;}
   virtual int numberOfDaughters() const override {throw std::__throw_runtime_error;}
   virtual Particle::Type getType() const override;
+  virtual Particle::SelectionFit getSelectionFit() const override {throw std::runtime_error("getSelectionFit not implemented");};
   // virtual bool isIsolated() const override {throw std::__throw_runtime_error;};
   virtual int pdgId() const override {throw std::__throw_runtime_error;};
   virtual int status() const override {throw std::__throw_runtime_error;};

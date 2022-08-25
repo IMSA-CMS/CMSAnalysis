@@ -1,0 +1,66 @@
+# General
+Main:timesAllowErrors = 10000
+ParticleDecays:limitTau0 = on
+ParticleDecays:tauMax = 10 
+#Random:seed=6
+
+# Beam Parameters
+Beams:idA = 11
+Beams:idB = -11
+                        
+# Decays for doubly charged higgs
+9900041:onMode = off
+#9900041:onIfAny = 11 13
+#Turns off tau decays
+9900041:offIfAny = 15 
+#Turn on in order to only have Muons
+9900041:onIfAll = 13 13
+#Turn on in order to only have Electrons
+9900041:onIfAll = 11 11
+#Turn on for H++ to decay to only Muons
+#9900041:onPosIfAll = 13 13
+#Turn on for H-- to decay to only electrons
+#9900041:onNegIfAll = 11 11 
+
+9900042:onMode = off
+9900042:onIfAny = 11 13
+#Turns off tau decays
+9900042:offIfAny = 15
+#Turn on in order to only have Muons
+9900042:onIfAll = 13
+#Turn on in order to only have Electrons  
+#9900042:onIfAll = 11                      
+
+# Left-Right Symmmetry Parameters
+#THERE NEEDS TO BE THREE Ms in symmmetry
+LeftRightSymmmetry:ffbar2HLHL = on
+LeftRightSymmmetry:ffbar2HRHR = off
+#Yukawa couplings fo H--
+LeftRightSymmmetry:coupHee = .02
+LeftRightSymmmetry:coupHmue = 0
+LeftRightSymmmetry:coupHmumu = .02
+LeftRightSymmmetry:coupHtaue = 0
+LeftRightSymmmetry:coupHtaumu = 0
+LeftRightSymmmetry:coupHtautau = 0
+                        
+# W Fusion decay
+#Vacuum Expectation in GeV default is 5
+LeftRightSymmmetry:vL = 0 
+
+# ZZ Background
+WeakDoubleBoson:ffbar2gmZgmZ = off
+WeakZ0:gmZmode = 2
+
+# Z Decays
+#23:onMode = off
+#23:onIfAny = 11 13
+#Turns off tau decays
+#23:offIfAny = 15 
+#Turn on in order to only have Muons
+#23:onIfAll = 13 13
+#Turn on in order to only have Electrons
+#23:onIfAll = 11 11
+
+# Higgs Values
+9900041:m0 = 200
+9900042:m0 = 200
