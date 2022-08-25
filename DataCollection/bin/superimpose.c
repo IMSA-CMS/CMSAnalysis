@@ -42,6 +42,7 @@ struct Plot
   {
     file = TFile::Open(filePath.c_str());
     plot = getHist(histPath.c_str(), file);
+    //std::cout << plot << std::endl;
     plot->SetLineColor(color);
     legend = ilegend;
     drawArgs = "9";
@@ -147,6 +148,7 @@ void superimpose(){
   string file23 = "Higgs1100.root";
   string file24 = "Higgs1300.root";
 
+
   // string hist1 = "Dimuon/Muon+ pt High";
   // string hist2 = "Dimuon/Muon+ pt Low";
 
@@ -173,8 +175,6 @@ void superimpose(){
   // string hist12 = "Gen Sim Photon Histogram";
   // string hist13 = "Gen Same Sign Invariant Mass";
 
- 
-  
   vector<Image> images
     {
       Image(.4, "Same-Sign Invariant Mass [GeV]", "Events", "", kCool
