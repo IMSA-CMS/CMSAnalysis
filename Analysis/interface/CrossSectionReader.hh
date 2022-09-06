@@ -1,6 +1,7 @@
 #ifndef CROSSSECTIONREADER_HH
 #define CROSSSECTIONREADER_HH
 
+#include <string>
 #include <unordered_map>
 
 class CrossSectionReader
