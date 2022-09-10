@@ -12,11 +12,19 @@
 #include "CMSAnalysis/DataCollection/interface/IDType.hh"
 #include "FWCore/FWLite/interface/FWLiteEnabler.h"
 #include "PhysicsTools/FWLite/interface/CommandLineParser.h"
-
 #include "CMSAnalysis/DataCollection/interface/DataCollectionPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/AnalyzerOptions.hh"
-
-
+#include "CMSAnalysis/DataCollection/bin/massResolutionAnalysis.cc"
+#include "CMSAnalysis/DataCollection/bin/HPlusPlusMassAnalysis.cc"
+#include "CMSAnalysis/DataCollection/bin/leptonJetReconstructionAnalysis.cc"
+#include "CMSAnalysis/DataCollection/bin/displacedVertexAnalysis.cc"
+#include "CMSAnalysis/DataCollection/bin/massAcceptanceAnalysis.cc"
+#include "CMSAnalysis/DataCollection/bin/triggerAnalysis.cc"
+#include "CMSAnalysis/DataCollection/bin/invariantMassAnalysis.cc"
+#include "CMSAnalysis/DataCollection/bin/HiggsBackgroundAnalysis.cc"
+#include "CMSAnalysis/DataCollection/bin/LeptonJetBackgroundAnalysis.cc"
+#include "CMSAnalysis/DataCollection/bin/FilestripAnalysis.cc"
+#
 
 int main(int argc, char **argv) {
   gROOT->SetBatch(true);
