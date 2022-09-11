@@ -23,9 +23,9 @@
 #include "TFitResult.h"
 #include <iostream>
 #include <memory>
-#include <vector>
- 
-TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes, HistVariable histvariable, bool drawLogo, TString extraText, TString xAxisTitle, TString yAxisTitle)
+#include <vector> 
+
+TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle)
 {
     THStack* background = processes->getStack(histvariable, "background", true);
 	THStack* signal = processes->getStack(histvariable, "signal", true);
@@ -55,7 +55,8 @@ TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes
 
     //Draws the histogram with more events first (bigger axis)
     first->Draw("HIST");
-   
+    stackVector.push_back(first);
+
     auto hist = first->GetHistogram();
  
     //Change axis and graph titles here
@@ -83,19 +84,27 @@ TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes
     }
     legend->Draw();
  
-    writeText(width, height, top, bottom, left, right, false, extraText);
+    writeText(width, height, top, bottom, left, right);
    
     //Draws the other histogram    
     second->Draw("HIST SAME");
+    stackVector.push_back(second);
 
     canvas->Update();
     return canvas;
 }
 
-TCanvas* PlotFormatter::superImposedHist(std::shared_ptr<Channel> processes, HistVariable histvariable, bool scaleToExpected, bool drawLogo, TString extraText, TString xAxisTitle, TString yAxisTitle) {
+TCanvas* PlotFormatter::superImposedHist(std::shared_ptr<Channel> processes, HistVariable histvariable, bool scaleToExpected, TString xAxisTitle, TString yAxisTitle) {
     std::vector<TH1*> hists;
     for(std::shared_ptr<Process> process : processes->getProcesses()) {
         hists.push_back(process->getHist(histvariable, scaleToExpected));
+    }
+
+    for(TH1* hist : hists) {
+        if(hist->Integral() != 0 && !std::isnan(hist->Integral())) {
+            hist->Scale(1/hist->Integral());
+	    hist->SetFillColor(kWhite);
+        }
     }
 
     //Defines order to draw so graph isn't cut off
@@ -125,7 +134,8 @@ TCanvas* PlotFormatter::superImposedHist(std::shared_ptr<Channel> processes, His
 
     //Draws the histogram with more events first (bigger axis)
     first->Draw("HIST");
- 
+    histVector.push_back(first);
+
     //Change axis and graph titles here
     first->GetXaxis()->SetTitle(xAxisTitle);
     first->GetYaxis()->SetTitle(yAxisTitle);
@@ -144,12 +154,13 @@ TCanvas* PlotFormatter::superImposedHist(std::shared_ptr<Channel> processes, His
     }
     legend->Draw();
  
-    writeText(width, height, top, bottom, left, right, false, extraText);
+    writeText(width, height, top, bottom, left, right);
    
     //Draws the other histogram    
     for(TH1* hist : hists) {
         if(find(hists.begin(), hists.end(), hist) - hists.begin() != firstIndex) {
             hist->Draw("HIST SAME");
+            histVector.push_back(hist);
         }
     }
 
@@ -157,7 +168,76 @@ TCanvas* PlotFormatter::superImposedHist(std::shared_ptr<Channel> processes, His
     return canvas;
 }
 
-TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, HistVariable histvariable, bool scaleToExpected, bool drawLogo, TString extraText, TString xAxisTitle, TString yAxisTitle) {
+TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vector<int> colors, std::vector<TString> names, TString xAxisTitle, TString yAxisTitle) {
+    //Defines order to draw so graph isn't cut off
+    TH1* first = hists.at(0);
+    int firstIndex = 0;
+    double maximum = 0;
+    int count = 0;
+    for(TH1* hist : hists) {
+	    if(hist->Integral() != 0 && !isnan(hist->Integral())) {
+	        hist->Scale(1/hist->Integral());
+		hist->SetFillColor(kWhite);
+	    }
+	    hist->SetLineColor(colors.at(count));
+        if(hist->GetMaximum() > maximum) {
+            maximum = hist->GetMaximum();
+            first = hist;
+            firstIndex = find(hists.begin(), hists.end(), hist) - hists.begin();
+        }
+	    count++;
+    }
+ 
+    //Setting size and margins
+    int width = 800;
+    int height = 600;
+ 
+    float top = 0.08*height;
+    float bottom = 0.12*height;
+    float left = 0.12*width;
+    float right = 0.04*width;
+
+    TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
+
+    gStyle->SetOptStat(0);
+
+    //Draws the histogram with more events first (bigger axis)
+    first->Draw("HIST");
+    histVector.push_back(first);
+
+    //Change axis and graph titles here
+    first->GetXaxis()->SetTitle(xAxisTitle);
+    first->GetYaxis()->SetTitle(yAxisTitle);
+ 
+    //Draws the legend
+    auto legend = new TLegend(0.8-(right/width), 0.85-(top/height), 1-(right/width), 1-(top/height));
+    legend->SetTextSize(0.02);
+    count = 0;
+    std::string name;
+    TString toAdd;
+    for(TH1* hist : hists) {
+        name = names.at(count); 
+        toAdd = name;
+        legend->AddEntry(hist, " " + toAdd, "L");
+        count++;
+    }
+    legend->Draw();
+ 
+    writeText(width, height, top, bottom, left, right);
+   
+    //Draws the other histogram    
+    for(TH1* hist : hists) {
+        if(find(hists.begin(), hists.end(), hist) - hists.begin() != firstIndex) {
+            hist->Draw("HIST SAME");
+            histVector.push_back(hist);
+        }
+    }
+
+    canvas->Update();
+    return canvas;
+}
+
+TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, HistVariable histvariable, bool scaleToExpected, TString xAxisTitle, TString yAxisTitle) {
     TH1* hist = process->getHist(histvariable, scaleToExpected);
  
     //Setting size and margins
@@ -173,19 +253,19 @@ TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, HistVaria
 
     //Draws the histogram
     hist->Draw("HIST");
-   
+    histVector.push_back(hist);
  
     //Change axis and graph titles here
     hist->GetXaxis()->SetTitle(xAxisTitle);
     hist->GetYaxis()->SetTitle(yAxisTitle);
 
-    writeText(width, height, top, bottom, left, right, false, extraText);
+    writeText(width, height, top, bottom, left, right);
    
     canvas->Update();
     return canvas;
 }
 
-TCanvas* PlotFormatter::simple2DHist(std::shared_ptr<Process> process, HistVariable histvariable, bool drawLogo, TString extraText, TString xAxisTitle, TString yAxisTitle) {
+TCanvas* PlotFormatter::simple2DHist(std::shared_ptr<Process> process, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle) {
     TH2* hist = process->get2DHist(histvariable);
  
     //Setting size and margins
@@ -201,19 +281,19 @@ TCanvas* PlotFormatter::simple2DHist(std::shared_ptr<Process> process, HistVaria
 
     //Draws the histogram
     hist->Draw("COLZ");
-   
+    th2Vector.push_back(hist);
  
     //Change axis and graph titles here
     hist->GetXaxis()->SetTitle(xAxisTitle);
     hist->GetYaxis()->SetTitle(yAxisTitle);
 
-    writeText(width, height, top, bottom, left, right, false, extraText);
+    writeText(width, height, top, bottom, left, right);
    
     canvas->Update();
     return canvas;
 }
 
-TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, HistVariable histvariable, bool drawLogo, TString extraText, TString xAxisTitle, TString yAxisTitle) {
+TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle) {
     THStack* hists = processes->getStack(histvariable, "", true);
  
     //Setting size and margins
@@ -229,7 +309,8 @@ TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, Hist
 
     //Draws the histogram with more events first (bigger axis)
     hists->Draw("HIST");
-   
+    stackVector.push_back(hists);
+
     auto hist = hists->GetHistogram();
  
     //Change axis and graph titles here
@@ -250,7 +331,7 @@ TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, Hist
     }
     legend->Draw();
  
-    writeText(width, height, top, bottom, left, right, false, extraText);
+    writeText(width, height, top, bottom, left, right);
 
     canvas->Update();
     return canvas;
@@ -280,7 +361,7 @@ TCanvas* PlotFormatter::makeFormat(int w, int h, float t, float b, float l, floa
     return canvas;
 }
 
-void PlotFormatter::writeText(int w, int h, float t, float b, float l, float r, bool drawLogo, TString extraText) {
+void PlotFormatter::writeText(int w, int h, float t, float b, float l, float r) {
     //Writes CMS logo and integrated luminosity
     int align_ = 13;
     TString lumiText = "14 TeV";
@@ -297,6 +378,7 @@ void PlotFormatter::writeText(int w, int h, float t, float b, float l, float r, 
     float posY_ = 0.95 - (t/h);
  
     if(drawLogo) {
+        //This code doesn't compile for some reason
         // float xl_0 = posX_;
         // float yl_0 = posY_ - 0.15;
         // float xl_1 = posX_ + 0.15*height/width;
@@ -321,4 +403,25 @@ void PlotFormatter::writeText(int w, int h, float t, float b, float l, float r, 
         latex.SetTextSize(0.04);
         latex.DrawLatex(posX_, posY_ - 0.05, extraText);
     }
+}
+
+void PlotFormatter::deleteHists() {
+    for(auto hist : histVector) {
+        delete hist;
+    }
+    for(auto stack : stackVector) {
+	TIter next(stack->GetHists());
+	TObject* object = 0;
+	while ((object = next())) {
+	    delete (TH1*)object;
+	}		
+        delete stack;
+
+    }
+    for(auto hist2 : th2Vector) {
+	delete hist2;
+    }
+    histVector.clear();
+    stackVector.clear();
+    th2Vector.clear();
 }
