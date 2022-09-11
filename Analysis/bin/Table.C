@@ -69,6 +69,7 @@ void Table()
             input = makeTableInput(input, HistVariable::MET, higgsAnalysis->getChannel(channel + std::to_string((int) massTarget)), massTarget);
         }
         auto tableInput = std::make_shared<TableData>(input);
+        //Change the type of table you want here
         auto table = std::make_shared<TextTable>();
         table->makeTable(tableInput, std::cout);
         std::cout << "\n" << std::endl;
