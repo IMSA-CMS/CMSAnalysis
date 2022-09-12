@@ -33,8 +33,8 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 	
 	output << "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" << std::endl;
 
-	int RecoEventElement = 1;
-	int GenEventElement = 1;
+	int recoEventElement = 1;
+	int genEventElement = 1;
 
 	//column labels
 	output << std::left << std::setw(8) << "element" << std::setw(11) << "| type"
@@ -49,7 +49,7 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 	for(auto &recoPart : recoParts){
 		// Standard info
 		output << "++++++++++++++++ Reco Element ++++++++++++++++\n";
-		output << std::setw(8) << eventElement << "| " << std::setw(9) << int(recoPart.getType()) << "| ";
+		output << std::setw(8) << recoEventElement << "| " << std::setw(9) << int(recoPart.getType()) << "| ";
 
 		// Particle properties
 		output << std::setw(13) << recoPart.getCharge() << "| " 
@@ -64,7 +64,7 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 		output << std::setw(13) << "N/A" << "| " 
 			<< std::setw(13) << recoPart.getMass() << "\n";
 		}
-		RecoEventElement++;
+		recoEventElement++;
 
 		output << "-------------- GenSim Matches --------------\n";
 
@@ -74,7 +74,7 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 			double deltaR = std::sqrt( std::pow(recoPart.getPhi() - genPart.getPhi(), 2) + std::pow(recoPart.getEta() - genPart.getEta(), 2) );
 			if (deltaR < 0.1)
 			{
-				output << std::setw(8) << GenEventElement << "| " << std::setw(9) << int(genPart.getType()) << "| ";
+				output << std::setw(8) << genEventElement << "| " << std::setw(9) << int(genPart.getType()) << "| ";
 				// Particle properties
 				output << std::setw(13) << genPart.getCharge() << "| " 
 					<< std::setw(13) << genPart.getPt() << "| " 
@@ -89,7 +89,7 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 					<< std::setw(13) << genPart.getMass() << "\n";
 				}
 			}
-			GenEventElement++;
+			genEventElement++;
 		}
 		
 	}
