@@ -38,6 +38,7 @@ Note that when doing this you must input all of the above parameters in the comm
 # Updated Instructions to Run HistGenerator (Legacy code)
 
 Note: This is old code. Unless you have a specific reason to use this code, run the file you generated via runAnalyzer rather than here.
+
 To run HistGenerator you simply put:
 ```
 cmsRun HistGenerator_cfg.py
