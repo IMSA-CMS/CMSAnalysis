@@ -1,12 +1,9 @@
 #include "CMSAnalysis/DataCollection/interface/SingleElectronTrigger.hh"
 
-SingleElectronTrigger::SingleElectronTrigger(double iPTCutoff) :
-  RecoTrigger("Single Electron Trigger"),
-  pTCutoff(iPTCutoff)
-{
-}
+SingleElectronTrigger::SingleElectronTrigger(double iPTCutoff) : RecoTrigger("Single Electron Trigger"),
+                                                                 pTCutoff(iPTCutoff){};
 
-bool SingleElectronTrigger::checkTrigger(const InputModule* input)
+bool SingleElectronTrigger::checkTrigger(const InputModule *input)
 {
   auto particles = input->getParticles(InputModule::RecoLevel::Reco, Particle::Type::Electron);
 
@@ -19,5 +16,5 @@ bool SingleElectronTrigger::checkTrigger(const InputModule* input)
   double pT = particles.getLeadingTransverseMomentum();
 
   // The particle passes the trigger if the transverse momentum is greater than the cutoff
-  return (pT >= pTCutoff);  
-}
+  return (pT >= pTCutoff);
+};

@@ -8,12 +8,12 @@
 
 Method         : DL::DNN_CPU
 TMVA Release   : 4.2.1         [262657]
-ROOT Release   : 6.18/04       [397828]
-Creator        : skomorav
-Date           : Tue May 10 12:13:36 2022
-Host           : Linux cmsbuild01.cern.ch 3.10.0-1062.9.1.el7.x86_64 #1 SMP Fri Dec 6 15:49:49 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
-Dir            : /uscms_data/d3/skomorav/CMSSW_11_0_2/src/CMSAnalysis/DataCollection/bin
-Training events: 14458
+ROOT Release   : 6.24/07       [399367]
+Creator        : kzhang1
+Date           : Sat Sep 17 14:24:33 2022
+Host           : Linux cmsbuild02.cern.ch 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
+Dir            : /uscms/homes/k/kzhang1/practice/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin
+Training events: 6941
 Analysis type  : [Classification]
 
 
@@ -42,14 +42,14 @@ ValidationSize: "20%" [Part of the training data to use for validation. Specify 
 #VAR -*-*-*-*-*-*-*-*-*-*-*-* variables *-*-*-*-*-*-*-*-*-*-*-*-
 
 NVar 6
-pt                            pt                            pt                            Transverse Momentum                                             'F'    [5.41091966629,1570.41589355]
+pt                            pt                            pt                            Transverse Momentum                                             'F'    [5.84302520752,2084.13500977]
 nParticles                    nParticles                    nParticles                    Number of Particles                                             'F'    [2,5]
-phi                           phi                           phi                           Pseudorapidity                                                  'F'    [-3.14136362076,3.14129686356]
-eta                           eta                           eta                           Azimuthal Angle                                                 'F'    [-3.93180203438,3.79994821548]
-mass                          mass                          mass                          Mass                                                            'F'    [-4.31583721365e-05,17.4713821411]
-deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.089096032083]
+phi                           phi                           phi                           Pseudorapidity                                                  'F'    [-3.14115381241,3.14027285576]
+eta                           eta                           eta                           Azimuthal Angle                                                 'F'    [-3.93180203438,3.72132587433]
+mass                          mass                          mass                          Mass                                                            'F'    [-3.0517578125e-05,38.7625541687]
+deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.175850793719]
 NSpec 1
-jetIndex*2                    spec1                         spec1                         Spectator 1                   units                             'F'    [0,6]
+jetIndex*2                    spec1                         spec1                         Spectator 1                   units                             'F'    [0,4]
 
 
 ============================================================================ */
@@ -126,7 +126,7 @@ class ReadDNN_CPU : public IClassifierReader {
       fVmin[2] = -1;
       fVmax[2] = 1;
       fVmin[3] = -1;
-      fVmax[3] = 1;
+      fVmax[3] = 0.99999988079071;
       fVmin[4] = -1;
       fVmax[4] = 1;
       fVmin[5] = -1;
@@ -219,16 +219,16 @@ inline void ReadDNN_CPU::InitTransform_1()
    double fMin_1[3][6];
    double fMax_1[3][6];
    // Normalization transformation, initialisation
-   fMin_1[0][0] = 5.41091966629;
-   fMax_1[0][0] = 1488.1262207;
+   fMin_1[0][0] = 5.84302520752;
+   fMax_1[0][0] = 2084.13500977;
    fScal_1[0][0] = 2.0/(fMax_1[0][0]-fMin_1[0][0]);
    fOff_1[0][0] = fMin_1[0][0]*fScal_1[0][0]+1.;
-   fMin_1[1][0] = 5.92393827438;
-   fMax_1[1][0] = 1570.41589355;
+   fMin_1[1][0] = 34.9402656555;
+   fMax_1[1][0] = 264.038452148;
    fScal_1[1][0] = 2.0/(fMax_1[1][0]-fMin_1[1][0]);
    fOff_1[1][0] = fMin_1[1][0]*fScal_1[1][0]+1.;
-   fMin_1[2][0] = 5.41091966629;
-   fMax_1[2][0] = 1570.41589355;
+   fMin_1[2][0] = 5.84302520752;
+   fMax_1[2][0] = 2084.13500977;
    fScal_1[2][0] = 2.0/(fMax_1[2][0]-fMin_1[2][0]);
    fOff_1[2][0] = fMin_1[2][0]*fScal_1[2][0]+1.;
    fMin_1[0][1] = 2;
@@ -236,59 +236,59 @@ inline void ReadDNN_CPU::InitTransform_1()
    fScal_1[0][1] = 2.0/(fMax_1[0][1]-fMin_1[0][1]);
    fOff_1[0][1] = fMin_1[0][1]*fScal_1[0][1]+1.;
    fMin_1[1][1] = 2;
-   fMax_1[1][1] = 4;
+   fMax_1[1][1] = 3;
    fScal_1[1][1] = 2.0/(fMax_1[1][1]-fMin_1[1][1]);
    fOff_1[1][1] = fMin_1[1][1]*fScal_1[1][1]+1.;
    fMin_1[2][1] = 2;
    fMax_1[2][1] = 5;
    fScal_1[2][1] = 2.0/(fMax_1[2][1]-fMin_1[2][1]);
    fOff_1[2][1] = fMin_1[2][1]*fScal_1[2][1]+1.;
-   fMin_1[0][2] = -3.14136362076;
-   fMax_1[0][2] = 3.14129686356;
+   fMin_1[0][2] = -3.14115381241;
+   fMax_1[0][2] = 3.14027285576;
    fScal_1[0][2] = 2.0/(fMax_1[0][2]-fMin_1[0][2]);
    fOff_1[0][2] = fMin_1[0][2]*fScal_1[0][2]+1.;
-   fMin_1[1][2] = -3.13878560066;
-   fMax_1[1][2] = 3.14085555077;
+   fMin_1[1][2] = -3.09603500366;
+   fMax_1[1][2] = 3.12010669708;
    fScal_1[1][2] = 2.0/(fMax_1[1][2]-fMin_1[1][2]);
    fOff_1[1][2] = fMin_1[1][2]*fScal_1[1][2]+1.;
-   fMin_1[2][2] = -3.14136362076;
-   fMax_1[2][2] = 3.14129686356;
+   fMin_1[2][2] = -3.14115381241;
+   fMax_1[2][2] = 3.14027285576;
    fScal_1[2][2] = 2.0/(fMax_1[2][2]-fMin_1[2][2]);
    fOff_1[2][2] = fMin_1[2][2]*fScal_1[2][2]+1.;
-   fMin_1[0][3] = -3.29279351234;
-   fMax_1[0][3] = 3.05456542969;
+   fMin_1[0][3] = -2.96060633659;
+   fMax_1[0][3] = 3.12261557579;
    fScal_1[0][3] = 2.0/(fMax_1[0][3]-fMin_1[0][3]);
    fOff_1[0][3] = fMin_1[0][3]*fScal_1[0][3]+1.;
    fMin_1[1][3] = -3.93180203438;
-   fMax_1[1][3] = 3.79994821548;
+   fMax_1[1][3] = 3.72132587433;
    fScal_1[1][3] = 2.0/(fMax_1[1][3]-fMin_1[1][3]);
    fOff_1[1][3] = fMin_1[1][3]*fScal_1[1][3]+1.;
    fMin_1[2][3] = -3.93180203438;
-   fMax_1[2][3] = 3.79994821548;
+   fMax_1[2][3] = 3.72132587433;
    fScal_1[2][3] = 2.0/(fMax_1[2][3]-fMin_1[2][3]);
    fOff_1[2][3] = fMin_1[2][3]*fScal_1[2][3]+1.;
-   fMin_1[0][4] = -4.31583721365e-05;
-   fMax_1[0][4] = 12.4114179611;
+   fMin_1[0][4] = -1.93104333448e-05;
+   fMax_1[0][4] = 38.7625541687;
    fScal_1[0][4] = 2.0/(fMax_1[0][4]-fMin_1[0][4]);
    fOff_1[0][4] = fMin_1[0][4]*fScal_1[0][4]+1.;
    fMin_1[1][4] = -3.0517578125e-05;
-   fMax_1[1][4] = 17.4713821411;
+   fMax_1[1][4] = 5.39513349533;
    fScal_1[1][4] = 2.0/(fMax_1[1][4]-fMin_1[1][4]);
    fOff_1[1][4] = fMin_1[1][4]*fScal_1[1][4]+1.;
-   fMin_1[2][4] = -4.31583721365e-05;
-   fMax_1[2][4] = 17.4713821411;
+   fMin_1[2][4] = -3.0517578125e-05;
+   fMax_1[2][4] = 38.7625541687;
    fScal_1[2][4] = 2.0/(fMax_1[2][4]-fMin_1[2][4]);
    fOff_1[2][4] = fMin_1[2][4]*fScal_1[2][4]+1.;
    fMin_1[0][5] = 0;
-   fMax_1[0][5] = 0.089096032083;
+   fMax_1[0][5] = 0.175850793719;
    fScal_1[0][5] = 2.0/(fMax_1[0][5]-fMin_1[0][5]);
    fOff_1[0][5] = fMin_1[0][5]*fScal_1[0][5]+1.;
    fMin_1[1][5] = 0;
-   fMax_1[1][5] = 0.0625216141343;
+   fMax_1[1][5] = 0.0993144065142;
    fScal_1[1][5] = 2.0/(fMax_1[1][5]-fMin_1[1][5]);
    fOff_1[1][5] = fMin_1[1][5]*fScal_1[1][5]+1.;
    fMin_1[2][5] = 0;
-   fMax_1[2][5] = 0.089096032083;
+   fMax_1[2][5] = 0.175850793719;
    fScal_1[2][5] = 2.0/(fMax_1[2][5]-fMin_1[2][5]);
    fOff_1[2][5] = fMin_1[2][5]*fScal_1[2][5]+1.;
 }
