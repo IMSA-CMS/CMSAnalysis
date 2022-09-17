@@ -8,12 +8,12 @@
 
 Method         : Cuts::CutsPCA
 TMVA Release   : 4.2.1         [262657]
-ROOT Release   : 6.18/04       [397828]
-Creator        : skomorav
-Date           : Tue May 10 12:09:48 2022
-Host           : Linux cmsbuild01.cern.ch 3.10.0-1062.9.1.el7.x86_64 #1 SMP Fri Dec 6 15:49:49 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
-Dir            : /uscms_data/d3/skomorav/CMSSW_11_0_2/src/CMSAnalysis/DataCollection/bin
-Training events: 14458
+ROOT Release   : 6.24/07       [399367]
+Creator        : kzhang1
+Date           : Sat Sep 17 14:23:57 2022
+Host           : Linux cmsbuild02.cern.ch 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
+Dir            : /uscms/homes/k/kzhang1/practice/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin
+Training events: 6941
 Analysis type  : [Classification]
 
 
@@ -53,14 +53,14 @@ VarProp[0]: "FSmart" [Categorisation of cuts]
 #VAR -*-*-*-*-*-*-*-*-*-*-*-* variables *-*-*-*-*-*-*-*-*-*-*-*-
 
 NVar 6
-pt                            pt                            pt                            Transverse Momentum                                             'F'    [5.41091966629,1570.41589355]
+pt                            pt                            pt                            Transverse Momentum                                             'F'    [5.84302520752,2084.13500977]
 nParticles                    nParticles                    nParticles                    Number of Particles                                             'F'    [2,5]
-phi                           phi                           phi                           Pseudorapidity                                                  'F'    [-3.14136362076,3.14129686356]
-eta                           eta                           eta                           Azimuthal Angle                                                 'F'    [-3.93180203438,3.79994821548]
-mass                          mass                          mass                          Mass                                                            'F'    [-4.31583721365e-05,17.4713821411]
-deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.089096032083]
+phi                           phi                           phi                           Pseudorapidity                                                  'F'    [-3.14115381241,3.14027285576]
+eta                           eta                           eta                           Azimuthal Angle                                                 'F'    [-3.93180203438,3.72132587433]
+mass                          mass                          mass                          Mass                                                            'F'    [-3.0517578125e-05,38.7625541687]
+deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.175850793719]
 NSpec 1
-jetIndex*2                    spec1                         spec1                         Spectator 1                   units                             'F'    [0,6]
+jetIndex*2                    spec1                         spec1                         Spectator 1                   units                             'F'    [0,4]
 
 
 ============================================================================ */
@@ -130,18 +130,18 @@ class ReadCutsPCA : public IClassifierReader {
       }
 
       // initialize min and max vectors (for normalisation)
-      fVmin[0] = -1488.6220703125;
-      fVmax[0] = 76.3766860961914;
-      fVmin[1] = -3.23028302192688;
-      fVmax[1] = 3.15331053733826;
-      fVmin[2] = -3.94327259063721;
-      fVmax[2] = 3.80287075042725;
-      fVmin[3] = -9.24868869781494;
-      fVmax[3] = 9.04031944274902;
-      fVmin[4] = -5.19839096069336;
-      fVmax[4] = 2.1025595664978;
-      fVmin[5] = -0.0877906307578087;
-      fVmax[5] = 0.153027936816216;
+      fVmin[0] = -1985.25109863281;
+      fVmax[0] = 92.9906997680664;
+      fVmin[1] = -3.4213924407959;
+      fVmax[1] = 3.11199927330017;
+      fVmin[2] = -15.5625047683716;
+      fVmax[2] = 30.4538917541504;
+      fVmin[3] = -3.90503358840942;
+      fVmax[3] = 3.74791216850281;
+      fVmin[4] = -8.66184329986572;
+      fVmax[4] = 2.13097500801086;
+      fVmin[5] = -0.412685841321945;
+      fVmax[5] = 0.385217666625977;
 
       // initialize input variable types
       fType[0] = 'F';
@@ -248,134 +248,134 @@ inline void ReadCutsPCA::InitTransform_1()
 {
    // PCA transformation, initialisation
    // initialise vector of mean values
-   fMeanValues_1[0][0] = 79.3744373374;
-   fMeanValues_1[0][1] = 2.09270231756;
-   fMeanValues_1[0][2] = 0.0115420342568;
-   fMeanValues_1[0][3] = 0.00679000781048;
-   fMeanValues_1[0][4] = 0.62868649341;
-   fMeanValues_1[0][5] = 0.0229547982813;
-   fMeanValues_1[1][0] = 110.350403292;
-   fMeanValues_1[1][1] = 2.04266666667;
-   fMeanValues_1[1][2] = -0.0396487482342;
-   fMeanValues_1[1][3] = -0.0691388777244;
-   fMeanValues_1[1][4] = 0.741096234482;
-   fMeanValues_1[1][5] = 0.014349042869;
-   fMeanValues_1[2][0] = 81.7847265683;
-   fMeanValues_1[2][1] = 2.0888089639;
-   fMeanValues_1[2][2] = 0.00755879796532;
-   fMeanValues_1[2][3] = 0.000881860333183;
-   fMeanValues_1[2][4] = 0.637433274342;
-   fMeanValues_1[2][5] = 0.0222851707506;
+   fMeanValues_1[0][0] = 99.5051053533;
+   fMeanValues_1[0][1] = 2.19894736842;
+   fMeanValues_1[0][2] = 0.0528891148282;
+   fMeanValues_1[0][3] = -0.00602008049552;
+   fMeanValues_1[0][4] = 2.01977972787;
+   fMeanValues_1[0][5] = 0.0584018686089;
+   fMeanValues_1[1][0] = 83.2358124199;
+   fMeanValues_1[1][1] = 2.02749140893;
+   fMeanValues_1[1][2] = -0.0249867045366;
+   fMeanValues_1[1][3] = -0.0539818973164;
+   fMeanValues_1[1][4] = 0.24941032289;
+   fMeanValues_1[1][5] = 0.00685774253874;
+   fMeanValues_1[2][0] = 98.8230185872;
+   fMeanValues_1[2][1] = 2.19175911252;
+   fMeanValues_1[2][2] = 0.0496241870894;
+   fMeanValues_1[2][3] = -0.00803086981908;
+   fMeanValues_1[2][4] = 1.94555735402;
+   fMeanValues_1[2][5] = 0.0562408917056;
 
    // initialise matrix of eigenvectors
-   fEigenVectors_1[0][0][0] = -0.99998397845;
-   fEigenVectors_1[0][0][1] = -0.000474627577277;
-   fEigenVectors_1[0][0][2] = 4.56586867995e-06;
-   fEigenVectors_1[0][0][3] = 0.00563589458993;
-   fEigenVectors_1[0][0][4] = -0.000189873237181;
-   fEigenVectors_1[0][0][5] = -0.000134874098274;
-   fEigenVectors_1[0][1][0] = -0.00218523324672;
-   fEigenVectors_1[0][1][1] = 0.000961234229622;
-   fEigenVectors_1[0][1][2] = 0.00286771284943;
-   fEigenVectors_1[0][1][3] = -0.418154045249;
-   fEigenVectors_1[0][1][4] = -0.908359110494;
-   fEigenVectors_1[0][1][5] = 0.00412284262269;
-   fEigenVectors_1[0][2][0] = -0.000472071897805;
-   fEigenVectors_1[0][2][1] = 0.999974813861;
-   fEigenVectors_1[0][2][2] = -0.00701766682769;
-   fEigenVectors_1[0][2][3] = 0.000487002344081;
-   fEigenVectors_1[0][2][4] = 0.000813210973397;
-   fEigenVectors_1[0][2][5] = 5.15767802118e-05;
-   fEigenVectors_1[0][3][0] = 3.46770940942e-05;
-   fEigenVectors_1[0][3][1] = 0.00701431282646;
-   fEigenVectors_1[0][3][2] = 0.99995759854;
-   fEigenVectors_1[0][3][3] = 0.00595033614659;
-   fEigenVectors_1[0][3][4] = 0.000425544900602;
-   fEigenVectors_1[0][3][5] = 0.000108382358753;
-   fEigenVectors_1[0][4][0] = -0.00520001708208;
-   fEigenVectors_1[0][4][1] = 0.00013577901367;
-   fEigenVectors_1[0][4][2] = 0.00522439785529;
-   fEigenVectors_1[0][4][3] = -0.908237630177;
-   fEigenVectors_1[0][4][4] = 0.418186470916;
-   fEigenVectors_1[0][4][5] = 0.0130433786679;
-   fEigenVectors_1[0][5][0] = 5.80216130888e-05;
-   fEigenVectors_1[0][5][1] = 5.81391993956e-05;
-   fEigenVectors_1[0][5][2] = 0.000187999720861;
-   fEigenVectors_1[0][5][3] = -0.0135718308706;
-   fEigenVectors_1[0][5][4] = 0.00170981652208;
-   fEigenVectors_1[0][5][5] = -0.999906415543;
-   fEigenVectors_1[1][0][0] = 0.999974342134;
-   fEigenVectors_1[1][0][1] = -3.74462414897e-05;
-   fEigenVectors_1[1][0][2] = -9.35045830931e-05;
-   fEigenVectors_1[1][0][3] = -0.00715612297385;
-   fEigenVectors_1[1][0][4] = -0.000303004891416;
-   fEigenVectors_1[1][0][5] = -5.49558745459e-05;
-   fEigenVectors_1[1][1][0] = 0.000395886753088;
-   fEigenVectors_1[1][1][1] = -0.00532517229674;
-   fEigenVectors_1[1][1][2] = 3.81483807444e-07;
-   fEigenVectors_1[1][1][3] = 0.0129626763961;
-   fEigenVectors_1[1][1][4] = 0.999882095726;
-   fEigenVectors_1[1][1][5] = 0.00626494062759;
-   fEigenVectors_1[1][2][0] = 6.51822886095e-05;
-   fEigenVectors_1[1][2][1] = -0.998002509388;
-   fEigenVectors_1[1][2][2] = 0.0614121052699;
-   fEigenVectors_1[1][2][3] = 0.0137608271665;
-   fEigenVectors_1[1][2][4] = -0.00549362889581;
-   fEigenVectors_1[1][2][5] = 3.10878944871e-06;
-   fEigenVectors_1[1][3][0] = 0.000118724093986;
-   fEigenVectors_1[1][3][1] = 0.0614611050064;
-   fEigenVectors_1[1][3][2] = 0.998104200736;
-   fEigenVectors_1[1][3][3] = 0.00321222720558;
-   fEigenVectors_1[1][3][4] = 0.000283047583499;
-   fEigenVectors_1[1][3][5] = 0.000352747008467;
-   fEigenVectors_1[1][4][0] = 0.00715118798702;
-   fEigenVectors_1[1][4][1] = 0.0136069303676;
-   fEigenVectors_1[1][4][2] = -0.00405624672356;
-   fEigenVectors_1[1][4][3] = 0.999734527377;
-   fEigenVectors_1[1][4][4] = -0.0129569155528;
-   fEigenVectors_1[1][4][5] = 0.0105000918585;
-   fEigenVectors_1[1][5][0] = 2.26576506585e-05;
-   fEigenVectors_1[1][5][1] = 0.000128101413842;
-   fEigenVectors_1[1][5][2] = 0.000309708925219;
-   fEigenVectors_1[1][5][3] = 0.0105808755554;
-   fEigenVectors_1[1][5][4] = 0.00612871111158;
-   fEigenVectors_1[1][5][5] = -0.999925182766;
-   fEigenVectors_1[2][0][0] = -0.999981867308;
-   fEigenVectors_1[2][0][1] = -0.000319320227246;
-   fEigenVectors_1[2][0][2] = -2.71453731938e-05;
-   fEigenVectors_1[2][0][3] = 0.00598669731466;
-   fEigenVectors_1[2][0][4] = 0.000554830908092;
-   fEigenVectors_1[2][0][5] = 0.000118201280407;
-   fEigenVectors_1[2][1][0] = -0.00158345001661;
-   fEigenVectors_1[2][1][1] = 0.0017409578274;
-   fEigenVectors_1[2][1][2] = 0.00264067232796;
-   fEigenVectors_1[2][1][3] = -0.351118319029;
-   fEigenVectors_1[2][1][4] = 0.936321933078;
-   fEigenVectors_1[2][1][5] = -0.00215691448336;
-   fEigenVectors_1[2][2][0] = -0.000323000861663;
-   fEigenVectors_1[2][2][1] = 0.999995063103;
-   fEigenVectors_1[2][2][2] = -0.00234670943382;
-   fEigenVectors_1[2][2][3] = -0.000436775844122;
-   fEigenVectors_1[2][2][4] = -0.0020171839419;
-   fEigenVectors_1[2][2][5] = -5.08922125893e-05;
-   fEigenVectors_1[2][3][0] = 9.56690602307e-06;
-   fEigenVectors_1[2][3][1] = 0.00234848500061;
-   fEigenVectors_1[2][3][2] = 0.99997725278;
-   fEigenVectors_1[2][3][3] = 0.00630361243231;
-   fEigenVectors_1[2][3][4] = -0.000461109954432;
-   fEigenVectors_1[2][3][5] = -0.000174063605062;
-   fEigenVectors_1[2][4][0] = -0.00580104466348;
-   fEigenVectors_1[2][4][1] = -0.00110630100058;
-   fEigenVectors_1[2][4][2] = 0.00573985610562;
-   fEigenVectors_1[2][4][3] = -0.936190603154;
-   fEigenVectors_1[2][4][4] = -0.351124822614;
-   fEigenVectors_1[2][4][5] = -0.013809110796;
-   fEigenVectors_1[2][5][0] = 3.46651161419e-05;
-   fEigenVectors_1[2][5][1] = 3.98204456892e-05;
-   fEigenVectors_1[2][5][2] = 0.000258926735459;
-   fEigenVectors_1[2][5][3] = -0.0136862617364;
-   fEigenVectors_1[2][5][4] = -0.00282968020338;
-   fEigenVectors_1[2][5][5] = 0.999902299887;
+   fEigenVectors_1[0][0][0] = -0.999977140689;
+   fEigenVectors_1[0][0][1] = -0.000306871608549;
+   fEigenVectors_1[0][0][2] = -0.00675045253755;
+   fEigenVectors_1[0][0][3] = -8.05187637784e-05;
+   fEigenVectors_1[0][0][4] = 5.18953402515e-05;
+   fEigenVectors_1[0][0][5] = 0.000214809629475;
+   fEigenVectors_1[0][1][0] = -0.00160018107687;
+   fEigenVectors_1[0][1][1] = 0.00311356774683;
+   fEigenVectors_1[0][1][2] = 0.243949238069;
+   fEigenVectors_1[0][1][3] = 0.0113595931998;
+   fEigenVectors_1[0][1][4] = 0.969677795114;
+   fEigenVectors_1[0][1][5] = -0.00851161955261;
+   fEigenVectors_1[0][2][0] = -0.000230898725966;
+   fEigenVectors_1[0][2][1] = 0.999903524953;
+   fEigenVectors_1[0][2][2] = -0.0113483332386;
+   fEigenVectors_1[0][2][3] = 0.0079936938573;
+   fEigenVectors_1[0][2][4] = -0.000449286348493;
+   fEigenVectors_1[0][2][5] = 4.24963405536e-05;
+   fEigenVectors_1[0][3][0] = -1.12101060914e-05;
+   fEigenVectors_1[0][3][1] = -0.00811072515537;
+   fEigenVectors_1[0][3][2] = -0.00996790857242;
+   fEigenVectors_1[0][3][3] = 0.999875287257;
+   fEigenVectors_1[0][3][4] = -0.00917968885441;
+   fEigenVectors_1[0][3][5] = -7.40045397414e-06;
+   fEigenVectors_1[0][4][0] = -0.00656449901418;
+   fEigenVectors_1[0][4][1] = 0.0108327722613;
+   fEigenVectors_1[0][4][2] = 0.969514762831;
+   fEigenVectors_1[0][4][3] = 0.00751126760296;
+   fEigenVectors_1[0][4][4] = -0.244167907611;
+   fEigenVectors_1[0][4][5] = -0.0143630360025;
+   fEigenVectors_1[0][5][0] = 0.00010692308596;
+   fEigenVectors_1[0][5][1] = 0.000139626122032;
+   fEigenVectors_1[0][5][2] = 0.0160056683914;
+   fEigenVectors_1[0][5][3] = 0.000211679776528;
+   fEigenVectors_1[0][5][4] = 0.00474713782378;
+   fEigenVectors_1[0][5][5] = 0.999860594046;
+   fEigenVectors_1[1][0][0] = -0.999975235542;
+   fEigenVectors_1[1][0][1] = -0.00579346741527;
+   fEigenVectors_1[1][0][2] = 0.00300925682383;
+   fEigenVectors_1[1][0][3] = -0.00261743885337;
+   fEigenVectors_1[1][0][4] = 0.000219740216455;
+   fEigenVectors_1[1][0][5] = -9.55995145407e-05;
+   fEigenVectors_1[1][1][0] = -0.000265229134564;
+   fEigenVectors_1[1][1][1] = -0.000603566470586;
+   fEigenVectors_1[1][1][2] = 0.00144594026224;
+   fEigenVectors_1[1][1][3] = 0.0201642248073;
+   fEigenVectors_1[1][1][4] = -0.99977565518;
+   fEigenVectors_1[1][1][5] = 0.00628633166327;
+   fEigenVectors_1[1][2][0] = 0.00599422864509;
+   fEigenVectors_1[1][2][1] = -0.996173455494;
+   fEigenVectors_1[1][2][2] = 0.0860671357857;
+   fEigenVectors_1[1][2][3] = 0.0139260632353;
+   fEigenVectors_1[1][2][4] = 0.00100425592084;
+   fEigenVectors_1[1][2][5] = -0.000141996638302;
+   fEigenVectors_1[1][3][0] = 0.00242856859812;
+   fEigenVectors_1[1][3][1] = 0.086425309518;
+   fEigenVectors_1[1][3][2] = 0.995912978834;
+   fEigenVectors_1[1][3][3] = 0.0260469063275;
+   fEigenVectors_1[1][3][4] = 0.00191229444007;
+   fEigenVectors_1[1][3][5] = -9.12098869487e-05;
+   fEigenVectors_1[1][4][0] = -0.00276197517644;
+   fEigenVectors_1[1][4][1] = 0.0116197090916;
+   fEigenVectors_1[1][4][2] = -0.0271677865332;
+   fEigenVectors_1[1][4][3] = 0.999069357619;
+   fEigenVectors_1[1][4][4] = 0.0202544499189;
+   fEigenVectors_1[1][4][5] = 0.0238629661518;
+   fEigenVectors_1[1][5][0] = 2.69564482767e-05;
+   fEigenVectors_1[1][5][1] = 0.000407734971083;
+   fEigenVectors_1[1][5][2] = -0.000742786559804;
+   fEigenVectors_1[1][5][3] = 0.0239707144605;
+   fEigenVectors_1[1][5][4] = -0.00580369561766;
+   fEigenVectors_1[1][5][5] = -0.999695455256;
+   fEigenVectors_1[2][0][0] = -0.999976263817;
+   fEigenVectors_1[2][0][1] = -0.00028702099737;
+   fEigenVectors_1[2][0][2] = -0.00688035064187;
+   fEigenVectors_1[2][0][3] = -3.77827549066e-05;
+   fEigenVectors_1[2][0][4] = -2.11635969454e-05;
+   fEigenVectors_1[2][0][5] = -0.000219822706408;
+   fEigenVectors_1[2][1][0] = -0.00160481229167;
+   fEigenVectors_1[2][1][1] = 0.00348662166592;
+   fEigenVectors_1[2][1][2] = 0.229830911919;
+   fEigenVectors_1[2][1][3] = 0.00953273345515;
+   fEigenVectors_1[2][1][4] = 0.973152375259;
+   fEigenVectors_1[2][1][5] = 0.00682652869749;
+   fEigenVectors_1[2][2][0] = -0.000194973308926;
+   fEigenVectors_1[2][2][1] = 0.999867876007;
+   fEigenVectors_1[2][2][2] = -0.0134206981707;
+   fEigenVectors_1[2][2][3] = 0.0091554703103;
+   fEigenVectors_1[2][2][4] = -0.000502419764078;
+   fEigenVectors_1[2][2][5] = -4.80869984526e-05;
+   fEigenVectors_1[2][3][0] = 1.09737192005e-06;
+   fEigenVectors_1[2][3][1] = -0.00923044705331;
+   fEigenVectors_1[2][3][2] = -0.00523998867125;
+   fEigenVectors_1[2][3][3] = 0.999907333278;
+   fEigenVectors_1[2][3][4] = -0.0085244032578;
+   fEigenVectors_1[2][3][5] = 2.77450707718e-05;
+   fEigenVectors_1[2][4][0] = -0.00669687287493;
+   fEigenVectors_1[2][4][1] = 0.0129134410701;
+   fEigenVectors_1[2][4][2] = 0.972947472734;
+   fEigenVectors_1[2][4][3] = 0.00325681379211;
+   fEigenVectors_1[2][4][4] = -0.229984442929;
+   fEigenVectors_1[2][4][5] = 0.0160673398259;
+   fEigenVectors_1[2][5][0] = 0.00010128610317;
+   fEigenVectors_1[2][5][1] = 0.000183040416785;
+   fEigenVectors_1[2][5][2] = 0.0172062599672;
+   fEigenVectors_1[2][5][3] = 0.000144736418994;
+   fEigenVectors_1[2][5][4] = 0.00294825608608;
+   fEigenVectors_1[2][5][5] = -0.999847582231;
 }
 
 //_______________________________________________________________________

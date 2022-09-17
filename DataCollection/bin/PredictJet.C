@@ -94,18 +94,19 @@ bool returnState(TString &myMethodList)
     }
 
     // input signal file here
-    string sgFile = "dkpt.root";
+    string sgFile = "dark_photons.root";
 
     // input background files here
     string bgFiles[] =
         {
-            "dy10.root",
+            //"dy10.root",
             "dy50.root",
-            "qcd500.root",
-            "qcd700.root",
-            "qcd1k.root",
-            "qcd1.5k.root",
-            "qcd2k.root"};
+            // "qcd500.root",
+            // "qcd700.root",
+            // "qcd1k.root",
+            // "qcd1.5k.root",
+            // "qcd2k.root"
+        };
 
     // (it is also possible to use ASCII format as input -> see TMVA Users Guide)
     TFile *input(0);
@@ -128,7 +129,7 @@ bool returnState(TString &myMethodList)
 
     // Registers background files in background chain
     TTree *bg = new TTree();
-    TChain *backgroundTree = new TChain("Background");
+    TChain *backgroundTree = new TChain("Signal"); // Signal of background files
     for (string file : bgFiles)
     {
         backgroundTree->Add(file.c_str());
@@ -139,7 +140,7 @@ bool returnState(TString &myMethodList)
     // Register the training and test trees
 
     TTree *signalTree = (TTree *)input->Get("Signal");
-    // TTree *backgroundTree = (TTree*)input2->Get("Background");
+    // TTree *backgroundTree = (TTree *)input2->Get("Background");
 
     // Create a ROOT output file where TMVA will store ntuples, histograms, etc.
     TString outfileName("TMVA.root");

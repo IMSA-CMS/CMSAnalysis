@@ -1,10 +1,8 @@
 #include "CMSAnalysis/DataCollection/interface/CollinsSoperFilter.hh"
 //#include "CMSAnalysis/DataCollection/interface/GenSimIdentificationModule.hh"
 
-CollinsSoperFilter::CollinsSoperFilter(double hiCut) :
-  //genSim(genSimModule),
-  highCutoff(hiCut)
-{}
+CollinsSoperFilter::CollinsSoperFilter(double hiCut) : // genSim(genSimModule),
+                                                       highCutoff(hiCut){};
 
 std::string CollinsSoperFilter::makeFilterString()
 {
@@ -14,4 +12,4 @@ std::string CollinsSoperFilter::makeFilterString()
     return "HighCS";
   else
     return "";
-}
+};

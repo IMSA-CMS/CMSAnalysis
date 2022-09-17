@@ -8,12 +8,12 @@
 
 Method         : Cuts::Cuts
 TMVA Release   : 4.2.1         [262657]
-ROOT Release   : 6.18/04       [397828]
-Creator        : skomorav
-Date           : Tue May 17 12:22:48 2022
-Host           : Linux cmsbuild01.cern.ch 3.10.0-1062.9.1.el7.x86_64 #1 SMP Fri Dec 6 15:49:49 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
-Dir            : /uscms_data/d3/skomorav/CMSSW_11_0_2/src/CMSAnalysis/DataCollection/bin
-Training events: 14458
+ROOT Release   : 6.24/07       [399367]
+Creator        : kzhang1
+Date           : Sat Sep 17 14:23:56 2022
+Host           : Linux cmsbuild02.cern.ch 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
+Dir            : /uscms/homes/k/kzhang1/practice/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin
+Training events: 6941
 Analysis type  : [Classification]
 
 
@@ -53,14 +53,14 @@ VarProp[0]: "FSmart" [Categorisation of cuts]
 #VAR -*-*-*-*-*-*-*-*-*-*-*-* variables *-*-*-*-*-*-*-*-*-*-*-*-
 
 NVar 6
-pt                            pt                            pt                            Transverse Momentum                                             'F'    [5.41091966629,1570.41589355]
+pt                            pt                            pt                            Transverse Momentum                                             'F'    [5.84302520752,2084.13500977]
 nParticles                    nParticles                    nParticles                    Number of Particles                                             'F'    [2,5]
-phi                           phi                           phi                           Pseudorapidity                                                  'F'    [-3.14136362076,3.14129686356]
-eta                           eta                           eta                           Azimuthal Angle                                                 'F'    [-3.93180203438,3.79994821548]
-mass                          mass                          mass                          Mass                                                            'F'    [-4.31583721365e-05,17.4713821411]
-deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.089096032083]
+phi                           phi                           phi                           Pseudorapidity                                                  'F'    [-3.14115381241,3.14027285576]
+eta                           eta                           eta                           Azimuthal Angle                                                 'F'    [-3.93180203438,3.72132587433]
+mass                          mass                          mass                          Mass                                                            'F'    [-3.0517578125e-05,38.7625541687]
+deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.175850793719]
 NSpec 1
-jetIndex*2                    spec1                         spec1                         Spectator 1                   units                             'F'    [0,6]
+jetIndex*2                    spec1                         spec1                         Spectator 1                   units                             'F'    [0,4]
 
 
 ============================================================================ */
