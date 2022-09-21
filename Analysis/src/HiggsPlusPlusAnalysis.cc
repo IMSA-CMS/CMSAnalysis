@@ -37,7 +37,7 @@ HiggsPlusPlusAnalysis::HiggsPlusPlusAnalysis() {
             double luminosity = 3000;
             auto ttbarBackground = std::make_shared<Process>("TTBar Background", 1);
             ttbarBackground->addProcess(makeSingleProcess(histFinder, fitHistFinder, filePath, "BackgroundRunCuts/TTBarPick500.root", "/30SelectBackgroundRuns/TTBar.root", "ttbar_lep", reader, massTarget, luminosity));
-            auto zzBackground = std::make_shared<Process>("ZZ Background", 2);
+            auto zzBackground = std::make_shared<Process>("ZZ Background", 5);
             zzBackground->addProcess(makeSingleProcess(histFinder, fitHistFinder, filePath, "BackgroundRunCuts/ZZPick4.root", "30SelectBackgroundRuns/ZZ.root", "zz4l", reader, massTarget, luminosity));
             auto dyBackground = std::make_shared<Process>("DY Background", 3);
             dyBackground->addProcess(makeSingleProcess(histFinder, fitHistFinder, filePath, "BackgroundRunCuts/DY10.root", "30SelectBackgroundRuns/DY10.root", "dy10to50", reader, massTarget, luminosity));
@@ -48,7 +48,7 @@ HiggsPlusPlusAnalysis::HiggsPlusPlusAnalysis() {
             qcdBackground->addProcess(makeSingleProcess(histFinder, fitHistFinder, filePath, "BackgroundRunCuts/QCD1000.root", "30SelectBackgroundRuns/QCD1000.root", "qcd1000to1500", reader, massTarget, luminosity));
             qcdBackground->addProcess(makeSingleProcess(histFinder, fitHistFinder, filePath, "BackgroundRunCuts/QCD1500.root", "30SelectBackgroundRuns/QCD1500.root", "qcd1500to2000", reader, massTarget, luminosity));
             qcdBackground->addProcess(makeSingleProcess(histFinder, fitHistFinder, filePath, "BackgroundRunCuts/QCD2000.root", "30SelectBackgroundRuns/QCD2000.root", "qcd2000toinf", reader, massTarget, luminosity));
-            auto higgsSignal = std::make_shared<Process>("Higgs Signal", 5);
+            auto higgsSignal = std::make_shared<Process>("Higgs Signal", 2);
             higgsSignal->addProcess(makeSignalProcess(histFinder, filePath, "HiggsRunCuts/Higgs" + std::to_string((int) massTarget) + ".root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
             std::vector<std::shared_ptr<Process>> backgroundProcesses = { ttbarBackground, zzBackground, dyBackground, qcdBackground, higgsSignal };
             auto leptonBackgrounds = std::make_shared<Channel>(name + std::to_string((int) massTarget), backgroundProcesses);

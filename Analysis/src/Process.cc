@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include "TList.h"
 
 TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 {
@@ -30,10 +31,17 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 		}
 	}
 	TH1* hist = new TH1F(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * maxBarWidth);
+	TH1* toAdd;
+	TList* toMerge = new TList;
 	for (const auto& singleProcess : processes)	
 	{
-		hist->Add(singleProcess.getHist(histType, scaleToExpected));
+		toAdd = singleProcess.getHist(histType, scaleToExpected);
+		toMerge->Add(toAdd);
+		//std::cout << "toAdd bins " << toAdd->GetMaximumBin() << std::endl;
+		//std::cout << "toAdd barWidth " << toAdd->GetBarWidth() << std::endl;
+		//hist->Add(toAdd);
 	}
+	hist->Merge(toMerge);
 	hist->SetLineColor(color);
 	hist->SetFillColor(color);
 	//If you want yield to print while running SuperPlot uncomment the print statement (only prints the yield for the first MassTarget in the process)
@@ -68,10 +76,12 @@ TH2* Process::get2DHist(HistVariable histType) const
 		}
 	}
 	TH2* hist = new TH2F(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * maxBarWidth, yMaxBinNum, 0, yMaxBinNum * maxBarWidth);
+	TList* toMerge = new TList;
 	for (const auto& singleProcess : processes)	
 	{
-		hist->Add(dynamic_cast<TH2 *>(singleProcess.get2DHist(histType)));
+		toMerge->Add(dynamic_cast<TH2 *>(singleProcess.get2DHist(histType)));
 	}
+	hist->Merge(toMerge);
 	hist->SetLineColor(color);
 	hist->SetFillColor(color);
 	//If you want yield to print while running SuperPlot uncomment the print statement (only prints the yield for the first MassTarget in the process)
