@@ -4,11 +4,11 @@
     <Info name="TMVA Release" value="4.2.1 [262657]"/>
     <Info name="ROOT Release" value="6.24/07 [399367]"/>
     <Info name="Creator" value="kzhang1"/>
-    <Info name="Date" value="Sat Sep 17 14:24:25 2022"/>
+    <Info name="Date" value="Sun Sep 18 15:36:10 2022"/>
     <Info name="Host" value="Linux cmsbuild02.cern.ch 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux"/>
     <Info name="Dir" value="/uscms/homes/k/kzhang1/practice/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin"/>
     <Info name="Training events" value="6941"/>
-    <Info name="TrainingTime" value="1.78869541e+01"/>
+    <Info name="TrainingTime" value="1.76617670e+01"/>
     <Info name="AnalysisType" value="Classification"/>
   </GeneralInfo>
   <Options>
