@@ -8,6 +8,7 @@
 #include "CMSAnalysis/Analysis/interface/FullAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsPlusPlusAnalysis.hh"
+#include "CMSAnalysis/Analysis/interface/HiggsComparisonAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/PlotFormatter.hh"
 #include "CMSAnalysis/Analysis/interface/TableData.hh"
 #include "CMSAnalysis/Analysis/interface/HTMLTable.hh"
@@ -24,12 +25,14 @@
 #include "CMSAnalysis/DataCollection/interface/Utility.hh"
 
 void JumboPlot() {
-	auto higgsStackAnalysis = std::make_shared<HiggsPlusPlusAnalysis>();
-	auto higgsSuperImpAnalysis = std::make_shared<HiggsPlusPlusAnalysis>();
+	auto higgsStackAnalysis = std::make_shared<HiggsComparisonAnalysis>();
+	auto higgsSuperImpAnalysis = std::make_shared<HiggsComparisonAnalysis>();
 	//Extra text is the second parameter
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "");
 	std::vector<std::shared_ptr<Channel>> stackChannels = higgsStackAnalysis->getChannels();
 	std::vector<std::shared_ptr<Channel>> superImpChannels = higgsSuperImpAnalysis->getChannels();
+	//Controls what graph types to make. 1 is stacked only, 2 is superimposed only, 3 is both.
+	int graphSwitch = 2;
 	//Put all variables you can graph here
 	std::vector<HistVariable> graphableTypes = {HistVariable::InvariantMass, HistVariable::SameSignMass, HistVariable::pT, HistVariable::MET};	
 	std::map<HistVariable, std::string> histVariableNames;
@@ -37,6 +40,8 @@ void JumboPlot() {
 	histVariableNames[HistVariable::SameSignMass] = "Same Sign Inv Mass";
 	histVariableNames[HistVariable::pT] = "Leading Lept pT";
 	histVariableNames[HistVariable::MET] = "MET";
+	//Change this to whatever process your signal is
+	std::string signalName = "Old Higgs";
 	TCanvas* canvas;
 	std::string fileName;
 	std::string dataName; 
@@ -47,7 +52,7 @@ void JumboPlot() {
 	for(std::shared_ptr<Channel> channel : stackChannels) {
 		for(std::string processName : channel->getNames()) {
 			//Change this to your signal process name
-			if(processName != "Higgs Signal") {
+			if(processName != signalName) {
 				channel->labelProcess("background", processName);
 			}
 			else {
@@ -56,7 +61,7 @@ void JumboPlot() {
 		}
 		for(std::string processName : superImpChannels.at(count)->getNames()) {
             //Change this to your signal process name
-            if(processName != "Higgs Signal") {
+            if(processName != signalName) {
                 superImpChannels.at(count)->labelProcess("background", processName);
             }
             else {
@@ -74,21 +79,35 @@ void JumboPlot() {
 			toAdd.push_back(channelName);
 			
 			dataName = Utility::removeSpaces(histVariableNames.find(dataType)->second);
-			fileName = "jumboPlotStorage/" + channelName + dataName + "Stack.png";
-			canvas = plotFormatter->superImposedStackHist(channel, dataType, xAxisName, yAxisName);
-			canvas->SaveAs(fileName.c_str());
-			plotFormatter->deleteHists();
-			canvas->Close();
-			delete canvas;
-			entry += "<img src=\"" + fileName + "\" alt=\"stack hist\" width=\"50%\" height = \"40%\">";
+			if(graphSwitch == 1 || graphSwitch == 3) {
+				fileName = "jumboPlotStorage/" + channelName + dataName + "Stack.png";
+				canvas = plotFormatter->superImposedStackHist(channel, dataType, xAxisName, yAxisName);
+				canvas->SaveAs(fileName.c_str());
+				plotFormatter->deleteHists();
+				canvas->Close();
+				delete canvas;
+				if(graphSwitch == 1) {
+					entry += "<img src=\"" + fileName + "\" alt=\"stack hist\" width=\"100%\" height = \"80%\">";
+				}
+				else {
+					entry += "<img src=\"" + fileName + "\" alt=\"stack hist\" width=\"50%\" height = \"40%\">";
+				}
+			}
 
-			fileName = "jumboPlotStorage/" + channelName + dataName + ".png";
-			canvas = plotFormatter->superImposedHist(superImpChannels.at(count), dataType, true, xAxisName, yAxisName);
-			canvas->SaveAs(fileName.c_str());
-			plotFormatter->deleteHists();
-			canvas->Close();
-			delete canvas;
-			entry += "<img src=\"" + fileName + "\" alt=\"superImposed hist\" width=\"50%\" height = \"40%\">";
+			if(graphSwitch == 2 || graphSwitch == 3) {
+				fileName = "jumboPlotStorage/" + channelName + dataName + ".png";
+				canvas = plotFormatter->superImposedHist(superImpChannels.at(count), dataType, true, xAxisName, yAxisName);
+				canvas->SaveAs(fileName.c_str());
+				plotFormatter->deleteHists();
+				canvas->Close();
+				delete canvas;
+				if(graphSwitch == 2) {
+					entry += "<img src=\"" + fileName + "\" alt=\"superImposed hist\" width=\"100%\" height = \"80%\">";
+				}
+				else {
+					entry += "<img src=\"" + fileName + "\" alt=\"superImposed hist\" width=\"50%\" height = \"40%\">";
+				}
+			}
 
 			toAdd.push_back(entry);
 			tableInput.push_back(toAdd);
