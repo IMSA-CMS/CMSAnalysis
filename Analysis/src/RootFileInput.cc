@@ -23,9 +23,11 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 {
 	std::string name = histFinder->getHistName(histType);
 	TH1* hist = dynamic_cast<TH1*>(file->Get(name.c_str()));
+	//std::cout << "hist rootFileInput " << hist << std::endl;
 	if(dynamic_cast<TH2 *>(hist) != 0) {
 		TH2* hist2D = dynamic_cast<TH2 *>(hist);
 		TH1 *newhist = hist2D->ProjectionX("_px", 0, -1, "E");
+		//std::cout << "returning newHist " << newhist << std::endl;
 		return newhist;
 	}
 	return hist;

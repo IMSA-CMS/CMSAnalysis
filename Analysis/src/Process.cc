@@ -18,17 +18,20 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 	{
 		singleProcessNumber++;
 		if (singleProcess.getHist(histType, false) == 0) {
-			std::cout << this->name << std::endl;
 			throw std::runtime_error("Histogram not found in process: " + this->name + "\nIn singleProcess number: " + singleProcessNumber);
 		}
-		if (singleProcess.getHist(histType, false)->GetMaximumBin() > maxBinNum)
+		if (singleProcess.getHist(histType, false)->GetNbinsX() > maxBinNum)
 		{
-			maxBinNum = singleProcess.getHist(histType, false)->GetMaximumBin();
+			maxBinNum = singleProcess.getHist(histType, false)->GetNbinsX();
 		}
-		if (singleProcess.getHist(histType, false)->GetBarWidth() > maxBarWidth)
+		if ((singleProcess.getHist(histType, false)->GetXaxis()->GetBinWidth(maxBinNum)) > maxBarWidth)
 		{
-			maxBarWidth = singleProcess.getHist(histType, false)->GetBarWidth();
+			maxBarWidth = (singleProcess.getHist(histType, false)->GetXaxis()->GetBinWidth(maxBinNum));
 		}
+		// if (singleProcess.getHist(histType, false)->GetBarWidth() > maxBarWidth)
+		// {
+		// 	maxBarWidth = singleProcess.getHist(histType, false)->GetBarWidth();
+		// }
 	}
 	TH1* hist = new TH1F(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * maxBarWidth);
 	TH1* toAdd;
@@ -59,12 +62,11 @@ TH2* Process::get2DHist(HistVariable histType) const
 	{
 		singleProcessNumber++;
 		if (singleProcess.get2DHist(histType) == 0) {
-			std::cout << this->name << std::endl;
 			throw std::runtime_error("Histogram not found in process: " + this->name + "\nIn singleProcess number: " + singleProcessNumber);
 		}
-		if (singleProcess.get2DHist(histType)->GetMaximumBin() > maxBinNum)
+		if (singleProcess.get2DHist(histType)->GetNbinsX() > maxBinNum)
 		{
-			maxBinNum = singleProcess.get2DHist(histType)->GetMaximumBin();
+			maxBinNum = singleProcess.get2DHist(histType)->GetNbinsX();
 		}
 		if (singleProcess.get2DHist(histType)->GetBarWidth() > maxBarWidth)
 		{
