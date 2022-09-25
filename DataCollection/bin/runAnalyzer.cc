@@ -12,19 +12,27 @@
 #include "CMSAnalysis/DataCollection/interface/IDType.hh"
 #include "FWCore/FWLite/interface/FWLiteEnabler.h"
 #include "PhysicsTools/FWLite/interface/CommandLineParser.h"
-
 #include "CMSAnalysis/DataCollection/interface/DataCollectionPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/AnalyzerOptions.hh"
+//#include "CMSAnalysis/DataCollection/bin/massResolutionAnalysis.cc"
+//#include "CMSAnalysis/DataCollection/bin/HPlusPlusMassAnalysis.cc"
+//#include "CMSAnalysis/DataCollection/bin/leptonJetReconstructionAnalysis.cc"
+//#include "CMSAnalysis/DataCollection/bin/displacedVertexAnalysis.cc"
+//#include "CMSAnalysis/DataCollection/bin/massAcceptanceAnalysis.cc"
+//#include "CMSAnalysis/DataCollection/bin/triggerAnalysis.cc"
+//#include "CMSAnalysis/DataCollection/bin/invariantMassAnalysis.cc"
+//#include "CMSAnalysis/DataCollection/bin/HiggsBackgroundAnalysis.cc"
+//#include "CMSAnalysis/DataCollection/bin/LeptonJetBackgroundAnalysis.cc"
+//#include "CMSAnalysis/DataCollection/bin/FilestripAnalysis.cc"
 
-
-
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   gROOT->SetBatch(true);
   gSystem->Load("libFWCoreFWLite");
   FWLiteEnabler::enable();
   gSystem->Load("libDataFormatsFWLite");
 
-  optutl::CommandLineParser parser ("Analyze FWLite Histograms");
+  optutl::CommandLineParser parser("Analyze FWLite Histograms");
 
   parser.addOption("output", optutl::CommandLineParser::kString, "Particle", "");
 
@@ -32,7 +40,7 @@ int main(int argc, char **argv) {
   parser.addOption("numFiles", optutl::CommandLineParser::kInteger, "Number of Files", -1);
 
   parser.addOption("analysis", optutl::CommandLineParser::kString, "Type of Analysis", "");
-  parser.parseArguments (argc, argv);
+  parser.parseArguments(argc, argv);
 
   std::string inputFile = parser.stringValue("input");
 
@@ -44,7 +52,7 @@ int main(int argc, char **argv) {
   if (inputFile.empty())
   {
     inputFile = options.pickfileInterface();
-    //inputFile = "textfiles/pickFiles.txt";
+    // inputFile = "textfiles/pickFiles.txt";
   }
 
   if (outputFile.empty())
@@ -54,12 +62,12 @@ int main(int argc, char **argv) {
 
   unsigned outputEvery = parser.integerValue("outputEvery");
 
-/* 
-  Selection of data collection plan has moved to command line argument "analysis"
-  The key for each Plan can now be found in AnalyzerOptions.cc
-  
-  e.g. runAnalyzer input=input.txt output=output.root analysis=DisplacedVertex
-*/
+  /*
+    Selection of data collection plan has moved to command line argument "analysis"
+    The key for each Plan can now be found in AnalyzerOptions.cc
+
+    e.g. runAnalyzer input=input.txt output=output.root analysis=DisplacedVertex
+  */
 
   std::string analysis = options.checkSelectedAnalysis(analysisType);
   std::cout << "Reading input file " << inputFile << std::endl;
@@ -67,9 +75,9 @@ int main(int argc, char **argv) {
 
   // analysisPlans[analysisType]->runAnalyzer(inputFile, outputFile, outputEvery, numFiles);
 
-  DataCollectionPlan* plan = options.getAnalysisPlans().at(analysis);
+  DataCollectionPlan *plan = options.getAnalysisPlans().at(analysis);
   plan->runAnalyzer(inputFile, outputFile, outputEvery, numFiles);
-  
+
   /* HiggsBackgroundPlan plan;
   plan.runAnalyzer(inputFile, outputFile, outputEvery, numFiles); // */
 
