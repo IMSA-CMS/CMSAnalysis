@@ -35,7 +35,9 @@ cmsRun EventGenerator_edm_cfg.py maxEvents=1000 globalTagKey=Run2 pythiaSettings
 
 Note that when doing this you must input all of the above parameters in the command line as the terminal will no longer prompt you for them.
 
-# Updated Instructions to Run HistGenerator
+# Updated Instructions to Run HistGenerator (Legacy code)
+
+Note: This is old code. Unless you have a specific reason to use this code, run the file you generated via runAnalyzer rather than here.
 
 To run HistGenerator you simply put:
 ```
