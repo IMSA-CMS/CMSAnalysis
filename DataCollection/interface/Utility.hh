@@ -11,6 +11,7 @@ namespace Utility
   template <typename T>
   std::vector<std::vector<T>> getAllCombinations(int nCombo, std::vector<T>& indices);
   std::string substitute(std::string original, std::string target, std::string subs);
+  std::string removeSpaces(std::string input); 
 }
 
 template <typename T>

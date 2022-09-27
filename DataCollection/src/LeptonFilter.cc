@@ -11,7 +11,7 @@ std::string LeptonFilter::makeFilterString()
     auto leptons = getInput()->getLeptons(InputModule::RecoLevel::Reco).getParticles();
 
     int particleCount = 0;
-    for (const auto& lep : leptons)
+    for (const auto &lep : leptons)
     {
         if (lep.getType() == type)
         {
@@ -19,4 +19,4 @@ std::string LeptonFilter::makeFilterString()
         }
     }
     return particleCount >= nParticles ? outputString : "";
-}
+};

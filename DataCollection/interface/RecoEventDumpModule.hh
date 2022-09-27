@@ -3,9 +3,9 @@
 
 #include <vector>
 
-#include "AnalysisModule.hh"
-#include "ParticleCollection.hh"
-#include "Particle.hh"
+#include "CMSAnalysis/DataCollection/interface/AnalysisModule.hh"
+#include "CMSAnalysis/DataCollection/interface/ParticleCollection.hh"
+#include "CMSAnalysis/DataCollection/interface/Particle.hh"
 
 // Outputs relevant data for reco events to a text file.
 // Not very finished/polished, code is mostly copied from GenSimEventDumpModule
@@ -25,7 +25,7 @@ private:
   int getIndexOf(const Particle& part, const std::vector<Particle>& recoParts) const;
 
   int numOfEvents;
-  int counter;
+  int counter = 0;
   int selectedcounter = 0;
 };
 

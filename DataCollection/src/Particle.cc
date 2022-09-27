@@ -36,20 +36,22 @@ particle(std::make_shared<DelphesImplementation>(vec,charge,type,pid,status,m1,m
 {
 }
 
-
-Particle::Particle(const Particle& particle1):
-particle(particle1.particle)
+Particle::Particle(const Particle &particle1) : particle(particle1.particle)
 {
-
 }
 
-Particle& Particle::operator = (const Particle& particle2)
+std::string Particle::getName() const
+{
+  return getType().getName();
+}
+
+Particle &Particle::operator=(const Particle &particle2)
 {
   particle = particle2.particle;
   return *this;
 }
 
-bool Particle::operator == (const Particle& p1) const
+bool Particle::operator==(const Particle &p1) const
 {
   return *particle == *(p1.particle);
 }
@@ -61,8 +63,8 @@ bool Particle::isNotNull() const
 
 void Particle::checkIsNull() const
 {
-  //std::cout << "This is check is null (particle)\n" << particle << "\n" << typeid(*particle).name() << "\n";
-  if(!particle->isNotNull())
+  // std::cout << "This is check is null (particle)\n" << particle << "\n" << typeid(*particle).name() << "\n";
+  if (!particle->isNotNull())
   {
     throw std::runtime_error("attempted to use null pointer in Particle (Particle)");
   }
@@ -185,7 +187,6 @@ const ParticleType& Particle::getType() const{
     return particle->getType();
 }
 
-
 // bool Particle::isIsolated() const
 // {
 //   checkIsNull();
@@ -248,21 +249,18 @@ int Particle::getCharge() const
   return particle->charge();
 }
 
-
-
-
 reco::Candidate::LorentzVector Particle::getFourVector() const
 {
   checkIsNull();
   return particle->getFourVector();
 }
 
-
 double Particle::getDeltaR(Particle part) const
 {
   return reco::deltaR(part.getFourVector(), getFourVector());
 }
 
-std::shared_ptr<ParticleImplementation> Particle::getParticleImplementation() {
+std::shared_ptr<ParticleImplementation> Particle::getParticleImplementation()
+{
   return particle;
 }
