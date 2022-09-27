@@ -14576,7 +14576,7 @@ process.hgchefrontDigitizer = cms.PSet(
 )
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(1),
+    input = cms.untracked.int32(1000),
     output = cms.optional.untracked.allowed(cms.int32,cms.PSet)
 )
 
@@ -17452,7 +17452,7 @@ process.AODSIMoutput = cms.OutputModule("PoolOutputModule",
         filterName = cms.untracked.string('')
     ),
     eventAutoFlushCompressedSize = cms.untracked.int32(15728640),
-    fileName = cms.untracked.string('file:output7.root'),
+    fileName = cms.untracked.string('file:HiggsTestFile.root'),
     outputCommands = cms.untracked.vstring( (
         'drop *',
         'drop *',

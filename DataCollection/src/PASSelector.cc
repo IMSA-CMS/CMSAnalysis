@@ -22,8 +22,11 @@ void PASSelector::selectParticles(const InputModule* input, Event& event)
     
     for (const auto& particle : particles)
     {
-        if (particle.getType() == Particle::Type::Electron && particle.getPt() > 50 && std::abs(particle.getEta()) < 3) {
-           event.addElectron(Electron(particle));
+        if (particle.getType() == ParticleType::electron() && particle.getPt() > 40 && std::abs(particle.getEta()) < 3) {
+            if (Lepton(particle).isLoose())
+            {
+                selected.push_back(particle);
+            }
             // electronCount++;
 
             // if (particle.getCharge() > 0) {
@@ -33,9 +36,12 @@ void PASSelector::selectParticles(const InputModule* input, Event& event)
             //     negElecs.push_back(Particle(particle));
             // }
         }
-        if (particle.getType() == Particle::Type::Muon && particle.getPt() > 50 && std::abs(particle.getEta()) < 2.8) 
+        if (particle.getType() == ParticleType::muon() && particle.getPt() > 40 && std::abs(particle.getEta()) < 2.8) 
         {
-            event.addMuon(Muon(particle));
+            if(Lepton(particle).isLoose())
+            {
+                selected.push_back(particle);
+            }
             // if (particle.getCharge() > 0) {
             //     posMuonCount++;
             //     posMuons.push_back(Particle(particle));

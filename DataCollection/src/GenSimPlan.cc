@@ -53,15 +53,15 @@ GenSimPlan::GenSimPlan()
 
     auto genSimPt = make_shared<PtHist>(InputModule::RecoLevel::GenSim, "Leading lepton pT", 500, 0, 1000);
     auto genSimInvMass = make_shared<InvariantMassHist>(InputModule::RecoLevel::GenSim, "Opposite-sign dilepton mass", 1000, 0, 2000);
-    auto metHist = make_shared<METHist>(metMod, "MET", 500, 0, 1000);
+    //auto metHist = make_shared<METHist>(metMod, "MET", 500, 0, 1000);
 
     // Add the histogram(s) created above to histMod
     histMod->addHistogram(genSimSameSignInvMassHist);
     histMod->addHistogram(genSimPt);
     histMod->addHistogram(genSimInvMass);
-    histMod->addHistogram(metHist);
+    //histMod->addHistogram(metHist);
 
-    //eventMod->addSelector(dpSelector);
+    eventMod->addSelector(dpSelector);
     //eventMod->addSelector(hppSelector);
     auto eventHistMod = eventMod->getHistogramModule();
 

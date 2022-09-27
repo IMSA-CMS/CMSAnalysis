@@ -39,7 +39,7 @@ DelphesEventFile::BranchNames DelphesEventFile::getTreeBranches() {
     delphesBranches.muonIdpass = "muon_idpass";
     delphesBranches.muonRelIso = "muon_reliso";
     
-    delphesBranches.metSize = "metpuppi_size";
+    //delphesBranches.metSize = "metpuppi_size"; // useless variable
     delphesBranches.metPT = "metpuppi_pt";
     delphesBranches.metPhi = "metpuppi_phi";
 

@@ -1,6 +1,6 @@
 #include "CMSAnalysis/DataCollection/interface/LeptonFilter.hh"
 
-LeptonFilter::LeptonFilter(Particle::Type itype, int inParticles, std::string ioutputString) :
+LeptonFilter::LeptonFilter(const ParticleType& itype, int inParticles, std::string ioutputString) :
     type(itype),
     nParticles(inParticles),
     outputString(ioutputString)

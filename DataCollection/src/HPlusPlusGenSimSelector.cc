@@ -30,27 +30,27 @@ void HPlusPlusGenSimSelector::selectParticles(const InputModule* input, Event& e
                 {
                     if (genSimParticle.pdgId() == 9900041)
                     {
-                        event.addSpecialObject(genSimParticle);   
+                        event.addSpecialObject("LeftHiggsPlus",genSimParticle);   
                     }
                     else if (genSimParticle.pdgId() == -9900041)
                     {
-                        event.addSpecialObject(genSimParticle);
+                        event.addSpecialObject("LeftHiggsMinus",genSimParticle);
                     }
                     else if (genSimParticle.pdgId() == 9900042)
                     {
-                        event.addSpecialObject(genSimParticle);
+                        event.addSpecialObject("RightHiggsPlus",genSimParticle);
                     }
                     else if (genSimParticle.pdgId() == -9900042)
                     {
-                        event.addSpecialObject(genSimParticle);
+                        event.addSpecialObject("RightHiggsMinus",genSimParticle);
                     }
                     for (int i = 0; i < 2; i++)
                     {
-                        if (genSimParticle.daughter(i).getType() == Particle::Type::Electron)
+                        if (genSimParticle.daughter(i).getType() == ParticleType::electron())
                         {
                             event.addElectron(genSimParticle.daughter(i));
                         } 
-                        else if (genSimParticle.daughter(i).getType() == Particle::Type::Muon)
+                        else if (genSimParticle.daughter(i).getType() == ParticleType::muon())
                         {
                             event.addMuon(genSimParticle.daughter(i));
                         }
@@ -60,7 +60,7 @@ void HPlusPlusGenSimSelector::selectParticles(const InputModule* input, Event& e
         }
         if (abs(genSimParticle.pdgId() == 23) && genSimParticle == genSimParticle.finalDaughter()) //Z Boson
         {
-            event.addSpecialObject(genSimParticle);
+            event.addSpecialObject("Zboson",genSimParticle);
         }
     }
 }
