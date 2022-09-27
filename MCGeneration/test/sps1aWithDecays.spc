@@ -799,25 +799,26 @@ DECAY   1000035     2.58585079E+00   # neutralino4 decays
 #         PDG            Width
 DECAY   1000022     1.00000000E-00  # ~chi_10 decays
 #          BR         NDA      ID1       ID2
-     2.50000000E-01    2     4900022        4900004   # BR( ~chi_10 -> gammav hvfermion )
-     2.50000000E-01    2     4900001        4900004   # BR( ~chi_10 -> hvpseudoscalar hvfermion )
-     2.50000000E-01    2     4900002        4900004   # BR( ~chi_10 -> hvlighthiggs hvfermion )
-     2.50000000E-01    2     4900003        4900004   # BR( ~chi_10 -> hvheavyhiggs hvfermion )
+      1.00000000E-00   2     4900022        4900004   # BR( ~chi_10 -> gammav hvfermion )
+#     2.50000000E-01   2     4900022        4900004   # BR( ~chi_10 -> gammav hvfermion )
+#     2.50000000E-01    2     4900001        4900004   # BR( ~chi_10 -> hvpseudoscalar hvfermion )
+#     2.50000000E-01    2     4900002        4900004   # BR( ~chi_10 -> hvlighthiggs hvfermion )
+#     2.50000000E-01    2     4900003        4900004   # BR( ~chi_10 -> hvheavyhiggs hvfermion )
 #
 #            PDG       Width
-DECAY   4900001   2.21729879e-15   #
+#DECAY   4900001   2.21729879e-15   #
 #          BR         NDA      ID1       ID2
-     1.00000000E+00    2     4900022     4900002       # BR( hvpseudoscalar -> gammav  hvlighthiggs )
+#     1.00000000E+00    2     4900022     4900002       # BR( hvpseudoscalar -> gammav  hvlighthiggs )
 #
 #            PDG       Width
-DECAY   4900003   2.00000000E-15   # width value ...
+#DECAY   4900003   2.00000000E-15   # width value ...
 #          BR         NDA      ID1       ID2
-     1.00000000E+00    2     4900022     4900022      # BR( hvheavyhiggs -> gammav  gammav )
+#     1.00000000E+00    2     4900022     4900022      # BR( hvheavyhiggs -> gammav  gammav )
 #
 #            PDG       Width
-DECAY   4900022   0.80000000E-15   # width value set to arbitrary number
+#DECAY   4900022   0.80000000E-00   # width value set to arbitrary number
 #          BR         NDA      ID1       ID2
 #     0.50000000E+00    2       11         -11      # BR( gammav -> 11  -11 )
-     1.00000000E+00    2       13         -13      # BR( gammav -> 13  -13 )
+#     1.00000000E+00    2       13         -13      # BR( gammav -> 13  -13 )
 
 # add pion decay here p+/p-

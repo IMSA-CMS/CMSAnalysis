@@ -1,12 +1,9 @@
 #include "CMSAnalysis/DataCollection/interface/SingleMuonTrigger.hh"
 
-SingleMuonTrigger::SingleMuonTrigger(double iPTCutoff) :
-  RecoTrigger("Single Muon Trigger"),
-  pTCutoff(iPTCutoff)
-{
-}
+SingleMuonTrigger::SingleMuonTrigger(double iPTCutoff) : RecoTrigger("Single Muon Trigger"),
+                                                         pTCutoff(iPTCutoff){};
 
-bool SingleMuonTrigger::checkTrigger(const InputModule* input)
+bool SingleMuonTrigger::checkTrigger(const InputModule *input)
 {
   auto particles = input->getParticles(InputModule::RecoLevel::Reco, ParticleType::muon());
 
@@ -18,7 +15,5 @@ bool SingleMuonTrigger::checkTrigger(const InputModule* input)
 
   double pT = particles.getLeadingTransverseMomentum();
 
-
- 
-  return (pT >= pTCutoff);  // The particle passes the trigger if the transverse momentum is greater than the cutoff
-}
+  return (pT >= pTCutoff); // The particle passes the trigger if the transverse momentum is greater than the cutoff
+};

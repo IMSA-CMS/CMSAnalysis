@@ -77,8 +77,8 @@ HiggsBackgroundPlan::HiggsBackgroundPlan()
     auto metHist = make_shared<METHist>(metMod, "MET", 500, 0, 1000);
 
     // Add the histogram(s) created above to histMod
-    histMod->addHistogram(genSimSameSignInvMassHist);
-    histMod->addHistogram(positiveNegativeInvMassHist);
+    histMod->addHistogram(recoSameSignInvMassHist);
+    histMod->addHistogram(recoInvMass);
     histMod->addHistogram(recoPt);
     histMod->addHistogram(recoInvMass);
     histMod->addHistogram(metHist);

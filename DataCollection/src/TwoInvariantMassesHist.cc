@@ -1,10 +1,7 @@
 #include "CMSAnalysis/DataCollection/interface/TwoInvariantMassesHist.hh"
 #include "CMSAnalysis/DataCollection/interface/Selector.hh"
 
-TwoInvariantMassesHist::TwoInvariantMassesHist(const std::string& iname, int iNBinsX, int iNBinsY, double iMinX, double iMinY, double iMaxX, double iMaxY) :
-  HistogramPrototype2D(iname, iNBinsX, iNBinsY, iMinX, iMinY, iMaxX, iMaxY)
-{
-}
+TwoInvariantMassesHist::TwoInvariantMassesHist(const std::string &iname, int iNBinsX, int iNBinsY, double iMinX, double iMinY, double iMaxX, double iMaxY) : HistogramPrototype2D(iname, iNBinsX, iNBinsY, iMinX, iMinY, iMaxX, iMaxY){};
 
 std::vector<std::pair<double, double>> TwoInvariantMassesHist::value2D() const
 {
@@ -16,4 +13,4 @@ std::vector<std::pair<double, double>> TwoInvariantMassesHist::value2D() const
   }
 
   return {{invMasses[0], invMasses[1]}};
-}
+};

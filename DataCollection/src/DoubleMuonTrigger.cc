@@ -1,12 +1,9 @@
 #include "CMSAnalysis/DataCollection/interface/DoubleMuonTrigger.hh"
-DoubleMuonTrigger::DoubleMuonTrigger(double iPTCutoff, double iSecondPTCutoff) :
-  RecoTrigger("Double Muon Trigger"),
-  pTCutoff(iPTCutoff),
-  secondPTCutoff(iSecondPTCutoff)
-{
-}
+DoubleMuonTrigger::DoubleMuonTrigger(double iPTCutoff, double iSecondPTCutoff) : RecoTrigger("Double Muon Trigger"),
+                                                                                 pTCutoff(iPTCutoff),
+                                                                                 secondPTCutoff(iSecondPTCutoff){};
 
-bool DoubleMuonTrigger::checkTrigger(const InputModule* input)
+bool DoubleMuonTrigger::checkTrigger(const InputModule *input)
 {
   auto particles = input->getParticles(InputModule::RecoLevel::Reco, ParticleType::muon());
 
@@ -19,5 +16,5 @@ bool DoubleMuonTrigger::checkTrigger(const InputModule* input)
   double highestPT = particles.getLeadingTransverseMomentum();
   double secondHighestPT = particles.getNthHighestPt(2);
 
-  return ((highestPT >= pTCutoff) && (secondHighestPT >= secondPTCutoff));  // The particle passes the trigger
-}
+  return ((highestPT >= pTCutoff) && (secondHighestPT >= secondPTCutoff)); // The particle passes the trigger
+};

@@ -13,9 +13,7 @@ class ParticleImplementation;
 // Interface for particle operations. Contains a ParticleImplementation.
 class Particle
 {
-  public:
-    // specifies particle type
-    //enum class Type{Electron, Muon, Photon, LeptonJet, Jet, DarkPhoton, Neutralino, LeftHiggs, RightHiggs, ZBoson, None}; 
+  public: 
     
     enum class SelectionFit{Tight, Medium, Loose};
 
@@ -29,6 +27,7 @@ class Particle
     Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int pid, int status, int m1, int m2,int d1, int d2, double relIso);
     std::shared_ptr<ParticleImplementation> getParticleImplementation();
     Particle& operator = (const Particle& particle2);
+    std::string getName() const;
     double getPt() const;
     double getPhi() const;
     double getEta() const;
@@ -50,17 +49,16 @@ class Particle
     // Static function to identify type of any particle based on pdgid.
     static const ParticleType& identifyType(int pdgid); 
 
+  // bool isGenSim() const;
+  // bool isFinalState() const;
+protected:
+  Particle(std::shared_ptr<ParticleImplementation> particle);
+  std::shared_ptr<ParticleImplementation> getParticle() { return particle; }
+  const std::shared_ptr<ParticleImplementation> getParticle() const { return particle; }
+  void checkIsNull() const;
 
-    // bool isGenSim() const;
-    //bool isFinalState() const;
-  protected:
-    Particle(std::shared_ptr<ParticleImplementation> particle);
-    std::shared_ptr<ParticleImplementation> getParticle(){return particle;}
-    const std::shared_ptr<ParticleImplementation> getParticle() const {return particle;}
-    void checkIsNull() const;
-  private:
-    std::shared_ptr<ParticleImplementation> particle;
-    
+private:
+  std::shared_ptr<ParticleImplementation> particle;
 };
 
 #endif
