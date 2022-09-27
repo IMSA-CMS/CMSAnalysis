@@ -21,32 +21,21 @@ class Event
         const ParticleCollection<Photon>& getPhotons() const {return photons;};
         const ParticleCollection<Jet>& getJets() const {return jets;};
         const double& getMET() const {return MET;};
-        //const std::unordered_map<std::string, Particle>& getSpecials() {return specialObjects;};
-        const std::unordered_map<int, ParticleCollection<Particle>>& getSpecials() {return specialObjects;};
+
+        const std::map<std::string, ParticleCollection<Particle>>& getSpecials() const {return specialObjects;};
+        ParticleCollection<Particle> getSpecial(std::string key) const;
 
         ParticleCollection<Particle> getParticles() const;
 
-        void addElectron(Electron electron) {electrons.addParticle(electron);};
-        void addMuon(Muon muon) {muons.addParticle(muon);};
-        void addPhoton(Photon photon) {photons.addParticle(photon);};
-        void addJet(Jet jet){jets.addParticle(jet);};
-        //void addSpecialObject(std::string key, Particle obj) {specialObjects[key] = obj;}
-        void addSpecialObject(Particle obj) 
-        {
-            GenSimParticle gensimobj = GenSimParticle(obj);
-            int key = gensimobj.pdgId();
-            specialObjects[key].addParticle(obj);
-        }
+        void addElectron(Electron electron);
+        void addMuon(Muon muon);
+        void addPhoton(Photon photon);
+        void addJet(Jet jet);
+        void addSpecialObject(std::string key, Particle obj); 
         void setMET(double newMET) {MET = newMET;}
-
-        void sortElectrons() {std::sort(electrons.begin(), electrons.end());}
-        void sortMuons() {std::sort(muons.begin(), muons.end());}
-        void sortPhotons() {std::sort(photons.begin(), photons.end());}
-        void sortJets() {std::sort(jets.begin(), jets.end());}
         
         bool containsParticles() const;
 
-        void sort();
         // Clears all vectors of particles within, for reuse of an Event object
         void clear();
     private:
@@ -56,6 +45,6 @@ class Event
         ParticleCollection<Photon> photons;
         ParticleCollection<Jet> jets;
         double MET;
-        std::unordered_map<int, ParticleCollection<Particle>> specialObjects;
+        std::map<std::string, ParticleCollection<Particle>> specialObjects;
 };
 #endif

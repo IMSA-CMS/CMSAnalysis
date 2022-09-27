@@ -4,12 +4,14 @@
 #include <vector>
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
 #include "CMSAnalysis/DataCollection/interface/ParticleImplementation.hh"
+#include "CMSAnalysis/DataCollection/interface/Lepton.hh"
 
 class SimpleImplementation : public ParticleImplementation
 {
     public:
         virtual ~SimpleImplementation(){}
-        SimpleImplementation(reco::Candidate::LorentzVector vec, int ch, Particle::Type type, double iIsolation = -999);
+        SimpleImplementation(reco::Candidate::LorentzVector vec, int ch, const ParticleType& type, double iIsolation = -999, 
+            Particle::SelectionFit fit = Particle::SelectionFit::Tight);
         virtual reco::Candidate::LorentzVector getFourVector() const override;
         virtual int charge() const override;
         virtual double isolation() const override {return particleIsolation;}
@@ -18,7 +20,8 @@ class SimpleImplementation : public ParticleImplementation
         virtual Particle mother() const override{throw std::runtime_error("mother() error");}
         virtual Particle daughter(int i) const override{throw std::runtime_error("daughter() error");}
         virtual int numberOfDaughters() const override{throw std::runtime_error("numberOfDaughters() error");}
-        virtual Particle::Type getType() const  override{ return particleType; }
+        virtual const ParticleType& getType() const  override{ return particleType; }
+        virtual Particle::SelectionFit getSelectionFit() const override{ return selectionFit;}
         virtual bool isNotNull() const override {return true;}
         virtual bool isFinalState() const override {return true;}
         virtual bool operator== (const ParticleImplementation& other) const override;
@@ -29,8 +32,9 @@ class SimpleImplementation : public ParticleImplementation
     private:
         reco::Candidate::LorentzVector lorentzVec;
         const int particleCharge;
-        Particle::Type particleType;
+        const ParticleType& particleType;
         const double particleIsolation;
+        Particle::SelectionFit selectionFit;
 };
 
 #endif

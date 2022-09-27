@@ -47,24 +47,6 @@ GenSimParticle GenSimParticle::daughter(int i) const
 {
   checkIsNull();
   auto daughter = getParticle()->daughter(i);
-
-/*
-
-  Particle::Type type;
-  switch (daughter->pdgId()) {
-  case 11:
-    type = Particle::Type::Electron;
-    break;
-  case 13:
-    type = Particle::Type::Muon;
-    break;
-  default:
-    type = Particle::Type::None;
-    break;
-  }
-
-*/
-
   return GenSimParticle(daughter);
 }
 

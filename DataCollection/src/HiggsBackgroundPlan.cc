@@ -31,6 +31,7 @@
 #include "CMSAnalysis/DataCollection/interface/PASSelector.hh"
 #include "CMSAnalysis/DataCollection/interface/QuarkoniaCut.hh"
 #include "CMSAnalysis/DataCollection/interface/ZVetoCut.hh"
+#include "CMSAnalysis/DataCollection/interface/FourLeptonCut.hh"
 
 using std::make_shared;
 
@@ -41,10 +42,13 @@ HiggsBackgroundPlan::HiggsBackgroundPlan()
     
     auto eventMod = make_shared<EventModule>();
     auto pasSelector = make_shared<PASSelector>();
+    auto fourLeptonCut = make_shared<FourLeptonCut>();
     auto zVetoCut = make_shared<ZVetoCut>();
     auto quarkoniaCut = make_shared<QuarkoniaCut>();
+    
 
     eventMod->addSelector(pasSelector);
+    eventMod->addCut(fourLeptonCut);
     eventMod->addCut(zVetoCut);
     eventMod->addCut(quarkoniaCut);
 
@@ -84,8 +88,8 @@ HiggsBackgroundPlan::HiggsBackgroundPlan()
     auto muonRecoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "Muon Reco Same Sign Invariant Mass", 1000, 0, 2000, false, false);
     auto muonPositiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Muon Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);
 
-    auto elecFilter = make_shared<LeptonFilter>(Particle::Type::Electron, 4, "Electron");
-    auto muonFilter = make_shared<LeptonFilter>(Particle::Type::Muon, 4, "Muon");
+    auto elecFilter = make_shared<LeptonFilter>(ParticleType::electron(), 4, "Electron");
+    auto muonFilter = make_shared<LeptonFilter>(ParticleType::muon(), 4, "Muon");
     auto snowmassCut = make_shared<SnowmassCutFilter>();
 
     elecRecoSameSignInvMassHist->addFilter(elecFilter);

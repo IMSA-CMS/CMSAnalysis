@@ -25,21 +25,22 @@ bool GenSimEventDumpModule::process()
   std::ofstream my_file;
   if (clearlatch) 
   {
-    my_file.open("EventDumpWWW.txt", std::ofstream::out | std::ofstream::trunc);
+    my_file.open("GenSimEventDump.txt", std::ofstream::out | std::ofstream::trunc);
     clearlatch = false;
   }
+  
   if(counter < numOfEvents || numOfEvents == -1)
   {
-    auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim, Particle::Type::None);
+    auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::none());
     //TODO this line needs to be fixed and put back in
     //Input Module is GenSim to match printGenSimParticleCollection
-    if( getInput()->getLeptons(InputModule::RecoLevel::GenSim).getNumParticles() == 4)
-    {
-      my_file.open("EventDumpWWW.txt", std::ios::app);
+    // if( getInput()->getLeptons(InputModule::RecoLevel::GenSim).getNumParticles() == 4)
+    // {
+      my_file.open("GenSimEventDump.txt", std::ios::app);
       printGenSimParticleCollection(genParticles, my_file);
       //std::cout << "\nAn event was printed";
       my_file.close();
-    }
+    // }
     counter++;
     return true;
   }

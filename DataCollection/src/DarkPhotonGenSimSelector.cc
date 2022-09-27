@@ -19,16 +19,16 @@ void DarkPhotonGenSimSelector::selectParticles(const InputModule* input, Event& 
         if (genSimParticle.pdgId() == 4900022 && genSimParticle == genSimParticle.finalDaughter()) //Dark Photon
         {
             if (genSimParticle.numberOfDaughters() == 2 && 
-            (genSimParticle.daughter(0).getType() == Particle::Type::Electron || genSimParticle.daughter(0).getType() == Particle::Type::Muon) && 
-            (genSimParticle.daughter(1).getType() == Particle::Type::Electron || genSimParticle.daughter(1).getType() == Particle::Type::Muon))
+            (genSimParticle.daughter(0).getType() == ParticleType::electron() || genSimParticle.daughter(0).getType() == ParticleType::muon()) && 
+            (genSimParticle.daughter(1).getType() == ParticleType::electron() || genSimParticle.daughter(1).getType() == ParticleType::muon()))
             {
-                event.addSpecialObject(genSimParticle);
+                event.addSpecialObject("DarkPhoton",genSimParticle);
                 for (int i = 0; i < 2; i++)
                 {
-                    if (genSimParticle.daughter(i).getType() == Particle::Type::Electron)
+                    if (genSimParticle.daughter(i).getType() == ParticleType::electron())
                     {
                         event.addElectron(Electron(genSimParticle.daughter(i)));
-                    } else if (genSimParticle.daughter(i).getType() == Particle::Type::Muon)
+                    } else if (genSimParticle.daughter(i).getType() == ParticleType::muon())
                     {
                         event.addMuon(Muon(genSimParticle.daughter(i)));
                     }
@@ -39,14 +39,14 @@ void DarkPhotonGenSimSelector::selectParticles(const InputModule* input, Event& 
         {
             if (genSimParticle.numberOfDaughters() == 2 && genSimParticle.daughter(0).pdgId() != 4900002 && genSimParticle.daughter(1).pdgId() != 4900002)
             { //4900002 means no jet
-                event.addSpecialObject(genSimParticle);
+                event.addSpecialObject("Neutralino",genSimParticle);
                 for (const auto& part : checkJet(genSimParticle))
                 {
-                    if (part.getType() == Particle::Type::Electron)
+                    if (part.getType() == ParticleType::electron())
                     {
                         event.addElectron(Electron(part));
                     } 
-                    else if (part.getType() == Particle::Type::Muon)
+                    else if (part.getType() == ParticleType::muon())
                     {
                         event.addMuon(Muon(part));
                     }
@@ -61,7 +61,7 @@ std::vector<Particle> DarkPhotonGenSimSelector::checkJet(GenSimParticle part) co
     std::vector<Particle> selected(0);
     if (part.isFinalState())
     {
-        if (part.getType() == Particle::Type::Electron || part.getType() == Particle::Type::Muon)
+        if (part.getType() == ParticleType::electron() || part.getType() == ParticleType::muon())
         {
             selected.push_back(part);
         }
