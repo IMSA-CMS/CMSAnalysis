@@ -23,7 +23,7 @@ class LeptonJetImplementation : public ParticleImplementation
   virtual Particle mother() const override {throw std::__throw_runtime_error;}
   virtual Particle daughter(int i) const override {throw std::__throw_runtime_error;}
   virtual int numberOfDaughters() const override {throw std::__throw_runtime_error;}
-  virtual Particle::Type getType() const override;
+  virtual const ParticleType& getType() const override;
   virtual Particle::SelectionFit getSelectionFit() const override {throw std::runtime_error("getSelectionFit not implemented");};
   // virtual bool isIsolated() const override {throw std::__throw_runtime_error;};
   virtual int pdgId() const override {throw std::__throw_runtime_error;};

@@ -7,6 +7,7 @@
 #include "CMSAnalysis/DataCollection/interface/AnalysisModule.hh"
 #include "CMSAnalysis/DataCollection/interface/ParticleCollection.hh"
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
+#include "CMSAnalysis/DataCollection/interface/ParticleType.hh"
 
 //compares event dumps of reco vs. gensim to match reconstructed particles to their corresponding 
 class RecoGenSimComparisonModule : public AnalysisModule

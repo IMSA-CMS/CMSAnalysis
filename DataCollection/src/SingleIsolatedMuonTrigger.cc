@@ -8,7 +8,7 @@ SingleIsolatedMuonTrigger::SingleIsolatedMuonTrigger(double iPTCutoff) :
 
 bool SingleIsolatedMuonTrigger::checkTrigger(const InputModule* input)
 {
-  auto particles = input->getParticles(InputModule::RecoLevel::Reco, Particle::Type::Muon);
+  auto particles = input->getParticles(InputModule::RecoLevel::Reco, ParticleType::muon());
 
   // If there aren't enough muons, then automatically fail the trigger
   if (particles.getNumParticles() < 1)
