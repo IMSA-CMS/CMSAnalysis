@@ -7,10 +7,10 @@ RecoGenSimComparisonModule::RecoGenSimComparisonModule()
 
 bool RecoGenSimComparisonModule::process()
 {
-	auto recoParticles = getInput()->getParticles(InputModule::RecoLevel::Reco, Particle::Type::None);
-	auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim, Particle::Type::None);
+	auto recoParticles = getInput()->getParticles(InputModule::RecoLevel::Reco, ParticleType::none());
+	auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::none());
+	eventCounter++;
 	if (getInput()->getLeptons(InputModule::RecoLevel::Reco).calculateSameSignInvariantMass()>500){
-		eventCounter++;
 		printMatchInfo(recoParticles, genParticles);
 	}
 	return true;
@@ -81,8 +81,8 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 	
 	for(auto &recoPart : recoParts){
 		// Standard info
-		output << std::left << "++++++++++++++++ Reco Element ++++++++++++++++\n";
-		output << std::setw(8) << recoEventElement << "| " << std::setw(9) << int(recoPart.getType()) << "| ";
+		output << "++++++++++++++++ Reco Element ++++++++++++++++\n";
+		output << std::setw(8) << recoEventElement << "| " << std::setw(9) << recoPart.getName() << "| ";
 
 		// Particle properties
 		output << std::setw(13) << recoPart.getCharge() << "| " 
@@ -102,11 +102,11 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 
 		recoEventElement++;
 		recoCounter++;
-		if(recoPart.getType()==Particle::Type::Electron)
+		if(recoPart.getType()==ParticleType::electron())
 		{
 			electronCounter++;
 
-		} else if (recoPart.getType()==Particle::Type::Muon)
+		} else if (recoPart.getType()==ParticleType::muon())
 		{
 			muonCounter++;
 		}
@@ -129,7 +129,7 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 			double deltaR = std::sqrt( std::pow(recoPart.getPhi() - genPart.getPhi(), 2) + std::pow(recoPart.getEta() - genPart.getEta(), 2) );
 			if (deltaR < 0.1)
 			{
-				output << std::setw(8) << genEventElement << "| " << std::setw(9) << int(genPart.getType()) << "| ";
+				output << std::setw(8) << genEventElement << "| " << std::setw(9) << genPart.getName() << "| ";
 				// Particle properties
 				output << std::setw(13) << genPart.getCharge() << "| " 
 					<< std::setw(13) << genPart.getPt() << "| " 
@@ -165,12 +165,12 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 						wrongCharge = true;
 					}
 				}
-				if (genPart.getType() == Particle::Type::Photon && !(mismeasuredPt || wrongCharge))
+				if (genPart.getType() == ParticleType::photon() && !(mismeasuredPt || wrongCharge))
 				{
 					fakePhoton = true;
 				}
 
-				if(recoPart.getType()==Particle::Type::Electron)
+				if(recoPart.getType()==ParticleType::electron())
 				{
 					elecMatchCounter++;
 					if (recoPart.getType()==genPart.getType())
@@ -178,7 +178,7 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 						accElecMatchCounter++;
 					}
 
-				} else if (recoPart.getType()==Particle::Type::Muon)
+				} else if (recoPart.getType()==ParticleType::muon())
 				{
 					muonMatchCounter++;
 					if (recoPart.getType()==genPart.getType())

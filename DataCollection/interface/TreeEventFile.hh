@@ -23,7 +23,6 @@ class TreeEventFile : public EventFile
         virtual ParticleCollection<GenSimParticle> getGenSimParticles() const override;
         virtual ParticleCollection<Particle> getRecoParticles() const override;
         virtual ParticleCollection<Particle> getRecoJets() const override;
-        //virtual GenEventInfoProduct getGenInfo() const override;
         virtual double getMET() const override;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;
@@ -254,7 +253,7 @@ inline ParticleCollection<Particle> TreeEventFile<S, E, M>::getRecoParticles() c
         recoParticles.addParticle(Particle(
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],
                                                                         elec_eta[i], elec_phi[i], elec_mass[i])),
-            charge, Particle::Type::Electron, elec_reliso[i], fit));
+            charge, ParticleType::electron(), elec_reliso[i], fit));
         
     }
     for (S i = 0; i < *muon_size; i++)
@@ -279,7 +278,7 @@ inline ParticleCollection<Particle> TreeEventFile<S, E, M>::getRecoParticles() c
         recoParticles.addParticle(Particle(
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],
                                                                         muon_eta[i], muon_phi[i], muon_mass[i])),
-            charge, Particle::Type::Muon, muon_reliso[i], fit));
+            charge, ParticleType::muon(), muon_reliso[i], fit));
         
     }
     return recoParticles;
@@ -295,7 +294,7 @@ inline ParticleCollection<Particle> TreeEventFile<S, E, M>::getRecoJets() const
             recoParticles.addParticle(
                 Particle(reco::Candidate::LorentzVector(jet_pt[i], jet_eta[i], jet_phi[i], jet_mass[i]), 
                 0, 
-                Particle::Type::Jet));    
+                ParticleType::jet()));    
         //}    
     }
     return recoParticles;
