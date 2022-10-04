@@ -26,6 +26,7 @@
 #include "CMSAnalysis/DataCollection/interface/TripleMuonTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/TwoInvariantMassesHist.hh"
 #include "CMSAnalysis/DataCollection/interface/BJetFilter.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimDeltaRHist.hh"
 
 #include "CMSAnalysis/DataCollection/interface/EventModule.hh"
 
@@ -35,6 +36,8 @@ GenSimPlan::GenSimPlan()
 {
 
     Analyzer& analyzer = getAnalyzer();
+
+    auto deltaR = make_shared<GenSimDeltaRHist>("Delta R", 100, 0, 1);
 
     auto matchMod = make_shared<MatchingModule>();
     auto triggerMod = make_shared<TriggerModule>();
@@ -59,6 +62,7 @@ GenSimPlan::GenSimPlan()
     histMod->addHistogram(genSimPt);
     histMod->addHistogram(genSimInvMass);
     histMod->addHistogram(metHist);
+    histMod->addHistogram(deltaR);
 
     auto elecGenSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::GenSim, "Electron GenSim Same Sign Invariant Mass", 1000, 0, 2000, false, false);
     //auto elecPositiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Electron Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);

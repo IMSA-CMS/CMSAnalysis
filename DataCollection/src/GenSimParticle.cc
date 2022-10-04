@@ -47,7 +47,6 @@ GenSimParticle GenSimParticle::daughter(int i) const
 {
   checkIsNull();
   auto daughter = getParticle()->daughter(i);
-
 /*
 
   Particle::Type type;
