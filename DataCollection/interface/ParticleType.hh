@@ -44,6 +44,7 @@ class ParticleType
     static SingleParticleHist getPtHist();
     static SingleParticleHist getPhiHist();
     static SingleParticleHist getEtaHist();
+    static SingleParticleHist getDaughterDeltaRHist();
 
     ParticleType(std::string typeName, int typepdgId, std::vector<SingleParticleHist> typeHists);
 

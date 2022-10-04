@@ -1,5 +1,6 @@
 #include "CMSAnalysis/DataCollection/interface/ParticleType.hh"
 #include "CMSAnalysis/DataCollection/interface/SingleParticleHist.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimParticle.hh"
 
 #include<string>
 #include<vector>
@@ -54,6 +55,20 @@ SingleParticleHist ParticleType::getEtaHist()
     return SingleParticleHist("Eta", 150, -10, 10, [](Particle particle){return std::vector<double>{particle.getEta()};});
 }
 
+SingleParticleHist ParticleType::getDaughterDeltaRHist()
+{
+    return SingleParticleHist("Daughter DeltaR", 150, 0, 3, [](Particle particle)
+    {
+        GenSimParticle genSimParticle = GenSimParticle(particle);
+        if (genSimParticle.numberOfDaughters() == 2)
+        {
+            double deltaR = genSimParticle.daughter(0).getDeltaR(genSimParticle.daughter(1));
+            return std::vector<double>{deltaR};
+        }
+        return std::vector<double>{};
+    });
+}
+
 
 const ParticleType& ParticleType::electron()
 {
@@ -82,7 +97,7 @@ const ParticleType& ParticleType::photon()
 
 const ParticleType& ParticleType::darkPhoton()
 {
-    return registerType("Dark Photon",4900022,std::vector<SingleParticleHist>{}); 
+    return registerType("Dark Photon",4900022,std::vector<SingleParticleHist>{getPtHist(),getPhiHist(),getEtaHist(),getDaughterDeltaRHist()}); 
 }
 
 const ParticleType& ParticleType::neutralino()

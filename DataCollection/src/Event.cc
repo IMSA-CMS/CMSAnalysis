@@ -92,7 +92,7 @@ ParticleCollection<Particle> Event::getSpecial(std::string key) const
     auto it = getSpecials().find(key);
     if (it == getSpecials().end()) // return null collection
     {
-        auto nullcollection = ParticleCollection();
+        auto nullcollection = ParticleCollection<Particle>();
         return nullcollection;
     }
     else
