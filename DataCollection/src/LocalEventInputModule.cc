@@ -33,15 +33,21 @@ ParticleCollection<Lepton> LocalEventInputModule::getLeptons(RecoLevel level) co
 
 ParticleCollection<Particle> LocalEventInputModule::getParticles(RecoLevel level, Particle::Type particleType) const
 {
+    std::cout << "hi1";
     ParticleCollection<Particle> particleList;
+    std::cout << "hi2";
     auto particles = event->getParticles().getParticles();
+    std::cout << "hi3";
     for (const auto &p : particles)
     {
+        std::cout << "hi4";
         if ((p.getType() == particleType || particleType == Particle::Type::None))
         {
+            std::cout << "hi5";
             particleList.addParticle(p);
         }
     }
+    std::cout << "hi6";
     return particleList;
 }
 

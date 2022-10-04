@@ -202,19 +202,20 @@ inline ParticleCollection<GenSimParticle> TreeEventFile<S, E, M>::getGenSimParti
     ParticleCollection<GenSimParticle> genParticles;
     for (S i = 0; i < *gen_size; i++) // iterator type must be defined by template to allow comparison with the size variable
     {
-        if (gen_status[i] != 1)
-        {
-            continue;
-        }
+        // if (gen_status[i] != 1)
+        // {
+        //     continue;
+        // }
         int charge = -1;
-        if (gen_pid[i] < 0)
-        {
-            charge = 1;
-        }
-        if (gen_pid[i] == 21 || gen_pid[i] == 22)
-        {
-            charge = 0;
-        }
+        // if (gen_pid[i] < 0)
+        // {
+        //     charge = 1;
+        // }
+        // if (gen_pid[i] == 21 || gen_pid[i] == 22)
+        // {
+        //     charge = 0;
+        // }
+
         genParticles.addParticle(
             Particle(
                 reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i],gen_eta[i], gen_phi[i], gen_mass[i])),

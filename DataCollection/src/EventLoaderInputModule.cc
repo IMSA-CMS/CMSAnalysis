@@ -27,20 +27,25 @@ ParticleCollection<Lepton> EventLoaderInputModule::getLeptons(RecoLevel level) c
 
 ParticleCollection<Particle> EventLoaderInputModule::getParticles(RecoLevel level, Particle::Type particleType) const
 {
+    //std::cout << "hey1";
     ParticleCollection<Particle> particleList;
     if (level == RecoLevel::GenSim)
     {
+        //std::cout << "hey2";
         auto particles = eventLoader->getFile()->getGenSimParticles().getParticles();
         for (const auto &p : particles)
         {
-            if ((p.getType() == particleType || particleType == Particle::Type::None) && p.isFinalState())
+            //std::cout << "hey3";
+            if ((p.getType() == particleType || particleType == Particle::Type::None))
             {
+               //std::cout << "hey5";
                 particleList.addParticle(p);
             }
         }
     }
     else if (level == RecoLevel::Reco)
     {
+        std::cout << "hey10";
         auto particles = eventLoader->getFile()->getRecoParticles().getParticles();
         for (const auto &p : particles)
         {
