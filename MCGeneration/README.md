@@ -25,7 +25,6 @@ Now, you can expedite this process by inputing the parameters in the cmsRun comm
 ```
 cmsRun EventGenerator_edm_cfg.py maxEvents=1000 globalTagKey=Run2 pythiaSettingsFile=dpPythiaParameters.txt outputFileName=output.root
 ```
-Of course, there are many more settings you can change and you can find all the options at the top of EventGenerator_edm_cfg and also in mcCommandLineOptions_cfi and ledMcCmndLineOptions_cfi which are located in the python directory.
 
 Finally, you can clearly see that running this file creates a lot of screen output. If you wish to redirect this to a .txt file and run it in the background, you can do it like so:
 
