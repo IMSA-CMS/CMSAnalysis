@@ -7,37 +7,71 @@
 #include "CMSAnalysis/DataCollection/interface/Lepton.hh"
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
 
-std::vector<Particle> DarkPhotonGenSimSelector::selectParticles(const InputModule* input) const
+void DarkPhotonGenSimSelector::selectParticles(const InputModule* input, Event& event) 
 {
     std::vector<Particle> selected(0);
+
     auto particles = input->getParticles(InputModule::RecoLevel::GenSim);
 
     for (const auto& particle : particles)
     {
         GenSimParticle genSimParticle = GenSimParticle(particle);
-        if (genSimParticle.pdgId() == 4900022) //Dark Photon
+        if (genSimParticle.pdgId() == 4900022 && genSimParticle == genSimParticle.finalDaughter()) //Dark Photon
         {
-            genSimParticle = genSimParticle.finalDaughter();
-            if (genSimParticle.numberOfDaughters() == 2)
+            if (genSimParticle.numberOfDaughters() == 2 && 
+            (genSimParticle.daughter(0).getType() == ParticleType::electron() || genSimParticle.daughter(0).getType() == ParticleType::muon()) && 
+            (genSimParticle.daughter(1).getType() == ParticleType::electron() || genSimParticle.daughter(1).getType() == ParticleType::muon()))
             {
-                GenSimParticle daughter1 = genSimParticle.daughter(0);
-                GenSimParticle daughter2 = genSimParticle.daughter(1);
-                selected.push_back(genSimParticle);
-                selected.push_back(daughter1);
-                selected.push_back(daughter2);
+                event.addSpecialObject("DarkPhoton",genSimParticle);
+                for (int i = 0; i < 2; i++)
+                {
+                    if (genSimParticle.daughter(i).getType() == ParticleType::electron())
+                    {
+                        event.addElectron(Electron(genSimParticle.daughter(i)));
+                    } else if (genSimParticle.daughter(i).getType() == ParticleType::muon())
+                    {
+                        event.addMuon(Muon(genSimParticle.daughter(i)));
+                    }
+                }
             }
         }
-        if (abs(genSimParticle.pdgId() == 1000022)) //neutralino
+        if (abs(genSimParticle.pdgId() == 1000022) && genSimParticle == genSimParticle.finalDaughter()) //neutralino
         {
-            genSimParticle = genSimParticle.finalDaughter();
-            if (genSimParticle.numberOfDaughters() == 2)
-            {
-                GenSimParticle daughter1 = genSimParticle.daughter(0);
-                GenSimParticle daughter2 = genSimParticle.daughter(1);
-                selected.push_back(genSimParticle);
-                selected.push_back(daughter1);
-                selected.push_back(daughter2);
+            if (genSimParticle.numberOfDaughters() == 2 && genSimParticle.daughter(0).pdgId() != 4900002 && genSimParticle.daughter(1).pdgId() != 4900002)
+            { //4900002 means no jet
+                event.addSpecialObject("Neutralino",genSimParticle);
+                for (const auto& part : checkJet(genSimParticle))
+                {
+                    if (part.getType() == ParticleType::electron())
+                    {
+                        event.addElectron(Electron(part));
+                    } 
+                    else if (part.getType() == ParticleType::muon())
+                    {
+                        event.addMuon(Muon(part));
+                    }
+                }
             }
+        }
+    }
+}
+
+std::vector<Particle> DarkPhotonGenSimSelector::checkJet(GenSimParticle part) const //cycles through jets to find leptons
+{
+    std::vector<Particle> selected(0);
+    if (part.isFinalState())
+    {
+        if (part.getType() == ParticleType::electron() || part.getType() == ParticleType::muon())
+        {
+            selected.push_back(part);
+        }
+    } 
+    else 
+    {
+        for (int i = 0; i < part.numberOfDaughters(); i++) 
+        {
+            auto daughters = checkJet(part.daughter(i));
+            selected.insert(selected.end(),daughters.begin(),daughters.end());
         }
     }
     return selected;
