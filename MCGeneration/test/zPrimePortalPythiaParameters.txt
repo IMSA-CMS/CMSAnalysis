@@ -58,8 +58,9 @@ HiddenValley:ffbar2Zv = on
 1000022:mayDecay = true
 4900002:mayDecay = off
 4900004:mayDecay = off
-4900022:m0 = 0.5
+4900022:m0 = 0.3  # change to .3
 4900022:0:meMode = 0
+4900023:m0 = 1000 # should be default of 1000, check if changing this changes plot
 
 
 # 4900023:oneChannel = 1 0.33 100 11 -11

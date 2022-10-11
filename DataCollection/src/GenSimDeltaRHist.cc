@@ -2,6 +2,7 @@
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimParticle.hh"
 #include "DataFormats/Math/interface/deltaR.h"
+#include "CMSAnalysis/DataCollection/interface/InputModule.hh"
   
 
  GenSimDeltaRHist::GenSimDeltaRHist(const std::string& iname, int iNBins, double iminimum, double imaximum):
@@ -12,11 +13,12 @@
 
   std::vector<double> GenSimDeltaRHist::value() const
 {
+
   //call getparticles or getInput getparticles in input module level-gensim, particle type called darkphoton in particle class
   //particles = GetInput() from input module?
   //not in particle.cc, just pdgid == 4900022 for identifying dark photons
-  //std::cout << "begin";
-  auto particles = getInput()->getParticles(InputModule::RecoLevel::GenSim, Particle::Type::DarkPhoton);
+  std::cout << "begin gensimdeltarhist -";
+  auto particles = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::darkPhoton());
   //std::cout << "end";
 
   //loop through number of events to get all final daughters
@@ -50,13 +52,13 @@
     }
 
     std::vector<Particle> leptons;
-    
+
     //looping through lepton decays (should be only 2) and pushing to lepton list
     for (int j = 0; j < particle.numberOfDaughters(); ++j)
     {
-      std::cout << "<<";
+      //std::cout << "<<";
       auto leptonCandidate = particle.daughter(j);
-      if (leptonCandidate.getType() == Particle::Type::Muon)
+      if (leptonCandidate.getType() == ParticleType::muon())
       {
         leptons.push_back(leptonCandidate);
       }
@@ -65,13 +67,12 @@
     //get deltaR between the 2 muons in this lepton jet and pushes deltaR to return vector
     if (leptons.size() >= 2)
     {
-      std::cout << "--";
+      //std::cout << "--";
       auto particle1FourVector = leptons[0].getFourVector();
       auto particle2FourVector = leptons[1].getFourVector();
       double deltaR = reco::deltaR(particle1FourVector, particle2FourVector);
       deltaRVector.push_back(deltaR);
     }
   }
-  deltaRVector.push_back(0.1);
   return deltaRVector;
 }

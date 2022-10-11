@@ -20,12 +20,15 @@ void SuperImpose() {
     //Change extraText here
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary");
     //Change the filePath here. This should be the longest branch all input files have in common.
-    const std::string filePath = "/uscms/home/aytang/RecoWidth/CMSSW_11_0_2/src/CMSAnalysis/DataCollection/bin/";
+    //const std::string filePath = "/uscms/home/aytang/RecoWidth/CMSSW_11_0_2/src/CMSAnalysis/DataCollection/bin/";
+    const std::string filePath = "/uscms/home/fciancio/practice/CMSSW_11_0_2/src/CMSAnalysis/DataCollection/bin/";
     //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
-    std::vector<std::string> files = {"HiggsRunCuts/Higgs700.root", "BackgroundRunCuts/TTBarPick500.root", "BackgroundRunCuts/ZZPick4.root"};
-    std::vector<std::string> hists = {"Cut4MET", "Cut4MET", "Cut4MET"};
+    std::vector<std::string> files = {"Higgs700.root"};
+    //std::vector<std::string> files = {"HiggsRunCuts/Higgs700.root", "BackgroundRunCuts/TTBarPick500.root", "BackgroundRunCuts/ZZPick4.root"};
+    std::vector<std::string> hists = {"MET"};
+    //std::vector<std::string> hists = {"Cut4MET", "Cut4MET", "Cut4MET"};
     //Write your graph names here (for the legend)
-    std::vector<TString> names = {"Higgs MET", "TTBar MET", "ZZ MET"};
+    std::vector<TString> names = {"Higgs MET"};
     //Colors go here
     std::vector<int> colors = {1, 2, 3};
     //Change x and y axis titles here

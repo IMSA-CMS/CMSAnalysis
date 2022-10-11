@@ -77,8 +77,8 @@ HiggsBackgroundPlan::HiggsBackgroundPlan()
     auto metHist = make_shared<METHist>(metMod, "MET", 500, 0, 1000);
 
     // Add the histogram(s) created above to histMod
-    histMod->addHistogram(genSimSameSignInvMassHist);
-    histMod->addHistogram(positiveNegativeInvMassHist);
+    histMod->addHistogram(recoSameSignInvMassHist);
+    histMod->addHistogram(recoInvMass);
     histMod->addHistogram(recoPt);
     histMod->addHistogram(recoInvMass);
     histMod->addHistogram(metHist);
@@ -88,8 +88,8 @@ HiggsBackgroundPlan::HiggsBackgroundPlan()
     auto muonRecoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "Muon Reco Same Sign Invariant Mass", 1000, 0, 2000, false, false);
     auto muonPositiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Muon Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);
 
-    auto elecFilter = make_shared<LeptonFilter>(Particle::Type::Electron, 4, "Electron");
-    auto muonFilter = make_shared<LeptonFilter>(Particle::Type::Muon, 4, "Muon");
+    auto elecFilter = make_shared<LeptonFilter>(ParticleType::electron(), 4, "Electron");
+    auto muonFilter = make_shared<LeptonFilter>(ParticleType::muon(), 4, "Muon");
     auto snowmassCut = make_shared<SnowmassCutFilter>();
 
     elecRecoSameSignInvMassHist->addFilter(elecFilter);

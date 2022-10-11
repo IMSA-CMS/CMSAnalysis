@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
+#include "CMSAnalysis/DataCollection/interface/ParticleType.hh"
 #include "CMSAnalysis/DataCollection/interface/ParticleImplementation.hh"
 
 class CandidateImplementation : public ParticleImplementation
@@ -21,7 +22,7 @@ public:
   virtual Particle daughter(int i) const override;
   virtual int numberOfDaughters() const override;
   virtual bool isNotNull() const override {return particle;}
-  virtual Particle::Type getType() const override;
+  virtual const ParticleType& getType() const override;
   virtual Particle::SelectionFit getSelectionFit() const override {throw std::runtime_error("getSelectionFit not implemented");};
   // virtual bool isIsolated() const override;
   const reco::Candidate* getUnderlyingParticle() const {return particle;}

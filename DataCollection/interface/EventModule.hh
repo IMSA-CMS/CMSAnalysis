@@ -13,6 +13,7 @@
 #include "CMSAnalysis/DataCollection/interface/Cut.hh"
 #include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LocalEventInputModule.hh"
+#include "CMSAnalysis/DataCollection/interface/SingleParticleHist.hh"
 
 // EventModule allows an Analyzer to select events and apply cuts.
 // Additionally, contains a HistogramOutputModule to generate basic histograms for events.
@@ -38,15 +39,17 @@ class EventModule : public AnalysisModule
 
         // function to generate lambda functions for HistogramPrototype1DGeneral, so that they don't have to be explicitly declared
         std::function<std::vector<double>(const InputModule*)> findNthParticleFunction(int n, 
-        Particle::Type particleType, InputModule::RecoLevel typeGenSim, double (Particle::* valueFunction)() const) const;
+        const ParticleType& particleType, InputModule::RecoLevel typeGenSim, double (Particle::* valueFunction)() const) const;
 
         // adds all Nth Highest Phi/Eta/Invariant Mass histograms for specified particleType up to the ith particle 
         // of that particle type
-        void addBasicHistograms(Particle::Type particleType, int n);
+        void addBasicHistograms(const ParticleType& particleType, const ParticleCollection<Particle>& particles);
         // returns "[n]th Highest [particle type] [value name]" e.g. 4th Highest Muon Eta
-        std::string getBasicHistogramTitle(int n, Particle::Type particleType, std::string valueName) const;
+        std::string getBasicHistogramTitle(int n, const ParticleType& particleType, std::string valueName) const;
+        bool checkHist(std::string histName) const;
 
     private:
+        void clearBasicHistograms();
         std::vector<std::shared_ptr<Selector>> selectors;
         std::vector<std::shared_ptr<Cut>> cuts;
         Event event;
@@ -55,7 +58,8 @@ class EventModule : public AnalysisModule
         LocalEventInputModule localInput;
 
         // Used for keeping track of the nth particles for which sets of histograms have been added
-        std::unordered_set<std::string> basicHistograms;
+        std::unordered_map<std::string,std::shared_ptr<SingleParticleHist>> basicHistograms;
+
 
         // Used for dynamically adding as many histograms as needed
         int maxElectrons = 0;
