@@ -9,8 +9,8 @@ bool RecoGenSimComparisonModule::process()
 {
 	auto recoParticles = getInput()->getParticles(InputModule::RecoLevel::Reco, ParticleType::none());
 	auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::none());
-	eventCounter++;
 	if (getInput()->getLeptons(InputModule::RecoLevel::Reco).calculateSameSignInvariantMass()>500){
+		eventCounter++;
 		printMatchInfo(recoParticles, genParticles);
 	}
 	return true;
@@ -36,11 +36,11 @@ void RecoGenSimComparisonModule::finalize()
 	
 	std::cout << "\nPer reconstructed event counters:\n";
 	std::cout << "Total events: " << eventCounter << "\n";
-	std::cout << "Total accurately measured events: " << accurateEventCounter << "\n";
-	std::cout << "Total wrong charge events: " << wrongChargeCounter << "\n";
-	std::cout << "Total mismeasured pT events: " << mismeasuredPtCounter << "\n";
-	std::cout << "Total fake photon events: " << fakePhotonCounter << "\n";
-	std::cout << "Total no match events: " << noMatchCounter << "\n";
+	std::cout << "Accurately measured events ratio: " << accurateEventCounter/(double)eventCounter << "\n";
+	std::cout << "Wrong charge events ratio: " << wrongChargeCounter/(double)eventCounter << "\n";
+	std::cout << "Mismeasured pT events ratio: " << mismeasuredPtCounter/(double)eventCounter << "\n";
+	std::cout << "Fake photon events ratio: " << fakePhotonCounter/(double)eventCounter << "\n";
+	std::cout << "No match events ratio: " << noMatchCounter/(double)eventCounter << "\n";
 }
 
 void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particle>& recoParts, 
