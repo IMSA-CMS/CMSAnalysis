@@ -120,8 +120,8 @@ HiddenValley:alphaFSR = 0
 4900004:tau0 = 1.97327e-13
 
 # Dark Photon
-4900022:oneChannel = 1 0.526471 100 11 -11
-4900022:addChannel = 1 0.466296 100 13 -13
+#4900022:oneChannel = 1 0.526471 100 11 -11
+#4900022:addChannel = 1 0.466296 100 13 -13
 #4900022:oneChannel = 1 1.0 100 11 -11
 #4900022:addChannel = 1 0.5 100 13 -13
 #4900022:onMode = off
