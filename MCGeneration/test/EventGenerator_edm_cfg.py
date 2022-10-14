@@ -7,21 +7,11 @@ options = VarParsing.VarParsing ('analysis')
 import os
 
 # Takes command line input parameters from user
-options.register ('zPrimeModel',
-                  "zPrimeSSM",
-                  VarParsing.VarParsing.multiplicity.singleton,
-                  VarParsing.VarParsing.varType.string,
-                  "which Z' model to use")
 options.register ('dpMass',
                 0,
                 VarParsing.VarParsing.multiplicity.singleton,
                   VarParsing.VarParsing.varType.float,
                   "mass of the dark photon")
-options.register ('interferenceMode',
-                  3,
-                  VarParsing.VarParsing.multiplicity.singleton,
-                  VarParsing.VarParsing.varType.int,          
-                  "Z/gamma/Z' interference setting")
 options.register ('outputFileName',
                   "0",
                   VarParsing.VarParsing.multiplicity.singleton,
@@ -38,14 +28,6 @@ options.register ('globalTagKey',
                   VarParsing.VarParsing.varType.string,
                   "Global Tag Identifier")
 options.parseArguments()
-
-# Imports additional command line input parameters from the user
-import sys
-sys.path.append('..')
-from python.mcCmdLineOptions_cfi import registerMcCmndLineOptions
-registerMcCmndLineOptions(options)
-from python.ledMcCmndLineOptions_cfi import registerLedMcCmndLineOptions
-registerLedMcCmndLineOptions(options)
 
 # The 4 input parameters below, maxEvents, globalTagKey, pythiaSettingsFile, and outputFile
 # are necessary for the program to run, thus if they are not entered it prompts the user to enter them.
@@ -104,7 +86,7 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 print(importedPythiaSettings)
 
 process.generator = cms.EDFilter("Pythia8GeneratorFilter",
-    comEnergy =  cms.double(options.comEnergy*1000), 
+    comEnergy =  cms.double(13000), 
     crossSection = cms.untracked.double(1e10),
     filterEfficiency = cms.untracked.double(1),
     maxEventsToPrint = cms.untracked.int32(0),
@@ -115,16 +97,7 @@ process.generator = cms.EDFilter("Pythia8GeneratorFilter",
         pythia8CP5SettingsBlock,
         pythia8PSweightsSettingsBlock,
         processParameters = cms.vstring(
-
-            #Master Switches all should be one for large events
-		    'PartonLevel:MPI = '+str(options.ULE),
-			'PartonLevel:ISR = '+str(options.ISR),
-			'PartonLevel:FSR = '+str(options.FSR),
-
-            'PhaseSpace:mHatMax = '+str(options.maxMass),                       
-            'PhaseSpace:mHatMin = '+str(options.minMass),
-
-            *importedPythiaSettings 
+            *importedPythiaSettings
         ),
         parameterSets = cms.vstring(
             'pythia8CommonSettings',
@@ -141,11 +114,12 @@ process.MessageLogger.cerr.FwkReport = cms.untracked.PSet(
     limit = cms.untracked.int32(10000000)
 )
 
+import random
 process.source = cms.Source("EmptySource",
-			    firstLuminosityBlock = cms.untracked.uint32(options.seed),
+			    firstLuminosityBlock = cms.untracked.uint32(random.randrange(1,10000)),
 			    numberEventsInLuminosityBlock = cms.untracked.uint32(100))
 
-process.RandomNumberGeneratorService.generator.initialSeed = options.seed*10000
+process.RandomNumberGeneratorService.generator.initialSeed = random.randrange(1,10000)
 
 process.genstepfilter.triggerConditions=cms.vstring("generation_step")
 from Configuration.AlCa.GlobalTag import GlobalTag

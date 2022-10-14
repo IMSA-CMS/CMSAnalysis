@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 process = cms.Process("GEN")
 
 process.source = cms.Source("EmptySource",
-    firstLuminosityBlock = cms.untracked.uint32(17),
+    firstLuminosityBlock = cms.untracked.uint32(2822),
     numberEventsInLuminosityBlock = cms.untracked.uint32(100)
 )
 process.AODEventContent = cms.PSet(
@@ -17342,11 +17342,6 @@ process.generator = cms.EDFilter("Pythia8GeneratorFilter",
             'processParameters'
         ),
         processParameters = cms.vstring(
-            'PartonLevel:MPI = on',
-            'PartonLevel:ISR = on',
-            'PartonLevel:FSR = on',
-            'PhaseSpace:mHatMax = -1',
-            'PhaseSpace:mHatMin = -1',
             'Main:timesAllowErrors = 10000',
             'SUSY:all = on',
             'SUSY:qqbar2squarkantisquark = on',
@@ -17974,7 +17969,7 @@ process.RandomNumberGeneratorService = cms.Service("RandomNumberGeneratorService
     ),
     generator = cms.PSet(
         engineName = cms.untracked.string('MixMaxRng'),
-        initialSeed = cms.untracked.uint32(170000)
+        initialSeed = cms.untracked.uint32(2780)
     ),
     hbhereco = cms.PSet(
         engineName = cms.untracked.string('MixMaxRng'),
