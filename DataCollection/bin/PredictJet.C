@@ -55,6 +55,14 @@ bool returnState(TString &myMethodList)
     Use["MLPBNN"] = 0;   // Recommended ANN with BFGS training method and bayesian regulator
     Use["CFMlpANN"] = 0; // Depreciated ANN from ALEPH
     Use["TMlpANN"] = 0;  // ROOT's own ANN
+
+    // Boosted Decision Trees
+    Use["BDT"] = 1;  // Boosted Decision Trees (Adaptive Boost, recommended)
+    Use["BDTG"] = 0; // uses Gradient Boost
+    Use["BDTB"] = 0; // uses Bagging
+    Use["BDTD"] = 0; // decorrelation + Adaptive Boost
+    Use["BDTF"] = 0; // allow usage of fisher discriminant for node splitting
+
 #ifdef R__HAS_TMVAGPU
     Use["DNN_GPU"] = 0; // CUDA-accelerated DNN training.
 #else
@@ -94,13 +102,13 @@ bool returnState(TString &myMethodList)
     }
 
     // input signal file here
-    string sgFile = "dark_photons.root";
+    string sgFile = "dpMiniAOD.root";
 
     // input background files here
     string bgFiles[] =
         {
             //"dy10.root",
-            "dy50.root",
+            "dy50Run2.root",
             // "qcd500.root",
             // "qcd700.root",
             // "qcd1k.root",
@@ -155,12 +163,11 @@ bool returnState(TString &myMethodList)
     // dataloader->AddVariable("jetIndex", "Jet Index", "", 'F');
     dataloader->AddVariable("pt", "Transverse Momentum", "", 'F');
     dataloader->AddVariable("nParticles", "Number of Particles", "", 'F');
-    dataloader->AddVariable("phi", "Pseudorapidity", "", 'F');
-    dataloader->AddVariable("eta", "Azimuthal Angle", "", 'F');
-    dataloader->AddVariable("mass", "Mass", "", 'F');
+    dataloader->AddVariable("eta", "Pseudorapidity", "", 'F');
+    dataloader->AddVariable("phi", "Azimuthal Angle", "", 'F');
+    // dataloader->AddVariable("mass", "Mass", "", 'F');
     dataloader->AddVariable("deltaR", "Jet Width", "", 'F');
-
-    dataloader->AddSpectator("spec1 := jetIndex*2", "Spectator 1", "units", 'F');
+    // dataloader->AddSpectator("spec1 := jetIndex*2", "Spectator 1", "units", 'F');
 
     // global event weights per tree (see below for setting event-wise weights)
     Double_t signalWeight = 1.0;
@@ -195,6 +202,10 @@ bool returnState(TString &myMethodList)
 
     if (Use["MLP"])
         factory->BookMethod(dataloader, TMVA::Types::kMLP, "MLP", "H:!V:NeuronType=tanh:VarTransform=N:NCycles=600:HiddenLayers=N+5:TestRate=5:!UseRegulator");
+
+    if (Use["BDT"])
+        factory->BookMethod(dataloader, TMVA::Types::kBDT, "BDT",
+                            "!H:!V:NTrees=850:MinNodeSize=2.5%:MaxDepth=3:BoostType=AdaBoost:AdaBoostBeta=0.5:UseBaggedBoost:BaggedSampleFraction=0.5:SeparationType=GiniIndex:nCuts=20");
 
     // Using both CUDA-Accelerated and Multi-core Accelerated Deep Neural Networks
     if (Use["DNN_CPU"] or Use["DNN_GPU"])
