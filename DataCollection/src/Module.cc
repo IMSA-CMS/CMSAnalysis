@@ -8,8 +8,6 @@ std::unordered_map<std::string, double> Module::parameters;
 // Event Counter that calls virtual process function
 bool Module::processEvent()
 {
-  std::cout << "Made it to module process\n";
-
   return process();
 }
 

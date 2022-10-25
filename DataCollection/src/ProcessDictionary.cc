@@ -11,7 +11,6 @@
 
 void ProcessDictionary::loadProcesses(std::string filename) 
 {
-  std::cout << "begin loadProcesses -";
   std::string line;
   std::ifstream textfile(filename);
   std::string processName;
@@ -54,7 +53,6 @@ void ProcessDictionary::loadProcesses(std::string filename)
 
 std::vector<FileParams> ProcessDictionary::readFile(std::string filename)
 {
-  std::cout << "begin readFile -";
   std::string line;
   std::ifstream textfile(filename);
   std::string process;
@@ -145,7 +143,6 @@ std::vector<FileParams> ProcessDictionary::readFile(std::string filename)
 
 Process& ProcessDictionary::findProcess(std::string newProcess) // fill in these functions
 {
-  std::cout << "begin findProcess -";
   std::cout << newProcess << std::endl;
   for (auto& process : processes)
   {
@@ -160,7 +157,6 @@ Process& ProcessDictionary::findProcess(std::string newProcess) // fill in these
 
 void ProcessDictionary::checkIDTypes(std::vector<IDType> idtypes, std::unordered_map<std::string, std::vector<std::string>> typesToCheck)
 {
-  std::cout << "begin checkIDTypes -";
   for (auto& typeToCheck : typesToCheck)
   {
     bool checkTypeName = false;
@@ -198,7 +194,6 @@ void ProcessDictionary::checkIDTypes(std::vector<IDType> idtypes, std::unordered
 
 FileParams ProcessDictionary::makeFileparams(Process& processName, std::vector<std::pair<std::string, std::string>> pairs) 
 {
-  std::cout << "begin makeFileparams -";
   std::map<std::string, std::string> parameters;
   for (auto& pair : pairs)
   {
@@ -209,7 +204,6 @@ FileParams ProcessDictionary::makeFileparams(Process& processName, std::vector<s
 
 FileParams ProcessDictionary::getFileparams(Process& processName, std::unordered_map<std::string, std::vector<std::string>> types, std::vector<int> indices)
 {
-  std::cout << "begin getFileparams -";
   std::vector<std::pair<std::string, std::string>> parameters;
   int counter = 0; // notes which "type" to use, e.g. "mass", "lepton", etc.
   for (auto& type : types) // loops through indices, e.g. [0, 1, 0]
