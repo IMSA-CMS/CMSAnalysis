@@ -52,7 +52,6 @@ bool EventModule::process ()
 {
     event.clear();
     // static int counter = 0;
-    std:: cout << "eventmodule processs() 1\n";
     // std::cout << "Event# " <<  counter << "\n";
     // static int tightCount = 0;
     for (auto selector : selectors) {

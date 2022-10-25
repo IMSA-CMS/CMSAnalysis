@@ -17,9 +17,7 @@
   //call getparticles or getInput getparticles in input module level-gensim, particle type called darkphoton in particle class
   //particles = GetInput() from input module?
   //not in particle.cc, just pdgid == 4900022 for identifying dark photons
-  std::cout << "begin gensimdeltarhist -";
   auto particles = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::darkPhoton());
-  //std::cout << "end";
 
   //loop through number of events to get all final daughters
   //finalDaughter(0...1...2...)
@@ -56,7 +54,6 @@
     //looping through lepton decays (should be only 2) and pushing to lepton list
     for (int j = 0; j < particle.numberOfDaughters(); ++j)
     {
-      //std::cout << "<<";
       auto leptonCandidate = particle.daughter(j);
       if (leptonCandidate.getType() == ParticleType::muon())
       {
@@ -67,7 +64,6 @@
     //get deltaR between the 2 muons in this lepton jet and pushes deltaR to return vector
     if (leptons.size() >= 2)
     {
-      //std::cout << "--";
       auto particle1FourVector = leptons[0].getFourVector();
       auto particle2FourVector = leptons[1].getFourVector();
       double deltaR = reco::deltaR(particle1FourVector, particle2FourVector);

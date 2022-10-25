@@ -4,7 +4,6 @@
 #include <iostream>
 #include <sstream>
 #include <unordered_set>
-#include <stdlib.h>
 
 #include "TFile.h"
 #include "TH1.h"
@@ -39,14 +38,9 @@ Analyzer::~Analyzer()
 
 void Analyzer::run(const std::string &configFile, const std::string &outputFile, int outputEvery, int nFiles)
 {
-  std::cout << "analyzer run -\n";
-  std::cout << "analyzer fetchRootFiles -\n";
   fetchRootFiles(configFile);
-  std::cout << "analyzer processRootFiles -\n";
   processRootFiles(outputEvery, nFiles);
-  std::cout << "analyzer writeOutputFile -\n";
   writeOutputFile(outputFile);
-  std::cout << "run end analyzer -";
 }
 
 void Analyzer::fetchRootFiles(const std::string &configFile)
@@ -78,7 +72,6 @@ void Analyzer::fetchRootFiles(const std::string &configFile)
 
 void Analyzer::processRootFiles(int outputEvery, int nFiles)
 {
-  std::cout << "  processRootFiles start -\n";
   // This keeps the histograms separate from the files they came from, avoiding errors
   TH1::AddDirectory(kFALSE);
   TH1::SetDefaultSumw2(kTRUE);
@@ -90,7 +83,6 @@ void Analyzer::processRootFiles(int outputEvery, int nFiles)
     module->setInput(input);
     module->initialize();
   }
-  std::cout << "  processRootFiles start looping -\n";
   // Loops through every file
   int fileCounter = 0;
   for (auto &fileName : rootFiles)
@@ -135,36 +127,22 @@ void Analyzer::processRootFiles(int outputEvery, int nFiles)
           filterString += module->getFilterString();
         }
       }
-      std::cout << "  processRootFiles start processing through analysis modules -\n";
       // Processes event through analysis modules
       if (continueProcessing)
       {
-        std::cerr << "  processRootFiles start inserting -\n";
         filterNames.insert(filterString);
-        //sleep(1);
-        std::cout << "  processRootFiles end inserting -\n";
         for (auto module : analysisModules)
         {
-          //sleep(1);
-          std::cout << "  processRootFiles start loop -\n";
           module->setFilterString(filterString);
-          std::cout << "  processRootFiles setFilterString -\n";
-          //sleep(1);
-          std::cout << "  processEvent() is called -\n";
           if (!module->processEvent())
           {
-            //sleep(1);
-            std::cout << "  processRootFiles processEvent -\n";
             continueProcessing = false;
             break;
           }
-          std::cout << "  processRootFiles middle loop -\n";
         }
       }
-      std::cout << "  processRootFiles finish loop -\n";
       eventLoader.getFile()->nextEvent();
     }
-    std::cout << "  processRootFiles delete file -\n";
     delete file;
     // Checks that the correct number of files are processed
     if (nFiles != -1 && fileCounter >= nFiles)
