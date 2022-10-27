@@ -28,6 +28,7 @@ public:
   virtual bool isNotNull() const override {return particle;}
   virtual const ParticleType& getType() const override;
   virtual Particle::SelectionFit getSelectionFit() const override;
+
   // virtual bool isIsolated() const override;
   const reco::Candidate* getUnderlyingParticle() const {return particle;}
   bool isFinalState() const override;
