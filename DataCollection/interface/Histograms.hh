@@ -120,6 +120,7 @@ private:
   std::shared_ptr<LeptonJetReconstructionModule> recoCalc;
 };
 
+
 class IsolationHist : public GenSimRecoPrototype
 {
   using GenSimRecoPrototype::GenSimRecoPrototype;
