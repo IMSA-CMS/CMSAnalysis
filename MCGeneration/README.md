@@ -3,7 +3,7 @@
 This packages is designed to perform GEN-only private MC productions using the CMSSW Pythia8 release that is included in the working CMSSW release. It also includes basic TTree-making files and simplistic histogramming that is intended primarly as a starting point to springboard to do whatever specific plotting is desired.
 
 # Updated Instructions to Run EventGenerator
-These instructions were most recently updated by George Bayliss on 7/18/22.
+These instructions were most recently updated by George Bayliss on 10/18/22.
 
 All commands should be run from MCGeneration/test.
 
@@ -23,9 +23,8 @@ Once you input all of these you should see output on the screen, however be pati
 Now, you can expedite this process by inputing the parameters in the cmsRun command:
 
 ```
-cmsRun EventGenerator_edm_cfg.py maxEvents=1000 globalTagKey=Run2 pythiaSettingsFile=dpPythiaParameters.txt outputFileName=output.root
+cmsRun EventGenerator_edm_cfg.py maxEvents=1000 globalTag=Run2 pythiaSettings=dpPythiaParameters.txt output=output.root
 ```
-Of course, there are many more settings you can change and you can find all the options at the top of EventGenerator_edm_cfg and also in mcCommandLineOptions_cfi and ledMcCmndLineOptions_cfi which are located in the python directory.
 
 Finally, you can clearly see that running this file creates a lot of screen output. If you wish to redirect this to a .txt file and run it in the background, you can do it like so:
 

@@ -12,8 +12,8 @@ eventLoader(iEventLoader)
 ParticleCollection<Lepton> EventLoaderInputModule::getLeptons(RecoLevel level) const
 {
     ParticleCollection<Lepton> leptons;
-    auto electrons = getParticles(level, Particle::Type::Electron).getParticles();
-    auto muons = getParticles(level, Particle::Type::Muon).getParticles();
+    auto electrons = getParticles(level, ParticleType::electron()).getParticles();
+    auto muons = getParticles(level, ParticleType::muon()).getParticles();
     for (const auto &p : electrons)
     {
         leptons.addParticle(p);
@@ -25,26 +25,30 @@ ParticleCollection<Lepton> EventLoaderInputModule::getLeptons(RecoLevel level) c
     return leptons;
 }
 
-ParticleCollection<Particle> EventLoaderInputModule::getParticles(RecoLevel level, Particle::Type particleType) const
+ParticleCollection<Particle> EventLoaderInputModule::getParticles(RecoLevel level, const ParticleType& particleType) const
 {
+    //std::cout << "hey1";
     ParticleCollection<Particle> particleList;
     if (level == RecoLevel::GenSim)
     {
+        //std::cout << "hey2";
         auto particles = eventLoader->getFile()->getGenSimParticles().getParticles();
         for (const auto &p : particles)
         {
-            if ((p.getType() == particleType || particleType == Particle::Type::None) && p.isFinalState())
+             if (p.getType() == particleType || particleType == ParticleType::none()) //&& p.isFinalState())
             {
+               //std::cout << "hey5";
                 particleList.addParticle(p);
             }
         }
     }
     else if (level == RecoLevel::Reco)
     {
+        std::cout << "hey10";
         auto particles = eventLoader->getFile()->getRecoParticles().getParticles();
         for (const auto &p : particles)
         {
-            if ((p.getType() == particleType || particleType == Particle::Type::None))
+             if (p.getType() == particleType || particleType == ParticleType::none()) //&& p.isFinalState())
             {
                 particleList.addParticle(p);
             }
@@ -78,11 +82,6 @@ std::vector<PileupSummaryInfo> InputModule::getPileupInfo() const
     return eventLoader->getPileupInfo();
 }
 */
-
-// GenEventInfoProduct EventLoaderInputModule::getGenInfo() const
-// {
-//     return eventLoader->getFile()->getGenInfo();
-// }
 
 double EventLoaderInputModule::getMET() const
 {

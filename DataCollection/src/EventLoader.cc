@@ -15,7 +15,7 @@ void EventLoader::changeFileFormat(TFile* ifile)
     {
         file = std::make_shared<DelphesEventFile> (ifile);
     }
-    else if (eventsBranch && eventsBranch->GetBranch("patMuons_slimmedMuons__RECO.obj")) //this branch is exlusive to MiniAOD
+    else if (eventsBranch && (eventsBranch->GetBranch("patMuons_slimmedMuons__RECO.obj") || eventsBranch->GetBranch("patMuons_slimmedMuons__PAT.obj"))) //this branch is exlusive to MiniAOD
     {
         file = std::make_shared<MiniAODEventFile> (ifile);
     }

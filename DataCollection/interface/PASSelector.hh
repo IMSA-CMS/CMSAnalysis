@@ -16,7 +16,7 @@ class PASSelector : public Selector
 {
     public:
         ~PASSelector() override {}
-        std::vector<Particle> selectParticles(const InputModule* input) const override;
+        void selectParticles(const InputModule* input, Event& event) override;
 };
 
 #endif
