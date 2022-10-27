@@ -11,7 +11,8 @@ LeptonJetReconstructionModule::LeptonJetReconstructionModule(double deltaRCut) :
 bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
 {
   leptonJets.clear();
-  //std::cout << "Lepton jet selector: " << leptonSelector << '\n';
+  std::cout << "LeptonJetReconstruction process()";
+  // std::cout << "Lepton jet selector: " << leptonSelector << '\n';
   const auto & recoCandidates = getInput()->getLeptons(InputModule::RecoLevel::Reco);
   auto recoLeptons = recoCandidates.getParticles();
 

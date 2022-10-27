@@ -39,7 +39,7 @@ NanoAODEventFile::BranchNames NanoAODEventFile::getTreeBranches() {
     nanoAODBranches.muonRelIso = "Muon_miniPFRelIso_all";
     
     //nanoAODBranches.metSize = "MET_sumEt"; // useless variable
-    nanoAODBranches.metPT = "MET_pt";
+    nanoAODBranches.metPT = "PuppiMET_pt";
     nanoAODBranches.metPhi = "MET_phi";
 
     nanoAODBranches.jetSize = "nJet";

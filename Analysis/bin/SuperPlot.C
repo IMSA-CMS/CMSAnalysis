@@ -49,7 +49,7 @@ void SuperPlot()
 	//TCanvas *canvas = plotFormatter->simple1DHist(process, HistVariable::MET, true, xAxisTitle, yAxisTitle);
 	//TCanvas *canvas = plotFormatter->simple2DHist(process, HistVariable::InvariantMass, xAxisTitle, yAxisTitle);
 	//TCanvas *canvas = plotFormatter->simpleStackHist(leptonBackgrounds, HistVariable::MET, xAxisTitle, yAxisTitle);
-	TCanvas *canvas = plotFormatter->superImposedHist(leptonBackgrounds, HistVariable::MET, false, xAxisTitle, yAxisTitle);
+	TCanvas *canvas = plotFormatter->superImposedHist(leptonBackgrounds, HistVariable::MET, xAxisTitle, yAxisTitle);
 
 
 	//Uncomment to save a png picture in your bin folder

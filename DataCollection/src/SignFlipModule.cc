@@ -18,7 +18,7 @@ bool SignFlipModule::process()
     auto particleType = particlePair.getGenParticle().getType();
     auto particlePt = particlePair.getGenParticle().getPt();
 
-    if (particleType == Particle::Type::Electron) 
+    if (particleType == ParticleType::electron()) 
     {
       if (particlePt > signFlipPtCut) 
       {
@@ -26,7 +26,7 @@ bool SignFlipModule::process()
       }
       nElectronEvents++;
     } 
-    else if (particleType == Particle::Type::Muon)
+    else if (particleType == ParticleType::muon())
     {
       if(particlePt > signFlipPtCut)
       {
@@ -39,7 +39,7 @@ bool SignFlipModule::process()
 
 	  if (particlePair.getGenParticle().getCharge() != particlePair.getRecoParticle().getCharge()) 
     {
-      if (particleType == Particle::Type::Electron) 
+      if (particleType == ParticleType::electron()) 
       {
         nElectronFlips++;
 
@@ -48,7 +48,7 @@ bool SignFlipModule::process()
           nHighPtElectronFlips++;
         }
       } 
-      else if (particleType == Particle::Type::Muon) 
+      else if (particleType == ParticleType::muon()) 
       {
         nMuonFlips++;
 

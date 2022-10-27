@@ -68,8 +68,8 @@ InvariantMassPlan::InvariantMassPlan()
   auto genSimDump = make_shared<GenSimEventDumpModule>();
   auto compMod= make_shared<RecoGenSimComparisonModule>();
   // Hopefully doesn't break // <- this is profound
-  analyzer.addAnalysisModule(histMod);
-  analyzer.addAnalysisModule(recoDump);
-  analyzer.addAnalysisModule(genSimDump);
+  //analyzer.addAnalysisModule(histMod);
+  //analyzer.addAnalysisModule(recoDump);
+  //analyzer.addAnalysisModule(genSimDump);
   analyzer.addAnalysisModule(compMod);
 }

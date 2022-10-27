@@ -32,7 +32,7 @@ bool RecoEventDumpModule::process()
   
   if(counter < numOfEvents || numOfEvents == -1)
   {
-    auto recoParticles = getInput()->getParticles(InputModule::RecoLevel::Reco, Particle::Type::None);
+    auto recoParticles = getInput()->getParticles(InputModule::RecoLevel::Reco);
     //TODO this line needs to be fixed and put back in
     //Input Module is Reco to match printRecoParticleCollection
     // if( getInput()->getLeptons(InputModule::RecoLevel::Reco).getNumParticles() == 4)
@@ -84,7 +84,7 @@ void RecoEventDumpModule::printRecoParticleCollection(const ParticleCollection<P
   for(auto &part : particleGroup){
 
     // Standard info
-    my_file << std::setw(8) << eventElement << "| " << std::setw(9) << int(part.getType()) << "| ";
+    my_file << std::setw(8) << eventElement << "| " << std::setw(9) << part.getType().getpdgId() << "| ";
 
 
     // Particle properties

@@ -94,10 +94,10 @@ TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes
     return canvas;
 }
 
-TCanvas* PlotFormatter::superImposedHist(std::shared_ptr<Channel> processes, HistVariable histvariable, bool scaleToExpected, TString xAxisTitle, TString yAxisTitle) {
+TCanvas* PlotFormatter::superImposedHist(std::shared_ptr<Channel> processes, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle) {
     std::vector<TH1*> hists;
     for(std::shared_ptr<Process> process : processes->getProcesses()) {
-        hists.push_back(process->getHist(histvariable, scaleToExpected));
+        hists.push_back(process->getHist(histvariable, false));
     }
 
     for(TH1* hist : hists) {
@@ -167,6 +167,75 @@ TCanvas* PlotFormatter::superImposedHist(std::shared_ptr<Channel> processes, His
     canvas->Update();
     return canvas;
 }
+
+TCanvas* PlotFormatter::simpleAnalysisHist(std::vector<TH1*> hists, std::vector<std::string> names, TString xAxisTitle, TString yAxisTitle) {
+    //Defines order to draw so graph isn't cut off
+    TH1* first = hists.at(0);
+    int firstIndex = 0;
+    double maximum = 0;
+    int count = 0;
+    for(TH1* hist : hists) {
+	    if(hist->Integral() != 0 && !isnan(hist->Integral())) {
+	        hist->Scale(1/hist->Integral());
+		hist->SetFillColor(kWhite);
+	    }
+        if(hist->GetMaximum() > maximum) {
+            maximum = hist->GetMaximum();
+            first = hist;
+            firstIndex = find(hists.begin(), hists.end(), hist) - hists.begin();
+        }
+	    count++;
+    }
+ 
+    //Setting size and margins
+    int width = 800;
+    int height = 600;
+ 
+    float top = 0.08*height;
+    float bottom = 0.12*height;
+    float left = 0.12*width;
+    float right = 0.04*width;
+
+    TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
+
+    gStyle->SetOptStat(0);
+
+    //Draws the histogram with more events first (bigger axis)
+    first->Draw("HIST");
+    histVector.push_back(first);
+
+    //Change axis and graph titles here
+    first->GetXaxis()->SetTitle(xAxisTitle);
+    first->GetYaxis()->SetTitle(yAxisTitle);
+ 
+    //Draws the legend
+    auto legend = new TLegend(0.8-(right/width), 0.85-(top/height), 1-(right/width), 1-(top/height));
+    legend->SetTextSize(0.02);
+    count = 0;
+    std::string name;
+    TString toAdd;
+    for(TH1* hist : hists) {
+        name = names.at(count); 
+        toAdd = name;
+        legend->AddEntry(hist, " " + toAdd, "L");
+        count++;
+    }
+    legend->Draw();
+ 
+    writeText(width, height, top, bottom, left, right);
+   
+    //Draws the other histogram    
+    for(TH1* hist : hists) {
+        if(find(hists.begin(), hists.end(), hist) - hists.begin() != firstIndex) {
+            hist->Draw("HIST SAME");
+            histVector.push_back(hist);
+        }
+    }
+
+    canvas->Update();
+    return canvas;
+}
+
 
 TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vector<int> colors, std::vector<TString> names, TString xAxisTitle, TString yAxisTitle) {
     //Defines order to draw so graph isn't cut off
@@ -364,7 +433,7 @@ TCanvas* PlotFormatter::makeFormat(int w, int h, float t, float b, float l, floa
 void PlotFormatter::writeText(int w, int h, float t, float b, float l, float r) {
     //Writes CMS logo and integrated luminosity
     int align_ = 13;
-    TString lumiText = "14 TeV";
+    TString lumiText = "13 TeV";
     TLatex latex;
     latex.SetNDC();
     latex.SetTextAngle(0);
