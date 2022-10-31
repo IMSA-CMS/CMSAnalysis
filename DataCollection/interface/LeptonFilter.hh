@@ -9,13 +9,13 @@
 class LeptonFilter : public FilterModule
 {
     public:
-        LeptonFilter(Particle::Type type, int nParticles, std::string outputString);
+        LeptonFilter(const ParticleType& type, int nParticles, std::string outputString);
 
     protected:
         virtual std::string makeFilterString() override;
 
     private:
-        Particle::Type type;
+        const ParticleType& type;
         int nParticles;
         std::string outputString;
 };

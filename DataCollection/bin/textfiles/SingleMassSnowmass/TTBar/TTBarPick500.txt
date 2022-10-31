@@ -1,2 +1,2 @@
 TTbartoLL
-Format:	Delphes
+Run:	HLLHC

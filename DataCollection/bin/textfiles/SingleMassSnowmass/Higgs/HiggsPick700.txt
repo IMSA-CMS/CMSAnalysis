@@ -1,4 +1,4 @@
 H++toLL
 Mass:	700
-Format:	Delphes
+Run:	HLLHC
 Lepton:	LL

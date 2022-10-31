@@ -29,9 +29,9 @@ bool LeptonJetImplementation::operator==(const ParticleImplementation& userParti
     }
 }
 
-Particle::Type LeptonJetImplementation::getType() const
+const ParticleType& LeptonJetImplementation::getType() const
 {
   std::cout << "LJI get type\n";
-  return Particle::Type::LeptonJet;
+  return ParticleType::leptonJet();
 
 }

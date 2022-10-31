@@ -49,5 +49,5 @@ void TableData::addEntry(std::vector<std::string> entry)
 //Overriding (first addEntry calls this one)
 void TableData::addEntry(int rowIndex, int colIndex, std::string entry) 
 {
-    entries.at(rowIndex).at(colIndex) = entry;
+    entries.at(rowIndex).at(colIndex) += entry;
 }

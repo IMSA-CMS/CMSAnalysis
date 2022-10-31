@@ -20,7 +20,6 @@ class EventFile
         virtual ParticleCollection<Particle> getRecoParticles() const = 0;
         virtual ParticleCollection<Particle> getRecoJets() const = 0;
         //These two functions should be removed at some point
-        //virtual GenEventInfoProduct getGenInfo() const = 0;
         virtual double getMET() const = 0;
         TFile* getFile() {return file;}
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const = 0;
