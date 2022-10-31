@@ -98,3 +98,8 @@ std::vector<std::string> EventLoaderInputModule::getTriggerNames(std::string sub
 {
     return eventLoader->getFile()->getTriggerNames(subProcess);
 }
+
+bool EventLoaderInputModule::checkTrigger(std::string triggerName, std::string subProcess) const
+{
+    return eventLoader->getFile()->checkTrigger(triggerName, subProcess);
+}

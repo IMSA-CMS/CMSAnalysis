@@ -103,6 +103,22 @@ std::vector<std::string> GenSimEventFile::getTriggerNames(std::string subProcess
     return v_names;
 }
 
+bool GenSimEventFile::checkTrigger(std::string triggerName, std::string subProcess) const
+{
+    auto names = getTriggerNames(subProcess);
+    auto results = getTriggerResults(subProcess);
+
+    auto it = find(names.begin(), names.end(), triggerName);
+    if(it != names.end())
+    {
+        return results.at(it - names.begin());
+    }
+    else
+    {
+        return false;
+    }
+}
+
 bool GenSimEventFile::isDone() const
 {
     return event->atEnd();
