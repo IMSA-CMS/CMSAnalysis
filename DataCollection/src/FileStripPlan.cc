@@ -3,7 +3,6 @@
 
 FileStripPlan::FileStripPlan()
 {
-	auto fileMod = std::make_shared<FileStripModule>("name.root");
+	auto fileMod = std::make_shared<FileStripModule>("~/nobackup/DY10_stripped.root");
 	getAnalyzer().addAnalysisModule(fileMod);
-
 }

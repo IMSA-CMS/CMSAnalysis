@@ -143,6 +143,7 @@ std::vector<FileParams> ProcessDictionary::readFile(std::string filename)
 
 Process& ProcessDictionary::findProcess(std::string newProcess) // fill in these functions
 {
+  std::cout << newProcess << std::endl;
   for (auto& process : processes)
   {
     if (process.getName() == newProcess)

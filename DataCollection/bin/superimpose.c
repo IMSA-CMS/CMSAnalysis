@@ -42,6 +42,7 @@ struct Plot
   {
     file = TFile::Open(filePath.c_str());
     plot = getHist(histPath.c_str(), file);
+    //std::cout << plot << std::endl;
     plot->SetLineColor(color);
     legend = ilegend;
     drawArgs = "9";
@@ -147,16 +148,21 @@ void superimpose(){
   string file23 = "Higgs1100.root";
   string file24 = "Higgs1300.root";
 
+
   // string hist1 = "Dimuon/Muon+ pt High";
   // string hist2 = "Dimuon/Muon+ pt Low";
 
   // string hist3 = "Dimuon/Invariant mass";
-  // string hist4 = "Dimuon/Four Lepton Invariant mass";
-
-  // string hist5 = "Dimuon/Leading Lepton pT";
-  // string hist6 = "Dimuon/Second Leading Lepton pT";
-  // string hist10 = "Dimuon/Third Leading Lepton pT";
-  // string hist11 = "Dimuon/Fourth Leading Lepton pT";
+  /*string hist4 = "4same_Sign_Invariant_Mass";
+  string hist5 = "2invariant_Mass";
+  string hist6 = "2invariant_Mass";
+  string hist7 = "2invariant_Mass";*/
+  string hist8 = "Leading lepton pT";
+  string hist9 = "Cut4Leading lepton pT";
+  string hist10 = "Cut2Leading lepton pT";
+  //string hist11 = "Cut0MET";
+  //string hist12 = "Cut0MET";
+  //string hist13 = "Cut0MET";
 
   // string hist7 = "Dimuon/Electron+ eta";
   // string hist12 = "Dimuon/delta r";
@@ -169,8 +175,6 @@ void superimpose(){
   // string hist12 = "Gen Sim Photon Histogram";
   // string hist13 = "Gen Same Sign Invariant Mass";
 
- 
-  
   vector<Image> images
     {
       Image(.4, "Same-Sign Invariant Mass [GeV]", "Events", "", kCool

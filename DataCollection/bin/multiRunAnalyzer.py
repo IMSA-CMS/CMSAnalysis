@@ -22,7 +22,7 @@ if __name__ == '__main__':
 	# If a job only has one pickfile in it, make sure to add a comma at the end so that python thinks it is a tuple
 	higgs_ttbar_zz = ("Higgs/HiggsPick300.txt", "Higgs/HiggsPick500.txt", "Higgs/HiggsPick700.txt", "Higgs/HiggsPick900.txt", "Higgs/HiggsPick1100.txt", "Higgs/HiggsPick1300.txt", "TTBar/TTBarPick500.txt", "ZZ/ZZPick4.txt")
 
-	#darkPhoton = ("DarkPhoton/PhotonPick0_5.txt", "DarkPhoton/PhotonPick0_9.txt", "DarkPhoton/PhotonPick2_0.txt")
+	darkPhoton = ("DarkPhoton/PhotonPick0_5.txt", "DarkPhoton/PhotonPick0_9.txt", "DarkPhoton/PhotonPick2_0.txt")
 	
 	dy4 = ("DY/DYPick4.txt", )
 	dy10 = ("DY/DYPick10.txt", )
@@ -34,11 +34,10 @@ if __name__ == '__main__':
 	qcd1500_2000 = ("QCD/QCDPick1500.txt", "QCD/QCDPick2000.txt")
 
 
-	# List of jobs
+	# List of jobs to run on from those above
 	jobsList = [higgs_ttbar_zz, dy4, dy10, dy50, qcd50_100, qcd200_500, qcd700_1000, qcd1500_2000]
 	# list of processes
 	processes = []
-	print(len(jobsList))
 	for job in jobsList:
 		newProcess = Process(target=loopRun, args=(job))
 		processes.append(newProcess)

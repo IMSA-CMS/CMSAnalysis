@@ -1,3 +1,3 @@
 QCD
 HTCut:	500-700
-Format:	Delphes
+Run:	HLLHC
