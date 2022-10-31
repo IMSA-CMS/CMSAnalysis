@@ -8,8 +8,9 @@
 class TDisplayText : public TObjString
 {
 public:
-    void DrawPad(Option_t* option = "");// override;
-    using TObjString::TObjString;   
+    TDisplayText(TBrowser* tb);
+    void DrawPad(Option_t* option = "");
+    using TObjString::TObjString;
 
     void Browse(TBrowser* tb) override;
 private:

@@ -13,8 +13,12 @@
 #include "CMSAnalysis/DataCollection/interface/Selector.hh"
 #include "CMSAnalysis/DataCollection/interface/Cut.hh"
 
+#include "CMSAnalysis/DataCollection/interface/GenSimParticle.hh"
+
 #include "CMSAnalysis/DataCollection/interface/GetNthHighestPtHist.hh"
+#include "CMSAnalysis/DataCollection/interface/SingleParticleHist.hh"
 #include "CMSAnalysis/DataCollection/interface/HistogramPrototype1DGeneral.hh"
+
 
 
 EventModule::EventModule():
@@ -47,51 +51,18 @@ void EventModule::writeAll() {}
 bool EventModule::process ()
 {
     event.clear();
-    int electronCount = 0;
-    int muonCount = 0;
-    int photonCount = 0;
-    int jetCount = 0;
     // static int counter = 0;
     // std::cout << "Event# " <<  counter << "\n";
     // static int tightCount = 0;
     for (auto selector : selectors) {
-        for (auto particle : selector->selectParticles(getInput()))
-        {
-            // if (particle.getSelectionFit() == Particle::SelectionFit::Tight)
-            // {
-            //     tightCount++;
-            // }
-            switch (particle.getType()) 
-            {
-                case Particle::Type::Electron:
-                    event.addElectron(particle);
-                    electronCount++;
-                    break;
-                case Particle::Type::Muon:
-                    event.addMuon(particle);
-                    muonCount++;
-                    break;
-                case Particle::Type::Photon:
-                    event.addPhoton(particle);
-                    photonCount++;
-                    break;
-                case Particle::Type::Jet:
-                    event.addJet(particle);
-                    jetCount++;
-                    break;
-                default:
-                    throw std::runtime_error("this particle type cannot be added to event");
-            }
-        }
+        selector->selectParticles(getInput(),event);
     }
     event.setMET(getInput()->getMET());
-    event.sort();
-    
     //std::cout << event.getMuons().getParticles().size() << "\n";
     bool passesCuts = true;
     if (event.containsParticles())
     {
-        for (int i = 0; i < int(cuts.size()); i++) 
+        for (size_t i = 0; i < cuts.size(); i++) 
         {
             //std::cout << __LINE__ << "\n";
             if (!(cuts[i]->checkEvent(event, passesCuts)))
@@ -104,92 +75,91 @@ bool EventModule::process ()
     if (!passesCuts){
         return false;
     }
-    /*if (maxElectrons < electronCount || maxMuons < muonCount || maxPhotons < photonCount || maxJets < jetCount) 
+    clearBasicHistograms(); //all histograms are cleared and we only fill the ones we are using for this event
+    addBasicHistograms(ParticleType::electron(), event.getElectrons());
+    addBasicHistograms(ParticleType::muon(), event.getMuons());
+    addBasicHistograms(ParticleType::photon(), event.getPhotons());
+    addBasicHistograms(ParticleType::jet(), event.getJets());
+
+    for (auto& [key,value] : event.getSpecials())
     {
-        maxElectrons = std::max(electronCount, maxElectrons);
-        addBasicHistograms(Particle::Type::Electron);
-        maxMuons = std::max(muonCount, maxMuons);
-        addBasicHistograms(Particle::Type::Muon);
-        maxPhotons = std::max(photonCount, maxPhotons);
-        addBasicHistograms(Particle::Type::Photon);
-        maxJets = std::max(jetCount, maxJets);
-        addBasicHistograms(Particle::Type::Jet);
-    }*/
-    addBasicHistograms(Particle::Type::Electron, electronCount);
-    addBasicHistograms(Particle::Type::Muon, muonCount);
-    addBasicHistograms(Particle::Type::Photon, photonCount);
-    addBasicHistograms(Particle::Type::Jet, jetCount);
+        addBasicHistograms(value.getParticles()[0].getType(), value);
+        //checks type of one particle, assuming all within a container have the same type
+    }
+    
     return true;
 }
 
 std::function<std::vector<double>(const InputModule*)> EventModule::findNthParticleFunction(int n, 
-            Particle::Type particleType, InputModule::RecoLevel typeGenSim, double (Particle::* valueFunction)() const) const
+            const ParticleType& particleType, InputModule::RecoLevel typeGenSim, double (Particle::* valueFunction)() const) const
 {
-    std::function<std::vector<double>(const InputModule*)> a = [n, particleType, typeGenSim, valueFunction] (const InputModule* input) -> std::vector<double> 
+    std::function<std::vector<double>(const InputModule*)> NThParticleFunction = [n, particleType, typeGenSim, valueFunction] (const InputModule* input) -> std::vector<double> 
     {
-        auto particles = input->getLeptons(typeGenSim);
-        int count = 0;
-        //std::cout << n << "\n";
-        std::sort(particles.begin(), particles.end(), [](auto p1, auto p2) {return p1.getPt()>p2.getPt();});
-        for (auto particle : particles.getParticles())
+        auto particles = input->getParticles(typeGenSim, particleType).getParticles();
+        if (particles.size() > static_cast<size_t>(n))
         {
-            if (particle.getType() == particleType)
-            {
-                count++;
-                if (count == n)
-                {
-                    // std::cout << "returns non-empty vector \n";
-                    return {((particle).*(valueFunction))()};
-                }
-            }
+            return {((particles[n]).*(valueFunction))()};
         }
-        // std::cout << "empty vector \n";
         return {};
     };
-    return a;
+    return NThParticleFunction;
 }
 
-void EventModule::addBasicHistograms(Particle::Type particleType, int n)
+void EventModule::addBasicHistograms(const ParticleType& particleType, const ParticleCollection<Particle>& particles)
 {
-
-    int maxCount = n;
-    /*
-    switch (particleType)
-    {
-        case Particle::Type::Electron:
-            maxCount = maxElectrons;
-            break;
-        case Particle::Type::Muon:
-            maxCount = maxMuons;
-            break;
-        case Particle::Type::Photon:
-            maxCount = maxPhotons;
-            break;
-        case Particle::Type::Jet:
-            maxCount = maxJets;
-            break;
-        default:
-            throw std::runtime_error("this particle type cannot be added to event");
-    }
-    */
-    for (int i = 1; i < maxCount; i++)
-    {
-        if (basicHistograms.find(getBasicHistogramTitle(i, particleType, "")) == basicHistograms.end()) 
+    std::vector<Particle> parts = particles.getParticles();
+    int count = 0;
+    for (auto part : parts)
+    {   
+        for (auto hist : particleType.getHists())
         {
-            histMod->addHistogram(std::make_shared<HistogramPrototype1DGeneral>(getBasicHistogramTitle(i, particleType, "Pt"), 150, 0, 1000, findNthParticleFunction(i, particleType, InputModule::RecoLevel::Reco, &Particle::getPt)));
-            histMod->addHistogram(std::make_shared<HistogramPrototype1DGeneral>(getBasicHistogramTitle(i, particleType, "Phi"), 150, -4, 4, findNthParticleFunction(i, particleType, InputModule::RecoLevel::Reco, &Particle::getPhi)));
-            histMod->addHistogram(std::make_shared<HistogramPrototype1DGeneral>(getBasicHistogramTitle(i, particleType, "Eta"), 150, -10, 10, findNthParticleFunction(i, particleType, InputModule::RecoLevel::Reco, &Particle::getEta)));
-            basicHistograms.emplace(getBasicHistogramTitle(i, particleType, "")); //maybe i should make basicHistograms store all the hists instead of only the boilerplate titles
+            auto histName = getBasicHistogramTitle(count,particleType,hist->getName());
+            if (!checkHist(histName))
+            {
+                hist->changeName(histName);
+                basicHistograms.insert({histName,hist});
+                histMod->addHistogram(hist);
+            }
+            basicHistograms[histName]->setParticle(part);
         }
+        count++;
     }
 }
 
-std::string EventModule::getBasicHistogramTitle(int n, Particle::Type particleType, std::string valueName) const
+bool EventModule::checkHist(std::string histName) const
 {
-    std::unordered_map<Particle::Type, std::string> particleTypeToName;
-    particleTypeToName[Particle::Type::Electron] = "Electron";
-    particleTypeToName[Particle::Type::Muon] = "Muon";
-    particleTypeToName[Particle::Type::Photon] = "Photon";
-    particleTypeToName[Particle::Type::Jet] = "Jet";
-    return std::to_string(n) + "th Highest " + particleTypeToName[particleType] + " " + valueName;
+    bool inMap = true;
+    auto it = basicHistograms.find(histName);
+    if (it == basicHistograms.end())
+    {
+        inMap = false;
+    }
+    return inMap;
+}
+
+std::string EventModule::getBasicHistogramTitle(int n, const ParticleType& particleType, std::string valueName) const
+{
+    n++;
+    std::string rank = "th Highest ";
+    if (n%10 == 1 && n%100 != 11) //I hate english words
+    {
+        rank = "st Highest ";
+    }
+    if (n%10 == 2 && n%100 != 12)
+    {
+        rank = "nd Highest ";
+    }
+    if (n%10 == 3 && n%100 != 13)
+    {
+        rank = "rd Highest ";
+    }
+    return std::to_string(n) + rank + particleType.getName() + " " + valueName;
+}
+
+void EventModule::clearBasicHistograms()
+{
+    for (auto& [key,value] : basicHistograms)
+    {
+        value->clear();
+    }
 }

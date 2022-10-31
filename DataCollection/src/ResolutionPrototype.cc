@@ -1,6 +1,8 @@
 #include "CMSAnalysis/DataCollection/interface/ResolutionPrototype.hh"
 #include "CMSAnalysis/DataCollection/interface/HistogramPrototype.hh"
 #include "CMSAnalysis/DataCollection/interface/Lepton.hh"
+#include "CMSAnalysis/DataCollection/interface/InputModule.hh"
+
 ResolutionPrototype::ResolutionPrototype(const std::string& iname, int iNBins, double iminimum, double imaximum) :
   HistogramPrototype1D(iname, iNBins, iminimum, imaximum) //initialize the base class
 {

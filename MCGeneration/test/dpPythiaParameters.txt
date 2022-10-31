@@ -7,17 +7,16 @@ Main:timesAllowErrors = 10000
 #Random:seed=6
 
 # SUSY
-#SUSY:all = on
-#SUSY:qqbar2squarkantisquark = on
-#SUSY:idA = 1000006
+SUSY:all = on
+# SUSY:qqbar2squarkantisquark = on
+# SUSY:idA = 1000006
 
 # SUSY Les Houches Accord
-#SLHA:readFrom = 2
-#SLHA:minDecayDeltaM = 0.001
-#SLHA:file = sps1aWithDecays.spc
+SLHA:readFrom = 2
+SLHA:file = sps1aWithDecays.spc
 
 # Hidden Valley
-#HiddenValley:all = on
+# HiddenValley:all = on
 HiddenValley:Ngauge = 1
 HiddenValley:doKinMix = on
 HiddenValley:FSR = on
@@ -26,11 +25,11 @@ HiddenValley:alphaFSR = 0
 # SM Higgs
 # Handbook of LHC Higgs Cross Sections: 1. Inclusive Observables, S. Dittmaier et al., CERN-2011-002 [arXiv:1101.0593].
 # Note: sum is not quite unity, and so BR's are rescaled accordingly.
-HiggsSM:all = on
+#HiggsSM:all = on
 #HiggsSM:gg2H = on
-25:onMode = off
-25:m0 = 1000.0
-25:addChannel = 1 0.0 0 4900001 -4900001
+#25:onMode = off
+#25:m0 = 1000.0
+#25:addChannel = 1 0.0 0 4900001 -4900001
 #25:0:bRatio  = 0.0
 #25:1:bRatio  = 0.0
 #25:2:bRatio  = 0.0
@@ -48,7 +47,7 @@ HiggsSM:all = on
 #25:12:bRatio = 0.0
 #25:13:bRatio = 0.0
 # dark photon
-25:76:bRatio = 1.0
+#25:76:bRatio = 1.0
 #25:0:meMode  = 100
 #25:1:meMode  = 100
 #25:2:meMode  = 100
@@ -63,39 +62,40 @@ HiggsSM:all = on
 #25:11:meMode = 100
 #25:12:meMode = 100
 #25:13:meMode = 100
-25:76:meMode = 100
-25:onIfAny = 4900001
-25:mMin = 1000
-25:mWidth = 10
+#25:76:meMode = 100
+#25:onIfAny = 4900001
+#25:mMin = 1000
+#25:mWidth = 10
 #25:tau0 = 1.97327e-13
 #25:oneChannel = 1 0.5 0 15 -15
 #25:addChannel = 1 0.5 0 4900022 4900022
 #25:onIfAny = 15
 
 # Dark Pseudo Scalar
-4900001:oneChannel = 1 1.0 100 4900022 4900004
-#4900001:onMode = off
+#4900001:oneChannel = 1 1.0 100 4900022 4900004
+4900001:onMode = off
 #4900001:onIfAll = 4900022 4900002
-4900001:m0 = 50.0
+4900001:m0 = 5.0
 4900001:spinType = 2
 4900001:chargeType = 0
 4900001:colType = 0
 4900001:name = darkPseudoScalar
 4900001:antiname = darkPseudoScalarBar
-4900001:mayDecay = true
+4900001:mayDecay = false
 
 # Dark Light Higgs
+4900002:onMode = off
 4900002:m0 = 0.1
 4900002:spinType = 1
 4900002:chargeType = 0
 4900002:colType = 0
 4900002:name = darkLightHiggs
 4900002:antiname = darkLightHiggsBar
-4900002:mayDecay = off
+4900002:mayDecay = false
 
 # Dark Heavy Higgs
-4900003:oneChannel = 1 1.0 100 4900022 4900022
-#4900003:onMode = off
+#4900003:oneChannel = 1 1.0 100 4900022 4900022
+4900003:onMode = off
 #4900003:onIfAll = 4900022 4900022
 4900003:m0 = 4.5
 4900003:spinType = 1
@@ -103,6 +103,7 @@ HiggsSM:all = on
 4900003:colType = 0
 4900003:name = darkHeavyHiggs
 4900003:antiname = darkHeavyHiggsBar
+4900003:mayDecay = false
 
 # Dark Fermion
 4900004:m0 = 2.0
@@ -116,11 +117,11 @@ HiggsSM:all = on
 4900004:mWidth = 0.0
 4900004:mMin = 0.0
 4900004:mMax = 0.0
-4900004:tau0 = 1.97327e-3
+4900004:tau0 = 1.97327e-13
 
 # Dark Photon
-4900022:oneChannel = 1 0.526471 100 11 -11
-4900022:addChannel = 1 0.466296 100 13 -13
+#4900022:oneChannel = 1 0.526471 100 11 -11
+#4900022:addChannel = 1 0.466296 100 13 -13
 #4900022:oneChannel = 1 1.0 100 11 -11
 #4900022:addChannel = 1 0.5 100 13 -13
 #4900022:onMode = off
@@ -128,11 +129,11 @@ HiggsSM:all = on
 #4900022:onIfAll = 13 -13
 4900022:mayDecay = true
 4900022:mWidth = 1.0
-4900022:mMin = 5.0
-4900022:mMax = 0.0
+#4900022:mMin = 5.0
+#4900022:mMax = 0.0
 4900022:isResonance = true
 4900022:tau0 = 1.97327e-13
-4900022:m0 = 0.4
+4900022:m0 = 0.3
 #4900022:0:meMode = 0
 
 # Lightest Neutralino

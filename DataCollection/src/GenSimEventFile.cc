@@ -35,13 +35,6 @@ std::vector<PileupSummaryInfo> MiniAODEventLoader::getPileupInfo() const
 }
 */
 
-// GenEventInfoProduct GenEventFile::getGenInfo() const
-// {
-//     edm::Handle<GenEventInfoProduct> genInfo;
-//     event->getByLabel(std::string("generator"), genInfo);
-//     return *genInfo;
-// }
-
 ParticleCollection<GenSimParticle> GenSimEventFile::getGenSimParticles() const
 {
     ParticleCollection<GenSimParticle> genParticles;

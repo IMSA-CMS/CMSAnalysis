@@ -2,6 +2,7 @@
 #include "CMSAnalysis/DataCollection/interface/LeptonJet.hh"
 #include "CMSAnalysis/DataCollection/interface/ParticleCollection.hh"
 #include "CMSAnalysis/DataCollection/interface/Lepton.hh"
+#include "CMSAnalysis/DataCollection/interface/InputModule.hh"
 #include <vector>
 
 TotalEventsHist::TotalEventsHist(const std::string iname, int iNBins, double iminimum, double imaximum) :

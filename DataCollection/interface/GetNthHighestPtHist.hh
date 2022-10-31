@@ -7,7 +7,7 @@
 class GetNthHighestPtHist : public GenSimRecoPrototype
 {
   public:
-    GetNthHighestPtHist(InputModule::RecoLevel typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum, int inthMuon = 1, Particle::Type parType = Particle::Type::None);
+    GetNthHighestPtHist(InputModule::RecoLevel typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum, int inthMuon = 1, const ParticleType& parType = ParticleType::none());
     using GenSimRecoPrototype::GenSimRecoPrototype;
     
 
@@ -16,7 +16,7 @@ class GetNthHighestPtHist : public GenSimRecoPrototype
 
   private:
     int nthMuon;
-    Particle::Type particleType;
+    const ParticleType& particleType;
 };
 
 #endif

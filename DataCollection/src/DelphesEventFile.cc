@@ -117,7 +117,7 @@ ParticleCollection<Particle> DelphesEventFile::getRecoParticles() const
         recoParticles.addParticle(Particle(
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],
                                                                         elec_eta[i], elec_phi[i], elec_mass[i])),
-            charge, Particle::Type::Electron, elec_reliso[i], fit));
+            charge, ParticleType::electron(), elec_reliso[i], fit));
         
     }
     for (Int_t i = 0; i < *muon_size; i++)
@@ -142,7 +142,7 @@ ParticleCollection<Particle> DelphesEventFile::getRecoParticles() const
         recoParticles.addParticle(Particle(
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],
                                                                         muon_eta[i], muon_phi[i], muon_mass[i])),
-            charge, Particle::Type::Muon, muon_reliso[i], fit));
+            charge, ParticleType::muon(), muon_reliso[i], fit));
         
     }
     return recoParticles;
@@ -156,7 +156,7 @@ ParticleCollection<Particle> DelphesEventFile::getRecoJets() const
             recoParticles.addParticle(
                 Particle(reco::Candidate::LorentzVector(jet_pt[i], jet_eta[i], jet_phi[i], jet_mass[i]), 
                 0, 
-                Particle::Type::Jet));    
+                ParticleType::jet()));    
         //}    
     }
     return recoParticles;

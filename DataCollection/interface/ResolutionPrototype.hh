@@ -8,7 +8,7 @@
 
 class GenSimIdentificationModule;
 class RecoIdentificationModule;
-//class ParticleCollection;
+class Lepton;
 
 class ResolutionPrototype : public HistogramPrototype1D
 {

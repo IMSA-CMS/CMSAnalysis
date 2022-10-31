@@ -28,12 +28,12 @@ bool LeptonEfficiency::process()
   for(const auto &particle : genSim.getParticles())
     {
       auto type = particle.getType();
-      if(type == Particle::Type::Electron)
+      if(type == ParticleType::electron())
 	{
 	  genSimElectrons++;
 	  // std::cout << "Electron" << std::endl;
 	}
-      else if(type == Particle::Type::Muon)
+      else if(type == ParticleType::muon())
 	{
 	  genSimMuons++;
 	  // std::cout << "Muon" << std::endl;
@@ -50,12 +50,12 @@ bool LeptonEfficiency::process()
 	{
 	  auto type = particle.getType();
 
-	  if(type == Particle::Type::Electron)
+	  if(type == ParticleType::electron())
 	    {
 	      recoElectrons++;
 	      // std::cout << "Reco Electron" << std::endl;
 	    }
-	  else if(type == Particle::Type::Muon)
+	  else if(type == ParticleType::muon())
 	    {
 	      recoMuons++;
 	      // std::cout << "Reco Muon" << std::endl;
