@@ -10,7 +10,8 @@
 <use   name="PhysicsTools/SelectorUtils"/>
 <use   name="SimDataFormats/GeneratorProducts"/>
 <use   name="pythia8"/>
+<use   name="CMSAnalysis/DataCollection"/>
 <environment>
-<!--  <bin   file="BackgroundEstimate.cc"/> -->
-<use name="CIAnalysis/Analysis"/>
+  <bin   file="BackgroundEstimate.cc"/>
+<use name="CMSAnalysis/Analysis"/>
 </environment>

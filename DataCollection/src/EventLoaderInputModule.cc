@@ -33,7 +33,7 @@ ParticleCollection<Particle> EventLoaderInputModule::getParticles(RecoLevel leve
         auto particles = eventLoader->getFile()->getGenSimParticles().getParticles();
         for (const auto &p : particles)
         {
-            if ((p.getType() == particleType || particleType == Particle::Type::None) && p.isFinalState())
+            if ((p.getType() == particleType || particleType == Particle::Type::None))
             {
                 particleList.addParticle(p);
             }

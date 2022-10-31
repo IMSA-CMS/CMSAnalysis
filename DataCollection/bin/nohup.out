@@ -1,190 +1,24 @@
-Reading input file textfiles/SingleMassSnowmass/DY/DYPick50.txt
-Reading input file textfiles/SingleMassSnowmass/QCD/QCDPick1500.txt
-Reading input file textfiles/SingleMassSnowmass/QCD/QCDPick200.txt
-Reading input file textfiles/SingleMassSnowmass/DY/DYPick4.txt
-Reading input file textfiles/SingleMassSnowmass/QCD/QCDPick50.txt
-Reading input file textfiles/SingleMassSnowmass/DY/DYPick10.txt
-Reading input file textfiles/SingleMassSnowmass/Higgs/HiggsPick300.txt
-Reading input file textfiles/SingleMassSnowmass/QCD/QCDPick700.txt
-Filename: textfiles/H++toLL/H++toLL_Format_Delphes_Lepton_LL_Mass_300.txt
-# of root files: 3
-Filename: textfiles/QCD/QCD_Format_Delphes_HTCut_50-100.txt
-# of root files: 580
-Filename: textfiles/QCD/QCD_Format_Delphes_HTCut_200-300.txt
-# of root files: 116
-Filename: textfiles/QCD/QCD_Format_Delphes_HTCut_700-1000.txt
-# of root files: 691
-Filename: textfiles/QCD/QCD_Format_Delphes_HTCut_1500-2000.txt
-# of root files: 708
-Filename: textfiles/Drell-Yan/Drell-Yan_Format_Delphes_MassCut_10-50.txt
-# of root files: 5401
-Filename: textfiles/Drell-Yan/Drell-Yan_Format_Delphes_MassCut_50-inf.txt
-# of root files: 2006
-Filename: textfiles/Drell-Yan/Drell-Yan_Format_Delphes_MassCut_4-10.txt
-# of root files: 2160
-Events Processed: 22043
-Dependent efficiency of 8ZVetoCut: 1
-Independent efficiency of 8ZVetoCut: 1
-Dependent efficiency of 12QuarkoniaCut: 1
-Independent efficiency of 12QuarkoniaCut: 1
-Processing complete!
-Output written to DYPick4_HiggsBackground.root
-Events Processed: 39996
-Dependent efficiency of 8ZVetoCut: 1
-Independent efficiency of 8ZVetoCut: 1
-Dependent efficiency of 12QuarkoniaCut: 0.988764
-Independent efficiency of 12QuarkoniaCut: 0.988764
-Processing complete!
-Output written to DYPick10_HiggsBackground.root
-Events Processed: 28659
-Dependent efficiency of 8ZVetoCut: 1
-Independent efficiency of 8ZVetoCut: 1
-Dependent efficiency of 12QuarkoniaCut: 1
-Independent efficiency of 12QuarkoniaCut: 1
-Processing complete!
-Output written to QCDPick50_HiggsBackground.root
-Reading input file textfiles/SingleMassSnowmass/QCD/QCDPick100.txt
-Filename: textfiles/QCD/QCD_Format_Delphes_HTCut_100-200.txt
-# of root files: 775
-Events Processed: 31386
-Dependent efficiency of 8ZVetoCut: 0.998701
-Independent efficiency of 8ZVetoCut: 0.998701
-Dependent efficiency of 12QuarkoniaCut: 0.992716
-Independent efficiency of 12QuarkoniaCut: 0.992725
-Processing complete!
-Output written to QCDPick700_HiggsBackground.root
-Events Processed: 32265
-Dependent efficiency of 8ZVetoCut: 0.999113
-Independent efficiency of 8ZVetoCut: 0.999113
-Dependent efficiency of 12QuarkoniaCut: 0.984381
-Independent efficiency of 12QuarkoniaCut: 0.984394
-Processing complete!
-Output written to QCDPick1500_HiggsBackground.root
-Reading input file textfiles/SingleMassSnowmass/QCD/QCDPick1000.txt
-Filename: textfiles/QCD/QCD_Format_Delphes_HTCut_1000-1500.txt
-# of root files: 720
-Events Processed: 39996
-Dependent efficiency of 8ZVetoCut: 0.957094
-Independent efficiency of 8ZVetoCut: 0.957094
-Dependent efficiency of 12QuarkoniaCut: 0.971132
-Independent efficiency of 12QuarkoniaCut: 0.970896
-Processing complete!
-Output written to HiggsPick300_HiggsBackground.root
-Reading input file textfiles/SingleMassSnowmass/QCD/QCDPick2000.txt
-Filename: textfiles/QCD/QCD_Format_Delphes_HTCut_1500-2000.txt
-# of root files: 708
-Events Processed: 39996
-Dependent efficiency of 8ZVetoCut: 0.971846
-Independent efficiency of 8ZVetoCut: 0.971846
-Dependent efficiency of 12QuarkoniaCut: 0.992589
-Independent efficiency of 12QuarkoniaCut: 0.992798
-Processing complete!
-Output written to DYPick50_HiggsBackground.root
-Events Processed: 35580
-Dependent efficiency of 8ZVetoCut: 1
-Independent efficiency of 8ZVetoCut: 1
-Dependent efficiency of 12QuarkoniaCut: 0.997526
-Independent efficiency of 12QuarkoniaCut: 0.997526
-Processing complete!
-Output written to QCDPick200_HiggsBackground.root
-Reading input file textfiles/SingleMassSnowmass/Higgs/HiggsPick500.txt
-Filename: textfiles/H++toLL/H++toLL_Format_Delphes_Lepton_LL_Mass_500.txt
-# of root files: 3
-Reading input file textfiles/SingleMassSnowmass/QCD/QCDPick500.txt
-Filename: textfiles/QCD/QCD_Format_Delphes_HTCut_500-700.txt
-# of root files: 723
-Events Processed: 28021
-Dependent efficiency of 8ZVetoCut: 1
-Independent efficiency of 8ZVetoCut: 1
-Dependent efficiency of 12QuarkoniaCut: 0.996032
-Independent efficiency of 12QuarkoniaCut: 0.996032
-Processing complete!
-Output written to QCDPick100_HiggsBackground.root
-Events Processed: 32265
-Dependent efficiency of 8ZVetoCut: 0.999113
-Independent efficiency of 8ZVetoCut: 0.999113
-Dependent efficiency of 12QuarkoniaCut: 0.984381
-Independent efficiency of 12QuarkoniaCut: 0.984394
-Processing complete!
-Output written to QCDPick2000_HiggsBackground.root
-Events Processed: 34592
-Dependent efficiency of 8ZVetoCut: 0.999011
-Independent efficiency of 8ZVetoCut: 0.999011
-Dependent efficiency of 12QuarkoniaCut: 0.989113
-Independent efficiency of 12QuarkoniaCut: 0.989124
-Processing complete!
-Output written to QCDPick1000_HiggsBackground.root
-Events Processed: 39996
-Dependent efficiency of 8ZVetoCut: 0.975798
-Independent efficiency of 8ZVetoCut: 0.975798
-Dependent efficiency of 12QuarkoniaCut: 0.969842
-Independent efficiency of 12QuarkoniaCut: 0.969572
-Processing complete!
-Output written to HiggsPick500_HiggsBackground.root
-Reading input file textfiles/SingleMassSnowmass/Higgs/HiggsPick700.txt
-Filename: textfiles/H++toLL/H++toLL_Format_Delphes_Lepton_LL_Mass_700.txt
-# of root files: 3
-Events Processed: 37339
-Dependent efficiency of 8ZVetoCut: 0.999756
-Independent efficiency of 8ZVetoCut: 0.999756
-Dependent efficiency of 12QuarkoniaCut: 0.997805
-Independent efficiency of 12QuarkoniaCut: 0.997806
-Processing complete!
-Output written to QCDPick500_HiggsBackground.root
-Events Processed: 39996
-Dependent efficiency of 8ZVetoCut: 0.984848
-Independent efficiency of 8ZVetoCut: 0.984848
-Dependent efficiency of 12QuarkoniaCut: 0.97083
-Independent efficiency of 12QuarkoniaCut: 0.970897
-Processing complete!
-Output written to HiggsPick700_HiggsBackground.root
-Reading input file textfiles/SingleMassSnowmass/Higgs/HiggsPick900.txt
-Filename: textfiles/H++toLL/H++toLL_Format_Delphes_Lepton_LL_Mass_900.txt
-# of root files: 3
-Events Processed: 39996
-Dependent efficiency of 8ZVetoCut: 0.989199
-Independent efficiency of 8ZVetoCut: 0.989199
-Dependent efficiency of 12QuarkoniaCut: 0.968759
-Independent efficiency of 12QuarkoniaCut: 0.968722
-Processing complete!
-Output written to HiggsPick900_HiggsBackground.root
-Reading input file textfiles/SingleMassSnowmass/Higgs/HiggsPick1100.txt
-Filename: textfiles/H++toLL/H++toLL_Format_Delphes_Lepton_LL_Mass_1100.txt
-# of root files: 3
-Events Processed: 39996
-Dependent efficiency of 8ZVetoCut: 0.992449
-Independent efficiency of 8ZVetoCut: 0.992449
-Dependent efficiency of 12QuarkoniaCut: 0.967728
-Independent efficiency of 12QuarkoniaCut: 0.967672
-Processing complete!
-Output written to HiggsPick1100_HiggsBackground.root
-Reading input file textfiles/SingleMassSnowmass/Higgs/HiggsPick1300.txt
-Filename: textfiles/H++toLL/H++toLL_Format_Delphes_Lepton_LL_Mass_1300.txt
-# of root files: 3
-Events Processed: 39996
-Dependent efficiency of 8ZVetoCut: 0.994649
-Independent efficiency of 8ZVetoCut: 0.994649
-Dependent efficiency of 12QuarkoniaCut: 0.968353
-Independent efficiency of 12QuarkoniaCut: 0.968347
-Processing complete!
-Output written to HiggsPick1300_HiggsBackground.root
 Reading input file textfiles/SingleMassSnowmass/TTBar/TTBarPick500.txt
-Filename: textfiles/TTbartoLL/TTbartoLL_Format_Delphes.txt
+TTbartoLL
+Filename: textfiles/TTbartoLL/TTbartoLL_Run_HLLHC.txt
 # of root files: 1783
-Events Processed: 39996
-Dependent efficiency of 8ZVetoCut: 0.991712
-Independent efficiency of 8ZVetoCut: 0.991712
-Dependent efficiency of 12QuarkoniaCut: 0.991894
-Independent efficiency of 12QuarkoniaCut: 0.991662
+Events Processed: 23608670
 Processing complete!
-Output written to TTBarPick500_HiggsBackground.root
+Output written to process.root
 Reading input file textfiles/SingleMassSnowmass/ZZ/ZZPick4.txt
-Filename: textfiles/ZZto4L/ZZto4L_Format_Delphes.txt
+ZZto4L
+Filename: textfiles/ZZto4L/ZZto4L_Run_HLLHC.txt
 # of root files: 1655
-Events Processed: 39996
-Dependent efficiency of 8ZVetoCut: 0.927482
-Independent efficiency of 8ZVetoCut: 0.927482
-Dependent efficiency of 12QuarkoniaCut: 0.990018
-Independent efficiency of 12QuarkoniaCut: 0.989542
+Events Processed: 26945545
 Processing complete!
-Output written to ZZPick4_HiggsBackground.root
+Output written to process.root
+Reading input file textfiles/SingleMassSnowmass/DY/DYPick10.txt
+Drell-Yan
+Filename: textfiles/Drell-Yan/Drell-Yan_MassCut_10-50_Run_HLLHC.txt
+# of root files: 5401
+Error in <TNetXNGFile::Open>: [ERROR] Server responded with an error: [3011] No servers are available to read the file.
+
+File root://cmsxrootd.fnal.gov///store/user/snowmass/Snowmass2021/DelphesNtuplizer/DYJetsToLL_M-10to50_TuneCUEP8M2T4_14TeV-madgraphMLM-pythia8_200PU/DYJetsToLL_M-10to50_TuneCUEP8M2T4_14TeV-madgraphMLM-pythia8_ntuple_9_0.root_ntuple not found!
+Events Processed: 100517388
+Processing complete!
+Output written to test.root

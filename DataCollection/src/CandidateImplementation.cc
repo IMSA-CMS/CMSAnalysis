@@ -54,9 +54,9 @@ reco::Candidate::LorentzVector CandidateImplementation::getFourVector() const {
 bool CandidateImplementation::operator==(
     const ParticleImplementation &userParticle) const {
   try {
-    auto candidateImp =
+      auto candidateImp =
         dynamic_cast<const CandidateImplementation &>(userParticle);
-    return candidateImp.particle == particle;
+      return candidateImp.particle == particle;
   } catch (std::bad_cast &) {
     return false;
   }
@@ -86,14 +86,36 @@ Particle CandidateImplementation::mother() const {
   // std::cout << "mother\n";
   checkIsNull();
   // mother of particle is often not electron/muon
-  return Particle(particle->mother());
+
+  const reco::Candidate* mother = particle->mother();
+/*  
+  if (!mother)
+  {
+    std::cout << "null\n";
+  }
+  else
+  {
+    std::cout << "not null\n";
+  }
+*/
+  // std::cout << mother << '\n';
+  //std::cout << particle->numberOfMothers() << '\n';
+  
+  Particle particleMother = Particle(mother);
+  return particleMother;
+  
+ // return Particle(particle->mother());
 }
 
 Particle CandidateImplementation::daughter(int i) const {
   // std::cout << "daugters\n";
   checkIsNull();
   auto daughter = particle->daughter(i);
-
+  /* if (!daughter)
+  {
+    throw std::runtime_error("null");
+  }
+*/
   /*
 
     Particle::Type type;

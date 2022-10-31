@@ -9,3 +9,14 @@ std::string Utility::substitute(std::string original, std::string target, std::s
   }
   return original;
 }
+
+std::string Utility::removeSpaces(std::string input) 
+{
+  std::string outputString;
+  for(int i = 0; i < (int) input.length(); i++) {
+	  if(input[i] != ' ') {
+		  outputString = outputString + input[i];
+	  }
+	}
+  return outputString;
+}

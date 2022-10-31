@@ -12,6 +12,7 @@
 #include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LocalEventInputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonFilter.hh"
+#include "CMSAnalysis/DataCollection/interface/LeptonEfficiency.hh"
 #include "CMSAnalysis/DataCollection/interface/MatchingModule.hh"
 #include "CMSAnalysis/DataCollection/interface/METHist.hh"
 #include "CMSAnalysis/DataCollection/interface/METModule.hh"
@@ -60,7 +61,7 @@ HiggsBackgroundPlan::HiggsBackgroundPlan()
     auto nLeptonsFilter = make_shared<NLeptonsFilter>();
     
     auto histMod = make_shared<HistogramOutputModule>();
-    
+    auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod);
 
     auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
 
@@ -77,8 +78,8 @@ HiggsBackgroundPlan::HiggsBackgroundPlan()
     auto metHist = make_shared<METHist>(metMod, "MET", 500, 0, 1000);
 
     // Add the histogram(s) created above to histMod
-    histMod->addHistogram(genSimSameSignInvMassHist);
-    histMod->addHistogram(positiveNegativeInvMassHist);
+    histMod->addHistogram(recoSameSignInvMassHist);
+    histMod->addHistogram(recoInvMass);
     histMod->addHistogram(recoPt);
     histMod->addHistogram(recoInvMass);
     histMod->addHistogram(metHist);
@@ -113,6 +114,7 @@ HiggsBackgroundPlan::HiggsBackgroundPlan()
     analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
     analyzer.addAnalysisModule(eventMod);
     analyzer.addAnalysisModule(eventHistMod);
+    analyzer.addAnalysisModule(leptonEfficiency);
 
     /*
     auto leptonSelector = std::make_shared<SnowmassLeptonSelector>(10);
