@@ -15,7 +15,9 @@ class Particle
 {
   public: 
     
-    enum class SelectionFit{Tight, Medium, Loose};
+
+    enum class SelectionFit{Tight, Medium, Loose, None};
+
 
     // specifies barrel state
     enum class BarrelState{Barrel, Endcap, None};
