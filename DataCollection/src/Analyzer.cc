@@ -42,9 +42,7 @@ void Analyzer::run(const std::string &configFile, const std::string &outputFile,
   auto start = std::chrono::steady_clock::now();
 
   fetchRootFiles(configFile);
-
   processRootFiles(outputEvery, nFiles);
-
   writeOutputFile(outputFile);
 
   //Measures processing time

@@ -65,13 +65,16 @@ double LocalEventInputModule::getMET() const
 std::vector<bool> LocalEventInputModule::getTriggerResults(std::string subProcess) const
 {
     throw std::runtime_error("calling getTrigger___() on a local event doesn't make sense");
-    return std::vector<bool>(0);
 }
 
 std::vector<std::string> LocalEventInputModule::getTriggerNames(std::string subProcess) const
 {
     throw std::runtime_error("calling getTrigger___() on a local event doesn't make sense");
-    return std::vector<std::string>(0);
+}
+
+bool LocalEventInputModule::checkTrigger(std::string triggerName, std::string subProcess) const
+{
+    throw std::runtime_error("calling getTrigger___() on a local event doesn't make sense");
 }
 
 ParticleCollection<Particle> LocalEventInputModule::getSpecial(std::string key) const
