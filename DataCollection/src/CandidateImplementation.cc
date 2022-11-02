@@ -174,3 +174,58 @@ bool CandidateImplementation::isFinalState() const {
   }
   return true;
 }
+
+const pat::Muon* CandidateImplementation::getMuon() const {
+  if(getType() == ParticleType::muon()) {
+	return dynamic_cast<const pat::Muon *>(particle);
+  }
+  else {
+	return 0;
+  }
+}
+
+const pat::Electron* CandidateImplementation::getElectron() const {
+  if(getType() == ParticleType::electron()) {
+	return dynamic_cast<const pat::Electron *>(particle);
+  }
+  else {
+        return 0;
+  }
+}
+
+Particle::SelectionFit CandidateImplementation::getSelectionFit() const {
+  const pat::Muon* muon = CandidateImplementation::getMuon();
+  const pat::Electron* electron = CandidateImplementation::getElectron();
+  if(muon)
+  {
+    if(muon->passed(reco::Muon::CutBasedIdTight)) {
+      return Particle::SelectionFit::Tight;
+    }
+    else if	(muon->passed(reco::Muon::CutBasedIdMedium)) {
+      return Particle::SelectionFit::Medium;
+    }
+    else if(muon->passed(reco::Muon::CutBasedIdLoose)) {
+      return Particle::SelectionFit::Loose;
+    }
+    else {
+      return Particle::SelectionFit::None;
+    }
+  }
+  else if(electron) {
+    if(electron->electronID("cutBasedElectronID-Fall17-94X-V2-tight") == 1) {
+      return Particle::SelectionFit::Tight;
+    }
+    else if(electron->electronID("cutBasedElectronID-Fall17-94X-V2-medium") == 1) {
+      return Particle::SelectionFit::Medium;
+    }
+    else if(electron->electronID("cutBasedElectronID-Fall17-94X-V2-loose") == 1) {
+      return Particle::SelectionFit::Loose;
+    }
+    else {
+      return Particle::SelectionFit::None;
+    }
+  }
+  else {
+	throw std::runtime_error("Particle is not electron or muon");
+  }
+}

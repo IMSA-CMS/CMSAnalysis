@@ -1,11 +1,17 @@
 import FWCore.ParameterSet.Config as cms
 process = cms.Process('GEN')
-
+import subprocess
 # Needed to implement command line input parameters
 import FWCore.ParameterSet.VarParsing as VarParsing
 options = VarParsing.VarParsing ('analysis')
+import os
 
 # Takes command line input parameters from user
+options.register ('dpMass',
+                0,
+                VarParsing.VarParsing.multiplicity.singleton,
+                  VarParsing.VarParsing.varType.float,
+                  "mass of the dark photon")
 options.register ('outputFileName',
                   "0",
                   VarParsing.VarParsing.multiplicity.singleton,
@@ -48,6 +54,13 @@ if pythiaSettingsFile == "0":
     pythiaSettingsFile = str(input("Please enter a pythia settings file name: \n(Format: \"fileName.txt\")\n"))
 importedPythiaSettings = FileUtils.loadListFromFile (pythiaSettingsFile) 
 
+if options.dpMass > 0:
+    savedpath = os.getcwd()
+    os.chdir("DarkRadiation")
+    branching_ratios = subprocess.run (["./DarkRadiation", str (options.dpMass)], stdout = subprocess.PIPE).stdout.decode("utf-8")
+    branching_ratios = branching_ratios.split("\n")
+    importedPythiaSettings.extend(branching_ratios)
+    os.chdir(savedpath)
 outputFileName = options.outputFileName
 if outputFileName == "0":
     outputFileName = input("Please enter an output file name: \n(Format: \"fileName.root\")\n") 
@@ -69,6 +82,8 @@ process.load('IOMC.EventVertexGenerators.VtxSmearedNominalCollision2015_cfi')
 process.load('GeneratorInterface.Core.genFilterSummary_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
+
+print(importedPythiaSettings)
 
 process.generator = cms.EDFilter("Pythia8GeneratorFilter",
     comEnergy =  cms.double(13000), 
