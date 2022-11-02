@@ -188,3 +188,24 @@ Dependent efficiency of 12QuarkoniaCut: 0.990018
 Independent efficiency of 12QuarkoniaCut: 0.989542
 Processing complete!
 Output written to ZZPick4_HiggsBackground.root
+----- Begin Fatal Exception 19-Oct-2022 10:44:11 CDT-----------------------
+An exception of category 'StdException' occurred while
+   [0] Processing the python configuration file named EventGenerator_edm_cfg.py
+Exception Message:
+A std::exception was thrown.
+File "EventGenerator_edm_cfg.py" could not be opened!
+----- End Fatal Exception -------------------------------------------------
+----- Begin Fatal Exception 19-Oct-2022 12:26:20 CDT-----------------------
+An exception of category 'StdException' occurred while
+   [0] Processing the python configuration file named EventGenerator_edm_cfg.py
+Exception Message:
+A std::exception was thrown.
+File "EventGenerator_edm_cfg.py" could not be opened!
+----- End Fatal Exception -------------------------------------------------
+----- Begin Fatal Exception 24-Oct-2022 18:41:51 CDT-----------------------
+An exception of category 'StdException' occurred while
+   [0] Processing the python configuration file named EventGenerator_edm_cfg.py
+Exception Message:
+A std::exception was thrown.
+File "EventGenerator_edm_cfg.py" could not be opened!
+----- End Fatal Exception -------------------------------------------------

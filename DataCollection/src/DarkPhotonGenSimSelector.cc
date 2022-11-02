@@ -27,10 +27,10 @@ void DarkPhotonGenSimSelector::selectParticles(const InputModule* input, Event& 
                 {
                     if (genSimParticle.daughter(i).getType() == ParticleType::electron())
                     {
-                        event.addElectron(Electron(genSimParticle.daughter(i)));
+                        event.addElectron(Electron(genSimParticle.daughter(i).finalDaughter()));
                     } else if (genSimParticle.daughter(i).getType() == ParticleType::muon())
                     {
-                        event.addMuon(Muon(genSimParticle.daughter(i)));
+                        event.addMuon(Muon(genSimParticle.daughter(i).finalDaughter()));
                     }
                 }
             }
@@ -44,11 +44,11 @@ void DarkPhotonGenSimSelector::selectParticles(const InputModule* input, Event& 
                 {
                     if (part.getType() == ParticleType::electron())
                     {
-                        event.addElectron(Electron(part));
+                        event.addElectron(Electron(GenSimParticle(part).finalDaughter()));
                     } 
                     else if (part.getType() == ParticleType::muon())
                     {
-                        event.addMuon(Muon(part));
+                        event.addMuon(Muon(GenSimParticle(part).finalDaughter()));
                     }
                 }
             }
@@ -70,7 +70,8 @@ std::vector<Particle> DarkPhotonGenSimSelector::checkJet(GenSimParticle part) co
     {
         for (int i = 0; i < part.numberOfDaughters(); i++) 
         {
-            selected.insert(selected.end(),checkJet(part.daughter(i)).begin(),checkJet(part.daughter(i)).end());
+            auto daughters = checkJet(part.daughter(i));
+            selected.insert(selected.end(),daughters.begin(),daughters.end());
         }
     }
     return selected;
