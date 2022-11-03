@@ -39,6 +39,7 @@ public:
     
     virtual double getMET() const = 0;
 
+    virtual bool checkTrigger(std::string triggerName, std::string subProcess = "") const = 0;
 private:
 };
 

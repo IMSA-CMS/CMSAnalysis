@@ -8,15 +8,15 @@ Main:timesAllowErrors = 10000
 
 # SUSY
 SUSY:all = on
-SUSY:qqbar2squarkantisquark = on
-SUSY:idA = 1000006
+# SUSY:qqbar2squarkantisquark = on
+# SUSY:idA = 1000006
 
 # SUSY Les Houches Accord
 SLHA:readFrom = 2
 SLHA:file = sps1aWithDecays.spc
 
 # Hidden Valley
-#HiddenValley:all = on
+# HiddenValley:all = on
 HiddenValley:Ngauge = 1
 HiddenValley:doKinMix = on
 HiddenValley:FSR = on
@@ -129,8 +129,8 @@ HiddenValley:alphaFSR = 0
 #4900022:onIfAll = 13 -13
 4900022:mayDecay = true
 4900022:mWidth = 1.0
-4900022:mMin = 5.0
-4900022:mMax = 0.0
+#4900022:mMin = 5.0
+#4900022:mMax = 0.0
 4900022:isResonance = true
 4900022:tau0 = 1.97327e-13
 4900022:m0 = 0.3

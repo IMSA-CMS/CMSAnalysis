@@ -25,7 +25,7 @@ EventModule::EventModule():
 localInput(&event)
 {
     histMod->setInput(&localInput);
-    //histMod->addHistogram(std::make_shared<HistogramPrototype1DGeneral>("MET", 150, 0, 1000, [] (const InputModule* input) -> std::vector<double> {return {input->getMET()};}));
+    histMod->addHistogram(std::make_shared<HistogramPrototype1DGeneral>("MET", 150, 0, 1000, [] (const InputModule* input) -> std::vector<double> {return {input->getMET()};}));
 }
 
 void EventModule::addSelector(std::shared_ptr<Selector> selector) 
@@ -58,7 +58,6 @@ bool EventModule::process ()
         selector->selectParticles(getInput(),event);
     }
     event.setMET(getInput()->getMET());
-    
     //std::cout << event.getMuons().getParticles().size() << "\n";
     bool passesCuts = true;
     if (event.containsParticles())
@@ -76,17 +75,18 @@ bool EventModule::process ()
     if (!passesCuts){
         return false;
     }
-
     clearBasicHistograms(); //all histograms are cleared and we only fill the ones we are using for this event
     addBasicHistograms(ParticleType::electron(), event.getElectrons());
     addBasicHistograms(ParticleType::muon(), event.getMuons());
     addBasicHistograms(ParticleType::photon(), event.getPhotons());
     addBasicHistograms(ParticleType::jet(), event.getJets());
+
     for (auto& [key,value] : event.getSpecials())
     {
         addBasicHistograms(value.getParticles()[0].getType(), value);
         //checks type of one particle, assuming all within a container have the same type
     }
+    
     return true;
 }
 

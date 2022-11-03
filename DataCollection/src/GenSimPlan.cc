@@ -26,6 +26,7 @@
 #include "CMSAnalysis/DataCollection/interface/TripleMuonTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/TwoInvariantMassesHist.hh"
 #include "CMSAnalysis/DataCollection/interface/BJetFilter.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimDeltaRHist.hh"
 
 #include "CMSAnalysis/DataCollection/interface/EventModule.hh"
 #include "CMSAnalysis/DataCollection/interface/DarkPhotonGenSimSelector.hh"
@@ -37,6 +38,8 @@ GenSimPlan::GenSimPlan()
 {
 
     Analyzer& analyzer = getAnalyzer();
+
+    auto deltaR = make_shared<GenSimDeltaRHist>("Delta R", 100, 0, 1);
 
     auto eventMod = make_shared<EventModule>();
     auto dpSelector = make_shared<DarkPhotonGenSimSelector>();
@@ -59,6 +62,7 @@ GenSimPlan::GenSimPlan()
     histMod->addHistogram(genSimSameSignInvMassHist);
     histMod->addHistogram(genSimPt);
     histMod->addHistogram(genSimInvMass);
+    histMod->addHistogram(deltaR);
     //histMod->addHistogram(metHist);
 
     eventMod->addSelector(dpSelector);
