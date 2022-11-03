@@ -72,12 +72,10 @@ ParticleCollection<Particle> EventLoaderInputModule::getJets(RecoLevel level) co
     return particleList;
 }
 
-/*
-std::vector<PileupSummaryInfo> InputModule::getPileupInfo() const
+int EventLoaderInputModule::getNumPileUpInteractions() const
 {
-    return eventLoader->getPileupInfo();
+    return eventLoader->getFile()->getNumPileUpInteractions();
 }
-*/
 
 double EventLoaderInputModule::getMET() const
 {
