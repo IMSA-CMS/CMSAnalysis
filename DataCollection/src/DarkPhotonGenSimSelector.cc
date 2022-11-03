@@ -70,7 +70,8 @@ std::vector<Particle> DarkPhotonGenSimSelector::checkJet(GenSimParticle part) co
     {
         for (int i = 0; i < part.numberOfDaughters(); i++) 
         {
-            selected.insert(selected.end(),checkJet(part.daughter(i)).begin(),checkJet(part.daughter(i)).end());
+            auto daughters = checkJet(part.daughter(i));
+            selected.insert(selected.end(),daughters.begin(),daughters.end());
         }
     }
     return selected;
