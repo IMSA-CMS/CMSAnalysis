@@ -91,4 +91,15 @@ class ThirdMuonPtHist : public GenSimRecoPrototype
   }
 };
 
+class PileUpHist : public HistogramPrototype1D
+{
+  using HistogramPrototype1D::HistogramPrototype1D;
+
+  std::vector<double> value() const
+  {
+    double pileUp = getInput()->getNumPileUpInteractions();
+    return {pileUp};
+  }
+};
+
 #endif

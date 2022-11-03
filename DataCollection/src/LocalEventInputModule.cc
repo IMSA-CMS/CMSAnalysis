@@ -50,12 +50,10 @@ ParticleCollection<Particle> LocalEventInputModule::getJets(RecoLevel level) con
     return event->getJets();
 }
 
-/*
-std::vector<PileupSummaryInfo> InputModule::getPileupInfo() const
+int LocalEventInputModule::getNumPileUpInteractions() const
 {
-    return eventLoader->getPileupInfo();
+    throw std::runtime_error("GenSimEventFile has no implementation of getNumPileUpInteractions");
 }
-*/
 
 double LocalEventInputModule::getMET() const
 {

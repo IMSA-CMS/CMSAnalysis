@@ -1,4 +1,3 @@
-/*
 #include "CMSAnalysis/DataCollection/interface/PileupFilter.hh"
 
 #include "DataFormats/FWLite/interface/Event.h"
@@ -14,15 +13,15 @@ PileupFilter::PileupFilter(double loCut, double hiCut) :
 
 std::string PileupFilter::makeFilterString()
 {
-  std::vector<PileupSummaryInfo> pileup = getInput()->getPileupInfo();
-
-  int interactions = (pileup)[0].getPU_NumInteractions();
+  int interactions = getInput()->getNumPileUpInteractions();
 
   if (interactions < lowCutoff)
+  {
     return "LowPileup";
+  }
   else if (interactions > highCutoff)
+  {
     return "HighPileup";
-  else
-    return "";
+  }
+  return "";
 }
-*/

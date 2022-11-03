@@ -23,6 +23,7 @@ class TreeEventFile : public EventFile
         virtual ParticleCollection<GenSimParticle> getGenSimParticles() const override;
         virtual ParticleCollection<Particle> getRecoParticles() const override;
         virtual ParticleCollection<Particle> getRecoJets() const override;
+        virtual int getNumPileUpInteractions() const override;
         virtual double getMET() const override;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;
@@ -63,11 +64,12 @@ class TreeEventFile : public EventFile
             std::string genPhi;
             std::string genMass;
             std::string genPt;
+            std::string genPileup;
             std::string gend1;
             std::string gend2;
             std::string genm1;
             std::string genm2;
-
+            
             std::string elecIdpass;
             std::string muonIdpass;
         };
@@ -114,10 +116,12 @@ class TreeEventFile : public EventFile
         mutable TTreeReaderArray<Float_t> gen_phi;
         mutable TTreeReaderArray<Float_t> gen_mass;
         mutable TTreeReaderArray<Float_t> gen_pt;
+        mutable TTreeReaderArray<Float_t> gen_pileup;
         mutable TTreeReaderArray<Int_t> gen_d1;
         mutable TTreeReaderArray<Int_t> gen_d2;
         mutable TTreeReaderArray<Int_t> gen_m1;
         mutable TTreeReaderArray<Int_t> gen_m2;
+
 
         mutable TTreeReaderArray<E> elec_idpass; // nanoAOD wants Int, Delphes wants UInt
         mutable TTreeReaderArray<M> muon_idpass; // nanoAOD wants Bool, Delphes wants UInt
@@ -158,6 +162,7 @@ inline TreeEventFile<S, E, M>::TreeEventFile(TFile *ifile, const BranchNames& br
     gen_phi(treeReader, branchNames.genPhi.c_str()),
     gen_mass(treeReader, branchNames.genMass.c_str()),
     gen_pt(treeReader, branchNames.genPt.c_str()),
+    gen_pileup(treeReader, branchNames.genPileup.c_str()),
     gen_d1(treeReader, branchNames.gend1.c_str()),
     gen_d2(treeReader, branchNames.gend2.c_str()),
     gen_m1(treeReader, branchNames.genm1.c_str()),
@@ -172,6 +177,7 @@ template <typename S, typename E, typename M>
 inline void TreeEventFile<S, E, M>::initialize()
 {
     tree = getFile()->Get<TTree>(getTreeName().c_str());
+    //tree->Print();
     treeReader.SetTree(tree);
     setEventCount(1);
     treeReader.Next(); 
@@ -235,6 +241,7 @@ inline ParticleCollection<Particle> TreeEventFile<S, E, M>::getRecoParticles() c
         int charge = elec_charge[i];
         
         Particle::SelectionFit fit;
+        /* comment this back in later:
         if (elec_idpass[i] & 4) 
         {
             fit = Particle::SelectionFit::Tight;
@@ -247,6 +254,7 @@ inline ParticleCollection<Particle> TreeEventFile<S, E, M>::getRecoParticles() c
         } else {
             continue;
         }
+        */
 
 
         // Lorentz four-vector
@@ -298,6 +306,12 @@ inline ParticleCollection<Particle> TreeEventFile<S, E, M>::getRecoJets() const
         //}    
     }
     return recoParticles;
+}
+
+template <typename S, typename E, typename M>
+inline int TreeEventFile<S, E, M>::getNumPileUpInteractions() const
+{
+    return static_cast<double>(gen_pileup[0]);
 }
 
 template <typename S, typename E, typename M>

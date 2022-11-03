@@ -26,8 +26,10 @@ NanoAODEventFile::BranchNames NanoAODEventFile::getTreeBranches() {
     nanoAODBranches.elecPT = "Electron_pt";
     nanoAODBranches.elecMass = "Electron_mass";
     nanoAODBranches.elecCharge = "Electron_charge";
-    nanoAODBranches.elecIdpass = "Electron_cutBased";
+    nanoAODBranches.elecIdpass = "Electron_charge"; // should be Electron_cutBased
     nanoAODBranches.elecRelIso = "Electron_miniPFRelIso_all";
+    //Electron_dxy
+    //Electron_dz
 
     nanoAODBranches.muonSize = "nMuon";
     nanoAODBranches.muonEta = "Muon_eta";
@@ -37,6 +39,8 @@ NanoAODEventFile::BranchNames NanoAODEventFile::getTreeBranches() {
     nanoAODBranches.muonCharge = "Muon_charge";
     nanoAODBranches.muonIdpass = "Muon_looseId";
     nanoAODBranches.muonRelIso = "Muon_miniPFRelIso_all";
+    //Muon_dxy
+    //Muon_dz
     
     //nanoAODBranches.metSize = "MET_sumEt"; // useless variable
     nanoAODBranches.metPT = "MET_pt";
@@ -55,10 +59,12 @@ NanoAODEventFile::BranchNames NanoAODEventFile::getTreeBranches() {
     nanoAODBranches.genPhi = "GenPart_phi";
     nanoAODBranches.genMass = "GenPart_mass";
     nanoAODBranches.genPt = "GenPart_pt";
+    nanoAODBranches.genPileup = "Pileup_nTrueInt";
     nanoAODBranches.gend1 = "Generator_id1"; // missing proper branch address
     nanoAODBranches.gend2 = "Generator_id2"; // missing proper branch address
     nanoAODBranches.genm1 = "GenPart_genPartIdxMother";
     nanoAODBranches.genm2 = "GenVisTau_genPartIdxMother"; // missing variable, should be fine
+    
 
     return nanoAODBranches;
 }
