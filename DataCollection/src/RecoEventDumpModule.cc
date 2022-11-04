@@ -32,15 +32,16 @@ bool RecoEventDumpModule::process()
   
   if(counter < numOfEvents || numOfEvents == -1)
   {
-    auto recoParticles = getInput()->getParticles(InputModule::RecoLevel::Reco, Particle::Type::None);
+    auto recoParticles = getInput()->getParticles(InputModule::RecoLevel::Reco);
     //TODO this line needs to be fixed and put back in
     //Input Module is Reco to match printRecoParticleCollection
     // if( getInput()->getLeptons(InputModule::RecoLevel::Reco).getNumParticles() == 4)
-    // {
+    if (getInput()->getLeptons(InputModule::RecoLevel::Reco).calculateSameSignInvariantMass()>500)
+    {
       my_file.open("RecoEventDump.txt", std::ios::app);
       printRecoParticleCollection(recoParticles, my_file);
     //   std::cout << "A reco event was printed\n";
-    // }
+    }
     counter++;
     my_file.close();
     return true;
@@ -59,7 +60,7 @@ void RecoEventDumpModule::writeAll()
 
 void RecoEventDumpModule::printRecoParticleCollection(const ParticleCollection<Particle>& recoParts,std::ofstream& my_file ) const
 {
-  std::cout << "printing reco event \n";
+  //std::cout << "printing reco event \n";
   int eventElement = 1;
   const auto& particleGroup = recoParts.getParticles();
   //if(counter>= 10){
@@ -68,6 +69,8 @@ void RecoEventDumpModule::printRecoParticleCollection(const ParticleCollection<P
   // Format
   my_file << "--------------------------------------------------------" << std::endl;
   my_file << "EVENT #" << (counter + 1) <<std::endl;
+  my_file << "all lepton invariant mass: " << recoParts.calculateAllLeptonInvariantMass() 
+    << " | same sign invariant mass: " << recoParts.calculateSameSignInvariantMass() << "\n";
   my_file << "--------------------------------------------------------" << std::endl;
 
   my_file << std::left << std::setw(8) << "element" << std::setw(11) << "| type"
@@ -81,7 +84,7 @@ void RecoEventDumpModule::printRecoParticleCollection(const ParticleCollection<P
   for(auto &part : particleGroup){
 
     // Standard info
-    my_file << std::setw(8) << eventElement << "| " << std::setw(9) << int(part.getType()) << "| ";
+    my_file << std::setw(8) << eventElement << "| " << std::setw(9) << part.getType().getpdgId() << "| ";
 
 
     // Particle properties

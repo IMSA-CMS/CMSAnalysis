@@ -24,6 +24,7 @@ void HTMLTable::makeTable(std::shared_ptr<TableData> data, std::ostream& outputS
     }
     outputStream << table;
     outputStream << "</table>" << std::endl;
+    
 }
 
 

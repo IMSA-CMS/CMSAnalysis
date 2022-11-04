@@ -4,13 +4,14 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include "CMSAnalysis/DataCollection/interface/InputModule.hh"
+//#include "CMSAnalysis/DataCollection/interface/InputModule.hh"
 
 namespace edm
 {
   class EventBase;
 }
 
+class InputModule;
 class FilterModule;
 class TH1;
 
@@ -27,7 +28,8 @@ public:
 	
 	virtual std::vector<double> value() const = 0;
 
-        std::string getName() const {return name;}
+    std::string getName() const {return name;}
+
 
 	bool shouldDraw() const; // Bool switch to determine if a histogram is to be filled
 	std::string getFilteredName() const {return (getFilterString() + getName());}
@@ -42,6 +44,7 @@ public:
 
 protected:
 	const InputModule* getInput() const {return input;}
+	void setName(std::string newName) {name = newName;}
 private:
 	const InputModule* input;
 	std::string name;

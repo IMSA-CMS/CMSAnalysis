@@ -13,8 +13,9 @@
 #include "CMSAnalysis/DataCollection/interface/LeptonJetImplementation.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimParticle.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimSimpleImplementation.hh"
+#include "CMSAnalysis/DataCollection/interface/ParticleType.hh"
 
-Particle::Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, double relIso, Particle::SelectionFit fit):
+Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, double relIso, Particle::SelectionFit fit):
 particle(std::make_shared<SimpleImplementation>(vec, charge, type, relIso, fit))
 {
 
@@ -33,13 +34,13 @@ Particle::Particle(const LeptonJet& leptonjet):
 {
 }
 
-Particle::Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, int pid, int status, int m1, int m2,int d1, int d2, double relIso):
+Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int pid, int status, int m1, int m2,int d1, int d2, double relIso):
 particle(std::make_shared<DelphesImplementation>(vec,charge,type,pid,status,m1,m2,d1,d2,relIso))
 {
 }
 
 
-Particle::Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, const Particle* motherParticle, std::vector<const GenSimParticle*> daughters):
+Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, const Particle* motherParticle, std::vector<const GenSimParticle*> daughters):
 particle(std::make_shared<GenSimSimpleImplementation>(vec, charge, type, motherParticle, daughters))
 {
 
@@ -48,16 +49,20 @@ particle(std::make_shared<GenSimSimpleImplementation>(vec, charge, type, motherP
 Particle::Particle(const Particle& particle1):
 particle(particle1.particle)
 {
-
 }
 
-Particle& Particle::operator = (const Particle& particle2)
+std::string Particle::getName() const
+{
+  return getType().getName();
+}
+
+Particle &Particle::operator=(const Particle &particle2)
 {
   particle = particle2.particle;
   return *this;
 }
 
-bool Particle::operator == (const Particle& p1) const
+bool Particle::operator==(const Particle &p1) const
 {
   return *particle == *(p1.particle);
 }
@@ -69,8 +74,8 @@ bool Particle::isNotNull() const
 
 void Particle::checkIsNull() const
 {
-  //std::cout << "This is check is null (particle)\n" << particle << "\n" << typeid(*particle).name() << "\n";
-  if(!particle->isNotNull())
+  // std::cout << "This is check is null (particle)\n" << particle << "\n" << typeid(*particle).name() << "\n";
+  if (!particle->isNotNull())
   {
     throw std::runtime_error("attempted to use null pointer in Particle (Particle)");
   }
@@ -120,7 +125,7 @@ Particle::BarrelState Particle::getBarrelState() const
 {
   checkIsNull();
   double etaValue = std::abs(getEta());
-  if (getType() == Particle::Type::Muon)
+  if (getType() == ParticleType::muon())
   {
     if (etaValue < 1.2)
     {
@@ -131,7 +136,7 @@ Particle::BarrelState Particle::getBarrelState() const
       return Particle::BarrelState::Endcap;
     }
   }
-  else if (getType() == Particle::Type::Electron)
+  else if (getType() == ParticleType::electron())
   {
     if (etaValue < 1.4442)
     {
@@ -188,12 +193,10 @@ bool Particle::isIsolated() const
   }
   return false;
 */
-Particle::Type Particle::getType() const
-{
+const ParticleType& Particle::getType() const{
     checkIsNull();
     return particle->getType();
 }
-
 
 // bool Particle::isIsolated() const
 // {
@@ -211,34 +214,44 @@ Particle::Type Particle::getType() const
 //   return false;
 // }
 
-Particle::Type Particle::identifyType(int pdgid)
+const ParticleType& Particle::identifyType(int pdgid)
 {
     if (pdgid == 11 || pdgid == -11)
     {
-      return Particle::Type::Electron;
+      return ParticleType::electron();
     }
 
     else if (pdgid == 13 || pdgid == -13)
     {
-      return Particle::Type::Muon;
+      return ParticleType::muon();
     }
     else if (pdgid == 22)
     {
-      return Particle::Type::Photon;
+      return ParticleType::photon();
     }
     else if (pdgid == 4900022)
     {
-      //std::cout << "Dark Photon\n";
-      return Particle::Type::DarkPhoton;
+      return ParticleType::darkPhoton();
     }
     else if (pdgid == 1000022)
     {
-      return Particle::Type::Neutralino;
+      return ParticleType::neutralino();
+    }
+    else if (abs(pdgid == 9900041))
+    {
+      return ParticleType::leftDoublyHiggs();
+    }
+    else if (abs(pdgid == 9900042))
+    {
+      return ParticleType::rightDoublyHiggs();
+    }
+    else if (pdgid == 23)
+    {
+      return ParticleType::zBoson();
     }
     else
     {
-      //std::cout << "Type: None\n";
-      return Particle::Type::None;
+      return ParticleType::none();
     }
 }
 int Particle::getCharge() const
@@ -247,15 +260,11 @@ int Particle::getCharge() const
   return particle->charge();
 }
 
-
-
-
 reco::Candidate::LorentzVector Particle::getFourVector() const
 {
   checkIsNull();
   return particle->getFourVector();
 }
-
 
 double Particle::getDeltaR(Particle part) const
 {

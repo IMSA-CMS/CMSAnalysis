@@ -66,6 +66,11 @@ std::vector<FileParams> ProcessDictionary::readFile(std::string filename)
   std::vector<FileParams> fileParamsVector;
   std::vector<Process> pickfileProcesses;
 
+  if (!textfile)
+  {
+    throw std::runtime_error("Cannot access textfile " + filename);
+  }
+  
   while (std::getline(textfile, line))  // splitting pickfiles by tab
   {
     if ((line.find("\t") == std::string::npos))  // if tab is not found
@@ -148,6 +153,7 @@ std::vector<FileParams> ProcessDictionary::readFile(std::string filename)
 
 Process& ProcessDictionary::findProcess(std::string newProcess) // fill in these functions
 {
+  std::cout << newProcess << std::endl;
   for (auto& process : processes)
   {
     if (process.getName() == newProcess)

@@ -31,16 +31,17 @@ bool GenSimEventDumpModule::process()
   
   if(counter < numOfEvents || numOfEvents == -1)
   {
-    auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim, Particle::Type::None);
+    auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::none());
     //TODO this line needs to be fixed and put back in
     //Input Module is GenSim to match printGenSimParticleCollection
     // if( getInput()->getLeptons(InputModule::RecoLevel::GenSim).getNumParticles() == 4)
-    // {
+    if (getInput()->getLeptons(InputModule::RecoLevel::Reco).calculateSameSignInvariantMass()>500)
+    {
       my_file.open("GenSimEventDump.txt", std::ios::app);
       printGenSimParticleCollection(genParticles, my_file);
       //std::cout << "\nAn event was printed";
       my_file.close();
-    // }
+    }
     counter++;
     return true;
   }

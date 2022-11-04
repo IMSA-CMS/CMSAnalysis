@@ -2,12 +2,14 @@
 #define PARTICLECOLLECTION_HH
 
 #include <utility>
+#include <functional>
 
 #include <vector>
 #include "TLorentzVector.h"
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
 #include "CMSAnalysis/DataCollection/interface/Utility.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimParticle.hh"
+#include "CMSAnalysis/DataCollection/interface/ParticleType.hh"
 
 namespace reco
 {
@@ -46,7 +48,7 @@ public:
   double calculateOppositeSignInvariantMass() const;
   double calculateRecoveredInvariantMass(int nLeptons, int motherPDGID) const;
   T getLeadingPtLepton() const;
-  int getLeptonTypeCount(Particle::Type leptonType) const;
+  int getLeptonTypeCount(const ParticleType& leptonType) const;
   void clear() {particles.clear();}
   T& operator[] (int i) {return particles.at(i);}
   const T& operator[] (int i) const {return particles.at(i);}
@@ -56,6 +58,7 @@ public:
   auto cend() const {return particles.end();}
   auto begin() const {return cbegin();}
   auto end() const {return cend();}
+  void sort() {std::sort(begin(), end(),std::greater<T>());};
 
 private:
   
@@ -130,7 +133,7 @@ template<typename T>
   template<typename T>
   inline double ParticleCollection<T>::getInvariantMass() const
   {
-    auto particlePair = chooseParticles();
+    auto particlePair = chooseParticles(true);
     if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
       {      
         return calculateInvariantMass(particlePair.first, particlePair.second);
@@ -254,8 +257,8 @@ template<typename T>
       return true;
     }
         //if both particles are muons, then EE counts as BE
-        if ((particlePair.first.getType() == Particle::Type::Muon
-      && particlePair.second.getType() == Particle::Type::Muon)
+        if ((particlePair.first.getType() == ParticleType::muon()
+      && particlePair.second.getType() == ParticleType::muon())
       && (particlePair.first.getBarrelState() == Particle::BarrelState::Endcap
       && particlePair.second.getBarrelState() == Particle::BarrelState::Endcap))
     {
@@ -413,7 +416,7 @@ template<typename T>
   }
 
   template<typename T>
-  inline int ParticleCollection<T>::getLeptonTypeCount(Particle::Type leptonType) const  // Finds the number of a certain lepton type (electrons/muons)
+  inline int ParticleCollection<T>::getLeptonTypeCount(const ParticleType& leptonType) const  // Finds the number of a certain lepton type (electrons/muons)
   {
     int count = 0;
     for (auto particle : particles)
