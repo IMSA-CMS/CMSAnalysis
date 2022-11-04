@@ -107,18 +107,23 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     gen_d2(treeReader, "Generator_id2"),
     gen_m1(treeReader, "GenPart_genPartIdxMother"),
     gen_m2(treeReader, "GenVisTau_genPartIdxMother"),
+    gen_pileup(treeReader, "Pileup_nTrueInt"),
     elec_idpass(treeReader, "Electron_cutBased"),
     muon_idpass(treeReader, "Muon_looseId")
+    //Muon_dxy
+    //Muon_dz
+    //Electron_dxy
+    //Electron_dz
     {
     std::ifstream triggerNameFile("validTriggers.txt");
-    if(!triggerNameFile)
+        tree = getFile()->Get<TTree>("Events");
+    if(triggerNameFile)
     {
-        throw std::runtime_error("validTriggers.txt not found.");
-    }
+
 
     std::string nameoftrigger;
 
-    tree = getFile()->Get<TTree>("Events");
+
 
     while(getline(triggerNameFile, nameoftrigger))
     {
@@ -129,7 +134,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
             triggers.emplace(nameoftrigger, intermediate);
         }
     }
-    
+    }    
     treeReader.SetTree(tree);
     setEventCount(1);
     treeReader.Next(); 
@@ -245,6 +250,11 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoJets() const
 double NanoAODEventFile::getMET() const
 {
     return static_cast<double>(met_pt[0]);
+}
+
+int NanoAODEventFile::getNumPileUpInteractions() const
+{
+    return static_cast<int>(gen_pileup[0]);
 }
 
 bool NanoAODEventFile::isDone() const

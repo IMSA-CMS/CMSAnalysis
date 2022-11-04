@@ -23,6 +23,7 @@ class NanoAODEventFile : public EventFile
         virtual ParticleCollection<Particle> getRecoJets() const override;
         //virtual GenEventInfoProduct getGenInfo() const override;
         virtual double getMET() const override;
+        virtual int getNumPileUpInteractions() const override;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;
         virtual bool checkTrigger(std::string triggerName, std::string subProcess) const override;
@@ -69,6 +70,7 @@ class NanoAODEventFile : public EventFile
         mutable TTreeReaderArray<Int_t> gen_d2;
         mutable TTreeReaderArray<Int_t> gen_m1;
         mutable TTreeReaderArray<Int_t> gen_m2;
+        mutable TTreeReaderArray<Float_t> gen_pileup;
 
         mutable TTreeReaderArray<Int_t> elec_idpass; // nanoAOD wants Int, Delphes wants UInt
         mutable TTreeReaderArray<Bool_t> muon_idpass; // nanoAOD wants Bool, Delphes wants UInt
