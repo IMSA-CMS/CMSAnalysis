@@ -1,45 +1,33 @@
 import FWCore.ParameterSet.Config as cms
 process = cms.Process('GEN')
-
+import subprocess
 # Needed to implement command line input parameters
 import FWCore.ParameterSet.VarParsing as VarParsing
 options = VarParsing.VarParsing ('analysis')
+import os
 
 # Takes command line input parameters from user
-options.register ('zPrimeModel',
-                  "zPrimeSSM",
-                  VarParsing.VarParsing.multiplicity.singleton,
-                  VarParsing.VarParsing.varType.string,
-                  "which Z' model to use")
-options.register ('interferenceMode',
-                  3,
-                  VarParsing.VarParsing.multiplicity.singleton,
-                  VarParsing.VarParsing.varType.int,          
-                  "Z/gamma/Z' interference setting")
-options.register ('outputFileName',
+options.register ('dpMass',
+                0,
+                VarParsing.VarParsing.multiplicity.singleton,
+                  VarParsing.VarParsing.varType.float,
+                  "mass of the dark photon")
+options.register ('output',
                   "0",
                   VarParsing.VarParsing.multiplicity.singleton,
                   VarParsing.VarParsing.varType.string,
                   "output file name")
-options.register ('pythiaSettingsFile',
+options.register ('pythiaSettings',
                   "0",
                   VarParsing.VarParsing.multiplicity.singleton,
                   VarParsing.VarParsing.varType.string,
                   "pythia settings file name")
-options.register ('globalTagKey',
+options.register ('globalTag',
                   "0",
                   VarParsing.VarParsing.multiplicity.singleton,
                   VarParsing.VarParsing.varType.string,
                   "Global Tag Identifier")
 options.parseArguments()
-
-# Imports additional command line input parameters from the user
-import sys
-sys.path.append('..')
-from python.mcCmdLineOptions_cfi import registerMcCmndLineOptions
-registerMcCmndLineOptions(options)
-from python.ledMcCmndLineOptions_cfi import registerLedMcCmndLineOptions
-registerLedMcCmndLineOptions(options)
 
 # The 4 input parameters below, maxEvents, globalTagKey, pythiaSettingsFile, and outputFile
 # are necessary for the program to run, thus if they are not entered it prompts the user to enter them.
@@ -48,7 +36,7 @@ if maxEvents == -1: # -1 is the default value
     maxEvents = int(input("Please enter the ammount of events:\n"))
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(maxEvents))
 
-globalTagKey = options.globalTagKey
+globalTagKey = options.globalTag
 globalTag = "0"
 globalTagsList = dict({'Run3' : '124X_mcRun3_2022_realistic_v9', 'Run2' : '106X_mcRun2_asymptotic_v13'})
 isValidTag = False
@@ -61,12 +49,19 @@ while not isValidTag:
         globalTagKey = str(input("Please enter a global tag:\n"))
 
 import FWCore.Utilities.FileUtils as FileUtils
-pythiaSettingsFile = options.pythiaSettingsFile
+pythiaSettingsFile = options.pythiaSettings
 if pythiaSettingsFile == "0":
     pythiaSettingsFile = str(input("Please enter a pythia settings file name: \n(Format: \"fileName.txt\")\n"))
 importedPythiaSettings = FileUtils.loadListFromFile (pythiaSettingsFile) 
 
-outputFileName = options.outputFileName
+if options.dpMass > 0:
+    savedpath = os.getcwd()
+    os.chdir("DarkRadiation")
+    branching_ratios = subprocess.run (["./DarkRadiation", str (options.dpMass)], stdout = subprocess.PIPE).stdout.decode("utf-8")
+    branching_ratios = branching_ratios.split("\n")
+    importedPythiaSettings.extend(branching_ratios)
+    os.chdir(savedpath)
+outputFileName = options.output
 if outputFileName == "0":
     outputFileName = input("Please enter an output file name: \n(Format: \"fileName.root\")\n") 
     
@@ -88,8 +83,10 @@ process.load('GeneratorInterface.Core.genFilterSummary_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
+print(importedPythiaSettings)
+
 process.generator = cms.EDFilter("Pythia8GeneratorFilter",
-    comEnergy =  cms.double(options.comEnergy*1000), 
+    comEnergy =  cms.double(13000), 
     crossSection = cms.untracked.double(1e10),
     filterEfficiency = cms.untracked.double(1),
     maxEventsToPrint = cms.untracked.int32(0),
@@ -100,15 +97,6 @@ process.generator = cms.EDFilter("Pythia8GeneratorFilter",
         pythia8CP5SettingsBlock,
         pythia8PSweightsSettingsBlock,
         processParameters = cms.vstring(
-
-            #Master Switches all should be one for large events
-		    'PartonLevel:MPI = '+str(options.ULE),
-			'PartonLevel:ISR = '+str(options.ISR),
-			'PartonLevel:FSR = '+str(options.FSR),
-
-            'PhaseSpace:mHatMax = '+str(options.maxMass),                       
-            'PhaseSpace:mHatMin = '+str(options.minMass),
-
             *importedPythiaSettings
         ),
         parameterSets = cms.vstring(
@@ -126,11 +114,12 @@ process.MessageLogger.cerr.FwkReport = cms.untracked.PSet(
     limit = cms.untracked.int32(10000000)
 )
 
+import random
 process.source = cms.Source("EmptySource",
-			    firstLuminosityBlock = cms.untracked.uint32(options.seed),
+			    firstLuminosityBlock = cms.untracked.uint32(random.randrange(1,10000)),
 			    numberEventsInLuminosityBlock = cms.untracked.uint32(100))
 
-process.RandomNumberGeneratorService.generator.initialSeed = options.seed*10000
+process.RandomNumberGeneratorService.generator.initialSeed = random.randrange(1,10000)
 
 process.genstepfilter.triggerConditions=cms.vstring("generation_step")
 from Configuration.AlCa.GlobalTag import GlobalTag

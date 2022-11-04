@@ -14,26 +14,29 @@
 #include "CMSAnalysis/DataCollection/interface/LeptonJetReconstructionPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/MassAcceptancePlan.hh"
 #include "CMSAnalysis/DataCollection/interface/MassResolutionPlan.hh"
+#include "CMSAnalysis/DataCollection/interface/Trigger.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimPlan.hh"
+#include "CMSAnalysis/DataCollection/interface/MLVariablesPlan.hh"
 
 AnalyzerOptions::AnalyzerOptions()
 {
-	analysisPlans["DisplacedVertex"] = new DisplacedVertexPlan();
-	analysisPlans["HiggsBackground"] = new HiggsBackgroundPlan();
-	analysisPlans["InvariantMass"] = new InvariantMassPlan();
-	analysisPlans["LeptonJetBackground"] = new LeptonJetBackgroundPlan();
-	analysisPlans["MassResolution"] = new MassResolutionPlan();
-	analysisPlans["LeptonJetReconstruction"] = new LeptonJetReconstructionPlan();
-	analysisPlans["MassAcceptance"] = new MassAcceptancePlan();
-	analysisPlans["Trigger"] = new TriggerPlan();
+  analysisPlans["DisplacedVertex"] = new DisplacedVertexPlan();
+  analysisPlans["HiggsBackground"] = new HiggsBackgroundPlan();
+  analysisPlans["InvariantMass"] = new InvariantMassPlan();
+  analysisPlans["LeptonJetBackground"] = new LeptonJetBackgroundPlan();
+  analysisPlans["MassResolution"] = new MassResolutionPlan();
+  analysisPlans["LeptonJetReconstruction"] = new LeptonJetReconstructionPlan();
+  analysisPlans["MassAcceptance"] = new MassAcceptancePlan();
+  analysisPlans["Trigger"] = new TriggerPlan();
   analysisPlans["GenSim"] = new GenSimPlan();
+  analysisPlans["DataStrip"] = new MLVariablesPlan();
 }
 
 std::string AnalyzerOptions::pickfileInterface()
 {
   std::cout << "\n                                        Pickfile Generator                                         \n"
-            <<  "===================================================================================================\n";
+            << "===================================================================================================\n";
   // Ask for process name and idtypes
   std::vector<std::string> namesOfProcesses = processNames();
 
@@ -93,7 +96,7 @@ std::vector<std::pair<std::string, std::string>> AnalyzerOptions::getProcessAndI
   std::vector<IDType> idtypes = findProcessIDTypes(processName.second);
   std::cout << "Process " << processName.second << " has " << idtypes.size() << " IDTypes.\n\n";
 
-  for (auto& idtype : idtypes)
+  for (auto &idtype : idtypes)
   {
     std::pair<std::string, std::string> newCategory = promptInput(idtype.getName(), idtype.getCategories());
     pickfileInfo.push_back(newCategory);
@@ -117,7 +120,7 @@ std::string AnalyzerOptions::takeFilename()
 
 bool AnalyzerOptions::checkFilename(std::string name)
 {
-  if (name.substr(name.length()-4, 4) != ".txt")
+  if (name.substr(name.length() - 4, 4) != ".txt")
   {
     std::cout << "Please enter a file name with .txt\n\n";
     return false;
@@ -125,18 +128,18 @@ bool AnalyzerOptions::checkFilename(std::string name)
   return true;
 }
 
-void AnalyzerOptions::currentStatus(std::vector<std::pair<std::string, std::string>>* pickfileInfo, std::vector<std::string> processNames)
+void AnalyzerOptions::currentStatus(std::vector<std::pair<std::string, std::string>> *pickfileInfo, std::vector<std::string> processNames)
 {
   // Note: passing in a pointer to the pickfileinfo because it would be easier to change it directly in this function
 
   std::string change;
-  // This loop keeps running until change == "N". But, it is guaranteed to run once. 
+  // This loop keeps running until change == "N". But, it is guaranteed to run once.
   do
   {
     // Output the information, and create a vector of names in case the user wants to change something
     std::cout << "Here is the current information entered: \n";
     std::vector<std::string> namesVector;
-    for (const auto& item : *(pickfileInfo))
+    for (const auto &item : *(pickfileInfo))
     {
       std::cout << '\t' << item.first << ": " << item.second << "\n";
       namesVector.push_back(item.first);
@@ -149,8 +152,8 @@ void AnalyzerOptions::currentStatus(std::vector<std::pair<std::string, std::stri
     if (change == "Y")
     {
       // If the user wants to change something, ask what they want to change
-      std::cout << "Which of the following would you like to change? Type \"Back\" to go back.\n" 
-        << separateVector(namesVector, '\t') << std::endl;
+      std::cout << "Which of the following would you like to change? Type \"Back\" to go back.\n"
+                << separateVector(namesVector, '\t') << std::endl;
       namesVector.push_back("Back");
       std::string categoryToChange = takeSingleInput(namesVector, "Pick one or type \"Back\": ");
       if (categoryToChange == "Back")
@@ -159,7 +162,7 @@ void AnalyzerOptions::currentStatus(std::vector<std::pair<std::string, std::stri
       }
       if (categoryToChange == "Filename")
       {
-        // Change the file name (which will always be at the end of the vector) 
+        // Change the file name (which will always be at the end of the vector)
         pickfileInfo->back().second = takeFilename();
       }
       else if (categoryToChange == "Process")
@@ -180,7 +183,7 @@ void AnalyzerOptions::currentStatus(std::vector<std::pair<std::string, std::stri
         std::vector<IDType> idtypes = findProcessIDTypes((*pickfileInfo)[0].second);
         // Finds out what index of pickfileInfo the selected IDType is at by looping through the vector
         int i = 0;
-        for (auto& item : (*pickfileInfo))
+        for (auto &item : (*pickfileInfo))
         {
           if (item.first == categoryToChange)
           {
@@ -191,7 +194,7 @@ void AnalyzerOptions::currentStatus(std::vector<std::pair<std::string, std::stri
 
         // Prompts the user's input for what the idtype should be changed to, then changes the correct entry
         // in pickfileinfo.
-        for (auto& idtype : idtypes)
+        for (auto &idtype : idtypes)
         {
           if (idtype.getName() == categoryToChange)
           {
@@ -216,7 +219,7 @@ void AnalyzerOptions::currentStatus(std::vector<std::pair<std::string, std::stri
 std::string AnalyzerOptions::separateVector(std::vector<std::string> list, char separator)
 {
   std::ostringstream namesToOutput;
-  for (auto& name : list)
+  for (auto &name : list)
   {
     namesToOutput << name << separator;
   }
@@ -228,7 +231,7 @@ std::string AnalyzerOptions::separateVector(std::vector<std::string> list, char 
 
 bool AnalyzerOptions::checkInput(std::string input, std::vector<std::string> list)
 {
-  for (auto& item : list)
+  for (auto &item : list)
   {
     if (item == input)
     {
@@ -249,31 +252,31 @@ std::vector<IDType> AnalyzerOptions::findProcessIDTypes(std::string process)
   // Reading processes.txt line by line
   while (getline(processes, line))
   {
-    if (line.empty()) 
+    if (line.empty())
     {
       // Go to the next line if this one is empty
       continue;
     }
-    else if (foundProcess == true) 
+    else if (foundProcess == true)
     {
       if (line.find(':') == std::string::npos)
       {
         // If the process name has already been passed, but there is no colon in this line, then it
-        // must be the name of another process -- there are no more idtypes remaining in the process 
+        // must be the name of another process -- there are no more idtypes remaining in the process
         // we're looking at. We can return the vector of idtypes.
         processes.close();
         break;
-        // return idtypes;  
+        // return idtypes;
       }
       // If the process name has been found and this one has a colon, then it has information about
       // the process's idtypes.
 
       int nameLength = line.find(':');
       std::string name = line.substr(0, nameLength);
-      std::string types = line.substr(nameLength+1, line.length()-1);
+      std::string types = line.substr(nameLength + 1, line.length() - 1);
       std::istringstream typeStream(types);
       std::string category;
-      
+
       // Separate the line by tabs and add each chunk to the categories vector
       while (getline(typeStream, category, '\t'))
       {
@@ -287,7 +290,7 @@ std::vector<IDType> AnalyzerOptions::findProcessIDTypes(std::string process)
       // Add the new idtype to the vector of idtypes.
       IDType newType(name, IDCategories);
       idtypes.push_back(newType);
-      
+
       IDCategories.clear();
     }
     else if (line == process)
@@ -317,7 +320,7 @@ std::pair<std::string, std::string> AnalyzerOptions::promptInput(std::string nam
   while (processInput == false)
   {
     std::cout << "Please choose a " << name << " from the following \n";
-    std::cout << separateVector(categories, '\t') <<"\n";
+    std::cout << separateVector(categories, '\t') << "\n";
     std::cout << "Choose one: ";
     selected = takeInput();
     processInput = checkInput(selected, categories);
@@ -354,14 +357,14 @@ void AnalyzerOptions::makePickfile(std::vector<std::pair<std::string, std::strin
   std::string name = info.back().second;
 
   // create the textfile
-  std::ofstream pickfile(name); 
+  std::ofstream pickfile(name);
   // find the process name and write it into the file
   name = info[0].second;
   pickfile << name << '\n';
 
   // write each idtype into the file
   std::ostringstream types;
-  for (auto& item : info)
+  for (auto &item : info)
   {
     if (!((item.first == "Process") || (item.first == "Filename")))
     {
@@ -380,7 +383,7 @@ void AnalyzerOptions::makePickfile(std::vector<std::pair<std::string, std::strin
 std::string AnalyzerOptions::checkSelectedAnalysis(std::string analysis)
 {
   std::string plan;
-  if (analysisPlans.find(analysis)==analysisPlans.end())
+  if (analysisPlans.find(analysis) == analysisPlans.end())
   {
     if (analysis.empty())
     {
@@ -392,13 +395,13 @@ std::string AnalyzerOptions::checkSelectedAnalysis(std::string analysis)
     }
     // A vector that contains the keys in the plan vector
     std::vector<std::string> planNames;
-    for (auto& entry : analysisPlans)
+    for (auto &entry : analysisPlans)
     {
       planNames.push_back(entry.first);
     }
     std::cout << separateVector(planNames, '\n') << '\n';
     std::string newAnalysis = takeSingleInput(planNames, "Choose one: ");
-    plan  = newAnalysis;
+    plan = newAnalysis;
   }
   else
   {

@@ -7,6 +7,7 @@
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
 #include "CMSAnalysis/DataCollection/interface/Lepton.hh"
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
+#include "CMSAnalysis/DataCollection/interface/Event.hh"
 
 class Particle;
 class Lepton;
@@ -15,7 +16,7 @@ class Selector
 {
     public:
         virtual ~Selector() {}
-        virtual std::vector<Particle> selectParticles(const InputModule* input) const = 0;
+        virtual void selectParticles(const InputModule* input, Event& event) = 0;
 };
 
 #endif

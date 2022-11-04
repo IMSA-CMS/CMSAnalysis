@@ -6,7 +6,7 @@
 #include "CMSAnalysis/DataCollection/interface/Lepton.hh"
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
 
-std::vector<Particle> PASSelector::selectParticles(const InputModule* input) const
+void PASSelector::selectParticles(const InputModule* input, Event& event)
 {
     std::vector<Particle> selected(0);
     // std::vector<Particle> posElecs(0);
@@ -22,8 +22,8 @@ std::vector<Particle> PASSelector::selectParticles(const InputModule* input) con
     
     for (const auto& particle : particles)
     {
-        if (particle.getType() == Particle::Type::Electron && particle.getPt() > 40 && std::abs(particle.getEta()) < 3) {
-            if (Lepton(particle).isLoose())
+        if (particle.getType() == ParticleType::electron() && particle.getPt() > 40 && std::abs(particle.getEta()) < 3) {
+            if (Lepton(particle).isTight())
             {
                 selected.push_back(particle);
             }
@@ -36,9 +36,9 @@ std::vector<Particle> PASSelector::selectParticles(const InputModule* input) con
             //     negElecs.push_back(Particle(particle));
             // }
         }
-        if (particle.getType() == Particle::Type::Muon && particle.getPt() > 40 && std::abs(particle.getEta()) < 2.8) 
+        if (particle.getType() == ParticleType::muon() && particle.getPt() > 40 && std::abs(particle.getEta()) < 2.8) 
         {
-            if(Lepton(particle).isLoose())
+            if(Lepton(particle).isTight())
             {
                 selected.push_back(particle);
             }
@@ -141,5 +141,5 @@ std::vector<Particle> PASSelector::selectParticles(const InputModule* input) con
     //     return std::vector<Particle>(0);
     // }
 
-    return selected;
+    //return selected;
 }
