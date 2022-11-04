@@ -7,7 +7,7 @@
 class LeptonJet;
 
 class ParticleImplementation;
-
+class GenSimParticle;
 // Interface for particle operations. Contains a ParticleImplementation.
 class Particle
 {
@@ -25,6 +25,7 @@ class Particle
     Particle(const LeptonJet& leptonjet);
     Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, double relIso = -999, Particle::SelectionFit fit = Particle::SelectionFit::Tight);
     Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, int pid, int status, int m1, int m2,int d1, int d2, double relIso);
+    Particle(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, const Particle* motherParticle, std::vector<const GenSimParticle*> daughters);
     std::shared_ptr<ParticleImplementation> getParticleImplementation();
     Particle& operator = (const Particle& particle2);
     double getPt() const;

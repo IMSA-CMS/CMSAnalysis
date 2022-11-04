@@ -20,7 +20,6 @@ class TreeEventFile : public EventFile
         virtual void nextEvent() override;
         virtual bool isDone() const override;
         // simply dumps gensim particles from event into ParticleCollection
-        virtual ParticleCollection<GenSimParticle> getGenSimParticles() const override;
         virtual ParticleCollection<Particle> getRecoParticles() const override;
         virtual ParticleCollection<Particle> getRecoJets() const override;
         //virtual GenEventInfoProduct getGenInfo() const override;
@@ -76,7 +75,7 @@ class TreeEventFile : public EventFile
         virtual std::string getTreeName() = 0;
         //virtual BranchNames getTreeBranches() = 0;
         virtual void initialize();
-    private:
+    protected:
 
         TTree* tree;
         TTreeReader treeReader;
@@ -195,35 +194,6 @@ inline void TreeEventFile<S, E, M>::nextEvent()
 //     return *genInfo;
 //     */
 // }
-
-template <typename S, typename E, typename M>
-inline ParticleCollection<GenSimParticle> TreeEventFile<S, E, M>::getGenSimParticles() const
-{
-    ParticleCollection<GenSimParticle> genParticles;
-    for (S i = 0; i < *gen_size; i++) // iterator type must be defined by template to allow comparison with the size variable
-    {
-        if (gen_status[i] != 1)
-        {
-            continue;
-        }
-        int charge = -1;
-        if (gen_pid[i] < 0)
-        {
-            charge = 1;
-        }
-        if (gen_pid[i] == 21 || gen_pid[i] == 22)
-        {
-            charge = 0;
-        }
-        genParticles.addParticle(
-            Particle(
-                reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i],gen_eta[i], gen_phi[i], gen_mass[i])),
-                charge, 
-                Particle::identifyType(gen_pid[i]),gen_pid[i],gen_status[i],gen_m1[i],gen_m2[i],gen_d1[i],gen_d2[i],
-                0)); //not sure if relIso, last parameter, should be set to 0
-    }
-    return genParticles;
-}
 
 template <typename S, typename E, typename M>
 inline ParticleCollection<Particle> TreeEventFile<S, E, M>::getRecoParticles() const

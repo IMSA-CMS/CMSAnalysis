@@ -14,8 +14,35 @@ DelphesEventFile::DelphesEventFile(TFile* ifile) :
     initialize();
 }
 
-std::string DelphesEventFile::getTreeName() {
+std::string DelphesEventFile::getTreeName() 
+{
     return "myana/mytree";
+}
+
+ParticleCollection<GenSimParticle> DelphesEventFile::getGenSimParticles() const
+{
+        ParticleCollection<GenSimParticle> genParticles;
+        for (int i = 0; i < *gen_size; i++)
+        {
+        if (gen_status[i] != 1)
+            continue;
+
+        int charge = -1;
+        if (gen_pid[i] < 0)
+        {
+            charge = 1;
+        }
+        if (gen_pid[i] == 21 || gen_pid[i] == 22)
+        {
+            charge = 0;
+        }
+                //std::cout << "Tree Event File: about to add particles\n";
+        genParticles.addParticle(Particle(
+        reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i],
+                                                                        gen_eta[i], gen_phi[i], gen_mass[i])),
+            charge, Particle::identifyType(gen_pid[i]),gen_pid[i],gen_status[i],gen_m1[i],gen_m2[i],gen_d1[i],gen_d2[i],0)); //not sure if relIso, last parameter, should be set to 0 
+        }
+    return genParticles;
 }
 
 DelphesEventFile::BranchNames DelphesEventFile::getTreeBranches() {

@@ -188,3 +188,6 @@ Dependent efficiency of 12QuarkoniaCut: 0.990018
 Independent efficiency of 12QuarkoniaCut: 0.989542
 Processing complete!
 Output written to ZZPick4_HiggsBackground.root
+Reading input file textfiles/DY50.txt
+Filename: textfiles/Drell-Yan/Drell-Yan_MassCut_50-inf_Run_2.txt
+# of root files: 113

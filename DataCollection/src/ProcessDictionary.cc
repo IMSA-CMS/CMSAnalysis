@@ -12,9 +12,14 @@
 void ProcessDictionary::loadProcesses(std::string filename) 
 {
   std::string line;
-  std::ifstream textfile(filename);
+  std::ifstream   textfile(filename);
   std::string processName;
   std::unordered_map<std::string, std::vector<std::string>> idTypes;
+
+  if (!textfile)
+  {
+    throw std::runtime_error("Cannot access textfile " + filename);
+  }
 
   while (std::getline(textfile, line))  // splitting pickfiles by tab
   {

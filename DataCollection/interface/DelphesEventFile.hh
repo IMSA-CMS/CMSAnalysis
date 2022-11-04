@@ -9,6 +9,7 @@ class DelphesEventFile : public TreeEventFile<Int_t, UInt_t, UInt_t> // sets whi
 {
     public:
         DelphesEventFile(TFile* ifile);
+        virtual ParticleCollection<GenSimParticle> getGenSimParticles() const override;
     protected:
         virtual std::string getTreeName() override;
         static BranchNames getTreeBranches();
