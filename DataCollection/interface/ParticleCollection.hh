@@ -128,7 +128,7 @@ template<typename T>
   template<typename T>
   inline double ParticleCollection<T>::getInvariantMass() const
   {
-    auto particlePair = chooseParticles();
+    auto particlePair = chooseParticles(true);
     if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
       {      
         return calculateInvariantMass(particlePair.first, particlePair.second);
