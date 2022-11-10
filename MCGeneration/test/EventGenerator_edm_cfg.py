@@ -13,17 +13,17 @@ options.register ('dpMass',
                 VarParsing.VarParsing.multiplicity.singleton,
                   VarParsing.VarParsing.varType.float,
                   "mass of the dark photon")
-options.register ('outputFileName',
+options.register ('output',
                   "0",
                   VarParsing.VarParsing.multiplicity.singleton,
                   VarParsing.VarParsing.varType.string,
                   "output file name")
-options.register ('pythiaSettingsFile',
+options.register ('pythiaSettings',
                   "0",
                   VarParsing.VarParsing.multiplicity.singleton,
                   VarParsing.VarParsing.varType.string,
                   "pythia settings file name")
-options.register ('globalTagKey',
+options.register ('globalTag',
                   "0",
                   VarParsing.VarParsing.multiplicity.singleton,
                   VarParsing.VarParsing.varType.string,
@@ -37,7 +37,7 @@ if maxEvents == -1: # -1 is the default value
     maxEvents = int(input("Please enter the ammount of events:\n"))
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(maxEvents))
 
-globalTagKey = options.globalTagKey
+globalTagKey = options.globalTag
 globalTag = "0"
 globalTagsList = dict({'Run3' : '124X_mcRun3_2022_realistic_v9', 'Run2' : '106X_mcRun2_asymptotic_v13'})
 isValidTag = False
@@ -50,7 +50,7 @@ while not isValidTag:
         globalTagKey = str(input("Please enter a global tag:\n"))
 
 import FWCore.Utilities.FileUtils as FileUtils
-pythiaSettingsFile = options.pythiaSettingsFile
+pythiaSettingsFile = options.pythiaSettings
 if pythiaSettingsFile == "0":
     pythiaSettingsFile = str(input("Please enter a pythia settings file name: \n(Format: \"fileName.txt\")\n"))
 importedPythiaSettings = FileUtils.loadListFromFile (pythiaSettingsFile) 
@@ -62,7 +62,7 @@ if options.dpMass > 0:
     branching_ratios = branching_ratios.split("\n")
     importedPythiaSettings.extend(branching_ratios)
     os.chdir(savedpath)
-outputFileName = options.outputFileName
+outputFileName = options.output
 if outputFileName == "0":
     outputFileName = input("Please enter an output file name: \n(Format: \"fileName.root\")\n") 
     

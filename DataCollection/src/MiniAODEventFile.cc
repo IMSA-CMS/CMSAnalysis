@@ -95,6 +95,14 @@ ParticleCollection<Particle> MiniAODEventFile::getRecoJets() const
         }
         return recoParticles;
 }
+int MiniAODEventFile::getNumPileUpInteractions() const {
+    
+    edm::Handle<std::vector<PileupSummaryInfo>> pileup;
+    event->getByLabel(std::string("slimmedAddPileupInfo"), pileup);
+
+    return (*pileup)[0].getPU_NumInteractions();
+
+}
 
 double MiniAODEventFile::getMET() const
 {
@@ -131,6 +139,23 @@ std::vector<std::string> MiniAODEventFile::getTriggerNames(std::string subProces
     }
     return v_names;
 }
+
+bool MiniAODEventFile::checkTrigger(std::string triggerName, std::string subProcess) const
+{
+    auto names = getTriggerNames(subProcess);
+    auto results = getTriggerResults(subProcess);
+
+    auto it = find(names.begin(), names.end(), triggerName);
+    if(it != names.end())
+    {
+        return results.at(it - names.begin());
+    }
+    else
+    {
+        return false;
+    }
+}
+
 
 bool MiniAODEventFile::isDone() const
 {

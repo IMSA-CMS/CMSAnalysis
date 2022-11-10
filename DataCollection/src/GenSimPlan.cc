@@ -44,36 +44,18 @@ GenSimPlan::GenSimPlan()
     auto eventMod = make_shared<EventModule>();
     auto dpSelector = make_shared<DarkPhotonGenSimSelector>();
     auto hppSelector = make_shared<HPlusPlusGenSimSelector>();
-    auto matchMod = make_shared<MatchingModule>();
-    auto triggerMod = make_shared<TriggerModule>();
     auto metMod = make_shared<METModule>();
-    auto bJetFilter = make_shared<BJetFilter>();
+
     
     auto histMod = make_shared<HistogramOutputModule>();
-    auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
+    auto metHist = make_shared<METHist>(metMod, "MET", 500, 0, 1000);
 
-    auto genSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::GenSim, "GenSim Same Sign Invariant Mass", 100, 0, 1000, false, false);
-
-    auto genSimPt = make_shared<PtHist>(InputModule::RecoLevel::GenSim, "Leading lepton pT", 500, 0, 1000);
-    auto genSimInvMass = make_shared<InvariantMassHist>(InputModule::RecoLevel::GenSim, "Opposite-sign dilepton mass", 1000, 0, 2000);
-    //auto metHist = make_shared<METHist>(metMod, "MET", 500, 0, 1000);
-
-    // Add the histogram(s) created above to histMod
-    histMod->addHistogram(genSimSameSignInvMassHist);
-    histMod->addHistogram(genSimPt);
-    histMod->addHistogram(genSimInvMass);
+    histMod->addHistogram(metHist);
     histMod->addHistogram(deltaR);
-    //histMod->addHistogram(metHist);
 
     // eventMod->addSelector(dpSelector);
     //eventMod->addSelector(hppSelector);
     auto eventHistMod = eventMod->getHistogramModule();
-
-    auto elecGenSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::GenSim, "Electron GenSim Same Sign Invariant Mass", 1000, 0, 2000, false, false);
-    auto muonGenSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::GenSim, "Muon GenSim Same Sign Invariant Mass", 1000, 0, 2000, false, false);
-
-    histMod->addHistogram(elecGenSimSameSignInvMassHist);
-    histMod->addHistogram(muonGenSimSameSignInvMassHist);
 
     analyzer.addProductionModule(metMod);
     analyzer.addAnalysisModule(eventMod);
