@@ -16,7 +16,7 @@ cmsRun EventGenerator_edm_cfg.py maxEvents=1000 globalTag=Run2 pythiaSettings=dp
 Running this file creates a lot of screen output. If you wish to redirect this to a .txt file and run it in the background, you can do it like so:
 
 ```
-cmsRun EventGenerator_edm_cfg.py maxEvents=1000 globalTag=Run2 pythiaSettings=dpPythiaParameters.txt output=output.root &> outFile.txt &
+cmsRun EventGenerator_edm_cfg.py maxEvents=1000 globalTag=Run2 pythiaSettings=dpPythiaParameters.txt output=output.root dpMass=0.3 &> outFile.txt &
 ```
 
 Note that when doing this you must input all of the above parameters in the command line as the terminal will no longer prompt you for them.
