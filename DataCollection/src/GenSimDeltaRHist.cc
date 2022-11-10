@@ -36,7 +36,8 @@
   std::vector<double> deltaRVector{};
 
   for (GenSimParticle particle : particles.getParticles()) 
-  {
+  { 
+    // std::cout << "Particle/n ";
     // if (particle.getType() == Particle::Type::DarkPhoton)
     // {
     // }
@@ -52,16 +53,19 @@
     std::vector<Particle> leptons;
 
     //looping through lepton decays (should be only 2) and pushing to lepton list
+
     for (int j = 0; j < particle.numberOfDaughters(); ++j)
     {
       auto leptonCandidate = particle.daughter(j);
+      std::cout << leptonCandidate.getType().getName() << '\n';
       if (leptonCandidate.getType() == ParticleType::muon())
       {
         leptons.push_back(leptonCandidate);
       }
     }
 
-    //get deltaR between the 2 muons in this lepton jet and pushes deltaR to return vector
+  // std::cout << leptons.size();
+
     if (leptons.size() >= 2)
     {
       auto particle1FourVector = leptons[0].getFourVector();

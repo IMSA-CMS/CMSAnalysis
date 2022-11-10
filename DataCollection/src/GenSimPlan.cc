@@ -65,7 +65,7 @@ GenSimPlan::GenSimPlan()
     histMod->addHistogram(deltaR);
     //histMod->addHistogram(metHist);
 
-    eventMod->addSelector(dpSelector);
+    // eventMod->addSelector(dpSelector);
     //eventMod->addSelector(hppSelector);
     auto eventHistMod = eventMod->getHistogramModule();
 
