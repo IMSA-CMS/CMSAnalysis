@@ -14,9 +14,13 @@ cmsRun EventGenerator_edm_cfg.py maxEvents=100 globalTag=Run2 pythiaSettings=SUS
 ```
 
 Max events corresponds the ammount of events you wish to generate.
+
 Global tag should be 'Run2' on CMSSW_11_0_2 and 'Run3' on CMSSW_12_4_3. 
+
 Pythia Settings is a text file that has the options for the time of event you wish to generate. 
+
 Output is the root file in which you want the output to go.
+
 dpMass is Dark Photon mass, you can leave this blank if you aren't running something involving Dark Photons.
 
 Running this file takes a long time and creates a lot of output you can run this in the background using nohup.
