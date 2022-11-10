@@ -10,23 +10,10 @@ All commands should be run from MCGeneration/test.
 Try running the generator executable using cmsRun.
 
 ```
-cmsRun EventGenerator_edm_cfg.py
-```
-The terminal will then prompt you for 
-1. A value for the maximum amount of events. (You probably want a low number for your first run as large values can take a long time to run).
-2. A global tag. For Run2 you must run in cmssw_11_0_2 and for Run3 you must run in cmssw_12_4_3.
-3. A pythia settings file. There are two of these text files, dpPythiaParameters.txt and hppPythiaParameters.txt, corresponding to Dark Photons and Higgs Plus Plus respectively.
-4. A root output file. 
-
-Once you input all of these you should see output on the screen, however be patient as it can take a minute or two to run the first time.
-
-Now, you can expedite this process by inputing the parameters in the cmsRun command:
-
-```
-cmsRun EventGenerator_edm_cfg.py maxEvents=1000 globalTag=Run2 pythiaSettings=dpPythiaParameters.txt output=output.root
+cmsRun EventGenerator_edm_cfg.py maxEvents=1000 globalTag=Run2 pythiaSettings=dpPythiaParameters.txt output=output.root dpMass=0.3
 ```
 
-Finally, you can clearly see that running this file creates a lot of screen output. If you wish to redirect this to a .txt file and run it in the background, you can do it like so:
+Running this file creates a lot of screen output. If you wish to redirect this to a .txt file and run it in the background, you can do it like so:
 
 ```
 cmsRun EventGenerator_edm_cfg.py maxEvents=1000 globalTag=Run2 pythiaSettings=dpPythiaParameters.txt output=output.root &> outFile.txt &
