@@ -25,7 +25,7 @@ Output is the root file in which you want the output to go.
 dpMass is Dark Photon mass, you can leave this blank if you aren't running something involving Dark Photons.
 
 
-Running this file takes a long time and creates a lot of output you can run this in the background using nohup.
+Running this file takes a long time and creates a lot of output, you can run this in the background using nohup.
 
 ```
 nohup cmsRun EventGenerator_edm_cfg.py maxEvents=100 globalTag=Run2 pythiaSettings=dpPythiaParameters.txt output=output.root dpMass=0.3 &> 
