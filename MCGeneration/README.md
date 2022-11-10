@@ -18,7 +18,7 @@ Max events corresponds the ammount of events you wish to generate.
 
 Global tag should be 'Run2' on CMSSW_11_0_2 and 'Run3' on CMSSW_12_4_3. 
 
-Pythia Settings is a text file that has the options for the time of event you wish to generate. 
+Pythia Settings is a text file that has the options for the type of event you wish to generate. 
 
 Output is the root file in which you want the output to go.
 
