@@ -11,6 +11,8 @@
 #include "CMSAnalysis/DataCollection/interface/DelphesImplementation.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJet.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJetImplementation.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimParticle.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimSimpleImplementation.hh"
 #include "CMSAnalysis/DataCollection/interface/ParticleType.hh"
 
 Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, double relIso, Particle::SelectionFit fit):
@@ -18,6 +20,7 @@ particle(std::make_shared<SimpleImplementation>(vec, charge, type, relIso, fit))
 {
 
 }
+
 
 Particle::Particle(const reco::Candidate* iparticle):
 particle(std::make_shared<CandidateImplementation>(iparticle))
@@ -36,7 +39,15 @@ particle(std::make_shared<DelphesImplementation>(vec,charge,type,pid,status,m1,m
 {
 }
 
-Particle::Particle(const Particle &particle1) : particle(particle1.particle)
+
+Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, const Particle* motherParticle, std::vector<const GenSimParticle*> daughters):
+particle(std::make_shared<GenSimSimpleImplementation>(vec, charge, type, motherParticle, daughters))
+{
+
+}
+
+Particle::Particle(const Particle& particle1):
+particle(particle1.particle)
 {
 }
 
@@ -260,7 +271,7 @@ double Particle::getDeltaR(Particle part) const
   return reco::deltaR(part.getFourVector(), getFourVector());
 }
 
-std::shared_ptr<ParticleImplementation> Particle::getParticleImplementation()
+std::shared_ptr<ParticleImplementation> Particle::getParticleImplementation() 
 {
   return particle;
 }
