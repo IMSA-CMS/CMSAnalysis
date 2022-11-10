@@ -134,7 +134,7 @@ HiddenValley:alphaFSR = 0
 4900022:isResonance = true
 4900022:tau0 = 1.97327e-13
 4900022:m0 = 0.3
-#4900022:0:meMode = 0
+# 4900022:0:meMode = 0
 
 # Lightest Neutralino
 #1000022:mayDecay = true
@@ -156,3 +156,5 @@ HiddenValley:alphaFSR = 0
 4900211:m0 = 1000000
 4900213:m0 = 1000000
 4900991:m0 = 1000000	
+
+#add branching ratios manually
