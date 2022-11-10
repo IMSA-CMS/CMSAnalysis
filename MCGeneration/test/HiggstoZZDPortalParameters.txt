@@ -1,0 +1,37 @@
+Tune:pp 5
+Tune:ee 3
+PartonLevel:MPI = on
+PartonLevel:ISR = on
+PartonLevel:FSR = on
+            
+HiggsSM:all = on
+25:onMode = off
+25:m0 = 125
+
+# 5) Set Higgs mass, width and branching ratios by hand.
+# Values for 125 GeV SM Higgs taken from
+# Handbook of LHC Higgs Cross Sections: 1. Inclusive Observables,
+# S. Dittmaier et al., CERN-2011-002 [arXiv:1101.0593].
+# Note: sum is not quite unity, and so BR's are rescaled accordingly.
+
+25:addChannel = 1 0.0 0 4900022 23
+25:76:bRatio = 1.0 
+25:76:meMode = 100
+25:onIfAny = 49000022
+25:mMin = 125
+25:mWidth = 10
+
+4900022:mayDecay = true
+4900022:m0 = 0.3
+4900022:mWidth = 1.0
+4900022:mMin = 5.0
+4900022:mMax = 0.0
+4900022:isResonance = true
+4900022:tau0 = 1.97327e-13
+
+HiddenValley:Ngauge = 1
+HiddenValley:doKinMix = on
+HiddenValley:FSR = on
+HiddenValley:alphaFSR = 0
+4900022:oneChannel = 1 0.526471 100 11 -11
+4900022:addChannel = 1 0.466296 100 13 -13
