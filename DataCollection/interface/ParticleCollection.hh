@@ -281,8 +281,8 @@ template<typename T>
   template<typename T>
   inline double ParticleCollection<T>::calculateSameSignInvariantMass(bool usingPhi) const
   {
-    T iPointer(nullptr);
-    T jPointer(nullptr);
+    T iPointer = Particle::nullParticle();
+    T jPointer = Particle::nullParticle();
     std::pair<T,T> particlePair = {iPointer, jPointer};
 
     if (usingPhi)
@@ -441,8 +441,8 @@ template<typename T>
   inline typename std::pair<T,T> ParticleCollection<T>::chooseParticles(bool oppositeSigns) const
   {
     double maxInvariantMass = 0;
-    T iPointer(nullptr);
-    T jPointer(nullptr);
+    T iPointer = Particle::nullParticle();
+    T jPointer = Particle::nullParticle();
 
     if(particles.size() > 0) {
       // std::cout << "!" << particles[0].getMass() << std::endl;
@@ -476,8 +476,8 @@ template<typename T>
   inline typename std::pair<T,T> ParticleCollection<T>::chooseParticlesByPhi(bool oppositeSigns) const
   {
     double bestAngle = 0;  // We want the two particles whose phi angle difference is closest to 180, since that's what H++ decay leptons do
-    T iPointer(nullptr);
-    T jPointer(nullptr);
+    T iPointer = Particle::nullParticle();
+    T jPointer = Particle::nullParticle();
 
     for (int i = 0; i < static_cast<int>(particles.size()) - 1; ++i)
     {

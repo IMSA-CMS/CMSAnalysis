@@ -19,10 +19,11 @@ class Particle
 
     // specifies barrel state
     enum class BarrelState{Barrel, Endcap, None};
-    
-    Particle(const reco::Candidate* iparticle = nullptr); 
+   // Particle(); // could cause problems???
+    Particle(const reco::Candidate* iparticle); 
     Particle(const Particle& particle1);
-    Particle(const LeptonJet& leptonjet);
+    Particle(const LeptonJet* iparticle);
+    static Particle nullParticle();
     Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, double relIso = -999, Particle::SelectionFit fit = Particle::SelectionFit::Tight);
     Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int pid, int status, int m1, int m2,int d1, int d2, double relIso);
     std::shared_ptr<ParticleImplementation> getParticleImplementation();
