@@ -36,18 +36,18 @@ bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
   //std::cout << "numParticles: " << jet.getNumParticles() << "\n";
     if (jet.getNumParticles() > 1)
     {
-      auto inputJets = getInput()->getJets(InputModule::RecoLevel::Reco);
-      bool close = false;
-      for (auto iJet : inputJets) {
-        if (iJet.getDeltaR(jet) < .5) {
-          close = true;
-          break;
-        }
-      }
-      if (!close) {
+      // auto inputJets = getInput()->getJets(InputModule::RecoLevel::Reco);
+      // bool close = false;
+      // for (auto iJet : inputJets) {
+      //   if (iJet.getDeltaR(jet) < .5) {
+      //     close = true;
+      //     break;
+      //   }
+      // }
+      //if (!close) {
         //std::cout << "adding jet\n";
         leptonJets.push_back(jet);
-      }
+      //}
     }
   }
   findDeltaRValues();
@@ -58,7 +58,8 @@ bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
 
 LeptonJet LeptonJetReconstructionModule::createLeptonJet(Lepton highestPtLepton) const
 {
-  LeptonJet leptonJet(highestPtLepton);
+  LeptonJet leptonJet;
+  leptonJet.addParticle(highestPtLepton);
   return leptonJet;
 }
 
