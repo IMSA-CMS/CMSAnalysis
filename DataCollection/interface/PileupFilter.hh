@@ -1,4 +1,3 @@
-/*
 #ifndef PILEUPFILTER_HH
 #define PILEUPFILTER_HH
 
@@ -18,4 +17,3 @@ private:
 };
 
 #endif
-*/

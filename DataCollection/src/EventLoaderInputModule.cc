@@ -72,12 +72,10 @@ ParticleCollection<Particle> EventLoaderInputModule::getJets(RecoLevel level) co
     return particleList;
 }
 
-/*
-std::vector<PileupSummaryInfo> InputModule::getPileupInfo() const
+int EventLoaderInputModule::getNumPileUpInteractions() const
 {
-    return eventLoader->getPileupInfo();
+    return eventLoader->getFile()->getNumPileUpInteractions();
 }
-*/
 
 double EventLoaderInputModule::getMET() const
 {
@@ -92,4 +90,9 @@ std::vector<bool> EventLoaderInputModule::getTriggerResults(std::string subProce
 std::vector<std::string> EventLoaderInputModule::getTriggerNames(std::string subProcess) const
 {
     return eventLoader->getFile()->getTriggerNames(subProcess);
+}
+
+bool EventLoaderInputModule::checkTrigger(std::string triggerName, std::string subProcess) const
+{
+    return eventLoader->getFile()->checkTrigger(triggerName, subProcess);
 }

@@ -45,6 +45,12 @@ class RecoGenSimComparisonModule : public AnalysisModule
 	int noMatchCounter = 0;
 	int mismeasuredPtCounter = 0;
 	int accurateEventCounter = 0;
+
+	//
+	int essWrongChargeCounter = 0;
+	int essFakePhotonCounter = 0;
+	int essNoMatchCounter = 0;
+	int essMismeasuredPtCounter = 0;
 };
 
 

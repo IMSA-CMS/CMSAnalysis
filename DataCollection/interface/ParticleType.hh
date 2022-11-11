@@ -42,6 +42,7 @@ class ParticleType
     int pdgId;
     std::vector<SingleParticleHist> hists;
 
+    //hists available to use
     static SingleParticleHist getPtHist();
     static SingleParticleHist getPhiHist();
     static SingleParticleHist getEtaHist();
