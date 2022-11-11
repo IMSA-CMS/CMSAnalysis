@@ -26,6 +26,7 @@
 #include "CMSAnalysis/DataCollection/interface/RecoEventDumpModule.hh"
 #include "CMSAnalysis/DataCollection/interface/RecoGenSimComparisonModule.hh"
 #include "CMSAnalysis/DataCollection/interface/EventModule.hh"
+#include "CMSAnalysis/DataCollection/interface/PileupFilter.hh"
 
 using std::make_shared;
 
@@ -38,6 +39,7 @@ InvariantMassPlan::InvariantMassPlan()
   auto invMassHist = make_shared<InvariantMassHist>(InputModule::RecoLevel::Reco, "invariant_Mass", 100, 0, 1000);
   auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "same_Sign_Invariant_Mass", 300, 500, 1000);
 
+  auto pileUpHist = make_shared<PileUpHist>("Pile Up Hist", 300, 0, 100);
   // Create necessary module(s) for the filter(s)
   auto trigSimMod = make_shared<TriggerSimModule>("HLT");
   auto simTrigger = make_shared<SimTrigger>("filter_trigger", TriggerSimModule::EnumTriggers::doubleElectronTriggers, trigSimMod);
@@ -47,6 +49,7 @@ InvariantMassPlan::InvariantMassPlan()
   auto triggerFilter = make_shared<TriggerFilter>(simTrigger);
 
   auto ssInvMassFilter = make_shared<SameSignInvariantMassFilter>(500);
+  auto pileUpFilter = make_shared<PileupFilter>(40,40);
 
   // Add the filter module(s) to the histogram(s) created above
   // invMassHist->addFilter(nLeptonsFilter);
@@ -54,11 +57,16 @@ InvariantMassPlan::InvariantMassPlan()
   // invMassHist->addFilter(triggerFilter);
   // sameSignInvMassHist->addFilter(triggerFilter);
   // invMassHist->addFilter(triggerFilter);
+
   invMassHist->addFilter(ssInvMassFilter);
+  sameSignInvMassHist->addFilter(ssInvMassFilter);
+  sameSignInvMassHist->addFilter(pileUpFilter);
+  pileUpHist->addFilter(ssInvMassFilter);
 
   // Add the histogram(s) created above to histMod
   histMod->addHistogram(invMassHist);
   histMod->addHistogram(sameSignInvMassHist);
+  histMod->addHistogram(pileUpHist);
 
   // Add production modules
   // analyzer.addProductionModule(trigSimMod);
@@ -66,9 +74,9 @@ InvariantMassPlan::InvariantMassPlan()
   // analyzer.addFilterModule(triggerFilter);
   auto recoDump = make_shared<RecoEventDumpModule>();
   auto genSimDump = make_shared<GenSimEventDumpModule>();
-  auto compMod= make_shared<RecoGenSimComparisonModule>();
+  auto compMod = make_shared<RecoGenSimComparisonModule>();
   // Hopefully doesn't break // <- this is profound
-  //analyzer.addAnalysisModule(histMod);
+  analyzer.addAnalysisModule(histMod);
   //analyzer.addAnalysisModule(recoDump);
   //analyzer.addAnalysisModule(genSimDump);
   analyzer.addAnalysisModule(compMod);
