@@ -39,9 +39,7 @@ Analyzer::~Analyzer()
 void Analyzer::run(const std::string &configFile, const std::string &outputFile, int outputEvery, int nFiles)
 {
   fetchRootFiles(configFile);
-
   processRootFiles(outputEvery, nFiles);
-
   writeOutputFile(outputFile);
 }
 

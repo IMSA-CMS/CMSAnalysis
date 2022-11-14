@@ -25,6 +25,8 @@
 # Other
 *.pdf
 *.orig
+GenTest.txt
+nohup.out
 
 # Files to always include
 !*.py

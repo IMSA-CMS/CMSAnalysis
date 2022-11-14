@@ -14,11 +14,13 @@ class FileStripModule : public AnalysisModule
     virtual void writeAll() override;
     // Checks if a GenSimParticle is inside of the collection given
     int checkGenSim(const GenSimParticle &genSim, ParticleCollection<Particle> &collection);
+    virtual void initialize() override;
 
     protected:
     bool process() override;
 
     private:
+    std::string name;
     TFile* file;
     TTree* tree;
 

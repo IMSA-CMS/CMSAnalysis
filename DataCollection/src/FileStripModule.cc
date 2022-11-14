@@ -1,8 +1,15 @@
 #include "CMSAnalysis/DataCollection/interface/FileStripModule.hh"
+#include "CMSAnalysis/DataCollection/interface/ParticleType.hh"
 #include "TFile.h"
 
-FileStripModule::FileStripModule(std::string name)
+FileStripModule::FileStripModule(std::string iname):
+	name(iname)
 {
+}
+
+void FileStripModule::initialize()
+{
+	std::cout << "Initializing in FileStrip!\n";
 	file = new TFile(name.c_str(), "recreate");
 	tree = new TTree("stripped", "Stripped Data");
 	tree->SetAutoSave(0);
@@ -52,7 +59,7 @@ FileStripModule::FileStripModule(std::string name)
 bool FileStripModule::process()
 {
 
-	auto electrons = getInput()->getParticles(InputModule::RecoLevel::Reco, Particle::Type::Electron);
+	auto electrons = getInput()->getParticles(InputModule::RecoLevel::Reco, ParticleType::electron());
 	elecSize = electrons.getNumParticles();
 	for (auto& electron : electrons)
         {
@@ -68,7 +75,7 @@ bool FileStripModule::process()
         }
 	
 
-	 auto muons = getInput()->getParticles(InputModule::RecoLevel::Reco, Particle::Type::Muon);
+	 auto muons = getInput()->getParticles(InputModule::RecoLevel::Reco, ParticleType::electron());
 	 muonSize = muons.getNumParticles();
 
 	 for (auto& muon : muons)
@@ -87,6 +94,8 @@ bool FileStripModule::process()
 	metPhi.push_back(-1.0);
 	metPt.push_back(-1.0);
 
+	jetSize = 0;
+	genSize = 0;
 /*
 	auto jets = getInput()->getJets(InputModule::RecoLevel::Reco);
 	jetSize = jets.getNumParticles();
@@ -122,7 +131,6 @@ bool FileStripModule::process()
 	} */
 
 	file->cd();
-
 	tree->Fill();
 
 	// Very important: clear the vectors

@@ -9,7 +9,7 @@ class DelphesImplementation : public ParticleImplementation
 {
     public:
         virtual ~DelphesImplementation(){}
-        DelphesImplementation(reco::Candidate::LorentzVector vec, int charge, Particle::Type type, int pid, int status, int m1, int m2,int d1, int d2,double iIsolation = -999);
+        DelphesImplementation(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int pid, int status, int m1, int m2,int d1, int d2,double iIsolation = -999);
         virtual reco::Candidate::LorentzVector getFourVector() const override;
         virtual int charge() const override{return particleCharge;}
         virtual double isolation() const override {return particleIsolation;}
@@ -20,7 +20,7 @@ class DelphesImplementation : public ParticleImplementation
         virtual std::vector<int> mothers() const{return mothersVec;}
         virtual std::vector<int> daughters() const{return daughtersVec;}
         virtual int numberOfDaughters() const override{return daughtersVec.size();}
-        virtual Particle::Type getType() const  override{ return particleType; }
+        virtual const ParticleType& getType() const  override{ return particleType; }
         virtual Particle::SelectionFit getSelectionFit() const override {throw std::runtime_error("getSelectionFit not implemented");};
         virtual bool isNotNull() const override {return true;}
         virtual bool isFinalState() const override {return status()==1;}
@@ -32,7 +32,7 @@ class DelphesImplementation : public ParticleImplementation
     private:
         reco::Candidate::LorentzVector lorentzVec;
         const int particleCharge;
-        Particle::Type particleType;
+        const ParticleType& particleType;
         const double particleIsolation;
         const int particleID;
         const int statusCode;

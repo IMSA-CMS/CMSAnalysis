@@ -15,7 +15,7 @@ bool MassRecoEfficiency::process()
   auto reco = getInput()->getLeptons(InputModule::RecoLevel::Reco);
   double invMass = reco.calculateSameSignInvariantMass();
   int size = reco.getNumParticles();
-  int nMuons = reco.getLeptonTypeCount(Particle::Type::Muon);
+  int nMuons = reco.getLeptonTypeCount(ParticleType::muon());
 
   auto invMasses = reco.calculateSameSignInvariantMasses();
 

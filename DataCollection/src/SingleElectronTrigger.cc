@@ -5,7 +5,7 @@ SingleElectronTrigger::SingleElectronTrigger(double iPTCutoff) : RecoTrigger("Si
 
 bool SingleElectronTrigger::checkTrigger(const InputModule *input)
 {
-  auto particles = input->getParticles(InputModule::RecoLevel::Reco, Particle::Type::Electron);
+  auto particles = input->getParticles(InputModule::RecoLevel::Reco, ParticleType::electron());
 
   // If there aren't enough electrons, then automatically fail the trigger
   if (particles.getNumParticles() < 1)
