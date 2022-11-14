@@ -5,6 +5,7 @@
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
 #include "CMSAnalysis/DataCollection/interface/Lepton.hh"
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
+#include "CMSAnalysis/DataCollection/interface/ParticleType.hh"
 
 std::vector<Particle> HiggsSelector::selectParticles(const InputModule* input) const
 {
@@ -22,7 +23,7 @@ std::vector<Particle> HiggsSelector::selectParticles(const InputModule* input) c
     
     for (const auto& particle : particles)
     {
-        if (particle.getType() == Particle::Type::Electron) 
+        if (particle.getType() == ParticleType::electron()) 
 		{
             if (Lepton(particle).isLoose())
             {
@@ -38,7 +39,7 @@ std::vector<Particle> HiggsSelector::selectParticles(const InputModule* input) c
             // }
         }
         // if (particle.getType() == Particle::Type::Muon && particle.getPt() > 40 && std::abs(particle.getEta()) < 2.8) 
-		if (particle.getType() == Particle::Type::Muon)
+		if (particle.getType() == ParticleType::electron())
         {
             if(Lepton(particle).isLoose())
             {

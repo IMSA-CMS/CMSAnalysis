@@ -47,7 +47,58 @@ ParticleCollection<Particle> Event::getParticles() const
     {
         particleList.addParticle(Particle(p));
     }
+    for (auto& [key,value] : specialObjects)
+    {
+        for (const auto& p: value.getParticles())
+        {
+           particleList.addParticle(Particle(p)); 
+        }
+    }
     return particleList;
+}
+
+void Event::addElectron(Electron electron) 
+{
+    electrons.addParticle(electron); 
+    electrons.sort();
+}
+
+void Event::addMuon(Muon muon) 
+{
+    muons.addParticle(muon); 
+    muons.sort();
+}
+
+void Event::addPhoton(Photon photon) 
+{
+    photons.addParticle(photon); 
+    photons.sort();
+}
+
+void Event::addJet(Jet jet) 
+{
+    jets.addParticle(jet); 
+    jets.sort();
+}
+
+void Event::addSpecialObject(std::string key, Particle obj) 
+{
+    specialObjects[key].addParticle(obj); 
+    specialObjects[key].sort();
+}
+
+ParticleCollection<Particle> Event::getSpecial(std::string key) const
+{
+    auto it = getSpecials().find(key);
+    if (it == getSpecials().end()) // return null collection
+    {
+        auto nullcollection = ParticleCollection<Particle>();
+        return nullcollection;
+    }
+    else
+    {
+        return it->second;
+    }
 }
 
 bool Event::containsParticles() const
@@ -59,13 +110,6 @@ bool Event::containsParticles() const
     return true;
 }
 
-void Event::sort()
-{
-    sortElectrons();
-    sortMuons();
-    sortPhotons();
-    sortJets();
-}
 void Event::clear()
 {
     electrons = ParticleCollection<Electron>();

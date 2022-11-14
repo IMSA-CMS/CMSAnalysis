@@ -31,7 +31,7 @@ bool GenSimEventDumpModule::process()
   
   if(counter < numOfEvents || numOfEvents == -1)
   {
-    auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim, Particle::Type::None);
+    auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::none());
     //TODO this line needs to be fixed and put back in
     //Input Module is GenSim to match printGenSimParticleCollection
     // if( getInput()->getLeptons(InputModule::RecoLevel::GenSim).getNumParticles() == 4)

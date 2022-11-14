@@ -2,7 +2,7 @@ from subprocess import run
 from multiprocessing import Process
 
 def loopRun(*fileList):
-	path = "textfiles/SingleMassSnowmass/"
+	path = "textfiles/"
 	for file in fileList:
 		# Filling in the parameters of runAnalyzer
 		analysis = "HiggsBackground"

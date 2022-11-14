@@ -10,7 +10,7 @@
 
 //Changes the file to the proper type
 void EventLoader::changeFileFormat(TFile* ifile)
-{ 
+{
     auto eventsBranch = dynamic_cast<TTree*>(ifile->Get("Events"));
     if (dynamic_cast<TTree*>(ifile->Get("myana/mytree"))) //myana/mytree is exclusive to Delphes
     {
