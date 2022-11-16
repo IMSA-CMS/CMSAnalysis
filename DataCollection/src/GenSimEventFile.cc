@@ -57,6 +57,11 @@ ParticleCollection<Particle> GenSimEventFile::getRecoJets() const
     throw std::runtime_error("Cannot run Reco on GenSim file");
 }
 
+int GenSimEventFile::getNumPileUpInteractions() const
+{
+    throw std::runtime_error("GenSimEventFile has no implementation of getNumPileUpInteractions");
+}
+
 double GenSimEventFile::getMET() const
 {
     edm::Handle<std::vector<reco::GenMET>> mets;

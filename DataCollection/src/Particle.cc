@@ -11,22 +11,26 @@
 #include "CMSAnalysis/DataCollection/interface/DelphesImplementation.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJet.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJetImplementation.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimParticle.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimSimpleImplementation.hh"
 #include "CMSAnalysis/DataCollection/interface/ParticleType.hh"
 
+// Particle::Particle()
+// {
+// }
 Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, double relIso, Particle::SelectionFit fit):
 particle(std::make_shared<SimpleImplementation>(vec, charge, type, relIso, fit))
 {
 }
 
+
 Particle::Particle(const reco::Candidate* iparticle):
 particle(std::make_shared<CandidateImplementation>(iparticle))
 {
-
 }
 
-Particle::Particle(const LeptonJet& leptonjet):
-  particle(std::make_shared<LeptonJetImplementation>(
-        std::make_shared<LeptonJet>(leptonjet)))
+Particle::Particle(const LeptonJet* iparticle):
+particle(std::make_shared<LeptonJetImplementation>(iparticle))
 {
 }
 
@@ -35,8 +39,24 @@ particle(std::make_shared<DelphesImplementation>(vec,charge,type,pid,status,m1,m
 {
 }
 
-Particle::Particle(const Particle &particle1) : particle(particle1.particle)
+
+Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, const Particle* motherParticle, std::vector<const GenSimParticle*> daughters):
+particle(std::make_shared<GenSimSimpleImplementation>(vec, charge, type, motherParticle, daughters))
 {
+
+}
+
+Particle::Particle(const Particle& particle1):
+particle(particle1.particle)
+{
+}
+
+Particle::Particle(const std::shared_ptr<ParticleImplementation> particlePtr):
+particle(particlePtr){
+}
+
+Particle Particle::nullParticle(){
+  return Particle(std::make_shared<CandidateImplementation>(nullptr));
 }
 
 std::string Particle::getName() const
@@ -62,7 +82,7 @@ bool Particle::isNotNull() const
 
 void Particle::checkIsNull() const
 {
-  // std::cout << "This is check is null (particle)\n" << particle << "\n" << typeid(*particle).name() << "\n";
+  //std::cout << "This is check is null (particle)\n" << particle << "\n" << typeid(*particle).name() << "\n";
   if (!particle->isNotNull())
   {
     throw std::runtime_error("attempted to use null pointer in Particle (Particle)");
@@ -259,7 +279,7 @@ double Particle::getDeltaR(Particle part) const
   return reco::deltaR(part.getFourVector(), getFourVector());
 }
 
-std::shared_ptr<ParticleImplementation> Particle::getParticleImplementation()
+std::shared_ptr<ParticleImplementation> Particle::getParticleImplementation() 
 {
   return particle;
 }
