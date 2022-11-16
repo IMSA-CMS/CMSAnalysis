@@ -36,7 +36,7 @@ NanoAODEventFile::BranchNames NanoAODEventFile::getTreeBranches() {
     nanoAODBranches.muonMass = "Muon_mass";
     nanoAODBranches.muonCharge = "Muon_charge";
     nanoAODBranches.muonIdpass = "Muon_looseId";
-    nanoAODBranches.muonRelIso = "Muon_miniPFRelIso_all";
+    nanoAODBranches.muonRelIso = "Muon_jetPtRelv2";
     
     //nanoAODBranches.metSize = "MET_sumEt"; // useless variable
     nanoAODBranches.metPT = "PuppiMET_pt";
