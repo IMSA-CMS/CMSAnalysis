@@ -17,6 +17,7 @@
 
 // EventModule allows an Analyzer to select events and apply cuts.
 // Additionally, contains a HistogramOutputModule to generate basic histograms for events.
+// Add as an AnalysisModule in a Plan
 class EventModule : public AnalysisModule
 {
     public:
@@ -25,10 +26,8 @@ class EventModule : public AnalysisModule
         void addSelector(std::shared_ptr<Selector> selector);
         void addCut(std::shared_ptr<Cut> cut);
         
-        // Prints the amount of events which passed each cut.
+        // Will print the amount of events which passed each cut.
         void finalize() override;
-        
-        
         
         virtual void writeAll() override;
 

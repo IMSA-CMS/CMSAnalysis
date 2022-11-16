@@ -21,10 +21,11 @@ class Event
         const ParticleCollection<Photon>& getPhotons() const {return photons;};
         const ParticleCollection<Jet>& getJets() const {return jets;};
         const double& getMET() const {return MET;};
-
         const std::map<std::string, ParticleCollection<Particle>>& getSpecials() const {return specialObjects;};
-        ParticleCollection<Particle> getSpecial(std::string key) const;
 
+        // gets a special object by key
+        ParticleCollection<Particle> getSpecial(std::string key) const;
+        // get all particles
         ParticleCollection<Particle> getParticles() const;
 
         void addElectron(Electron electron);
@@ -34,12 +35,13 @@ class Event
         void addSpecialObject(std::string key, Particle obj); 
         void setMET(double newMET) {MET = newMET;}
         
+        // returns true if the event contains any particles
         bool containsParticles() const;
 
-        // Clears all vectors of particles within, for reuse of an Event object
+        // Clears all ParticleCollections/specialObjects, for reuse of the same Event object
         void clear();
     private:
-    //make particlecollections
+        //make particlecollections
         ParticleCollection<Electron> electrons;
         ParticleCollection<Muon> muons;
         ParticleCollection<Photon> photons;
