@@ -62,13 +62,7 @@ private:
   EventLoader eventLoader;
   InputModule* input;
   ProcessDictionary dictionary;
-
-  // Parse one line of the the configuration file
-  //std::vector<std::string> parseLine(std::ifstream& txtFile) const;
-  // Find all input files from the configuration files, stored as FileParams objects
-  //std::vector<FileParams> inputFiles(const std::string& txtFile) const;
-  // Simple utility function allowing an operation to be performed on all
-  // moduels, regardless of type
+  
   std::vector<std::shared_ptr<Module>> getAllModules() const;
   void fetchRootFiles(const std::string& configFile);
   void processRootFiles(int outputEvery, int nFiles);
