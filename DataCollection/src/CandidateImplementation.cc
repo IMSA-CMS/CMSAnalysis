@@ -9,11 +9,9 @@
 CandidateImplementation::CandidateImplementation(
     const reco::Candidate *iparticle)
     : particle(iparticle) {
-  // std::cout << "Got to CI\n";
 }
 
 int CandidateImplementation::charge() const {
-  // std::cout << "charge\n";
   checkIsNull();
   return particle->charge();
 }
@@ -39,15 +37,7 @@ double CandidateImplementation::isolation() const {
   return -1;
 }
 
-// double CandidateImplementation::eta() const
-// {
-//   checkIsNull();
-//   return particle->eta();
-// }
-
-
 reco::Candidate::LorentzVector CandidateImplementation::getFourVector() const {
-  // std::cout << "get four vec\n";
   checkIsNull();
   return particle->p4();
 }
@@ -63,49 +53,24 @@ bool CandidateImplementation::operator==(
   }
 }
 
-// }
-// Particle& CandidateImplementation::operator = (const CandidateImplementation&
-// particle2)
-// {
-//   particle = particle2.particle;
-//   return *this;
-// }
-
 int CandidateImplementation::pdgId() const {
-  // std::cout << "pdgId\n";
   checkIsNull();
   return particle->pdgId();
 }
 
 int CandidateImplementation::status() const {
-  // std::cout << "status\n";
   checkIsNull();
   return particle->status();
 }
 
 Particle CandidateImplementation::mother() const {
-  // std::cout << "mother\n";
   checkIsNull();
   // mother of particle is often not electron/muon
 
   const reco::Candidate* mother = particle->mother();
-/*  
-  if (!mother)
-  {
-    std::cout << "null\n";
-  }
-  else
-  {
-    std::cout << "not null\n";
-  }
-*/
-  // std::cout << mother << '\n';
-  //std::cout << particle->numberOfMothers() << '\n';
-  
   Particle particleMother = Particle(mother);
   return particleMother;
   
- // return Particle(particle->mother());
 }
 
 Particle CandidateImplementation::daughter(int i) const {
