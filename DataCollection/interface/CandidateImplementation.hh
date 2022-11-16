@@ -10,13 +10,13 @@
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
 
+
 class CandidateImplementation : public ParticleImplementation
 {
 public:
   virtual ~CandidateImplementation(){}
   CandidateImplementation(const reco::Candidate*);
   virtual reco::Candidate::LorentzVector getFourVector() const override;
-  // virtual double eta() const override;
   virtual bool operator == (const ParticleImplementation& p1) const override;
   virtual int charge() const override;
   virtual int pdgId() const override;
@@ -29,7 +29,6 @@ public:
   virtual const ParticleType& getType() const override;
   virtual Particle::SelectionFit getSelectionFit() const override;
 
-  // virtual bool isIsolated() const override;
   const reco::Candidate* getUnderlyingParticle() const {return particle;}
   bool isFinalState() const override;
 
