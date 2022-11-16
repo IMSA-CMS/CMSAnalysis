@@ -117,7 +117,7 @@ const ParticleType& ParticleType::rightDoublyHiggs()
 
 const ParticleType& ParticleType::zBoson()
 {
-    return registerType("Z Boson",23,std::vector<SingleParticleHist>{}); 
+    return registerType("Z Boson",23,std::vector<SingleParticleHist>{getPtHist(),getPhiHist(),getEtaHist()}); 
 }
 
 const ParticleType& ParticleType::none()
