@@ -9,7 +9,7 @@
 
 void DarkPhotonGenSimSelector::selectParticles(const InputModule* input, Event& event) 
 {
-    std::vector<Particle> selected(0);
+    std::vector<Particle> selected;
 
     auto particles = input->getParticles(InputModule::RecoLevel::GenSim);
 
@@ -62,7 +62,7 @@ void DarkPhotonGenSimSelector::selectParticles(const InputModule* input, Event& 
 
 std::vector<Particle> DarkPhotonGenSimSelector::checkJet(GenSimParticle part) const //cycles through jets to find leptons
 {
-    std::vector<Particle> selected(0);
+    std::vector<Particle> selected;
     if (part.isFinalState())
     {
         if (part.getType() == ParticleType::electron() || part.getType() == ParticleType::muon())
