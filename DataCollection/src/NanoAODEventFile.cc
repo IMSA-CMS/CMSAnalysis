@@ -110,7 +110,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     elec_idpass(treeReader, "Electron_cutBased"),
     muon_idpass(treeReader, "Muon_looseId")
     {
-    std::ifstream triggerNameFile("validTriggers.txt");
+    std::ifstream triggerNameFile("betterValidTriggers.txt");
     if(!triggerNameFile)
     {
         throw std::runtime_error("validTriggers.txt not found.");

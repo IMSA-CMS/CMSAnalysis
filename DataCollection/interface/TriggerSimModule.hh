@@ -13,7 +13,7 @@ class TriggerSimModule : public ProductionModule
 {
 public:
   enum class EnumTriggers {singleMuonTriggers, doubleMuonTriggers, singleElectronTriggers, doubleElectronTriggers,
-    isoSingleMuonTriggers, isoDoubleMuonTriggers, isoSingleElectronTriggers, isoDoubleElectronTriggers, debug};
+    isoSingleMuonTriggers, isoDoubleMuonTriggers, isoSingleElectronTriggers, isoDoubleElectronTriggers, photonTriggers, debug};
 
   TriggerSimModule(std::string _subProcess = "HLT"); // Defaults to HLT -- There are three main sub processes: HLT, SIM, and RECO. In data files, SIM is replaced with PAT
 
@@ -60,7 +60,7 @@ private:
   std::vector<std::string> passedTriggers;
   const std::map<EnumTriggers, std::vector<std::string>> triggerEnumNameMap = {
     { EnumTriggers::singleMuonTriggers, {
-        "HLT_L2Mu50_v2",
+        "HLT_Mu15_IsoVVVL_PFHT600",
         "",
         "",
         ""} },
@@ -70,15 +70,15 @@ private:
         "",
         ""} },
     { EnumTriggers::singleElectronTriggers, {
-        "",
+        "HLT_Ele50_CaloIdVT_GsfTrkIdT_PFJet165",
         "",
         "",
         ""} },
     { EnumTriggers::doubleElectronTriggers, {
-        "HLT_DoubleEle24_eta2p1_WPTight_Gsf_v5",
-        "HLT_DoubleEle25_CaloIdL_MW_v2",
-        "HLT_DoubleEle27_CaloIdL_MW_v2",
-        "HLT_DoubleEle33_CaloIdL_MW_v15"} },
+        "",
+        "",
+        "",
+        ""} },
     { EnumTriggers::isoSingleMuonTriggers, {
         "",
         "",
@@ -96,6 +96,11 @@ private:
         ""} },
     { EnumTriggers::isoDoubleElectronTriggers, {
         "",
+        "",
+        "",
+        ""} },
+    { EnumTriggers::photonTriggers, {
+        "HLT_Photon75",
         "",
         "",
         ""} },
