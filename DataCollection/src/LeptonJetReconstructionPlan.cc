@@ -35,19 +35,28 @@
 #include "CMSAnalysis/DataCollection/interface/TripleMuonTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/SnowmassLeptonSelector.hh"
 #include "CMSAnalysis/DataCollection/interface/RelIsoHist.hh"
+#include "CMSAnalysis/DataCollection/interface/RecoEventDumpModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJetMLCalculator.hh"
+#include "CMSAnalysis/DataCollection/interface/LeptonJetSelector.hh"
+#include "CMSAnalysis/DataCollection/interface/EventModule.hh"
+
 
 using std::make_shared;
 
 LeptonJetReconstructionPlan::LeptonJetReconstructionPlan()
 {
   Analyzer &analyzer = getAnalyzer();
+
+  auto eventMod = std::make_shared<EventModule>();
+  auto eventHistMod = eventMod->getHistogramModule();
+  eventMod->addSelector(std::make_shared<LeptonJetSelector>());	
+
   auto matchMod = std::make_shared<MatchingModule>();
-  auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>();
   auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
+  auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>();
   auto lepMatchMod =
-      std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.5);
+      std::make_shared<LeptonJetMatchingModule>(lepRecoMod, genSimEventDumpMod, 0.5);
   auto histOutputMod = std::make_shared<HistogramOutputModule>();
   auto mlMod = std::make_shared<LeptonJetMLCalculator>();
 
@@ -60,21 +69,24 @@ LeptonJetReconstructionPlan::LeptonJetReconstructionPlan()
   // auto matchPtHist = std::make_shared<MatchingPtHist>(lepMatchMod, "Differences in pT for Matched Lepton Jets", 100, -300, 300);
   // auto matchPhiHist = std::make_shared<MatchingPhiHist>(lepMatchMod, "Differences in Phi for Matched Lepton Jets", 100, 0, 3.15);
   // auto matchEtaHist = std::make_shared<MatchingEtaHist>(lepMatchMod, "Differences in Eta for Matched Lepton Jets", 100, -1, 1);
-  auto relIsoHist = std::make_shared<RelIsoHist>("RelIso of Leptons", 100, 0, 0.05);
+
+  auto relIsoHist = std::make_shared<IsolationHist>(InputModule::RecoLevel::Reco, "RelIso of Leptons", 2000, 0, 1);
   auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(InputModule::RecoLevel::Reco, "NN Classifier Output Distribution", 100, 0, 1, mlMod, lepRecoMod);
 
-  histOutputMod->addHistogram(deltaRHist);
-  histOutputMod->addHistogram(pTHist);
-  histOutputMod->addHistogram(matchedLeptonJetHist);
-  histOutputMod->addHistogram(unmatchedLeptonJetHist);
-  histOutputMod->addHistogram(relIsoHist);
-  histOutputMod->addHistogram(leptonJetMLHist);
+  eventHistMod->addHistogram(deltaRHist);
+  eventHistMod->addHistogram(pTHist);
+  eventHistMod->addHistogram(matchedLeptonJetHist);
+  eventHistMod->addHistogram(unmatchedLeptonJetHist);
+  eventHistMod->addHistogram(relIsoHist);
+  eventHistMod->addHistogram(leptonJetMLHist);
+
   // histOutputMod->addHistogram(matchDeltaRHist);
   // histOutputMod->addHistogram(matchPtHist);
   // histOutputMod->addHistogram(matchPhiHist);
   // histOutputMod->addHistogram(matchEtaHist);
   // auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>(3);
-
+  //auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>();
+  //auto recoEventDumpMod = std::make_shared<RecoEventDumpModule>();
   // auto triggerMod = std::make_shared<TriggerModule>();
 
   auto nLeptonsFilter = std::make_shared<NLeptonsFilter>(); // Needs to be updated with shared pointers
@@ -98,13 +110,13 @@ LeptonJetReconstructionPlan::LeptonJetReconstructionPlan()
   auto leptonJetEfficiency = std::make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
 
   // Add the histogram(s) created above to histMod
-  histOutputMod->addHistogram(nLeptonsHist);
-  histOutputMod->addHistogram(nElectronsHist);
-  histOutputMod->addHistogram(nMuonsHist);
-  histOutputMod->addHistogram(recoThirdMuonPtHist);
-  histOutputMod->addHistogram(recoSecondMuonPtHist);
-  histOutputMod->addHistogram(recoFirstMuonPtHist);
-  histOutputMod->addHistogram(nLeptonJetHist);
+  eventHistMod->addHistogram(nLeptonsHist);
+  eventHistMod->addHistogram(nElectronsHist);
+  eventHistMod->addHistogram(nMuonsHist);
+  eventHistMod->addHistogram(recoThirdMuonPtHist);
+  eventHistMod->addHistogram(recoSecondMuonPtHist);
+  eventHistMod->addHistogram(recoFirstMuonPtHist);
+  eventHistMod->addHistogram(nLeptonJetHist);
 
   // Initialize triggers
   /*
@@ -121,9 +133,9 @@ LeptonJetReconstructionPlan::LeptonJetReconstructionPlan()
   triggerMod->addTrigger(tripleMuonTrigger);
   */
 
-  // analyzer.addProductionModule(genSimMod);
-  // analyzer.addProductionModule(recoMod);
-  // analyzer.addProductionModule(matchMod);
+  //analyzer.addProductionModule(genSimEventDumpMod);
+  //analyzer.addProductionModule(recoEventDumpMod);
+  //analyzer.addProductionModule(matchMod);
   analyzer.addProductionModule(lepRecoMod);
   // analyzer.addProductionModule(genPartMod);
   analyzer.addProductionModule(lepMatchMod);
@@ -131,14 +143,15 @@ LeptonJetReconstructionPlan::LeptonJetReconstructionPlan()
   analyzer.addAnalysisModule(histOutputMod);
   // analyzer.addProductionModule(triggerMod);
 
-  // analyzer.addAnalysisModule(leptonEfficiency);
-  analyzer.addAnalysisModule(leptonJetEfficiency);
-  // analyzer.addAnalysisModule(massRecoEfficiency200);
-  // analyzer.addAnalysisModule(massRecoEfficiency500);
-  // analyzer.addAnalysisModule(massRecoEfficiency800);
-  // analyzer.addAnalysisModule(massRecoEfficiency1000);
-  // analyzer.addAnalysisModule(massRecoEfficiency1300);
-  // analyzer.addAnalysisModule(genSimEventDumpMod);
+  //analyzer.addAnalysisModule(leptonEfficiency);
+  //analyzer.addAnalysisModule(leptonJetEfficiency);
+  //analyzer.addAnalysisModule(massRecoEfficiency200);
+  //analyzer.addAnalysisModule(massRecoEfficiency500);
+  //analyzer.addAnalysisModule(massRecoEfficiency800);
+  //analyzer.addAnalysisModule(massRecoEfficiency1000);
+  //analyzer.addAnalysisModule(massRecoEfficiency1300);
+  analyzer.addAnalysisModule(genSimEventDumpMod);
+  //analyzer.addAnalysisModule(recoEventDumpMod);
   /* auto selector = make_shared<SnowmassLeptonSelector>(5);
   analyzer.getInputModule()->setLeptonSelector(selector);
   */
