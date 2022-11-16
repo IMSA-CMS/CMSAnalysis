@@ -15,7 +15,7 @@ public:
     LeptonJetMatchingModule(std::shared_ptr<LeptonJetReconstructionModule> lepJetModule, double deltaRCut = 0.5);
     virtual bool process() override;
     void finalize() override;
-    const std::vector<MatchingPair>& getMatchingPairs() const {return matchingPairs;}
+    const std::vector<std::pair<Particle,LeptonJet>> getMatchingPairs() const;
 
 private:
     double findMatchingPairDeltaR(MatchingPair pair);
@@ -27,6 +27,7 @@ private:
 
     int lepJetSize = 0;
     int genSize = 0;
+    int darkPhoton = 0;
 };
 
 #endif
