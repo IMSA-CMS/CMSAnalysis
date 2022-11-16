@@ -18,6 +18,10 @@ public:
   // virtual double eta() const = 0;
   virtual double isolation() const = 0;
   virtual reco::Candidate::LorentzVector getFourVector() const = 0;
+  
+  virtual double dxy() const = 0;
+  virtual double dz() const = 0;
+
   virtual int pdgId() const = 0;
   virtual int status() const = 0;
   virtual Particle mother() const = 0;

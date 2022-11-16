@@ -38,7 +38,9 @@ InvariantMassPlan::InvariantMassPlan()
   auto histMod = make_shared<HistogramOutputModule>();
   auto invMassHist = make_shared<InvariantMassHist>(InputModule::RecoLevel::Reco, "invariant_Mass", 100, 0, 1000);
   auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "same_Sign_Invariant_Mass", 300, 500, 1000);
-
+  
+  auto dxyHist = make_shared<DxyHist>(InputModule::RecoLevel::Reco, "Dxy Hist", 100, -0.02, 0.02);
+  auto dzHist = make_shared<DzHist>(InputModule::RecoLevel::Reco, "Dz Hist", 100, -0.5, 0.5);
   auto pileUpHist = make_shared<PileUpHist>("Pile Up Hist", 300, 0, 100);
   // Create necessary module(s) for the filter(s)
   auto trigSimMod = make_shared<TriggerSimModule>("HLT");
@@ -62,11 +64,15 @@ InvariantMassPlan::InvariantMassPlan()
   sameSignInvMassHist->addFilter(ssInvMassFilter);
   sameSignInvMassHist->addFilter(pileUpFilter);
   pileUpHist->addFilter(ssInvMassFilter);
+  dxyHist->addFilter(ssInvMassFilter);
+  dzHist->addFilter(ssInvMassFilter);
 
   // Add the histogram(s) created above to histMod
   histMod->addHistogram(invMassHist);
   histMod->addHistogram(sameSignInvMassHist);
   histMod->addHistogram(pileUpHist);
+  histMod->addHistogram(dxyHist);
+  histMod->addHistogram(dzHist);
 
   // Add production modules
   // analyzer.addProductionModule(trigSimMod);
