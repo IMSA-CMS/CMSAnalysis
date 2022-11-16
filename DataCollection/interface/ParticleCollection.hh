@@ -59,12 +59,12 @@ public:
   auto begin() const {return cbegin();}
   auto end() const {return cend();}
   void sort() {std::sort(begin(), end(),std::greater<T>());};
+  std::pair<T, T> chooseParticles(bool oppositeSigns) const; // picks particles given if they are opposite signs or not
 
 private:
   
   std::vector<T> particles;
   std::pair<T, T> chooseParticles() const; // picks particles with greatest invariant mass
-  std::pair<T, T> chooseParticles(bool oppositeSigns) const; // picks particles given if they are opposite signs or not
   // PartPair chooseParticles(bool oppositeSigns) const; // oppositeSigns is true when the particles have opposite sign charge
   std::pair<T, T> chooseParticlesByPhi(bool oppositeSigns) const; // picks particles by the Phi angle
   bool checkSigns(T particle1, T particle2) const;
