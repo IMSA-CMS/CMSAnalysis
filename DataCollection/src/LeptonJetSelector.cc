@@ -8,7 +8,7 @@
 
 void LeptonJetSelector::selectParticles(const InputModule* input, Event& event)
 {
-    std::vector<Particle> selected(0);
+    std::vector<Particle> selected;
     auto particles = input->getLeptons(InputModule::RecoLevel::Reco).getParticles();
     
     

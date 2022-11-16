@@ -96,7 +96,7 @@ GenSimParticle GenSimParticle::findMother(int motherPDGID) const
 {
   bool foundMother = false;
 
-  GenSimParticle finalMother = Particle(nullptr);  // Null Particle
+  GenSimParticle finalMother = Particle::nullParticle();  // Null Particle
 
   auto currentMother = mother();
 
@@ -104,7 +104,7 @@ GenSimParticle GenSimParticle::findMother(int motherPDGID) const
   {
     if (!currentMother.isNotNull())  // Return a null particle if we reach an initial particle
     {
-      return GenSimParticle(nullptr);
+      return Particle::nullParticle();
     }
     else if (currentMother.pdgId() == motherPDGID)
     {
@@ -131,7 +131,7 @@ GenSimParticle GenSimParticle::sharedMother(int motherPDGID, GenSimParticle part
   }
   else
   {
-    return GenSimParticle(nullptr);
+    return Particle::nullParticle();
   }
 }
 
@@ -139,7 +139,7 @@ GenSimParticle GenSimParticle::sharedMother(int motherPDGID, std::vector<Particl
 {
   if (particles.size() < 2)
   {
-    return GenSimParticle(nullptr);
+    return Particle::nullParticle();
   }
 
   GenSimParticle finalMother = sharedMother(motherPDGID, particles[0], particles[1]);  // Shared mother between the first 2 particles
@@ -153,7 +153,7 @@ GenSimParticle GenSimParticle::sharedMother(int motherPDGID, std::vector<Particl
     {
       if (sharedMother(motherPDGID, particles[i], particles[j]) != finalMother)
       {
-        return GenSimParticle(nullptr);
+        return Particle::nullParticle();
       }
     }
   }
