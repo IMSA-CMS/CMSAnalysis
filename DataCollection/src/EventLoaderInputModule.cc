@@ -44,7 +44,7 @@ ParticleCollection<Particle> EventLoaderInputModule::getParticles(RecoLevel leve
     }
     else if (level == RecoLevel::Reco)
     {
-        std::cout << "hey10";
+        // std::cout << "hey10";
         auto particles = eventLoader->getFile()->getRecoParticles().getParticles();
         for (const auto &p : particles)
         {
