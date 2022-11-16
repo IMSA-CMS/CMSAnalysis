@@ -23,6 +23,7 @@ class DelphesEventFile : public EventFile
         virtual ParticleCollection<Particle> getRecoJets() const override;
         //virtual GenEventInfoProduct getGenInfo() const override;
         virtual double getMET() const override;
+        virtual int getNumPileUpInteractions() const override {throw std::runtime_error("not implemented yet");}
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override {throw std::runtime_error("not implemented yet");}
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override {throw std::runtime_error("not implemented yet");}
         virtual bool checkTrigger(std::string triggerName, std::string subProcess) const override {throw std::runtime_error("not implemented yet");};

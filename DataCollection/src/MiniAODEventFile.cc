@@ -95,6 +95,14 @@ ParticleCollection<Particle> MiniAODEventFile::getRecoJets() const
         }
         return recoParticles;
 }
+int MiniAODEventFile::getNumPileUpInteractions() const {
+    
+    edm::Handle<std::vector<PileupSummaryInfo>> pileup;
+    event->getByLabel(std::string("slimmedAddPileupInfo"), pileup);
+
+    return (*pileup)[0].getPU_NumInteractions();
+
+}
 
 double MiniAODEventFile::getMET() const
 {
