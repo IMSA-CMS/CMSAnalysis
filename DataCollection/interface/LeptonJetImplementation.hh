@@ -11,19 +11,21 @@ class LeptonJetImplementation : public ParticleImplementation
 {
   public:
   virtual ~LeptonJetImplementation(){}
-  LeptonJetImplementation(std::shared_ptr<LeptonJet>);
+  LeptonJetImplementation();
+  LeptonJetImplementation(const LeptonJet*);
   virtual reco::Candidate::LorentzVector getFourVector() const override;
   virtual bool operator == (const ParticleImplementation& userParticle) const override;
   virtual int charge() const override {throw std::__throw_runtime_error;}
   virtual double isolation() const override {throw std::runtime_error("Isolation not implemented.");}
-
-  virtual double dxy() const override {throw std::runtime_error("dxy not implemented for this particle implementation");}
-  virtual double dz() const {throw std::runtime_error("dz not implemented for this particle implementation");}
-
-  // double getPt() const override {return getFourVector().Pt();}
-  // double getPhi() const override {return getFourVector().Phi();}
-  // double getEta() const override {return getFourVector().Eta();}
-  // double getMass() const override{return getFourVector().mass();}
+  double getPt() const {return getFourVector().Pt();}
+  double getPhi() const {return getFourVector().Phi();}
+  double getEta() const {return getFourVector().Eta();}
+  double getMass() const {return getFourVector().mass();}
+  virtual double dxy() const {throw std::runtime_error("getDxy not implemented");}
+  virtual double dz() const {throw std::runtime_error("getDxy not implemented");}
+  const std::vector<Particle>& getParticles() const {return leptonJetParticles;}
+  void addParticle(const Particle particle) {leptonJetParticles.push_back(particle);}
+  int getNumParticles() const {return leptonJetParticles.size();}
   virtual Particle mother() const override {throw std::__throw_runtime_error;}
   virtual Particle daughter(int i) const override {throw std::__throw_runtime_error;}
   virtual int numberOfDaughters() const override {throw std::__throw_runtime_error;}
@@ -38,7 +40,8 @@ class LeptonJetImplementation : public ParticleImplementation
 
   
   private:
-    std::shared_ptr<LeptonJet> lJet;
+    std::vector<Particle> leptonJetParticles;
+    //std::shared_ptr<LeptonJet> lJet;
     void checkIsNull() const;
 
 };
