@@ -10,7 +10,7 @@ class LeptonJetReconstructionModule;
 // auto deltaRHist = make_shared<LeptonJetDeltaRHist>(recoMod, "Lepton Jet Delta R", 500, 0, 2);
 // histMod->addHistogram(deltaRHist);
 //
-// This histogram module looks for two leptons and finds the difference in the phi-eta plane between them
+// This histogram module takes all events with two leptons and finds the difference in the phi-eta plane between them
 class LeptonJetDeltaRHist : public HistogramPrototype1D
 {
   public:
