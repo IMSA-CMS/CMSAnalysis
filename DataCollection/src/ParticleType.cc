@@ -135,3 +135,12 @@ bool ParticleType::operator== (const ParticleType type) const
     }
     return false;
 }
+bool ParticleType::operator!= (const ParticleType type) const
+{
+    //necessary to directly compare particleTypes
+    if (type.getName() != getName())
+    {
+        return true;
+    }
+    return false;
+}

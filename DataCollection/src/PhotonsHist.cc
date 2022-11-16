@@ -24,7 +24,7 @@ std::vector<double> PhotonsHist::protectedValue(InputModule::RecoLevel typeGenSi
     auto particleVectorOppSign = oppSignLep.getParticles();
    
     auto tempPhotons = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::photon()).getParticles();
-    std::vector<GenSimParticle> photons(0);
+    std::vector<GenSimParticle> photons;
     for (auto photon : tempPhotons){
       photons.push_back(GenSimParticle(photon));
     }

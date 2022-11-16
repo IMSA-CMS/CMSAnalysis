@@ -94,6 +94,17 @@ class ThirdMuonPtHist : public GenSimRecoPrototype
   }
 };
 
+class PileUpHist : public HistogramPrototype1D
+{
+  using HistogramPrototype1D::HistogramPrototype1D;
+
+  std::vector<double> value() const
+  {
+    double pileUp = getInput()->getNumPileUpInteractions();
+    return {pileUp};
+  }
+};
+
 class LeptonJetMLHist : public GenSimRecoPrototype
 {
 public:
@@ -118,6 +129,24 @@ protected:
 private:
   std::shared_ptr<LeptonJetMLCalculator> mLCalc;
   std::shared_ptr<LeptonJetReconstructionModule> recoCalc;
+};
+
+
+class IsolationHist : public GenSimRecoPrototype
+{
+  using GenSimRecoPrototype::GenSimRecoPrototype;
+
+  std::vector<double> protectedValue(InputModule::RecoLevel level) const
+  {
+    auto particles = getInput()->getLeptons(level);
+    std::vector<double> isolation;
+    for(auto particle : particles.getParticles()) {
+        if(particle.getIsolation() != 0) {
+	    isolation.push_back(particle.getIsolation());
+    	}
+    }
+    return isolation;
+  }
 };
 
 #endif

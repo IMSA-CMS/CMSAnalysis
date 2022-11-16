@@ -57,6 +57,11 @@ ParticleCollection<Particle> GenSimEventFile::getRecoJets() const
     throw std::runtime_error("Cannot run Reco on GenSim file");
 }
 
+int GenSimEventFile::getNumPileUpInteractions() const
+{
+    throw std::runtime_error("GenSimEventFile has no implementation of getNumPileUpInteractions");
+}
+
 double GenSimEventFile::getMET() const
 {
     edm::Handle<std::vector<reco::GenMET>> mets;
@@ -94,6 +99,22 @@ std::vector<std::string> GenSimEventFile::getTriggerNames(std::string subProcess
         v_names.push_back(names.triggerName(i));
     }
     return v_names;
+}
+
+bool GenSimEventFile::checkTrigger(std::string triggerName, std::string subProcess) const
+{
+    auto names = getTriggerNames(subProcess);
+    auto results = getTriggerResults(subProcess);
+
+    auto it = find(names.begin(), names.end(), triggerName);
+    if(it != names.end())
+    {
+        return results.at(it - names.begin());
+    }
+    else
+    {
+        return false;
+    }
 }
 
 bool GenSimEventFile::isDone() const

@@ -28,10 +28,6 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 		{
 			maxBarWidth = (singleProcess.getHist(histType, false)->GetXaxis()->GetBinWidth(maxBinNum));
 		}
-		// if (singleProcess.getHist(histType, false)->GetBarWidth() > maxBarWidth)
-		// {
-		// 	maxBarWidth = singleProcess.getHist(histType, false)->GetBarWidth();
-		// }
 	}
 	TH1* hist = new TH1F(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * maxBarWidth);
 	TH1* toAdd;
@@ -40,9 +36,6 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 	{
 		toAdd = singleProcess.getHist(histType, scaleToExpected);
 		toMerge->Add(toAdd);
-		//std::cout << "toAdd bins " << toAdd->GetMaximumBin() << std::endl;
-		//std::cout << "toAdd barWidth " << toAdd->GetBarWidth() << std::endl;
-		//hist->Add(toAdd);
 	}
 	hist->Merge(toMerge);
 	hist->SetLineColor(color);
