@@ -3,27 +3,32 @@
 
 #include <vector>
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
+#include "CMSAnalysis/DataCollection/interface/LeptonJetImplementation.hh"
 
 class LeptonJet : public Particle
 {
 public:
-  LeptonJet(const Particle particle);
-  double getPt() const {return getFourVector().Pt();}
-  double getPhi() const {return getFourVector().Phi();}
-  double getEta() const {return getFourVector().Eta();}
-  double getMass() const {return getFourVector().mass();}
+  using Particle::Particle;
+  LeptonJet();
+  LeptonJet(const Particle& particle);
+  // double getPt() const {return leptonJet->getPt();}
+  // double getPhi() const {return leptonJet->getPhi();}
+  // double getEta() const {return leptonJet->getEta();}
+  // double getMass() const {return leptonJet->getMass();}
 
   bool operator==(LeptonJet userJet) const;
 
-  const std::vector<Particle>& getParticles() const {return leptonJetParticles;}
-  void addParticle(const Particle particle) {leptonJetParticles.push_back(particle);}
-  int getNumParticles() const {return leptonJetParticles.size();}
+  const std::vector<Particle>& getParticles() const {return cast()->getParticles();}
+  void addParticle(const Particle particle) {cast()->addParticle(particle);}
+  int getNumParticles() const {return cast()->getNumParticles();}
 
   // Adds four vectors (reco::Candidate::LorentzVector)
-  reco::Candidate::LorentzVector getFourVector() const;
+  //reco::Candidate::LorentzVector getFourVector() const {return leptonJet->getFourVector();}
 
 private:
-  std::vector<Particle> leptonJetParticles;
+
+  std::shared_ptr<LeptonJetImplementation> cast() const;
+  //std::shared_ptr<LeptonJetImplementation> leptonJet;
 };
 
 #endif

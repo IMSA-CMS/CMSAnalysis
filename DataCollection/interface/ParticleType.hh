@@ -35,6 +35,7 @@ class ParticleType
     static const ParticleType& none();
 
     bool operator== (const ParticleType type) const;
+    bool operator!= (const ParticleType type) const;
 
     private:
     std::string name;
