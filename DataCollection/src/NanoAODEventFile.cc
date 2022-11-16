@@ -110,11 +110,12 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     elec_idpass(treeReader, "Electron_cutBased"),
     muon_idpass(treeReader, "Muon_looseId")
     {
+            tree = getFile()->Get<TTree>("Events");
     std::ifstream triggerNameFile("validTriggers.txt");
-    if(!triggerNameFile)
+    if(triggerNameFile)
     {
-        throw std::runtime_error("validTriggers.txt not found.");
-    }
+    
+    
 
     std::string nameoftrigger;
 
@@ -122,14 +123,13 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
 
     while(getline(triggerNameFile, nameoftrigger))
     {
-        // std::cout << nameoftrigger << std::endl;
         if(tree->GetBranch(nameoftrigger.c_str()))
         {
             TTreeReaderValue<Bool_t> intermediate(treeReader, nameoftrigger.c_str());
             triggers.emplace(nameoftrigger, intermediate);
         }
     }
-    
+    }
     treeReader.SetTree(tree);
     setEventCount(1);
     treeReader.Next(); 
