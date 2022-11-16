@@ -42,7 +42,7 @@ bool HiggsDataStripModule::process()
 	auto leptons = getInput()->getLeptons(InputModule::RecoLevel::Reco);
 	double cutoff = 100;
 	// Find source of null pointer error
-	std::pair<Particle, Particle> twoLeptons = leptons.chooseParticles(false);
+	auto twoLeptons = leptons.chooseParticles(false);
 	ParticleCollection<Particle> particles;
 	particles.addParticle(twoLeptons.first);
 	particles.addParticle(twoLeptons.second);

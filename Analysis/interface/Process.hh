@@ -15,6 +15,7 @@ class Process
         Process(std::string name, int color) : name(name), color(color) {}
         std::string getName() const {return name;}
         int getColor() const {return color;}
+        int getNEvents();
         std::vector<SingleProcess> getProcesses() const {return processes;}
         //Gets the hists from all the singleProcesses as one hist
         TH1* getHist(HistVariable histType, bool scaleToExpected = false) const;
