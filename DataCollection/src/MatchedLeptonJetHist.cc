@@ -24,8 +24,8 @@ std::vector<double> MatchedLeptonJetHist::value() const
   }
   */
 
-  Particle nullParticle(nullptr);
-  LeptonJet nullJet(nullParticle);
+  Particle nullParticle(Particle::nullParticle());
+  LeptonJet nullJet;
 
   for (unsigned int i = 0; i < recoJets.size(); i++) {
     const auto lj = recoJets[i];

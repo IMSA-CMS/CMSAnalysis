@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <chrono>
 
 #include "TH1.h"
 #include "TH2.h"

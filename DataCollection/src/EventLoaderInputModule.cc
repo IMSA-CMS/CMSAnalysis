@@ -27,24 +27,20 @@ ParticleCollection<Lepton> EventLoaderInputModule::getLeptons(RecoLevel level) c
 
 ParticleCollection<Particle> EventLoaderInputModule::getParticles(RecoLevel level, const ParticleType& particleType) const
 {
-    //std::cout << "hey1";
     ParticleCollection<Particle> particleList;
     if (level == RecoLevel::GenSim)
     {
-        //std::cout << "hey2";
         auto particles = eventLoader->getFile()->getGenSimParticles().getParticles();
         for (const auto &p : particles)
         {
-             if (p.getType() == particleType || particleType == ParticleType::none()) //&& p.isFinalState())
+             if ((p.getType() == particleType || particleType == ParticleType::none()) && p.finalDaughter() == p) //&& p.isFinalState())
             {
-               //std::cout << "hey5";
                 particleList.addParticle(p);
             }
         }
     }
     else if (level == RecoLevel::Reco)
     {
-        //std::cout << "hey10";
         auto particles = eventLoader->getFile()->getRecoParticles().getParticles();
         for (const auto &p : particles)
         {
@@ -76,12 +72,10 @@ ParticleCollection<Particle> EventLoaderInputModule::getJets(RecoLevel level) co
     return particleList;
 }
 
-/*
-std::vector<PileupSummaryInfo> InputModule::getPileupInfo() const
+int EventLoaderInputModule::getNumPileUpInteractions() const
 {
-    return eventLoader->getPileupInfo();
+    return eventLoader->getFile()->getNumPileUpInteractions();
 }
-*/
 
 double EventLoaderInputModule::getMET() const
 {
@@ -96,4 +90,9 @@ std::vector<bool> EventLoaderInputModule::getTriggerResults(std::string subProce
 std::vector<std::string> EventLoaderInputModule::getTriggerNames(std::string subProcess) const
 {
     return eventLoader->getFile()->getTriggerNames(subProcess);
+}
+
+bool EventLoaderInputModule::checkTrigger(std::string triggerName, std::string subProcess) const
+{
+    return eventLoader->getFile()->checkTrigger(triggerName, subProcess);
 }

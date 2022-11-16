@@ -1,27 +1,29 @@
 #include "CMSAnalysis/DataCollection/interface/LeptonJet.hh"
 
-LeptonJet::LeptonJet(const Particle particle)
-{
-  addParticle(particle);
+LeptonJet::LeptonJet():
+Particle(std::make_shared<LeptonJetImplementation>()){
+  
 }
 
-reco::Candidate::LorentzVector LeptonJet::getFourVector() const
-{
-  reco::Candidate::LorentzVector vector;
-  for (auto particle : leptonJetParticles)
-  {
-    vector += particle.getFourVector();
-    // std::cout << "Lepton Jet:" << leptonJetParticles.size() << "\n";
-    // std::cout << particle.getPhi() << "\n";
-  }
+LeptonJet::LeptonJet (const Particle& particle):
+Particle(particle){}
 
-  // std::cout << "Total Phi: " << vector.Phi() << "\n";
 
-  return vector; // Does this have to be ROOT::Math::LorentzVector?
-}
 
 bool LeptonJet::operator==(LeptonJet userJet) const
 {
-  std::vector<Particle> userParticles = userJet.getParticles();
-  return leptonJetParticles == userParticles;
+  return cast() == userJet.getParticleImplementation();
+}
+
+std::shared_ptr<LeptonJetImplementation> LeptonJet::cast() const
+{
+  auto pointer = std::dynamic_pointer_cast<LeptonJetImplementation>(getParticle());
+  if(pointer)
+  {
+    return pointer;
+  }
+  else
+  {
+    throw std::runtime_error("Null pointer");
+  }
 }

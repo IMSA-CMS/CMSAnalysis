@@ -8,7 +8,7 @@
 
 void PASSelector::selectParticles(const InputModule* input, Event& event)
 {
-    std::vector<Particle> selected(0);
+    std::vector<Particle> selected;
     // std::vector<Particle> posElecs(0);
     // std::vector<Particle> negElecs(0);
     // std::vector<Particle> posMuons(0);
@@ -23,7 +23,7 @@ void PASSelector::selectParticles(const InputModule* input, Event& event)
     for (const auto& particle : particles)
     {
         if (particle.getType() == ParticleType::electron() && particle.getPt() > 40 && std::abs(particle.getEta()) < 3) {
-            if (Lepton(particle).isLoose())
+            if (Lepton(particle).isTight())
             {
                 selected.push_back(particle);
             }
@@ -38,7 +38,7 @@ void PASSelector::selectParticles(const InputModule* input, Event& event)
         }
         if (particle.getType() == ParticleType::muon() && particle.getPt() > 40 && std::abs(particle.getEta()) < 2.8) 
         {
-            if(Lepton(particle).isLoose())
+            if(Lepton(particle).isTight())
             {
                 selected.push_back(particle);
             }
