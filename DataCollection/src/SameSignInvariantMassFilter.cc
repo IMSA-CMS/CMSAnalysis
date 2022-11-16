@@ -13,10 +13,10 @@ std::string SameSignInvariantMassFilter::makeFilterString()
     auto inv = leptons.calculateSameSignInvariantMass();
     if (inv < cut)
     {
-        return "";
+        return "lowMass";
     } else
     {
-        return "Cut";
+        return "highMass";
     }
     return "Cut";
 }
