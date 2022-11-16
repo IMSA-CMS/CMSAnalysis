@@ -41,6 +41,12 @@ void RecoGenSimComparisonModule::finalize()
 	std::cout << "Mismeasured pT events ratio: " << mismeasuredPtCounter/(double)eventCounter << "\n";
 	std::cout << "Fake photon events ratio: " << fakePhotonCounter/(double)eventCounter << "\n";
 	std::cout << "No match events ratio: " << noMatchCounter/(double)eventCounter << "\n";
+
+	std::cout << "\nEssential to huge invariant mass:\n";
+	std::cout << "Wrong charge events ratio: " << essWrongChargeCounter/(double)eventCounter << "\n";
+	std::cout << "Mismeasured pT events ratio: " << essMismeasuredPtCounter/(double)eventCounter << "\n";
+	std::cout << "Fake photon events ratio: " << essFakePhotonCounter/(double)eventCounter << "\n";
+	std::cout << "No match events ratio: " << essNoMatchCounter/(double)eventCounter << "\n";
 }
 
 void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particle>& recoParts, 
@@ -64,11 +70,16 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 	bool accurate = false;
 	bool noMatch = true;
 
+	bool accurateEvent = true;
 	bool wrongChargeEvent = false;
 	bool fakePhotonEvent = false;
 	bool mismeasuredPtEvent = false;
-	bool accurateEvent = false;
-	bool noMatchEvent = true;
+	bool noMatchEvent = false;
+
+	ParticleCollection<Particle> notWrongCharge;
+	ParticleCollection<Particle> notFakePhoton;
+	ParticleCollection<Particle> notMismeasuredPt;
+	ParticleCollection<Particle> notNoMatch;
 	
 	//column labels
 	output << std::left << std::setw(8) << "element" << std::setw(11) << "| type"
@@ -84,7 +95,7 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 		output << "++++++++++++++++ Reco Element ++++++++++++++++\n";
 		output << std::setw(8) << recoEventElement << "| " << std::setw(9) << recoPart.getName() << "| ";
 
-		// Particle properties
+		// // Particle properties
 		output << std::setw(13) << recoPart.getCharge() << "| " 
 			<< std::setw(13) << recoPart.getPt() << "| " 
 			<< std::setw(13) << recoPart.getEta() << "| " 
@@ -156,6 +167,11 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 						accurate = true;
 						break;
 					}
+					if (accurate)
+					{
+						std::cout << "huh \n";
+					}
+
 					if(!((recoPart.getPt() - genPart.getPt())/genPart.getPt() < 0.1))
 					{
 						mismeasuredPt = true;
@@ -198,30 +214,58 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 			}
 			genEventElement++;
 		}
-		if (!accurate||noMatch)
+
+		if (accurate)
 		{
-			accurateEvent = false;
-			if (wrongCharge)
-			{
-				wrongChargeEvent = true;
-			}
-			if (mismeasuredPt)
-			{
-				mismeasuredPtEvent = true;
-			}
-			if (fakePhoton)
-			{
-				fakePhotonEvent = true;
-			}
-			if (noMatch)
-			{
-				noMatchEvent = true;
-			}
-		}
+			notWrongCharge.addParticle(recoPart);
+			notFakePhoton.addParticle(recoPart);
+			notMismeasuredPt.addParticle(recoPart);
+			notNoMatch.addParticle(recoPart);
+		} else { accurateEvent = false; }
+
+		if (!wrongCharge)
+		{
+			notWrongCharge.addParticle(recoPart);
+		} else { wrongChargeEvent = true; }
+
+		if (!mismeasuredPt)
+		{
+			notMismeasuredPt.addParticle(recoPart);
+		} else { mismeasuredPtEvent = true; }
+
+		if (!fakePhoton)
+		{
+			notFakePhoton.addParticle(recoPart);
+		} else { fakePhotonEvent = true; }
+
+		if (!noMatch)
+		{
+			notNoMatch.addParticle(recoPart);
+		} else { noMatchEvent = true; }
+
 	}
+
+	if (notWrongCharge.calculateSameSignInvariantMass()<500){
+		essWrongChargeCounter++;
+		output << "wrong charge essential " << notWrongCharge.calculateSameSignInvariantMass();
+	}
+	if (notFakePhoton.calculateSameSignInvariantMass()<500){
+		essFakePhotonCounter++;
+		output << "| fake photon essential " << notFakePhoton.calculateSameSignInvariantMass();
+	}
+	if (notMismeasuredPt.calculateSameSignInvariantMass()<500){
+		essMismeasuredPtCounter++;
+		output << "| mismeasured pt essential " << notMismeasuredPt.calculateSameSignInvariantMass();
+	}
+	if (notNoMatch.calculateSameSignInvariantMass()<500){
+		essNoMatchCounter++;
+		output << "| no match essential " << notNoMatch.calculateSameSignInvariantMass();
+	}
+	output << "\n";
+
 	wrongChargeCounter += wrongChargeEvent;
 	fakePhotonCounter += fakePhotonEvent;
+	noMatchCounter += noMatchEvent;
 	mismeasuredPtCounter += mismeasuredPtEvent;
 	accurateEventCounter += accurateEvent;
-	noMatchCounter += noMatchEvent;
 }

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <unordered_set>
+#include <chrono>
 
 #include "TFile.h"
 #include "TH1.h"
@@ -38,9 +39,16 @@ Analyzer::~Analyzer()
 
 void Analyzer::run(const std::string &configFile, const std::string &outputFile, int outputEvery, int nFiles)
 {
+  auto start = std::chrono::steady_clock::now();
+
   fetchRootFiles(configFile);
   processRootFiles(outputEvery, nFiles);
   writeOutputFile(outputFile);
+
+  //Measures processing time
+  auto end = std::chrono::steady_clock::now();
+  std::chrono::duration<float> duration = end - start;
+  std::cout<<"Processing time: " << duration.count()<< " s"<<std::endl;
 }
 
 void Analyzer::fetchRootFiles(const std::string &configFile)

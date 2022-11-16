@@ -35,12 +35,14 @@ class ParticleType
     static const ParticleType& none();
 
     bool operator== (const ParticleType type) const;
+    bool operator!= (const ParticleType type) const;
 
     private:
     std::string name;
     int pdgId;
     std::vector<SingleParticleHist> hists;
 
+    //hists available to use
     static SingleParticleHist getPtHist();
     static SingleParticleHist getPhiHist();
     static SingleParticleHist getEtaHist();
