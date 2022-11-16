@@ -9,7 +9,7 @@ class ParticleType;
 class LeptonJet;
 
 class ParticleImplementation;
-
+class GenSimParticle;
 // Interface for particle operations. Contains a ParticleImplementation.
 class Particle
 {
@@ -21,12 +21,17 @@ class Particle
 
     // specifies barrel state
     enum class BarrelState{Barrel, Endcap, None};
-    
-    Particle(const reco::Candidate* iparticle = nullptr); 
+    Particle(const reco::Candidate* iparticle); 
     Particle(const Particle& particle1);
     Particle(const LeptonJet& leptonjet);
-    Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, double relIso = -999, Particle::SelectionFit fit = Particle::SelectionFit::Tight);
+    Particle(const LeptonJet* iparticle);
+    static Particle nullParticle();
+    //Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, double relIso = -999, Particle::SelectionFit fit = Particle::SelectionFit::Tight);
+    
+    Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, double relIso = -999, Particle::SelectionFit fit = Particle::SelectionFit::Tight, double dxy = 0, double dz = 0);
+    
     Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int pid, int status, int m1, int m2,int d1, int d2, double relIso);
+    Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, const Particle* motherParticle, std::vector<const GenSimParticle*> daughters);
     std::shared_ptr<ParticleImplementation> getParticleImplementation();
     Particle& operator = (const Particle& particle2);
     std::string getName() const;
@@ -45,6 +50,8 @@ class Particle
     // bool isIsolated() const {throw std::runtime_error("error");}; //Lepton
     double getDeltaR(Particle particle) const;
     int getCharge() const;
+    double getDxy() const;
+    double getDz() const;
     Particle::BarrelState getBarrelState() const;
     reco::Candidate::LorentzVector getFourVector() const;
     const ParticleType& getType() const;

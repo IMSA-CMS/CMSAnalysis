@@ -19,13 +19,8 @@
 #include "CMSAnalysis/DataCollection/interface/SameSignInvariantMassHist.hh"
 #include "CMSAnalysis/DataCollection/interface/NLeptonsFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerFilter.hh"
-#include "CMSAnalysis/DataCollection/interface/SameSignInvariantMassFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/SimTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerSimModule.hh"
-#include "CMSAnalysis/DataCollection/interface/GenSimEventDumpModule.hh"
-#include "CMSAnalysis/DataCollection/interface/RecoEventDumpModule.hh"
-#include "CMSAnalysis/DataCollection/interface/RecoGenSimComparisonModule.hh"
-#include "CMSAnalysis/DataCollection/interface/EventModule.hh"
 
 using std::make_shared;
 
@@ -35,8 +30,8 @@ InvariantMassPlan::InvariantMassPlan()
 
   // Create necessary histogram(s), as well as histMod
   auto histMod = make_shared<HistogramOutputModule>();
-  auto invMassHist = make_shared<InvariantMassHist>(InputModule::RecoLevel::Reco, "invariant_Mass", 100, 0, 1000);
-  auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "same_Sign_Invariant_Mass", 300, 500, 1000);
+  auto invMassHist = make_shared<InvariantMassHist>(InputModule::RecoLevel::Reco, "invariant_Mass", 100, 0, 100);
+  auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "same_Sign_Invariant_Mass", 300, 0, 300);
 
   // Create necessary module(s) for the filter(s)
   auto trigSimMod = make_shared<TriggerSimModule>("HLT");
@@ -46,30 +41,21 @@ InvariantMassPlan::InvariantMassPlan()
   auto nLeptonsFilter = make_shared<NLeptonsFilter>();
   auto triggerFilter = make_shared<TriggerFilter>(simTrigger);
 
-  auto ssInvMassFilter = make_shared<SameSignInvariantMassFilter>(500);
-
   // Add the filter module(s) to the histogram(s) created above
-  // invMassHist->addFilter(nLeptonsFilter);
-  // sameSignInvMassHist->addFilter(nLeptonsFilter);
-  // invMassHist->addFilter(triggerFilter);
-  // sameSignInvMassHist->addFilter(triggerFilter);
-  // invMassHist->addFilter(triggerFilter);
-  invMassHist->addFilter(ssInvMassFilter);
+  invMassHist->addFilter(nLeptonsFilter);
+  sameSignInvMassHist->addFilter(nLeptonsFilter);
+  invMassHist->addFilter(triggerFilter);
+  sameSignInvMassHist->addFilter(triggerFilter);
 
   // Add the histogram(s) created above to histMod
   histMod->addHistogram(invMassHist);
   histMod->addHistogram(sameSignInvMassHist);
 
   // Add production modules
-  // analyzer.addProductionModule(trigSimMod);
+  analyzer.addProductionModule(trigSimMod);
 
-  // analyzer.addFilterModule(triggerFilter);
-  auto recoDump = make_shared<RecoEventDumpModule>();
-  auto genSimDump = make_shared<GenSimEventDumpModule>();
-  auto compMod= make_shared<RecoGenSimComparisonModule>();
-  // Hopefully doesn't break // <- this is profound
-  //analyzer.addAnalysisModule(histMod);
-  //analyzer.addAnalysisModule(recoDump);
-  //analyzer.addAnalysisModule(genSimDump);
-  analyzer.addAnalysisModule(compMod);
+  analyzer.addFilterModule(triggerFilter);
+
+  // Hopefully doesn't break
+  analyzer.addAnalysisModule(histMod);
 }

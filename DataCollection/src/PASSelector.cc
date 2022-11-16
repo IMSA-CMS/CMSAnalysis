@@ -8,6 +8,11 @@
 
 void PASSelector::selectParticles(const InputModule* input, Event& event)
 {
+    std::vector<Particle> selected;
+    // std::vector<Particle> posElecs(0);
+    // std::vector<Particle> negElecs(0);
+    // std::vector<Particle> posMuons(0);
+    // std::vector<Particle> negMuons(0);
     auto particles = input->getLeptons(InputModule::RecoLevel::Reco).getParticles();
 
     
