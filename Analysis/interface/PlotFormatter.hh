@@ -21,7 +21,7 @@ class PlotFormatter
         //Superimposed hist (second function is for the simple SuperImpose.C script)
         TCanvas* superImposedHist(std::shared_ptr<Channel> processes, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle);
         TCanvas* simpleSuperImposedHist(std::vector<TH1*> hists, std::vector<int> colors, std::vector<TString> names, TString xAxisTitle, TString yAxisTitle);
-	TCanvas* simpleAnalysisHist(std::vector<TH1*> hists, std::vector<std::string> names, TString xAxisTitle, TString yAxisTitle);
+	    TCanvas* simpleAnalysisHist(std::vector<TH1*> hists, std::vector<std::string> names, TString xAxisTitle, TString yAxisTitle);
         //Single 1D hist
         TCanvas* simple1DHist(std::shared_ptr<Process> process, HistVariable histvariable, bool scaleToExpected, TString xAxisTitle, TString yAxisTitle);
         //Single 2D hist
