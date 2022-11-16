@@ -17,7 +17,7 @@ class SingleParticleHist : public HistogramPrototype1D
     SingleParticleHist(const std::string& iname, int inBins, double iminimum, double imaximum, std::function<std::vector<double>(Particle)>function);
     
     SingleParticleHist clone() {return SingleParticleHist(getName(),getNBins(),getMinimum(),getMaximum(),valueFunction);};
-    void clear() {setParticle(nullptr);};
+    void clear() {setParticle(Particle::nullParticle());};
 
     void setParticle(Particle part) {particle = part;}; 
     void changeName (std::string newName) {setName(newName);};
@@ -25,7 +25,7 @@ class SingleParticleHist : public HistogramPrototype1D
     virtual std::vector<double> value() const override;
 
   protected:
-    Particle particle;
+    Particle particle{Particle::nullParticle()};
     std::function<std::vector<double>(Particle)> valueFunction;
 };
 
