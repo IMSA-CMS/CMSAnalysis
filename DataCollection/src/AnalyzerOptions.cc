@@ -18,6 +18,7 @@
 #include "CMSAnalysis/DataCollection/interface/TriggerPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/MLVariablesPlan.hh"
+#include "CMSAnalysis/DataCollection/interface/HiggsDataStripPlan.hh"
 
 AnalyzerOptions::AnalyzerOptions()
 {
@@ -30,7 +31,8 @@ AnalyzerOptions::AnalyzerOptions()
   analysisPlans["MassAcceptance"] = new MassAcceptancePlan();
   analysisPlans["Trigger"] = new TriggerPlan();
   analysisPlans["GenSim"] = new GenSimPlan();
-  analysisPlans["DataStrip"] = new MLVariablesPlan();
+  analysisPlans["LeptonJetDataStrip"] = new MLVariablesPlan();
+  analysisPlans["HiggsDataStrip"] = new HiggsDataStripPlan();
 }
 
 std::string AnalyzerOptions::pickfileInterface()
