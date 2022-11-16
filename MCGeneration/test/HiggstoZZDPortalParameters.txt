@@ -29,6 +29,8 @@ HiggsSM:all = on
 4900022:isResonance = true
 4900022:tau0 = 1.97327e-13
 
+23:mayDecay = true
+
 HiddenValley:Ngauge = 1
 HiddenValley:doKinMix = on
 HiddenValley:FSR = on
