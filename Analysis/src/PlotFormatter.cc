@@ -100,6 +100,17 @@ TCanvas* PlotFormatter::superImposedHist(std::shared_ptr<Channel> processes, His
         hists.push_back(process->getHist(histvariable, false));
     }
 
+    double minimumBin = (double) hists.at(0)->GetNbinsX();
+    for(TH1* hist : hists) {
+	if((double) hist->GetNbinsX() < minimumBin) {
+	     minimumBin = (double) hist->GetNbinsX();
+	}
+    }
+
+    for(TH1* hist : hists) {
+	hist->Rebin((int) (((double) hist->GetNbinsX()) / minimumBin + 0.5));
+    }
+
     for(TH1* hist : hists) {
         if(hist->Integral() != 0 && !std::isnan(hist->Integral())) {
             hist->Scale(1/hist->Integral());
@@ -174,6 +185,18 @@ TCanvas* PlotFormatter::simpleAnalysisHist(std::vector<TH1*> hists, std::vector<
     int firstIndex = 0;
     double maximum = 0;
     int count = 0;
+
+    double minimumBin = (double) hists.at(0)->GetNbinsX();
+    for(TH1* hist : hists) {
+	if((double) hist->GetNbinsX() < minimumBin) {
+	     minimumBin = (double) hist->GetNbinsX();
+	}
+    }
+
+    for(TH1* hist : hists) {
+	    hist->Rebin((int) (((double) hist->GetNbinsX()) / minimumBin + 0.5));
+    }
+
     for(TH1* hist : hists) {
 	    if(hist->Integral() != 0 && !isnan(hist->Integral())) {
 	        hist->Scale(1/hist->Integral());
@@ -243,6 +266,18 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     int firstIndex = 0;
     double maximum = 0;
     int count = 0;
+
+    double minimumBin = (double) hists.at(0)->GetNbinsX();
+    for(TH1* hist : hists) {
+	if((double) hist->GetNbinsX() < minimumBin) {
+	     minimumBin = (double) hist->GetNbinsX();
+	}
+    }
+
+    for(TH1* hist : hists) {
+	hist->Rebin((int) (((double) hist->GetNbinsX()) / minimumBin + 0.5));
+    }
+
     for(TH1* hist : hists) {
 	    if(hist->Integral() != 0 && !isnan(hist->Integral())) {
 	        hist->Scale(1/hist->Integral());
@@ -271,6 +306,7 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     gStyle->SetOptStat(0);
 
     //Draws the histogram with more events first (bigger axis)
+    first->Rebin(10);
     first->Draw("HIST");
     histVector.push_back(first);
 
@@ -297,7 +333,8 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     //Draws the other histogram    
     for(TH1* hist : hists) {
         if(find(hists.begin(), hists.end(), hist) - hists.begin() != firstIndex) {
-            hist->Draw("HIST SAME");
+            hist->Rebin(10);
+	    hist->Draw("HIST SAME");
             histVector.push_back(hist);
         }
     }
