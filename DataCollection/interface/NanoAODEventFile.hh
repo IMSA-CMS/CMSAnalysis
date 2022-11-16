@@ -76,9 +76,11 @@ class NanoAODEventFile : public EventFile
         mutable TTreeReaderArray<Int_t> gen_m2;
         mutable TTreeReaderArray<Float_t> gen_pileup;
 
-        mutable TTreeReaderArray<Int_t> elec_idpass; // nanoAOD wants Int, Delphes wants UInt
-        mutable TTreeReaderArray<Bool_t> muon_idpass; // nanoAOD wants Bool, Delphes wants UInt
+        mutable TTreeReaderArray<Int_t> elec_idpass;
+        mutable TTreeReaderArray<Bool_t> muon_idpass;
         mutable std::unordered_map<std::string, TTreeReaderValue<Bool_t>> triggers;
+
+        std::vector<GenSimParticle> genSimParticles;
 };
 
 

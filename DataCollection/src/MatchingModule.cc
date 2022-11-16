@@ -27,14 +27,20 @@ bool MatchingModule::process()
 //std::cerr << "Hey, I'm in charge of names here" << std::endl;
 bool MatchingModule::match(std::vector<Particle> genSimParticles, std::vector<Particle> recoCandidates)
 {
-  // std::cout << "Matching\n";
+  //recoCandidates = recoParticlesCut.copy();
+   //std::cout << "Matching\n";
+   matchingBestPairs.clear();
+   //std::cout<< "RecoJets Size "<< recoCandidates.size()<< std::endl;
+   //std::cout << isNotNull(genSimParticles)<< " "<< isNotNull(recoCandidates)<<std::endl;
+   //std::cout << checkIsNull(genSimParticles)<< " "<< checkIsNull(recoCandidates)<<std::endl;
   while (!checkIsNull(genSimParticles) && !checkIsNull(recoCandidates))
     {
-      // std::cerr << "Loop starts" << std::endl;
+       //std::cerr << "Loop starts" << std::endl;
+	   //std::cerr << genSimParticles.size()<<" "<< recoCandidates.size()<<std::endl;
       //start with a high value, only really needs to be higher than the cutoff delta R
       double deltaRMin = std::numeric_limits<double>::max();
 
-		Particle nullParticle(nullptr);
+		Particle  nullParticle(Particle::nullParticle());
 
 		MatchingPair pairDataList(nullParticle, nullParticle);
 
@@ -170,6 +176,7 @@ bool MatchingModule::checkIsNull(std::vector<Particle> matching) const
 {
   	for (auto& particle : matching)
   	{
+		//std::cerr<< particle.isNotNull()<<std::endl;
     	if(particle.isNotNull())
     	{
       	//std::cerr << "Particle is not null" << std::endl;
