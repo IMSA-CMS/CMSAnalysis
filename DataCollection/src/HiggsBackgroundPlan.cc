@@ -80,8 +80,6 @@ HiggsBackgroundPlan::HiggsBackgroundPlan()
     auto muonGenSimPt = make_shared<PtHist>(InputModule::RecoLevel::GenSim, "Muon GenSim Leading lepton pT", 500, 0, 1000);
     //auto recoInvMass = make_shared<InvariantMassHist>(InputModule::RecoLevel::Reco, "Opposite-sign dilepton mass", 1000, 0, 2000);
     auto elecMetHist = make_shared<METHist>(metMod, "MET", 500, 0, 1000);
-    auto muonMetHist = make_shared<METHist>(metMod, "MET", 500, 0, 1000);
-
     // Add the histogram(s) created above to histMod
     // histMod->addHistogram(elecRecoPt);
     // histMod->addHistogram(elecGenSimPt);
@@ -118,23 +116,21 @@ HiggsBackgroundPlan::HiggsBackgroundPlan()
     elecGenSimSameSignInvMassHist->addFilter(elecFilter);
     muonGenSimSameSignInvMassHist->addFilter(muonFilter);
     elecMetHist->addFilter(elecFilter);
-    muonMetHist->addFilter(muonFilter);
 
-    histMod->addHistogram(elecRecoPt);
-    histMod->addHistogram(elecGenSimPt);
-    histMod->addHistogram(muonRecoPt);
-    histMod->addHistogram(muonGenSimPt);
-    histMod->addHistogram(elecGenSimSameSignInvMassHist);
-    histMod->addHistogram(elecRecoSameSignInvMassHist);
-    histMod->addHistogram(muonGenSimSameSignInvMassHist);
-    histMod->addHistogram(muonRecoSameSignInvMassHist);
+    eventHistMod->addHistogram(elecRecoPt);
+    eventHistMod->addHistogram(elecGenSimPt);
+    eventHistMod->addHistogram(muonRecoPt);
+    eventHistMod->addHistogram(muonGenSimPt);
+    eventHistMod->addHistogram(elecGenSimSameSignInvMassHist);
+    eventHistMod->addHistogram(elecRecoSameSignInvMassHist);
+    eventHistMod->addHistogram(muonGenSimSameSignInvMassHist);
+    eventHistMod->addHistogram(muonRecoSameSignInvMassHist);
     //histMod->addHistogram(recoInvMass);
-    histMod->addHistogram(elecMetHist);
-    histMod->addHistogram(muonMetHist);
+    eventHistMod->addHistogram(elecMetHist);
     //histMod->addHistogram(elecRecoSameSignInvMassHist);
-    histMod->addHistogram(elecPositiveNegativeInvMassHist);
+    eventHistMod->addHistogram(elecPositiveNegativeInvMassHist);
     //histMod->addHistogram(muonRecoSameSignInvMassHist);
-    histMod->addHistogram(muonPositiveNegativeInvMassHist);
+    eventHistMod->addHistogram(muonPositiveNegativeInvMassHist);
 
     analyzer.addProductionModule(metMod);
 

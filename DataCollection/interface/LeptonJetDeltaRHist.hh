@@ -5,6 +5,12 @@
 
 class LeptonJetReconstructionModule;
 
+// To use this histogram module, you need to add to the Plan.hh file the following lines:
+// #include "CMSAnalysis/DataCollection/interface/LeptonJetDeltaRHist.hh"
+// auto deltaRHist = make_shared<LeptonJetDeltaRHist>(recoMod, "Lepton Jet Delta R", 500, 0, 2);
+// histMod->addHistogram(deltaRHist);
+//
+// This histogram module looks for two leptons and finds the difference in the phi-eta plane between them
 class LeptonJetDeltaRHist : public HistogramPrototype1D
 {
   public:
