@@ -9,7 +9,6 @@ FileStripModule::FileStripModule(std::string iname):
 
 void FileStripModule::initialize()
 {
-	std::cout << "Initializing in FileStrip!\n";
 	file = new TFile(name.c_str(), "recreate");
 	tree = new TTree("stripped", "Stripped Data");
 	tree->SetAutoSave(0);
@@ -96,39 +95,39 @@ bool FileStripModule::process()
 
 	jetSize = 0;
 	genSize = 0;
-/*
-	auto jets = getInput()->getJets(InputModule::RecoLevel::Reco);
-	jetSize = jets.getNumParticles();
 
-	for (auto& jet : jets)
-	{
-		jetEta.push_back(jet.getEta());
-		jetPhi.push_back(jet.getPhi());
-		jetMass.push_back(jet.getMass());
-		jetPt.push_back(jet.getPt());
-	}
-*/
-/*
-	auto genSim = getInput()->getParticles(InputModule::RecoLevel::GenSim);
-	genSize = genSim.getNumParticles();
+	// Only work with particles in CandidateImplementation:
 
-	for (auto& particle : genSim)
-	{
-		auto genSimParticle = GenSimParticle(particle);
-		genPID.push_back(genSimParticle.pdgId());
-		genStatus.push_back(genSimParticle.status());
-		genEta.push_back(genSimParticle.getEta());
-		genPhi.push_back(genSimParticle.getPhi());
-		genMass.push_back(genSimParticle.getMass());
-		genPt.push_back(genSimParticle.getPt());
-		auto genD1Particle = genSimParticle.daughter(1);
-		genD1.push_back(checkGenSim(genD1Particle, (genSim)));
-		auto genD2Particle = genSimParticle.daughter(2);
-		genD2.push_back(checkGenSim(genD2Particle, (genSim)));
-		auto genM1Particle = genSimParticle.mother();
-		genM1.push_back(checkGenSim(genM1Particle, (genSim))); 
-		genM2.push_back(-1);
-	} */
+	// auto jets = getInput()->getJets(InputModule::RecoLevel::Reco);
+	// jetSize = jets.getNumParticles();
+
+	// for (auto& jet : jets)
+	// {
+	// 	jetEta.push_back(jet.getEta());
+	// 	jetPhi.push_back(jet.getPhi());
+	// 	jetMass.push_back(jet.getMass());
+	// 	jetPt.push_back(jet.getPt());
+	// }
+	// auto genSim = getInput()->getParticles(InputModule::RecoLevel::GenSim);
+	// genSize = genSim.getNumParticles();
+
+	// for (auto& particle : genSim)
+	// {
+	// 	auto genSimParticle = GenSimParticle(particle);
+	// 	genPID.push_back(genSimParticle.pdgId());
+	// 	genStatus.push_back(genSimParticle.status());
+	// 	genEta.push_back(genSimParticle.getEta());
+	// 	genPhi.push_back(genSimParticle.getPhi());
+	// 	genMass.push_back(genSimParticle.getMass());
+	// 	genPt.push_back(genSimParticle.getPt());
+	// 	auto genD1Particle = genSimParticle.daughter(1);
+	// 	genD1.push_back(checkGenSim(genD1Particle, (genSim)));
+	// 	auto genD2Particle = genSimParticle.daughter(2);
+	// 	genD2.push_back(checkGenSim(genD2Particle, (genSim)));
+	// 	auto genM1Particle = genSimParticle.mother();
+	// 	genM1.push_back(checkGenSim(genM1Particle, (genSim))); 
+	// 	genM2.push_back(-1);
+	// } 
 
 	file->cd();
 	tree->Fill();

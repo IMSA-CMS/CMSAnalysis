@@ -5,6 +5,9 @@
 #include "TTree.h"
 #include <vector>
 
+// A class that can strip a file down to only the needed data, and stores the data in a TTree.
+// To use file stripping, call its plan through runAnalyzer, and the file name of the stripped file
+// can be changed in FileStripPlan.cc. 
 class FileStripModule : public AnalysisModule
 {
     public:

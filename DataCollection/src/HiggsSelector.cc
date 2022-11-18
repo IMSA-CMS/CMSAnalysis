@@ -9,7 +9,7 @@
 
 std::vector<Particle> HiggsSelector::selectParticles(const InputModule* input) const
 {
-    std::vector<Particle> selected(0);
+    std::vector<Particle> selected;
     // std::vector<Particle> posElecs(0);
     // std::vector<Particle> negElecs(0);
     // std::vector<Particle> posMuons(0);

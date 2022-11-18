@@ -117,18 +117,18 @@ ParticleCollection<Particle> StrippedEventFile::getRecoParticles() const
         int charge = muonCharge[i];
         
         Particle::SelectionFit fit;
-        // if (muonIDPass[i] & 4) 
-        // {
-        //     fit = Particle::SelectionFit::Tight;
-        // } else if (muonIDPass[i] & 2) 
-        // {
-        //     fit = Particle::SelectionFit::Medium;
-        // } else if (muonIDPass[i] & 1) 
-        // {
-        //     fit = Particle::SelectionFit::Loose;
-        // } else {
-        //     continue;
-        // }
+        if (muonIDPass[i] & 4) 
+        {
+            fit = Particle::SelectionFit::Tight;
+        } else if (muonIDPass[i] & 2) 
+        {
+            fit = Particle::SelectionFit::Medium;
+        } else if (muonIDPass[i] & 1) 
+        {
+            fit = Particle::SelectionFit::Loose;
+        } else {
+            continue;
+        }
         // Lorentz four-vector
         recoParticles.addParticle(Particle(
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muonPt[i],
