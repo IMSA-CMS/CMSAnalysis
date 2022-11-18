@@ -9,14 +9,7 @@
 
 void HPlusPlusGenSimSelector::selectParticles(const InputModule* input, Event& event)
 {
-    std::vector<Particle> selected(0);
-    ParticleCollection<Particle> leftHiggsPlus;
-    ParticleCollection<Particle> leftHiggsMinus;
-    ParticleCollection<Particle> rightHiggsPlus;
-    ParticleCollection<Particle> rightHiggsMinus;
-    ParticleCollection<Particle> zBoson;
-
-
+    std::vector<Particle> selected;
     auto particles = input->getParticles(InputModule::RecoLevel::GenSim);
 
     for (const auto& particle : particles)

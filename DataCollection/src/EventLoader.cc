@@ -3,6 +3,7 @@
 #include "CMSAnalysis/DataCollection/interface/GenSimEventFile.hh"
 #include "CMSAnalysis/DataCollection/interface/DelphesEventFile.hh"
 #include "CMSAnalysis/DataCollection/interface/NanoAODEventFile.hh"
+#include "CMSAnalysis/DataCollection/interface/StrippedEventFile.hh"
 #include "TFile.h"
 #include "TTree.h"
 #include <iostream>
@@ -14,6 +15,10 @@ void EventLoader::changeFileFormat(TFile* ifile)
     if (dynamic_cast<TTree*>(ifile->Get("myana/mytree"))) //myana/mytree is exclusive to Delphes
     {
         file = std::make_shared<DelphesEventFile> (ifile);
+    }
+    else if (dynamic_cast<TTree*>(ifile->Get("stripped")))
+    {
+        file = std::make_shared<StrippedEventFile> (ifile);
     }
     else if (eventsBranch && (eventsBranch->GetBranch("patMuons_slimmedMuons__RECO.obj") || eventsBranch->GetBranch("patMuons_slimmedMuons__PAT.obj"))) //this branch is exlusive to MiniAOD
     {

@@ -49,7 +49,8 @@ TH2* Process::get2DHist(HistVariable histType) const
 {
 	int maxBinNum = 0;
 	int yMaxBinNum = 0;
-	double maxBarWidth = 0.0;
+	double xMaxBarWidth = 0.0;
+	double yMaxBarWidth = 0.0;
 	int singleProcessNumber = 0;
 	for (const auto& singleProcess : processes)
 	{
@@ -61,16 +62,20 @@ TH2* Process::get2DHist(HistVariable histType) const
 		{
 			maxBinNum = singleProcess.get2DHist(histType)->GetNbinsX();
 		}
-		if (singleProcess.get2DHist(histType)->GetBarWidth() > maxBarWidth)
+		if ((singleProcess.get2DHist(histType)->GetXaxis()->GetBinWidth(maxBinNum)) > xMaxBarWidth)
 		{
-			maxBarWidth = singleProcess.get2DHist(histType)->GetBarWidth();
+			xMaxBarWidth = (singleProcess.getHist(histType, false)->GetXaxis()->GetBinWidth(maxBinNum));
 		}
 		if (singleProcess.get2DHist(histType)->GetNbinsY() > yMaxBinNum)
 		{
 			yMaxBinNum = singleProcess.get2DHist(histType)->GetNbinsY();
 		}
+		if ((singleProcess.get2DHist(histType)->GetYaxis()->GetBinWidth(yMaxBinNum)) > yMaxBarWidth)
+		{
+			yMaxBarWidth = (singleProcess.getHist(histType, false)->GetYaxis()->GetBinWidth(yMaxBinNum));
+		}
 	}
-	TH2* hist = new TH2F(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * maxBarWidth, yMaxBinNum, 0, yMaxBinNum * maxBarWidth);
+	TH2* hist = new TH2F(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * xMaxBarWidth, yMaxBinNum, 0, yMaxBinNum * yMaxBarWidth);
 	TList* toMerge = new TList;
 	for (const auto& singleProcess : processes)	
 	{
@@ -100,4 +105,13 @@ void Process::addProcess(SingleProcess process)
 	if(process.checkValidity() == true) {
 		processes.push_back(process);
 	}
+}
+
+int Process::getNEvents() 
+{
+	int total = 0;
+	for(auto singleProcess : processes) {
+		total += singleProcess.getTotalEvents();
+	}
+	return total;
 }

@@ -17,6 +17,7 @@
 #include "CMSAnalysis/DataCollection/interface/Trigger.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimPlan.hh"
+#include "CMSAnalysis/DataCollection/interface/FileStripPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/MLVariablesPlan.hh"
 
 AnalyzerOptions::AnalyzerOptions()
@@ -30,6 +31,7 @@ AnalyzerOptions::AnalyzerOptions()
   analysisPlans["MassAcceptance"] = new MassAcceptancePlan();
   analysisPlans["Trigger"] = new TriggerPlan();
   analysisPlans["GenSim"] = new GenSimPlan();
+  analysisPlans["FileStrip"] = new FileStripPlan();
   analysisPlans["DataStrip"] = new MLVariablesPlan();
 }
 
