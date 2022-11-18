@@ -15,6 +15,8 @@ class GenSimSimpleImplementation : public ParticleImplementation
         virtual ~GenSimSimpleImplementation(){}
         GenSimSimpleImplementation(reco::Candidate::LorentzVector vec, int ch, const ParticleType& type, const Particle* motherParticle, std::vector<const GenSimParticle*> daughters);
         virtual reco::Candidate::LorentzVector getFourVector() const override;
+        virtual double dxy() const {throw std::runtime_error("getDxy not implemented");}
+        virtual double dz() const {throw std::runtime_error("getDz not implemented");}
         virtual int charge() const override;
         virtual int pdgId() const override{throw std::runtime_error("pdgID error");}
         virtual int status() const override{throw std::runtime_error("status() error");}

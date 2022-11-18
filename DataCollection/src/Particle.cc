@@ -15,11 +15,15 @@
 #include "CMSAnalysis/DataCollection/interface/GenSimSimpleImplementation.hh"
 #include "CMSAnalysis/DataCollection/interface/ParticleType.hh"
 
-// Particle::Particle()
+// Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, double relIso, Particle::SelectionFit fit):
+// particle(std::make_shared<SimpleImplementation>(vec, charge, type, relIso, fit))
 // {
+
 // }
-Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, double relIso, Particle::SelectionFit fit):
-particle(std::make_shared<SimpleImplementation>(vec, charge, type, relIso, fit))
+
+//added for dxy, dz
+Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, double relIso, Particle::SelectionFit fit, double dxy, double dz):
+particle(std::make_shared<SimpleImplementation>(vec, charge, type, relIso, fit, dxy, dz))
 {
 }
 
@@ -128,6 +132,16 @@ double Particle::getMass() const
 //   checkIsNull();
 //   return particle->isolation();
 // }
+
+double Particle::getDxy() const
+{
+    return particle->dxy();
+}
+
+double Particle::getDz() const
+{
+  return particle->dz();
+}
 
 Particle::BarrelState Particle::getBarrelState() const
 {
