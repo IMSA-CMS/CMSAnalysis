@@ -9,6 +9,7 @@
 
 class TTree;
 
+// An EventFile that works with stripped files generated from FileStripModule
 class StrippedEventFile : public EventFile
 {
   public:
@@ -16,11 +17,10 @@ class StrippedEventFile : public EventFile
   protected:
     virtual void nextEvent() override;
     virtual bool isDone() const override;
-    // simply dumps gensim particles from event into ParticleCollection
     virtual ParticleCollection<GenSimParticle> getGenSimParticles() const override;
     virtual ParticleCollection<Particle> getRecoParticles() const override;
     virtual ParticleCollection<Particle> getRecoJets() const override;
-    //virtual GenEventInfoProduct getGenInfo() const override;
+    virtual int getNumPileUpInteractions() const override {throw std::runtime_error("not implemented yet");}
     virtual double getMET() const override;
     virtual std::vector<bool> getTriggerResults(std::string subProcess) const override {throw std::runtime_error("not implemented yet");}
     virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override {throw std::runtime_error("not implemented yet");}
