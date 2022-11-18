@@ -34,12 +34,10 @@
 
 using std::make_shared;
 
-GenSimPlan::GenSimPlan()
+void GenSimPlan::setupAnalyzer()
 {
 
     Analyzer& analyzer = getAnalyzer();
-
-    void setupAnalyzer() override;
 
     auto deltaR = make_shared<GenSimDeltaRHist>("Delta R", 100, 0, 1);
 

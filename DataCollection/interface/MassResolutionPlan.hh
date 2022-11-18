@@ -5,10 +5,8 @@
 
 class MassResolutionPlan : public DataCollectionPlan
 {
-    public:
-        MassResolutionPlan();
-    private:
-        
+    protected:
+        void setupAnalyzer() override;
 };
 
 #endif

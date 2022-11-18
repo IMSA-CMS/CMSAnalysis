@@ -43,7 +43,7 @@
 
 using std::make_shared;
 
-LeptonJetReconstructionPlan::LeptonJetReconstructionPlan()
+void LeptonJetReconstructionPlan::setupAnalyzer()
 {
   Analyzer &analyzer = getAnalyzer();
 

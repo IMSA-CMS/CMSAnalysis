@@ -12,6 +12,7 @@ class DataCollectionPlan
         // Runs the analyzer with the specified parameters. 
         void runAnalyzer(const std::string& inputFile, const std::string& outputFile, 
             int outputEvery = 0, int numFiles = -1);
+        virtual ~DataCollectionPlan(){}
             
     protected:
         const Analyzer& getAnalyzer() const {return analyzer;}

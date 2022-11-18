@@ -5,8 +5,9 @@
 
 class LeptonJetBackgroundPlan : public DataCollectionPlan
 {
-    public:
-        LeptonJetBackgroundPlan();
+
+    protected:
+        void setupAnalyzer() override;
 };
 
 #endif

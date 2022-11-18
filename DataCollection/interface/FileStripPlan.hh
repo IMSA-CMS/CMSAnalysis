@@ -8,8 +8,8 @@
 // change the name of the stripped file in FileStripPlan.cc
 class FileStripPlan : public DataCollectionPlan
 {
-    public:
-        FileStripPlan();
+    protected:
+        void setupAnalyzer() override;
 };
 
 #endif
