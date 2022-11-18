@@ -36,7 +36,7 @@
 
 using std::make_shared;
 
-HiggsBackgroundPlan::HiggsBackgroundPlan()
+void HiggsBackgroundPlan::setupAnalyzer()
 {
 
     Analyzer& analyzer = getAnalyzer();
@@ -46,7 +46,6 @@ HiggsBackgroundPlan::HiggsBackgroundPlan()
     auto fourLeptonCut = make_shared<FourLeptonCut>();
     auto zVetoCut = make_shared<ZVetoCut>();
     auto quarkoniaCut = make_shared<QuarkoniaCut>();
-    
 
     eventMod->addSelector(pasSelector);
     eventMod->addCut(fourLeptonCut);

@@ -18,7 +18,7 @@
 
 using std::make_shared;
 
-LeptonJetBackgroundPlan::LeptonJetBackgroundPlan()
+void LeptonJetBackgroundPlan::setupAnalyzer()
 {
     Analyzer& analyzer = getAnalyzer();
 

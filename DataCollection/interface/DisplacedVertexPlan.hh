@@ -5,8 +5,8 @@
 
 class DisplacedVertexPlan : public DataCollectionPlan
 {
-    public:
-        DisplacedVertexPlan();
+    protected:
+        void setupAnalyzer() override;
 };
 
 #endif

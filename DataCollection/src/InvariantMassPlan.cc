@@ -24,7 +24,7 @@
 
 using std::make_shared;
 
-InvariantMassPlan::InvariantMassPlan()
+void InvariantMassPlan::setupAnalyzer()
 {
   Analyzer& analyzer = getAnalyzer();
 
