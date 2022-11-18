@@ -53,6 +53,10 @@ void DarkPhotonGenSimSelector::selectParticles(const InputModule* input, Event& 
                 }
             }
         }
+        if (abs(genSimParticle.pdgId() == 23) && genSimParticle == genSimParticle.finalDaughter()) //Z Boson
+        {
+            event.addSpecialObject("Zboson",genSimParticle);
+        }
     }
 }
 

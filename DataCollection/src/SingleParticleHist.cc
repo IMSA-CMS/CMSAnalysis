@@ -12,7 +12,7 @@ SingleParticleHist::SingleParticleHist(const std::string& iname, int inBins, dou
 
 std::vector<double> SingleParticleHist::value() const
 {
-    if (particle != nullptr)
+    if (particle != Particle::nullParticle())
     {
         return valueFunction(particle);
     }

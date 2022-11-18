@@ -39,6 +39,8 @@ GenSimPlan::GenSimPlan()
 
     Analyzer& analyzer = getAnalyzer();
 
+    void setupAnalyzer() override;
+
     auto deltaR = make_shared<GenSimDeltaRHist>("Delta R", 100, 0, 1);
 
     auto eventMod = make_shared<EventModule>();
