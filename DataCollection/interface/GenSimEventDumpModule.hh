@@ -7,7 +7,7 @@
 #include "ParticleCollection.hh"
 #include "GenSimParticle.hh"
 
-// GenSimIdentificationModule creates a Particle Collection
+// 
 // of gen sim particles that will be used in MatchingModule 
 class GenSimEventDumpModule : public AnalysisModule
 {
