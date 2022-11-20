@@ -77,7 +77,7 @@ const ParticleType& ParticleType::electron()
 
 const ParticleType& ParticleType::muon()
 {
-    return registerType("Muon",13,std::vector<SingleParticleHist>{}); 
+    return registerType("Muon",13,std::vector<SingleParticleHist>{getPtHist(),getPhiHist(),getEtaHist()}); 
 }
 
 const ParticleType& ParticleType::jet()
