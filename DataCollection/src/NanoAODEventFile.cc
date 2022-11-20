@@ -113,29 +113,23 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     gen_m1(treeReader, "GenPart_genPartIdxMother"),
     gen_m2(treeReader, "GenVisTau_genPartIdxMother"),
     gen_pileup(treeReader, "Pileup_nTrueInt"),
-    elec_idpass(treeReader, "Electron_cutBased"), //"Generator_id1"), // 
-    muon_idpass(treeReader, "Muon_looseId") //"Muon_highPurity") // 
-    
-    {
+    elec_idpass(treeReader, "Electron_cutBased"), //"Generator_id1")
+    muon_idpass(treeReader, "Muon_looseId") //"Muon_highPurity")
+{
+    tree = getFile()->Get<TTree>("Events");
     std::ifstream triggerNameFile("validTriggers.txt");
-        tree = getFile()->Get<TTree>("Events");
     if(triggerNameFile)
     {
+        std::string nameoftrigger;
 
-
-    std::string nameoftrigger;
-
-
-
-    while(getline(triggerNameFile, nameoftrigger))
-    {
-        // std::cout << nameoftrigger << std::endl;
-        if(tree->GetBranch(nameoftrigger.c_str()))
+        while(getline(triggerNameFile, nameoftrigger))
         {
-            TTreeReaderValue<Bool_t> intermediate(treeReader, nameoftrigger.c_str());
-            triggers.emplace(nameoftrigger, intermediate);
+            if(tree->GetBranch(nameoftrigger.c_str()))
+            {
+                TTreeReaderValue<Bool_t> intermediate(treeReader, nameoftrigger.c_str());
+                triggers.emplace(nameoftrigger, intermediate);
+            }
         }
-    }
     }    
     treeReader.SetTree(tree);
     setEventCount(1);
