@@ -16,7 +16,7 @@
 
 using std::make_shared;
 
-TriggerPlan::TriggerPlan()
+void TriggerPlan::setupAnalyzer()
 {
   Analyzer& analyzer = getAnalyzer();
 

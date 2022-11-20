@@ -3,8 +3,8 @@
 
 class MLVariablesPlan : public DataCollectionPlan
 {
-public:
-    MLVariablesPlan();
+protected:
+    void setupAnalyzer() override;
 };
 
 #endif

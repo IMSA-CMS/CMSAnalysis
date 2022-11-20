@@ -5,8 +5,8 @@
 
 class LeptonJetReconstructionPlan : public DataCollectionPlan
 {
-    public:
-        LeptonJetReconstructionPlan();
+    protected:
+        void setupAnalyzer() override;
 };
 
 #endif

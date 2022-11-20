@@ -5,8 +5,8 @@
 
 class HPlusPlusMassPlan : public DataCollectionPlan
 {
-    public:
-        HPlusPlusMassPlan();
+    protected:
+        void setupAnalyzer() override;
 };
 
 #endif

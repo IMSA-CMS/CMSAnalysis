@@ -12,6 +12,7 @@
 #include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LocalEventInputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonFilter.hh"
+#include "CMSAnalysis/DataCollection/interface/LeptonEfficiency.hh"
 #include "CMSAnalysis/DataCollection/interface/MatchingModule.hh"
 #include "CMSAnalysis/DataCollection/interface/METHist.hh"
 #include "CMSAnalysis/DataCollection/interface/METModule.hh"
@@ -35,7 +36,7 @@
 
 using std::make_shared;
 
-HiggsBackgroundPlan::HiggsBackgroundPlan()
+void HiggsBackgroundPlan::setupAnalyzer()
 {
 
     Analyzer& analyzer = getAnalyzer();
@@ -45,7 +46,6 @@ HiggsBackgroundPlan::HiggsBackgroundPlan()
     auto fourLeptonCut = make_shared<FourLeptonCut>();
     auto zVetoCut = make_shared<ZVetoCut>();
     auto quarkoniaCut = make_shared<QuarkoniaCut>();
-    
 
     eventMod->addSelector(pasSelector);
     eventMod->addCut(fourLeptonCut);
@@ -60,7 +60,7 @@ HiggsBackgroundPlan::HiggsBackgroundPlan()
     auto nLeptonsFilter = make_shared<NLeptonsFilter>();
     
     auto histMod = make_shared<HistogramOutputModule>();
-    
+    auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod);
 
     auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
 
@@ -140,6 +140,7 @@ HiggsBackgroundPlan::HiggsBackgroundPlan()
     analyzer.addFilterModule(nLeptonsFilter);*/
 
     analyzer.addAnalysisModule(eventMod);
+    analyzer.addAnalysisModule(leptonEfficiency);
     analyzer.addAnalysisModule(eventHistMod);    
     analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
 
