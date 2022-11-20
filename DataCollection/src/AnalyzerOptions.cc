@@ -34,7 +34,7 @@ AnalyzerOptions::AnalyzerOptions()
   analysisPlans["GenSim"] = new GenSimPlan();
   analysisPlans["FileStrip"] = new FileStripPlan();
   analysisPlans["LeptonJetDataStrip"] = new MLVariablesPlan();
-  analysisPlans["HiggsDataStrip"] = new HiggsDataStripPlan();
+  //analysisPlans["HiggsDataStrip"] = new HiggsDataStripPlan();
 }
 
 std::string AnalyzerOptions::pickfileInterface()
