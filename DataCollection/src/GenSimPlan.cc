@@ -35,7 +35,7 @@
 
 using std::make_shared;
 
-GenSimPlan::GenSimPlan()
+void GenSimPlan::setupAnalyzer()
 {
 
     Analyzer& analyzer = getAnalyzer();

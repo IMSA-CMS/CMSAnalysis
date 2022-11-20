@@ -25,7 +25,7 @@
 
 using std::make_shared;
 
-DisplacedVertexPlan::DisplacedVertexPlan()
+void DisplacedVertexPlan::setupAnalyzer()
 {
   Analyzer& analyzer = getAnalyzer();
 
