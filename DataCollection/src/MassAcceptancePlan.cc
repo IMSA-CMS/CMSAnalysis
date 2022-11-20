@@ -21,7 +21,7 @@
 
 using std::make_shared;
 
-MassAcceptancePlan::MassAcceptancePlan()
+void MassAcceptancePlan::setupAnalyzer()
 {
   Analyzer& analyzer = getAnalyzer();
 

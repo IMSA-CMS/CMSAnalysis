@@ -5,10 +5,8 @@
 
 class MassAcceptancePlan : public DataCollectionPlan
 {
-    public:
-        MassAcceptancePlan();
-    private:
-        
+    protected:
+        void setupAnalyzer() override;
 };
 
 #endif
