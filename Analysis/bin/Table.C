@@ -4,7 +4,6 @@
 #include "CMSAnalysis/Analysis/interface/RootFileInput.hh"
 #include "CMSAnalysis/Analysis/interface/Estimator.hh"
 #include "CMSAnalysis/Analysis/interface/FitEstimator.hh"
-#include "CMSAnalysis/Analysis/interface/ChannelLoader.hh"
 #include "CMSAnalysis/Analysis/interface/TableData.hh"
 #include "CMSAnalysis/Analysis/interface/TableWriter.hh"
 #include "CMSAnalysis/Analysis/interface/TextTable.hh"

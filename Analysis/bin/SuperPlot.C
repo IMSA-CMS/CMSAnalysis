@@ -4,7 +4,6 @@
 #include "CMSAnalysis/Analysis/interface/RootFileInput.hh"
 #include "CMSAnalysis/Analysis/interface/Estimator.hh"
 #include "CMSAnalysis/Analysis/interface/FitEstimator.hh"
-#include "CMSAnalysis/Analysis/interface/ChannelLoader.hh"
 #include "CMSAnalysis/Analysis/interface/FullAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsPlusPlusAnalysis.hh"
@@ -43,13 +42,14 @@ void SuperPlot()
 	TString xAxisTitle = "MET [GeV]";
 	TString yAxisTitle = "Events";
 
-	//Creates the graph; to change the quality you've looking at edit the HistVariable
+	//Creates the graph
 	//For now, don't set drawLogo to true as it's not working yet
-	//TCanvas *canvas = plotFormatter->superImposedStackHist(leptonBackgrounds, HistVariable::InvariantMass, xAxisTitle, yAxisTitle);
-	//TCanvas *canvas = plotFormatter->simple1DHist(process, HistVariable::MET, true, xAxisTitle, yAxisTitle);
-	//TCanvas *canvas = plotFormatter->simple2DHist(process, HistVariable::InvariantMass, xAxisTitle, yAxisTitle);
-	//TCanvas *canvas = plotFormatter->simpleStackHist(leptonBackgrounds, HistVariable::MET, xAxisTitle, yAxisTitle);
-	TCanvas *canvas = plotFormatter->superImposedHist(leptonBackgrounds, HistVariable::MET, xAxisTitle, yAxisTitle);
+	//Choices for plotting are GenSim Same Sign Inv Mass, Same Sign Inv Mass, Invariant Mass, GenSim pT, pT, Eta, Phi, MET (caps matter)
+	//TCanvas *canvas = plotFormatter->superImposedStackHist(leptonBackgrounds, "Invariant Mass"	, xAxisTitle, yAxisTitle);
+	//TCanvas *canvas = plotFormatter->simple1DHist(process, "MET", true, xAxisTitle, yAxisTitle);
+	//TCanvas *canvas = plotFormatter->simple2DHist(process, "Invariant Mass", xAxisTitle, yAxisTitle);
+	//TCanvas *canvas = plotFormatter->simpleStackHist(leptonBackgrounds, "MET", xAxisTitle, yAxisTitle);
+	TCanvas *canvas = plotFormatter->superImposedHist(leptonBackgrounds, "MET", xAxisTitle, yAxisTitle);
 
 
 	//Uncomment to save a png picture in your bin folder
