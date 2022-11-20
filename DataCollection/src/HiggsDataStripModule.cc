@@ -8,6 +8,7 @@
 
 void HiggsDataStripModule::initialize()
 {
+	// creates ML model
 	tree = new TTree("Signal", "Higgs Data");
 	for (TTree *treeId : {tree})
 	{
@@ -39,6 +40,7 @@ void HiggsDataStripModule::finalize()
 
 bool HiggsDataStripModule::process()
 {
+	// puts numbers into ML model
 	auto leptons = getInput()->getLeptons(InputModule::RecoLevel::Reco);
 	double cutoff = 100;
 	// Find source of null pointer error
