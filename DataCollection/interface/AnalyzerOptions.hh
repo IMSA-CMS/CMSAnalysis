@@ -7,13 +7,16 @@
 #include "IDType.hh"
 
 class DataCollectionPlan;
+
+// A class that contains both the pickfile generating interface if a pickfile is not specified, 
+// and an interface to select an analysis if one is not specified in the runAnalyzer command.
+// Used in runAnalyzer.cc
 class AnalyzerOptions
 {
 	public:
-	// Constructor
+	// New plans should be added to this constructor so that they appear in the analysisPlans map.
 	AnalyzerOptions();
 
-	// pickfile creating interface
 	std::string pickfileInterface(); 
 
 	// Reads processes.txt and returns a string with the names of the processes in the file
@@ -22,10 +25,9 @@ class AnalyzerOptions
 	// gets user input for and checks the process and idtypes of the pickfile
 	std::vector<std::pair<std::string, std::string>> getProcessAndIDTypes(std::vector<std::string> processes);
 
-	// takes the file name and calls the check function, returns the file name in a string
+	// gets user input for the file name and calls the check function, returns the file name in a string
 	std::string takeFilename();
 
-	// checks if the file name is valid
 	bool checkFilename(std::string name);
 
 	// Print current status and ask for any changes
@@ -43,7 +45,7 @@ class AnalyzerOptions
 	// Checks whether the selected item was in the list 
 	bool checkInput(std::string input, std::vector<std::string> list);
 
-	// A function that gets the user's input, adds a newline character and converts the string to lowercase.
+	// A function that gets the user's input, adds a newline character and converts the string to lowercase, only for aesthetic purposes
 	std::string takeInput();
 
 	// A function that prompts for the user's input, and returns a pair with the user's input and corresponding category

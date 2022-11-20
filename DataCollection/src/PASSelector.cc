@@ -10,21 +10,22 @@ void PASSelector::selectParticles(const InputModule* input, Event& event)
 {
     std::vector<Particle> selected;
     auto particles = input->getLeptons(InputModule::RecoLevel::Reco).getParticles();
-    
+
     
     for (const auto& particle : particles)
     {
         if (particle.getType() == ParticleType::electron() && particle.getPt() > 40 && std::abs(particle.getEta()) < 3) {
-            if (Lepton(particle).isTight())
+
+            if (Lepton(particle).isLoose())
             {
-                selected.push_back(particle);
+                event.addElectron(particle);
             }
         }
         if (particle.getType() == ParticleType::muon() && particle.getPt() > 40 && std::abs(particle.getEta()) < 2.8) 
         {
-            if(Lepton(particle).isTight())
+            if(Lepton(particle).isLoose())
             {
-                selected.push_back(particle);
+                event.addMuon(particle);
             }
         }
     }

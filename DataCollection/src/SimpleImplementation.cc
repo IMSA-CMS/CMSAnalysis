@@ -17,6 +17,20 @@ selectionFit(fit)
   //std::cout << "Got to SI\n";
 }
 
+//added for dxy, dz
+SimpleImplementation::SimpleImplementation(reco::Candidate::LorentzVector vec, int ch, const ParticleType& type, double iIsolation, Lepton::SelectionFit fit, double dxy, double dz):
+lorentzVec(vec), 
+particleCharge(ch),
+particleType(type),
+particleIsolation(iIsolation),
+selectionFit(fit),
+particleDxy(dxy),
+particleDz(dz)
+{
+
+  //std::cout << "Got to SI\n";
+}
+
 bool SimpleImplementation::operator== (const ParticleImplementation& other) const 
 {
     try
