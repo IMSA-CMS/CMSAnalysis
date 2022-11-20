@@ -5,10 +5,8 @@
 
 class TriggerPlan : public DataCollectionPlan
 {
-    public:
-        TriggerPlan();
-    private:
-        
+    protected:
+        void setupAnalyzer() override;
 };
 
 #endif
