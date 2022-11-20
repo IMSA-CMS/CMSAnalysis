@@ -1,7 +1,6 @@
 #include "CMSAnalysis/Analysis/interface/RootFileInput.hh"
 #include "CMSAnalysis/Analysis/interface/Estimator.hh"
 #include "CMSAnalysis/Analysis/interface/FitEstimator.hh"
-#include "CMSAnalysis/Analysis/interface/HistogramFinder.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include "CMSAnalysis/Analysis/interface/PlotFormatter.hh"
 #include <fstream>
