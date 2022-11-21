@@ -25,7 +25,7 @@
 #include <memory>
 #include <vector> 
 
-TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle)
+TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes, std::string histvariable, TString xAxisTitle, TString yAxisTitle)
 {
     THStack* background = processes->getStack(histvariable, "background", true);
 	THStack* signal = processes->getStack(histvariable, "signal", true);
@@ -94,10 +94,21 @@ TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes
     return canvas;
 }
 
-TCanvas* PlotFormatter::superImposedHist(std::shared_ptr<Channel> processes, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle) {
+TCanvas* PlotFormatter::superImposedHist(std::shared_ptr<Channel> processes, std::string histvariable, TString xAxisTitle, TString yAxisTitle) {
     std::vector<TH1*> hists;
     for(std::shared_ptr<Process> process : processes->getProcesses()) {
         hists.push_back(process->getHist(histvariable, false));
+    }
+
+    double minimumBin = (double) hists.at(0)->GetNbinsX();
+    for(TH1* hist : hists) {
+	if((double) hist->GetNbinsX() < minimumBin) {
+	     minimumBin = (double) hist->GetNbinsX();
+	}
+    }
+
+    for(TH1* hist : hists) {
+	hist->Rebin((int) (((double) hist->GetNbinsX()) / minimumBin + 0.5));
     }
 
     for(TH1* hist : hists) {
@@ -174,6 +185,18 @@ TCanvas* PlotFormatter::simpleAnalysisHist(std::vector<TH1*> hists, std::vector<
     int firstIndex = 0;
     double maximum = 0;
     int count = 0;
+
+    double minimumBin = (double) hists.at(0)->GetNbinsX();
+    for(TH1* hist : hists) {
+	if((double) hist->GetNbinsX() < minimumBin) {
+	     minimumBin = (double) hist->GetNbinsX();
+	}
+    }
+
+    for(TH1* hist : hists) {
+	    hist->Rebin((int) (((double) hist->GetNbinsX()) / minimumBin + 0.5));
+    }
+
     for(TH1* hist : hists) {
 	    if(hist->Integral() != 0 && !isnan(hist->Integral())) {
 	        hist->Scale(1/hist->Integral());
@@ -243,6 +266,18 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     int firstIndex = 0;
     double maximum = 0;
     int count = 0;
+
+    double minimumBin = (double) hists.at(0)->GetNbinsX();
+    for(TH1* hist : hists) {
+	if((double) hist->GetNbinsX() < minimumBin) {
+	     minimumBin = (double) hist->GetNbinsX();
+	}
+    }
+
+    for(TH1* hist : hists) {
+	hist->Rebin((int) (((double) hist->GetNbinsX()) / minimumBin + 0.5));
+    }
+
     for(TH1* hist : hists) {
 	    if(hist->Integral() != 0 && !isnan(hist->Integral())) {
 	        hist->Scale(1/hist->Integral());
@@ -271,6 +306,7 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     gStyle->SetOptStat(0);
 
     //Draws the histogram with more events first (bigger axis)
+    first->Rebin(10);
     first->Draw("HIST");
     histVector.push_back(first);
 
@@ -297,7 +333,8 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     //Draws the other histogram    
     for(TH1* hist : hists) {
         if(find(hists.begin(), hists.end(), hist) - hists.begin() != firstIndex) {
-            hist->Draw("HIST SAME");
+            hist->Rebin(10);
+	    hist->Draw("HIST SAME");
             histVector.push_back(hist);
         }
     }
@@ -306,7 +343,7 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     return canvas;
 }
 
-TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, HistVariable histvariable, bool scaleToExpected, TString xAxisTitle, TString yAxisTitle) {
+TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, std::string histvariable, bool scaleToExpected, TString xAxisTitle, TString yAxisTitle) {
     TH1* hist = process->getHist(histvariable, scaleToExpected);
  
     //Setting size and margins
@@ -334,7 +371,7 @@ TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, HistVaria
     return canvas;
 }
 
-TCanvas* PlotFormatter::simple2DHist(std::shared_ptr<Process> process, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle) {
+TCanvas* PlotFormatter::simple2DHist(std::shared_ptr<Process> process, std::string histvariable, TString xAxisTitle, TString yAxisTitle) {
     TH2* hist = process->get2DHist(histvariable);
  
     //Setting size and margins
@@ -362,7 +399,7 @@ TCanvas* PlotFormatter::simple2DHist(std::shared_ptr<Process> process, HistVaria
     return canvas;
 }
 
-TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle) {
+TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, std::string histvariable, TString xAxisTitle, TString yAxisTitle) {
     THStack* hists = processes->getStack(histvariable, "", true);
  
     //Setting size and margins

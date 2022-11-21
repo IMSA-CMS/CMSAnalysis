@@ -5,8 +5,8 @@
 
 class GenSimPlan : public DataCollectionPlan
 {
-    public:
-        GenSimPlan();
+    protected:
+        void setupAnalyzer() override;
 };
 
 #endif

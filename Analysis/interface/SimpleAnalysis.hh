@@ -5,7 +5,6 @@
 #include <memory>
 #include "CrossSectionReader.hh"
 #include "SingleProcess.hh"
-#include "HistogramFinder.hh"
 #include "SimpleChannel.hh"
 
 class SimpleAnalysis

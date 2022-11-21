@@ -9,11 +9,9 @@
 CandidateImplementation::CandidateImplementation(
     const reco::Candidate *iparticle)
     : particle(iparticle) {
-  // std::cout << "Got to CI\n";
 }
 
 int CandidateImplementation::charge() const {
-  // std::cout << "charge\n";
   checkIsNull();
   return particle->charge();
 }
@@ -39,15 +37,7 @@ double CandidateImplementation::isolation() const {
   return -1;
 }
 
-// double CandidateImplementation::eta() const
-// {
-//   checkIsNull();
-//   return particle->eta();
-// }
-
-
 reco::Candidate::LorentzVector CandidateImplementation::getFourVector() const {
-  // std::cout << "get four vec\n";
   checkIsNull();
   return particle->p4();
 }
@@ -55,46 +45,43 @@ reco::Candidate::LorentzVector CandidateImplementation::getFourVector() const {
 bool CandidateImplementation::operator==(
     const ParticleImplementation &userParticle) const {
   try {
-    auto candidateImp =
+      auto candidateImp =
         dynamic_cast<const CandidateImplementation &>(userParticle);
-    return candidateImp.particle == particle;
+      return candidateImp.particle == particle;
   } catch (std::bad_cast &) {
     return false;
   }
 }
 
-// }
-// Particle& CandidateImplementation::operator = (const CandidateImplementation&
-// particle2)
-// {
-//   particle = particle2.particle;
-//   return *this;
-// }
-
 int CandidateImplementation::pdgId() const {
-  // std::cout << "pdgId\n";
   checkIsNull();
   return particle->pdgId();
 }
 
 int CandidateImplementation::status() const {
-  // std::cout << "status\n";
   checkIsNull();
   return particle->status();
 }
 
 Particle CandidateImplementation::mother() const {
-  // std::cout << "mother\n";
   checkIsNull();
   // mother of particle is often not electron/muon
-  return Particle(particle->mother());
+
+  const reco::Candidate* mother = particle->mother();
+  Particle particleMother = Particle(mother);
+  return particleMother;
+  
 }
 
 Particle CandidateImplementation::daughter(int i) const {
   // std::cout << "daugters\n";
   checkIsNull();
   auto daughter = particle->daughter(i);
-
+  /* if (!daughter)
+  {
+    throw std::runtime_error("null");
+  }
+*/
   /*
 
     Particle::Type type;

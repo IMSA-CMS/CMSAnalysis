@@ -7,7 +7,7 @@
 #include "TSystem.h"
 
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
-#include "CMSAnalysis/DataCollection/interface/DeltaRHist.hh"
+// #include "CMSAnalysis/DataCollection/interface/DeltaRHist.hh"
 #include "CMSAnalysis/DataCollection/interface/DoubleMuonTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimEventDumpModule.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimParticleModule.hh"
@@ -43,7 +43,7 @@
 
 using std::make_shared;
 
-LeptonJetReconstructionPlan::LeptonJetReconstructionPlan()
+void LeptonJetReconstructionPlan::setupAnalyzer()
 {
   Analyzer &analyzer = getAnalyzer();
 
@@ -55,13 +55,12 @@ LeptonJetReconstructionPlan::LeptonJetReconstructionPlan()
   auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
   auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>();
-  auto lepMatchMod =
-      std::make_shared<LeptonJetMatchingModule>(lepRecoMod, genSimEventDumpMod, 0.5);
+  auto lepMatchMod = std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.5);
   auto histOutputMod = std::make_shared<HistogramOutputModule>();
   auto mlMod = std::make_shared<LeptonJetMLCalculator>();
 
   // Histograms
-  auto deltaRHist = std::make_shared<DeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.1);
+  // auto deltaRHist = std::make_shared<DeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.1);
   auto pTHist = std::make_shared<LeptonJetPtHist>(lepRecoMod, "pT Values (Reconstructed Jets)", 100, 0, 200);
   auto matchedLeptonJetHist = std::make_shared<MatchedLeptonJetHist>("Matched Lepton Jet Hist HadET", 100, 0, 10, lepMatchMod, lepRecoMod, true);
   auto unmatchedLeptonJetHist = std::make_shared<MatchedLeptonJetHist>("Unmatched Lepton Jet Hist HadET", 100, 0, 10, lepMatchMod, lepRecoMod, false);
@@ -70,10 +69,10 @@ LeptonJetReconstructionPlan::LeptonJetReconstructionPlan()
   // auto matchPhiHist = std::make_shared<MatchingPhiHist>(lepMatchMod, "Differences in Phi for Matched Lepton Jets", 100, 0, 3.15);
   // auto matchEtaHist = std::make_shared<MatchingEtaHist>(lepMatchMod, "Differences in Eta for Matched Lepton Jets", 100, -1, 1);
 
-  auto relIsoHist = std::make_shared<IsolationHist>(InputModule::RecoLevel::Reco, "RelIso of Leptons", 2000, 0, 1);
+  auto relIsoHist = std::make_shared<IsolationHist>(InputModule::RecoLevel::Reco, "Jet pT Rel", 10000, 0, 100);
   auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(InputModule::RecoLevel::Reco, "NN Classifier Output Distribution", 100, 0, 1, mlMod, lepRecoMod);
 
-  eventHistMod->addHistogram(deltaRHist);
+  // eventHistMod->addHistogram(deltaRHist);
   eventHistMod->addHistogram(pTHist);
   eventHistMod->addHistogram(matchedLeptonJetHist);
   eventHistMod->addHistogram(unmatchedLeptonJetHist);

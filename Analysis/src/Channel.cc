@@ -66,7 +66,7 @@ void Channel::addProcessLabel(std::string label, std::vector<std::shared_ptr<Pro
 	}
 }
 
-std::vector<double> Channel::getYields(HistVariable dataType) const
+std::vector<double> Channel::getYields(std::string dataType) const
 {
 	std::vector<double> yields;
 	for(auto process : processes)
@@ -86,7 +86,7 @@ std::vector<std::string> Channel::getNames() const
 	return names;
 }
 
-THStack* Channel::getStack(HistVariable histType, std::string label, bool scaleToExpected) const
+THStack* Channel::getStack(std::string histType, std::string label, bool scaleToExpected) const
 {
 	THStack* superPlot = new THStack(name.c_str(), name.c_str());
 	if (label == "")
