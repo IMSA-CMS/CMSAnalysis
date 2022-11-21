@@ -7,6 +7,8 @@ class MassAcceptancePlan : public DataCollectionPlan
 {
     public:
         MassAcceptancePlan();
+    protected:
+        virtual void initialize() override;
     private:
         
 };

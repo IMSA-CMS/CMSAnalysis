@@ -7,6 +7,9 @@ class LeptonJetReconstructionPlan : public DataCollectionPlan
 {
     public:
         LeptonJetReconstructionPlan();
+    
+    protected:
+        virtual void initialize() override;
 };
 
 #endif

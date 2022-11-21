@@ -18,6 +18,11 @@ using std::make_shared;
 
 TriggerPlan::TriggerPlan()
 {
+  
+}
+
+void TriggerPlan::initialize()
+{
   Analyzer& analyzer = getAnalyzer();
 
   // Create objects

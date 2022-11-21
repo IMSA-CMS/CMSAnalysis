@@ -17,6 +17,11 @@ using std::make_shared;
 
 MLVariablesPlan::MLVariablesPlan()
 {
+
+}
+
+void MLVariablesPlan::initialize()
+{
     Analyzer &analyzer = getAnalyzer();
     auto leptonJetRecoMod = make_shared<LeptonJetReconstructionModule>(0.1);
     auto genSimEventDump = make_shared<GenSimEventDumpModule>();
