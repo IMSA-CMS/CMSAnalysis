@@ -26,6 +26,11 @@ using std::make_shared;
 
 InvariantMassPlan::InvariantMassPlan()
 {
+
+}
+
+void InvariantMassPlan::initialize() 
+{
   Analyzer& analyzer = getAnalyzer();
 
   // Create necessary histogram(s), as well as histMod

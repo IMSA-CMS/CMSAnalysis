@@ -17,6 +17,11 @@ using std::make_shared;
 
 MassResolutionPlan::MassResolutionPlan()
 {
+
+}
+
+void MassResolutionPlan::initialize()
+{
   Analyzer& analyzer = getAnalyzer();
 
   auto matchMod = make_shared<MatchingModule>();

@@ -7,6 +7,8 @@ class LeptonJetBackgroundPlan : public DataCollectionPlan
 {
     public:
         LeptonJetBackgroundPlan();
+    protected:
+        virtual void initialize() override;
 };
 
 #endif

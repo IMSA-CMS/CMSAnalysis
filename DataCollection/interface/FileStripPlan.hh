@@ -10,6 +10,8 @@ class FileStripPlan : public DataCollectionPlan
 {
     public:
         FileStripPlan();
+    protected:
+        virtual void initialize() override;
 };
 
 #endif

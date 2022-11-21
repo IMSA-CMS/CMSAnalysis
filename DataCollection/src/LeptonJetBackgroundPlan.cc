@@ -20,6 +20,11 @@ using std::make_shared;
 
 LeptonJetBackgroundPlan::LeptonJetBackgroundPlan()
 {
+
+}
+
+void LeptonJetBackgroundPlan::initialize()
+{
     Analyzer& analyzer = getAnalyzer();
 
     // auto genSimMod = make_shared<GenSimIdentificationModule>(1000022, true);

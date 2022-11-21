@@ -7,6 +7,8 @@ class DisplacedVertexPlan : public DataCollectionPlan
 {
     public:
         DisplacedVertexPlan();
+    protected:
+        virtual void initialize() override;
 };
 
 #endif

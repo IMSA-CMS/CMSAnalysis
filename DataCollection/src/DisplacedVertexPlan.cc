@@ -27,6 +27,10 @@ using std::make_shared;
 
 DisplacedVertexPlan::DisplacedVertexPlan()
 {
+} 
+
+void DisplacedVertexPlan::initialize()
+{
   Analyzer& analyzer = getAnalyzer();
 
   auto dispVerMod = make_shared<DisplacedVertexModule>();

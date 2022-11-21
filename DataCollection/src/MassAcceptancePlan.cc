@@ -23,7 +23,11 @@ using std::make_shared;
 
 MassAcceptancePlan::MassAcceptancePlan()
 {
-  Analyzer& analyzer = getAnalyzer();
+}
+
+void MassAcceptancePlan::initialize()
+{
+    Analyzer& analyzer = getAnalyzer();
 
   //auto genSimMod = make_shared<GenSimIdentificationModule>();
   //auto recoMod = make_shared<RecoIdentificationModule>(50);
@@ -41,4 +45,5 @@ MassAcceptancePlan::MassAcceptancePlan()
   analyzer.addAnalysisModule(signFlipMod);
 
   analyzer.addAnalysisModule(histMod);
+
 }
