@@ -7,13 +7,13 @@ Main:timesAllowErrors = 10000
 #Random:seed=6
 
 # SUSY
-#SUSY:all = on
+SUSY:all = on
 #SUSY:qqbar2squarkantisquark = on
 #SUSY:idA = 1000006
 
 # SUSY Les Houches Accord
-#SLHA:readFrom = 2
-#SLHA:file = sps1aWithDecays.spc
+SLHA:readFrom = 2
+SLHA:file = SUSYLeptonJet.spc
 
 # Hidden Valley
 #HiddenValley:all = on
@@ -22,58 +22,9 @@ HiddenValley:doKinMix = on
 HiddenValley:FSR = on
 HiddenValley:alphaFSR = 0
 
-# SM Higgs
-# Handbook of LHC Higgs Cross Sections: 1. Inclusive Observables, S. Dittmaier et al., CERN-2011-002 [arXiv:1101.0593].
-# Note: sum is not quite unity, and so BR's are rescaled accordingly.
-HiggsSM:all = on
-HiggsSM:gg2H = on
-25:onMode = off
-25:m0 = 1000.0
-25:addChannel = 1 0.0 0 4900001 -4900001
-#25:0:bRatio  = 0.0
-#25:1:bRatio  = 0.0
-#25:2:bRatio  = 0.0
-#25:3:bRatio  = 0.0
-#25:4:bRatio  = 0.0
-#25:5:bRatio  = 0.0
-#H -> e+ e-
-#25:6:bRatio  = 0.0 
-#H -> mu+ mu-
-#25:7:bRatio  = 0.0 
-#25:8:bRatio  = 0.5
-#25:9:bRatio  = 0.0
-#25:10:bRatio = 0.0
-#25:11:bRatio = 0.0
-#25:12:bRatio = 0.0
-#25:13:bRatio = 0.0
-# dark photon
-#25:76:bRatio = 0.5
-25:0:meMode  = 100
-25:1:meMode  = 100
-25:2:meMode  = 100
-25:3:meMode  = 100
-25:4:meMode  = 100
-25:5:meMode  = 100
-25:6:meMode  = 100
-25:7:meMode  = 100
-25:8:meMode  = 100
-25:9:meMode  = 100
-25:10:meMode = 100
-25:11:meMode = 100
-25:12:meMode = 100
-25:13:meMode = 100
-25:76:meMode = 100
-25:onIfAny = 4900001
-25:mMin = 1000
-25:mWidth = 10
-25:tau0 = 1.97327e-13
-25:oneChannel = 1 0.5 0 15 -15
-25:addChannel = 1 0.5 0 4900022 4900022
-25:onIfAny = 15
-
 # Dark Pseudo Scalar
-#4900001:oneChannel = 1 1.0 100 4900022 4900004
-4900001:onMode = off
+4900001:oneChannel = 1 1.0 100 4900022 4900004
+#4900001:onMode = off
 #4900001:onIfAll = 4900022 4900002
 4900001:m0 = 5.0
 4900001:spinType = 2
@@ -120,11 +71,7 @@ HiggsSM:gg2H = on
 4900004:tau0 = 1.97327e-13
 
 # Dark Photon
-4900022:oneChannel = 1 0.526471 100 11 -11
-4900022:addChannel = 1 0.466296 100 13 -13
-#4900022:oneChannel = 1 1.0 100 11 -11
-#4900022:addChannel = 1 0.5 100 13 -13
-#4900022:onMode = off
+4900022:onMode = off
 #4900022:onIfAll = 11 -11
 #4900022:onIfAll = 13 -13
 4900022:mayDecay = true
@@ -134,10 +81,10 @@ HiggsSM:gg2H = on
 4900022:isResonance = true
 4900022:tau0 = 1.97327e-13
 4900022:m0 = 0.3
-#4900022:0:meMode = 0
+4900022:0:meMode = 0
 
 # Lightest Neutralino
-#1000022:mayDecay = true
+1000022:mayDecay = true
 
 # Other Dark Particles
 4900005:m0 = 1000000
@@ -156,3 +103,31 @@ HiggsSM:gg2H = on
 4900211:m0 = 1000000
 4900213:m0 = 1000000
 4900991:m0 = 1000000	
+
+#add branching ratios manually
+4900022:oneChannel = 1 0.526471 100 11 -11
+4900022:addChannel = 1 0.466296 100 13 -13
+4900022:addChannel = 1 0 100 15 -15
+4900022:addChannel = 1 0.00723239 100 211 -211
+4900022:addChannel = 1 0 100 321 -321
+4900022:addChannel = 1 0 100 311 -311
+4900022:addChannel = 1 0 100 111 22
+4900022:addChannel = 1 0 100 221 22
+4900022:addChannel = 1 0 100 111 111 22
+4900022:addChannel = 1 0 100 211 -211 111
+4900022:addChannel = 1 0 100 111 321 -321
+4900022:addChannel = 1 0 100 310 -321 211
+4900022:addChannel = 1 0 100 310 321 -211
+4900022:addChannel = 1 0 100 211 -211 111 111
+4900022:addChannel = 1 0 100 211 -211 211 -211
+4900022:addChannel = 1 0 100 321 -321 211 -211
+4900022:addChannel = 1 0 100 22 22 211 -211
+4900022:addChannel = 1 0 100 211 -211 211 -211 111
+4900022:addChannel = 1 0 100 211 -211 111 111 111
+4900022:addChannel = 1 0 100 211 -211 211 -211 211 -211
+4900022:addChannel = 1 0 100 211 -211 211 -211 111 111
+4900022:addChannel = 1 0 91 1 -1
+4900022:addChannel = 1 0 91 2 -2
+4900022:addChannel = 1 0 91 3 -3
+4900022:addChannel = 1 0 91 4 -4
+4900022:addChannel = 1 0 91 5 -5

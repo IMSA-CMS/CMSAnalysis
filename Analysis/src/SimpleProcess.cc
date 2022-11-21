@@ -1,5 +1,4 @@
 #include "CMSAnalysis/Analysis/interface/SimpleProcess.hh"
-#include "CMSAnalysis/Analysis/interface/HistogramFinder.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include "TH1.h"
 #include <unordered_map>
@@ -9,29 +8,29 @@
 #include <vector>
 
 
-void SimpleProcess::addFile(std::string fileName, std::shared_ptr<HistogramFinder> histogramFinder) {
-    if(checkValidity(fileName, histogramFinder)) {
+void SimpleProcess::addFile(std::string fileName, std::vector<HistVariable> histVariables) {
+    if(checkValidity(fileName, histVariables)) {
 	files.push_back(fileName);
-	histFinders.push_back(histogramFinder);
+	histVariableVec.push_back(histVariables);
     }
 }
 
-TH1* SimpleProcess::getHist(HistVariable histType) {
+TH1* SimpleProcess::getHist(std::string histType) {
 	int maxBinNum = 0;
 	double maxBarWidth = 0.0;
 	int count = 0;
 	for (std::string file : files)
 	{
-		if (getHistFromFile(file, histFinders.at(count), histType) == 0) {
+		if (getHistFromFile(file, histVariableVec.at(count), histType) == 0) {
 			throw std::runtime_error("Histogram not found in file: " + file);
 		}
-		if (getHistFromFile(file, histFinders.at(count), histType)->GetNbinsX() > maxBinNum)
+		if (getHistFromFile(file, histVariableVec.at(count), histType)->GetNbinsX() > maxBinNum)
 		{
-			maxBinNum = getHistFromFile(file, histFinders.at(count), histType)->GetNbinsX();
+			maxBinNum = getHistFromFile(file, histVariableVec.at(count), histType)->GetNbinsX();
 		}
-		if ((getHistFromFile(file, histFinders.at(count), histType)->GetXaxis()->GetBinWidth(maxBinNum)) > maxBarWidth)
+		if ((getHistFromFile(file, histVariableVec.at(count), histType)->GetXaxis()->GetBinWidth(maxBinNum)) > maxBarWidth)
 		{
-			maxBarWidth = (getHistFromFile(file, histFinders.at(count), histType)->GetXaxis()->GetBinWidth(maxBinNum));
+			maxBarWidth = (getHistFromFile(file, histVariableVec.at(count), histType)->GetXaxis()->GetBinWidth(maxBinNum));
 		}
 		count++;
 	}
@@ -41,7 +40,7 @@ TH1* SimpleProcess::getHist(HistVariable histType) {
 	count = 0;
 	for (std::string file : files)	
 	{
-		toAdd = getHistFromFile(file, histFinders.at(count), histType);
+		toAdd = getHistFromFile(file, histVariableVec.at(count), histType);
 		toMerge->Add(toAdd);
 		count++;
 	}
@@ -51,7 +50,7 @@ TH1* SimpleProcess::getHist(HistVariable histType) {
 	return hist;    
 }
 
-TH1* SimpleProcess::getHistFromFile(std::string file, std::shared_ptr<HistogramFinder> histFinder, HistVariable histType) {
+TH1* SimpleProcess::getHistFromFile(std::string file, std::vector<HistVariable> histVariables, std::string histType) {
     TH1* hist;
     std::string fileName = filePath + file;
     TFile* openedFile;
@@ -59,7 +58,13 @@ TH1* SimpleProcess::getHistFromFile(std::string file, std::shared_ptr<HistogramF
     if(!openedFile) {
         throw std::runtime_error("Cannot open file!");
     }
-    hist = dynamic_cast<TH1*>(openedFile->Get(histFinder->getHistName(histType).c_str()));
+    std::string name = "";
+    for(HistVariable histVar : histVariables) {
+	if(histVar.getName() == histType) {
+	    name = histVar.getHistName();
+	}
+    }
+    hist = dynamic_cast<TH1*>(openedFile->Get(name.c_str()));
     if(dynamic_cast<TH2 *>(hist) != 0) {
         TH2* hist2D = dynamic_cast<TH2 *>(hist);
         TH1 *newhist = hist2D->ProjectionX("_px", 0, -1, "E");
@@ -68,12 +73,11 @@ TH1* SimpleProcess::getHistFromFile(std::string file, std::shared_ptr<HistogramF
     return hist;
 }
 
-bool SimpleProcess::checkValidity(std::string file, std::shared_ptr<HistogramFinder> histFinder) {
+bool SimpleProcess::checkValidity(std::string file, std::vector<HistVariable> histVariables) {
     bool validFile = true;
     TH1* hist;
-    std::unordered_map<HistVariable, std::string> nameMap = histFinder->getMap();
-    for (auto item : nameMap) {
-        hist = getHistFromFile(file, histFinder, item.first);
+    for (auto histVar : histVariables) {
+        hist = getHistFromFile(file, histVariables, histVar.getName());
         if(hist == 0) {
             validFile = false;
         }

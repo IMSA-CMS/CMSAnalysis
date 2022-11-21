@@ -6,10 +6,9 @@
 #include "TH2.h"
 #include "TH2F.h"
 #include <memory>
-#include "CMSAnalysis/Analysis/interface/HistogramFinder.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 
-RootFileInput::RootFileInput(std::string fileName, std::shared_ptr<HistogramFinder> iHistFinder) : histFinder(iHistFinder), fileSource(fileName),
+RootFileInput::RootFileInput(std::string fileName, std::vector<HistVariable> iHistVariables) : histVariables(iHistVariables), fileSource(fileName),
 	file(TFile::Open(fileName.c_str(), "read")) 
 	{
 		if(!file)
@@ -19,9 +18,14 @@ RootFileInput::RootFileInput(std::string fileName, std::shared_ptr<HistogramFind
 	}
 
 
-TH1* RootFileInput::getHist(HistVariable histType) const
+TH1* RootFileInput::getHist(std::string histType) const
 {
-	std::string name = histFinder->getHistName(histType);
+	std::string name = "";
+	for(HistVariable histVar : histVariables) {
+	    if(histVar.getName() == histType) {
+		name = histVar.getHistName();
+	    }
+	}
 	TH1* hist = dynamic_cast<TH1*>(file->Get(name.c_str()));
 	//std::cout << "hist rootFileInput " << hist << std::endl;
 	if(dynamic_cast<TH2 *>(hist) != 0) {
@@ -33,14 +37,16 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 	return hist;
 }
 
-TH1* RootFileInput::get2DHist(HistVariable histType) const
+TH1* RootFileInput::get2DHist(std::string histType) const
 {
-	std::string name = histFinder->getHistName(histType);
+	std::string name = "";
+	for(HistVariable histVar : histVariables) {
+	    if(histVar.getName() == histType) {
+		name = histVar.getHistName();
+	    }
+	}
 	TH1* hist = (TH2F *)file->Get(name.c_str());
 	//Since only windowEstimator uses this, windowEstimator will proceed with using 1D hists instead of 2D if no 2D hist.
-	//if(dynamic_cast<TH2 *>(hist) == 0) {
-	//	throw std::runtime_error("No 2D hist of name " + name + " in file " + fileSource);
-	//}
 	return hist;
 }
 

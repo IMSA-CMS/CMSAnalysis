@@ -1,6 +1,5 @@
 #include "CMSAnalysis/DataCollection/interface/GenSimSimpleImplementation.hh"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
-
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
 #include "DataFormats/PatCandidates/interface/Photon.h"

@@ -8,7 +8,6 @@
 #include "CMSAnalysis/Analysis/interface/RootFileInput.hh"
 #include "CMSAnalysis/Analysis/interface/CrossSectionReader.hh"
 #include "CMSAnalysis/Analysis/interface/Process.hh"
-#include "CMSAnalysis/Analysis/interface/HistogramFinder.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include <memory>
 #include <iostream>
@@ -19,23 +18,23 @@ HiggsComparisonAnalysis::HiggsComparisonAnalysis() {
     std::vector<std::string> names = {"Muon", "Electron"};
     for(std::string name : names) {
         for(double massTarget : massTargets) {
-            auto histFinder = std::make_shared<HistogramFinder>();
+            std::vector<HistVariable> histVariables;
             //Change this file to your folder to use your own cross sections
             auto reader = std::make_shared<CrossSectionReader>("/uscms/home/fciancio/practice/CMSSW_11_0_2/src/CMSAnalysis/Analysis/bin/crossSections.txt");
             //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
             const std::string newFilePath = "/uscms/home/fciancio/practice/CMSSW_11_0_2/src/CMSAnalysis/DataCollection/bin/";
 	        //Add your hists here
-            histFinder->addHist(HistVariable::InvariantMass, name + name + " Reco Invariant Mass Background");
-            histFinder->addHist(HistVariable::SameSignMass, name + name + " Reco Same Sign Invariant Mass");
-	        histFinder->addHist(HistVariable::GenSimSameSignMass, name + name + " GenSim Same Sign Invariant Mass");
-            histFinder->addHist(HistVariable::pT, name + name + " Reco Leading lepton pT");
-	        histFinder->addHist(HistVariable::GenSimPt, name + name + " GenSim Leading lepton pT");
-            histFinder->addHist(HistVariable::MET, name + "MET");
+            histVariables.push_back(HistVariable::InvariantMass(name + name + " Reco Invariant Mass Background"));
+            histVariables.push_back(HistVariable::SameSignMass(name + name + " Reco Same Sign Invariant Mass"));
+	        histVariables.push_back(HistVariable::GenSimSameSignMass(name + name + " GenSim Same Sign Invariant Mass"));
+            histVariables.push_back(HistVariable::Pt(name + name + " Reco Leading lepton pT"));
+	        histVariables.push_back(HistVariable::GenSimPt(name + name + " GenSim Leading lepton pT"));
+            histVariables.push_back(HistVariable::MET(name + "MET"));
             double luminosity = 3000;
 	        auto newHiggs = std::make_shared<Process>("Run 2", 1);
-	        newHiggs->addProcess(makeSignalProcess(histFinder, newFilePath, "Higgs" + std::to_string((int) massTarget) + "_HiggsBackground.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
+	        newHiggs->addProcess(makeSignalProcess(histVariables, newFilePath, "Higgs" + std::to_string((int) massTarget) + "_HiggsBackground.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
             auto higgsSignal = std::make_shared<Process>("Delphes", 2);
-            higgsSignal->addProcess(makeSignalProcess(histFinder, newFilePath, "HiggsPick" + std::to_string((int) massTarget) + "_HiggsBackground.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
+            higgsSignal->addProcess(makeSignalProcess(histVariables, newFilePath, "HiggsPick" + std::to_string((int) massTarget) + "_HiggsBackground.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
             std::vector<std::shared_ptr<Process>> higgsProcesses = { newHiggs, higgsSignal };
             auto higgsChannels = std::make_shared<Channel>(name + std::to_string((int) massTarget), higgsProcesses);
             channels.push_back(higgsChannels);

@@ -21,6 +21,8 @@ class LeptonJetImplementation : public ParticleImplementation
   double getPhi() const {return getFourVector().Phi();}
   double getEta() const {return getFourVector().Eta();}
   double getMass() const {return getFourVector().mass();}
+  virtual double dxy() const {throw std::runtime_error("getDxy not implemented");}
+  virtual double dz() const {throw std::runtime_error("getDxy not implemented");}
   const std::vector<Particle>& getParticles() const {return leptonJetParticles;}
   void addParticle(const Particle particle) {leptonJetParticles.push_back(particle);}
   int getNumParticles() const {return leptonJetParticles.size();}
