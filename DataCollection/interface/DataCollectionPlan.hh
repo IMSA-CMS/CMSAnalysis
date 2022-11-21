@@ -16,10 +16,10 @@ class DataCollectionPlan
         virtual ~DataCollectionPlan(){}
         
     protected:
-        const Analyzer& getAnalyzer() const {return analyzer;}
         
         virtual void initialize() = 0;
-
+            
+        const Analyzer& getAnalyzer() const {return analyzer;}
         // Returns the analyzer as a reference, typically for use within a ChildPlan constructor
         Analyzer& getAnalyzer() {return analyzer;}
     private:

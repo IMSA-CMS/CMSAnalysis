@@ -16,3 +16,7 @@ File root://cmsxrootd.fnal.gov///store/user/snowmass/Snowmass2021/DelphesNtupliz
 Events Processed: 100517388
 Processing complete!
 Output written to process.root
+Reading input file textfiles/DY50Run2.txt
+Drell-Yan
+Filename: textfiles/Drell-Yan/Drell-Yan_MassCut_50-inf_Run_2.txt
+# of root files: 113

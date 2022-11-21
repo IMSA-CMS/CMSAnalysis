@@ -37,21 +37,31 @@ std::vector<double> PhotonsHist::protectedValue(InputModule::RecoLevel typeGenSi
     }
   auto finalPhotonList = finalPhotons.getParticles();
 
-    for(auto currentParticle:finalPhotonList)
-    {
-      addPhotonUsingMother(posSignLep, oppSignLep, currentParticle);
-    }
+    // for(auto currentParticle:finalPhotonList)
+    // {
+    //   addPhotonUsingMother(posSignLep, oppSignLep, currentParticle);
+    // }
 
-       auto posSignIv = posSignLep.calculateAllLeptonInvariantMass();
-       auto oppSignIv = oppSignLep.calculateAllLeptonInvariantMass();
-       if(posSignIv > oppSignIv)
-       {
-          return {posSignIv};
-       }
-      else
-      {
-        return{oppSignIv};
-      }
+  // finds all photons Pt
+  std::vector<double> photonPT;
+  
+  for(auto currentParticle : finalPhotonList)
+  {
+    photonPT.push_back(currentParticle.getPt());
+  }
+
+  return photonPT;
+
+  // auto posSignIv = posSignLep.calculateAllLeptonInvariantMass();
+  // auto oppSignIv = oppSignLep.calculateAllLeptonInvariantMass();
+  // if(posSignIv > oppSignIv)
+  // {
+  //   return {posSignIv};
+  // }
+  // else
+  // {
+  //   return{oppSignIv};
+  // }
 
   
   }

@@ -18,11 +18,6 @@
 
 using std::make_shared;
 
-LeptonJetBackgroundPlan::LeptonJetBackgroundPlan()
-{
-
-}
-
 void LeptonJetBackgroundPlan::initialize()
 {
     Analyzer& analyzer = getAnalyzer();

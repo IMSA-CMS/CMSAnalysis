@@ -25,7 +25,7 @@
 #include <memory>
 #include <vector> 
 
-TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle)
+TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes, std::string histvariable, TString xAxisTitle, TString yAxisTitle)
 {
     THStack* background = processes->getStack(histvariable, "background", true);
 	THStack* signal = processes->getStack(histvariable, "signal", true);
@@ -94,7 +94,7 @@ TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes
     return canvas;
 }
 
-TCanvas* PlotFormatter::superImposedHist(std::shared_ptr<Channel> processes, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle) {
+TCanvas* PlotFormatter::superImposedHist(std::shared_ptr<Channel> processes, std::string histvariable, TString xAxisTitle, TString yAxisTitle) {
     std::vector<TH1*> hists;
     for(std::shared_ptr<Process> process : processes->getProcesses()) {
         hists.push_back(process->getHist(histvariable, false));
@@ -343,7 +343,7 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     return canvas;
 }
 
-TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, HistVariable histvariable, bool scaleToExpected, TString xAxisTitle, TString yAxisTitle) {
+TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, std::string histvariable, bool scaleToExpected, TString xAxisTitle, TString yAxisTitle) {
     TH1* hist = process->getHist(histvariable, scaleToExpected);
  
     //Setting size and margins
@@ -371,7 +371,7 @@ TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, HistVaria
     return canvas;
 }
 
-TCanvas* PlotFormatter::simple2DHist(std::shared_ptr<Process> process, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle) {
+TCanvas* PlotFormatter::simple2DHist(std::shared_ptr<Process> process, std::string histvariable, TString xAxisTitle, TString yAxisTitle) {
     TH2* hist = process->get2DHist(histvariable);
  
     //Setting size and margins
@@ -399,7 +399,7 @@ TCanvas* PlotFormatter::simple2DHist(std::shared_ptr<Process> process, HistVaria
     return canvas;
 }
 
-TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle) {
+TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, std::string histvariable, TString xAxisTitle, TString yAxisTitle) {
     THStack* hists = processes->getStack(histvariable, "", true);
  
     //Setting size and margins

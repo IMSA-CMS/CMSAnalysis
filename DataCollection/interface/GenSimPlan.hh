@@ -5,8 +5,6 @@
 
 class GenSimPlan : public DataCollectionPlan
 {
-    public:
-        GenSimPlan();
     protected:
         virtual void initialize() override; 
 };
