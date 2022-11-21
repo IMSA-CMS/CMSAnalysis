@@ -89,6 +89,8 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     muon_idpass(treeReader, "Muon_looseId")
     {
     std::ifstream triggerNameFile("betterValidTriggers.txt");
+    tree = getFile()->Get<TTree>("Events");
+    
     if(!triggerNameFile)
     {
         std::string nameoftrigger;

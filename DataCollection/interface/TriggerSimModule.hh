@@ -70,7 +70,7 @@ private:
         "",
         ""} },
     { EnumTriggers::singleElectronTriggers, {
-        "HLT_Ele50_CaloIdVT_GsfTrkIdT_PFJet165",
+        "HLT_Ele300_CaloIdVT_GsfTrkIdT",
         "",
         "",
         ""} },

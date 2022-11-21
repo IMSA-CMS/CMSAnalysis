@@ -40,7 +40,7 @@ void TriggerPlan::setupAnalyzer()
   // simTrigPhoton->enableAllTriggers();
   triggerMod->addTrigger(simTrigSingleElectron);
   triggerMod->addTrigger(simTrigSingleMuon);
-  triggerMod->addTrigger(simTrigPhoton);
+  // triggerMod->addTrigger(simTrigPhoton);
 
   // triggerMod->addTrigger(testTrig);
 
