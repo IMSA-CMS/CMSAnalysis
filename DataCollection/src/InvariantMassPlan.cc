@@ -4,10 +4,8 @@
 #include <memory>
 
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
-
 #include "CMSAnalysis/DataCollection/interface/Histograms.hh"
 #include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
-
 //#include "CMSAnalysis/DataCollection/interface/GenSimIdentificationModule.hh"
 //#include "CMSAnalysis/DataCollection/interface/RecoIdentificationModule.hh"
 #include "CMSAnalysis/DataCollection/interface/MatchingModule.hh"
@@ -21,6 +19,8 @@
 #include "CMSAnalysis/DataCollection/interface/TriggerFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/SimTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerSimModule.hh"
+#include "CMSAnalysis/DataCollection/interface/PhotonsHist.hh"
+
 
 using std::make_shared;
 
@@ -30,8 +30,7 @@ void InvariantMassPlan::setupAnalyzer()
 
   // Create necessary histogram(s), as well as histMod
   auto histMod = make_shared<HistogramOutputModule>();
-  auto invMassHist = make_shared<InvariantMassHist>(InputModule::RecoLevel::Reco, "invariant_Mass", 100, 0, 100);
-  auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "same_Sign_Invariant_Mass", 300, 0, 300);
+  auto PTHist = make_shared<PhotonsHist>(InputModule::RecoLevel::Reco, "Photon_PT", 100, 0, 100);
 
   // Create necessary module(s) for the filter(s)
   auto trigSimMod = make_shared<TriggerSimModule>("HLT");
@@ -42,19 +41,18 @@ void InvariantMassPlan::setupAnalyzer()
   auto triggerFilter = make_shared<TriggerFilter>(simTrigger);
 
   // Add the filter module(s) to the histogram(s) created above
-  invMassHist->addFilter(nLeptonsFilter);
-  sameSignInvMassHist->addFilter(nLeptonsFilter);
-  invMassHist->addFilter(triggerFilter);
-  sameSignInvMassHist->addFilter(triggerFilter);
+  // invMassHist->addFilter(nLeptonsFilter);
+  // sameSignInvMassHist->addFilter(nLeptonsFilter);
+  // invMassHist->addFilter(triggerFilter);
+  // sameSignInvMassHist->addFilter(triggerFilter);
 
   // Add the histogram(s) created above to histMod
-  histMod->addHistogram(invMassHist);
-  histMod->addHistogram(sameSignInvMassHist);
+  // histMod->addHistogram(PTHist);
 
   // Add production modules
-  analyzer.addProductionModule(trigSimMod);
+  // analyzer.addProductionModule(trigSimMod);
 
-  analyzer.addFilterModule(triggerFilter);
+  // analyzer.addFilterModule(triggerFilter);
 
   // Hopefully doesn't break
   analyzer.addAnalysisModule(histMod);
