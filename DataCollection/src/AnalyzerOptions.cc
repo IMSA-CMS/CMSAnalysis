@@ -19,6 +19,7 @@
 #include "CMSAnalysis/DataCollection/interface/GenSimPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/FileStripPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/MLVariablesPlan.hh"
+#include "CMSAnalysis/DataCollection/interface/HiggsDataStripPlan.hh"
 
 AnalyzerOptions::AnalyzerOptions()
 {
@@ -32,7 +33,8 @@ AnalyzerOptions::AnalyzerOptions()
   analysisPlans["Trigger"] = new TriggerPlan();
   analysisPlans["GenSim"] = new GenSimPlan();
   analysisPlans["FileStrip"] = new FileStripPlan();
-  analysisPlans["DataStrip"] = new MLVariablesPlan();
+  analysisPlans["LeptonJetDataStrip"] = new MLVariablesPlan();
+  //analysisPlans["HiggsDataStrip"] = new HiggsDataStripPlan();
 }
 
 std::string AnalyzerOptions::pickfileInterface()
@@ -212,7 +214,7 @@ void AnalyzerOptions::currentStatus(std::vector<std::pair<std::string, std::stri
       std::string generate = takeSingleInput({"Y", "N"}, "(Y or N): ");
       if (generate == "N")
       {
-        change = "Y"; // This makes it go through the do-while again
+        change = "Y"; 
       }
     }
   } while (change == "Y");

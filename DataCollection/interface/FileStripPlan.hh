@@ -8,8 +8,6 @@
 // change the name of the stripped file in FileStripPlan.cc
 class FileStripPlan : public DataCollectionPlan
 {
-    public:
-        FileStripPlan();
     protected:
         virtual void initialize() override;
 };

@@ -36,10 +36,6 @@
 
 using std::make_shared;
 
-HiggsBackgroundPlan::HiggsBackgroundPlan()
-{
-}
-
 void HiggsBackgroundPlan::initialize()
 {
     
@@ -50,7 +46,6 @@ void HiggsBackgroundPlan::initialize()
     auto fourLeptonCut = make_shared<FourLeptonCut>();
     auto zVetoCut = make_shared<ZVetoCut>();
     auto quarkoniaCut = make_shared<QuarkoniaCut>();
-    
 
     eventMod->addSelector(pasSelector);
     eventMod->addCut(fourLeptonCut);

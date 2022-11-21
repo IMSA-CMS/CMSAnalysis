@@ -5,9 +5,6 @@
 
 class InvariantMassPlan : public DataCollectionPlan
 {
-    public:
-        InvariantMassPlan();
-
     protected:
         virtual void initialize() override;
 };

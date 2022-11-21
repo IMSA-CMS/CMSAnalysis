@@ -13,7 +13,7 @@ class SimpleChannel {
 	std::string getName() {return name;}
 	std::vector<std::string> getNames();
         void addProcess(std::shared_ptr<SimpleProcess> process) {processes.push_back(process);}
-        std::vector<TH1*> getHists(HistVariable histType);
+        std::vector<TH1*> getHists(std::string histType);
 
     private:
         std::vector<std::shared_ptr<SimpleProcess>> processes;
