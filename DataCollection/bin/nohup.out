@@ -1,0 +1,16 @@
+                         : Booking "MLP" of type "MLP" from dataset/weights/TMVAClassification_MLP.weights.xml.
+                         : Reading weight file: dataset/weights/TMVAClassification_MLP.weights.xml
+<HEADER> DataSetInfo              : [Default] : Added class "Signal"
+<HEADER> DataSetInfo              : [Default] : Added class "Background"
+<HEADER> MLP                      : Building Network. 
+                         : Initializing weights
+                         : Booked classifier "MLP" of type: "MLP"
+Reading input file textfiles/DY50Run2.txt
+Drell-Yan
+Filename: textfiles/Drell-Yan/Drell-Yan_MassCut_50-inf_Run_2.txt
+# of root files: 113
+■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+EVENT #1
+all lepton invariant mass: 840.151 | same sign invariant mass: 840.151
+■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+element | type     | charge       | pT           | Eta          | Phi          | E            | mass
