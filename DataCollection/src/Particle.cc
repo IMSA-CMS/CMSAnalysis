@@ -25,7 +25,6 @@
 Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, double relIso, Particle::SelectionFit fit, double dxy, double dz):
 particle(std::make_shared<SimpleImplementation>(vec, charge, type, relIso, fit, dxy, dz))
 {
-
 }
 
 

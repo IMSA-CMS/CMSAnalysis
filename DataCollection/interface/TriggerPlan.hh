@@ -5,8 +5,8 @@
 
 class TriggerPlan : public DataCollectionPlan
 {
-    public:
-        TriggerPlan();
+    protected:
+        virtual void initialize() override;
     private:
         
 };

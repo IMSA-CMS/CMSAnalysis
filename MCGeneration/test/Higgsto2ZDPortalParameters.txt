@@ -1,50 +1,12 @@
-# ParticleDecays:limitTau0 = on
-# ParticleDecays:tauMax = 10
-# Tune:pp 5
-# Tune:ee 3
-# 23:onMode = off
-# PartonLevel:MPI = off
-# PartonLevel:ISR = off
-# PartonLevel:FSR = off
-# # turn on for final
-# SUSY:all = on
-# #HiddenValley:all = on
-# #SUSY:qqbar2squarkantisquark = on
-# #SUSY:idA = 1000006
-# SLHA:readFrom = 2
-		
-# 4900022:mayDecay = true
-# 1000022:mayDecay = true
-# 4900002:mayDecay = off
-# 4900004:mayDecay = off
-# 4900022:m0 = 1
-# 4900022:0:meMode = 0
-		
-# #SLHA:minDecayDeltaM = 0.001
-		
-# HiddenValley:Ngauge = 1
-# HiddenValley:doKinMix = on
-# HiddenValley:FSR = on
-# HiddenValley:alphaFSR = 0.3
 Tune:pp 5
 Tune:ee 3
 PartonLevel:MPI = on
 PartonLevel:ISR = on
 PartonLevel:FSR = on
             
-SUSY:all = on
-SLHA:readFrom = 2
-#SLHA:file = leptonJet.spc
-
-# Turn off SUSY based production mechanism [12/16/2021]
-# SUSY:all = on
-# SLHA:readFrom = 2
-# SLHA:file = sps1aWithDecays.spc
-
 HiggsSM:all = on
 25:onMode = off
-25:m0 = 600.0
-
+25:m0 = 125
 
 # 5) Set Higgs mass, width and branching ratios by hand.
 # Values for 125 GeV SM Higgs taken from
@@ -52,99 +14,30 @@ HiggsSM:all = on
 # S. Dittmaier et al., CERN-2011-002 [arXiv:1101.0593].
 # Note: sum is not quite unity, and so BR's are rescaled accordingly.
 
-# see whether this will work -- screw with things
 25:addChannel = 1 0.0 0 4900001 -4900001
-# 25:0:bRatio  = 0.0
-# 25:1:bRatio  = 0.0
-# 25:2:bRatio  = 0.0
-# 25:3:bRatio  = 0.0
-# 25:4:bRatio  = 0.0
-# 25:5:bRatio  = 0.0
-# H -> e+ e-
-# 25:6:bRatio  = 0.0
-# H -> mu+ mu-
-# 25:7:bRatio  = 0.0
-# 25:8:bRatio  = 1.0
-# 25:9:bRatio  = 0.0
-# 25:10:bRatio = 0.0
-# 25:11:bRatio = 0.0
-# 25:12:bRatio = 0.0
-# 25:13:bRatio = 0.0
-# dark photon
 25:76:bRatio = 1.0 
-# set meMode = 100 so that
-# 25:0:meMode  = 100
-# branching ratios are not
-# 25:1:meMode  = 100
- # overwritten at initialization
-# 25:2:meMode  = 100
-# 25:3:meMode  = 100
-# 25:4:meMode  = 100
-# 25:5:meMode  = 100
-# 25:6:meMode  = 100
-# 25:7:meMode  = 100
-# 25:8:meMode  = 100
-# 25:9:meMode  = 100
-# 25:10:meMode = 100
-# 25:11:meMode = 100
-# 25:12:meMode = 100
-# 25:13:meMode = 100
 25:76:meMode = 100
 25:onIfAny = 4900001
-25:mMin = 600
+25:mMin = 125
 25:mWidth = 10
-# 25:tau0 = 1.97327e-13
-# HiggsSM:all = on
-# HiggsSM:gg2H = on
-
-# Is Higgs 25? 35? idk it shows multiple H_0
-# 25:onMode = off
-# Decay to dark fermion only
-# 25:oneChannel = 1 0.5 0 15 -15
-# 25:addChannel = 1 0.5 0 4900022 4900022
-# 25:onIfAny = 15
-
                         
-# meMode? 0
 4900001:oneChannel = 1 1.0 100 4900022 4900004
 4900003:oneChannel = 1 1.0 100 4900022 4900022
 
-# 4900022:oneChannel = 1 1.0 100 11 -11
-# 4900022:addChannel = 1 0.5 100 13 -13
-
-# Is this how you force?
-                        
-# Do this for dark fermion
-# 4900001:onMode = off
-# 4900001:onIfAll = 4900022 4900002
-
-# 4900003:onMode = off
-# 4900003:onIfAll = 4900022 4900022
-
-# 4900022:onMode = off
-# 4900022:onIfAll = 11 -11
-# 4900022:onIfAll = 13 -13
-
-
 # Dark Fermion is 4900001
 4900001:m0 = 50.0
-
 4900002:m0 = 0.1
 4900003:m0 = 4.5
 4900004:m0 = 2.0
 
-# assume is fermion, changed from 1
 4900001:spinType = 2 
 4900002:spinType = 1
 4900003:spinType = 1
-# assume is HLSP
 4900004:spinType = 2 
 
-# change from 0?
 4900001:chargeType = 0 
 4900002:chargeType = 0
 4900003:chargeType = 0
-# wouldn't dark be charged, change from 0
 4900004:chargeType = 0 
 
 4900001:colType = 0
@@ -178,29 +71,22 @@ HiggsSM:all = on
 4900211:m0 = 1000000
 4900213:m0 = 1000000
 4900991:m0 = 1000000
-###Change ends here
 4900022:mayDecay = true
 4900001:mayDecay = true 
 4900002:mayDecay = off
 4900004:mayDecay = off
 4900022:m0 = 0.3
-# Just test because idk how it interprets this
 4900022:mWidth = 1.0
 4900022:mMin = 5.0
 4900022:mMax = 0.0
 4900022:isResonance = true
 4900022:tau0 = 1.97327e-13
-# Don't know what this means? 1.000e+00  5.000e+01  0.000e+00  1.97327e-13
-# 4900022:0:meMode = 0
-# remove resonance for dark fermion
 4900004:isResonance = false 
 4900004:mWidth = 0.0
 4900004:mMin = 0.0
 4900004:mMax = 0.0
 4900004:tau0 = 1.97327e-3
 
-
-# I'm not sure what this means
 HiddenValley:Ngauge = 1
 HiddenValley:doKinMix = on
 HiddenValley:FSR = on

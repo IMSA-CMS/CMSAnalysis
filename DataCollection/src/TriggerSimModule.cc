@@ -140,7 +140,7 @@ bool TriggerSimModule::process()
     }
   */
 
-  bool passAnyTrigger = false; // True if the event passes any of the triggers
+  // bool passAnyTrigger = false; // True if the event passes any of the triggers
   bool passCurrentTrigger;     // True if the event passes the current trigger
 
   for (unsigned int i = 0, n = triggerResults.size(); i < n; ++i)
@@ -154,10 +154,10 @@ bool TriggerSimModule::process()
       // Set passAnyTrigger to true once the event passes one trigger
       // Since passAnyTrigger is automatically false, if the event doesn't pass any triggers
       //    then passAnyTrigger remains false
-      if (passCurrentTrigger)
-      {
-        passAnyTrigger = true;
-      }
+      // if (passCurrentTrigger)
+      // {
+      //   passAnyTrigger = true;
+      // }
 
       if (triggerResultsData.find(names[i]) == triggerResultsData.end())
       {
@@ -178,7 +178,7 @@ bool TriggerSimModule::process()
     }
   }
 
-  return passAnyTrigger;
+  // return passAnyTrigger;
   return true;
 };
 
