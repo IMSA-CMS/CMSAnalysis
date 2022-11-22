@@ -3,8 +3,8 @@
 
 class MLVariablesPlan : public DataCollectionPlan
 {
-public:
-    MLVariablesPlan();
+private:
+    virtual void initialize() override;
 };
 
 #endif

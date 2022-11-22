@@ -51,7 +51,7 @@ void Analyzer::run(const std::string &configFile, const std::string &outputFile,
   std::cout<<"Processing time: " << duration.count()<< " s"<<std::endl;
 }
 
-void Analyzer::fetchRootFiles(const std::string &configFile)
+void Analyzer::fetchRootFiles(const std::string &configFile)  
 {
   auto substringFound = configFile.find(".root");
   bool isLocalFile = substringFound != std::string::npos;

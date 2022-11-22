@@ -12,10 +12,14 @@ class DataCollectionPlan
         // Runs the analyzer with the specified parameters. 
         void runAnalyzer(const std::string& inputFile, const std::string& outputFile, 
             int outputEvery = 0, int numFiles = -1);
-            
-    protected:
-        const Analyzer& getAnalyzer() const {return analyzer;}
 
+        virtual ~DataCollectionPlan(){}
+        
+    protected:
+        
+        virtual void initialize() = 0;
+            
+        const Analyzer& getAnalyzer() const {return analyzer;}
         // Returns the analyzer as a reference, typically for use within a ChildPlan constructor
         Analyzer& getAnalyzer() {return analyzer;}
     private:

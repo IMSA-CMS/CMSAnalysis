@@ -21,20 +21,14 @@ double calculateEvents(std::vector<double> crossSections, std::vector<TH1*> hist
 
 void CutFinder() {
     auto analysis = std::make_shared<HiggsPlusPlusAnalysis>();
-    std::vector<HistVariable> cutTypes = {HistVariable::InvariantMass, HistVariable::SameSignMass, HistVariable::pT, HistVariable::MET};
+    //Choices are GenSim Same Sign Inv Mass, Same Sign Inv Mass, Invariant Mass, GenSim pT, pT, Eta, Phi, MET (caps matter)
+    std::vector<std::string> cutTypes = {"Invariant Mass", "Same Sign Inv Mass", "pT", "MET"};
     std::vector<std::shared_ptr<Channel>> channels = analysis->getChannels();
     int luminosity = 3000;
     //Change this to your signal process name
     std::string signalName = "Higgs Signal";
 
 
-    std::map<HistVariable, std::string> histVariableNames;
-	histVariableNames[HistVariable::InvariantMass] = "Invariant Mass";
-	histVariableNames[HistVariable::SameSignMass] = "Same Sign Inv Mass";
-	histVariableNames[HistVariable::pT] = "Leading Lept pT";
-	histVariableNames[HistVariable::MET] = "MET";
-	histVariableNames[HistVariable::GenSimSameSignMass] = "GenSim Same Sign Inv Mass";
-	histVariableNames[HistVariable::GenSimPt] = "GenSim Leading Lepton pT";	
     for(std::shared_ptr<Channel> channel : channels) {
 		for(std::string processName : channel->getNames()) {
 			if(processName != signalName) {
@@ -45,7 +39,7 @@ void CutFinder() {
 			}
 		}
     }
-    for(HistVariable dataType : cutTypes) {
+    for(std::string dataType : cutTypes) {
         for(std::shared_ptr<Channel> channel : channels) {
             //Can't start this at 0 because minimum bin will be 0, not initializing gives errors, so we set it arbitrarily high (the integer limit).
             int minimumBin = 2147483647;

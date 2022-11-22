@@ -43,9 +43,9 @@
 
 using std::make_shared;
 
-LeptonJetReconstructionPlan::LeptonJetReconstructionPlan()
+void LeptonJetReconstructionPlan::initialize()
 {
-  Analyzer &analyzer = getAnalyzer();
+ Analyzer &analyzer = getAnalyzer();
 
   auto eventMod = std::make_shared<EventModule>();
   auto eventHistMod = eventMod->getHistogramModule();
@@ -55,8 +55,7 @@ LeptonJetReconstructionPlan::LeptonJetReconstructionPlan()
   auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
   auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>();
-  auto lepMatchMod =
-  std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.5);
+  auto lepMatchMod = std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.5);
   auto histOutputMod = std::make_shared<HistogramOutputModule>();
   auto mlMod = std::make_shared<LeptonJetMLCalculator>();
 
@@ -154,5 +153,5 @@ LeptonJetReconstructionPlan::LeptonJetReconstructionPlan()
   //analyzer.addAnalysisModule(recoEventDumpMod);
   /* auto selector = make_shared<SnowmassLeptonSelector>(5);
   analyzer.getInputModule()->setLeptonSelector(selector);
-  */
+  */ 
 }
