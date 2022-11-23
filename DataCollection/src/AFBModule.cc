@@ -1,14 +1,8 @@
 #include "CMSAnalysis/DataCollection/interface/AFBModule.hh"
-
-//#include "CMSAnalysis/DataCollection/interface/GenSimIdentificationModule.hh"
-//#include "CMSAnalysis/DataCollection/interface/RecoIdentificationModule.hh"
-
 #include <iostream>
 
 AFBModule::AFBModule(int minMass, int maxMass, int massInterval) :
   HistogramOutputModule(),
-  // genSim(genSimModule),
-  // reco(recoModule),
   minMassCut(minMass),
   maxMassCut(maxMass),
   interval(massInterval)

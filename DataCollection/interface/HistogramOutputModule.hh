@@ -10,8 +10,6 @@
 #include "TH2.h"
 
 class TObject;
-//class GenSimIdentificationModule;
-//class RecoIdentificationModule;
 class PtResolutionModule;
 class HistogramPrototype;
 class InputModule;
@@ -21,8 +19,8 @@ class HistogramOutputModule : public AnalysisModule
 {
 public:
   virtual void writeAll();
-  virtual void initialize() override {};                                     // Empty function
-  virtual bool process() override;                // Fills the histograms
+  virtual void initialize() override {};     // Empty function
+  virtual bool process() override;    // Fills the histograms
   void addHistogram(std::shared_ptr<HistogramPrototype> hist); // Adds a HistogramPrototype* to histogram (the vector)
   virtual void setInput(const InputModule* iInput) override;
 

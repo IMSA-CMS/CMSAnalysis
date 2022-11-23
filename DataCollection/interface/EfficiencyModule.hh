@@ -9,19 +9,19 @@
 class EfficiencyModule : public AnalysisModule
 {
     public:
-    void finalize() override;
-    virtual void writeAll() override;
+        void finalize() override;
+        virtual void writeAll() override;
 
     protected:
-    void incrementCounter(std::string name, double increment = 1);
-    double getCounter(std::string name) const;
-    double getEfficiency(std::string name) const;
-    bool process() override;
-    virtual void doCounters() = 0; 
+        void incrementCounter(std::string name, double increment = 1);
+        double getCounter(std::string name) const;
+        double getEfficiency(std::string name) const;
+        bool process() override;
+        virtual void doCounters() = 0; 
 
     private:
-    std::unordered_map<std::string, double> counters;
-    double total;
+        std::unordered_map<std::string, double> counters;
+        double total;
 };
 
 #endif
