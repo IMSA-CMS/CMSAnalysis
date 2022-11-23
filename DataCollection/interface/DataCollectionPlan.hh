@@ -16,7 +16,6 @@ class DataCollectionPlan
         virtual ~DataCollectionPlan(){}
         
     protected:
-        
         virtual void initialize() = 0;
             
         const Analyzer& getAnalyzer() const {return analyzer;}
