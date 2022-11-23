@@ -5,8 +5,7 @@
 #include "InputModule.hh"
 #include "RecoTrigger.hh"
 
-//class RecoIdentificationModule;
-
+  // Trigger Code to analyze HLT Simulations, for double muons
 class DoubleMuonTrigger : public RecoTrigger
 {
   public:

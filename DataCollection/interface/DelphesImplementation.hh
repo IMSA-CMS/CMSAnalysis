@@ -9,6 +9,7 @@ class DelphesImplementation : public ParticleImplementation
 {
     // Allows GenSimEventDump to run Delphes Files
     public:
+        // Bbunch of getter methods, returning various information such as charge, ID, # of daughters, etc.
         virtual ~DelphesImplementation(){}
         DelphesImplementation(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int pid, int status, int m1, int m2,int d1, int d2,double iIsolation = -999);
         virtual reco::Candidate::LorentzVector getFourVector() const override;
