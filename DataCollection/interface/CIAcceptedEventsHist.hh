@@ -4,7 +4,6 @@
 #include "HistogramPrototype1D.hh"
 
 class MatchingModule;
-//class GenSimIdentificationModule;
 
 class CIAcceptedEventsHist : public HistogramPrototype1D
 {
@@ -14,7 +13,7 @@ class CIAcceptedEventsHist : public HistogramPrototype1D
 
   private:
   const std::shared_ptr<MatchingModule> matchMod;
-  // const std::shared_ptr<GenSimIdentificationModule> genSimIdentification;
+  
 };
 
 
