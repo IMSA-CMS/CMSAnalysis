@@ -7,6 +7,7 @@
 
 class DelphesImplementation : public ParticleImplementation
 {
+    // Allows GenSimEventDump to run Delphes Files
     public:
         virtual ~DelphesImplementation(){}
         DelphesImplementation(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int pid, int status, int m1, int m2,int d1, int d2,double iIsolation = -999);
@@ -29,8 +30,6 @@ class DelphesImplementation : public ParticleImplementation
         virtual bool isNotNull() const override {return true;}
         virtual bool isFinalState() const override {return status()==1;}
         virtual bool operator== (const ParticleImplementation& other) const override;
-        // virtual Particle::BarrelState getBarrelState() const override {throw std::runtime_error("error");}
-        // virtual bool isIsolated() const  override{throw std::runtime_error("error");};
 
 
     private:
