@@ -34,7 +34,7 @@ AnalyzerOptions::AnalyzerOptions()
   analysisPlans["GenSim"] = new GenSimPlan();
   analysisPlans["FileStrip"] = new FileStripPlan();
   analysisPlans["LeptonJetDataStrip"] = new MLVariablesPlan();
-  //analysisPlans["HiggsDataStrip"] = new HiggsDataStripPlan();
+  analysisPlans["HiggsDataStrip"] = new HiggsDataStripPlan();
 }
 
 std::string AnalyzerOptions::pickfileInterface()
@@ -214,7 +214,7 @@ void AnalyzerOptions::currentStatus(std::vector<std::pair<std::string, std::stri
       std::string generate = takeSingleInput({"Y", "N"}, "(Y or N): ");
       if (generate == "N")
       {
-        change = "Y"; 
+        change = "Y";
       }
     }
   } while (change == "Y");

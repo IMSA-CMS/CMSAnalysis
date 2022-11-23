@@ -43,18 +43,25 @@ bool HiggsDataStripModule::process()
 	// puts numbers into ML model
 	auto leptons = getInput()->getLeptons(InputModule::RecoLevel::Reco);
 	double cutoff = 100;
-	// Find source of null pointer error
 	auto twoLeptons = leptons.chooseParticles(false);
 	ParticleCollection<Particle> particles;
 	particles.addParticle(twoLeptons.first);
 	particles.addParticle(twoLeptons.second);
+	if (!twoLeptons.first.isNotNull())
+	{
+		return true;
+	}
+	if (!twoLeptons.second.isNotNull())
+	{
+		return true;
+	}
 
-	std::cout << "Line A0 ";
+	// std::cout << "Line A0 ";
+	// std::cout << leptons.getNumParticles() << " ";
 	if (particles.calculateSameSignInvariantMass(false) > cutoff)
 	{
 
-		std::cout << "Line A1"
-				  << "\n";
+		// std::cout << "Line A1" << "\n";
 		pt1 = twoLeptons.first.getPt();
 		phi1 = twoLeptons.first.getPhi();
 		eta1 = twoLeptons.first.getEta();
