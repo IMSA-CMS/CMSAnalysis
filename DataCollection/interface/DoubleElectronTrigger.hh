@@ -3,10 +3,11 @@
 
 #include "RecoTrigger.hh"
 
-//class RecoIdentificationModule;
+
 
 class DoubleElectronTrigger : public RecoTrigger
 {
+  // Trigger Code to analyze HLT Simulations, for double isolated muon triggers
   public:
     DoubleElectronTrigger(const double iPTCutoff = 25, const double iSecondPTCutoff = 25);
   
