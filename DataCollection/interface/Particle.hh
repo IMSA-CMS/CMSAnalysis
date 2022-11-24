@@ -65,4 +65,6 @@ private:
   std::shared_ptr<ParticleImplementation> particle;
 };
 
+std::ostream& operator<<(std::ostream& str, Particle part);
+
 #endif
