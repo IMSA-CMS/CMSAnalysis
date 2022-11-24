@@ -240,3 +240,12 @@ std::string EventDumpModule::formatDaughterParticles(const GenSimParticle& part,
   return daughters;
 }
 
+std::string EventDumpModule::formatMotherParticle(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts)
+{
+  int index = getIndexOf(part.uniqueMother().finalDaughter(), genParts);
+  if (index == -1)
+  {
+    return "";
+  }
+  return std::to_string(index);
+}
