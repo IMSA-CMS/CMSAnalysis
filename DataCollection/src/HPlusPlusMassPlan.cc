@@ -37,7 +37,8 @@
 
 using std::make_shared;
 
-HPlusPlusMassPlan::HPlusPlusMassPlan() {
+void HPlusPlusMassPlan::initialize()
+{
   Analyzer& analyzer = getAnalyzer();
 
   auto eventDump = make_shared<EventDumpModule>(true,true);

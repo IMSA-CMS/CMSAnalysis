@@ -17,12 +17,12 @@ class Channel
 		//Channel(std::string name, std::string iYAxisName, std::vector<std::shared_ptr<Process>> iProcesses);
 		Channel(std::string name, std::vector<std::shared_ptr<Process>> iProcesses);
 		//Gets data from all processes in the format needed to make table
-		std::vector<double> getYields(HistVariable dataType) const;
+		std::vector<double> getYields(std::string dataType) const;
 		std::vector<std::string> getNames() const;
 		std::string getName() {return name;}
 		std::vector<std::string> getNamesWithLabel(std::string label);
 		//Makes stacked histogram
-		THStack* getStack(HistVariable histType, std::string label = "", bool scaleToExpected = false) const;
+		THStack* getStack(std::string histType, std::string label = "", bool scaleToExpected = false) const;
 		
 		const std::shared_ptr<Process> findProcess(std::string processName) const;
 		

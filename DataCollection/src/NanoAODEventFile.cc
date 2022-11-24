@@ -14,61 +14,33 @@
 
 std::vector<bool> NanoAODEventFile::getTriggerResults(std::string subProcess) const
 {
-    // just whether it passes or not
-    // edm::Handle<edm::TriggerResults> triggerResults;
-    // event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
-
+    // determines whether it passes the trigger's criteria or not
     std::vector<bool> v_results = {};
 
     for(auto& trigger : triggers)
     {
         v_results.push_back(*(trigger.second));
     }
-    // for (unsigned int i = 0; i < triggerResults->size(); i++)
-    // {
-    //     v_results.push_back(triggerResults->accept(i));
-    // }
+
     return v_results;
 }
 
 std::vector<std::string> NanoAODEventFile::getTriggerNames(std::string subProcess) const
 {
-    // just get the name of the trigger
-    // edm::Handle<edm::TriggerResults> triggerResults;
-    // event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
-    // const edm::TriggerNames names = event->triggerNames(*triggerResults);
     std::vector<std::string> v_names = {};
 
     for(auto& trigger : triggers)
     {
         v_names.push_back(trigger.first);
     }
-    //testTrigger.GetBranchName()
 
-    // for (unsigned int i = 0; i < names.size(); i++)
-    // {
-    //     v_names.push_back(names.triggerName(i));
-    // }
     return v_names;
 }
 
 bool NanoAODEventFile::checkTrigger(std::string triggerName, std::string subProcess) const
 {
-    // auto names = getTriggerNames(subProcess);
-    // auto results = getTriggerResults(subProcess);
-
-    // auto it = find(names.begin(), names.end(), triggerName);
-    // if(it != names.end())
-    // {
-    //     return results.at(it - names.begin());
-    // }
-    // else
-    // {
-    //     return false;
-    // }
     return *(triggers.find(triggerName)->second);
 }
-
 
 NanoAODEventFile::NanoAODEventFile(TFile *ifile) : 
     EventFile(ifile), 
@@ -81,6 +53,8 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     elec_charge(treeReader, "Electron_charge"),
     elec_pt(treeReader, "Electron_pt"),
     elec_reliso(treeReader, "Electron_miniPFRelIso_all"),
+    elec_dxy(treeReader, "Electron_dxy"),
+    elec_dz(treeReader, "Electron_dz"),
     muon_size(treeReader, "nMuon"),
     muon_eta(treeReader, "Muon_eta"),
     muon_phi(treeReader, "Muon_phi"),
@@ -88,6 +62,8 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     muon_charge(treeReader, "Muon_charge"),
     muon_pt(treeReader, "Muon_pt"),
     muon_reliso(treeReader, "Muon_miniPFRelIso_all"),
+    muon_dxy(treeReader, "Muon_dxy"),
+    muon_dz(treeReader, "Muon_dz"),
     //met_size(treeReader, branchNames.metSize.c_str()),
     met_phi(treeReader, "MET_phi"),
     met_pt(treeReader, "MET_pt"),
@@ -109,32 +85,27 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     gen_m1(treeReader, "GenPart_genPartIdxMother"),
     gen_m2(treeReader, "GenVisTau_genPartIdxMother"),
     gen_pileup(treeReader, "Pileup_nTrueInt"),
-    elec_idpass(treeReader, "Electron_cutBased"),
-    muon_idpass(treeReader, "Muon_looseId")
-    //Muon_dxy
-    //Muon_dz
-    //Electron_dxy
-    //Electron_dz
+    elec_idpass(treeReader, "Electron_cutBased"), //"Generator_id1")
+    muon_looseid(treeReader, "Muon_looseId"), //"Muon_highPurity")
+    muon_mediumid(treeReader, "Muon_mediumId"), 
+    muon_tightid(treeReader, "Muon_tightId")
+    
     {
-    std::ifstream triggerNameFile("validTriggers.txt");
-        tree = getFile()->Get<TTree>("Events");
-    if(triggerNameFile)
+    std::ifstream triggerNameFile("betterValidTriggers.txt");
+    tree = getFile()->Get<TTree>("Events");
+    
+    if(!triggerNameFile)
     {
+        std::string nameoftrigger;
 
-
-    std::string nameoftrigger;
-
-
-
-    while(getline(triggerNameFile, nameoftrigger))
-    {
-        // std::cout << nameoftrigger << std::endl;
-        if(tree->GetBranch(nameoftrigger.c_str()))
+        while(getline(triggerNameFile, nameoftrigger))
         {
-            TTreeReaderValue<Bool_t> intermediate(treeReader, nameoftrigger.c_str());
-            triggers.emplace(nameoftrigger, intermediate);
+            if(tree->GetBranch(nameoftrigger.c_str()))
+            {
+                TTreeReaderValue<Bool_t> intermediate(treeReader, nameoftrigger.c_str());
+                triggers.emplace(nameoftrigger, intermediate);
+            }
         }
-    }
     }    
     treeReader.SetTree(tree);
     setEventCount(1);
@@ -167,16 +138,14 @@ void NanoAODEventFile::nextEvent()
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i],
                                                                         gen_eta[i], gen_phi[i], gen_mass[i])),
             charge, Particle::identifyType(gen_pid[i]),&genSimParticles[gen_m1[i]],
-            daughterCollectionVector));         
+            daughterCollectionVector, gen_status[i]));         
         
     }
 }
 
 ParticleCollection<GenSimParticle> NanoAODEventFile::getGenSimParticles() const
 {
-    ParticleCollection<GenSimParticle> collectionVector;
-
-    return collectionVector;
+    return genSimParticles;
 }
 
 ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
@@ -189,13 +158,13 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         int charge = elec_charge[i];
         
         Particle::SelectionFit fit;
-        if (elec_idpass[i] & 4) 
+        if (elec_idpass[i] == 4) 
         {
             fit = Particle::SelectionFit::Tight;
-        } else if (elec_idpass[i] & 2) 
+        } else if (elec_idpass[i] == 3) 
         {
             fit = Particle::SelectionFit::Medium;
-        } else if (elec_idpass[i] & 1) 
+        } else if (elec_idpass[i] == 2) 
         {
             fit = Particle::SelectionFit::Loose;
         } else {
@@ -207,7 +176,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         recoParticles.addParticle(Particle(
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],
                                                                         elec_eta[i], elec_phi[i], elec_mass[i])),
-            charge, ParticleType::electron(), elec_reliso[i], fit));
+            charge, ParticleType::electron(), elec_reliso[i], fit, elec_dxy[i], elec_dz[i]));
         
     }
     for (UInt_t i = 0; i < *muon_size; i++)
@@ -216,23 +185,24 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         int charge = muon_charge[i];
         
         Particle::SelectionFit fit;
-        if (muon_idpass[i] & 4) 
+        if (muon_looseid[i]) 
         {
             fit = Particle::SelectionFit::Tight;
-        } else if (muon_idpass[i] & 2) 
+        } else if (muon_mediumid[i]) 
         {
             fit = Particle::SelectionFit::Medium;
-        } else if (muon_idpass[i] & 1) 
+        } else if (muon_looseid[i]) 
         {
             fit = Particle::SelectionFit::Loose;
         } else {
             continue;
         }
+
         // Lorentz four-vector
         recoParticles.addParticle(Particle(
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],
                                                                         muon_eta[i], muon_phi[i], muon_mass[i])),
-            charge, ParticleType::muon(), muon_reliso[i], fit));
+            charge, ParticleType::muon(), muon_reliso[i], fit, muon_dxy[i], muon_dz[i]));
         
     }
     return recoParticles;
