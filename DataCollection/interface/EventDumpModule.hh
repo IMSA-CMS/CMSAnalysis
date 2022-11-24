@@ -21,6 +21,7 @@ public:
   void printGenSimParticleCollection(const ParticleCollection<GenSimParticle>& genParts, std::ofstream& my_file) const;
   void printRecoParticleCollection(const ParticleCollection<Particle>& recoParts, std::ofstream& my_file) const;
   static std::string formatDaughterParticles(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts);
+  static std::string formatMotherParticle(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts);
 
 private:
   // prints information to the screen
