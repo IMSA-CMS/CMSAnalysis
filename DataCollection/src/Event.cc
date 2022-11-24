@@ -21,16 +21,7 @@ Event::Event()
 ParticleCollection<Particle> Event::getParticles() const
 {
     ParticleCollection<Particle> particleList;
-    /*
-    std::vector<ParticleCollection<Particle>*> particleCollections = {&electrons, &muons, &photons, &jets};
-    for (const auto& collection : particleCollections)
-    {
-        for (const auto& p: collection->getParticles())
-        {
-            particleList.addParticle(Particle(p));
-        }
-    }
-    */
+   
     for (const auto& p: muons.getParticles())
     {
         particleList.addParticle(Particle(p));

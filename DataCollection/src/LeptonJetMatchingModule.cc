@@ -5,7 +5,6 @@
 #include <limits>
 #include <fstream>
 
-
 LeptonJetMatchingModule::LeptonJetMatchingModule(std::shared_ptr<LeptonJetReconstructionModule> lepJetModule, double deltaRCut) :
   //genSim(genSimModule),
   lepJet(lepJetModule),

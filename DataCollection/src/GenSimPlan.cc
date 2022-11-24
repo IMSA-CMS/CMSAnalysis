@@ -27,6 +27,7 @@
 #include "CMSAnalysis/DataCollection/interface/TwoInvariantMassesHist.hh"
 #include "CMSAnalysis/DataCollection/interface/BJetFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimDeltaRHist.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimEventDumpModule.hh"
 
 #include "CMSAnalysis/DataCollection/interface/EventModule.hh"
 #include "CMSAnalysis/DataCollection/interface/DarkPhotonGenSimSelector.hh"
@@ -34,9 +35,8 @@
 
 using std::make_shared;
 
-GenSimPlan::GenSimPlan()
+void GenSimPlan::initialize()
 {
-
     Analyzer& analyzer = getAnalyzer();
 
     auto deltaR = make_shared<GenSimDeltaRHist>("Delta R", 100, 0, 1);
@@ -45,7 +45,7 @@ GenSimPlan::GenSimPlan()
     auto dpSelector = make_shared<DarkPhotonGenSimSelector>();
     auto hppSelector = make_shared<HPlusPlusGenSimSelector>();
     auto metMod = make_shared<METModule>();
-
+    auto eventDump = make_shared<GenSimEventDumpModule>();
     
     auto histMod = make_shared<HistogramOutputModule>();
     auto metHist = make_shared<METHist>(metMod, "MET", 500, 0, 1000);
@@ -62,5 +62,5 @@ GenSimPlan::GenSimPlan()
     analyzer.addAnalysisModule(eventHistMod);
 
     analyzer.addAnalysisModule(histMod);
-
+    analyzer.addAnalysisModule(eventDump);
 }

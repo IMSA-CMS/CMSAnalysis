@@ -4,10 +4,8 @@
 #include <memory>
 
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
-
 #include "CMSAnalysis/DataCollection/interface/Histograms.hh"
 #include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
-
 //#include "CMSAnalysis/DataCollection/interface/GenSimIdentificationModule.hh"
 //#include "CMSAnalysis/DataCollection/interface/RecoIdentificationModule.hh"
 #include "CMSAnalysis/DataCollection/interface/MatchingModule.hh"
@@ -29,7 +27,7 @@
 
 using std::make_shared;
 
-InvariantMassPlan::InvariantMassPlan()
+void InvariantMassPlan::initialize() 
 {
   Analyzer& analyzer = getAnalyzer();
 
@@ -76,6 +74,6 @@ InvariantMassPlan::InvariantMassPlan()
   // Hopefully doesn't break // <- this is profound
   analyzer.addAnalysisModule(histMod);
   //analyzer.addAnalysisModule(recoDump);
-  //analyzer.addAnalysisModule(genSimDump);
+  // analyzer.addAnalysisModule(genSimDump);
   analyzer.addAnalysisModule(compMod);
 }

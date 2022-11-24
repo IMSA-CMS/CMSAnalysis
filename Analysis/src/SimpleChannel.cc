@@ -4,7 +4,7 @@
 #include "CMSAnalysis/Analysis/interface/SimpleProcess.hh"
 #include <memory>
 
-std::vector<TH1*> SimpleChannel::getHists(HistVariable histType) {
+std::vector<TH1*> SimpleChannel::getHists(std::string histType) {
     std::vector<TH1*> hists;
     for(std::shared_ptr<SimpleProcess> process : processes) {
         hists.push_back(process->getHist(histType));

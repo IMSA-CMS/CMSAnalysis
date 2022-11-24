@@ -4,7 +4,6 @@
 #include "CMSAnalysis/Analysis/interface/RootFileInput.hh"
 #include "CMSAnalysis/Analysis/interface/Estimator.hh"
 #include "CMSAnalysis/Analysis/interface/FitEstimator.hh"
-#include "CMSAnalysis/Analysis/interface/ChannelLoader.hh"
 #include "CMSAnalysis/Analysis/interface/FullAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsPlusPlusAnalysis.hh"
@@ -31,26 +30,28 @@
 #include "CMSAnalysis/Analysis/interface/SimpleChannel.hh"
 
 void JumboPlot() {
-	auto higgsStackAnalysis = std::make_shared<HiggsComparisonAnalysis>();
-	auto higgsSuperImpAnalysis = std::make_shared<HiggsComparisonAnalysis>();
+	//Change things in this section
+
+	//Put your analysises here. If you only have a simpleAnalysis or only superimposed histograms that's ok, just leave the others at default
+	auto higgsStackAnalysis = std::make_shared<HiggsPlusPlusAnalysis>();
+	auto higgsSuperImpAnalysis = std::make_shared<HiggsPlusPlusAnalysis>();
 	auto simpleAnalysis = std::make_shared<SimpleHiggsComparison>();
 	//Extra text is the second parameter
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "");
 	std::vector<std::shared_ptr<Channel>> stackChannels = higgsStackAnalysis->getChannels();
 	std::vector<std::shared_ptr<Channel>> superImpChannels = higgsSuperImpAnalysis->getChannels();
 	//Controls what graph types to make. 1 is stacked only, 2 is superimposed only, 3 is both. 4 is for SimpleAnalysis only
-	int graphSwitch = 4;
+	int graphSwitch = 2;
 	//Put all variables you can graph here
-	std::vector<HistVariable> graphableTypes = {HistVariable::InvariantMass, HistVariable::SameSignMass, HistVariable::GenSimSameSignMass, HistVariable::pT, HistVariable::GenSimPt, HistVariable::MET};	
-	std::map<HistVariable, std::string> histVariableNames;
-	histVariableNames[HistVariable::InvariantMass] = "Invariant Mass [GEV]";
-	histVariableNames[HistVariable::SameSignMass] = "Same Sign Inv Mass [GEV]";
-	histVariableNames[HistVariable::pT] = "Leading Lept pT [GEV]";
-	histVariableNames[HistVariable::MET] = "MET [GEV]";
-	histVariableNames[HistVariable::GenSimSameSignMass] = "GenSim Same Sign Inv Mass [GEV]";
-	histVariableNames[HistVariable::GenSimPt] = "GenSim Leading Lepton pT [GEV]";	
+	//Choices are GenSim Same Sign Inv Mass, Same Sign Inv Mass, Invariant Mass, GenSim pT, pT, Eta, Phi, MET (caps matter)
+	std::vector<std::string> graphableTypes = {"Invariant Mass", "Same Sign Inv Mass", "pT", "MET"};
 	//Change this to whatever process your signal is
-	std::string signalName = "Delphes";
+	std::string signalName = "Higgs Signal";
+	TString units = " [GEV]";
+
+
+
+	//You don't have to change anything here, unless your y axis is something other than Events
 	TCanvas* canvas;
 	std::string fileName;
 	std::string dataName; 
@@ -80,16 +81,15 @@ void JumboPlot() {
 		}
 			std::string channelName = channel->getName();
 			//toAdd.push_back(channelName);
-			for(HistVariable dataType : graphableTypes) {
+			for(std::string dataType : graphableTypes) {
 				entry = "";
-				TString xAxisName = histVariableNames.find(dataType)->second;
+				TString xAxisName = dataType.c_str() + units;
 				TString yAxisName = "Events";
 				TString superyAxisName = "Events (1/Integral)";
 				
-				toAdd.push_back(histVariableNames.find(dataType)->second);
+				toAdd.push_back(dataType);
 				toAdd.push_back(channelName);
-				
-				dataName = Utility::removeSpaces(histVariableNames.find(dataType)->second.erase(histVariableNames.find(dataType)->second.length()-6));
+				dataName = Utility::removeSpaces(dataType);
 				if(graphSwitch == 1 || graphSwitch == 3) {
 					fileName = "jumboPlotStorage/" + channelName + dataName + "Stack.png";
 					canvas = plotFormatter->superImposedStackHist(channel, dataType, xAxisName, yAxisName);
@@ -130,15 +130,15 @@ void JumboPlot() {
 	else {
 		for(std::shared_ptr<SimpleChannel> channel : simpleAnalysis->getChannels()) {
 			std::string channelName = channel->getName();
-			for(HistVariable dataType : graphableTypes) {
+			for(std::string dataType : graphableTypes) {
 				entry = "";
-				TString xAxisName = histVariableNames.find(dataType)->second;
+				TString xAxisName = dataType.c_str() + units;
 				TString yAxisName = "Events (1/Integral)";
 			
-				toAdd.push_back(histVariableNames.find(dataType)->second);
+				toAdd.push_back(dataType);
 				toAdd.push_back(channelName);
 				
-				dataName = Utility::removeSpaces(histVariableNames.find(dataType)->second.erase(histVariableNames.find(dataType)->second.length()-6));
+				dataName = Utility::removeSpaces(dataType);
 
 				fileName = "jumboPlotStorage/" + channelName + dataName + ".png";
 				canvas = plotFormatter->simpleAnalysisHist(channel->getHists(dataType), channel->getNames(), xAxisName, yAxisName);

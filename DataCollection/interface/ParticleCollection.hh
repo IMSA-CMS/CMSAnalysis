@@ -17,7 +17,7 @@ namespace reco
 }
 // Particle container. Essentially holds them within a vector,
 // but allows numerous useful operations on them
-template<typename T=Particle>
+template <typename T = Particle>
 class ParticleCollection
 {
 public:
@@ -26,20 +26,19 @@ public:
   // Copy/conversion constructor
   template <typename U>
   ParticleCollection(ParticleCollection<U> pc1);
-  ParticleCollection(std::vector<T> collectionVector);
 
-  void addParticle(T particle) {particles.push_back(particle);}
-  const std::vector<T>& getParticles() const {return particles;}
-  double getNumParticles() const {return particles.size();}
+  void addParticle(T particle) { particles.push_back(particle); }
+  const std::vector<T> &getParticles() const { return particles; }
+  double getNumParticles() const { return particles.size(); }
   ParticleCollection<T> getPosParticles() const;
   ParticleCollection<T> getNegParticles() const;
-  double getNumPosParticles() const {return getPosParticles().getNumParticles();}
-  double getNumNegParticles() const {return getNegParticles().getNumParticles();}
-  double getInvariantMass() const;  
+  double getNumPosParticles() const { return getPosParticles().getNumParticles(); }
+  double getNumNegParticles() const { return getNegParticles().getNumParticles(); }
+  double getInvariantMass() const;
   double getLeadingTransverseMomentum() const;
   double getNthHighestPt(int n) const;
   double getLeadingPt() const;
-  double getCollinsSoper() const; 
+  double getCollinsSoper() const;
   bool isBB() const;
   bool isBE() const;
   double calculateAllLeptonInvariantMass() const;
@@ -48,23 +47,22 @@ public:
   double calculateOppositeSignInvariantMass() const;
   double calculateRecoveredInvariantMass(int nLeptons, int motherPDGID) const;
   T getLeadingPtLepton() const;
-  int getLeptonTypeCount(const ParticleType& leptonType) const;
-  void clear() {particles.clear();}
-  T& operator[] (int i) {return particles.at(i);}
-  const T& operator[] (int i) const {return particles.at(i);}
-  auto begin() {return particles.begin();}
-  auto end() {return particles.end();}
-  auto cbegin() const {return particles.begin();}
-  auto cend() const {return particles.end();}
-  auto begin() const {return cbegin();}
-  auto end() const {return cend();}
-  void sort() {std::sort(begin(), end(),std::greater<T>());};
+  int getLeptonTypeCount(const ParticleType &leptonType) const;
+  void clear() { particles.clear(); }
+  T &operator[](int i) { return particles.at(i); }
+  const T &operator[](int i) const { return particles.at(i); }
+  auto begin() { return particles.begin(); }
+  auto end() { return particles.end(); }
+  auto cbegin() const { return particles.begin(); }
+  auto cend() const { return particles.end(); }
+  auto begin() const { return cbegin(); }
+  auto end() const { return cend(); }
+  void sort() { std::sort(begin(), end(), std::greater<T>()); };
+  std::pair<T, T> chooseParticles(bool oppositeSigns) const; // picks particles given if they are opposite signs or not
 
 private:
-  
   std::vector<T> particles;
   std::pair<T, T> chooseParticles() const; // picks particles with greatest invariant mass
-  std::pair<T, T> chooseParticles(bool oppositeSigns) const; // picks particles given if they are opposite signs or not
   // PartPair chooseParticles(bool oppositeSigns) const; // oppositeSigns is true when the particles have opposite sign charge
   std::pair<T, T> chooseParticlesByPhi(bool oppositeSigns) const; // picks particles by the Phi angle
   bool checkSigns(T particle1, T particle2) const;
@@ -72,558 +70,552 @@ private:
   double calculateLeadingTransverseMomentum(T particle1, T particle2) const;
   double calculateCollinsSoper(T particle1, T particle2) const;
   double calculateCosTheta(TLorentzVector Ele, TLorentzVector Elebar) const;
-  
 
   bool lowEtaFlip(T particle, T antiparticle) const;
-  
 };
 
 template <typename T>
 template <typename U>
-  inline ParticleCollection<T>::ParticleCollection(ParticleCollection<U> pc1)
+inline ParticleCollection<T>::ParticleCollection(ParticleCollection<U> pc1)
+{
+  for (auto particle : pc1.getParticles())
   {
-    for (auto particle : pc1.getParticles()) 
+    particles.push_back(particle);
+  }
+}
+
+template <typename T>
+inline ParticleCollection<T> ParticleCollection<T>::getPosParticles() const
+{
+  ParticleCollection<T> positives; // All of the positively-charged particles in the ParticleCollection
+
+  for (auto particle : getParticles())
+  {
+    if (particle.getCharge() > 0)
     {
-      particles.push_back(particle);
+      // std::cout << "Added positive particle with charge " << particle.charge() << " to positive collection.\n";
+      positives.addParticle(particle); // Add all of the positively-charged particles to positives
     }
   }
-  
-template<typename T>
-inline ParticleCollection<T>::ParticleCollection(std::vector<T> collectionVector) :
-  particles(collectionVector){}
 
-template<typename T>
-  inline ParticleCollection<T> ParticleCollection<T>::getPosParticles() const
+  // std::cout << "Number of Positive Particles: " << positives.getNumParticles() << '\n';
+
+  return positives;
+} // ParticleCollection of just the positively charged particles
+
+template <typename T>
+inline ParticleCollection<T> ParticleCollection<T>::getNegParticles() const
+{
+  ParticleCollection<T> negatives; // All of the negatively-charged particles in the ParticleCollection
+
+  for (auto particle : getParticles())
   {
-    ParticleCollection<T> positives;  // All of the positively-charged particles in the ParticleCollection
-
-    for (auto particle : getParticles())
+    if (particle.getCharge() < 0)
     {
-      if (particle.getCharge() > 0)
-      {
-        // std::cout << "Added positive particle with charge " << particle.charge() << " to positive collection.\n";
-        positives.addParticle(particle);  // Add all of the positively-charged particles to positives
-      }
+      // std::cout << "Added negative particle with charge " << particle.charge() << " to negative collection.\n";
+      negatives.addParticle(particle); // Add all of the negatively-charged particles to negatives
     }
-
-    // std::cout << "Number of Positive Particles: " << positives.getNumParticles() << '\n';
-
-    return positives;
-  } // ParticleCollection of just the positively charged particles
-
-  template<typename T>
-  inline ParticleCollection<T> ParticleCollection<T>::getNegParticles() const
-  {
-    ParticleCollection<T> negatives;  // All of the negatively-charged particles in the ParticleCollection
-
-    for (auto particle : getParticles())
-    {
-      if (particle.getCharge() < 0)
-      {
-        // std::cout << "Added negative particle with charge " << particle.charge() << " to negative collection.\n";
-        negatives.addParticle(particle);  // Add all of the negatively-charged particles to negatives
-      }
-    }
-
-    // std::cout << "Number of Negative Particles: " << negatives.getNumParticles() << '\n';
-
-    return negatives;
-  }  // ParticleCollection of just the negatively charged particles
-
-  template<typename T>
-  inline double ParticleCollection<T>::getInvariantMass() const
-  {
-    auto particlePair = chooseParticles(true);
-    if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
-      {      
-        return calculateInvariantMass(particlePair.first, particlePair.second);
-      }
-    else
-      {     
-        return -1;
-      }
   }
 
-  template<typename T>
-  inline double ParticleCollection<T>::getLeadingTransverseMomentum() const
+  // std::cout << "Number of Negative Particles: " << negatives.getNumParticles() << '\n';
+
+  return negatives;
+} // ParticleCollection of just the negatively charged particles
+
+template <typename T>
+inline double ParticleCollection<T>::getInvariantMass() const
+{
+  auto particlePair = chooseParticles();
+  if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
   {
-    auto particlePair = chooseParticles();
-    if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
-      {
+    return calculateInvariantMass(particlePair.first, particlePair.second);
+  }
+  else
+  {
+    return -1;
+  }
+}
 
-        return calculateLeadingTransverseMomentum(particlePair.first, particlePair.second);
-      }
-    else
-      {
+template <typename T>
+inline double ParticleCollection<T>::getLeadingTransverseMomentum() const
+{
+  auto particlePair = chooseParticles();
+  if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
+  {
 
-        return -1;
-      }
+    return calculateLeadingTransverseMomentum(particlePair.first, particlePair.second);
+  }
+  else
+  {
+
+    return -1;
+  }
+}
+
+template <typename T>
+inline double ParticleCollection<T>::getNthHighestPt(int n) const
+{
+  if (n < 1)
+  {
+    throw std::invalid_argument("Not a positive integer");
   }
 
-  template<typename T>
-  inline double ParticleCollection<T>::getNthHighestPt(int n) const
+  if (n > getNumParticles())
   {
-    if (n < 1)
-    {
-      throw std::invalid_argument("Not a positive integer");
-    }
-
-    if (n > getNumParticles())
-    {
-      return 0;   // If the nth highest pt particle doesn't exist, return 0
-    }
-
-    auto particlesVec = getParticles();  // Vector of Particles
-
-    // Sort the vector of particles by pt (greatest to least)
-    std::sort(particlesVec.begin(), particlesVec.end(), [](auto a, auto b){return a.getPt() > b.getPt();});
-
-    // for (auto particle : particlesVec)
-    // {
-    //  std::cout << particle.pt() << '\n';
-    // }
-    // std::cout << '\n';
-
-    return particlesVec[n - 1].getPt();  // n-1 since the first element is 0, 2nd element is 1, etc.
+    return 0; // If the nth highest pt particle doesn't exist, return 0
   }
 
-  template<typename T>
-  inline double ParticleCollection<T>::getLeadingPt() const
-  {
-    double highestPt = 0;
-    for (auto particle : particles)
-    {
-      double pt = particle.getPt();
-      if (pt > highestPt)
-      {
-        pt = highestPt;
-      }
-    }
+  auto particlesVec = getParticles(); // Vector of Particles
 
-    return highestPt;
+  // Sort the vector of particles by pt (greatest to least)
+  std::sort(particlesVec.begin(), particlesVec.end(), [](auto a, auto b)
+            { return a.getPt() > b.getPt(); });
+
+  // for (auto particle : particlesVec)
+  // {
+  //  std::cout << particle.pt() << '\n';
+  // }
+  // std::cout << '\n';
+
+  return particlesVec[n - 1].getPt(); // n-1 since the first element is 0, 2nd element is 1, etc.
+}
+
+template <typename T>
+inline double ParticleCollection<T>::getLeadingPt() const
+{
+  double highestPt = 0;
+  for (auto particle : particles)
+  {
+    double pt = particle.getPt();
+    if (pt > highestPt)
+    {
+      pt = highestPt;
+    }
   }
 
-  template<typename T>
-  inline double ParticleCollection<T>::getCollinsSoper() const
-  {
-    auto particlePair = chooseParticles();
+  return highestPt;
+}
 
-    //guarantees that the particle has to have a negative charge or the antiparticle has to have a positve charge
-    //if both particles have the same sign (i.e. electrons), the situation is solved at the start of calculateCollinsSoper()
-    if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
-      {
-        if (particlePair.first.getCharge() < 0) //no flip
+template <typename T>
+inline double ParticleCollection<T>::getCollinsSoper() const
+{
+  auto particlePair = chooseParticles();
+
+  // guarantees that the particle has to have a negative charge or the antiparticle has to have a positve charge
+  // if both particles have the same sign (i.e. electrons), the situation is solved at the start of calculateCollinsSoper()
+  if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
+  {
+    if (particlePair.first.getCharge() < 0) // no flip
     {
-      
+
       return calculateCollinsSoper(particlePair.first, particlePair.second);
     }
-        else //flip
+    else // flip
     {
-      
+
       return calculateCollinsSoper(particlePair.second, particlePair.first);
     }
-      }
-    else
-      {
-        
-        return -2;
-      }
   }
-  template<typename T>
-  inline bool ParticleCollection<T>::isBB() const
+  else
   {
-    auto particlePair = chooseParticles();
-    if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
-      {
-        if (particlePair.first.getBarrelState() == Particle::BarrelState::Barrel && particlePair.second.getBarrelState() == Particle::BarrelState::Barrel)
+
+    return -2;
+  }
+}
+template <typename T>
+inline bool ParticleCollection<T>::isBB() const
+{
+  auto particlePair = chooseParticles();
+  if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
+  {
+    if (particlePair.first.getBarrelState() == Particle::BarrelState::Barrel && particlePair.second.getBarrelState() == Particle::BarrelState::Barrel)
     {
       return true;
     }
-      }
-    return false;
   }
-  
-  template<typename T>
-  inline bool ParticleCollection<T>::isBE() const
+  return false;
+}
+
+template <typename T>
+inline bool ParticleCollection<T>::isBE() const
+{
+  auto particlePair = chooseParticles();
+  if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
   {
-    auto particlePair = chooseParticles();
-    if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
+    if ((particlePair.first.getBarrelState() == Particle::BarrelState::Barrel && particlePair.second.getBarrelState() == Particle::BarrelState::Endcap) || (particlePair.first.getBarrelState() == Particle::BarrelState::Endcap && particlePair.second.getBarrelState() == Particle::BarrelState::Barrel))
+    {
+      return true;
+    }
+    // if both particles are muons, then EE counts as BE
+    if ((particlePair.first.getType() == ParticleType::muon() && particlePair.second.getType() == ParticleType::muon()) && (particlePair.first.getBarrelState() == Particle::BarrelState::Endcap && particlePair.second.getBarrelState() == Particle::BarrelState::Endcap))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+template <typename T>
+inline double ParticleCollection<T>::calculateAllLeptonInvariantMass() const
+{
+  reco::Candidate::LorentzVector total;
+
+  for (auto particle : particles)
+  {
+    auto newVec = particle.getFourVector();
+    total += newVec;
+  }
+
+  // std::cout << total.M() << '\n';
+
+  return total.M();
+}
+
+template <typename T>
+inline double ParticleCollection<T>::calculateSameSignInvariantMass(bool usingPhi) const
+{
+  T iPointer = Particle::nullParticle();
+  T jPointer = Particle::nullParticle();
+  std::pair<T, T> particlePair = {iPointer, jPointer};
+  if (usingPhi)
+  {
+    particlePair = chooseParticlesByPhi(false); // we want same sign particles with best phi angle
+  }
+  else
+  {
+    // std::cout << "Line B1 ";
+    particlePair = chooseParticles(false); // we want same sign particles with highest invariant mass
+    // std::cout << "Line B2 ";
+  }
+
+  if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
+  {
+
+    return calculateInvariantMass(particlePair.first, particlePair.second);
+  }
+  else
+  {
+    return -1;
+  }
+}
+
+template <typename T>
+inline std::vector<double> ParticleCollection<T>::calculateSameSignInvariantMasses(bool usingPhi) const
+{
+  std::vector<double> sameSignInvariantMasses;
+
+  if (getPosParticles().getNumParticles() >= 2)
+  {
+    sameSignInvariantMasses.push_back(getPosParticles().calculateSameSignInvariantMass(usingPhi));
+  }
+  else
+  {
+    sameSignInvariantMasses.push_back(0);
+  }
+
+  if (getNegParticles().getNumParticles() >= 2)
+  {
+    sameSignInvariantMasses.push_back(getNegParticles().calculateSameSignInvariantMass(usingPhi));
+  }
+  else
+  {
+    sameSignInvariantMasses.push_back(0);
+  }
+
+  return sameSignInvariantMasses;
+}
+template <typename T>
+inline double ParticleCollection<T>::calculateOppositeSignInvariantMass() const
+{
+  auto particlePair = chooseParticles(true); // we want opposite sign particles with highest invariant mass
+  if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
+  {
+    return calculateInvariantMass(particlePair.first, particlePair.second);
+  }
+  else
+  {
+    return -1;
+  }
+}
+
+template <typename T>
+inline double ParticleCollection<T>::calculateRecoveredInvariantMass(int nLeptons, int motherPDGID) const
+{
+  double maxInvariantMass = 0;
+
+  if (nLeptons < 0)
+  {
+    throw std::out_of_range("Use a valid number of leptons"); // Use valid nLeptons number
+  }
+
+  else if (nLeptons > getNumParticles())
+  {
+    std::cout << "Not enough leptons; running on " << getNumParticles() << " leptons.\n";
+    return calculateRecoveredInvariantMass(getNumParticles(), motherPDGID);
+  }
+
+  auto allLeptons = getParticles();       // Vector of Particles
+  int allLeptonsSize = getNumParticles(); // Size of above vector
+
+  // Create a vector of ints that are the indices of allLeptons
+  std::vector<int> indices;
+  for (int i = 0; i < allLeptonsSize; i++)
+  {
+    indices.push_back(i);
+  }
+
+  std::vector<int> combination;
+  std::vector<std::vector<int>> totalCombinations;
+
+  Utility::getAllCombinations(0, nLeptons, combination, indices, totalCombinations);
+
+  for (auto leptonIndices : totalCombinations)
+  {
+    // Create a new ParticleCollection and add back the leptons
+    ParticleCollection<T> leptons;
+    std::vector<Particle> part;
+    for (auto index : leptonIndices)
+    {
+      leptons.addParticle(allLeptons[index]);
+      part.push_back(allLeptons[index]);
+    }
+
+    bool daughterOfHPlusPlus = GenSimParticle::sharedMother(motherPDGID, part).isNotNull(); // If all of the particles map their mother to the specified mother particle, this is true
+
+    if ((leptons.calculateAllLeptonInvariantMass() > maxInvariantMass) && (daughterOfHPlusPlus))
+    {
+      maxInvariantMass = leptons.calculateAllLeptonInvariantMass();
+    }
+  }
+
+  return maxInvariantMass;
+}
+template <typename T>
+inline T ParticleCollection<T>::getLeadingPtLepton() const
+{
+  double highestPt = getLeadingPt();
+  for (auto part : particles)
+  {
+    if (part.getPt() == highestPt)
+    {
+      return part;
+    }
+  }
+
+  throw std::runtime_error("No leading pT lepton!");
+}
+
+template <typename T>
+inline int ParticleCollection<T>::getLeptonTypeCount(const ParticleType &leptonType) const // Finds the number of a certain lepton type (electrons/muons)
+{
+  int count = 0;
+  for (auto particle : particles)
+  {
+    if (particle.getType() == leptonType)
+    {
+      ++count;
+    }
+  }
+
+  return count;
+}
+
+template <typename T>
+inline typename std::pair<T, T> ParticleCollection<T>::chooseParticles() const
+{
+  auto particlePair = chooseParticles(true); // opposite signs
+
+  if (!(particlePair.first.isNotNull() && particlePair.second.isNotNull())) // If the particle pair is empty, then test same signs
+  {
+    particlePair = chooseParticles(false);
+  }
+
+  return particlePair;
+}
+template <typename T>
+inline typename std::pair<T, T> ParticleCollection<T>::chooseParticles(bool oppositeSigns) const
+{
+  double maxInvariantMass = 0;
+  T iPointer = Particle::nullParticle();
+  T jPointer = Particle::nullParticle();
+  if (particles.size() > 0)
+  {
+    // std::cout << "!" << particles[0].getMass() << std::endl;
+  }
+
+  for (int i = 0; i < static_cast<int>(particles.size()) - 1; ++i)
+  {
+    for (int j = i + 1; j < static_cast<int>(particles.size()); ++j)
+    {
+      // std::cout << "i: " << i << "j: " << j << " particles.size(): " << particles.size() << " Line C1" << " ";
+
+      // std::cout << " ";
+      if (particles[i].getType() == particles[j].getType())
       {
-        if ((particlePair.first.getBarrelState() == Particle::BarrelState::Barrel
-      && particlePair.second.getBarrelState() == Particle::BarrelState::Endcap)
-      || (particlePair.first.getBarrelState() == Particle::BarrelState::Endcap 
-      && particlePair.second.getBarrelState() == Particle::BarrelState::Barrel))
-    {
-      return true;
-    }
-        //if both particles are muons, then EE counts as BE
-        if ((particlePair.first.getType() == ParticleType::muon()
-      && particlePair.second.getType() == ParticleType::muon())
-      && (particlePair.first.getBarrelState() == Particle::BarrelState::Endcap
-      && particlePair.second.getBarrelState() == Particle::BarrelState::Endcap))
-    {
-      return true;
-    }
-      }
-    return false;
-  }
-  template<typename T>
-  inline double ParticleCollection<T>::calculateAllLeptonInvariantMass() const
-  {
-    reco::Candidate::LorentzVector total;
-
-    for (auto particle : particles)
-    {
-      auto newVec = particle.getFourVector();
-      total += newVec;
-    }
-
-    // std::cout << total.M() << '\n';
-
-    return total.M();
-  }
-
-  template<typename T>
-  inline double ParticleCollection<T>::calculateSameSignInvariantMass(bool usingPhi) const
-  {
-    T iPointer = Particle::nullParticle();
-    T jPointer = Particle::nullParticle();
-    std::pair<T,T> particlePair = {iPointer, jPointer};
-
-    if (usingPhi)
-    {
-      particlePair = chooseParticlesByPhi(false);  // we want same sign particles with best phi angle
-    }
-    else
-    {
-      particlePair = chooseParticles(false);  // we want same sign particles with highest invariant mass
-    }
-
-    if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
-    {
-      return calculateInvariantMass(particlePair.first, particlePair.second);
-    }
-    else
-    {
-      return -1;
-    }
-  }
-  
-  template<typename T>
-  inline std::vector<double> ParticleCollection<T>::calculateSameSignInvariantMasses(bool usingPhi) const
-  {
-    std::vector<double> sameSignInvariantMasses;
-
-    if (getPosParticles().getNumParticles() >= 2)
-    {
-      sameSignInvariantMasses.push_back(getPosParticles().calculateSameSignInvariantMass(usingPhi));
-    }
-    else
-    {
-      sameSignInvariantMasses.push_back(0);
-    }
-
-    if (getNegParticles().getNumParticles() >= 2)
-    {
-      sameSignInvariantMasses.push_back(getNegParticles().calculateSameSignInvariantMass(usingPhi));
-    }
-    else
-    {
-      sameSignInvariantMasses.push_back(0);
-    }
-
-    return sameSignInvariantMasses;
-  }
-  template<typename T>
-  inline double ParticleCollection<T>::calculateOppositeSignInvariantMass() const
-  {
-    auto particlePair = chooseParticles(true);					// we want opposite sign particles with highest invariant mass
-    if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
-    {      
-      return calculateInvariantMass(particlePair.first, particlePair.second);
-    }
-    else
-    {     
-      return -1;
-    }
-  }
-
-  template<typename T>
-  inline double ParticleCollection<T>::calculateRecoveredInvariantMass(int nLeptons, int motherPDGID) const
-  {
-    double maxInvariantMass = 0;
-
-    if (nLeptons < 0)
-    {
-      throw std::out_of_range("Use a valid number of leptons");  // Use valid nLeptons number
-    }
-
-    else if (nLeptons > getNumParticles())
-    {
-      std::cout << "Not enough leptons; running on " << getNumParticles() << " leptons.\n";
-      return calculateRecoveredInvariantMass(getNumParticles(), motherPDGID);
-    }
-
-    auto allLeptons = getParticles();         // Vector of Particles
-    int allLeptonsSize = getNumParticles();   // Size of above vector
-
-    // Create a vector of ints that are the indices of allLeptons
-    std::vector<int> indices;
-    for (int i = 0; i < allLeptonsSize; i++)
-    {
-        indices.push_back(i);
-    }
-
-    std::vector<int> combination;
-    std::vector<std::vector<int>> totalCombinations;
-
-    Utility::getAllCombinations(0, nLeptons, combination, indices, totalCombinations);
-
-    for (auto leptonIndices : totalCombinations)
-    {
-        // Create a new ParticleCollection and add back the leptons
-        ParticleCollection<T> leptons;
-        std::vector<Particle> part;
-        for (auto index : leptonIndices)
+        // std::cout << "Line C2 ";
+        if (checkSigns(particles[i], particles[j]) == oppositeSigns) // Check if the particle pairs' signs match with what we want
         {
-            leptons.addParticle(allLeptons[index]);
-            part.push_back(allLeptons[index]);
-        }
-
-        bool daughterOfHPlusPlus = GenSimParticle::sharedMother(motherPDGID, part).isNotNull();  // If all of the particles map their mother to the specified mother particle, this is true
-
-        if ((leptons.calculateAllLeptonInvariantMass() > maxInvariantMass) && (daughterOfHPlusPlus))
-        {
-            maxInvariantMass = leptons.calculateAllLeptonInvariantMass();
-        }
-    }
-
-    return maxInvariantMass;
-  }
-  template<typename T>
-  inline T ParticleCollection<T>::getLeadingPtLepton() const
-  {
-    double highestPt = getLeadingPt();
-    for (auto part : particles)
-    {
-      if (part.getPt() == highestPt)
-      {
-        return part;
-      }
-    }
-    
-    throw std::runtime_error("No leading pT lepton!");
-  }
-
-  template<typename T>
-  inline int ParticleCollection<T>::getLeptonTypeCount(const ParticleType& leptonType) const  // Finds the number of a certain lepton type (electrons/muons)
-  {
-    int count = 0;
-    for (auto particle : particles)
-    {
-      if (particle.getType() == leptonType)
-      {
-        ++count;
-      }
-    }
-
-    return count;
-  }
-
-  template<typename T>
-  inline typename std::pair<T,T> ParticleCollection<T>::chooseParticles() const
-  {
-    auto particlePair = chooseParticles(true); // opposite signs
-    
-    if (!(particlePair.first.isNotNull() && particlePair.second.isNotNull()))  // If the particle pair is empty, then test same signs
-    {
-      particlePair = chooseParticles(false);
-    }
-
-    return particlePair;
-  }
-   template<typename T>
-  inline typename std::pair<T,T> ParticleCollection<T>::chooseParticles(bool oppositeSigns) const
-  {
-    double maxInvariantMass = 0;
-    T iPointer = Particle::nullParticle();
-    T jPointer = Particle::nullParticle();
-
-    if(particles.size() > 0) {
-      // std::cout << "!" << particles[0].getMass() << std::endl;
-    }
-
-    for (int i = 0; i < static_cast<int>(particles.size()) - 1; ++i)
-      {
-        for (int j = i + 1; j < static_cast<int>(particles.size()); ++j)
-          {
-            if (particles[i].getType() == particles[j].getType()) 
-            {
-        
-              if (checkSigns(particles[i], particles[j]) == oppositeSigns)     // Check if the particle pairs' signs match with what we want
-              {
           // std::cout << calculateInvariantMass(particles[i], particles[j]) << std::endl;
-                  if (calculateInvariantMass(particles[i], particles[j]) > maxInvariantMass)
-                  {
-                      maxInvariantMass = calculateInvariantMass(particles[i], particles[j]);
-                      iPointer = particles[i];
-                      jPointer = particles[j];
-                  }
-              }
-            }
-          }
-      }
-    
-    return {iPointer, jPointer};
-  }
-
-  template<typename T>
-  inline typename std::pair<T,T> ParticleCollection<T>::chooseParticlesByPhi(bool oppositeSigns) const
-  {
-    double bestAngle = 0;  // We want the two particles whose phi angle difference is closest to 180, since that's what H++ decay leptons do
-    T iPointer = Particle::nullParticle();
-    T jPointer = Particle::nullParticle();
-
-    for (int i = 0; i < static_cast<int>(particles.size()) - 1; ++i)
-    {
-      for (int j = i + 1; j < static_cast<int>(particles.size()); ++j)
-      {
-        if (checkSigns(particles[i], particles[j]) == oppositeSigns)     // Check if the particle pairs' signs match with what we want
-        {
-          double angleDifference = abs(particles[i].getPhi() - particles[j].getPhi());
-          if (angleDifference > 180)
+          if (calculateInvariantMass(particles[i], particles[j]) > maxInvariantMass)
           {
-            angleDifference = 360 - angleDifference;
-          }
-
-          if (angleDifference > bestAngle)
-          {
-            bestAngle = angleDifference;
+            maxInvariantMass = calculateInvariantMass(particles[i], particles[j]);
             iPointer = particles[i];
             jPointer = particles[j];
           }
         }
       }
     }
-    
-    return {iPointer, jPointer};
   }
-  template<typename T>
-  inline bool ParticleCollection<T>::checkSigns(T particle1, T particle2) const
+
+  return {iPointer, jPointer};
+}
+
+template <typename T>
+inline typename std::pair<T, T> ParticleCollection<T>::chooseParticlesByPhi(bool oppositeSigns) const
+{
+  double bestAngle = 0; // We want the two particles whose phi angle difference is closest to 180, since that's what H++ decay leptons do
+  T iPointer = Particle::nullParticle();
+  T jPointer = Particle::nullParticle();
+
+  for (int i = 0; i < static_cast<int>(particles.size()) - 1; ++i)
   {
-    if (particle1.getCharge() != particle2.getCharge())
+    for (int j = i + 1; j < static_cast<int>(particles.size()); ++j)
+    {
+      if (checkSigns(particles[i], particles[j]) == oppositeSigns) // Check if the particle pairs' signs match with what we want
       {
-        return true;
+        double angleDifference = abs(particles[i].getPhi() - particles[j].getPhi());
+        if (angleDifference > 180)
+        {
+          angleDifference = 360 - angleDifference;
+        }
+
+        if (angleDifference > bestAngle)
+        {
+          bestAngle = angleDifference;
+          iPointer = particles[i];
+          jPointer = particles[j];
+        }
       }
-
-    return false;
+    }
   }
-  template<typename T>
-  inline double ParticleCollection<T>::calculateCosTheta(TLorentzVector Ele, TLorentzVector Elebar) const
+
+  return {iPointer, jPointer};
+}
+template <typename T>
+inline bool ParticleCollection<T>::checkSigns(T particle1, T particle2) const
+{
+  if (particle1.getCharge() != particle2.getCharge())
   {
-    double Eleplus  = 1.0/sqrt(2.0) * (Ele.E() + Ele.Z());
-    double Eleminus = 1.0/sqrt(2.0) * (Ele.E() - Ele.Z());
-
-    double Elebarplus  = 1.0/sqrt(2.0) * (Elebar.E() + Elebar.Z());
-    double Elebarminus = 1.0/sqrt(2.0) * (Elebar.E() - Elebar.Z());
-
-    TLorentzVector Q(Ele+Elebar);
-
-  
-    double costheta = 2.0 / (Q.Mag() * sqrt(pow(Q.Mag(),2) + pow(Q.Pt(),2))) * (Eleplus * Elebarminus - Eleminus * Elebarplus);
-    if (Q.Pz() < 0) costheta = -costheta;
-    return costheta;
+    return true;
   }
-  template<typename T>
-  inline bool ParticleCollection<T>::lowEtaFlip(T particle, T antiparticle) const
+
+  return false;
+}
+template <typename T>
+inline double ParticleCollection<T>::calculateCosTheta(TLorentzVector Ele, TLorentzVector Elebar) const
+{
+  double Eleplus = 1.0 / sqrt(2.0) * (Ele.E() + Ele.Z());
+  double Eleminus = 1.0 / sqrt(2.0) * (Ele.E() - Ele.Z());
+
+  double Elebarplus = 1.0 / sqrt(2.0) * (Elebar.E() + Elebar.Z());
+  double Elebarminus = 1.0 / sqrt(2.0) * (Elebar.E() - Elebar.Z());
+
+  TLorentzVector Q(Ele + Elebar);
+
+  double costheta = 2.0 / (Q.Mag() * sqrt(pow(Q.Mag(), 2) + pow(Q.Pt(), 2))) * (Eleplus * Elebarminus - Eleminus * Elebarplus);
+  if (Q.Pz() < 0)
+    costheta = -costheta;
+  return costheta;
+}
+template <typename T>
+inline bool ParticleCollection<T>::lowEtaFlip(T particle, T antiparticle) const
+{
+  if (std::abs(particle.getEta()) < std::abs(antiparticle.getEta()))
   {
-    if (std::abs(particle.getEta()) < std::abs(antiparticle.getEta()))
-      {
-        if (particle.getCharge() < 0)
+    if (particle.getCharge() < 0)
     {
       return true;
     }
-      }
+  }
 
-    else 
-      {
-        if (antiparticle.getCharge() > 0)
+  else
+  {
+    if (antiparticle.getCharge() > 0)
     {
       return true;
     }
-      }
-
-    return false;
   }
-  template<typename T>
-  inline double ParticleCollection<T>::calculateCollinsSoper(T particle, T antiparticle) const
+
+  return false;
+}
+template <typename T>
+inline double ParticleCollection<T>::calculateCollinsSoper(T particle, T antiparticle) const
+{
+  // if same-sign problem occurs, we trust the charge of the particle with abs(eta) closer to 0
+  if (!checkSigns(particle, antiparticle) && lowEtaFlip(particle, antiparticle))
   {
-    //if same-sign problem occurs, we trust the charge of the particle with abs(eta) closer to 0
-    if (!checkSigns(particle, antiparticle) && lowEtaFlip(particle, antiparticle))
-      {
-        T temp = particle;
-        particle = antiparticle;
-        antiparticle = temp;
-      }
-
-    TLorentzVector Ele;
-    TLorentzVector Elebar;
-
-    float Et1 = particle.getEt();
-    float Et2 = antiparticle.getEt();
-    float Eta1 = particle.getEta();
-    float Eta2 = antiparticle.getEta();
-    float Phi1 = particle.getPhi();
-    float Phi2 = antiparticle.getPhi();
-    float En1 = particle.getEnergy();
-    float En2 = antiparticle.getEnergy();
-    Ele.SetPtEtaPhiE(Et1,Eta1,Phi1,En1);
-    Elebar.SetPtEtaPhiE(Et2,Eta2,Phi2,En2);
-
-    return calculateCosTheta(Ele, Elebar);
+    T temp = particle;
+    particle = antiparticle;
+    antiparticle = temp;
   }
-  template<typename T>
-  inline double ParticleCollection<T>::calculateInvariantMass(T particle1, T particle2) const
+
+  TLorentzVector Ele;
+  TLorentzVector Elebar;
+
+  float Et1 = particle.getEt();
+  float Et2 = antiparticle.getEt();
+  float Eta1 = particle.getEta();
+  float Eta2 = antiparticle.getEta();
+  float Phi1 = particle.getPhi();
+  float Phi2 = antiparticle.getPhi();
+  float En1 = particle.getEnergy();
+  float En2 = antiparticle.getEnergy();
+  Ele.SetPtEtaPhiE(Et1, Eta1, Phi1, En1);
+  Elebar.SetPtEtaPhiE(Et2, Eta2, Phi2, En2);
+
+  return calculateCosTheta(Ele, Elebar);
+}
+template <typename T>
+inline double ParticleCollection<T>::calculateInvariantMass(T particle1, T particle2) const
+{
+  auto vec1 = particle1.getFourVector();
+  auto vec2 = particle2.getFourVector();
+
+  // std::cout << vec1.M() << std::endl;
+  // std::cout << vec2.M() << std::endl;
+
+  auto sum = vec1 + vec2;
+
+  // std::cout << sum.M() << '\n';
+
+  // USED TO BE POSITIVE, JUST WANTED TO SEE WHAT HAPPENED MAY GOD HAVE MERCY
+  // I APOLOGIZE TO THE FLYING SPAGHETTI MONSTER FOR THIS BLASPHEMY [ATANG, 11/07]
+  // Problem solved :)
+  return sum.M();
+
+  // double product = 2 * particle1.pt() * particle2.pt();
+  // double diff = std::cosh(particle1.eta() - particle2.eta()) - std::cos(particle1.phi() - particle2.phi());
+  // double invariantMass = product * diff;
+  // if (invariantMass > 0)
+  //   {
+  //     return std::sqrt(invariantMass);
+  //   }
+  // else
+  //   {
+  //     return 0;
+  //   }
+}
+template <typename T>
+inline double ParticleCollection<T>::calculateLeadingTransverseMomentum(T particle1, T particle2) const
+{
+  double pt1 = particle1.getPt();
+  double pt2 = particle2.getPt();
+  if (pt1 > pt2)
   {
-    auto vec1 = particle1.getFourVector();
-    auto vec2 = particle2.getFourVector();
-
-    // std::cout << vec1.M() << std::endl;
-    // std::cout << vec2.M() << std::endl;
-
-    auto sum = vec1 + vec2;
-
-    // std::cout << sum.M() << '\n';
-
-    // USED TO BE POSITIVE, JUST WANTED TO SEE WHAT HAPPENED MAY GOD HAVE MERCY
-    // I APOLOGIZE TO THE FLYING SPAGHETTI MONSTER FOR THIS BLASPHEMY [ATANG, 11/07]
-    // Problem solved :)
-    return sum.M();
-
-    //double product = 2 * particle1.pt() * particle2.pt(); 
-    //double diff = std::cosh(particle1.eta() - particle2.eta()) - std::cos(particle1.phi() - particle2.phi()); 
-    //double invariantMass = product * diff; 
-    //if (invariantMass > 0)
-    //  {
-    //    return std::sqrt(invariantMass);
-    //  }
-    //else
-    //  {
-    //    return 0; 
-    //  }
+    return pt1;
   }
-  template<typename T>
-  inline double ParticleCollection<T>::calculateLeadingTransverseMomentum(T particle1, T particle2) const
+  else
   {
-    double pt1 = particle1.getPt();
-    double pt2 = particle2.getPt();
-    if (pt1 > pt2)
-      {
-        return pt1;
-      }
-    else
-      {
-        return pt2;
-      }
+    return pt2;
   }
+}
 #endif

@@ -39,6 +39,8 @@ class NanoAODEventFile : public EventFile
         mutable TTreeReaderArray<Int_t> elec_charge;
         mutable TTreeReaderArray<Float_t> elec_pt;
         mutable TTreeReaderArray<Float_t> elec_reliso;
+        mutable TTreeReaderArray<Float_t> elec_dxy;
+        mutable TTreeReaderArray<Float_t> elec_dz;
 
         mutable TTreeReaderValue<UInt_t> muon_size;
         mutable TTreeReaderArray<Float_t> muon_eta;
@@ -47,6 +49,8 @@ class NanoAODEventFile : public EventFile
         mutable TTreeReaderArray<Int_t> muon_charge;
         mutable TTreeReaderArray<Float_t> muon_pt;
         mutable TTreeReaderArray<Float_t> muon_reliso;
+        mutable TTreeReaderArray<Float_t> muon_dxy;
+        mutable TTreeReaderArray<Float_t> muon_dz;
 
         //mutable TTreeReaderValue<UInt_t> met_size; useless variable
         mutable TTreeReaderArray<Float_t> met_phi;
@@ -73,7 +77,9 @@ class NanoAODEventFile : public EventFile
         mutable TTreeReaderArray<Float_t> gen_pileup;
 
         mutable TTreeReaderArray<Int_t> elec_idpass;
-        mutable TTreeReaderArray<Bool_t> muon_idpass;
+        mutable TTreeReaderArray<Bool_t> muon_looseid;
+        mutable TTreeReaderArray<Bool_t> muon_mediumid;
+        mutable TTreeReaderArray<Bool_t> muon_tightid;
         mutable std::unordered_map<std::string, TTreeReaderValue<Bool_t>> triggers;
 
         std::vector<GenSimParticle> genSimParticles;

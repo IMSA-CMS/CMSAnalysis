@@ -17,17 +17,17 @@ class PlotFormatter
     public:
         PlotFormatter(bool iDrawLogo, TString iExtraText) : drawLogo(iDrawLogo), extraText(iExtraText) {}
         //Superimposed stacks
-        TCanvas* superImposedStackHist(std::shared_ptr<Channel> processes, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle);
+        TCanvas* superImposedStackHist(std::shared_ptr<Channel> processes, std::string histvariable, TString xAxisTitle, TString yAxisTitle);
         //Superimposed hist (second function is for the simple SuperImpose.C script)
-        TCanvas* superImposedHist(std::shared_ptr<Channel> processes, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle);
+        TCanvas* superImposedHist(std::shared_ptr<Channel> processes, std::string histvariable, TString xAxisTitle, TString yAxisTitle);
         TCanvas* simpleSuperImposedHist(std::vector<TH1*> hists, std::vector<int> colors, std::vector<TString> names, TString xAxisTitle, TString yAxisTitle);
-	TCanvas* simpleAnalysisHist(std::vector<TH1*> hists, std::vector<std::string> names, TString xAxisTitle, TString yAxisTitle);
+	    TCanvas* simpleAnalysisHist(std::vector<TH1*> hists, std::vector<std::string> names, TString xAxisTitle, TString yAxisTitle);
         //Single 1D hist
-        TCanvas* simple1DHist(std::shared_ptr<Process> process, HistVariable histvariable, bool scaleToExpected, TString xAxisTitle, TString yAxisTitle);
+        TCanvas* simple1DHist(std::shared_ptr<Process> process, std::string histvariable, bool scaleToExpected, TString xAxisTitle, TString yAxisTitle);
         //Single 2D hist
-        TCanvas* simple2DHist(std::shared_ptr<Process> process, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle);
+        TCanvas* simple2DHist(std::shared_ptr<Process> process, std::string histvariable, TString xAxisTitle, TString yAxisTitle);
         //Single stacked histogram
-        TCanvas* simpleStackHist(std::shared_ptr<Channel> processes, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle);
+        TCanvas* simpleStackHist(std::shared_ptr<Channel> processes, std::string histvariable, TString xAxisTitle, TString yAxisTitle);
         //Formats the canvas based on the margins
         TCanvas* makeFormat(int w, int h, float t, float b, float l, float r);
         //Writes text and draws logo based on the margins

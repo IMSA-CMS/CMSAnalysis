@@ -21,7 +21,7 @@
 #include <memory>
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 
-TH1* FitEstimator::getFitHist(HistVariable histType) const {
+TH1* FitEstimator::getFitHist(std::string histType) const {
     return fitInput->getHist(histType);
 }
 
@@ -29,7 +29,7 @@ double FitEstimator::getMassTarget() const {
     return massTarget;
 }
 
-double FitEstimator::getExpectedYield(const SingleProcess* process, HistVariable dataType, double luminosity) const 
+double FitEstimator::getExpectedYield(const SingleProcess* process, std::string dataType, double luminosity) const 
 {
     int totalEventsInt = process->getTotalEvents();
     //Takes the fit histogram wanted from the file, assigns it hist 
