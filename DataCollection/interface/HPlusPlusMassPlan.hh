@@ -6,7 +6,7 @@
 class HPlusPlusMassPlan : public DataCollectionPlan
 {
     protected:
-        void setupAnalyzer() override;
+        void initialize() override;
 };
 
 #endif

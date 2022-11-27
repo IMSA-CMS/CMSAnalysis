@@ -16,6 +16,8 @@ public:
     virtual bool process() override;
     void finalize() override;
     const std::vector<std::pair<Particle,LeptonJet>> getMatchingPairs() const;
+    const bool isQuark(GenSimParticle lepton);
+    const bool isSquark(GenSimParticle lepton);
 
 private:
     double findMatchingPairDeltaR(MatchingPair pair);
@@ -27,7 +29,12 @@ private:
 
     int lepJetSize = 0;
     int genSize = 0;
-    int darkPhoton = 0;
+    double darkPhoton = 0;
+    int eventNumber = 1;
+    int squark = 0;
+    int quark = 0;
+    int proton = 0;
+    int genLeptons = 0;
 };
 
 #endif
