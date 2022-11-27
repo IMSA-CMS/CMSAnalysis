@@ -1,6 +1,8 @@
 #ifndef HISTVARIABLE_HH
 #define HISTVARIABLE_HH
 
+#include <string>
+
 class HistVariable 
 {
     public:
