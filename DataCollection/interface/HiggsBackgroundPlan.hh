@@ -6,7 +6,7 @@
 class HiggsBackgroundPlan : public DataCollectionPlan
 {
     protected:
-        void setupAnalyzer() override;
+        virtual void initialize() override;
 };
 
 #endif

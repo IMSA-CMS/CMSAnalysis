@@ -3,7 +3,7 @@
 This packages is designed to perform GEN-only private MC productions using the CMSSW Pythia8 release that is included in the working CMSSW release. It also includes basic TTree-making files and simplistic histogramming that is intended primarly as a starting point to springboard to do whatever specific plotting is desired.
 
 # Updated Instructions to Run EventGenerator
-These instructions were most recently updated by George Bayliss on 11/03/22.
+These instructions were most recently updated by George Bayliss on 11/26/22.
 
 All commands should be run from MCGeneration/test.
 
@@ -28,7 +28,7 @@ dpMass is Dark Photon mass, you can leave this blank if you aren't running somet
 Running this file takes a long time and creates a lot of output, you can run this in the background using nohup.
 
 ```
-nohup cmsRun EventGenerator_edm_cfg.py maxEvents=100 globalTag=Run2 pythiaSettings=dpPythiaParameters.txt output=output.root dpMass=0.3 &> 
+nohup cmsRun EventGenerator_edm_cfg.py maxEvents=100 globalTag=Run2 pythiaSettings=SUSYto2ZDPortalParameters.txt output=output.root dpMass=0.3 &> 
 ```
 
 Don't get trigger-happy with nohup or Marguerite will find you.

@@ -2,8 +2,6 @@
 #define DISPLACEDVERTEXMODULE_HH
 
 #include "ProductionModule.hh"
-//#include "GenSimIdentificationModule.hh"
-//#include "RecoIdentificationModule.hh"
 #include "MatchingPairCollection.hh"
 #include "DataFormats/GeometrySurface/interface/Surface.h"
 
@@ -27,8 +25,6 @@ public:
 
   double closestApproach(reco::TrackRef& t1, reco::TrackRef& t2);
 
-private:
-  // const std::shared_ptr<RecoIdentificationModule> reco; 
 };
 
 #endif

@@ -9,7 +9,7 @@
 #include <algorithm>
 #include "TList.h"
 
-TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
+TH1* Process::getHist(std::string histType, bool scaleToExpected) const
 {
 	int maxBinNum = 0;
 	double maxBarWidth = 0.0;
@@ -45,7 +45,7 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 	return hist;
 }
 
-TH2* Process::get2DHist(HistVariable histType) const
+TH2* Process::get2DHist(std::string histType) const
 {
 	int maxBinNum = 0;
 	int yMaxBinNum = 0;
@@ -90,7 +90,7 @@ TH2* Process::get2DHist(HistVariable histType) const
 }
 
 
-double Process::getYield(HistVariable dataType) const
+double Process::getYield(std::string dataType) const
 {
 	double totalYield = 0;
 	for(const auto& singleProcess : processes)
