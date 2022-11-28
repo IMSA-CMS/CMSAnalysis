@@ -12,7 +12,7 @@ public:
   BarrelStateFilter(const std::shared_ptr<MatchingModule> matchingModule);
 
 protected:
-  virtual std::string makeFilterString() override;
+  virtual std::string makeFilterString() override; // Reformate and Validates the filter string
 
 private:
   const std::shared_ptr<MatchingModule> matchMod;

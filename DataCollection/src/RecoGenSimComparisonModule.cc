@@ -38,22 +38,22 @@ void RecoGenSimComparisonModule::finalize()
 	std::cout << "Total events: " << eventCounter << "\n";
 	std::cout << "Total electron events: " << elecEventCounter << "\n";
 	std::cout << "Total muon events: " << muonEventCounter << "\n";
-	std::cout << "Accurately measured events ratio: " << accurateEventCounter/(double)eventCounter << "\n";
-	std::cout << "Wrong charge events ratio: " << wrongChargeCounter/(double)eventCounter << "\n";
-	std::cout << "Mismeasured pT events ratio: " << mismeasuredPtCounter/(double)eventCounter << "\n";
-	std::cout << "Fake photon events ratio: " << fakePhotonCounter/(double)eventCounter << "\n";
-	std::cout << "No match events ratio: " << noMatchCounter/(double)eventCounter << "\n";
+	// std::cout << "Accurately measured events ratio: " << accurateEventCounter/(double)eventCounter << "\n";
+	// std::cout << "Wrong charge events ratio: " << wrongChargeCounter/(double)eventCounter << "\n";
+	// std::cout << "Mismeasured pT events ratio: " << mismeasuredPtCounter/(double)eventCounter << "\n";
+	// std::cout << "Fake photon events ratio: " << fakePhotonCounter/(double)eventCounter << "\n";
+	// std::cout << "No match events ratio: " << noMatchCounter/(double)eventCounter << "\n";
 
 	std::cout << "\nEssential to huge invariant mass:\n\n";
-	std::cout << "Wrong charge electron events ratio: " << eEssWrongChargeCounter/(double)eventCounter << "\n";
-	std::cout << "Mismeasured pT electron events ratio: " << eEssMismeasuredPtCounter/(double)eventCounter << "\n";
-	std::cout << "Fake photon electron events ratio: " << eEssFakePhotonCounter/(double)eventCounter << "\n";
-	std::cout << "No match electron events ratio: " << eEssNoMatchCounter/(double)eventCounter << "\n\n";
+	std::cout << "Wrong charge electron events ratio: " << elecWrongChargeCounter/(double)eventCounter << "\n";
+	std::cout << "Mismeasured pT electron events ratio: " << elecMismeasuredPtCounter/(double)eventCounter << "\n";
+	std::cout << "Fake photon electron events ratio: " << elecFakePhotonCounter/(double)eventCounter << "\n";
+	std::cout << "No match electron events ratio: " << elecNoMatchCounter/(double)eventCounter << "\n\n";
 
-	std::cout << "Wrong charge muon events ratio: " << mEssWrongChargeCounter/(double)eventCounter << "\n";
-	std::cout << "Mismeasured pT muon events ratio: " << mEssMismeasuredPtCounter/(double)eventCounter << "\n";
-	std::cout << "Fake photon muon events ratio: " << mEssFakePhotonCounter/(double)eventCounter << "\n";
-	std::cout << "No match muon events ratio: " << mEssNoMatchCounter/(double)eventCounter << "\n";
+	std::cout << "Wrong charge muon events ratio: " << muonWrongChargeCounter/(double)eventCounter << "\n";
+	std::cout << "Mismeasured pT muon events ratio: " << muonMismeasuredPtCounter/(double)eventCounter << "\n";
+	std::cout << "Fake photon muon events ratio: " << muonFakePhotonCounter/(double)eventCounter << "\n";
+	std::cout << "No match muon events ratio: " << muonNoMatchCounter/(double)eventCounter << "\n";
 }
 
 void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particle>& recoParts, 
@@ -76,12 +76,6 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 	bool mismeasuredPt = false;
 	bool accurate = false;
 	bool noMatch = true;
-
-	bool accurateEvent = true;
-	bool wrongChargeEvent = false;
-	bool fakePhotonEvent = false;
-	bool mismeasuredPtEvent = false;
-	bool noMatchEvent = false;
 
 	ParticleType recoPartType = ParticleType::photon();
 	ParticleType wrongChargeType = ParticleType::photon();
@@ -125,19 +119,19 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 		}
 
 		recoEventElement++;
-		recoCounter++;
-		if(recoPart.getType()==ParticleType::electron())
-		{
-			electronCounter++;
+		// recoCounter++;
+		// if(recoPart.getType()==ParticleType::electron())
+		// {
+		// 	electronCounter++;
 
-		} else if (recoPart.getType()==ParticleType::muon())
-		{
-			muonCounter++;
-		}
-		if (recoPart.getEta() > 1.3)
-		{
-			highEtaCounter++;
-		}
+		// } else if (recoPart.getType()==ParticleType::muon())
+		// {
+		// 	muonCounter++;
+		// }
+		// if (recoPart.getEta() > 1.3)
+		// {
+		// 	highEtaCounter++;
+		// }
 
 		wrongCharge = false;
 		fakePhoton = false;
@@ -170,7 +164,7 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 					<< std::setw(13) << genPart.getMass() << std::endl;
 				}
 
-				matchCounter++;
+				// matchCounter++;
 				noMatch = false;
 				
 				if (recoPart.getType()==genPart.getType())
@@ -178,7 +172,7 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 					fakePhoton = false;
 					if((recoPart.getPt() - genPart.getPt())/genPart.getPt() < 0.1 && genPart.getCharge() == recoPart.getCharge())
 					{
-						accurateMatchCounter++;
+						// accurateMatchCounter++;
 						accurate = true;
 						break;
 					}
@@ -202,31 +196,31 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 					fakePhoton = true;
 				}
 
-				if(recoPart.getType()==ParticleType::electron())
-				{
-					elecMatchCounter++;
-					if (recoPart.getType()==genPart.getType())
-					{
-						accElecMatchCounter++;
-					}
+				// if(recoPart.getType()==ParticleType::electron())
+				// {
+				// 	elecMatchCounter++;
+				// 	if (recoPart.getType()==genPart.getType())
+				// 	{
+				// 		accElecMatchCounter++;
+				// 	}
 
-				} else if (recoPart.getType()==ParticleType::muon())
-				{
-					muonMatchCounter++;
-					if (recoPart.getType()==genPart.getType())
-					{
-						accMuonMatchCounter++;
-					}
-				}
+				// } else if (recoPart.getType()==ParticleType::muon())
+				// {
+				// 	muonMatchCounter++;
+				// 	if (recoPart.getType()==genPart.getType())
+				// 	{
+				// 		accMuonMatchCounter++;
+				// 	}
+				// }
 
-				if (recoPart.getEta() > 1.3)
-				{
-					highEtaMatchCounter++;
-					if (recoPart.getType()==genPart.getType())
-					{
-						accHighEtaMatchCounter++;
-					}
-				}
+				// if (recoPart.getEta() > 1.3)
+				// {
+				// 	highEtaMatchCounter++;
+				// 	if (recoPart.getType()==genPart.getType())
+				// 	{
+				// 		accHighEtaMatchCounter++;
+				// 	}
+				// }
 			}
 			genEventElement++;
 		}
@@ -237,13 +231,12 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 			notFakePhoton.addParticle(recoPart);
 			notMismeasuredPt.addParticle(recoPart);
 			notNoMatch.addParticle(recoPart);
-		} else { accurateEvent = false; }
+		}
 
 		if (!wrongCharge)
 		{
 			notWrongCharge.addParticle(recoPart);
 		} else { 
-			wrongChargeEvent = true; 
 			if (wrongChargeType==ParticleType::photon())
 			{
 				wrongChargeType = recoPart.getType();
@@ -254,7 +247,6 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 		{
 			notMismeasuredPt.addParticle(recoPart);
 		} else { 
-			mismeasuredPtEvent = true; 
 			if (mismeasuredPtType==ParticleType::photon())
 			{
 				mismeasuredPtType = recoPart.getType();
@@ -265,7 +257,6 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 		{
 			notFakePhoton.addParticle(recoPart);
 		} else { 
-			fakePhotonEvent = true; 
 			if (fakePhotonType==ParticleType::photon())
 			{
 				fakePhotonType = recoPart.getType();
@@ -276,7 +267,6 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 		{
 			notNoMatch.addParticle(recoPart);
 		} else { 
-			noMatchEvent = true; 
 			if (noMatchType==ParticleType::photon())
 			{
 				noMatchType = recoPart.getType();
@@ -286,58 +276,54 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
 	}
 
 	if (notWrongCharge.calculateSameSignInvariantMass()<500){
+		wrongChargeCounter++;
 		if (wrongChargeType == ParticleType::electron()) {
-			eEssNoMatchCounter++;
+			elecWrongChargeCounter++;
+			output << "wrong charge essential elec " << notWrongCharge.calculateSameSignInvariantMass() << std::endl;
 		}
 		if (wrongChargeType == ParticleType::muon()) {
-			mEssWrongChargeCounter++;
+			muonWrongChargeCounter++;
+			output << "wrong charge essential muon " << notWrongCharge.calculateSameSignInvariantMass() << std::endl;
 		}
-		recoPartType = wrongChargeType;
-		output << "wrong charge essential " << notWrongCharge.calculateSameSignInvariantMass();
 	}
 	if (notFakePhoton.calculateSameSignInvariantMass()<500){
-		if (recoPartType == ParticleType::electron()) {
-			eEssNoMatchCounter++;
+		fakePhotonCounter++;
+		if (fakePhotonType == ParticleType::electron()) {
+			elecFakePhotonCounter++;
+			output << "| fake photon essential elec " << notFakePhoton.calculateSameSignInvariantMass() << std::endl;
 		}
-		if (recoPartType == ParticleType::muon()) {
-			mEssFakePhotonCounter++;
+		if (fakePhotonType == ParticleType::muon()) {
+			muonFakePhotonCounter++;
+			output << "| fake photon essential muon " << notFakePhoton.calculateSameSignInvariantMass() << std::endl;
 		}
-		recoPartType = fakePhotonType;
-		output << "| fake photon essential " << notFakePhoton.calculateSameSignInvariantMass();
 	}
 	if (notMismeasuredPt.calculateSameSignInvariantMass()<500){
+		mismeasuredPtCounter++;
 		if (mismeasuredPtType == ParticleType::electron()) {
-			eEssNoMatchCounter++;
+			elecMismeasuredPtCounter++;
+			output << "| mismeasured pt essential elec " << notMismeasuredPt.calculateSameSignInvariantMass() << std::endl;
 		}
 		if (mismeasuredPtType == ParticleType::muon()) {
-			mEssMismeasuredPtCounter++;
-		};
-		recoPartType = mismeasuredPtType;
-		output << "| mismeasured pt essential " << notMismeasuredPt.calculateSameSignInvariantMass();
+			muonMismeasuredPtCounter++;
+			output << "| mismeasured pt essential muon " << notMismeasuredPt.calculateSameSignInvariantMass() << std::endl;
+		}
 	}
 	if (notNoMatch.calculateSameSignInvariantMass()<500){
+		noMatchCounter++;
 		if (noMatchType == ParticleType::electron()) {
-			eEssNoMatchCounter++;
+			elecNoMatchCounter++;
+			output << "| no match essential elec " << notNoMatch.calculateSameSignInvariantMass() << std::endl;
 		}
 		if (noMatchType == ParticleType::muon()) {
-			mEssNoMatchCounter++;
+			muonNoMatchCounter++;
+			output << "| no match essential muon " << notNoMatch.calculateSameSignInvariantMass() << std::endl;
 		}
-		recoPartType = noMatchType;
-		output << "| no match essential " << notNoMatch.calculateSameSignInvariantMass();
 	}
-	output << "\n";
+
 	if (recoPartType == ParticleType::electron()) {
 		elecEventCounter++;
-		std::cout << "electron event \n";
 	}
 	if (recoPartType == ParticleType::muon()) {
 		muonEventCounter++;
-		std::cout << "muon event \n";
 	}
-
-	wrongChargeCounter += wrongChargeEvent;
-	fakePhotonCounter += fakePhotonEvent;
-	noMatchCounter += noMatchEvent;
-	mismeasuredPtCounter += mismeasuredPtEvent;
-	accurateEventCounter += accurateEvent;
 }

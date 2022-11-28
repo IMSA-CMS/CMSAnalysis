@@ -36,9 +36,9 @@
 
 using std::make_shared;
 
-void HiggsBackgroundPlan::setupAnalyzer()
+void HiggsBackgroundPlan::initialize()
 {
-
+    
     Analyzer& analyzer = getAnalyzer();
     
     auto eventMod = make_shared<EventModule>();

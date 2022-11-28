@@ -33,21 +33,20 @@ class RecoGenSimComparisonModule : public AnalysisModule
 	int elecEventCounter = 0;
 	int muonEventCounter = 0;
 	//per particle counters
-	int recoCounter = 0;
-	int electronCounter = 0;
-	int muonCounter = 0;
-	int matchCounter = 0;
-	int accurateMatchCounter = 0;
-	int accElecMatchCounter = 0;
-	int accMuonMatchCounter = 0;
-	int accHighEtaMatchCounter = 0;
-	int elecMatchCounter = 0;
-	int muonMatchCounter = 0;
-	int highEtaCounter = 0;
-	int highEtaMatchCounter = 0;
+	// int recoCounter = 0;
+	// int electronCounter = 0;
+	// int muonCounter = 0;
+	// int matchCounter = 0;
+	// int accurateMatchCounter = 0;
+	// int accElecMatchCounter = 0;
+	// int accMuonMatchCounter = 0;
+	// int accHighEtaMatchCounter = 0;
+	// int elecMatchCounter = 0;
+	// int muonMatchCounter = 0;
+	// int highEtaCounter = 0;
+	// int highEtaMatchCounter = 0;
 
-	// Per event counters - simply adds to the count if the event contains an occurence of respective mismeasurement
-	// Doesn't consider the importance of the mismeasurement, compared to essential counters
+	// Essential event counters - only counts if the effect is a cause of the outlier mass
 	// An event can add to more than one counter at a time
 	int wrongChargeCounter = 0;
 	int fakePhotonCounter = 0;
@@ -55,17 +54,17 @@ class RecoGenSimComparisonModule : public AnalysisModule
 	int mismeasuredPtCounter = 0;
 	int accurateEventCounter = 0;
 
-	// Essential event counters - only counts if the effect is a cause of the outlier mass
+	// Essential event counters by particle type - only counts if the effect is a cause of the outlier mass
 	// An event can add to more than one counter at a time
-	// Prefixes: e = electron, m = muon
-	int eEssWrongChargeCounter = 0;
-	int eEssFakePhotonCounter = 0;
-	int eEssNoMatchCounter = 0;
-	int eEssMismeasuredPtCounter = 0;
-	int mEssWrongChargeCounter = 0;
-	int mEssFakePhotonCounter = 0;
-	int mEssNoMatchCounter = 0;
-	int mEssMismeasuredPtCounter = 0;
+	// elec = electron
+	int elecWrongChargeCounter = 0;
+	int elecFakePhotonCounter = 0;
+	int elecNoMatchCounter = 0;
+	int elecMismeasuredPtCounter = 0;
+	int muonWrongChargeCounter = 0;
+	int muonFakePhotonCounter = 0;
+	int muonNoMatchCounter = 0;
+	int muonMismeasuredPtCounter = 0;
 };
 
 
