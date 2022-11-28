@@ -28,7 +28,7 @@ dpMass is Dark Photon mass, you can leave this blank if you aren't running somet
 Running this file takes a long time and creates a lot of output, you can run this in the background using nohup.
 
 ```
-nohup cmsRun EventGenerator_edm_cfg.py maxEvents=100 globalTag=Run2 pythiaSettings=SUSYto2ZDPortalParameters.txt output=output.root dpMass=0.3 &> 
+nohup cmsRun EventGenerator_edm_cfg.py maxEvents=100 globalTag=Run2 pythiaSettings=SUSYto2ZDPortalParameters.txt output=output.root dpMass=0.3 & 
 ```
 
 Don't get trigger-happy with nohup or Marguerite will find you.
