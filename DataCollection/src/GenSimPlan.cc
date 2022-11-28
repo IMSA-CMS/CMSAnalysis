@@ -62,5 +62,5 @@ void GenSimPlan::initialize()
     analyzer.addAnalysisModule(eventHistMod);
 
     analyzer.addAnalysisModule(histMod);
-    analyzer.addAnalysisModule(eventDump);
+    //analyzer.addAnalysisModule(eventDump);
 }
