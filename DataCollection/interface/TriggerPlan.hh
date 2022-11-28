@@ -6,7 +6,9 @@
 class TriggerPlan : public DataCollectionPlan
 {
     protected:
-        void setupAnalyzer() override;
+        virtual void initialize() override;
+    private:
+        
 };
 
 #endif

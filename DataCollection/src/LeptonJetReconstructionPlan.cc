@@ -9,7 +9,7 @@
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
 // #include "CMSAnalysis/DataCollection/interface/DeltaRHist.hh"
 #include "CMSAnalysis/DataCollection/interface/DoubleMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/GenSimEventDumpModule.hh"
+#include "CMSAnalysis/DataCollection/interface/EventDumpModule.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimParticleModule.hh"
 #include "CMSAnalysis/DataCollection/interface/GetNthHighestPtHist.hh"
 #include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
@@ -35,7 +35,6 @@
 #include "CMSAnalysis/DataCollection/interface/TripleMuonTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/SnowmassLeptonSelector.hh"
 #include "CMSAnalysis/DataCollection/interface/RelIsoHist.hh"
-#include "CMSAnalysis/DataCollection/interface/RecoEventDumpModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJetMLCalculator.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJetSelector.hh"
 #include "CMSAnalysis/DataCollection/interface/EventModule.hh"
@@ -43,9 +42,9 @@
 
 using std::make_shared;
 
-void LeptonJetReconstructionPlan::setupAnalyzer()
+void LeptonJetReconstructionPlan::initialize()
 {
-  Analyzer &analyzer = getAnalyzer();
+ Analyzer &analyzer = getAnalyzer();
 
   auto eventMod = std::make_shared<EventModule>();
   auto eventHistMod = eventMod->getHistogramModule();
@@ -54,8 +53,9 @@ void LeptonJetReconstructionPlan::setupAnalyzer()
   auto matchMod = std::make_shared<MatchingModule>();
   auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
-  auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>();
-  auto lepMatchMod = std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.5);
+  auto EventDumpMod = std::make_shared<EventDumpModule>(true,true);
+  auto lepMatchMod =
+      std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.5);
   auto histOutputMod = std::make_shared<HistogramOutputModule>();
   auto mlMod = std::make_shared<LeptonJetMLCalculator>();
 
@@ -149,9 +149,9 @@ void LeptonJetReconstructionPlan::setupAnalyzer()
   //analyzer.addAnalysisModule(massRecoEfficiency800);
   //analyzer.addAnalysisModule(massRecoEfficiency1000);
   //analyzer.addAnalysisModule(massRecoEfficiency1300);
-  analyzer.addAnalysisModule(genSimEventDumpMod);
+  analyzer.addAnalysisModule(EventDumpMod);
   //analyzer.addAnalysisModule(recoEventDumpMod);
   /* auto selector = make_shared<SnowmassLeptonSelector>(5);
   analyzer.getInputModule()->setLeptonSelector(selector);
-  */
+  */ 
 }

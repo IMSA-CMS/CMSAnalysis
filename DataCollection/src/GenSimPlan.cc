@@ -35,9 +35,8 @@
 
 using std::make_shared;
 
-void GenSimPlan::setupAnalyzer()
+void GenSimPlan::initialize()
 {
-
     Analyzer& analyzer = getAnalyzer();
 
     auto deltaR = make_shared<GenSimDeltaRHist>("Delta R", 100, 0, 1);
@@ -63,5 +62,5 @@ void GenSimPlan::setupAnalyzer()
     analyzer.addAnalysisModule(eventHistMod);
 
     analyzer.addAnalysisModule(histMod);
-    analyzer.addAnalysisModule(eventDump);
+    //analyzer.addAnalysisModule(eventDump);
 }
