@@ -43,14 +43,14 @@ void HiggsBackgroundPlan::setupAnalyzer()
     
     auto eventMod = make_shared<EventModule>();
     auto pasSelector = make_shared<PASSelector>();
-    auto fourLeptonCut = make_shared<FourLeptonCut>();
-    auto zVetoCut = make_shared<ZVetoCut>();
-    auto quarkoniaCut = make_shared<QuarkoniaCut>();
+    //auto fourLeptonCut = make_shared<FourLeptonCut>();
+    //auto zVetoCut = make_shared<ZVetoCut>();
+    //auto quarkoniaCut = make_shared<QuarkoniaCut>();
 
     eventMod->addSelector(pasSelector);
-    eventMod->addCut(fourLeptonCut);
-    eventMod->addCut(zVetoCut);
-    eventMod->addCut(quarkoniaCut);
+    //eventMod->addCut(fourLeptonCut);
+    //eventMod->addCut(zVetoCut);
+    //eventMod->addCut(quarkoniaCut);
 
     auto matchMod = make_shared<MatchingModule>();
     auto triggerMod = make_shared<TriggerModule>();
