@@ -1,5 +1,5 @@
-#ifndef EVENTLOADERINPUTMODULE_HH
-#define EVENTLOADERINPUTMODULE_HH
+#ifndef ANALYZERINPUTMODULE_HH
+#define ANALYZERLOADERINPUTMODULE_HH
 
 #include <memory>
 
@@ -13,12 +13,12 @@
 #include "CMSAnalysis/DataCollection/interface/Lepton.hh"
 class TFile;
 class EventLoader;
+class EventInterface;
 
-
-class EventLoaderInputModule : public InputModule
+class AnalyzerInputModule : public InputModule
 {
     public:
-        EventLoaderInputModule(const EventLoader *iEventLoader);
+        AnalyzerInputModule(const EventInterface*& eventInterface);
 
         virtual ParticleCollection<Lepton> getLeptons(RecoLevel level) const override;
         virtual ParticleCollection<Particle> getParticles(RecoLevel level, const ParticleType& particleType = ParticleType::none()) const override;
@@ -29,6 +29,6 @@ class EventLoaderInputModule : public InputModule
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;
         virtual double getMET() const override;
     private:
-        const EventLoader *eventLoader;
+        const EventInterface*& eventInterface;
 };
 #endif

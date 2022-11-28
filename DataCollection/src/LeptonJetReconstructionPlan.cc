@@ -120,6 +120,7 @@ LeptonJetReconstructionPlan::LeptonJetReconstructionPlan() {
   // analyzer.addProductionModule(recoMod);
   //analyzer.addProductionModule(matchMod);
   analyzer.addProductionModule(lepRecoMod);
+  analyzer.printModules();
   //analyzer.addProductionModule(genPartMod);
   analyzer.addProductionModule(lepMatchMod);
 
