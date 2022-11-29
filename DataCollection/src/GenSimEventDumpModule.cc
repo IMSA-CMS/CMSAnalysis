@@ -110,21 +110,6 @@ int GenSimEventDumpModule::getIndexOf(const GenSimParticle& part, const std::vec
   return -1;
 }
 
-int GenSimEventDumpModule::getLatestIndexOfDaughters(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts) const
-{
-  int indexOf = -1;
-  for(int i = 0; i < (int) part.numberOfDaughters(); i++)
-  {
-    int compareIndex = getIndexOf(part.daughter(i), genParts);
-    if(compareIndex >= indexOf)
-    {
-      indexOf = compareIndex;
-    }
-  }
-
-  return indexOf;
-}
-
 std::string GenSimEventDumpModule::formatDaughterParticles(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts) const
 {
   std::string daughters = "";
