@@ -26,6 +26,7 @@ public:
   // Copy/conversion constructor
   template <typename U>
   ParticleCollection(ParticleCollection<U> pc1);
+  ParticleCollection(std::vector<T> collectionVector);
 
   void addParticle(T particle) { particles.push_back(particle); }
   const std::vector<T> &getParticles() const { return particles; }
@@ -85,6 +86,9 @@ inline ParticleCollection<T>::ParticleCollection(ParticleCollection<U> pc1)
 }
 
 template <typename T>
+inline ParticleCollection<T>::ParticleCollection(std::vector<T> collectionVector) : particles(collectionVector) {}
+
+template <typename T>
 inline ParticleCollection<T> ParticleCollection<T>::getPosParticles() const
 {
   ParticleCollection<T> positives; // All of the positively-charged particles in the ParticleCollection
@@ -125,7 +129,7 @@ inline ParticleCollection<T> ParticleCollection<T>::getNegParticles() const
 template <typename T>
 inline double ParticleCollection<T>::getInvariantMass() const
 {
-  auto particlePair = chooseParticles();
+  auto particlePair = chooseParticles(true);
   if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
   {
     return calculateInvariantMass(particlePair.first, particlePair.second);
@@ -282,14 +286,10 @@ inline double ParticleCollection<T>::calculateSameSignInvariantMass(bool usingPh
   }
   else
   {
-    // std::cout << "Line B1 ";
     particlePair = chooseParticles(false); // we want same sign particles with highest invariant mass
-    // std::cout << "Line B2 ";
   }
-
   if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
   {
-
     return calculateInvariantMass(particlePair.first, particlePair.second);
   }
   else
@@ -437,6 +437,7 @@ inline typename std::pair<T, T> ParticleCollection<T>::chooseParticles(bool oppo
   double maxInvariantMass = 0;
   T iPointer = Particle::nullParticle();
   T jPointer = Particle::nullParticle();
+
   if (particles.size() > 0)
   {
     // std::cout << "!" << particles[0].getMass() << std::endl;
@@ -446,12 +447,9 @@ inline typename std::pair<T, T> ParticleCollection<T>::chooseParticles(bool oppo
   {
     for (int j = i + 1; j < static_cast<int>(particles.size()); ++j)
     {
-      // std::cout << "i: " << i << "j: " << j << " particles.size(): " << particles.size() << " Line C1" << " ";
-
-      // std::cout << " ";
       if (particles[i].getType() == particles[j].getType())
       {
-        // std::cout << "Line C2 ";
+
         if (checkSigns(particles[i], particles[j]) == oppositeSigns) // Check if the particle pairs' signs match with what we want
         {
           // std::cout << calculateInvariantMass(particles[i], particles[j]) << std::endl;
