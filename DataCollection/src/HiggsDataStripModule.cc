@@ -1,6 +1,7 @@
 #include "CMSAnalysis/DataCollection/interface/HiggsDataStripModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJetReconstructionModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJetMatchingModule.hh"
+#include "CMSAnalysis/DataCollection/interface/InputModule.hh"
 #include "TFile.h"
 #include "TTree.h"
 
@@ -8,8 +9,7 @@
 
 void HiggsDataStripModule::initialize()
 {
-	// creates ML model
-	tree = new TTree("Signal", "Higgs Data");
+	tree = new TTree("Signal", "Lepton Jet Data");
 	for (TTree *treeId : {tree})
 	{
 		treeId->Branch("pt", &pt1, "pt1/F");
@@ -31,7 +31,7 @@ HiggsDataStripModule::HiggsDataStripModule(const std::string outputFileName, std
 
 void HiggsDataStripModule::writeAll()
 {
-	tree->Write(); // file->Close();
+	tree->Write();
 }
 
 void HiggsDataStripModule::finalize()
@@ -40,36 +40,29 @@ void HiggsDataStripModule::finalize()
 
 bool HiggsDataStripModule::process()
 {
-	// puts numbers into ML model
 	auto leptons = getInput()->getLeptons(InputModule::RecoLevel::Reco);
 	double cutoff = 100;
+	if (leptons.getNumParticles() < 2)
+	{
+		return true;
+	}
 	auto twoLeptons = leptons.chooseParticles(false);
 	ParticleCollection<Particle> particles;
 	particles.addParticle(twoLeptons.first);
 	particles.addParticle(twoLeptons.second);
-	if (!twoLeptons.first.isNotNull())
+	if (twoLeptons.first.isNotNull() && twoLeptons.second.isNotNull())
 	{
-		return true;
-	}
-	if (!twoLeptons.second.isNotNull())
-	{
-		return true;
-	}
-
-	// std::cout << "Line A0 ";
-	// std::cout << leptons.getNumParticles() << " ";
-	if (particles.calculateSameSignInvariantMass(false) > cutoff)
-	{
-
-		// std::cout << "Line A1" << "\n";
-		pt1 = twoLeptons.first.getPt();
-		phi1 = twoLeptons.first.getPhi();
-		eta1 = twoLeptons.first.getEta();
-		pt2 = twoLeptons.second.getPt();
-		phi2 = twoLeptons.second.getPhi();
-		eta2 = twoLeptons.second.getEta();
-		deltaR = twoLeptons.second.getDeltaR(twoLeptons.first);
-		tree->Fill();
+		if (particles.calculateSameSignInvariantMass(false) > cutoff)
+		{
+			pt1 = twoLeptons.first.getPt();
+			phi1 = twoLeptons.first.getPhi();
+			eta1 = twoLeptons.first.getEta();
+			pt2 = twoLeptons.second.getPt();
+			phi2 = twoLeptons.second.getPhi();
+			eta2 = twoLeptons.second.getEta();
+			deltaR = twoLeptons.second.getDeltaR(twoLeptons.first);
+			tree->Fill();
+		}
 	}
 	return true;
 }
