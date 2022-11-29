@@ -297,3 +297,13 @@ std::shared_ptr<ParticleImplementation> Particle::getParticleImplementation()
 {
   return particle;
 }
+std::ostream& operator<<(std::ostream& str, Particle part)
+{
+  str << "| " << std::setw(9) << part.getType().getpdgId() << "| ";
+  // Particle properties
+  str << std::setw(13) << part.getCharge() << "| " << std::setw(13) << part.getPt() << "| " << std::setw(13) << part.getEta() << "| " << std::setw(13) << part.getPhi() << "| ";
+
+  str << std::setw(13) << part.getEnergy() << "| " << std::setw(13) << part.getMass() << "\n";
+
+  return str;
+}

@@ -117,7 +117,7 @@ process.MessageLogger.cerr.FwkReport = cms.untracked.PSet(
 import random
 process.source = cms.Source("EmptySource",
 			    firstLuminosityBlock = cms.untracked.uint32(random.randrange(1,10000)),
-			    numberEventsInLuminosityBlock = cms.untracked.uint32(100))
+			    numberEventsInLuminosityBlock = cms.untracked.uint32(1000)) #error with creating second block in ZZD portal
 
 process.RandomNumberGeneratorService.generator.initialSeed = random.randrange(1,10000)
 

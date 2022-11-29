@@ -254,7 +254,6 @@ TCanvas* PlotFormatter::simpleAnalysisHist(std::vector<TH1*> hists, std::vector<
             histVector.push_back(hist);
         }
     }
-
     canvas->Update();
     return canvas;
 }
@@ -268,10 +267,13 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     int count = 0;
 
     double minimumBin = (double) hists.at(0)->GetNbinsX();
-    for(TH1* hist : hists) {
-	if((double) hist->GetNbinsX() < minimumBin) {
-	     minimumBin = (double) hist->GetNbinsX();
-	}
+
+    for(TH1* hist : hists) 
+    {
+	    if((double) hist->GetNbinsX() < minimumBin) 
+        {
+	        minimumBin = (double) hist->GetNbinsX();
+	    }
     }
 
     for(TH1* hist : hists) {
@@ -291,7 +293,6 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
         }
 	    count++;
     }
- 
     //Setting size and margins
     int width = 800;
     int height = 600;
@@ -306,14 +307,14 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     gStyle->SetOptStat(0);
 
     //Draws the histogram with more events first (bigger axis)
-    first->Rebin(10);
     first->Draw("HIST");
     histVector.push_back(first);
 
     //Change axis and graph titles here
     first->GetXaxis()->SetTitle(xAxisTitle);
     first->GetYaxis()->SetTitle(yAxisTitle);
- 
+
+
     //Draws the legend
     auto legend = new TLegend(0.8-(right/width), 0.85-(top/height), 1-(right/width), 1-(top/height));
     legend->SetTextSize(0.02);
@@ -333,7 +334,6 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     //Draws the other histogram    
     for(TH1* hist : hists) {
         if(find(hists.begin(), hists.end(), hist) - hists.begin() != firstIndex) {
-            hist->Rebin(10);
 	    hist->Draw("HIST SAME");
             histVector.push_back(hist);
         }

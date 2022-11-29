@@ -57,7 +57,7 @@ SingleParticleHist ParticleType::getEtaHist()
 
 SingleParticleHist ParticleType::getDaughterDeltaRHist()
 {
-    return SingleParticleHist("Daughter DeltaR", 150, 0, 3, [](Particle particle)
+    return SingleParticleHist("Daughter Delta R", 150, 0, 3, [](Particle particle)
     {
         GenSimParticle genSimParticle = GenSimParticle(particle);
         if (genSimParticle.numberOfDaughters() == 2)
