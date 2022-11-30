@@ -27,6 +27,7 @@ std::vector<bool> NanoAODEventFile::getTriggerResults(std::string subProcess) co
 
 std::vector<std::string> NanoAODEventFile::getTriggerNames(std::string subProcess) const
 {
+    // just get the name of the triggers
     std::vector<std::string> v_names = {};
 
     for(auto& trigger : triggers)
@@ -64,6 +65,10 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     muon_reliso(treeReader, "Muon_miniPFRelIso_all"),
     muon_dxy(treeReader, "Muon_dxy"),
     muon_dz(treeReader, "Muon_dz"),
+    photon_size(treeReader, "nPhoton"),
+    photon_eta(treeReader, "Photon_eta"),
+    photon_phi(treeReader, "Photon_phi"),
+    photon_pt(treeReader, "Photon_pt"), 
     //met_size(treeReader, branchNames.metSize.c_str()),
     met_phi(treeReader, "MET_phi"),
     met_pt(treeReader, "MET_pt"),
@@ -91,7 +96,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     std::ifstream triggerNameFile("betterValidTriggers.txt");
     tree = getFile()->Get<TTree>("Events");
     
-    if(!triggerNameFile)
+    if(triggerNameFile)
     {
         std::string nameoftrigger;
 
@@ -103,7 +108,8 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
                 triggers.emplace(nameoftrigger, intermediate);
             }
         }
-    }    
+    }  
+    
     treeReader.SetTree(tree);
     setEventCount(1);
     treeReader.Next(); 
@@ -170,7 +176,6 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
             continue;
         }
 
-
         // Lorentz four-vector
         recoParticles.addParticle(Particle(
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],
@@ -178,31 +183,31 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
             charge, ParticleType::electron(), elec_reliso[i], fit, elec_dxy[i], elec_dz[i]));
         
     }
+
     for (UInt_t i = 0; i < *muon_size; i++)
     {
         
         int charge = muon_charge[i];
         
         Particle::SelectionFit fit;
-        // if (muon_idpass[i] & 4) 
-        // {
-        //     fit = Particle::SelectionFit::Tight;
-        // } else if (muon_idpass[i] & 2) 
-        // {
-        //     fit = Particle::SelectionFit::Medium;
-        // } else if (muon_idpass[i] & 1) 
-        // {
-        //     fit = Particle::SelectionFit::Loose;
-        // } else {
-        //     continue;
-        // }
-
+        
         // Lorentz four-vector
         recoParticles.addParticle(Particle(
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],
                                                                         muon_eta[i], muon_phi[i], muon_mass[i])),
             charge, ParticleType::muon(), muon_reliso[i], fit, muon_dxy[i], muon_dz[i]));
         
+    }
+
+    for (UInt_t i = 0; i < *photon_size; i++) //what do i even put here
+    {
+        Particle::SelectionFit fit;
+
+        // Lorentz four-vector
+        recoParticles.addParticle(Particle(
+            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(photon_pt[i],
+                                                                        photon_eta[i], photon_phi[i], 0)),
+            0, ParticleType::photon(), 0, fit, 0, 0)); 
     }
     return recoParticles;
 }
