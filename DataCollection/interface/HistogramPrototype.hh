@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 #include <memory>
-//#include "CMSAnalysis/DataCollection/interface/InputModule.hh"
 
 namespace edm
 {

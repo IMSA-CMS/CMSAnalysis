@@ -14,6 +14,7 @@
 #include "CMSAnalysis/DataCollection/interface/Histograms.hh"
 #include "CMSAnalysis/DataCollection/interface/SnowmassLeptonSelector.hh"
 #include "CMSAnalysis/DataCollection/interface/METHist.hh"
+#include "CMSAnalysis/DataCollection/interface/EventDumpModule.hh"
 
 
 using std::make_shared;
@@ -25,6 +26,7 @@ void LeptonJetBackgroundPlan::initialize()
     // auto genSimMod = make_shared<GenSimIdentificationModule>(1000022, true);
     // auto recoMod = make_shared<RecoIdentificationModule>(5);
     auto metMod = make_shared<METModule>();
+    auto eventDump = make_shared<EventDumpModule>(true,true);
 
     auto leptonJetRecoModule = make_shared<LeptonJetReconstructionModule>(0.05);
     
@@ -47,7 +49,7 @@ void LeptonJetBackgroundPlan::initialize()
     analyzer.addProductionModule(metMod);
 
     analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
-
+    analyzer.addAnalysisModule(eventDump);
     /*
     auto leptonSelector = std::make_shared<SnowmassLeptonSelector>(5);
     analyzer.getInputModule()->setLeptonSelector(leptonSelector);

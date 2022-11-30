@@ -7,11 +7,10 @@
 #include <vector>
 #include <memory>
 #include <unordered_set>
-
-#include "EventLoader.hh"
 #include "FileParams.hh"
 #include "InputModule.hh"
 #include "ProcessDictionary.hh"
+#include "RootEventInterface.hh"
 
 //#include "ProductionModule.hh"
 
@@ -19,6 +18,12 @@ class AnalysisModule;
 class FilterModule;
 class Module;
 class ProductionModule;
+class EventInterface;
+
+namespace edm
+{
+  class Event;
+}
 
 // A general class to run an analysis, consisting of many sequential modules
 class Analyzer
@@ -46,8 +51,19 @@ const InputModule* getInputModule() const {return input;}
 
   // Run the analysis for a given configuration file, a Root output file,
   // and an optional parameter to output with a certain event frequency
-  void run(const std::string& configFile, const std::string& outputFile, 
-	   int outputEvery = 0, int nFiles = -1);
+  /*void run(const std::string& configFile, const std::string& outputFile, 
+	   int outputEvery = 0, int nFiles = -1);*/
+  
+  void writeOutputFile(const std::string& outputFile);
+  void processOneEvent(const EventInterface *eventInterface);
+  void initialize();
+
+  void printModules(){
+    std::cout << "Printing Modules" << std::endl;
+    for (std::shared_ptr<Module> i: getAllModules()){
+      std::cout << i << ' ' << std::endl;
+    }
+  }
 
 private:
   std::vector<std::shared_ptr<ProductionModule>> productionModules;
@@ -57,17 +73,16 @@ private:
 
   int numOfEvents = 0;
 
-  std::vector<std::string> rootFiles;
-
-  EventLoader eventLoader;
+  //std::vector<std::string> rootFiles;
+  
+  const EventInterface *eventInterface;
   InputModule* input;
-  ProcessDictionary dictionary;
+
+
+  // Simple utility function allowing an operation to be performed on all
+  // moduels, regardless of type
   
   std::vector<std::shared_ptr<Module>> getAllModules() const;
-  void fetchRootFiles(const std::string& configFile);
-  void processRootFiles(int outputEvery, int nFiles);
-  void writeOutputFile(const std::string& outputFile);
-
 };
 
 #endif

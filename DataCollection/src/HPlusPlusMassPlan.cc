@@ -9,7 +9,7 @@
 
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
 #include "CMSAnalysis/DataCollection/interface/DoubleMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/GenSimEventDumpModule.hh"
+#include "CMSAnalysis/DataCollection/interface/EventDumpModule.hh"
 #include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonEfficiency.hh"
 #include "CMSAnalysis/DataCollection/interface/MassRecoEfficiency.hh"
@@ -41,7 +41,7 @@ void HPlusPlusMassPlan::initialize()
 {
   Analyzer& analyzer = getAnalyzer();
 
-  auto eventDump = make_shared<GenSimEventDumpModule>(7);
+  auto eventDump = make_shared<EventDumpModule>(true,true);
 
   //auto genSimMod = make_shared<GenSimIdentificationModule>(9900041, true);
   //auto recoMod = make_shared<RecoIdentificationModule>(50);

@@ -184,7 +184,6 @@ bool TriggerSimModule::process()
 
 bool TriggerSimModule::checkTrigger(EnumTriggers name)
 {
-  // std::cerr << "Notice: TriggerSimModule::checkTrigger is running\n";
   bool passed = false;
 
   std::vector<std::string> nameVector = triggerEnumNameMap.find(name)->second;
@@ -192,8 +191,6 @@ bool TriggerSimModule::checkTrigger(EnumTriggers name)
   // For every trigger that passed
   for (std::string trigger : passedTriggers)
   {
-    // std::cerr << trigger << std::endl;
-
     // If the trigger is one of the specified ones
     if (enableAll || std::find(nameVector.begin(), nameVector.end(), trigger) != nameVector.end())
     {
@@ -202,7 +199,6 @@ bool TriggerSimModule::checkTrigger(EnumTriggers name)
   }
 
   return passed;
-  return true;
 };
 
 // For use within a trigger object [Defunct]

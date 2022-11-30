@@ -3,6 +3,7 @@
 
 #include "CMSAnalysis/DataCollection/interface/DataCollectionPlan.hh"
 
+//Contains the specification for all the module to run for a Displaced Vertex analysis
 class DisplacedVertexPlan : public DataCollectionPlan
 {
     protected:
