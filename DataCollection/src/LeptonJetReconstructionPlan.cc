@@ -73,16 +73,16 @@ void LeptonJetReconstructionPlan::initialize()
   auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(InputModule::RecoLevel::Reco, "NN Classifier Output Distribution", 100, 0, 1, mlMod, lepRecoMod);
 
   // eventHistMod->addHistogram(deltaRHist);
-  eventHistMod->addHistogram(pTHist);
-  eventHistMod->addHistogram(matchedLeptonJetHist);
-  eventHistMod->addHistogram(unmatchedLeptonJetHist);
-  eventHistMod->addHistogram(relIsoHist);
-  eventHistMod->addHistogram(leptonJetMLHist);
+  histOutputMod->addHistogram(pTHist);
+  histOutputMod->addHistogram(matchedLeptonJetHist);
+  histOutputMod->addHistogram(unmatchedLeptonJetHist);
+  histOutputMod->addHistogram(relIsoHist);
+  histOutputMod->addHistogram(leptonJetMLHist);
 
-  // histOutputMod->addHistogram(matchDeltaRHist);
-  // histOutputMod->addHistogram(matchPtHist);
-  // histOutputMod->addHistogram(matchPhiHist);
-  // histOutputMod->addHistogram(matchEtaHist);
+//   histOutputMod->addHistogram(matchDeltaRHist);
+//   histOutputMod->addHistogram(matchPtHist);
+//   histOutputMod->addHistogram(matchPhiHist);
+//   histOutputMod->addHistogram(matchEtaHist);
   // auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>(3);
   //auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>();
   //auto recoEventDumpMod = std::make_shared<RecoEventDumpModule>();
@@ -135,13 +135,13 @@ void LeptonJetReconstructionPlan::initialize()
   //analyzer.addProductionModule(genSimEventDumpMod);
   //analyzer.addProductionModule(recoEventDumpMod);
   //analyzer.addProductionModule(matchMod);
+
   analyzer.addProductionModule(lepRecoMod);
   // analyzer.addProductionModule(genPartMod);
   analyzer.addProductionModule(lepMatchMod);
 
   analyzer.addAnalysisModule(histOutputMod);
   // analyzer.addProductionModule(triggerMod);
-
   //analyzer.addAnalysisModule(leptonEfficiency);
   //analyzer.addAnalysisModule(leptonJetEfficiency);
   //analyzer.addAnalysisModule(massRecoEfficiency200);
