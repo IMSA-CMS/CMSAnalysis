@@ -14,13 +14,11 @@ class MiniAODEventFile : public EventFile
         MiniAODEventFile(TFile* ifile);
         // maybe just ++event
         virtual void nextEvent() override;
-        
         virtual bool isDone() const override;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;
         virtual int getNumPileUpInteractions() const override;
-        
-        virtual bool checkTrigger(std::string triggerName, std::string subProcess) const override;
+        virtual bool checkTrigger(std::string triggerName, std::string subProcess) const override; //checks if event passes trigger criteria
     protected:
         //virtual void getLeptons(RecoLevel level) override;
         virtual ParticleCollection<GenSimParticle> getGenSimParticles() const override;

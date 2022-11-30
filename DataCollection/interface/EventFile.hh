@@ -27,7 +27,7 @@ class EventFile
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const = 0;
         int getNumOfEvents() const {return numOfEvents;}
         int getEventCount() const {return eventCount;}
-        virtual bool checkTrigger(std::string triggerName, std::string subProcess) const = 0;
+        virtual bool checkTrigger(std::string triggerName, std::string subProcess) const = 0; //checks if event passes trigger criteria
     protected:
         void setNumOfEvents(int newNum) {numOfEvents = newNum;}
         void setEventCount(int newNum) {eventCount = newNum;}
