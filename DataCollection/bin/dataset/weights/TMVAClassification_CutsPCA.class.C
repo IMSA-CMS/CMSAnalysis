@@ -10,10 +10,10 @@ Method         : Cuts::CutsPCA
 TMVA Release   : 4.2.1         [262657]
 ROOT Release   : 6.24/07       [399367]
 Creator        : kzhang1
-Date           : Wed Oct 12 11:29:44 2022
+Date           : Tue Nov 29 15:39:59 2022
 Host           : Linux cmsbuild02.cern.ch 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
 Dir            : /uscms/homes/k/kzhang1/practice/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin
-Training events: 438455
+Training events: 4302
 Analysis type  : [Classification]
 
 
@@ -50,11 +50,11 @@ VarProp[0]: "FSmart" [Categorisation of cuts]
 #VAR -*-*-*-*-*-*-*-*-*-*-*-* variables *-*-*-*-*-*-*-*-*-*-*-*-
 
 NVar 5
-pt                            pt                            pt                            Transverse Momentum                                             'F'    [4.53686761856,1806.10986328]
+pt                            pt                            pt                            Transverse Momentum                                             'F'    [8.94119262695,2084.13500977]
 nParticles                    nParticles                    nParticles                    Number of Particles                                             'F'    [2,5]
-eta                           eta                           eta                           Pseudorapidity                                                  'F'    [-3.99890303612,3.99965810776]
-phi                           phi                           phi                           Azimuthal Angle                                                 'F'    [-3.1415810585,3.14155507088]
-deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.18585370481]
+eta                           eta                           eta                           Pseudorapidity                                                  'F'    [-3.1376721859,3.12934875488]
+phi                           phi                           phi                           Azimuthal Angle                                                 'F'    [-3.13815546036,3.13753390312]
+deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.191068515182]
 NSpec 0
 
 
@@ -125,16 +125,16 @@ class ReadCutsPCA : public IClassifierReader {
       }
 
       // initialize min and max vectors (for normalisation)
-      fVmin[0] = -1724.11608886719;
-      fVmax[0] = 77.4568481445312;
-      fVmin[1] = -3.185378074646;
-      fVmax[1] = 3.18686008453369;
-      fVmin[2] = -4.04003429412842;
-      fVmax[2] = 4.03391790390015;
-      fVmin[3] = -1.25117528438568;
-      fVmax[3] = 2.95116519927979;
-      fVmin[4] = -0.0474866963922977;
-      fVmax[4] = 0.150274977087975;
+      fVmin[0] = -1988.15100097656;
+      fVmax[0] = 87.0418167114258;
+      fVmin[1] = -3.5351197719574;
+      fVmax[1] = 3.51085090637207;
+      fVmin[2] = -3.05070734024048;
+      fVmax[2] = 3.08148694038391;
+      fVmin[3] = -2.72831201553345;
+      fVmax[3] = 2.16388607025146;
+      fVmin[4] = -0.269678056240082;
+      fVmax[4] = 0.0894818976521492;
 
       // initialize input variable types
       fType[0] = 'F';
@@ -240,98 +240,98 @@ inline void ReadCutsPCA::InitTransform_1()
 {
    // PCA transformation, initialisation
    // initialise vector of mean values
-   fMeanValues_1[0][0] = 75.4197304321;
-   fMeanValues_1[0][1] = 2.18428468445;
-   fMeanValues_1[0][2] = 0.00287502623593;
-   fMeanValues_1[0][3] = 0.00274283893459;
-   fMeanValues_1[0][4] = 0.0346402777199;
-   fMeanValues_1[1][0] = 82.2301934619;
-   fMeanValues_1[1][1] = 2.0105861114;
-   fMeanValues_1[1][2] = 0.000958203884922;
-   fMeanValues_1[1][3] = 0.00162498370376;
-   fMeanValues_1[1][4] = 0.00653629516711;
-   fMeanValues_1[2][0] = 81.9931774503;
-   fMeanValues_1[2][1] = 2.0166311252;
-   fMeanValues_1[2][2] = 0.00102491265151;
-   fMeanValues_1[2][3] = 0.00166388701873;
-   fMeanValues_1[2][4] = 0.00751436285883;
+   fMeanValues_1[0][0] = 96.3874790575;
+   fMeanValues_1[0][1] = 2.12684223242;
+   fMeanValues_1[0][2] = -0.000658688029451;
+   fMeanValues_1[0][3] = -0.0167012127389;
+   fMeanValues_1[0][4] = 0.0600636921073;
+   fMeanValues_1[1][0] = 85.7178010941;
+   fMeanValues_1[1][1] = 2.0245398773;
+   fMeanValues_1[1][2] = -0.0598920662673;
+   fMeanValues_1[1][3] = -0.030707187115;
+   fMeanValues_1[1][4] = 0.00650321689146;
+   fMeanValues_1[2][0] = 95.9832118543;
+   fMeanValues_1[2][1] = 2.1229660623;
+   fMeanValues_1[2][2] = -0.00290300245362;
+   fMeanValues_1[2][3] = -0.0172318900572;
+   fMeanValues_1[2][4] = 0.0580343203128;
 
    // initialise matrix of eigenvectors
-   fEigenVectors_1[0][0][0] = -0.999996416494;
-   fEigenVectors_1[0][0][1] = 0.000321011593595;
-   fEigenVectors_1[0][0][2] = -6.85638567827e-05;
-   fEigenVectors_1[0][0][3] = -0.00265219814366;
-   fEigenVectors_1[0][0][4] = -0.000158414025996;
-   fEigenVectors_1[0][1][0] = -0.00265503262374;
-   fEigenVectors_1[0][1][1] = 0.00286721573561;
-   fEigenVectors_1[0][1][2] = 0.0019040590042;
-   fEigenVectors_1[0][1][3] = 0.999508403237;
-   fEigenVectors_1[0][1][4] = 0.0310492559115;
-   fEigenVectors_1[0][2][0] = 6.78726222925e-05;
-   fEigenVectors_1[0][2][1] = 0.0132607348043;
-   fEigenVectors_1[0][2][2] = -0.999910312571;
-   fEigenVectors_1[0][2][3] = 0.00187079871106;
-   fEigenVectors_1[0][2][4] = -0.00012341622303;
-   fEigenVectors_1[0][3][0] = -0.00032774589695;
-   fEigenVectors_1[0][3][1] = -0.999907905691;
-   fEigenVectors_1[0][3][2] = -0.0132553114774;
-   fEigenVectors_1[0][3][3] = 0.0028929870974;
-   fEigenVectors_1[0][3][4] = -7.87503001795e-06;
-   fEigenVectors_1[0][4][0] = 7.60075234921e-05;
-   fEigenVectors_1[0][4][1] = 9.52577072505e-05;
-   fEigenVectors_1[0][4][2] = 0.000182728121919;
-   fEigenVectors_1[0][4][3] = 0.0310491294645;
-   fEigenVectors_1[0][4][4] = -0.999517835418;
-   fEigenVectors_1[1][0][0] = -0.99999988508;
-   fEigenVectors_1[1][0][1] = 2.27819213782e-05;
-   fEigenVectors_1[1][0][2] = -0.000244193830111;
-   fEigenVectors_1[1][0][3] = -0.00040940372324;
-   fEigenVectors_1[1][0][4] = 4.5592295312e-05;
-   fEigenVectors_1[1][1][0] = -0.000409640354252;
-   fEigenVectors_1[1][1][1] = -9.55882273452e-05;
-   fEigenVectors_1[1][1][2] = 8.89056505608e-05;
-   fEigenVectors_1[1][1][3] = 0.999988540217;
-   fEigenVectors_1[1][1][4] = -0.00476808017286;
-   fEigenVectors_1[1][2][0] = 0.0002444376606;
-   fEigenVectors_1[1][2][1] = 0.0132273990573;
-   fEigenVectors_1[1][2][2] = -0.99991248001;
-   fEigenVectors_1[1][2][3] = 9.0348953836e-05;
-   fEigenVectors_1[1][2][4] = 1.79388255827e-05;
-   fEigenVectors_1[1][3][0] = -1.9511678379e-05;
-   fEigenVectors_1[1][3][1] = -0.99991250924;
-   fEigenVectors_1[1][3][2] = -0.0132274129356;
-   fEigenVectors_1[1][3][3] = -9.44625082064e-05;
-   fEigenVectors_1[1][3][4] = -1.039420631e-05;
-   fEigenVectors_1[1][4][0] = 4.36350003578e-05;
-   fEigenVectors_1[1][4][1] = -1.1087517979e-05;
-   fEigenVectors_1[1][4][2] = 1.82350170516e-05;
-   fEigenVectors_1[1][4][3] = 0.00476809580137;
-   fEigenVectors_1[1][4][4] = 0.999988631387;
-   fEigenVectors_1[2][0][0] = -0.999999715023;
-   fEigenVectors_1[2][0][1] = -6.90146504618e-05;
-   fEigenVectors_1[2][0][2] = 0.000216829030254;
-   fEigenVectors_1[2][0][3] = -0.000716439949481;
-   fEigenVectors_1[2][0][4] = 6.99324968893e-05;
-   fEigenVectors_1[2][1][0] = -0.000717865417858;
-   fEigenVectors_1[2][1][1] = 3.20551571023e-05;
-   fEigenVectors_1[2][1][2] = -8.74383275877e-05;
-   fEigenVectors_1[2][1][3] = 0.999741457032;
-   fEigenVectors_1[2][1][4] = -0.0227265282997;
-   fEigenVectors_1[2][2][0] = 0.000217660442574;
-   fEigenVectors_1[2][2][1] = -0.0132196475146;
-   fEigenVectors_1[2][2][2] = 0.999912588856;
-   fEigenVectors_1[2][2][3] = 8.84677509211e-05;
-   fEigenVectors_1[2][2][4] = 1.91047622636e-05;
-   fEigenVectors_1[2][3][0] = -6.61204034858e-05;
-   fEigenVectors_1[2][3][1] = 0.999912613718;
-   fEigenVectors_1[2][3][2] = 0.0132196651116;
-   fEigenVectors_1[2][3][3] = -3.10991591523e-05;
-   fEigenVectors_1[2][3][4] = -6.47712742176e-06;
-   fEigenVectors_1[2][4][0] = 5.36271526158e-05;
-   fEigenVectors_1[2][4][1] = 7.46437636013e-06;
-   fEigenVectors_1[2][4][2] = -2.1025230332e-05;
-   fEigenVectors_1[2][4][3] = 0.0227265706258;
-   fEigenVectors_1[2][4][4] = 0.999741716452;
+   fEigenVectors_1[0][0][0] = -0.999999410587;
+   fEigenVectors_1[0][0][1] = -0.00018176401875;
+   fEigenVectors_1[0][0][2] = -0.000229203321324;
+   fEigenVectors_1[0][0][3] = 0.00103213662694;
+   fEigenVectors_1[0][0][4] = -0.000167172237617;
+   fEigenVectors_1[0][1][0] = -0.00103508320704;
+   fEigenVectors_1[0][1][1] = -0.003197925825;
+   fEigenVectors_1[0][1][2] = -0.00362174702324;
+   fEigenVectors_1[0][1][3] = -0.999576424189;
+   fEigenVectors_1[0][1][4] = 0.0286802550077;
+   fEigenVectors_1[0][2][0] = 0.000253332233956;
+   fEigenVectors_1[0][2][1] = -0.118713194593;
+   fEigenVectors_1[0][2][2] = -0.992920520538;
+   fEigenVectors_1[0][2][3] = 0.00396284848578;
+   fEigenVectors_1[0][2][4] = -0.000498977131109;
+   fEigenVectors_1[0][3][0] = 0.000156105464813;
+   fEigenVectors_1[0][3][1] = -0.992923419827;
+   fEigenVectors_1[0][3][2] = 0.118724556297;
+   fEigenVectors_1[0][3][3] = 0.00274523877559;
+   fEigenVectors_1[0][3][4] = -3.72241168862e-05;
+   fEigenVectors_1[0][4][0] = 0.000137410015415;
+   fEigenVectors_1[0][4][1] = 4.51078063921e-06;
+   fEigenVectors_1[0][4][2] = 0.000387350299782;
+   fEigenVectors_1[0][4][3] = -0.0286821616263;
+   fEigenVectors_1[0][4][4] = -0.999588497664;
+   fEigenVectors_1[1][0][0] = -0.999986071037;
+   fEigenVectors_1[1][0][1] = 0.00386093584642;
+   fEigenVectors_1[1][0][2] = 0.00356746976248;
+   fEigenVectors_1[1][0][3] = -0.000472040636733;
+   fEigenVectors_1[1][0][4] = -3.52606709303e-05;
+   fEigenVectors_1[1][1][0] = -0.000481391834025;
+   fEigenVectors_1[1][1][1] = -0.00131466094996;
+   fEigenVectors_1[1][1][2] = -0.00101761247368;
+   fEigenVectors_1[1][1][3] = 0.999775733554;
+   fEigenVectors_1[1][1][4] = 0.0211065627078;
+   fEigenVectors_1[1][2][0] = -0.00494494218556;
+   fEigenVectors_1[1][2][1] = -0.460988781588;
+   fEigenVectors_1[1][2][2] = -0.88739089798;
+   fEigenVectors_1[1][2][3] = -0.00151063443461;
+   fEigenVectors_1[1][2][4] = -5.4428622285e-05;
+   fEigenVectors_1[1][3][0] = -0.0017812615826;
+   fEigenVectors_1[1][3][1] = -0.887396589418;
+   fEigenVectors_1[1][3][2] = 0.461002854386;
+   fEigenVectors_1[1][3][3] = -0.000697634102687;
+   fEigenVectors_1[1][3][4] = -4.18460473461e-05;
+   fEigenVectors_1[1][4][0] = 2.5449007309e-05;
+   fEigenVectors_1[1][4][1] = 3.43485628717e-05;
+   fEigenVectors_1[1][4][2] = 7.40587368474e-06;
+   fEigenVectors_1[1][4][3] = 0.021106659231;
+   fEigenVectors_1[1][4][4] = -0.999777228713;
+   fEigenVectors_1[2][0][0] = -0.999999430556;
+   fEigenVectors_1[2][0][1] = -0.000151596225793;
+   fEigenVectors_1[2][0][2] = -0.000163533783594;
+   fEigenVectors_1[2][0][3] = 0.00103078449692;
+   fEigenVectors_1[2][0][4] = -0.000163234684901;
+   fEigenVectors_1[2][1][0] = -0.00103415189091;
+   fEigenVectors_1[2][1][1] = -0.00310146427151;
+   fEigenVectors_1[2][1][2] = -0.00332464712033;
+   fEigenVectors_1[2][1][3] = -0.999548311105;
+   fEigenVectors_1[2][1][4] = 0.0296889194572;
+   fEigenVectors_1[2][2][0] = 0.00018592141431;
+   fEigenVectors_1[2][2][1] = -0.131575675452;
+   fEigenVectors_1[2][2][2] = -0.991299167005;
+   fEigenVectors_1[2][2][3] = 0.00369527036523;
+   fEigenVectors_1[2][2][4] = -0.000336949068484;
+   fEigenVectors_1[2][3][0] = 0.000131482765267;
+   fEigenVectors_1[2][3][1] = -0.991301265707;
+   fEigenVectors_1[2][3][2] = 0.131585820568;
+   fEigenVectors_1[2][3][3] = 0.0026370319613;
+   fEigenVectors_1[2][3][4] = -3.47679232158e-05;
+   fEigenVectors_1[2][4][0] = 0.000132522949551;
+   fEigenVectors_1[2][4][1] = -1.32604359378e-05;
+   fEigenVectors_1[2][4][2] = 0.000230865663956;
+   fEigenVectors_1[2][4][3] = -0.0296901042514;
+   fEigenVectors_1[2][4][4] = -0.999559116147;
 }
 
 //_______________________________________________________________________
