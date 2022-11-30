@@ -52,6 +52,11 @@ class NanoAODEventFile : public EventFile
         mutable TTreeReaderArray<Float_t> muon_dxy;
         mutable TTreeReaderArray<Float_t> muon_dz;
 
+        mutable TTreeReaderValue<UInt_t> photon_size;
+        mutable TTreeReaderArray<Float_t> photon_eta;
+        mutable TTreeReaderArray<Float_t> photon_phi;
+        mutable TTreeReaderArray<Float_t> photon_pt; 
+        
         //mutable TTreeReaderValue<UInt_t> met_size; useless variable
         mutable TTreeReaderArray<Float_t> met_phi;
         mutable TTreeReaderArray<Float_t> met_pt;
