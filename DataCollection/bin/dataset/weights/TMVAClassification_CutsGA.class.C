@@ -10,10 +10,10 @@ Method         : Cuts::CutsGA
 TMVA Release   : 4.2.1         [262657]
 ROOT Release   : 6.24/07       [399367]
 Creator        : kzhang1
-Date           : Wed Oct 12 11:30:01 2022
+Date           : Tue Nov 29 15:40:01 2022
 Host           : Linux cmsbuild02.cern.ch 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
 Dir            : /uscms/homes/k/kzhang1/practice/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin
-Training events: 438455
+Training events: 4302
 Analysis type  : [Classification]
 
 
@@ -50,11 +50,11 @@ VarProp[0]: "NotEnforced" [Categorisation of cuts]
 #VAR -*-*-*-*-*-*-*-*-*-*-*-* variables *-*-*-*-*-*-*-*-*-*-*-*-
 
 NVar 5
-pt                            pt                            pt                            Transverse Momentum                                             'F'    [4.53686761856,1806.10986328]
+pt                            pt                            pt                            Transverse Momentum                                             'F'    [8.94119262695,2084.13500977]
 nParticles                    nParticles                    nParticles                    Number of Particles                                             'F'    [2,5]
-eta                           eta                           eta                           Pseudorapidity                                                  'F'    [-3.99890303612,3.99965810776]
-phi                           phi                           phi                           Azimuthal Angle                                                 'F'    [-3.1415810585,3.14155507088]
-deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.18585370481]
+eta                           eta                           eta                           Pseudorapidity                                                  'F'    [-3.1376721859,3.12934875488]
+phi                           phi                           phi                           Azimuthal Angle                                                 'F'    [-3.13815546036,3.13753390312]
+deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.191068515182]
 NSpec 0
 
 

@@ -8,18 +8,16 @@
 
 void LeptonJetDataStripModule::initialize()
 {
-    // tree = new TTree("DataStripTree", "Lepton Jet Data");
-    // tree2 = new TTree("DataStripTree2", "Lepton Jet Data");
     tree = new TTree("Signal", "Lepton Jet Data");
-    tree2 = new TTree("Background", "Lepton Jet Data");
+    tree2 = new TTree("Matched Signal", "Lepton Jet Data");
     for (TTree *treeId : {tree, tree2})
     {
-        treeId->Branch("jetIndex", &jetIndex, "jetIndex/I");
+        // treeId->Branch("jetIndex", &jetIndex, "jetIndex/I");
         treeId->Branch("nParticles", &nParticles, "nParticles/I");
         treeId->Branch("pt", &pt, "pt/F");
         treeId->Branch("phi", &phi, "phi/F");
         treeId->Branch("eta", &eta, "eta/F");
-        treeId->Branch("mass", &mass, "mass/F");
+        // treeId->Branch("mass", &mass, "mass/F");
         treeId->Branch("deltaR", &deltaR, "deltaR/F");
 
         std::cout << treeId->GetListOfBranches();
@@ -53,10 +51,10 @@ bool LeptonJetDataStripModule::process()
     {
         nParticles = leptonJet.getNumParticles();
         pt = leptonJet.getPt();
-        jetIndex = jetIterator;
+        // jetIndex = jetIterator;
         phi = leptonJet.getPhi();
         eta = leptonJet.getEta();
-        mass = leptonJet.getMass();
+        // mass = leptonJet.getMass();
         deltaR = 0;
 
         for (Particle p : leptonJet.getParticles())
@@ -70,22 +68,6 @@ bool LeptonJetDataStripModule::process()
             }
         }
 
-        // bool isMatched = false;
-        // for(const auto& matchedJet : matchedLeptonJets)
-        // {
-        //     if(matchedJet.second == leptonJet)
-        //     {
-        //         tree->Fill();
-        //         isMatched = true;
-        //         break;
-        //     }
-        // }
-
-        // if(!isMatched)
-        // {
-        //     tree2->Fill();
-        // }
-
         tree->Fill();
 
         jetIterator++;
@@ -96,10 +78,10 @@ bool LeptonJetDataStripModule::process()
         const auto &fil = leptonJet.second;
         nParticles = fil.getNumParticles();
         pt = fil.getPt();
-        jetIndex = jetIterator;
+        // jetIndex = jetIterator;
         phi = fil.getPhi();
         eta = fil.getEta();
-        mass = fil.getMass();
+        // mass = fil.getMass();
         deltaR = 0;
 
         for (Particle p : fil.getParticles())
