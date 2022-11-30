@@ -10,10 +10,10 @@ Method         : DL::DNN_CPU
 TMVA Release   : 4.2.1         [262657]
 ROOT Release   : 6.24/07       [399367]
 Creator        : kzhang1
-Date           : Wed Oct 12 12:04:29 2022
+Date           : Tue Nov 29 15:40:37 2022
 Host           : Linux cmsbuild02.cern.ch 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
 Dir            : /uscms/homes/k/kzhang1/practice/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin
-Training events: 438455
+Training events: 4302
 Analysis type  : [Classification]
 
 
@@ -42,11 +42,11 @@ ValidationSize: "20%" [Part of the training data to use for validation. Specify 
 #VAR -*-*-*-*-*-*-*-*-*-*-*-* variables *-*-*-*-*-*-*-*-*-*-*-*-
 
 NVar 5
-pt                            pt                            pt                            Transverse Momentum                                             'F'    [4.53686761856,1806.10986328]
+pt                            pt                            pt                            Transverse Momentum                                             'F'    [8.94119262695,2084.13500977]
 nParticles                    nParticles                    nParticles                    Number of Particles                                             'F'    [2,5]
-eta                           eta                           eta                           Pseudorapidity                                                  'F'    [-3.99890303612,3.99965810776]
-phi                           phi                           phi                           Azimuthal Angle                                                 'F'    [-3.1415810585,3.14155507088]
-deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.18585370481]
+eta                           eta                           eta                           Pseudorapidity                                                  'F'    [-3.1376721859,3.12934875488]
+phi                           phi                           phi                           Azimuthal Angle                                                 'F'    [-3.13815546036,3.13753390312]
+deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.191068515182]
 NSpec 0
 
 
@@ -118,7 +118,7 @@ class ReadDNN_CPU : public IClassifierReader {
 
       // initialize min and max vectors (for normalisation)
       fVmin[0] = -1;
-      fVmax[0] = 0.99999988079071;
+      fVmax[0] = 1;
       fVmin[1] = -1;
       fVmax[1] = 1;
       fVmin[2] = -1;
@@ -214,16 +214,16 @@ inline void ReadDNN_CPU::InitTransform_1()
    double fMin_1[3][5];
    double fMax_1[3][5];
    // Normalization transformation, initialisation
-   fMin_1[0][0] = 5.41091966629;
-   fMax_1[0][0] = 1500.41540527;
+   fMin_1[0][0] = 8.94119262695;
+   fMax_1[0][0] = 2084.13500977;
    fScal_1[0][0] = 2.0/(fMax_1[0][0]-fMin_1[0][0]);
    fOff_1[0][0] = fMin_1[0][0]*fScal_1[0][0]+1.;
-   fMin_1[1][0] = 4.53686761856;
-   fMax_1[1][0] = 1806.10986328;
+   fMin_1[1][0] = 10.5544462204;
+   fMax_1[1][0] = 426.872131348;
    fScal_1[1][0] = 2.0/(fMax_1[1][0]-fMin_1[1][0]);
    fOff_1[1][0] = fMin_1[1][0]*fScal_1[1][0]+1.;
-   fMin_1[2][0] = 4.53686761856;
-   fMax_1[2][0] = 1806.10986328;
+   fMin_1[2][0] = 8.94119262695;
+   fMax_1[2][0] = 2084.13500977;
    fScal_1[2][0] = 2.0/(fMax_1[2][0]-fMin_1[2][0]);
    fOff_1[2][0] = fMin_1[2][0]*fScal_1[2][0]+1.;
    fMin_1[0][1] = 2;
@@ -231,47 +231,47 @@ inline void ReadDNN_CPU::InitTransform_1()
    fScal_1[0][1] = 2.0/(fMax_1[0][1]-fMin_1[0][1]);
    fOff_1[0][1] = fMin_1[0][1]*fScal_1[0][1]+1.;
    fMin_1[1][1] = 2;
-   fMax_1[1][1] = 4;
+   fMax_1[1][1] = 3;
    fScal_1[1][1] = 2.0/(fMax_1[1][1]-fMin_1[1][1]);
    fOff_1[1][1] = fMin_1[1][1]*fScal_1[1][1]+1.;
    fMin_1[2][1] = 2;
    fMax_1[2][1] = 5;
    fScal_1[2][1] = 2.0/(fMax_1[2][1]-fMin_1[2][1]);
    fOff_1[2][1] = fMin_1[2][1]*fScal_1[2][1]+1.;
-   fMin_1[0][2] = -3.11513948441;
-   fMax_1[0][2] = 3.05456542969;
+   fMin_1[0][2] = -3.1376721859;
+   fMax_1[0][2] = 3.12934875488;
    fScal_1[0][2] = 2.0/(fMax_1[0][2]-fMin_1[0][2]);
    fOff_1[0][2] = fMin_1[0][2]*fScal_1[0][2]+1.;
-   fMin_1[1][2] = -3.99890303612;
-   fMax_1[1][2] = 3.99965810776;
+   fMin_1[1][2] = -3.07524633408;
+   fMax_1[1][2] = 3.0906586647;
    fScal_1[1][2] = 2.0/(fMax_1[1][2]-fMin_1[1][2]);
    fOff_1[1][2] = fMin_1[1][2]*fScal_1[1][2]+1.;
-   fMin_1[2][2] = -3.99890303612;
-   fMax_1[2][2] = 3.99965810776;
+   fMin_1[2][2] = -3.1376721859;
+   fMax_1[2][2] = 3.12934875488;
    fScal_1[2][2] = 2.0/(fMax_1[2][2]-fMin_1[2][2]);
    fOff_1[2][2] = fMin_1[2][2]*fScal_1[2][2]+1.;
-   fMin_1[0][3] = -3.14136362076;
-   fMax_1[0][3] = 3.14115834236;
+   fMin_1[0][3] = -3.13815546036;
+   fMax_1[0][3] = 3.13753390312;
    fScal_1[0][3] = 2.0/(fMax_1[0][3]-fMin_1[0][3]);
    fOff_1[0][3] = fMin_1[0][3]*fScal_1[0][3]+1.;
-   fMin_1[1][3] = -3.1415810585;
-   fMax_1[1][3] = 3.14155507088;
+   fMin_1[1][3] = -3.07524466515;
+   fMax_1[1][3] = 3.10426855087;
    fScal_1[1][3] = 2.0/(fMax_1[1][3]-fMin_1[1][3]);
    fOff_1[1][3] = fMin_1[1][3]*fScal_1[1][3]+1.;
-   fMin_1[2][3] = -3.1415810585;
-   fMax_1[2][3] = 3.14155507088;
+   fMin_1[2][3] = -3.13815546036;
+   fMax_1[2][3] = 3.13753390312;
    fScal_1[2][3] = 2.0/(fMax_1[2][3]-fMin_1[2][3]);
    fOff_1[2][3] = fMin_1[2][3]*fScal_1[2][3]+1.;
    fMin_1[0][4] = 0;
-   fMax_1[0][4] = 0.165774270892;
+   fMax_1[0][4] = 0.191068515182;
    fScal_1[0][4] = 2.0/(fMax_1[0][4]-fMin_1[0][4]);
    fOff_1[0][4] = fMin_1[0][4]*fScal_1[0][4]+1.;
    fMin_1[1][4] = 0;
-   fMax_1[1][4] = 0.18585370481;
+   fMax_1[1][4] = 0.0993144065142;
    fScal_1[1][4] = 2.0/(fMax_1[1][4]-fMin_1[1][4]);
    fOff_1[1][4] = fMin_1[1][4]*fScal_1[1][4]+1.;
    fMin_1[2][4] = 0;
-   fMax_1[2][4] = 0.18585370481;
+   fMax_1[2][4] = 0.191068515182;
    fScal_1[2][4] = 2.0/(fMax_1[2][4]-fMin_1[2][4]);
    fOff_1[2][4] = fMin_1[2][4]*fScal_1[2][4]+1.;
 }
