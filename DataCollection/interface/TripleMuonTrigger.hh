@@ -12,7 +12,7 @@ class TripleMuonTrigger : public RecoTrigger
     TripleMuonTrigger(const double iPTCutoff = 10, const double iSecondPTCutoff = 5, const double iThirdPTCutoff = 5);
   
   protected:
-    bool checkTrigger(const InputModule* input) override;
+    bool checkTrigger(const InputModule* input) override; //checks if event passes trigger criteria
 
   private:
     const double pTCutoff;
