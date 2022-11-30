@@ -15,7 +15,7 @@
 
 using std::make_shared;
 
-void MassResolutionPlan::setupAnalyzer()
+void MassResolutionPlan::initialize()
 {
   Analyzer& analyzer = getAnalyzer();
 

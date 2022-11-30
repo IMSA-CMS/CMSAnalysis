@@ -82,7 +82,9 @@ class NanoAODEventFile : public EventFile
         mutable TTreeReaderArray<Float_t> gen_pileup;
 
         mutable TTreeReaderArray<Int_t> elec_idpass;
-        mutable TTreeReaderArray<Bool_t> muon_idpass;
+        mutable TTreeReaderArray<Bool_t> muon_looseid;
+        mutable TTreeReaderArray<Bool_t> muon_mediumid;
+        mutable TTreeReaderArray<Bool_t> muon_tightid;
         mutable std::unordered_map<std::string, TTreeReaderValue<Bool_t>> triggers;
 
         std::vector<GenSimParticle> genSimParticles;

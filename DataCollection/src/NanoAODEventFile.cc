@@ -17,7 +17,7 @@ std::vector<bool> NanoAODEventFile::getTriggerResults(std::string subProcess) co
     // determines whether it passes the trigger's criteria or not
     std::vector<bool> v_results = {};
 
-    for(auto& trigger : triggers)
+    for (auto &trigger : triggers)
     {
         v_results.push_back(*(trigger.second));
     }
@@ -30,7 +30,7 @@ std::vector<std::string> NanoAODEventFile::getTriggerNames(std::string subProces
     // just get the name of the triggers
     std::vector<std::string> v_names = {};
 
-    for(auto& trigger : triggers)
+    for (auto &trigger : triggers)
     {
         v_names.push_back(trigger.first);
     }
@@ -100,9 +100,9 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     {
         std::string nameoftrigger;
 
-        while(getline(triggerNameFile, nameoftrigger))
+        while (getline(triggerNameFile, nameoftrigger))
         {
-            if(tree->GetBranch(nameoftrigger.c_str()))
+            if (tree->GetBranch(nameoftrigger.c_str()))
             {
                 TTreeReaderValue<Bool_t> intermediate(treeReader, nameoftrigger.c_str());
                 triggers.emplace(nameoftrigger, intermediate);
@@ -112,19 +112,19 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     
     treeReader.SetTree(tree);
     setEventCount(1);
-    treeReader.Next(); 
+    treeReader.Next();
 }
 
 void NanoAODEventFile::nextEvent()
 {
-    treeReader.Next(); 
+    treeReader.Next();
     setEventCount(getEventCount() + 1);
 
     genSimParticles.clear();
     genSimParticles.reserve(*gen_size);
 
     for (unsigned i = 0; i < *gen_size; i++)
-    {          
+    {
         int charge = -1;
         if (gen_pid[i] < 0)
         {
@@ -135,22 +135,19 @@ void NanoAODEventFile::nextEvent()
             charge = 0;
         }
 
-        std::vector<const GenSimParticle*> daughterCollectionVector {&genSimParticles[gen_d1[i]], &genSimParticles[gen_d2[i]]};
+        std::vector<const GenSimParticle *> daughterCollectionVector{&genSimParticles[gen_d1[i]], &genSimParticles[gen_d2[i]]};
 
         genSimParticles.push_back(GenSimParticle(
-        reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i],
+            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i],
                                                                         gen_eta[i], gen_phi[i], gen_mass[i])),
-            charge, Particle::identifyType(gen_pid[i]),&genSimParticles[gen_m1[i]],
-            daughterCollectionVector));         
-        
+            charge, Particle::identifyType(gen_pid[i]), &genSimParticles[gen_m1[i]],
+            daughterCollectionVector, gen_status[i]));
     }
 }
 
 ParticleCollection<GenSimParticle> NanoAODEventFile::getGenSimParticles() const
 {
-    ParticleCollection<GenSimParticle> collectionVector;
-
-    return collectionVector;
+    return genSimParticles;
 }
 
 ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
@@ -158,21 +155,25 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
     ParticleCollection<Particle> recoParticles;
     for (UInt_t i = 0; i < *elec_size; i++)
     {
-        
-        //std::cout<<"elec_idpass "<<elec_idpass[i]<<std::endl;
+
+        // std::cout<<"elec_idpass "<<elec_idpass[i]<<std::endl;
         int charge = elec_charge[i];
-        
+
         Particle::SelectionFit fit;
-        if (elec_idpass[i] & 4) 
+        if (elec_idpass[i] == 4)
         {
             fit = Particle::SelectionFit::Tight;
-        } else if (elec_idpass[i] & 2) 
+        }
+        else if (elec_idpass[i] == 3)
         {
             fit = Particle::SelectionFit::Medium;
-        } else if (elec_idpass[i] & 1) 
+        }
+        else if (elec_idpass[i] == 2)
         {
             fit = Particle::SelectionFit::Loose;
-        } else {
+        }
+        else
+        {
             continue;
         }
 
@@ -181,22 +182,36 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],
                                                                         elec_eta[i], elec_phi[i], elec_mass[i])),
             charge, ParticleType::electron(), elec_reliso[i], fit, elec_dxy[i], elec_dz[i]));
-        
     }
 
     for (UInt_t i = 0; i < *muon_size; i++)
     {
-        
+
         int charge = muon_charge[i];
-        
+
         Particle::SelectionFit fit;
-        
+        if (muon_looseid[i])
+        {
+            fit = Particle::SelectionFit::Tight;
+        }
+        else if (muon_mediumid[i])
+        {
+            fit = Particle::SelectionFit::Medium;
+        }
+        else if (muon_looseid[i])
+        {
+            fit = Particle::SelectionFit::Loose;
+        }
+        else
+        {
+            continue;
+        }
+
         // Lorentz four-vector
         recoParticles.addParticle(Particle(
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],
                                                                         muon_eta[i], muon_phi[i], muon_mass[i])),
             charge, ParticleType::muon(), muon_reliso[i], fit, muon_dxy[i], muon_dz[i]));
-        
     }
 
     for (UInt_t i = 0; i < *photon_size; i++) //what do i even put here
@@ -215,13 +230,14 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
 ParticleCollection<Particle> NanoAODEventFile::getRecoJets() const
 {
     ParticleCollection<Particle> recoParticles;
-    for(UInt_t i = 0; i < *jet_size; i++) {
-        //if(bJet[i] > 0){
-            recoParticles.addParticle(
-                Particle(reco::Candidate::LorentzVector(jet_pt[i], jet_eta[i], jet_phi[i], jet_mass[i]), 
-                0, 
-                ParticleType::jet()));    
-        //}    
+    for (UInt_t i = 0; i < *jet_size; i++)
+    {
+        // if(bJet[i] > 0){
+        recoParticles.addParticle(
+            Particle(reco::Candidate::LorentzVector(jet_pt[i], jet_eta[i], jet_phi[i], jet_mass[i]),
+                     0,
+                     ParticleType::jet()));
+        //}
     }
     return recoParticles;
 }
