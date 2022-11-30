@@ -10,11 +10,16 @@
 
 class TFile;
 
+//Identifies the type of a root file and creates the appropriate implementation
 class EventLoader
 {
     public:
+        //Identifies the proper type and sets the file to that implementation
         void changeFileFormat(TFile* ifile);
+
         std::shared_ptr<EventFile> getFile() const {return file;} 
+
+        //Responsible for outputing a short message after processing a certain ammount of events
         void setOutputEvery(int output) {outputEvery = output;}
 
     private:
