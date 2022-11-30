@@ -19,13 +19,13 @@ public:
   virtual reco::Candidate::LorentzVector getFourVector() const override;
   virtual bool operator == (const ParticleImplementation& p1) const override;
 
-  virtual double dxy() const override {throw std::runtime_error("dxy not implemented for this particle implementation");}
-  virtual double dz() const {throw std::runtime_error("dz not implemented for this particle implementation");}
+  //virtual double dxy() const override {throw std::runtime_error("dxy not implemented for this particle implementation");}
+  //virtual double dz() const {throw std::runtime_error("dz not implemented for this particle implementation");}
 
   virtual int charge() const override;
   virtual int pdgId() const override;
   virtual int status() const override;
-  virtual double isolation() const override;
+  //virtual double isolation() const override;
   virtual Particle mother() const override;
   virtual Particle daughter(int i) const override;
   virtual int numberOfDaughters() const override;
