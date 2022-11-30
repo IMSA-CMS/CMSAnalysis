@@ -19,7 +19,7 @@ Particle(pParticle)
 double Lepton::getIsolation() const
 {
   checkIsNull();
-  return getParticle()->isolation();
+  return getParticle()->getInfo("Isolation");
 }
 
 bool Lepton::isTight() const

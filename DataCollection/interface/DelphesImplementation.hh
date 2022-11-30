@@ -9,14 +9,10 @@ class DelphesImplementation : public ParticleImplementation
 {
     public:
         virtual ~DelphesImplementation(){}
-        DelphesImplementation(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int pid, int status, int m1, int m2,int d1, int d2,double iIsolation = -999);
+        DelphesImplementation(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int pid, int status, int m1, int m2,int d1, int d2);
         virtual reco::Candidate::LorentzVector getFourVector() const override;
         virtual int charge() const override{return particleCharge;}
-        virtual double isolation() const override {return particleIsolation;}
-
-        virtual double dxy() const override {throw std::runtime_error("dxy not implemented for this particle implementation");}
-        virtual double dz() const {throw std::runtime_error("dz not implemented for this particle implementation");}
-
+        
         virtual int pdgId() const override{return particleID;}
         virtual int status() const override{return statusCode;}
         virtual Particle mother() const override{throw std::runtime_error("mother() error");}
@@ -37,7 +33,6 @@ class DelphesImplementation : public ParticleImplementation
         reco::Candidate::LorentzVector lorentzVec;
         const int particleCharge;
         const ParticleType& particleType;
-        const double particleIsolation;
         const int particleID;
         const int statusCode;
         std::vector<int> mothersVec;

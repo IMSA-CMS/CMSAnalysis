@@ -72,6 +72,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     jet_phi(treeReader, "Jet_phi"),
     jet_mass(treeReader, "Jet_mass"),
     jet_pt(treeReader, "Jet_pt"),
+    bJet(treeReader, "bJet"),
     //bJet(treeReader, branchNames.bJet.c_str()),
     gen_size(treeReader, "nGenPart"),
     gen_pid(treeReader, "GenPart_pdgId"),
@@ -173,10 +174,17 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
 
 
         // Lorentz four-vector
-        recoParticles.addParticle(Particle(
+        auto particle = Particle(
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],
                                                                         elec_eta[i], elec_phi[i], elec_mass[i])),
-            charge, ParticleType::electron(), elec_reliso[i], fit, elec_dxy[i], elec_dz[i]));
+                                                                        charge, ParticleType::electron(), fit);
+
+            particle.addInfo("Isolation", elec_reliso[i]);
+            particle.addInfo("dxy", elec_dxy[i]);
+            particle.addInfo("dz", elec_dz[i]);
+            particle.addInfo("bJet", bJet[i]);
+        recoParticles.addParticle(particle);
+            
         
     }
     for (UInt_t i = 0; i < *muon_size; i++)
@@ -199,10 +207,16 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         }
 
         // Lorentz four-vector
-        recoParticles.addParticle(Particle(
+        auto particle = Particle(
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],
                                                                         muon_eta[i], muon_phi[i], muon_mass[i])),
-            charge, ParticleType::muon(), muon_reliso[i], fit, muon_dxy[i], muon_dz[i]));
+                                                                        charge, ParticleType::muon(), fit);
+            particle.addInfo("Isolation", muon_reliso[i]);
+            particle.addInfo("dxy", muon_dxy[i]);
+            particle.addInfo("dz", muon_dz[i]);
+            particle.addInfo("bJet", bJet[i]);
+        recoParticles.addParticle(particle);
+        
         
     }
     return recoParticles;

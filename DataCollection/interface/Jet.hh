@@ -13,3 +13,5 @@ class Jet : public Particle
         Jet(const Particle &particle);
 };
 #endif
+
+// add accessor here
