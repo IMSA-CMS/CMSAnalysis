@@ -5,8 +5,8 @@
 
 class InvariantMassPlan : public DataCollectionPlan
 {
-    private:
-        void setupAnalyzer() override;
+    protected:
+        virtual void initialize() override;
 };
 
 #endif

@@ -3,6 +3,6 @@
 void DataCollectionPlan::runAnalyzer(const std::string& inputFile, const std::string& outputFile, 
 	   int outputEvery, int numFiles)
 {
-    setupAnalyzer();
+	initialize();
     analyzer.run(inputFile, outputFile, outputEvery, numFiles);
 }

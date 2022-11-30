@@ -24,11 +24,9 @@
 #include "CMSAnalysis/DataCollection/interface/PhotonsHist.hh"
 #include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
 
-
-
 using std::make_shared;
 
-void DisplacedVertexPlan::setupAnalyzer()
+void DisplacedVertexPlan::initialize()
 {
   Analyzer& analyzer = getAnalyzer();
 

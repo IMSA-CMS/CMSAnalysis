@@ -6,7 +6,10 @@
 class MassResolutionPlan : public DataCollectionPlan
 {
     protected:
-        void setupAnalyzer() override;
+        virtual void initialize() override;
+
+    private:
+        
 };
 
 #endif

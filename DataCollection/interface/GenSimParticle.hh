@@ -6,13 +6,12 @@
 
 class LeptonJet;
 
-
 class GenSimParticle : public Particle
 {
     public:
         using Particle::Particle;
         GenSimParticle(const Particle&);
-        GenSimParticle();
+        //GenSimParticle();
         int pdgId() const;
         int status() const;
         GenSimParticle mother() const;
@@ -27,4 +26,8 @@ class GenSimParticle : public Particle
 
 
 };
+
+std::ostream& operator<<(std::ostream& str, const std::pair<GenSimParticle, std::vector<GenSimParticle>> genParticles);
+std::ostream& operator<<(std::ostream& str, const GenSimParticle part);
+
 #endif

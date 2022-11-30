@@ -9,14 +9,13 @@
 #include "CMSAnalysis/DataCollection/interface/SimTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerModule.hh"
 #include "CMSAnalysis/DataCollection/interface/RecoTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/GenSimEventDumpModule.hh"
-#include "CMSAnalysis/DataCollection/interface/RecoEventDumpModule.hh"
+#include "CMSAnalysis/DataCollection/interface/EventDumpModule.hh"
 #include "CMSAnalysis/DataCollection/interface/SingleMuonTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/SingleElectronTrigger.hh"
 
 using std::make_shared;
 
-void TriggerPlan::setupAnalyzer()
+void TriggerPlan::initialize()
 {
   Analyzer& analyzer = getAnalyzer();
 
@@ -29,8 +28,7 @@ void TriggerPlan::setupAnalyzer()
   auto triggerMod = make_shared<TriggerModule>();
 
 
-  auto genSimEventDumpMod = make_shared<GenSimEventDumpModule>();
-  auto recoDumpMod = make_shared<RecoEventDumpModule>();
+  auto EventDumpMod = make_shared<EventDumpModule>(true,true);
 
 
   // Configure objects
@@ -49,6 +47,6 @@ void TriggerPlan::setupAnalyzer()
   analyzer.addProductionModule(triggerMod);
   // analyzer.addProductionModule(recoTriggerMod);
 
-  analyzer.addAnalysisModule(genSimEventDumpMod);
-  analyzer.addAnalysisModule(recoDumpMod);
+  analyzer.addAnalysisModule(EventDumpMod);
+
 }
