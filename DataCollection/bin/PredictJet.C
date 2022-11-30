@@ -102,17 +102,20 @@ bool returnState(TString &myMethodList)
     }
 
     // input signal file here
-    string sgFile = "dpMiniAOD.root";
+    // string sgFile = "photons0_5.root";
+    // string sgFile = "photons0_9.root";
+    string sgFile = "photons2_0.root";
 
     // input background files here
     string bgFiles[] =
         {
-            //"dy10.root",
-            "dy50Run2.root",
+            "dy4.root"
+            "dy10.root",
+            "dy50.root",
             // "qcd500.root",
             // "qcd700.root",
             // "qcd1k.root",
-            // "qcd1.5k.root",
+            // "qcd1_5k.root",
             // "qcd2k.root"
         };
 
@@ -147,8 +150,8 @@ bool returnState(TString &myMethodList)
 
     // Register the training and test trees
 
-    TTree *signalTree = (TTree *)input->Get("Signal");
-    // TTree *backgroundTree = (TTree *)input2->Get("Background");
+    // TTree *signalTree = (TTree *)input->Get("Signal");
+    TTree *signalTree = (TTree *)input->Get("Matched Signal");
 
     // Create a ROOT output file where TMVA will store ntuples, histograms, etc.
     TString outfileName("TMVA.root");
