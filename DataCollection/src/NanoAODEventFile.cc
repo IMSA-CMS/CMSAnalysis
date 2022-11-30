@@ -91,7 +91,9 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     gen_m2(treeReader, "GenVisTau_genPartIdxMother"),
     gen_pileup(treeReader, "Pileup_nTrueInt"),
     elec_idpass(treeReader, "Electron_cutBased"),
-    muon_idpass(treeReader, "Muon_looseId")
+    muon_looseid(treeReader, "Muon_looseId"),
+    muon_mediumid(treeReader, "Muon_mediumId"),
+    muon_tightid(treeReader, "Muon_tightId")
     {
     std::ifstream triggerNameFile("betterValidTriggers.txt");
     tree = getFile()->Get<TTree>("Events");

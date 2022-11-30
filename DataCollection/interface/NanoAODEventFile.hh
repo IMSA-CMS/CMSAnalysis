@@ -26,7 +26,7 @@ class NanoAODEventFile : public EventFile
         virtual int getNumPileUpInteractions() const override;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;
-        virtual bool checkTrigger(std::string triggerName, std::string subProcess) const override;
+        virtual bool checkTrigger(std::string triggerName, std::string subProcess) const override; //checks if event passes trigger criteria
     private:
 
         TTree* tree;
@@ -85,6 +85,7 @@ class NanoAODEventFile : public EventFile
         mutable TTreeReaderArray<Bool_t> muon_looseid;
         mutable TTreeReaderArray<Bool_t> muon_mediumid;
         mutable TTreeReaderArray<Bool_t> muon_tightid;
+        
         mutable std::unordered_map<std::string, TTreeReaderValue<Bool_t>> triggers;
 
         std::vector<GenSimParticle> genSimParticles;
