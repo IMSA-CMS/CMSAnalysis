@@ -269,18 +269,14 @@ inline double ParticleCollection<T>::calculateSameSignInvariantMass(bool usingPh
   T iPointer = Particle::nullParticle();
   T jPointer = Particle::nullParticle();
   std::pair<T, T> particlePair = {iPointer, jPointer};
-  std::cout << "Line B0";
   if (usingPhi)
   {
-    std::cout << "Line B1";
     particlePair = chooseParticlesByPhi(false); // we want same sign particles with best phi angle
   }
   else
   {
-    std::cout << "Line B2";
     particlePair = chooseParticles(false); // we want same sign particles with highest invariant mass
   }
-  std::cout << "Line B3";
   if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
   {
     return calculateInvariantMass(particlePair.first, particlePair.second);

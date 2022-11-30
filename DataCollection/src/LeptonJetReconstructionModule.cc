@@ -16,20 +16,38 @@ bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
   const auto & recoCandidates = getInput()->getLeptons(InputModule::RecoLevel::Reco);
   auto recoLeptons = recoCandidates.getParticles();
 
-  while (recoLeptons.size() != 0) {
+  while (recoLeptons.size() != 0) 
+  {
     Lepton highestPtLepton = findHighestPtLepton(recoLeptons);
+    if(highestPtLepton.getPt()<= 5)
+    {
+      break;
+    }
+    else if(abs(highestPtLepton.getEta())>3)
+    {
+      recoLeptons.erase(std::find(recoLeptons.begin(), recoLeptons.end(), highestPtLepton));
+      continue;
+    }
     LeptonJet jet = createLeptonJet(highestPtLepton);
     std::vector<Particle> initialLeptons = jet.getParticles();
 
     auto highestPtLeptonFourVector = highestPtLepton.getFourVector();
     recoLeptons.erase(std::find(recoLeptons.begin(), recoLeptons.end(), highestPtLepton));
 
-    for (unsigned i = 0; i < recoLeptons.size(); ++i) {
+    for (unsigned i = 0; i < recoLeptons.size(); ++i)
+    {
       auto fourVector = recoLeptons[i].getFourVector();
       double deltaR = reco::deltaR(highestPtLeptonFourVector, fourVector);
       //std::cout << "delta r: " << deltaR << " delta r cut: " << DeltaRCut << "\n";
-      if (deltaR < DeltaRCut) {
+      //std::cout << "The value of Eta is "<< abs(recoLeptons[i].getEta()) <<std::endl;
+      if (deltaR < DeltaRCut && recoLeptons[i].getPt()>= 5 && abs(recoLeptons[i].getEta())<=3)
+      {
         jet.addParticle(recoLeptons[i]);
+        recoLeptons.erase(recoLeptons.begin() + i);
+        --i;
+      }
+      else if(deltaR < DeltaRCut)
+      {
         recoLeptons.erase(recoLeptons.begin() + i);
         --i;
       }
