@@ -35,6 +35,7 @@ private:
     int quark = 0;
     int proton = 0;
     int genLeptons = 0;
+    int darkPhotonOrigin = 0;
 };
 
 #endif
