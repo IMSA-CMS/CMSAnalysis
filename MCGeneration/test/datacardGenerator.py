@@ -21,90 +21,69 @@ processParameters += "\n\t\t),\n" # processParameters can now replace the declar
 
 # just muon
 for i in range(500, 1501, 100): #mass range 500 to 1500 with increments of 100
-    shutil.copy('higgsDatacards/template.py', f'higgsDatacards/higgsToMuon/pythiaFragmentDoublyChargedHiggsMass{i}.py')
+    newFile = f'higgsDatacards/higgsToMuon/pythiaFragmentDoublyChargedHiggsMass{i}.py'
+    shutil.copy('higgsDatacards/template.py', newFile)
 
-    newf = open(f'higgsDatacards/higgsToMuon/pythiaFragmentDoublyChargedHiggsMass{i}.py', 'r')
-
+    newf = open(newFile, 'r')
     data = newf.readlines()
-
     newf.close()
 
     data[14] = processParameters
 
-    newf = open(f'higgsDatacards/higgsToMuon/pythiaFragmentDoublyChargedHiggsMass{i}.py', 'w')
-
+    newf = open(newFile, 'w')
     newf.writelines(data)
-
     newf.close()
 
-    newf = open(f'higgsDatacards/higgsToMuon/pythiaFragmentDoublyChargedHiggsMass{i}.py', 'r')
-
+    newf = open(newFile, 'r')
     data = newf.readlines()
-
     data[26] = f"\t\t\t'9900041:m0 = {i}'\n"
-
     newf.close()
 
-    newf = open(f'higgsDatacards/higgsToMuon/pythiaFragmentDoublyChargedHiggsMass{i}.py', 'w')
-
+    newf = open(newFile, 'w')
     newf.writelines(data)
 
 #just electron
 # for i in range(500, 1501, 100):
-#     shutil.copy('higgsDatacards/template.py', f'higgsDatacards/higgsToElectron/pythiaFragmentDoublyChargedHiggsMass{i}.py')
+#     newFile = f'higgsDatacards/higgsToElectron/pythiaFragmentDoublyChargedHiggsMass{i}.py'
+#     shutil.copy('higgsDatacards/template.py', newFile)
 
-#     newf = open(f'higgsDatacards/higgsToElectron/pythiaFragmentDoublyChargedHiggsMass{i}.py', 'r')
-
+#     newf = open(newFile, 'r')
 #     data = newf.readlines()
-
 #     newf.close()
 
 #     data[14] = processParameters
 
-#     newf = open(f'higgsDatacards/higgsToElectron/pythiaFragmentDoublyChargedHiggsMass{i}.py', 'w')
-
+#     newf = open(newFile, 'w')
 #     newf.writelines(data)
-
 #     newf.close()
 
-#     newf = open(f'higgsDatacards/higgsToElectron/pythiaFragmentDoublyChargedHiggsMass{i}.py', 'r')
-
+#     newf = open(newFile, 'r')
 #     data = newf.readlines()
-
 #     data[26] = f"\t\t\t'9900041:m0 = {i}'\n"
-
 #     newf.close()
 
-#     newf = open(f'higgsDatacards/higgsToElectron/pythiaFragmentDoublyChargedHiggsMass{i}.py', 'w')
-
+#     newf = open(newFile, 'w')
 #     newf.writelines(data)
 
-#muon and electron
+# muon and electron
 # for i in range(500, 1501, 100):
-#     shutil.copy('higgsDatacards/template.py', f'higgsDatacards/higgsToMuonElectron/pythiaFragmentDoublyChargedHiggsMass{i}.py')
+#     newFile = f'higgsDatacards/higgsToMuonElectron/pythiaFragmentDoublyChargedHiggsMass{i}.py'
+#     shutil.copy('higgsDatacards/template.py', newFile)
 
-#     newf = open(f'higgsDatacards/higgsToMuonElectron/pythiaFragmentDoublyChargedHiggsMass{i}.py', 'r')
-
+#     newf = open(newFile, 'r')
 #     data = newf.readlines()
-
 #     newf.close()
 
 #     data[14] = processParameters
 
-#     newf = open(f'higgsDatacards/higgsToMuonElectron/pythiaFragmentDoublyChargedHiggsMass{i}.py', 'w')
-
+#     newf = open(newFile, 'w')
 #     newf.writelines(data)
-
 #     newf.close()
 
-#     newf = open(f'higgsDatacards/higgsToMuonElectron/pythiaFragmentDoublyChargedHiggsMass{i}.py', 'r')
-
+#     newf = open(newFile, 'r')
 #     data = newf.readlines()
-
 #     data[26] = f"\t\t\t'9900041:m0 = {i}'\n"
-
 #     newf.close()
 
-#     newf = open(f'higgsDatacards/higgsToMuonElectron/pythiaFragmentDoublyChargedHiggsMass{i}.py', 'w')
-
+#     newf = open(newFile, 'w')
 #     newf.writelines(data)

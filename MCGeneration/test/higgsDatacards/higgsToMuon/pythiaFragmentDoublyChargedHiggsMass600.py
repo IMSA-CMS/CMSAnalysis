@@ -23,9 +23,8 @@ generator = cms.EDFilter("Pythia8GeneratorFilter",
 			'LeftRightSymmmetry:coupHtaue = 0.1',
 			'LeftRightSymmmetry:coupHtaumu = 0.1',
 			'LeftRightSymmmetry:coupHtautau = 0.1',
-			'',
+			'LeftRightSymmmetry:vL = 0',
 			'9900041:m0 = 600'
-			'9900041:m0 = 500'
 		),
         parameterSets = cms.vstring('pythia8CommonSettings',
             'pythia8CP5Settings',

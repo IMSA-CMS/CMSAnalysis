@@ -1,9 +1,9 @@
 # Decays for doubly charged higgs
 9900041:onMode = off
 #Turn on in order to only have Muons
-9900041:onIfAll = 13 13
+#9900041:onIfAll = 13 13
 #Turn on in order to only have Electrons
-#9900041:onIfAll = 11 11
+9900041:onIfAll = 11 11
 #Turn on in order to have one Electron and one Muon
 #9900041:onIfAll = 11 13
 
@@ -28,7 +28,7 @@ LeftRightSymmmetry:coupHmumu = 0.1
 LeftRightSymmmetry:coupHtaue = 0.1
 LeftRightSymmmetry:coupHtaumu = 0.1
 LeftRightSymmmetry:coupHtautau = 0.1
-                        
+
 # W Fusion decay
 #Vacuum Expectation in GeV default is 5
 LeftRightSymmmetry:vL = 0 
