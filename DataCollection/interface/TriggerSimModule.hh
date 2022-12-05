@@ -71,8 +71,8 @@ private:
         ""} },
     { EnumTriggers::singleElectronTriggers, {
         "HLT_Ele300_CaloIdVT_GsfTrkIdT",
-        "",
-        "",
+        "HLT_Ele250_CaloIdVT_GsfTrkIdT",
+        "HLT_Ele15_IsoVVVL_PFHT600",
         ""} },
     { EnumTriggers::doubleElectronTriggers, {
         "",
