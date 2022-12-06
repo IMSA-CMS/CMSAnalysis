@@ -66,7 +66,7 @@ class NanoAODEventFile : public EventFile
         mutable TTreeReaderArray<Float_t> jet_phi;
         mutable TTreeReaderArray<Float_t> jet_mass;
         mutable TTreeReaderArray<Float_t> jet_pt;
-        mutable TTreeReaderArray<Int_t> bJet; 
+        mutable TTreeReaderArray<Int_t> jet_bTag;
 
         mutable TTreeReaderValue<UInt_t> gen_size;
         mutable TTreeReaderArray<Int_t> gen_pid;

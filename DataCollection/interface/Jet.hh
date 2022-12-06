@@ -11,6 +11,8 @@ class Jet : public Particle
     public:
         using Particle::Particle;
         Jet(const Particle &particle);
+
+        // bool isBJet();
 };
 #endif
 
