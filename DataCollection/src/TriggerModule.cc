@@ -26,7 +26,7 @@ bool TriggerModule::process()
 
     // Set passAnyTrigger to true once the event passes one trigger
     // Since passAnyTrigger is automatically false, if the event doesn't pass any triggers, passAnyTrigger remains false
-    if (passCurrentTrigger)  // if (passCurrentTrigger == true)  
+    if (passCurrentTrigger)
     {
       passAnyTrigger = true;
       passSingleTrigger.push_back(true);
@@ -41,7 +41,7 @@ bool TriggerModule::process()
   if (overlap.find(passSingleTrigger) == overlap.end())
   {
     //if not in there, add vector to map, make value 1
-    overlap.insert({passSingleTrigger,1}); 
+    overlap.insert({passSingleTrigger, 1}); 
   }
   else
   {
@@ -49,7 +49,7 @@ bool TriggerModule::process()
     overlap[passSingleTrigger]++;
   }
 
-  // Increment the counters (passAny is incremented only if passAnyTrigger is true)
+  // Increment the counters
   if (passAnyTrigger)
   {
     ++passAny;
@@ -67,7 +67,7 @@ int TriggerModule::twoTriggerOverlap(int index1, int index2)
   int counter = 0;
   for (auto event : overlap)
   {
-    if (event.first[index1] == true || event.first[index2] == true)
+    if (event.first[index1] || event.first[index2])
     {
       counter += event.second;
     }
@@ -110,7 +110,7 @@ void TriggerModule::callTriggerCombo()
   }
 
   //find combinations for n-1 combos, where n is total num of triggers
-  for (int i = 1; i < total; ++i)
+  for (int i = 1; i < total + 1; ++i)
   {
     Utility::getAllCombinations(0, i, combination, nTriggers, trigCombos);
   }
@@ -118,7 +118,11 @@ void TriggerModule::callTriggerCombo()
 
 void TriggerModule::triggerCombinations(int offset, int nCombo, std::vector<int>& combination, std::vector<int>& nTriggers)
 {
-  
+  // nCombo: maximum number of *things* to be combined
+  // combination: vector that represents each possible combination; reset after every loop
+  // indices: indices of all of the things that combinations are being take on
+  // offset: which index to start on
+  // totalCombinations: vector of all of the combinations
   if (nCombo == 0)
   {
     trigCombos.push_back(combination);
@@ -148,12 +152,6 @@ void TriggerModule::findMostEfficientCombo(double efficiency, int nPass, std::ve
 
 void TriggerModule::finalize()
 {
-  //for (auto trigger : triggers)
-  //{
-  //  trigger->printTriggerResult();
-  //  std::cout << '\n';
-  //}
-
   std::cout << '\n';
 
   callTriggerCombo();
@@ -194,11 +192,6 @@ void TriggerModule::printComboEfficiency(int passCombo, std::vector<int> trigInd
 
 void TriggerModule::printOverallEfficiency()
 {
-  //std::cout << "Total event count: " << total << '\n';
-  //std::cout << "Number of events passing at least one trigger: " << passAny << '\n';
-  //std::cout << "Overall Efficiency: " << static_cast<double>(passAny) / total << '\n';
-
-
   std::cout << "Most efficient combination:" << '\n';
   for (size_t i = 0; i < highestEffCombo.size(); ++i)
   {
