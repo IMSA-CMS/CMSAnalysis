@@ -1,9 +1,3 @@
-Tune:pp 5
-Tune:ee 3
-PartonLevel:MPI = on
-PartonLevel:ISR = on
-PartonLevel:FSR = on
-            
 HiggsSM:all = on
 25:onMode = off
 25:m0 = 125
