@@ -20,7 +20,6 @@
 #include "CMSAnalysis/DataCollection/interface/RecoveredInvariantMassHist.hh"
 #include "CMSAnalysis/DataCollection/interface/SameSignInvariantMassHist.hh"
 #include "CMSAnalysis/DataCollection/interface/SingleMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/TriggerEfficiencyModule.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerModule.hh"
 #include "CMSAnalysis/DataCollection/interface/TripleMuonTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/TwoInvariantMassesHist.hh"
