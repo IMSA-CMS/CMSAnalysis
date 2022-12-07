@@ -8,10 +8,12 @@
 class LeptonJetReconstructionModule;
 class LeptonJetMatchingModule;
 
+//Responsible for calculating the efficiency of Lepton Jet Matching
 class LeptonJetEfficiency : public EfficiencyModule 
 {
 public:
     LeptonJetEfficiency(const std::shared_ptr<LeptonJetReconstructionModule> iLepRecoMod, const std::shared_ptr<LeptonJetMatchingModule> iLepMatchMod);
+    
     void finalize() override;
 
 protected:
