@@ -25,13 +25,14 @@ class Particle
     Particle(const reco::Candidate* iparticle); 
     Particle(const Particle& particle1);
     Particle(const LeptonJet* iparticle);
-    //Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, double relIso = -999, Particle::SelectionFit fit = Particle::SelectionFit::Tight);
     
     Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, Particle::SelectionFit fit = Particle::SelectionFit::Tight);
     Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int pid, int status, int m1, int m2,int d1, int d2);
     Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, const Particle* motherParticle, std::vector<const GenSimParticle*> daughters, const int status);
 
     static Particle nullParticle();
+
+    //you shouldn't need to use this but it's here anyway
     std::shared_ptr<ParticleImplementation> getParticleImplementation();
 
     // Accessors for particle properties
