@@ -6,11 +6,10 @@
 #include "DataFormats/PatCandidates/interface/Electron.h"
 #include "DataFormats/PatCandidates/interface/Photon.h"
 
-DelphesImplementation::DelphesImplementation(reco::Candidate::LorentzVector vec, int ch, const ParticleType& type,int pid, int status, int m1, int m2,int d1, int d2, double iIsolation ):
+DelphesImplementation::DelphesImplementation(reco::Candidate::LorentzVector vec, int ch, const ParticleType& type,int pid, int status, int m1, int m2,int d1, int d2):
 lorentzVec(vec), 
 particleCharge(ch),
 particleType(type),
-particleIsolation(iIsolation),
 particleID(pid),
 statusCode(status)
 {

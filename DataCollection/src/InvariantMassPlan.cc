@@ -20,8 +20,7 @@
 #include "CMSAnalysis/DataCollection/interface/SameSignInvariantMassFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/SimTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerSimModule.hh"
-#include "CMSAnalysis/DataCollection/interface/GenSimEventDumpModule.hh"
-#include "CMSAnalysis/DataCollection/interface/RecoEventDumpModule.hh"
+#include "CMSAnalysis/DataCollection/interface/EventDumpModule.hh"
 #include "CMSAnalysis/DataCollection/interface/RecoGenSimComparisonModule.hh"
 #include "CMSAnalysis/DataCollection/interface/EventModule.hh"
 #include "CMSAnalysis/DataCollection/interface/PileupFilter.hh"
@@ -75,8 +74,7 @@ void InvariantMassPlan::initialize()
   // analyzer.addProductionModule(trigSimMod);
 
   // analyzer.addFilterModule(triggerFilter);
-  auto recoDump = make_shared<RecoEventDumpModule>();
-  auto genSimDump = make_shared<GenSimEventDumpModule>();
+  auto eventDump = make_shared<EventDumpModule>(true,true);
   auto compMod = make_shared<RecoGenSimComparisonModule>();
   // Hopefully doesn't break // <- this is profound
   analyzer.addAnalysisModule(histMod);

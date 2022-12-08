@@ -13,8 +13,8 @@ public:
   virtual bool process() override;
   virtual void finalize() override;
   void addTrigger(std::shared_ptr<Trigger> trigger) {triggers.push_back(trigger);}
-  void printComboEfficiency(int passCombo, std::vector<int> trigIndices);
-  void printOverallEfficiency();
+  void printComboEfficiency(int passCombo, std::vector<int> trigIndices); //given a set of triggers, find the combined efficiency
+  void printOverallEfficiency(); //print out a summary of most efficient combination, total events, total events passing one trigger, and overall efficiency
 
 private:
   int twoTriggerOverlap(int index1, int index2);

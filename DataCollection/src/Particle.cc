@@ -15,15 +15,15 @@
 #include "CMSAnalysis/DataCollection/interface/GenSimSimpleImplementation.hh"
 #include "CMSAnalysis/DataCollection/interface/ParticleType.hh"
 
-// Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, double relIso, Particle::SelectionFit fit):
-// particle(std::make_shared<SimpleImplementation>(vec, charge, type, relIso, fit))
+// Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, Particle::SelectionFit fit):
+// particle(std::make_shared<SimpleImplementation>(vec, charge, type, fit))
 // {
 
 // }
 
 //added for dxy, dz
-Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, double relIso, Particle::SelectionFit fit, double dxy, double dz):
-particle(std::make_shared<SimpleImplementation>(vec, charge, type, relIso, fit, dxy, dz))
+Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, Particle::SelectionFit fit):
+particle(std::make_shared<SimpleImplementation>(vec, charge, type, fit))
 {
 }
 
@@ -38,8 +38,8 @@ particle(std::make_shared<LeptonJetImplementation>(iparticle))
 {
 }
 
-Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int pid, int status, int m1, int m2,int d1, int d2, double relIso):
-particle(std::make_shared<DelphesImplementation>(vec,charge,type,pid,status,m1,m2,d1,d2,relIso))
+Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int pid, int status, int m1, int m2,int d1, int d2):
+particle(std::make_shared<DelphesImplementation>(vec,charge,type,pid,status,m1,m2,d1,d2))
 {
 }
 
@@ -127,21 +127,33 @@ double Particle::getMass() const
   return particle->getFourVector().mass();
 }
 
+double Particle::getInfo(std::string mapKey) const
+{
+  checkIsNull();
+  return particle->getInfo(mapKey);
+}
+
+void Particle::addInfo(std::string mapKey, double value)
+{
+  checkIsNull();
+  return particle->addInfo(mapKey, value);
+}
+
 // double Particle::getIsolation() const
 // {
 //   checkIsNull();
 //   return particle->isolation();
 // }
 
-double Particle::getDxy() const
-{
-    return particle->dxy();
-}
+// double Particle::getDxy() const
+// {
+//     return particle->dxy();
+// }
 
-double Particle::getDz() const
-{
-  return particle->dz();
-}
+// double Particle::getDz() const
+// {
+//   return particle->dz();
+// }
 
 Particle::BarrelState Particle::getBarrelState() const
 {
@@ -296,4 +308,14 @@ double Particle::getDeltaR(Particle part) const
 std::shared_ptr<ParticleImplementation> Particle::getParticleImplementation() 
 {
   return particle;
+}
+std::ostream& operator<<(std::ostream& str, Particle part)
+{
+  str << "| " << std::setw(9) << part.getType().getpdgId() << "| ";
+  // Particle properties
+  str << std::setw(13) << part.getCharge() << "| " << std::setw(13) << part.getPt() << "| " << std::setw(13) << part.getEta() << "| " << std::setw(13) << part.getPhi() << "| ";
+
+  str << std::setw(13) << part.getEnergy() << "| " << std::setw(13) << part.getMass();
+
+  return str;
 }
