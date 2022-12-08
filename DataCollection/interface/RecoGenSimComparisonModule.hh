@@ -61,10 +61,12 @@ class RecoGenSimComparisonModule : public AnalysisModule
 	int elecFakePhotonCounter = 0;
 	int elecNoMatchCounter = 0;
 	int elecMismeasuredPtCounter = 0;
+	int elecAccurateCounter = 0;
 	int muonWrongChargeCounter = 0;
 	int muonFakePhotonCounter = 0;
 	int muonNoMatchCounter = 0;
 	int muonMismeasuredPtCounter = 0;
+	int muonAccurateCounter = 0;
 };
 
 
