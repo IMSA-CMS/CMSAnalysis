@@ -14,13 +14,13 @@ class Trigger
   public:
     Trigger(std::string iName);
     std::string getName() const {return name;}
-    bool checkEvent(const InputModule* input);                  // Calls checkTrigger() and increments pass and total
+    bool checkEvent(const InputModule* input);   // Calls checkTrigger() and increments pass and total
     double passRatio() const {return static_cast<double>(pass) / total;}
     void printTriggerResult();
     virtual ~Trigger() {};
 
   protected:
-    virtual bool checkTrigger(const InputModule* input) = 0;    // Returns true if the trigger is passed
+    virtual bool checkTrigger(const InputModule* input) = 0;   // Returns true if the trigger is passed
 
   private:
     const std::string name;

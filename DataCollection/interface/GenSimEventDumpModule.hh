@@ -7,8 +7,7 @@
 #include "ParticleCollection.hh"
 #include "GenSimParticle.hh"
 
-// 
-// of gen sim particles that will be used in MatchingModule 
+// Dumps the contents each event into a text file
 class GenSimEventDumpModule : public AnalysisModule
 {
 public:
@@ -19,13 +18,14 @@ public:
   virtual void writeAll() override;
 
 private:
-  // prints information to the screen
+  // prints information of a single event
   void printGenSimParticleCollection(const ParticleCollection<GenSimParticle>& genParts, std::ofstream& my_file) const;
 
   int getIndexOf(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts) const;
-  int getLatestIndexOfDaughters(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts) const;
+
   std::string formatDaughterParticles(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts) const;
-    std::string formatMotherParticle(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts) const;
+
+  std::string formatMotherParticle(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts) const;
 
   int numOfEvents;
   int counter;
