@@ -25,6 +25,7 @@
 #include "CMSAnalysis/DataCollection/interface/RecoGenSimComparisonModule.hh"
 #include "CMSAnalysis/DataCollection/interface/EventModule.hh"
 #include "CMSAnalysis/DataCollection/interface/PileupFilter.hh"
+#include "CMSAnalysis/DataCollection/interface/LeptonFilter.hh"
 
 using std::make_shared;
 
@@ -35,7 +36,7 @@ void InvariantMassPlan::initialize()
   // Create necessary histogram(s), as well as histMod
   auto histMod = make_shared<HistogramOutputModule>();
   auto invMassHist = make_shared<InvariantMassHist>(InputModule::RecoLevel::Reco, "invariant_Mass", 100, 0, 1000);
-  auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "same_Sign_Invariant_Mass", 300, 500, 1000);
+  auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "same_Sign_Invariant_Mass", 300, 1, 1000);
 
   auto pileUpHist = make_shared<PileUpHist>("Pile Up Hist", 300, 0, 100);
   // Create necessary module(s) for the filter(s)
@@ -48,6 +49,7 @@ void InvariantMassPlan::initialize()
 
   auto ssInvMassFilter = make_shared<SameSignInvariantMassFilter>(500);
   auto pileUpFilter = make_shared<PileupFilter>(40,40);
+  auto lepFilter = make_shared<LeptonFilter>(ParticleType::muon(), 4, "Muon64");
 
   // Add the filter module(s) to the histogram(s) created above
   // invMassHist->addFilter(nLeptonsFilter);
@@ -57,9 +59,12 @@ void InvariantMassPlan::initialize()
   // invMassHist->addFilter(triggerFilter);
 
   invMassHist->addFilter(ssInvMassFilter);
+  invMassHist->addFilter(lepFilter);
   sameSignInvMassHist->addFilter(ssInvMassFilter);
   sameSignInvMassHist->addFilter(pileUpFilter);
+  sameSignInvMassHist->addFilter(lepFilter);
   pileUpHist->addFilter(ssInvMassFilter);
+  pileUpHist->addFilter(lepFilter);
 
   // Add the histogram(s) created above to histMod
   histMod->addHistogram(invMassHist);

@@ -18,5 +18,5 @@ std::string LeptonFilter::makeFilterString()
             ++particleCount;
         }
     }
-    return particleCount >= nParticles ? outputString : "";
+    return particleCount >= nParticles ? outputString : "Electron";
 };
