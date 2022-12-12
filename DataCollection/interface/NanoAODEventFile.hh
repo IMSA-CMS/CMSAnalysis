@@ -85,6 +85,8 @@ class NanoAODEventFile : public EventFile
         mutable TTreeReaderArray<Bool_t> muon_looseid;
         mutable TTreeReaderArray<Bool_t> muon_mediumid;
         mutable TTreeReaderArray<Bool_t> muon_tightid;
+
+        mutable TTreeReaderValue<ULong64_t> event_number;
         
         mutable std::unordered_map<std::string, TTreeReaderValue<Bool_t>> triggers;
 
