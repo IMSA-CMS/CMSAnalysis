@@ -93,7 +93,8 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     elec_idpass(treeReader, "Electron_cutBased"),
     muon_looseid(treeReader, "Muon_looseId"),
     muon_mediumid(treeReader, "Muon_mediumId"),
-    muon_tightid(treeReader, "Muon_tightId")
+    muon_tightid(treeReader, "Muon_tightId"),
+    event_number(treeReader, "event")
     {
     std::ifstream triggerNameFile("betterValidTriggers.txt");
     tree = getFile()->Get<TTree>("Events");
@@ -122,28 +123,33 @@ void NanoAODEventFile::nextEvent()
     treeReader.Next();
     setEventCount(getEventCount() + 1);
 
-    genSimParticles.clear();
-    genSimParticles.reserve(*gen_size);
+    // std::cout << 'event number' << *event_number << std::endl;
 
-    for (unsigned i = 0; i < *gen_size; i++)
+    if (gen_size.IsValid())
     {
-        int charge = -1;
-        if (gen_pid[i] < 0)
-        {
-            charge = 1;
-        }
-        if (gen_pid[i] == 21 || gen_pid[i] == 22)
-        {
-            charge = 0;
-        }
+        genSimParticles.clear();
+        genSimParticles.reserve(*gen_size);
 
-        std::vector<const GenSimParticle *> daughterCollectionVector{&genSimParticles[gen_d1[i]], &genSimParticles[gen_d2[i]]};
+        for (unsigned i = 0; i < *gen_size; i++)
+        {
+            int charge = -1;
+            if (gen_pid[i] < 0)
+            {
+                charge = 1;
+            }
+            if (gen_pid[i] == 21 || gen_pid[i] == 22)
+            {
+                charge = 0;
+            }
 
-        genSimParticles.push_back(GenSimParticle(
-            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i],
-                                                                        gen_eta[i], gen_phi[i], gen_mass[i])),
-            charge, Particle::identifyType(gen_pid[i]), &genSimParticles[gen_m1[i]],
-            daughterCollectionVector, gen_status[i]));
+            std::vector<const GenSimParticle *> daughterCollectionVector{&genSimParticles[gen_d1[i]], &genSimParticles[gen_d2[i]]};
+
+            genSimParticles.push_back(GenSimParticle(
+                reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i],
+                                                                            gen_eta[i], gen_phi[i], gen_mass[i])),
+                charge, Particle::identifyType(gen_pid[i]), &genSimParticles[gen_m1[i]],
+                daughterCollectionVector, gen_status[i]));
+        }
     }
 }
 
@@ -155,9 +161,9 @@ ParticleCollection<GenSimParticle> NanoAODEventFile::getGenSimParticles() const
 ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
 {
     ParticleCollection<Particle> recoParticles;
+    // std::cout << *elec_size << std::endl;
     for (UInt_t i = 0; i < *elec_size; i++)
     {
-
         // std::cout<<"elec_idpass "<<elec_idpass[i]<<std::endl;
         int charge = elec_charge[i];
 
@@ -186,6 +192,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
             charge, ParticleType::electron(), elec_reliso[i], fit, elec_dxy[i], elec_dz[i]));
     }
 
+    // std::cout << *muon_size << std::endl;
     for (UInt_t i = 0; i < *muon_size; i++)
     {
 
@@ -215,6 +222,8 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
                                                                         muon_eta[i], muon_phi[i], muon_mass[i])),
             charge, ParticleType::muon(), muon_reliso[i], fit, muon_dxy[i], muon_dz[i]));
     }
+
+    // std::cout << *photon_size << std::endl;
 
     for (UInt_t i = 0; i < *photon_size; i++) //what do i even put here
     {

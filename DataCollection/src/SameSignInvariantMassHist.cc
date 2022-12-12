@@ -23,8 +23,10 @@ std::vector<double> SameSignInvariantMassHist::protectedValue(InputModule::RecoL
   else 
   {
     auto particles = getInput()->getLeptons(typeGenSim);
+    // std::cout << particles.getNumParticles() << std::endl;
     // std::cout << "4-" << particles.calculateSameSignInvariantMass() << std::endl;
     auto inv = particles.calculateSameSignInvariantMass();
+    // std::cout << inv << std::endl;
     return {inv};
   }
 }
