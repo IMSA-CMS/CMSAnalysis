@@ -158,8 +158,9 @@ class DxyHist : public GenSimRecoPrototype
     auto particles = getInput()->getLeptons(level);
     std::vector<double> dxy;
     for(auto particle : particles.getParticles()) {
-        if(particle.getDxy() != 0) {
-	    dxy.push_back(particle.getDxy());
+      double particleDxy = particle.getInfo("dxy");
+      if(particleDxy != 0) {
+	      dxy.push_back(particleDxy);
     	}
     }
     return dxy;
@@ -175,8 +176,9 @@ class DzHist : public GenSimRecoPrototype
     auto particles = getInput()->getLeptons(level);
     std::vector<double> dz;
     for(auto particle : particles.getParticles()) {
-        if(particle.getDz() != 0) {
-	    dz.push_back(particle.getDz());
+      double particleDz = particle.getInfo("dz");
+      if(particleDz != 0) {
+	      dz.push_back(particleDz);
     	}
     }
     return dz;

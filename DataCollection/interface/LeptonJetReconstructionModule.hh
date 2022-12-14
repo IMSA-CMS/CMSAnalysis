@@ -13,6 +13,7 @@ public:
   const std::vector<LeptonJet>& getLeptonJets() const {return leptonJets;}
   const std::vector<double>& getDeltaRValues() const {return deltaRValues;}
   const std::vector<double>& getPtValues() const {return pTValues;}
+  const std::vector<LeptonJet> findLeptonJets(ParticleCollection<Lepton> recoCandidates);
 
 private:
   LeptonJet createLeptonJet(Lepton highestPtLepton) const;
