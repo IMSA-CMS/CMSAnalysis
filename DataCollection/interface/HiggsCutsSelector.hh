@@ -1,5 +1,5 @@
-#ifndef FOURLEPTONSELECTOR_HH
-#define FOURLEPTONSELECTOR_HH
+#ifndef HIGGSCUTSSELECTOR_HH
+#define HIGGSCUTSSELECTOR_HH
 #include <vector>
 #include <string>
 
@@ -7,10 +7,10 @@
 
 //To implement a selector, add it to an EventModule in a DataCollectionPlan, then add the histograms to that EventModule's EventHistogramModule
 
-class FourLeptonSelector : public Selector
+class HiggsCutsSelector : public Selector
 {
     public:
-        FourLeptonSelector() {}
+        HiggsCutsSelector() {}
         void selectParticles(const InputModule* input, Event& event) override;
 };
 

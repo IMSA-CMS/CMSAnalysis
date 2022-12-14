@@ -193,10 +193,10 @@ inline double ParticleCollection<T>::getLeadingPt() const
     double pt = particle.getPt();
     if (pt > highestPt)
     {
-      pt = highestPt;
+      highestPt = pt;
     }
   }
-
+  
   return highestPt;
 }
 
