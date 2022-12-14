@@ -1,22 +1,37 @@
-                         : Booking "MLP" of type "MLP" from dataset/weights/TMVAClassification_MLP.weights.xml.
-                         : Reading weight file: dataset/weights/TMVAClassification_MLP.weights.xml
-<HEADER> DataSetInfo              : [Default] : Added class "Signal"
-<HEADER> DataSetInfo              : [Default] : Added class "Background"
-<HEADER> MLP                      : Building Network. 
-                         : Initializing weights
-                         : Booked classifier "MLP" of type: "MLP"
-Reading input file textfiles/SingleMassSnowmass/DY/DYPick10.txt
-Drell-Yan
-Filename: textfiles/Drell-Yan/Drell-Yan_MassCut_10-50_Run_HLLHC.txt
-# of root files: 5401
-Initializing in FileStrip!
-Error in <TNetXNGFile::Open>: [ERROR] Server responded with an error: [3011] No servers are available to read the file.
+HLT_Ele15_IsoVVVL_PFHT600 : Passed 156566 : Total 200000 : Passed/Total 0.78283
+HLT_Ele300_CaloIdVT_GsfTrkIdT : Passed 129730 : Total 200000 : Passed/Total 0.64865
+HLT_Ele50_CaloIdVT_GsfTrkIdT_PFJet165 : Passed 159336 : Total 200000 : Passed/Total 0.79668
+HLT_Mu15_IsoVVVL_PFHT600 : Passed 148536 : Total 200000 : Passed/Total 0.74268
 
-File root://cmsxrootd.fnal.gov///store/user/snowmass/Snowmass2021/DelphesNtuplizer/DYJetsToLL_M-10to50_TuneCUEP8M2T4_14TeV-madgraphMLM-pythia8_200PU/DYJetsToLL_M-10to50_TuneCUEP8M2T4_14TeV-madgraphMLM-pythia8_ntuple_9_0.root_ntuple not found!
-Events Processed: 100517388
-Processing complete!
-Output written to process.root
-Reading input file textfiles/DY50Run2.txt
-Drell-Yan
-Filename: textfiles/Drell-Yan/Drell-Yan_MassCut_50-inf_Run_2.txt
-# of root files: 113
+Triggers combined:
+singleElectron
+singleMuon
+Total event count: 200000
+Number of events passing at least one trigger: 190036
+Overall Efficiency: 0.95018
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+HLT_Ele15_IsoVVVL_PFHT600 : Passed 156566 : Total 200000 : Passed/Total 0.78283
+HLT_Ele300_CaloIdVT_GsfTrkIdT : Passed 129730 : Total 200000 : Passed/Total 0.64865
+HLT_Mu15_IsoVVVL_PFHT600 : Passed 148536 : Total 200000 : Passed/Total 0.74268
+
+Triggers combined:
+singleElectron
+singleMuon
+Total event count: 200000
+Number of events passing at least one trigger: 188547
+Overall Efficiency: 0.942735
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+HLT_Ele15_IsoVVVL_PFHT600 : Passed 156566 : Total 200000 : Passed/Total 0.78283
+HLT_Ele250_CaloIdVT_GsfTrkIdT : Passed 137759 : Total 200000 : Passed/Total 0.688795
+HLT_Ele300_CaloIdVT_GsfTrkIdT : Passed 129730 : Total 200000 : Passed/Total 0.64865
+HLT_Mu15_IsoVVVL_PFHT600 : Passed 148536 : Total 200000 : Passed/Total 0.74268
+
+Triggers combined:
+singleElectron
+singleMuon
+Total event count: 200000
+Number of events passing at least one trigger: 188678
+Overall Efficiency: 0.94339
+

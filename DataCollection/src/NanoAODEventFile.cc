@@ -64,6 +64,10 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     muon_reliso(treeReader, "Muon_miniPFRelIso_all"),
     muon_dxy(treeReader, "Muon_dxy"),
     muon_dz(treeReader, "Muon_dz"),
+    photon_size(treeReader, "nPhoton"),
+    photon_eta(treeReader, "Photon_eta"),
+    photon_phi(treeReader, "Photon_phi"),
+    photon_pt(treeReader, "Photon_pt"),
     //met_size(treeReader, branchNames.metSize.c_str()),
     met_phi(treeReader, "MET_phi"),
     met_pt(treeReader, "MET_pt"),
@@ -72,6 +76,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     jet_phi(treeReader, "Jet_phi"),
     jet_mass(treeReader, "Jet_mass"),
     jet_pt(treeReader, "Jet_pt"),
+    jet_bTag(treeReader, "Jet_btagCMVA"),
     //bJet(treeReader, branchNames.bJet.c_str()),
     gen_size(treeReader, "nGenPart"),
     gen_pid(treeReader, "GenPart_pdgId"),
@@ -89,7 +94,6 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     muon_looseid(treeReader, "Muon_looseId"), //"Muon_highPurity")
     muon_mediumid(treeReader, "Muon_mediumId"), 
     muon_tightid(treeReader, "Muon_tightId")
-    
     {
     std::ifstream triggerNameFile("betterValidTriggers.txt");
     tree = getFile()->Get<TTree>("Events");
@@ -173,10 +177,14 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
 
 
         // Lorentz four-vector
-        recoParticles.addParticle(Particle(
+        auto particle = Particle(
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],
                                                                         elec_eta[i], elec_phi[i], elec_mass[i])),
-            charge, ParticleType::electron(), elec_reliso[i], fit, elec_dxy[i], elec_dz[i]));
+            charge, ParticleType::electron(), fit);
+        particle.addInfo("Isolation", elec_reliso[i]);
+        particle.addInfo("dxy", elec_dxy[i]);
+        particle.addInfo("dz", elec_dz[i]);
+        recoParticles.addParticle(particle);
         
     }
     for (UInt_t i = 0; i < *muon_size; i++)
@@ -199,11 +207,25 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         }
 
         // Lorentz four-vector
-        recoParticles.addParticle(Particle(
+        auto particle = Particle(
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],
                                                                         muon_eta[i], muon_phi[i], muon_mass[i])),
-            charge, ParticleType::muon(), muon_reliso[i], fit, muon_dxy[i], muon_dz[i]));
-        
+            charge, ParticleType::muon(), fit);
+        particle.addInfo("Isolation", muon_reliso[i]);
+        particle.addInfo("dxy", muon_dxy[i]);
+        particle.addInfo("dz", muon_dz[i]);
+        recoParticles.addParticle(particle);
+
+        for (UInt_t i = 0; i < *photon_size; i++)
+        {
+            Particle::SelectionFit fit;
+
+            auto particle = Particle(
+            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(photon_pt[i],
+                                                                        photon_eta[i], photon_phi[i], 0)),
+            0, ParticleType::photon(), fit);
+            recoParticles.addParticle(particle);
+        }
     }
     return recoParticles;
 }

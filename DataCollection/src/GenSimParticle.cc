@@ -174,7 +174,7 @@ std::ostream& operator<<(std::ostream& str, const std::pair<GenSimParticle, std:
   str << std::setw(18) << EventDumpModule::formatDaughterParticles(part, genParts) << "| ";
     // Particle properties
   str << std::setw(13) << part.getPt() << "| " << std::setw(13) << part.getEta() << "| " << std::setw(13) << part.getPhi() << "| ";
-  str << std::setw(13) << part.getEnergy() << "| " << std::setw(13) << part.getMass() << "\n";
+  str << std::setw(13) << part.getEnergy() << "| " << std::setw(13) << part.getMass();
   return str;
 }
 
@@ -189,7 +189,7 @@ std::ostream& operator<<(std::ostream& str, const GenSimParticle part)
   str << std::setw(18) << "" << "| ";
     // Particle properties
   str << std::setw(13) << part.getPt() << "| " << std::setw(13) << part.getEta() << "| " << std::setw(13) << part.getPhi() << "| ";
-  str << std::setw(13) << part.getEnergy() << "| " << std::setw(13) << part.getMass() << "\n";
+  str << std::setw(13) << part.getEnergy() << "| " << std::setw(13) << part.getMass();
   return str;
 }
 
