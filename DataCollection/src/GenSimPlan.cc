@@ -45,13 +45,14 @@ GenSimPlan::GenSimPlan()
     auto dpSelector = make_shared<DarkPhotonGenSimSelector>();
     auto hppSelector = make_shared<HPlusPlusGenSimSelector>();
     auto metMod = make_shared<METModule>();
-
+    auto gammahist = make_shared<GammaHistogram>("Gamma", 100, 0, 1000);
     
     auto histMod = make_shared<HistogramOutputModule>();
     auto metHist = make_shared<METHist>(metMod, "MET", 500, 0, 1000);
 
     histMod->addHistogram(metHist);
     histMod->addHistogram(deltaR);
+    histMod->addHistogram(gammahist);
 
     // eventMod->addSelector(dpSelector);
     //eventMod->addSelector(hppSelector);

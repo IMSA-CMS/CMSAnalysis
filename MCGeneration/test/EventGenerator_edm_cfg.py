@@ -65,6 +65,9 @@ if options.dpMass > 0:
 outputFileName = options.output
 if outputFileName == "0":
     outputFileName = input("Please enter an output file name: \n(Format: \"fileName.root\")\n") 
+
+for i in range(0, len(importedPythiaSettings)):
+    importedPythiaSettings[i] = importedPythiaSettings[i].replace("^mass^", str(options.dpMass))
     
 # Pythia definitions
 from Configuration.Generator.Pythia8CommonSettings_cfi import *
