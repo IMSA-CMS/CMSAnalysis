@@ -24,14 +24,15 @@ class Particle
     // Constructors
     Particle(const reco::Candidate* iparticle); 
     Particle(const Particle& particle1);
-    Particle(const LeptonJet& leptonjet);
     Particle(const LeptonJet* iparticle);
-
-    Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, double relIso = -999, Particle::SelectionFit fit = Particle::SelectionFit::Tight, double dxy = 0, double dz = 0);  
-    Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int pid, int status, int m1, int m2,int d1, int d2, double relIso);
+    
+    Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, Particle::SelectionFit fit = Particle::SelectionFit::Tight);
+    Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int pid, int status, int m1, int m2,int d1, int d2);
     Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, const Particle* motherParticle, std::vector<const GenSimParticle*> daughters, const int status);
 
     static Particle nullParticle();
+
+    //you shouldn't need to use this but it's here anyway
     std::shared_ptr<ParticleImplementation> getParticleImplementation();
 
     // Accessors for particle properties
@@ -55,9 +56,9 @@ class Particle
 
     // More accessors for particle properties
     double getDeltaR(Particle particle) const;
+    double getInfo(std::string) const;
+    void addInfo(std::string, double);
     int getCharge() const;
-    double getDxy() const;
-    double getDz() const;
     Particle::BarrelState getBarrelState() const;
     reco::Candidate::LorentzVector getFourVector() const;
     const ParticleType& getType() const;

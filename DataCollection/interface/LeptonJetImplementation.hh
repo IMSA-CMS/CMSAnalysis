@@ -23,13 +23,13 @@ class LeptonJetImplementation : public ParticleImplementation
   virtual reco::Candidate::LorentzVector getFourVector() const override;
   virtual bool operator == (const ParticleImplementation& userParticle) const override;
   virtual int charge() const override {throw std::__throw_runtime_error;}
-  virtual double isolation() const override {throw std::runtime_error("Isolation not implemented.");}
+  //virtual double isolation() const override {throw std::runtime_error("Isolation not implemented.");}
   double getPt() const {return getFourVector().Pt();}
   double getPhi() const {return getFourVector().Phi();}
   double getEta() const {return getFourVector().Eta();}
   double getMass() const {return getFourVector().mass();}
-  virtual double dxy() const {throw std::runtime_error("getDxy not implemented");}
-  virtual double dz() const {throw std::runtime_error("getDxy not implemented");}
+  //virtual double dxy() const {throw std::runtime_error("getDxy not implemented");}
+  //virtual double dz() const {throw std::runtime_error("getDxy not implemented");}
   const std::vector<Particle>& getParticles() const {return leptonJetParticles;}
   void addParticle(const Particle particle) {leptonJetParticles.push_back(particle);}
   int getNumParticles() const {return leptonJetParticles.size();}
