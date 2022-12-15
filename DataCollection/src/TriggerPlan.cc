@@ -9,41 +9,44 @@
 #include "CMSAnalysis/DataCollection/interface/SimTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerModule.hh"
 #include "CMSAnalysis/DataCollection/interface/RecoTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/GenSimEventDumpModule.hh"
-#include "CMSAnalysis/DataCollection/interface/RecoEventDumpModule.hh"
+#include "CMSAnalysis/DataCollection/interface/EventDumpModule.hh"
 #include "CMSAnalysis/DataCollection/interface/SingleMuonTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/SingleElectronTrigger.hh"
 
 using std::make_shared;
 
-TriggerPlan::TriggerPlan()
+void TriggerPlan::initialize()
 {
   Analyzer& analyzer = getAnalyzer();
 
   // Create objects
   auto trigSimMod = make_shared<TriggerSimModule>("HLT");
-  auto simTrigd = make_shared<SimTrigger>("doubleElectron", TriggerSimModule::EnumTriggers::doubleElectronTriggers, trigSimMod);
-  auto simTrigs = make_shared<SimTrigger>("singleMuon", TriggerSimModule::EnumTriggers::singleMuonTriggers, trigSimMod);
-  auto testTrig = make_shared<SingleElectronTrigger>();
+  auto simTrigSingleElectron = make_shared<SimTrigger>("singleElectron", TriggerSimModule::EnumTriggers::singleElectronTriggers, trigSimMod);
+  auto simTrigSingleMuon = make_shared<SimTrigger>("singleMuon", TriggerSimModule::EnumTriggers::singleMuonTriggers, trigSimMod);
+  // auto simTrigPhoton = make_shared<SimTrigger>("photon", TriggerSimModule::EnumTriggers::photonTriggers, trigSimMod);
+  // auto testTrig = make_shared<SingleElectronTrigger>();
   auto triggerMod = make_shared<TriggerModule>();
 
 
-  auto genSimEventDumpMod = make_shared<GenSimEventDumpModule>();
-  auto recoDumpMod = make_shared<RecoEventDumpModule>();
+  auto EventDumpMod = make_shared<EventDumpModule>(true,true);
 
 
   // Configure objects
-  simTrigd->enableAllTriggers(); // For testing purposes. You should probably remove this, if I haven't already
-  simTrigs->enableAllTriggers();
-  triggerMod->addTrigger(simTrigd);
-  triggerMod->addTrigger(simTrigs);
-  triggerMod->addTrigger(testTrig);
+  // simTrigd->enableAllTriggers(); // For testing purposes. You should probably remove this, if I haven't already
+  // simTrigSingleElectron->enableAllTriggers();
+  // simTrigSingleMuon->enableAllTriggers();
+  // simTrigPhoton->enableAllTriggers();
+  triggerMod->addTrigger(simTrigSingleElectron);
+  triggerMod->addTrigger(simTrigSingleMuon);
+  // triggerMod->addTrigger(simTrigPhoton);
+
+  // triggerMod->addTrigger(testTrig);
 
   // Add objects to analyzer
   analyzer.addProductionModule(trigSimMod);
   analyzer.addProductionModule(triggerMod);
   // analyzer.addProductionModule(recoTriggerMod);
 
-  analyzer.addAnalysisModule(genSimEventDumpMod);
-  analyzer.addAnalysisModule(recoDumpMod);
+  // analyzer.addAnalysisModule(EventDumpMod);
+
 }

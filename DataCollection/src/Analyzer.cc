@@ -18,17 +18,16 @@
 #include "CMSAnalysis/DataCollection/interface/Module.hh"
 #include "CMSAnalysis/DataCollection/interface/TDisplayText.h"
 #include "CMSAnalysis/DataCollection/interface/ProcessDictionary.hh"
-#include "CMSAnalysis/DataCollection/interface/EventLoaderInputModule.hh"
+#include "CMSAnalysis/DataCollection/interface/AnalyzerInputModule.hh"
 
-Analyzer::Analyzer() : eventLoader(),
-                       input(new EventLoaderInputModule(&eventLoader))
+Analyzer::Analyzer() : 
+eventInterface(nullptr),
+input(new AnalyzerInputModule(eventInterface))
 {
-  dictionary.loadProcesses("textfiles/processes.txt");
 }
 
 Analyzer::Analyzer(const Analyzer &analyzer)
 {
-  eventLoader = analyzer.eventLoader;
   input = analyzer.input;
 }
 
@@ -37,129 +36,6 @@ Analyzer::~Analyzer()
   delete input;
 }
 
-void Analyzer::run(const std::string &configFile, const std::string &outputFile, int outputEvery, int nFiles)
-{
-  auto start = std::chrono::steady_clock::now();
-
-  fetchRootFiles(configFile);
-  processRootFiles(outputEvery, nFiles);
-  writeOutputFile(outputFile);
-
-  //Measures processing time
-  auto end = std::chrono::steady_clock::now();
-  std::chrono::duration<float> duration = end - start;
-  std::cout<<"Processing time: " << duration.count()<< " s"<<std::endl;
-}
-
-void Analyzer::fetchRootFiles(const std::string &configFile)
-{
-  auto substringFound = configFile.find(".root");
-  bool isLocalFile = substringFound != std::string::npos;
-  if (isLocalFile)
-  {
-    rootFiles.push_back(configFile);
-  }
-  else
-  {
-    auto fileparams = dictionary.readFile(configFile);
-    for (auto &filepar : fileparams)
-    {
-      // Get a list of Root files for each filpar object
-      auto tempFiles = filepar.getFileList();
-      rootFiles.insert(rootFiles.end(), tempFiles.begin(), tempFiles.end());
-    }
-    for (auto &fileName : rootFiles)
-    {
-      // Adds prefix necessary to read remote files
-      const std::string eossrc = "root://cmsxrootd.fnal.gov//";
-      fileName = eossrc + fileName;
-    }
-  }
-  std::cout << "# of root files: " << rootFiles.size() << std::endl;
-}
-
-void Analyzer::processRootFiles(int outputEvery, int nFiles)
-{
-  // This keeps the histograms separate from the files they came from, avoiding errors
-  TH1::AddDirectory(kFALSE);
-  TH1::SetDefaultSumw2(kTRUE);
-  // Get a list of FileParams objects
-  eventLoader.setOutputEvery(outputEvery);
-  // Initialize all modules
-  for (auto module : getAllModules())
-  {
-    module->setInput(input);
-    module->initialize();
-  }
-  // Loops through every file
-  int fileCounter = 0;
-  for (auto &fileName : rootFiles)
-  {
-    ++fileCounter;
-    TFile *file = TFile::Open(fileName.c_str(), "READ");
-    if (!file)
-    {
-      std::cout << "File " << fileName << " not found!\n";
-      continue;
-    }
-    eventLoader.changeFileFormat(file); // Makes a GenSimEventFile, DelphesEventFile or MiniAODFile shared pointer
-    // Loops through every event in the file
-    while (true)
-    {
-      if (eventLoader.getFile()->isDone())
-      {
-        numOfEvents += eventLoader.getFile()->getEventCount() - 1; //-1 is necessary to not count the last event which is invalid
-        break;
-      }
-      bool continueProcessing = true;
-      std::string filterString;
-      // Processes event through production modules
-      for (auto module : productionModules)
-      {
-        if (!module->processEvent())
-        {
-          continueProcessing = false;
-          break;
-        }
-      }
-      // Processes event through filter modules
-      for (auto module : filterModules)
-      {
-        if (!module->processEvent())
-        {
-          continueProcessing = false;
-          break;
-        }
-        else
-        {
-          filterString += module->getFilterString();
-        }
-      }
-      // Processes event through analysis modules
-      if (continueProcessing)
-      {
-        filterNames.insert(filterString);
-        for (auto module : analysisModules)
-        {
-          module->setFilterString(filterString);
-          if (!module->processEvent())
-          {
-            continueProcessing = false;
-            break;
-          }
-        }
-      }
-      eventLoader.getFile()->nextEvent();
-    }
-    delete file;
-    // Checks that the correct number of files are processed
-    if (nFiles != -1 && fileCounter >= nFiles)
-    {
-      break;
-    }
-  }
-  std::cout << "Events Processed: " << numOfEvents << std::endl;
-}
 
 void Analyzer::writeOutputFile(const std::string &outputFile)
 {
@@ -213,3 +89,62 @@ std::vector<std::shared_ptr<Module>> Analyzer::getAllModules() const
   }
   return modules;
 }
+
+void Analyzer::initialize()
+{
+  // This keeps the histograms separate from the files they came from, avoiding errors
+  TH1::AddDirectory(kFALSE);
+  TH1::SetDefaultSumw2(kTRUE);
+
+  // Initialize all modules
+  for (auto module : getAllModules())
+  {
+    module->setInput(input);
+    module->initialize();
+  }
+}
+
+void Analyzer::processOneEvent(const EventInterface *eInterface)
+{
+      //printModules();
+      eventInterface = eInterface;
+      bool continueProcessing = true;
+      std::string filterString;
+      // Processes event through production modules
+      for (auto module : productionModules)
+      {
+        if (!module->processEvent())
+        {
+          continueProcessing = false;
+          break;
+        }
+      }
+      // Processes event through filter modules
+      for (auto module : filterModules)
+      {
+        if (!module->processEvent())
+        {
+          continueProcessing = false;
+          break;
+        }
+        else
+        {
+          filterString += module->getFilterString();
+        }
+      }
+      // Processes event through analysis modules
+      if (continueProcessing)
+      {
+        filterNames.insert(filterString);
+        for (auto module : analysisModules)
+        {
+          module->setFilterString(filterString);
+          if (!module->processEvent())
+          {
+            continueProcessing = false;
+            break;
+          }
+        }
+      }
+}
+

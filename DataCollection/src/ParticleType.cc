@@ -57,7 +57,7 @@ SingleParticleHist ParticleType::getEtaHist()
 
 SingleParticleHist ParticleType::getDaughterDeltaRHist()
 {
-    return SingleParticleHist("Daughter DeltaR", 150, 0, 3, [](Particle particle)
+    return SingleParticleHist("Daughter Delta R", 150, 0, 3, [](Particle particle)
     {
         GenSimParticle genSimParticle = GenSimParticle(particle);
         if (genSimParticle.numberOfDaughters() == 2)
@@ -77,7 +77,7 @@ const ParticleType& ParticleType::electron()
 
 const ParticleType& ParticleType::muon()
 {
-    return registerType("Muon",13,std::vector<SingleParticleHist>{}); 
+    return registerType("Muon",13,std::vector<SingleParticleHist>{getPtHist(),getPhiHist(),getEtaHist()}); 
 }
 
 const ParticleType& ParticleType::jet()
@@ -117,7 +117,7 @@ const ParticleType& ParticleType::rightDoublyHiggs()
 
 const ParticleType& ParticleType::zBoson()
 {
-    return registerType("Z Boson",23,std::vector<SingleParticleHist>{}); 
+    return registerType("Z Boson",23,std::vector<SingleParticleHist>{getPtHist(),getPhiHist(),getEtaHist()}); 
 }
 
 const ParticleType& ParticleType::none()

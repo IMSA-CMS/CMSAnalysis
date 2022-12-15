@@ -7,12 +7,14 @@
 
 class DelphesImplementation : public ParticleImplementation
 {
+    // Allows GenSimEventDump to run Delphes Files
     public:
+        // Bbunch of getter methods, returning various information such as charge, ID, # of daughters, etc.
         virtual ~DelphesImplementation(){}
-        DelphesImplementation(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int pid, int status, int m1, int m2,int d1, int d2,double iIsolation = -999);
+        DelphesImplementation(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int pid, int status, int m1, int m2,int d1, int d2);
         virtual reco::Candidate::LorentzVector getFourVector() const override;
         virtual int charge() const override{return particleCharge;}
-        virtual double isolation() const override {return particleIsolation;}
+        
         virtual int pdgId() const override{return particleID;}
         virtual int status() const override{return statusCode;}
         virtual Particle mother() const override{throw std::runtime_error("mother() error");}
@@ -25,15 +27,12 @@ class DelphesImplementation : public ParticleImplementation
         virtual bool isNotNull() const override {return true;}
         virtual bool isFinalState() const override {return status()==1;}
         virtual bool operator== (const ParticleImplementation& other) const override;
-        // virtual Particle::BarrelState getBarrelState() const override {throw std::runtime_error("error");}
-        // virtual bool isIsolated() const  override{throw std::runtime_error("error");};
 
 
     private:
         reco::Candidate::LorentzVector lorentzVec;
         const int particleCharge;
         const ParticleType& particleType;
-        const double particleIsolation;
         const int particleID;
         const int statusCode;
         std::vector<int> mothersVec;

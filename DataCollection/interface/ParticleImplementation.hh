@@ -16,8 +16,8 @@ public:
   // explicit Particle(const reco::Candidate* iparticle);
   virtual int charge() const = 0;
   // virtual double eta() const = 0;
-  virtual double isolation() const = 0;
   virtual reco::Candidate::LorentzVector getFourVector() const = 0;
+
   virtual int pdgId() const = 0;
   virtual int status() const = 0;
   virtual Particle mother() const = 0;
@@ -26,14 +26,15 @@ public:
   virtual const ParticleType& getType() const = 0;
   virtual Particle::SelectionFit getSelectionFit() const = 0;
   virtual bool isNotNull() const = 0;
-  bool isIsolated() {throw std::runtime_error("error");};
   // virtual const reco::Candidate* getUnderlyingParticle() const = 0;
   virtual bool isFinalState() const = 0;
+  double getInfo(std::string) const;
+  void addInfo(std::string, double);
 
   virtual bool operator==(const ParticleImplementation& userJet) const =0;
 
- 
-
+ private:
+  std::unordered_map<std::string, double> infoMap;
 
 };
 

@@ -10,11 +10,12 @@ class SimpleImplementation : public ParticleImplementation
 {
     public:
         virtual ~SimpleImplementation(){}
-        SimpleImplementation(reco::Candidate::LorentzVector vec, int ch, const ParticleType& type, double iIsolation = -999, 
+        SimpleImplementation(reco::Candidate::LorentzVector vec, int ch, const ParticleType& type, 
             Particle::SelectionFit fit = Particle::SelectionFit::Tight);
+
         virtual reco::Candidate::LorentzVector getFourVector() const override;
         virtual int charge() const override;
-        virtual double isolation() const override {return particleIsolation;}
+
         virtual int pdgId() const override{throw std::runtime_error("pdgId() error");}
         virtual int status() const override{throw std::runtime_error("status() error");}
         virtual Particle mother() const override{throw std::runtime_error("mother() error");}
@@ -33,7 +34,6 @@ class SimpleImplementation : public ParticleImplementation
         reco::Candidate::LorentzVector lorentzVec;
         const int particleCharge;
         const ParticleType& particleType;
-        const double particleIsolation;
         Particle::SelectionFit selectionFit;
 };
 
