@@ -1,0 +1,37 @@
+HLT_Ele15_IsoVVVL_PFHT600 : Passed 156566 : Total 200000 : Passed/Total 0.78283
+HLT_Ele300_CaloIdVT_GsfTrkIdT : Passed 129730 : Total 200000 : Passed/Total 0.64865
+HLT_Ele50_CaloIdVT_GsfTrkIdT_PFJet165 : Passed 159336 : Total 200000 : Passed/Total 0.79668
+HLT_Mu15_IsoVVVL_PFHT600 : Passed 148536 : Total 200000 : Passed/Total 0.74268
+
+Triggers combined:
+singleElectron
+singleMuon
+Total event count: 200000
+Number of events passing at least one trigger: 190036
+Overall Efficiency: 0.95018
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+HLT_Ele15_IsoVVVL_PFHT600 : Passed 156566 : Total 200000 : Passed/Total 0.78283
+HLT_Ele300_CaloIdVT_GsfTrkIdT : Passed 129730 : Total 200000 : Passed/Total 0.64865
+HLT_Mu15_IsoVVVL_PFHT600 : Passed 148536 : Total 200000 : Passed/Total 0.74268
+
+Triggers combined:
+singleElectron
+singleMuon
+Total event count: 200000
+Number of events passing at least one trigger: 188547
+Overall Efficiency: 0.942735
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+HLT_Ele15_IsoVVVL_PFHT600 : Passed 156566 : Total 200000 : Passed/Total 0.78283
+HLT_Ele250_CaloIdVT_GsfTrkIdT : Passed 137759 : Total 200000 : Passed/Total 0.688795
+HLT_Ele300_CaloIdVT_GsfTrkIdT : Passed 129730 : Total 200000 : Passed/Total 0.64865
+HLT_Mu15_IsoVVVL_PFHT600 : Passed 148536 : Total 200000 : Passed/Total 0.74268
+
+Triggers combined:
+singleElectron
+singleMuon
+Total event count: 200000
+Number of events passing at least one trigger: 188678
+Overall Efficiency: 0.94339
+

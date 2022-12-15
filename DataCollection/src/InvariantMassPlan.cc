@@ -4,10 +4,8 @@
 #include <memory>
 
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
-
 #include "CMSAnalysis/DataCollection/interface/Histograms.hh"
 #include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
-
 //#include "CMSAnalysis/DataCollection/interface/GenSimIdentificationModule.hh"
 //#include "CMSAnalysis/DataCollection/interface/RecoIdentificationModule.hh"
 #include "CMSAnalysis/DataCollection/interface/MatchingModule.hh"
@@ -22,15 +20,14 @@
 #include "CMSAnalysis/DataCollection/interface/SameSignInvariantMassFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/SimTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerSimModule.hh"
-#include "CMSAnalysis/DataCollection/interface/GenSimEventDumpModule.hh"
-#include "CMSAnalysis/DataCollection/interface/RecoEventDumpModule.hh"
+#include "CMSAnalysis/DataCollection/interface/EventDumpModule.hh"
 #include "CMSAnalysis/DataCollection/interface/RecoGenSimComparisonModule.hh"
 #include "CMSAnalysis/DataCollection/interface/EventModule.hh"
 #include "CMSAnalysis/DataCollection/interface/PileupFilter.hh"
 
 using std::make_shared;
 
-InvariantMassPlan::InvariantMassPlan()
+void InvariantMassPlan::initialize() 
 {
   Analyzer& analyzer = getAnalyzer();
 
@@ -72,12 +69,11 @@ InvariantMassPlan::InvariantMassPlan()
   // analyzer.addProductionModule(trigSimMod);
 
   // analyzer.addFilterModule(triggerFilter);
-  auto recoDump = make_shared<RecoEventDumpModule>();
-  auto genSimDump = make_shared<GenSimEventDumpModule>();
+  auto eventDump = make_shared<EventDumpModule>(true,true);
   auto compMod = make_shared<RecoGenSimComparisonModule>();
   // Hopefully doesn't break // <- this is profound
   analyzer.addAnalysisModule(histMod);
   //analyzer.addAnalysisModule(recoDump);
-  //analyzer.addAnalysisModule(genSimDump);
+  // analyzer.addAnalysisModule(genSimDump);
   analyzer.addAnalysisModule(compMod);
 }

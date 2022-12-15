@@ -40,18 +40,22 @@ void DarkPhotonGenSimSelector::selectParticles(const InputModule* input, Event& 
             if (genSimParticle.numberOfDaughters() == 2 && genSimParticle.daughter(0).pdgId() != 4900002 && genSimParticle.daughter(1).pdgId() != 4900002)
             { //4900002 means no jet
                 event.addSpecialObject("Neutralino",genSimParticle);
-                for (const auto& part : checkJet(genSimParticle))
-                {
-                    if (part.getType() == ParticleType::electron())
-                    {
-                        event.addElectron(Electron(GenSimParticle(part).finalDaughter()));
-                    } 
-                    else if (part.getType() == ParticleType::muon())
-                    {
-                        event.addMuon(Muon(GenSimParticle(part).finalDaughter()));
-                    }
-                }
+                // for (const auto& part : checkJet(genSimParticle))
+                // {
+                //     if (part.getType() == ParticleType::electron())
+                //     {
+                //         event.addElectron(Electron(GenSimParticle(part).finalDaughter()));
+                //     } 
+                //     else if (part.getType() == ParticleType::muon())
+                //     {
+                //         event.addMuon(Muon(GenSimParticle(part).finalDaughter()));
+                //     }
+                // }
             }
+        }
+        if (abs(genSimParticle.pdgId() == 23) && genSimParticle == genSimParticle.finalDaughter()) //Z Boson
+        {
+            event.addSpecialObject("Zboson",genSimParticle);
         }
     }
 }

@@ -172,4 +172,41 @@ class IsolationHist : public GenSimRecoPrototype
   }
 };
 
+class DxyHist : public GenSimRecoPrototype
+{
+  using GenSimRecoPrototype::GenSimRecoPrototype;
+
+  std::vector<double> protectedValue(InputModule::RecoLevel level) const
+  {
+    auto particles = getInput()->getLeptons(level);
+    std::vector<double> dxy;
+    for(auto particle : particles.getParticles()) {
+      double particleDxy = particle.getInfo("dxy");
+      if(particleDxy != 0) {
+	      dxy.push_back(particleDxy);
+    	}
+    }
+    return dxy;
+  }
+};
+
+class DzHist : public GenSimRecoPrototype
+{
+  using GenSimRecoPrototype::GenSimRecoPrototype;
+
+  std::vector<double> protectedValue(InputModule::RecoLevel level) const
+  {
+    auto particles = getInput()->getLeptons(level);
+    std::vector<double> dz;
+    for(auto particle : particles.getParticles()) {
+      double particleDz = particle.getInfo("dz");
+      if(particleDz != 0) {
+	      dz.push_back(particleDz);
+    	}
+    }
+    return dz;
+  }
+};
+
+
 #endif

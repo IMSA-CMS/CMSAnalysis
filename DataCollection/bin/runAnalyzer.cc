@@ -25,6 +25,7 @@
 //#include "CMSAnalysis/DataCollection/bin/LeptonJetBackgroundAnalysis.cc"
 //#include "CMSAnalysis/DataCollection/bin/FilestripAnalysis.cc"
 
+
 int main(int argc, char **argv)
 {
   gROOT->SetBatch(true);
@@ -62,12 +63,10 @@ int main(int argc, char **argv)
 
   unsigned outputEvery = parser.integerValue("outputEvery");
 
-  /*
-    Selection of data collection plan has moved to command line argument "analysis"
-    The key for each Plan can now be found in AnalyzerOptions.cc
+  //   Selection of data collection plan has moved to command line argument "analysis"
+  //   The key for each Plan can now be found in AnalyzerOptions.cc
 
-    e.g. runAnalyzer input=input.txt output=output.root analysis=DisplacedVertex
-  */
+  //   e.g. runAnalyzer input=input.txt output=output.root analysis=DisplacedVertex
 
   std::string analysis = options.checkSelectedAnalysis(analysisType);
   std::cout << "Reading input file " << inputFile << std::endl;
@@ -76,13 +75,15 @@ int main(int argc, char **argv)
   // analysisPlans[analysisType]->runAnalyzer(inputFile, outputFile, outputEvery, numFiles);
 
   DataCollectionPlan *plan = options.getAnalysisPlans().at(analysis);
-  plan->runAnalyzer(inputFile, outputFile, outputEvery, numFiles);
+  plan->initialize();
+  plan->runEventLoader(inputFile, outputFile, outputEvery, numFiles);
 
-  /* HiggsBackgroundPlan plan;
-  plan.runAnalyzer(inputFile, outputFile, outputEvery, numFiles); // */
+  // HiggsBackgroundPlan plan;
+  // plan.runAnalyzer(inputFile, outputFile, outputEvery, numFiles);
 
   std::cout << "Processing complete!" << std::endl;
   std::cout << "Output written to " << outputFile << std::endl;
 
   return 0;
 }
+

@@ -1,59 +1,64 @@
 #include "CMSAnalysis/DataCollection/interface/GenSimRecoPrototype.hh"
 #include "DataFormats/Math/interface/deltaPhi.h"
 #include "CMSAnalysis/DataCollection/interface/PhotonsHist.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimParticle.hh"
+#include "CMSAnalysis/DataCollection/interface/ParticleCollection.hh"
+
 
 #include <vector>
 
 std::vector<double> PhotonsHist::protectedValue(InputModule::RecoLevel typeGenSim) const
 {
   // std::cerr << "photons hist " << EventLoader.use_count() << "\n";
-  if (typeGenSim == InputModule::RecoLevel::GenSim)          // typeGenSim == true, so we want the GenSim values
+  if (typeGenSim == InputModule::RecoLevel::GenSim)      // typeGenSim == true, so we want the GenSim values
   {
     ParticleCollection<GenSimParticle> finalPhotons;
     auto lepVector = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::photon()).getParticles();
     ParticleCollection<GenSimParticle> lepCollection;
-    for (auto lepton : lepVector){
+
+    for (auto lepton : lepVector)
+    {
       lepCollection.addParticle(GenSimParticle(lepton));
     }
+
     ParticleCollection<GenSimParticle> posSignLep = lepCollection.getPosParticles();
     ParticleCollection<GenSimParticle> oppSignLep = lepCollection.getNegParticles();
 
-   
-
     auto particleVectorPosSign = posSignLep.getParticles();
     auto particleVectorOppSign = oppSignLep.getParticles();
-   
+    
     auto tempPhotons = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::photon()).getParticles();
     std::vector<GenSimParticle> photons;
-    for (auto photon : tempPhotons){
+    for (auto photon : tempPhotons)
+    {
       photons.push_back(GenSimParticle(photon));
     }
    
-   for(auto current:photons){
+    for(auto current : photons)
+    {
       if(current.findMother(11).isNotNull() || current.findMother(-11).isNotNull() || current.findMother(13).isNotNull()|| current.findMother(-13).isNotNull())
       {
         finalPhotons.addParticle(current);
       }
     }
-  auto finalPhotonList = finalPhotons.getParticles();
 
-    for(auto currentParticle:finalPhotonList)
+    auto finalPhotonList = finalPhotons.getParticles();
+
+      // for(auto currentParticle : finalPhotonList)
+      // {
+      //   addPhotonUsingPt(posSignLep, oppSignLep, currentParticle);
+      // }
+
+    // finds all photons Pt
+    std::vector<double> photonPT;
+    
+    for(auto currentParticle : finalPhotonList)
     {
-      addPhotonUsingMother(posSignLep, oppSignLep, currentParticle);
+      photonPT.push_back(currentParticle.getPt());
     }
 
-       auto posSignIv = posSignLep.calculateAllLeptonInvariantMass();
-       auto oppSignIv = oppSignLep.calculateAllLeptonInvariantMass();
-       if(posSignIv > oppSignIv)
-       {
-          return {posSignIv};
-       }
-      else
-      {
-        return{oppSignIv};
-      }
+    return photonPT;
 
-  
   }
   // NOTE: When redoing the histogram files, everything in the else statement was commented out. So, I
   // left it commented out and left the if statement intact. If this is wrong, please change it.
@@ -63,8 +68,19 @@ std::vector<double> PhotonsHist::protectedValue(InputModule::RecoLevel typeGenSi
     // ParticleCollection leptons;
     // ParticleCollection posSignLep;
     // ParticleCollection oppSignLep;
-    // auto recoPhotonParticles = 
-    // leptons = getInput()->getParticles(InputModule::RecoLevel::GenSim, Particle::Type::Lepton).getParticles();
+    // auto recoPhotonParticles =
+    std::vector<Particle> photons; 
+    photons = getInput()->getParticles(InputModule::RecoLevel::Reco, ParticleType::photon()).getParticles();
+    std::vector<double> photonPT;
+
+    for(auto currentParticle : photons)
+    {
+      photonPT.push_back(currentParticle.getPt());
+      std::cout << currentParticle.getPt();
+    }
+
+    return photonPT;
+
     // auto particleVectorLep = leptons.getParticles();
 
     // for(auto currentParticle : particleVectorLep)
@@ -167,6 +183,7 @@ void PhotonsHist::addPhotonUsingDR(ParticleCollection<Particle>& pc1, ParticleCo
     pc1.addParticle(photon);
   }
 }
+
 void PhotonsHist::addPhotonUsingPt(ParticleCollection<Particle>& pc1, ParticleCollection<Particle>& pc2, Particle photon) const
 {
   ParticleCollection<Particle> particleCollectOne(pc1);
@@ -185,6 +202,7 @@ void PhotonsHist::addPhotonUsingPt(ParticleCollection<Particle>& pc1, ParticleCo
   }
 
 }
+
 void PhotonsHist::addPhotonUsingPhi(ParticleCollection<Particle>& pc1, ParticleCollection<Particle>& pc2, Particle photon) const
 {
   ParticleCollection<Particle> particleCollectOne(pc1);
@@ -234,7 +252,6 @@ void PhotonsHist::addPhotonUsingPhi(ParticleCollection<Particle>& pc1, ParticleC
   }
 
 }
-
 
 void PhotonsHist::addPhotonUsingEta(ParticleCollection<Particle>& pc1, ParticleCollection<Particle>& pc2, Particle photon) const
 {

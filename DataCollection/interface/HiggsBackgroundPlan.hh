@@ -5,8 +5,8 @@
 
 class HiggsBackgroundPlan : public DataCollectionPlan
 {
-    public:
-        HiggsBackgroundPlan();
+    protected:
+        virtual void initialize() override;
 };
 
 #endif

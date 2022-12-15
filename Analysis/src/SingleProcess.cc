@@ -12,10 +12,9 @@
 #include "TH2.h"
 #include "TH2F.h"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
-#include "CMSAnalysis/Analysis/interface/HistogramFinder.hh"
 #include <unordered_map>
 
-TH1* SingleProcess::getHist(HistVariable histType, bool scaleToExpected) const
+TH1* SingleProcess::getHist(std::string histType, bool scaleToExpected) const
 {
     if(scaleToExpected) {
         TH1* hist = input->getHist(histType);
@@ -29,7 +28,7 @@ TH1* SingleProcess::getHist(HistVariable histType, bool scaleToExpected) const
     }
 }
 
-TH1* SingleProcess::get2DHist(HistVariable histType) const
+TH1* SingleProcess::get2DHist(std::string histType) const
 {
     return input->get2DHist(histType);
 }
@@ -39,7 +38,7 @@ int SingleProcess::getTotalEvents() const
     return input->getTotalEvents();
 }
 
-double SingleProcess::getExpectedYield(HistVariable dataType) const
+double SingleProcess::getExpectedYield(std::string dataType) const
 {
     double expectedYield = estimator->getExpectedYield(this, dataType, luminosity);
     return expectedYield;
@@ -48,12 +47,11 @@ double SingleProcess::getExpectedYield(HistVariable dataType) const
 bool SingleProcess::checkValidity() 
 {
     bool validProcess = true;
-    std::shared_ptr<HistogramFinder> histFinder = input->getHistFinder();
-    std::unordered_map<HistVariable, std::string> nameMap = histFinder->getMap();
-    for (auto item : nameMap) {
-        if(getHist(item.first) == 0) {
+    std::vector<HistVariable> histVariables = input->getHistVariables();
+    for(HistVariable histVar : histVariables) {
+        if(input->getHist(histVar.getName()) == 0) {
             validProcess = false;
         }
-    }
+    }    
     return validProcess;
 }

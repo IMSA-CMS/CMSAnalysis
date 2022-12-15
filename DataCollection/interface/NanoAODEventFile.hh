@@ -26,7 +26,7 @@ class NanoAODEventFile : public EventFile
         virtual int getNumPileUpInteractions() const override;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;
-        virtual bool checkTrigger(std::string triggerName, std::string subProcess) const override;
+        virtual bool checkTrigger(std::string triggerName, std::string subProcess) const override; //checks if event passes trigger criteria
     private:
 
         TTree* tree;
@@ -39,6 +39,8 @@ class NanoAODEventFile : public EventFile
         mutable TTreeReaderArray<Int_t> elec_charge;
         mutable TTreeReaderArray<Float_t> elec_pt;
         mutable TTreeReaderArray<Float_t> elec_reliso;
+        mutable TTreeReaderArray<Float_t> elec_dxy;
+        mutable TTreeReaderArray<Float_t> elec_dz;
 
         mutable TTreeReaderValue<UInt_t> muon_size;
         mutable TTreeReaderArray<Float_t> muon_eta;
@@ -47,7 +49,14 @@ class NanoAODEventFile : public EventFile
         mutable TTreeReaderArray<Int_t> muon_charge;
         mutable TTreeReaderArray<Float_t> muon_pt;
         mutable TTreeReaderArray<Float_t> muon_reliso;
+        mutable TTreeReaderArray<Float_t> muon_dxy;
+        mutable TTreeReaderArray<Float_t> muon_dz;
 
+        mutable TTreeReaderValue<UInt_t> photon_size;
+        mutable TTreeReaderArray<Float_t> photon_eta;
+        mutable TTreeReaderArray<Float_t> photon_phi;
+        mutable TTreeReaderArray<Float_t> photon_pt; 
+        
         //mutable TTreeReaderValue<UInt_t> met_size; useless variable
         mutable TTreeReaderArray<Float_t> met_phi;
         mutable TTreeReaderArray<Float_t> met_pt;
@@ -57,7 +66,7 @@ class NanoAODEventFile : public EventFile
         mutable TTreeReaderArray<Float_t> jet_phi;
         mutable TTreeReaderArray<Float_t> jet_mass;
         mutable TTreeReaderArray<Float_t> jet_pt;
-        //mutable TTreeReaderArray<Int_t> bJet;
+        mutable TTreeReaderArray<Int_t> jet_bTag;
 
         mutable TTreeReaderValue<UInt_t> gen_size;
         mutable TTreeReaderArray<Int_t> gen_pid;
@@ -73,7 +82,10 @@ class NanoAODEventFile : public EventFile
         mutable TTreeReaderArray<Float_t> gen_pileup;
 
         mutable TTreeReaderArray<Int_t> elec_idpass;
-        mutable TTreeReaderArray<Bool_t> muon_idpass;
+        mutable TTreeReaderArray<Bool_t> muon_looseid;
+        mutable TTreeReaderArray<Bool_t> muon_mediumid;
+        mutable TTreeReaderArray<Bool_t> muon_tightid;
+        
         mutable std::unordered_map<std::string, TTreeReaderValue<Bool_t>> triggers;
 
         std::vector<GenSimParticle> genSimParticles;

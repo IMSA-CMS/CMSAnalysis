@@ -5,8 +5,9 @@
 
 class MassResolutionPlan : public DataCollectionPlan
 {
-    public:
-        MassResolutionPlan();
+    protected:
+        virtual void initialize() override;
+
     private:
         
 };

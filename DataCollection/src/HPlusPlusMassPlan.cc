@@ -9,7 +9,7 @@
 
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
 #include "CMSAnalysis/DataCollection/interface/DoubleMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/GenSimEventDumpModule.hh"
+#include "CMSAnalysis/DataCollection/interface/EventDumpModule.hh"
 #include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonEfficiency.hh"
 #include "CMSAnalysis/DataCollection/interface/MassRecoEfficiency.hh"
@@ -20,7 +20,6 @@
 #include "CMSAnalysis/DataCollection/interface/RecoveredInvariantMassHist.hh"
 #include "CMSAnalysis/DataCollection/interface/SameSignInvariantMassHist.hh"
 #include "CMSAnalysis/DataCollection/interface/SingleMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/TriggerEfficiencyModule.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerModule.hh"
 #include "CMSAnalysis/DataCollection/interface/TripleMuonTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/TwoInvariantMassesHist.hh"
@@ -37,10 +36,11 @@
 
 using std::make_shared;
 
-HPlusPlusMassPlan::HPlusPlusMassPlan() {
+void HPlusPlusMassPlan::initialize()
+{
   Analyzer& analyzer = getAnalyzer();
 
-  auto eventDump = make_shared<GenSimEventDumpModule>(7);
+  auto eventDump = make_shared<EventDumpModule>(true,true);
 
   //auto genSimMod = make_shared<GenSimIdentificationModule>(9900041, true);
   //auto recoMod = make_shared<RecoIdentificationModule>(50);

@@ -7,9 +7,9 @@
 #include "TSystem.h"
 
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
-#include "CMSAnalysis/DataCollection/interface/DeltaRHist.hh"
+// #include "CMSAnalysis/DataCollection/interface/DeltaRHist.hh"
 #include "CMSAnalysis/DataCollection/interface/DoubleMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/GenSimEventDumpModule.hh"
+#include "CMSAnalysis/DataCollection/interface/EventDumpModule.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimParticleModule.hh"
 #include "CMSAnalysis/DataCollection/interface/GetNthHighestPtHist.hh"
 #include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
@@ -35,7 +35,6 @@
 #include "CMSAnalysis/DataCollection/interface/TripleMuonTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/SnowmassLeptonSelector.hh"
 #include "CMSAnalysis/DataCollection/interface/RelIsoHist.hh"
-#include "CMSAnalysis/DataCollection/interface/RecoEventDumpModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJetMLCalculator.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJetSelector.hh"
 #include "CMSAnalysis/DataCollection/interface/EventModule.hh"
@@ -43,9 +42,9 @@
 
 using std::make_shared;
 
-LeptonJetReconstructionPlan::LeptonJetReconstructionPlan()
+void LeptonJetReconstructionPlan::initialize()
 {
-  Analyzer &analyzer = getAnalyzer();
+ Analyzer &analyzer = getAnalyzer();
 
   auto eventMod = std::make_shared<EventModule>();
   auto eventHistMod = eventMod->getHistogramModule();
@@ -54,14 +53,14 @@ LeptonJetReconstructionPlan::LeptonJetReconstructionPlan()
   auto matchMod = std::make_shared<MatchingModule>();
   auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
-  auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>();
+  auto EventDumpMod = std::make_shared<EventDumpModule>(true,true);
   auto lepMatchMod =
-      std::make_shared<LeptonJetMatchingModule>(lepRecoMod, genSimEventDumpMod, 0.5);
+      std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.5);
   auto histOutputMod = std::make_shared<HistogramOutputModule>();
   auto mlMod = std::make_shared<LeptonJetMLCalculator>();
 
   // Histograms
-  auto deltaRHist = std::make_shared<DeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.1);
+  // auto deltaRHist = std::make_shared<DeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.1);
   auto pTHist = std::make_shared<LeptonJetPtHist>(lepRecoMod, "pT Values (Reconstructed Jets)", 100, 0, 200);
   auto matchedLeptonJetHist = std::make_shared<MatchedLeptonJetHist>("Matched Lepton Jet Hist HadET", 100, 0, 10, lepMatchMod, lepRecoMod, true);
   auto unmatchedLeptonJetHist = std::make_shared<MatchedLeptonJetHist>("Unmatched Lepton Jet Hist HadET", 100, 0, 10, lepMatchMod, lepRecoMod, false);
@@ -70,20 +69,20 @@ LeptonJetReconstructionPlan::LeptonJetReconstructionPlan()
   // auto matchPhiHist = std::make_shared<MatchingPhiHist>(lepMatchMod, "Differences in Phi for Matched Lepton Jets", 100, 0, 3.15);
   // auto matchEtaHist = std::make_shared<MatchingEtaHist>(lepMatchMod, "Differences in Eta for Matched Lepton Jets", 100, -1, 1);
 
-  auto relIsoHist = std::make_shared<IsolationHist>(InputModule::RecoLevel::Reco, "RelIso of Leptons", 2000, 0, 1);
+  auto relIsoHist = std::make_shared<IsolationHist>(InputModule::RecoLevel::Reco, "Jet pT Rel", 10000, 0, 100);
   auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(InputModule::RecoLevel::Reco, "NN Classifier Output Distribution", 100, 0, 1, mlMod, lepRecoMod);
 
-  eventHistMod->addHistogram(deltaRHist);
-  eventHistMod->addHistogram(pTHist);
-  eventHistMod->addHistogram(matchedLeptonJetHist);
-  eventHistMod->addHistogram(unmatchedLeptonJetHist);
-  eventHistMod->addHistogram(relIsoHist);
-  eventHistMod->addHistogram(leptonJetMLHist);
+  // eventHistMod->addHistogram(deltaRHist);
+  histOutputMod->addHistogram(pTHist);
+  histOutputMod->addHistogram(matchedLeptonJetHist);
+  histOutputMod->addHistogram(unmatchedLeptonJetHist);
+  histOutputMod->addHistogram(relIsoHist);
+  histOutputMod->addHistogram(leptonJetMLHist);
 
-  // histOutputMod->addHistogram(matchDeltaRHist);
-  // histOutputMod->addHistogram(matchPtHist);
-  // histOutputMod->addHistogram(matchPhiHist);
-  // histOutputMod->addHistogram(matchEtaHist);
+//   histOutputMod->addHistogram(matchDeltaRHist);
+//   histOutputMod->addHistogram(matchPtHist);
+//   histOutputMod->addHistogram(matchPhiHist);
+//   histOutputMod->addHistogram(matchEtaHist);
   // auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>(3);
   //auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>();
   //auto recoEventDumpMod = std::make_shared<RecoEventDumpModule>();
@@ -136,13 +135,13 @@ LeptonJetReconstructionPlan::LeptonJetReconstructionPlan()
   //analyzer.addProductionModule(genSimEventDumpMod);
   //analyzer.addProductionModule(recoEventDumpMod);
   //analyzer.addProductionModule(matchMod);
+
   analyzer.addProductionModule(lepRecoMod);
   // analyzer.addProductionModule(genPartMod);
   analyzer.addProductionModule(lepMatchMod);
 
   analyzer.addAnalysisModule(histOutputMod);
   // analyzer.addProductionModule(triggerMod);
-
   //analyzer.addAnalysisModule(leptonEfficiency);
   //analyzer.addAnalysisModule(leptonJetEfficiency);
   //analyzer.addAnalysisModule(massRecoEfficiency200);
@@ -150,9 +149,9 @@ LeptonJetReconstructionPlan::LeptonJetReconstructionPlan()
   //analyzer.addAnalysisModule(massRecoEfficiency800);
   //analyzer.addAnalysisModule(massRecoEfficiency1000);
   //analyzer.addAnalysisModule(massRecoEfficiency1300);
-  analyzer.addAnalysisModule(genSimEventDumpMod);
+  analyzer.addAnalysisModule(EventDumpMod);
   //analyzer.addAnalysisModule(recoEventDumpMod);
   /* auto selector = make_shared<SnowmassLeptonSelector>(5);
   analyzer.getInputModule()->setLeptonSelector(selector);
-  */
+  */ 
 }

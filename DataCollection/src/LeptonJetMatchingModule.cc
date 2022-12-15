@@ -1,14 +1,13 @@
 #include "CMSAnalysis/DataCollection/interface/LeptonJetMatchingModule.hh"
 #include "DataFormats/Math/interface/deltaR.h"
-#include "CMSAnalysis/DataCollection/interface/GenSimEventDumpModule.hh"
+#include "CMSAnalysis/DataCollection/interface/EventDumpModule.hh"
 
 #include <limits>
 #include <fstream>
 
-LeptonJetMatchingModule::LeptonJetMatchingModule(std::shared_ptr<LeptonJetReconstructionModule> lepJetModule, std::shared_ptr<GenSimEventDumpModule> dump, double deltaRCut) :
+LeptonJetMatchingModule::LeptonJetMatchingModule(std::shared_ptr<LeptonJetReconstructionModule> lepJetModule, double deltaRCut) :
   //genSim(genSimModule),
   lepJet(lepJetModule),
-  eventDump(dump),
   deltaRCutoff(deltaRCut)
 {
   
@@ -18,66 +17,132 @@ bool LeptonJetMatchingModule::process()
 {
     matchingPairs.clear();
     auto darkPhotons(getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::darkPhoton()).getParticles());
-    auto genSimParticles(getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::none()).getParticles());
+    auto recoParticles(getInput()->getParticles(InputModule::RecoLevel::Reco, ParticleType::none()).getParticles());
+    auto genSim(getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::none()).getParticles());
 
-    genSize += darkPhotons.size();
+    //std::cout<< __LINE__ << std::endl;
+    MatchingModule::match(genSim, recoParticles);
+
+    const MatchingPairCollection& bestLeptonPairs = getMatchingBestPairs();
+    const std::vector<GenSimParticle> underLepton = bestLeptonPairs.getGenParticles().getParticles();
+    const std::vector<Particle> recoLeptons = bestLeptonPairs.getRecoParticles().getParticles();
+    //std::cout<< __LINE__ << std::endl;
+    std::vector<Particle> underlyingLepton;
+
+    for (Particle lepton : underLepton)
+    {
+      if (lepton.getPt() >= 5 && (lepton.getType() == ParticleType::electron() || lepton.getType() == ParticleType::muon()))
+      {
+        underlyingLepton.push_back(lepton);
+      }
+    }
+    //std::cout<< __LINE__ << std::endl;
+
+    genLeptons += underlyingLepton.size();
+
+    std::vector<std::string> particleParentage;
+
+    std::vector<GenSimParticle> genSimVector;
+    
+    for(Particle genParticle: genSim)
+    {
+      genSimVector.push_back(GenSimParticle(genParticle));
+    }
+
+    //std::cout<< __LINE__ << std::endl;
+    //std::vector<std::pair<GenSimParticle, GenSimParticle>> leptonOrigins;
+    for(GenSimParticle lepton : underlyingLepton)
+    {
+      bool passedDarkPhoton = false;
+      GenSimParticle particle = lepton;
+      while(!(isQuark(particle) || isSquark(particle) || particle.status() == 4))
+      {
+        particle = particle.mother();
+        if(particle.getType() == ParticleType::darkPhoton())
+        {
+          passedDarkPhoton = true;
+        }
+      }
+      if(isQuark(particle))
+      {
+        quark++;
+      }
+      if(isSquark(particle))
+      {
+        if(passedDarkPhoton)
+        {
+          darkPhotonOrigin++;
+        }
+        else
+        {
+          squark++;
+        }
+      }
+      if(particle.status() == 4)
+      {
+        proton++;
+      }
+    
+    }
+    
+  
+    for(Particle darkPhoton:darkPhotons)
+    {
+      if(darkPhoton.getPt()>=10 && abs(darkPhoton.getEta())<=3)
+      {
+        genSize++;
+      }
+    }
     
     //std::vector<Particle> genSimParticles(temp.begin(), temp.end());
     std::vector<LeptonJet> recoLeptonJets(lepJet->getLeptonJets());
     std::vector<Particle> lJets;
+
+    // for (LeptonJet& lJet:recoLeptonJets)
+    // {
+    //   lJets.push_back(lJet);
+    // }
+
     for (LeptonJet& lJet:recoLeptonJets)
     {
-      //std::cout<<"Lepton Jet "<<lJet<<std::endl;
-      // auto lJetParticle = lJet.getParticles();
-      // for(auto particle: lJetParticle){
-      //   std::cout<<"The Particle is not null "<<particle.getName()<<std::endl;
-      // }
-      //std::cout<<"The Lepton Jet null "<<lJet.isNotNull()<<std::endl;
-      //std::cout<<lJet.getName()<<std::endl;
-      //std::cout<<"Making Particle"<<Particle(lJet).isNotNull()<<std::endl;
+      auto leptonJetParticles = lJet.getParticles();
       lJets.push_back(lJet);
-      //std::cout << "LJet Matching: lJet list size:" << lJets.size() << "\n";
     }
-    //std::cout << "Size of genSimParticles: " << genSimParticles.size() << "\n";
-    //std::cout << "Size of recoLeptonJets: " << lJets.size() << "\n";
-
+    std::vector<Particle> nonlJetParticles;
+    
+   
     //MatchingModule::match(genSimParticles, lJets);
-    MatchingModule::match(genSimParticles, lJets);
+    MatchingModule::match(darkPhotons, lJets);
     //std::cout << "Size of matchingPairs: " << getMatchingBestPairs().getSize()<<"\n";
-    lepJetSize += getMatchingBestPairs().getSize();
+    lepJetSize += recoLeptonJets.size();
+    darkPhoton += getMatchingBestPairs().getSize();
     std::vector<MatchingPair> matchedLeptonJets = getMatchingPairs();
     //std::cout<<getMatchingPairs().size()<<std::endl;
-    for (MatchingPair leptonPair : matchedLeptonJets)
-    {
-      //std::cout<<leptonPair.first.getName()<<std::endl;
-      if(!(leptonPair.first.getType() == ParticleType::darkPhoton()))
-      {
-        // //std::cout<<"Made it to loop"<<std::endl;
-        // std::ofstream my_file;
-        // if (latch) 
-        // {
-        //   my_file.open("leptonJet.txt", std::ofstream::out | std::ofstream::trunc);
-        //   latch = false;
-        // }
-        // //std::cout<<"The origin particle is "<<leptonPair.first.getName()<<std::endl;
-        // ParticleCollection<Particle> leptonJet;
-        // leptonJet.addParticle(leptonPair.first);
-        // for (Particle lepton: leptonPair.second.getParticles())
-        // {
-        //   leptonJet.addParticle(lepton);
-        // }
-        // //ParticleCollection<Particle> leptonJet = leptonPair.second.getParticle();
-        // my_file.open("leptonJet.txt", std::ios::app);
-        // //std::cout<<"The Size of Particle Collection "<<leptonJet.getNumParticles()<<std::endl;
-        // eventDump->printGenSimParticleCollection(leptonJet, my_file);
-        // my_file.close();
-      }
-      else
-      {
-        darkPhoton++;
-      }
-    }
-    
+
+    // for (Particle lepton:recoParticles){
+    //   lJetsCopy = std
+    // }
+    //leptonOrigins.push_back(std::pair<Particle,GenSimParticle>{Particle::nullParticle(),underlyingLepton.at(0)}); 
+    // for (MatchingPair leptonPair : matchedLeptonJets)
+    // {
+    //   //std::cout<<leptonPair.first.getName()<<std::endl;
+    //   if((leptonPair.first.getType() == ParticleType::darkPhoton()))
+    //   {
+    //     darkPhoton++;
+    //   }
+    //   else
+    //   {
+    //  
+    //     for(GenSimParticle jet: leptonJet.getParticles())
+    //     {
+    //       // auto it = std::find_if( leptonOrigins.begin(), leptonOrigins.end(),
+    //       //   [&jet](const std::pair<GenSimParticle,GenSimParticle>& element){ return element.first == jet;} );
+    //       //my_file1 << particleInformationString(jet,it->second, leptonJet.getParticles())<<std::endl;
+    //       my_file1 << particleInformationString(jet, leptonJet.getParticles())<<std::endl;
+    //       //printGenSimParticleCollection(leptonJet, my_file1);
+    //     }
+    //   }
+    // }
     //lepJetSize += recoLeptonJets.size();
 
     // MatchingPair candidate;
@@ -105,9 +170,14 @@ void LeptonJetMatchingModule::finalize()
   std::cout << "Lepton Jets Found: " << lepJetSize << "\n";
   std::cout << "Number of Dark Photons: " << genSize << "\n";
   std::cout << "Lepton Jet Matching Efficiency: " << (double) darkPhoton / genSize << "\n";
+  std::cout << "Leptons From Quarks " << (double) quark / genLeptons << std::endl;
+  std::cout << "Leptons From Dark Photons " << (double) darkPhotonOrigin / genLeptons << std::endl;
+  std::cout << "Leptons From Squarks " << (double) squark / genLeptons << std::endl;
+  std::cout << "Leptons From Protons " << (double) proton / genLeptons << std::endl;
 }
 
-const std::vector<std::pair<Particle,LeptonJet>> LeptonJetMatchingModule::getMatchingPairs() const {
+const std::vector<std::pair<Particle,LeptonJet>> LeptonJetMatchingModule::getMatchingPairs() const 
+{
   auto& matchedParticles = getMatchingBestPairs().getPairs();
   std::vector<MatchingPair> matchedLeptonJets;
   for (auto& matched : matchedParticles){
@@ -115,3 +185,33 @@ const std::vector<std::pair<Particle,LeptonJet>> LeptonJetMatchingModule::getMat
   }
   return matchedLeptonJets;
 }
+const bool LeptonJetMatchingModule::isQuark(GenSimParticle lepton) 
+{
+  if(abs(lepton.pdgId()) == 1 || abs(lepton.pdgId()) == 2 || abs(lepton.pdgId()) == 3 || abs(lepton.pdgId()) == 4)
+  {
+    //quark++;
+    return true;
+  }
+  else if(abs(lepton.pdgId()) == 5 || abs(lepton.pdgId()) == 6)
+  {
+    //quark++;
+    return true;
+  }
+  return false;
+}
+const bool LeptonJetMatchingModule::isSquark(GenSimParticle lepton)
+{
+  if(abs(lepton.pdgId()) == 1000001 || abs(lepton.pdgId()) == 1000002 || abs(lepton.pdgId()) == 1000003 || abs(lepton.pdgId()) == 1000004)
+  {
+    //squark++;
+    return true;
+  }
+  else if(abs(lepton.pdgId()) == 1000005 || abs(lepton.pdgId()) == 1000006)
+  {
+    //squark++;
+    return true;
+  }
+  return false;
+}
+
+
