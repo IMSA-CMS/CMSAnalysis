@@ -1,4 +1,5 @@
 #include "CMSAnalysis/Analysis/interface/HiggsPlusPlusAnalysis.hh"
+#include "CMSAnalysis/Analysis/interface/HiggsCutsAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include "CMSAnalysis/Analysis/interface/Channel.hh"
 #include "CMSAnalysis/Analysis/interface/Process.hh"
@@ -20,9 +21,9 @@ double calculateEvents(std::vector<double> crossSections, std::vector<TH1*> hist
 }
 
 void CutFinder() {
-    auto analysis = std::make_shared<HiggsPlusPlusAnalysis>();
+    auto analysis = std::make_shared<HiggsCutsAnalysis>();
     //Choices are GenSim Same Sign Inv Mass, Same Sign Inv Mass, Invariant Mass, GenSim pT, pT, Eta, Phi, MET (caps matter)
-    std::vector<std::string> cutTypes = {"Invariant Mass", "Same Sign Inv Mass", "pT", "MET"};
+    std::vector<std::string> cutTypes = {"firstPt"};
     std::vector<std::shared_ptr<Channel>> channels = analysis->getChannels();
     int luminosity = 3000;
     //Change this to your signal process name
@@ -66,6 +67,7 @@ void CutFinder() {
                 if(process->getName() == signalName) {
                     isSignal = true;
                     for(auto singleProcess : process->getProcesses()) {
+			std:cout << "getting signal hist" << std::endl;
                         signalHists.push_back(singleProcess.getHist(dataType, false)->Rebin((int) ((double) singleProcess.getHist(dataType, false)->GetNbinsX() / ((double) minimumBin) + 0.5)));
                         signalEvents.push_back(singleProcess.getTotalEvents());
                         signalCrossSecs.push_back(singleProcess.getCrossSection());
@@ -73,6 +75,7 @@ void CutFinder() {
                 }
                 if(!isSignal) {
                     for(auto singleProcess : process->getProcesses()) {
+			std::cout << "getting background hist" << std::endl;
                         backgroundHists.push_back(singleProcess.getHist(dataType, false)->Rebin((int) ((double) singleProcess.getHist(dataType, false)->GetNbinsX() / ((double) minimumBin) + 0.5)));
                         backgroundEvents.push_back(singleProcess.getTotalEvents());
                         backgroundCrossSecs.push_back(singleProcess.getCrossSection());
@@ -96,7 +99,7 @@ void CutFinder() {
                     finalCutEfficiency = signal/totalSignal;
                 }
             }
-            std::cout << "The cut on " + histVariableNames.find(dataType)->second + " for " + channel->getName() + " is at " + finalCut + " with efficiency of " + finalCutEfficiency + " and significance difference of " + ((significance - baseSignificance) / baseSignificance) * 100 + "%" << std::endl;
+            std::cout << "The cut on " + dataType + " for " + channel->getName() + " is at " + finalCut + " with efficiency of " + finalCutEfficiency + " and significance difference of " + ((significance - baseSignificance) / baseSignificance) * 100 + "%" << std::endl;
         }
     }
 }

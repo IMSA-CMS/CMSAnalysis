@@ -14,26 +14,28 @@ class GenSimParticle;
 class Particle
 {
   public: 
-    
-
+  
+    // Specifies selection fit
     enum class SelectionFit{Tight, Medium, Loose, None};
 
-
-    // specifies barrel state
+    // Specifies barrel state
     enum class BarrelState{Barrel, Endcap, None};
+
+    // Constructors
     Particle(const reco::Candidate* iparticle); 
     Particle(const Particle& particle1);
-    Particle(const LeptonJet& leptonjet);
     Particle(const LeptonJet* iparticle);
-    static Particle nullParticle();
-    //Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, double relIso = -999, Particle::SelectionFit fit = Particle::SelectionFit::Tight);
     
-    Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, double relIso = -999, Particle::SelectionFit fit = Particle::SelectionFit::Tight, double dxy = 0, double dz = 0);
-    
-    Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int pid, int status, int m1, int m2,int d1, int d2, double relIso);
+    Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, Particle::SelectionFit fit = Particle::SelectionFit::Tight);
+    Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int pid, int status, int m1, int m2,int d1, int d2);
     Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, const Particle* motherParticle, std::vector<const GenSimParticle*> daughters, const int status);
+
+    static Particle nullParticle();
+
+    //you shouldn't need to use this but it's here anyway
     std::shared_ptr<ParticleImplementation> getParticleImplementation();
-    Particle& operator = (const Particle& particle2);
+
+    // Accessors for particle properties
     std::string getName() const;
     double getPt() const;
     double getPhi() const;
@@ -41,29 +43,36 @@ class Particle
     double getEt() const;
     double getEnergy() const;
     double getMass() const;
-    // double getIsolation() const;//Lepton
     bool isNotNull() const;
+
+    // Operators
+    Particle& operator = (const Particle& particle2);
     bool operator == (const Particle& p1) const;
     bool operator != (const Particle& p1) const {return !(*this == p1);}
+
+    // For purpose of sorting by pt 
     bool operator < (const Particle& p1) const {return (getPt() < p1.getPt());}
     bool operator > (const Particle& p1) const {return (getPt() > p1.getPt());}
-    // bool isIsolated() const {throw std::runtime_error("error");}; //Lepton
+
+    // More accessors for particle properties
     double getDeltaR(Particle particle) const;
+    double getInfo(std::string) const;
+    void addInfo(std::string, double);
     int getCharge() const;
-    double getDxy() const;
-    double getDz() const;
     Particle::BarrelState getBarrelState() const;
     reco::Candidate::LorentzVector getFourVector() const;
     const ParticleType& getType() const;
+
     // Static function to identify type of any particle based on pdgid.
     static const ParticleType& identifyType(int pdgid); 
 
-  // bool isGenSim() const;
-  // bool isFinalState() const;
 protected:
   Particle(std::shared_ptr<ParticleImplementation> particle);
+
+  // Returns particle implementation connected to particle
   std::shared_ptr<ParticleImplementation> getParticle() { return particle; }
   const std::shared_ptr<ParticleImplementation> getParticle() const { return particle; }
+
   void checkIsNull() const;
 
 private:
