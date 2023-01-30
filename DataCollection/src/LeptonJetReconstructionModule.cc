@@ -10,14 +10,21 @@ LeptonJetReconstructionModule::LeptonJetReconstructionModule(double deltaRCut) :
 
 bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
 {
-  leptonJets.clear();
   //std::cout << "LeptonJetReconstruction process()";
   // std::cout << "Lepton jet selector: " << leptonSelector << '\n';
   const auto & recoCandidates = getInput()->getLeptons(InputModule::RecoLevel::Reco);
-  auto recoLeptons = recoCandidates.getParticles();
+  leptonJets = findLeptonJets(recoCandidates);
+  findDeltaRValues();
+  findPtValues();
+  // std::cout << "LJ:" << leptonJets.size() << "\n";
+  return true;
+}
 
-  while (recoLeptons.size() != 0) 
-  {
+const std::vector<LeptonJet> LeptonJetReconstructionModule::findLeptonJets(ParticleCollection<Lepton> recoCandidates)
+{
+  auto recoLeptons = recoCandidates.getParticles();
+  std::vector<LeptonJet> leptonJetList;
+  while (recoLeptons.size() != 0) {
     Lepton highestPtLepton = findHighestPtLepton(recoLeptons);
     if(highestPtLepton.getPt()<= 5)
     {
@@ -52,7 +59,7 @@ bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
         --i;
       }
     }
-  //std::cout << "numParticles: " << jet.getNumParticles() << "\n";
+    //std::cout << "numParticles: " << jet.getNumParticles() << "\n";
     if (jet.getNumParticles() > 1)
     {
       // auto inputJets = getInput()->getJets(InputModule::RecoLevel::Reco);
@@ -65,14 +72,11 @@ bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
       // }
       //if (!close) {
         //std::cout << "adding jet\n";
-        leptonJets.push_back(jet);
+      leptonJetList.push_back(jet);
       //}
     }
   }
-  findDeltaRValues();
-  findPtValues();
-  // std::cout << "LJ:" << leptonJets.size() << "\n";
-  return true;
+  return leptonJetList;
 }
 
 LeptonJet LeptonJetReconstructionModule::createLeptonJet(Lepton highestPtLepton) const

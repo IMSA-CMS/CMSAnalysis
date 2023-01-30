@@ -16,26 +16,26 @@ int CandidateImplementation::charge() const {
   return particle->charge();
 }
 
-double CandidateImplementation::isolation() const {
-  if (getType() == ParticleType::muon()) {
-    auto muon = dynamic_cast<const reco::Muon *>(particle);
-    if (!muon)
-    {
-      return -1;
-    }
-    return muon->isolationR03().sumPt / particle->pt();
-  } 
-  else if (getType() == ParticleType::electron()) 
-  {
-    auto elec = dynamic_cast<const reco::GsfElectron *>(particle);
-        if (!elec)
-    {
-      return -1;
-    }
-    return elec->dr03TkSumPt() / particle->pt();
-  }
-  return -1;
-}
+// double CandidateImplementation::isolation() const {
+//   if (getType() == ParticleType::muon()) {
+//     auto muon = dynamic_cast<const reco::Muon *>(particle);
+//     if (!muon)
+//     {
+//       return -1;
+//     }
+//     return muon->isolationR03().sumPt / particle->pt();
+//   } 
+//   else if (getType() == ParticleType::electron()) 
+//   {
+//     auto elec = dynamic_cast<const reco::GsfElectron *>(particle);
+//         if (!elec)
+//     {
+//       return -1;
+//     }
+//     return elec->dr03TkSumPt() / particle->pt();
+//   }
+//   return -1;
+// }
 
 reco::Candidate::LorentzVector CandidateImplementation::getFourVector() const {
   checkIsNull();
@@ -76,6 +76,7 @@ Particle CandidateImplementation::mother() const {
 Particle CandidateImplementation::daughter(int i) const {
   // std::cout << "daugters\n";
   checkIsNull();
+  std::cout << "Daughter type " << particle->daughter(i)->pdgId() <<'\n';
   auto daughter = particle->daughter(i);
   /* if (!daughter)
   {
