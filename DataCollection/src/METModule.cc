@@ -6,6 +6,7 @@
 
 bool METModule::process()
 {
+
   met = getInput()->getMET();
 
   return true;
