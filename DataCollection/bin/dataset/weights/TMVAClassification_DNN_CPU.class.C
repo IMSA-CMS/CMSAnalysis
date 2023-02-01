@@ -10,10 +10,10 @@ Method         : DL::DNN_CPU
 TMVA Release   : 4.2.1         [262657]
 ROOT Release   : 6.24/07       [399367]
 Creator        : kzhang1
-Date           : Tue Nov 29 15:40:37 2022
+Date           : Sat Dec 10 20:47:51 2022
 Host           : Linux cmsbuild02.cern.ch 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
 Dir            : /uscms/homes/k/kzhang1/practice/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin
-Training events: 4302
+Training events: 9889
 Analysis type  : [Classification]
 
 
@@ -41,12 +41,14 @@ ValidationSize: "20%" [Part of the training data to use for validation. Specify 
 
 #VAR -*-*-*-*-*-*-*-*-*-*-*-* variables *-*-*-*-*-*-*-*-*-*-*-*-
 
-NVar 5
-pt                            pt                            pt                            Transverse Momentum                                             'F'    [8.94119262695,2084.13500977]
-nParticles                    nParticles                    nParticles                    Number of Particles                                             'F'    [2,5]
-eta                           eta                           eta                           Pseudorapidity                                                  'F'    [-3.1376721859,3.12934875488]
-phi                           phi                           phi                           Azimuthal Angle                                                 'F'    [-3.13815546036,3.13753390312]
-deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.191068515182]
+NVar 7
+leading_pt                    leading_pt                    leading_pt                    Leading Lepton Pt                                               'F'    [5.07694292068,637.124511719]
+nParticles                    nParticles                    nParticles                    Number of Particles                                             'F'    [2,6]
+eta                           eta                           eta                           Pseudorapidity                                                  'F'    [-2.87590885162,2.97644805908]
+phi                           phi                           phi                           Azimuthal Angle                                                 'F'    [-3.14097380638,3.14128875732]
+deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.802249372005]
+sum_pt                        sum_pt                        sum_pt                        Total Transverse Momentum                                       'F'    [10.0917778015,948.382324219]
+delta_pt                      delta_pt                      delta_pt                      Difference in First and Second Highest Lepton Pt                                  'F'    [0,637.124511719]
 NSpec 0
 
 
@@ -90,10 +92,10 @@ class ReadDNN_CPU : public IClassifierReader {
    ReadDNN_CPU( std::vector<std::string>& theInputVars )
       : IClassifierReader(),
         fClassName( "ReadDNN_CPU" ),
-        fNvars( 5 )
+        fNvars( 7 )
    {
       // the training input variables
-      const char* inputVars[] = { "pt", "nParticles", "eta", "phi", "deltaR" };
+      const char* inputVars[] = { "leading_pt", "nParticles", "eta", "phi", "deltaR", "sum_pt", "delta_pt" };
 
       // sanity checks
       if (theInputVars.size() <= 0) {
@@ -122,11 +124,15 @@ class ReadDNN_CPU : public IClassifierReader {
       fVmin[1] = -1;
       fVmax[1] = 1;
       fVmin[2] = -1;
-      fVmax[2] = 0.99999988079071;
+      fVmax[2] = 1;
       fVmin[3] = -1;
       fVmax[3] = 1;
       fVmin[4] = -1;
       fVmax[4] = 1;
+      fVmin[5] = -1;
+      fVmax[5] = 1;
+      fVmin[6] = -1;
+      fVmax[6] = 1;
 
       // initialize input variable types
       fType[0] = 'F';
@@ -134,6 +140,8 @@ class ReadDNN_CPU : public IClassifierReader {
       fType[2] = 'F';
       fType[3] = 'F';
       fType[4] = 'F';
+      fType[5] = 'F';
+      fType[6] = 'F';
 
       // initialize constants
       Initialize();
@@ -159,8 +167,8 @@ class ReadDNN_CPU : public IClassifierReader {
 
    // input variable transformation
 
-   double fOff_1[3][5];
-   double fScal_1[3][5];
+   double fOff_1[3][7];
+   double fScal_1[3][7];
    void InitTransform_1();
    void Transform_1( std::vector<double> & iv, int sigOrBgd ) const;
    void InitTransform();
@@ -174,15 +182,15 @@ class ReadDNN_CPU : public IClassifierReader {
    char   GetType( int ivar ) const { return fType[ivar]; }
 
    // normalisation of input variables
-   double fVmin[5];
-   double fVmax[5];
+   double fVmin[7];
+   double fVmax[7];
    double NormVariable( double x, double xmin, double xmax ) const {
       // normalise to output range: [-1, 1]
       return 2*(x - xmin)/(xmax - xmin) - 1.0;
    }
 
    // type of input variable: 'F' or 'I'
-   char   fType[5];
+   char   fType[7];
 
    // initialize internal variables
    void Initialize();
@@ -211,23 +219,23 @@ inline double ReadDNN_CPU::GetMvaValue( const std::vector<double>& inputValues )
 //_______________________________________________________________________
 inline void ReadDNN_CPU::InitTransform_1()
 {
-   double fMin_1[3][5];
-   double fMax_1[3][5];
+   double fMin_1[3][7];
+   double fMax_1[3][7];
    // Normalization transformation, initialisation
-   fMin_1[0][0] = 8.94119262695;
-   fMax_1[0][0] = 2084.13500977;
+   fMin_1[0][0] = 5.07694292068;
+   fMax_1[0][0] = 637.124511719;
    fScal_1[0][0] = 2.0/(fMax_1[0][0]-fMin_1[0][0]);
    fOff_1[0][0] = fMin_1[0][0]*fScal_1[0][0]+1.;
-   fMin_1[1][0] = 10.5544462204;
-   fMax_1[1][0] = 426.872131348;
+   fMin_1[1][0] = 12.2568826675;
+   fMax_1[1][0] = 142.19720459;
    fScal_1[1][0] = 2.0/(fMax_1[1][0]-fMin_1[1][0]);
    fOff_1[1][0] = fMin_1[1][0]*fScal_1[1][0]+1.;
-   fMin_1[2][0] = 8.94119262695;
-   fMax_1[2][0] = 2084.13500977;
+   fMin_1[2][0] = 5.07694292068;
+   fMax_1[2][0] = 637.124511719;
    fScal_1[2][0] = 2.0/(fMax_1[2][0]-fMin_1[2][0]);
    fOff_1[2][0] = fMin_1[2][0]*fScal_1[2][0]+1.;
    fMin_1[0][1] = 2;
-   fMax_1[0][1] = 5;
+   fMax_1[0][1] = 6;
    fScal_1[0][1] = 2.0/(fMax_1[0][1]-fMin_1[0][1]);
    fOff_1[0][1] = fMin_1[0][1]*fScal_1[0][1]+1.;
    fMin_1[1][1] = 2;
@@ -235,45 +243,69 @@ inline void ReadDNN_CPU::InitTransform_1()
    fScal_1[1][1] = 2.0/(fMax_1[1][1]-fMin_1[1][1]);
    fOff_1[1][1] = fMin_1[1][1]*fScal_1[1][1]+1.;
    fMin_1[2][1] = 2;
-   fMax_1[2][1] = 5;
+   fMax_1[2][1] = 6;
    fScal_1[2][1] = 2.0/(fMax_1[2][1]-fMin_1[2][1]);
    fOff_1[2][1] = fMin_1[2][1]*fScal_1[2][1]+1.;
-   fMin_1[0][2] = -3.1376721859;
-   fMax_1[0][2] = 3.12934875488;
+   fMin_1[0][2] = -2.79237270355;
+   fMax_1[0][2] = 2.79322266579;
    fScal_1[0][2] = 2.0/(fMax_1[0][2]-fMin_1[0][2]);
    fOff_1[0][2] = fMin_1[0][2]*fScal_1[0][2]+1.;
-   fMin_1[1][2] = -3.07524633408;
-   fMax_1[1][2] = 3.0906586647;
+   fMin_1[1][2] = -2.87590885162;
+   fMax_1[1][2] = 2.97644805908;
    fScal_1[1][2] = 2.0/(fMax_1[1][2]-fMin_1[1][2]);
    fOff_1[1][2] = fMin_1[1][2]*fScal_1[1][2]+1.;
-   fMin_1[2][2] = -3.1376721859;
-   fMax_1[2][2] = 3.12934875488;
+   fMin_1[2][2] = -2.87590885162;
+   fMax_1[2][2] = 2.97644805908;
    fScal_1[2][2] = 2.0/(fMax_1[2][2]-fMin_1[2][2]);
    fOff_1[2][2] = fMin_1[2][2]*fScal_1[2][2]+1.;
-   fMin_1[0][3] = -3.13815546036;
-   fMax_1[0][3] = 3.13753390312;
+   fMin_1[0][3] = -3.14097380638;
+   fMax_1[0][3] = 3.14128875732;
    fScal_1[0][3] = 2.0/(fMax_1[0][3]-fMin_1[0][3]);
    fOff_1[0][3] = fMin_1[0][3]*fScal_1[0][3]+1.;
-   fMin_1[1][3] = -3.07524466515;
-   fMax_1[1][3] = 3.10426855087;
+   fMin_1[1][3] = -3.11440777779;
+   fMax_1[1][3] = 3.09705018997;
    fScal_1[1][3] = 2.0/(fMax_1[1][3]-fMin_1[1][3]);
    fOff_1[1][3] = fMin_1[1][3]*fScal_1[1][3]+1.;
-   fMin_1[2][3] = -3.13815546036;
-   fMax_1[2][3] = 3.13753390312;
+   fMin_1[2][3] = -3.14097380638;
+   fMax_1[2][3] = 3.14128875732;
    fScal_1[2][3] = 2.0/(fMax_1[2][3]-fMin_1[2][3]);
    fOff_1[2][3] = fMin_1[2][3]*fScal_1[2][3]+1.;
    fMin_1[0][4] = 0;
-   fMax_1[0][4] = 0.191068515182;
+   fMax_1[0][4] = 0.802249372005;
    fScal_1[0][4] = 2.0/(fMax_1[0][4]-fMin_1[0][4]);
    fOff_1[0][4] = fMin_1[0][4]*fScal_1[0][4]+1.;
    fMin_1[1][4] = 0;
-   fMax_1[1][4] = 0.0993144065142;
+   fMax_1[1][4] = 0.496532022953;
    fScal_1[1][4] = 2.0/(fMax_1[1][4]-fMin_1[1][4]);
    fOff_1[1][4] = fMin_1[1][4]*fScal_1[1][4]+1.;
    fMin_1[2][4] = 0;
-   fMax_1[2][4] = 0.191068515182;
+   fMax_1[2][4] = 0.802249372005;
    fScal_1[2][4] = 2.0/(fMax_1[2][4]-fMin_1[2][4]);
    fOff_1[2][4] = fMin_1[2][4]*fScal_1[2][4]+1.;
+   fMin_1[0][5] = 10.0917778015;
+   fMax_1[0][5] = 948.382324219;
+   fScal_1[0][5] = 2.0/(fMax_1[0][5]-fMin_1[0][5]);
+   fOff_1[0][5] = fMin_1[0][5]*fScal_1[0][5]+1.;
+   fMin_1[1][5] = 20.0205631256;
+   fMax_1[1][5] = 236.630081177;
+   fScal_1[1][5] = 2.0/(fMax_1[1][5]-fMin_1[1][5]);
+   fOff_1[1][5] = fMin_1[1][5]*fScal_1[1][5]+1.;
+   fMin_1[2][5] = 10.0917778015;
+   fMax_1[2][5] = 948.382324219;
+   fScal_1[2][5] = 2.0/(fMax_1[2][5]-fMin_1[2][5]);
+   fOff_1[2][5] = fMin_1[2][5]*fScal_1[2][5]+1.;
+   fMin_1[0][6] = 0;
+   fMax_1[0][6] = 637.124511719;
+   fScal_1[0][6] = 2.0/(fMax_1[0][6]-fMin_1[0][6]);
+   fOff_1[0][6] = fMin_1[0][6]*fScal_1[0][6]+1.;
+   fMin_1[1][6] = 0;
+   fMax_1[1][6] = 142.19720459;
+   fScal_1[1][6] = 2.0/(fMax_1[1][6]-fMin_1[1][6]);
+   fOff_1[1][6] = fMin_1[1][6]*fScal_1[1][6]+1.;
+   fMin_1[2][6] = 0;
+   fMax_1[2][6] = 637.124511719;
+   fScal_1[2][6] = 2.0/(fMax_1[2][6]-fMin_1[2][6]);
+   fOff_1[2][6] = fMin_1[2][6]*fScal_1[2][6]+1.;
 }
 
 //_______________________________________________________________________
@@ -284,7 +316,7 @@ inline void ReadDNN_CPU::Transform_1( std::vector<double>& iv, int cls) const
    if (2 > 1 ) cls = 2;
       else cls = 2;
    }
-   const int nVar = 5;
+   const int nVar = 7;
 
    // get indices of used variables
 
@@ -299,6 +331,8 @@ inline void ReadDNN_CPU::Transform_1( std::vector<double>& iv, int cls) const
       indicesGet.push_back( 2);
       indicesGet.push_back( 3);
       indicesGet.push_back( 4);
+      indicesGet.push_back( 5);
+      indicesGet.push_back( 6);
    }
    if ( indicesPut.empty() ) {
       indicesPut.reserve(fNvars);
@@ -307,12 +341,14 @@ inline void ReadDNN_CPU::Transform_1( std::vector<double>& iv, int cls) const
       indicesPut.push_back( 2);
       indicesPut.push_back( 3);
       indicesPut.push_back( 4);
+      indicesPut.push_back( 5);
+      indicesPut.push_back( 6);
    }
 
    static std::vector<double> dv;
    dv.resize(nVar);
    for (int ivar=0; ivar<nVar; ivar++) dv[ivar] = iv[indicesGet.at(ivar)];
-   for (int ivar=0;ivar<5;ivar++) {
+   for (int ivar=0;ivar<7;ivar++) {
       double offset = fOff_1[cls][ivar];
       double scale  = fScal_1[cls][ivar];
       iv[indicesPut.at(ivar)] = scale*dv[ivar]-offset;
