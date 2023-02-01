@@ -137,32 +137,32 @@ void SetDarkPhotonBranchingRatios(double mA)
   }
 
   stringstream BRstr[26];
-  BRstr[0] << "4900022:oneChannel = 1 " <<  BR_ee   		<< " 91 11 -11";
-  BRstr[1] << "4900022:addChannel = 1 " <<  BR_mm   		<< " 91 13 -13";
-  BRstr[2] << "4900022:addChannel = 1 " <<  BR_tt   		<< " 91 15 -15";
-  BRstr[3] << "4900022:addChannel = 1 " <<  BR_Pi_pm 		<< " 100 211 -211";
-  BRstr[4] << "4900022:addChannel = 1 " <<  BR_K_pm 		<< " 100 321 -321";
-  BRstr[5] << "4900022:addChannel = 1 " <<  BR_K_00 		<< " 100 311 -311";
-  BRstr[6] << "4900022:addChannel = 1 " <<  BR_PiGamma 		<< " 100 111 22";
-  BRstr[7] << "4900022:addChannel = 1 " <<  BR_EtaGamma 	<< " 100 221 22";
-  BRstr[8] << "4900022:addChannel = 1 " <<  BR_2PiGamma		<< " 100 111 111 22";
-  BRstr[9] << "4900022:addChannel = 1 " <<  BR_Pi_pm0 		<< " 100 211 -211 111";
-  BRstr[10] << "4900022:addChannel = 1 " <<  BR_PiK_pm 		<< " 100 111 321 -321";
-  BRstr[11] << "4900022:addChannel = 1 " <<  BR_KsK_pm_Pi_pm/2. << " 100 310 -321 211";
-  BRstr[12] << "4900022:addChannel = 1 " <<  BR_KsK_pm_Pi_pm/2. << " 100 310 321 -211";
-  BRstr[13] << "4900022:addChannel = 1 " <<  BR_Pi_pm00 	<< " 100 211 -211 111 111";
-  BRstr[14] << "4900022:addChannel = 1 " <<  BR_Pi_pmpm 	<< " 100 211 -211 211 -211";
-  BRstr[15] << "4900022:addChannel = 1 " <<  BR_K_pm_Pi_pm 	<< " 100 321 -321 211 -211";
-  BRstr[16] << "4900022:addChannel = 1 " <<  BR_2GammaPi_pm 	<< " 100 22 22 211 -211";
-  BRstr[17] << "4900022:addChannel = 1 " <<  BR_Pi_pmpm0 	<< " 100 211 -211 211 -211 111";
-  BRstr[18] << "4900022:addChannel = 1 " <<  BR_Pi_pm000 	<< " 100 211 -211 111 111 111";
-  BRstr[19] << "4900022:addChannel = 1 " <<  BR_Pi_pmpmpm 	<< " 100 211 -211 211 -211 211 -211";
-  BRstr[20] << "4900022:addChannel = 1 " <<  BR_Pi_pmpm00 	<< " 100 211 -211 211 -211 111 111";
-  BRstr[21] << "4900022:addChannel = 1 " <<  BR_dd   		<< " 91 1 -1";
-  BRstr[22] << "4900022:addChannel = 1 " <<  BR_uu   		<< " 91 2 -2";
-  BRstr[23] << "4900022:addChannel = 1 " <<  BR_ss   		<< " 91 3 -3";
-  BRstr[24] << "4900022:addChannel = 1 " <<  BR_cc   		<< " 91 4 -4";
-  BRstr[25] << "4900022:addChannel = 1 " <<  BR_bb   		<< " 91 5 -5";
+  BRstr[0] << "4900022:oneChannel = 1 " <<  BR_ee   		<< " 103 11 -11";
+  BRstr[1] << "4900022:addChannel = 1 " <<  BR_mm   		<< " 103 13 -13";
+  BRstr[2] << "4900022:addChannel = 1 " <<  BR_tt   		<< " 103 15 -15";
+  BRstr[3] << "4900022:addChannel = 1 " <<  BR_Pi_pm 		<< " 103 211 -211";
+  BRstr[4] << "4900022:addChannel = 1 " <<  BR_K_pm 		<< " 103 321 -321";
+  BRstr[5] << "4900022:addChannel = 1 " <<  BR_K_00 		<< " 103 311 -311";
+  BRstr[6] << "4900022:addChannel = 1 " <<  BR_PiGamma 		<< " 103 111 22";
+  BRstr[7] << "4900022:addChannel = 1 " <<  BR_EtaGamma 	<< " 103 221 22";
+  BRstr[8] << "4900022:addChannel = 1 " <<  BR_2PiGamma		<< " 103 111 111 22";
+  BRstr[9] << "4900022:addChannel = 1 " <<  BR_Pi_pm0 		<< " 103 211 -211 111";
+  BRstr[10] << "4900022:addChannel = 1 " <<  BR_PiK_pm 		<< " 103 111 321 -321";
+  BRstr[11] << "4900022:addChannel = 1 " <<  BR_KsK_pm_Pi_pm/2. << " 103 310 -321 211";
+  BRstr[12] << "4900022:addChannel = 1 " <<  BR_KsK_pm_Pi_pm/2. << " 103 310 321 -211";
+  BRstr[13] << "4900022:addChannel = 1 " <<  BR_Pi_pm00 	<< " 103 211 -211 111 111";
+  BRstr[14] << "4900022:addChannel = 1 " <<  BR_Pi_pmpm 	<< " 103 211 -211 211 -211";
+  BRstr[15] << "4900022:addChannel = 1 " <<  BR_K_pm_Pi_pm 	<< " 103 321 -321 211 -211";
+  BRstr[16] << "4900022:addChannel = 1 " <<  BR_2GammaPi_pm 	<< " 103 22 22 211 -211";
+  BRstr[17] << "4900022:addChannel = 1 " <<  BR_Pi_pmpm0 	<< " 103 211 -211 211 -211 111";
+  BRstr[18] << "4900022:addChannel = 1 " <<  BR_Pi_pm000 	<< " 103 211 -211 111 111 111";
+  BRstr[19] << "4900022:addChannel = 1 " <<  BR_Pi_pmpmpm 	<< " 103 211 -211 211 -211 211 -211";
+  BRstr[20] << "4900022:addChannel = 1 " <<  BR_Pi_pmpm00 	<< " 103 211 -211 211 -211 111 111";
+  BRstr[21] << "4900022:addChannel = 1 " <<  BR_dd   		<< " 103 1 -1";
+  BRstr[22] << "4900022:addChannel = 1 " <<  BR_uu   		<< " 103 2 -2";
+  BRstr[23] << "4900022:addChannel = 1 " <<  BR_ss   		<< " 103 3 -3";
+  BRstr[24] << "4900022:addChannel = 1 " <<  BR_cc   		<< " 103 4 -4";
+  BRstr[25] << "4900022:addChannel = 1 " <<  BR_bb   		<< " 103 5 -5";
 
   //added Nov 5
   for(int i=0;i<26;i++)

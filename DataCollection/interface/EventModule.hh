@@ -14,6 +14,7 @@
 #include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LocalEventInputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/SingleParticleHist.hh"
+#include "CMSAnalysis/DataCollection/interface/CollectionHist.hh"
 
 // EventModule allows an Analyzer to select events and apply cuts.
 // Additionally, contains a HistogramOutputModule to generate basic histograms for events.
@@ -43,12 +44,16 @@ class EventModule : public AnalysisModule
         // adds all Nth Highest Phi/Eta/Invariant Mass histograms for specified particleType up to the ith particle 
         // of that particle type
         void addBasicHistograms(const ParticleType& particleType, const ParticleCollection<Particle>& particles);
+
+        // adds histograms which count the ammount of a certain type of particle
+        void addCountHistograms(const ParticleType& particleType, const ParticleCollection<Particle>& particles);
+
         // returns "[n]th Highest [particle type] [value name]" e.g. 4th Highest Muon Eta
         std::string getBasicHistogramTitle(int n, const ParticleType& particleType, std::string valueName) const;
         bool checkHist(std::string histName) const;
 
     private:
-        void clearBasicHistograms();
+        void clearHistograms();
         std::vector<std::shared_ptr<Selector>> selectors;
         std::vector<std::shared_ptr<Cut>> cuts;
         Event event;
@@ -57,7 +62,8 @@ class EventModule : public AnalysisModule
         LocalEventInputModule localInput;
 
         // Used for keeping track of the nth particles for which sets of histograms have been added
-        std::unordered_map<std::string,std::shared_ptr<SingleParticleHist>> basicHistograms;
+        std::unordered_map<std::string,std::shared_ptr<SingleParticleHist>> particleHistograms;
+        std::unordered_map<std::string,std::shared_ptr<CollectionHist>> collectionHistograms;
 
 
         // Used for dynamically adding as many histograms as needed
