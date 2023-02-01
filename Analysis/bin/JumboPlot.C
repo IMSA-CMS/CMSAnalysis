@@ -33,8 +33,8 @@ void JumboPlot() {
 	//Change things in this section
 
 	//Put your analysises here. If you only have a simpleAnalysis or only superimposed histograms that's ok, just leave the others at default
-	auto higgsStackAnalysis = std::make_shared<HiggsPlusPlusAnalysis>();
-	auto higgsSuperImpAnalysis = std::make_shared<HiggsPlusPlusAnalysis>();
+	auto higgsStackAnalysis = std::make_shared<HiggsComparisonAnalysis>();
+	auto higgsSuperImpAnalysis = std::make_shared<HiggsComparisonAnalysis>();
 	auto simpleAnalysis = std::make_shared<SimpleHiggsComparison>();
 	//Extra text is the second parameter
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "");

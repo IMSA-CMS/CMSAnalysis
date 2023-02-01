@@ -1,10 +1,5 @@
 # General
 Main:timesAllowErrors = 10000
-#ParticleDecays:limitTau0 = on
-#ParticleDecays:tauMax = 10
-#Tune:pp 5
-#Tune:ee 3  
-#Random:seed=6
 
 # SUSY
 SUSY:all = on
@@ -16,7 +11,6 @@ SLHA:readFrom = 2
 SLHA:file = SUSYLeptonJet.spc
 
 # Hidden Valley
-#HiddenValley:all = on
 HiddenValley:Ngauge = 1
 HiddenValley:doKinMix = on
 HiddenValley:FSR = on

@@ -20,14 +20,16 @@ class SingleParticleHist : public HistogramPrototype1D
     //Clones histogram / This is necessary for to move them from ParticleType
     SingleParticleHist clone() {return SingleParticleHist(getName(),getNBins(),getMinimum(),getMaximum(),valueFunction);};
 
-    //Resets particle connected to Hist
+    //Sets nullparticle to hist to avoid null pointer error
     void clear() {setParticle(Particle::nullParticle());};
 
+    //Sets the Particle
     void setParticle(Particle part) {particle = part;}; 
 
-    //This function is necessary to change name from default in ParticleType
+    //This function is necessary to change name from default in ParticleType / called in EventModule
     void changeName (std::string newName) {setName(newName);};
 
+    // value function which is called in HistMod
     virtual std::vector<double> value() const override;
 
   protected:

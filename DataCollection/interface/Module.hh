@@ -42,6 +42,10 @@ public:
   // Writes text to screen and to Root file
   // par is the text itself while name is the name of the variable in the Root file
   void writeText(std::string par, std::string name) const;
+  const int getInputPublic() const {
+    if(input){return 1;}
+    return 0;
+    }
 
 protected:
   // This is called once per event, with the event object passed in.
@@ -56,6 +60,7 @@ private:
   static std::unordered_map<std::string, double> parameters;
   std::unordered_map<std::string, int> eventCount; 
   const InputModule* input = nullptr;
+
 };
 
 #endif

@@ -73,14 +73,12 @@ ParticleCollection<GenSimParticle> DelphesEventFile::getGenSimParticles() const
         {
             charge = 0;
         }
-        // std::cout << "ID: " << gen_pid[i];
-        genParticles.addParticle(
-            Particle(
-                reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i], gen_eta[i], gen_phi[i], gen_mass[i])),
-                charge,
-                Particle::identifyType(gen_pid[i]), gen_pid[i], gen_status[i], gen_m1[i], gen_m2[i], gen_d1[i], gen_d2[i],
-                0)); // not sure if relIso, last parameter, should be set to 0
-        // std::cout << " particle type: " << genParticles[genParticles.getNumParticles() - 1].getType().getName() << '\n';
+        auto particle = Particle(
+            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i], gen_eta[i], gen_phi[i], gen_mass[i])),
+            charge,
+            Particle::identifyType(gen_pid[i]), gen_pid[i], gen_status[i], gen_m1[i], gen_m2[i], gen_d1[i], gen_d2[i]);
+        particle.addInfo("Isolation", 0); // not sure if relIso, last parameter, should be set to 0
+        genParticles.addParticle(particle);
     }
     return genParticles;
 }
@@ -113,11 +111,13 @@ ParticleCollection<Particle> DelphesEventFile::getRecoParticles() const
         }
 
         // Lorentz four-vector
-        recoParticles.addParticle(Particle(
+        auto particle = Particle(
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],
                                                                         elec_eta[i], elec_phi[i], elec_mass[i])),
-            charge, ParticleType::electron(), elec_reliso[i], fit));
-    }
+            charge, ParticleType::electron(), fit);
+        particle.addInfo("Isolation", elec_reliso[i]);
+        recoParticles.addParticle(particle);
+        }
     for (Int_t i = 0; i < *muon_size; i++)
     {
 
@@ -141,10 +141,12 @@ ParticleCollection<Particle> DelphesEventFile::getRecoParticles() const
             continue;
         }
         // Lorentz four-vector
-        recoParticles.addParticle(Particle(
+        auto particle = Particle(
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],
                                                                         muon_eta[i], muon_phi[i], muon_mass[i])),
-            charge, ParticleType::muon(), muon_reliso[i], fit));
+            charge, ParticleType::muon(), fit);
+        particle.addInfo("Isolation", muon_reliso[i]);
+        recoParticles.addParticle(particle);
     }
     return recoParticles;
 }
