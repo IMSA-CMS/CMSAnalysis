@@ -104,14 +104,15 @@ bool returnState(TString &myMethodList)
     // input signal file here
     // string sgFile = "photons0_5.root";
     // string sgFile = "photons0_9.root";
-    string sgFile = "photons2_0.root";
+    string sgFile = "photons0_5.root";
 
     // input background files here
     string bgFiles[] =
         {
-            "dy4.root"
-            "dy10.root",
-            "dy50.root",
+            "background.root"
+            //"dy4.root"
+            //"dy10.root",
+            //"dy50.root",
             // "qcd500.root",
             // "qcd700.root",
             // "qcd1k.root",
@@ -162,15 +163,13 @@ bool returnState(TString &myMethodList)
 
     TMVA::DataLoader *dataloader = new TMVA::DataLoader("dataset");
 
-    // change var1 to index and var2 to pt
-    // dataloader->AddVariable("jetIndex", "Jet Index", "", 'F');
-    dataloader->AddVariable("pt", "Transverse Momentum", "", 'F');
+    dataloader->AddVariable("leading_pt", "Leading Lepton Pt", "", 'F');
     dataloader->AddVariable("nParticles", "Number of Particles", "", 'F');
     dataloader->AddVariable("eta", "Pseudorapidity", "", 'F');
     dataloader->AddVariable("phi", "Azimuthal Angle", "", 'F');
-    // dataloader->AddVariable("mass", "Mass", "", 'F');
     dataloader->AddVariable("deltaR", "Jet Width", "", 'F');
-    // dataloader->AddSpectator("spec1 := jetIndex*2", "Spectator 1", "units", 'F');
+    dataloader->AddVariable("sum_pt", "Total Transverse Momentum", "", 'F');
+    dataloader->AddVariable("delta_pt", "Difference in First and Second Highest Lepton Pt", "", 'F');
 
     // global event weights per tree (see below for setting event-wise weights)
     Double_t signalWeight = 1.0;

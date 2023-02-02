@@ -53,12 +53,7 @@ const InputModule* getInputModule() const {return input;}
   void processOneEvent(const EventInterface *eventInterface);
   void initialize();
 
-  void printModules(){
-    std::cout << "Printing Modules" << std::endl;
-    for (std::shared_ptr<Module> i: getAllModules()){
-      std::cout << i << ' ' << std::endl;
-    }
-  }
+ 
 
 private:
   std::vector<std::shared_ptr<ProductionModule>> productionModules;

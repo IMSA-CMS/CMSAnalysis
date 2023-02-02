@@ -10,10 +10,10 @@ Method         : Cuts::Cuts
 TMVA Release   : 4.2.1         [262657]
 ROOT Release   : 6.24/07       [399367]
 Creator        : kzhang1
-Date           : Tue Nov 29 15:39:58 2022
+Date           : Sat Dec 10 20:45:59 2022
 Host           : Linux cmsbuild02.cern.ch 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
 Dir            : /uscms/homes/k/kzhang1/practice/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin
-Training events: 4302
+Training events: 9889
 Analysis type  : [Classification]
 
 
@@ -34,27 +34,35 @@ CutRangeMin[0]: "-1.000000e+00" [Minimum of allowed cut range (set per variable)
     CutRangeMin[2]: "-1.000000e+00"
     CutRangeMin[3]: "-1.000000e+00"
     CutRangeMin[4]: "-1.000000e+00"
+    CutRangeMin[5]: "-1.000000e+00"
+    CutRangeMin[6]: "-1.000000e+00"
 CutRangeMax[0]: "-1.000000e+00" [Maximum of allowed cut range (set per variable)]
     CutRangeMax[1]: "-1.000000e+00"
     CutRangeMax[2]: "-1.000000e+00"
     CutRangeMax[3]: "-1.000000e+00"
     CutRangeMax[4]: "-1.000000e+00"
+    CutRangeMax[5]: "-1.000000e+00"
+    CutRangeMax[6]: "-1.000000e+00"
 VarProp[0]: "FSmart" [Categorisation of cuts]
     VarProp[1]: "FSmart"
     VarProp[2]: "FSmart"
     VarProp[3]: "FSmart"
     VarProp[4]: "FSmart"
+    VarProp[5]: "FSmart"
+    VarProp[6]: "FSmart"
 ##
 
 
 #VAR -*-*-*-*-*-*-*-*-*-*-*-* variables *-*-*-*-*-*-*-*-*-*-*-*-
 
-NVar 5
-pt                            pt                            pt                            Transverse Momentum                                             'F'    [8.94119262695,2084.13500977]
-nParticles                    nParticles                    nParticles                    Number of Particles                                             'F'    [2,5]
-eta                           eta                           eta                           Pseudorapidity                                                  'F'    [-3.1376721859,3.12934875488]
-phi                           phi                           phi                           Azimuthal Angle                                                 'F'    [-3.13815546036,3.13753390312]
-deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.191068515182]
+NVar 7
+leading_pt                    leading_pt                    leading_pt                    Leading Lepton Pt                                               'F'    [5.07694292068,637.124511719]
+nParticles                    nParticles                    nParticles                    Number of Particles                                             'F'    [2,6]
+eta                           eta                           eta                           Pseudorapidity                                                  'F'    [-2.87590885162,2.97644805908]
+phi                           phi                           phi                           Azimuthal Angle                                                 'F'    [-3.14097380638,3.14128875732]
+deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.802249372005]
+sum_pt                        sum_pt                        sum_pt                        Total Transverse Momentum                                       'F'    [10.0917778015,948.382324219]
+delta_pt                      delta_pt                      delta_pt                      Difference in First and Second Highest Lepton Pt                                  'F'    [0,637.124511719]
 NSpec 0
 
 
@@ -98,10 +106,10 @@ class ReadCuts : public IClassifierReader {
    ReadCuts( std::vector<std::string>& theInputVars )
       : IClassifierReader(),
         fClassName( "ReadCuts" ),
-        fNvars( 5 )
+        fNvars( 7 )
    {
       // the training input variables
-      const char* inputVars[] = { "pt", "nParticles", "eta", "phi", "deltaR" };
+      const char* inputVars[] = { "leading_pt", "nParticles", "eta", "phi", "deltaR", "sum_pt", "delta_pt" };
 
       // sanity checks
       if (theInputVars.size() <= 0) {
@@ -135,6 +143,10 @@ class ReadCuts : public IClassifierReader {
       fVmax[3] = 0;
       fVmin[4] = 0;
       fVmax[4] = 0;
+      fVmin[5] = 0;
+      fVmax[5] = 0;
+      fVmin[6] = 0;
+      fVmax[6] = 0;
 
       // initialize input variable types
       fType[0] = 'F';
@@ -142,6 +154,8 @@ class ReadCuts : public IClassifierReader {
       fType[2] = 'F';
       fType[3] = 'F';
       fType[4] = 'F';
+      fType[5] = 'F';
+      fType[6] = 'F';
 
       // initialize constants
       Initialize();
@@ -171,15 +185,15 @@ class ReadCuts : public IClassifierReader {
    char   GetType( int ivar ) const { return fType[ivar]; }
 
    // normalisation of input variables
-   double fVmin[5];
-   double fVmax[5];
+   double fVmin[7];
+   double fVmax[7];
    double NormVariable( double x, double xmin, double xmax ) const {
       // normalise to output range: [-1, 1]
       return 2*(x - xmin)/(xmax - xmin) - 1.0;
    }
 
    // type of input variable: 'F' or 'I'
-   char   fType[5];
+   char   fType[7];
 
    // initialize internal variables
    void Initialize();
