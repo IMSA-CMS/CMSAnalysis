@@ -27,6 +27,11 @@ bool GenSimSimpleImplementation::operator== (const ParticleImplementation& other
   }
 }
 
+int GenSimSimpleImplementation::pdgId() const
+{
+  return particleType.getpdgId();
+}
+
 reco::Candidate::LorentzVector GenSimSimpleImplementation::getFourVector() const
 {
   return lorentzVec;
