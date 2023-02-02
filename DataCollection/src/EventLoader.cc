@@ -45,7 +45,6 @@ void EventLoader::run(int outputEvery, int nFiles){
 
 void EventLoader::processRootFiles(int outputEvery, int nFiles)
 {
-  
   // Get a list of FileParams objects
   setOutputEvery(outputEvery);
 
@@ -63,7 +62,6 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles)
       continue;
     }
 
-    std::cout << "Sucess " << fileName << " Sucess\n";
     file = changeFileFormat(tFile); // Makes a GenSimEventFile, DelphesEventFile or MiniAODFile shared pointer
     eventInterface.setFile(file); //Change eventFile reference
     
