@@ -46,9 +46,9 @@ void LeptonJetReconstructionPlan::initialize()
 {
  Analyzer &analyzer = getAnalyzer();
 
-  auto eventMod = std::make_shared<EventModule>();
-  auto eventHistMod = eventMod->getHistogramModule();
-  eventMod->addSelector(std::make_shared<LeptonJetSelector>());	
+  //auto eventMod = std::make_shared<EventModule>();
+  //auto eventHistMod = eventMod->getHistogramModule();
+  //eventMod->addSelector(std::make_shared<LeptonJetSelector>());	
 
   auto matchMod = std::make_shared<MatchingModule>();
   auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
@@ -106,16 +106,16 @@ void LeptonJetReconstructionPlan::initialize()
 
   // Efficiency Modules
   auto leptonEfficiency = std::make_shared<LeptonEfficiency>(matchMod);
-  auto leptonJetEfficiency = std::make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
+  //auto leptonJetEfficiency = std::make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
 
   // Add the histogram(s) created above to histMod
-  eventHistMod->addHistogram(nLeptonsHist);
-  eventHistMod->addHistogram(nElectronsHist);
-  eventHistMod->addHistogram(nMuonsHist);
-  eventHistMod->addHistogram(recoThirdMuonPtHist);
-  eventHistMod->addHistogram(recoSecondMuonPtHist);
-  eventHistMod->addHistogram(recoFirstMuonPtHist);
-  eventHistMod->addHistogram(nLeptonJetHist);
+  // eventHistMod->addHistogram(nLeptonsHist);
+  // eventHistMod->addHistogram(nElectronsHist);
+  // eventHistMod->addHistogram(nMuonsHist);
+  // eventHistMod->addHistogram(recoThirdMuonPtHist);
+  // eventHistMod->addHistogram(recoSecondMuonPtHist);
+  // eventHistMod->addHistogram(recoFirstMuonPtHist);
+  // eventHistMod->addHistogram(nLeptonJetHist);
 
   // Initialize triggers
   /*
@@ -136,7 +136,7 @@ void LeptonJetReconstructionPlan::initialize()
   //analyzer.addProductionModule(recoEventDumpMod);
   //analyzer.addProductionModule(matchMod);
 
-  analyzer.addProductionModule(lepRecoMod);
+  //analyzer.addProductionModule(lepRecoMod);
   // analyzer.addProductionModule(genPartMod);
   analyzer.addProductionModule(lepMatchMod);
 

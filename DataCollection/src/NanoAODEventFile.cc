@@ -137,11 +137,12 @@ void NanoAODEventFile::nextEvent()
         }
 
         std::vector<const GenSimParticle*> daughterCollectionVector {&genSimParticles[gen_d1[i]], &genSimParticles[gen_d2[i]]};
-
+        GenSimParticle *motherParticle = nullptr;
+        if(gen_m1[i] != -1) motherParticle = &genSimParticles[gen_m1[i]];
         genSimParticles.push_back(GenSimParticle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i],
                                                                         gen_eta[i], gen_phi[i], gen_mass[i])),
-            charge, Particle::identifyType(gen_pid[i]),&genSimParticles[gen_m1[i]],
+            charge, Particle::identifyType(gen_pid[i]), gen_pid[i], motherParticle,
             daughterCollectionVector, gen_status[i]));         
         
     }
