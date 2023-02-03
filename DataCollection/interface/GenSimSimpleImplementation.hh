@@ -18,7 +18,7 @@ class GenSimSimpleImplementation : public ParticleImplementation
         //virtual double dxy() const {throw std::runtime_error("getDxy not implemented");}
         //virtual double dz() const {throw std::runtime_error("getDz not implemented");}
         virtual int charge() const override;
-        virtual int pdgId() const override{throw std::runtime_error("pdgID error");}
+        virtual int pdgId() const override;
         virtual int status() const override{ return particleStatus; }
         virtual Particle mother() const override {return *motherParticle;}
         virtual Particle daughter(int i) const override;
