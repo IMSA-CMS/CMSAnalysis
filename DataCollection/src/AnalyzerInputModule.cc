@@ -4,7 +4,7 @@
 #include "CMSAnalysis/DataCollection/interface/EventLoader.hh"
 #include "CMSAnalysis/DataCollection/interface/Selector.hh"
 
-AnalyzerInputModule::AnalyzerInputModule(const EventInterface *&iEventInterface) : eventInterface(iEventInterface)
+AnalyzerInputModule::AnalyzerInputModule(const EventInterface **iEventInterface) : eventInterface(iEventInterface)
 {
 }
 

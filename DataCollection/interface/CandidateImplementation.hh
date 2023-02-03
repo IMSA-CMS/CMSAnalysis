@@ -28,6 +28,7 @@ public:
   //virtual double isolation() const override;
   virtual Particle mother() const override;
   virtual Particle daughter(int i) const override;
+  virtual bool doesHaveMother() override {throw std::runtime_error("not implemented error");}
   virtual int numberOfDaughters() const override;
   virtual bool isNotNull() const override {return particle;}
   virtual const ParticleType& getType() const override;
