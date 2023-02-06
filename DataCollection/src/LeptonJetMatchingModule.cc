@@ -55,14 +55,22 @@ bool LeptonJetMatchingModule::process()
     {
       bool passedDarkPhoton = false;
       GenSimParticle particle = lepton;
+      bool forgetIt = false;
       while(!(isQuark(particle) || isSquark(particle) || particle.status() == 4))
       {
+        if(particle.hasMother() == false) break;
         particle = particle.mother();
+        if(particle.pdgId() == 0)
+        {
+          forgetIt = true;
+          break;
+        }
         if(particle.getType() == ParticleType::darkPhoton())
         {
           passedDarkPhoton = true;
         }
       }
+      if(forgetIt) break;
       if(isQuark(particle))
       {
         quark++;
@@ -82,7 +90,6 @@ bool LeptonJetMatchingModule::process()
       {
         proton++;
       }
-    
     }
     
   
