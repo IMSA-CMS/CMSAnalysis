@@ -76,7 +76,7 @@ void EventDumpModule::printGenSimParticleCollection(const ParticleCollection<Gen
   my_file << "EVENT #" << (counter + 1) <<std::endl;
   my_file << "--------------------------------------------------------" << std::endl;
 
-  my_file << std::left << std::setw(8) << "element" << std::setw(11) << "| pdfId"
+  my_file << std::left << std::setw(8) << "element" << std::setw(11) << "| pdgId"
    << std::setw(10) << "| status"
    << std::setw(motherColumnWidth) << "| mothers"
    << std::setw(daughterColumnWidth) << "| daughters"

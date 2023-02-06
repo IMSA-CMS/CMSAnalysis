@@ -1,5 +1,7 @@
 #include "CMSAnalysis/DataCollection/interface/DataCollectionPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/EventLoader.hh"
+#include "CMSAnalysis/DataCollection/interface/CmsswEventInterface.hh"
+
 
 void DataCollectionPlan::runEventLoader(const std::string& inputFile, const std::string& outputFile, 
 	   int outputEvery, int numFiles)
@@ -10,9 +12,13 @@ void DataCollectionPlan::runEventLoader(const std::string& inputFile, const std:
     analyzer.writeOutputFile(outputFile);
 }
 
-void DataCollectionPlan::runAnalyzerWrapper(){
+// void DataCollectionPlan::runAnalyzerWrapper(const std::string& inputFile, const std::string& outputFile)
+// {
+//   //RunAnalyzerWrapper.beginJob();
+//   //RunAnalyzerWrapper.analyze(fetchEvent(inputfile), eventsetup);
+//   //RunAnalyzerWrapper.endJob();
 
-}
+// }
 
 std::vector<std::string> DataCollectionPlan::fetchRootFiles(const std::string &configFile) const
 {

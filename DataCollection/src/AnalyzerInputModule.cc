@@ -4,8 +4,7 @@
 #include "CMSAnalysis/DataCollection/interface/EventLoader.hh"
 #include "CMSAnalysis/DataCollection/interface/Selector.hh"
 
-AnalyzerInputModule::AnalyzerInputModule(const EventInterface*& iEventInterface):
-eventInterface(iEventInterface)
+AnalyzerInputModule::AnalyzerInputModule(const EventInterface **iEventInterface) : eventInterface(iEventInterface)
 {
 }
 
@@ -30,7 +29,7 @@ ParticleCollection<Particle> AnalyzerInputModule::getParticles(RecoLevel level, 
     ParticleCollection<Particle> particleList;
     if (level == RecoLevel::GenSim)
     {
-        auto particles = eventInterface->getGenSimParticles().getParticles();
+        auto particles = (*eventInterface)->getGenSimParticles().getParticles();
         for (const auto &p : particles)
         {
              if ((p.getType() == particleType || particleType == ParticleType::none())) //&& p.isFinalState())
@@ -41,7 +40,7 @@ ParticleCollection<Particle> AnalyzerInputModule::getParticles(RecoLevel level, 
     }
     else if (level == RecoLevel::Reco)
     {
-        auto particles = eventInterface->getRecoParticles().getParticles();
+        auto particles = (*eventInterface)->getRecoParticles().getParticles();
         for (const auto &p : particles)
         {
              if (p.getType() == particleType || particleType == ParticleType::none()) //&& p.isFinalState())
@@ -63,7 +62,7 @@ ParticleCollection<Particle> AnalyzerInputModule::getJets(RecoLevel level) const
     }
     else if (level == RecoLevel::Reco)
     {
-        auto particles = eventInterface->getRecoJets().getParticles();
+        auto particles = (*eventInterface)->getRecoJets().getParticles();
         for (const auto &p : particles)
         {
             particleList.addParticle(p);
@@ -74,25 +73,25 @@ ParticleCollection<Particle> AnalyzerInputModule::getJets(RecoLevel level) const
 
 int AnalyzerInputModule::getNumPileUpInteractions() const
 {
-    return eventInterface->getNumPileUpInteractions();
+    return (*eventInterface)->getNumPileUpInteractions();
 }
 
 double AnalyzerInputModule::getMET() const
 {
-    return eventInterface->getMET();
-} 
+    return (*eventInterface)->getMET();
+}
 
 std::vector<bool> AnalyzerInputModule::getTriggerResults(std::string subProcess) const
 {
-    return eventInterface->getTriggerResults(subProcess);
+    return (*eventInterface)->getTriggerResults(subProcess);
 }
 
 std::vector<std::string> AnalyzerInputModule::getTriggerNames(std::string subProcess) const
 {
-    return eventInterface->getTriggerNames(subProcess);
+    return (*eventInterface)->getTriggerNames(subProcess);
 }
 
 bool AnalyzerInputModule::checkTrigger(std::string triggerName, std::string subProcess) const
 {
-    return eventInterface->checkTrigger(triggerName, subProcess);
+    return (*eventInterface)->checkTrigger(triggerName, subProcess);
 }

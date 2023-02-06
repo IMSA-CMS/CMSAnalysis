@@ -22,12 +22,13 @@
 
 Analyzer::Analyzer() : 
 eventInterface(nullptr),
-input(new AnalyzerInputModule(eventInterface))
+input(new AnalyzerInputModule(&eventInterface))
 {
 }
 
 Analyzer::Analyzer(const Analyzer &analyzer)
 {
+
   input = analyzer.input;
 }
 
@@ -106,8 +107,9 @@ void Analyzer::initialize()
 
 void Analyzer::processOneEvent(const EventInterface *eInterface)
 {
-      //printModules();
+
       eventInterface = eInterface;
+
       bool continueProcessing = true;
       std::string filterString;
       // Processes event through production modules
@@ -118,6 +120,7 @@ void Analyzer::processOneEvent(const EventInterface *eInterface)
           continueProcessing = false;
           break;
         }
+
       }
       // Processes event through filter modules
       for (auto module : filterModules)
