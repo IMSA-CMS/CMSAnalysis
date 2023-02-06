@@ -44,8 +44,8 @@ particle(std::make_shared<DelphesImplementation>(vec,charge,type,pid,status,m1,m
 }
 
 
-Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, const Particle* motherParticle, std::vector<const GenSimParticle*> daughters, const int status):
-particle(std::make_shared<GenSimSimpleImplementation>(vec, charge, type, motherParticle, daughters, status))
+Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int currentpdgId, const Particle* motherParticle, std::vector<const GenSimParticle*> daughters, const int status):
+particle(std::make_shared<GenSimSimpleImplementation>(vec, charge, type, currentpdgId, motherParticle, daughters, status))
 {
 
 }

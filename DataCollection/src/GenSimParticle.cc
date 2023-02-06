@@ -56,6 +56,10 @@ bool GenSimParticle::isFinalState() const
 {
   return getParticle()->isFinalState();
 }
+bool GenSimParticle::hasMother()
+{
+  return getParticle()->doesHaveMother();
+}
 
 GenSimParticle GenSimParticle::uniqueMother() const
 {
