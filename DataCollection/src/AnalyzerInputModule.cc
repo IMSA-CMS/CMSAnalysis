@@ -4,8 +4,7 @@
 #include "CMSAnalysis/DataCollection/interface/EventLoader.hh"
 #include "CMSAnalysis/DataCollection/interface/Selector.hh"
 
-AnalyzerInputModule::AnalyzerInputModule(const EventInterface** iEventInterface):
-eventInterface(iEventInterface)
+AnalyzerInputModule::AnalyzerInputModule(const EventInterface **iEventInterface) : eventInterface(iEventInterface)
 {
 }
 
@@ -83,7 +82,7 @@ int AnalyzerInputModule::getNumPileUpInteractions() const
 double AnalyzerInputModule::getMET() const
 {
     return (*eventInterface)->getMET();
-} 
+}
 
 std::vector<bool> AnalyzerInputModule::getTriggerResults(std::string subProcess) const
 {

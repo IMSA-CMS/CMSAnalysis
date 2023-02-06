@@ -1,6 +1,6 @@
 HiggsSM:all = on
 25:onMode = off
-25:m0 = 125
+25:m0 = 1000
 
 # 5) Set Higgs mass, width and branching ratios by hand.
 # Values for 125 GeV SM Higgs taken from
@@ -12,9 +12,9 @@ HiggsSM:all = on
 25:76:bRatio = 1.0 
 25:76:meMode = 100
 25:onIfAny = 4900001
-25:mMin = 125
+25:mMin = 1000
 25:mWidth = 10
-                        
+
 4900001:oneChannel = 1 1.0 100 4900022 4900004
 4900003:oneChannel = 1 1.0 100 4900022 4900022
 
@@ -71,8 +71,6 @@ HiggsSM:all = on
 4900004:mayDecay = off
 4900022:m0 = 0.3
 4900022:mWidth = 1.0
-4900022:mMin = 5.0
-4900022:mMax = 0.0
 4900022:isResonance = true
 4900022:tau0 = 1.97327e-13
 4900004:isResonance = false 
@@ -85,5 +83,3 @@ HiddenValley:Ngauge = 1
 HiddenValley:doKinMix = on
 HiddenValley:FSR = on
 HiddenValley:alphaFSR = 0
-4900022:oneChannel = 1 0.526471 100 11 -11
-4900022:addChannel = 1 0.466296 100 13 -13

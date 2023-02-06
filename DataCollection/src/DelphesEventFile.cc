@@ -80,12 +80,11 @@ ParticleCollection<GenSimParticle> DelphesEventFile::getGenSimParticles() const
             charge = 0;
         }
         auto particle = Particle(
-                reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i],gen_eta[i], gen_phi[i], gen_mass[i])),
-                charge, 
-                Particle::identifyType(gen_pid[i]),gen_pid[i],gen_status[i],gen_m1[i],gen_m2[i],gen_d1[i],gen_d2[i]); 
-        particle.addInfo("Isolation", 0);  //not sure if relIso, last parameter, should be set to 0
+            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i], gen_eta[i], gen_phi[i], gen_mass[i])),
+            charge,
+            Particle::identifyType(gen_pid[i]), gen_pid[i], gen_status[i], gen_m1[i], gen_m2[i], gen_d1[i], gen_d2[i]);
+        particle.addInfo("Isolation", 0); // not sure if relIso, last parameter, should be set to 0
         genParticles.addParticle(particle);
-            
     }
     return genParticles;
 }
@@ -121,8 +120,7 @@ ParticleCollection<Particle> DelphesEventFile::getRecoParticles() const
             charge, ParticleType::electron(), fit);
         particle.addInfo("Isolation", elec_reliso[i]);
         recoParticles.addParticle(particle);
-        
-    }
+        }
     for (Int_t i = 0; i < *muon_size; i++)
     {
         
