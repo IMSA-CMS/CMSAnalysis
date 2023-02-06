@@ -72,12 +72,12 @@ ParticleCollection<GenSimParticle> StrippedEventFile::getGenSimParticles() const
         {
             charge = 0;
         }
-        genParticles.addParticle(
-            Particle(
+        auto particle = Particle(
                 reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(genPt[i],genEta[i], genPhi[i], genMass[i])),
                 charge, 
-                Particle::identifyType(genPID[i]),genPID[i],genStatus[i],genM1[i],genM2[i],genD1[i],genD2[i],
-                0)); //not sure if relIso, last parameter, should be set to 0
+                Particle::identifyType(genPID[i]),genPID[i],genStatus[i],genM1[i],genM2[i],genD1[i],genD2[i]);
+                particle.addInfo("Isolation", 0); //not sure if relIso should be set to 0
+        genParticles.addParticle(particle);
     }
     return genParticles;
 }
@@ -106,10 +106,12 @@ ParticleCollection<Particle> StrippedEventFile::getRecoParticles() const
         }
 
         // Lorentz four-vector
-        recoParticles.addParticle(Particle(
+        auto particle = Particle(
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elecPt[i],
                                                                         elecEta[i], elecPhi[i], elecMass[i])),
-            charge, ParticleType::electron(), elecReliso[i], fit));
+            charge, ParticleType::electron(), fit);
+        particle.addInfo("Isolation", elecReliso[i]);
+        recoParticles.addParticle(particle);
     }
     for (UInt_t i = 0; i < *muonSize; i++)
     {
@@ -130,10 +132,12 @@ ParticleCollection<Particle> StrippedEventFile::getRecoParticles() const
             continue;
         }
         // Lorentz four-vector
-        recoParticles.addParticle(Particle(
+        auto particle = Particle(
             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muonPt[i],
                                                                         muonEta[i], muonPhi[i], muonMass[i])),
-            charge, ParticleType::muon(), muonReliso[i], fit));
+            charge, ParticleType::muon(), fit);
+            particle.addInfo("Isolation", muonReliso[i]);
+        recoParticles.addParticle(particle);
         
     }
     // std::cout << recoParticles.getNumParticles() << '\n';
