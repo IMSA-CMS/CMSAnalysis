@@ -27,7 +27,7 @@ public:
   template <typename U>
   ParticleCollection(ParticleCollection<U> pc1);
   ParticleCollection(std::vector<T> collectionVector);
-
+  int size(){return particles.size();}
   void addParticle(T particle) { particles.push_back(particle); }
   const std::vector<T> &getParticles() const { return particles; }
   double getNumParticles() const { return particles.size(); }
