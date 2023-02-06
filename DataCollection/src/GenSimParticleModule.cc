@@ -18,7 +18,6 @@ GenSimParticleModule::GenSimParticleModule(int itargetPdgId):
 //update to remove event parameter
 bool GenSimParticleModule::process()
 {
-  //std::cerr << "ENTERING GenSimParticleModule" << std::endl;
   genParticles.clear();
 
   //Get Events Tree and create handle for GEN
@@ -54,8 +53,6 @@ bool GenSimParticleModule::process()
         }
       }
     }
-    //std::cout << "Number of particles: " << genParticles.getNumParticles() << std::endl;
   }
-  //std::cerr << "EXITING GenSimParticleModule" << std::endl;
  return true;
 }
