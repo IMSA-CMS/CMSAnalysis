@@ -119,8 +119,11 @@ std::string HistogramOutputModule::getObjectName(const std::string &str) const {
 bool HistogramOutputModule::process() {
   //std::cout << "HistOutMod running \n";
   for (auto hist : histograms) {
+    //std::cout << hist->getName() << std::endl;
     bool draw = hist->shouldDraw(); // call the shouldDraw function so we can
                                     // call process on the FilterModules
+    // 2/2/2023 investigating shouldDraw problem, this comment is just a placeholder
+    
     if(draw)
     {
       // If the histogram without mass bin doesn't exist, make it
