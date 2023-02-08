@@ -41,10 +41,9 @@ std::vector<std::vector<std::string>> makeTableInput(std::vector<std::vector<std
     std::vector<std::vector<std::string>> newInput = oldInput;
     std::vector<std::string> toAdd(3, "");
     int count = 0;
-    while(static_cast<std::vector<int>::size_type>(count) < names.size())
-    {
+    for(std::string name : names) {
         toAdd.at(0) = names.at(count);
-        toAdd.at(1) = std::to_string((int) massTarget);
+        toAdd.at(1) = channel->getName();
         toAdd.at(2) = roundDoubleString(yields.at(count), 4);
         newInput.push_back(toAdd);
         count++;
@@ -60,7 +59,7 @@ void Table()
     //List massTargets here
     std::vector<double> massTargets = {900};
     //Change particle type here
-    auto higgsAnalysis = std::make_shared<HiggsCutsAnalysis>();
+    auto higgsAnalysis = std::make_shared<HiggsPlusPlusAnalysis>();
     for(std::string channel : channels) {
         input.clear();
         for(double massTarget : massTargets) {

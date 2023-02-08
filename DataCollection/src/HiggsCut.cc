@@ -20,8 +20,14 @@ bool HiggsCut::checkEventInternal(const Event& event) const
     //    return false;
     //}
     if(particles.getLeadingPt() < 5) {
-        return false;
+    	return false;
     }
 
+    // for(auto particle : particles) {
+    //     if(particle.getType() == ParticleType::electron()) 
+    //    	{
+    //        std::cout << "electron kept" << std::endl;
+    //     }
+    // }
     return true;
 }

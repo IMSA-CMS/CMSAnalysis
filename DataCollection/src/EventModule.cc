@@ -134,14 +134,14 @@ void EventModule::addBasicHistograms(const ParticleType& particleType, const Par
 
 void EventModule::addCountHistograms(const ParticleType& particleType, const ParticleCollection<Particle>& particles)
 {
-    std::string histName = "Number of " + particleType.getName() + "s";
-    if (!checkHist(histName))
-    {
-        auto hist = std::make_shared<CollectionHist>(histName, 11, -0.5, 10.5, [](const ParticleCollection<Particle>& collection){return std::vector<double>{collection.getNumParticles()};});
-        collectionHistograms.insert({histName,hist});
-        histMod->addHistogram(hist);
-    }
-    collectionHistograms[histName]->setCollection(particles);
+//     std::string histName = "Number of " + particleType.getName() + "s";
+//     if (!checkHist(histName))
+//     {
+//         auto hist = std::make_shared<CollectionHist>(histName, 11, -0.5, 10.5, [](const ParticleCollection<Particle>& collection){return std::vector<double>{collection.getNumParticles()};});
+//         collectionHistograms.insert({histName,hist});
+//         histMod->addHistogram(hist);
+//     }
+//     collectionHistograms[histName]->setCollection(particles);
 }
 bool EventModule::checkHist(std::string histName) const
 {
@@ -151,11 +151,11 @@ bool EventModule::checkHist(std::string histName) const
     {
         inMap = true;
     }
-    auto it2 = collectionHistograms.find(histName);
-     if (it2 != collectionHistograms.end())
-    {
-        inMap = true;
-    }
+    // auto it2 = collectionHistograms.find(histName);
+    //  if (it2 != collectionHistograms.end())
+    // {
+    //     inMap = true;
+    // }
     return inMap;
 }
 
@@ -184,8 +184,8 @@ void EventModule::clearHistograms()
     {
         value->clear();
     }
-    for (auto& [key,value] : collectionHistograms)
-    {
-        value->clear();
-    }
+    // for (auto& [key,value] : collectionHistograms)
+    // {
+    //     value->clear();
+    // }
 }

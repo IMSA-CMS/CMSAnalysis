@@ -35,3 +35,602 @@ Total event count: 200000
 Number of events passing at least one trigger: 188678
 Overall Efficiency: 0.94339
 
+Reading input file textfiles/newHiggs/Higgs900.txt
+H++toLL
+Filename: textfiles/H++toLL/H++toLL_Lepton_LL_Mass_900_Run_2.txt
+# of root files: 1
+Reading input file textfiles/DY50Run2.txt
+Drell-Yan
+Filename: textfiles/Drell-Yan/Drell-Yan_MassCut_50-inf_Run_2.txt
+# of root files: 113
+Error in <TTreeReaderArrayBase::GetBranchAndLeaf()>: The tree does not have a branch called Jet_btagCMVA. You could check with TTree::Print() for available branches.
+
+ *** Break *** segmentation violation
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/FBCF1B86-38C5-8542-9156-DE687C3D45B3.root Sucess
+
+
+
+===========================================================
+There was a crash.
+This is the entire stack trace of all threads:
+===========================================================
+
+Thread 6 (Thread 0x7f31abe6c700 (LWP 15111)):
+#0  0x00007f31baf5fe29 in syscall () from /lib64/libc.so.6
+#1  0x00007f31ae2ec35d in XrdSys::LinuxSemaphore::Wait (this=0x40a5d20) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdSys/XrdSysLinuxSemaphore.hh:161
+#2  XrdCl::SyncQueue<XrdCl::JobManager::JobHelper>::Get (this=0x40d3228) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdCl/XrdClSyncQueue.hh:67
+#3  XrdCl::JobManager::RunJobs() () at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClJobManager.cc:146
+#4  0x00007f31ae2ec519 in RunRunnerThread (arg=<optimized out>) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClJobManager.cc:33
+#5  0x00007f31bb23dea5 in start_thread () from /lib64/libpthread.so.0
+#6  0x00007f31baf65b0d in clone () from /lib64/libc.so.6
+
+Thread 5 (Thread 0x7f31ac66d700 (LWP 15110)):
+#0  0x00007f31baf5fe29 in syscall () from /lib64/libc.so.6
+#1  0x00007f31ae2ec35d in XrdSys::LinuxSemaphore::Wait (this=0x40a5d20) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdSys/XrdSysLinuxSemaphore.hh:161
+#2  XrdCl::SyncQueue<XrdCl::JobManager::JobHelper>::Get (this=0x40d3228) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdCl/XrdClSyncQueue.hh:67
+#3  XrdCl::JobManager::RunJobs() () at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClJobManager.cc:146
+#4  0x00007f31ae2ec519 in RunRunnerThread (arg=<optimized out>) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClJobManager.cc:33
+#5  0x00007f31bb23dea5 in start_thread () from /lib64/libpthread.so.0
+#6  0x00007f31baf65b0d in clone () from /lib64/libc.so.6
+
+Thread 4 (Thread 0x7f31ace6e700 (LWP 15109)):
+#0  0x00007f31baf5fe29 in syscall () from /lib64/libc.so.6
+#1  0x00007f31ae2ec35d in XrdSys::LinuxSemaphore::Wait (this=0x40a5d20) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdSys/XrdSysLinuxSemaphore.hh:161
+#2  XrdCl::SyncQueue<XrdCl::JobManager::JobHelper>::Get (this=0x40d3228) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdCl/XrdClSyncQueue.hh:67
+#3  XrdCl::JobManager::RunJobs() () at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClJobManager.cc:146
+#4  0x00007f31ae2ec519 in RunRunnerThread (arg=<optimized out>) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClJobManager.cc:33
+#5  0x00007f31bb23dea5 in start_thread () from /lib64/libpthread.so.0
+#6  0x00007f31baf65b0d in clone () from /lib64/libc.so.6
+
+Thread 3 (Thread 0x7f31ad66f700 (LWP 15108)):
+#0  0x00007f31bb244e9d in nanosleep () from /lib64/libpthread.so.0
+#1  0x00007f31ae403a1d in XrdSysTimer::Wait (mills=<optimized out>) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdSys/XrdSysTimer.cc:239
+#2  0x00007f31ae292308 in XrdCl::TaskManager::RunTasks() () at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClTaskManager.cc:244
+#3  0x00007f31ae2923e9 in RunRunnerThread (arg=<optimized out>) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClTaskManager.cc:37
+#4  0x00007f31bb23dea5 in start_thread () from /lib64/libpthread.so.0
+#5  0x00007f31baf65b0d in clone () from /lib64/libc.so.6
+
+Thread 2 (Thread 0x7f31ade70700 (LWP 15107)):
+#0  0x00007f31baf660e3 in epoll_wait () from /lib64/libc.so.6
+#1  0x00007f31ae3fdd57 in XrdSys::IOEvents::PollE::Begin (syncsem=<optimized out>, retcode=<optimized out>, eTxt=<optimized out>, this=<optimized out>) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdSys/XrdSysIOEventsPollE.icc:213
+#2  XrdSys::IOEvents::PollE::Begin (this=0x4096c30, syncsem=<optimized out>, retcode=<optimized out>, eTxt=<optimized out>) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdSys/XrdSysIOEventsPollE.icc:197
+#3  0x00007f31ae3fa545 in XrdSys::IOEvents::BootStrap::Start(void*) () at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdSys/XrdSysIOEvents.cc:131
+#4  0x00007f31ae403208 in XrdSysThread_Xeq (myargs=0x40a5960) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdSys/XrdSysPthread.cc:86
+#5  0x00007f31bb23dea5 in start_thread () from /lib64/libpthread.so.0
+#6  0x00007f31baf65b0d in clone () from /lib64/libc.so.6
+
+Thread 1 (Thread 0x7f31b925a600 (LWP 15076)):
+#0  0x00007f31baf2c659 in waitpid () from /lib64/libc.so.6
+#1  0x00007f31baea9f62 in do_system () from /lib64/libc.so.6
+#2  0x00007f31baeaa311 in system () from /lib64/libc.so.6
+#3  0x00007f31bdc4f503 in TUnixSystem::StackTrace() () from /cvmfs/cms.cern.ch/slc7_amd64_gcc820/cms/cmssw/CMSSW_11_0_2/external/slc7_amd64_gcc820/lib/libCore.so
+#4  0x00007f31bdc51d54 in TUnixSystem::DispatchSignals(ESignals) () from /cvmfs/cms.cern.ch/slc7_amd64_gcc820/cms/cmssw/CMSSW_11_0_2/external/slc7_amd64_gcc820/lib/libCore.so
+#5  <signal handler called>
+#6  0x00007f31c32179a1 in NanoAODEventFile::getMET() const () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#7  0x00007f31c32293fe in METModule::process() () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#8  0x00007f31c3296d0a in Analyzer::processOneEvent(EventInterface const*) () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#9  0x00007f31c326cdfc in EventLoader::processRootFiles(int, int) () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#10 0x00007f31c32a45e4 in DataCollectionPlan::runEventLoader(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int, int) () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#11 0x0000000000404962 in main ()
+===========================================================
+
+
+The lines below might hint at the cause of the crash.
+You may get help by asking at the ROOT forum http://root.cern.ch/forum
+Only if you are really convinced it is a bug in ROOT then please submit a
+report at http://root.cern.ch/bugs Please post the ENTIRE stack trace
+from above as an attachment in addition to anything else
+that might help us fixing this issue.
+===========================================================
+#6  0x00007f31c32179a1 in NanoAODEventFile::getMET() const () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#7  0x00007f31c32293fe in METModule::process() () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#8  0x00007f31c3296d0a in Analyzer::processOneEvent(EventInterface const*) () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#9  0x00007f31c326cdfc in EventLoader::processRootFiles(int, int) () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#10 0x00007f31c32a45e4 in DataCollectionPlan::runEventLoader(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int, int) () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#11 0x0000000000404962 in main ()
+===========================================================
+
+
+Reading input file textfiles/DY50Run2.txt
+Drell-Yan
+Filename: textfiles/Drell-Yan/Drell-Yan_MassCut_50-inf_Run_2.txt
+# of root files: 113
+Error in <TTreeReaderArrayBase::GetBranchAndLeaf()>: The tree does not have a branch called Jet_btagCMVA. You could check with TTree::Print() for available branches.
+
+ *** Break *** segmentation violation
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/FBCF1B86-38C5-8542-9156-DE687C3D45B3.root Sucess
+
+
+
+===========================================================
+There was a crash.
+This is the entire stack trace of all threads:
+===========================================================
+
+Thread 6 (Thread 0x7ff064ac6700 (LWP 15514)):
+#0  0x00007ff073bb9e29 in syscall () from /lib64/libc.so.6
+#1  0x00007ff066f4635d in XrdSys::LinuxSemaphore::Wait (this=0x58fa390) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdSys/XrdSysLinuxSemaphore.hh:161
+#2  XrdCl::SyncQueue<XrdCl::JobManager::JobHelper>::Get (this=0x58dec38) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdCl/XrdClSyncQueue.hh:67
+#3  XrdCl::JobManager::RunJobs() () at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClJobManager.cc:146
+#4  0x00007ff066f46519 in RunRunnerThread (arg=<optimized out>) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClJobManager.cc:33
+#5  0x00007ff073e97ea5 in start_thread () from /lib64/libpthread.so.0
+#6  0x00007ff073bbfb0d in clone () from /lib64/libc.so.6
+
+Thread 5 (Thread 0x7ff0652c7700 (LWP 15513)):
+#0  0x00007ff073bb9e29 in syscall () from /lib64/libc.so.6
+#1  0x00007ff066f4635d in XrdSys::LinuxSemaphore::Wait (this=0x58fa390) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdSys/XrdSysLinuxSemaphore.hh:161
+#2  XrdCl::SyncQueue<XrdCl::JobManager::JobHelper>::Get (this=0x58dec38) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdCl/XrdClSyncQueue.hh:67
+#3  XrdCl::JobManager::RunJobs() () at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClJobManager.cc:146
+#4  0x00007ff066f46519 in RunRunnerThread (arg=<optimized out>) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClJobManager.cc:33
+#5  0x00007ff073e97ea5 in start_thread () from /lib64/libpthread.so.0
+#6  0x00007ff073bbfb0d in clone () from /lib64/libc.so.6
+
+Thread 4 (Thread 0x7ff065ac8700 (LWP 15512)):
+#0  0x00007ff073bb9e29 in syscall () from /lib64/libc.so.6
+#1  0x00007ff066f4635d in XrdSys::LinuxSemaphore::Wait (this=0x58fa390) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdSys/XrdSysLinuxSemaphore.hh:161
+#2  XrdCl::SyncQueue<XrdCl::JobManager::JobHelper>::Get (this=0x58dec38) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdCl/XrdClSyncQueue.hh:67
+#3  XrdCl::JobManager::RunJobs() () at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClJobManager.cc:146
+#4  0x00007ff066f46519 in RunRunnerThread (arg=<optimized out>) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClJobManager.cc:33
+#5  0x00007ff073e97ea5 in start_thread () from /lib64/libpthread.so.0
+#6  0x00007ff073bbfb0d in clone () from /lib64/libc.so.6
+
+Thread 3 (Thread 0x7ff0662c9700 (LWP 15511)):
+#0  0x00007ff073e9ee9d in nanosleep () from /lib64/libpthread.so.0
+#1  0x00007ff06705da1d in XrdSysTimer::Wait (mills=<optimized out>) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdSys/XrdSysTimer.cc:239
+#2  0x00007ff066eec308 in XrdCl::TaskManager::RunTasks() () at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClTaskManager.cc:244
+#3  0x00007ff066eec3e9 in RunRunnerThread (arg=<optimized out>) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClTaskManager.cc:37
+#4  0x00007ff073e97ea5 in start_thread () from /lib64/libpthread.so.0
+#5  0x00007ff073bbfb0d in clone () from /lib64/libc.so.6
+
+Thread 2 (Thread 0x7ff066aca700 (LWP 15510)):
+#0  0x00007ff073bc00e3 in epoll_wait () from /lib64/libc.so.6
+#1  0x00007ff067057d57 in XrdSys::IOEvents::PollE::Begin (syncsem=<optimized out>, retcode=<optimized out>, eTxt=<optimized out>, this=<optimized out>) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdSys/XrdSysIOEventsPollE.icc:213
+#2  XrdSys::IOEvents::PollE::Begin (this=0x591e210, syncsem=<optimized out>, retcode=<optimized out>, eTxt=<optimized out>) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdSys/XrdSysIOEventsPollE.icc:197
+#3  0x00007ff067054545 in XrdSys::IOEvents::BootStrap::Start(void*) () at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdSys/XrdSysIOEvents.cc:131
+#4  0x00007ff06705d208 in XrdSysThread_Xeq (myargs=0x5917810) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdSys/XrdSysPthread.cc:86
+#5  0x00007ff073e97ea5 in start_thread () from /lib64/libpthread.so.0
+#6  0x00007ff073bbfb0d in clone () from /lib64/libc.so.6
+
+Thread 1 (Thread 0x7ff071eb4600 (LWP 15478)):
+#0  0x00007ff073b86659 in waitpid () from /lib64/libc.so.6
+#1  0x00007ff073b03f62 in do_system () from /lib64/libc.so.6
+#2  0x00007ff073b04311 in system () from /lib64/libc.so.6
+#3  0x00007ff0768a9503 in TUnixSystem::StackTrace() () from /cvmfs/cms.cern.ch/slc7_amd64_gcc820/cms/cmssw/CMSSW_11_0_2/external/slc7_amd64_gcc820/lib/libCore.so
+#4  0x00007ff0768abd54 in TUnixSystem::DispatchSignals(ESignals) () from /cvmfs/cms.cern.ch/slc7_amd64_gcc820/cms/cmssw/CMSSW_11_0_2/external/slc7_amd64_gcc820/lib/libCore.so
+#5  <signal handler called>
+#6  0x00007ff07be719a1 in NanoAODEventFile::getMET() const () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#7  0x00007ff07be833fe in METModule::process() () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#8  0x00007ff07bef0d0a in Analyzer::processOneEvent(EventInterface const*) () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#9  0x00007ff07bec6dfc in EventLoader::processRootFiles(int, int) () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#10 0x00007ff07befe5e4 in DataCollectionPlan::runEventLoader(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int, int) () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#11 0x0000000000404962 in main ()
+===========================================================
+
+
+The lines below might hint at the cause of the crash.
+You may get help by asking at the ROOT forum http://root.cern.ch/forum
+Only if you are really convinced it is a bug in ROOT then please submit a
+report at http://root.cern.ch/bugs Please post the ENTIRE stack trace
+from above as an attachment in addition to anything else
+that might help us fixing this issue.
+===========================================================
+#6  0x00007ff07be719a1 in NanoAODEventFile::getMET() const () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#7  0x00007ff07be833fe in METModule::process() () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#8  0x00007ff07bef0d0a in Analyzer::processOneEvent(EventInterface const*) () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#9  0x00007ff07bec6dfc in EventLoader::processRootFiles(int, int) () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#10 0x00007ff07befe5e4 in DataCollectionPlan::runEventLoader(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int, int) () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#11 0x0000000000404962 in main ()
+===========================================================
+
+
+Reading input file textfiles/QCD500-700.txt
+QCD
+Filename: textfiles/QCD/QCD_HTCut_500-700_Run_2.txt
+# of root files: 8
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer16NanoAODv7/HPlusPlusHMinusMinusHRTo4L_M-900_TuneCUETP8M1_13TeV-pythia8/NANOAODSIM/PUMoriond17_Nano02Apr2020_102X_mcRun2_asymptotic_v8-v1/60000/7BC04F0F-FAA8-CA4E-A767-8E879D65558E.root Sucess
+Dependent efficiency of 8HiggsCut: 0.999501
+Independent efficiency of 8HiggsCut: 0.999501
+Muon Efficiency : 0.000000
+Electron Efficiency : 0.000000
+Processing complete!
+Output written to HiggsCutTest.root
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL16NanoAOD/QCD_bEnriched_HT500to700_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_mcRun2_asymptotic_v13-v1/280000/623DE168-4CBA-B540-8081-B96971A00F31.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL16NanoAOD/QCD_bEnriched_HT500to700_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_mcRun2_asymptotic_v13-v1/280000/6EDFA611-B605-2F44-A432-8BC4725A7CAE.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL16NanoAOD/QCD_bEnriched_HT500to700_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_mcRun2_asymptotic_v13-v1/120000/90CA2366-6E68-1248-8707-B057319CD487.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL16NanoAOD/QCD_bEnriched_HT500to700_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_mcRun2_asymptotic_v13-v1/130000/7AFBE30D-F064-6D48-93EF-D6CEAC83A06B.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL16NanoAOD/QCD_bEnriched_HT500to700_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_mcRun2_asymptotic_v13-v1/270000/F29B125B-7BA4-1541-B83E-E14B6D4C91CD.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL16NanoAOD/QCD_bEnriched_HT500to700_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_mcRun2_asymptotic_v13-v1/270000/2125F134-B19C-424F-9334-E176FF121675.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL16NanoAOD/QCD_bEnriched_HT500to700_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_mcRun2_asymptotic_v13-v1/270000/B935C47E-F91D-2F4F-BEDA-0C7932D21C03.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL16NanoAOD/QCD_bEnriched_HT500to700_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_mcRun2_asymptotic_v13-v1/70000/DF79C1F2-7781-404C-9360-DC34B4FCCA06.root Sucess
+Dependent efficiency of 8HiggsCut: 0.805031
+Independent efficiency of 8HiggsCut: 0.805031
+Muon Efficiency : 0.000000
+Electron Efficiency : 0.000000
+Processing complete!
+Output written to QCDCutTest.root
+Reading input file textfiles/DY50Run2.txt
+Drell-Yan
+Filename: textfiles/Drell-Yan/Drell-Yan_MassCut_50-inf_Run_2.txt
+# of root files: 113
+Error in <TTreeReaderArrayBase::GetBranchAndLeaf()>: The tree does not have a branch called Jet_btagCMVA. You could check with TTree::Print() for available branches.
+
+ *** Break *** segmentation violation
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/FBCF1B86-38C5-8542-9156-DE687C3D45B3.root Sucess
+
+
+
+===========================================================
+There was a crash.
+This is the entire stack trace of all threads:
+===========================================================
+
+Thread 6 (Thread 0x7fa16538d700 (LWP 15514)):
+#0  0x00007fa174480e29 in syscall () from /lib64/libc.so.6
+#1  0x00007fa16780d35d in XrdSys::LinuxSemaphore::Wait (this=0x5747740) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdSys/XrdSysLinuxSemaphore.hh:161
+#2  XrdCl::SyncQueue<XrdCl::JobManager::JobHelper>::Get (this=0x574cdf8) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdCl/XrdClSyncQueue.hh:67
+#3  XrdCl::JobManager::RunJobs() () at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClJobManager.cc:146
+#4  0x00007fa16780d519 in RunRunnerThread (arg=<optimized out>) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClJobManager.cc:33
+#5  0x00007fa17475eea5 in start_thread () from /lib64/libpthread.so.0
+#6  0x00007fa174486b0d in clone () from /lib64/libc.so.6
+
+Thread 5 (Thread 0x7fa165b8e700 (LWP 15513)):
+#0  0x00007fa174480e29 in syscall () from /lib64/libc.so.6
+#1  0x00007fa16780d35d in XrdSys::LinuxSemaphore::Wait (this=0x5747740) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdSys/XrdSysLinuxSemaphore.hh:161
+#2  XrdCl::SyncQueue<XrdCl::JobManager::JobHelper>::Get (this=0x574cdf8) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdCl/XrdClSyncQueue.hh:67
+#3  XrdCl::JobManager::RunJobs() () at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClJobManager.cc:146
+#4  0x00007fa16780d519 in RunRunnerThread (arg=<optimized out>) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClJobManager.cc:33
+#5  0x00007fa17475eea5 in start_thread () from /lib64/libpthread.so.0
+#6  0x00007fa174486b0d in clone () from /lib64/libc.so.6
+
+Thread 4 (Thread 0x7fa16638f700 (LWP 15512)):
+#0  0x00007fa174480e29 in syscall () from /lib64/libc.so.6
+#1  0x00007fa16780d35d in XrdSys::LinuxSemaphore::Wait (this=0x5747740) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdSys/XrdSysLinuxSemaphore.hh:161
+#2  XrdCl::SyncQueue<XrdCl::JobManager::JobHelper>::Get (this=0x574cdf8) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdCl/XrdClSyncQueue.hh:67
+#3  XrdCl::JobManager::RunJobs() () at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClJobManager.cc:146
+#4  0x00007fa16780d519 in RunRunnerThread (arg=<optimized out>) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClJobManager.cc:33
+#5  0x00007fa17475eea5 in start_thread () from /lib64/libpthread.so.0
+#6  0x00007fa174486b0d in clone () from /lib64/libc.so.6
+
+Thread 3 (Thread 0x7fa166b90700 (LWP 15511)):
+#0  0x00007fa174765e9d in nanosleep () from /lib64/libpthread.so.0
+#1  0x00007fa167924a1d in XrdSysTimer::Wait (mills=<optimized out>) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdSys/XrdSysTimer.cc:239
+#2  0x00007fa1677b3308 in XrdCl::TaskManager::RunTasks() () at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClTaskManager.cc:244
+#3  0x00007fa1677b33e9 in RunRunnerThread (arg=<optimized out>) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdCl/XrdClTaskManager.cc:37
+#4  0x00007fa17475eea5 in start_thread () from /lib64/libpthread.so.0
+#5  0x00007fa174486b0d in clone () from /lib64/libc.so.6
+
+Thread 2 (Thread 0x7fa167391700 (LWP 15510)):
+#0  0x00007fa1744870e3 in epoll_wait () from /lib64/libc.so.6
+#1  0x00007fa16791ed57 in XrdSys::IOEvents::PollE::Begin (syncsem=<optimized out>, retcode=<optimized out>, eTxt=<optimized out>, this=<optimized out>) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdSys/XrdSysIOEventsPollE.icc:213
+#2  XrdSys::IOEvents::PollE::Begin (this=0x57ae850, syncsem=<optimized out>, retcode=<optimized out>, eTxt=<optimized out>) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/./XrdSys/XrdSysIOEventsPollE.icc:197
+#3  0x00007fa16791b545 in XrdSys::IOEvents::BootStrap::Start(void*) () at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdSys/XrdSysIOEvents.cc:131
+#4  0x00007fa167924208 in XrdSysThread_Xeq (myargs=0x573ff60) at /data/cmsbld/jenkins/workspace/auto-builds/CMSSW_11_0_0_pre12-slc7_amd64_gcc820/build/CMSSW_11_0_0_pre12-build/BUILD/slc7_amd64_gcc820/external/xrootd/4.10.0-nmpfii2/xrootd-4.10.0/src/XrdSys/XrdSysPthread.cc:86
+#5  0x00007fa17475eea5 in start_thread () from /lib64/libpthread.so.0
+#6  0x00007fa174486b0d in clone () from /lib64/libc.so.6
+
+Thread 1 (Thread 0x7fa17277b600 (LWP 15475)):
+#0  0x00007fa17444d659 in waitpid () from /lib64/libc.so.6
+#1  0x00007fa1743caf62 in do_system () from /lib64/libc.so.6
+#2  0x00007fa1743cb311 in system () from /lib64/libc.so.6
+#3  0x00007fa177170503 in TUnixSystem::StackTrace() () from /cvmfs/cms.cern.ch/slc7_amd64_gcc820/cms/cmssw/CMSSW_11_0_2/external/slc7_amd64_gcc820/lib/libCore.so
+#4  0x00007fa177172d54 in TUnixSystem::DispatchSignals(ESignals) () from /cvmfs/cms.cern.ch/slc7_amd64_gcc820/cms/cmssw/CMSSW_11_0_2/external/slc7_amd64_gcc820/lib/libCore.so
+#5  <signal handler called>
+#6  0x00007fa17c7389a1 in NanoAODEventFile::getMET() const () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#7  0x00007fa17c74a3fe in METModule::process() () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#8  0x00007fa17c7b7d0a in Analyzer::processOneEvent(EventInterface const*) () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#9  0x00007fa17c78ddfc in EventLoader::processRootFiles(int, int) () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#10 0x00007fa17c7c55e4 in DataCollectionPlan::runEventLoader(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int, int) () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#11 0x0000000000404962 in main ()
+===========================================================
+
+
+The lines below might hint at the cause of the crash.
+You may get help by asking at the ROOT forum http://root.cern.ch/forum
+Only if you are really convinced it is a bug in ROOT then please submit a
+report at http://root.cern.ch/bugs Please post the ENTIRE stack trace
+from above as an attachment in addition to anything else
+that might help us fixing this issue.
+===========================================================
+#6  0x00007fa17c7389a1 in NanoAODEventFile::getMET() const () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#7  0x00007fa17c74a3fe in METModule::process() () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#8  0x00007fa17c7b7d0a in Analyzer::processOneEvent(EventInterface const*) () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#9  0x00007fa17c78ddfc in EventLoader::processRootFiles(int, int) () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#10 0x00007fa17c7c55e4 in DataCollectionPlan::runEventLoader(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int, int) () from /uscms/homes/f/fciancio/practice/CMSSW_11_0_2/lib/slc7_amd64_gcc820/libCMSAnalysisDataCollection.so
+#11 0x0000000000404962 in main ()
+===========================================================
+
+
+Reading input file textfiles/DY50Run2.txt
+Drell-Yan
+Filename: textfiles/Drell-Yan/Drell-Yan_MassCut_50-inf_Run_2.txt
+# of root files: 113
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/FBCF1B86-38C5-8542-9156-DE687C3D45B3.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/130000/7410E6CA-D9E0-A24A-B9BC-0204B57AF8AD.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/130000/F2EDA2DB-C62D-9E4F-A6D6-276BE54FB05F.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/5C8A1B42-4A8B-4A49-991E-C21A984E20A2.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/6DE05425-FCEE-0141-9909-7374DF0B8F36.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/3B4C1924-6665-034E-BD3C-5B8A8A7E2230.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/130000/A23915A3-9E46-2F4F-8578-65E6BF763EB5.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/130000/82C4CDF3-4739-BF4E-8E48-479DD91FEAD5.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/130000/45C431B8-4B29-B747-A2B1-0DA8C892B6AE.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/130000/CBEE56B6-B283-254A-BF02-F485B63DB0DB.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/CF8F6359-4F62-CA41-A43C-83454246B816.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/E159C0B4-7731-DD48-85C0-6072955A51AB.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/130000/0C0955D4-F843-AD4C-ACDE-5ECFF142C1EF.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/DFC9772E-2515-B44E-9B50-68D8C4A03F45.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/8B919C92-B03F-5444-A06E-4FE5B6FEF6D4.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/130000/8E473F37-F09B-7144-B900-E65DDA72C3E5.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/130000/D51A1AD7-0694-2144-A15E-A7F48C3F3F86.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/87683B51-66BE-CE48-A5E5-B5E475BE5D54.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/86792C7F-BC2A-874D-AA29-A7A684D68570.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/9461F3D6-6F5D-9F40-A404-ABDAD3B655BB.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/3242D7B6-6144-AB4B-A89E-DAA7C0688D55.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/130000/3C8F9C97-5D2C-5E42-B218-E90D45108E31.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/130000/E65183AB-EDB1-0C4E-A38A-071C1E6DB21F.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/130000/00CDEB53-1F42-5F44-AC39-FF8C045D8032.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/0F905737-3B89-414D-ADBD-8C38D1260CB9.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/130000/F38ED3B8-401B-8346-9F36-173AA3F10E4B.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/0DA33BA1-3F3B-C041-A16F-28CEA3F3D62B.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/CB01A859-0856-EA40-82CD-9C129777E8AB.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/9BBE660B-CFE3-A340-899C-2E769B0495B8.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/1FD9E301-E57B-0F40-969A-A4B0C557C08D.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/40B0C28C-D1C6-3C4A-AB9C-81A44B05134E.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/F4A592CB-F21C-8146-B9FA-DB939622BAD7.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/F5612BD4-FFFC-F640-9F72-4D989EDF96EA.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/130000/479CAD07-8019-2145-A631-5DF107286F03.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/C65EC1C8-C559-104C-919F-6AD3B47DC64B.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/C0211961-1D8F-1C49-A22F-1BE3AAD185B3.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/138EC4C8-033C-9943-843C-E9C0BC0FCAFB.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/77DD30B0-2D06-7843-985C-16ECB30DE2C3.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/5F550320-D2CE-0842-AE21-BF551DDA01ED.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/E3F1FE92-AAB1-9B48-AB0A-C4CCB50DD41D.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/F58C2C9D-2D4B-8546-A4E0-98D3D1C2DD59.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/130000/21BB760C-BD5B-9D41-BB7C-50EBEE26AC9D.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/48B70E73-0645-FB4B-BDB7-0AA701E435E0.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/0D769354-BFD4-DF42-A642-DEB9403CEE95.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/516A9EEE-E254-FB4C-BCE7-18082D751361.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/51B62F88-AC1F-C14C-B236-7E036D55E159.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/82F94965-E65D-DD43-BF38-B5916AC6AD08.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/D2F2129F-38DF-1044-A4BE-554F2A467283.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/EFC97DD7-FAD8-BD48-BF91-8E5C9B13D045.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/224097B7-0FEA-4A43-8623-AC28AA8D2FBB.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/1C4BE9E5-32B9-5245-BDCA-F4F0FAD26F8F.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/00FB8C8E-7DCB-7842-BFB1-10FF5CEAD8C8.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/AE5E8F3A-E332-B44C-ADDA-A2407183DF8F.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/B415086A-740A-E140-B595-C1EC4CB45281.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/D71CD078-B27E-B140-A462-A4896DC166FE.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/CE89EB6B-5DD5-4B4E-A48B-F028A2D41278.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/DF551029-0DB4-3C4C-8EFC-B77D950346E2.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/FFD5C63D-ED15-114C-80E2-A1039FB67ED7.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/CB442104-82F9-8841-9F07-DA66F235F03C.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/BFB327B3-8C66-5747-B3A6-C57682C70416.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/130000/5B0F9814-D9A7-8B48-92A4-8E20CF476559.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/130000/C7077AE3-4E77-6B46-BE23-A775C5A90175.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/130000/58D64BE8-7489-2F41-9A16-65CE6C48EB8C.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/7F020E1C-284B-F948-944B-8B114F4F95E7.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/D449B764-DACB-804E-A8EB-C3F8848EF158.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/03B7DE06-51AF-084B-9B1F-71AA4E024A2B.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/ECD0D1C3-C329-2243-A4D5-75EC10ECFCCB.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/9DB060D1-A713-004B-9518-F5A8384C541F.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/90F6E22D-A7F9-3D40-A983-60E56C290394.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/8F033467-B295-B344-A585-7E6FFD67715A.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/D0104BC1-BBB7-6846-A499-A9F97DC5D694.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/C53AA422-8C5C-AC41-BE14-AA7062DD0226.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/EFD1483C-0E14-8C40-9BE4-491DF76FC260.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/B2E8CA36-A427-E444-A1B2-69D356A30DBA.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/AA1D335C-002C-4A4C-84EE-5DA0B8753789.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/20C1DF9A-59E9-5947-8576-56031F18B91D.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/2AE83A82-3FC0-404C-96BA-5DAB79BCB08F.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/8E99AA4A-04F8-D644-A48D-3FE62CDBC7FB.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/63C4E28C-5BDE-F14E-96D8-410FDFD8F961.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/7F228576-5D57-9E43-914C-89E572D65B2F.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/B8F69E46-6104-6742-9F39-ACEF2360F226.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/91B0CDB9-FD80-EF4A-A15B-948786B772E9.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/EAD17F50-D45F-B749-BF88-131677F24148.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/3B0006CB-2880-4542-A6B5-60888B672241.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/AFE770CD-B119-524D-8710-8E00F9639E78.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/B11ACEBF-09C3-0E4F-B543-D8A130A69A78.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/D3ACB65C-E43D-B34D-BE14-CC13DAFAD4F2.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/49CD1A97-76F5-6A41-A3B2-0C7A397A8E1C.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/27E33DDA-0EB8-6F44-A498-0C0BC2310807.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/00B93E59-813E-4148-B399-AA9A3F3BECFF.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/C0F1198D-E967-4649-B851-C413CDE73F59.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/7E3B16DA-9F62-8F47-B886-E5341BE316F8.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/BF4F7AF8-B777-E147-A4B8-AA45F2427EA3.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/5B5B8A97-96C1-D949-8AC7-2EAFE175F3DF.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/26ECB7C0-511A-D340-ACE9-07FBE6839BDA.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/A485B49E-E87C-D248-BB11-222FA4B36FCC.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/2A7B79DF-05CC-C145-8BA7-4EEF055AA5D8.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/B6D9F91B-896B-FD42-9B90-7AAB23AC8400.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/06F8A158-0E52-B147-8818-AA59D9464601.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/9DC5309A-D507-7849-AF8B-02E3B2013734.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/16449679-FDBE-8C47-B10E-2A8B269FB2F7.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/39CFF063-FE54-6F4E-A5C2-95CC31ED0AED.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/2237A8F9-B542-EA41-BF20-92C1DAC68E13.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/7FB63776-AF49-F041-8B84-67D65F54702C.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/FB79A5B5-436A-C646-8D45-C5EEF3E29224.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/2B1721CA-09B6-244E-9D8C-049BC3A185B7.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/F2C813B6-5BFA-1E41-B693-CFE68F9FEB90.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/09BDD6B7-B8E7-C84C-9319-46593C90BA31.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/F4C4D341-CEFA-4344-8F66-E7334E963E2E.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/270000/005EDEE9-3613-C640-8123-B86B0960E850.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/A8C90875-48CC-5642-AB9F-8891926CBBDB.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/280000/2663C261-6C1A-D040-BB5D-01C81FF23895.root Sucess
+Sucess root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v1/70000/A763EF77-BC94-BE42-BA0A-6E629F944036.root Sucess
+Dependent efficiency of 8HiggsCut: 0.963737
+Independent efficiency of 8HiggsCut: 0.963737
+Muon Efficiency : 0.000000
+Electron Efficiency : 0.000000
+Processing complete!
+Output written to DYCutTest.root
+Reading input file textfiles/newHiggs/Higgs300.txt
+H++toLL
+Filename: textfiles/H++toLL/H++toLL_Lepton_LL_Mass_300_Run_2.txt
+# of root files: 1
+Reading input file textfiles/newHiggs/Higgs500.txt
+H++toLL
+Filename: textfiles/H++toLL/H++toLL_Lepton_LL_Mass_500_Run_2.txt
+# of root files: 2
+Reading input file textfiles/newHiggs/Higgs700.txt
+H++toLL
+Filename: textfiles/H++toLL/H++toLL_Lepton_LL_Mass_700_Run_2.txt
+# of root files: 1
+Reading input file textfiles/newHiggs/Higgs900.txt
+H++toLL
+Filename: textfiles/H++toLL/H++toLL_Lepton_LL_Mass_900_Run_2.txt
+# of root files: 1
+Dependent efficiency of 8HiggsCut: 0.987188
+Independent efficiency of 8HiggsCut: 0.987188
+Muon Efficiency : 0.000000
+Electron Efficiency : 0.000000
+Processing complete!
+Output written to Higgs300_HiggsBackground.root
+Dependent efficiency of 8HiggsCut: 0.988149
+Independent efficiency of 8HiggsCut: 0.988149
+Muon Efficiency : 0.000000
+Electron Efficiency : 0.000000
+Processing complete!
+Output written to Higgs500_HiggsBackground.root
+Dependent efficiency of 8HiggsCut: 0.989168
+Independent efficiency of 8HiggsCut: 0.989168
+Muon Efficiency : 0.000000
+Electron Efficiency : 0.000000
+Processing complete!
+Output written to Higgs700_HiggsBackground.root
+Reading input file textfiles/newHiggs/Higgs1100.txt
+H++toLL
+Filename: textfiles/H++toLL/H++toLL_Lepton_LL_Mass_1100_Run_2.txt
+# of root files: 2
+Reading input file textfiles/newHiggs/Higgs1300.txt
+H++toLL
+Filename: textfiles/H++toLL/H++toLL_Lepton_LL_Mass_1300_Run_2.txt
+# of root files: 5
+Reading input file textfiles/newHiggs/Higgs1500.txt
+H++toLL
+Filename: textfiles/H++toLL/H++toLL_Lepton_LL_Mass_1500_Run_2.txt
+# of root files: 2
+Dependent efficiency of 8HiggsCut: 0.989391
+Independent efficiency of 8HiggsCut: 0.989391
+Muon Efficiency : 0.000000
+Electron Efficiency : 0.000000
+Processing complete!
+Output written to Higgs1300_HiggsBackground.root
+Dependent efficiency of 8HiggsCut: 0.989412
+Independent efficiency of 8HiggsCut: 0.989412
+Muon Efficiency : 0.000000
+Electron Efficiency : 0.000000
+Processing complete!
+Output written to Higgs1100_HiggsBackground.root
+Dependent efficiency of 8HiggsCut: 0.989403
+Independent efficiency of 8HiggsCut: 0.989403
+Muon Efficiency : 0.000000
+Electron Efficiency : 0.000000
+Processing complete!
+Output written to Higgs900_HiggsBackground.root
+Dependent efficiency of 8HiggsCut: 0.989927
+Independent efficiency of 8HiggsCut: 0.989927
+Muon Efficiency : 0.000000
+Electron Efficiency : 0.000000
+Processing complete!
+Output written to Higgs1500_HiggsBackground.root
+Reading input file textfiles/newHiggs/Higgs900.txt
+H++toLL
+Filename: textfiles/H++toLL/H++toLL_Lepton_LL_Mass_900_Run_2.txt
+# of root files: 1
+Dependent efficiency of 8HiggsCut: 0.989403
+Independent efficiency of 8HiggsCut: 0.989403
+Muon Efficiency : 0.000000
+Electron Efficiency : 0.000000
+Processing complete!
+Output written to Higgs900_HiggsBackground.root
+Reading input file textfiles/newHiggs/Higgs300.txt
+H++toLL
+Filename: textfiles/H++toLL/H++toLL_Lepton_LL_Mass_300_Run_2.txt
+# of root files: 1
+Dependent efficiency of 8HiggsCut: 0.999054
+Independent efficiency of 8HiggsCut: 0.999054
+Muon Efficiency : 0.000000
+Electron Efficiency : 0.000000
+Processing complete!
+Output written to Higgs300_HiggsBackground.root
+Reading input file textfiles/newHiggs/Higgs500.txt
+H++toLL
+Filename: textfiles/H++toLL/H++toLL_Lepton_LL_Mass_500_Run_2.txt
+# of root files: 2
+Dependent efficiency of 8HiggsCut: 0.999253
+Independent efficiency of 8HiggsCut: 0.999253
+Muon Efficiency : 0.000000
+Electron Efficiency : 0.000000
+Processing complete!
+Output written to Higgs500_HiggsBackground.root
+Reading input file textfiles/newHiggs/Higgs700.txt
+H++toLL
+Filename: textfiles/H++toLL/H++toLL_Lepton_LL_Mass_700_Run_2.txt
+# of root files: 1
+Dependent efficiency of 8HiggsCut: 0.999496
+Independent efficiency of 8HiggsCut: 0.999496
+Muon Efficiency : 0.000000
+Electron Efficiency : 0.000000
+Processing complete!
+Output written to Higgs700_HiggsBackground.root
+Reading input file textfiles/newHiggs/Higgs900.txt
+H++toLL
+Filename: textfiles/H++toLL/H++toLL_Lepton_LL_Mass_900_Run_2.txt
+# of root files: 1
+Dependent efficiency of 8HiggsCut: 0.999501
+Independent efficiency of 8HiggsCut: 0.999501
+Muon Efficiency : 0.000000
+Electron Efficiency : 0.000000
+Processing complete!
+Output written to Higgs900_HiggsBackground.root
+Reading input file textfiles/newHiggs/Higgs1100.txt
+H++toLL
+Filename: textfiles/H++toLL/H++toLL_Lepton_LL_Mass_1100_Run_2.txt
+# of root files: 2
+Dependent efficiency of 8HiggsCut: 0.999482
+Independent efficiency of 8HiggsCut: 0.999482
+Muon Efficiency : 0.000000
+Electron Efficiency : 0.000000
+Processing complete!
+Output written to Higgs1100_HiggsBackground.root
+Reading input file textfiles/newHiggs/Higgs1300.txt
+H++toLL
+Filename: textfiles/H++toLL/H++toLL_Lepton_LL_Mass_1300_Run_2.txt
+# of root files: 5
+Dependent efficiency of 8HiggsCut: 0.999584
+Independent efficiency of 8HiggsCut: 0.999584
+Muon Efficiency : 0.000000
+Electron Efficiency : 0.000000
+Processing complete!
+Output written to Higgs1300_HiggsBackground.root
+Reading input file textfiles/newHiggs/Higgs1500.txt
+H++toLL
+Filename: textfiles/H++toLL/H++toLL_Lepton_LL_Mass_1500_Run_2.txt
+# of root files: 2
+Dependent efficiency of 8HiggsCut: 0.999548
+Independent efficiency of 8HiggsCut: 0.999548
+Muon Efficiency : 0.000000
+Electron Efficiency : 0.000000
+Processing complete!
+Output written to Higgs1500_HiggsBackground.root
+Creating output=Higgs300_HiggsBackground.root
+Creating output=Higgs500_HiggsBackground.root
+Creating output=Higgs700_HiggsBackground.root
+Creating output=Higgs900_HiggsBackground.root
+Creating output=Higgs1100_HiggsBackground.root
+Creating output=Higgs1300_HiggsBackground.root
+Creating output=Higgs1500_HiggsBackground.root
+Reading input file textfiles/QCD500-700.txt
+QCD
+Filename: textfiles/QCD/QCD_HTCut_500-700_Run_2.txt
+# of root files: 8
+Error in <TNetXNGFile::Open>: [FATAL] Redirect limit has been reached
+Error in <TNetXNGFile::Open>: [FATAL] Redirect limit has been reached
+File root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL16NanoAOD/QCD_bEnriched_HT500to700_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_mcRun2_asymptotic_v13-v1/280000/623DE168-4CBA-B540-8081-B96971A00F31.root not found!
+File root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL16NanoAOD/QCD_bEnriched_HT500to700_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_mcRun2_asymptotic_v13-v1/280000/6EDFA611-B605-2F44-A432-8BC4725A7CAE.root not found!
+Dependent efficiency of 8HiggsCut: 0.804829
+Independent efficiency of 8HiggsCut: 0.804829
+Muon Efficiency : 0.000000
+Electron Efficiency : 0.000000
+Processing complete!
+Output written to QCD500_HiggsBackground.root
