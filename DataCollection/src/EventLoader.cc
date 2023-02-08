@@ -74,7 +74,7 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles)
       }
       analyzer->processOneEvent(&eventInterface); //EventInterface will loop through all event files in analyzer
       file->nextEvent();
-      if (count%outputEvery == 0)
+      if (outputEvery != 0 && count%outputEvery == 0)
       {
         std::cout<<"Processed "<<count<<" Events"<<std::endl;
       }
