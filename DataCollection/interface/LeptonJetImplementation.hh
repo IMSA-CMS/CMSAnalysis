@@ -35,6 +35,7 @@ class LeptonJetImplementation : public ParticleImplementation
   int getNumParticles() const {return leptonJetParticles.size();}
   virtual Particle mother() const override {throw std::__throw_runtime_error;}
   virtual Particle daughter(int i) const override {throw std::__throw_runtime_error;}
+  virtual bool doesHaveMother() override {throw std::runtime_error("not implemented error");}
   virtual int numberOfDaughters() const override {throw std::__throw_runtime_error;}
   virtual const ParticleType& getType() const override;
   virtual Particle::SelectionFit getSelectionFit() const override {throw std::runtime_error("getSelectionFit not implemented");};

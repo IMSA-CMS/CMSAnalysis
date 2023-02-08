@@ -45,7 +45,6 @@ void EventLoader::run(int outputEvery, int nFiles){
 
 void EventLoader::processRootFiles(int outputEvery, int nFiles)
 {
-  
   // Get a list of FileParams objects
   setOutputEvery(outputEvery);
 

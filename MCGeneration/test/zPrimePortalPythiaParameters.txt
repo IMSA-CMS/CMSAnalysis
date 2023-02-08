@@ -51,7 +51,6 @@ HiddenValley:ffbar2Zv = on
 # 4900211:m0 = 1000000
 # 4900213:m0 = 1000000
 # 4900991:m0 = 1000000
-                        
 
 4900023:mayDecay = true 
 4900022:mayDecay = true
@@ -60,7 +59,7 @@ HiddenValley:ffbar2Zv = on
 4900004:mayDecay = off
 4900022:m0 = 0.3  # baseline = 0.3
 4900022:0:meMode = 0
-4900023:m0 = 300  # Default is 1000 when not set, make sure this mass is > than twice the qv mass
+4900023:m0 = 1000  # Default is 1000 when not set, make sure this mass is > than twice the qv mass
 4900101:m0 = 100  # qv mass
 
 4900023:oneChannel = 1 .9 102 4900101 -4900101  # We want it to only decay to qv, not any other fermions
@@ -73,30 +72,3 @@ HiddenValley:Ngauge = 1
 HiddenValley:doKinMix = on
 HiddenValley:FSR = on
 HiddenValley:alphaFSR = 3  # How frequently they radiate dark photons
-
-4900022:oneChannel = 1 0.526471 91 11 -11
-4900022:addChannel = 1 0.466296 91 13 -13
-4900022:addChannel = 1 0 91 15 -15
-4900022:addChannel = 1 0.00723239 100 211 -211
-4900022:addChannel = 1 0.00001 100 321 -321
-4900022:addChannel = 1 0.00001 100 311 -311
-4900022:addChannel = 1 0.00001 100 111 22
-4900022:addChannel = 1 0.00001 100 221 22
-4900022:addChannel = 1 0.00001 100 111 111 22
-4900022:addChannel = 1 0.00001 100 211 -211 111
-4900022:addChannel = 1 0.00001 100 111 321 -321
-4900022:addChannel = 1 0.00001 100 310 -321 211
-4900022:addChannel = 1 0.00001 100 310 321 -211
-4900022:addChannel = 1 0.00001 100 211 -211 111 111
-4900022:addChannel = 1 0.00001 100 211 -211 211 -211
-4900022:addChannel = 1 0.00001 100 321 -321 211 -211
-4900022:addChannel = 1 0.00001 100 22 22 211 -211
-4900022:addChannel = 1 0.00001 100 211 -211 211 -211 111
-4900022:addChannel = 1 0.00001 100 211 -211 111 111 111
-4900022:addChannel = 1 0.00001 100 211 -211 211 -211 211 -211
-4900022:addChannel = 1 0.00001 100 211 -211 211 -211 111 111
-4900022:addChannel = 1 0.00001 91 1 -1
-4900022:addChannel = 1 0.00001 91 2 -2
-4900022:addChannel = 1 0.00001 91 3 -3
-4900022:addChannel = 1 0.00001 91 4 -4
-4900022:addChannel = 1 0.00001 91 5 -5
