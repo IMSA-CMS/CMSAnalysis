@@ -63,7 +63,6 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles)
       continue;
     }
 
-    std::cout << "Sucess " << fileName << " Sucess\n";
     file = changeFileFormat(tFile); // Makes a GenSimEventFile, DelphesEventFile or MiniAODFile shared pointer
     eventInterface.setFile(file); //Change eventFile reference
     

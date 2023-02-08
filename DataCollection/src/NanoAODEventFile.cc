@@ -76,7 +76,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     jet_phi(treeReader, "Jet_phi"),
     jet_mass(treeReader, "Jet_mass"),
     jet_pt(treeReader, "Jet_pt"),
-    jet_bTag(treeReader, "Jet_btagCMVA"),
+    //jet_bTag(treeReader, "Jet_btagCMVA"),
     //bJet(treeReader, branchNames.bJet.c_str()),
     gen_size(treeReader, "nGenPart"),
     gen_pid(treeReader, "GenPart_pdgId"),

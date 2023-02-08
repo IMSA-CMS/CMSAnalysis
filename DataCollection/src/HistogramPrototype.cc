@@ -10,13 +10,15 @@ bool HistogramPrototype::shouldDraw() const
   {
     filterMod->process(); // Calls process and makes the filter string
     
+
     if (filterMod->getFilterString() == "")
     {
       return false; // Return false if any filterString is empty
     }
+    
   }
 
-  return true;
+  return true;  
 }
 
 void HistogramPrototype::setInput(const InputModule* iInput)

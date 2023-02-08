@@ -20,7 +20,7 @@ double calculateEvents(std::vector<double> crossSections, std::vector<TH1*> hist
     return selected;
 }
 
-void CutFinder() {
+void SignificanceFinder() {
     auto analysis = std::make_shared<HiggsCutsAnalysis>();
     //Choices are GenSim Same Sign Inv Mass, Same Sign Inv Mass, Invariant Mass, GenSim pT, pT, Eta, Phi, MET (caps matter)
     std::vector<std::string> cutTypes = {"Same Sign Inv Mass"};
@@ -68,8 +68,8 @@ void CutFinder() {
                     isSignal = true;
                     for(auto singleProcess : process->getProcesses()) {
                         signalHists.push_back(singleProcess.getHist(dataType, false)->Rebin((int) ((double) singleProcess.getHist(dataType, false)->GetNbinsX() / ((double) minimumBin) + 0.5)));
+                        //signalEvents.push_back(singleProcess.getTotalEvents());
                         signalEvents.push_back(singleProcess.getHist(dataType, false)->Rebin((int) ((double) singleProcess.getHist(dataType, false)->GetNbinsX() / ((double) minimumBin) + 0.5))->Integral());
-                        //signalEvents.push_back(singleProcess.getHist(dataType, false)->Rebin((int) ((double) singleProcess.getHist(dataType, false)->GetNbinsX() / ((double) minimumBin) + 0.5))->Integral());
                         signalCrossSecs.push_back(singleProcess.getCrossSection());
                     }
                 }
@@ -83,6 +83,7 @@ void CutFinder() {
                 }
             }
             baseSignificance = calculateEvents(signalCrossSecs, signalHists, signalEvents, luminosity, 0) / (2.5 + sqrt(calculateEvents(backgroundCrossSecs, backgroundHists, backgroundEvents, luminosity, 0)));
+            //std::cout << "Base significance " << baseSignificance << std::endl;
             // double totalSignal = 0;
             // for(int total : signalEvents) {
             //     totalSignal += (double) total;
@@ -91,15 +92,15 @@ void CutFinder() {
             for(int i = 0; i < signalHists.at(0)->GetNbinsX(); i++) {
                 signal = calculateEvents(signalCrossSecs, signalHists, signalEvents, luminosity, i);
                 background = calculateEvents(backgroundCrossSecs, backgroundHists, backgroundEvents, luminosity, i);
+
                 //std::cout << "significance " << signal / (2.5 + sqrt(background)) << std::endl;
-                if(signal / (2.5 + sqrt(background)) > significance) {
-                    significance = signal / (2.5 + sqrt(background));
-                    finalCut = i * signalHists.at(0)->GetXaxis()->GetBinWidth(0);
-                    finalCutEfficiency = signal/calculateEvents(signalCrossSecs, signalHists, signalEvents, luminosity, 0);
-                    //finalCutEfficiency = signal/totalSignal;
-                }
+                significance = signal / (2.5 + sqrt(background));
+                finalCut = i * signalHists.at(0)->GetXaxis()->GetBinWidth(0);
+                finalCutEfficiency = signal/calculateEvents(signalCrossSecs, signalHists, signalEvents, luminosity, 0);
+                //finalCutEfficiency = signal/totalSignal;
+                std::cout << "The cut on " + dataType + " for " + channel->getName() + " at " + finalCut + " has efficiency of " + finalCutEfficiency + " and significance difference of " + ((significance - baseSignificance) / baseSignificance) * 100 + "%" << std::endl;
+                std::cout << "This cut keeps " << signal << " signal events and " << background << " background events." << std::endl;
             }
-            std::cout << "The cut on " + dataType + " for " + channel->getName() + " is at " + finalCut + " with efficiency of " + finalCutEfficiency + " and significance difference of " + ((significance - baseSignificance) / baseSignificance) * 100 + "%" << std::endl;
         }
     }
 }
