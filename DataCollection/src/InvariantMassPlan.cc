@@ -33,8 +33,8 @@ void InvariantMassPlan::initialize()
 
   // Create necessary histogram(s), as well as histMod
   auto histMod = make_shared<HistogramOutputModule>();
-  auto invMassHist = make_shared<InvariantMassHist>(InputModule::RecoLevel::Reco, "invariant_Mass", 300, 0, 1000);
-  auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "same_Sign_Invariant_Mass", 300, 0, 1000);
+  auto invMassHist = make_shared<InvariantMassHist>(InputModule::RecoLevel::Reco, "invariant_Mass", 300, 0, 400);
+  auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "same_Sign_Invariant_Mass", 300, 0, 400);
 
   // auto pileUpHist = make_shared<PileUpHist>("Pile Up Hist", 300, 0, 100);
   // Create necessary module(s) for the filter(s)
