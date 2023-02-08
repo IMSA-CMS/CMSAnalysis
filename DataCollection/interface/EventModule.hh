@@ -63,7 +63,7 @@ class EventModule : public AnalysisModule
 
         // Used for keeping track of which sets of histograms have been added
         std::unordered_map<std::string,std::shared_ptr<SingleParticleHist>> particleHistograms;
-        std::unordered_map<std::string,std::shared_ptr<CollectionHist>> collectionHistograms;
+        //std::unordered_map<std::string,std::shared_ptr<CollectionHist>> collectionHistograms;
 
 
         // Used for dynamically adding as many histograms as needed

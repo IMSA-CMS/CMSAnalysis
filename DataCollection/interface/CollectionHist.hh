@@ -1,5 +1,5 @@
-#ifndef COLLECTIONHIST_HH
-#define COLLECTIONHIST_HH
+// #ifndef COLLECTIONHIST_HH
+// #define COLLECTIONHIST_HH
 
 #include "HistogramPrototype1D.hh"
 #include "Particle.hh"
@@ -29,8 +29,8 @@ class CollectionHist : public HistogramPrototype1D
   //This function is necessary to change name from default in ParticleType / called in EventModule
   void changeName (std::string newName) {setName(newName);};
 
-  // value function which is called in HistMod
-  virtual std::vector<double> value() const override;
+//   // value function which is called in HistMod
+//   virtual std::vector<double> value() const override;
 
   private:
   std::shared_ptr<ParticleCollection<Particle>> collection;
@@ -38,4 +38,4 @@ class CollectionHist : public HistogramPrototype1D
   std::function<std::vector<double>(std::shared_ptr<ParticleCollection<Particle>>)> valueFunction;
 };
 
-#endif
+// #endif
