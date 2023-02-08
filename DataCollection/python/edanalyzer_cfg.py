@@ -4,7 +4,7 @@ process = cms.Process("Demo")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(5000) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000) )
 
 process.options = cms.untracked.PSet( SkipEvent = cms.untracked.vstring('ProductNotFound'))
 process.source = cms.Source("PoolSource",
@@ -19,7 +19,7 @@ process.source = cms.Source("PoolSource",
                             )
 
 process.demo = cms.EDAnalyzer('RunAnalyzerWrapper',
-    analyzerType   = cms.untracked.string('HiggsBackground'),
+    analyzerType   = cms.untracked.string('GenSim'),
     rootOutFile = cms.untracked.string( 'output.root' )
                               )
 

@@ -51,23 +51,23 @@ ParticleCollection<Particle> CmsswEventInterface::getRecoParticles() const
     //This seems problematic
     
         edm::Handle<std::vector<pat::Electron>> electrons;
-        event->getByLabel(std::string("slimmedElectrons"), electrons);
+        event->getByToken(electronToken, electrons);
 
         for (const auto& p : *electrons)
-	    {       
+	    {   
 	        recoParticles.addParticle(Particle(&p)); 
 	    }
 
         edm::Handle<std::vector<pat::Muon>> muons;
-        event->getByLabel(edm::InputTag("slimmedMuons"), muons);
+        event->getByToken(muonToken, muons);
 
         for (const auto& p : *muons)
-	    {       
+	    {   
 	        recoParticles.addParticle(Particle(&p));
         }
 
         edm::Handle<std::vector<pat::Photon>> photons;
-        event->getByLabel(edm::InputTag("slimmedPhotons"), photons);
+        event->getByToken(photonToken, photons);
 
         for (const auto& p : *photons)
 	    {       
@@ -81,7 +81,7 @@ ParticleCollection<Particle> CmsswEventInterface::getRecoJets() const
     ParticleCollection<Particle> recoParticles;
 
         edm::Handle<std::vector<pat::Jet>> jets;
-        event->getByLabel(edm::InputTag("slimmedJets"), jets);
+        event->getByToken(jetToken, jets);
         for (const auto& j : *jets)
 	    {       
 	        recoParticles.addParticle(Particle(&j));
