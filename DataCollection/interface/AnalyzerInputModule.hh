@@ -18,7 +18,7 @@ class EventInterface;
 class AnalyzerInputModule : public InputModule
 {
     public:
-        AnalyzerInputModule(const EventInterface*& eventInterface);
+        AnalyzerInputModule(const EventInterface** eventInterface);
 
         virtual ParticleCollection<Lepton> getLeptons(RecoLevel level) const override;
         virtual ParticleCollection<Particle> getParticles(RecoLevel level, const ParticleType& particleType = ParticleType::none()) const override;
@@ -31,6 +31,6 @@ class AnalyzerInputModule : public InputModule
         virtual double getMET() const override;
         virtual bool checkTrigger(std::string triggerName, std::string subProcess) const override;
     private:
-        const EventInterface*& eventInterface;
+        const EventInterface** eventInterface;
 };
 #endif

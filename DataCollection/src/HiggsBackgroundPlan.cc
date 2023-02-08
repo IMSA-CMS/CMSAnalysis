@@ -33,7 +33,8 @@
 #include "CMSAnalysis/DataCollection/interface/QuarkoniaCut.hh"
 #include "CMSAnalysis/DataCollection/interface/ZVetoCut.hh"
 #include "CMSAnalysis/DataCollection/interface/FourLeptonCut.hh"
-#include "CMSAnalysis/DataCollection/interface/BJetCut.hh"
+#include "CMSAnalysis/DataCollection/interface/HiggsCutsSelector.hh"
+#include "CMSAnalysis/DataCollection/interface/HiggsCut.hh"
 
 using std::make_shared;
 
@@ -43,17 +44,19 @@ void HiggsBackgroundPlan::initialize()
     Analyzer& analyzer = getAnalyzer();
     
     auto eventMod = make_shared<EventModule>();
-    auto pasSelector = make_shared<PASSelector>();
-    auto fourLeptonCut = make_shared<FourLeptonCut>();
-    auto zVetoCut = make_shared<ZVetoCut>();
-    auto quarkoniaCut = make_shared<QuarkoniaCut>();
-    auto bJetVeto = make_shared<BJetCut>();
+    //auto pasSelector = make_shared<PASSelector>();
+    auto higgsCutsSelector = make_shared<HiggsCutsSelector>();
+    auto higgsCut = make_shared<HiggsCut>();
+    //auto fourLeptonCut = make_shared<FourLeptonCut>();
+    //auto zVetoCut = make_shared<ZVetoCut>();
+    //auto quarkoniaCut = make_shared<QuarkoniaCut>();
 
-    eventMod->addSelector(pasSelector);
-    eventMod->addCut(fourLeptonCut);
-    eventMod->addCut(zVetoCut);
-    eventMod->addCut(quarkoniaCut);
-    eventMod->addCut(bJetVeto);
+    //eventMod->addSelector(pasSelector);
+    eventMod->addSelector(higgsCutsSelector);
+    eventMod->addCut(higgsCut);
+    //eventMod->addCut(fourLeptonCut);
+    //eventMod->addCut(zVetoCut);
+    //eventMod->addCut(quarkoniaCut);
 
     auto matchMod = make_shared<MatchingModule>();
     auto triggerMod = make_shared<TriggerModule>();

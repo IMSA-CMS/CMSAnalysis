@@ -816,9 +816,9 @@ DECAY   1000022     1.00000000E-00  # ~chi_10 decays
 #     1.00000000E+00    2     4900022     4900022      # BR( hvheavyhiggs -> gammav  gammav )
 #
 #            PDG       Width
-#DECAY   4900022   0.80000000E-00   # width value set to arbitrary number
+# DECAY   4900022   0.80000000E-00   # width value set to arbitrary number
 #          BR         NDA      ID1       ID2
-#     0.50000000E+00    2       11         -11      # BR( gammav -> 11  -11 )
-#     1.00000000E+00    2       13         -13      # BR( gammav -> 13  -13 )
+#  0.50000000E+00    2       11         -11      # BR( gammav -> 11  -11 )
+#    1.00000000E+00    2       13         -13      # BR( gammav -> 13  -13 )
 
 # add pion decay here p+/p-
