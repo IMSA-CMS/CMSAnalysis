@@ -15,8 +15,8 @@
 //   // Constructor / takes a value function
 //   CollectionHist(const std::string& iname, int iNBins, double iminimum, double imaximum, std::function<std::vector<double>(const ParticleCollection<Particle>&)>function);
 
-//   // Sets nullparticle to hist to avoid null pointer error
-//   void clear() {collection = ParticleCollection();}
+  // Sets nullparticle to hist to avoid null pointer error
+  //void clear() {collection = ParticleCollection<Particle>();}
 
 //   // Sets the collection
 //   void setCollection(const ParticleCollection<Particle>& particleCollection) {collection = particleCollection;}; 

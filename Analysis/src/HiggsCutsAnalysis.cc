@@ -33,7 +33,6 @@ HiggsCutsAnalysis::HiggsCutsAnalysis() {
             auto higgsSignal = std::make_shared<Process>("Higgs Signal", 2);
             higgsSignal->addProcess(makeSignalProcess(histVariables, filePath, "Higgs" + std::to_string((int) massTarget) + "_HiggsBackground.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
             std::vector<std::shared_ptr<Process>> backgroundProcesses = { dyBackground, qcdBackground, higgsSignal };
-	    std::vector<std::shared_ptr<Process>> backgroundProcesses = { dyBackground, higgsSignal };
             auto leptonBackgrounds = std::make_shared<Channel>(name + std::to_string((int) massTarget), backgroundProcesses);
             channels.push_back(leptonBackgrounds);
         }

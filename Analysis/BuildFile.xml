@@ -11,7 +11,7 @@
 <use   name="TrackingTools/GeomPropagators"/>
 <use   name="TrackingTools/TransientTrack"/>
 <use   name="rootgraphics"/>
-<use  name="CMSAnalysis/DataCollection"/>
+<use   name="CMSAnalysis/DataCollection"/>
 <export>
    <lib name="1"/>
 </export>
