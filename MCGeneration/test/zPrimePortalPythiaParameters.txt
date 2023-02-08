@@ -60,8 +60,8 @@ HiddenValley:ffbar2Zv = on
 4900004:mayDecay = off
 4900022:m0 = 0.3  # baseline = 0.3
 4900022:0:meMode = 0
-4900023:m0 = 300  # Default is 1000 when not set, make sure this mass is > than twice the qv mass
-4900101:m0 = 100  # qv mass
+4900023:m0 = 400  # Default is 1000 when not set, make sure this mass is > than twice the qv mass
+4900101:m0 = 10  # qv mass
 
 4900023:oneChannel = 1 .9 102 4900101 -4900101  # We want it to only decay to qv, not any other fermions
 4900023:addChannel = 1 0.00001 102 1 -1

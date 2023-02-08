@@ -32,14 +32,16 @@
 #include "CMSAnalysis/DataCollection/interface/EventModule.hh"
 #include "CMSAnalysis/DataCollection/interface/DarkPhotonGenSimSelector.hh"
 #include "CMSAnalysis/DataCollection/interface/HPlusPlusGenSimSelector.hh"
+#include "CMSAnalysis/DataCollection/interface/HPlusPlusDecayFilter.hh"
 
 using std::make_shared;
 
 void GenSimPlan::initialize()
 {
+    
     Analyzer& analyzer = getAnalyzer();
 
-    auto deltaR = make_shared<GenSimDeltaRHist>("Delta R", 100, 0, 1);
+    auto deltaR = make_shared<GenSimDeltaRHist>("Delta R", 100, 0, 2);
 
     auto eventMod = make_shared<EventModule>();
     auto dpSelector = make_shared<DarkPhotonGenSimSelector>();
@@ -48,15 +50,15 @@ void GenSimPlan::initialize()
     auto eventDump = make_shared<GenSimEventDumpModule>();
     
     auto histMod = make_shared<HistogramOutputModule>();
-    auto metHist = make_shared<METHist>(metMod, "MET", 500, 0, 1000);
 
-    histMod->addHistogram(metHist);
     histMod->addHistogram(deltaR);
 
-    eventMod->addSelector(dpSelector);
-    //eventMod->addSelector(hppSelector);
+    //eventMod->addSelector(dpSelector);
+    eventMod->addSelector(hppSelector);
     auto eventHistMod = eventMod->getHistogramModule();
+    auto hppFilter = make_shared<HPlusPlusDecayFilter>();
 
+    analyzer.addFilterModule(hppFilter);
     analyzer.addProductionModule(metMod);
     analyzer.addAnalysisModule(eventMod);
     analyzer.addAnalysisModule(eventHistMod);

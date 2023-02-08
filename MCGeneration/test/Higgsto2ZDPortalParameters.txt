@@ -1,6 +1,5 @@
 HiggsSM:all = on
 25:onMode = off
-25:m0 = 125
 
 # 5) Set Higgs mass, width and branching ratios by hand.
 # Values for 125 GeV SM Higgs taken from
@@ -12,14 +11,15 @@ HiggsSM:all = on
 25:76:bRatio = 1.0 
 25:76:meMode = 100
 25:onIfAny = 4900001
-25:mMin = 125
+25:mMin = 1000
+25:m0 = 1000
 25:mWidth = 10
                         
 4900001:oneChannel = 1 1.0 100 4900022 4900004
 4900003:oneChannel = 1 1.0 100 4900022 4900022
 
 # Dark Fermion is 4900001
-4900001:m0 = 50.0
+4900001:m0 = 50
 4900002:m0 = 0.1
 4900003:m0 = 4.5
 4900004:m0 = 2.0
