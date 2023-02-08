@@ -16,6 +16,7 @@ particleStatus(status)
 
 }
 
+
 bool GenSimSimpleImplementation::operator== (const ParticleImplementation& other) const 
 {
   try
@@ -38,6 +39,7 @@ reco::Candidate::LorentzVector GenSimSimpleImplementation::getFourVector() const
 {
   return lorentzVec;
 }
+
 
 Particle GenSimSimpleImplementation::daughter(int i) const  
 {
