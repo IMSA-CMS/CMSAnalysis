@@ -2,10 +2,10 @@
 #include "CMSAnalysis/DataCollection/interface/ParticleCollection.hh"
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
 
-// #include "TH1.h"
-// #include <functional>
+#include "TH1.h"
+#include <functional>
 
-// #include <string>
+#include <string>
 
 CollectionHist::CollectionHist(const std::string& iname, int inBins, double iminimum, double imaximum, std::function<std::vector<double>(std::shared_ptr<ParticleCollection<Particle>>)>function):
     HistogramPrototype1D(iname, inBins, iminimum, imaximum),
