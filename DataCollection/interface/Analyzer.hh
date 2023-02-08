@@ -53,12 +53,7 @@ const InputModule* getInputModule() const {return input;}
   void processOneEvent(const EventInterface *eventInterface);
   void initialize();
 
-  void printModules(){
-    std::cout << "Printing Modules" << std::endl;
-    for (std::shared_ptr<Module> i: getAllModules()){
-      std::cout << i << ' ' << std::endl;
-    }
-  }
+ 
 
 private:
   std::vector<std::shared_ptr<ProductionModule>> productionModules;
@@ -67,6 +62,9 @@ private:
   std::unordered_set<std::string> filterNames;
 
   int numOfEvents = 0;
+  int numOfEvents124 = 0;
+  int numOfEvents137 = 0;
+
   
   const EventInterface *eventInterface;
   InputModule* input;

@@ -20,6 +20,7 @@ SingleProcess FullAnalysis::makeSingleProcess(std::vector<HistVariable> histVari
     return SingleProcess(crossSectionName, inputFile, crossReader, histEstimator, luminosity);
 }
 
+//This is called SignalProcess but just use it as long as you don't need to use scaleToExpected or don't have fit histograms.
 SingleProcess FullAnalysis::makeSignalProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, int massTarget, double luminosity) 
 {
     auto inputFile = std::make_shared<RootFileInput>(filePathway + fileName, histVariables);

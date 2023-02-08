@@ -26,7 +26,7 @@ EventModule::EventModule():
 localInput(&event)
 {
     histMod->setInput(&localInput);
-    histMod->addHistogram(std::make_shared<HistogramPrototype1DGeneral>("MET", 150, 0, 1000, [] (const InputModule* input) -> std::vector<double> {return {input->getMET()};}));
+    //histMod->addHistogram(std::make_shared<HistogramPrototype1DGeneral>("MET", 150, 0, 1000, [] (const InputModule* input) -> std::vector<double> {return {input->getMET()};}));
 }
 
 void EventModule::addSelector(std::shared_ptr<Selector> selector) 
