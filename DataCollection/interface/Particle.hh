@@ -41,8 +41,9 @@ class Particle
     double getPhi() const;
     double getEta() const;
     double getEt() const;
-    double getEnergy() const;
+    double getEnergy() const; 
     double getMass() const;
+    double getGamma() const;
     bool isNotNull() const;
 
     // Operators

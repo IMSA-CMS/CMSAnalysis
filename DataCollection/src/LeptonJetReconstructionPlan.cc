@@ -7,6 +7,10 @@
 #include "TSystem.h"
 
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
+
+#include "CMSAnalysis/DataCollection/interface/GammaHist.hh"
+#include "CMSAnalysis/DataCollection/interface/GammaDeltaRHist2D.hh"
+
 //uncomented
 #include "CMSAnalysis/DataCollection/interface/DeltaRHist.hh" //VIKRAM CHANGED
 #include "CMSAnalysis/DataCollection/interface/DoubleMuonTrigger.hh"
@@ -61,7 +65,9 @@ void LeptonJetReconstructionPlan::initialize()
   //auto mlMod = std::make_shared<LeptonJetMLCalculator>();
 
   // Histograms
-  //uncomented
+  //uncomented 
+  auto gammaDeltaRHist2D = make_shared<GammaDeltaRHist2D>("Gamma Delta R Hist", 100, 100, 1, 0, 1000, 0.5);
+  auto gammaHist = std::make_shared<GammaHist>(lepRecoMod, "Gamma Values", 100, 1, 1000); //VIKRAM CHANGED
   auto deltaRHist = std::make_shared<DeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.1); //VIKRAM CHANGED
   auto pTHist = std::make_shared<LeptonJetPtHist>(lepRecoMod, "pT Values (Reconstructed Jets)", 100, 0, 200);
   auto matchedLeptonJetHist = std::make_shared<MatchedLeptonJetHist>("Matched Lepton Jet Hist HadET", 100, 0, 10, lepMatchMod, lepRecoMod, true);
@@ -74,6 +80,10 @@ void LeptonJetReconstructionPlan::initialize()
   auto relIsoHist = std::make_shared<IsolationHist>(InputModule::RecoLevel::Reco, "Jet pT Rel", 10000, 0, 100);
  // auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(InputModule::RecoLevel::Reco, "NN Classifier Output Distribution", 100, 0, 1, mlMod, lepRecoMod);
 //uncomented
+  eventHistMod->addHistogram(gammaDeltaRHist2D);
+  histOutputMod->addHistogram(gammaDeltaRHist2D);
+  eventHistMod->addHistogram(gammaHist);
+  histOutputMod->addHistogram(gammaHist);
   eventHistMod->addHistogram(deltaRHist);
   histOutputMod->addHistogram(deltaRHist);
   histOutputMod->addHistogram(pTHist);
