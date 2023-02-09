@@ -1,35 +1,65 @@
 #include "CMSAnalysis/DataCollection/interface/HPlusPlusDecayFilter.hh"
 
-HPlusPlusDecayFilter::HPlusPlusDecayFilter(){};
+HPlusPlusDecayFilter::HPlusPlusDecayFilter(InputModule::RecoLevel isGenSim):
+typeGenSim(isGenSim)
+{};
 
 std::string HPlusPlusDecayFilter::makeFilterString()
 {
-  auto particles = getInput()->getParticles(InputModule::RecoLevel::GenSim);
   int higgsPlus = 0;
   int higgsMinus = 0;
-  for (const auto &particle : particles) //cycles through to find the doubly charged higgs
+  if (typeGenSim == InputModule::RecoLevel::GenSim)
   {
-    GenSimParticle genSimParticle = GenSimParticle(particle);
-    if ((genSimParticle.pdgId() == 9900041 || genSimParticle.pdgId() == 9900042) && genSimParticle == genSimParticle.finalDaughter()) // H++
+    auto particles = getInput()->getParticles(InputModule::RecoLevel::GenSim);
+    for (const auto &particle : particles) //cycles through to find the doubly charged higgs
     {
-      if (genSimParticle.numberOfDaughters() == 2 &&
-        (genSimParticle.daughter(0).pdgId() == 13 || genSimParticle.daughter(0).pdgId() == 11) &&
-        (genSimParticle.daughter(1).pdgId() == 13 || genSimParticle.daughter(1).pdgId() == 11))
+      GenSimParticle genSimParticle = GenSimParticle(particle);
+      if ((genSimParticle.pdgId() == 9900041 || genSimParticle.pdgId() == 9900042) && genSimParticle == genSimParticle.finalDaughter()) // H++
       {
-        higgsPlus = genSimParticle.daughter(0).pdgId() + genSimParticle.daughter(1).pdgId();
+        if (genSimParticle.numberOfDaughters() == 2 &&
+          (genSimParticle.daughter(0).pdgId() == 13 || genSimParticle.daughter(0).pdgId() == 11) &&
+          (genSimParticle.daughter(1).pdgId() == 13 || genSimParticle.daughter(1).pdgId() == 11))
+        {
+          higgsPlus = genSimParticle.daughter(0).pdgId() + genSimParticle.daughter(1).pdgId();
+        }
+      } else if ((genSimParticle.pdgId() == -9900041 || genSimParticle.pdgId() == -9900042) && genSimParticle == genSimParticle.finalDaughter()) // H++
+      {
+        if (genSimParticle.numberOfDaughters() == 2 &&
+          (genSimParticle.daughter(0).pdgId() == -13 || genSimParticle.daughter(0).pdgId() == -11) &&
+          (genSimParticle.daughter(1).pdgId() == -13 || genSimParticle.daughter(1).pdgId() == -11))
+        {
+          higgsMinus = genSimParticle.daughter(0).pdgId() + genSimParticle.daughter(1).pdgId();
+        }
       }
-    } else if ((genSimParticle.pdgId() == -9900041 || genSimParticle.pdgId() == -9900042) && genSimParticle == genSimParticle.finalDaughter()) // H++
-    {
-      if (genSimParticle.numberOfDaughters() == 2 &&
-        (genSimParticle.daughter(0).pdgId() == -13 || genSimParticle.daughter(0).pdgId() == -11) &&
-        (genSimParticle.daughter(1).pdgId() == -13 || genSimParticle.daughter(1).pdgId() == -11))
+      if (higgsMinus != 0 && higgsPlus != 0) //exits once both are found
       {
-        higgsMinus = genSimParticle.daughter(0).pdgId() + genSimParticle.daughter(1).pdgId();
+        break;
       }
     }
-    if (higgsMinus != 0 && higgsPlus != 0) //exits once both are found
+  } else if (typeGenSim == InputModule::RecoLevel::Reco)
+  {
+    auto leptons = getInput()->getLeptons(InputModule::RecoLevel::Reco);
+    for (const auto &lepton : leptons) //cycles through to find the doubly charged higgs
     {
-      break;
+      if (lepton.getCharge() > 0)
+      {
+        if (lepton.getType() == ParticleType::electron())
+        {
+          higgsPlus += 11;
+        } else if (lepton.getType() == ParticleType::muon())
+        {
+          higgsPlus += 13;
+        }
+      } else if (lepton.getCharge() < 0)
+      {
+        if (lepton.getType() == ParticleType::electron())
+        {
+          higgsMinus -= 11;
+        } else if (lepton.getType() == ParticleType::muon())
+        {
+          higgsMinus -= 13;
+        }
+      }
     }
   }
   if (higgsPlus == 22) //classifies them based off of pdgID: 22 is ee, 24 is eu, 26 is uu
@@ -49,10 +79,10 @@ std::string HPlusPlusDecayFilter::makeFilterString()
   {
     if (higgsMinus == -22)
     {
-      return "uuee";
+      return "eeuu";
     } else if (higgsMinus == -24)
     {
-      return "uueu";
+      return "euuu";
     } else if (higgsMinus == -26)
     {
       return "uuuu";
@@ -61,7 +91,7 @@ std::string HPlusPlusDecayFilter::makeFilterString()
   {
     if (higgsMinus == -22)
     {
-      return "euee";
+      return "eeeu";
     } else if (higgsMinus == -24)
     {
       return "eueu";

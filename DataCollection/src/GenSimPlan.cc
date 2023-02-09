@@ -58,7 +58,7 @@ void GenSimPlan::initialize()
     //eventMod->addSelector(dpSelector);
     eventMod->addSelector(hppSelector);
     auto eventHistMod = eventMod->getHistogramModule();
-    auto hppFilter = make_shared<HPlusPlusDecayFilter>();
+    auto hppFilter = make_shared<HPlusPlusDecayFilter>(InputModule::RecoLevel::GenSim);
 
     analyzer.addFilterModule(hppFilter);
     analyzer.addProductionModule(metMod);
@@ -66,5 +66,5 @@ void GenSimPlan::initialize()
     analyzer.addAnalysisModule(eventHistMod);
 
     analyzer.addAnalysisModule(histMod);
-    analyzer.addAnalysisModule(eventDump);
+    //analyzer.addAnalysisModule(eventDump);
 }

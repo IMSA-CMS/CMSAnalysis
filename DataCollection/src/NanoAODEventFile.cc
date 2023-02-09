@@ -201,13 +201,19 @@ void NanoAODEventFile::nextEvent()
             {
                 charge = 0;
             }
-
-            std::vector<const GenSimParticle*> daughterCollectionVector{&genSimParticles[getArrayElement<Int_t>("gen_d1", i)], &genSimParticles[getArrayElement<Int_t>("gen_d2", i)]};
+            std::vector<const GenSimParticle*> daughterCollectionVector{};
+            if (i < getArraySize<Int_t>("gen_d1"))
+            {
+                daughterCollectionVector.push_back(&genSimParticles[getArrayElement<Int_t>("gen_d2", i)]);
+            } 
+            if (i < getArraySize<Int_t>("gen_d2"))
+            {
+                daughterCollectionVector.push_back(&genSimParticles[getArrayElement<Int_t>("gen_d2", i)]);
+            } 
             GenSimParticle* mother = &genSimParticles[getArrayElement<Int_t>("gen_m1", i)];
-            genSimParticles[getArrayElement<Int_t>("gen_m1", i)];
             genSimParticles.push_back(GenSimParticle(reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(
-                getArrayElement<Int_t>("gen_pt", i),getArrayElement<Int_t>("gen_eta", i), 
-                getArrayElement<Int_t>("gen_phi", i), getArrayElement<Int_t>("gen_mass", i))),
+                getArrayElement<Float_t>("gen_pt", i),getArrayElement<Float_t>("gen_eta", i), 
+                getArrayElement<Float_t>("gen_phi", i), getArrayElement<Float_t>("gen_mass", i))),
                 charge, 
                 Particle::identifyType(getArrayElement<Int_t>("gen_pid", i)), 
                 getArrayElement<Int_t>("gen_pid", i),

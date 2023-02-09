@@ -3,15 +3,15 @@
 
 #include "FilterModule.hh"
 
-//Filters hpp events based upon their decays. Currently only work for GenSim
+//Filters hpp events based upon their decays. Implemented for both GenSim and Reco (in progress)
 class HPlusPlusDecayFilter : public FilterModule
 {
 public:
-  HPlusPlusDecayFilter();
+  HPlusPlusDecayFilter(InputModule::RecoLevel isGenSim);
 
 protected:
   virtual std::string makeFilterString() override; 
-
-};
+  InputModule::RecoLevel typeGenSim;
+  };
 
 #endif
