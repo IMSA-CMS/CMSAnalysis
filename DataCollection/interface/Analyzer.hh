@@ -62,8 +62,7 @@ private:
   std::unordered_set<std::string> filterNames;
 
   int numOfEvents = 0;
-  int numOfEvents124 = 0;
-  int numOfEvents137 = 0;
+
 
   
   const EventInterface *eventInterface;
