@@ -53,18 +53,33 @@ void Analyzer::writeOutputFile(const std::string &outputFile)
   }
 
   outputRootFile->cd();
-  // Finalize separately for each filterString, to be safe
+  //Finalize separately for each filterString, to be safe
   for (auto module : analysisModules)
   {
+       // Write the output
     module->doneProcessing();
-    for (auto &str : filterNames)
+    if (filterModules.size() != 0)
     {
-      module->setFilterString(str);
+      for (auto &str : filterNames)
+      {
+        auto it = filterDirectories.find(str);
+        if (it == filterDirectories.end())
+        {
+          filterDirectories.insert({str,outputRootFile->mkdir((str + "_hists").c_str())});
+        }
+        filterDirectories[str]->cd();
+        module->setFilterString(str);
+        module->finalize();
+        module->writeAll();
+        outputRootFile->cd();
+      }
+    } else {
+      module->setFilterString("");
       module->finalize();
+      module->writeAll();
     }
-    // Write the output
-    module->writeAll();
   }
+
   // Write total number of events
   auto eventsText = new TDisplayText(std::to_string(numOfEvents).c_str());
   eventsText->Write("NEvents");
