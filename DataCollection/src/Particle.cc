@@ -44,8 +44,8 @@ particle(std::make_shared<DelphesImplementation>(vec,charge,type,pid,status,m1,m
 }
 
 
-Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, const Particle* motherParticle, std::vector<const GenSimParticle*> daughters, const int status):
-particle(std::make_shared<GenSimSimpleImplementation>(vec, charge, type, motherParticle, daughters, status))
+Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int currentpdgId, const Particle* motherParticle, std::vector<const GenSimParticle*> daughters, const int status):
+particle(std::make_shared<GenSimSimpleImplementation>(vec, charge, type, currentpdgId, motherParticle, daughters, status))
 {
 
 }
@@ -271,11 +271,11 @@ const ParticleType& Particle::identifyType(int pdgid)
     {
       return ParticleType::neutralino();
     }
-    else if (abs(pdgid == 9900041))
+    else if (pdgid == 9900041 || pdgid == -9900041)
     {
       return ParticleType::leftDoublyHiggs();
     }
-    else if (abs(pdgid == 9900042))
+    else if (pdgid == 9900042 || pdgid == -9900042)
     {
       return ParticleType::rightDoublyHiggs();
     }

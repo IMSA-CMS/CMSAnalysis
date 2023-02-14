@@ -24,7 +24,7 @@ ParticleCollection<Lepton> AnalyzerInputModule::getLeptons(RecoLevel level) cons
     return leptons;
 }
 
-ParticleCollection<Particle> AnalyzerInputModule::getParticles(RecoLevel level, const ParticleType &particleType) const
+ParticleCollection<Particle> AnalyzerInputModule::getParticles(RecoLevel level, const ParticleType& particleType) const
 {
     ParticleCollection<Particle> particleList;
     if (level == RecoLevel::GenSim)
@@ -32,8 +32,7 @@ ParticleCollection<Particle> AnalyzerInputModule::getParticles(RecoLevel level, 
         auto particles = (*eventInterface)->getGenSimParticles().getParticles();
         for (const auto &p : particles)
         {
-            // std::cout << "Particle type: " << p.getType().getName() << "\n";
-            if ((p.getType() == particleType || particleType == ParticleType::none())) //&& p.isFinalState())
+             if ((p.getType() == particleType || particleType == ParticleType::none())) //&& p.isFinalState())
             {
                 particleList.addParticle(p);
             }
@@ -42,11 +41,14 @@ ParticleCollection<Particle> AnalyzerInputModule::getParticles(RecoLevel level, 
     else if (level == RecoLevel::Reco)
     {
         auto particles = (*eventInterface)->getRecoParticles().getParticles();
+        
+
         for (const auto &p : particles)
         {
-            if (p.getType() == particleType || particleType == ParticleType::none()) //&& p.isFinalState())
+             if (p.getType() == particleType || particleType == ParticleType::none()) //&& p.isFinalState())
             {
                 particleList.addParticle(p);
+                //std::cout << "AnalyzerInputModule +1" ;
             }
         }
     }
