@@ -14,8 +14,8 @@
 #include <vector>
 
 HiggsCutsAnalysis::HiggsCutsAnalysis() {
-    std::vector<double> massTargets {900};
-    std::vector<std::string> names = {"Muon"};
+    std::vector<double> massTargets = {300, 500, 700, 900, 1100, 1300, 1500};
+    std::vector<std::string> names = {"Muon", "Electron"};
     for(std::string name : names) {
         for(double massTarget : massTargets) {
             std::vector<HistVariable> histVariables;
@@ -24,12 +24,9 @@ HiggsCutsAnalysis::HiggsCutsAnalysis() {
             //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
             const std::string filePath = "/uscms/home/fciancio/practice/CMSSW_11_0_2/src/CMSAnalysis/DataCollection/bin/";
             //Add your hists here
-            histVariables.push_back(HistVariable::firstPt("1st Highest " + name + " Pt"));
-	    histVariables.push_back(HistVariable::secondPt("2nd Highest " + name + " Pt"));
-	    histVariables.push_back(HistVariable::thirdPt("3rd Highest " + name + " Pt"));
-	    histVariables.push_back(HistVariable::fourthPt("4th Highest " + name + " Pt"));
+            histVariables.push_back(HistVariable::SameSignMass(name + name + " Reco Same Sign Invariant Mass"));
             double luminosity = 3000;
-	    auto dyBackground = std::make_shared<Process>("DY Background", 3);
+	        auto dyBackground = std::make_shared<Process>("DY Background", 3);
             dyBackground->addProcess(makeSignalProcess(histVariables, filePath, "DY50Run2_HiggsBackground.root", "dy50toinf", reader, massTarget, luminosity));
             auto qcdBackground = std::make_shared<Process>("QCD Background", 4);
             qcdBackground->addProcess(makeSignalProcess(histVariables, filePath, "QCD500_HiggsBackground.root", "qcd500to700", reader, massTarget, luminosity));

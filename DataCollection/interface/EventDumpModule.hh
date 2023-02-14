@@ -8,8 +8,10 @@
 #include "GenSimParticle.hh"
 #include "Particle.hh"
 
-// GenSimIdentificationModule creates a Particle Collection
-// of gen sim particles that will be used in MatchingModule 
+// Event Dump Module is responsible for printing the particle information such as energy, pt, phi, eta for all the events in the root file
+// There is a flag for genSim or reco in constructor
+// GenSim events print daughter and mother information along with status codes used by PYTHIA 
+// EventDumpModule should be added into any Analyzerplan by making a shared pointer, and adding onto analysis module
 class EventDumpModule : public AnalysisModule
 {
 public:

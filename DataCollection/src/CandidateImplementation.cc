@@ -76,7 +76,6 @@ Particle CandidateImplementation::mother() const {
 Particle CandidateImplementation::daughter(int i) const {
   // std::cout << "daugters\n";
   checkIsNull();
-  std::cout << "Daughter type " << particle->daughter(i)->pdgId() <<'\n';
   auto daughter = particle->daughter(i);
   /* if (!daughter)
   {
