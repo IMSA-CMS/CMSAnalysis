@@ -1,5 +1,3 @@
-
-
 #include "CMSAnalysis/DataCollection/interface/GenSimStudyModule.hh"
 
 #include <cmath>

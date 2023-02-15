@@ -1,33 +1,46 @@
-// #ifndef COLLECTIONHIST_HH
-// #define COLLECTIONHIST_HH
+#ifndef COLLECTIONHIST_HH
+#define COLLECTIONHIST_HH
 
-// #include "HistogramPrototype1D.hh"
-// #include "ParticleCollection.hh"
-// #include "Particle.hh"
+#include "HistogramPrototype1D.hh"
+#include "Particle.hh"
 
-// class MatchingModule;
+#include <functional>
 
-// //General Histogram Type which has a ParticleCollection connected to it
-// //cdollection must be cleared/updated each event
-// class CollectionHist : public HistogramPrototype1D
-// {
-//   public:
-//   // Constructor / takes a value function
-//   CollectionHist(const std::string& iname, int iNBins, double iminimum, double imaximum, std::function<std::vector<double>(const ParticleCollection<Particle>&)>function);
+#include <string>
+#include <vector>
 
-  // Sets nullparticle to hist to avoid null pointer error
-  //void clear() {collection = ParticleCollection<Particle>();}
+template<class T>
+class ParticleCollection;
 
-//   // Sets the collection
-//   void setCollection(const ParticleCollection<Particle>& particleCollection) {collection = particleCollection;}; 
+//General Histogram Type which has a ParticleCollection connected to it
+//collection must be cleared/updated each event
+//This class works similarly to SingleParticleHist
+//Implemented in ParticleType
+class CollectionHist : public HistogramPrototype1D
+{
+  public:
+  // Constructor / takes a value function
+  CollectionHist(const std::string& iname, int iNBins, double iminimum, double imaximum, std::function<std::vector<double>(std::shared_ptr<ParticleCollection<Particle>>)>function);
 
-//   // value function which is called in HistMod
-//   virtual std::vector<double> value() const override;
+  //Clones histogram
+  CollectionHist clone() {return CollectionHist(getName(),getNBins(),getMinimum(),getMaximum(),valueFunction);};
 
-//   private:
-//   ParticleCollection<Particle> collection;
+  // Sets nullptr to hist to avoid null pointer error
+  void clear();
 
-//   std::function<std::vector<double>(const ParticleCollection<Particle>&)> valueFunction;
-// };
+  // Sets the collection
+  void setCollection(std::shared_ptr<ParticleCollection<Particle>> particleCollection);
 
-// #endif
+  //This function is necessary to change name from default in ParticleType / called in EventModule
+  void changeName (std::string newName) {setName(newName);};
+
+  // value function which is called in HistMod
+  virtual std::vector<double> value() const override;
+
+  private:
+  std::shared_ptr<ParticleCollection<Particle>> collection;
+
+  std::function<std::vector<double>(std::shared_ptr<ParticleCollection<Particle>>)> valueFunction;
+};
+
+#endif
