@@ -60,6 +60,7 @@ private:
   std::vector<std::shared_ptr<FilterModule>> filterModules;
   std::vector<std::shared_ptr<AnalysisModule>> analysisModules;
   std::unordered_set<std::string> filterNames;
+  std::unordered_map<std::string, TDirectory*> filterDirectories;
 
   int numOfEvents = 0;
   int numOfEvents124 = 0;
