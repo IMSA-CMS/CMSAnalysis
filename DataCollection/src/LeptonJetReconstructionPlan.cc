@@ -66,7 +66,7 @@ void LeptonJetReconstructionPlan::initialize()
 
   // Histograms
   //uncomented 
-  auto gammaDeltaRHist2D = make_shared<GammaDeltaRHist2D>("Gamma Delta R Hist", 100, 100, 1, 0, 1000, 0.5);
+  auto gammaDeltaRHist2D = make_shared<GammaDeltaRHist2D>(lepRecoMod, "Gamma Delta R Hist", 100, 100, 1, 0, 1000, 0.5);
   auto gammaHist = std::make_shared<GammaHist>(lepRecoMod, "Gamma Values", 100, 1, 1000); //VIKRAM CHANGED
   auto deltaRHist = std::make_shared<DeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.1); //VIKRAM CHANGED
   auto pTHist = std::make_shared<LeptonJetPtHist>(lepRecoMod, "pT Values (Reconstructed Jets)", 100, 0, 200);
@@ -81,7 +81,6 @@ void LeptonJetReconstructionPlan::initialize()
  // auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(InputModule::RecoLevel::Reco, "NN Classifier Output Distribution", 100, 0, 1, mlMod, lepRecoMod);
 //uncomented
   eventHistMod->addHistogram(gammaDeltaRHist2D);
-  histOutputMod->addHistogram(gammaDeltaRHist2D);
   eventHistMod->addHistogram(gammaHist);
   histOutputMod->addHistogram(gammaHist);
   eventHistMod->addHistogram(deltaRHist);

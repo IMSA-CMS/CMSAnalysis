@@ -8,7 +8,7 @@ class LeptonJetReconstructionModule;
 class GammaDeltaRHist2D : public HistogramPrototype2D
 {
   public:
-  GammaDeltaRHist2D(const std::string& iname, int iNBinsX, int iNBinsY, double iMinX, double iMinY, double iMaxX, double iMaxY);
+  GammaDeltaRHist2D(std::shared_ptr<LeptonJetReconstructionModule> ileptonJetRecoModule, const std::string& iname, int iNBinsX, int iNBinsY, double iMinX, double iMinY, double iMaxX, double iMaxY);
   protected:
     std::vector<std::pair<double, double>> value2D() const override;
   private:
