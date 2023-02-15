@@ -14,22 +14,18 @@ std::string HPlusPlusDecayFilter::makeFilterString()
     for (const auto &particle : particles) //cycles through to find the doubly charged higgs
     {
       GenSimParticle genSimParticle = GenSimParticle(particle);
-      if ((genSimParticle.pdgId() == 9900041 || genSimParticle.pdgId() == 9900042) && genSimParticle == genSimParticle.finalDaughter()) // H++
+      if ((genSimParticle.pdgId() == 9900041 || genSimParticle.pdgId() == 9900042) && 
+      genSimParticle == genSimParticle.finalDaughter() && genSimParticle.numberOfDaughters() != 0 &&
+      (genSimParticle.daughter(0).pdgId() == 13 || genSimParticle.daughter(0).pdgId() == 11) &&
+      (genSimParticle.daughter(1).pdgId() == 13 || genSimParticle.daughter(1).pdgId() == 11)) // H++
       {
-        if (genSimParticle.numberOfDaughters() == 2 &&
-          (genSimParticle.daughter(0).pdgId() == 13 || genSimParticle.daughter(0).pdgId() == 11) &&
-          (genSimParticle.daughter(1).pdgId() == 13 || genSimParticle.daughter(1).pdgId() == 11))
-        {
-          higgsPlus = genSimParticle.daughter(0).pdgId() + genSimParticle.daughter(1).pdgId();
-        }
-      } else if ((genSimParticle.pdgId() == -9900041 || genSimParticle.pdgId() == -9900042) && genSimParticle == genSimParticle.finalDaughter()) // H++
+        higgsPlus = genSimParticle.daughter(0).pdgId() + genSimParticle.daughter(1).pdgId();
+      } else if ((genSimParticle.pdgId() == -9900041 || genSimParticle.pdgId() == -9900042) && 
+      genSimParticle == genSimParticle.finalDaughter() && genSimParticle.numberOfDaughters() != 0 &&
+      (genSimParticle.daughter(0).pdgId() == -13 || genSimParticle.daughter(0).pdgId() == -11) &&
+      (genSimParticle.daughter(1).pdgId() == -13 || genSimParticle.daughter(1).pdgId() == -11)) // H--
       {
-        if (genSimParticle.numberOfDaughters() == 2 &&
-          (genSimParticle.daughter(0).pdgId() == -13 || genSimParticle.daughter(0).pdgId() == -11) &&
-          (genSimParticle.daughter(1).pdgId() == -13 || genSimParticle.daughter(1).pdgId() == -11))
-        {
-          higgsMinus = genSimParticle.daughter(0).pdgId() + genSimParticle.daughter(1).pdgId();
-        }
+        higgsMinus = genSimParticle.daughter(0).pdgId() + genSimParticle.daughter(1).pdgId();
       }
       if (higgsMinus != 0 && higgsPlus != 0) //exits once both are found
       {
