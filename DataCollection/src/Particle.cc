@@ -271,11 +271,11 @@ const ParticleType& Particle::identifyType(int pdgid)
     {
       return ParticleType::neutralino();
     }
-    else if (abs(pdgid == 9900041))
+    else if (pdgid == 9900041 || pdgid == -9900041)
     {
       return ParticleType::leftDoublyHiggs();
     }
-    else if (abs(pdgid == 9900042))
+    else if (pdgid == 9900042 || pdgid == -9900042)
     {
       return ParticleType::rightDoublyHiggs();
     }

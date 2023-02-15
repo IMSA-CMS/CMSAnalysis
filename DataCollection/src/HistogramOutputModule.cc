@@ -21,7 +21,10 @@ void HistogramOutputModule::writeAll() {
 
   // Then write all the objects to file
   for (auto &entry : baseObjects) {
-    entry.second->Write();
+    if (entry.first.find(getFilter()) != std::string::npos || getFilter() == "")
+    {
+      entry.second->Write();
+    }
   }
 }
 
@@ -149,4 +152,17 @@ bool HistogramOutputModule::process() {
     }
   }
   return true;
+}
+
+void HistogramOutputModule::finalize()
+{
+  for (auto hist : histograms) 
+  {
+    auto Thist = getHistogram(hist->getFilteredName());
+    if (Thist->GetEntries() == 0)
+    {
+      auto it = baseObjects.find(getObjectName(hist->getFilteredName()));
+      baseObjects.erase(it);
+    }
+  }
 }
