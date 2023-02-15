@@ -17,7 +17,7 @@ bool LeptonEfficiency::process()
 {
   auto genSim = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
   if(getInput()){
-    std::cout << "Pointer is full";
+    std::cout << "Pointer is full\n";
   }
   
 

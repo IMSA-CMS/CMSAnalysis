@@ -109,7 +109,7 @@ void LeptonJetReconstructionPlan::initialize()
 
   // Efficiency Modules
   auto leptonEfficiency = std::make_shared<LeptonEfficiency>(matchMod);
-  //auto leptonJetEfficiency = std::make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
+  auto leptonJetEfficiency = std::make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
 
   // Add the histogram(s) created above to histMod
   // eventHistMod->addHistogram(nLeptonsHist);
@@ -146,8 +146,8 @@ void LeptonJetReconstructionPlan::initialize()
   analyzer.addAnalysisModule(histOutputMod);
   analyzer.addAnalysisModule(eventHistMod);
   // analyzer.addProductionModule(triggerMod);
-  //analyzer.addAnalysisModule(leptonEfficiency);
-  //analyzer.addAnalysisModule(leptonJetEfficiency);
+  analyzer.addAnalysisModule(leptonEfficiency);
+  analyzer.addAnalysisModule(leptonJetEfficiency);
   //analyzer.addAnalysisModule(massRecoEfficiency200);
   //analyzer.addAnalysisModule(massRecoEfficiency500);
   //analyzer.addAnalysisModule(massRecoEfficiency800);
