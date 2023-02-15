@@ -56,11 +56,11 @@ void Analyzer::writeOutputFile(const std::string &outputFile)
   //Finalize separately for each filterString, to be safe
   for (auto module : analysisModules)
   {
-       // Write the output
+    // Write the output
     module->doneProcessing();
     if (filterModules.size() != 0)
     {
-      for (auto &str : filterNames)
+      for (auto &str : filterNames) //writes analysis modules by filter string
       {
         auto it = filterDirectories.find(str);
         if (it == filterDirectories.end())
@@ -70,7 +70,7 @@ void Analyzer::writeOutputFile(const std::string &outputFile)
         filterDirectories[str]->cd();
         module->setFilterString(str);
         module->finalize();
-        module->writeAll();
+        module->writeAll(); //writes files to folder
         outputRootFile->cd();
       }
     } else {
