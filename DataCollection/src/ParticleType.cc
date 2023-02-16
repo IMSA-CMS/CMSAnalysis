@@ -98,7 +98,6 @@ SingleParticleHist ParticleType::getDaughterDeltaRHist()
     });
 }
 
-
 const ParticleType& ParticleType::electron()
 {
     return registerType("Electron",11,
@@ -111,6 +110,13 @@ const ParticleType& ParticleType::muon()
     return registerType("Muon",13,
     std::vector<SingleParticleHist>{getPtHist(),getPhiHist(),getEtaHist()},
     std::vector<CollectionHist>{getNumberHist(),getSameSignInvariantMassHist(),getOppositeSignInvariantMassHist()}); 
+}
+
+const ParticleType& ParticleType::tau()
+{
+    return registerType("Tau",15,
+    std::vector<SingleParticleHist>{},
+    std::vector<CollectionHist>{getNumberHist()}); 
 }
 
 const ParticleType& ParticleType::jet()
@@ -130,7 +136,7 @@ const ParticleType& ParticleType::leptonJet()
 const ParticleType& ParticleType::photon()
 {
     return registerType("Photon",22,
-    std::vector<SingleParticleHist>{getPtHist(),getPhiHist(),getEtaHist()},
+    std::vector<SingleParticleHist>{},
     std::vector<CollectionHist>{getNumberHist()}); 
 }
 
@@ -144,30 +150,58 @@ const ParticleType& ParticleType::darkPhoton()
 const ParticleType& ParticleType::neutralino()
 {
     return registerType("Neutralino",1000022,
-    std::vector<SingleParticleHist>{getPtHist(),getPhiHist(),getEtaHist()},
+    std::vector<SingleParticleHist>{},
     std::vector<CollectionHist>{getNumberHist()}); 
 }
 
 const ParticleType& ParticleType::leftDoublyHiggs()
 {
     return registerType("Left Doubly Charged Higgs",9900041,
-    std::vector<SingleParticleHist>{getPtHist(),getPhiHist(),getEtaHist()},
+    std::vector<SingleParticleHist>{},
     std::vector<CollectionHist>{getNumberHist()}); 
 }
 
 const ParticleType& ParticleType::rightDoublyHiggs()
 {
     return registerType("Right Doubly Charged Higgs",9900042,
-    std::vector<SingleParticleHist>{getPtHist(),getPhiHist(),getEtaHist()},
+    std::vector<SingleParticleHist>{},
     std::vector<CollectionHist>{getNumberHist()}); 
 }
 
-const ParticleType& ParticleType::zBoson()
+const ParticleType& ParticleType::z()
 {
     return registerType("Z Boson",23,
-    std::vector<SingleParticleHist>{getPtHist(),getPhiHist(),getEtaHist()},
+    std::vector<SingleParticleHist>{},
     std::vector<CollectionHist>{getNumberHist()}); 
 }
+
+const ParticleType& ParticleType::w()
+{
+    return registerType("W Boson",24,
+    std::vector<SingleParticleHist>{},
+    std::vector<CollectionHist>{getNumberHist()}); 
+}
+
+const ParticleType& ParticleType::higgs()
+{
+    return registerType("Higgs Boson",25,
+    std::vector<SingleParticleHist>{},
+    std::vector<CollectionHist>{getNumberHist()}); 
+}
+
+const ParticleType& ParticleType::meson()
+{
+    return registerType("Meson",0,
+    std::vector<SingleParticleHist>{},
+    std::vector<CollectionHist>{getNumberHist()}); 
+} 
+
+const ParticleType& ParticleType::baryon()
+{
+    return registerType("Baryon",0,
+    std::vector<SingleParticleHist>{},
+    std::vector<CollectionHist>{getNumberHist()}); 
+} 
 
 const ParticleType& ParticleType::none()
 {
