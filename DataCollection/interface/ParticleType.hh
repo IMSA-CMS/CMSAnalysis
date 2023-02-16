@@ -28,13 +28,19 @@ class ParticleType
     static const ParticleType& electron();
     static const ParticleType& muon();
     static const ParticleType& jet(); 
+    static const ParticleType& tau();
     static const ParticleType& leptonJet(); 
     static const ParticleType& photon();
     static const ParticleType& darkPhoton();
     static const ParticleType& neutralino();
     static const ParticleType& leftDoublyHiggs();
     static const ParticleType& rightDoublyHiggs();
-    static const ParticleType& zBoson();
+    static const ParticleType& z();
+    static const ParticleType& w();
+    static const ParticleType& higgs();
+    static const ParticleType& meson();
+    static const ParticleType& baryon();
+
     static const ParticleType& none();
 
     bool operator== (const ParticleType type) const;
