@@ -23,17 +23,7 @@ void GenSimEventFile::nextEvent()
     auto& eventRef = *event;
     ++(eventRef);
     setEventCount(getEventCount() + 1);
-    // std::cout << "next Event \n";
 }
-
-/*
-std::vector<PileupSummaryInfo> MiniAODEventLoader::getPileupInfo() const
-{
-    edm::Handle<std::vector<PileupSummaryInfo>> pileup;
-    event->getByLabel(std::string("slimmedAddPileupInfo"), pileup);
-    return *pileup;
-}
-*/
 
 ParticleCollection<GenSimParticle> GenSimEventFile::getGenSimParticles() const
 {
@@ -50,19 +40,16 @@ ParticleCollection<GenSimParticle> GenSimEventFile::getGenSimParticles() const
 ParticleCollection<Particle> GenSimEventFile::getRecoParticles() const
 {
     return ParticleCollection<Particle>();
-    //throw std::runtime_error("Cannot run Reco on GenSim file");
 }
 
 ParticleCollection<Particle> GenSimEventFile::getRecoJets() const
 {
     return ParticleCollection<Particle>();
-    //throw std::runtime_error("Cannot run Reco on GenSim file");
 }
 
 int GenSimEventFile::getNumPileUpInteractions() const
 {
     return -1;
-    //throw std::runtime_error("GenSimEventFile has no implementation of getNumPileUpInteractions");
 }
 
 double GenSimEventFile::getMET() const
