@@ -8,11 +8,6 @@
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
 
-CmsswEventInterface::CmsswEventInterface() : 
-EventInterface()
-{
-}
-
 /*
 std::vector<PileupSummaryInfo> MiniAODEventLoader::getPileupInfo() const
 {
@@ -21,9 +16,24 @@ std::vector<PileupSummaryInfo> MiniAODEventLoader::getPileupInfo() const
     return *pileup;
 }
 */
+CmsswEventInterface::CmsswEventInterface(
+    edm::EDGetTokenT<pat::ElectronCollection>& iElectronToken,
+    edm::EDGetTokenT<pat::MuonCollection>& iMuonToken,
+    edm::EDGetTokenT<pat::PhotonCollection>& iPhotonToken,
+    edm::EDGetTokenT<pat::JetCollection>& iJetToken,
+    edm::EDGetTokenT<pat::METCollection>& iMETToken):
+electronToken(iElectronToken),
+muonToken(iMuonToken),
+photonToken(iPhotonToken),
+jetToken(iJetToken),
+metToken(iMETToken)
+{
+
+}
 
 ParticleCollection<GenSimParticle> CmsswEventInterface::getGenSimParticles() const
 {
+
     ParticleCollection<GenSimParticle> genParticles;
     edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
     event->getByLabel(std::string("prunedGenParticles"), genParticlesHandle);
@@ -37,34 +47,32 @@ ParticleCollection<GenSimParticle> CmsswEventInterface::getGenSimParticles() con
 
 ParticleCollection<Particle> CmsswEventInterface::getRecoParticles() const
 {
-    // std::cout << "get reco particles \n";
     ParticleCollection<Particle> recoParticles;
     //This seems problematic
     
         edm::Handle<std::vector<pat::Electron>> electrons;
-        event->getByLabel(std::string("slimmedElectrons"), electrons);
+        event->getByToken(electronToken, electrons);
 
         for (const auto& p : *electrons)
-	    {       
+	    {   
 	        recoParticles.addParticle(Particle(&p)); 
 	    }
 
         edm::Handle<std::vector<pat::Muon>> muons;
-        event->getByLabel(edm::InputTag("slimmedMuons"), muons);
+        event->getByToken(muonToken, muons);
 
         for (const auto& p : *muons)
-	    {       
+	    {   
 	        recoParticles.addParticle(Particle(&p));
         }
 
         edm::Handle<std::vector<pat::Photon>> photons;
-        event->getByLabel(edm::InputTag("slimmedPhotons"), photons);
+        event->getByToken(photonToken, photons);
 
         for (const auto& p : *photons)
 	    {       
 	        recoParticles.addParticle(Particle(&p));
         }
-        // std::cout << "made it through mini aod reco particles \n";
         return recoParticles;
 }
 
@@ -73,8 +81,7 @@ ParticleCollection<Particle> CmsswEventInterface::getRecoJets() const
     ParticleCollection<Particle> recoParticles;
 
         edm::Handle<std::vector<pat::Jet>> jets;
-        event->getByLabel(edm::InputTag("slimmedJets"), jets);
-
+        event->getByToken(jetToken, jets);
         for (const auto& j : *jets)
 	    {       
 	        recoParticles.addParticle(Particle(&j));
@@ -85,16 +92,20 @@ ParticleCollection<Particle> CmsswEventInterface::getRecoJets() const
 double CmsswEventInterface::getMET() const
 {
     edm::Handle<std::vector<pat::MET>> mets;
-    event->getByLabel(edm::InputTag("slimmedMETs"), mets);
+
+    event->getByToken(metToken, mets);
+
     for (const auto& p : *mets)
     {
         return p.corPt(pat::MET::METCorrectionLevel::Type1);
     }
     throw std::runtime_error("There are no MET objects found");
+    
+
 }
 
 std::vector<bool> CmsswEventInterface::getTriggerResults(std::string subProcess) const
-{
+{   
     edm::Handle<edm::TriggerResults> triggerResults;
     event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
     std::vector<bool> v_results = {};
@@ -106,7 +117,8 @@ std::vector<bool> CmsswEventInterface::getTriggerResults(std::string subProcess)
 }
 
 std::vector<std::string> CmsswEventInterface::getTriggerNames(std::string subProcess) const
-{
+{   
+
     edm::Handle<edm::TriggerResults> triggerResults;
     event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
     const edm::TriggerNames names = event->triggerNames(*triggerResults);
@@ -118,3 +130,14 @@ std::vector<std::string> CmsswEventInterface::getTriggerNames(std::string subPro
     return v_names;
 }
 
+int CmsswEventInterface::getNumPileUpInteractions() const
+{   
+    return 1;
+   // return static_cast<int>(gen_pileup[0]);
+}
+bool CmsswEventInterface::checkTrigger(std::string triggerName, std::string subProcess) const
+{   
+
+    return true;
+    //return *(triggers.find(triggerName)->second);
+}

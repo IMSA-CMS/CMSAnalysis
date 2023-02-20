@@ -1,4 +1,7 @@
 #include "CMSAnalysis/DataCollection/interface/Utility.hh"
+#include <vector>
+#include <numeric>
+#include <iostream>
 
 std::string Utility::substitute(std::string original, std::string target, std::string subs)
 {
@@ -19,4 +22,16 @@ std::string Utility::removeSpaces(std::string input)
 	  }
 	}
   return outputString;
+}
+
+int Utility::gcf(std::vector<int> nums) {
+  int toReturn = 0;
+  int previous = nums[0];
+
+  for(int i = 1; static_cast<std::vector<int>::size_type>(i) < nums.size(); i++) {
+    toReturn = std::gcd(previous, nums[i]);
+    previous = toReturn;
+  }
+
+  return toReturn;
 }

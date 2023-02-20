@@ -13,27 +13,29 @@ class GenSimSimpleImplementation : public ParticleImplementation
 {
     public:
         virtual ~GenSimSimpleImplementation(){}
-        GenSimSimpleImplementation(reco::Candidate::LorentzVector vec, int ch, const ParticleType& type, const Particle* motherParticle, std::vector<const GenSimParticle*> daughters, const int status);
+        GenSimSimpleImplementation(reco::Candidate::LorentzVector vec, int ch, const ParticleType& type, int ipdgId, const Particle* motherParticle, std::vector<const GenSimParticle*> daughters, const int status);
         virtual reco::Candidate::LorentzVector getFourVector() const override;
-        virtual double dxy() const {throw std::runtime_error("getDxy not implemented");}
-        virtual double dz() const {throw std::runtime_error("getDz not implemented");}
+        //virtual double dxy() const {throw std::runtime_error("getDxy not implemented");}
+        //virtual double dz() const {throw std::runtime_error("getDz not implemented");}
         virtual int charge() const override;
-        virtual int pdgId() const override{throw std::runtime_error("pdgID error");}
+        virtual int pdgId() const override;
         virtual int status() const override{ return particleStatus; }
         virtual Particle mother() const override {return *motherParticle;}
         virtual Particle daughter(int i) const override;
+        virtual bool doesHaveMother() override;
         virtual int numberOfDaughters() const override{return daughters.size();}
         virtual const ParticleType& getType() const  override{ return particleType; }
         virtual Particle::SelectionFit getSelectionFit() const override{throw std::runtime_error("selectionFit error");}
         virtual bool isNotNull() const override {return true;}
         virtual bool isFinalState() const override {return true;}
         virtual bool operator== (const ParticleImplementation& other) const override;
-        virtual double isolation() const override{throw std::runtime_error("isolation error");}
+        //virtual double isolation() const override{throw std::runtime_error("isolation error");}
 
     private:
         reco::Candidate::LorentzVector lorentzVec;
         const int particleCharge;
         const ParticleType particleType;
+        int currentPdgId;
         const Particle* motherParticle;
         std::vector<const GenSimParticle*> daughters;
         const int particleStatus;

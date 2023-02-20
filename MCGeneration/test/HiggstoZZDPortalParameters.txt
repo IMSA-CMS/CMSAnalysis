@@ -3,10 +3,10 @@ Tune:ee 3
 PartonLevel:MPI = on
 PartonLevel:ISR = on
 PartonLevel:FSR = on
-            
+
 HiggsSM:all = on
 25:onMode = off
-25:m0 = 125
+25:m0 = 1000
 
 # 5) Set Higgs mass, width and branching ratios by hand.
 # Values for 125 GeV SM Higgs taken from
@@ -18,7 +18,7 @@ HiggsSM:all = on
 25:76:bRatio = 1.0 
 25:76:meMode = 100
 25:onIfAny = 49000022
-25:mMin = 125
+25:mMin = 1000
 25:mWidth = 10
 
 4900022:mayDecay = true
@@ -35,5 +35,3 @@ HiddenValley:Ngauge = 1
 HiddenValley:doKinMix = on
 HiddenValley:FSR = on
 HiddenValley:alphaFSR = 0
-4900022:oneChannel = 1 0.526471 100 11 -11
-4900022:addChannel = 1 0.466296 100 13 -13

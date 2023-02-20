@@ -14,10 +14,10 @@
 
 std::vector<bool> NanoAODEventFile::getTriggerResults(std::string subProcess) const
 {
-    // determines whether it passes the trigger's criteria or not
+    // determines whether it passes the trigger"s criteria or not
     std::vector<bool> v_results = {};
 
-    for (auto &trigger : triggers)
+    for(auto& trigger : triggers)
     {
         v_results.push_back(*(trigger.second));
     }
@@ -27,10 +27,9 @@ std::vector<bool> NanoAODEventFile::getTriggerResults(std::string subProcess) co
 
 std::vector<std::string> NanoAODEventFile::getTriggerNames(std::string subProcess) const
 {
-    // just get the name of the triggers
     std::vector<std::string> v_names = {};
 
-    for (auto &trigger : triggers)
+    for(auto& trigger : triggers)
     {
         v_names.push_back(trigger.first);
     }
@@ -44,106 +43,133 @@ bool NanoAODEventFile::checkTrigger(std::string triggerName, std::string subProc
 }
 
 NanoAODEventFile::NanoAODEventFile(TFile *ifile) : 
-    EventFile(ifile), 
-    // These objects take the value of the branch. 
-    // They change as the treereader advances to the next event. 
-    elec_size(treeReader, "nElectron"),
-    elec_eta(treeReader, "Electron_eta"),
-    elec_phi(treeReader, "Electron_phi"),
-    elec_mass(treeReader, "Electron_mass"),
-    elec_charge(treeReader, "Electron_charge"),
-    elec_pt(treeReader, "Electron_pt"),
-    elec_reliso(treeReader, "Electron_miniPFRelIso_all"),
-    elec_dxy(treeReader, "Electron_dxy"),
-    elec_dz(treeReader, "Electron_dz"),
-    muon_size(treeReader, "nMuon"),
-    muon_eta(treeReader, "Muon_eta"),
-    muon_phi(treeReader, "Muon_phi"),
-    muon_mass(treeReader, "Muon_mass"),
-    muon_charge(treeReader, "Muon_charge"),
-    muon_pt(treeReader, "Muon_pt"),
-    muon_reliso(treeReader, "Muon_miniPFRelIso_all"),
-    muon_dxy(treeReader, "Muon_dxy"),
-    muon_dz(treeReader, "Muon_dz"),
-    photon_size(treeReader, "nPhoton"),
-    photon_eta(treeReader, "Photon_eta"),
-    photon_phi(treeReader, "Photon_phi"),
-    photon_pt(treeReader, "Photon_pt"), 
-    //met_size(treeReader, branchNames.metSize.c_str()),
-    met_phi(treeReader, "MET_phi"),
-    met_pt(treeReader, "MET_pt"),
-    jet_size(treeReader, "nJet"),
-    jet_eta(treeReader, "Jet_eta"),
-    jet_phi(treeReader, "Jet_phi"),
-    jet_mass(treeReader, "Jet_mass"),
-    jet_pt(treeReader, "Jet_pt"),
-    //bJet(treeReader, branchNames.bJet.c_str()),
-    gen_size(treeReader, "nGenPart"),
-    gen_pid(treeReader, "GenPart_pdgId"),
-    gen_status(treeReader, "GenPart_status"),
-    gen_eta(treeReader, "GenPart_eta"),
-    gen_phi(treeReader, "GenPart_phi"),
-    gen_mass(treeReader, "GenPart_mass"),
-    gen_pt(treeReader, "GenPart_pt"),
-    gen_d1(treeReader, "Generator_id1"),
-    gen_d2(treeReader, "Generator_id2"),
-    gen_m1(treeReader, "GenPart_genPartIdxMother"),
-    gen_m2(treeReader, "GenVisTau_genPartIdxMother"),
-    gen_pileup(treeReader, "Pileup_nTrueInt"),
-    elec_idpass(treeReader, "Electron_cutBased"),
-    muon_looseid(treeReader, "Muon_looseId"),
-    muon_mediumid(treeReader, "Muon_mediumId"),
-    muon_tightid(treeReader, "Muon_tightId")
+    EventFile(ifile)
     {
-    std::ifstream triggerNameFile("betterValidTriggers.txt");
+    //initializing variables from header file
+    std::vector<std::shared_ptr<TreeVariableBase>> treeVariables = {
+		std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("elec_size", "nElectron"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_eta", "Electron_eta"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_phi", "Electron_phi"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_mass", "Electron_mass"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("elec_charge", "Electron_charge"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_pt", "Electron_pt"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_reliso", "Electron_miniPFRelIso_all"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dxy", "Electron_dxy"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dz", "Electron_dz"),
+		std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("muon_size", "nMuon"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_eta", "Muon_eta"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_phi", "Muon_phi"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_mass", "Muon_mass"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("muon_charge", "Muon_charge"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_pt", "Muon_pt"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_reliso", "Muon_miniPFRelIso_all"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_dxy", "Muon_dxy"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_dz", "Muon_dz"),
+		std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("photon_size", "nPhoton"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("photon_eta", "Photon_eta"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("photon_phi", "Photon_phi"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("photon_pt", "Photon_pt"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("met_phi", "MET_phi"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("met_pt", "MET_pt"),
+		std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("jet_size", "nJet"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_eta", "Jet_eta"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_phi", "Jet_phi"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_mass", "Jet_mass"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_pt", "Jet_pt"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("elec_idpass", "Electron_cutBased"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_looseid", "Muon_looseId"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_mediumid", "Muon_mediumId"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_tightid", "Muon_tightId"),
+		std::make_shared<TreeVariable<TTreeReaderValue<ULong64_t>>>("event_number", "event"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_bTag", "Jet_btagCMVA"),
+		std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("gen_size", "nGenPart"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_pid", "GenPart_pdgId"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_status", "GenPart_status"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_eta", "GenPart_eta"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_phi", "GenPart_phi"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_mass", "GenPart_mass"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pt", "GenPart_pt"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_d1", "Generator_id1"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_d2", "Generator_id2"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_m1", "GenPart_genPartIdxMother"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_m2", "GenVisTau_genPartIdxMother"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pileup", "Pileup_nTrueInt")
+    };
+
     tree = getFile()->Get<TTree>("Events");
-    
-    if(triggerNameFile)
+
+    for(auto& var : treeVariables)
+    {
+        // std::cout << "Checking " << var->getBranchName() << std::endl;
+        if(tree->GetBranch(var->getBranchName().c_str()))
+        {
+            // std::cout << "Adding " << var->getBranchName() << std::endl;
+            variables.emplace(var->getName(), var->makeReader(treeReader));
+        }
+    }
+
+    //initializing triggers from header file
+    std::ifstream triggerNameFile("betterValidTriggers.txt");
+
+    if(!triggerNameFile)
     {
         std::string nameoftrigger;
 
-        while (getline(triggerNameFile, nameoftrigger))
+        while(getline(triggerNameFile, nameoftrigger))
         {
-            if (tree->GetBranch(nameoftrigger.c_str()))
+            if(tree->GetBranch(nameoftrigger.c_str()))
             {
                 TTreeReaderValue<Bool_t> intermediate(treeReader, nameoftrigger.c_str());
                 triggers.emplace(nameoftrigger, intermediate);
             }
         }
-    }  
-    
+    }    
     treeReader.SetTree(tree);
     setEventCount(1);
-    treeReader.Next();
+    treeReader.Next(); 
 }
 
 void NanoAODEventFile::nextEvent()
 {
-    treeReader.Next();
+    treeReader.Next(); 
     setEventCount(getEventCount() + 1);
 
-    genSimParticles.clear();
-    genSimParticles.reserve(*gen_size);
-
-    for (unsigned i = 0; i < *gen_size; i++)
+    if(getVariable<UInt_t>("gen_size") > 0)
     {
-        int charge = -1;
-        if (gen_pid[i] < 0)
-        {
-            charge = 1;
-        }
-        if (gen_pid[i] == 21 || gen_pid[i] == 22)
-        {
-            charge = 0;
-        }
+        genSimParticles.clear();
+        genSimParticles.reserve(getVariable<UInt_t>("gen_size") );
 
-        std::vector<const GenSimParticle *> daughterCollectionVector{&genSimParticles[gen_d1[i]], &genSimParticles[gen_d2[i]]};
-
-        genSimParticles.push_back(GenSimParticle(
-            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i],
-                                                                        gen_eta[i], gen_phi[i], gen_mass[i])),
-            charge, Particle::identifyType(gen_pid[i]), &genSimParticles[gen_m1[i]],
-            daughterCollectionVector, gen_status[i]));
+        for (unsigned i = 0; i < getVariable<UInt_t>("gen_size") ; i++)
+        {
+            int charge = -1;
+            if (getArrayElement<Int_t>("gen_pid", i) < 0)
+            {
+                charge = 1;
+            }
+            if (getArrayElement<Int_t>("gen_pid", i) == 21 || getArrayElement<Int_t>("gen_pid", i) == 22)
+            {
+                charge = 0;
+            }
+            std::vector<const GenSimParticle*> daughterCollectionVector{};
+            if (i < getArraySize<Int_t>("gen_d1"))
+            {
+                daughterCollectionVector.push_back(&genSimParticles[getArrayElement<Int_t>("gen_d2", i)]);
+            } 
+            if (i < getArraySize<Int_t>("gen_d2"))
+            {
+                daughterCollectionVector.push_back(&genSimParticles[getArrayElement<Int_t>("gen_d2", i)]);
+            } 
+            GenSimParticle* mother = &genSimParticles[getArrayElement<Int_t>("gen_m1", i)];
+            genSimParticles.push_back(GenSimParticle(reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(
+                getArrayElement<Float_t>("gen_pt", i),getArrayElement<Float_t>("gen_eta", i), 
+                getArrayElement<Float_t>("gen_phi", i), getArrayElement<Float_t>("gen_mass", i))),
+                charge, 
+                Particle::identifyType(getArrayElement<Int_t>("gen_pid", i)), 
+                getArrayElement<Int_t>("gen_pid", i),
+                mother,
+                daughterCollectionVector, 
+                getArrayElement<Int_t>("gen_status", i)));
+        }
     }
 }
 
@@ -155,103 +181,97 @@ ParticleCollection<GenSimParticle> NanoAODEventFile::getGenSimParticles() const
 ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
 {
     ParticleCollection<Particle> recoParticles;
-    for (UInt_t i = 0; i < *elec_size; i++)
+
+    for (UInt_t i = 0; i < getVariable<UInt_t>("elec_size"); i++)
     {
-
-        // std::cout<<"elec_idpass "<<elec_idpass[i]<<std::endl;
-        int charge = elec_charge[i];
-
+        int charge = getArrayElement<Int_t>("elec_charge", i);
         Particle::SelectionFit fit;
-        if (elec_idpass[i] == 4)
+        if (getArrayElement<Int_t>("elec_idpass", i) == 4) 
         {
             fit = Particle::SelectionFit::Tight;
-        }
-        else if (elec_idpass[i] == 3)
+        } else if (getArrayElement<Int_t>("elec_idpass", i) == 3) 
         {
             fit = Particle::SelectionFit::Medium;
-        }
-        else if (elec_idpass[i] == 2)
+        } else if (getArrayElement<Int_t>("elec_idpass", i) == 2) 
         {
             fit = Particle::SelectionFit::Loose;
-        }
-        else
-        {
+        } else {
             continue;
         }
 
         // Lorentz four-vector
-        recoParticles.addParticle(Particle(
-            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],
-                                                                        elec_eta[i], elec_phi[i], elec_mass[i])),
-            charge, ParticleType::electron(), elec_reliso[i], fit, elec_dxy[i], elec_dz[i]));
+        auto particle = Particle(
+        reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("elec_pt", i),
+        getArrayElement<Float_t>("elec_eta", i), getArrayElement<Float_t>("elec_phi", i), getArrayElement<Float_t>("elec_mass", i))),
+        charge, ParticleType::electron(), fit);
+        particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i));
+        particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
+        particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
+        recoParticles.addParticle(particle);
     }
 
-    for (UInt_t i = 0; i < *muon_size; i++)
+    for (UInt_t i = 0; i < getVariable<UInt_t>("muon_size"); i++)
     {
-
-        int charge = muon_charge[i];
-
+        int charge = getArrayElement<Int_t>("muon_charge", i);
         Particle::SelectionFit fit;
-        if (muon_looseid[i])
+
+        if (getArrayElement<Bool_t>("muon_tightid", i)) 
         {
             fit = Particle::SelectionFit::Tight;
-        }
-        else if (muon_mediumid[i])
+        } else if (getArrayElement<Bool_t>("muon_mediumid", i)) 
         {
             fit = Particle::SelectionFit::Medium;
-        }
-        else if (muon_looseid[i])
+        } else if (getArrayElement<Bool_t>("muon_looseid", i)) 
         {
             fit = Particle::SelectionFit::Loose;
-        }
-        else
-        {
+        } else {
             continue;
         }
 
         // Lorentz four-vector
-        recoParticles.addParticle(Particle(
-            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],
-                                                                        muon_eta[i], muon_phi[i], muon_mass[i])),
-            charge, ParticleType::muon(), muon_reliso[i], fit, muon_dxy[i], muon_dz[i]));
+        auto particle = Particle(
+        reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("muon_pt", i),
+        getArrayElement<Float_t>("muon_eta", i), getArrayElement<Float_t>("muon_phi", i), getArrayElement<Float_t>("muon_mass", i))),
+        charge, ParticleType::muon(), fit);
+        particle.addInfo("Isolation", getArrayElement<Float_t>("muon_reliso", i));
+        particle.addInfo("dxy", getArrayElement<Float_t>("muon_dxy", i));
+        particle.addInfo("dz", getArrayElement<Float_t>("muon_dz", i));
+        recoParticles.addParticle(particle);
     }
-
-    for (UInt_t i = 0; i < *photon_size; i++) //what do i even put here
+    for (UInt_t i = 0; i < getVariable<UInt_t>("photon_size"); i++)
     {
         Particle::SelectionFit fit;
 
-        // Lorentz four-vector
-        recoParticles.addParticle(Particle(
-            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(photon_pt[i],
-                                                                        photon_eta[i], photon_phi[i], 0)),
-            0, ParticleType::photon(), 0, fit, 0, 0)); 
+        auto particle = Particle(
+        reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("photon_pt", i),
+        getArrayElement<Float_t>("photon_eta", i), getArrayElement<Float_t>("photon_phi", i), 0)),
+        0, ParticleType::photon(), fit);
+        recoParticles.addParticle(particle);
     }
+    
     return recoParticles;
 }
 
 ParticleCollection<Particle> NanoAODEventFile::getRecoJets() const
 {
     ParticleCollection<Particle> recoParticles;
-    for (UInt_t i = 0; i < *jet_size; i++)
-    {
-        // if(bJet[i] > 0){
+    for(UInt_t i = 0; i < getVariable<UInt_t>("jet_size"); i++) {
         recoParticles.addParticle(
-            Particle(reco::Candidate::LorentzVector(jet_pt[i], jet_eta[i], jet_phi[i], jet_mass[i]),
-                     0,
-                     ParticleType::jet()));
-        //}
+        Particle(reco::Candidate::LorentzVector(getArrayElement<Float_t>("jet_pt", i), getArrayElement<Float_t>("jet_eta", i), getArrayElement<Float_t>("jet_phi", i), getArrayElement<Float_t>("jet_mass", i)), 
+        0, 
+        ParticleType::jet()));        
     }
     return recoParticles;
 }
 
 double NanoAODEventFile::getMET() const
 {
-    return static_cast<double>(met_pt[0]);
+    return static_cast<double>(getArrayElement<Float_t>("met_pt", 0));
 }
 
 int NanoAODEventFile::getNumPileUpInteractions() const
 {
-    return static_cast<int>(gen_pileup[0]);
+    return 1;
 }
 
 bool NanoAODEventFile::isDone() const
