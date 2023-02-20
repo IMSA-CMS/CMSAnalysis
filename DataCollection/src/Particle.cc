@@ -15,15 +15,15 @@
 #include "CMSAnalysis/DataCollection/interface/GenSimSimpleImplementation.hh"
 #include "CMSAnalysis/DataCollection/interface/ParticleType.hh"
 
-// Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, double relIso, Particle::SelectionFit fit):
-// particle(std::make_shared<SimpleImplementation>(vec, charge, type, relIso, fit))
+// Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, Particle::SelectionFit fit):
+// particle(std::make_shared<SimpleImplementation>(vec, charge, type, fit))
 // {
 
 // }
 
 //added for dxy, dz
-Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, double relIso, Particle::SelectionFit fit, double dxy, double dz):
-particle(std::make_shared<SimpleImplementation>(vec, charge, type, relIso, fit, dxy, dz))
+Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, Particle::SelectionFit fit):
+particle(std::make_shared<SimpleImplementation>(vec, charge, type, fit))
 {
 }
 
@@ -38,14 +38,14 @@ particle(std::make_shared<LeptonJetImplementation>(iparticle))
 {
 }
 
-Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int pid, int status, int m1, int m2,int d1, int d2, double relIso):
-particle(std::make_shared<DelphesImplementation>(vec,charge,type,pid,status,m1,m2,d1,d2,relIso))
+Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int pid, int status, int m1, int m2,int d1, int d2):
+particle(std::make_shared<DelphesImplementation>(vec,charge,type,pid,status,m1,m2,d1,d2))
 {
 }
 
 
-Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, const Particle* motherParticle, std::vector<const GenSimParticle*> daughters, const int status):
-particle(std::make_shared<GenSimSimpleImplementation>(vec, charge, type, motherParticle, daughters, status))
+Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, int currentpdgId, const Particle* motherParticle, std::vector<const GenSimParticle*> daughters, const int status):
+particle(std::make_shared<GenSimSimpleImplementation>(vec, charge, type, currentpdgId, motherParticle, daughters, status))
 {
 
 }
@@ -127,21 +127,33 @@ double Particle::getMass() const
   return particle->getFourVector().mass();
 }
 
+double Particle::getInfo(std::string mapKey) const
+{
+  checkIsNull();
+  return particle->getInfo(mapKey);
+}
+
+void Particle::addInfo(std::string mapKey, double value)
+{
+  checkIsNull();
+  return particle->addInfo(mapKey, value);
+}
+
 // double Particle::getIsolation() const
 // {
 //   checkIsNull();
 //   return particle->isolation();
 // }
 
-double Particle::getDxy() const
-{
-    return particle->dxy();
-}
+// double Particle::getDxy() const
+// {
+//     return particle->dxy();
+// }
 
-double Particle::getDz() const
-{
-  return particle->dz();
-}
+// double Particle::getDz() const
+// {
+//   return particle->dz();
+// }
 
 Particle::BarrelState Particle::getBarrelState() const
 {
@@ -242,10 +254,13 @@ const ParticleType& Particle::identifyType(int pdgid)
     {
       return ParticleType::electron();
     }
-
     else if (pdgid == 13 || pdgid == -13)
     {
       return ParticleType::muon();
+    }
+    else if (pdgid == 15 || pdgid == -15)
+    {
+      return ParticleType::tau();
     }
     else if (pdgid == 22)
     {
@@ -259,17 +274,33 @@ const ParticleType& Particle::identifyType(int pdgid)
     {
       return ParticleType::neutralino();
     }
-    else if (abs(pdgid == 9900041))
+    else if (pdgid == 9900041 || pdgid == -9900041)
     {
       return ParticleType::leftDoublyHiggs();
     }
-    else if (abs(pdgid == 9900042))
+    else if (pdgid == 9900042 || pdgid == -9900042)
     {
       return ParticleType::rightDoublyHiggs();
     }
     else if (pdgid == 23)
     {
-      return ParticleType::zBoson();
+      return ParticleType::z();
+    } 
+    else if (pdgid == 24 || pdgid == -24)
+    {
+      return ParticleType::w();
+    } 
+    else if (pdgid == 25)
+    {
+      return ParticleType::higgs();
+    } 
+    else if ((99 < pdgid && pdgid < 1000) || (-99 > pdgid && pdgid > -1000))
+    {
+      return ParticleType::meson();
+    }
+    else if ((999 < pdgid && pdgid < 10000) || (-999 > pdgid && pdgid > -10000))
+    {
+      return ParticleType::baryon();
     }
     else
     {

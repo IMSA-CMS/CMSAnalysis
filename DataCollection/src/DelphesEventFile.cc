@@ -26,7 +26,6 @@ DelphesEventFile::DelphesEventFile(TFile *ifile) :
     muon_charge(treeReader, "muon_charge"),
     muon_pt(treeReader, "muon_pt"),
     muon_reliso(treeReader, "muon_reliso"),
-    //met_size(treeReader, branchNames.metSize.c_str()),
     met_phi(treeReader, "metpuppi_phi"),
     met_pt(treeReader, "metpuppi_pt"),
     jet_size(treeReader, "jetpuppi_size"),
@@ -34,7 +33,6 @@ DelphesEventFile::DelphesEventFile(TFile *ifile) :
     jet_phi(treeReader, "jetpuppi_phi"),
     jet_mass(treeReader, "jetpuppi_mass"),
     jet_pt(treeReader, "jetpuppi_pt"),
-    //bJet(treeReader, branchNames.bJet.c_str()),
     gen_size(treeReader, "genpart_size"),
     gen_pid(treeReader, "genpart_pid"),
     gen_status(treeReader, "genpart_status"),
@@ -79,12 +77,12 @@ ParticleCollection<GenSimParticle> DelphesEventFile::getGenSimParticles() const
         {
             charge = 0;
         }
-        genParticles.addParticle(
-            Particle(
-                reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i],gen_eta[i], gen_phi[i], gen_mass[i])),
-                charge, 
-                Particle::identifyType(gen_pid[i]),gen_pid[i],gen_status[i],gen_m1[i],gen_m2[i],gen_d1[i],gen_d2[i],
-                0)); //not sure if relIso, last parameter, should be set to 0
+        auto particle = Particle(
+            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i], gen_eta[i], gen_phi[i], gen_mass[i])),
+            charge,
+            Particle::identifyType(gen_pid[i]), gen_pid[i], gen_status[i], gen_m1[i], gen_m2[i], gen_d1[i], gen_d2[i]);
+        particle.addInfo("Isolation", 0); 
+        genParticles.addParticle(particle);
     }
     return genParticles;
 }
@@ -94,8 +92,7 @@ ParticleCollection<Particle> DelphesEventFile::getRecoParticles() const
     ParticleCollection<Particle> recoParticles;
     for (Int_t i = 0; i < *elec_size; i++)
     {
-        
-        //std::cout<<"elec_idpass "<<elec_idpass[i]<<std::endl;
+    
         int charge = elec_charge[i];
         
         Particle::SelectionFit fit;
@@ -112,14 +109,15 @@ ParticleCollection<Particle> DelphesEventFile::getRecoParticles() const
             continue;
         }
 
-
         // Lorentz four-vector
-        recoParticles.addParticle(Particle(
-            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],
-                                                                        elec_eta[i], elec_phi[i], elec_mass[i])),
-            charge, ParticleType::electron(), elec_reliso[i], fit));
-        
+        auto particle = Particle(
+        reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],elec_eta[i], elec_phi[i], elec_mass[i])),
+        charge, ParticleType::electron(), fit);
+
+        particle.addInfo("Isolation", elec_reliso[i]);
+        recoParticles.addParticle(particle);
     }
+
     for (Int_t i = 0; i < *muon_size; i++)
     {
         
@@ -139,11 +137,12 @@ ParticleCollection<Particle> DelphesEventFile::getRecoParticles() const
             continue;
         }
         // Lorentz four-vector
-        recoParticles.addParticle(Particle(
-            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],
-                                                                        muon_eta[i], muon_phi[i], muon_mass[i])),
-            charge, ParticleType::muon(), muon_reliso[i], fit));
-        
+        auto particle = Particle(
+        reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],muon_eta[i], muon_phi[i], muon_mass[i])),
+        charge, ParticleType::muon(), fit);
+
+        particle.addInfo("Isolation", muon_reliso[i]);
+        recoParticles.addParticle(particle);
     }
     return recoParticles;
 }
@@ -151,13 +150,10 @@ ParticleCollection<Particle> DelphesEventFile::getRecoParticles() const
 ParticleCollection<Particle> DelphesEventFile::getRecoJets() const
 {
     ParticleCollection<Particle> recoParticles;
-    for(Int_t i = 0; i < *jet_size; i++) {
-        //if(bJet[i] > 0){
-            recoParticles.addParticle(
-                Particle(reco::Candidate::LorentzVector(jet_pt[i], jet_eta[i], jet_phi[i], jet_mass[i]), 
-                0, 
-                ParticleType::jet()));    
-        //}    
+    for(Int_t i = 0; i < *jet_size; i++) 
+    {
+        recoParticles.addParticle(
+        Particle(reco::Candidate::LorentzVector(jet_pt[i], jet_eta[i], jet_phi[i], jet_mass[i]),0,ParticleType::jet()));     
     }
     return recoParticles;
 }
@@ -171,8 +167,3 @@ bool DelphesEventFile::isDone() const
 {
     return getEventCount() > tree->GetEntries();
 }
-
-// bool checkTrigger(std::string triggerName, std::string subProcess) const
-// {
-//     return true;
-// }

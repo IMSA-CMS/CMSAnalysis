@@ -9,6 +9,7 @@
 #include "TFile.h"
 #include "TStyle.h"
 #include "TGraph.h"
+#include "TMath.h"
 #include "TCanvas.h"
 #include "TFormula.h"
 #include "TFitResult.h"
@@ -30,11 +31,11 @@ void fitNorm();
 
 TFitResultPtr fitToDSCB(std::vector<double> params, int x, TFile* file, TH1* hist, char const* name);
 void fitToAlternative(std::vector<double> params, TFile* file, TH1* hist, char const* name);
-
+void fitNorm();
 
 void loopFit()
 {
-	
+	fitNorm();
 	// multipleFits();
 	// auto paramData = getParams();
 	// graph(paramData);
@@ -385,4 +386,21 @@ void paramsFromFits(std::vector<std::vector<double>> results, std::vector<std::v
 	}
 	auto graphs = graph(data);
 	// fitParameters(graphs);
+}
+
+void fitNorm()
+{
+	double x [6] = {300, 500, 700, 900, 1100, 1300};
+	double y [6] = {1067.93, 685.735, 450.176, 325.855, 258.233, 215.295};
+
+	auto graph = new TGraph(6, x, y);
+	graph->SetMarkerSize(15);
+	graph
+	graph->SetTitle("Norm;Mass;Norm");
+	TF1* f2 = new TF1("exponential", "[0] * exp( [1] * (x - 300)) + [2]", 0, 800);
+	f2->SetParameters(910, -0.00279749911266, 156);
+	f2->SetParNames("a", "k", "c");
+	graph->Fit("exponential");
+	gStyle->SetOptFit(111111);
+	graph->Draw("AP");
 }
