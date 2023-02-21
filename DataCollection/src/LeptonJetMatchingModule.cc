@@ -1,6 +1,7 @@
 #include "CMSAnalysis/DataCollection/interface/LeptonJetMatchingModule.hh"
 #include "DataFormats/Math/interface/deltaR.h"
 #include "CMSAnalysis/DataCollection/interface/EventDumpModule.hh"
+#include "CMSAnalysis/DataCollection/interface/Particle.hh"
 
 #include <limits>
 #include <fstream>
@@ -25,15 +26,35 @@ bool LeptonJetMatchingModule::process()
 
     const MatchingPairCollection& bestLeptonPairs = getMatchingBestPairs();
     const std::vector<GenSimParticle> underLepton = bestLeptonPairs.getGenParticles().getParticles();
+    /*
+    for (uint i = 0; i < underLepton.size(); i++)
+    {
+      if (underLepton[i].pdgId() == -1)
+      {
+        underLepton.erase(i);
+      }
+    }
+    */
+
     const std::vector<Particle> recoLeptons = bestLeptonPairs.getRecoParticles().getParticles();
     //std::cout<< __LINE__ << std::endl;
     std::vector<Particle> underlyingLepton;
 
-    for (Particle lepton : underLepton)
+    //for (Particle lepton : underLepton)
+    for (GenSimParticle lepton : underLepton)
     {
       if (lepton.getPt() >= 5 && (lepton.getType() == ParticleType::electron() || lepton.getType() == ParticleType::muon()))
       {
-        underlyingLepton.push_back(lepton);
+        if (lepton.pdgId() != -1)
+        {
+          underlyingLepton.push_back(lepton);
+          std::cout << "NOT skipping lepton: " << lepton.pdgId() << "\n";
+        }
+        else
+        {
+          std::cout << "skipping lepton: " << lepton << "\n";
+        }
+        //underlyingLepton.push_back(lepton);
       }
     }
     //std::cout<< __LINE__ << std::endl;
@@ -59,7 +80,20 @@ bool LeptonJetMatchingModule::process()
       while(!(isQuark(particle) || isSquark(particle) || particle.status() == 4))
       {
         if(particle.hasMother() == false) break;
-        particle = particle.mother();
+        // new line - vrao
+        if(!particle.isNotNull()) {std::cout << "skipping particle: " << particle << "\n"; break;};
+        
+        std::cout << "before crash: " << particle << "\n";
+        if (particle.mother() != Particle::nullParticle())
+        {
+          particle = particle.mother();
+        }
+        else 
+        {
+          break;
+        }
+        //particle = particle.mother();
+        std::cout << "after  crash: " << particle << "\n";
         if(particle.pdgId() == 0)
         {
           forgetIt = true;

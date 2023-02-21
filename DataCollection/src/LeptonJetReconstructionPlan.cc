@@ -66,6 +66,7 @@ void LeptonJetReconstructionPlan::initialize()
 
   // Histograms
   //uncomented 
+  //std::cout << lepRecoMod << "\n";
   auto gammaDeltaRHist2D = make_shared<GammaDeltaRHist2D>(lepRecoMod, "Gamma Delta R Hist", 100, 100, 1, 0, 1000, 0.5);
   auto gammaHist = std::make_shared<GammaHist>(lepRecoMod, "Gamma Values", 100, 1, 1000); //VIKRAM CHANGED
   auto deltaRHist = std::make_shared<DeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.1); //VIKRAM CHANGED
