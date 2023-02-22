@@ -254,10 +254,13 @@ const ParticleType& Particle::identifyType(int pdgid)
     {
       return ParticleType::electron();
     }
-
     else if (pdgid == 13 || pdgid == -13)
     {
       return ParticleType::muon();
+    }
+    else if (pdgid == 15 || pdgid == -15)
+    {
+      return ParticleType::tau();
     }
     else if (pdgid == 22)
     {
@@ -281,7 +284,23 @@ const ParticleType& Particle::identifyType(int pdgid)
     }
     else if (pdgid == 23)
     {
-      return ParticleType::zBoson();
+      return ParticleType::z();
+    } 
+    else if (pdgid == 24 || pdgid == -24)
+    {
+      return ParticleType::w();
+    } 
+    else if (pdgid == 25)
+    {
+      return ParticleType::higgs();
+    } 
+    else if ((99 < pdgid && pdgid < 1000) || (-99 > pdgid && pdgid > -1000))
+    {
+      return ParticleType::meson();
+    }
+    else if ((999 < pdgid && pdgid < 10000) || (-999 > pdgid && pdgid > -10000))
+    {
+      return ParticleType::baryon();
     }
     else
     {
