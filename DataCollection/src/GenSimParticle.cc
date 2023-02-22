@@ -198,6 +198,3 @@ std::ostream& operator<<(std::ostream& str, const GenSimParticle part)
   str << std::setw(13) << part.getEnergy() << "| " << std::setw(13) << part.getMass();
   return str;
 }
-
-
-
