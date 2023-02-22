@@ -141,15 +141,6 @@ void NanoAODEventFile::nextEvent()
 
         for (unsigned i = 0; i < getVariable<UInt_t>("gen_size") ; i++)
         {
-            int charge = -1;
-            if (getArrayElement<Int_t>("gen_pid", i) < 0)
-            {
-                charge = 1;
-            }
-            if (getArrayElement<Int_t>("gen_pid", i) == 21 || getArrayElement<Int_t>("gen_pid", i) == 22)
-            {
-                charge = 0;
-            }
             std::vector<const GenSimParticle*> daughterCollectionVector{};
             if (i < getArraySize<Int_t>("gen_d1"))
             {
@@ -162,9 +153,7 @@ void NanoAODEventFile::nextEvent()
             GenSimParticle* mother = &genSimParticles[getArrayElement<Int_t>("gen_m1", i)];
             genSimParticles.push_back(GenSimParticle(reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(
                 getArrayElement<Float_t>("gen_pt", i),getArrayElement<Float_t>("gen_eta", i), 
-                getArrayElement<Float_t>("gen_phi", i), getArrayElement<Float_t>("gen_mass", i))),
-                charge, 
-                Particle::identifyType(getArrayElement<Int_t>("gen_pid", i)), 
+                getArrayElement<Float_t>("gen_phi", i), getArrayElement<Float_t>("gen_mass", i))), 
                 getArrayElement<Int_t>("gen_pid", i),
                 mother,
                 daughterCollectionVector, 
