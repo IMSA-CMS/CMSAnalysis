@@ -23,17 +23,7 @@ void MiniAODEventFile::nextEvent()
     auto& eventRef = *event;
     ++(eventRef);
     setEventCount(getEventCount() + 1);
-    // std::cout << "next Event \n";
 }
-
-/*
-std::vector<PileupSummaryInfo> MiniAODEventLoader::getPileupInfo() const
-{
-    edm::Handle<std::vector<PileupSummaryInfo>> pileup;
-    event->getByLabel(std::string("slimmedAddPileupInfo"), pileup);
-    return *pileup;
-}
-*/
 
 ParticleCollection<GenSimParticle> MiniAODEventFile::getGenSimParticles() const
 {
@@ -50,10 +40,7 @@ ParticleCollection<GenSimParticle> MiniAODEventFile::getGenSimParticles() const
 
 ParticleCollection<Particle> MiniAODEventFile::getRecoParticles() const
 {
-    // std::cout << "get reco particles \n";
     ParticleCollection<Particle> recoParticles;
-    //This seems problematic
-        
 
         edm::Handle<std::vector<pat::Electron>> electrons;
         event->getByLabel(std::string("slimmedElectrons"), electrons);
@@ -78,7 +65,6 @@ ParticleCollection<Particle> MiniAODEventFile::getRecoParticles() const
 	    {       
 	        recoParticles.addParticle(Particle(&p));
         }
-        // std::cout << "made it through mini aod reco particles \n";
         return recoParticles;
 }
 
@@ -95,6 +81,7 @@ ParticleCollection<Particle> MiniAODEventFile::getRecoJets() const
         }
         return recoParticles;
 }
+
 int MiniAODEventFile::getNumPileUpInteractions() const {
     
     edm::Handle<std::vector<PileupSummaryInfo>> pileup;
@@ -155,7 +142,6 @@ bool MiniAODEventFile::checkTrigger(std::string triggerName, std::string subProc
         return false;
     }
 }
-
 
 bool MiniAODEventFile::isDone() const
 {
