@@ -159,7 +159,8 @@ void NanoAODEventFile::nextEvent()
             {
                 daughterCollectionVector.push_back(&genSimParticles[getArrayElement<Int_t>("gen_d2", i)]);
             } 
-            GenSimParticle* mother = &genSimParticles[getArrayElement<Int_t>("gen_m1", i)];
+            GenSimParticle *mother = nullptr;
+            if(getArrayElement<Int_t>("gen_m1", i) != -1) mother = &genSimParticles[getArrayElement<Int_t>("gen_m1", i)];
             genSimParticles.push_back(GenSimParticle(reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(
                 getArrayElement<Float_t>("gen_pt", i),getArrayElement<Float_t>("gen_eta", i), 
                 getArrayElement<Float_t>("gen_phi", i), getArrayElement<Float_t>("gen_mass", i))),

@@ -62,7 +62,6 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles)
 
     file = changeFileFormat(tFile); // Makes a GenSimEventFile, DelphesEventFile or MiniAODFile shared pointer
     eventInterface.setFile(file); //Change eventFile reference
-    
     // Loops through every event in the file
     int count = 0;
     while (true)
