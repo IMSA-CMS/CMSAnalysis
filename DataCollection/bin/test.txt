@@ -59053,7 +59053,7 @@ Has mother:
 after  crash: |  -2000001|       22|                   |                   |           321|       1.14062|       2.39844|       777.453|           546
 before crash: |  -2000001|       22|                   |                   |           321|       1.14062|       2.39844|       777.453|           546
 Entered: 
-Existed: 
+Existed:  
 Has mother: 
 Entered: 
 Existed: 
