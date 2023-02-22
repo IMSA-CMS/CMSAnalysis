@@ -36,51 +36,8 @@ GenSimParticle GenSimParticle::mother() const
 {
   checkIsNull();
   //mother of particle is often not electron/muon
-  std::cout << "Entered: " << "\n";
-  
-  GenSimParticle motherParticle = getParticle()->mother();
-  std::cout << "Existed: " << "\n";
-
-  if (motherParticle != nullParticle())
-  {
-    std::cout << "Has mother: " << "\n";
-    //return GenSimParticle(motherParticle); 
-    return motherParticle;
-  }
-  else
-  {
-    std::cout << "Has no mother: " << "\n";
-    //return GenSimParticle(nullParticle());
-    return nullParticle();
-  } 
-  //return GenSimParticle(getParticle()->mother());
+  return GenSimParticle(getParticle()->mother());
 }
-
-
-/*
-GenSimParticle GenSimParticle::mother() const
-{
-  checkIsNull();
-  //mother of particle is often not electron/muon
-  // GenSimParticle tempParticle = getParticle()->mother();
-
-  const std::shared_ptr<ParticleImplementation> tempParticle1 = getParticle();
-  GenSimParticle tempParticle;
-  std::cout << "tempParticle1: " << tempParticle1 << "\n";
-  if (tempParcile1 != NULL) 
-  {
-    tempParticle = tempParticle1->mother();
-  }
-
-  std::cout << "temp particle: " << tempParticle << "\n";
-  if (tempParticle.pdgId() == -1)
-  {
-    std::cout << "particle with -1 id: " << tempParticle << "\n";
-  }
-  //return GenSimParticle(getParticle()->mother());
-  return GenSimParticle(tempParticle);
-}
-*/
 
 int GenSimParticle::numberOfDaughters() const {
   checkIsNull();
@@ -241,6 +198,3 @@ std::ostream& operator<<(std::ostream& str, const GenSimParticle part)
   str << std::setw(13) << part.getEnergy() << "| " << std::setw(13) << part.getMass();
   return str;
 }
-
-
-
