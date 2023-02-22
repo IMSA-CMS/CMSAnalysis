@@ -21,6 +21,7 @@ class ParticleType
     public:
     std::string getName() const {return name;};
     int getpdgId() const {return pdgId;};
+    double getCharge() const {return charge;};
     std::vector<std::shared_ptr<SingleParticleHist>> getParticleHists() const;
     std::vector<std::shared_ptr<CollectionHist>> getCollectionHists() const;
 
@@ -49,6 +50,7 @@ class ParticleType
     private:
     std::string name;
     int pdgId;
+    double charge;
     std::vector<SingleParticleHist> particleHists;
     std::vector<CollectionHist> collectionHists;
 
@@ -62,12 +64,12 @@ class ParticleType
     static CollectionHist getSameSignInvariantMassHist();
     static CollectionHist getOppositeSignInvariantMassHist();
 
-    ParticleType(std::string typeName, int typepdgId, std::vector<SingleParticleHist> typeParticleHists, std::vector<CollectionHist> typeCollectionHists);//, std::vector<CollectionHist> collectionhists);
+    ParticleType(std::string typeName, int typepdgId, double charge, std::vector<SingleParticleHist> typeParticleHists, std::vector<CollectionHist> typeCollectionHists);//, std::vector<CollectionHist> collectionhists);
 
     static std::unordered_map<std::string,ParticleType> typeList;
 
     //Adds type object to list if it does not exist and then refrence it
-    static const ParticleType& registerType(std::string typeName, int typepdgId, std::vector<SingleParticleHist> typeParticleHists, std::vector<CollectionHist> typeCollectionHists);//, std::vector<CollectionHist> collectionhist);
+    static const ParticleType& registerType(std::string typeName, int typepdgId, double charge, std::vector<SingleParticleHist> typeParticleHists, std::vector<CollectionHist> typeCollectionHists);//, std::vector<CollectionHist> collectionhist);
 };
 
 #endif
