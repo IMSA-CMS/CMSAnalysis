@@ -82,8 +82,7 @@ bool EventModule::process ()
     {
         auto specialPtr = std::make_shared<ParticleCollection<Particle>>(value);
         addBasicHistograms(value.getParticles()[0].getType(), value);
-        addCountHistograms(value.getParticles()[0].getType(), specialPtr);
-        //checks type of one particle, assuming all within a container have the same type
+        addCountHistograms(value.getParticles()[0].getType(), specialPtr); 
     }
     
     auto electronCollection = std::make_shared<ParticleCollection<Particle>>(event.getElectrons());
