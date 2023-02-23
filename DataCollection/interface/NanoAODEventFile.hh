@@ -140,6 +140,22 @@ class NanoAODEventFile : public EventFile
         }
 
         template<typename T>
+        unsigned getArraySize(std::string name) const
+        {
+            auto it = variables.find(name);
+            if (it == variables.end())
+            {
+                throw std::runtime_error("Variable " + name + " not found");
+            }
+            auto array = std::dynamic_pointer_cast<TTreeReaderArray<T>>(it->second);
+            if (!array)
+            {
+                throw std::runtime_error("Variable " + name + " is not an array");
+            }
+            return static_cast<unsigned>(array->GetSize());
+        }
+
+        template<typename T>
         T getVariable(std::string name) const
         {
             auto it = variables.find(name);

@@ -130,7 +130,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
 		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_mediumid", "Muon_mediumId"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_tightid", "Muon_tightId"),
 		std::make_shared<TreeVariable<TTreeReaderValue<ULong64_t>>>("event_number", "event"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("jet_bTag", "Jet_btagCMVA"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_bTag", "Jet_btagCMVA"),
 		std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("gen_size", "nGenPart"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_pid", "GenPart_pdgId"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_status", "GenPart_status"),
@@ -185,32 +185,43 @@ void NanoAODEventFile::nextEvent()
     // std::cerr << gen_size.IsValid() << std::endl;
     // std::cerr << "event number" << *event_number << std::endl;
 
-    // if(variables["gen_size"]->IsValid())
-    // {
-    //     genSimParticles.clear();
-    //     genSimParticles.reserve(*gen_size);
+    if(getVariable<UInt_t>("gen_size") > 0)
+    {
+        genSimParticles.clear();
+        genSimParticles.reserve(getVariable<UInt_t>("gen_size") );
 
-    //     for (unsigned i = 0; i < *gen_size; i++)
-    //     {
-    //         int charge = -1;
-    //         if (gen_pid[i] < 0)
-    //         {
-    //             charge = 1;
-    //         }
-    //         if (gen_pid[i] == 21 || gen_pid[i] == 22)
-    //         {
-    //             charge = 0;
-    //         }
-
-    //         std::vector<const GenSimParticle *> daughterCollectionVector{&genSimParticles[gen_d1[i]], &genSimParticles[gen_d2[i]]};
-
-    //         genSimParticles.push_back(GenSimParticle(
-    //             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i],
-    //                                                                         gen_eta[i], gen_phi[i], gen_mass[i])),
-    //             charge, Particle::identifyType(gen_pid[i]), &genSimParticles[gen_m1[i]],
-    //             daughterCollectionVector, gen_status[i]));
-    //     }
-    // }
+        for (unsigned i = 0; i < getVariable<UInt_t>("gen_size") ; i++)
+        {
+            int charge = -1;
+            if (getArrayElement<Int_t>("gen_pid", i) < 0)
+            {
+                charge = 1;
+            }
+            if (getArrayElement<Int_t>("gen_pid", i) == 21 || getArrayElement<Int_t>("gen_pid", i) == 22)
+            {
+                charge = 0;
+            }
+            std::vector<const GenSimParticle*> daughterCollectionVector{};
+            if (i < getArraySize<Int_t>("gen_d1"))
+            {
+                daughterCollectionVector.push_back(&genSimParticles[getArrayElement<Int_t>("gen_d2", i)]);
+            } 
+            if (i < getArraySize<Int_t>("gen_d2"))
+            {
+                daughterCollectionVector.push_back(&genSimParticles[getArrayElement<Int_t>("gen_d2", i)]);
+            } 
+            GenSimParticle* mother = &genSimParticles[getArrayElement<Int_t>("gen_m1", i)];
+            genSimParticles.push_back(GenSimParticle(reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(
+                getArrayElement<Float_t>("gen_pt", i),getArrayElement<Float_t>("gen_eta", i), 
+                getArrayElement<Float_t>("gen_phi", i), getArrayElement<Float_t>("gen_mass", i))),
+                charge, 
+                Particle::identifyType(getArrayElement<Int_t>("gen_pid", i)), 
+                getArrayElement<Int_t>("gen_pid", i),
+                mother,
+                daughterCollectionVector, 
+                getArrayElement<Int_t>("gen_status", i)));
+        }
+    }
 }
 
 ParticleCollection<GenSimParticle> NanoAODEventFile::getGenSimParticles() const

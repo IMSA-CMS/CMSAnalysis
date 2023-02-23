@@ -45,8 +45,6 @@ void EventLoader::run(int outputEvery, int nFiles){
 
 void EventLoader::processRootFiles(int outputEvery, int nFiles)
 {
-  // Get a list of FileParams objects
-  setOutputEvery(outputEvery);
 
   int fileCounter = 0;
 
@@ -66,14 +64,20 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles)
     eventInterface.setFile(file); //Change eventFile reference
     
     // Loops through every event in the file
+    int count = 0;
     while (true)
-    {      
+    { 
+      count++; 
       if (file->isDone())
       {
         break;
       }
       analyzer->processOneEvent(&eventInterface); //EventInterface will loop through all event files in analyzer
       file->nextEvent();
+      if (outputEvery != 0 && count%outputEvery == 0)
+      {
+        std::cout<<"Processed "<<count<<" Events"<<std::endl;
+      }
     }
 
     delete tFile;
