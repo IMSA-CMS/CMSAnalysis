@@ -46,7 +46,7 @@ class EventModule : public AnalysisModule
         void addBasicHistograms(const ParticleType& particleType, const ParticleCollection<Particle>& particles);
 
         // adds histograms which count the ammount of a certain type of particle
-        void addCountHistograms(const ParticleType& particleType, const ParticleCollection<Particle>& particles);
+        void addCountHistograms(const ParticleType& particleType, const std::shared_ptr<ParticleCollection<Particle>> particles);
 
         // returns "[n]th Highest [particle type] [value name]" e.g. 4th Highest Muon Eta
         std::string getBasicHistogramTitle(int n, const ParticleType& particleType, std::string valueName) const;
@@ -61,7 +61,7 @@ class EventModule : public AnalysisModule
         std::shared_ptr<HistogramOutputModule> histMod = std::make_shared<HistogramOutputModule>();
         LocalEventInputModule localInput;
 
-        // Used for keeping track of the nth particles for which sets of histograms have been added
+        // Used for keeping track of which sets of histograms have been added
         std::unordered_map<std::string,std::shared_ptr<SingleParticleHist>> particleHistograms;
         std::unordered_map<std::string,std::shared_ptr<CollectionHist>> collectionHistograms;
 

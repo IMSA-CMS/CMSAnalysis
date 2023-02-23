@@ -12,6 +12,7 @@ namespace Utility
   std::vector<std::vector<T>> getAllCombinations(int nCombo, std::vector<T>& indices);
   std::string substitute(std::string original, std::string target, std::string subs);
   std::string removeSpaces(std::string input); 
+  int gcf(std::vector<int> nums);
 }
 
 template <typename T>
