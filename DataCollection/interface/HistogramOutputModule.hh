@@ -20,6 +20,7 @@ class HistogramOutputModule : public AnalysisModule
 public:
   virtual void writeAll();
   virtual void initialize() override {};     // Empty function
+  virtual void finalize() override;
   virtual bool process() override;    // Fills the histograms
   void addHistogram(std::shared_ptr<HistogramPrototype> hist); // Adds a HistogramPrototype* to histogram (the vector)
   virtual void setInput(const InputModule* iInput) override;
