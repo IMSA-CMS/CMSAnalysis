@@ -68,19 +68,10 @@ ParticleCollection<GenSimParticle> DelphesEventFile::getGenSimParticles() const
         {
             continue;
         }
-        int charge = -1;
-        if (gen_pid[i] < 0)
-        {
-            charge = 1;
-        }
-        if (gen_pid[i] == 21 || gen_pid[i] == 22)
-        {
-            charge = 0;
-        }
         auto particle = Particle(
-            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i], gen_eta[i], gen_phi[i], gen_mass[i])),
-            charge,
-            Particle::identifyType(gen_pid[i]), gen_pid[i], gen_status[i], gen_m1[i], gen_m2[i], gen_d1[i], gen_d2[i]);
+        reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i], gen_eta[i], gen_phi[i], gen_mass[i])),
+        gen_pid[i], gen_status[i], gen_m1[i], gen_m2[i], gen_d1[i], gen_d2[i]);
+        
         particle.addInfo("Isolation", 0); 
         genParticles.addParticle(particle);
     }

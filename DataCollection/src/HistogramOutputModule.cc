@@ -56,6 +56,29 @@ void HistogramOutputModule::addObject(const std::string &name, TObject *obj) {
   // std::cout << "Histogram added: " << name << '\n';
 }
 
+TObject* HistogramOutputModule::getObject(const std::string& name) 
+{
+  auto it = baseObjects.find(getObjectName(name));
+  if (it != baseObjects.end())
+  {
+    return baseObjects[getObjectName(name)];
+  } else 
+  {
+    return nullptr;
+  }
+}
+
+const TObject* HistogramOutputModule::getObject(const std::string& name) const 
+{
+  auto it = baseObjects.find(getObjectName(name));
+  if (it != baseObjects.end())
+  {
+    return (baseObjects.find(getObjectName(name)))->second;
+  } else 
+  {
+    return nullptr;
+  }
+}
 void HistogramOutputModule::makeHistogram(const std::string &name,
                                           const std::string &title, int nbins,
                                           double min, double max) {
@@ -159,10 +182,14 @@ void HistogramOutputModule::finalize()
   for (auto hist : histograms) 
   {
     auto Thist = getHistogram(hist->getFilteredName());
-    if (Thist->GetEntries() == 0)
+    if (Thist && Thist->GetEntries() == 0)
     {
       auto it = baseObjects.find(getObjectName(hist->getFilteredName()));
-      baseObjects.erase(it);
+      if (it != baseObjects.end())
+      {
+        baseObjects.erase(it);
+        //should probably remove hist from histograms tho not sure how to do that - George 2/23/23
+      }
     }
   }
 }
