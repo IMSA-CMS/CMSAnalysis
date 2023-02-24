@@ -25,5 +25,6 @@ JPsi
 Run:	2
 
 Data
-Run:	TEST
+Trigger:	EGamma
+Year:	2017a
 
