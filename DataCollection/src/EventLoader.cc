@@ -39,11 +39,11 @@ std::shared_ptr<EventFile> EventLoader::changeFileFormat(TFile* ifile)
     }
 }
 
-void EventLoader::run(int outputEvery, int nFiles){
-    processRootFiles(outputEvery, nFiles);
+void EventLoader::run(int outputEvery, int nFiles, int maxEvents){
+  processRootFiles(outputEvery, nFiles, maxEvents);
 }
 
-void EventLoader::processRootFiles(int outputEvery, int nFiles)
+void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents)
 {
 
   int fileCounter = 0;
@@ -59,7 +59,6 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles)
       std::cout << "File " << fileName << " not found!\n";
       continue;
     }
-
     file = changeFileFormat(tFile); // Makes a GenSimEventFile, DelphesEventFile or MiniAODFile shared pointer
     eventInterface.setFile(file); //Change eventFile reference
     // Loops through every event in the file
@@ -76,6 +75,10 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles)
       if (outputEvery != 0 && count%outputEvery == 0)
       {
         std::cout<<"Processed "<<count<<" Events"<<std::endl;
+      }
+      if (count == maxEvents)
+      {
+        break;
       }
     }
 
