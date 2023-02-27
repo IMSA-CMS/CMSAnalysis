@@ -9,40 +9,21 @@
 
 void HPlusPlusGenSimSelector::selectParticles(const InputModule *input, Event &event)
 {
-    std::vector<Particle> selected;
-    ParticleCollection<Particle> leftHiggsPlus;
-    ParticleCollection<Particle> leftHiggsMinus;
-    ParticleCollection<Particle> rightHiggsPlus;
-    ParticleCollection<Particle> rightHiggsMinus;
-    ParticleCollection<Particle> zBoson;
-
-
     auto particles = input->getParticles(InputModule::RecoLevel::GenSim);
-
     for (const auto &particle : particles)
     {
         GenSimParticle genSimParticle = GenSimParticle(particle);
-        if ((abs(genSimParticle.pdgId() == 9900041) || abs(genSimParticle.pdgId() == 9900042)) && genSimParticle == genSimParticle.finalDaughter()) // H++
+        if ((genSimParticle.getType() == ParticleType::leftDoublyHiggs() || genSimParticle.getType() == ParticleType::rightDoublyHiggs()) && genSimParticle == genSimParticle.finalDaughter()) // H++
         {
             if (genSimParticle.numberOfDaughters() == 2 &&
-                (abs(genSimParticle.daughter(0).pdgId()) == 13 || abs(genSimParticle.daughter(0).pdgId()) == 11) &&
-                (abs(genSimParticle.daughter(1).pdgId()) == 13 || abs(genSimParticle.daughter(1).pdgId()) == 11))
+            (genSimParticle.daughter(0).getType() == ParticleType::electron() || genSimParticle.daughter(0).getType() == ParticleType::muon()) &&
+            (genSimParticle.daughter(1).getType() == ParticleType::electron() || genSimParticle.daughter(1).getType() == ParticleType::muon()))
             {
-                if (genSimParticle.pdgId() == 9900041)
+                if (genSimParticle.getType() == ParticleType::leftDoublyHiggs())
                 {
-                    event.addSpecialObject("LeftHiggsPlus", genSimParticle);
-                }
-                else if (genSimParticle.pdgId() == -9900041)
-                {
-                    event.addSpecialObject("LeftHiggsMinus", genSimParticle);
-                }
-                else if (genSimParticle.pdgId() == 9900042)
-                {
-                    event.addSpecialObject("RightHiggsPlus", genSimParticle);
-                }
-                else if (genSimParticle.pdgId() == -9900042)
-                {
-                    event.addSpecialObject("RightHiggsMinus", genSimParticle);
+                    event.addSpecialObject("LeftHiggs", particle);
+                } else {
+                    event.addSpecialObject("RightHiggs", particle);
                 }
                 for (int i = 0; i < 2; i++)
                 {
@@ -56,8 +37,7 @@ void HPlusPlusGenSimSelector::selectParticles(const InputModule *input, Event &e
                     }
                 }
             }
-        }
-        if (abs(genSimParticle.pdgId() == 23) && genSimParticle == genSimParticle.finalDaughter()) // Z Boson
+        } else if (genSimParticle.getType() == ParticleType::z() && genSimParticle == genSimParticle.finalDaughter()) // Z Boson
         {
             event.addSpecialObject("Zboson", genSimParticle);
         }

@@ -94,6 +94,29 @@ class ThirdMuonPtHist : public GenSimRecoPrototype
   }
 };
 
+// write histogram for Gamma distribution
+
+class GammaHistogram : public GenSimRecoPrototype
+{
+  using GenSimRecoPrototype::GenSimRecoPrototype;
+
+  std::vector<double> protectedValue(InputModule::RecoLevel level) const
+  {
+    auto particles = getInput()->getParticles(level, ParticleType::darkPhoton());
+    std::vector<double> outputs;
+    for (const auto& particle : particles)
+    {
+      double gammaVal = particle.getFourVector().Gamma();
+      outputs.push_back(gammaVal);
+    }
+    return outputs;
+  }
+  
+    
+  };
+
+
+
 class PileUpHist : public HistogramPrototype1D
 {
   using HistogramPrototype1D::HistogramPrototype1D;

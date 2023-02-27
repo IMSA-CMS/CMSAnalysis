@@ -25,9 +25,9 @@ public:
 
   // Copy/conversion constructor
   template <typename U>
-  ParticleCollection(ParticleCollection<U> pc1);
+  ParticleCollection(const ParticleCollection<U>& pc1);
   ParticleCollection(std::vector<T> collectionVector);
-
+  int size(){return particles.size();}
   void addParticle(T particle) { particles.push_back(particle); }
   const std::vector<T> &getParticles() const { return particles; }
   double getNumParticles() const { return particles.size(); }
@@ -77,7 +77,7 @@ private:
 
 template <typename T>
 template <typename U>
-inline ParticleCollection<T>::ParticleCollection(ParticleCollection<U> pc1)
+inline ParticleCollection<T>::ParticleCollection(const ParticleCollection<U>& pc1)
 {
   for (auto particle : pc1.getParticles())
   {
@@ -193,10 +193,10 @@ inline double ParticleCollection<T>::getLeadingPt() const
     double pt = particle.getPt();
     if (pt > highestPt)
     {
-      pt = highestPt;
+      highestPt = pt;
     }
   }
-
+  
   return highestPt;
 }
 
@@ -280,14 +280,18 @@ inline double ParticleCollection<T>::calculateSameSignInvariantMass(bool usingPh
   T iPointer = Particle::nullParticle();
   T jPointer = Particle::nullParticle();
   std::pair<T, T> particlePair = {iPointer, jPointer};
+  //std::cout << "Line B0";
   if (usingPhi)
   {
+    //std::cout << "Line B1";
     particlePair = chooseParticlesByPhi(false); // we want same sign particles with best phi angle
   }
   else
   {
+    //std::cout << "Line B2";
     particlePair = chooseParticles(false); // we want same sign particles with highest invariant mass
   }
+  //std::cout << "Line B3";
   if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
   {
     return calculateInvariantMass(particlePair.first, particlePair.second);

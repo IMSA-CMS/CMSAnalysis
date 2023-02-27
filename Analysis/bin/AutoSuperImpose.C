@@ -18,14 +18,14 @@
 void AutoSuperImpose() {
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary");
     //Folder path for your files 
-    const std::string filePath = "~/nobackup/rootfiles/";
-    const std::string outputFile = "AutoSuperImpose_FSR.root";
+    const std::string filePath = "~/";
+    const std::string outputFile = "AutoSuperImpose_Higgsto2ZDFermion.root";
     //List of files to superimpose
-    std::vector<std::string> files = {"Higgsto2ZD/Hist_Higgsto2ZD_SM.root", "Higgsto2ZD/FSR/Hist_Higgsto2ZD_FSR01.root","Higgsto2ZD/FSR/Hist_Higgsto2ZD_FSR03.root","Higgsto2ZD/FSR/Hist_Higgsto2ZD_FSR05.root","Higgsto2ZD/FSR/Hist_Higgsto2ZD_FSR10.root"};   
+    std::vector<std::string> files = {"nobackup/rootfiles/Higgsto2ZD/Hist_Higgsto2ZD_300.root", "CMSAnalysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/Hist_Higgsto2ZD_Fermion100.root", "CMSAnalysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/Hist_Higgsto2ZD_Fermion150.root"};   
     //List of histograms to be fetched in ever file
     std::vector<std::string> histnames = {"1st Highest Dark Photon Pt","1st Highest Dark Photon Daughter Delta R","Delta R"};
     //Labels for the legend    
-    std::vector<TString> names = {"FSR0", "FSR01","FSR03","FSR05","FSR10"};
+    std::vector<TString> names = {"Higgsto2ZD", "Fermion100","Fermion150"};
     //Colors go here
     std::vector<int> colors = {1, 2, 3, 4, 5};
     TString yTitle = "Events (1/Integral)";
