@@ -28,20 +28,16 @@ class EventLoader
         //Advances to next file
         void nextFile(std::shared_ptr<EventFile> newFile) {file=newFile;}
 
-        //responsible for outputing a short message every n events
-        void setOutputEvery(int output) {outputEvery = output;}
-
         //Calls process Root files
-        void run(int outputEvery, int nFiles);
+        void run(int outputEvery, int nFiles, int maxEvents);
 
     private:
         void beginJob();
         void analyze(const RootEventInterface);
         void endJob();
         
-        void processRootFiles(int outputEvery, int nFiles);
+        void processRootFiles(int outputEvery, int nFiles, int maxEvents);
 
-        int outputEvery = 0;
         std::vector<std::string> rootFiles;
         Analyzer *analyzer; 
         std::shared_ptr<EventFile> file = nullptr;
