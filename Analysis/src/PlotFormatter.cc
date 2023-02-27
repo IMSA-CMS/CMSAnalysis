@@ -2,6 +2,7 @@
 #include "CMSAnalysis/Analysis/interface/Channel.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include "CMSAnalysis/Analysis/interface/Process.hh"
+#include "CMSAnalysis/DataCollection/interface/Utility.hh"
 #include "TGraph.h"
 #include "TH1.h"
 #include "TH1F.h"
@@ -529,7 +530,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<Channel> processes, std::st
         histVector.push_back(signal);
     }
     else {
-        data->Draw("HIST");
+        data->Draw("E0");
         histVector.push_back(data);
     }
 
@@ -582,13 +583,13 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<Channel> processes, std::st
     if(first == 0) {
         signal->Draw("HIST SAME");
         histVector.push_back(signal);
-        data->Draw("HIST SAME");
+        data->Draw("E0 SAME");
         histVector.push_back(data);
     }
     else if(first == 1) {
         background->Draw("HIST SAME");
         stackVector.push_back(background);
-        data->Draw("HIST SAME");
+        data->Draw("E0 SAME");
         histVector.push_back(data);
     }
     else {
