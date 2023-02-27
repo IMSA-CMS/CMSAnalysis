@@ -56,6 +56,10 @@ bool GenSimParticle::isFinalState() const
 {
   return getParticle()->isFinalState();
 }
+bool GenSimParticle::hasMother()
+{
+  return getParticle()->doesHaveMother();
+}
 
 GenSimParticle GenSimParticle::uniqueMother() const
 {
@@ -75,17 +79,19 @@ GenSimParticle GenSimParticle::uniqueMother() const
 GenSimParticle GenSimParticle::finalDaughter() const
 {
   GenSimParticle current = GenSimParticle(*this);
-  while (current.status() != 1) {
+  while (current.status() != 1) 
+  {
     int di = -1;
-    int dpt = 0;
-    for (int i = 0; i < current.numberOfDaughters(); ++i) {
+    for (int i = 0; i < current.numberOfDaughters(); ++i)
+    {
       GenSimParticle daughter = current.daughter(i);
-      if (daughter.pdgId() == current.pdgId() && daughter.getPt() > dpt) {
+      if (daughter.pdgId() == current.pdgId()) 
+      {
         di = i;
-        dpt = daughter.getPt();
       }
     }
-    if (di == -1) {
+    if (di == -1) 
+    {
       break;
     }
     current = current.daughter(di);

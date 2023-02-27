@@ -2,32 +2,45 @@
 #define COLLECTIONHIST_HH
 
 #include "HistogramPrototype1D.hh"
-#include "ParticleCollection.hh"
 #include "Particle.hh"
 
-class MatchingModule;
+#include <functional>
+
+#include <string>
+#include <vector>
+
+template<class T>
+class ParticleCollection;
 
 //General Histogram Type which has a ParticleCollection connected to it
-//cdollection must be cleared/updated each event
+//collection must be cleared/updated each event
+//This class works similarly to SingleParticleHist
+//Implemented in ParticleType
 class CollectionHist : public HistogramPrototype1D
 {
   public:
   // Constructor / takes a value function
-  CollectionHist(const std::string& iname, int iNBins, double iminimum, double imaximum, std::function<std::vector<double>(const ParticleCollection<Particle>&)>function);
+  CollectionHist(const std::string& iname, int iNBins, double iminimum, double imaximum, std::function<std::vector<double>(std::shared_ptr<ParticleCollection<Particle>>)>function);
 
-  // Sets nullparticle to hist to avoid null pointer error
-  void clear() {collection = ParticleCollection<Particle>();}
+  //Clones histogram
+  CollectionHist clone() {return CollectionHist(getName(),getNBins(),getMinimum(),getMaximum(),valueFunction);};
+
+  // Sets nullptr to hist to avoid null pointer error
+  void clear();
 
   // Sets the collection
-  void setCollection(const ParticleCollection<Particle>& particleCollection) {collection = particleCollection;}; 
+  void setCollection(std::shared_ptr<ParticleCollection<Particle>> particleCollection);
+
+  //This function is necessary to change name from default in ParticleType / called in EventModule
+  void changeName (std::string newName) {setName(newName);};
 
   // value function which is called in HistMod
   virtual std::vector<double> value() const override;
 
   private:
-  ParticleCollection<Particle> collection;
+  std::shared_ptr<ParticleCollection<Particle>> collection;
 
-  std::function<std::vector<double>(const ParticleCollection<Particle>&)> valueFunction;
+  std::function<std::vector<double>(std::shared_ptr<ParticleCollection<Particle>>)> valueFunction;
 };
 
 #endif

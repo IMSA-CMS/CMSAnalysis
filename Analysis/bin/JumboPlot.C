@@ -9,6 +9,7 @@
 #include "CMSAnalysis/Analysis/interface/HiggsPlusPlusAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsComparisonAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsGenComparisonAnalysis.hh"
+#include "CMSAnalysis/Analysis/interface/HiggsCutsAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/DYComparisonAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/PlotFormatter.hh"
 #include "CMSAnalysis/Analysis/interface/TableData.hh"
@@ -33,8 +34,8 @@ void JumboPlot() {
 	//Change things in this section
 
 	//Put your analysises here. If you only have a simpleAnalysis or only superimposed histograms that's ok, just leave the others at default
-	auto higgsStackAnalysis = std::make_shared<HiggsPlusPlusAnalysis>();
-	auto higgsSuperImpAnalysis = std::make_shared<HiggsPlusPlusAnalysis>();
+	auto higgsStackAnalysis = std::make_shared<HiggsCutsAnalysis>();
+	auto higgsSuperImpAnalysis = std::make_shared<HiggsCutsAnalysis>();
 	auto simpleAnalysis = std::make_shared<SimpleHiggsComparison>();
 	//Extra text is the second parameter
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "");
@@ -44,7 +45,7 @@ void JumboPlot() {
 	int graphSwitch = 2;
 	//Put all variables you can graph here
 	//Choices are GenSim Same Sign Inv Mass, Same Sign Inv Mass, Invariant Mass, GenSim pT, pT, Eta, Phi, MET (caps matter)
-	std::vector<std::string> graphableTypes = {"Invariant Mass", "Same Sign Inv Mass", "pT", "MET"};
+	std::vector<std::string> graphableTypes = {"Same Sign Inv Mass"};
 	//Change this to whatever process your signal is
 	std::string signalName = "Higgs Signal";
 	TString units = " [GEV]";

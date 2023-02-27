@@ -17,12 +17,16 @@ bool LeptonEfficiency::process()
 {
   auto genSim = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
 
+  
+
   for(const auto &particle : genSim.getParticles())
   {
+
     auto type = particle.getType();
     if(type == ParticleType::electron())
 	  {
 	    genSimElectrons++;
+
 	  }
     else if(type == ParticleType::muon())
 	  {

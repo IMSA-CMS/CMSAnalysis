@@ -621,11 +621,11 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
 				{
 					if((recoPart.getPt() - genPart.getPt())/genPart.getPt() < 0.25 && genPart.getCharge() == recoPart.getCharge())
 					{
-						if (GenSimParticle(GenSimParticle(genPart).mother()).mother().getType() == ParticleType::electron())
+						if (GenSimParticle(genPart).mother().mother().getType() == ParticleType::electron())
 						{
 							fromElec++;
 						}
-						else if (GenSimParticle(GenSimParticle(genPart).mother()).mother().pdgId() < 7 && GenSimParticle(GenSimParticle(genPart).mother()).mother().pdgId() > 0)
+						else if (GenSimParticle(genPart).mother().mother().pdgId() < 7 && GenSimParticle(genPart).mother().mother().pdgId() > 0)
 						{
 							fromQuark++;
 						}
@@ -636,7 +636,7 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
 		}
 		recoEventElement++;
 	}
-	
+
 	if (elecCount > 2) 
 	{
 		electronCounter++;
