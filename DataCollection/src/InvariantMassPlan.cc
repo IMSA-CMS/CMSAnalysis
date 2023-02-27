@@ -37,64 +37,31 @@ void InvariantMassPlan::initialize()
 
   // Create necessary histogram(s), as well as histMod
   auto histMod = make_shared<HistogramOutputModule>();
-  auto invMassHist = make_shared<InvariantMassHist>(InputModule::RecoLevel::GenSim, "invariant_Mass", 100, 0, 1000);
-  auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "same_Sign_Invariant_Mass", 300, 1, 1000);
   
-  auto elecInvMassHist = make_shared<InvariantMassHist>(InputModule::RecoLevel::Reco, "Electron Invariant Mass", 100, 0, 1000);
-  auto elecSSInvMass = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "Electron same-sign invariant mass", 300, 1, 1000);
+  auto elecInvMassHist = make_shared<InvariantMassHist>(InputModule::RecoLevel::Reco, "Electron Invariant Mass", 300, 1, 1000);
+  auto photonElectronMassHist = make_shared<PhotonInvariantMassHist>(InputModule::RecoLevel::Reco, "Photon-electron invariant mass", 300, 1, 1000);
 
-  auto ptResolutionHist = make_shared<PtResolutionHist>("Pt Resolution Histogram", 300, -100, 100);
-
-  auto pileUpHist = make_shared<PileUpHist>("Pile Up Hist", 300, 0, 100);
   // Create necessary module(s) for the filter(s)
-  auto trigSimMod = make_shared<TriggerSimModule>("HLT");
-  auto simTrigger = make_shared<SimTrigger>("filter_trigger", TriggerSimModule::EnumTriggers::doubleElectronTriggers, trigSimMod);
 
   // Create necessary filter(s)
 
   auto nLeptonsFilter = make_shared<NLeptonsFilter>();
-  // auto triggerFilter = make_shared<TriggerFilter>(simTrigger);
   auto lepFilter = make_shared<LeptonFilter>(ParticleType::electron(), 2, "Elec2");
-  // auto invMassFilter = make_shared<InvariantMassFilter>(500, InputModule::RecoLevel::GenSim);
-  // auto fakePhotonFilter = make_shared<FakePhotonFilter>();
 
   // Add the filter module(s) to the histogram(s) created above
-  // invMassHist->addFilter(nLeptonsFilter);
-  // sameSignInvMassHist->addFilter(nLeptonsFilter);
-  // invMassHist->addFilter(triggerFilter);
-  // sameSignInvMassHist->addFilter(triggerFilter);
-  // invMassHist->addFilter(triggerFilter);
 
-  invMassHist->addFilter(invMassFilter);
-  invMassHist->addFilter(lepFilter);
-  sameSignInvMassHist->addFilter(invMassFilter);
-  sameSignInvMassHist->addFilter(pileUpFilter);
-  //sameSignInvMassHist->addFilter(lepFilter);
-  pileUpHist->addFilter(invMassFilter);
-  pileUpHist->addFilter(lepFilter);
-  
-  ptResolutionHist->addFilter(fakePhotonFilter);
-
-  // elecInvMassHist->addFilter(lepFilter);
-  // elecSSInvMass->addFilter(lepFilter);
+  elecInvMassHist->addFilter(lepFilter);
+  elecInvMassHist->addFilter(nLeptonsFilter);
+  photonElectronMassHist->addFilter(lepFilter);
+  photonElectronMassHist->addFilter(nLeptonsFilter);
 
   // Add the histogram(s) created above to histMod
-  histMod->addHistogram(invMassHist);
-  histMod->addHistogram(sameSignInvMassHist);
-  histMod->addHistogram(pileUpHist);
   histMod->addHistogram(elecInvMassHist);
-  histMod->addHistogram(elecSSInvMass);
-  histMod->addHistogram(ptResolutionHist);
+  histMod->addHistogram(photonElectronMassHist);
 
   // Add production modules
-  // analyzer.addProductionModule(trigSimMod);
-
-  // analyzer.addFilterModule(triggerFilter);
-  auto eventDump = make_shared<EventDumpModule>(true,true);
-  auto compMod = make_shared<RecoGenSimComparisonModule>("fakePhoton");
+  auto compMod = make_shared<RecoGenSimComparisonModule>("mother");
   // Hopefully doesn't break // <- this is profound
   analyzer.addAnalysisModule(histMod);
-  //analyzer.addAnalysisModule(recoDump);
-  // analyzer.addAnalysisModule(genSimDump);
   analyzer.addAnalysisModule(compMod);
 }

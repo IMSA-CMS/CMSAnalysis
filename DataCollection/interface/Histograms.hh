@@ -185,5 +185,32 @@ class DzHist : public GenSimRecoPrototype
   }
 };
 
+// plots highest lepton-photon invariant mass in the event
+class PhotonInvariantMassHist : public GenSimRecoPrototype
+{
+  using GenSimRecoPrototype::GenSimRecoPrototype;
+
+  std::vector<double> protectedValue(InputModule::RecoLevel level) const
+  {
+    auto particles = getInput()->getParticles(level);
+    bool ePlusGamma = false;
+    double highInvMass = 0;
+    double thisInvMass = 0;
+
+    for(auto particle : particles.getParticles()) {
+      for (auto particle2 : particles.getParticles())
+      {
+        ePlusGamma = (particle.getType() == ParticleType::electron() && particle2.getType() == ParticleType::photon() ) || (particle2.getType() == ParticleType::electron() && particle.getType() == ParticleType::photon());
+        thisInvMass = (particle.getFourVector() + particle2.getFourVector()).M();
+
+        if (ePlusGamma && (thisInvMass > highInvMass)) {
+          highInvMass = thisInvMass;
+        }
+      }
+    }
+    return {highInvMass};
+  }
+};
+
 
 #endif
