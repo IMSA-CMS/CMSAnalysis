@@ -55,6 +55,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     elec_reliso(treeReader, "Electron_miniPFRelIso_all"),
     elec_dxy(treeReader, "Electron_dxy"),
     elec_dz(treeReader, "Electron_dz"),
+    elec_convveto(treeReader, "Electron_convVeto"),
     muon_size(treeReader, "nMuon"),
     muon_eta(treeReader, "Muon_eta"),
     muon_phi(treeReader, "Muon_phi"),
@@ -76,7 +77,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     jet_phi(treeReader, "Jet_phi"),
     jet_mass(treeReader, "Jet_mass"),
     jet_pt(treeReader, "Jet_pt"),
-    jet_bTag(treeReader, "Jet_btagCMVA"),
+    // jet_bTag(treeReader, "Jet_btagCMVA"),
     //bJet(treeReader, branchNames.bJet.c_str()),
     gen_size(treeReader, "nGenPart"),
     gen_pid(treeReader, "GenPart_pdgId"),
@@ -184,8 +185,8 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         particle.addInfo("Isolation", elec_reliso[i]);
         particle.addInfo("dxy", elec_dxy[i]);
         particle.addInfo("dz", elec_dz[i]);
+        particle.addInfo("convVeto", elec_convveto[i]);
         recoParticles.addParticle(particle);
-        
     }
     for (UInt_t i = 0; i < *muon_size; i++)
     {
@@ -193,7 +194,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         int charge = muon_charge[i];
         
         Particle::SelectionFit fit;
-        if (muon_looseid[i]) 
+        if (muon_tightid[i]) 
         {
             fit = Particle::SelectionFit::Tight;
         } else if (muon_mediumid[i]) 
@@ -214,7 +215,9 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         particle.addInfo("Isolation", muon_reliso[i]);
         particle.addInfo("dxy", muon_dxy[i]);
         particle.addInfo("dz", muon_dz[i]);
-        recoParticles.addParticle(particle);
+        if (muon_tightid[i]){
+            recoParticles.addParticle(particle);
+        }
 
         for (UInt_t i = 0; i < *photon_size; i++)
         {
