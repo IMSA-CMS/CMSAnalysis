@@ -28,6 +28,8 @@ class PlotFormatter
         TCanvas* simple2DHist(std::shared_ptr<Process> process, std::string histvariable, TString xAxisTitle, TString yAxisTitle);
         //Single stacked histogram
         TCanvas* simpleStackHist(std::shared_ptr<Channel> processes, std::string histvariable, TString xAxisTitle, TString yAxisTitle);
+        //Complete Signal/Background plot
+        TCanvas* completePlot(std::shared_ptr<Channel> processes, std::string histvariable, TString xAxisTitle, TString yAxisTitle);
         //Formats the canvas based on the margins
         TCanvas* makeFormat(int w, int h, float t, float b, float l, float r);
         //Writes text and draws logo based on the margins
