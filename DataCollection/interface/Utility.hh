@@ -16,6 +16,7 @@ namespace Utility
   //the length of the name (how many particles in your sample), and if you want to eliminate channels that mean the same thing if you have same sign pairs or opposite sign pairs
   std::vector<std::string> channelMaker(std::vector<std::string> particles, int length, bool sameSign);
   bool comparator(std::string a, std::string b);
+  int gcf(std::vector<int> nums);
 }
 
 inline bool Utility::comparator(std::string a, std::string b) {return a<b;}

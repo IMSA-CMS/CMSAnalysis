@@ -20,6 +20,7 @@ class HistogramOutputModule : public AnalysisModule
 public:
   virtual void writeAll();
   virtual void initialize() override {};     // Empty function
+  virtual void finalize() override;
   virtual bool process() override;    // Fills the histograms
   void addHistogram(std::shared_ptr<HistogramPrototype> hist); // Adds a HistogramPrototype* to histogram (the vector)
   virtual void setInput(const InputModule* iInput) override;
@@ -36,9 +37,8 @@ protected:
   // You do NOT need to consider filter names in your code - the implementation
   // takes care of that.  Simply code as though there was only one set of histograms,
   // and they will duplicate automatically as needed.
-  TObject* getObject(const std::string& name) {return baseObjects[getObjectName(name)];}
-  const TObject* getObject(const std::string& name) const 
-  {return (baseObjects.find(getObjectName(name)))->second;}
+  TObject* getObject(const std::string& name); 
+  const TObject* getObject(const std::string& name) const; 
 
   // Creates a histogram and adds it to the collection.  Just a convenient shortcut
   // for addObject() above.

@@ -104,15 +104,26 @@ TCanvas* PlotFormatter::superImposedHist(std::shared_ptr<Channel> processes, std
         hists.push_back(process->getHist(histvariable, false));
     }
 
-    double minimumBin = (double) hists.at(0)->GetNbinsX();
+    std::vector<int> bins;
     for(TH1* hist : hists) {
-	if((double) hist->GetNbinsX() < minimumBin) {
-	     minimumBin = (double) hist->GetNbinsX();
-	}
+        bins.push_back(hist->GetNbinsX());
     }
 
+    int commonFactor = Utility::gcf(bins);
+
     for(TH1* hist : hists) {
-	hist->Rebin((int) (((double) hist->GetNbinsX()) / minimumBin + 0.5));
+        hist->Rebin(hist->GetNbinsX() / commonFactor);
+    }
+
+    double maxBinWidth = hists.at(0)->GetXaxis()->GetBinWidth(0);
+
+    for(TH1* hist : hists) {
+        if(hist->GetXaxis()->GetBinWidth(0) > maxBinWidth) {
+            maxBinWidth = hist->GetXaxis()->GetBinWidth(0);
+        }
+    }
+    for(TH1* hist : hists) {
+        hist->Rebin((int) (maxBinWidth / hist->GetXaxis()->GetBinWidth(0)));
     }
 
     for(TH1* hist : hists) {
@@ -190,15 +201,26 @@ TCanvas* PlotFormatter::simpleAnalysisHist(std::vector<TH1*> hists, std::vector<
     double maximum = 0;
     int count = 0;
 
-    double minimumBin = (double) hists.at(0)->GetNbinsX();
+    std::vector<int> bins;
     for(TH1* hist : hists) {
-	if((double) hist->GetNbinsX() < minimumBin) {
-	     minimumBin = (double) hist->GetNbinsX();
-	}
+        bins.push_back(hist->GetNbinsX());
     }
 
+    int commonFactor = Utility::gcf(bins);
+
     for(TH1* hist : hists) {
-	    hist->Rebin((int) (((double) hist->GetNbinsX()) / minimumBin + 0.5));
+        hist->Rebin(hist->GetNbinsX() / commonFactor);
+    }
+
+    double maxBinWidth = hists.at(0)->GetXaxis()->GetBinWidth(0);
+
+    for(TH1* hist : hists) {
+        if(hist->GetXaxis()->GetBinWidth(0) > maxBinWidth) {
+            maxBinWidth = hist->GetXaxis()->GetBinWidth(0);
+        }
+    }
+    for(TH1* hist : hists) {
+        hist->Rebin((int) (maxBinWidth / hist->GetXaxis()->GetBinWidth(0)));
     }
 
     for(TH1* hist : hists) {
@@ -270,24 +292,32 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     double maximum = 0;
     int count = 0;
 
-    double minimumBin = (double) hists.at(0)->GetNbinsX();
-
-    for(TH1* hist : hists) 
-    {
-	    if((double) hist->GetNbinsX() < minimumBin) 
-        {
-	        minimumBin = (double) hist->GetNbinsX();
-	    }
+    std::vector<int> bins;
+    for(TH1* hist : hists) {
+        bins.push_back(hist->GetNbinsX());
     }
+
+    int commonFactor = Utility::gcf(bins);
 
     for(TH1* hist : hists) {
-	hist->Rebin((int) (((double) hist->GetNbinsX()) / minimumBin + 0.5));
+        hist->Rebin(hist->GetNbinsX() / commonFactor);
     }
+
+    double maxBinWidth = hists.at(0)->GetXaxis()->GetBinWidth(0);
+
+    for(TH1* hist : hists) {
+        if(hist->GetXaxis()->GetBinWidth(0) > maxBinWidth) {
+            maxBinWidth = hist->GetXaxis()->GetBinWidth(0);
+        }
+    }
+    for(TH1* hist : hists) {
+        hist->Rebin((int) (maxBinWidth / hist->GetXaxis()->GetBinWidth(0)));
+    }     
 
     for(TH1* hist : hists) {
 	    if(hist->Integral() != 0 && !isnan(hist->Integral())) {
 	        hist->Scale(1/hist->Integral());
-		hist->SetFillColor(kWhite);
+		    hist->SetFillColor(kWhite);
 	    }
 	    hist->SetLineColor(colors.at(count));
         if(hist->GetMaximum() > maximum) {

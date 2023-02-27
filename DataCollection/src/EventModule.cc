@@ -17,7 +17,7 @@
 
 #include "CMSAnalysis/DataCollection/interface/GetNthHighestPtHist.hh"
 #include "CMSAnalysis/DataCollection/interface/SingleParticleHist.hh"
-#include "CMSAnalysis/DataCollection/interface/CollectionHist.hh"
+//#include "CMSAnalysis/DataCollection/interface/CollectionHist.hh"
 #include "CMSAnalysis/DataCollection/interface/HistogramPrototype1DGeneral.hh"
 
 
@@ -52,16 +52,6 @@ void EventModule::writeAll() {}
 bool EventModule::process ()
 {
     clearHistograms(); //all histograms are cleared and we only fill the ones we are using for this event
-    addCountHistograms(ParticleType::electron(), event.getElectrons());
-    addCountHistograms(ParticleType::muon(), event.getMuons());
-    addCountHistograms(ParticleType::photon(), event.getPhotons());
-    addCountHistograms(ParticleType::jet(), event.getJets());
-    for (auto& [key,value] : event.getSpecials())
-    {
-        addCountHistograms(value.getParticles()[0].getType(), value);
-        //checks type of one particle, assuming all within a container have the same type
-    }
-    
     event.clear();
 
     for (auto selector : selectors) {
@@ -82,6 +72,7 @@ bool EventModule::process ()
     if (!passesCuts){
         return false;
     }
+
     addBasicHistograms(ParticleType::electron(), event.getElectrons());
     addBasicHistograms(ParticleType::muon(), event.getMuons());
     addBasicHistograms(ParticleType::photon(), event.getPhotons());
@@ -89,10 +80,22 @@ bool EventModule::process ()
 
     for (auto& [key,value] : event.getSpecials())
     {
+        auto specialPtr = std::make_shared<ParticleCollection<Particle>>(value);
         addBasicHistograms(value.getParticles()[0].getType(), value);
-        //checks type of one particle, assuming all within a container have the same type
+        addCountHistograms(value.getParticles()[0].getType(), specialPtr); 
     }
     
+    auto electronCollection = std::make_shared<ParticleCollection<Particle>>(event.getElectrons());
+    auto muonCollection = std::make_shared<ParticleCollection<Particle>>(event.getMuons());
+    auto photonCollection = std::make_shared<ParticleCollection<Particle>>(event.getPhotons());
+    auto jetCollection = std::make_shared<ParticleCollection<Particle>>(event.getJets());
+    addCountHistograms(ParticleType::electron(), electronCollection);
+    addCountHistograms(ParticleType::muon(), muonCollection);
+    addCountHistograms(ParticleType::photon(), photonCollection);
+    addCountHistograms(ParticleType::jet(), jetCollection);
+   
+
+
     return true;
 }
 
@@ -111,13 +114,14 @@ std::function<std::vector<double>(const InputModule*)> EventModule::findNthParti
     return NThParticleFunction;
 }
 
+
 void EventModule::addBasicHistograms(const ParticleType& particleType, const ParticleCollection<Particle>& particles)
 {
     std::vector<Particle> parts = particles.getParticles();
     int count = 0;
     for (auto part : parts)
     {   
-        for (auto hist : particleType.getHists())
+        for (auto hist : particleType.getParticleHists())
         {
             auto histName = getBasicHistogramTitle(count,particleType,hist->getName());
             if (!checkHist(histName))
@@ -132,17 +136,21 @@ void EventModule::addBasicHistograms(const ParticleType& particleType, const Par
     }
 }
 
-void EventModule::addCountHistograms(const ParticleType& particleType, const ParticleCollection<Particle>& particles)
+void EventModule::addCountHistograms(const ParticleType& particleType, const std::shared_ptr<ParticleCollection<Particle>> particles)
 {
-//     std::string histName = "Number of " + particleType.getName() + "s";
-//     if (!checkHist(histName))
-//     {
-//         auto hist = std::make_shared<CollectionHist>(histName, 11, -0.5, 10.5, [](const ParticleCollection<Particle>& collection){return std::vector<double>{collection.getNumParticles()};});
-//         collectionHistograms.insert({histName,hist});
-//         histMod->addHistogram(hist);
-//     }
-//     collectionHistograms[histName]->setCollection(particles);
+    for (auto hist : particleType.getCollectionHists())
+    {
+        auto histName = particleType.getName() + " " + hist->getName();
+        if (!checkHist(histName))
+        {
+            hist->changeName(histName);
+            collectionHistograms.insert({histName,hist});
+            histMod->addHistogram(hist);
+        }
+        collectionHistograms[histName]->setCollection(particles);
+    }
 }
+
 bool EventModule::checkHist(std::string histName) const
 {
     bool inMap = false;
@@ -151,11 +159,11 @@ bool EventModule::checkHist(std::string histName) const
     {
         inMap = true;
     }
-    // auto it2 = collectionHistograms.find(histName);
-    //  if (it2 != collectionHistograms.end())
-    // {
-    //     inMap = true;
-    // }
+    auto it2 = collectionHistograms.find(histName);
+    if (it2 != collectionHistograms.end())
+    {
+        inMap = true;
+    }
     return inMap;
 }
 
@@ -184,8 +192,8 @@ void EventModule::clearHistograms()
     {
         value->clear();
     }
-    // for (auto& [key,value] : collectionHistograms)
-    // {
-    //     value->clear();
-    // }
+    for (auto& [key,value] : collectionHistograms)
+    {
+        value->clear();
+    }
 }
