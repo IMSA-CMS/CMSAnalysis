@@ -1,14 +1,11 @@
 #include "CMSAnalysis/DataCollection/interface/Utility.hh"
-<<<<<<< HEAD
 #include <algorithm>
 #include <vector>
 #include <string>
 #include <cmath>
-=======
 #include <vector>
-#include <numeric>
 #include <iostream>
->>>>>>> 493fd3babd8c234233f4aee4360a619edc1e0021
+#include <numeric>
 
 std::string Utility::substitute(std::string original, std::string target, std::string subs)
 {
@@ -122,6 +119,8 @@ std::vector<std::string> Utility::channelMaker(std::vector<std::string> particle
     }
   }
   return channels;
+}
+
 int Utility::gcf(std::vector<int> nums) {
   int toReturn = 0;
   int previous = nums[0];
