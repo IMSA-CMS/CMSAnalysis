@@ -12,6 +12,8 @@
 #include <fstream>
 #include <string>
 
+using namespace std;
+
 std::vector<bool> NanoAODEventFile::getTriggerResults(std::string subProcess) const
 {
     // determines whether it passes the trigger"s criteria or not
@@ -144,7 +146,8 @@ void NanoAODEventFile::nextEvent()
             std::vector<const GenSimParticle*> daughterCollectionVector{};
             if (i < getArraySize<Int_t>("gen_d1"))
             {
-                daughterCollectionVector.push_back(&genSimParticles[getArrayElement<Int_t>("gen_d2", i)]);
+                daughterCollectionVector.push_back(&genSimParticles[getArrayElement<Int_t>("gen_d1", i)]);
+                std::cout<< "Stuff:" << getArrayElement<Int_t>("gen_d1", i) << " ID: " << getArrayElement<Int_t>("gen_pid", i) <<  "\n";
             } 
             if (i < getArraySize<Int_t>("gen_d2"))
             {
