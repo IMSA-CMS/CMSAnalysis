@@ -2,12 +2,15 @@
 #include "CMSAnalysis/Analysis/interface/Channel.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include "CMSAnalysis/Analysis/interface/Process.hh"
+#include "CMSAnalysis/DataCollection/interface/Utility.hh"
+#include "TGraph.h"
 #include "TH1.h"
 #include "TH1F.h"
 #include "TF1.h"
 #include "THStack.h"
 #include "TCanvas.h"
 #include "TString.h"
+#include "TPad.h"
 #include "TFile.h"
 #include "TFrame.h"
 #include "TStyle.h"
@@ -19,12 +22,13 @@
 #include "TBox.h"
 #include "TImage.h"
 #include "TASImage.h"
+#include "TGraphErrors.h"
 #include "TPaveStats.h"
 #include "TFitResult.h"
 #include <iostream>
 #include <memory>
 #include <vector>
-#include "CMSAnalysis/DataCollection/interface/Utility.hh" 
+#include <cmath> 
 
 TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes, std::string histvariable, TString xAxisTitle, TString yAxisTitle)
 {
@@ -334,7 +338,7 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     float right = 0.04*width;
 
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
-
+    gStyle->SetOptStat(0);
     gStyle->SetOptStat(0);
 
     //Draws the histogram with more events first (bigger axis)
@@ -469,6 +473,204 @@ TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, std:
     legend->Draw();
  
     writeText(width, height, top, bottom, left, right);
+
+    canvas->Update();
+    return canvas;
+}
+
+TCanvas* PlotFormatter::completePlot(std::shared_ptr<Channel> processes, std::string histvariable, TString xAxisTitle, TString yAxisTitle)
+{
+    THStack* background = processes->getStack(histvariable, "background", true);
+	TH1* signal = processes->findProcess(processes->getNamesWithLabel("signal").at(0))->getHist(histvariable, true);
+    TH1* data = processes->findProcess(processes->getNamesWithLabel("data").at(0))->getHist(histvariable, false);
+
+    signal->SetLineColor(6);
+	signal->SetFillColor(6);
+
+    data->SetLineColor(kBlack);
+    data->SetFillColor(kWhite);
+
+    //Defines order to draw in so graph isn't cut off
+    int first;
+    if(signal->GetMaximum() > background->GetMaximum() && signal->GetMaximum() > data->GetMaximum()) {
+        first = 1;
+    }
+    else if(data->GetMaximum() > background->GetMaximum() && data->GetMaximum() > signal->GetMaximum()) {
+        first = 2;
+    }
+    else {
+        first = 0;
+    }
+
+    //Setting size and margins
+    int width = 800;
+    int height = 600;
+ 
+    float top = 0.08*height;
+    float bottom = 0.12*height;
+    float left = 0.12*width;
+    float right = 0.04*width;
+
+    TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
+    TPad* topPad = new TPad("pad1", "", 0, 0.5, 1, 1);
+    TPad* bottomPad = new TPad("pad2", "", 0, 0, 1, 0.5);
+    canvas->SetLogy();
+    gStyle->SetOptStat(0);
+
+    topPad->Draw();
+    topPad->cd();
+
+    //Draws the histogram with more events first (bigger axis)
+    if(first == 0) {
+        background->Draw("HIST");
+        stackVector.push_back(background);
+    }
+    else if(first == 1) {
+        signal->Draw("HIST");
+        histVector.push_back(signal);
+    }
+    else {
+        data->Draw("E0");
+        histVector.push_back(data);
+    }
+
+    TH1* histLoop;
+    signal->Rebin(4);
+    for(const auto&& obj : *(background->GetHists())) { //How you iterate over a TList
+        histLoop = dynamic_cast<TH1*>(obj);
+        histLoop->Rebin(4);
+    }
+
+    TH1* hist;
+    if(first == 0) {
+        hist = background->GetHistogram();
+    }
+    else if (first == 1){
+        hist = signal;
+    }
+    else {
+        hist = data;
+    }
+    topPad->Update();
+    
+    //Change axis and graph titles here
+    hist->GetYaxis()->SetTitle(yAxisTitle);
+ 
+    //Draws the legend
+    auto legend = new TLegend(0.8-(right/width), 0.85-(top/height), 1-(right/width), 1-(top/height));
+    legend->SetTextSize(0.02);
+    std::string name;
+    TString toAdd;
+    name = processes->getNamesWithLabel("data").at(0); 
+    toAdd = name;
+    legend->AddEntry(data, " " + toAdd, "L");
+    name = processes->getNamesWithLabel("signal").at(0); 
+    toAdd = name;
+    legend->AddEntry(signal, " " + toAdd, "F");
+    int count = 0;
+    for(const auto&& obj2 : *background->GetHists()) {
+        name = processes->getNamesWithLabel("background").at(count);
+        toAdd = name;
+        legend->AddEntry(obj2, " " + toAdd, "F");
+        count++;
+    }
+    legend->Draw();
+    topPad->Update();
+
+    writeText(width, height, top, bottom, left, right);
+
+    //Draws the other histogram    
+    if(first == 0) {
+        signal->Draw("HIST SAME");
+        histVector.push_back(signal);
+        data->Draw("E0 SAME");
+        histVector.push_back(data);
+    }
+    else if(first == 1) {
+        background->Draw("HIST SAME");
+        stackVector.push_back(background);
+        data->Draw("E0 SAME");
+        histVector.push_back(data);
+    }
+    else {
+        signal->Draw("HIST SAME");
+        histVector.push_back(signal);
+        background->Draw("HIST SAME");
+        stackVector.push_back(background);
+    }
+
+    double x1[background->GetHistogram()->GetNbinsX()], y1[background->GetHistogram()->GetNbinsX()];
+    double xerror[background->GetHistogram()->GetNbinsX()], yerror[background->GetHistogram()->GetNbinsX()];
+
+    for(int i = 0; i < background->GetHistogram()->GetNbinsX(); i++) {
+        double errortotal = 0;
+        x1[i] = i * background->GetHistogram()->GetBinWidth(0);
+        y1[i] = background->GetHistogram()->GetBinContent(i);
+        for(const auto&& obj : *(background->GetHists())) { //How you iterate over a TList
+            histLoop = dynamic_cast<TH1*>(obj);
+            errortotal+= pow(histLoop->GetBinError(i), 2);
+        }
+        yerror[i] = pow(errortotal, 0.5);
+        xerror[i] = 0;
+    }
+
+    auto errorgraph = new TGraphErrors(signal->GetNbinsX(), x1, y1, xerror, yerror);
+    TAxis *eaxis = errorgraph->GetXaxis();
+    eaxis->SetLimits(0, signal->GetNbinsX() * signal->GetBinWidth(signal->GetNbinsX()));
+    errorgraph->Draw("P SAME");
+
+    //Draws on bottom pad
+    topPad->Update();
+    topPad->Modified();
+
+    canvas->cd();
+
+    bottomPad->Draw();
+    bottomPad->cd();
+
+
+    double x[signal->GetNbinsX()], y[signal->GetNbinsX()];
+    double highestPoint = 0;
+    double lowestPoint = 0;
+
+    for(int i = 0; i < signal->GetNbinsX(); i++) {
+        double total = 0;
+        x[i] = i * signal->GetBinWidth(0);
+        for(const auto&& obj : *(background->GetHists())) { //How you iterate over a TList
+            histLoop = dynamic_cast<TH1*>(obj);
+            total+= histLoop->GetBinContent(i);
+        }
+        if(total != 0) {
+            y[i] = (signal->GetBinContent(i) - total) / total;
+            if((signal->GetBinContent(i) - total) / total > highestPoint) {
+                highestPoint = (signal->GetBinContent(i) - total) / total;
+            }
+            else if((signal->GetBinContent(i) - total) / total < lowestPoint) {
+                lowestPoint = (signal->GetBinContent(i) - total) / total;
+            }
+        }
+        else {
+            y[i] = 0;
+        }
+    }
+
+    auto graph = new TGraph(signal->GetNbinsX(), x, y);
+    graph->SetTitle(";" + xAxisTitle +";(signal - bkg) / bkg");
+    graph->SetMarkerSize(0.5);
+    graph->SetMarkerStyle(kFullDotLarge);
+    graph->SetMaximum(1.5 * highestPoint);
+    if(lowestPoint != 0) {
+        graph->SetMinimum(1.5 * lowestPoint);
+    }
+    else {
+        graph->SetMinimum(-1);
+    }
+    TAxis *axis = graph->GetXaxis();
+    axis->SetLimits(0, signal->GetNbinsX() * signal->GetBinWidth(signal->GetNbinsX()));
+    graph->Draw("AP");
+
+    bottomPad->Update();
+    bottomPad->Modified();
 
     canvas->Update();
     return canvas;

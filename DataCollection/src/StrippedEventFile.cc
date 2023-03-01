@@ -63,18 +63,9 @@ ParticleCollection<GenSimParticle> StrippedEventFile::getGenSimParticles() const
         {
             continue;
         }
-        int charge = -1;
-        if (genPID[i] < 0)
-        {
-            charge = 1;
-        }
-        if (genPID[i] == 21 || genPID[i] == 22)
-        {
-            charge = 0;
-        }
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(genPt[i],genEta[i], genPhi[i], genMass[i])),
-        charge,Particle::identifyType(genPID[i]),genPID[i],genStatus[i],genM1[i],genM2[i],genD1[i],genD2[i]);
+        genPID[i],genStatus[i],genM1[i],genM2[i],genD1[i],genD2[i]);
         particle.addInfo("Isolation", 0);
         genParticles.addParticle(particle);
     }
@@ -106,7 +97,6 @@ ParticleCollection<Particle> StrippedEventFile::getRecoParticles() const
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elecPt[i],elecEta[i], elecPhi[i], elecMass[i])),
         charge, ParticleType::electron(), fit);
-
         particle.addInfo("Isolation", elecReliso[i]);
         recoParticles.addParticle(particle);
     }
