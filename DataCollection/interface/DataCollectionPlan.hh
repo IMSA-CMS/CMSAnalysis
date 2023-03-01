@@ -14,7 +14,7 @@ class DataCollectionPlan
     public:
         // Runs the eventLoader with the specified parameters. 
         void runEventLoader(const std::string& inputFile, const std::string& outputFile, 
-            int outputEvery = 0, int numFiles = -1);
+            int outputEvery = 0, int numFiles = -1, int maxEvents = -1);
         //void runAnalyzerWrapper(edm::Event event, const std::string& outputFile);
 
         void getOptions(std::shared_ptr<ModuleOptions> options) {moduleOptions = options;};
