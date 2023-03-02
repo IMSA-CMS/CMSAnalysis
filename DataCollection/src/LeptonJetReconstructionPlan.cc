@@ -44,6 +44,7 @@
 #include "CMSAnalysis/DataCollection/interface/LeptonJetSelector.hh"
 #include "CMSAnalysis/DataCollection/interface/EventModule.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimDeltaRHist.hh"
+#include "CMSAnalysis/DataCollection/interface/NLeptonJetsFilter.hh"
 
 using std::make_shared;
 
@@ -92,8 +93,8 @@ void LeptonJetReconstructionPlan::initialize()
   histOutputMod->addHistogram(matchedLeptonJetHist);
   histOutputMod->addHistogram(unmatchedLeptonJetHist);
   histOutputMod->addHistogram(relIsoHist);
-
   histOutputMod->addHistogram(genSimDeltaRHist);
+  eventHistMod->addHistogram(genSimDeltaRHist);
  // histOutputMod->addHistogram(leptonJetMLHist);
 
 //   histOutputMod->addHistogram(matchDeltaRHist);
@@ -105,7 +106,10 @@ void LeptonJetReconstructionPlan::initialize()
   //auto recoEventDumpMod = std::make_shared<RecoEventDumpModule>();
   // auto triggerMod = std::make_shared<TriggerModule>();
 
-  auto nLeptonsFilter = std::make_shared<NLeptonsFilter>(); // Needs to be updated with shared pointers
+  auto nLeptonsFilter = std::make_shared<NLeptonsFilter>(); 
+  auto nLeptonJetsFilter =std::make_shared<NLeptonJetsFilter>();
+
+  // Needs to be updated with shared pointers
 
   auto nLeptonsHist = std::make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
   auto nElectronsHist = std::make_shared<NLeptonsHist>(matchMod, "Matched Electrons", 10, 0, 10, 11);
@@ -152,7 +156,8 @@ void LeptonJetReconstructionPlan::initialize()
   //analyzer.addProductionModule(genSimEventDumpMod);
   //analyzer.addProductionModule(recoEventDumpMod);
   analyzer.addProductionModule(matchMod);
-
+  analyzer.addFilterModule(nLeptonsFilter);
+  analyzer.addFilterModule(nLeptonJetsFilter);
   analyzer.addProductionModule(lepRecoMod);
   // analyzer.addProductionModule(genPartMod);
   analyzer.addProductionModule(lepMatchMod);
