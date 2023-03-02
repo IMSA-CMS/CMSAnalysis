@@ -6,8 +6,18 @@ NLeptonJetsFilter::NLeptonJetsFilter(){};
 
 std::string NLeptonJetsFilter::makeFilterString()
 {
-  int numberOfLeptonJets = getInput()->getJets(InputModule::RecoLevel::GenSim).getNumParticles();
+  int numberOfLeptonJets = getInput()->getJets(InputModule::RecoLevel::Reco).getNumParticles();
   std::cout<< "Number of Jets: " << numberOfLeptonJets;
-
-  return std::to_string(numberOfLeptonJets);
+  std::string returnString;
+  if(numberOfLeptonJets == 0) {
+    returnString = "No Jets";
+  }
+  else if(numberOfLeptonJets > 0){
+    returnString = "Jet Detected";
+  }
+  else {
+    throw std::runtime_error("Negative Jets");
+  }
+ 
+  return returnString;
 };
