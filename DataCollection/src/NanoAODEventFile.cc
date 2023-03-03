@@ -89,10 +89,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_phi", "GenPart_phi"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_mass", "GenPart_mass"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pt", "GenPart_pt"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_d1", "Generator_id1"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_d2", "Generator_id2"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_m1", "GenPart_genPartIdxMother"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_m2", "GenVisTau_genPartIdxMother"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pileup", "Pileup_nTrueInt")
     };
 
@@ -142,16 +139,10 @@ void NanoAODEventFile::nextEvent()
         for (unsigned i = 0; i < getVariable<UInt_t>("gen_size") ; i++)
         {
             std::vector<const GenSimParticle*> daughterCollectionVector{};
-            if (i < getArraySize<Int_t>("gen_d1"))
-            {
-                daughterCollectionVector.push_back(&genSimParticles[getArrayElement<Int_t>("gen_d2", i)]);
-            } 
-            if (i < getArraySize<Int_t>("gen_d2"))
-            {
-                daughterCollectionVector.push_back(&genSimParticles[getArrayElement<Int_t>("gen_d2", i)]);
-            } 
+            
             GenSimParticle *mother = nullptr;
             if(getArrayElement<Int_t>("gen_m1", i) != -1) mother = &genSimParticles[getArrayElement<Int_t>("gen_m1", i)];
+            std::cout << getArrayElement<Float_t>("gen_eta", i) << "\n";
             genSimParticles.push_back(GenSimParticle(reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(
                 getArrayElement<Float_t>("gen_pt", i),getArrayElement<Float_t>("gen_eta", i), 
                 getArrayElement<Float_t>("gen_phi", i), getArrayElement<Float_t>("gen_mass", i))), 
