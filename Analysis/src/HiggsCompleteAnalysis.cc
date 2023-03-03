@@ -13,6 +13,7 @@
 #include <iostream>
 #include <vector>
 #include "TH1.h"
+#include "TList.h"
 
 HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     std::vector<double> massTargets {300, 500, 700, 900, 1100, 1300};
@@ -76,4 +77,42 @@ std::shared_ptr<Channel> HiggsCompleteAnalysis::getChannel(std::string name)
         }
     }
     throw std::runtime_error("Channel of name " + name + " not found.");
+}
+
+TH1* HiggsCompleteAnalysis::getHiggsHist(std::string histType, bool scaleToExpected) const {
+    int maxBinNum = 0;
+	double maxBarWidth = 0.0;
+	int channelNumber = 0;
+    std::string name = "Higgs";
+	for (const auto& channel : channels)
+	{
+		channelNumber++;
+		if (channel->getHists(histType, "data", false).size() == 0) {
+			throw std::runtime_error("Histogram not found in channel: " + channel->getName());
+		}
+		if (channel->getHists(histType, "data", false).at(0)->GetNbinsX() > maxBinNum)
+		{
+			maxBinNum = channel->getHists(histType, "data", false).at(0)->GetNbinsX();
+		}
+		if ((channel->getHists(histType, "data", false).at(0)->GetXaxis()->GetBinWidth(maxBinNum)) > maxBarWidth)
+		{
+			maxBarWidth = (channel->getHists(histType, "data", false).at(0)->GetXaxis()->GetBinWidth(maxBinNum));
+		}
+	}
+	TH1* hist = new TH1F(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * maxBarWidth);
+	std::vector<TH1*> toAdd;
+	TList* toMerge = new TList;
+	for (const auto& channel : channels)	
+	{
+		toAdd = channel->getHists(histType, "data", scaleToExpected);
+		for(auto vechist : toAdd){
+            toMerge->Add(vechist);
+        }
+	}
+	hist->Merge(toMerge);
+	hist->SetLineColor(kBlack);
+	hist->SetFillColor(kBlack);
+	//If you want yield to print while running SuperPlot uncomment the print statement (only prints the yield for the first MassTarget in the process)
+	//std::cout << "Total yield for mass target " << processes.at(0).getMassTarget() << " is " << getYield(processes.at(0).getMassTarget()) << std::endl;
+	return hist;
 }
