@@ -12,7 +12,7 @@
 #include "CMSAnalysis/DataCollection/interface/GammaDeltaRHist2D.hh"
 
 //uncomented
-#include "CMSAnalysis/DataCollection/interface/DeltaRHist.hh" //VIKRAM CHANGED
+#include "CMSAnalysis/DataCollection/interface/DeltaRHist.hh"
 #include "CMSAnalysis/DataCollection/interface/DoubleMuonTrigger.hh"
 #include "CMSAnalysis/DataCollection/interface/EventDumpModule.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimParticleModule.hh"
@@ -107,7 +107,7 @@ void LeptonJetReconstructionPlan::initialize()
   // auto triggerMod = std::make_shared<TriggerModule>();
 
   auto nLeptonsFilter = std::make_shared<NLeptonsFilter>(); 
-  auto nLeptonJetsFilter =std::make_shared<NLeptonJetsFilter>();
+  auto nLeptonJetsFilter =std::make_shared<NLeptonJetsFilter>(lepRecoMod);
 
   // Needs to be updated with shared pointers
 
@@ -156,12 +156,14 @@ void LeptonJetReconstructionPlan::initialize()
   //analyzer.addProductionModule(genSimEventDumpMod);
   //analyzer.addProductionModule(recoEventDumpMod);
   analyzer.addProductionModule(matchMod);
-  analyzer.addFilterModule(nLeptonsFilter);
-  analyzer.addFilterModule(nLeptonJetsFilter);cd
+  
+  //analyzer.addFilterModule(nLeptonsFilter);
+  
+  analyzer.addFilterModule(nLeptonJetsFilter);
   analyzer.addProductionModule(lepRecoMod);
   // analyzer.addProductionModule(genPartMod);
   analyzer.addProductionModule(lepMatchMod);
-
+  
   analyzer.addAnalysisModule(histOutputMod);
   analyzer.addAnalysisModule(eventHistMod);
   // analyzer.addProductionModule(triggerMod);
@@ -178,3 +180,4 @@ void LeptonJetReconstructionPlan::initialize()
   analyzer.getInputModule()->setLeptonSelector(selector);
   */ 
 }
+
