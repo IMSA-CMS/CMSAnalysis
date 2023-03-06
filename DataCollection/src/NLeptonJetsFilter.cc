@@ -2,18 +2,23 @@
 #include "CMSAnalysis/DataCollection/interface/Selector.hh"
 #include<iostream>
 
-NLeptonJetsFilter::NLeptonJetsFilter(){};
+NLeptonJetsFilter::NLeptonJetsFilter(std::shared_ptr<LeptonJetReconstructionModule> lepJetModule) : 
+  leptonJets(lepJetModule)
+{};
 
 std::string NLeptonJetsFilter::makeFilterString()
 {
-  int numberOfLeptonJets = getInput()->getJets(InputModule::RecoLevel::Reco).getNumParticles();
-  std::cout<< "Number of Jets: " << numberOfLeptonJets;
-  std::string returnString;
+  std::vector<LeptonJet> leptonJetsVector = leptonJets->getLeptonJets();
+  int numberOfLeptonJets = leptonJetsVector.size();
+  std::string returnString; 
   if(numberOfLeptonJets == 0) {
-    returnString = "No Jets";
+    returnString = "No Jets ";
+    std::cout<< "No Jets \n";
   }
   else if(numberOfLeptonJets > 0){
-    returnString = "Jet Detected";
+    returnString = "Jet Detected ";
+    std::cout<< "Jets Detected \n";
+
   }
   else {
     throw std::runtime_error("Negative Jets");
@@ -21,3 +26,5 @@ std::string NLeptonJetsFilter::makeFilterString()
  
   return returnString;
 };
+//look at lepton jet matching module
+//get number of jets from lepton jet reconstruction modeule
