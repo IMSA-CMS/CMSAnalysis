@@ -35,6 +35,10 @@ int GenSimParticle::status() const
 GenSimParticle GenSimParticle::mother() const
 {
   checkIsNull();
+  if (!hasMother())
+  {
+    throw std::runtime_error("GenSimParticle::mother() | This particle has no mother! :(\n");
+  }
   //mother of particle is often not electron/muon
   return GenSimParticle(getParticle()->mother());
 }
@@ -56,7 +60,7 @@ bool GenSimParticle::isFinalState() const
 {
   return getParticle()->isFinalState();
 }
-bool GenSimParticle::hasMother()
+bool GenSimParticle::hasMother() const
 {
   return getParticle()->doesHaveMother();
 }
