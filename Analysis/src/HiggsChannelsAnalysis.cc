@@ -32,7 +32,7 @@ HiggsChannelsAnalysis::HiggsChannelsAnalysis() {
             histVariables.push_back(HistVariable::SameSignMass(name + "Reco Same Sign Invariant Mass"));
             double luminosity = 3000;
             auto higgsSignal = std::make_shared<Process>("Higgs Signal", 2);
-            higgsSignal->addProcess(makeSignalProcess(histVariables, filePath, "Hist_DoublyChargedHiggs.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
+            //higgsSignal->addProcess(makeSignalProcess(histVariables, filePath, "Hist_DoublyChargedHiggs.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
             std::vector<std::shared_ptr<Process>> backgroundProcesses = { higgsSignal };
             auto leptonBackgrounds = std::make_shared<Channel>(name + std::to_string((int) massTarget), backgroundProcesses);
             channels.push_back(leptonBackgrounds);
