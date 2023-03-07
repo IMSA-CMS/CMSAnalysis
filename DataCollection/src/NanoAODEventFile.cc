@@ -92,10 +92,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_phi", "GenPart_phi"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_mass", "GenPart_mass"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pt", "GenPart_pt"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_d1", "Generator_id1"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_d2", "Generator_id2"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_m1", "GenPart_genPartIdxMother"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_m2", "GenVisTau_genPartIdxMother"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pileup", "Pileup_nTrueInt")
     };
 
@@ -144,17 +141,25 @@ void NanoAODEventFile::nextEvent()
         genSimParticles.clear();
         genSimParticles.reserve(getVariable<UInt_t>("gen_size") );
 
+        //construct daughters from mothers
+        int mothersIndex;
+        std::vector<std::vector<Int_t>> daughtersVectors((int)getVariable<UInt_t>("gen_size"), std::vector<int>(0));
+        
+        for (unsigned j = 0; j < getVariable<UInt_t>("gen_size"); j++)
+        {
+            mothersIndex = getArrayElement<Int_t>("gen_m1", j);
+            if (mothersIndex < (int)getVariable<UInt_t>("gen_size") && mothersIndex > -1)
+            {
+                daughtersVectors[mothersIndex].push_back(j);
+            }
+        }
         for (unsigned i = 0; i < getVariable<UInt_t>("gen_size") ; i++)
         {
             std::vector<const GenSimParticle*> daughterCollectionVector{};
-            if (i < getArraySize<Int_t>("gen_d1"))
+            for (auto index : daughtersVectors[i])
             {
-                daughterCollectionVector.push_back(&genSimParticles[getArrayElement<Int_t>("gen_d2", i)]);
-            } 
-            if (i < getArraySize<Int_t>("gen_d2"))
-            {
-                daughterCollectionVector.push_back(&genSimParticles[getArrayElement<Int_t>("gen_d2", i)]);
-            } 
+                daughterCollectionVector.push_back(&genSimParticles[index]);
+            }
             GenSimParticle *mother = nullptr;
             if(getArrayElement<Int_t>("gen_m1", i) != -1) mother = &genSimParticles[getArrayElement<Int_t>("gen_m1", i)];
             genSimParticles.push_back(GenSimParticle(reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(
