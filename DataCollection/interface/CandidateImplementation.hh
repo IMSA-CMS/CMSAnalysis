@@ -28,7 +28,7 @@ public:
   //virtual double isolation() const override;
   virtual Particle mother() const override;
   virtual Particle daughter(int i) const override;
-  virtual bool doesHaveMother() override {return true;}
+  virtual bool doesHaveMother() const override {return true;}
   virtual int numberOfDaughters() const override;
   virtual bool isNotNull() const override {return particle;}
   virtual const ParticleType& getType() const override;

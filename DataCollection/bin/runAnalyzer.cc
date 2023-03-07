@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <filesystem>
+#include <chrono>
 
 #include "TROOT.h"
 #include "TSystem.h"
@@ -29,6 +30,8 @@
 
 int main(int argc, char **argv)
 {
+  auto start = std::chrono::steady_clock::now();
+
   gROOT->SetBatch(true);
   gSystem->Load("libFWCoreFWLite");
   FWLiteEnabler::enable();
@@ -67,6 +70,8 @@ int main(int argc, char **argv)
 
   unsigned outputEvery = parser.integerValue("outputEvery");
 
+  unsigned maxEvents = parser.integerValue("maxEvents");
+
   //   Selection of data collection plan has moved to command line argument "analysis"
   //   The key for each Plan can now be found in AnalyzerOptions.cc
 
@@ -88,7 +93,7 @@ int main(int argc, char **argv)
   }
 
   plan->initialize();
-  plan->runEventLoader(inputFile, outputFile, outputEvery, numFiles);
+  plan->runEventLoader(inputFile, outputFile, outputEvery, numFiles, maxEvents);
 
   // HiggsBackgroundPlan plan;
   // plan.runAnalyzer(inputFile, outputFile, outputEvery, numFiles);
@@ -96,5 +101,10 @@ int main(int argc, char **argv)
   std::cout << "Processing complete!" << std::endl;
   std::cout << "Output written to " << outputFile << std::endl;
 
+  auto end = std::chrono::steady_clock::now();
+
+  std::chrono::duration<double> processingTime = end - start;
+
+  std::cout<<"Processing time: "<<processingTime.count()<<"s"<<std::endl;
   return 0;
 }

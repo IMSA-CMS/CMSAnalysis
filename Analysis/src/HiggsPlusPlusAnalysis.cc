@@ -12,10 +12,12 @@
 #include <memory>	
 #include <iostream>
 #include <vector>
+#include "TH1.h"
 
 HiggsPlusPlusAnalysis::HiggsPlusPlusAnalysis() {
     std::vector<double> massTargets {300, 500, 700, 900, 1100, 1300, 1500, 1700};
     std::vector<std::string> names = {"Muon", "Electron"};
+    TH1::SetDefaultSumw2();
     for(std::string name : names) {
         for(double massTarget : massTargets) {
             std::vector<HistVariable> histVariables;
@@ -26,15 +28,15 @@ HiggsPlusPlusAnalysis::HiggsPlusPlusAnalysis() {
             const std::string filePath = "/uscms/home/aytang/RecoWidth/CMSSW_11_0_2/src/CMSAnalysis/DataCollection/bin/";
             //Add your hists here
             histVariables.push_back(HistVariable::InvariantMass("Cut4" + name + name + " Reco Invariant Mass Background"));
-	    histVariables.push_back(HistVariable::SameSignMass("Cut4" + name + name + " Reco Same Sign Invariant Mass"));
-	    histVariables.push_back(HistVariable::Pt("Cut4Leading lepton pT"));
-	    histVariables.push_back(HistVariable::MET("Cut4MET"));
-	    fitHistVariables.push_back(HistVariable::InvariantMass("Cut4Reco Invariant Mass Background"));
-	    fitHistVariables.push_back(HistVariable::SameSignMass("Cut4Reco Same Sign Invariant Mass"));
-	    fitHistVariables.push_back(HistVariable::Pt("Cut4Leading lepton pT"));
-	    fitHistVariables.push_back(HistVariable::MET("Cut4MET"));
+	        histVariables.push_back(HistVariable::SameSignMass("Cut4" + name + name + " Reco Same Sign Invariant Mass"));
+	        histVariables.push_back(HistVariable::Pt("Cut4Leading lepton pT"));
+	        histVariables.push_back(HistVariable::MET("Cut4MET"));
+	        fitHistVariables.push_back(HistVariable::InvariantMass("Cut4Reco Invariant Mass Background"));
+	        fitHistVariables.push_back(HistVariable::SameSignMass("Cut4Reco Same Sign Invariant Mass"));
+	        fitHistVariables.push_back(HistVariable::Pt("Cut4Leading lepton pT"));
+	        fitHistVariables.push_back(HistVariable::MET("Cut4MET"));
             double luminosity = 3000;
-            auto ttbarBackground = std::make_shared<Process>("TTBar Background", 1);
+            auto ttbarBackground = std::make_shared<Process>("TTBar Background", 2);
             ttbarBackground->addProcess(makeSingleProcess(histVariables, fitHistVariables, filePath, "BackgroundRunCuts/TTBarPick500.root", "/30SelectBackgroundRuns/TTBar.root", "ttbar_lep", reader, massTarget, luminosity));
             auto zzBackground = std::make_shared<Process>("ZZ Background", 5);
             zzBackground->addProcess(makeSingleProcess(histVariables, fitHistVariables, filePath, "BackgroundRunCuts/ZZPick4.root", "30SelectBackgroundRuns/ZZ.root", "zz4l", reader, massTarget, luminosity));
@@ -47,7 +49,7 @@ HiggsPlusPlusAnalysis::HiggsPlusPlusAnalysis() {
             qcdBackground->addProcess(makeSingleProcess(histVariables, fitHistVariables, filePath, "BackgroundRunCuts/QCD1000.root", "30SelectBackgroundRuns/QCD1000.root", "qcd1000to1500", reader, massTarget, luminosity));
             qcdBackground->addProcess(makeSingleProcess(histVariables, fitHistVariables, filePath, "BackgroundRunCuts/QCD1500.root", "30SelectBackgroundRuns/QCD1500.root", "qcd1500to2000", reader, massTarget, luminosity));
             qcdBackground->addProcess(makeSingleProcess(histVariables, fitHistVariables, filePath, "BackgroundRunCuts/QCD2000.root", "30SelectBackgroundRuns/QCD2000.root", "qcd2000toinf", reader, massTarget, luminosity));
-            auto higgsSignal = std::make_shared<Process>("Higgs Signal", 2);
+            auto higgsSignal = std::make_shared<Process>("Higgs Signal", 1);
             higgsSignal->addProcess(makeSignalProcess(histVariables, filePath, "HiggsRunCuts/Higgs" + std::to_string((int) massTarget) + ".root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
             std::vector<std::shared_ptr<Process>> backgroundProcesses = { ttbarBackground, zzBackground, dyBackground, qcdBackground, higgsSignal };
             auto leptonBackgrounds = std::make_shared<Channel>(name + std::to_string((int) massTarget), backgroundProcesses);
