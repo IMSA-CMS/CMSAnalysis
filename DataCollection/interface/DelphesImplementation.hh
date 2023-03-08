@@ -19,7 +19,7 @@ class DelphesImplementation : public ParticleImplementation
         virtual int status() const override{return statusCode;}
         virtual Particle mother() const override{throw std::runtime_error("mother() error");}
         virtual Particle daughter(int i) const override{throw std::runtime_error("daughter() error");}
-        virtual bool doesHaveMother() override {throw std::runtime_error("not implemented error");}
+        virtual bool doesHaveMother() const override {throw std::runtime_error("not implemented error");}
         virtual std::vector<int> mothers() const{return mothersVec;}
         virtual std::vector<int> daughters() const{return daughtersVec;}
         virtual int numberOfDaughters() const override{return daughtersVec.size();}

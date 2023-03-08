@@ -2,3 +2,5724 @@ Reading input file textfiles/darkPhotonsRun2.txt
 DarkPhotonSUSY
 Filename: textfiles/DarkPhotonSUSY/DarkPhotonSUSY_Mass_0_3_Run_2.txt
 # of root files: 99
+No Jets 
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Jets Detected 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+No Jets 
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+ParticleType: Dark Photon
+Daughters: 0
+Lepton Jets Found: 278
+Number of Dark Photons: 749
+Lepton Jet Matching Efficiency: 0.329773
+Leptons From Quarks 0
+Leptons From Dark Photons 0
+Leptons From Squarks 0
+Leptons From Protons 0
+Jet Detected  : 240
+No Jets  : 245
+Processing complete!
+Output written to test.root
+Processing time: 3.43678s

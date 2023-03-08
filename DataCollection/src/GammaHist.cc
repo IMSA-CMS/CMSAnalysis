@@ -13,7 +13,7 @@ GammaHist::GammaHist(std::shared_ptr<LeptonJetReconstructionModule> iLeptonJetRe
 
 std::vector<double> GammaHist::value() const
 {
-  const std::vector<LeptonJet>& LeptonJets = leptonJetRecoModule->getLeptonJets();
+  const std::vector<LeptonJet> LeptonJets = leptonJetRecoModule->getLeptonJets();
 
   std::vector<double> gamma_leptonJets; 
 
