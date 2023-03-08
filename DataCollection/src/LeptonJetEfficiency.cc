@@ -29,6 +29,15 @@ void LeptonJetEfficiency::doCounters()
         incrementCounter("Double Jet Events", 1);
     }
     
+    for(int i = 0; i <= recoLeptonJets.size(); ++i)
+    {
+         if (recoLeptonJets[1] == 1)
+    {
+        incrementCounter("Single Jet Events", 1);
+    }
+
+    }
+
     auto matchingPairs = lepMatchMod->getMatchingPairs();
     incrementCounter("Number of matched jets", matchingPairs.size());
 
