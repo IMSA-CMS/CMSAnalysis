@@ -17,25 +17,25 @@ bool LeptonEfficiency::process()
 {
   auto genSim = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
   if(getInput()){
-    std::cout << "Pointer is full\n";
+    //std::cout << "Pointer is full\n"; ##I Commented This##
   }
   
 
   for(const auto &particle : genSim.getParticles())
   {
-    std::cout << "LeptonEfficiency22";
+    //std::cout << "LeptonEfficiency22";
 
     auto type = particle.getType();
     if(type == ParticleType::electron())
 	  {
 	    genSimElectrons++;
-      std::cout << "LeptonEfficiency28";
+      //std::cout << "LeptonEfficiency28";
 
 	  }
     else if(type == ParticleType::muon())
 	  {
 	    genSimMuons++;
-      std::cout << "LeptonEfficiency34";
+      //std::cout << "LeptonEfficiency34";
 	  }
   }
 
