@@ -12,8 +12,6 @@
 #include <fstream>
 #include <string>
 
-using namespace std;
-
 std::vector<bool> NanoAODEventFile::getTriggerResults(std::string subProcess) const
 {
     // determines whether it passes the trigger"s criteria or not
@@ -21,6 +19,7 @@ std::vector<bool> NanoAODEventFile::getTriggerResults(std::string subProcess) co
 
     for(auto& trigger : triggers)
     {
+        // std::cout << "Is this for loop working" << "\n";
         v_results.push_back(*(trigger.second));
     }
 
@@ -41,6 +40,8 @@ std::vector<std::string> NanoAODEventFile::getTriggerNames(std::string subProces
 
 bool NanoAODEventFile::checkTrigger(std::string triggerName, std::string subProcess) const
 {
+    // add cout statement to check, it in fact does pass through this code
+    // std::cout << "Does this Trigger work?" << "\n";
     return *(triggers.find(triggerName)->second);
 }
 
@@ -110,16 +111,18 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     //initializing triggers from header file
     std::ifstream triggerNameFile("betterValidTriggers.txt");
 
-    if(!triggerNameFile)
+    if(triggerNameFile)
     {
         std::string nameoftrigger;
 
         while(getline(triggerNameFile, nameoftrigger))
         {
+            std::cout << nameoftrigger << "Does this work?" << "\n";
             if(tree->GetBranch(nameoftrigger.c_str()))
             {
                 TTreeReaderValue<Bool_t> intermediate(treeReader, nameoftrigger.c_str());
                 triggers.emplace(nameoftrigger, intermediate);
+                std::cout << nameoftrigger <<"\n";
             }
         }
     }    
@@ -129,22 +132,36 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
 }
 
 void NanoAODEventFile::nextEvent()
-{
+{ 
     treeReader.Next(); 
     setEventCount(getEventCount() + 1);
 
-    if(getVariable<UInt_t>("gen_size") > 0)
+    if(variables.find("gen_size") != variables.end() && getVariable<UInt_t>("gen_size") > 0)
     {
         genSimParticles.clear();
         genSimParticles.reserve(getVariable<UInt_t>("gen_size") );
 
+        //construct daughters from mothers
+        int mothersIndex;
+        std::vector<std::vector<Int_t>> daughtersVectors((int)getVariable<UInt_t>("gen_size"), std::vector<int>(0));
+        
+        for (unsigned j = 0; j < getVariable<UInt_t>("gen_size"); j++)
+        {
+            mothersIndex = getArrayElement<Int_t>("gen_m1", j);
+            if (mothersIndex < (int)getVariable<UInt_t>("gen_size") && mothersIndex > -1)
+            {
+                daughtersVectors[mothersIndex].push_back(j);
+            }
+        }
         for (unsigned i = 0; i < getVariable<UInt_t>("gen_size") ; i++)
         {
             std::vector<const GenSimParticle*> daughterCollectionVector{};
-            
+            for (auto index : daughtersVectors[i])
+            {
+                daughterCollectionVector.push_back(&genSimParticles[index]);
+            }
             GenSimParticle *mother = nullptr;
             if(getArrayElement<Int_t>("gen_m1", i) != -1) mother = &genSimParticles[getArrayElement<Int_t>("gen_m1", i)];
-            std::cout << getArrayElement<Float_t>("gen_eta", i) << "\n";
             genSimParticles.push_back(GenSimParticle(reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(
                 getArrayElement<Float_t>("gen_pt", i),getArrayElement<Float_t>("gen_eta", i), 
                 getArrayElement<Float_t>("gen_phi", i), getArrayElement<Float_t>("gen_mass", i))), 
@@ -260,4 +277,4 @@ int NanoAODEventFile::getNumPileUpInteractions() const
 bool NanoAODEventFile::isDone() const
 {
     return getEventCount() > tree->GetEntries();
-}
+} 
