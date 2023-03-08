@@ -52,11 +52,11 @@ void LeptonJetReconstructionPlan::initialize()
   //eventMod->addSelector(std::make_shared<LeptonJetSelector>());	
 
   auto matchMod = std::make_shared<MatchingModule>();
-  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
+  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(1);
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
   auto eventDumpMod = std::make_shared<EventDumpModule>(true,true);
   auto lepMatchMod =
-      std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.5);
+      std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 64/64.0);
   auto histOutputMod = std::make_shared<HistogramOutputModule>();
   //auto mlMod = std::make_shared<LeptonJetMLCalculator>();
 
