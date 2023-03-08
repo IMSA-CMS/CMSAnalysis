@@ -621,6 +621,15 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
 				{
 					if((recoPart.getPt() - genPart.getPt())/genPart.getPt() < 0.25 && genPart.getCharge() == recoPart.getCharge())
 					{
+						if (!GenSimParticle(genPart).hasMother())
+						{
+							continue;
+						}
+						if (!GenSimParticle(genPart).mother().hasMother())
+						{
+							continue;
+						}
+
 						if (GenSimParticle(genPart).mother().mother().getType() == ParticleType::electron())
 						{
 							fromElec++;
@@ -629,6 +638,7 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
 						{
 							fromQuark++;
 						}
+						
 					}					
 				}
 			}
