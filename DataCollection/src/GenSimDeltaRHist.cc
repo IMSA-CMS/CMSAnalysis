@@ -22,6 +22,9 @@ std::vector<double> GenSimDeltaRHist::value() const
   //particles = GetInput() from input module?
   //not in particle.cc, just pdgid == 4900022 for identifying dark photons
   auto particles = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::darkPhoton());
+  //
+  // particles is an empty vector,
+  //std::cout<<particles[0];
   //only getting dark photons breaks
   //, ParticleType::darkPhoton()
 
@@ -42,7 +45,7 @@ std::vector<double> GenSimDeltaRHist::value() const
 
   for (GenSimParticle particle : particles.getParticles()) 
   { 
-    // std::cout << "Particle/n ";
+    
     // if (particle.getType() == Particle::Type::DarkPhoton)
     // {
     // }
@@ -68,7 +71,7 @@ std::vector<double> GenSimDeltaRHist::value() const
       }
     }
 
-  // std::cout << leptons.size();
+   //std::cout << leptons.size();
 
     if (leptons.size() >= 2)
     {
