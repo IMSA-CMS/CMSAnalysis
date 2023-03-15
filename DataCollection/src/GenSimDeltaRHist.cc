@@ -34,8 +34,9 @@ std::vector<double> GenSimDeltaRHist::value() const
   // }
   std::vector<double> deltaRVector{};
 
-  for (GenSimParticle particle : particles.getParticles()) 
+  for (auto iparticle : particles.getParticles()) 
   { 
+    GenSimParticle particle(iparticle);
     // std::cout << "Particle/n ";
     // if (particle.getType() == Particle::Type::DarkPhoton)
     // {

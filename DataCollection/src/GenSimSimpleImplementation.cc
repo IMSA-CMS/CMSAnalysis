@@ -5,12 +5,13 @@
 #include "DataFormats/PatCandidates/interface/Photon.h"
 #include "CMSAnalysis/DataCollection/interface/GenSimParticle.hh"
 
-GenSimSimpleImplementation::GenSimSimpleImplementation(reco::Candidate::LorentzVector vec, int ch, const ParticleType& type, int ipdgId, const Particle* imotherParticle, std::vector<const GenSimParticle*> daughters, const int status):
+GenSimSimpleImplementation::GenSimSimpleImplementation(reco::Candidate::LorentzVector vec, int ch, const ParticleType& type, int ipdgId, const Particle* imotherParticle, std::vector<const GenSimParticle*> idaughters, const int status):
 lorentzVec(vec), 
 particleCharge(ch),
 particleType(type),
 currentPdgId(ipdgId),
 motherParticle(imotherParticle),
+daughters(idaughters),
 particleStatus(status)
 {
 

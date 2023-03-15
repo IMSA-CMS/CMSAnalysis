@@ -156,36 +156,19 @@ void NanoAODEventFile::nextEvent()
         for (unsigned i = 0; i < getVariable<UInt_t>("gen_size") ; i++)
         {
             std::vector<const GenSimParticle*> daughterCollectionVector{};
-            std::cout << "size of daughters vector: " << daughtersVectors[i].size() << "\n";
-            std::cout << "size of genSimParticles vector: " << genSimParticles.size() << "\n";
-
             for (auto index : daughtersVectors[i])
             {
-                //std::cout << "index: " << index << "\n";
-                //std::cout << "i: " << index << "\n"; 
-                //std::cout << "particle: " << genSimParticles[index] << "\n";
                 daughterCollectionVector.push_back(&genSimParticles[index]);
-                std::cout << "1st: " << &genSimParticles[index] << "\n";
-                std::cout << daughterCollectionVector[0] << "\n";
-
             }
             GenSimParticle *mother = nullptr;
             if(getArrayElement<Int_t>("gen_m1", i) != -1) mother = &genSimParticles[getArrayElement<Int_t>("gen_m1", i)];
-            genSimParticles.emplace_back(GenSimParticle(reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(
+            genSimParticles.push_back(GenSimParticle(reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(
                 getArrayElement<Float_t>("gen_pt", i),getArrayElement<Float_t>("gen_eta", i), 
                 getArrayElement<Float_t>("gen_phi", i), getArrayElement<Float_t>("gen_mass", i))), 
                 getArrayElement<Int_t>("gen_pid", i),
                 mother,
                 daughterCollectionVector, 
                 getArrayElement<Int_t>("gen_status", i)));
-            
-            std::cout << "2nd" << &genSimParticles[2] <<'\n';
-            //std::cout << "particle (i): " << genSimParticles[i] << "\n";
-            if (daughterCollectionVector.size() > 0)
-            {
-                std::cout << "daughterCollectionVector: " << daughterCollectionVector[0] << "\n"; 
-                std::cout << "daughterCollectionVector dereferenced: " << *daughterCollectionVector[0] << "\n"; 
-            } 
         }
     }
 }
@@ -294,4 +277,4 @@ int NanoAODEventFile::getNumPileUpInteractions() const
 bool NanoAODEventFile::isDone() const
 {
     return getEventCount() > tree->GetEntries();
-} 
+}
