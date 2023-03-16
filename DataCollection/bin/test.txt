@@ -11,4 +11,4 @@ Leptons From Squarks 0
 Leptons From Protons 0
 Processing complete!
 Output written to test.root
-Processing time: 3.45031s
+Processing time: 3.73785s
