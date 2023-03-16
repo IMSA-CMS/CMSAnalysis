@@ -6,8 +6,6 @@
 #include "CMSAnalysis/DataCollection/interface/GenSimSimpleImplementation.hh"
 #include <iostream>
 
-using namespace std;
-
 GenSimDeltaRHist::GenSimDeltaRHist(const std::string& iname, int iNBins, double iminimum, double imaximum):
  HistogramPrototype1D(iname, iNBins, iminimum, imaximum)
 {
@@ -16,6 +14,7 @@ GenSimDeltaRHist::GenSimDeltaRHist(const std::string& iname, int iNBins, double 
 
 std::vector<double> GenSimDeltaRHist::value() const
 {
+
   //call getparticles or getInput getparticles in input module level-gensim, particle type called darkphoton in particle class
   //particles = GetInput() from input module?
   //not in particle.cc, just pdgid == 4900022 for identifying dark photons
@@ -61,7 +60,6 @@ std::vector<double> GenSimDeltaRHist::value() const
     //std::cout<<"Daughters: " << particle.numberOfDaughters() << "\n";
 
     for (int j = 0; j < particle.numberOfDaughters(); ++j)
-    
     {
       auto leptonCandidate = particle.daughter(j);
       if (leptonCandidate.getType() == ParticleType::muon())
@@ -80,5 +78,6 @@ std::vector<double> GenSimDeltaRHist::value() const
       deltaRVector.push_back(deltaR);
     }
   }
+  
   return deltaRVector;
 }

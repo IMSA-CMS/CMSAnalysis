@@ -12,8 +12,6 @@
 #include <fstream>
 #include <string>
 
-using namespace std;
-
 std::vector<bool> NanoAODEventFile::getTriggerResults(std::string subProcess) const
 {
     // determines whether it passes the trigger"s criteria or not
