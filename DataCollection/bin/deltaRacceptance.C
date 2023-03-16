@@ -14,7 +14,7 @@
 using std::string;
 
 TH1* getHist(string name, TFile* file);
-void process(TH1* hist, std::string canvasName, std::string xaxis, std::string yaxis);
+void process(TH1* hist, std::string canvasName, std::string xaxis, std::string yaxis, std::string title);
 
 void deltaRacceptance()
 {
@@ -22,6 +22,7 @@ void deltaRacceptance()
     
     string filteredHist = "Gen Sim Delta R (Reconstructed Jets)";
     string allHist = "Gen Sim Delta R";
+    string title = "Delta R Acceptance";
     
     auto filteredPlot = getHist(filteredHist.c_str(), dRHists);
     auto allPlot =  getHist(allHist.c_str(), dRHists);
@@ -31,7 +32,7 @@ void deltaRacceptance()
     string canvasName = "Delta R Acceptance";
     string xaxis = "Delta R";
     string yaxis = "Percentage of Events Accepted";
-    process(acceptedHist, canvasName, xaxis, yaxis);
+    process(acceptedHist, canvasName, xaxis, yaxis, title);
 }
 
 
@@ -43,12 +44,13 @@ TH1* getHist(std::string name, TFile* file)
     return hist;
 }
 
-void process(TH1* hist, std::string canvasName, std::string xaxis, std::string yaxis){
+void process(TH1* hist, std::string canvasName, std::string xaxis, std::string yaxis, std::string title){
     TFile* refinedOutput = TFile::Open("deltaRacceptance.root", "UPDATE");
     TCanvas* c = new TCanvas(canvasName.c_str(), canvasName.c_str());
     hist->SetStats(kFALSE);
     hist->GetXaxis()->SetTitle(xaxis.c_str());
     hist->GetYaxis()->SetTitle(yaxis.c_str());
+    hist->SetTitle(title.c_str());
     hist->Write();
     hist->Draw();
     c->Update();
