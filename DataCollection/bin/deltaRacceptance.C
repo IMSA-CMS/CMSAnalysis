@@ -1,63 +1,3 @@
-/*#include "TROOT.h"
-#include "TFile.h"
-#include "TTree.h"
-#include "TBrowser.h"
-#include "TH1.h"
-#include "TH2.h"
-#include "TF1.h"
-#include <iostream>
-#include <string>
-#include "TCanvas.h"
-#include "TPaveStats.h"
-#include "TStyle.h"
-#include "TLegend.h"
-#include "TLatex.h"
-#include "TRandom.h"
-
-void deltaRacceptance()
-{
-  TFile* genSimdeltaRaccepted = TFile::Open("test.root");
-  TFile* allGenSimdeltaR = TFile::Open("test.root");
-  
-  TCanvas* histogramCanvas = new TCanvas("c", "Delta R Acceptance");
-  //histogramCanvas->cd();
-
-
-  //get the histograms from the root file
-  TH1* alldeltaRHist=dynamic_cast<TH1*>(allGenSimdeltaR->Get("Gen Sim Delta R")); 
-  TH1* deltaRfilteredHist=dynamic_cast<TH1*>(genSimdeltaRaccepted->Get("Gen Sim Delta R (W/ Reconstructed Jets)")); 
-  
-  // scale the pass trigger histogram 
-  
-  //std::cerr << " Accpetence Ratio: " << (deltaRfilteredHist->GetEntries() / alldeltaRHist->GetEntries() ) << std::endl;
-
-  //passTriggerHist->Scale((allEventsHist->GetEntries()) / (allEventsHist->Integral()*passTriggerHist->GetEntries())); 
-  //passTriggerHist->Scale((passTriggerHist->GetEntries()*allEventsHist->Integral()) / (passTriggerHist->Integral()*allEventsHist->GetEntries())); //makes ratios match, doesn't fix hists
-
-  //std::cerr << "(AFTER SCALING) Ratio of Integrals: " << (passTriggerHist->Integral() / allEventsHist->Integral() ) << std::endl;
-  //std::cerr << "(AFTER SCALING) Ratio of Number of Entries: " << (passTriggerHist->GetEntries() / allEventsHist->GetEntries() ) << std::endl;
-
-  //divide histograms
-  //TH1 *triggerEfficiencyHist = (TH1*)passTriggerHist->Clone("triggerEfficiencyHist");
-  //triggerEfficiencyHist->Divide(passTriggerHist, allEventsHist);
-
-  
-  deltaRfilteredHist->Divide(alldeltaRHist);
-  
-  deltaRfilteredHist->GetXaxis()->SetTitle("Delta R");
-  deltaRfilteredHist->GetYaxis()->SetTitle("Percentage of Events Accepted");
-  deltaRfilteredHist->SetTitle("Delta R Acceptance");
-  deltaRfilteredHist->Draw();
-}*/
-
-
-
-
-
-
-
-
-
 #include <algorithm>
 #include "TROOT.h"
 #include "TFile.h"
@@ -80,7 +20,7 @@ void deltaRacceptance()
 {
     TFile* dRHists = TFile::Open("test.root");
     
-    string filteredHist = "Gen Sim Delta R (W/ Reconstructed Jets)";
+    string filteredHist = "Gen Sim Delta R (Reconstructed Jets)";
     string allHist = "Gen Sim Delta R";
     
     auto filteredPlot = getHist(filteredHist.c_str(), dRHists);
