@@ -13,11 +13,11 @@ std::string NLeptonJetsFilter::makeFilterString()
   std::string returnString; 
   if(numberOfLeptonJets == 0) {
     returnString = "No Jets ";
-    std::cout<< "No Jets \n";
+    //std::cout<< "No Jets \n";
   }
   else if(numberOfLeptonJets > 0){
     returnString = "Jet Detected ";
-    std::cout<< "Jets Detected \n";
+    //std::cout<< "Jets Detected \n";
 
   }
   else {
