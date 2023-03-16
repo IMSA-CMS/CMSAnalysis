@@ -161,7 +161,7 @@ void NanoAODEventFile::nextEvent()
             std::vector<const GenSimParticle*> daughterCollectionVector{};
             for (auto index : daughtersVectors[i]) //for every particle, go throught its daughters and add add its index in genSimp ro daughter collection vector
             {
-                std::cout<< "index: " << index << "\n";
+                //std::cout<< "index: " << index << "\n";
                 //std::cout<< "size: " <<daughtersVectors[i].size() << "\n";
 
                 daughterCollectionVector.push_back(&genSimParticles[index]); //probably something wrong here
@@ -187,10 +187,10 @@ void NanoAODEventFile::nextEvent()
             
             
             if(daughterCollectionVector.size() > 0) {
-                std::cout<< "GenSimParticle " << &genSimParticles[daughtersVectors[i][0]] << "\n";
-                std::cout<< "Daughter zero: " << daughterCollectionVector[0] << "\n";
+                //std::cout<< "GenSimParticle " << &genSimParticles[daughtersVectors[i][0]] << "\n";
+                //std::cout<< "Daughter zero: " << daughterCollectionVector[0] << "\n";
                 if(&genSimParticles[daughtersVectors[i][0]] != daughterCollectionVector[0]) {
-                    std::cout << "ERROR!" << "\n";
+                    //std::cout << "ERROR!" << "\n";
                 }
 
                 //std::cout<< "Daughter: " << daughterCollectionVector[0]->getName(); //segfaulted
