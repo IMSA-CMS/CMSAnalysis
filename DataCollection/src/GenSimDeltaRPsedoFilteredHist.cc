@@ -1,20 +1,26 @@
-#include "CMSAnalysis/DataCollection/interface/GenSimDeltaRHist.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimDeltaRPsedoFilteredHist.hh"
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimParticle.hh"
 #include "DataFormats/Math/interface/deltaR.h"
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimSimpleImplementation.hh"
+#include "CMSAnalysis/DataCollection/interface/LeptonJetReconstructionModule.hh"
+
+
+
 #include <iostream>
 
 using namespace std;
 
-GenSimDeltaRHist::GenSimDeltaRHist(const std::string& iname, int iNBins, double iminimum, double imaximum):
- HistogramPrototype1D(iname, iNBins, iminimum, imaximum)
+GenSimDeltaRPsedoFilteredHist::GenSimDeltaRPsedoFilteredHist(const std::string& iname, int iNBins, double iminimum, double imaximum, std::shared_ptr<LeptonJetReconstructionModule> lepJetModule):
+ HistogramPrototype1D(iname, iNBins, iminimum, imaximum),
+ leptonJets(lepJetModule)
+
 {
 
 }
 
-std::vector<double> GenSimDeltaRHist::value() const
+std::vector<double> GenSimDeltaRPsedoFilteredHist::value() const
 {
   //call getparticles or getInput getparticles in input module level-gensim, particle type called darkphoton in particle class
   //particles = GetInput() from input module?
@@ -68,10 +74,25 @@ std::vector<double> GenSimDeltaRHist::value() const
         leptons.push_back(leptonCandidate);
       }
     }
+  std::vector<LeptonJet> leptonJetsVector = leptonJets->getLeptonJets();
+  int numberOfLeptonJets = leptonJetsVector.size();
+  bool returnBool; 
+  if(numberOfLeptonJets == 0) {
+    returnBool = false;
+  }
+  else if(numberOfLeptonJets > 0){
+    returnBool = true;
+
+  }
+  else {
+    throw std::runtime_error("Negative Jets");
+  }
+
+
 
    //std::cout << leptons.size();
 
-    if (leptons.size() >= 2)
+    if (leptons.size() >= 2 && returnBool)
     {
       auto particle1FourVector = leptons[0].getFourVector();
       auto particle2FourVector = leptons[1].getFourVector();
