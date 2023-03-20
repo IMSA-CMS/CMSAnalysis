@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/GenSimDeltaRPsedoFilteredHist.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimDeltaRTwoJetsPsedoFilteredHist.hh"
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimParticle.hh"
 #include "DataFormats/Math/interface/deltaR.h"
@@ -12,7 +12,7 @@
 
 using std::cout;
 
-GenSimDeltaRPsedoFilteredHist::GenSimDeltaRPsedoFilteredHist(const std::string& iname, int iNBins, double iminimum, double imaximum, std::shared_ptr<LeptonJetReconstructionModule> lepJetModule):
+GenSimDeltaRTwoJetsPsedoFilteredHist::GenSimDeltaRTwoJetsPsedoFilteredHist(const std::string& iname, int iNBins, double iminimum, double imaximum, std::shared_ptr<LeptonJetReconstructionModule> lepJetModule):
  HistogramPrototype1D(iname, iNBins, iminimum, imaximum),
  leptonJets(lepJetModule)
 
@@ -20,7 +20,7 @@ GenSimDeltaRPsedoFilteredHist::GenSimDeltaRPsedoFilteredHist(const std::string& 
 
 }
 
-std::vector<double> GenSimDeltaRPsedoFilteredHist::value() const
+std::vector<double> GenSimDeltaRTwoJetsPsedoFilteredHist::value() const
 {
   //call getparticles or getInput getparticles in input module level-gensim, particle type called darkphoton in particle class
   //particles = GetInput() from input module?
@@ -80,7 +80,7 @@ std::vector<double> GenSimDeltaRPsedoFilteredHist::value() const
   if(numberOfLeptonJets == 0) {
     returnBool = false;
   }
-  else if(numberOfLeptonJets == 1){
+  else if(numberOfLeptonJets == 2){
     returnBool = true;
 
   }
