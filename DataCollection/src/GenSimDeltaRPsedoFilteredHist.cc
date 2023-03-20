@@ -10,7 +10,11 @@
 
 #include <iostream>
 
+<<<<<<< HEAD
 using std::cout;
+=======
+using namespace std;
+>>>>>>> c08328e247533a725a90e86c303ea3e0f27c39a7
 
 GenSimDeltaRPsedoFilteredHist::GenSimDeltaRPsedoFilteredHist(const std::string& iname, int iNBins, double iminimum, double imaximum, std::shared_ptr<LeptonJetReconstructionModule> lepJetModule):
  HistogramPrototype1D(iname, iNBins, iminimum, imaximum),
