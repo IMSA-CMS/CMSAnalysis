@@ -44,8 +44,11 @@
 #include "CMSAnalysis/DataCollection/interface/LeptonJetSelector.hh"
 #include "CMSAnalysis/DataCollection/interface/EventModule.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimDeltaRHist.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimGammaHist.hh"
 #include "CMSAnalysis/DataCollection/interface/NLeptonJetsFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimDeltaRPsedoFilteredHist.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimGammaPsedoFilteredHist.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimDeltaRTwoJetsPsedoFilteredHist.hh"
 
 
 using std::make_shared;
@@ -72,8 +75,13 @@ void LeptonJetReconstructionPlan::initialize()
   auto gammaHist = std::make_shared<GammaHist>(lepRecoMod, "Gamma Values", 100, 1, 1000); 
   auto deltaRHist = std::make_shared<DeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.1); 
   
+  auto genSimGammaHist = std::make_shared<GenSimGammaHist>("Gen Sim Gamma", 100, 1, 1000);
+  auto genSimGammaPsedoFilteredHist = std::make_shared<GenSimGammaPsedoFilteredHist>("Gen Sim Gamma (Reconstructed Jets)", 100, 1, 1000, lepRecoMod); 
+
+
   auto genSimDeltaRHist = std::make_shared<GenSimDeltaRHist>("Gen Sim Delta R", 100, 0, 0.5);
-  auto genSimDeltaRPsedoFilteredHist = std::make_shared<GenSimDeltaRPsedoFilteredHist>("Gen Sim Delta R (W/ Reconstructed Jets)", 100, 0, 0.5, lepRecoMod);
+  auto genSimDeltaRPsedoFilteredHist = std::make_shared<GenSimDeltaRPsedoFilteredHist>("Gen Sim Delta R (Reconstructed Jets)", 100, 0, 0.5, lepRecoMod);
+  auto genSimDeltaRTwoJetsPsedoFilteredHist = std::make_shared<GenSimDeltaRTwoJetsPsedoFilteredHist>("Gen Sim Delta R (Reconstructed Two Jets)", 100, 0, 0.5, lepRecoMod);
 
   auto pTHist = std::make_shared<LeptonJetPtHist>(lepRecoMod, "pT Values (Reconstructed Jets)", 100, 0, 200);
   auto matchedLeptonJetHist = std::make_shared<MatchedLeptonJetHist>("Matched Lepton Jet Hist HadET", 100, 0, 10, lepMatchMod, lepRecoMod, true);
@@ -98,8 +106,14 @@ void LeptonJetReconstructionPlan::initialize()
   histOutputMod->addHistogram(relIsoHist);
   histOutputMod->addHistogram(genSimDeltaRHist);
   eventHistMod->addHistogram(genSimDeltaRHist);
+  histOutputMod->addHistogram(genSimGammaHist);
+  eventHistMod->addHistogram(genSimGammaHist);
   histOutputMod->addHistogram(genSimDeltaRPsedoFilteredHist);
   eventHistMod->addHistogram(genSimDeltaRPsedoFilteredHist);
+  histOutputMod->addHistogram(genSimGammaPsedoFilteredHist);
+  eventHistMod->addHistogram(genSimGammaPsedoFilteredHist);
+  histOutputMod->addHistogram(GenSimDeltaRTwoJetsPsedoFilteredHist);
+  eventHistMod->addHistogram(GenSimDeltaRTwoJetsPsedoFilteredHist);
 
  // histOutputMod->addHistogram(leptonJetMLHist);
 

@@ -76,20 +76,20 @@ using std::string;
 TH1* getHist(string name, TFile* file);
 void process(TH1* hist, std::string canvasName, std::string xaxis, std::string yaxis);
 
-void deltaRacceptance()
+void deltaRTwoJetsacceptance()
 {
     TFile* dRHists = TFile::Open("test.root");
     
 
     std::string allHist = "Gen Sim Delta R";
-    std::string filteredHist = "Gen Sim Delta R (Reconstructed Jets)";
+    std::string filteredHist = "Gen Sim Delta R (Reconstructed Two Jets)";
     
     auto filteredPlot = getHist(filteredHist, dRHists);
     auto allPlot =  getHist(allHist, dRHists);
     auto acceptedHist = (TH1D*) filteredPlot->Clone(); 
     acceptedHist->Divide(allPlot);
 
-    string canvasName = "Delta R Acceptance";
+    string canvasName = "Delta R Two Jets Acceptance";
     string xaxis = "Delta R";
     string yaxis = "Percentage of Events Accepted";
     process(acceptedHist, canvasName, xaxis, yaxis);
@@ -105,7 +105,7 @@ TH1* getHist(std::string name, TFile* file)
 }
 
 void process(TH1* hist, std::string canvasName, std::string xaxis, std::string yaxis){
-    TFile* refinedOutput = TFile::Open("deltaRacceptance.root", "UPDATE");
+    TFile* refinedOutput = TFile::Open("deltaRTwoJetsacceptance.root", "UPDATE");
     TCanvas* c = new TCanvas(canvasName.c_str(), canvasName.c_str());
     hist->SetStats(kFALSE);
     hist->GetXaxis()->SetTitle(xaxis.c_str());
