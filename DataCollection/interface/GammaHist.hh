@@ -1,4 +1,4 @@
-#ifndef GAMMAHIST_HH
+wo#ifndef GAMMAHIST_HH
 #define GAMMAHIST_HH
 
 #include "HistogramPrototype1D.hh"
