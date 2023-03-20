@@ -48,6 +48,7 @@
 #include "CMSAnalysis/DataCollection/interface/NLeptonJetsFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimDeltaRPsedoFilteredHist.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimGammaPsedoFilteredHist.hh"
+#include "CMSAnalysis/DataCollection/interface/DarkPhotonMassHist.hh"
 
 
 using std::make_shared;
@@ -70,7 +71,9 @@ void LeptonJetReconstructionPlan::initialize()
 
   // Histograms
   //uncomented 
-  auto gammaDeltaRHist2D = make_shared<GammaDeltaRHist2D>(lepRecoMod, "Gamma Delta R Hist", 100, 100, 1, 0, 500, 0.25);
+  auto gammaDeltaRHist2D = std::make_shared<GammaDeltaRHist2D>(lepRecoMod, "Gamma Delta R Hist", 100, 100, 1, 0, 500, 0.25);
+  auto darkPhotonMassHist = std::make_shared<DarkPhotonMassHist>("Dark Photon Mass", 100, 0, 5);
+
   auto gammaHist = std::make_shared<GammaHist>(lepRecoMod, "Gamma Values", 100, 1, 1000); 
   auto deltaRHist = std::make_shared<DeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.1); 
   
@@ -105,6 +108,8 @@ void LeptonJetReconstructionPlan::initialize()
   eventHistMod->addHistogram(genSimDeltaRHist);
   histOutputMod->addHistogram(genSimGammaHist);
   eventHistMod->addHistogram(genSimGammaHist);
+  histOutputMod->addHistogram(darkPhotonMassHist);
+  eventHistMod->addHistogram(darkPhotonMassHist);
   histOutputMod->addHistogram(genSimDeltaRPsedoFilteredHist);
   eventHistMod->addHistogram(genSimDeltaRPsedoFilteredHist);
   histOutputMod->addHistogram(genSimGammaPsedoFilteredHist);
