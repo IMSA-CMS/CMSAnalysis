@@ -22,7 +22,7 @@ void massAcceptanceRefineOutput()
     TFile* MVAHists = TFile::Open("output.root");
     
     string hist1 = "Mass vs Total Events";
-    string hist2 = "Mass vs Accepted Events";
+     hist2 = "Mass vs Accepted Events";
     string hist3 = "Mass vs Acceptance";
     
     
