@@ -1,46 +1,30 @@
-#include "CMSAnalysis/DataCollection/interface/GenSimDeltaRHist.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimGammaPsedoFilteredHist.hh"
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimParticle.hh"
-#include "DataFormats/Math/interface/deltaR.h"
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimSimpleImplementation.hh"
+#include "CMSAnalysis/DataCollection/interface/LeptonJetReconstructionModule.hh"
+
+
 #include <iostream>
 
-GenSimDeltaRHist::GenSimDeltaRHist(const std::string& iname, int iNBins, double iminimum, double imaximum):
- HistogramPrototype1D(iname, iNBins, iminimum, imaximum)
-{
+GenSimGammaPsedoFilteredHist::GenSimGammaPsedoFilteredHist(const std::string& iname, int iNBins, double iminimum, double imaximum, std::shared_ptr<LeptonJetReconstructionModule> lepJetModule):
+ HistogramPrototype1D(iname, iNBins, iminimum, imaximum),
+ leptonJets(lepJetModule)
 
+{ 
 }
 
-std::vector<double> GenSimDeltaRHist::value() const
+std::vector<double> GenSimGammaPsedoFilteredHist::value() const
 {
-
   //call getparticles or getInput getparticles in input module level-gensim, particle type called darkphoton in particle class
   //particles = GetInput() from input module?
   //not in particle.cc, just pdgid == 4900022 for identifying dark photons
   auto particles = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::darkPhoton());
-  //
-  // particles is an empty vector,
-  //std::cout<<particles[0];
-  //only getting dark photons breaks
-  //, ParticleType::darkPhoton()
 
-  //loop through number of events to get all final daughters
-  //finalDaughter(0...1...2...)
-  // for (auto particle : particles.getParticles())
-  // {
-  //   while (particle != particle.finalDaughter())
-  //   {
-  //     particle = particle.finalDaughter();
-  //   }
-  // }
+  std::vector<double> gammaVector{};
 
-  // if (particle.getType() == 4900022)
-  // {
-  // }
-  std::vector<double> deltaRVector{};
-
-  for (auto iparticle : particles.getParticles()) 
+  for (auto iparticle : particles.getParticles())  
   { 
     GenSimParticle particle(iparticle);
     // std::cout << "Particle/n ";
@@ -68,16 +52,28 @@ std::vector<double> GenSimDeltaRHist::value() const
       }
     }
 
-   //std::cout << leptons.size();
+  std::vector<LeptonJet> leptonJetsVector = leptonJets->getLeptonJets();
+  int numberOfLeptonJets = leptonJetsVector.size();
+  bool returnBool; 
+  if(numberOfLeptonJets == 0) {
+    returnBool = false;
+  }
+  else if(numberOfLeptonJets > 0){
+    returnBool = true;
 
-    if (leptons.size() >= 2)
+  }
+  else {
+    throw std::runtime_error("Negative Jets");
+  }
+
+    if (leptons.size() >= 2 && returnBool)
     {
       auto particle1FourVector = leptons[0].getFourVector();
       auto particle2FourVector = leptons[1].getFourVector();
-      double deltaR = reco::deltaR(particle1FourVector, particle2FourVector);
-      deltaRVector.push_back(deltaR);
+      auto darkPhotonFourVector = particle1FourVector + particle2FourVector;
+      double gamma = darkPhotonFourVector.Gamma();
+      gammaVector.push_back(gamma);
     }
   }
-  
-  return deltaRVector;
+  return gammaVector;
 }
