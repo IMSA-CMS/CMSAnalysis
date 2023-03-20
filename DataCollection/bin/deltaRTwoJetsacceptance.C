@@ -1,3 +1,7 @@
+
+
+
+
 #include <algorithm>
 #include "TROOT.h"
 #include "TFile.h"
@@ -16,30 +20,23 @@ using std::string;
 TH1* getHist(string name, TFile* file);
 void process(TH1* hist, std::string canvasName, std::string xaxis, std::string yaxis);
 
-void massAcceptanceRefineOutput()
+void deltaRTwoJetsacceptance()
 {
-  
-    TFile* MVAHists = TFile::Open("output.root");
+    TFile* dRHists = TFile::Open("test.root");
     
-    string hist1 = "Mass vs Total Events";
-     hist2 = "Mass vs Accepted Events";
-    string hist3 = "Mass vs Acceptance";
-    
-    
-    auto plot1 = getHist(hist1.c_str(), MVAHists);
-    auto plot2 =  getHist(hist2.c_str(), MVAHists);
-    auto finalHist = getHist(hist3.c_str(), MVAHists);
-    auto tempBool = finalHist->Divide(plot1);
 
-    string canvasName1 = "Mass VS Total Events";
-    string canvasName2 = "Mass VS Accepted Events";
-    string canvasName3 = "Mass VS Acceptance";
-    string xaxis = "Mass(GeV)";
-    string yaxisOriginal = "Events";
-    string yaxisFinal = "Acceptance";
-    process(plot1, canvasName1, xaxis, yaxisOriginal);
-    process(plot2, canvasName2, xaxis, yaxisOriginal);
-    process(finalHist, canvasName3, xaxis, yaxisFinal);
+    std::string allHist = "Gen Sim Delta R";
+    std::string filteredHist = "Gen Sim Delta R (Reconstructed Two Jets)";
+    
+    auto filteredPlot = getHist(filteredHist, dRHists);
+    auto allPlot =  getHist(allHist, dRHists);
+    auto acceptedHist = (TH1D*) filteredPlot->Clone(); 
+    acceptedHist->Divide(allPlot);
+
+    string canvasName = "Delta R Two Jets Acceptance";
+    string xaxis = "Delta R";
+    string yaxis = "Percentage of Events Accepted";
+    process(acceptedHist, canvasName, xaxis, yaxis);
 }
 
 
@@ -52,7 +49,7 @@ TH1* getHist(std::string name, TFile* file)
 }
 
 void process(TH1* hist, std::string canvasName, std::string xaxis, std::string yaxis){
-    TFile* refinedOutput = TFile::Open("massAcceptanceRefinedOutput.root", "UPDATE");
+    TFile* refinedOutput = TFile::Open("deltaRTwoJetsacceptance.root", "UPDATE");
     TCanvas* c = new TCanvas(canvasName.c_str(), canvasName.c_str());
     hist->SetStats(kFALSE);
     hist->GetXaxis()->SetTitle(xaxis.c_str());
