@@ -8,11 +8,11 @@
 class LeptonJetReconstructionModule : public ProductionModule
 {
 public:
-  LeptonJetReconstructionModule(double deltaRCut = 0.5);
+  LeptonJetReconstructionModule(double deltaRCut);
   virtual bool process() override;
-  const std::vector<LeptonJet>& getLeptonJets() const {return leptonJets;}
-  const std::vector<double>& getDeltaRValues() const {return deltaRValues;}
-  const std::vector<double>& getPtValues() const {return pTValues;}
+  const std::vector<LeptonJet> &getLeptonJets() const { return leptonJets; }
+  const std::vector<double> &getDeltaRValues() const { return deltaRValues; }
+  const std::vector<double> &getPtValues() const { return pTValues; }
   const std::vector<LeptonJet> findLeptonJets(ParticleCollection<Lepton> recoCandidates);
 
 private:

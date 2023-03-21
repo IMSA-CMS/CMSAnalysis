@@ -8,7 +8,7 @@ config.General.transferLogs = False
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'dummyPSet.py'
 config.JobType.scriptExe = 'crabScript.sh'
-config.JobType.scriptArgs = ['input=textfiles/SingleMassSnowmass/DY/DYPick50.txt', 'output=dy50.root', 'numFiles=1']
+config.JobType.scriptArgs = ['input=textfiles/SingleMassSnowmass/DY/DYPick50.txt', 'output=dy50.root', 'analysis=HiggsDataStrip']
 config.JobType.outputFiles = ['crabOutput.txt']
 
 config.Data.publication = False
