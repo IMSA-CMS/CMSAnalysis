@@ -73,7 +73,7 @@ void LeptonJetReconstructionPlan::initialize()
   // Histograms
   //uncomented 
   auto gammaDeltaRHist2D = std::make_shared<GammaDeltaRHist2D>(lepRecoMod, "Gamma Delta R Hist", 100, 100, 1, 0, 500, 0.25);
-  auto darkPhotonMassHist = std::make_shared<DarkPhotonMassHist>("Dark Photon Mass", 100, 0, 5);
+  auto darkPhotonMassHist = std::make_shared<DarkPhotonMassHist>("Dark Photon Mass", 100, 0, 3000);
 
   auto gammaHist = std::make_shared<GammaHist>(lepRecoMod, "Gamma Values", 100, 1, 1000); 
   auto deltaRHist = std::make_shared<DeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.1); 
