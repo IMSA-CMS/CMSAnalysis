@@ -1,4 +1,4 @@
-T#ifndef GENSIMDELTARHIST_HH
+#ifndef GENSIMDELTARHIST_HH
 #define GENSIMDELTARHIST_HH
 
 #include "HistogramPrototype1D.hh"

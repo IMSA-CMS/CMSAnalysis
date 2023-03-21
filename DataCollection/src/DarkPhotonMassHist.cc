@@ -60,7 +60,7 @@ std::vector<double> DarkPhotonMassHist::value() const
   for (auto gamma : gammaVector)
   {
     double DarkPhotonMass =  -((((gamma)*(8*muonMass*std::pow(darkFermionMass, 2)))/higgsMass) - std::pow(darkPseudoScalarMass, 2) + std::pow(darkFermionMass, 2));
-    
+    std::cout<< "Dark Photon Mass: " << DarkPhotonMass << "\n";
     massVector.push_back(DarkPhotonMass);
   }
 
