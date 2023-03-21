@@ -1,5 +1,4 @@
 #include "CMSAnalysis/DataCollection/interface/TriggerSimModule.hh"
-
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "FWCore/Framework/interface/Event.h"
@@ -148,6 +147,8 @@ bool TriggerSimModule::process()
     // Checks if the current trigger is meant to be analyzed
     if (enableAll || std::find(triggerNames.begin(), triggerNames.end(), names[i]) != triggerNames.end())
     {
+      //std::cout << names[i] << "\n";
+    
       // This line is where the trigger is actually checked
       passCurrentTrigger = triggerResults[i];
 

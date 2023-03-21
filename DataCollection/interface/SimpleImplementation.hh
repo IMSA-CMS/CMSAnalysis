@@ -20,7 +20,7 @@ class SimpleImplementation : public ParticleImplementation
         virtual int status() const override{throw std::runtime_error("status() error");}
         virtual Particle mother() const override{throw std::runtime_error("mother() error");}
         virtual Particle daughter(int i) const override{throw std::runtime_error("daughter() error");}
-        virtual bool doesHaveMother() override {throw std::runtime_error("not implemented error");}
+        virtual bool doesHaveMother() const override {throw std::runtime_error("not implemented error");}
         virtual int numberOfDaughters() const override{throw std::runtime_error("numberOfDaughters() error");}
         virtual const ParticleType& getType() const  override{ return particleType; }
         virtual Particle::SelectionFit getSelectionFit() const override{ return selectionFit;}

@@ -29,14 +29,14 @@ class EventLoader
         void nextFile(std::shared_ptr<EventFile> newFile) {file=newFile;}
 
         //Calls process Root files
-        void run(int outputEvery, int nFiles);
+        void run(int outputEvery, int nFiles, int maxEvents);
 
     private:
         void beginJob();
         void analyze(const RootEventInterface);
         void endJob();
         
-        void processRootFiles(int outputEvery, int nFiles);
+        void processRootFiles(int outputEvery, int nFiles, int maxEvents);
 
         std::vector<std::string> rootFiles;
         Analyzer *analyzer; 

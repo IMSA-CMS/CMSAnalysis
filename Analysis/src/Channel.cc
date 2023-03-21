@@ -39,6 +39,9 @@ std::vector<std::string> Channel::getNamesWithLabel(std::string label)
 	{
 		names.push_back(process->getName());
 	}
+	if(names.size() == 0) {
+		throw std::runtime_error("No processes with the given label.");		
+	}
 	return names;
 }
 
@@ -105,9 +108,43 @@ THStack* Channel::getStack(std::string histType, std::string label, bool scaleTo
 				hist->SetLineColor(kRed);
 				hist->SetFillColor(kWhite);
 			}
-			//hist->GetYaxis()->SetTitle(yAxisName.c_str());
+			else {
+				hist->SetFillColor(hist->GetLineColor());
+				//hist->SetLineColor(kBlack);
+				//hist->SetLineWidth(1);
+			}
 			superPlot->Add(hist);
 		}
 	}
 	return superPlot;
+}
+
+std::vector<TH1*> Channel::getHists(std::string histType, std::string label, bool scaleToExpected) const
+{
+	std::vector<TH1*> hists;
+	if (label == "")
+	{
+		for (auto process : processes)
+		{	
+			hists.push_back(process->getHist(histType, scaleToExpected));
+		}
+	}
+	else
+	{
+		for (const auto& process : map.find(label)->second)
+		{
+			TH1* hist = process->getHist(histType, scaleToExpected);
+			if(label == "signal") {
+				hist->SetLineColor(kRed);
+				hist->SetFillColor(kWhite);
+			}
+			else {
+				hist->SetFillColor(hist->GetLineColor());
+				//hist->SetLineColor(kBlack);
+				//hist->SetLineWidth(1);
+			}
+			hists.push_back(hist);
+		}
+	}
+	return hists;
 }

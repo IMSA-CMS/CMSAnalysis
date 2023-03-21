@@ -4,11 +4,11 @@
 
 
 void DataCollectionPlan::runEventLoader(const std::string& inputFile, const std::string& outputFile, 
-	   int outputEvery, int numFiles)
+	   int outputEvery, int numFiles, int maxEvents)
 {
     EventLoader eventLoader(fetchRootFiles(inputFile), &analyzer);
     analyzer.initialize();
-    eventLoader.run(outputEvery, numFiles);
+    eventLoader.run(outputEvery, numFiles, maxEvents);
     analyzer.writeOutputFile(outputFile);
 }
 
