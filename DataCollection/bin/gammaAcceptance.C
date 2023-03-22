@@ -29,7 +29,7 @@ void gammaAcceptance()
     auto acceptedHist = (TH1D*) filteredPlot->Clone(); 
     acceptedHist->Divide(allPlot);
 
-    string canvasName = "Gamma Acceptance";
+    string canvasName = "Gamma Acceptance (One Jet)";
     string xaxis = "Gamma";
     string yaxis = "Percentage of Events Accepted";
     process(acceptedHist, canvasName, xaxis, yaxis, title);
