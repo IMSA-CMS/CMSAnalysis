@@ -72,7 +72,7 @@ void LeptonJetReconstructionPlan::initialize()
   // Histograms
   //uncomented 
   auto gammaDeltaRHist2D = std::make_shared<GammaDeltaRHist2D>(lepRecoMod, "Gamma Delta R Hist", 100, 100, 1, 0, 500, 0.25);
-  auto darkPhotonMassHist = std::make_shared<DarkPhotonMassHist>("Dark Photon Mass", 100, 0, 3000);
+  auto darkPhotonMassHist = std::make_shared<DarkPhotonMassHist>("Higgs Mass", 100, 0, 1500);   
 
   auto gammaHist = std::make_shared<GammaHist>(lepRecoMod, "Gamma Values", 100, 1, 1000); 
   auto deltaRHist = std::make_shared<DeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.1); 
@@ -91,7 +91,7 @@ void LeptonJetReconstructionPlan::initialize()
   // auto matchPhiHist = std::make_shared<MatchingPhiHist>(lepMatchMod, "Differences in Phi for Matched Lepton Jets", 100, 0, 3.15);
   // auto matchEtaHist = std::make_shared<MatchingEtaHist>(lepMatchMod, "Differences in Eta for Matched Lepton Jets", 100, -1, 1);
 
-  auto relIsoHist = std::make_shared<IsolationHist>(InputModule::RecoLevel::Reco, "Jet pT Rel", 10000, 0, 100);
+  //auto relIsoHist = std::make_shared<IsolationHist>(InputModule::RecoLevel::Reco, "Jet pT Rel", 10000, 0, 100);
  // auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(InputModule::RecoLevel::Reco, "NN Classifier Output Distribution", 100, 0, 1, mlMod, lepRecoMod);
 //uncomented
   
@@ -101,9 +101,9 @@ void LeptonJetReconstructionPlan::initialize()
   eventHistMod->addHistogram(deltaRHist);
   histOutputMod->addHistogram(deltaRHist);
   histOutputMod->addHistogram(pTHist);
-  histOutputMod->addHistogram(matchedLeptonJetHist);
+  histOutputMod->addHistogram(matchedLeptonJetHist); 
   histOutputMod->addHistogram(unmatchedLeptonJetHist);
-  histOutputMod->addHistogram(relIsoHist);
+  //histOutputMod->addHistogram(relIsoHist);
   histOutputMod->addHistogram(genSimDeltaRHist);
   eventHistMod->addHistogram(genSimDeltaRHist);
   histOutputMod->addHistogram(genSimGammaHist);
@@ -125,7 +125,7 @@ void LeptonJetReconstructionPlan::initialize()
   //auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>();
   //auto recoEventDumpMod = std::make_shared<RecoEventDumpModule>();
   // auto triggerMod = std::make_shared<TriggerModule>();
-
+ 
   auto nLeptonsFilter = std::make_shared<NLeptonsFilter>(); 
   auto nLeptonJetsFilter =std::make_shared<NLeptonJetsFilter>(lepRecoMod);
 

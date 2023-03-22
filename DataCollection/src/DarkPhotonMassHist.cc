@@ -15,14 +15,14 @@ DarkPhotonMassHist::DarkPhotonMassHist(const std::string& iname, int iNBins, dou
 std::vector<double> DarkPhotonMassHist::value() const
 {
   //all in GeV
-  double muonMass = 0.1057;
-  double darkFermionMass = 2;
-  double darkPseudoScalarMass = 50;
-  double higgsMass = 1000;
+  const double muonMass = 0.1057;
+  const double darkFermionMass = 50;//2
+  const double darkPseudoScalarMass = 2;//50
+  const double darkPhotonMass = 0.3;
   
   auto particles = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::darkPhoton()); 
 
-  std::vector<double> gammaVector{};
+  std::vector<double> gammaVector{}; 
   std::vector<double> massVector{};
   
   for (auto iparticle : particles.getParticles()) 
@@ -32,8 +32,8 @@ std::vector<double> DarkPhotonMassHist::value() const
     if (particle.finalDaughter() != particle)
     {
       std::cout << "++";
-      continue;
-    }
+      continue; 
+    } 
 
     std::vector<Particle> leptons;
     //looping through lepton decays (should be only 2) and pushing to lepton list
@@ -59,9 +59,10 @@ std::vector<double> DarkPhotonMassHist::value() const
   
   for (auto gamma : gammaVector)
   {
-    double DarkPhotonMass =  -(((8*muonMass*std::pow(darkFermionMass, 2)*gamma)/higgsMass) - std::pow(darkPseudoScalarMass, 2) + std::pow(darkFermionMass, 2));
-    massVector.push_back(DarkPhotonMass);
-  }
+    double higgsMass  =  (8 * muonMass * std::pow(darkFermionMass, 2) * gamma) / (std::pow(darkFermionMass, 2) - std::pow(darkPhotonMass, 2) - std::pow(darkPseudoScalarMass, 2));
+    massVector.push_back(higgsMass);
+    //std::cout << "higgs mass: " << higgsMass << "\n";
+  } 
 
   return massVector;
 } 
