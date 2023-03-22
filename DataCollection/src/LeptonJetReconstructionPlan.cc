@@ -50,6 +50,8 @@
 #include "CMSAnalysis/DataCollection/interface/GenSimGammaPsedoFilteredHist.hh"
 #include "CMSAnalysis/DataCollection/interface/DarkPhotonMassHist.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimDeltaRTwoJetsPsedoFilteredHist.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimGammaTwoJetsPsedoFilteredHist.hh"
+
 
 
 using std::make_shared;
@@ -80,6 +82,8 @@ void LeptonJetReconstructionPlan::initialize()
   
   auto genSimGammaHist = std::make_shared<GenSimGammaHist>("Gen Sim Gamma", 100, 1, 1000);
   auto genSimGammaPsedoFilteredHist = std::make_shared<GenSimGammaPsedoFilteredHist>("Gen Sim Gamma (Reconstructed Jets)", 100, 1, 1000, lepRecoMod); 
+  auto genSimGammaTwoJetsPsedoFilteredHist = std::make_shared<GenSimGammaTwoJetsPsedoFilteredHist>("Gen Sim Gamma (Reconstructed Two Jets)", 100, 1, 1000, lepRecoMod); 
+
 
   auto genSimDeltaRHist = std::make_shared<GenSimDeltaRHist>("Gen Sim Delta R", 100, 0, 0.5);
   auto genSimDeltaRPsedoFilteredHist = std::make_shared<GenSimDeltaRPsedoFilteredHist>("Gen Sim Delta R (Reconstructed Jets)", 100, 0, 0.5, lepRecoMod);
@@ -119,6 +123,8 @@ void LeptonJetReconstructionPlan::initialize()
   eventHistMod->addHistogram(genSimGammaPsedoFilteredHist);
   histOutputMod->addHistogram(genSimDeltaRTwoJetsPsedoFilteredHist);
   eventHistMod->addHistogram(genSimDeltaRTwoJetsPsedoFilteredHist);
+  histOutputMod->addHistogram(genSimGammaTwoJetsPsedoFilteredHist);
+  eventHistMod->addHistogram(genSimGammaTwoJetsPsedoFilteredHist);
 
 
  // histOutputMod->addHistogram(leptonJetMLHist);
