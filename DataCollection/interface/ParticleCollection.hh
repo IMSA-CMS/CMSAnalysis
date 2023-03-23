@@ -25,7 +25,7 @@ public:
 
   // Copy/conversion constructor
   template <typename U>
-  ParticleCollection(ParticleCollection<U> pc1);
+  ParticleCollection(const ParticleCollection<U>& pc1);
   ParticleCollection(std::vector<T> collectionVector);
   int size(){return particles.size();}
   void addParticle(T particle) { particles.push_back(particle); }
@@ -77,7 +77,7 @@ private:
 
 template <typename T>
 template <typename U>
-inline ParticleCollection<T>::ParticleCollection(ParticleCollection<U> pc1)
+inline ParticleCollection<T>::ParticleCollection(const ParticleCollection<U>& pc1)
 {
   for (auto particle : pc1.getParticles())
   {

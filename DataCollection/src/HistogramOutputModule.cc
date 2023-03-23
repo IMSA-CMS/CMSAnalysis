@@ -21,7 +21,10 @@ void HistogramOutputModule::writeAll() {
 
   // Then write all the objects to file
   for (auto &entry : baseObjects) {
-    entry.second->Write();
+    if (entry.first.find(getFilter()) != std::string::npos || getFilter() == "")
+    {
+      entry.second->Write();
+    }
   }
 }
 
@@ -53,6 +56,29 @@ void HistogramOutputModule::addObject(const std::string &name, TObject *obj) {
   // std::cout << "Histogram added: " << name << '\n';
 }
 
+TObject* HistogramOutputModule::getObject(const std::string& name) 
+{
+  auto it = baseObjects.find(getObjectName(name));
+  if (it != baseObjects.end())
+  {
+    return baseObjects[getObjectName(name)];
+  } else 
+  {
+    return nullptr;
+  }
+}
+
+const TObject* HistogramOutputModule::getObject(const std::string& name) const 
+{
+  auto it = baseObjects.find(getObjectName(name));
+  if (it != baseObjects.end())
+  {
+    return (baseObjects.find(getObjectName(name)))->second;
+  } else 
+  {
+    return nullptr;
+  }
+}
 void HistogramOutputModule::makeHistogram(const std::string &name,
                                           const std::string &title, int nbins,
                                           double min, double max) {
@@ -119,8 +145,11 @@ std::string HistogramOutputModule::getObjectName(const std::string &str) const {
 bool HistogramOutputModule::process() {
   //std::cout << "HistOutMod running \n";
   for (auto hist : histograms) {
+    //std::cout << hist->getName() << std::endl;
     bool draw = hist->shouldDraw(); // call the shouldDraw function so we can
                                     // call process on the FilterModules
+    // 2/2/2023 investigating shouldDraw problem, this comment is just a placeholder
+    
     if(draw)
     {
       // If the histogram without mass bin doesn't exist, make it
@@ -146,4 +175,21 @@ bool HistogramOutputModule::process() {
     }
   }
   return true;
+}
+
+void HistogramOutputModule::finalize()
+{
+  for (auto hist : histograms) 
+  {
+    auto Thist = getHistogram(hist->getFilteredName());
+    if (Thist && Thist->GetEntries() == 0)
+    {
+      auto it = baseObjects.find(getObjectName(hist->getFilteredName()));
+      if (it != baseObjects.end())
+      {
+        baseObjects.erase(it);
+        //should probably remove hist from histograms tho not sure how to do that - George 2/23/23
+      }
+    }
+  }
 }

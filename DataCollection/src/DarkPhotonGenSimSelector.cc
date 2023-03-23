@@ -16,7 +16,7 @@ void DarkPhotonGenSimSelector::selectParticles(const InputModule* input, Event& 
     for (const auto& particle : particles)
     {
         GenSimParticle genSimParticle = GenSimParticle(particle);
-        if (genSimParticle.pdgId() == 4900022 && genSimParticle == genSimParticle.finalDaughter()) //Dark Photon
+        if (genSimParticle.getType() == ParticleType::darkPhoton() && genSimParticle == genSimParticle.finalDaughter()) //Dark Photon
         {
             if (genSimParticle.numberOfDaughters() == 2 && 
             (genSimParticle.daughter(0).getType() == ParticleType::electron() || genSimParticle.daughter(0).getType() == ParticleType::muon()) && 
@@ -35,32 +35,18 @@ void DarkPhotonGenSimSelector::selectParticles(const InputModule* input, Event& 
                 }
             }
         }
-        if (abs(genSimParticle.pdgId() == 1000022) && genSimParticle == genSimParticle.finalDaughter()) //neutralino
+        if (genSimParticle.getType() == ParticleType::neutralino() && genSimParticle == genSimParticle.finalDaughter()) //neutralino
         {
-            if (genSimParticle.numberOfDaughters() == 2 && genSimParticle.daughter(0).pdgId() != 4900002 && genSimParticle.daughter(1).pdgId() != 4900002)
-            { //4900002 means no jet
-                event.addSpecialObject("Neutralino",genSimParticle);
-                // for (const auto& part : checkJet(genSimParticle))
-                // {
-                //     if (part.getType() == ParticleType::electron())
-                //     {
-                //         event.addElectron(Electron(GenSimParticle(part).finalDaughter()));
-                //     } 
-                //     else if (part.getType() == ParticleType::muon())
-                //     {
-                //         event.addMuon(Muon(GenSimParticle(part).finalDaughter()));
-                //     }
-                // }
-            }
+            event.addSpecialObject("Neutralino",genSimParticle);
         }
-        if (abs(genSimParticle.pdgId() == 23) && genSimParticle == genSimParticle.finalDaughter()) //Z Boson
+        if (genSimParticle.getType() == ParticleType::z() && genSimParticle == genSimParticle.finalDaughter()) //Z Boson
         {
             event.addSpecialObject("Zboson",genSimParticle);
         }
     }
 }
 
-std::vector<Particle> DarkPhotonGenSimSelector::checkJet(GenSimParticle part) const //cycles through jets to find leptons
+std::vector<Particle> DarkPhotonGenSimSelector::checkJet(GenSimParticle part) const //recursively cycles through jets to find leptons
 {
     std::vector<Particle> selected;
     if (part.isFinalState())

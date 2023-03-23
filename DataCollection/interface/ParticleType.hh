@@ -7,6 +7,7 @@
 #include <functional>
 
 #include "SingleParticleHist.hh"
+#include "CollectionHist.hh"
 #include "Particle.hh"
 
 
@@ -20,19 +21,27 @@ class ParticleType
     public:
     std::string getName() const {return name;};
     int getpdgId() const {return pdgId;};
-    std::vector<std::shared_ptr<SingleParticleHist>> getHists() const;
+    double getCharge() const {return charge;};
+    std::vector<std::shared_ptr<SingleParticleHist>> getParticleHists() const;
+    std::vector<std::shared_ptr<CollectionHist>> getCollectionHists() const;
 
     //Member function used to check type
     static const ParticleType& electron();
     static const ParticleType& muon();
     static const ParticleType& jet(); 
+    static const ParticleType& tau();
     static const ParticleType& leptonJet(); 
     static const ParticleType& photon();
     static const ParticleType& darkPhoton();
     static const ParticleType& neutralino();
     static const ParticleType& leftDoublyHiggs();
     static const ParticleType& rightDoublyHiggs();
-    static const ParticleType& zBoson();
+    static const ParticleType& z();
+    static const ParticleType& w();
+    static const ParticleType& higgs();
+    static const ParticleType& meson();
+    static const ParticleType& baryon();
+
     static const ParticleType& none();
 
     bool operator== (const ParticleType type) const;
@@ -41,7 +50,9 @@ class ParticleType
     private:
     std::string name;
     int pdgId;
-    std::vector<SingleParticleHist> hists;
+    double charge;
+    std::vector<SingleParticleHist> particleHists;
+    std::vector<CollectionHist> collectionHists;
 
     //Avaliable hists for ParticleTypes
     static SingleParticleHist getPtHist();
@@ -49,12 +60,16 @@ class ParticleType
     static SingleParticleHist getEtaHist();
     static SingleParticleHist getDaughterDeltaRHist();
 
-    ParticleType(std::string typeName, int typepdgId, std::vector<SingleParticleHist> typeHists);
+    static CollectionHist getNumberHist();
+    static CollectionHist getSameSignInvariantMassHist();
+    static CollectionHist getOppositeSignInvariantMassHist();
+
+    ParticleType(std::string typeName, int typepdgId, double charge, std::vector<SingleParticleHist> typeParticleHists, std::vector<CollectionHist> typeCollectionHists);//, std::vector<CollectionHist> collectionhists);
 
     static std::unordered_map<std::string,ParticleType> typeList;
 
     //Adds type object to list if it does not exist and then refrence it
-    static const ParticleType& registerType(std::string typeName, int typepdgId, std::vector<SingleParticleHist>  typeHists);
+    static const ParticleType& registerType(std::string typeName, int typepdgId, double charge, std::vector<SingleParticleHist> typeParticleHists, std::vector<CollectionHist> typeCollectionHists);//, std::vector<CollectionHist> collectionhist);
 };
 
 #endif
