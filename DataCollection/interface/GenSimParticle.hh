@@ -20,7 +20,7 @@ class GenSimParticle : public Particle
         int status() const;
 
         GenSimParticle mother() const;
-        bool hasMother();
+        bool hasMother() const;
         int numberOfDaughters() const;
         GenSimParticle daughter(int i) const;
         bool isFinalState() const;

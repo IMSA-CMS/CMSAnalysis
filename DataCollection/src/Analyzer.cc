@@ -53,25 +53,36 @@ void Analyzer::writeOutputFile(const std::string &outputFile)
   }
 
   outputRootFile->cd();
-  // Finalize separately for each filterString, to be safe
+  //Finalize separately for each filterString, to be safe
   for (auto module : analysisModules)
   {
-    module->doneProcessing();
-    for (auto &str : filterNames)
-    {
-      module->setFilterString(str);
-      module->finalize();
-    }
     // Write the output
-    module->writeAll();
+    module->doneProcessing();
+    if (filterModules.size() != 0)
+    {
+      for (auto &str : filterNames) //writes analysis modules by filter string
+      {
+        auto it = filterDirectories.find(str);
+        if (it == filterDirectories.end())
+        {
+          filterDirectories.insert({str,outputRootFile->mkdir((str + "_hists").c_str())});
+        }
+        filterDirectories[str]->cd();
+        module->setFilterString(str);
+        module->finalize();
+        module->writeAll(); //writes files to folder
+        outputRootFile->cd();
+      }
+    } else {
+      module->setFilterString("");
+      module->finalize();
+      module->writeAll();
+    }
   }
+
   // Write total number of events
   auto eventsText = new TDisplayText(std::to_string(numOfEvents).c_str());
   eventsText->Write("NEvents");
-  auto eventsText1 = new TDisplayText(std::to_string(numOfEvents124).c_str());
-  eventsText1->Write("NEvents124");
-  auto eventsText2 = new TDisplayText(std::to_string(numOfEvents137).c_str());
-  eventsText2->Write("NEvents137");
   // Clean up
   outputRootFile->Close();
   delete outputRootFile;
@@ -112,6 +123,7 @@ void Analyzer::initialize()
 void Analyzer::processOneEvent(const EventInterface *eInterface)
 {
       eventInterface = eInterface;
+      numOfEvents++;
 
       bool continueProcessing = true;
       std::string filterString;
@@ -125,7 +137,7 @@ void Analyzer::processOneEvent(const EventInterface *eInterface)
         }
 
       }
-      numOfEvents124++;
+   
 
       // Processes event through filter modules
       for (auto module : filterModules)
@@ -140,14 +152,12 @@ void Analyzer::processOneEvent(const EventInterface *eInterface)
           filterString += module->getFilterString();
         }
       }
-      numOfEvents137++;
 
       // Processes event through analysis modules
       if (continueProcessing)
       {
 
         filterNames.insert(filterString);
-        numOfEvents++;
 
         for (auto module : analysisModules)
         {

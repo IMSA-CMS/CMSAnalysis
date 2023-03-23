@@ -70,6 +70,7 @@ void HiggsBackgroundPlan::initialize()
 
     auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
 
+    auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::GenSim, "Electron GenSim Same Sign Invariant Mass", 100, 0, 1000, false, false);
     auto elecGenSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::GenSim, "Electron GenSim Same Sign Invariant Mass", 100, 0, 1000, false, false);
     auto elecRecoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "Electron Reco Same Sign Invariant Mass", 1000, 0, 2000, false, false);
     auto muonGenSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::GenSim, "Muon GenSim Same Sign Invariant Mass", 100, 0, 1000, false, false);
@@ -123,6 +124,7 @@ void HiggsBackgroundPlan::initialize()
     muonGenSimSameSignInvMassHist->addFilter(muonFilter);
     elecMetHist->addFilter(elecFilter);
 
+    eventHistMod->addHistogram(sameSignInvMassHist);
     eventHistMod->addHistogram(elecRecoPt);
     eventHistMod->addHistogram(elecGenSimPt);
     eventHistMod->addHistogram(muonRecoPt);
