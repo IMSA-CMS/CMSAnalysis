@@ -182,33 +182,31 @@ void NanoAODEventFile::nextEvent()
 {
     treeReader.Next(); 
     setEventCount(getEventCount() + 1);
-    // std::cerr << gen_size.IsValid() << std::endl;
-    // std::cerr << "event number" << *event_number << std::endl;
 
-    // if(variables["gen_size"]->IsValid())
+    // if(getVariable<UInt_t>("gen_size") > 0)
     // {
     //     genSimParticles.clear();
-    //     genSimParticles.reserve(*gen_size);
+    //     genSimParticles.reserve(getVariable<UInt_t>("gen_size") );
 
-    //     for (unsigned i = 0; i < *gen_size; i++)
+    //     for (unsigned i = 0; i < getVariable<UInt_t>("gen_size") ; i++)
     //     {
     //         int charge = -1;
-    //         if (gen_pid[i] < 0)
+    //         if (getArrayElement<Int_t>("gen_pid", i) < 0)
     //         {
     //             charge = 1;
     //         }
-    //         if (gen_pid[i] == 21 || gen_pid[i] == 22)
+    //         if (getArrayElement<Int_t>("gen_pid", i) == 21 || getArrayElement<Int_t>("gen_pid", i) == 22)
     //         {
     //             charge = 0;
     //         }
 
-    //         std::vector<const GenSimParticle *> daughterCollectionVector{&genSimParticles[gen_d1[i]], &genSimParticles[gen_d2[i]]};
+    //         std::vector<const GenSimParticle *> daughterCollectionVector{&genSimParticles[getArrayElement<Int_t>("gen_d1", i)], &genSimParticles[getArrayElement<Int_t>("gen_d2", i)]};
 
     //         genSimParticles.push_back(GenSimParticle(
-    //             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i],
-    //                                                                         gen_eta[i], gen_phi[i], gen_mass[i])),
-    //             charge, Particle::identifyType(gen_pid[i]), &genSimParticles[gen_m1[i]],
-    //             daughterCollectionVector, gen_status[i]));
+    //             reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Int_t>("gen_pt", i),
+    //                                                                         getArrayElement<Int_t>("gen_eta", i), getArrayElement<Int_t>("gen_phi", i), getArrayElement<Int_t>("gen_mass", i))),
+    //             charge, Particle::identifyType(getArrayElement<Int_t>("gen_pid", i)), &genSimParticles[getArrayElement<Int_t>("gen_m1", i)],
+    //             daughterCollectionVector, getArrayElement<Int_t>("gen_status", i)));
     //     }
     // }
 }
@@ -222,35 +220,35 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
 {
     ParticleCollection<Particle> recoParticles;
 
-    for (UInt_t i = 0; i < getVariable<UInt_t>("elec_size"); i++)
-    {
-        int charge = getArrayElement<Int_t>("elec_charge", i);
+    // for (UInt_t i = 0; i < getVariable<UInt_t>("elec_size"); i++)
+    // {
+    //     int charge = getArrayElement<Int_t>("elec_charge", i);
         
-        Particle::SelectionFit fit;
-        if (getArrayElement<Int_t>("elec_idpass", i) == 4) 
-        {
-            fit = Particle::SelectionFit::Tight;
-        } else if (getArrayElement<Int_t>("elec_idpass", i) == 3) 
-        {
-            fit = Particle::SelectionFit::Medium;
-        } else if (getArrayElement<Int_t>("elec_idpass", i) == 2) 
-        {
-            fit = Particle::SelectionFit::Loose;
-        } else {
-            continue;
-        }
+    //     Particle::SelectionFit fit;
+    //     if (getArrayElement<Int_t>("elec_idpass", i) == 4) 
+    //     {
+    //         fit = Particle::SelectionFit::Tight;
+    //     } else if (getArrayElement<Int_t>("elec_idpass", i) == 3) 
+    //     {
+    //         fit = Particle::SelectionFit::Medium;
+    //     } else if (getArrayElement<Int_t>("elec_idpass", i) == 2) 
+    //     {
+    //         fit = Particle::SelectionFit::Loose;
+    //     } else {
+    //         continue;
+    //     }
 
 
-        // Lorentz four-vector
-        auto particle = Particle(
-            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("elec_pt", i),
-                                                                        getArrayElement<Float_t>("elec_eta", i), getArrayElement<Float_t>("elec_phi", i), getArrayElement<Float_t>("elec_mass", i))),
-            charge, ParticleType::electron(), fit);
-        particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i));
-        particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
-        particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
-        recoParticles.addParticle(particle);
-    }
+    //     // Lorentz four-vector
+    //     auto particle = Particle(
+    //         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("elec_pt", i),
+    //                                                                     getArrayElement<Float_t>("elec_eta", i), getArrayElement<Float_t>("elec_phi", i), getArrayElement<Float_t>("elec_mass", i))),
+    //         charge, ParticleType::electron(), fit);
+    //     particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i));
+    //     particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
+    //     particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
+    //     recoParticles.addParticle(particle);
+    // }
 
     for (UInt_t i = 0; i < getVariable<UInt_t>("muon_size"); i++)
     {
@@ -279,6 +277,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         particle.addInfo("dxy", getArrayElement<Float_t>("muon_dxy", i));
         particle.addInfo("dz", getArrayElement<Float_t>("muon_dz", i));
         recoParticles.addParticle(particle);
+    }
 
     for (UInt_t i = 0; i < getVariable<UInt_t>("photon_size"); i++)
     {
@@ -289,8 +288,8 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
                                                                         getArrayElement<Float_t>("photon_eta", i), getArrayElement<Float_t>("photon_phi", i), 0)),
             0, ParticleType::photon(), fit);
             recoParticles.addParticle(particle);
-        }
     }
+
     return recoParticles;
 }
 
