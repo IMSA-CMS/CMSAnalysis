@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/GenSimGammaPsedoFilteredHist.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimGammaTwoJetsPsedoFilteredHist.hh"
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimParticle.hh"
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
@@ -8,14 +8,14 @@
 
 #include <iostream>
 
-GenSimGammaPsedoFilteredHist::GenSimGammaPsedoFilteredHist(const std::string& iname, int iNBins, double iminimum, double imaximum, std::shared_ptr<LeptonJetReconstructionModule> lepJetModule):
+GenSimGammaTwoJetsPsedoFilteredHist::GenSimGammaTwoJetsPsedoFilteredHist(const std::string& iname, int iNBins, double iminimum, double imaximum, std::shared_ptr<LeptonJetReconstructionModule> lepJetModule):
  HistogramPrototype1D(iname, iNBins, iminimum, imaximum),
  leptonJets(lepJetModule)
 
 { 
 }
 
-std::vector<double> GenSimGammaPsedoFilteredHist::value() const
+std::vector<double> GenSimGammaTwoJetsPsedoFilteredHist::value() const
 {
   //call getparticles or getInput getparticles in input module level-gensim, particle type called darkphoton in particle class
   //particles = GetInput() from input module?
@@ -58,7 +58,7 @@ std::vector<double> GenSimGammaPsedoFilteredHist::value() const
   if(numberOfLeptonJets == 0) {
     returnBool = false;
   }
-  else if(numberOfLeptonJets == 1){
+  else if(numberOfLeptonJets == 2){
     returnBool = true;
 
   }

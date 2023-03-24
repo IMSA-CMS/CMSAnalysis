@@ -16,29 +16,33 @@ using std::string;
 TH1* getHist(string name, TFile* file);
 void process(TH1* hist, std::string canvasName, std::string xaxis, std::string yaxis, std::string title, std::string rootFileName);
 
-void acceptance(string analysis, string numJetsFilter)
+//analysis: e.g. Gamma, Delta R
+//numJetsFilter: number of lepton jets to filter for
+//inputFile: input root file name
+//higgsMass: higgs mass of file running on
+void acceptance(std::string analysis, std::string numJetsFilter, std::string inputFile, std::string higgsMass)
 {
-    for (int i = 0; i < numJetsFilter; i++)
+    for (int i = 1; i <= std::stoi(numJetsFilter); i++)
     {
-        TFile* dRHists = TFile::Open("test.root");
+        TFile* dRHists = TFile::Open(inputFile.c_str());
         
-        string filteredHist = "Gen Sim " + analysis + " (Reconstructed" + numJetsFilter " Jets)";
+        string filteredHist = "Gen Sim " + analysis + " (Reconstructed " + std::to_string(i) + " Jets)";
         string allHist = "Gen Sim " + analysis;
-        string title = analysis + " Acceptance";
+        string title = analysis + " Acceptance (" + std::to_string(i) + " Jet, Higgs Mass " + higgsMass + ")";
         
         auto filteredPlot = getHist(filteredHist.c_str(), dRHists);
         auto allPlot =  getHist(allHist.c_str(), dRHists);
         auto acceptedHist = (TH1D*) filteredPlot->Clone(); 
         acceptedHist->Divide(allPlot);
 
-        string canvasName = analysis + " Acceptance (" + numJetsFilter " Jet)";
+        string canvasName = analysis + " Acceptance (" + std::to_string(i) + " Jet, Higgs Mass " + higgsMass + ")";
         string xaxis = analysis;
         string yaxis = "Percentage of Events Accepted";
-        process(acceptedHist, canvasName, xaxis, yaxis, title, analysis + "Acceptance.root");
+        std::string rootFileName = analysis + "Acceptance.root";
+        process(acceptedHist, canvasName, xaxis, yaxis, title, rootFileName);
     } 
     
 }
-
 
 TH1* getHist(std::string name, TFile* file)
     {
@@ -49,7 +53,7 @@ TH1* getHist(std::string name, TFile* file)
 }
 
 void process(TH1* hist, std::string canvasName, std::string xaxis, std::string yaxis, std::string title, std::string rootFileName){
-    TFile* refinedOutput = TFile::Open(rootFileName, "UPDATE");
+    TFile* refinedOutput = TFile::Open(rootFileName.c_str(), "UPDATE");
     TCanvas* c = new TCanvas(canvasName.c_str(), canvasName.c_str());
     hist->SetStats(kFALSE);
     hist->GetXaxis()->SetTitle(xaxis.c_str());
@@ -59,5 +63,5 @@ void process(TH1* hist, std::string canvasName, std::string xaxis, std::string y
     hist->Draw();
     c->Update();
     c->Write();
-    c->SaveAs((canvasName + ".png").c_str());
+    c->SaveAs((canvasName + " " +  ".png").c_str());
 }
