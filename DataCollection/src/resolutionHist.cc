@@ -3,6 +3,7 @@
 #include "CMSAnalysis/DataCollection/interface/GenSimParticle.hh"
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimSimpleImplementation.hh"
+#include "CMSAnalysis/DataCollection/interface/LeptonJetMatchingModule.hh"
 #include <iostream>
 
 resolutionHist::resolutionHist(std::shared_ptr<LeptonJetReconstructionModule> iLeptonJetRecoModule, const std::string& iname, int iNBins, double iminimum, double imaximum, std::string ianalysis):
@@ -15,9 +16,7 @@ resolutionHist::resolutionHist(std::shared_ptr<LeptonJetReconstructionModule> iL
 
 std::vector<double> resolutionHist::value() const
 {
-  //call getparticles or getInput getparticles in input module level-gensim, particle type called darkphoton in particle class
-  //particles = GetInput() from input module?
-  //not in particle.cc, just pdgid == 4900022 for identifying dark photons
+  //Gen Sim section
   auto particles = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::darkPhoton());
   std::vector<double> gammaVector{};
   std::vector<double> deltaRVector{};
@@ -31,7 +30,7 @@ std::vector<double> resolutionHist::value() const
       continue;
     }
     std::vector<Particle> leptons;
-    
+
     //looping through lepton decays (should be only 2) and pushing to lepton list
     for (int j = 0; j < particle.numberOfDaughters(); ++j)
     {
@@ -41,14 +40,26 @@ std::vector<double> resolutionHist::value() const
         leptons.push_back(leptonCandidate);
       }
     }
-
-    if (leptons.size() >= 2)
+    auto particle1FourVector = leptons[0].getFourVector();
+    auto particle2FourVector = leptons[1].getFourVector();
+    if (analysis=="Gamma")
     {
-      auto particle1FourVector = leptons[0].getFourVector();
-      auto particle2FourVector = leptons[1].getFourVector();
-      auto darkPhotonFourVector = particle1FourVector + particle2FourVector;
-      double gamma = darkPhotonFourVector.Gamma();
-      gammaVector.push_back(gamma);
+        if (leptons.size() >= 2)
+        {
+            
+            auto darkPhotonFourVector = particle1FourVector + particle2FourVector;
+            double gamma = darkPhotonFourVector.Gamma();
+            gammaVector.push_back(gamma);
+        }
+    }
+    else if (analysis=="Delta R")
+    {
+        double deltaR = reco::deltaR(particle1FourVector, particle2FourVector);
+        deltaRVector.push_back(deltaR);
+    }
+    else 
+    {
+        std::runtime_error("analysis incorectly inputed");
     }
   }
   
