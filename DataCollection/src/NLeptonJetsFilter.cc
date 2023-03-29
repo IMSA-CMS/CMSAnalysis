@@ -14,9 +14,17 @@ std::string NLeptonJetsFilter::makeFilterString()
   if(numberOfLeptonJets == 0) {
     returnString = "No Jets ";
   }
-  else if(numberOfLeptonJets > 0){
-    returnString = "Jet Detected ";
-
+  else if(numberOfLeptonJets == 1){
+    returnString = "1 Jets ";
+  }
+  else if(numberOfLeptonJets == 2){
+    returnString = "2 Jets ";
+  }
+  else if(numberOfLeptonJets == 3){
+    returnString = "3 Jets ";
+  }
+  else if(numberOfLeptonJets > 3){
+    returnString = "4 or more Jets ";
   }
   else {
     throw std::runtime_error("Negative Jets");
