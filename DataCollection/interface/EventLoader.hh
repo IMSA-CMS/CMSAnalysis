@@ -1,8 +1,8 @@
 #ifndef EVENTLOADER_HH
 #define EVENTLOADER_HH
 
-#include "ParticleCollection.hh"
-#include "EventFile.hh"
+#include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
+#include "CMSAnalysis/EventFiles/interface/EventFile.hh"
 #include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
 #include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 #include "DataFormats/Common/interface/TriggerResults.h"

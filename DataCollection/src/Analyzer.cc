@@ -9,16 +9,16 @@
 #include "TFile.h"
 #include "TH1.h"
 
-#include "CMSAnalysis/DataCollection/interface/AnalysisModule.hh"
-#include "CMSAnalysis/DataCollection/interface/FilterModule.hh"
-#include "CMSAnalysis/DataCollection/interface/ProductionModule.hh"
+#include "CMSAnalysis/Modules/interface/AnalysisModule.hh"
+#include "CMSAnalysis/Modules/interface/FilterModule.hh"
+#include "CMSAnalysis/Modules/interface/ProductionModule.hh"
 #include "CMSAnalysis/DataCollection/interface/EventLoader.hh"
 #include "FWCore/Framework/interface/Event.h"
 #include "DataFormats/FWLite/interface/Event.h"
-#include "CMSAnalysis/DataCollection/interface/Module.hh"
+#include "CMSAnalysis/Modules/interface/Module.hh"
 #include "CMSAnalysis/DataCollection/interface/TDisplayText.h"
 #include "CMSAnalysis/DataCollection/interface/ProcessDictionary.hh"
-#include "CMSAnalysis/DataCollection/interface/AnalyzerInputModule.hh"
+#include "CMSAnalysis/Modules/interface/AnalyzerInputModule.hh"
 
 Analyzer::Analyzer() : 
 eventInterface(nullptr),

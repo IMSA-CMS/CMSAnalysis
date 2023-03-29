@@ -1,6 +1,6 @@
 #include "CMSAnalysis/DataCollection/interface/CmsswEventInterface.hh"
-#include "CMSAnalysis/DataCollection/interface/InputModule.hh"
-#include "CMSAnalysis/DataCollection/interface/Particle.hh"
+#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"

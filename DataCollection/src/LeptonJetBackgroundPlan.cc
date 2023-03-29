@@ -7,14 +7,14 @@
 #include "TSystem.h"
 
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonJetReconstructionModule.hh"
-#include "CMSAnalysis/DataCollection/interface/METModule.hh"
-#include "CMSAnalysis/DataCollection/interface/NLeptonJetHist.hh"
-#include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
-#include "CMSAnalysis/DataCollection/interface/Histograms.hh"
-#include "CMSAnalysis/DataCollection/interface/SnowmassLeptonSelector.hh"
-#include "CMSAnalysis/DataCollection/interface/METHist.hh"
-#include "CMSAnalysis/DataCollection/interface/EventDumpModule.hh"
+#include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
+#include "CMSAnalysis/Modules/interface/METModule.hh"
+#include "CMSAnalysis/Histograms/interface/NLeptonJetHist.hh"
+#include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
+#include "CMSAnalysis/Histograms/interface/Histograms.hh"
+#include "CMSAnalysis/Filters/interface/SnowmassLeptonSelector.hh"
+#include "CMSAnalysis/Histograms/interface/METHist.hh"
+#include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
 
 
 using std::make_shared;

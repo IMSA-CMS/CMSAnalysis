@@ -7,32 +7,32 @@
 #include "TSystem.h"
 
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
-#include "CMSAnalysis/DataCollection/interface/DoubleElectronTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/DoubleMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
-#include "CMSAnalysis/DataCollection/interface/LocalEventInputModule.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonFilter.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonEfficiency.hh"
-#include "CMSAnalysis/DataCollection/interface/MatchingModule.hh"
-#include "CMSAnalysis/DataCollection/interface/METHist.hh"
-#include "CMSAnalysis/DataCollection/interface/METModule.hh"
-#include "CMSAnalysis/DataCollection/interface/NLeptonsFilter.hh"
-#include "CMSAnalysis/DataCollection/interface/NLeptonsHist.hh"
-#include "CMSAnalysis/DataCollection/interface/SameSignInvariantMassHist.hh"
-#include "CMSAnalysis/DataCollection/interface/SingleElectronTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/SingleMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/SnowmassCutFilter.hh"
-#include "CMSAnalysis/DataCollection/interface/SnowmassLeptonSelector.hh"
-#include "CMSAnalysis/DataCollection/interface/Histograms.hh"
-#include "CMSAnalysis/DataCollection/interface/TriggerModule.hh"
-#include "CMSAnalysis/DataCollection/interface/TripleMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/TwoInvariantMassesHist.hh"
-#include "CMSAnalysis/DataCollection/interface/BJetFilter.hh"
-#include "CMSAnalysis/DataCollection/interface/EventModule.hh"
-#include "CMSAnalysis/DataCollection/interface/PASSelector.hh"
-#include "CMSAnalysis/DataCollection/interface/QuarkoniaCut.hh"
-#include "CMSAnalysis/DataCollection/interface/ZVetoCut.hh"
-#include "CMSAnalysis/DataCollection/interface/FourLeptonCut.hh"
+#include "CMSAnalysis/Filters/interface/DoubleElectronTrigger.hh"
+#include "CMSAnalysis/Filters/interface/DoubleMuonTrigger.hh"
+#include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
+#include "CMSAnalysis/Modules/interface/LocalEventInputModule.hh"
+#include "CMSAnalysis/Filters/interface/LeptonFilter.hh"
+#include "CMSAnalysis/Modules/interface/LeptonEfficiency.hh"
+#include "CMSAnalysis/Modules/interface/MatchingModule.hh"
+#include "CMSAnalysis/Histograms/interface/METHist.hh"
+#include "CMSAnalysis/Modules/interface/METModule.hh"
+#include "CMSAnalysis/Filters/interface/NLeptonsFilter.hh"
+#include "CMSAnalysis/Histograms/interface/NLeptonsHist.hh"
+#include "CMSAnalysis/Histograms/interface/SameSignInvariantMassHist.hh"
+#include "CMSAnalysis/Filters/interface/SingleElectronTrigger.hh"
+#include "CMSAnalysis/Filters/interface/SingleMuonTrigger.hh"
+#include "CMSAnalysis/Filters/interface/SnowmassCutFilter.hh"
+#include "CMSAnalysis/Filters/interface/SnowmassLeptonSelector.hh"
+#include "CMSAnalysis/Histograms/interface/Histograms.hh"
+#include "CMSAnalysis/Modules/interface/TriggerModule.hh"
+#include "CMSAnalysis/Filters/interface/TripleMuonTrigger.hh"
+#include "CMSAnalysis/Histograms/interface/TwoInvariantMassesHist.hh"
+#include "CMSAnalysis/Filters/interface/BJetFilter.hh"
+#include "CMSAnalysis/Modules/interface/EventModule.hh"
+#include "CMSAnalysis/Filters/interface/PASSelector.hh"
+#include "CMSAnalysis/Filters/interface/QuarkoniaCut.hh"
+#include "CMSAnalysis/Filters/interface/ZVetoCut.hh"
+#include "CMSAnalysis/Filters/interface/FourLeptonCut.hh"
 
 using std::make_shared;
 
@@ -135,7 +135,7 @@ void HiggsBackgroundPlan::initialize()
     analyzer.addProductionModule(metMod);
 
 
-    /*analyzer.addFilterModule(bJetFilter);
+    /*analyzer.addFilterModule(make_shared<FilterModule>(bJetFilter));
     analyzer.addFilterModule(snowmassCut);
     analyzer.addFilterModule(nLeptonsFilter);*/
 
