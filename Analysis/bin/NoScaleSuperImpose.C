@@ -15,7 +15,7 @@
 #include "TH1.h"
 #include "TStyle.h"
 
-void SuperImpose() {
+void NoScaleSuperImpose() {
     //Change extraText here
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary");
     //Change the filePath here. This should be the longest branch all input files have in common.
@@ -58,5 +58,5 @@ void SuperImpose() {
         count++;
     }
     
-    TCanvas *canvas = plotFormatter->simpleSuperImposedHist(histVector, colors,  names, xTitle, yTitle);
+    TCanvas *canvas = plotFormatter->noScaleSimpleSuperImposedHist(histVector, colors,  names, xTitle, yTitle);
 }
