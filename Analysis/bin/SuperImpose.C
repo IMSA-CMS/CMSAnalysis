@@ -25,10 +25,13 @@ void SuperImpose() {
     //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
     //Write your graph names here (for the legend)
     
-    std::vector<std::string> files = {"GammaAcceptance1000.root", "GammaAcceptance1000.root"};
-    std::vector<std::string> hists = {"Gen Sim Gamma (Reconstructed 1 Jets)", "Gen Sim Gamma (Reconstructed 2 Jets)"};
+    //std::vector<std::string> files = {"GammaAcceptance1000.root", "GammaAcceptance1000.root"};
+    //std::vector<std::string> hists = {"Gen Sim Gamma (Reconstructed 1 Jets)", "Gen Sim Gamma (Reconstructed 2 Jets)"};
+    
     //std::vector<std::string> hists = {"Gamma Acceptance (1 Jet, Higgs Mass 1000)", "Gamma Acceptance (2 Jet, Higgs Mass 1000)"};
-    std::vector<TString> names = {"Gamma Acceptance (1 Jet, Higgs Mass 1000)", "Gamma Acceptance (2 Jet, Higgs Mass 1000)"};
+    
+    //std::vector<TString> names = {"Gamma Acceptance (1 Jet, Higgs Mass 1000)", "Gamma Acceptance (2 Jet, Higgs Mass 1000)"};
+
 
     //std::vector<std::string> files = {"GammaAcceptance300.root", "GammaAcceptance300.root"};
     //std::vector<std::string> hists = {"Gamma Acceptance (1 Jet, Higgs Mass 300)", "Gamma Acceptance (2 Jet, Higgs Mass 300)"};
@@ -40,9 +43,10 @@ void SuperImpose() {
 
     
     
-    //std::vector<std::string> files = {"Delta RAcceptance1000.root", "Delta RAcceptance1000.root"};    
+    std::vector<std::string> files = {"Delta RAcceptance1000.root", "Delta RAcceptance1000.root"};    
+    std::vector<std::string> hists = {"Gen Sim Delta R (Reconstructed 1 Jets)", "Gen Sim Delta R (Reconstructed 2 Jets)"};
     //std::vector<std::string> hists = {"Delta R Acceptance (1 Jet, Higgs Mass 1000)", "Delta R Acceptance (2 Jet, Higgs Mass 1000)"};
-    //std::vector<TString> names = {"Delta R Acceptance (1 Jet, Higgs Mass 1000)", "Delta R Acceptance (2 Jet, Higgs Mass 1000)"};
+    std::vector<TString> names = {"Delta R Acceptance (1 Jet, Higgs Mass 1000)", "Delta R Acceptance (2 Jet, Higgs Mass 1000)"};
 
     //std::vector<std::string> files = {"Delta RAcceptance300.root", "Delta RAcceptance300.root"};    
     //std::vector<std::string> hists = {"Delta R Acceptance (1 Jet, Higgs Mass 300)", "Delta R Acceptance (2 Jet, Higgs Mass 300)"};
@@ -57,8 +61,8 @@ void SuperImpose() {
     //Colors go here
     std::vector<int> colors = {1, 2};
     //Change x and y axis titles here
-    TString xTitle = "Gamma";
-    //TString xTitle = "Delta R";
+    //TString xTitle = "Gamma";
+    TString xTitle = "Delta R";
     TString yTitle = "Percentage of Events Accepted";
 
 
