@@ -1,3 +1,7 @@
+#include <cmath>
+#include <stdexcept>
+#include <fstream>
+
 #include "CMSAnalysis/DataCollection/interface/LeptonJetEfficiency.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJetReconstructionModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJetMatchingModule.hh"
@@ -12,7 +16,6 @@ void LeptonJetEfficiency::doCounters()
 {
     auto recoLeptonJets = lepRecoMod->getLeptonJets();
     incrementCounter("Number of Reconstructed Jets", recoLeptonJets.size());
-
     if (recoLeptonJets.size() > 1) 
     {
         incrementCounter("Multiple Jet Events", 1);

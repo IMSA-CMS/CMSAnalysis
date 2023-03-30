@@ -94,6 +94,29 @@ class ThirdMuonPtHist : public GenSimRecoPrototype
   }
 };
 
+// write histogram for Gamma distribution
+
+class GammaHistogram : public GenSimRecoPrototype
+{
+  using GenSimRecoPrototype::GenSimRecoPrototype;
+
+  std::vector<double> protectedValue(InputModule::RecoLevel level) const
+  {
+    auto particles = getInput()->getParticles(level, ParticleType::darkPhoton());
+    std::vector<double> outputs;
+    for (const auto& particle : particles)
+    {
+      double gammaVal = particle.getFourVector().Gamma();
+      outputs.push_back(gammaVal);
+    }
+    return outputs;
+  }
+  
+    
+  };
+
+
+
 class PileUpHist : public HistogramPrototype1D
 {
   using HistogramPrototype1D::HistogramPrototype1D;
@@ -158,8 +181,9 @@ class DxyHist : public GenSimRecoPrototype
     auto particles = getInput()->getLeptons(level);
     std::vector<double> dxy;
     for(auto particle : particles.getParticles()) {
-        if(particle.getDxy() != 0) {
-	    dxy.push_back(particle.getDxy());
+      double particleDxy = particle.getInfo("dxy");
+      if(particleDxy != 0) {
+	      dxy.push_back(particleDxy);
     	}
     }
     return dxy;
@@ -175,11 +199,39 @@ class DzHist : public GenSimRecoPrototype
     auto particles = getInput()->getLeptons(level);
     std::vector<double> dz;
     for(auto particle : particles.getParticles()) {
-        if(particle.getDz() != 0) {
-	    dz.push_back(particle.getDz());
+      double particleDz = particle.getInfo("dz");
+      if(particleDz != 0) {
+	      dz.push_back(particleDz);
     	}
     }
     return dz;
+  }
+};
+
+// plots highest lepton-photon invariant mass in the event
+class PhotonInvariantMassHist : public GenSimRecoPrototype
+{
+  using GenSimRecoPrototype::GenSimRecoPrototype;
+
+  std::vector<double> protectedValue(InputModule::RecoLevel level) const
+  {
+    auto particles = getInput()->getParticles(level);
+    bool ePlusGamma = false;
+    double highInvMass = 0;
+    double thisInvMass = 0;
+
+    for(auto particle : particles.getParticles()) {
+      for (auto particle2 : particles.getParticles())
+      {
+        ePlusGamma = (particle.getType() == ParticleType::electron() && particle2.getType() == ParticleType::photon() ) || (particle2.getType() == ParticleType::electron() && particle.getType() == ParticleType::photon());
+        thisInvMass = (particle.getFourVector() + particle2.getFourVector()).M();
+
+        if (ePlusGamma && (thisInvMass > highInvMass)) {
+          highInvMass = thisInvMass;
+        }
+      }
+    }
+    return {highInvMass};
   }
 };
 

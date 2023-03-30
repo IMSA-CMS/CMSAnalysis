@@ -20,7 +20,11 @@ class LeptonJetDumpModule : public AnalysisModule
     virtual void writeAll() override;
     
     void printLeptons(std::ofstream& my_file);
+
     void printRecoJets(std::ofstream& my_file);
+
+    void printWrongRecoLeptons(std::ofstream& my_file);
+
     private:
 
     int counter;

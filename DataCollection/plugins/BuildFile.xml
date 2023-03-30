@@ -1,0 +1,9 @@
+<use name="FWCore/Framework"/>
+<use name="FWCore/ParameterSet"/>
+<use name="FWCore/PluginManager"/>
+<use name="CommonTools/UtilAlgos"/>
+<use name="FWCore/ServiceRegistry"/>
+<use name="DataFormats/TrackReco"/>
+<use name="CMSAnalysis/DataCollection"/>
+<flags EDM_PLUGIN="1"/>
+

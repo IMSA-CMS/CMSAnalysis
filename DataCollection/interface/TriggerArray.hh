@@ -19,7 +19,7 @@ template <class... Args> class TriggerArray
 
   protected:
     virtual std::map<std::string, bool> checkTrigger(Args&... arg) = 0;
-    virtual std::map<std::string, bool> checkTrigger() = 0;    // Returns true if the trigger is passed
+    virtual std::map<std::string, bool> checkTrigger() = 0;    // map of trigger and true if the trigger is passed
 
   private:
     struct efficiency
