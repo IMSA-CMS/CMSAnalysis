@@ -90,6 +90,8 @@ void LeptonJetReconstructionPlan::initialize()
   auto genSimDeltaRTwoJetsPsedoFilteredHist = std::make_shared<GenSimDeltaRTwoJetsPsedoFilteredHist>("Gen Sim Delta R (Reconstructed 2 Jets)", 100, 0, 0.5, lepRecoMod);
 
 
+  auto ResolutionHist = std::make_shared<ResolutionHist>(lepMatchMod, "Gamma Resolution", 100, 0, 1000);
+
   auto pTHist = std::make_shared<LeptonJetPtHist>(lepRecoMod, "pT Values (Reconstructed Jets)", 100, 0, 200);
   auto matchedLeptonJetHist = std::make_shared<MatchedLeptonJetHist>("Matched Lepton Jet Hist HadET", 100, 0, 10, lepMatchMod, lepRecoMod, true);
   auto unmatchedLeptonJetHist = std::make_shared<MatchedLeptonJetHist>("Unmatched Lepton Jet Hist HadET", 100, 0, 10, lepMatchMod, lepRecoMod, false);
@@ -125,8 +127,8 @@ void LeptonJetReconstructionPlan::initialize()
   eventHistMod->addHistogram(genSimDeltaRTwoJetsPsedoFilteredHist);
   histOutputMod->addHistogram(genSimGammaTwoJetsPsedoFilteredHist);
   eventHistMod->addHistogram(genSimGammaTwoJetsPsedoFilteredHist);
-
-
+  histOutputMod->addHistogram(ResolutionHist);
+  eventHistMod->addHistogram(ResolutionHist);
  // histOutputMod->addHistogram(leptonJetMLHist);
 
 //   histOutputMod->addHistogram(matchDeltaRHist);

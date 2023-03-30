@@ -4,11 +4,14 @@
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimSimpleImplementation.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonJetMatchingModule.hh"
+#include "CMSAnalysis/DataCollection/interface/LeptonJet.hh"
 #include <iostream>
+
+
 
 ResolutionHist::ResolutionHist(std::shared_ptr<LeptonJetMatchingModule> iLeptonJetMatchingModule, const std::string& iname, int iNBins, double iminimum, double imaximum):
     HistogramPrototype1D(iname, iNBins, iminimum, imaximum),
-    LeptonJetMatchingModule(iLeptonJetMatchingModule),
+    leptonMatchMod(iLeptonJetMatchingModule)
 {
 
 }
@@ -16,19 +19,12 @@ ResolutionHist::ResolutionHist(std::shared_ptr<LeptonJetMatchingModule> iLeptonJ
 std::vector<double> ResolutionHist::value() const
 { 
   //pair of particles <gen sim, reco>
-  const auto matchedPairs = LeptonJetMatchingModule->getMatchingPairs();
-  std::vector<double> gammaVector{};
-  std::vector<std::pair<double, double>> ResolutionVector{};
+  const auto matchedPairs = leptonMatchMod->getMatchingPairs();
+  std::vector<double> ResolutionVector{};
+  std::vector<std::pair<double, double>> gammaVector{};
   for (auto matchedPair : matchedPairs)
   { 
-    if (analysis=="Gamma")
-    {
-        gammaVector.push_back(matchedPair.first().getGamma(), matchedPair.second().getGamma());
-    }
-    else 
-    {
-        std::runtime_error("analysis incorectly inputed");
-    }
+    gammaVector.push_back(std::get<0>(matchedPair).getGamma(), std::get<1>(matchedPair).getGamma());    
   }
   for (auto gammaPair : gammaVector)
   {
