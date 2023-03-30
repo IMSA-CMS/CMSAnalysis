@@ -75,8 +75,9 @@ void LeptonJetReconstructionPlan::initialize()
   // Histograms
   //uncomented 
   auto gammaDeltaRHist2D = std::make_shared<GammaDeltaRHist2D>(lepRecoMod, "Gamma Delta R Hist", 100, 100, 1, 0, 500, 0.25);
-  //auto darkPhotonMassHist = std::make_shared<DarkPhotonMassHist>("Higgs Mass", 100, 0, 1500);   
-
+  //auto darkPhotonMassHist = std::make_shared<DarkPhotonMassHist>("Higgs Mass", 100, 0, 1500);
+  auto resolutionHist = std::make_shared<ResolutionHist>(lepMatchMod, "Gamma Resolution", 1000, -1, 1); 
+   
   auto gammaHist = std::make_shared<GammaHist>(lepRecoMod, "Gamma Values", 100, 1, 1000); 
   auto deltaRHist = std::make_shared<DeltaRHist>(lepRecoMod, "Delta R Values", 100, 0, 0.1); 
   
@@ -102,6 +103,8 @@ void LeptonJetReconstructionPlan::initialize()
  // auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(InputModule::RecoLevel::Reco, "NN Classifier Output Distribution", 100, 0, 1, mlMod, lepRecoMod);
 //uncomented
   
+  eventHistMod->addHistogram(resolutionHist);
+  histOutputMod->addHistogram(resolutionHist);
   eventHistMod->addHistogram(gammaDeltaRHist2D);
   eventHistMod->addHistogram(gammaHist);
   histOutputMod->addHistogram(gammaHist);
