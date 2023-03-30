@@ -51,7 +51,7 @@
 #include "CMSAnalysis/DataCollection/interface/DarkPhotonMassHist.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimDeltaRTwoJetsPsedoFilteredHist.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimGammaTwoJetsPsedoFilteredHist.hh"
-
+#include "CMSAnalysis/DataCollection/interface/ResolutionHist.hh"
 
 
 using std::make_shared;
