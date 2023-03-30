@@ -1,4 +1,4 @@
- #include "CMSAnalysis/DataCollection/interface/resolutionHist.hh"
+#include "CMSAnalysis/DataCollection/interface/resolutionHist.hh"
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimParticle.hh"
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
@@ -8,9 +8,9 @@
 #include "CMSAnalysis/DataCollection/interface/LeptonJet.hh"
 #include <iostream>
 
-resolutionHist::resolutionHist(std::shared_ptr<LeptonJetMatchingModule> iLeptonJetRecoModule, const std::string& iname, int iNBins, double iminimum, double imaximum, std::string ianalysis):
+resolutionHist::resolutionHist(std::shared_ptr<LeptonJetMatchingModule> LeptonJetMatchingModule, const std::string& iname, int iNBins, double iminimum, double imaximum, std::string ianalysis):
     HistogramPrototype1D(iname, iNBins, iminimum, imaximum),
-    leptonJetRecoModule(iLeptonJetRecoModule),
+    LeptonJetMatchingModule(iLeptonJetMatchingModule),
     analysis(ianalysis)
 {
 
@@ -18,10 +18,13 @@ resolutionHist::resolutionHist(std::shared_ptr<LeptonJetMatchingModule> iLeptonJ
 
 std::vector<double> resolutionHist::value() const
 {
-  //call getparticles or getInput getparticles in input module level-gensim, particle type called darkphoton in particle class
-  //particles = GetInput() from input module?
-  //not in particle.cc, just pdgid == 4900022 for identifying dark photons
-  auto particles = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::darkPhoton());
+  auto matchedPairs = LeptonJetMatchingModule.getMatchingPairs()
+  for(pairs : matchedPairs) {
+    pairs.get(first)
+
+
+
+  }
   std::vector<double> gammaVector{};
   std::vector<double> deltaRVector{};
   for (auto iparticle : particles.getParticles()) 
@@ -56,7 +59,7 @@ std::vector<double> resolutionHist::value() const
   }
   
   return gammaVector;
-
+}
 
 std::vector<double> resolutionHist::recoGamma(std::vector<LeptonJet> LeptonJets)
   {
@@ -74,5 +77,4 @@ std::vector<double> resolutionHist::recoGamma(std::vector<LeptonJet> LeptonJets)
     {
     return {-1};
     }  
-  }
-} 
+  } 
