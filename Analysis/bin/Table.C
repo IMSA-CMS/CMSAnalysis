@@ -34,9 +34,10 @@ std::string roundDoubleString(double doub, int digits)
 }
 
 //Converts channel data to something TableData can work with
-std::vector<std::vector<std::string>> makeTableInput(std::vector<std::vector<std::string>> oldInput, HistVariable dataType, std::shared_ptr<Channel> channel, double massTarget)
+std::vector<std::vector<std::string>> makeTableInput(std::vector<std::vector<std::string>> oldInput, 
+HistVariable dataType, std::shared_ptr<Channel> channel, double massTarget)
 {
-    std::vector<double> yields = channel->getYields(dataType);
+    std::vector<double> yields = channel->getYields(dataType.getName());
     std::vector<std::string> names = channel->getNames();
     std::vector<std::vector<std::string>> newInput = oldInput;
     std::vector<std::string> toAdd(3, "");
@@ -65,7 +66,8 @@ void Table()
         input.clear();
         for(double massTarget : massTargets) {
             //Change the histVariable to analyze different properties
-            input = makeTableInput(input, HistVariable::MET, higgsAnalysis->getChannel(channel + std::to_string((int) massTarget)), massTarget);
+            input = makeTableInput(input, HistVariable::MET("Histogram"), 
+            higgsAnalysis->getChannel(channel + std::to_string((int) massTarget)), massTarget);
         }
         auto tableInput = std::make_shared<TableData>(input);
         //Change the type of table you want here
