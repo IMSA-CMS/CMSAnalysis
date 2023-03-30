@@ -17,7 +17,7 @@ LeptonJetDumpModule::LeptonJetDumpModule(std::shared_ptr<LeptonJetMatchingModule
     matchMod(iMatch),
     numEvents(inumEvents)
 {
-    counter = 0;
+    counter = 1;
     std::ofstream my_file;
     my_file.open("LeptonJetDump.txt", std::ofstream::out | std::ofstream::trunc);
     my_file.close();
@@ -32,9 +32,14 @@ bool LeptonJetDumpModule::process()
     printLeptons(my_file);
 
     my_file << std::endl;
-    my_file << "----------SHOWING INDIVIDUAL LEPTONS JETS---------------"<<std::endl;
+    my_file << "----------SHOWING INDIVIDUAL LEPTONS JETS---------------" << std::endl;
 
     printRecoJets(my_file);
+    
+    my_file << std::endl;
+    my_file << "----------SHOWING PARTICLES RECONSTRUCTED AS LEPTONS---------------" << std::endl;
+
+    printWrongRecoLeptons(my_file);
 
     my_file.close();
 
@@ -85,7 +90,7 @@ void LeptonJetDumpModule::printLeptons(std::ofstream& my_file)
     << std::setw(15) << "| E"
     << std::setw(5) << "| mass\n";
 
-    if(genLeptons.size() != 0) // checks if event is empty
+    if(genLeptons.size() == 0) // checks if event is empty
     {
       return;
     }
@@ -96,8 +101,8 @@ void LeptonJetDumpModule::printLeptons(std::ofstream& my_file)
     {
       GenSimParticle particle = lepton;
       Particle recoLepton = recoMatch.at(std::find(genMatch.begin(),genMatch.end(),lepton) - genMatch.begin());
-      particleParentage.insert(particleParentage.begin(), Particle::nullParticle()); //will be used as new line for each lepton lineage
       particleParentage.insert(particleParentage.begin(), recoLepton);
+      particleParentage.insert(particleParentage.begin(), Particle::nullParticle()); //will be used as new line for each lepton lineage
 
       while(particle.isNotNull() && !(lepJet -> isQuark(particle) || lepJet -> isSquark(particle) || particle.status() == 4))
       {
@@ -122,35 +127,56 @@ void LeptonJetDumpModule::printLeptons(std::ofstream& my_file)
         }
         else
         {
-            my_file << std::endl;
-            my_file << std::setw(8) << eventElement <<particleParentage[i] << std::endl;
-            eventElement++;
             i++;
+            my_file << std::setw(8) << eventElement << GenSimParticle(particleParentage[i]) << std::endl;
+            my_file << std::endl;
+            // std::cout<<std::endl;
+            // std::cout<< i << " "<< particleParentage.size() <<std::endl;
+            //std::cout<<particleParentage[i].isNotNull() <<std::endl;
+            eventElement++;
         }
     }
     
-    for(Particle part : particleParentage)
-    {
-        if(part != Particle::nullParticle())
-        {
-            my_file << std::setw(8) << eventElement <<std::pair<GenSimParticle, std::vector<GenSimParticle>>{part, genSimVector} << std::endl;
-            eventElement++;
-        }
-        else
-        {
-            my_file << std::endl;
-        }
-    }
 }
 void LeptonJetDumpModule::printRecoJets(std::ofstream& my_file)
 {
     std::vector<std::pair<Particle,LeptonJet>> recoJets = lepJet->getMatchingPairs();
     for (std::pair<Particle,LeptonJet> leptonPair : recoJets)
     {
-        my_file << std::setw(8) << "" << leptonPair.first <<std::endl;
+        my_file << std::setw(8) << "" << GenSimParticle(leptonPair.first) <<std::endl;
         for(GenSimParticle lepton : leptonPair.second.getParticles())
         {
             my_file << std::setw(8) << "" << lepton <<std::endl;
         }
+        my_file << std::endl;
     }
+}
+void LeptonJetDumpModule::printWrongRecoLeptons(std::ofstream& my_file)
+{
+    std::vector<Particle> genSim(getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::none()).getParticles());
+
+    std::vector<GenSimParticle> genSimVector;
+
+    for(Particle genParticle: genSim)
+    {
+      genSimVector.push_back(GenSimParticle(genParticle));
+    }
+
+    const MatchingPairCollection& bestMatches = matchMod->getMatchingBestPairs();
+    const std::vector<GenSimParticle> genMatch = bestMatches.getGenParticles().getParticles();
+    const std::vector<Particle> recoMatch = bestMatches.getRecoParticles().getParticles();
+
+    for (size_t i = 0; i < genMatch.size(); i++)
+    {
+        if(recoMatch[i].getType() == ParticleType::electron() || recoMatch[i].getType() == ParticleType::muon())
+        {
+            if(genMatch[i].getType() != ParticleType::electron() || genMatch[i].getType() != ParticleType::muon())
+            {
+                my_file << std::setw(8) <<""<<std::pair<GenSimParticle, std::vector<GenSimParticle>>{genMatch[i], genSimVector} << std::endl;
+                my_file << std::setw(8) <<""<< GenSimParticle(recoMatch[i]) << std::endl;
+                my_file << std::endl;
+            }
+        }
+    }
+    
 }

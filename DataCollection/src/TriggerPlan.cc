@@ -23,7 +23,7 @@ void TriggerPlan::initialize()
   auto trigSimMod = make_shared<TriggerSimModule>("HLT");
   auto simTrigSingleElectron = make_shared<SimTrigger>("singleElectron", TriggerSimModule::EnumTriggers::singleElectronTriggers, trigSimMod);
   auto simTrigSingleMuon = make_shared<SimTrigger>("singleMuon", TriggerSimModule::EnumTriggers::singleMuonTriggers, trigSimMod);
-  auto simTrigPhoton = make_shared<SimTrigger>("photon", TriggerSimModule::EnumTriggers::photonTriggers, trigSimMod);
+  // auto simTrigPhoton = make_shared<SimTrigger>("photon", TriggerSimModule::EnumTriggers::photonTriggers, trigSimMod);
   // auto testTrig = make_shared<SingleElectronTrigger>();
   auto triggerMod = make_shared<TriggerModule>();
 
@@ -32,7 +32,7 @@ void TriggerPlan::initialize()
 
 
   // Configure objects
-  // simTrigd->enableAllTriggers(); // For testing purposes. You should probably remove this, if I haven't already
+  trigSimMod->enableAllTriggers(); // For testing purposes. You should probably remove this, if I haven't already
   // simTrigSingleElectron->enableAllTriggers();
   // simTrigSingleMuon->enableAllTriggers();
   // simTrigPhoton->enableAllTriggers();
@@ -47,6 +47,6 @@ void TriggerPlan::initialize()
   analyzer.addProductionModule(triggerMod);
   // analyzer.addProductionModule(recoTriggerMod);
 
-  analyzer.addAnalysisModule(EventDumpMod);
+  // analyzer.addAnalysisModule(EventDumpMod);
 
 }

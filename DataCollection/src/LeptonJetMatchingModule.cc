@@ -53,24 +53,43 @@ bool LeptonJetMatchingModule::process()
     //std::vector<std::pair<GenSimParticle, GenSimParticle>> leptonOrigins;
     for(GenSimParticle lepton : underlyingLepton)
     {
+      bool passedDarkPhoton = false;
       GenSimParticle particle = lepton;
+      bool forgetIt = false;
       while(!(isQuark(particle) || isSquark(particle) || particle.status() == 4))
       {
+        if(particle.hasMother() == false) break;
         particle = particle.mother();
-      } 
+        if(particle.pdgId() == 0)
+        {
+          forgetIt = true;
+          break;
+        }
+        if(particle.getType() == ParticleType::darkPhoton())
+        {
+          passedDarkPhoton = true;
+        }
+      }
+      if(forgetIt) break;
       if(isQuark(particle))
       {
         quark++;
       }
       if(isSquark(particle))
       {
-        squark++;
+        if(passedDarkPhoton)
+        {
+          darkPhotonOrigin++;
+        }
+        else
+        {
+          squark++;
+        }
       }
       if(particle.status() == 4)
       {
         proton++;
       }
-    
     }
     
   
@@ -159,6 +178,7 @@ void LeptonJetMatchingModule::finalize()
   std::cout << "Number of Dark Photons: " << genSize << "\n";
   std::cout << "Lepton Jet Matching Efficiency: " << (double) darkPhoton / genSize << "\n";
   std::cout << "Leptons From Quarks " << (double) quark / genLeptons << std::endl;
+  std::cout << "Leptons From Dark Photons " << (double) darkPhotonOrigin / genLeptons << std::endl;
   std::cout << "Leptons From Squarks " << (double) squark / genLeptons << std::endl;
   std::cout << "Leptons From Protons " << (double) proton / genLeptons << std::endl;
 }

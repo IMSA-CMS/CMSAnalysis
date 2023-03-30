@@ -38,3 +38,9 @@
 # Files to always include
 !*.cc
 !*.h
+
+#Root dictionary files
+*ACLiC*
+
+#Nohup files
+nohup.out

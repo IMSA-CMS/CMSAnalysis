@@ -1,5 +1,4 @@
 #include "CMSAnalysis/DataCollection/interface/TriggerSimModule.hh"
-
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "FWCore/Framework/interface/Event.h"
@@ -148,6 +147,8 @@ bool TriggerSimModule::process()
     // Checks if the current trigger is meant to be analyzed
     if (enableAll || std::find(triggerNames.begin(), triggerNames.end(), names[i]) != triggerNames.end())
     {
+      //std::cout << names[i] << "\n";
+    
       // This line is where the trigger is actually checked
       passCurrentTrigger = triggerResults[i];
 
@@ -184,7 +185,6 @@ bool TriggerSimModule::process()
 
 bool TriggerSimModule::checkTrigger(EnumTriggers name)
 {
-  // std::cerr << "Notice: TriggerSimModule::checkTrigger is running\n";
   bool passed = false;
 
   std::vector<std::string> nameVector = triggerEnumNameMap.find(name)->second;
@@ -192,8 +192,6 @@ bool TriggerSimModule::checkTrigger(EnumTriggers name)
   // For every trigger that passed
   for (std::string trigger : passedTriggers)
   {
-    // std::cerr << trigger << std::endl;
-
     // If the trigger is one of the specified ones
     if (enableAll || std::find(nameVector.begin(), nameVector.end(), trigger) != nameVector.end())
     {
@@ -202,7 +200,6 @@ bool TriggerSimModule::checkTrigger(EnumTriggers name)
   }
 
   return passed;
-  return true;
 };
 
 // For use within a trigger object [Defunct]

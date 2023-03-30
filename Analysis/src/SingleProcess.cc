@@ -49,9 +49,9 @@ bool SingleProcess::checkValidity()
     bool validProcess = true;
     std::vector<HistVariable> histVariables = input->getHistVariables();
     for(HistVariable histVar : histVariables) {
-	if(input->getHist(histVar.getName()) == 0) {
-	    validProcess = false;
-	}
+        if(input->getHist(histVar.getName()) == 0) {
+            validProcess = false;
+        }
     }    
     return validProcess;
 }

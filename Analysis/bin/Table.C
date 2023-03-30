@@ -42,10 +42,9 @@ HistVariable dataType, std::shared_ptr<Channel> channel, double massTarget)
     std::vector<std::vector<std::string>> newInput = oldInput;
     std::vector<std::string> toAdd(3, "");
     int count = 0;
-    while(static_cast<std::vector<int>::size_type>(count) < names.size())
-    {
+    for(std::string name : names) {
         toAdd.at(0) = names.at(count);
-        toAdd.at(1) = std::to_string((int) massTarget);
+        toAdd.at(1) = channel->getName();
         toAdd.at(2) = roundDoubleString(yields.at(count), 4);
         newInput.push_back(toAdd);
         count++;
@@ -59,15 +58,19 @@ void Table()
     //Change what branching ratio particles you are looking at here
     std::vector<std::string> channels = {"Muon", "Electron"};
     //List massTargets here
-    std::vector<double> massTargets = {300, 500, 700, 900, 1100, 1300};
+    std::vector<double> massTargets = {900};
     //Change particle type here
     auto higgsAnalysis = std::make_shared<HiggsPlusPlusAnalysis>();
     for(std::string channel : channels) {
         input.clear();
         for(double massTarget : massTargets) {
             //Change the histVariable to analyze different properties
+<<<<<<< HEAD
             input = makeTableInput(input, HistVariable::MET("Histogram"), 
             higgsAnalysis->getChannel(channel + std::to_string((int) massTarget)), massTarget);
+=======
+            input = makeTableInput(input, "Same Sign Inv Mass", higgsAnalysis->getChannel(channel + std::to_string((int) massTarget)), massTarget);
+>>>>>>> 1f020eb09cd64be0e737ce47ad8265a726fa746a
         }
         auto tableInput = std::make_shared<TableData>(input);
         //Change the type of table you want here

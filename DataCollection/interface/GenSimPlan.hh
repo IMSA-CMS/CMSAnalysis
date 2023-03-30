@@ -3,6 +3,7 @@
 
 #include "CMSAnalysis/DataCollection/interface/DataCollectionPlan.hh"
 
+//Contains the specification for all the module to run on the analysis of a GenSim File
 class GenSimPlan : public DataCollectionPlan
 {
     protected:
