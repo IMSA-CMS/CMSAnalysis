@@ -18,14 +18,12 @@ bool HiggsLeptonEfficiency::process()
   {
     auto genSimPart = GenSimParticle(particle);
     auto type = particle.getType();
-    if (genSimPart.uniqueMother().getType() != ParticleType::leftDoublyHiggs() && genSimPart.uniqueMother().getType() != ParticleType::rightDoublyHiggs())
+
+    if ((genSimPart.uniqueMother().getType() != ParticleType::leftDoublyHiggs() && genSimPart.uniqueMother().getType() != ParticleType::rightDoublyHiggs()) || genSimPart != genSimPart.finalDaughter())
     {
       continue;
     }
-    if (genSimPart != genSimPart.finalDaughter())
-    {
-      continue;
-    }
+
     if(type == ParticleType::electron())
 	  {
       incrementCounter("genSimLepton", 1);
@@ -53,23 +51,22 @@ bool HiggsLeptonEfficiency::process()
   for(const auto &match : matched.getPairs())
   {
     auto particle = match.getRecoParticle();
+    auto genParticle = match.getGenParticle();
+    auto type = particle.getType();
     if(particle.isNotNull())
     {
+
       try 
-      {
-        if (match.getGenParticle().uniqueMother().getType() != ParticleType::leftDoublyHiggs() && match.getGenParticle().uniqueMother().getType() != ParticleType::rightDoublyHiggs())
+      { //if statement checks type to avoid double counting a lepton if it is mismatched to a lepton of another type.
+        if (type != genParticle.getType() || (genParticle.uniqueMother().getType() != ParticleType::leftDoublyHiggs() && genParticle.uniqueMother().getType() != ParticleType::rightDoublyHiggs()))
         {
           continue;
         }
-      } catch (...)
+      } catch (std::runtime_error& e) //Try catch statement handles case when genParticle's mother is null. In this case it is safe to assume that we don't the particle anyway.
       {
         continue;
       }
-      auto type = particle.getType();
-      if (type != match.getGenParticle().getType())
-      {
-        continue;
-      }
+
       if(type == ParticleType::electron())
       {
         incrementCounter("recoLepton", 1);
