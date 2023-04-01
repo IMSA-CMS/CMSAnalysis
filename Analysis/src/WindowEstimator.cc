@@ -23,8 +23,9 @@ double WindowEstimator::getExpectedYield(const SingleProcess* process, std::stri
 {
     //Takes the histogram wanted from the file, assigns it hist
     TH1 *hist = dynamic_cast<TH1 *>(process->getHist(dataType));
-    if (!hist)
+    if (!hist) {
         throw std::runtime_error("Hist not found");
+    }
 
     int totalEventsInt = process->getTotalEvents();
 

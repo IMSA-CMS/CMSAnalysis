@@ -7,10 +7,12 @@
 #include "CrossSectionReader.hh"
 #include "SingleProcess.hh"
 #include "HistVariable.hh"
+#include "TH1.h"
 
 class FullAnalysis
 {
     public:
+        FullAnalysis() {TH1::SetDefaultSumw2();}
         virtual ~FullAnalysis() {}
         //To my knowledge, this has to be defined in derived classes to use that class' variables
         virtual std::shared_ptr<Channel> getChannel(std::string name) = 0;

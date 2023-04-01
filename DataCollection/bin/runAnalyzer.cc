@@ -95,9 +95,6 @@ int main(int argc, char **argv)
   plan->initialize();
   plan->runEventLoader(inputFile, outputFile, outputEvery, numFiles, maxEvents);
 
-  // HiggsBackgroundPlan plan;
-  // plan.runAnalyzer(inputFile, outputFile, outputEvery, numFiles);
-
   std::cout << "Processing complete!" << std::endl;
   std::cout << "Output written to " << outputFile << std::endl;
 
