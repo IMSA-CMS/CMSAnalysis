@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include "TH1.h"
 
 class Process;
 class THStack;
@@ -24,6 +25,8 @@ class Channel
 		//Makes stacked histogram
 		THStack* getStack(std::string histType, std::string label = "", bool scaleToExpected = false) const;
 		
+		std::vector<TH1*> getHists(std::string histType, std::string label = "", bool scaleToExpected = false) const;
+
 		const std::shared_ptr<Process> findProcess(std::string processName) const;
 		
 		void labelProcess(std::string label, std::string processName);
@@ -31,6 +34,8 @@ class Channel
 		void labelProcess(std::string label, std::shared_ptr<Process> process);
 
 		void addProcessLabel(std::string label, std::vector<std::shared_ptr<Process>> processes);
+
+		void makeDatacard(std::shared_ptr<Channel> channel);
 
 		std::vector<std::shared_ptr<Process>> getProcesses() {return processes;}
 
