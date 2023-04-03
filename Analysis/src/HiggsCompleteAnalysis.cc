@@ -12,6 +12,8 @@
 #include <memory>	
 #include <iostream>
 #include <vector>
+#include <string>
+#include <cmath>
 #include "TH1.h"
 #include "TList.h"
 
@@ -79,40 +81,53 @@ std::shared_ptr<Channel> HiggsCompleteAnalysis::getChannel(std::string name)
     throw std::runtime_error("Channel of name " + name + " not found.");
 }
 
-TH1* HiggsCompleteAnalysis::getHiggsHist(std::string histType, bool scaleToExpected) const {
+TH1* HiggsCompleteAnalysis::getHiggsHist(std::string histType, double massTarget, bool scaleToExpected) const {
     int maxBinNum = 0;
 	double maxBarWidth = 0.0;
 	int channelNumber = 0;
     std::string name = "Higgs";
 	for (const auto& channel : channels)
 	{
-		channelNumber++;
-		if (channel->getHists(histType, "data", false).size() == 0) {
-			throw std::runtime_error("Histogram not found in channel: " + channel->getName());
-		}
-		if (channel->getHists(histType, "data", false).at(0)->GetNbinsX() > maxBinNum)
-		{
-			maxBinNum = channel->getHists(histType, "data", false).at(0)->GetNbinsX();
-		}
-		if ((channel->getHists(histType, "data", false).at(0)->GetXaxis()->GetBinWidth(maxBinNum)) > maxBarWidth)
-		{
-			maxBarWidth = (channel->getHists(histType, "data", false).at(0)->GetXaxis()->GetBinWidth(maxBinNum));
-		}
+        std::string channelName = channel->getName();
+        channelName = channelName.substr((channelName.length() - 2) - int(log10((int) massTarget)) + 1, int(log10((int) massTarget)) + 1);
+        if(channelName == std::to_string((int) massTarget)) {
+            channelNumber++;
+            std::vector<TH1*> channelHists = channel->getHists(histType, "signal", false);
+            if (channelHists.size() == 0) {
+                throw std::runtime_error("Histogram not found in channel: " + channel->getName());
+            }
+            if (channelHists.at(0)->GetNbinsX() > maxBinNum)
+            {
+                maxBinNum = channelHists.at(0)->GetNbinsX();
+            }
+            if ((channelHists.at(0)->GetXaxis()->GetBinWidth(maxBinNum)) > maxBarWidth)
+            {
+                maxBarWidth = (channelHists.at(0)->GetXaxis()->GetBinWidth(maxBinNum));
+            }
+            for(auto histogram : channelHists) {
+                delete histogram;
+                channelHists.clear();
+            }
+        }
 	}
 	TH1* hist = new TH1F(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * maxBarWidth);
 	std::vector<TH1*> toAdd;
 	TList* toMerge = new TList;
+    TH1::AddDirectory(kFALSE);
 	for (const auto& channel : channels)	
 	{
-		toAdd = channel->getHists(histType, "data", scaleToExpected);
-		for(auto vechist : toAdd){
+        std::string channelName = channel->getName();
+        channelName = channelName.substr((channelName.length() - 2) - int(log10((int) massTarget)) + 1, int(log10((int) massTarget)) + 1);
+		if(channelName == std::to_string((int) massTarget)) {
+            toAdd = channel->getHists(histType, "signal", scaleToExpected);
+        }
+        for(auto vechist : toAdd) {
             toMerge->Add(vechist);
         }
 	}
+    TH1::AddDirectory(kTRUE);
 	hist->Merge(toMerge);
 	hist->SetLineColor(kBlack);
 	hist->SetFillColor(kBlack);
-	//If you want yield to print while running SuperPlot uncomment the print statement (only prints the yield for the first MassTarget in the process)
-	//std::cout << "Total yield for mass target " << processes.at(0).getMassTarget() << " is " << getYield(processes.at(0).getMassTarget()) << std::endl;
 	return hist;
 }

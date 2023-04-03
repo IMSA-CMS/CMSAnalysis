@@ -10,16 +10,13 @@ class MatchingPair
 {
 public:
   MatchingPair(GenSimParticle bestGenParticle, Particle bestRecoParticle);
-  double getDeltaPhi() const;
+  double getDeltaPhi() const; //getter methods
   double getDeltaR() const;
   double getPtError() const;
   double getEtaError() const;
 
   GenSimParticle getGenParticle() const {return genParticle;}
   Particle getRecoParticle() const {return recoParticle;}
-
-  //void setGenParticle(Particle inputParticle) {genParticle = inputParticle;}
-  //void setRecoParticle(Particle inputParticle) {recoParticle = inputParticle;}
 
 private:
   GenSimParticle genParticle;
