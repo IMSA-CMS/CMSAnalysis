@@ -1,15 +1,15 @@
-#ifndef LEPTONEFFICIENCY_HH
-#define LEPTONEFFICIENCY_HH
+#ifndef HIGGSLEPTONEFFICIENCY_HH
+#define HIGGSLEPTONEFFICIENCY_HH
 
 #include "EfficiencyModule.hh"
 
 class MatchingModule;
 
 //Responsible for calculating reconstruction efficiency for leptons
-class LeptonEfficiency : public EfficiencyModule
+class HiggsLeptonEfficiency : public EfficiencyModule
 {
 public:
-  LeptonEfficiency(const std::shared_ptr<MatchingModule> imatchModule);
+  HiggsLeptonEfficiency(const std::shared_ptr<MatchingModule> imatchModule);
 
   bool process() override;
   void finalize() override;

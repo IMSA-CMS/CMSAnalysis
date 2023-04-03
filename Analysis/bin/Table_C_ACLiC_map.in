@@ -1,5 +1,5 @@
 /cvmfs/cms.cern.ch/slc7_amd64_gcc10/lcg/root/6.24.07-bf41b0420bc269850b74e23486e2953a/.rootmap
-/uscms/home/kzhang1/.rootmap
+/uscms/home/ganne/.rootmap
 .rootmap
 /cvmfs/cms.cern.ch/slc7_amd64_gcc10/lcg/root/6.24.07-bf41b0420bc269850b74e23486e2953a/lib/libmultisetDict.rootmap
 /cvmfs/cms.cern.ch/slc7_amd64_gcc10/lcg/root/6.24.07-bf41b0420bc269850b74e23486e2953a/lib/libunordered_multisetDict.rootmap
@@ -19,7 +19,7 @@
 /cvmfs/cms.cern.ch/slc7_amd64_gcc10/lcg/root/6.24.07-bf41b0420bc269850b74e23486e2953a/lib/libforward_listDict.rootmap
 /cvmfs/cms.cern.ch/slc7_amd64_gcc10/lcg/root/6.24.07-bf41b0420bc269850b74e23486e2953a/lib/libunordered_mapDict.rootmap
 /cvmfs/cms.cern.ch/slc7_amd64_gcc10/lcg/root/6.24.07-bf41b0420bc269850b74e23486e2953a/lib/libunordered_multimapDict.rootmap
-/uscms/homes/k/kzhang1/practice/CMSSW_12_4_3/lib/slc7_amd64_gcc10/CMSAnalysisDataCollection_xr.rootmap
+/uscms/homes/g/ganne/research/CMSSW_12_4_3/lib/slc7_amd64_gcc10/CMSAnalysisDataCollection_xr.rootmap
 /cvmfs/cms.cern.ch/slc7_amd64_gcc10/cms/cmssw/CMSSW_12_4_3/lib/slc7_amd64_gcc10/AnalysisDataFormatsEWK_xr.rootmap
 /cvmfs/cms.cern.ch/slc7_amd64_gcc10/cms/cmssw/CMSSW_12_4_3/lib/slc7_amd64_gcc10/AnalysisDataFormatsTrackInfo_xr.rootmap
 /cvmfs/cms.cern.ch/slc7_amd64_gcc10/cms/cmssw/CMSSW_12_4_3/lib/slc7_amd64_gcc10/CUDADataFormatsHGCal_xr.rootmap

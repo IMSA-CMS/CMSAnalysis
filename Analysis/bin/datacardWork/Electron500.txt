@@ -1,0 +1,7 @@
+
+imax    1 number of bins
+jmax    _______ number of processes minus 1
+----------------------------------------------------------------------------------------------------------------------------------
+bin                  Electron500         
+process             TTBar Background    ZZ Background       DY Background       QCD Background      Higgs Signal        
+rate                0.086229            0.004963            0.000000            0.523997            557.894989          

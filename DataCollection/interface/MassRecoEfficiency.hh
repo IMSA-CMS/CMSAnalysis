@@ -4,7 +4,6 @@
 #include <memory>
 #include "EfficiencyModule.hh"
 
-//class RecoIdentificationModule;
 
 class MassRecoEfficiency : public EfficiencyModule
 {
