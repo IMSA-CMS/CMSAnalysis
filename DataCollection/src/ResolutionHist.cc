@@ -26,10 +26,6 @@ std::vector<double> ResolutionHist::value() const
   for (auto gammaPair : gammaVector)
   {
     auto resolution = (gammaPair.first-gammaPair.second)/(gammaPair.first);
-    
-    //if(resolution < 0){
-    //  resolution*= -1;
-    //}
     //std::cout<< "Resolution: " << resolution << "\n";
     ResolutionVector.push_back(resolution);
   }
