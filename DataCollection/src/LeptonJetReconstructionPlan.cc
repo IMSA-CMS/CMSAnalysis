@@ -75,8 +75,9 @@ void LeptonJetReconstructionPlan::initialize()
   // Histograms
   //uncomented 
   auto gammaDeltaRHist2D = std::make_shared<GammaDeltaRHist2D>(lepRecoMod, "Gamma Delta R Hist", 100, 100, 1, 0, 500, 0.25);
-  //auto darkPhotonMassHist = std::make_shared<DarkPhotonMassHist>("Higgs Mass", 100, 0, 1500);   
-
+  //auto darkPhotonMassHist = std::make_shared<DarkPhotonMassHist>("Higgs Mass", 100, 0, 1500);
+  auto resolutionHist = std::make_shared<ResolutionHist>(lepMatchMod, "GammaResolution", 1000, -1.5, 1.5); 
+   
   auto gammaHist = std::make_shared<GammaHist>(lepRecoMod, "Gamma Values", 100, 1, 1000); 
   auto deltaRHist = std::make_shared<DeltaRHist>(lepRecoMod, "Delta R Values", 100, 0, 0.1); 
   
@@ -90,8 +91,6 @@ void LeptonJetReconstructionPlan::initialize()
   auto genSimDeltaRTwoJetsPsedoFilteredHist = std::make_shared<GenSimDeltaRTwoJetsPsedoFilteredHist>("Gen Sim Delta R (Reconstructed 2 Jets)", 100, 0, 0.5, lepRecoMod);
 
 
-  auto ResolutionHist = std::make_shared<ResolutionHist>(lepMatchMod, "Gamma Resolution", 100, 0, 1000);
-
   auto pTHist = std::make_shared<LeptonJetPtHist>(lepRecoMod, "pT Values (Reconstructed Jets)", 100, 0, 200);
   auto matchedLeptonJetHist = std::make_shared<MatchedLeptonJetHist>("Matched Lepton Jet Hist HadET", 100, 0, 10, lepMatchMod, lepRecoMod, true);
   auto unmatchedLeptonJetHist = std::make_shared<MatchedLeptonJetHist>("Unmatched Lepton Jet Hist HadET", 100, 0, 10, lepMatchMod, lepRecoMod, false);
@@ -104,6 +103,8 @@ void LeptonJetReconstructionPlan::initialize()
  // auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(InputModule::RecoLevel::Reco, "NN Classifier Output Distribution", 100, 0, 1, mlMod, lepRecoMod);
 //uncomented
   
+  eventHistMod->addHistogram(resolutionHist);
+  histOutputMod->addHistogram(resolutionHist);
   eventHistMod->addHistogram(gammaDeltaRHist2D);
   eventHistMod->addHistogram(gammaHist);
   histOutputMod->addHistogram(gammaHist);
@@ -127,8 +128,8 @@ void LeptonJetReconstructionPlan::initialize()
   eventHistMod->addHistogram(genSimDeltaRTwoJetsPsedoFilteredHist);
   histOutputMod->addHistogram(genSimGammaTwoJetsPsedoFilteredHist);
   eventHistMod->addHistogram(genSimGammaTwoJetsPsedoFilteredHist);
-  histOutputMod->addHistogram(ResolutionHist);
-  eventHistMod->addHistogram(ResolutionHist);
+
+
  // histOutputMod->addHistogram(leptonJetMLHist);
 
 //   histOutputMod->addHistogram(matchDeltaRHist);
@@ -214,4 +215,3 @@ void LeptonJetReconstructionPlan::initialize()
   analyzer.getInputModule()->setLeptonSelector(selector);
   */ 
 }
-

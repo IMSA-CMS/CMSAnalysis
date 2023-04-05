@@ -5,15 +5,16 @@
 #include "LeptonJetMatchingModule.hh"
 #include "LeptonJet.hh"
 
+class LeptonJetMatchingModule;
 
 class ResolutionHist : public HistogramPrototype1D
 {
   public:
-  ResolutionHist(std::shared_ptr<LeptonJetMatchingModule> iLeptonJetMatchingModule, const std::string& iname, int iNBins, double iminimum, double imaximum);
-  std::vector<double> value() const override;
+  ResolutionHist(std::shared_ptr<LeptonJetMatchingModule> ileptonJetMatchModule, const std::string& iname, int iNBins, double iminimum, double imaximum);
+  std::vector<double> value() const override; 
   
   private:
-  std::shared_ptr<LeptonJetMatchingModule> leptonMatchMod;
+  std::shared_ptr<LeptonJetMatchingModule> leptonJetMatchModule;
 };
 
 
