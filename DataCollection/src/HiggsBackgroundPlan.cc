@@ -12,7 +12,7 @@
 #include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LocalEventInputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/LeptonFilter.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonEfficiency.hh"
+#include "CMSAnalysis/DataCollection/interface/HiggsLeptonEfficiency.hh"
 #include "CMSAnalysis/DataCollection/interface/MatchingModule.hh"
 #include "CMSAnalysis/DataCollection/interface/METHist.hh"
 #include "CMSAnalysis/DataCollection/interface/METModule.hh"
@@ -36,6 +36,7 @@
 #include "CMSAnalysis/DataCollection/interface/HiggsCutsSelector.hh"
 #include "CMSAnalysis/DataCollection/interface/HiggsCut.hh"
 #include "CMSAnalysis/DataCollection/interface/HPlusPlusDecayFilter.hh"
+#include "CMSAnalysis/DataCollection/interface/GenSimEventDumpModule.hh"
 
 using std::make_shared;
 
@@ -48,6 +49,7 @@ void HiggsBackgroundPlan::initialize()
     //auto pasSelector = make_shared<PASSelector>();
     auto higgsCutsSelector = make_shared<HiggsCutsSelector>();
     auto higgsCut = make_shared<HiggsCut>();
+    auto eventDump = make_shared<GenSimEventDumpModule>();
     //auto fourLeptonCut = make_shared<FourLeptonCut>();
     //auto zVetoCut = make_shared<ZVetoCut>();
     //auto quarkoniaCut = make_shared<QuarkoniaCut>();
@@ -150,10 +152,12 @@ void HiggsBackgroundPlan::initialize()
     analyzer.addFilterModule(nLeptonsFilter);*/
     analyzer.addFilterModule(higgsFilter);
 
+    analyzer.addProductionModule(matchMod);
     analyzer.addAnalysisModule(eventMod);
     //analyzer.addAnalysisModule(leptonEfficiency);
     analyzer.addAnalysisModule(eventHistMod);    
     analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
+    analyzer.addAnalysisModule(eventDump);
 
     /*
     auto leptonSelector = std::make_shared<SnowmassLeptonSelector>(10);
