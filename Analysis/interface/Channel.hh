@@ -23,7 +23,7 @@ class Channel
 		std::string getName() {return name;}
 		std::vector<std::string> getNamesWithLabel(std::string label);
 		//Makes stacked histogram
-		THStack* getStack(std::string histType, std::string label = "", bool scaleToExpected = false) const;
+		THStack* getStack(std::string histType, std::string label = "", bool scaleToExpected = false, int rebinConstant = 1) const;
 		
 		std::vector<TH1*> getHists(std::string histType, std::string label = "", bool scaleToExpected = false) const;
 
