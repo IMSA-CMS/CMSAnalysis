@@ -11,6 +11,7 @@
 #include "CMSAnalysis/Analysis/interface/LatexTable.hh"
 #include "CMSAnalysis/Analysis/interface/PowerpointTable.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsPlusPlusAnalysis.hh"
+#include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
 #include <fstream>
 #include "THStack.h"
 #include <iostream>
@@ -22,6 +23,7 @@
 #include <sstream>
 #include <iomanip>
 #include <string>
+#include "CMSAnalysis/DataCollection/interface/Utility.hh"
 
 //Rounds doubles when converted to strings to get rid of trailing zeroes
 std::string roundDoubleString(double doub, int digits) 
@@ -55,11 +57,12 @@ void Table()
 {
     std::vector<std::vector<std::string>> input;
     //Change what branching ratio particles you are looking at here
-    std::vector<std::string> channels = {"Muon", "Electron"};
+    std::vector<std::string> particles = {"e", "u"};
+    std::vector<std::string> channels = Utility::channelMaker(particles, 4, true);
     //List massTargets here
     std::vector<double> massTargets = {900};
     //Change particle type here
-    auto higgsAnalysis = std::make_shared<HiggsPlusPlusAnalysis>();
+    auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
     for(std::string channel : channels) {
         input.clear();
         for(double massTarget : massTargets) {

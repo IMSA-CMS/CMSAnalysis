@@ -35,6 +35,7 @@
 #include "CMSAnalysis/DataCollection/interface/FourLeptonCut.hh"
 #include "CMSAnalysis/DataCollection/interface/HiggsCutsSelector.hh"
 #include "CMSAnalysis/DataCollection/interface/HiggsCut.hh"
+#include "CMSAnalysis/DataCollection/interface/HPlusPlusDecayFilter.hh"
 
 using std::make_shared;
 
@@ -62,11 +63,12 @@ void HiggsBackgroundPlan::initialize()
     auto triggerMod = make_shared<TriggerModule>();
     auto metMod = make_shared<METModule>();
     auto bJetFilter = make_shared<BJetFilter>();
+    auto higgsFilter = make_shared<HPlusPlusDecayFilter>(InputModule::RecoLevel::Reco);
 
     auto nLeptonsFilter = make_shared<NLeptonsFilter>();
     
     auto histMod = make_shared<HistogramOutputModule>();
-    auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod);
+    //auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod);
 
     auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
 
@@ -112,17 +114,17 @@ void HiggsBackgroundPlan::initialize()
     auto muonFilter = make_shared<LeptonFilter>(ParticleType::muon(), 4, "Muon");
     auto snowmassCut = make_shared<SnowmassCutFilter>();
 
-    elecRecoSameSignInvMassHist->addFilter(elecFilter);
-    elecPositiveNegativeInvMassHist->addFilter(elecFilter);
-    muonRecoSameSignInvMassHist->addFilter(muonFilter);
-    muonPositiveNegativeInvMassHist->addFilter(muonFilter);
-    elecRecoPt->addFilter(elecFilter);
-    elecGenSimPt->addFilter(elecFilter);
-    muonRecoPt->addFilter(muonFilter);
-    muonGenSimPt->addFilter(muonFilter);
-    elecGenSimSameSignInvMassHist->addFilter(elecFilter);
-    muonGenSimSameSignInvMassHist->addFilter(muonFilter);
-    elecMetHist->addFilter(elecFilter);
+    //elecRecoSameSignInvMassHist->addFilter(elecFilter);
+    //elecPositiveNegativeInvMassHist->addFilter(elecFilter);
+    //muonRecoSameSignInvMassHist->addFilter(muonFilter);
+    //muonPositiveNegativeInvMassHist->addFilter(muonFilter);
+    //elecRecoPt->addFilter(elecFilter);
+    //elecGenSimPt->addFilter(elecFilter);
+    //muonRecoPt->addFilter(muonFilter);
+    //muonGenSimPt->addFilter(muonFilter);
+    //elecGenSimSameSignInvMassHist->addFilter(elecFilter);
+    //muonGenSimSameSignInvMassHist->addFilter(muonFilter);
+    //elecMetHist->addFilter(elecFilter);
 
     eventHistMod->addHistogram(sameSignInvMassHist);
     eventHistMod->addHistogram(elecRecoPt);
@@ -146,9 +148,10 @@ void HiggsBackgroundPlan::initialize()
     /*analyzer.addFilterModule(bJetFilter);
     analyzer.addFilterModule(snowmassCut);
     analyzer.addFilterModule(nLeptonsFilter);*/
+    analyzer.addFilterModule(higgsFilter);
 
     analyzer.addAnalysisModule(eventMod);
-    analyzer.addAnalysisModule(leptonEfficiency);
+    //analyzer.addAnalysisModule(leptonEfficiency);
     analyzer.addAnalysisModule(eventHistMod);    
     analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
 
