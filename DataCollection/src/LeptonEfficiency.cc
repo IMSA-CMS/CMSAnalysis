@@ -6,10 +6,6 @@
 LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<MatchingModule> imatchModule):
   EfficiencyModule(),
   matchModule(imatchModule)
-  ,recoMuons(0)
-  ,genSimMuons(0)
-  ,recoElectrons(0)
-  ,genSimElectrons(0)
 {
 }
 
@@ -25,12 +21,12 @@ bool LeptonEfficiency::process()
     auto type = particle.getType();
     if(type == ParticleType::electron())
 	  {
-	    genSimElectrons++;
+	    incrementCounter("genSimElectron", 1);
 
 	  }
     else if(type == ParticleType::muon())
 	  {
-	    genSimMuons++;
+	    incrementCounter("genSimMuon", 1);
 	  }
   }
 
@@ -44,11 +40,11 @@ bool LeptonEfficiency::process()
       auto type = particle.getType();
       if(type == ParticleType::electron())
       {
-        recoElectrons++;
+        incrementCounter("recoElectron", 1);
       }
     else if(type == ParticleType::muon())
       {
-        recoMuons++;
+        incrementCounter("recoMuon", 1);
       }
     }
   }
@@ -57,9 +53,9 @@ bool LeptonEfficiency::process()
 
 void LeptonEfficiency::finalize()
 {
-  std::string muonOutputString = std::to_string(recoMuons/(double)genSimMuons);
-  writeText(muonOutputString, "Muon Efficiency");
+  std::string muonEndcapOutputString = std::to_string(getCounter("recoMuon")/(double)getCounter("genSimMuon"));
+  writeText(muonEndcapOutputString, "Muon Efficiency");
 
-  std::string electronOutputString = std::to_string(recoElectrons/(double)genSimElectrons);
-  writeText(electronOutputString, "Electron Efficiency");
+  std::string electronBarrelOutputString = std::to_string(getCounter("recoElectron")/(double)getCounter("genSimElectron"));
+  writeText(electronBarrelOutputString, "Electron Efficiency");
 }
