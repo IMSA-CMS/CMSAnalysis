@@ -127,20 +127,20 @@ void HiggsBackgroundPlan::initialize()
     elecMetHist->addFilter(elecFilter);
 
     eventHistMod->addHistogram(sameSignInvMassHist);
-    eventHistMod->addHistogram(elecRecoPt);
-    eventHistMod->addHistogram(elecGenSimPt);
-    eventHistMod->addHistogram(muonRecoPt);
-    eventHistMod->addHistogram(muonGenSimPt);
-    eventHistMod->addHistogram(elecGenSimSameSignInvMassHist);
-    eventHistMod->addHistogram(elecRecoSameSignInvMassHist);
-    eventHistMod->addHistogram(muonGenSimSameSignInvMassHist);
-    eventHistMod->addHistogram(muonRecoSameSignInvMassHist);
-    //histMod->addHistogram(recoInvMass);
-    eventHistMod->addHistogram(elecMetHist);
-    //histMod->addHistogram(elecRecoSameSignInvMassHist);
-    eventHistMod->addHistogram(elecPositiveNegativeInvMassHist);
-    //histMod->addHistogram(muonRecoSameSignInvMassHist);
-    eventHistMod->addHistogram(muonPositiveNegativeInvMassHist);
+    // eventHistMod->addHistogram(elecRecoPt);
+    // eventHistMod->addHistogram(elecGenSimPt);
+    // eventHistMod->addHistogram(muonRecoPt);
+    // eventHistMod->addHistogram(muonGenSimPt);
+    // eventHistMod->addHistogram(elecGenSimSameSignInvMassHist);
+    // eventHistMod->addHistogram(elecRecoSameSignInvMassHist);
+    // eventHistMod->addHistogram(muonGenSimSameSignInvMassHist);
+    // eventHistMod->addHistogram(muonRecoSameSignInvMassHist);
+    // //histMod->addHistogram(recoInvMass);
+    // eventHistMod->addHistogram(elecMetHist);
+    // //histMod->addHistogram(elecRecoSameSignInvMassHist);
+    // eventHistMod->addHistogram(elecPositiveNegativeInvMassHist);
+    // //histMod->addHistogram(muonRecoSameSignInvMassHist);
+    // eventHistMod->addHistogram(muonPositiveNegativeInvMassHist);
 
     analyzer.addProductionModule(metMod);
 
@@ -149,12 +149,12 @@ void HiggsBackgroundPlan::initialize()
     //analyzer.addFilterModule(snowmassCut);
     //analyzer.addFilterModule(nLeptonsFilter);
 
-    analyzer.addProductionModule(matchMod);
+    //analyzer.addProductionModule(matchMod);
     analyzer.addAnalysisModule(eventMod);
-    analyzer.addAnalysisModule(higgsLeptonEfficiency);
+    //analyzer.addAnalysisModule(higgsLeptonEfficiency);
     analyzer.addAnalysisModule(eventHistMod);    
     analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
-    analyzer.addAnalysisModule(eventDump);
+    //analyzer.addAnalysisModule(eventDump);
 
     /*
     auto leptonSelector = std::make_shared<SnowmassLeptonSelector>(10);
