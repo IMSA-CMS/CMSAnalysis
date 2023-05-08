@@ -1,0 +1,62 @@
+imax    1 number of bins
+jmax    5 number of processes minus 1
+kmax    * number of nuisance parameters
+--------------------------------------------------------------------------------
+shapes * htt_mt_1_8TeV htt_mt.input.root htt_mt_1_8TeV/$PROCESS htt_mt_1_8TeV/$PROCESS_$SYSTEMATIC
+shapes ggH htt_mt_1_8TeV htt_mt.input.root htt_mt_1_8TeV/ggH$MASS htt_mt_1_8TeV/ggH$MASS_$SYSTEMATIC
+shapes qqH htt_mt_1_8TeV htt_mt.input.root htt_mt_1_8TeV/qqH$MASS htt_mt_1_8TeV/qqH$MASS_$SYSTEMATIC
+--------------------------------------------------------------------------------
+bin          htt_mt_1_8TeV   
+observation  9010.0          
+--------------------------------------------------------------------------------
+bin                                                  htt_mt_1_8TeV   htt_mt_1_8TeV   htt_mt_1_8TeV   htt_mt_1_8TeV   htt_mt_1_8TeV   htt_mt_1_8TeV   
+process                                              ZTT             W               QCD             TT              ggH             qqH             
+process                                              1               2               3               4               -1              0               
+rate                                                 6051.89         1404.27         791.851         179.564         29.8119         61.3014         
+--------------------------------------------------------------------------------
+CMS_eff_m                                    lnN     1.02            -               -               1.02            1.02            1.02            
+CMS_htt_mt_muTau_1jet_medium_8TeV_QCD_bin_2  shape   -               -               1               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_QCD_bin_24 shape   -               -               1               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_QCD_bin_25 shape   -               -               1               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_QCD_bin_26 shape   -               -               1               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_TT_bin_18  shape   -               -               -               1               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_TT_bin_19  shape   -               -               -               1               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_TT_bin_2   shape   -               -               -               1               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_TT_bin_20  shape   -               -               -               1               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_TT_bin_21  shape   -               -               -               1               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_TT_bin_22  shape   -               -               -               1               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_TT_bin_23  shape   -               -               -               1               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_TT_bin_24  shape   -               -               -               1               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_TT_bin_25  shape   -               -               -               1               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_TT_bin_26  shape   -               -               -               1               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_TT_bin_3   shape   -               -               -               1               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_TT_bin_4   shape   -               -               -               1               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_TT_bin_5   shape   -               -               -               1               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_W_bin_18   shape   -               1               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_W_bin_19   shape   -               1               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_W_bin_2    shape   -               1               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_W_bin_20   shape   -               1               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_W_bin_22   shape   -               1               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_W_bin_23   shape   -               1               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_W_bin_24   shape   -               1               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_W_bin_25   shape   -               1               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_W_bin_26   shape   -               1               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_W_bin_3    shape   -               1               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_W_bin_4    shape   -               1               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_W_bin_6    shape   -               1               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_ZTT_bin_17 shape   1               -               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_ZTT_bin_18 shape   1               -               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_ZTT_bin_19 shape   1               -               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_ZTT_bin_20 shape   1               -               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_ZTT_bin_21 shape   1               -               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_ZTT_bin_22 shape   1               -               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_ZTT_bin_23 shape   1               -               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_ZTT_bin_24 shape   1               -               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_ZTT_bin_25 shape   1               -               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_ZTT_bin_3  shape   1               -               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_ZTT_bin_4  shape   1               -               -               -               -               -               
+CMS_htt_mt_muTau_1jet_medium_8TeV_ZTT_bin_5  shape   1               -               -               -               -               -               
+CMS_scale_j_8TeV                             lnN     -               -               -               -               1.04            0.99            
+CMS_scale_t_mutau_8TeV                       shape   1               -               -               -               1               1               
+lumi_8TeV                                    lnN     -               -               -               -               1.026           1.026           
+pdf_gg                                       lnN     -               -               -               -               1.097           -               
