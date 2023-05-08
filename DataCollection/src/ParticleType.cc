@@ -141,6 +141,13 @@ const ParticleType& ParticleType::photon()
     std::vector<CollectionHist>{getNumberHist()}); 
 }
 
+const ParticleType& ParticleType::quark()
+{
+    return registerType("Quark",1,0,
+    std::vector<SingleParticleHist>{},
+    std::vector<CollectionHist>{getNumberHist()}); 
+}
+
 const ParticleType& ParticleType::darkPhoton()
 {
     return registerType("Dark Photon",4900022,0,
