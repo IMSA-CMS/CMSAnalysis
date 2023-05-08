@@ -21,8 +21,8 @@
 **/bin/*.txt
 
 # Keep all textfiles in textfiles
-!CIStudies/bin/textfiles/*.txt
-!CIStudies/bin/textfiles/*/*.txt
+!DataCollection/bin/textfiles/*.txt
+!DataCollection/bin/textfiles/*/*.txt
 
 #Remove temporary backups
 *backup.txt
@@ -39,5 +39,8 @@
 !*.cc
 !*.h
 
-# Root compilation files
-*ACLiC_dict*
+#Root dictionary files
+*ACLiC*
+
+#Nohup files
+nohup.out
