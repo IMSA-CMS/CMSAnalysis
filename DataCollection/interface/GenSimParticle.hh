@@ -21,6 +21,7 @@ class GenSimParticle : public Particle
 
         GenSimParticle mother() const;
         bool hasMother() const;
+        bool hasUniqueMother() const;
         int numberOfDaughters() const;
         GenSimParticle daughter(int i) const;
         bool isFinalState() const;
