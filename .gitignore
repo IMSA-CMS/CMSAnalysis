@@ -38,3 +38,6 @@
 # Files to always include
 !*.cc
 !*.h
+
+# Root compilation files
+*ACLiC_dict*
