@@ -11,6 +11,7 @@
 #include "CMSAnalysis/Analysis/interface/LatexTable.hh"
 #include "CMSAnalysis/Analysis/interface/PowerpointTable.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsPlusPlusAnalysis.hh"
+#include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
 #include <fstream>
 #include "THStack.h"
 #include <iostream>
@@ -22,6 +23,7 @@
 #include <sstream>
 #include <iomanip>
 #include <string>
+#include "CMSAnalysis/DataCollection/interface/Utility.hh"
 
 //Rounds doubles when converted to strings to get rid of trailing zeroes
 std::string roundDoubleString(double doub, int digits) 
@@ -34,9 +36,10 @@ std::string roundDoubleString(double doub, int digits)
 }
 
 //Converts channel data to something TableData can work with
-std::vector<std::vector<std::string>> makeTableInput(std::vector<std::vector<std::string>> oldInput, std::string dataType, std::shared_ptr<Channel> channel, double massTarget)
+std::vector<std::vector<std::string>> makeTableInput(std::vector<std::vector<std::string>> oldInput, 
+HistVariable dataType, std::shared_ptr<Channel> channel, double massTarget)
 {
-    std::vector<double> yields = channel->getYields(dataType);
+    std::vector<double> yields = channel->getYields(dataType.getName());
     std::vector<std::string> names = channel->getNames();
     std::vector<std::vector<std::string>> newInput = oldInput;
     std::vector<std::string> toAdd(3, "");
@@ -55,16 +58,22 @@ void Table()
 {
     std::vector<std::vector<std::string>> input;
     //Change what branching ratio particles you are looking at here
-    std::vector<std::string> channels = {"Muon", "Electron"};
+    std::vector<std::string> particles = {"e", "u"};
+    std::vector<std::string> channels = Utility::channelMaker(particles, 4, true);
     //List massTargets here
     std::vector<double> massTargets = {900};
     //Change particle type here
-    auto higgsAnalysis = std::make_shared<HiggsPlusPlusAnalysis>();
+    auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
     for(std::string channel : channels) {
         input.clear();
         for(double massTarget : massTargets) {
             //Change the histVariable to analyze different properties
+<<<<<<< HEAD
+            input = makeTableInput(input, HistVariable::MET("Histogram"), 
+            higgsAnalysis->getChannel(channel + std::to_string((int) massTarget)), massTarget);
+=======
             input = makeTableInput(input, "Same Sign Inv Mass", higgsAnalysis->getChannel(channel + std::to_string((int) massTarget)), massTarget);
+>>>>>>> 1f020eb09cd64be0e737ce47ad8265a726fa746a
         }
         auto tableInput = std::make_shared<TableData>(input);
         //Change the type of table you want here
