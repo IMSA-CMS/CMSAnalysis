@@ -19,7 +19,6 @@ class RecoGenSimComparisonModule : public AnalysisModule
         RecoGenSimComparisonModule(std::string compType = "perParticle", bool writeOutput = false);
 
         virtual bool process() override;
-        virtual void writeAll() override;
 
         //prints information to the screen
         virtual void finalize() override;

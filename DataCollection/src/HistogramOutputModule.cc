@@ -15,7 +15,7 @@
 #include "TH1.h"
 #include "TH2.h"
 
-void HistogramOutputModule::writeAll() {
+void HistogramOutputModule::finalizeFilterString() {
   // Check if any baseObjects have not been copied to objects yet,
   // and fill them into the main map if not
 

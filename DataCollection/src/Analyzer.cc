@@ -60,6 +60,7 @@ void Analyzer::writeOutputFile(const std::string &outputFile)
     module->doneProcessing();
     if (filterModules.size() != 0)
     {
+      module->finalize();
       for (auto &str : filterNames) //writes analysis modules by filter string
       {
         auto it = filterDirectories.find(str);
@@ -69,14 +70,12 @@ void Analyzer::writeOutputFile(const std::string &outputFile)
         }
         filterDirectories[str]->cd();
         module->setFilterString(str);
-        module->finalize();
-        module->writeAll(); //writes files to folder
+        module->finalizeFilterString();
         outputRootFile->cd();
       }
     } else {
       module->setFilterString("");
       module->finalize();
-      module->writeAll();
     }
   }
 
@@ -151,6 +150,7 @@ void Analyzer::processOneEvent(const EventInterface *eInterface)
         {
           filterString += module->getFilterString();
         }
+        filterString += "_";
       }
 
       // Processes event through analysis modules

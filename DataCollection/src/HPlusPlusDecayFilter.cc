@@ -17,7 +17,7 @@ std::string HPlusPlusDecayFilter::makeFilterString()
       if ((genSimParticle.pdgId() == 9900041 || genSimParticle.pdgId() == 9900042) && 
       genSimParticle == genSimParticle.finalDaughter() && genSimParticle.numberOfDaughters() == 2) 
       {
-        higgsPlus = std::abs(genSimParticle.daughter(0).pdgId() + genSimParticle.daughter(1).pdgId());
+        higgsPlus = std::abs(genSimParticle.daughter(0).pdgId() + genSimParticle.daughter(1).pdgId()); //adds the pdgid of the particles for easier processing
       } else if ((genSimParticle.pdgId() == -9900041 || genSimParticle.pdgId() == -9900042) && 
       genSimParticle == genSimParticle.finalDaughter() && genSimParticle.numberOfDaughters() == 2) // H--
       {
@@ -31,7 +31,7 @@ std::string HPlusPlusDecayFilter::makeFilterString()
   } else if (typeGenSim == InputModule::RecoLevel::Reco)
   {
     auto leptons = getInput()->getLeptons(InputModule::RecoLevel::Reco);
-    for (const auto &lepton : leptons) //cycles through to find the doubly charged higgs
+    for (const auto &lepton : leptons)
     {
       if (lepton.getCharge() > 0)
       {

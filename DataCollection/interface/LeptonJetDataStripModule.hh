@@ -16,8 +16,6 @@ public:
 
     LeptonJetDataStripModule(std::string outputFileName, std::shared_ptr<LeptonJetReconstructionModule> recomod, std::shared_ptr<LeptonJetMatchingModule> matchmod);
 
-    virtual void writeAll() override;
-
     virtual void finalize() override;
 
 private:

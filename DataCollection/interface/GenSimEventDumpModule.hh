@@ -14,8 +14,6 @@ public:
   GenSimEventDumpModule(int inumOfEvents = -1);
 
   virtual bool process() override;
-  
-  virtual void writeAll() override;
 
 private:
   // prints information of a single event

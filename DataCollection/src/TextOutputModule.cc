@@ -13,7 +13,7 @@ TextOutputModule::~TextOutputModule()
     deleteFiles();
 }
 
-void TextOutputModule::writeAll()
+void TextOutputModule::finalize()
 {
   // Deleting an ofstream pointer is the same as closing the file
   deleteFiles();

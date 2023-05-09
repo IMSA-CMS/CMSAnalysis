@@ -170,7 +170,7 @@ bool FileStripModule::process()
 	return true;
 }
 
-void FileStripModule::writeAll()
+void FileStripModule::finalize()
 {
 	file->Write();
 	file->Close();

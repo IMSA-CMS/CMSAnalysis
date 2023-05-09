@@ -16,11 +16,6 @@ bool RecoGenSimComparisonModule::process()
 	return true;
 }
 
-void RecoGenSimComparisonModule::writeAll()
-{
-
-}
-
 void RecoGenSimComparisonModule::finalize()
 {
 	if (comparisonType == "SameSignInvariantMass")

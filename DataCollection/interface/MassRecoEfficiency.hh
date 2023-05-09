@@ -11,7 +11,6 @@ public:
   MassRecoEfficiency(double iHiggsMass, double iLowerWidth, double iUpperWidth);
   bool process() override;
   void finalize() override;
-  void writeAll() override {}
 
 private:
   double HiggsMass;
