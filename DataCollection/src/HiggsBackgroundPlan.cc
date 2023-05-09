@@ -36,6 +36,8 @@
 #include "CMSAnalysis/DataCollection/interface/HiggsCutsSelector.hh"
 #include "CMSAnalysis/DataCollection/interface/HiggsCut.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimEventDumpModule.hh"
+#include "CMSAnalysis/DataCollection/interface/HPlusPlusDecayFilter.hh"
+#include "CMSAnalysis/DataCollection/interface/FilterStringModule.hh"
 
 using std::make_shared;
 
@@ -64,6 +66,15 @@ void HiggsBackgroundPlan::initialize()
     auto triggerMod = make_shared<TriggerModule>();
     auto metMod = make_shared<METModule>();
     auto bJetFilter = make_shared<BJetFilter>();
+
+    auto recoDecayFilter = make_shared<HPlusPlusDecayFilter>(InputModule::RecoLevel::Reco);
+    auto genSimDecayFilter = make_shared<HPlusPlusDecayFilter>(InputModule::RecoLevel::GenSim);
+    analyzer.addFilterModule(recoDecayFilter);
+    analyzer.addFilterModule(genSimDecayFilter);
+    auto filterStringModule = make_shared<FilterStringModule>();
+    analyzer.addAnalysisModule(filterStringModule);
+    
+
 
     auto nLeptonsFilter = make_shared<NLeptonsFilter>();
     
@@ -126,6 +137,7 @@ void HiggsBackgroundPlan::initialize()
     muonGenSimSameSignInvMassHist->addFilter(muonFilter);
     elecMetHist->addFilter(elecFilter);
 
+
     eventHistMod->addHistogram(sameSignInvMassHist);
     eventHistMod->addHistogram(elecRecoPt);
     eventHistMod->addHistogram(elecGenSimPt);
@@ -151,7 +163,7 @@ void HiggsBackgroundPlan::initialize()
 
     analyzer.addProductionModule(matchMod);
     analyzer.addAnalysisModule(eventMod);
-    analyzer.addAnalysisModule(higgsLeptonEfficiency);
+    //analyzer.addAnalysisModule(higgsLeptonEfficiency);
     analyzer.addAnalysisModule(eventHistMod);    
     analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
     analyzer.addAnalysisModule(eventDump);

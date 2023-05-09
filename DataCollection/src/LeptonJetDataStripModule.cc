@@ -29,15 +29,10 @@ LeptonJetDataStripModule::LeptonJetDataStripModule(const std::string outputFileN
 {
 }
 
-void LeptonJetDataStripModule::writeAll()
+void LeptonJetDataStripModule::finalize()
 {
     tree->Write();
     tree2->Write();
-    // file->Close();
-}
-
-void LeptonJetDataStripModule::finalize()
-{
 }
 
 bool LeptonJetDataStripModule::process()

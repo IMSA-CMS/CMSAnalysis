@@ -46,11 +46,6 @@ bool LeptonJetDumpModule::process()
     return true;
 }
 
-void LeptonJetDumpModule::writeAll()
-{
-
-}
-
 void LeptonJetDumpModule::printLeptons(std::ofstream& my_file)
 {
     std::vector<Particle> genSim(getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::none()).getParticles());
