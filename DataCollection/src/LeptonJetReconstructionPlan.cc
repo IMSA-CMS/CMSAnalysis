@@ -48,7 +48,11 @@ void LeptonJetReconstructionPlan::initialize()
 
   auto eventMod = std::make_shared<EventModule>();
   auto eventHistMod = eventMod->getHistogramModule();
+<<<<<<< HEAD
   // eventMod->addSelector(std::make_shared<LeptonJetSelector>());
+=======
+  eventMod->addSelector(std::make_shared<LeptonJetSelector>());	
+>>>>>>> 669e4da0f6b7c74a6554d38e263680ea43f4b3ef
 
   auto matchMod = std::make_shared<MatchingModule>();
   auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
@@ -78,8 +82,13 @@ void LeptonJetReconstructionPlan::initialize()
   histOutputMod->addHistogram(pTHist);
   histOutputMod->addHistogram(matchedLeptonJetHist);
   histOutputMod->addHistogram(unmatchedLeptonJetHist);
+<<<<<<< HEAD
   //  histOutputMod->addHistogram(relIsoHist);
   histOutputMod->addHistogram(leptonJetMLHist);
+=======
+  //histOutputMod->addHistogram(relIsoHist);
+ // histOutputMod->addHistogram(leptonJetMLHist);
+>>>>>>> 669e4da0f6b7c74a6554d38e263680ea43f4b3ef
 
   //   histOutputMod->addHistogram(matchDeltaRHist);
   //   histOutputMod->addHistogram(matchPtHist);
