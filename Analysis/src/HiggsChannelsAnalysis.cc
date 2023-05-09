@@ -30,7 +30,7 @@ HiggsChannelsAnalysis::HiggsChannelsAnalysis() {
             const std::string filePath = "/uscms/home/gbayliss/CMSAnalysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/";
             //Add your hists here
             histVariables.push_back(HistVariable::SameSignMass(name + "Reco Same Sign Invariant Mass"));
-            double luminosity = 3000;
+            //double luminosity = 3000;
             auto higgsSignal = std::make_shared<Process>("Higgs Signal", 2);
             //higgsSignal->addProcess(makeSignalProcess(histVariables, filePath, "Hist_DoublyChargedHiggs.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
             std::vector<std::shared_ptr<Process>> backgroundProcesses = { higgsSignal };
@@ -49,4 +49,3 @@ std::shared_ptr<Channel> HiggsChannelsAnalysis::getChannel(std::string name)
     }
     throw std::runtime_error("Channel of name " + name + " not found.");
 }
-
