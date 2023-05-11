@@ -20,15 +20,16 @@ def loopRun(*fileList):
 if __name__ == '__main__':
 	# jobs grouped by process
 	# If a job only has one pickfile in it, make sure to add a comma at the end so that python thinks it is a tuple
-	higgs = ("newHiggs/Higgs300.txt", "newHiggs/Higgs500.txt", "newHiggs/Higgs700.txt", "newHiggs/Higgs900.txt", "newHiggs/Higgs1100.txt", "newHiggs/Higgs1300.txt", "newHiggs/Higgs1500.txt",)
+	
+	dy50 = ("DY50Run2.txt", )
 
-	#dy50 = ("DY50Run2.txt", )
+	qcd500 = ("Run2QCD/QCD500.txt", )
 
-	#qcd500 = ("Run2QCD/QCD500.txt", )
+	zz = ("SingleMassSnowmass/ZZ/ZZPick4.txt", )
 
-
+	ttBar = ("SingleMassSnowmass/TTBar/TTBarPick500.txt", )
 	# List of jobs to run on from those above
-	jobsList = [higgs]
+	jobsList = [dy50, qcd500, zz, ttBar]
 	# list of processes
 	processes = []
 	for job in jobsList:
