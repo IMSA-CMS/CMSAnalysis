@@ -2,8 +2,6 @@
 #define MATCHINGMODULE_HH
 
 #include "ProductionModule.hh"
-//#include "GenSimIdentificationModule.hh"
-//#include "RecoIdentificationModule.hh"
 #include "MatchingPairCollection.hh"
 
 #include "TLorentzVector.h"
@@ -45,17 +43,6 @@ class MatchingModule : public ProductionModule
   bool checkIsNull(std::vector<Particle> matching) const;
 };
 
-
-//template<typename T>
-//inline bool MatchingModule::checkIsNull (std::vector<T*> matching)const
-//{
-  //for (auto& particle : matching)
-    //{
-      //if (particle)
-	//{
-	  //return false;
-	//}
-    //}
 
 #endif
 

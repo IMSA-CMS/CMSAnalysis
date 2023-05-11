@@ -20,7 +20,7 @@ class GenSimParticle : public Particle
         int status() const;
 
         GenSimParticle mother() const;
-        bool hasMother();
+        bool hasMother() const;
         int numberOfDaughters() const;
         GenSimParticle daughter(int i) const;
         bool isFinalState() const;
@@ -30,6 +30,7 @@ class GenSimParticle : public Particle
 
         //finds the last hit of a particle before it decays into something else
         GenSimParticle finalDaughter() const;
+        bool isFinalDaughter() {return finalDaughter() == *this;}
 
         GenSimParticle findMother(int motherPDGID) const;
 

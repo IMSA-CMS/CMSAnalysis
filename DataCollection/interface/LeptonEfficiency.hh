@@ -18,9 +18,6 @@ public:
 private:
   const std::shared_ptr<MatchingModule> matchModule;
 
-  //counters for ammount of reco and gensim leptons / these are used to calculate the efficiency
-  int recoMuons, genSimMuons, recoElectrons, genSimElectrons;
-
   protected:
   void doCounters() override{}
 };
