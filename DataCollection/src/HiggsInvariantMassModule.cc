@@ -11,7 +11,7 @@ void HiggsInvariantMassModule::initialize()
 {
     file = new TFile(name.c_str(), "RECREATE");
     tree = new TTree("invariantMass", "Higgs Invariant Mass");
-    tree->SetAutoSave(0);
+    //tree->SetAutoSave(0);
 
     tree->Branch("invariantMass", &muonInvariantMass);
 }
