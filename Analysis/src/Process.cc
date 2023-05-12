@@ -52,6 +52,7 @@ TH2* Process::get2DHist(std::string histType) const
 	double xMaxBarWidth = 0.0;
 	double yMaxBarWidth = 0.0;
 	int singleProcessNumber = 0;
+	//std::cout << processes.size() << std::endl;
 	for (const auto& singleProcess : processes)
 	{
 		singleProcessNumber++;
