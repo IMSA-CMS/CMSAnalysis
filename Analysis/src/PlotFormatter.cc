@@ -612,9 +612,11 @@ TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, std:
     return canvas;
 }
 
+
+
 TCanvas* PlotFormatter::completePlot(std::shared_ptr<Channel> processes, std::string histvariable, TString xAxisTitle, TString yAxisTitle)
 {
-    THStack* background = processes->getStack(histvariable, "background", true);
+    THStack* background = processes->getStack(histvariable, "background", true, 4);
 	TH1* signal = processes->findProcess(processes->getNamesWithLabel("signal").at(0))->getHist(histvariable, true);
     TH1* data = processes->findProcess(processes->getNamesWithLabel("data").at(0))->getHist(histvariable, false);
 
@@ -649,11 +651,15 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<Channel> processes, std::st
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
     TPad* topPad = new TPad("pad1", "", 0, 0.5, 1, 1);
     TPad* bottomPad = new TPad("pad2", "", 0, 0, 1, 0.5);
-    canvas->SetLogy();
+    topPad->SetLogy();
     gStyle->SetOptStat(0);
 
     topPad->Draw();
     topPad->cd();
+
+    TH1* histLoop;
+    signal->Rebin(4);
+    data->Rebin(4);
 
     //Draws the histogram with more events first (bigger axis)
     if(first == 0) {
@@ -669,12 +675,6 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<Channel> processes, std::st
         histVector.push_back(data);
     }
 
-    TH1* histLoop;
-    signal->Rebin(4);
-    for(const auto&& obj : *(background->GetHists())) { //How you iterate over a TList
-        histLoop = dynamic_cast<TH1*>(obj);
-        histLoop->Rebin(4);
-    }
 
     TH1* hist;
     if(first == 0) {
@@ -739,8 +739,15 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<Channel> processes, std::st
 
     for(int i = 0; i < background->GetHistogram()->GetNbinsX(); i++) {
         double errortotal = 0;
-        x1[i] = i * background->GetHistogram()->GetBinWidth(0);
-        y1[i] = background->GetHistogram()->GetBinContent(i);
+        x1[i] = i * background->GetHistogram()->GetBinWidth(0) - 0.5 * background->GetHistogram()->GetBinWidth(0);
+        double bincontent = 0;
+        for(const auto&& obj : *(background->GetHists())) {
+            histLoop = dynamic_cast<TH1*>(obj);
+            bincontent += histLoop->GetBinContent(i);
+            //std::cout << "at " << i << " adding " << histLoop->GetBinContent(i) << std::endl;
+        }
+        //std::cout << "bincontent at " << i << " is " << bincontent << std::endl;
+        y1[i] = bincontent;
         for(const auto&& obj : *(background->GetHists())) { //How you iterate over a TList
             histLoop = dynamic_cast<TH1*>(obj);
             errortotal+= pow(histLoop->GetBinError(i), 2);
@@ -749,10 +756,11 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<Channel> processes, std::st
         xerror[i] = 0;
     }
 
+    //auto errorgraph = new TGraphErrors(signal->GetNbinsX(), x1, y1, xerror, yerror);
     auto errorgraph = new TGraphErrors(signal->GetNbinsX(), x1, y1, xerror, yerror);
     TAxis *eaxis = errorgraph->GetXaxis();
     eaxis->SetLimits(0, signal->GetNbinsX() * signal->GetBinWidth(signal->GetNbinsX()));
-    errorgraph->Draw("P SAME");
+    errorgraph->Draw("P E0 SAME ");
 
     //Draws on bottom pad
     topPad->Update();
@@ -764,24 +772,24 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<Channel> processes, std::st
     bottomPad->cd();
 
 
-    double x[signal->GetNbinsX()], y[signal->GetNbinsX()];
+    double x[data->GetNbinsX()], y[data->GetNbinsX()];
     double highestPoint = 0;
     double lowestPoint = 0;
 
-    for(int i = 0; i < signal->GetNbinsX(); i++) {
+    for(int i = 0; i < data->GetNbinsX(); i++) {
         double total = 0;
-        x[i] = i * signal->GetBinWidth(0);
+        x[i] = i * data->GetBinWidth(0);
         for(const auto&& obj : *(background->GetHists())) { //How you iterate over a TList
             histLoop = dynamic_cast<TH1*>(obj);
             total+= histLoop->GetBinContent(i);
         }
         if(total != 0) {
-            y[i] = (signal->GetBinContent(i) - total) / total;
-            if((signal->GetBinContent(i) - total) / total > highestPoint) {
-                highestPoint = (signal->GetBinContent(i) - total) / total;
+            y[i] = (data->GetBinContent(i) - total) / total;
+            if((data->GetBinContent(i) - total) / total > highestPoint) {
+                highestPoint = (data->GetBinContent(i) - total) / total;
             }
-            else if((signal->GetBinContent(i) - total) / total < lowestPoint) {
-                lowestPoint = (signal->GetBinContent(i) - total) / total;
+            else if((data->GetBinContent(i) - total) / total < lowestPoint) {
+                lowestPoint = (data->GetBinContent(i) - total) / total;
             }
         }
         else {
@@ -789,8 +797,28 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<Channel> processes, std::st
         }
     }
 
-    auto graph = new TGraph(signal->GetNbinsX(), x, y);
-    graph->SetTitle(";" + xAxisTitle +";(signal - bkg) / bkg");
+    double xerror2[data->GetNbinsX()], yerror2[data->GetNbinsX()];
+    for(int i = 0; i < data->GetNbinsX(); i++) {
+        double total = 0;
+        double errortotal = 0;
+        x[i] = i * data->GetBinWidth(0);
+        for(const auto&& obj : *(background->GetHists())) { //How you iterate over a TList
+            histLoop = dynamic_cast<TH1*>(obj);
+            total+= histLoop->GetBinContent(i);
+            errortotal+= pow(histLoop->GetBinError(i), 2);
+        }
+        xerror2[i] = 0;
+        if(total != 0) {
+            yerror2[i] = (data->GetBinContent(i) / pow(total, 2)) * errortotal;
+        }
+        else {
+            yerror2[i] = 0;
+        }
+    }
+    auto errorgraph2 = new TGraphErrors(signal->GetNbinsX(), x, y, xerror2, yerror2);
+
+    auto graph = new TGraph(data->GetNbinsX(), x, y);
+    graph->SetTitle(";" + xAxisTitle +";(data - bkg) / bkg");
     graph->SetMarkerSize(0.5);
     graph->SetMarkerStyle(kFullDotLarge);
     graph->SetMaximum(1.5 * highestPoint);
@@ -801,8 +829,11 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<Channel> processes, std::st
         graph->SetMinimum(-1);
     }
     TAxis *axis = graph->GetXaxis();
-    axis->SetLimits(0, signal->GetNbinsX() * signal->GetBinWidth(signal->GetNbinsX()));
-    graph->Draw("AP");
+    axis->SetLimits(0, data->GetNbinsX() * data->GetBinWidth(data->GetNbinsX()));
+    graph->Draw("AP SAME");
+    errorgraph2->SetFillColor(16);
+    errorgraph2->Draw("P SAME E3");
+    
 
     bottomPad->Update();
     bottomPad->Modified();
