@@ -35,10 +35,6 @@ int GenSimParticle::status() const
 GenSimParticle GenSimParticle::mother() const
 {
   checkIsNull();
-  if (!hasMother())
-  {
-    throw std::runtime_error("GenSimParticle::mother() | This particle has no mother! :(\n");
-  }
   //mother of particle is often not electron/muon
   return GenSimParticle(getParticle()->mother());
 }
@@ -55,12 +51,23 @@ GenSimParticle GenSimParticle::daughter(int i) const
   return GenSimParticle(daughter);
 }
 
+std::vector<GenSimParticle> GenSimParticle::getDaughters() const
+{
+  checkIsNull();
+  std::vector<GenSimParticle> daughters;
+  for(int i = 0; i < getParticle()->numberOfDaughters(); i++)
+  {
+    daughters.push_back(getParticle()->daughter(i));
+  }
+  return daughters;
+}
+
 
 bool GenSimParticle::isFinalState() const
 {
   return getParticle()->isFinalState();
 }
-bool GenSimParticle::hasMother() const
+bool GenSimParticle::hasMother()
 {
   return getParticle()->doesHaveMother();
 }
@@ -202,6 +209,3 @@ std::ostream& operator<<(std::ostream& str, const GenSimParticle part)
   str << std::setw(13) << part.getEnergy() << "| " << std::setw(13) << part.getMass();
   return str;
 }
-
-
-
