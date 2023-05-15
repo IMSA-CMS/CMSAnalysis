@@ -18,11 +18,12 @@ for line in f.readlines():
 	DPMass = DPMass.replace('p', '_')
 	NAME += 'DpMass_' + DPMass + '_'
 
-	# only first one
-	# FSR = line[int(line.index("FSR", 40, 100) + 4) : int(line.index("FSR", 40, 100) + 7)]
-	# FSR = FSR.replace('p', '_')
-	# NAME += 'FSR_' + FSR + '_'
-	# del
+	if "FSR" in line:
+		FSR = line[int(line.index("FSR", 40, 100) + 4) : int(line.index("FSR", 40, 100) + 7)]
+		FSR = FSR.replace('p', '_')
+		NAME += 'FSR_' + FSR + '_'
+	else:
+		NAME += "FSR_0_0_"
 
 	NAME += "Format_NanoAOD_"
 	HMass = line[int(line.index("-", line.index("HMass"), 100) + 1) : int(line.index("_", line.index("HMass"), 100))]
