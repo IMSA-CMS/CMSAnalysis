@@ -1,0 +1,1 @@
+/store/mc/Run3Summer22NanoAODv11/HTo2DarkPhoton_HMass-1000_DPMass-1p5_TuneCP5_13p6TeV-pythia8/NANOAODSIM/126X_mcRun3_2022_realistic_v2-v1/60000/bc799807-dbe4-4309-96e8-4ac2f9c5e90c.root
