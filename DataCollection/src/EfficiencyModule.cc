@@ -20,6 +20,10 @@ bool EfficiencyModule::process ()
 
 void EfficiencyModule::incrementCounter(std::string name, double increment)
 {
+    // if (increment != 0)
+    // {
+    //     std::cout << name << "+" << std::to_string(increment) << std::endl;
+    // }
     if(counters.find(name) == counters.end())
     {
         double newCounter = 0;
