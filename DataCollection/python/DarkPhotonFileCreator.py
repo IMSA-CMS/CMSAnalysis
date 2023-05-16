@@ -1,7 +1,7 @@
 import os 
 import subprocess
 
-f = open('python/nanoAODrun3/susy.txt', 'r')
+f = open('python/DarkPhoton/nanoAODrun3/susy.txt', 'r')
 
 for line in f.readlines():
 	NAME = 'DarkPhoton/Run3NanoAOD/DarkPhoton_'
