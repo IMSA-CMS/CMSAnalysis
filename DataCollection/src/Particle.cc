@@ -254,6 +254,10 @@ const ParticleType& Particle::getType() const{
 
 const ParticleType& Particle::identifyType(int pdgid)
 {
+    if (pdgid > 0 && pdgid < 7)
+    {
+      return ParticleType::quark();
+    }
     if (pdgid == 11 || pdgid == -11)
     {
       return ParticleType::electron();
