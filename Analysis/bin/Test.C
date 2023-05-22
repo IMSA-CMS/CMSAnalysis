@@ -10,6 +10,7 @@
 #include "TCanvas.h"
 #include "CMSAnalysis/Analysis/interface/Process.hh"
 #include "CMSAnalysis/Analysis/interface/Channel.hh"
+#include "THStack.h"
 
 void Test() {
     std::shared_ptr<HiggsCompleteAnalysis> analysis = std::make_shared<HiggsCompleteAnalysis>();
@@ -53,6 +54,26 @@ void Test() {
     canvas->SetTickx(0);
     canvas->SetTicky(0);
 
-    TH1* hist = analysis->getHiggsHist("Same Sign Inv Mass", 900);
-    hist->Draw("HIST");
+    //TH1* hist = analysis->getDecayHist("Same Sign Inv Mass", "ZZ Background", 900, false);
+    
+    std::string histvariable = "Same Sign Inv Mass";
+    double massTarget = 900;
+
+    std::vector<std::shared_ptr<Channel>> channels = analysis->getChannels();
+    std::shared_ptr<Channel> processes = channels.at(0);
+    std::vector<std::string> backgroundNames = processes->getNamesWithLabel("background");
+    std::vector<std::string> signalNames = processes->getNamesWithLabel("signal");
+    std::vector<std::string> dataNames = processes->getNamesWithLabel("data");
+    TH1* data = analysis->getDecayHist(histvariable, dataNames.at(0), massTarget, false);
+    TH1* signal = analysis->getDecayHist(histvariable, signalNames.at(0), massTarget, true);
+    std::vector<TH1*> backgroundHists;
+    for(std::string name : backgroundNames) {
+        backgroundHists.push_back(analysis->getDecayHist(histvariable, name, massTarget, true));
+    }
+    THStack* background = new THStack("background", "background");
+    for(TH1* backgroundHist : backgroundHists) {
+        backgroundHist->Rebin(4);
+        background->Add(backgroundHist);
+    }    
+    signal->Draw("HIST");
 }

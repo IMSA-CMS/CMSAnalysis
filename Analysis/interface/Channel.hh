@@ -7,6 +7,7 @@
 #include <vector>
 #include <memory>
 #include "TH1.h"
+#include "Process.hh"
 
 class Process;
 class THStack;
@@ -38,6 +39,7 @@ class Channel
 		void makeDatacard(std::shared_ptr<Channel> channel);
 
 		std::vector<std::shared_ptr<Process>> getProcesses() {return processes;}
+
 
 	private: 
 		std::string name;

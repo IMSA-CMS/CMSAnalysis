@@ -10,6 +10,8 @@
 #include "CMSAnalysis/Analysis/interface/Process.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include "CMSAnalysis/DataCollection/interface/Utility.hh"
+#include "CMSAnalysis/Analysis/interface/Correction.hh"
+#include "CMSAnalysis/Analysis/interface/ConstantCorrection.hh"
 #include <memory>	
 #include <iostream>
 #include <vector>
@@ -37,7 +39,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
             histVariables.push_back(HistVariable::SameSignMass(name + "_hists/" + name + "Muon" + " Reco Same Sign Invariant Mass"));
             //histVariables.push_back(HistVariable::Pt(name + "_hists/" + name + "Muon" + " Reco Leading lepton pT"));
             //histVariables.push_back(HistVariable::MET(particleString + name + "MET"));
-            double luminosity = 3000;
+            double luminosity = 20;
             auto ttbarBackground = std::make_shared<Process>("TTBar Background", 2);
             ttbarBackground->addProcess(makeSignalProcess(histVariables, filePath, "TTBar_HiggsBackground.root", "ttbar_lep", reader, massTarget, luminosity));
             auto zzBackground = std::make_shared<Process>("ZZ Background", 5);
@@ -49,9 +51,13 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
             auto higgsSignal = std::make_shared<Process>("Higgs Signal", 5);
             higgsSignal->addProcess(makeSignalProcess(histVariables, filePath, "Higgs" + std::to_string((int) massTarget) + "_HiggsBackground.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
             auto higgsData = std::make_shared<Process>("Higgs Data", 1);
+            // std::vector<std::shared_ptr<Correction>> corrections = {};
+            // auto correction = std::make_shared<ConstantCorrection>(2);
+            //corrections.push_back(correction);
             higgsData->addProcess(makeSignalProcess(histVariables, filePath + "../python/", "data.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
             std::vector<std::shared_ptr<Process>> backgroundProcesses = { ttbarBackground, zzBackground, dyBackground, qcdBackground, higgsSignal, higgsData };
             auto leptonBackgrounds = std::make_shared<Channel>(name  + std::to_string((int) massTarget), backgroundProcesses);
+            //leptonBackgrounds->cleanProcesses();
             channels.push_back(leptonBackgrounds);
         }
     }
@@ -67,37 +73,37 @@ std::shared_ptr<Channel> HiggsCompleteAnalysis::getChannel(std::string name)
     throw std::runtime_error("Channel of name " + name + " not found.");
 }
 
-TH1* HiggsCompleteAnalysis::getHiggsHist(std::string histType, double massTarget, bool scaleToExpected) const {
+TH1* HiggsCompleteAnalysis::getDecayHist(std::string histType, std::string processName, double massTarget, bool scaleToExpected) const {
     int maxBinNum = 0;
 	double maxBarWidth = 0.0;
 	int channelNumber = 0;
-    std::string name = "Higgs";
+    std::string name = processName;
 	for (const auto& channel : channels)
 	{
         std::string channelName = channel->getName();
         channelName = channelName.substr((channelName.length() - 2) - int(log10((int) massTarget)) + 1, int(log10((int) massTarget)) + 1);
         if(channelName == std::to_string((int) massTarget)) {
             channelNumber++;
-            std::vector<TH1*> channelHists = channel->getHists(histType, "signal", false);
-            if (channelHists.size() == 0) {
-                throw std::runtime_error("Histogram not found in channel: " + channel->getName());
+            //std::vector<TH1*> channelHists = channel->getHists(histType, "signal", false);
+            TH1* channelHist = channel->findProcess(processName)->getHist(histType, scaleToExpected);
+            if(channelHist->GetEntries() > 0) {
+                if (channelHist == 0) {
+                    throw std::runtime_error("Histogram not found in channel: " + channel->getName());
+                }
+                if (channelHist->GetNbinsX() > maxBinNum)
+                {
+                    maxBinNum = channelHist->GetNbinsX();
+                }
+                if ((channelHist->GetXaxis()->GetBinWidth(maxBinNum)) > maxBarWidth)
+                {
+                    maxBarWidth = (channelHist->GetXaxis()->GetBinWidth(maxBinNum));
+                }
             }
-            if (channelHists.at(0)->GetNbinsX() > maxBinNum)
-            {
-                maxBinNum = channelHists.at(0)->GetNbinsX();
-            }
-            if ((channelHists.at(0)->GetXaxis()->GetBinWidth(maxBinNum)) > maxBarWidth)
-            {
-                maxBarWidth = (channelHists.at(0)->GetXaxis()->GetBinWidth(maxBinNum));
-            }
-            for(auto histogram : channelHists) {
-                delete histogram;
-                channelHists.clear();
-            }
+            delete channelHist;
         }
 	}
 	TH1* hist = new TH1F(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * maxBarWidth);
-	std::vector<TH1*> toAdd;
+	TH1* toAdd = 0;
 	TList* toMerge = new TList;
     TH1::AddDirectory(kFALSE);
 	for (const auto& channel : channels)	
@@ -105,15 +111,16 @@ TH1* HiggsCompleteAnalysis::getHiggsHist(std::string histType, double massTarget
         std::string channelName = channel->getName();
         channelName = channelName.substr((channelName.length() - 2) - int(log10((int) massTarget)) + 1, int(log10((int) massTarget)) + 1);
 		if(channelName == std::to_string((int) massTarget)) {
-            toAdd = channel->getHists(histType, "signal", scaleToExpected);
+            toAdd = channel->findProcess(processName)->getHist(histType, scaleToExpected);
+            //toAdd = dynamic_cast<TH1*>(channel->findProcess(processName)->getHist(histType, scaleToExpected)->Clone((channelName + processName).c_str()));
         }
-        for(auto vechist : toAdd) {
-            toMerge->Add(vechist);
+        if(toAdd->GetEntries() > 0) {
+            toMerge->Add(toAdd);
         }
 	}
     TH1::AddDirectory(kTRUE);
 	hist->Merge(toMerge);
-	hist->SetLineColor(kBlack);
-	hist->SetFillColor(kBlack);
+	hist->SetLineColor(channels.at(0)->findProcess(processName)->getColor());
+	hist->SetFillColor(channels.at(0)->findProcess(processName)->getColor());
 	return hist;
 }
