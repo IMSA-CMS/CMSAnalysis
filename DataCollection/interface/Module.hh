@@ -38,6 +38,7 @@ public:
 
   bool processEvent();
   virtual void setInput(const InputModule* iInput) {input = iInput;}
+  const InputModule* getInput() const {return input;}
 
   // Writes text to screen and to Root file
   // par is the text itself while name is the name of the variable in the Root file
@@ -54,7 +55,7 @@ protected:
   // if you are deliberately filtering events.
   // In most cases, you should return true.
   virtual bool process() = 0;
-  const InputModule* getInput() const {return input;}
+
 
 private:
   static std::unordered_map<std::string, double> parameters;

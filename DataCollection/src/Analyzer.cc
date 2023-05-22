@@ -114,7 +114,10 @@ void Analyzer::initialize()
   // Initialize all modules
   for (auto module : getAllModules())
   {
-    module->setInput(input);
+    if (!module->getInput())
+    {
+      module->setInput(input);
+    }
     module->initialize();
   }
 }

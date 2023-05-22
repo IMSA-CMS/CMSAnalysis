@@ -33,7 +33,7 @@
 #include "CMSAnalysis/DataCollection/interface/QuarkoniaCut.hh"
 #include "CMSAnalysis/DataCollection/interface/ZVetoCut.hh"
 #include "CMSAnalysis/DataCollection/interface/FourLeptonCut.hh"
-#include "CMSAnalysis/DataCollection/interface/HiggsCutsSelector.hh"
+#include "CMSAnalysis/DataCollection/interface/HiggsSelector.hh"
 #include "CMSAnalysis/DataCollection/interface/HiggsCut.hh"
 #include "CMSAnalysis/DataCollection/interface/HPlusPlusDecayFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimEventDumpModule.hh"
@@ -49,7 +49,7 @@ void HiggsBackgroundPlan::initialize()
     
     auto eventMod = make_shared<EventModule>();
     //auto pasSelector = make_shared<PASSelector>();
-    auto higgsCutsSelector = make_shared<HiggsCutsSelector>();
+    auto higgsSelector = make_shared<HiggsSelector>();
     auto higgsCut = make_shared<HiggsCut>();
     auto eventDump = make_shared<GenSimEventDumpModule>();
     //auto fourLeptonCut = make_shared<FourLeptonCut>();
@@ -57,7 +57,7 @@ void HiggsBackgroundPlan::initialize()
     //auto quarkoniaCut = make_shared<QuarkoniaCut>();
 
     //eventMod->addSelector(pasSelector);
-    eventMod->addSelector(higgsCutsSelector);
+    eventMod->addSelector(higgsSelector);
     eventMod->addCut(higgsCut);
     //eventMod->addCut(fourLeptonCut);
     //eventMod->addCut(zVetoCut);
@@ -69,7 +69,9 @@ void HiggsBackgroundPlan::initialize()
     auto bJetFilter = make_shared<BJetFilter>();
     auto higgsFilter = make_shared<HPlusPlusDecayFilter>(InputModule::RecoLevel::Reco);
 
+    auto localEventInputModule = make_shared<LocalEventInputModule>(&(eventMod->getEvent()));
     auto recoDecayFilter = make_shared<HPlusPlusDecayFilter>(InputModule::RecoLevel::Reco);
+    recoDecayFilter->setInput(localEventInputModule.get());
     auto genSimDecayFilter = make_shared<HPlusPlusDecayFilter>(InputModule::RecoLevel::GenSim);
     analyzer.addFilterModule(recoDecayFilter);
     analyzer.addFilterModule(genSimDecayFilter);
