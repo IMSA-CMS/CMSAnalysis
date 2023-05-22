@@ -1,0 +1,47 @@
++--------+-------+----------+-------------+---------------------------------+-------+--------------------------------------------------------------+
+| run    | cmsls | prescidx | totprescval | hltpath/prescval                | logic | l1bit/prescval                                               |
++--------+-------+----------+-------------+---------------------------------+-------+--------------------------------------------------------------+
+| 321773 | 1     | 0        | 0.00        | HLT_Ele27_Ele37_CaloIdL_MW_v4/0 | OR    | L1_SingleEG26er2p5/0.00 L1_DoubleEG_22_10_er2p5/0.00         |
+|        |       |          |             |                                 |       | L1_SingleJet180/0.00 L1_SingleEG40er2p5/0.00                 |
+|        |       |          |             |                                 |       | L1_DoubleEG_25_12_er2p5/0.00 L1_SingleJet200/0.00            |
+|        |       |          |             |                                 |       | L1_SingleEG38er2p5/0.00 L1_DoubleEG_25_14_er2p5/0.00         |
+|        |       |          |             |                                 |       | L1_SingleEG42er2p5/0.00 L1_SingleEG45er2p5/0.00              |
+|        |       |          |             |                                 |       | L1_SingleEG60/0.00 L1_SingleEG34er2p5/0.00                   |
+|        |       |          |             |                                 |       | L1_SingleTau120er2p1/0.00 L1_SingleJet160er2p5/0.00          |
+|        |       |          |             |                                 |       | L1_SingleEG36er2p5/0.00                                      |
+| 321773 | 3     | 2        | 1.00        | HLT_Ele27_Ele37_CaloIdL_MW_v4/1 | OR    | L1_SingleJet180/1.00 L1_SingleEG60/1.00                      |
+|        |       |          |             |                                 |       | L1_SingleJet160er2p5/0.00 L1_SingleTau120er2p1/1.00          |
+|        |       |          |             |                                 |       | L1_SingleEG36er2p5/1.00 L1_DoubleEG_22_10_er2p5/0.00         |
+|        |       |          |             |                                 |       | L1_DoubleEG_25_14_er2p5/1.00 L1_SingleEG26er2p5/780.00       |
+|        |       |          |             |                                 |       | L1_SingleEG42er2p5/1.00 L1_SingleEG38er2p5/1.00              |
+|        |       |          |             |                                 |       | L1_SingleJet200/1.00 L1_DoubleEG_25_12_er2p5/1.00            |
+|        |       |          |             |                                 |       | L1_SingleEG34er2p5/0.00 L1_SingleEG45er2p5/1.00              |
+|        |       |          |             |                                 |       | L1_SingleEG40er2p5/1.00                                      |
+| 321773 | 1     | 0        | 0.00        | HLT_Ele27_WPTight_Gsf_v16/0     | OR    | L1_SingleIsoEG28er2p1/0.00 L1_SingleIsoEG30er2p1/0.00        |
+|        |       |          |             |                                 |       | L1_SingleLooseIsoEG26er2p5/0.00                              |
+|        |       |          |             |                                 |       | L1_SingleLooseIsoEG28er2p1/0.00 L1_SingleIsoEG28er2p5/0.00   |
+|        |       |          |             |                                 |       | L1_SingleEG42er2p5/0.00 L1_SingleIsoEG32er2p1/0.00           |
+|        |       |          |             |                                 |       | L1_SingleLooseIsoEG26er1p5/0.00 L1_SingleIsoEG26er2p5/0.00   |
+|        |       |          |             |                                 |       | L1_SingleIsoEG32er2p5/0.00 L1_SingleEG40er2p5/0.00           |
+|        |       |          |             |                                 |       | L1_SingleIsoEG26er2p1/0.00 L1_SingleEG45er2p5/0.00           |
+|        |       |          |             |                                 |       | L1_SingleEG36er2p5/0.00 L1_SingleEG26er2p5/0.00              |
+|        |       |          |             |                                 |       | L1_SingleEG38er2p5/0.00 L1_SingleLooseIsoEG30er2p5/0.00      |
+|        |       |          |             |                                 |       | L1_SingleEG60/0.00 L1_SingleIsoEG24er2p1/0.00                |
+|        |       |          |             |                                 |       | L1_SingleIsoEG34er2p5/0.00 L1_SingleEG34er2p5/0.00           |
+|        |       |          |             |                                 |       | L1_SingleIsoEG30er2p5/0.00 L1_SingleLooseIsoEG30er1p5/0.00   |
+|        |       |          |             |                                 |       | L1_SingleLooseIsoEG28er2p5/0.00                              |
+|        |       |          |             |                                 |       | L1_SingleLooseIsoEG28er1p5/0.00                              |
+| 321773 | 3     | 2        | 0.00        | HLT_Ele27_WPTight_Gsf_v16/0     | OR    | L1_SingleEG60/1.00 L1_SingleIsoEG24er2p1/0.00                |
+|        |       |          |             |                                 |       | L1_SingleEG36er2p5/1.00 L1_SingleEG26er2p5/780.00            |
+|        |       |          |             |                                 |       | L1_SingleLooseIsoEG30er1p5/0.00 L1_SingleIsoEG28er2p5/1.00   |
+|        |       |          |             |                                 |       | L1_SingleLooseIsoEG26er2p5/0.00 L1_SingleEG34er2p5/0.00      |
+|        |       |          |             |                                 |       | L1_SingleIsoEG30er2p1/1.00 L1_SingleLooseIsoEG28er2p1/1.00   |
+|        |       |          |             |                                 |       | L1_SingleLooseIsoEG28er1p5/0.00                              |
+|        |       |          |             |                                 |       | L1_SingleLooseIsoEG30er2p5/1.00 L1_SingleIsoEG30er2p5/1.00   |
+|        |       |          |             |                                 |       | L1_SingleIsoEG34er2p5/1.00 L1_SingleIsoEG32er2p5/1.00        |
+|        |       |          |             |                                 |       | L1_SingleLooseIsoEG28er2p5/1.00 L1_SingleIsoEG28er2p1/1.00   |
+|        |       |          |             |                                 |       | L1_SingleEG42er2p5/1.00 L1_SingleLooseIsoEG26er1p5/1.00      |
+|        |       |          |             |                                 |       | L1_SingleIsoEG26er2p1/0.00 L1_SingleIsoEG32er2p1/1.00        |
+|        |       |          |             |                                 |       | L1_SingleEG45er2p5/1.00 L1_SingleEG40er2p5/1.00              |
+|        |       |          |             |                                 |       | L1_SingleIsoEG26er2p5/0.00 L1_SingleEG38er2p5/1.00           |
++--------+-------+----------+-------------+---------------------------------+-------+--------------------------------------------------------------+

@@ -18,7 +18,6 @@
 void HistogramOutputModule::finalizeFilterString() {
   // Check if any baseObjects have not been copied to objects yet,
   // and fill them into the main map if not
-
   // Then write all the objects to file
   for (auto &entry : baseObjects) {
     if (entry.first.find(getFilter()) != std::string::npos || getFilter() == "")
@@ -79,6 +78,7 @@ const TObject* HistogramOutputModule::getObject(const std::string& name) const
     return nullptr;
   }
 }
+
 void HistogramOutputModule::makeHistogram(const std::string &name,
                                           const std::string &title, int nbins,
                                           double min, double max) {
@@ -145,7 +145,6 @@ std::string HistogramOutputModule::getObjectName(const std::string &str) const {
 bool HistogramOutputModule::process() {
   //std::cout << "HistOutMod running \n";
   for (auto hist : histograms) {
-    //std::cout << hist->getName() << std::endl;
     bool draw = hist->shouldDraw(); // call the shouldDraw function so we can
                                     // call process on the FilterModules
     // 2/2/2023 investigating shouldDraw problem, this comment is just a placeholder
@@ -154,7 +153,7 @@ bool HistogramOutputModule::process() {
     {
       // If the histogram without mass bin doesn't exist, make it
       if (baseObjects.find(getObjectName(hist->getFilteredName())) == baseObjects.end()) {
-        //std::cout << hist->getFilteredName() << "\n";
+        std::cout << "HistogramOutputModule159" << hist->getFilteredName() << "\n";
         makeHistogram(hist, hist->getFilteredName());
       }
 
