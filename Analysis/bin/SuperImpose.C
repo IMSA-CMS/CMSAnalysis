@@ -20,18 +20,18 @@ void SuperImpose() {
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary");
     //Change the filePath here. This should be the longest branch all input files have in common.
     //const std::string filePath = "/uscms/home/aytang/RecoWidth/CMSSW_11_0_2/src/CMSAnalysis/DataCollection/bin/";
-    const std::string filePath = "/uscms/home/fciancio/practice/CMSSW_11_0_2/src/CMSAnalysis/DataCollection/bin/";
+    const std::string filePath = "/uscms/home/jamespan/test/CMSSW_11_0_2/src/CMSAnalysis/DataCollection/bin/";
     //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
-    std::vector<std::string> files = {"DarkPhotonJetpT.root", "QCDJetpT.root", "DYJetpT.root"};
+    std::vector<std::string> files = {"nElectrons10.root", "nElectrons10.root"};
     //std::vector<std::string> files = {"HiggsRunCuts/Higgs700.root", "BackgroundRunCuts/TTBarPick500.root", "BackgroundRunCuts/ZZPick4.root"};
-    std::vector<std::string> hists = {"Jet pT Rel", "Jet pT Rel", "Jet pT Rel"};
+    std::vector<std::string> hists = {"Elec22Photon-electron invariant mass", "Elec24Photon-electron invariant mass"};
     //std::vector<std::string> hists = {"Cut4MET", "Cut4MET", "Cut4MET"};
     //Write your graph names here (for the legend)
-    std::vector<TString> names = {"Dark Photon Jet pT Rel", "QCD", "DY"};
+    std::vector<TString> names = {"2 Electrons", "4 Electrons"};
     //Colors go here
-    std::vector<int> colors = {1, 2, 3};
+    std::vector<int> colors = {1, 2};
     //Change x and y axis titles here
-    TString xTitle = "Relative pT";
+    TString xTitle = "e-gamma Invariant Mass";
     TString yTitle = "Events (1/Integral)";
 
 
