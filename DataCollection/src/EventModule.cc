@@ -50,7 +50,6 @@ bool EventModule::process ()
 {
     clearHistograms(); //all histograms are cleared and we only fill the ones we are using for this event
     event.clear();
-
     for (auto selector : selectors) {
         selector->selectParticles(getInput(),event);
     }
@@ -69,7 +68,6 @@ bool EventModule::process ()
     if (!passesCuts){
         return false;
     }
-
     addBasicHistograms(ParticleType::electron(), event.getElectrons());
     addBasicHistograms(ParticleType::muon(), event.getMuons());
     addBasicHistograms(ParticleType::photon(), event.getPhotons());
@@ -80,6 +78,7 @@ bool EventModule::process ()
         auto specialPtr = std::make_shared<ParticleCollection<Particle>>(value);
         addBasicHistograms(value.getParticles()[0].getType(), value);
         addCountHistograms(value.getParticles()[0].getType(), specialPtr); 
+
     }
     
     auto electronCollection = std::make_shared<ParticleCollection<Particle>>(event.getElectrons());
@@ -118,6 +117,7 @@ void EventModule::addBasicHistograms(const ParticleType& particleType, const Par
     int count = 0;
     for (auto part : parts)
     {   
+
         for (auto hist : particleType.getParticleHists())
         {
             auto histName = getBasicHistogramTitle(count,particleType,hist->getName());
@@ -126,8 +126,10 @@ void EventModule::addBasicHistograms(const ParticleType& particleType, const Par
                 hist->changeName(histName);
                 particleHistograms.insert({histName,hist});
                 histMod->addHistogram(hist);
+
             }
             particleHistograms[histName]->setParticle(part);
+
         }
         count++;
     }
