@@ -42,7 +42,7 @@ particle(std::make_shared<LeptonJetImplementation>(iparticle))
 Particle::Particle(reco::Candidate::LorentzVector vec, int pid, int status, int m1, int m2,int d1, int d2)
 {
   auto type = identifyType(pid);
-  int charge = type.getCharge()* (std::signbit(pid) ? -1 : 1);
+  int charge = type.getCharge() * (pid < 0 ? -1 : 1);
   particle = std::make_shared<DelphesImplementation>(vec,charge,type,pid,status,m1,m2,d1,d2);
 }
 
@@ -50,7 +50,7 @@ Particle::Particle(reco::Candidate::LorentzVector vec, int pid, int status, int 
 Particle::Particle(reco::Candidate::LorentzVector vec, int pid, const Particle* motherParticle, std::vector<const GenSimParticle*> daughters, const int status)
 {
   auto type = identifyType(pid);
-  int charge = type.getCharge()* (std::signbit(pid) ? -1 : 1);
+  int charge = type.getCharge() * (pid < 0 ? -1 : 1);
   particle = std::make_shared<GenSimSimpleImplementation>(vec, charge, type, pid, motherParticle, daughters, status);
 }
 
@@ -254,6 +254,10 @@ const ParticleType& Particle::getType() const{
 
 const ParticleType& Particle::identifyType(int pdgid)
 {
+    if (pdgid > 0 && pdgid < 7)
+    {
+      return ParticleType::quark();
+    }
     if (pdgid == 11 || pdgid == -11)
     {
       return ParticleType::electron();

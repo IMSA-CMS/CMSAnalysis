@@ -116,6 +116,8 @@ std::vector<bool> MiniAODEventFile::getTriggerResults(std::string subProcess) co
 
 std::vector<std::string> MiniAODEventFile::getTriggerNames(std::string subProcess) const
 {
+    // cout statements
+    // std::cout << "Is this part running?" << "\n";
     edm::Handle<edm::TriggerResults> triggerResults;
     event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
     const edm::TriggerNames names = event->triggerNames(*triggerResults);
@@ -129,16 +131,22 @@ std::vector<std::string> MiniAODEventFile::getTriggerNames(std::string subProces
 
 bool MiniAODEventFile::checkTrigger(std::string triggerName, std::string subProcess) const
 {
+    // cout statements
+    // std::cout << "Is this part running?" << "\n";
     auto names = getTriggerNames(subProcess);
     auto results = getTriggerResults(subProcess);
 
     auto it = find(names.begin(), names.end(), triggerName);
     if(it != names.end())
     {
+        // cout statement (if it is false in here)
+        // std::cout << "Is this part running?" << "\n";
         return results.at(it - names.begin());
     }
     else
     {
+        // cout statement (if it is false in here)
+        // std::cout << "Is this part running?" << "\n";
         return false;
     }
 }

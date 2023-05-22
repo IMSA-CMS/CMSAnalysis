@@ -3,7 +3,6 @@
 
 #include "FilterModule.hh"
 
-//class GenSimIdentificationModule;
 
 // MassFilter applies a high mass cut based on the invariant mass of the gen sim particles
 class MassFilter : public FilterModule

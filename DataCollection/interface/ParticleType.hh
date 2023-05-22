@@ -31,6 +31,7 @@ class ParticleType
     static const ParticleType& jet(); 
     static const ParticleType& tau();
     static const ParticleType& leptonJet(); 
+    static const ParticleType& quark();
     static const ParticleType& photon();
     static const ParticleType& darkPhoton();
     static const ParticleType& neutralino();
