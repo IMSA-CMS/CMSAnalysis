@@ -154,7 +154,10 @@ void HiggsBackgroundPlan::initialize()
 
     //analyzer.addProductionModule(matchMod);
     analyzer.addAnalysisModule(eventMod);
+<<<<<<< HEAD
+=======
     //analyzer.addAnalysisModule(higgsLeptonEfficiency);
+>>>>>>> 73f9c576726342a75fa3110834c1c8b44c2a7f88
     //analyzer.addAnalysisModule(leptonEfficiency);
     analyzer.addAnalysisModule(eventHistMod);    
     analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
