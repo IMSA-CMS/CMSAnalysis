@@ -489,6 +489,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<Channel> processes, std::st
 
     data->SetLineColor(kBlack);
     data->SetFillColor(kWhite);
+    data->SetMarkerSize(1);
 
     //Defines order to draw in so graph isn't cut off
     int first;
@@ -530,7 +531,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<Channel> processes, std::st
         histVector.push_back(signal);
     }
     else {
-        data->Draw("E0");
+        data->Draw("PHIST");
         histVector.push_back(data);
     }
 
@@ -583,13 +584,13 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<Channel> processes, std::st
     if(first == 0) {
         signal->Draw("HIST SAME");
         histVector.push_back(signal);
-        data->Draw("E0 SAME");
+        data->Draw("PHIST SAME");
         histVector.push_back(data);
     }
     else if(first == 1) {
         background->Draw("HIST SAME");
         stackVector.push_back(background);
-        data->Draw("E0 SAME");
+        data->Draw("PHIST SAME");
         histVector.push_back(data);
     }
     else {
