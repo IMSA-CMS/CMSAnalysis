@@ -15,6 +15,7 @@
 #include "CMSAnalysis/DataCollection/interface/ResolutionModule.hh"
 //#include "CMSAnalysis/DataCollection/interface/MassResolutionModule.hh"
 #include "CMSAnalysis/DataCollection/interface/SameSignInvariantMassHist.hh"
+#include "CMSAnalysis/DataCollection/interface/PhotonElectronInvariantMassHist.hh"
 #include "CMSAnalysis/DataCollection/interface/NLeptonsFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerFilter.hh"
 #include "CMSAnalysis/DataCollection/interface/SameSignInvariantMassFilter.hh"
@@ -38,30 +39,39 @@ void InvariantMassPlan::initialize()
   // Create necessary histogram(s), as well as histMod
   auto histMod = make_shared<HistogramOutputModule>();
   
-  auto elecInvMassHist = make_shared<InvariantMassHist>(InputModule::RecoLevel::Reco, "Electron Invariant Mass", 300, 1, 1000);
-  auto photonElectronMassHist = make_shared<PhotonInvariantMassHist>(InputModule::RecoLevel::Reco, "Photon-electron invariant mass", 300, 1, 1000);
+  // auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "same_Sign_Invariant_Mass", 300, 0, 1000);
+  // auto invMassHist = make_shared<InvariantMassHist>(InputModule::RecoLevel::Reco, "invariant_Mass", 300, 0, 1000);
+  auto photonElectronHist = make_shared<PhotonElectronInvariantMassHist>(InputModule::RecoLevel::Reco, "photon_Electron_Invariant_Mass", 300, 0, 1000);
 
+
+
+  auto ssInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "Drell-Yan Same Sign Invariant Mass", 300, 1, 1000);
+  auto highSsInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "Drell-Yan Same Sign Invariant Mass > 500 GeV", 200, 500, 1000);
   // Create necessary module(s) for the filter(s)
 
   // Create necessary filter(s)
 
-  auto nLeptonsFilter = make_shared<NLeptonsFilter>();
-  auto lepFilter = make_shared<LeptonFilter>(ParticleType::electron(), 2, "Elec2");
+  // auto nLeptonsFilter = make_shared<NLeptonsFilter>();
+  // auto lepFilter = make_shared<LeptonFilter>(ParticleType::electron(), 2, "Elec2");
 
   // Add the filter module(s) to the histogram(s) created above
 
-  elecInvMassHist->addFilter(lepFilter);
-  elecInvMassHist->addFilter(nLeptonsFilter);
-  photonElectronMassHist->addFilter(lepFilter);
-  photonElectronMassHist->addFilter(nLeptonsFilter);
+  // elecInvMassHist->addFilter(lepFilter);
+  // elecInvMassHist->addFilter(nLeptonsFilter);
+  // photonElectronMassHist->addFilter(lepFilter);
+  // photonElectronMassHist->addFilter(nLeptonsFilter);
 
   // Add the histogram(s) created above to histMod
-  histMod->addHistogram(elecInvMassHist);
-  histMod->addHistogram(photonElectronMassHist);
+  // histMod->addHistogram(elecInvMassHist);
+  // histMod->addHistogram(photonElectronMassHist);
+  // histMod->addHistogram(ssInvMassHist);
+  // histMod->addHistogram(highSsInvMassHist);
 
   // Add production modules
-  auto compMod = make_shared<RecoGenSimComparisonModule>("mother");
+  //auto eventDump = make_shared<EventDumpModule>(1, 1);
+  auto compMod = make_shared<RecoGenSimComparisonModule>("mother", true);
   // Hopefully doesn't break // <- this is profound
   analyzer.addAnalysisModule(histMod);
+  //analyzer.addAnalysisModule(eventDump);
   analyzer.addAnalysisModule(compMod);
 }

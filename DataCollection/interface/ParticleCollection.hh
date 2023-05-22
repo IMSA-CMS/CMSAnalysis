@@ -64,7 +64,6 @@ public:
 private:
   std::vector<T> particles;
   std::pair<T, T> chooseParticles() const; // picks particles with greatest invariant mass
-  // PartPair chooseParticles(bool oppositeSigns) const; // oppositeSigns is true when the particles have opposite sign charge
   std::pair<T, T> chooseParticlesByPhi(bool oppositeSigns) const; // picks particles by the Phi angle
   bool checkSigns(T particle1, T particle2) const;
   double calculateInvariantMass(T particle1, T particle2) const;
@@ -97,12 +96,10 @@ inline ParticleCollection<T> ParticleCollection<T>::getPosParticles() const
   {
     if (particle.getCharge() > 0)
     {
-      // std::cout << "Added positive particle with charge " << particle.charge() << " to positive collection.\n";
       positives.addParticle(particle); // Add all of the positively-charged particles to positives
     }
   }
 
-  // std::cout << "Number of Positive Particles: " << positives.getNumParticles() << '\n';
 
   return positives;
 } // ParticleCollection of just the positively charged particles
@@ -116,12 +113,10 @@ inline ParticleCollection<T> ParticleCollection<T>::getNegParticles() const
   {
     if (particle.getCharge() < 0)
     {
-      // std::cout << "Added negative particle with charge " << particle.charge() << " to negative collection.\n";
       negatives.addParticle(particle); // Add all of the negatively-charged particles to negatives
     }
   }
 
-  // std::cout << "Number of Negative Particles: " << negatives.getNumParticles() << '\n';
 
   return negatives;
 } // ParticleCollection of just the negatively charged particles
@@ -175,11 +170,6 @@ inline double ParticleCollection<T>::getNthHighestPt(int n) const
   std::sort(particlesVec.begin(), particlesVec.end(), [](auto a, auto b)
             { return a.getPt() > b.getPt(); });
 
-  // for (auto particle : particlesVec)
-  // {
-  //  std::cout << particle.pt() << '\n';
-  // }
-  // std::cout << '\n';
 
   return particlesVec[n - 1].getPt(); // n-1 since the first element is 0, 2nd element is 1, etc.
 }
@@ -269,7 +259,6 @@ inline double ParticleCollection<T>::calculateAllLeptonInvariantMass() const
     total += newVec;
   }
 
-  // std::cout << total.M() << '\n';
 
   return total.M();
 }
@@ -443,11 +432,6 @@ inline typename std::pair<T, T> ParticleCollection<T>::chooseParticles(bool oppo
   T iPointer = Particle::nullParticle();
   T jPointer = Particle::nullParticle();
 
-  if (particles.size() > 0)
-  {
-    // std::cout << "!" << particles[0].getMass() << std::endl;
-  }
-
   for (int i = 0; i < static_cast<int>(particles.size()) - 1; ++i)
   {
     for (int j = i + 1; j < static_cast<int>(particles.size()); ++j)
@@ -457,7 +441,6 @@ inline typename std::pair<T, T> ParticleCollection<T>::chooseParticles(bool oppo
 
         if (checkSigns(particles[i], particles[j]) == oppositeSigns) // Check if the particle pairs' signs match with what we want
         {
-          // std::cout << calculateInvariantMass(particles[i], particles[j]) << std::endl;
           if (calculateInvariantMass(particles[i], particles[j]) > maxInvariantMass)
           {
             maxInvariantMass = calculateInvariantMass(particles[i], particles[j]);
@@ -583,29 +566,13 @@ inline double ParticleCollection<T>::calculateInvariantMass(T particle1, T parti
   auto vec1 = particle1.getFourVector();
   auto vec2 = particle2.getFourVector();
 
-  // std::cout << vec1.M() << std::endl;
-  // std::cout << vec2.M() << std::endl;
-
   auto sum = vec1 + vec2;
-
-  // std::cout << sum.M() << '\n';
 
   // USED TO BE POSITIVE, JUST WANTED TO SEE WHAT HAPPENED MAY GOD HAVE MERCY
   // I APOLOGIZE TO THE FLYING SPAGHETTI MONSTER FOR THIS BLASPHEMY [ATANG, 11/07]
   // Problem solved :)
   return sum.M();
 
-  // double product = 2 * particle1.pt() * particle2.pt();
-  // double diff = std::cosh(particle1.eta() - particle2.eta()) - std::cos(particle1.phi() - particle2.phi());
-  // double invariantMass = product * diff;
-  // if (invariantMass > 0)
-  //   {
-  //     return std::sqrt(invariantMass);
-  //   }
-  // else
-  //   {
-  //     return 0;
-  //   }
 }
 template <typename T>
 inline double ParticleCollection<T>::calculateLeadingTransverseMomentum(T particle1, T particle2) const
