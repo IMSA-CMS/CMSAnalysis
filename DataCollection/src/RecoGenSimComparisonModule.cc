@@ -70,13 +70,18 @@ void RecoGenSimComparisonModule::finalize()
         std::cout << "\nTotal 4-lepton events: " << numOfDesiredEvents << "\n";
         std::cout << "Total electron events: " << electronCounter << "\n";
         std::cout << "Total muon events: " << muonCounter << "\n";
+
+        
         std::cout << "\nRatios are out of total 4-lepton events\n";
         std::cout << "Events with ISR " << isrCounter/(double)numOfDesiredEvents << "\n";
         std::cout << "Events with FSR " << fsrCounter/(double)numOfDesiredEvents << "\n";
+        std::cout << "No match events: " << noMatchCounter/(double)numOfDesiredEvents << "\n\n";
         std::cout << "\nElectron events with ISR " << elecIsrCounter/(double)numOfDesiredEvents << "\n";
         std::cout << "Electron events with FSR " << elecFsrCounter/(double)numOfDesiredEvents << "\n";
+        std::cout << "No match electron events: " << elecNoMatchCounter/(double)numOfDesiredEvents << "\n\n";
         std::cout << "\nMuon events with ISR " << muonIsrCounter/(double)numOfDesiredEvents << "\n";
         std::cout << "Muon events with FSR " << muonFsrCounter/(double)numOfDesiredEvents << "\n";
+        std::cout << "No match muon events: " << muonNoMatchCounter/(double)numOfDesiredEvents << "\n\n";
     }
 }
 void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particle>& recoParts, 
@@ -531,6 +536,8 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
         const ParticleCollection<Particle>& genParts, 
         std::ostream& output)
 {
+    std::ofstream unmatchedFile("unmatchedFile2.txt");
+    unmatchedFile << "event #\tevent element\tname\tcharge\tpt\tEta\tPhi\tEnergy\tMass\n";
     int recoEventElement = 1;
     int genEventElement = 1;
     int leptonCount = 0;
@@ -561,16 +568,20 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
     }
     printEventHeader(output);
     numOfDesiredEvents++;
-    
+    int noMatchCount = 0;
+    bool noMatch = true;
     for(auto &recoPart : recoParts)
     {
+        noMatch = true;
         printRecoPart(recoPart, recoEventElement, output);
         for (auto &genPart : genParts)
         {
             genEventElement = 1;
             double deltaR = std::sqrt( std::pow(recoPart.getPhi() - genPart.getPhi(), 2) + std::pow(recoPart.getEta() - genPart.getEta(), 2) );
+            
             if (deltaR < 0.1)
             {
+                noMatch = false;
                 if (eventOutput) 
                 {
                     output << std::setw(8) << genEventElement << "| " << std::setw(9) << genPart.getName() << "| ";
@@ -585,7 +596,7 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
                     }
                     catch(const std::exception& e){
                     output << std::setw(13) << "N/A" << "| " 
-                        << std::setw(13) << genPart.getMass();
+                        << std::setw(13) << genPart.getMass() << std::endl;
                     }
                 }
 
@@ -628,6 +639,24 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
             }
             genEventElement++;
         }
+        if (noMatch)
+        {
+            output << eventCounter << "\t" << recoEventElement << "\t" << recoPart.getName() << "\t";
+            // Particle properties
+            output << recoPart.getCharge() << "\t" 
+            << recoPart.getPt() << "\t"
+            << recoPart.getEta() << "\t" 
+            << recoPart.getPhi() << "\t";
+            try
+            {
+                output << "\t" << recoPart.getEnergy() << "\t" << recoPart.getMass() << std::endl;
+            }
+            catch(const std::exception& e)
+            {
+                output << "\t" << "N/A" << "\t" << recoPart.getMass() << std::endl;
+            }
+            noMatchCount += noMatch;
+        }
         recoEventElement++;
     }
     if (elecCount > 2) 
@@ -645,7 +674,7 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
         electronCounter++;
         elecEvent = true;
     }
-    if (fromQuark == 4) 
+    if (fromQuark > 2) 
     {
         isr = true;
     }
@@ -653,6 +682,11 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
     {
         fsr = true;
     }
+    bool noMatchCaused = muonCount + elecCount - noMatchCount < 4;
+    noMatchCounter += noMatchCaused;
+    elecNoMatchCounter += noMatchCaused && elecEvent;
+    muonNoMatchCounter += noMatchCaused && muonEvent;
+
     isrCounter += isr;
     fsrCounter += fsr;
     neitherCounter += !isr && !fsr;
@@ -660,4 +694,5 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
     elecFsrCounter += fsr && elecEvent;
     muonIsrCounter += isr && muonEvent;
     muonFsrCounter += fsr && muonEvent;
+    unmatchedFile.close();
 }

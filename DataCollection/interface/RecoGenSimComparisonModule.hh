@@ -2,6 +2,8 @@
 #define RECOGENSIMCOMPARISONMODULE_HH
 #include <vector>
 #include <cmath>
+#include <fstream>
+
 #include "CMSAnalysis/DataCollection/interface/AnalysisModule.hh"
 #include "CMSAnalysis/DataCollection/interface/ParticleCollection.hh"
 #include "CMSAnalysis/DataCollection/interface/Particle.hh"
