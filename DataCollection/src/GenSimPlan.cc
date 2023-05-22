@@ -33,6 +33,7 @@
 #include "CMSAnalysis/DataCollection/interface/DarkPhotonGenSimSelector.hh"
 #include "CMSAnalysis/DataCollection/interface/HPlusPlusGenSimSelector.hh"
 #include "CMSAnalysis/DataCollection/interface/HPlusPlusDecayFilter.hh"
+#include "CMSAnalysis/DataCollection/interface/HPlusPlusEfficiency.hh"
 
 using std::make_shared;
 
@@ -64,6 +65,9 @@ void GenSimPlan::initialize()
     analyzer.addProductionModule(metMod);
     analyzer.addAnalysisModule(eventMod);
     analyzer.addAnalysisModule(eventHistMod);
+
+    auto hPlusPlusEfficiency = make_shared<HPlusPlusEfficiency>();
+	analyzer.addAnalysisModule(hPlusPlusEfficiency);
 
     analyzer.addAnalysisModule(histMod);
     //analyzer.addAnalysisModule(eventDump);
