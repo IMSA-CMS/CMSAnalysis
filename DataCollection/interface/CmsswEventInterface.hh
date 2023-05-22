@@ -12,6 +12,11 @@
 #include "DataFormats/PatCandidates/interface/Photon.h"
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
+#include "DataFormats/PatCandidates/interface/TriggerEvent.h"
+#include "DataFormats/PatCandidates/interface/GenericParticle.h"
+#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
+
+
 //class TFile;
 
 class CmsswEventInterface : public EventInterface
@@ -22,7 +27,11 @@ class CmsswEventInterface : public EventInterface
             edm::EDGetTokenT<pat::MuonCollection>& iMuonToken,
             edm::EDGetTokenT<pat::PhotonCollection>& iPhotonToken,
             edm::EDGetTokenT<pat::JetCollection>& iJetToken,
-            edm::EDGetTokenT<pat::METCollection>& iMETToken);
+            edm::EDGetTokenT<pat::METCollection>& iMETToken,
+			edm::EDGetTokenT<pat::TriggerEvent>& iTriggerToken,
+			edm::EDGetTokenT<reco::GenParticleCollection>& iGenSimToken
+
+			);
 
         // maybe just ++event
         
@@ -44,6 +53,10 @@ class CmsswEventInterface : public EventInterface
         edm::EDGetTokenT<pat::PhotonCollection>& photonToken;
         edm::EDGetTokenT<pat::JetCollection>& jetToken;
         edm::EDGetTokenT<pat::METCollection>& metToken;
+		edm::EDGetTokenT<pat::TriggerEvent>& triggerToken;
+		edm::EDGetTokenT<reco::GenParticleCollection>& genSimToken;
+
+
 };
 
 
