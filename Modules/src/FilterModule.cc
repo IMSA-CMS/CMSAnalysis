@@ -1,6 +1,10 @@
 #include "CMSAnalysis/Modules/interface/FilterModule.hh"
 #include "CMSAnalysis/Utility/interface/Filter.hh"
 
+FilterModule::FilterModule(std::shared_ptr<Filter> ifilter) :
+  filter(ifilter)
+  {}
+
 bool FilterModule::process()
 {
   filterString = filter->getFilterString(getInput());
