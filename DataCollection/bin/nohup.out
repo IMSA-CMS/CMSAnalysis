@@ -6437,3 +6437,514 @@ Leptons From Protons 0
 Processing complete!
 Output written to qcd500NNoutput.root
 Processing time: 13550.8s
+230509 21:28:50 32285 secgsi_GetCACheck: CRL entry for 'ba240aa8.0:1' needs refreshing: clean the related entry cache first (0x7f41c40277e0)
+SysError in <TFile::Flush>: error flushing file dy50NNoutput.root Disk quota exceeded
+Lepton Jets Found: 112790
+Number of Dark Photons: 0
+Lepton Jet Matching Efficiency: -nan
+Leptons From Quarks 0
+Leptons From Dark Photons 0
+Leptons From Squarks 0
+Leptons From Protons 0
+Processing complete!
+Output written to dy50NNoutput.root
+Processing time: 173776s
+Reading input file textfiles/DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_1_Format_MiniAOD_HiggsMass_1000_Period_2016_Run_2.txt
+                         : Booking "MLP" of type "MLP" from dataset/weights/TMVAClassification_MLP.weights.xml.
+                         : Reading weight file: dataset/weights/TMVAClassification_MLP.weights.xml
+<HEADER> DataSetInfo              : [Default] : Added class "Signal"
+<HEADER> DataSetInfo              : [Default] : Added class "Background"
+<HEADER> MLP                      : Building Network. 
+                         : Initializing weights
+                         : Booked classifier "MLP" of type: "MLP"
+# of root files: 12
+Events: 1881
+Events: 1873
+Events: 2830
+Reading input file textfiles/DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_2_Format_MiniAOD_HiggsMass_1000_Period_2016_Run_2.txt
+                         : Booking "MLP" of type "MLP" from dataset/weights/TMVAClassification_MLP.weights.xml.
+                         : Reading weight file: dataset/weights/TMVAClassification_MLP.weights.xml
+<HEADER> DataSetInfo              : [Default] : Added class "Signal"
+<HEADER> DataSetInfo              : [Default] : Added class "Background"
+<HEADER> MLP                      : Building Network. 
+                         : Initializing weights
+                         : Booked classifier "MLP" of type: "MLP"
+# of root files: 11
+Events: 545
+Events: 3772
+Events: 942
+Events: 942
+Events: 9420
+Events: 1872
+Events: 7544
+Events: 942
+Events: 938
+Events: 941
+Events: 4276
+Events: 945
+Events: 941
+Events: 945
+Lepton Jets Found: 1079
+Number of Dark Photons: 48367
+Lepton Jet Matching Efficiency: 0.0209234
+Leptons From Quarks 0.694119
+Leptons From Dark Photons 0
+Leptons From Squarks 0
+Leptons From Protons 0.305881
+Processing complete!
+Output written to photons_mass_0_1.root
+Processing time: 168.858s
+Events: 1884
+Events: 1884
+Events: 942
+Events: 1884
+Events: 942
+Events: 942
+Lepton Jets Found: 8156
+Number of Dark Photons: 48350
+Lepton Jet Matching Efficiency: 0.166743
+Leptons From Quarks 0.694465
+Leptons From Dark Photons 0
+Leptons From Squarks 0
+Leptons From Protons 0.305535
+Processing complete!
+Output written to photons_mass_0_2.root
+Processing time: 171.205s
+Reading input file textfiles/DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_3_Format_MiniAOD_HiggsMass_125_Period_2016_Run_2.txt
+                         : Booking "MLP" of type "MLP" from dataset/weights/TMVAClassification_MLP.weights.xml.
+                         : Reading weight file: dataset/weights/TMVAClassification_MLP.weights.xml
+<HEADER> DataSetInfo              : [Default] : Added class "Signal"
+<HEADER> DataSetInfo              : [Default] : Added class "Background"
+<HEADER> MLP                      : Building Network. 
+                         : Initializing weights
+                         : Booked classifier "MLP" of type: "MLP"
+# of root files: 10
+Events: 638
+Events: 937
+Events: 4685
+Reading input file textfiles/DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_3_Format_MiniAOD_HiggsMass_300_Period_2016_Run_2.txt
+                         : Booking "MLP" of type "MLP" from dataset/weights/TMVAClassification_MLP.weights.xml.
+                         : Reading weight file: dataset/weights/TMVAClassification_MLP.weights.xml
+<HEADER> DataSetInfo              : [Default] : Added class "Signal"
+<HEADER> DataSetInfo              : [Default] : Added class "Background"
+<HEADER> MLP                      : Building Network. 
+                         : Initializing weights
+                         : Booked classifier "MLP" of type: "MLP"
+# of root files: 10
+Events: 937
+Events: 4695
+Events: 937
+Events: 937
+Events: 2811
+Events: 937
+Events: 10307
+Events: 1874
+Lepton Jets Found: 8347
+Number of Dark Photons: 43347
+Lepton Jet Matching Efficiency: 0.179759
+Leptons From Quarks 0.246827
+Leptons From Dark Photons 0
+Leptons From Squarks 0
+Leptons From Protons 0.753173
+Processing complete!
+Output written to photons_mass_0_3_higgs_mass_125.root
+Processing time: 221.102s
+Events: 1878
+Events: 2817
+Events: 4695
+Events: 1878
+Events: 939
+Events: 1878
+Events: 1525
+Events: 3756
+Events: 939
+Lepton Jets Found: 8970
+Number of Dark Photons: 45317
+Lepton Jet Matching Efficiency: 0.194828
+Leptons From Quarks 0.154943
+Leptons From Dark Photons 0
+Leptons From Squarks 0
+Leptons From Protons 0.845057
+Processing complete!
+Output written to photons_mass_0_3_higgs_mass_300.root
+Processing time: 280.94s
+Reading input file textfiles/DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_0_Format_MiniAOD_HiggsMass_1000_Run_2.txt
+                         : Booking "MLP" of type "MLP" from dataset/weights/TMVAClassification_MLP.weights.xml.
+                         : Reading weight file: dataset/weights/TMVAClassification_MLP.weights.xml
+<HEADER> DataSetInfo              : [Default] : Added class "Signal"
+<HEADER> DataSetInfo              : [Default] : Added class "Background"
+<HEADER> MLP                      : Building Network. 
+                         : Initializing weights
+                         : Booked classifier "MLP" of type: "MLP"
+# of root files: 11
+Events: 941
+Events: 3764
+Events: 9410
+Reading input file textfiles/DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_1_Format_MiniAOD_HiggsMass_1000_Period_2018_Run_2.txt
+                         : Booking "MLP" of type "MLP" from dataset/weights/TMVAClassification_MLP.weights.xml.
+                         : Reading weight file: dataset/weights/TMVAClassification_MLP.weights.xml
+<HEADER> DataSetInfo              : [Default] : Added class "Signal"
+<HEADER> DataSetInfo              : [Default] : Added class "Background"
+<HEADER> MLP                      : Building Network. 
+                         : Initializing weights
+                         : Booked classifier "MLP" of type: "MLP"
+# of root files: 9
+Events: 16000
+Events: 1882
+Events: 1882
+Events: 1882
+Events: 941
+Events: 1882
+Events: 941
+Events: 941
+Events: 6000
+Events: 534
+Lepton Jets Found: 8304
+Number of Dark Photons: 48351
+Lepton Jet Matching Efficiency: 0.169676
+Leptons From Quarks 0.694239
+Leptons From Dark Photons 0
+Leptons From Squarks 0
+Leptons From Protons 0.305761
+Processing complete!
+Output written to photons_mass_0_3_fsr_0_0.root
+Processing time: 206.412s
+Events: 2000
+Events: 6000
+Events: 1000
+Events: 2000
+Events: 3000
+Events: 5000
+Events: 9000
+Lepton Jets Found: 17490
+Number of Dark Photons: 142067
+Lepton Jet Matching Efficiency: 0.121717
+Leptons From Quarks 0.693723
+Leptons From Dark Photons 0
+Leptons From Squarks 0
+Leptons From Protons 0.306277
+Processing complete!
+Output written to photons_mass_0_3_fsr_0_1.root
+Processing time: 380.514s
+Reading input file textfiles/DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_4_Format_MiniAOD_HiggsMass_1000_Period_2016_Run_2.txt
+                         : Booking "MLP" of type "MLP" from dataset/weights/TMVAClassification_MLP.weights.xml.
+                         : Reading weight file: dataset/weights/TMVAClassification_MLP.weights.xml
+<HEADER> DataSetInfo              : [Default] : Added class "Signal"
+<HEADER> DataSetInfo              : [Default] : Added class "Background"
+<HEADER> MLP                      : Building Network. 
+                         : Initializing weights
+                         : Booked classifier "MLP" of type: "MLP"
+# of root files: 9
+Events: 940
+Events: 560
+Events: 940
+Events: 1880
+Events: 2820
+Reading input file textfiles/DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_6_Format_MiniAOD_HiggsMass_1000_Period_2016_Run_2.txt
+                         : Booking "MLP" of type "MLP" from dataset/weights/TMVAClassification_MLP.weights.xml.
+                         : Reading weight file: dataset/weights/TMVAClassification_MLP.weights.xml
+<HEADER> DataSetInfo              : [Default] : Added class "Signal"
+<HEADER> DataSetInfo              : [Default] : Added class "Background"
+<HEADER> MLP                      : Building Network. 
+                         : Initializing weights
+                         : Booked classifier "MLP" of type: "MLP"
+# of root files: 2
+Events: 24466
+Events: 9400
+Events: 940
+Events: 6580
+Events: 534
+Lepton Jets Found: 9763
+Number of Dark Photons: 48373
+Lepton Jet Matching Efficiency: 0.197466
+Leptons From Quarks 0.690813
+Leptons From Dark Photons 0
+Leptons From Squarks 0
+Leptons From Protons 0.309187
+Processing complete!
+Output written to photons_mass_0_6.root
+Processing time: 120.395s
+Events: 940
+Lepton Jets Found: 9360
+Number of Dark Photons: 48407
+Lepton Jet Matching Efficiency: 0.190902
+Leptons From Quarks 0.696642
+Leptons From Dark Photons 0
+Leptons From Squarks 0
+Leptons From Protons 0.303358
+Processing complete!
+Output written to photons_mass_0_4.root
+Processing time: 187.874s
+Reading input file textfiles/DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_1_2_Format_MiniAOD_HiggsMass_1000_Period_2016_Run_2.txt
+                         : Booking "MLP" of type "MLP" from dataset/weights/TMVAClassification_MLP.weights.xml.
+                         : Reading weight file: dataset/weights/TMVAClassification_MLP.weights.xml
+<HEADER> DataSetInfo              : [Default] : Added class "Signal"
+<HEADER> DataSetInfo              : [Default] : Added class "Background"
+<HEADER> MLP                      : Building Network. 
+                         : Initializing weights
+                         : Booked classifier "MLP" of type: "MLP"
+# of root files: 6
+Events: 534
+Events: 941
+Events: 1882
+Events: 19761
+Reading input file textfiles/DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_1_5_Format_MiniAOD_HiggsMass_1000_Period_2016_Run_2.txt
+                         : Booking "MLP" of type "MLP" from dataset/weights/TMVAClassification_MLP.weights.xml.
+                         : Reading weight file: dataset/weights/TMVAClassification_MLP.weights.xml
+<HEADER> DataSetInfo              : [Default] : Added class "Signal"
+<HEADER> DataSetInfo              : [Default] : Added class "Background"
+<HEADER> MLP                      : Building Network. 
+                         : Initializing weights
+                         : Booked classifier "MLP" of type: "MLP"
+# of root files: 5
+Events: 2811
+Reading input file textfiles/DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_2_5_Format_MiniAOD_HiggsMass_1000_Period_2016_Run_2.txt
+                         : Booking "MLP" of type "MLP" from dataset/weights/TMVAClassification_MLP.weights.xml.
+                         : Reading weight file: dataset/weights/TMVAClassification_MLP.weights.xml
+<HEADER> DataSetInfo              : [Default] : Added class "Signal"
+<HEADER> DataSetInfo              : [Default] : Added class "Background"
+<HEADER> MLP                      : Building Network. 
+                         : Initializing weights
+                         : Booked classifier "MLP" of type: "MLP"
+# of root files: 6
+Events: 638
+Events: 2826
+Events: 17803
+Events: 942
+Events: 17464
+Reading input file textfiles/DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_4_0_Format_MiniAOD_HiggsMass_1000_Period_2016_Run_2.txt
+                         : Booking "MLP" of type "MLP" from dataset/weights/TMVAClassification_MLP.weights.xml.
+                         : Reading weight file: dataset/weights/TMVAClassification_MLP.weights.xml
+<HEADER> DataSetInfo              : [Default] : Added class "Signal"
+<HEADER> DataSetInfo              : [Default] : Added class "Background"
+<HEADER> MLP                      : Building Network. 
+                         : Initializing weights
+                         : Booked classifier "MLP" of type: "MLP"
+# of root files: 13
+Events: 508
+Events: 942
+Events: 1884
+Events: 941
+Events: 942
+Events: 941
+Events: 1884
+Lepton Jets Found: 10896
+Number of Dark Photons: 48333
+Lepton Jet Matching Efficiency: 0.221877
+Leptons From Quarks 0.687088
+Leptons From Dark Photons 0
+Leptons From Squarks 0
+Leptons From Protons 0.312912
+Processing complete!
+Output written to photons_mass_1_2.root
+Processing time: 149.956s
+Events: 942
+Events: 1884
+Events: 1884
+Events: 937
+Events: 1884
+Events: 942
+Events: 942
+Events: 2811
+Events: 942
+Lepton Jets Found: 10087
+Number of Dark Photons: 48435
+Lepton Jet Matching Efficiency: 0.203799
+Leptons From Quarks 0.691247
+Leptons From Dark Photons 0
+Leptons From Squarks 0
+Leptons From Protons 0.308753
+Processing complete!
+Output written to photons_mass_1_5.root
+Processing time: 177.508s
+Reading input file textfiles/DarkPhoton/DarkPhoton_Decay_Higgs4DP_DpMass_0_3_Format_MiniAOD_HiggsMass_1000_Period_2016_Run_2.txt
+                         : Booking "MLP" of type "MLP" from dataset/weights/TMVAClassification_MLP.weights.xml.
+                         : Reading weight file: dataset/weights/TMVAClassification_MLP.weights.xml
+<HEADER> DataSetInfo              : [Default] : Added class "Signal"
+<HEADER> DataSetInfo              : [Default] : Added class "Background"
+<HEADER> MLP                      : Building Network. 
+                         : Initializing weights
+                         : Booked classifier "MLP" of type: "MLP"
+# of root files: 12
+Events: 950
+Events: 12350
+Events: 1884
+Reading input file textfiles/DarkPhoton/DarkPhoton_Decay_HiggsDPZ_DpMass_0_3_Format_MiniAOD_HiggsMass_1000_Period_2016_Run_2.txt
+                         : Booking "MLP" of type "MLP" from dataset/weights/TMVAClassification_MLP.weights.xml.
+                         : Reading weight file: dataset/weights/TMVAClassification_MLP.weights.xml
+<HEADER> DataSetInfo              : [Default] : Added class "Signal"
+<HEADER> DataSetInfo              : [Default] : Added class "Background"
+<HEADER> MLP                      : Building Network. 
+                         : Initializing weights
+                         : Booked classifier "MLP" of type: "MLP"
+# of root files: 9
+Events: 953
+Events: 1906
+Events: 942
+Events: 8478
+Events: 953
+Events: 222
+Events: 953
+Events: 1906
+Events: 953
+Lepton Jets Found: 9918
+Number of Dark Photons: 48652
+Lepton Jet Matching Efficiency: 0.196662
+Leptons From Quarks 0.709022
+Leptons From Dark Photons 0
+Leptons From Squarks 0
+Leptons From Protons 0.290978
+Processing complete!
+Output written to photons_mass_4_0.root
+Processing time: 290.566s
+Events: 14295
+Events: 950
+Events: 1900
+Reading input file textfiles/DarkPhoton/DarkPhoton_Decay_SUSY_DpMass_0_3_Format_MiniAOD_HiggsMass_1000_Period_2016_Run_2.txt
+                         : Booking "MLP" of type "MLP" from dataset/weights/TMVAClassification_MLP.weights.xml.
+                         : Reading weight file: dataset/weights/TMVAClassification_MLP.weights.xml
+<HEADER> DataSetInfo              : [Default] : Added class "Signal"
+<HEADER> DataSetInfo              : [Default] : Added class "Background"
+<HEADER> MLP                      : Building Network. 
+                         : Initializing weights
+                         : Booked classifier "MLP" of type: "MLP"
+# of root files: 3
+Events: 3716
+Events: 950
+Events: 2859
+Events: 950
+Lepton Jets Found: 16268
+Number of Dark Photons: 24701
+Lepton Jet Matching Efficiency: 0.634185
+Leptons From Quarks 0.763213
+Leptons From Dark Photons 0
+Leptons From Squarks 0
+Leptons From Protons 0.236787
+Processing complete!
+Output written to photons_mass_0_3_dpz.root
+Processing time: 187.261s
+Events: 300
+Events: 950
+Reading input file textfiles/DarkPhoton/DarkPhoton_Decay_ZPrime_DpMass_0_3_Format_MiniAOD_HiggsMass_1000_Period_2016_Run_2.txt
+                         : Booking "MLP" of type "MLP" from dataset/weights/TMVAClassification_MLP.weights.xml.
+                         : Reading weight file: dataset/weights/TMVAClassification_MLP.weights.xml
+<HEADER> DataSetInfo              : [Default] : Added class "Signal"
+<HEADER> DataSetInfo              : [Default] : Added class "Background"
+<HEADER> MLP                      : Building Network. 
+                         : Initializing weights
+                         : Booked classifier "MLP" of type: "MLP"
+# of root files: 4
+Events: 950
+Events: 1858
+Events: 16902
+Events: 950
+Events: 2850
+Events: 19426
+Events: 950
+Lepton Jets Found: 20578
+Number of Dark Photons: 93194
+Lepton Jet Matching Efficiency: 0.18322
+Leptons From Quarks 0.209257
+Leptons From Dark Photons 0
+Leptons From Squarks 0
+Leptons From Protons 0.790743
+Processing complete!
+Output written to photons_mass_0_3_4dp.root
+Processing time: 319.392s
+Events: 6573
+Lepton Jets Found: 16395
+Number of Dark Photons: 48157
+Lepton Jet Matching Efficiency: 0.294682
+Leptons From Quarks 0.317028
+Leptons From Dark Photons 0.398192
+Leptons From Squarks 0.0907328
+Leptons From Protons 0.194048
+Processing complete!
+Output written to photons_mass_0_3_susy.root
+Processing time: 378.52s
+Events: 939
+Events: 586
+Lepton Jets Found: 10490
+Number of Dark Photons: 116296
+Lepton Jet Matching Efficiency: 0.085248
+Leptons From Quarks 0.999009
+Leptons From Dark Photons 0
+Leptons From Squarks 0
+Leptons From Protons 0.000991008
+Processing complete!
+Output written to photons_mass_0_3_zprime.root
+Processing time: 440.211s
+Events: 1884
+Lepton Jets Found: 10472
+Number of Dark Photons: 48485
+Lepton Jet Matching Efficiency: 0.210622
+Leptons From Quarks 0.687383
+Leptons From Dark Photons 0
+Leptons From Squarks 0
+Leptons From Protons 0.312617
+Processing complete!
+Output written to photons_mass_2_5.root
+Processing time: 1312.52s
+Reading input file textfiles/DY50Run2.txt
+Reading input file textfiles/QCD500-700.txt
+                         : Booking "MLP" of type "MLP" from dataset/weights/TMVAClassification_MLP.weights.xml.
+                         : Booking "MLP" of type "MLP" from dataset/weights/TMVAClassification_MLP.weights.xml.
+                         : Reading weight file: dataset/weights/TMVAClassification_MLP.weights.xml
+                         : Reading weight file: dataset/weights/TMVAClassification_MLP.weights.xml
+<HEADER> DataSetInfo              : [Default] : Added class "Signal"
+<HEADER> DataSetInfo              : [Default] : Added class "Signal"
+<HEADER> DataSetInfo              : [Default] : Added class "Background"
+<HEADER> DataSetInfo              : [Default] : Added class "Background"
+<HEADER> MLP                      : Building Network. 
+<HEADER> MLP                      : Building Network. 
+                         : Initializing weights
+                         : Initializing weights
+                         : Booked classifier "MLP" of type: "MLP"
+                         : Booked classifier "MLP" of type: "MLP"
+Drell-Yan
+QCD
+Filename: textfiles/QCD/QCD_HTCut_500-700_Run_2.txt
+# of root files: 8
+Filename: textfiles/Drell-Yan/Drell-Yan_MassCut_50-inf_Run_2.txt
+# of root files: 113
+Lepton Jets Found: 72646
+Number of Dark Photons: 0
+Lepton Jet Matching Efficiency: -nan
+Leptons From Quarks 0
+Leptons From Dark Photons 0
+Leptons From Squarks 0
+Leptons From Protons 0
+Processing complete!
+Output written to qcd500.root
+Processing time: 5368.45s
+Reading input file textfiles/DY50Run2.txt
+                         : Booking "MLP" of type "MLP" from dataset/weights/TMVAClassification_MLP.weights.xml.
+                         : Reading weight file: dataset/weights/TMVAClassification_MLP.weights.xml
+<HEADER> DataSetInfo              : [Default] : Added class "Signal"
+<HEADER> DataSetInfo              : [Default] : Added class "Background"
+<HEADER> MLP                      : Building Network. 
+                         : Initializing weights
+                         : Booked classifier "MLP" of type: "MLP"
+Drell-Yan
+Filename: textfiles/Drell-Yan/Drell-Yan_MassCut_50-inf_Run_2.txt
+# of root files: 113
+Lepton Jets Found: 112790
+Number of Dark Photons: 0
+Lepton Jet Matching Efficiency: -nan
+Leptons From Quarks 0
+Leptons From Dark Photons 0
+Leptons From Squarks 0
+Leptons From Protons 0
+Processing complete!
+Output written to dy50run2.root
+Processing time: 42219.9s
+Lepton Jets Found: 112790
+Number of Dark Photons: 0
+Lepton Jet Matching Efficiency: -nan
+Leptons From Quarks 0
+Leptons From Dark Photons 0
+Leptons From Squarks 0
+Leptons From Protons 0
+Processing complete!
+Output written to dy50run2.root
+Processing time: 30108.2s
