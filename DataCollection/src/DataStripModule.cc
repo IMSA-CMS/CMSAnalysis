@@ -33,16 +33,10 @@ matchmod(iMatchmod)
     
 }
 
-void DataStripModule::writeAll()
+void DataStripModule::finalize()
 {
     tree->Write();
     tree2->Write();
-    //file->Close();
-}
-
-void DataStripModule::finalize()
-{
-
 }
 
 bool DataStripModule::process()

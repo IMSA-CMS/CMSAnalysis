@@ -1,8 +1,0 @@
->> Local Products Rules ..... started
->> Local Products Rules ..... done
->> Creating project symlinks
->> Entering Package CMSAnalysis/DataCollection
->> Compiling  /uscms/homes/k/kmhuang/practice/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/src/Analyzer.cc
->> Compiling  /uscms/homes/k/kmhuang/practice/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/src/EventLoader.cc
->> Compiling  /uscms/homes/k/kmhuang/practice/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/src/MiniAODEventFile.cc
-gmake: *** [There are compilation/build errors. Please see the detail log above.] Error 2

@@ -1,0 +1,11 @@
+/store/mc/Run3Summer22EEMiniAODv3/HTo2DarkPhoton_HMass-1000_DPMass-0p4_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_postEE_v1-v2/2560000/a91fefdd-1e4e-497b-baf1-dd2af47ca535.root
+/store/mc/Run3Summer22EEMiniAODv3/HTo2DarkPhoton_HMass-1000_DPMass-0p4_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_postEE_v1-v2/2560000/6abcbbe5-ebe0-4c56-a6c4-8ed3ac9bce43.root
+/store/mc/Run3Summer22EEMiniAODv3/HTo2DarkPhoton_HMass-1000_DPMass-0p4_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_postEE_v1-v2/2560000/b4a6740c-f339-47ae-bce0-7b6ef2d49333.root
+/store/mc/Run3Summer22EEMiniAODv3/HTo2DarkPhoton_HMass-1000_DPMass-0p4_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_postEE_v1-v2/2560000/ebbd6275-5fb6-4ed9-9cbd-d4bf82b6a384.root
+/store/mc/Run3Summer22EEMiniAODv3/HTo2DarkPhoton_HMass-1000_DPMass-0p4_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_postEE_v1-v2/2560000/26f92d2d-bdeb-40be-ae9a-bef3f3f59afa.root
+/store/mc/Run3Summer22EEMiniAODv3/HTo2DarkPhoton_HMass-1000_DPMass-0p4_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_postEE_v1-v2/2560000/b686d52a-2e05-467f-96f2-674bfe92b2ea.root
+/store/mc/Run3Summer22EEMiniAODv3/HTo2DarkPhoton_HMass-1000_DPMass-0p4_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_postEE_v1-v2/2560000/9a371d0f-90a0-4d5e-8055-c6de15c40355.root
+/store/mc/Run3Summer22EEMiniAODv3/HTo2DarkPhoton_HMass-1000_DPMass-0p4_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_postEE_v1-v2/2560000/fbc4fa90-0be8-47b6-81f2-2be817ff0ec2.root
+/store/mc/Run3Summer22EEMiniAODv3/HTo2DarkPhoton_HMass-1000_DPMass-0p4_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_postEE_v1-v2/2560000/56bb2094-6ff5-48e7-a475-6ccd7564ce74.root
+/store/mc/Run3Summer22EEMiniAODv3/HTo2DarkPhoton_HMass-1000_DPMass-0p4_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_postEE_v1-v2/2560000/7b05597e-9d36-490e-975c-cbb44d211c37.root
+/store/mc/Run3Summer22EEMiniAODv3/HTo2DarkPhoton_HMass-1000_DPMass-0p4_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_postEE_v1-v2/2560000/5e20402c-6492-4cb9-b587-c53a878e934e.root

@@ -21,10 +21,14 @@ ParticleCollection<Lepton> LocalEventInputModule::getLeptons(RecoLevel level) co
     auto muons = getParticles(level, ParticleType::muon()).getParticles();
     for (const auto &p : electrons)
     {
+        std::cout<<"LocalEvent"<<std::endl;
+        std::cout<<p.getPt()<<std::endl;
         leptons.addParticle(p);
     }
     for (const auto &p : muons)
     {
+        std::cout<<"LocalEvent"<<std::endl;
+        std::cout<<p.getPt()<<std::endl;
         leptons.addParticle(p);
     }
     return leptons;

@@ -57,11 +57,6 @@ bool EventDumpModule::process()
   }
 }
 
-void EventDumpModule::writeAll()
-{
-}
-
-
 void EventDumpModule::printGenSimParticleCollection(const ParticleCollection<GenSimParticle>& genParts,std::ofstream& my_file ) const
 {
   int eventElement = 1;

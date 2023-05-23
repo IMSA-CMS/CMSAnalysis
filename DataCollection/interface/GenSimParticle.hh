@@ -20,7 +20,8 @@ class GenSimParticle : public Particle
         int status() const;
 
         GenSimParticle mother() const;
-        bool hasMother();
+        bool hasMother() const;
+        bool hasUniqueMother() const;
         int numberOfDaughters() const;
         GenSimParticle daughter(int i) const;
         std::vector<GenSimParticle> getDaughters() const;

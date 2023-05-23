@@ -21,7 +21,9 @@ TH1* SingleProcess::getHist(std::string histType, bool scaleToExpected) const
     if(scaleToExpected) {
         double yield = getExpectedYield(histType);
         double events = hist->Integral();
-        hist->Scale(yield/events);
+        if(events != 0) {
+            hist->Scale(yield/events);
+        }
     }
     for(auto correction : corrections) {
         hist = correction->correctHist(hist);

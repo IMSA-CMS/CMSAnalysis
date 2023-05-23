@@ -18,7 +18,7 @@ class InputModule;
 class HistogramOutputModule : public AnalysisModule
 {
 public:
-  virtual void writeAll();
+  virtual void finalizeFilterString();
   virtual void initialize() override {};     // Empty function
   virtual void finalize() override;
   virtual bool process() override;    // Fills the histograms
@@ -28,7 +28,6 @@ public:
 protected:
   // This adds an object to the collection to be written.
   // All objects that use this method are duplicated for different filter categories
-  // and written to a Root file by writeAll().
   // If you add two objects of the same name, the second will replace the first.
   void addObject(const std::string& name, TObject* obj);
 

@@ -18,11 +18,6 @@ GenSimEventDumpModule::GenSimEventDumpModule(int inumOfEvents):
   counter = 1;
 }
 
-//don't remove
-void GenSimEventDumpModule::writeAll()
-{
-}
-
 bool GenSimEventDumpModule::process()
 {
   std::ofstream my_file;
