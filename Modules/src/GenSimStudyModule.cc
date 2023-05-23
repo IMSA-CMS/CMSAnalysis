@@ -1,6 +1,4 @@
-
-
-#include "CMSAnalysis/DataCollection/interface/GenSimStudyModule.hh"
+#include "CMSAnalysis/Modules/interface/GenSimStudyModule.hh"
 
 #include <cmath>
 #include <stdexcept>

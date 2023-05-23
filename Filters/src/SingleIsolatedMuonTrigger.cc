@@ -1,5 +1,5 @@
-#include "CMSAnalysis/DataCollection/interface/SingleIsolatedMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/Lepton.hh"
+#include "CMSAnalysis/Filters/interface/SingleIsolatedMuonTrigger.hh"
+#include "CMSAnalysis/Utility/interface/Lepton.hh"
 SingleIsolatedMuonTrigger::SingleIsolatedMuonTrigger(double iPTCutoff) :
   RecoTrigger("Single Isolated Muon Trigger"),
   pTCutoff(iPTCutoff)

@@ -1,5 +1,5 @@
-#include "CMSAnalysis/DataCollection/interface/SameSignInvariantMassFilter.hh"
-
+#include "CMSAnalysis/Filters/interface/SameSignInvariantMassFilter.hh"
+#include "CMSAnalysis/Modules/interface/InputModule.hh"
 SameSignInvariantMassFilter::SameSignInvariantMassFilter(double sameSignInvariantMassCut):
 cut(sameSignInvariantMassCut)
 {
@@ -7,9 +7,9 @@ cut(sameSignInvariantMassCut)
 }
 
 
-std::string SameSignInvariantMassFilter::makeFilterString()
+std::string SameSignInvariantMassFilter::getFilterString(const InputModule* inputMod) const
 {
-    auto leptons = getInput()->getParticles(InputModule::RecoLevel::Reco);
+    auto leptons = inputMod->getParticles(InputModule::RecoLevel::Reco);
     auto inv = leptons.calculateSameSignInvariantMass();
     if (inv < cut)
     {

@@ -7,7 +7,6 @@
 #include "Module.hh"
 #include "InputModule.hh"
 
-
 namespace edm
 {
   class EventBase;

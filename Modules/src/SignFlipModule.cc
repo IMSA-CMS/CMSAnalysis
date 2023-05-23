@@ -1,5 +1,5 @@
-#include "CMSAnalysis/DataCollection/interface/MatchingModule.hh"
-#include "CMSAnalysis/DataCollection/interface/SignFlipModule.hh"
+#include "CMSAnalysis/Modules/interface/MatchingModule.hh"
+#include "CMSAnalysis/Modules/interface/SignFlipModule.hh"
 
 SignFlipModule::SignFlipModule(const std::shared_ptr<MatchingModule> imatchModule):
   matchModule(imatchModule)

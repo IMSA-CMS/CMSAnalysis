@@ -1,4 +1,5 @@
-#include "CMSAnalysis/DataCollection/interface/AFBModule.hh"
+#include "CMSAnalysis/Modules/interface/AFBModule.hh"
+#include "CMSAnalysis/Modules/interface/InputModule.hh"
 #include <iostream>
 
 AFBModule::AFBModule(int minMass, int maxMass, int massInterval) :

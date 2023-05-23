@@ -1,5 +1,5 @@
 #include "CMSAnalysis/Histograms/interface/ResolutionPrototype.hh"
-#include "CMSAnalysis/Histograms/interface/HistogramPrototype.hh"
+#include "CMSAnalysis/Utility/interface/HistogramPrototype.hh"
 #include "CMSAnalysis/Utility/interface/Lepton.hh"
 #include "CMSAnalysis/Modules/interface/InputModule.hh"
 

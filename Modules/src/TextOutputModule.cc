@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/TextOutputModule.hh"
+#include "CMSAnalysis/Modules/interface/TextOutputModule.hh"
 
 #include <stdexcept>
 

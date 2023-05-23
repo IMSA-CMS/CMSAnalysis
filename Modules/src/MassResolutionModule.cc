@@ -1,5 +1,5 @@
-#include "CMSAnalysis/DataCollection/interface/MassResolutionModule.hh"
-#include "CMSAnalysis/DataCollection/interface/MatchingPairCollection.hh"
+#include "CMSAnalysis/Modules/interface/MassResolutionModule.hh"
+#include "CMSAnalysis/Utility/interface/MatchingPairCollection.hh"
 
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 

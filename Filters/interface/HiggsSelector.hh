@@ -3,11 +3,11 @@
 #include <vector>
 #include <string>
 
-#include "CMSAnalysis/DataCollection/interface/ParticleCollection.hh"
-#include "CMSAnalysis/DataCollection/interface/Selector.hh"
-#include "CMSAnalysis/DataCollection/interface/Particle.hh"
-#include "CMSAnalysis/DataCollection/interface/Lepton.hh"
-#include "CMSAnalysis/DataCollection/interface/InputModule.hh"
+#include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
+#include "CMSAnalysis/Filters/interface/Selector.hh"
+#include "CMSAnalysis/Utility/interface/Particle.hh"
+#include "CMSAnalysis/Utility/interface/Lepton.hh"
+#include "CMSAnalysis/Modules/interface/InputModule.hh"
 
 class Particle;
 class Lepton;

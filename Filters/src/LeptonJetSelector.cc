@@ -1,10 +1,11 @@
-#include "CMSAnalysis/DataCollection/interface/LeptonJetSelector.hh"
+#include "CMSAnalysis/Filters/interface/LeptonJetSelector.hh"
 #include <vector>
 
-#include "CMSAnalysis/DataCollection/interface/ParticleCollection.hh"
-#include "CMSAnalysis/DataCollection/interface/Particle.hh"
-#include "CMSAnalysis/DataCollection/interface/Lepton.hh"
-#include "CMSAnalysis/DataCollection/interface/InputModule.hh"
+#include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
+#include "CMSAnalysis/Utility/interface/Particle.hh"
+#include "CMSAnalysis/Utility/interface/Lepton.hh"
+#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Utility/interface/Event.hh"
 
 void LeptonJetSelector::selectParticles(const InputModule* input, Event& event)
 {

@@ -1,11 +1,12 @@
-#include "CMSAnalysis/DataCollection/interface/DarkPhotonGenSimSelector.hh"
+#include "CMSAnalysis/Filters/interface/DarkPhotonGenSimSelector.hh"
 #include <vector>
 
-#include "CMSAnalysis/DataCollection/interface/ParticleCollection.hh"
-#include "CMSAnalysis/DataCollection/interface/Particle.hh"
-#include "CMSAnalysis/DataCollection/interface/GenSimParticle.hh"
-#include "CMSAnalysis/DataCollection/interface/Lepton.hh"
+#include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
+#include "CMSAnalysis/Utility/interface/Particle.hh"
+#include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
+#include "CMSAnalysis/Utility/interface/Lepton.hh"
 #include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Utility/interface/Event.hh"
 
 void DarkPhotonGenSimSelector::selectParticles(const InputModule* input, Event& event) 
 {

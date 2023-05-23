@@ -1,12 +1,13 @@
-#include "CMSAnalysis/DataCollection/interface/TriggerFilter.hh"
+#include "CMSAnalysis/Filters/interface/TriggerFilter.hh"
+#include "CMSAnalysis/Modules/interface/InputModule.hh"
 
 TriggerFilter::TriggerFilter(const std::shared_ptr<Trigger> iTrigger) :
   trigger(iTrigger)
 {
 }
 
-std::string TriggerFilter::makeFilterString()
+std::string TriggerFilter::getFilterString(const InputModule* inputMod) const
 {
   //std::cout << trigger->checkEvent(getInput()) << " : " << (trigger->checkEvent(getInput()) ? trigger->getName() : "") << "\n";
-  return trigger->checkEvent(getInput()) ? trigger->getName() : "";
+  return trigger->checkEvent(inputMod) ? trigger->getName() : "";
 }

@@ -1,10 +1,11 @@
-#include "CMSAnalysis/DataCollection/interface/NLeptonsFilter.hh"
-#include "CMSAnalysis/DataCollection/interface/Selector.hh"
+#include "CMSAnalysis/Filters/interface/NLeptonsFilter.hh"
+#include "CMSAnalysis/Filters/interface/Selector.hh"
+#include "CMSAnalysis/Modules/interface/InputModule.hh"
 
 NLeptonsFilter::NLeptonsFilter(){};
 
-std::string NLeptonsFilter::makeFilterString()
+std::string NLeptonsFilter::getFilterString(const InputModule* inputMod) const
 {
-  int num = getInput()->getLeptons(InputModule::RecoLevel::Reco).getNumParticles();
+  int num = inputMod->getLeptons(InputModule::RecoLevel::Reco).getNumParticles();
   return std::to_string(num);
 };

@@ -1,17 +1,17 @@
 #ifndef COLLINSSOPERFILTER_HH
 #define COLLINSSOPERFILTER_HH
 
-#include "FilterModule.hh"
+#include "CMSAnalysis/Utility/interface/Filter.hh"
 
 
 // MassFilter applies a high mass cut based on the invariant mass of the gen sim particles
-class CollinsSoperFilter : public FilterModule
+class CollinsSoperFilter : public Filter
 {
 public:
   CollinsSoperFilter(double hiCut);
 
 protected:
-  virtual std::string makeFilterString() override;
+  virtual std::string getFilterString(const InputModule* inputMod) const override;
 
 private:
   double highCutoff;

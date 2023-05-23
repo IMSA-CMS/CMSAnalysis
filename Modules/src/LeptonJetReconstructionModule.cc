@@ -1,6 +1,6 @@
-#include "CMSAnalysis/DataCollection/interface/LeptonJetReconstructionModule.hh"
+#include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
 #include "DataFormats/Math/interface/deltaR.h"
-#include "CMSAnalysis/DataCollection/interface/Selector.hh"
+#include "CMSAnalysis/Filters/interface/Selector.hh"
 #include <iostream>
 
 LeptonJetReconstructionModule::LeptonJetReconstructionModule(double deltaRCut) :

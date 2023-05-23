@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/Trigger.hh"
+#include "CMSAnalysis/Filters/interface/Trigger.hh"
 
 //#include "CMSAnalysis/DataCollection/interface/RecoIdentificationModule.hh"
 

@@ -1,7 +1,7 @@
-#include "CMSAnalysis/DataCollection/interface/TriggerModule.hh"
-#include "CMSAnalysis/DataCollection/interface/Utility.hh"
+#include "CMSAnalysis/Modules/interface/TriggerModule.hh"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 
-#include "CMSAnalysis/DataCollection/interface/Trigger.hh"
+#include "CMSAnalysis/Filters/interface/Trigger.hh"
 
 TriggerModule::TriggerModule() :
   //recoMod(iRecoMod),

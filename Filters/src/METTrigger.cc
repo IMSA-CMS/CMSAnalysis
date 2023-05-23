@@ -1,5 +1,5 @@
-#include "CMSAnalysis/DataCollection/interface/METTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/METModule.hh"
+#include "CMSAnalysis/Filters/interface/METTrigger.hh"
+#include "CMSAnalysis/Modules/interface/METModule.hh"
 
 METTrigger::METTrigger(std::shared_ptr<METModule> iMETMod, const double iMETCutoff) :
   RecoTrigger("MET Trigger"),

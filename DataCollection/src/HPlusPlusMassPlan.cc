@@ -33,6 +33,7 @@
 #include "CMSAnalysis/Filters/interface/METTrigger.hh"
 #include "CMSAnalysis/Modules/interface/SignFlipModule.hh"
 #include "CMSAnalysis/Histograms/interface/HistogramPrototype1DGeneral.hh"
+#include "CMSAnalysis/Modules/interface/FilterModule.hh"
 
 
 using std::make_shared;

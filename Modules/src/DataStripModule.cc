@@ -1,6 +1,6 @@
-#include "CMSAnalysis/DataCollection/interface/DataStripModule.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonJetReconstructionModule.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonJetMatchingModule.hh"
+#include "CMSAnalysis/Modules/interface/DataStripModule.hh"
+#include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
+#include "CMSAnalysis/Modules/interface/LeptonJetMatchingModule.hh"
 #include "TFile.h"
 #include "TTree.h"
 

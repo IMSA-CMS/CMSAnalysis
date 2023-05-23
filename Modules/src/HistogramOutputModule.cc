@@ -1,12 +1,9 @@
-#include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
-#include "CMSAnalysis/DataCollection/interface/HistogramPrototype.hh"
-
-//#include "CMSAnalysis/DataCollection/interface/GenSimIdentificationModule.hh"
-//#include "CMSAnalysis/DataCollection/interface/RecoIdentificationModule.hh"
+#include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
+#include "CMSAnalysis/Utility/interface/HistogramPrototype.hh"
 #include "CMSAnalysis/DataCollection/interface/FileParams.hh"
-#include "CMSAnalysis/DataCollection/interface/PtResolutionModule.hh"
-#include "CMSAnalysis/DataCollection/interface/Module.hh"
-#include "CMSAnalysis/DataCollection/interface/AnalysisModule.hh"
+#include "CMSAnalysis/Modules/interface/PtResolutionModule.hh"
+#include "CMSAnalysis/Modules/interface/Module.hh"
+#include "CMSAnalysis/Modules/interface/AnalysisModule.hh"
 
 #include <iostream>
 #include <stdexcept>

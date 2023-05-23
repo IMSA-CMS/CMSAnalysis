@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/SingleElectronTrigger.hh"
+#include "CMSAnalysis/Filters/interface/SingleElectronTrigger.hh"
 
 SingleElectronTrigger::SingleElectronTrigger(double iPTCutoff) : RecoTrigger("Single Electron Trigger"),
                                                                  pTCutoff(iPTCutoff){};

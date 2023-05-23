@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/DoubleIsolatedMuonTrigger.hh"
+#include "CMSAnalysis/Filters/interface/DoubleIsolatedMuonTrigger.hh"
 
 //#include "CMSAnalysis/DataCollection/src/RecoIdentificationModule.cc"
 //#include "CMSAnalysis/DataCollection/interface/RecoIdentificationModule.hh"

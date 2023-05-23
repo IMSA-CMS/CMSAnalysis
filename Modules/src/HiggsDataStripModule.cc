@@ -1,7 +1,7 @@
-#include "CMSAnalysis/DataCollection/interface/HiggsDataStripModule.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonJetReconstructionModule.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonJetMatchingModule.hh"
-#include "CMSAnalysis/DataCollection/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/HiggsDataStripModule.hh"
+#include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
+#include "CMSAnalysis/Modules/interface/LeptonJetMatchingModule.hh"
+#include "CMSAnalysis/Modules/interface/InputModule.hh"
 #include "TFile.h"
 #include "TTree.h"
 

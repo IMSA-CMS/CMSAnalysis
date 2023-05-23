@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/GenSimParticleModule.hh"
+#include "CMSAnalysis/Modules/interface/GenSimParticleModule.hh"
 #include "TText.h"
 #include "TCanvas.h"
 #include "TF1.h"

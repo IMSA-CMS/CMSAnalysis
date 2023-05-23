@@ -1,6 +1,6 @@
-#include "CMSAnalysis/DataCollection/interface/ResolutionModule.hh"
-#include "CMSAnalysis/DataCollection/interface/MatchingModule.hh"
-#include "CMSAnalysis/DataCollection/interface/MatchingPairCollection.hh"
+#include "CMSAnalysis/Modules/interface/ResolutionModule.hh"
+#include "CMSAnalysis/Modules/interface/MatchingModule.hh"
+#include "CMSAnalysis/Utility/interface/MatchingPairCollection.hh"
 
 
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"

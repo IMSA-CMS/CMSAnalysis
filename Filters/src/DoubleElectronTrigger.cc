@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/DoubleElectronTrigger.hh"
+#include "CMSAnalysis/Filters/interface/DoubleElectronTrigger.hh"
 
 DoubleElectronTrigger::DoubleElectronTrigger(double iPTCutoff, double iSecondPTCutoff) : RecoTrigger("Double Electron Trigger"),
                                                                                          pTCutoff(iPTCutoff),

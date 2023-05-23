@@ -1,5 +1,5 @@
 #include "CMSAnalysis/Analysis/interface/RootFileInput.hh"
-#include "CMSAnalysis/DataCollection/interface/TDisplayText.h"
+#include "CMSAnalysis/Utility/interface/TDisplayText.h"
 #include "TFile.h"
 #include "TH1.h"
 #include <iostream>

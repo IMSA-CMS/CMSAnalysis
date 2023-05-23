@@ -1,4 +1,5 @@
-#include "CMSAnalysis/DataCollection/interface/UnusualFinalStateFilter.hh"
+#include "CMSAnalysis/Filters/interface/UnusualFinalStateFilter.hh"
+#include "CMSAnalysis/Modules/interface/InputModule.hh"
 
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/FWLite/interface/Event.h"
@@ -8,9 +9,9 @@ UnusualFinalStateFilter::UnusualFinalStateFilter()
 {
 }
 
-std::string UnusualFinalStateFilter::makeFilterString()
+std::string UnusualFinalStateFilter::getFilterString(const InputModule* inputMod) const
 {
-  auto recoParticles = getInput()->getLeptons(InputModule::RecoLevel::Reco);
+  auto recoParticles = inputMod->getLeptons(InputModule::RecoLevel::Reco);
 
   if (recoParticles.getNumParticles() > 4)  // Keep all of the events with more than 4 final state leptons
   {

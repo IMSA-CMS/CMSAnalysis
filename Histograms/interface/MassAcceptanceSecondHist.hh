@@ -1,7 +1,7 @@
 #ifndef MVASECONDHIST_HH
 #define MVASECONDHIST_HH
 
-#include "HistogramPrototype1D.hh"
+#include "CMSAnalysis/Utility/interface/HistogramPrototype1D.hh"
 
 class MatchingModule;
 
