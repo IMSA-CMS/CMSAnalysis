@@ -266,6 +266,7 @@ inline double ParticleCollection<T>::calculateAllLeptonInvariantMass() const
 template <typename T>
 inline double ParticleCollection<T>::calculateSameSignInvariantMass(bool usingPhi) const
 {
+ // std::cout << "Particle Collection SameSignIM Vector Size:" << particles.size();
   T iPointer = Particle::nullParticle();
   T jPointer = Particle::nullParticle();
   std::pair<T, T> particlePair = {iPointer, jPointer};

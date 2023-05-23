@@ -10,8 +10,8 @@ class HiggsInvariantMassModule : public AnalysisModule
 {
     public: 
     HiggsInvariantMassModule(std::string name);
-    virtual void writeAll() override;
     virtual void initialize();
+    virtual void finalize();
 
     protected: 
     bool process() override;

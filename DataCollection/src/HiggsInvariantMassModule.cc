@@ -48,7 +48,7 @@ bool HiggsInvariantMassModule::process()
     return true;
 }
 
-void HiggsInvariantMassModule::writeAll()
+void HiggsInvariantMassModule::finalize()
 {
 	file->Write();
 	file->Close();

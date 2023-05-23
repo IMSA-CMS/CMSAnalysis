@@ -21,8 +21,10 @@ class GenSimParticle : public Particle
 
         GenSimParticle mother() const;
         bool hasMother() const;
+        bool hasUniqueMother() const;
         int numberOfDaughters() const;
         GenSimParticle daughter(int i) const;
+        std::vector<GenSimParticle> getDaughters() const;
         bool isFinalState() const;
 
         //finds the first mother which is not itself
