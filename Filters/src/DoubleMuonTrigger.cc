@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/DoubleMuonTrigger.hh"
+#include "CMSAnalysis/Filters/interface/DoubleMuonTrigger.hh"
 DoubleMuonTrigger::DoubleMuonTrigger(double iPTCutoff, double iSecondPTCutoff) : RecoTrigger("Double Muon Trigger"),
                                                                                  pTCutoff(iPTCutoff),
                                                                                  secondPTCutoff(iSecondPTCutoff){};

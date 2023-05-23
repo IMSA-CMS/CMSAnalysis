@@ -1,23 +1,23 @@
-#include "CMSAnalysis/DataCollection/interface/EventModule.hh"
+#include "CMSAnalysis/Modules/interface/EventModule.hh"
 
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
 
-#include "CMSAnalysis/DataCollection/interface/ParticleCollection.hh"
-#include "CMSAnalysis/DataCollection/interface/Particle.hh"
-#include "CMSAnalysis/DataCollection/interface/Lepton.hh"
-#include "CMSAnalysis/DataCollection/interface/Electron.hh"
-#include "CMSAnalysis/DataCollection/interface/Muon.hh"
-#include "CMSAnalysis/DataCollection/interface/Jet.hh"
-#include "CMSAnalysis/DataCollection/interface/Selector.hh"
-#include "CMSAnalysis/DataCollection/interface/Cut.hh"
+#include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
+#include "CMSAnalysis/Utility/interface/Particle.hh"
+#include "CMSAnalysis/Utility/interface/Lepton.hh"
+#include "CMSAnalysis/Utility/interface/Electron.hh"
+#include "CMSAnalysis/Utility/interface/Muon.hh"
+#include "CMSAnalysis/Utility/interface/Jet.hh"
+#include "CMSAnalysis/Filters/interface/Selector.hh"
+#include "CMSAnalysis/Filters/interface/Cut.hh"
 
-#include "CMSAnalysis/DataCollection/interface/GenSimParticle.hh"
+#include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
 
-#include "CMSAnalysis/DataCollection/interface/GetNthHighestPtHist.hh"
-#include "CMSAnalysis/DataCollection/interface/SingleParticleHist.hh"
-#include "CMSAnalysis/DataCollection/interface/HistogramPrototype1DGeneral.hh"
+#include "CMSAnalysis/Histograms/interface/GetNthHighestPtHist.hh"
+#include "CMSAnalysis/Utility/interface/SingleParticleHist.hh"
+#include "CMSAnalysis/Histograms/interface/HistogramPrototype1DGeneral.hh"
 
 
 

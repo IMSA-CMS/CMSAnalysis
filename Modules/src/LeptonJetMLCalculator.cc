@@ -1,5 +1,5 @@
-#include "CMSAnalysis/DataCollection/interface/LeptonJetMLCalculator.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonJet.hh"
+#include "CMSAnalysis/Modules/interface/LeptonJetMLCalculator.hh"
+#include "CMSAnalysis/Utility/interface/LeptonJet.hh"
 #include "TMVA/Reader.h"
 #include <time.h>
 

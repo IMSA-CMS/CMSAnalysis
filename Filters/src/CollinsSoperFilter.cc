@@ -1,12 +1,13 @@
-#include "CMSAnalysis/DataCollection/interface/CollinsSoperFilter.hh"
+#include "CMSAnalysis/Filters/interface/CollinsSoperFilter.hh"
+#include "CMSAnalysis/Modules/interface/InputModule.hh"
 //#include "CMSAnalysis/DataCollection/interface/GenSimIdentificationModule.hh"
 
 CollinsSoperFilter::CollinsSoperFilter(double hiCut) : // genSim(genSimModule),
                                                        highCutoff(hiCut){};
 
-std::string CollinsSoperFilter::makeFilterString()
+std::string CollinsSoperFilter::getFilterString(const InputModule* inputMod) const
 {
-  double collinsSoper = getInput()->getLeptons(InputModule::RecoLevel::GenSim).getCollinsSoper();
+  double collinsSoper = inputMod->getLeptons(InputModule::RecoLevel::GenSim).getCollinsSoper();
 
   if (abs(collinsSoper) > highCutoff)
     return "HighCS";

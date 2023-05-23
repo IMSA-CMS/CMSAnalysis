@@ -15,7 +15,7 @@
 #include "CMSAnalysis/Filters/interface/NLeptonsFilter.hh"
 #include "CMSAnalysis/Filters/interface/TriggerFilter.hh"
 #include "CMSAnalysis/Filters/interface/SameSignInvariantMassFilter.hh"
-#include "CMSAnalysis/Filters/interface/SimTrigger.hh"
+#include "CMSAnalysis/Modules/interface/SimTrigger.hh"
 #include "CMSAnalysis/Modules/interface/TriggerSimModule.hh"
 #include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
 #include "CMSAnalysis/Modules/interface/RecoGenSimComparisonModule.hh"

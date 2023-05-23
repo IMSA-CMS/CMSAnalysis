@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/GenSimEventDumpModule.hh"
+#include "CMSAnalysis/Modules/interface/GenSimEventDumpModule.hh"
 
 #include <cmath>
 #include <stdexcept>
@@ -9,8 +9,8 @@
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/FWLite/interface/Event.h"
-#include "CMSAnalysis/DataCollection/interface/InputModule.hh"
-#include "CMSAnalysis/DataCollection/interface/ParticleCollection.hh"
+#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 
 GenSimEventDumpModule::GenSimEventDumpModule(int inumOfEvents):
   numOfEvents(inumOfEvents)

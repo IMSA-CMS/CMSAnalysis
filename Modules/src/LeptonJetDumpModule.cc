@@ -122,8 +122,9 @@ void LeptonJetDumpModule::printLeptons(std::ofstream& my_file)
     {
         if(particleParentage[i] != Particle::nullParticle())
         {
-            my_file << std::setw(8) << eventElement <<std::pair<GenSimParticle, std::vector<GenSimParticle>>{particleParentage[i], genSimVector} << std::endl;
-            eventElement++;
+          // FIX THIS
+            // my_file << std::setw(8) << eventElement <<std::pair<GenSimParticle, std::vector<GenSimParticle>>{particleParentage[i], genSimVector} << std::endl;
+            // eventElement++;
         }
         else
         {
@@ -172,9 +173,10 @@ void LeptonJetDumpModule::printWrongRecoLeptons(std::ofstream& my_file)
         {
             if(genMatch[i].getType() != ParticleType::electron() || genMatch[i].getType() != ParticleType::muon())
             {
-                my_file << std::setw(8) <<""<<std::pair<GenSimParticle, std::vector<GenSimParticle>>{genMatch[i], genSimVector} << std::endl;
-                my_file << std::setw(8) <<""<< GenSimParticle(recoMatch[i]) << std::endl;
-                my_file << std::endl;
+              // THIS NEEDS TO BE FIXED
+                // my_file << std::setw(8) <<""<<std::pair<GenSimParticle, std::vector<GenSimParticle>>{genMatch[i], genSimVector} << std::endl;
+                // my_file << std::setw(8) <<""<< GenSimParticle(recoMatch[i]) << std::endl;
+                // my_file << std::endl;
             }
         }
     }

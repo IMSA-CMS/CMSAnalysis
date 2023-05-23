@@ -1,13 +1,13 @@
-#include "CMSAnalysis/DataCollection/interface/LocalEventInputModule.hh"
+#include "CMSAnalysis/Modules/interface/LocalEventInputModule.hh"
 
-#include "CMSAnalysis/DataCollection/interface/Module.hh"
-#include "CMSAnalysis/DataCollection/interface/ParticleCollection.hh"
+#include "CMSAnalysis/Modules/interface/Module.hh"
+#include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "FWCore/Common/interface/TriggerNames.h"
-#include "CMSAnalysis/DataCollection/interface/InputModule.hh"
-#include "CMSAnalysis/DataCollection/interface/Lepton.hh"
-#include "CMSAnalysis/DataCollection/interface/Event.hh"
+#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Utility/interface/Lepton.hh"
+#include "CMSAnalysis/Utility/interface/Event.hh"
 
 LocalEventInputModule::LocalEventInputModule(const Event* event1)
 {

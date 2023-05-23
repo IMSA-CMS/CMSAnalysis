@@ -6,7 +6,7 @@
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
 #include "CMSAnalysis/Filters/interface/Trigger.hh"
 #include "CMSAnalysis/Modules/interface/TriggerSimModule.hh"
-#include "CMSAnalysis/Filters/interface/SimTrigger.hh"
+#include "CMSAnalysis/Modules/interface/SimTrigger.hh"
 #include "CMSAnalysis/Modules/interface/TriggerModule.hh"
 #include "CMSAnalysis/Filters/interface/RecoTrigger.hh"
 #include "CMSAnalysis/Modules/interface/EventDumpModule.hh"

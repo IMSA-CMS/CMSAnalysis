@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/TripleMuonTrigger.hh"
+#include "CMSAnalysis/Filters/interface/TripleMuonTrigger.hh"
 
 TripleMuonTrigger::TripleMuonTrigger(double iPTCutoff, double iSecondPTCutoff, double iThirdPTCutoff) : RecoTrigger("Triple Muon Trigger"),
                                                                                                         pTCutoff(iPTCutoff),

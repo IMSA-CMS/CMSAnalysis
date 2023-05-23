@@ -12,6 +12,7 @@
 <use   name="TrackingTools/TransientTrack"/>
 <use   name="roottmva"/>
 <use   name="CMSAnalysis/Utility"/>
+<use   name="CMSAnalysis/Modules"/>
 <export>
    <lib name="1"/>
 </export>

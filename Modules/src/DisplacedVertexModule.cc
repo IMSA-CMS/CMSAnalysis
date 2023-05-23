@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/DisplacedVertexModule.hh"
+#include "CMSAnalysis/Modules/interface/DisplacedVertexModule.hh"
 
 #include "DataFormats/RecoCandidate/interface/RecoCandidate.h"
 
@@ -7,8 +7,8 @@
 #include "DataFormats/GeometrySurface/interface/Cylinder.h"
 #include <limits>
 
-#include "CMSAnalysis/DataCollection/interface/CandidateImplementation.hh"
-#include "CMSAnalysis/DataCollection/interface/ParticleImplementation.hh"
+#include "CMSAnalysis/Utility/interface/CandidateImplementation.hh"
+#include "CMSAnalysis/Utility/interface/ParticleImplementation.hh"
 
 #include <algorithm>
 #include <cmath>

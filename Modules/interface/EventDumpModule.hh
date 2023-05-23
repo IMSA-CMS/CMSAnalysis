@@ -20,6 +20,7 @@ public:
   virtual void writeAll() override;
   void printGenSimParticleCollection(const ParticleCollection<GenSimParticle>& genParts, std::ofstream& my_file) const;
   void printRecoParticleCollection(const ParticleCollection<Particle>& recoParts, std::ofstream& my_file) const;
+  static std::string formatDaughterParticles(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts);
 
 private:
   // prints information to the screen
@@ -28,7 +29,6 @@ private:
   static int getIndexOf(const Particle& part, const std::vector<Particle>& allParts);
   static int getIndexOf(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts);
   int getLatestIndexOfDaughters(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts) const;
-  static std::string formatDaughterParticles(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts);
   static std::string formatMotherParticle(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts);
 
   bool genSim;

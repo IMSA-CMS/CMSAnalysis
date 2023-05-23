@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/MatchingModule.hh"
+#include "CMSAnalysis/Modules/interface/MatchingModule.hh"
 
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/RecoCandidate/interface/RecoCandidate.h"

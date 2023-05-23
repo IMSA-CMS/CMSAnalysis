@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/METModule.hh"
+#include "CMSAnalysis/Modules/interface/METModule.hh"
 
 #include "DataFormats/PatCandidates/interface/MET.h"
 

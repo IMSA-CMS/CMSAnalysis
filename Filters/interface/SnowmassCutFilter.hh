@@ -11,13 +11,13 @@ class SnowmassCutFilter : public Filter
 
     private:
         // Checks to see if opposite-sign invariant mass is vetoed
-        bool checkInvariantMass(Particle p1, Particle p2);
+        bool checkInvariantMass(Particle p1, Particle p2) const;
 
         // Checks to see if particles are the same lepton flavor
-        bool checkFlavor(Particle p1, Particle p2);
+        bool checkFlavor(Particle p1, Particle p2) const;
 
         // Checks to see if the particles are opposite sign
-        bool checkSign(Particle p1, Particle p2);
+        bool checkSign(Particle p1, Particle p2) const;
 };
 
 #endif

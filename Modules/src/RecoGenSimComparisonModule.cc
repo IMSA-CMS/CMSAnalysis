@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/RecoGenSimComparisonModule.hh"
+#include "CMSAnalysis/Modules/interface/RecoGenSimComparisonModule.hh"
 
 RecoGenSimComparisonModule::RecoGenSimComparisonModule()
 {

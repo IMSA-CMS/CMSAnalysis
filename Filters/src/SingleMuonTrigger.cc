@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/SingleMuonTrigger.hh"
+#include "CMSAnalysis/Filters/interface/SingleMuonTrigger.hh"
 
 SingleMuonTrigger::SingleMuonTrigger(double iPTCutoff) : RecoTrigger("Single Muon Trigger"),
                                                          pTCutoff(iPTCutoff){};

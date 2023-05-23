@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/TriggerSimModule.hh"
+#include "CMSAnalysis/Modules/interface/TriggerSimModule.hh"
 
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "FWCore/Common/interface/TriggerNames.h"

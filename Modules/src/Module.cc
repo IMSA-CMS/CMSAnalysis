@@ -1,6 +1,5 @@
-#include "CMSAnalysis/DataCollection/interface/Module.hh"
-#include "CMSAnalysis/DataCollection/interface/TDisplayText.h"
-//#include "CMSAnalysis/DataCollection/interface/TDisplayText.h"
+#include "CMSAnalysis/Modules/interface/Module.hh"
+#include "CMSAnalysis/Utility/interface/TDisplayText.h"
 
 // Static initialization
 std::unordered_map<std::string, double> Module::parameters;

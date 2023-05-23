@@ -259,24 +259,12 @@ std::ostream& operator<<(std::ostream& str, const std::pair<GenSimParticle, std:
     //str << std::setw(motherColumnWidth - 2) << formatMotherParticles(part, genParts) << "| ";
     // Print daughters
     //formatDaughterParticles(part, particleGroup) was replaced by function not working string
-  str << std::setw(18) << GenSimParticles::formatDaughterParticles(part, genParts) << "| ";
+  str << std::setw(18) << EventDumpModule::formatDaughterParticles(part, genParts) << "| ";
     // Particle properties
   str << std::setw(13) << part.getPt() << "| " << std::setw(13) << part.getEta() << "| " << std::setw(13) << part.getPhi() << "| ";
   str << std::setw(13) << part.getEnergy() << "| " << std::setw(13) << part.getMass();
   return str;
 }
-
-std::string GenSimParticle::formatDaughterParticles(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts)
-{
-  std::string daughters = "";
-
-  int daughterIndexes [(int) part.numberOfDaughters()];
-
-  // Store all indexes
-  for(int i = 0; i < (int) part.numberOfDaughters(); i++)
-  {
-    daughterIndexes[i] = getIndexOf(part.daughter(i), genParts);
-  }
 
 std::ostream& operator<<(std::ostream& str, const GenSimParticle part)
 {

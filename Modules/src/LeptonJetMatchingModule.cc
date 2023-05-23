@@ -1,6 +1,6 @@
-#include "CMSAnalysis/DataCollection/interface/LeptonJetMatchingModule.hh"
+#include "CMSAnalysis/Modules/interface/LeptonJetMatchingModule.hh"
 #include "DataFormats/Math/interface/deltaR.h"
-#include "CMSAnalysis/DataCollection/interface/EventDumpModule.hh"
+#include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
 
 #include <limits>
 #include <fstream>

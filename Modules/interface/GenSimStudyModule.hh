@@ -3,8 +3,8 @@
 #define GENSIMSTUDYMODULE_HH
 #include <vector>
 
-#include "ProductionModule.hh"
-#include "ParticleCollection.hh"
+#include "CMSAnalysis/Modules/interface/ProductionModule.hh"
+#include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 
 namespace edm
 {

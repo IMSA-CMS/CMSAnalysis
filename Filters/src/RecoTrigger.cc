@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/RecoTrigger.hh"
+#include "CMSAnalysis/Filters/interface/RecoTrigger.hh"
 
 RecoTrigger::RecoTrigger(std::string iName) :
   Trigger(iName)

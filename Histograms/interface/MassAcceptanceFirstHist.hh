@@ -1,7 +1,7 @@
 #ifndef MVAFIRSTHIST_HH
 #define MVAFIRSTHIST_HH
 
-#include "HistogramPrototype1D.hh"
+#include "CMSAnalysis/Utility/interface/HistogramPrototype1D.hh"
 
 class GenSimIdentificationModule;
 

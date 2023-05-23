@@ -1,4 +1,5 @@
-#include "CMSAnalysis/DataCollection/interface/MassRecoEfficiency.hh"
+#include "CMSAnalysis/Modules/interface/MassRecoEfficiency.hh"
+#include "CMSAnalysis/Modules/interface/InputModule.hh"
 //#include "CMSAnalysis/DataCollection/interface/RecoIdentificationModule.hh"
 
 MassRecoEfficiency::MassRecoEfficiency(double iHiggsMass, double iLowerWidth, double iUpperWidth):

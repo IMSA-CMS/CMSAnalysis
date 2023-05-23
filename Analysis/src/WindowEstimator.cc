@@ -15,7 +15,6 @@
 #include <string>
 #include <cstdlib>
 #include "CMSAnalysis/Analysis/interface/WindowEstimator.hh"
-#include "CMSAnalysis/DataCollection/interface/TDisplayText.h"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 
 

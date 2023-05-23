@@ -16,7 +16,7 @@
 #include "FWCore/Framework/interface/Event.h"
 #include "DataFormats/FWLite/interface/Event.h"
 #include "CMSAnalysis/Modules/interface/Module.hh"
-#include "CMSAnalysis/DataCollection/interface/TDisplayText.h"
+#include "CMSAnalysis/Utility/interface/TDisplayText.h"
 #include "CMSAnalysis/DataCollection/interface/ProcessDictionary.hh"
 #include "CMSAnalysis/Modules/interface/AnalyzerInputModule.hh"
 

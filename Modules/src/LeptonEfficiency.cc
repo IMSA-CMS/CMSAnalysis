@@ -6,8 +6,8 @@
 
 //#include "CMSAnalysis/DataCollection/interface/TDisplayText.h"
 
-#include "CMSAnalysis/DataCollection/interface/MatchingModule.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonEfficiency.hh"
+#include "CMSAnalysis/Modules/interface/MatchingModule.hh"
+#include "CMSAnalysis/Modules/interface/LeptonEfficiency.hh"
 
 LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<MatchingModule> imatchModule):
   EfficiencyModule(),
