@@ -17,7 +17,7 @@
 
 #include "CMSAnalysis/Histograms/interface/GetNthHighestPtHist.hh"
 #include "CMSAnalysis/Utility/interface/SingleParticleHist.hh"
-#include "CMSAnalysis/Histograms/interface/HistogramPrototype1DGeneral.hh"
+#include "CMSAnalysis/Utility/interface/HistogramPrototype1DGeneral.hh"
 
 
 
