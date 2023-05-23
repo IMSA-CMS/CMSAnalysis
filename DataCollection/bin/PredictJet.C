@@ -104,14 +104,14 @@ bool returnState(TString &myMethodList)
     // input signal file here
     // string sgFile = "photons0_5.root";
     // string sgFile = "photons0_9.root";
-    string sgFile = "photons2_0.root";
+    string sgFile = "photonsBaseline.root";
 
     // input background files here
     string bgFiles[] =
         {
-            "dy4.root"
-            "dy10.root",
-            "dy50.root",
+            //"dy4.root"
+            //"dy10.root",
+            "DY50Run2.root",
             // "qcd500.root",
             // "qcd700.root",
             // "qcd1k.root",
@@ -164,13 +164,15 @@ bool returnState(TString &myMethodList)
 
     // change var1 to index and var2 to pt
     // dataloader->AddVariable("jetIndex", "Jet Index", "", 'F');
-    dataloader->AddVariable("pt", "Transverse Momentum", "", 'F');
+    dataloader->AddVariable("leadingPt", "Leading Lepton Transverse Momentum", "", 'F');
     dataloader->AddVariable("nParticles", "Number of Particles", "", 'F');
     dataloader->AddVariable("eta", "Pseudorapidity", "", 'F');
     dataloader->AddVariable("phi", "Azimuthal Angle", "", 'F');
     // dataloader->AddVariable("mass", "Mass", "", 'F');
     dataloader->AddVariable("deltaR", "Jet Width", "", 'F');
-    // dataloader->AddSpectator("spec1 := jetIndex*2", "Spectator 1", "units", 'F');
+    dataloader->AddVariable("sumPt", "Total Transverse Momentum", "", 'F');
+    // dataloader->AddVariable("deltaPt", "Leading Change in Transverse Momentum", "", 'F'); // Difference in transverse momentum between leading and runner up highest transverse momentum particles.
+    //  dataloader->AddSpectator("spec1 := jetIndex*2", "Spectator 1", "units", 'F');
 
     // global event weights per tree (see below for setting event-wise weights)
     Double_t signalWeight = 1.0;

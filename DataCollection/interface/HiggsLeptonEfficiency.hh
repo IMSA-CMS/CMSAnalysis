@@ -13,7 +13,6 @@ public:
 
   bool process() override;
   void finalize() override;
-  void writeAll() override {}
   
 private:
   const std::shared_ptr<MatchingModule> matchModule;

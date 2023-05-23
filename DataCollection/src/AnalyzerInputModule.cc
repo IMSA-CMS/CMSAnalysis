@@ -42,7 +42,6 @@ ParticleCollection<Particle> AnalyzerInputModule::getParticles(RecoLevel level, 
     {
         auto particles = (*eventInterface)->getRecoParticles().getParticles();
         
-
         for (const auto &p : particles)
         {
              if (p.getType() == particleType || particleType == ParticleType::none()) //&& p.isFinalState())

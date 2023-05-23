@@ -1,7 +1,6 @@
 #include "CMSAnalysis/DataCollection/interface/HiggsInvariantMassModule.hh"
 #include "CMSAnalysis/DataCollection/interface/HiggsInvariantMassPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/EventModule.hh"
-#include "CMSAnalysis/DataCollection/interface/HiggsCutsSelector.hh"
 #include "CMSAnalysis/DataCollection/interface/LocalEventInputModule.hh"
 
 

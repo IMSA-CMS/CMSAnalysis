@@ -29,11 +29,14 @@ class EventModule : public AnalysisModule
         
         // Will print the amount of events which passed each cut.
         void finalize() override;
-        
-        virtual void writeAll() override;
 
         const Event& getEvent() const {return event;}
+        
         std::shared_ptr<HistogramOutputModule> getHistogramModule() {return histMod;}
+
+        // Returns an input module that can be used to make these events the input to other modules
+        const InputModule* getEventInputModule() const {return &localInput;}
+
     protected:
         bool process() override;
 

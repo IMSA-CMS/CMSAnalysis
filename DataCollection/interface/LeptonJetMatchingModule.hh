@@ -12,16 +12,16 @@ class LeptonJetMatchingModule : public MatchingModule
 {
 public:
     using MatchingPair = std::pair<Particle, LeptonJet>;
-    LeptonJetMatchingModule(std::shared_ptr<LeptonJetReconstructionModule> lepJetModule, double deltaRCut = 0.5);
+    LeptonJetMatchingModule(std::shared_ptr<LeptonJetReconstructionModule> lepJetModule, double deltaRCut);
     virtual bool process() override;
     void finalize() override;
-    const std::vector<std::pair<Particle,LeptonJet>> getMatchingPairs() const;
+    const std::vector<std::pair<Particle, LeptonJet>> getMatchingPairs() const;
     const bool isQuark(GenSimParticle lepton);
     const bool isSquark(GenSimParticle lepton);
 
 private:
     double findMatchingPairDeltaR(MatchingPair pair);
-    
+
     std::vector<MatchingPair> matchingPairs;
     std::shared_ptr<GenSimParticleModule> genSim;
     std::shared_ptr<LeptonJetReconstructionModule> lepJet;
