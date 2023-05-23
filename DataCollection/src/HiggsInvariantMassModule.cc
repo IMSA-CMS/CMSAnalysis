@@ -14,13 +14,32 @@ void HiggsInvariantMassModule::initialize()
     //tree->SetAutoSave(0);
 
     tree->Branch("invariantMass", &muonInvariantMass);
+    tree->Branch("muonSize", &muonSize);
 }
 
 bool HiggsInvariantMassModule::process()
 {
+// loop through, make a collection that has pt greater than 5
     auto muons = getInput()->getParticles(InputModule::RecoLevel::Reco, ParticleType::muon());
-    muonSize = muons.getNumParticles();
-    muonInvariantMass = muons.calculateSameSignInvariantMasses();
+    ParticleCollection highPtMuons;
+
+    for (const auto& _muon : muons)
+    {
+        if (_muon.getPt() > 5)
+        {
+            highPtMuons.addParticle(_muon);
+        }
+    }
+
+    muonSize = highPtMuons.getNumParticles();
+
+    if (muonSize < 4)
+    {
+        return true;
+    }
+
+    muonInvariantMass = highPtMuons.calculateSameSignInvariantMasses();
+
     
     file->cd();
     tree->Fill();
