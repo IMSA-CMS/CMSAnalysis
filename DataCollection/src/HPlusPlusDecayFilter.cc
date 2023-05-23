@@ -1,4 +1,5 @@
 #include "CMSAnalysis/DataCollection/interface/HPlusPlusDecayFilter.hh"
+#include "CMSAnalysis/DataCollection/interface/LocalEventInputModule.hh"
 
 HPlusPlusDecayFilter::HPlusPlusDecayFilter(InputModule::RecoLevel isGenSim):
 typeGenSim(isGenSim)
@@ -6,6 +7,7 @@ typeGenSim(isGenSim)
 
 std::string HPlusPlusDecayFilter::makeFilterString()
 {
+  std::cout << "Starting makeFilterString\n";
   int higgsPlus = 0;
   int higgsMinus = 0;
   if (typeGenSim == InputModule::RecoLevel::GenSim)
@@ -16,8 +18,9 @@ std::string HPlusPlusDecayFilter::makeFilterString()
       GenSimParticle genSimParticle = GenSimParticle(particle);
       if ((genSimParticle.pdgId() == 9900041 || genSimParticle.pdgId() == 9900042) && genSimParticle == genSimParticle.finalDaughter() && genSimParticle.numberOfDaughters() == 2) // H++
       {
-        higgsPlus = std::abs(genSimParticle.daughter(0).pdgId() + genSimParticle.daughter(1).pdgId());
-      } else if ((genSimParticle.pdgId() == -9900041 || genSimParticle.pdgId() == -9900042) && genSimParticle == genSimParticle.finalDaughter() && genSimParticle.numberOfDaughters() == 2) // H--
+        higgsPlus = std::abs(genSimParticle.daughter(0).pdgId() + genSimParticle.daughter(1).pdgId()); //adds the pdgid of the particles for easier processing
+      } else if ((genSimParticle.pdgId() == -9900041 || genSimParticle.pdgId() == -9900042) && 
+      genSimParticle == genSimParticle.finalDaughter() && genSimParticle.numberOfDaughters() == 2) // H--
       {
         higgsMinus = std::abs(genSimParticle.daughter(0).pdgId() + genSimParticle.daughter(1).pdgId());
       }
@@ -28,9 +31,15 @@ std::string HPlusPlusDecayFilter::makeFilterString()
     }
   } else if (typeGenSim == InputModule::RecoLevel::Reco)
   {
+    std::cout << "Getting leptons\n";
+    auto input = getInput();
+    std::cout << "Is local event input module: " << dynamic_cast<const LocalEventInputModule*>(input) << '\n';
     auto leptons = getInput()->getLeptons(InputModule::RecoLevel::Reco);
-    for (const auto &lepton : leptons) //cycles through to find the doubly charged higgs
+    std::cout<<leptons.getNumParticles()<<std::endl;
+    for (const auto &lepton : leptons)
     {
+      std::cout<<"HiggsDecay"<<std::endl;
+      std::cout<<lepton.getPt()<<std::endl;
       if (lepton.getCharge() > 0)
       {
         if (lepton.getType() == ParticleType::electron())

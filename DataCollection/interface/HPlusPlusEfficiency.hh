@@ -11,7 +11,6 @@ public:
 
   bool process() override;
   void finalize() override;
-  void writeAll() override {}
   
 private:
 

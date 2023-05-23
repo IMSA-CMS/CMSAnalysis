@@ -23,7 +23,7 @@ void SuperPlot()
 {
 	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
 	//Change extra text here (keep drawLogo to false for now)
-	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary");
+	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation)");
 	//Change the string for the channel you want, if using one channel. Otherwise use the loop.
 	std::shared_ptr<Channel> leptonBackgrounds = higgsAnalysis->getChannel("none900");
 	//SINGLE CHANNEL CODE HERE
@@ -73,7 +73,8 @@ void SuperPlot()
 	//TCanvas *canvas = plotFormatter->simple2DHist(process, "Invariant Mass", xAxisTitle, yAxisTitle);
 	//TCanvas *canvas = plotFormatter->simpleStackHist(leptonBackgrounds, "Same Sign Inv Mass", xAxisTitle, yAxisTitle);
 	//TCanvas *canvas = plotFormatter->superImposedHist(leptonBackgrounds, "MET", xAxisTitle, yAxisTitle);
-	TCanvas *canvas = plotFormatter->completePlot(leptonBackgrounds, "Same Sign Inv Mass", xAxisTitle, yAxisTitle);
+	TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Same Sign Inv Mass", xAxisTitle, yAxisTitle, 900);
+	
 
 	//Uncomment to save a png picture in your bin folder
 	//canvas->SaveAs("SuperPlot.png");

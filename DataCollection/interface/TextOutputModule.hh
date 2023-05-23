@@ -15,7 +15,7 @@ public:
   TextOutputModule(const std::string& outputFilename);
   virtual ~TextOutputModule() override;
 
-  virtual void writeAll() override;
+  virtual void finalize() override;
 
 protected:
   // Write one line (with a newline character) to the file.
