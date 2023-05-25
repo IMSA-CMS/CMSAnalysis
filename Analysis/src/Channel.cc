@@ -13,7 +13,7 @@
 #include <vector>
 #include <fstream>
 #include "CMSAnalysis/DataCollection/interface/Utility.hh"
-
+#include "CMSAnalysis/Analysis/interface/Systematic.hh"
 //Channel::Channel(std::string name, std::string iYAxisName, std::vector<std::shared_ptr<Process>> iProcesses) : name(name), yAxisName(iYAxisName)
 Channel::Channel(std::string name, std::vector<std::shared_ptr<Process>> iProcesses) : name(name)
 {
@@ -21,7 +21,15 @@ Channel::Channel(std::string name, std::vector<std::shared_ptr<Process>> iProces
 	{
 		processes.push_back(process);
 	}
+}    
+
+
+void addGlobalSystematic(Systematic& systematic)
+{
+
+ 
 }
+
 
 const std::shared_ptr<Process> Channel::findProcess(std::string processName) const
 {
