@@ -7,7 +7,7 @@
 #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
 #include "CMSAnalysis/DataCollection/interface/ParticleType.hh"
 
-std::vector<Particle> HiggsSelector::selectParticles(const InputModule* input) const
+void HiggsSelector::selectParticles(const InputModule* input, Event& event)
 {
     std::vector<Particle> selected;
     // std::vector<Particle> posElecs(0);
@@ -25,9 +25,10 @@ std::vector<Particle> HiggsSelector::selectParticles(const InputModule* input) c
     {
         if (particle.getType() == ParticleType::electron()) 
 		{
-            if (Lepton(particle).isLoose())
+            if (Lepton(particle).isLoose() && particle.getPt() > 5)
             {
-                selected.push_back(particle);
+                event.addElectron(particle);
+
             }
             // electronCount++;
 
@@ -39,11 +40,11 @@ std::vector<Particle> HiggsSelector::selectParticles(const InputModule* input) c
             // }
         }
         // if (particle.getType() == Particle::Type::Muon && particle.getPt() > 40 && std::abs(particle.getEta()) < 2.8) 
-		if (particle.getType() == ParticleType::electron())
+		if (particle.getType() == ParticleType::muon())
         {
-            if(Lepton(particle).isLoose())
+            if(Lepton(particle).isLoose() && particle.getPt() > 5)
             {
-                selected.push_back(particle);
+                event.addMuon(particle);
             }
             // if (particle.getCharge() > 0) {
             //     posMuonCount++;
@@ -144,5 +145,4 @@ std::vector<Particle> HiggsSelector::selectParticles(const InputModule* input) c
     //     return std::vector<Particle>(0);
     // }
 
-    return selected;
 }

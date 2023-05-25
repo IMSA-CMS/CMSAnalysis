@@ -29,13 +29,9 @@ HiggsDataStripModule::HiggsDataStripModule(const std::string outputFileName, std
 {
 }
 
-void HiggsDataStripModule::writeAll()
-{
-	tree->Write();
-}
-
 void HiggsDataStripModule::finalize()
 {
+	tree->Write();
 }
 
 bool HiggsDataStripModule::process()

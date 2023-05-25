@@ -74,7 +74,7 @@ bool FileStripModule::process()
         }
 	
 
-	 auto muons = getInput()->getParticles(InputModule::RecoLevel::Reco, ParticleType::electron());
+	 auto muons = getInput()->getParticles(InputModule::RecoLevel::Reco, ParticleType::muon());
 	 muonSize = muons.getNumParticles();
 
 	 for (auto& muon : muons)
@@ -170,7 +170,7 @@ bool FileStripModule::process()
 	return true;
 }
 
-void FileStripModule::writeAll()
+void FileStripModule::finalize()
 {
 	file->Write();
 	file->Close();

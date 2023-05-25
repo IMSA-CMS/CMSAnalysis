@@ -16,7 +16,7 @@ class HiggsSelector : public Selector
 {
     public:
         ~HiggsSelector() override {}
-        std::vector<Particle> selectParticles(const InputModule* input) const;
+        void selectParticles(const InputModule* input, Event& event) override;
 };
 
 #endif

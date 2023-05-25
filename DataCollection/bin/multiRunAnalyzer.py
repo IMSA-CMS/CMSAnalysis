@@ -2,7 +2,7 @@ from subprocess import run
 from multiprocessing import Process
 
 def loopRun(*fileList):
-	path = "textfiles/"
+	path = "textfiles/SingleMassSnowmass/"
 	for file in fileList:
 		# Filling in the parameters of runAnalyzer
 		analysis = "HiggsBackground"
@@ -15,7 +15,7 @@ def loopRun(*fileList):
 		analysisName = "analysis=" + analysis
 		# calls runAnalyzer
 		print("Creating " + outputString)
-		run(["nohup", "runAnalyzer", inputString, outputString, analysisName], check=True)
+		run(["runAnalyzer", inputString, outputString, analysisName], check=True)
 
 if __name__ == '__main__':
 	# jobs grouped by process

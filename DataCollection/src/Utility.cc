@@ -118,6 +118,7 @@ std::vector<std::string> Utility::channelMaker(std::vector<std::string> particle
       }
     }
   }
+  channels.push_back("none");
   return channels;
 }
 

@@ -13,7 +13,6 @@ class EfficiencyModule : public AnalysisModule
 {
     public:
         void finalize() override;
-        virtual void writeAll() override;
 
     protected:
         //Adds the counter for a thing

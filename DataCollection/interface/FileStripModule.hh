@@ -14,7 +14,7 @@ class FileStripModule : public AnalysisModule
     // Called in FileStripPlan.hh. The name of the stripped data file is specified in the name 
     //parameter of this constructor. The output file of runAnalyzer only contains nEvents.
 	FileStripModule(std::string name);
-    virtual void writeAll() override;
+    virtual void finalize() override;
     // Checks if a GenSimParticle is inside of the collection given
     int checkGenSim(const GenSimParticle &genSim, ParticleCollection<Particle> &collection);
     virtual void initialize() override;

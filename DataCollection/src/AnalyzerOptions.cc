@@ -20,6 +20,7 @@
 #include "CMSAnalysis/DataCollection/interface/FileStripPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/MLVariablesPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/HiggsDataStripPlan.hh"
+#include "CMSAnalysis/DataCollection/interface/HiggsInvariantMassPlan.hh"
 
 AnalyzerOptions::AnalyzerOptions()
 {
@@ -35,6 +36,7 @@ AnalyzerOptions::AnalyzerOptions()
   analysisPlans["FileStrip"] = new FileStripPlan();
   analysisPlans["LeptonJetDataStrip"] = new MLVariablesPlan();
   analysisPlans["HiggsDataStrip"] = new HiggsDataStripPlan();
+  analysisPlans["HiggsInvariantMass"] = new HiggsInvariantMassPlan();
 }
 
 std::string AnalyzerOptions::pickfileInterface()

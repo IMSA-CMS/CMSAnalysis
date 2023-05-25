@@ -16,8 +16,6 @@ class LeptonJetDumpModule : public AnalysisModule
     LeptonJetDumpModule(std::shared_ptr<LeptonJetMatchingModule> iLepJet,std::shared_ptr<MatchingModule> iMatch, int inumEvents = -1);
 
     virtual bool process() override;
-  
-    virtual void writeAll() override;
     
     void printLeptons(std::ofstream& my_file);
 

@@ -77,7 +77,7 @@ CollectionHist ParticleType::getNumberHist()
 
 CollectionHist ParticleType::getSameSignInvariantMassHist()
 {
-    return CollectionHist("Same Sign Invariant Mass", 150, 0, 1000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateSameSignInvariantMass()};});
+    return CollectionHist("Same Sign Invariant Mass", 150, 0, 2000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateSameSignInvariantMass()};});
 }
 
 CollectionHist ParticleType::getOppositeSignInvariantMassHist()
@@ -137,6 +137,13 @@ const ParticleType& ParticleType::leptonJet()
 const ParticleType& ParticleType::photon()
 {
     return registerType("Photon",22,0,
+    std::vector<SingleParticleHist>{},
+    std::vector<CollectionHist>{getNumberHist()}); 
+}
+
+const ParticleType& ParticleType::quark()
+{
+    return registerType("Quark",1,0,
     std::vector<SingleParticleHist>{},
     std::vector<CollectionHist>{getNumberHist()}); 
 }
