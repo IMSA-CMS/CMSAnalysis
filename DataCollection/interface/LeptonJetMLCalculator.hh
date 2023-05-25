@@ -11,12 +11,13 @@ class LeptonJetMatchingModule;
 class LeptonJetMLCalculator : public ProductionModule
 {
 private:
-	mutable Float_t pt;
+	mutable Float_t leadingPt;
 	mutable Float_t phi;
 	mutable Float_t eta;
 	// mutable Float_t mass;
 	mutable Float_t deltaR;
 	mutable Float_t nParticles;
+	mutable Float_t sumPt;
 	// mutable Int_t jetIndex;
 	mutable TMVA::Reader reader;
 

@@ -15,7 +15,8 @@ class AnalysisModule : public Module
 public:
   // This writes all relevant files.
   // It is called after finalize().
-  virtual void writeAll() = 0;
+
+  virtual void finalizeFilterString() {}
 
   // Sets the current filter string used to group resulting objects
   // This should just be used by Analyzer::run()!

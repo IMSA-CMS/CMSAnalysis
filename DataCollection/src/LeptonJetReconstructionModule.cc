@@ -3,8 +3,7 @@
 #include "CMSAnalysis/DataCollection/interface/Selector.hh"
 #include <iostream>
 
-LeptonJetReconstructionModule::LeptonJetReconstructionModule(double deltaRCut) :
-  DeltaRCut(deltaRCut)
+LeptonJetReconstructionModule::LeptonJetReconstructionModule(double deltaRCut) : DeltaRCut(deltaRCut)
 {
 }
 
@@ -27,11 +26,11 @@ const std::vector<LeptonJet> LeptonJetReconstructionModule::findLeptonJets(Parti
   while (recoLeptons.size() != 0)
   {
     Lepton highestPtLepton = findHighestPtLepton(recoLeptons);
-    if(highestPtLepton.getPt()<= 5)
+    if (highestPtLepton.getPt() <= 5)
     {
       break;
     }
-    else if(abs(highestPtLepton.getEta())>3)
+    else if (abs(highestPtLepton.getEta()) > 3)
     {
       recoLeptons.erase(std::find(recoLeptons.begin(), recoLeptons.end(), highestPtLepton));
       continue;
@@ -46,21 +45,16 @@ const std::vector<LeptonJet> LeptonJetReconstructionModule::findLeptonJets(Parti
     {
       auto fourVector = recoLeptons[i].getFourVector();
       double deltaR = reco::deltaR(highestPtLeptonFourVector, fourVector);
-      //std::cout << "delta r: " << deltaR << " delta r cut: " << DeltaRCut << "\n";
-      //std::cout << "The value of Eta is "<< abs(recoLeptons[i].getEta()) <<std::endl;
-      if (deltaR < DeltaRCut && recoLeptons[i].getPt()>= 5 && abs(recoLeptons[i].getEta())<=3)
+      // std::cout << "delta r: " << deltaR << " delta r cut: " << DeltaRCut << "\n";
+      // std::cout << "The value of Eta is "<< abs(recoLeptons[i].getEta()) <<std::endl;
+      if (deltaR < DeltaRCut && recoLeptons[i].getPt() >= 5 && abs(recoLeptons[i].getEta()) <= 3)
       {
         jet.addParticle(recoLeptons[i]);
-        recoLeptons.erase(recoLeptons.begin() + i);
-        --i;
       }
-      else if(deltaR < DeltaRCut)
-      {
-        recoLeptons.erase(recoLeptons.begin() + i);
-        --i;
-      }
+      recoLeptons.erase(recoLeptons.begin() + i);
+      --i;
     }
-  //std::cout << "numParticles: " << jet.getNumParticles() << "\n";
+    // std::cout << "numParticles: " << jet.getNumParticles() << "\n";
     if (jet.getNumParticles() > 1)
     {
       // auto inputJets = getInput()->getJets(InputModule::RecoLevel::Reco);
@@ -103,7 +97,7 @@ Particle LeptonJetReconstructionModule::findHighestPtLepton(std::vector<Lepton> 
   {
     if (lep.getPt() == highestPt)
     {
-       return lep;
+      return lep;
     }
   }
 

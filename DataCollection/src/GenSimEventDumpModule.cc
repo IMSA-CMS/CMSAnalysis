@@ -15,12 +15,7 @@
 GenSimEventDumpModule::GenSimEventDumpModule(int inumOfEvents):
   numOfEvents(inumOfEvents)
 {
-  counter = 0;
-}
-
-//don't remove
-void GenSimEventDumpModule::writeAll()
-{
+  counter = 1;
 }
 
 bool GenSimEventDumpModule::process()
@@ -29,6 +24,7 @@ bool GenSimEventDumpModule::process()
   if (clearlatch) 
   {
     my_file.open("GenSimEventDump.txt", std::ofstream::out | std::ofstream::trunc);
+    my_file.close();
     clearlatch = false;
   }
   

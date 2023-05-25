@@ -11,6 +11,7 @@
 #include "CMSAnalysis/DataCollection/interface/LeptonJetMatchingModule.hh"
 #include "CMSAnalysis/DataCollection/interface/HiggsDataStripModule.hh"
 #include "CMSAnalysis/DataCollection/interface/HiggsDataStripPlan.hh"
+#include "CMSAnalysis/DataCollection/interface/HPlusPlusEfficiency.hh"
 
 using std::make_shared;
 
@@ -20,6 +21,8 @@ void HiggsDataStripPlan::initialize()
 	auto leptonJetRecoMod = make_shared<LeptonJetReconstructionModule>(0.1);
 	auto leptonJetMatchingMod = make_shared<LeptonJetMatchingModule>(leptonJetRecoMod, 0.1);
 	auto dataStripMod = make_shared<HiggsDataStripModule>("data.root", leptonJetRecoMod, leptonJetMatchingMod);
+	auto hPlusPlusEfficiency = make_shared<HPlusPlusEfficiency>();
+	analyzer.addAnalysisModule(hPlusPlusEfficiency);
 	analyzer.addProductionModule(leptonJetRecoMod);
 	analyzer.addProductionModule(leptonJetMatchingMod);
 	analyzer.addAnalysisModule(dataStripMod);

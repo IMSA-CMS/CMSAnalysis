@@ -140,14 +140,14 @@ std::vector<std::string> Channel::getNames() const
 	return names;
 }
 
-THStack* Channel::getStack(std::string histType, std::string label, bool scaleToExpected) const
+THStack* Channel::getStack(std::string histType, std::string label, bool scaleToExpected, int rebinConstant) const
 {
 	THStack* superPlot = new THStack(name.c_str(), name.c_str());
 	if (label == "")
 	{
 		for (auto process : processes)
 		{	
-			superPlot->Add(process->getHist(histType, scaleToExpected));
+			superPlot->Add(process->getHist(histType, scaleToExpected)->Rebin(rebinConstant));
 		}
 	}
 	else
@@ -164,6 +164,7 @@ THStack* Channel::getStack(std::string histType, std::string label, bool scaleTo
 				//hist->SetLineColor(kBlack);
 				//hist->SetLineWidth(1);
 			}
+			hist->Rebin(rebinConstant);
 			superPlot->Add(hist);
 		}
 	}

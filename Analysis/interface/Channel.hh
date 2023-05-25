@@ -7,6 +7,7 @@
 #include <vector>
 #include <memory>
 #include "TH1.h"
+#include "Process.hh"
 
 class Process;
 class THStack;
@@ -23,7 +24,7 @@ class Channel
 		std::string getName() {return name;}
 		std::vector<std::string> getNamesWithLabel(std::string label);
 		//Makes stacked histogram
-		THStack* getStack(std::string histType, std::string label = "", bool scaleToExpected = false) const;
+		THStack* getStack(std::string histType, std::string label = "", bool scaleToExpected = false, int rebinConstant = 1) const;
 		
 		std::vector<TH1*> getHists(std::string histType, std::string label = "", bool scaleToExpected = false) const;
 
@@ -40,6 +41,7 @@ class Channel
 		void addGlobalSystematic(Systematic& systematic);
 
 		std::vector<std::shared_ptr<Process>> getProcesses() {return processes;}
+
 
 	private: 
 		std::string name;

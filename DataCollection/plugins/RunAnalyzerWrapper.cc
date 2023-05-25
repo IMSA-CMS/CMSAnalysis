@@ -47,6 +47,10 @@
 #include "DataFormats/PatCandidates/interface/Photon.h"
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
+#include "DataFormats/PatCandidates/interface/TriggerEvent.h"
+#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
+
+
 //
 // class declaration
 //
@@ -81,6 +85,10 @@ private:
   edm::EDGetTokenT<pat::PhotonCollection> PhotonToken_;
   edm::EDGetTokenT<pat::JetCollection> JetToken_;
   edm::EDGetTokenT<pat::METCollection> METToken_;
+  edm::EDGetTokenT<pat::TriggerEvent> TriggerToken_;
+  edm::EDGetTokenT<reco::GenParticleCollection> GenSimToken_;
+
+
   CmsswEventInterface eventInterface;
 
   
@@ -109,7 +117,9 @@ RunAnalyzerWrapper::RunAnalyzerWrapper(const edm::ParameterSet& iConfig)
      PhotonToken_(consumes<pat::PhotonCollection>(edm::InputTag("slimmedPhotons", ""))),
      JetToken_(consumes<pat::JetCollection>(edm::InputTag("slimmedJets", ""))),
      METToken_(consumes<pat::METCollection>(edm::InputTag("slimmedMETs", ""))),
-     eventInterface(ElectronToken_,MuonToken_,PhotonToken_,JetToken_,METToken_)
+	 TriggerToken_(consumes<pat::TriggerEvent>(edm::InputTag("triggerEvent"))),
+	 GenSimToken_(consumes<reco::GenParticleCollection>(edm::InputTag("GenericParticle"))),
+     eventInterface(ElectronToken_,MuonToken_,PhotonToken_,JetToken_,METToken_,TriggerToken_,GenSimToken_)
 {
   AnalyzerOptions options;
   std::string analysis = options.checkSelectedAnalysis(analyzerType_);

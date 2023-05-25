@@ -266,6 +266,7 @@ inline double ParticleCollection<T>::calculateAllLeptonInvariantMass() const
 template <typename T>
 inline double ParticleCollection<T>::calculateSameSignInvariantMass(bool usingPhi) const
 {
+ // std::cout << "Particle Collection SameSignIM Vector Size:" << particles.size();
   T iPointer = Particle::nullParticle();
   T jPointer = Particle::nullParticle();
   std::pair<T, T> particlePair = {iPointer, jPointer};
@@ -298,19 +299,27 @@ inline std::vector<double> ParticleCollection<T>::calculateSameSignInvariantMass
 
   if (getPosParticles().getNumParticles() >= 2)
   {
-    sameSignInvariantMasses.push_back(getPosParticles().calculateSameSignInvariantMass(usingPhi));
+    double inv = getPosParticles().calculateSameSignInvariantMass(usingPhi);
+    // std::cout << inv << '\t';
+    sameSignInvariantMasses.push_back(inv);
+    // sameSignInvariantMasses.push_back(getPosParticles().calculateSameSignInvariantMass(usingPhi));
   }
   else
   {
+    // std::cout << "0\t";
     sameSignInvariantMasses.push_back(0);
   }
 
   if (getNegParticles().getNumParticles() >= 2)
   {
-    sameSignInvariantMasses.push_back(getNegParticles().calculateSameSignInvariantMass(usingPhi));
+    double inv = getNegParticles().calculateSameSignInvariantMass(usingPhi);
+    // std::cout << inv << '\n';
+    sameSignInvariantMasses.push_back(inv);
+    // sameSignInvariantMasses.push_back(getNegParticles().calculateSameSignInvariantMass(usingPhi));
   }
   else
   {
+    // std::cout << "0\n";
     sameSignInvariantMasses.push_back(0);
   }
 

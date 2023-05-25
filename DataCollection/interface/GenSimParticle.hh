@@ -21,8 +21,10 @@ class GenSimParticle : public Particle
 
         GenSimParticle mother() const;
         bool hasMother() const;
+        bool hasUniqueMother() const;
         int numberOfDaughters() const;
         GenSimParticle daughter(int i) const;
+        std::vector<GenSimParticle> getDaughters() const;
         bool isFinalState() const;
 
         //finds the first mother which is not itself
@@ -30,6 +32,7 @@ class GenSimParticle : public Particle
 
         //finds the last hit of a particle before it decays into something else
         GenSimParticle finalDaughter() const;
+        bool isFinalDaughter() {return finalDaughter() == *this;}
 
         GenSimParticle findMother(int motherPDGID) const;
 
