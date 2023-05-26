@@ -114,6 +114,12 @@ void Process::addProcess(SingleProcess process)
 	}
 }
 
+void Process::addSystematic(std::shared_ptr<Systematic> systematic)
+{
+
+
+}
+
 int Process::getNEvents() 
 {
 	int total = 0;
