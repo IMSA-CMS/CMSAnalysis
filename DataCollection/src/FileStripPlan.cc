@@ -1,5 +1,5 @@
 #include "CMSAnalysis/DataCollection/interface/FileStripPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/FileStripModule.hh"
+#include "CMSAnalysis/Modules/interface/FileStripModule.hh"
 
 void FileStripPlan::initialize()
 {

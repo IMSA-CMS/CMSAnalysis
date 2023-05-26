@@ -7,11 +7,11 @@
 #include "TSystem.h"
 
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonJetReconstructionModule.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonJetMatchingModule.hh"
-#include "CMSAnalysis/DataCollection/interface/HiggsDataStripModule.hh"
+#include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
+#include "CMSAnalysis/Modules/interface/LeptonJetMatchingModule.hh"
+#include "CMSAnalysis/Modules/interface/HiggsDataStripModule.hh"
 #include "CMSAnalysis/DataCollection/interface/HiggsDataStripPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/HPlusPlusEfficiency.hh"
+#include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
 
 using std::make_shared;
 

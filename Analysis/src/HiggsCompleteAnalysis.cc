@@ -9,7 +9,7 @@
 #include "CMSAnalysis/Analysis/interface/CrossSectionReader.hh"
 #include "CMSAnalysis/Analysis/interface/Process.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
-#include "CMSAnalysis/DataCollection/interface/Utility.hh"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "CMSAnalysis/Analysis/interface/Correction.hh"
 #include "CMSAnalysis/Analysis/interface/ConstantCorrection.hh"
 #include <memory>	

@@ -1,8 +1,8 @@
 #ifndef CMSSWEVENTINTERFACE_HH
 #define CMSSWEVENTINTERFACE_HH
 
-#include "ParticleCollection.hh"
-#include "EventInterface.hh"
+#include "CMSAnalysis/DataCollection/interface/EventLoader.hh"
+#include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include "FWCore/Framework/interface/Event.h"
 #include "DataFormats/FWLite/interface/Event.h"
 #include "DataFormats/Common/interface/DetSetVector.h"

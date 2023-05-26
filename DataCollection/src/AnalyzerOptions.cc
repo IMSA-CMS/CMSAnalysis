@@ -14,7 +14,7 @@
 #include "CMSAnalysis/DataCollection/interface/LeptonJetReconstructionPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/MassAcceptancePlan.hh"
 #include "CMSAnalysis/DataCollection/interface/MassResolutionPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/Trigger.hh"
+#include "CMSAnalysis/Filters/interface/Trigger.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/FileStripPlan.hh"

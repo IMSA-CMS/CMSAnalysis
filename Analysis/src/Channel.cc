@@ -12,7 +12,7 @@
 #include <memory>
 #include <vector>
 #include <fstream>
-#include "CMSAnalysis/DataCollection/interface/Utility.hh"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 
 //Channel::Channel(std::string name, std::string iYAxisName, std::vector<std::shared_ptr<Process>> iProcesses) : name(name), yAxisName(iYAxisName)
 Channel::Channel(std::string name, std::vector<std::shared_ptr<Process>> iProcesses) : name(name)

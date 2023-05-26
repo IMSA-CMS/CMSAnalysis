@@ -12,6 +12,11 @@
 <use   name="TrackingTools/TransientTrack"/>
 <use   name="rootgraphics"/>
 <use   name="roottmva"/>
+<use   name="CMSAnalysis/Histograms"/>
+<use   name="CMSAnalysis/Modules"/>
+<use   name="CMSAnalysis/Plans"/>
+<use   name="CMSAnalysis/Utility"/>
+<use   name="CMSAnalysis/EventFiles"/>
 <export>
    <lib name="1"/>
 </export>
