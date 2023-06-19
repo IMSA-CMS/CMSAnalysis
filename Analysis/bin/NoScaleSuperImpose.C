@@ -23,17 +23,17 @@ void NoScaleSuperImpose() {
     const std::string filePath = "/uscms/home/vrao/analysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/";
     //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
     //std::vector<std::string> files = {"Delta RAcceptance1000.root", "Delta RAcceptance1000.root"};
-    std::vector<std::string> files = {"GammaAcceptance300.root", "GammaAcceptance300.root"};
-    std::vector<std::string> hists = {"Gen Sim Gamma (Reconstructed 1 Jets)", "Gen Sim Gamma (Reconstructed 2 Jets)"};
+    std::vector<std::string> files = {"test1000.root", "HiggsDPZ.root", "ZPrime.root", "SUSY.root", "Higgs4DP.root"};
+    std::vector<std::string> hists = {"Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values"};
     //std::vector<std::string> hists = {"Cut4MET", "Cut4MET", "Cut4MET"};
     //Write your graph names here (for the legend)
-    std::vector<TString> names = {"1 Jet, Higgs Mass 300", "2 Jet, Higgs Mass 300"};
+    std::vector<TString> names = {"Higgs to 2 Dark Photon", "Higgs to Z and Dark Photon", "Z Prime", "SUSY", "Higgs to 4 Dark Photon"};
     //Colors go here
-    std::vector<int> colors = {1, 2};
+    std::vector<int> colors = {1, 2, 3, 4, 5};
     //Change x and y axis titles here
     //TString xTitle = "Delta R";
     TString xTitle = "Gamma";
-    TString yTitle = "Percentage of Events Accepted";
+    TString yTitle = "Number of Events"; 
 
 
     int count = 0;

@@ -19,51 +19,19 @@ void SuperImpose() {
     //Change extraText here
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary");
     //Change the filePath here. This should be the longest branch all input files have in common.
-    //const std::string filePath = "/vrao/analysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/";
     const std::string filePath = "/uscms/home/vrao/analysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/";
-    //std::cout << "created file path\n";
     //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
     //Write your graph names here (for the legend)
     
-    //std::vector<std::string> files = {"GammaAcceptance1000.root", "GammaAcceptance1000.root"};
-    //std::vector<std::string> hists = {"Gen Sim Gamma (Reconstructed 1 Jets)", "Gen Sim Gamma (Reconstructed 2 Jets)"};
-    
-    //std::vector<std::string> hists = {"Gamma Acceptance (1 Jet, Higgs Mass 1000)", "Gamma Acceptance (2 Jet, Higgs Mass 1000)"};
-    
-    //std::vector<TString> names = {"Gamma Acceptance (1 Jet, Higgs Mass 1000)", "Gamma Acceptance (2 Jet, Higgs Mass 1000)"};
-
-
-    //std::vector<std::string> files = {"GammaAcceptance300.root", "GammaAcceptance300.root"};
-    //std::vector<std::string> hists = {"Gamma Acceptance (1 Jet, Higgs Mass 300)", "Gamma Acceptance (2 Jet, Higgs Mass 300)"};
-    //std::vector<TString> names = {"Gamma Acceptance (1 Jet, Higgs Mass 300)", "Gamma Acceptance (2 Jet, Higgs Mass 300)"};
-
-    //std::vector<std::string> files = {"GammaAcceptance125.root", "GammaAcceptance125.root"};
-    //std::vector<std::string> hists = {"Gamma Acceptance (1 Jet, Higgs Mass 125)", "Gamma Acceptance (2 Jet, Higgs Mass 125)"};
-    //std::vector<TString> names = {"Gamma Acceptance (1 Jet, Higgs Mass 125)", "Gamma Acceptance (2 Jet, Higgs Mass 125)"};
-
-    
-    
-    std::vector<std::string> files = {"Delta RAcceptance1000.root", "Delta RAcceptance1000.root"};    
-    std::vector<std::string> hists = {"Gen Sim Delta R (Reconstructed 1 Jets)", "Gen Sim Delta R (Reconstructed 2 Jets)"};
-    //std::vector<std::string> hists = {"Delta R Acceptance (1 Jet, Higgs Mass 1000)", "Delta R Acceptance (2 Jet, Higgs Mass 1000)"};
-    std::vector<TString> names = {"Delta R Acceptance (1 Jet, Higgs Mass 1000)", "Delta R Acceptance (2 Jet, Higgs Mass 1000)"};
-
-    //std::vector<std::string> files = {"Delta RAcceptance300.root", "Delta RAcceptance300.root"};    
-    //std::vector<std::string> hists = {"Delta R Acceptance (1 Jet, Higgs Mass 300)", "Delta R Acceptance (2 Jet, Higgs Mass 300)"};
-    //std::vector<TString> names = {"Delta R Acceptance (1 Jet, Higgs Mass 300)", "Delta R Acceptance (2 Jet, Higgs Mass 300)"};
-
-    //std::vector<std::string> files = {"Delta RAcceptance125.root", "Delta RAcceptance125.root"};
-    //std::vector<std::string> hists = {"Delta R Acceptance (1 Jet, Higgs Mass 125)", "Delta R Acceptance (2 Jet, Higgs Mass 125)"};
-    //std::vector<TString> names = {"Delta R Acceptance (1 Jet, Higgs Mass 125)", "Delta R Acceptance (2 Jet, Higgs Mass 125)"};
-
-
+    std::vector<std::string> files = {"test1000.root", "HiggsDPZ.root", "ZPrime.root", "SUSY.root", "Higgs4DP.root"};
+    std::vector<std::string> hists = {"Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values"};
+    std::vector<TString> names = {"Higgs to 2 Dark Photon", "Higgs to Z and Dark Photon", "Z Prime", "SUSY", "Higgs to 4 Dark Photon"};
 
     //Colors go here
-    std::vector<int> colors = {1, 2};
+    std::vector<int> colors = {1, 2, 3, 4, 5};
     //Change x and y axis titles here
-    //TString xTitle = "Gamma";
-    TString xTitle = "Delta R";
-    TString yTitle = "Percentage of Events Accepted";
+    TString xTitle = "Gamma";
+    TString yTitle = "Events (1/Integral)";
 
 
     int count = 0;
