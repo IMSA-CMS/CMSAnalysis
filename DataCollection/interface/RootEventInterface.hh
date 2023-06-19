@@ -2,9 +2,9 @@
 #define ROOTEVENTINTERFACE_HH
 #include <vector>
 
-#include "ParticleCollection.hh"
+#include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include "EventInterface.hh"
-#include "EventFile.hh"
+#include "CMSAnalysis/EventFiles/interface/EventFile.hh"
 class EventFile;
 
 class RootEventInterface : public EventInterface

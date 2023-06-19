@@ -14,6 +14,7 @@ class SimpleEstimator : public Estimator
 {		
 	public: 
 		SimpleEstimator() {}
+		double getMassTarget() const override  {return 0;}
 		double getExpectedYield(const SingleProcess* process, std::string dataType, double luminosity) const override;
 };	
 
