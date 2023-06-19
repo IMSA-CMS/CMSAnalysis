@@ -14,7 +14,6 @@
 using std::string;
 
 TH1* getHist(string name, TFile* file);
-//void process(TH1* hist, std::string canvasName, std::string xaxis, std::string yaxis, std::string title, std::string rootFileName);
 void process(TH1* hist, std::string canvasName, std::string xaxis, std::string yaxis, std::string title);    
 
 //inputFile: input root file name
@@ -28,8 +27,8 @@ void GaussianFit(std::string inputFile)
     auto originalPlot = getHist(originalHist.c_str(), refinedOutput);
     auto fittedPlot = (TH1D*) originalPlot->Clone(); 
 
-    //add gaussian fit
-    fittedPlot->Fit("gaus","","", -0.05, 0.05);
+    //adding gaussian fit and setting x-axis limits on the fit
+    fittedPlot->Fit("gaus","","", -1, 1);
 
     string canvasName = "Gamma Resolution (Gaussian Fit)";
     string xaxis = "Resolution";
@@ -46,7 +45,6 @@ TH1* getHist(std::string name, TFile* file)
     return hist;
 }
 
-//void process(TH1* hist, std::string canvasName, std::string xaxis, std::string yaxis, std::string title, std::string rootFileName){
 void process(TH1* hist, std::string canvasName, std::string xaxis, std::string yaxis, std::string title){    
     //TFile* refinedOutput = TFile::Open(rootFileName.c_str(), "UPDATE");
     TCanvas* c = new TCanvas(canvasName.c_str(), canvasName.c_str());

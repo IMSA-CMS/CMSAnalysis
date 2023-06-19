@@ -342,7 +342,7 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
 
     for(TH1* hist : hists) {
 	    if(hist->Integral() != 0 && !isnan(hist->Integral())) {
-	        //hist->Scale(1/hist->Integral());
+	        hist->Scale(1/hist->Integral());
 		    hist->SetFillColor(kWhite);
 	    }
 	    hist->SetLineColor(colors.at(count));
