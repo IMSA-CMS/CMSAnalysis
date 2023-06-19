@@ -71,7 +71,7 @@ void LeptonJetReconstructionPlan::initialize()
   // auto matchPhiHist = std::make_shared<MatchingPhiHist>(lepMatchMod, "Differences in Phi for Matched Lepton Jets", 100, 0, 3.15);
   // auto matchEtaHist = std::make_shared<MatchingEtaHist>(lepMatchMod, "Differences in Eta for Matched Lepton Jets", 100, -1, 1);
 
-  auto relIsoHist = std::make_shared<IsolationHist>(InputModule::RecoLevel::Reco, "Jet pT Rel", 10000, 0, 100);
+  //auto relIsoHist = std::make_shared<IsolationHist>(InputModule::RecoLevel::Reco, "Jet pT Rel", 10000, 0, 100);
  // auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(InputModule::RecoLevel::Reco, "NN Classifier Output Distribution", 100, 0, 1, mlMod, lepRecoMod);
 //uncomented
   eventHistMod->addHistogram(deltaRHist);
@@ -79,7 +79,7 @@ void LeptonJetReconstructionPlan::initialize()
   histOutputMod->addHistogram(pTHist);
   histOutputMod->addHistogram(matchedLeptonJetHist);
   histOutputMod->addHistogram(unmatchedLeptonJetHist);
-  histOutputMod->addHistogram(relIsoHist);
+  //histOutputMod->addHistogram(relIsoHist);
  // histOutputMod->addHistogram(leptonJetMLHist);
 
 //   histOutputMod->addHistogram(matchDeltaRHist);
@@ -109,7 +109,7 @@ void LeptonJetReconstructionPlan::initialize()
 
   // Efficiency Modules
   auto leptonEfficiency = std::make_shared<LeptonEfficiency>(matchMod);
-  //auto leptonJetEfficiency = std::make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
+  auto leptonJetEfficiency = std::make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
 
   // Add the histogram(s) created above to histMod
   // eventHistMod->addHistogram(nLeptonsHist);
@@ -147,7 +147,7 @@ void LeptonJetReconstructionPlan::initialize()
   analyzer.addAnalysisModule(eventHistMod);
   // analyzer.addProductionModule(triggerMod);
   //analyzer.addAnalysisModule(leptonEfficiency);
-  //analyzer.addAnalysisModule(leptonJetEfficiency);
+  analyzer.addAnalysisModule(leptonJetEfficiency);
   //analyzer.addAnalysisModule(massRecoEfficiency200);
   //analyzer.addAnalysisModule(massRecoEfficiency500);
   //analyzer.addAnalysisModule(massRecoEfficiency800);
