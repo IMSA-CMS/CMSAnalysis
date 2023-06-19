@@ -22,6 +22,7 @@ class RootFileInput : public Input
 		std::vector<HistVariable> histVariables;
 		std::string fileSource;
 		TFile* file;
+
 };
 
 

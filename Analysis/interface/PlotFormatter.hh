@@ -7,6 +7,7 @@
 #include "Channel.hh"
 #include <memory>
 #include "HistVariable.hh"
+#include "FullAnalysis.hh"
 #include "Process.hh"
 #include <vector>
 #include "TH1.h"
@@ -30,7 +31,7 @@ class PlotFormatter
         //Single stacked histogram
         TCanvas* simpleStackHist(std::shared_ptr<Channel> processes, std::string histvariable, TString xAxisTitle, TString yAxisTitle);
         //Complete Signal/Background plot
-        TCanvas* completePlot(std::shared_ptr<Channel> processes, std::string histvariable, TString xAxisTitle, TString yAxisTitle);
+        TCanvas* completePlot(std::shared_ptr<FullAnalysis> analysis, std::string histvariable, TString xAxisTitle, TString yAxisTitle, double massTarget, std::string channelName = "");
         //Formats the canvas based on the margins
         TCanvas* makeFormat(int w, int h, float t, float b, float l, float r);
         //Writes text and draws logo based on the margins
