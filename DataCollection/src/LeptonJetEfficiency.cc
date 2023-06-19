@@ -15,6 +15,9 @@ LeptonJetEfficiency::LeptonJetEfficiency(const std::shared_ptr<LeptonJetReconstr
 void LeptonJetEfficiency::doCounters()
 {
     auto recoLeptonJets = lepRecoMod->getLeptonJets();
+    double muonCount = 0;
+    double electronCount = 0;
+    double pairMatch = 0;
     incrementCounter("Number of Reconstructed Jets", recoLeptonJets.size());
     if (recoLeptonJets.size() > 1) 
     {
@@ -28,7 +31,43 @@ void LeptonJetEfficiency::doCounters()
     {
         incrementCounter("Double Jet Events", 1);
     }
+     
+    for (auto leptonJet : recoLeptonJets)
+    {
+        for (auto particle : leptonJet.getParticles())
+        {
+            if (particle.getType() == ParticleType::electron())
+            {
+                electronCount++;
+            }
+            
+            if (particle.getType() == ParticleType::muon())
+            {
+                muonCount++;
+            }
+            
+        }
+            //exactly one for both
+        if (electronCount == 1 && muonCount == 1)
+        {
+            for (auto pair : lepMatchMod->getMatchingPairs())
+            {
+                if (pair.second == leptonJet)
+                {
+                    incrementCounter("Fake pair match", 1);
+                    std::cout << "electon count " << electronCount << "\n";
+                    std::cout << "muon count " << muonCount << "\n\n";
+                }
+            }
+            incrementCounter("Number of fake jets", 1);
+        }
+
+        
+
+    }
+
     
+
     auto matchingPairs = lepMatchMod->getMatchingPairs();
     incrementCounter("Number of matched jets", matchingPairs.size());
 
