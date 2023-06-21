@@ -159,6 +159,8 @@ void HiggsBackgroundPlan::initialize()
     // eventHistMod->addHistogram(muonPositiveNegativeInvMassHist);
 
     analyzer.addProductionModule(metMod);
+    //Changed because EventModule inherits from ProductionModule now
+    analyzer.addProductionModule(eventMod);
 
 
     // analyzer.addFilterModule(make_shared<FilterModule>(bJetFilter));
@@ -167,7 +169,7 @@ void HiggsBackgroundPlan::initialize()
     analyzer.addFilterModule(recoDecayFilterMod);
 
     //analyzer.addProductionModule(matchMod);
-    analyzer.addAnalysisModule(eventMod);
+    //analyzer.addAnalysisModule(eventMod);
     analyzer.addAnalysisModule(eventHistMod);    
     analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
     //analyzer.addAnalysisModule(eventDump);
