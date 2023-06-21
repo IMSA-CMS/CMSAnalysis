@@ -1,20 +1,20 @@
-#include "CMSAnalysis/Modules/interface/LocalEventInputModule.hh"
+#include "CMSAnalysis/Modules/interface/LocalEventEventInput.hh"
 
 #include "CMSAnalysis/Modules/interface/Module.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "FWCore/Common/interface/TriggerNames.h"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/Lepton.hh"
 #include "CMSAnalysis/Utility/interface/Event.hh"
 
-LocalEventInputModule::LocalEventInputModule(const Event* event1)
+LocalEventEventInput::LocalEventEventInput(const Event* event1)
 {
     event = event1;
 }
 
-ParticleCollection<Lepton> LocalEventInputModule::getLeptons(RecoLevel level) const
+ParticleCollection<Lepton> LocalEventEventInput::getLeptons(RecoLevel level) const
 {
     ParticleCollection<Lepton> leptons;
     auto electrons = getParticles(level, ParticleType::electron()).getParticles();
@@ -30,7 +30,7 @@ ParticleCollection<Lepton> LocalEventInputModule::getLeptons(RecoLevel level) co
     return leptons;
 }
 
-ParticleCollection<Particle> LocalEventInputModule::getParticles(RecoLevel level, const ParticleType& particleType) const
+ParticleCollection<Particle> LocalEventEventInput::getParticles(RecoLevel level, const ParticleType& particleType) const
 {
     ParticleCollection<Particle> particleList;
     auto particles = event->getParticles().getParticles();
@@ -45,37 +45,37 @@ ParticleCollection<Particle> LocalEventInputModule::getParticles(RecoLevel level
 }
 
 /* TODO: getJets */
-ParticleCollection<Particle> LocalEventInputModule::getJets(RecoLevel level) const
+ParticleCollection<Particle> LocalEventEventInput::getJets(RecoLevel level) const
 {
     return event->getJets();
 }
 
-int LocalEventInputModule::getNumPileUpInteractions() const
+int LocalEventEventInput::getNumPileUpInteractions() const
 {
     throw std::runtime_error("GenSimEventFile has no implementation of getNumPileUpInteractions");
 }
 
-double LocalEventInputModule::getMET() const
+double LocalEventEventInput::getMET() const
 {
     return event->getMET();
 } 
 
-std::vector<bool> LocalEventInputModule::getTriggerResults(std::string subProcess) const
+std::vector<bool> LocalEventEventInput::getTriggerResults(std::string subProcess) const
 {
     throw std::runtime_error("calling getTrigger___() on a local event doesn't make sense");
 }
 
-std::vector<std::string> LocalEventInputModule::getTriggerNames(std::string subProcess) const
+std::vector<std::string> LocalEventEventInput::getTriggerNames(std::string subProcess) const
 {
     throw std::runtime_error("calling getTrigger___() on a local event doesn't make sense");
 }
 
-bool LocalEventInputModule::checkTrigger(std::string triggerName, std::string subProcess) const
+bool LocalEventEventInput::checkTrigger(std::string triggerName, std::string subProcess) const
 {
     throw std::runtime_error("calling getTrigger___() on a local event doesn't make sense");
 }
 
-ParticleCollection<Particle> LocalEventInputModule::getSpecial(std::string key) const
+ParticleCollection<Particle> LocalEventEventInput::getSpecial(std::string key) const
 {
     return event->getSpecial(key);
 }

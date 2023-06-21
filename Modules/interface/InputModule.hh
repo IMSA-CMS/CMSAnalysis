@@ -17,10 +17,10 @@ class TFile;
 class EventLoader;
 class Selector;
 
-class InputModule
+class EventInput
 {
 public:
-    virtual ~InputModule(){}
+    virtual ~EventInput(){}
 
     enum class RecoLevel
     {

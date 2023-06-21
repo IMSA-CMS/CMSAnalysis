@@ -9,7 +9,7 @@
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/FWLite/interface/Event.h"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 
 GenSimEventDumpModule::GenSimEventDumpModule(int inumOfEvents):
@@ -30,7 +30,7 @@ bool GenSimEventDumpModule::process()
   
   if(counter < numOfEvents || numOfEvents == -1)
   {
-    auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::none());
+    auto genParticles = getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::none());
     my_file.open("GenSimEventDump.txt", std::ios::app);
     printGenSimParticleCollection(genParticles, my_file);
     my_file.close();

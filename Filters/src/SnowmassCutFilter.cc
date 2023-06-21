@@ -1,9 +1,9 @@
 #include "CMSAnalysis/Filters/interface/SnowmassCutFilter.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 
-std::string SnowmassCutFilter::getFilterString(const InputModule* inputMod) const
+std::string SnowmassCutFilter::getFilterString(const EventInput* inputMod) const
 {
-    auto leptons = inputMod->getLeptons(InputModule::RecoLevel::Reco).getParticles();
+    auto leptons = inputMod->getLeptons(EventInput::RecoLevel::Reco).getParticles();
     for (unsigned i = 0; i < leptons.size(); ++i)
     {
         for (unsigned j = i + 1; j < leptons.size(); ++j)

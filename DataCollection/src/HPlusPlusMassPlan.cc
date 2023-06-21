@@ -60,7 +60,7 @@ void HPlusPlusMassPlan::initialize()
   auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod);
   auto signFlip = make_shared<SignFlipModule>(matchMod);
 
-  auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(InputModule::RecoLevel::Reco, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
+  auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(EventInput::RecoLevel::Reco, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
   //auto genSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
   // Go up to 2000 - Andy, 09/02 - and make more bins. Modifications also made for picking files
   //auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "Reco Same Sign Invariant Mass", 1000, 0, 2000);
@@ -68,10 +68,10 @@ void HPlusPlusMassPlan::initialize()
   // auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
   // 
   auto genSimSameSignInvMassHist = make_shared<HistogramPrototype1DGeneral>("GenSim Same Sign Invariant Mass", 100, 0, 1000,
-[](const InputModule* input){return std::vector<double>{input -> getParticles(InputModule::RecoLevel::GenSim).calculateSameSignInvariantMass()};});
+[](const EventInput* input){return std::vector<double>{input -> getParticles(EventInput::RecoLevel::GenSim).calculateSameSignInvariantMass()};});
 
   auto recoSameSignInvMassHist = make_shared<HistogramPrototype1DGeneral>("Reco Same Sign Invariant Mass", 100, 0, 1000,
-  [](const InputModule* input){return std::vector<double>{input -> getParticles(InputModule::RecoLevel::Reco).calculateSameSignInvariantMass()};});
+  [](const EventInput* input){return std::vector<double>{input -> getParticles(EventInput::RecoLevel::Reco).calculateSameSignInvariantMass()};});
   // auto genSimHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
   // auto recoHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, false, "Reco H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
   // auto genSimHMinusMinusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H-- Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, -9900041);

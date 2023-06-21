@@ -22,7 +22,7 @@ bool GenSimParticleModule::process()
 
   //Get Events Tree and create handle for GEN
 
-  auto rawGenParticles = getInput()->getLeptons(InputModule::RecoLevel::GenSim).getParticles();
+  auto rawGenParticles = getInput()->getLeptons(EventInput::RecoLevel::GenSim).getParticles();
  
   //Begin GEN looping
   //Loop through Particle list&

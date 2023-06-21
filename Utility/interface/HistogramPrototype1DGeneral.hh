@@ -10,10 +10,10 @@
 class HistogramPrototype1DGeneral: public HistogramPrototype1D
 {
   public:
-    HistogramPrototype1DGeneral(const std::string& iname, int inBins, double iminimum, double imaximum, std::function<std::vector<double>(const InputModule*)>function);
+    HistogramPrototype1DGeneral(const std::string& iname, int inBins, double iminimum, double imaximum, std::function<std::vector<double>(const EventInput*)>function);
     virtual std::vector<double> value() const override {return vecOne(getInput());}
   private:
-    std::function<std::vector<double>(const InputModule*)>vecOne;
+    std::function<std::vector<double>(const EventInput*)>vecOne;
     
 
 };

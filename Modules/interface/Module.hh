@@ -12,7 +12,7 @@ namespace edm
   class EventBase;
 }
 
-class InputModule;
+class EventInput;
 
 // The base class for all modules used in the Analyzer framework
 class Module
@@ -37,8 +37,8 @@ public:
   int getEventCount(const std::string massBin) {return eventCount[massBin];}
 
   bool processEvent();
-  virtual void setInput(const InputModule* iInput) {input = iInput;}
-  const InputModule* getInput() const {return input;}
+  virtual void setInput(const EventInput* iInput) {input = iInput;}
+  const EventInput* getInput() const {return input;}
 
   // Writes text to screen and to Root file
   // par is the text itself while name is the name of the variable in the Root file
@@ -60,7 +60,7 @@ protected:
 private:
   static std::unordered_map<std::string, double> parameters;
   std::unordered_map<std::string, int> eventCount; 
-  const InputModule* input = nullptr;
+  const EventInput* input = nullptr;
 
 };
 

@@ -18,11 +18,11 @@
 #include "CMSAnalysis/Modules/interface/Module.hh"
 #include "CMSAnalysis/Utility/interface/TDisplayText.h"
 #include "CMSAnalysis/DataCollection/interface/ProcessDictionary.hh"
-#include "CMSAnalysis/Modules/interface/AnalyzerInputModule.hh"
+#include "CMSAnalysis/Modules/interface/AnalyzerEventInput.hh"
 
 Analyzer::Analyzer() : 
 eventInterface(nullptr),
-input(new AnalyzerInputModule(&eventInterface))
+input(new AnalyzerEventInput(&eventInterface))
 {
 }
 

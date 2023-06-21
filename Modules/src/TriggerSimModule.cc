@@ -204,7 +204,7 @@ bool TriggerSimModule::checkTrigger(EnumTriggers name)
 };
 
 // For use within a trigger object [Defunct]
-std::map<std::string, bool> TriggerSimModule::checkEvent(std::shared_ptr<InputModule> input)
+std::map<std::string, bool> TriggerSimModule::checkEvent(std::shared_ptr<EventInput> input)
 {
   // // Get the triggers regarding the event
   // const edm::TriggerResults triggerResults = input->getTriggerResults(subProcess);

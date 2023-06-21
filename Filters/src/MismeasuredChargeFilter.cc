@@ -3,10 +3,10 @@
 MismeasuredChargeFilter::MismeasuredChargeFilter()
 {}
 
-std::string MismeasuredChargeFilter::getFilterString(const InputModule* inputMod) const
+std::string MismeasuredChargeFilter::getFilterString(const EventInput* inputMod) const
 {
-	auto recoParts = inputMod->getParticles(InputModule::RecoLevel::Reco).getParticles();
-	auto genParts = inputMod->getParticles(InputModule::RecoLevel::GenSim).getParticles();
+	auto recoParts = inputMod->getParticles(EventInput::RecoLevel::Reco).getParticles();
+	auto genParts = inputMod->getParticles(EventInput::RecoLevel::GenSim).getParticles();
 	bool MismeasuredCharge = false;
 	for (auto &recoPart : recoParts)
 	{
