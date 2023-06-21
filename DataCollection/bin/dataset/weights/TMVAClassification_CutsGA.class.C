@@ -10,10 +10,10 @@ Method         : Cuts::CutsGA
 TMVA Release   : 4.2.1         [262657]
 ROOT Release   : 6.24/07       [399367]
 Creator        : kzhang1
-Date           : Tue Nov 29 15:40:01 2022
+Date           : Mon Apr  3 23:23:47 2023
 Host           : Linux cmsbuild02.cern.ch 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
 Dir            : /uscms/homes/k/kzhang1/practice/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin
-Training events: 4302
+Training events: 60497
 Analysis type  : [Classification]
 
 
@@ -34,27 +34,31 @@ CutRangeMin[0]: "-1.000000e+01" [Minimum of allowed cut range (set per variable)
     CutRangeMin[2]: "-1.000000e+00"
     CutRangeMin[3]: "-1.000000e+00"
     CutRangeMin[4]: "-1.000000e+00"
+    CutRangeMin[5]: "-1.000000e+00"
 CutRangeMax[0]: "1.000000e+01" [Maximum of allowed cut range (set per variable)]
     CutRangeMax[1]: "-1.000000e+00"
     CutRangeMax[2]: "-1.000000e+00"
     CutRangeMax[3]: "-1.000000e+00"
     CutRangeMax[4]: "-1.000000e+00"
+    CutRangeMax[5]: "-1.000000e+00"
 VarProp[0]: "NotEnforced" [Categorisation of cuts]
     VarProp[1]: "FMax"
     VarProp[2]: "NotEnforced"
     VarProp[3]: "NotEnforced"
     VarProp[4]: "NotEnforced"
+    VarProp[5]: "NotEnforced"
 ##
 
 
 #VAR -*-*-*-*-*-*-*-*-*-*-*-* variables *-*-*-*-*-*-*-*-*-*-*-*-
 
-NVar 5
-pt                            pt                            pt                            Transverse Momentum                                             'F'    [8.94119262695,2084.13500977]
+NVar 6
+leadingPt                     leadingPt                     leadingPt                     Leading Lepton Transverse Momentum                                  'F'    [5.0726776123,21324.2890625]
 nParticles                    nParticles                    nParticles                    Number of Particles                                             'F'    [2,5]
-eta                           eta                           eta                           Pseudorapidity                                                  'F'    [-3.1376721859,3.12934875488]
-phi                           phi                           phi                           Azimuthal Angle                                                 'F'    [-3.13815546036,3.13753390312]
-deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.191068515182]
+eta                           eta                           eta                           Pseudorapidity                                                  'F'    [-2.51045441628,2.50291919708]
+phi                           phi                           phi                           Azimuthal Angle                                                 'F'    [-3.14158964157,3.14142203331]
+deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.876891136169]
+sumPt                         sumPt                         sumPt                         Total Transverse Momentum                                       'F'    [10.112449646,21441.2851562]
 NSpec 0
 
 
@@ -98,10 +102,10 @@ class ReadCutsGA : public IClassifierReader {
    ReadCutsGA( std::vector<std::string>& theInputVars )
       : IClassifierReader(),
         fClassName( "ReadCutsGA" ),
-        fNvars( 5 )
+        fNvars( 6 )
    {
       // the training input variables
-      const char* inputVars[] = { "pt", "nParticles", "eta", "phi", "deltaR" };
+      const char* inputVars[] = { "leadingPt", "nParticles", "eta", "phi", "deltaR", "sumPt" };
 
       // sanity checks
       if (theInputVars.size() <= 0) {
@@ -135,6 +139,8 @@ class ReadCutsGA : public IClassifierReader {
       fVmax[3] = 0;
       fVmin[4] = 0;
       fVmax[4] = 0;
+      fVmin[5] = 0;
+      fVmax[5] = 0;
 
       // initialize input variable types
       fType[0] = 'F';
@@ -142,6 +148,7 @@ class ReadCutsGA : public IClassifierReader {
       fType[2] = 'F';
       fType[3] = 'F';
       fType[4] = 'F';
+      fType[5] = 'F';
 
       // initialize constants
       Initialize();
@@ -171,15 +178,15 @@ class ReadCutsGA : public IClassifierReader {
    char   GetType( int ivar ) const { return fType[ivar]; }
 
    // normalisation of input variables
-   double fVmin[5];
-   double fVmax[5];
+   double fVmin[6];
+   double fVmax[6];
    double NormVariable( double x, double xmin, double xmax ) const {
       // normalise to output range: [-1, 1]
       return 2*(x - xmin)/(xmax - xmin) - 1.0;
    }
 
    // type of input variable: 'F' or 'I'
-   char   fType[5];
+   char   fType[6];
 
    // initialize internal variables
    void Initialize();
