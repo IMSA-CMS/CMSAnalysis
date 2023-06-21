@@ -68,7 +68,7 @@ bool FileStripModule::process()
 		elecCharge.push_back(electron.getCharge());
 		elecPt.push_back(electron.getPt());
 		auto l_electron = Lepton(electron);
-		elecReliso.push_back(l_electron.getIsolation());
+		//elecReliso.push_back(l_electron.getIsolation()); GAVIN CHANGED
 		int idPass = (l_electron.isTight() & 1) | (l_electron.isMedium() & 2) | (l_electron.isLoose() & 4);
 		elecIDPass.push_back(idPass);
         }
@@ -85,7 +85,7 @@ bool FileStripModule::process()
 		 muonCharge.push_back(muon.getCharge());
 		 muonPt.push_back(muon.getPt());
 		 auto l_muon = Lepton(muon);
-		 muonReliso.push_back(l_muon.getIsolation());
+		 //muonReliso.push_back(l_muon.getIsolation()); GAVIN CHANGED
 		 int idPass = (l_muon.isTight() & 1) | (l_muon.isMedium() & 2) | (l_muon.isLoose() & 4);
 		 muonIDPass.push_back(idPass);
 	}

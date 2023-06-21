@@ -19,6 +19,7 @@ std::vector<bool> NanoAODEventFile::getTriggerResults(std::string subProcess) co
 
     for(auto& trigger : triggers)
     {
+        // std::cout << "Is this for loop working" << "\n";
         v_results.push_back(*(trigger.second));
     }
 
@@ -39,6 +40,8 @@ std::vector<std::string> NanoAODEventFile::getTriggerNames(std::string subProces
 
 bool NanoAODEventFile::checkTrigger(std::string triggerName, std::string subProcess) const
 {
+    // add cout statement to check, it in fact does pass through this code
+    // std::cout << "Does this Trigger work?" << "\n";
     return *(triggers.find(triggerName)->second);
 }
 
@@ -89,10 +92,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_phi", "GenPart_phi"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_mass", "GenPart_mass"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pt", "GenPart_pt"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_d1", "Generator_id1"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_d2", "Generator_id2"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_m1", "GenPart_genPartIdxMother"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_m2", "GenVisTau_genPartIdxMother"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pileup", "Pileup_nTrueInt")
     };
 
@@ -111,16 +111,18 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     //initializing triggers from header file
     std::ifstream triggerNameFile("betterValidTriggers.txt");
 
-    if(!triggerNameFile)
+    if(triggerNameFile)
     {
         std::string nameoftrigger;
 
         while(getline(triggerNameFile, nameoftrigger))
         {
+            std::cout << nameoftrigger << "Does this work?" << "\n";
             if(tree->GetBranch(nameoftrigger.c_str()))
             {
                 TTreeReaderValue<Bool_t> intermediate(treeReader, nameoftrigger.c_str());
                 triggers.emplace(nameoftrigger, intermediate);
+                std::cout << nameoftrigger <<"\n";
             }
         }
     }    
@@ -130,42 +132,39 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
 }
 
 void NanoAODEventFile::nextEvent()
-{
+{ 
     treeReader.Next(); 
     setEventCount(getEventCount() + 1);
 
-    if(getVariable<UInt_t>("gen_size") > 0)
+    if(variables.find("gen_size") != variables.end() && getVariable<UInt_t>("gen_size") > 0)
     {
         genSimParticles.clear();
         genSimParticles.reserve(getVariable<UInt_t>("gen_size") );
 
+        //construct daughters from mothers
+        int mothersIndex;
+        std::vector<std::vector<Int_t>> daughtersVectors((int)getVariable<UInt_t>("gen_size"), std::vector<int>(0));
+        
+        for (unsigned j = 0; j < getVariable<UInt_t>("gen_size"); j++)
+        {
+            mothersIndex = getArrayElement<Int_t>("gen_m1", j);
+            if (mothersIndex < (int)getVariable<UInt_t>("gen_size") && mothersIndex > -1)
+            {
+                daughtersVectors[mothersIndex].push_back(j);
+            }
+        }
         for (unsigned i = 0; i < getVariable<UInt_t>("gen_size") ; i++)
         {
-            int charge = -1;
-            if (getArrayElement<Int_t>("gen_pid", i) < 0)
-            {
-                charge = 1;
-            }
-            if (getArrayElement<Int_t>("gen_pid", i) == 21 || getArrayElement<Int_t>("gen_pid", i) == 22)
-            {
-                charge = 0;
-            }
             std::vector<const GenSimParticle*> daughterCollectionVector{};
-            if (i < getArraySize<Int_t>("gen_d1"))
+            for (auto index : daughtersVectors[i])
             {
-                daughterCollectionVector.push_back(&genSimParticles[getArrayElement<Int_t>("gen_d2", i)]);
-            } 
-            if (i < getArraySize<Int_t>("gen_d2"))
-            {
-                daughterCollectionVector.push_back(&genSimParticles[getArrayElement<Int_t>("gen_d2", i)]);
-            } 
+                daughterCollectionVector.push_back(&genSimParticles[index]);
+            }
             GenSimParticle *mother = nullptr;
             if(getArrayElement<Int_t>("gen_m1", i) != -1) mother = &genSimParticles[getArrayElement<Int_t>("gen_m1", i)];
             genSimParticles.push_back(GenSimParticle(reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(
                 getArrayElement<Float_t>("gen_pt", i),getArrayElement<Float_t>("gen_eta", i), 
-                getArrayElement<Float_t>("gen_phi", i), getArrayElement<Float_t>("gen_mass", i))),
-                charge, 
-                Particle::identifyType(getArrayElement<Int_t>("gen_pid", i)), 
+                getArrayElement<Float_t>("gen_phi", i), getArrayElement<Float_t>("gen_mass", i))), 
                 getArrayElement<Int_t>("gen_pid", i),
                 mother,
                 daughterCollectionVector, 
@@ -205,7 +204,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("elec_pt", i),
         getArrayElement<Float_t>("elec_eta", i), getArrayElement<Float_t>("elec_phi", i), getArrayElement<Float_t>("elec_mass", i))),
         charge, ParticleType::electron(), fit);
-        particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i));
+        //particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i)); GAVIN CHANGED
         particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
         particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
         recoParticles.addParticle(particle);
@@ -234,7 +233,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("muon_pt", i),
         getArrayElement<Float_t>("muon_eta", i), getArrayElement<Float_t>("muon_phi", i), getArrayElement<Float_t>("muon_mass", i))),
         charge, ParticleType::muon(), fit);
-        particle.addInfo("Isolation", getArrayElement<Float_t>("muon_reliso", i));
+        //particle.addInfo("Isolation", getArrayElement<Float_t>("muon_reliso", i)); GAVIN CHANGED
         particle.addInfo("dxy", getArrayElement<Float_t>("muon_dxy", i));
         particle.addInfo("dz", getArrayElement<Float_t>("muon_dz", i));
         recoParticles.addParticle(particle);
