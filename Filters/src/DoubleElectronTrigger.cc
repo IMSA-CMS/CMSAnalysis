@@ -4,9 +4,9 @@ DoubleElectronTrigger::DoubleElectronTrigger(double iPTCutoff, double iSecondPTC
                                                                                          pTCutoff(iPTCutoff),
                                                                                          secondPTCutoff(iSecondPTCutoff){};
 
-bool DoubleElectronTrigger::checkTrigger(const InputModule *input)
+bool DoubleElectronTrigger::checkTrigger(const EventInput *input)
 {
-  auto particles = input->getParticles(InputModule::RecoLevel::Reco, ParticleType::electron());
+  auto particles = input->getParticles(EventInput::RecoLevel::Reco, ParticleType::electron());
 
   // If there aren't enough electrons, then automatically fail the trigger
   if (particles.getNumParticles() < 2)

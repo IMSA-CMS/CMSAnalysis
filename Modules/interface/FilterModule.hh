@@ -5,7 +5,7 @@
 #include <map>
 
 #include "Module.hh"
-#include "InputModule.hh"
+#include "EventInput.hh"
 
 namespace edm
 {

@@ -4,18 +4,18 @@
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "CMSAnalysis/Utility/interface/Lepton.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/ParticleType.hh"
 #include "CMSAnalysis/Utility/interface/Event.hh"
 
-void HiggsSelector::selectParticles(const InputModule* input, Event& event) const
+void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
 {
     std::vector<Particle> selected;
     // std::vector<Particle> posElecs(0);
     // std::vector<Particle> negElecs(0);
     // std::vector<Particle> posMuons(0);
     // std::vector<Particle> negMuons(0);
-    auto particles = input->getLeptons(InputModule::RecoLevel::Reco).getParticles();
+    auto particles = input->getLeptons(EventInput::RecoLevel::Reco).getParticles();
 
     // int electronCount = 0;
     // int posMuonCount = 0;

@@ -1,13 +1,13 @@
-// #include "CMSAnalysis/DataCollection/interface/InputModule.hh"
+// #include "CMSAnalysis/DataCollection/interface/EventInput.hh"
 // #include "CMSAnalysis/DataCollection/interface/ParticleCollection.hh"
 // #include "CMSAnalysis/DataCollection/interface/EventLoader.hh"
 // #include "CMSAnalysis/DataCollection/interface/Selector.hh"
 
-// InputModule::InputModule(const EventLoader *iEventLoader) : eventLoader(iEventLoader)
+// EventInput::EventInput(const EventLoader *iEventLoader) : eventLoader(iEventLoader)
 // {
 // }
 
-// ParticleCollection InputModule::getLeptons(RecoLevel level) const
+// ParticleCollection EventInput::getLeptons(RecoLevel level) const
 // {
 //     ParticleCollection leptons;
 //     auto electrons = getParticles(level, Particle::Type::Electron).getParticles();
@@ -29,7 +29,7 @@
 //     return leptons;
 // }
 
-// ParticleCollection InputModule::getParticles(RecoLevel level, Particle::Type particleType,  std::shared_ptr<Selector> selector) const
+// ParticleCollection EventInput::getParticles(RecoLevel level, Particle::Type particleType,  std::shared_ptr<Selector> selector) const
 // {
 //     ParticleCollection particleList;
 //     if (level == RecoLevel::GenSim)
@@ -64,7 +64,7 @@
 // }
 
 // /* TODO: getJets */
-// ParticleCollection InputModule::getJets(RecoLevel level, double pTcut) const
+// ParticleCollection EventInput::getJets(RecoLevel level, double pTcut) const
 // {
 //     ParticleCollection particleList;
 //     if (level == RecoLevel::GenSim)
@@ -86,21 +86,21 @@
 // }
 
 // /*
-// std::vector<PileupSummaryInfo> InputModule::getPileupInfo() const
+// std::vector<PileupSummaryInfo> EventInput::getPileupInfo() const
 // {
 //     return eventLoader->getPileupInfo();
 // }
 // */
 
-// double InputModule::getMET() const
+// double EventInput::getMET() const
 // {
 //     return eventLoader->getFile()->getMET();
 // }       
-// std::vector<bool> InputModule::getTriggerResults(std::string subProcess) const
+// std::vector<bool> EventInput::getTriggerResults(std::string subProcess) const
 // {
 //     return eventLoader->getFile()->getTriggerResults(subProcess);
 // }
-// std::vector<std::string> InputModule::getTriggerNames(std::string subProcess) const
+// std::vector<std::string> EventInput::getTriggerNames(std::string subProcess) const
 // {
 //     return eventLoader->getFile()->getTriggerNames(subProcess);
 // }

@@ -3,7 +3,7 @@
 
 #include "Module.hh"
 
-#include "InputModule.hh"
+#include "EventInput.hh"
 
 // This class is used for intermediate, "stepping-stone" modules that perform
 // tasks that are used by the AnalysisModules (or other ProductionModules).
