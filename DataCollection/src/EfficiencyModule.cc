@@ -1,39 +1,71 @@
-#include "CMSAnalysis/DataCollection/interface/EfficiencyModule.hh"
+#include <iostream>
 
-void EfficiencyModule::finalize()
+#include "CMSAnalysis/DataCollection/interface/MatchingModule.hh"
+#include "CMSAnalysis/DataCollection/interface/HPlusPlusEfficiency.hh"
+
+HPlusPlusEfficiency::HPlusPlusEfficiency(const std::shared_ptr<MatchingModule> imatchModule):
+  EfficiencyModule(),
+  matchModule(imatchModule)
+  ,genSimMuons(0)
+  ,genSimElectrons(0)
+  ,genSimHPlusPlus(0)
 {
-    for(auto& pair : counters)
+}
+
+bool LeptonEfficiency::process()
+{
+  auto genSim = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
+
+  
+
+  for(const auto &particle : genSim.getParticles())
+  {
+
+    auto type = particle.getType();
+    if(type == ParticleType::electron())
+	  {
+	    genSimElectrons++;
+
+	  }
+    else if(type == ParticleType::muon())
+	  {
+	    genSimMuons++;
+	  }
+    else if(type == ParticleType::leftDoublyHiggs() || type == ParticleType::rightDoublyHiggs())
+      {
+        genSimHPlusPlus++;
+      }
+  }
+
+  const MatchingPairCollection& matched = matchModule->getMatchingBestPairs();
+
+  auto particles = matched.getRecoParticles().getParticles();
+  for(const auto &particle : particles)
+  {
+    if(particle.isNotNull())
     {
-        std::cout<<pair.first<<": "<<getCounter(pair.first)<<"\n";
-        std::cout<<pair.first<<" efficiency : "<<getEfficiency(pair.first)<<"\n";
+      auto type = particle.getType();
+      if(type == ParticleType::electron())
+      {
+        recoElectronsList.add(particle);
+      }
+    else if(type == ParticleType::muon())
+      {
+        recoMuonsList.add(particle);
+      }
     }
+  }
+
+  
+
+  return true;
 }
 
-void EfficiencyModule::writeAll() {}
-
-bool EfficiencyModule::process ()
+void LeptonEfficiency::finalize()
 {
-    doCounters();
-    ++total;
-    return true;
-}
+  std::string muonOutputString = std::to_string(recoMuons/(double)genSimMuons);
+  writeText(muonOutputString, "Muon Efficiency");
 
-void EfficiencyModule::incrementCounter(std::string name, double increment)
-{
-    if(counters.find(name) == counters.end())
-    {
-        double newCounter = 0;
-        counters.insert({name,newCounter});
-    }
-    counters[name] += increment;
-}
-
-double EfficiencyModule::getCounter(std::string name) const
-{
-    return counters.at(name);
-}
-
-double EfficiencyModule::getEfficiency(std::string name) const
-{
-    return getCounter(name)/total;
+  std::string electronOutputString = std::to_string(recoElectrons/(double)genSimElectrons);
+  writeText(electronOutputString, "Electron Efficiency");
 }
