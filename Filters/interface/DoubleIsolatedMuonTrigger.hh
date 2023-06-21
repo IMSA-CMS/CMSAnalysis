@@ -10,7 +10,7 @@ class DoubleIsolatedMuonTrigger : public RecoTrigger
     DoubleIsolatedMuonTrigger(const double iPTCutoff = 17, const double iSecondPTCutoff = 8);
   
   protected:
-    bool checkTrigger(const InputModule* input) override;
+    bool checkTrigger(const EventInput* input) override;
 
   private:
     const double pTCutoff;

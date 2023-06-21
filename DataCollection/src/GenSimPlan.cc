@@ -48,7 +48,7 @@ void GenSimPlan::initialize()
     auto dpSelector = make_shared<DarkPhotonGenSimSelector>();
     auto hppSelector = make_shared<HPlusPlusGenSimSelector>();
     auto metMod = make_shared<METModule>();
-    auto gammahist = make_shared<GammaHistogram>(InputModule::RecoLevel::GenSim, "Gamma", 100, 0, 1000);
+    auto gammahist = make_shared<GammaHistogram>(EventInput::RecoLevel::GenSim, "Gamma", 100, 0, 1000);
     auto eventDump = make_shared<GenSimEventDumpModule>();
     
     auto histMod = make_shared<HistogramOutputModule>();
@@ -59,7 +59,7 @@ void GenSimPlan::initialize()
     //eventMod->addSelector(dpSelector);
     eventMod->addSelector(hppSelector);
     auto eventHistMod = eventMod->getHistogramModule();
-    //auto hppFilter = make_shared<HPlusPlusDecayFilter>(InputModule::RecoLevel::GenSim);
+    //auto hppFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::GenSim);
 
     //analyzer.addFilterModule(hppFilter);
     analyzer.addProductionModule(metMod);

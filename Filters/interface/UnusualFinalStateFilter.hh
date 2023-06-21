@@ -11,7 +11,7 @@ class UnusualFinalStateFilter : public Filter
   public:
     UnusualFinalStateFilter();
   protected:
-    virtual std::string getFilterString(const InputModule* inputMod) const override;
+    virtual std::string getFilterString(const EventInput* inputMod) const override;
   private:
 };
 

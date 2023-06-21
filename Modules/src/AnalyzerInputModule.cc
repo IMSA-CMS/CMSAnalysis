@@ -1,5 +1,5 @@
 #include "CMSAnalysis/Modules/interface/AnalyzerInputModule.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include "CMSAnalysis/DataCollection/interface/EventLoader.hh"
 #include "CMSAnalysis/Filters/interface/Selector.hh"

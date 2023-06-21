@@ -9,7 +9,7 @@ public:
   PileupFilter(double loCut, double hiCut);
 
 protected:
-  virtual std::string getFilterString(const InputModule* inputMod) const override;
+  virtual std::string getFilterString(const EventInput* inputMod) const override;
 
 private:
   double lowCutoff;

@@ -17,7 +17,7 @@ bool HistogramPrototype::shouldDraw() const
   return true;
 }
 
-void HistogramPrototype::setInput(const InputModule* iInput)
+void HistogramPrototype::setInput(const EventInput* iInput)
 {
   input = iInput;
 }

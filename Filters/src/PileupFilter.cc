@@ -1,5 +1,5 @@
 #include "CMSAnalysis/Filters/interface/PileupFilter.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 
 #include "DataFormats/FWLite/interface/Event.h"
 #include "DataFormats/Common/interface/Handle.h"
@@ -12,7 +12,7 @@ PileupFilter::PileupFilter(double loCut, double hiCut) :
   highCutoff(hiCut)
 {}
 
-std::string PileupFilter::getFilterString(const InputModule* inputMod) const
+std::string PileupFilter::getFilterString(const EventInput* inputMod) const
 {
   int interactions = inputMod ->getNumPileUpInteractions();
 

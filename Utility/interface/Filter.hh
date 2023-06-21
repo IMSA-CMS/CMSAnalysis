@@ -3,11 +3,11 @@
 
 #include <string>
 
-class InputModule;
+class EventInput;
 class Filter
 {
     public:
-    virtual std::string getFilterString(const InputModule* input) const = 0;
+    virtual std::string getFilterString(const EventInput* input) const = 0;
     virtual ~Filter(){}
 };
 

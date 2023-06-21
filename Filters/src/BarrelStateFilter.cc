@@ -3,7 +3,7 @@
 
 BarrelStateFilter::BarrelStateFilter(const std::shared_ptr<MatchingModule> matchingModule) : matchMod(matchingModule){};
 
-std::string BarrelStateFilter::getFilterString(const InputModule* inputMod) const // const edm::EventBase& event)
+std::string BarrelStateFilter::getFilterString(const EventInput* inputMod) const // const edm::EventBase& event)
 {
   if (matchMod->getMatchingBestPairs().getGenParticles().isBB())
   {
