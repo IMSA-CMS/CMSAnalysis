@@ -7,7 +7,7 @@
 #include <vector>
 #include <memory>
 
-#include "CMSAnalysis/Modules/interface/AnalysisModule.hh"
+#include "CMSAnalysis/Modules/interface/ProductionModule.hh"
 #include "CMSAnalysis/Utility/interface/Event.hh"
 #include "CMSAnalysis/Filters/interface/Selector.hh"
 #include "CMSAnalysis/Filters/interface/Cut.hh"
@@ -18,7 +18,7 @@
 // EventModule allows an Analyzer to select events and apply cuts.
 // Additionally, contains a HistogramOutputModule to generate basic histograms for events.
 // Add as an AnalysisModule in a Plan
-class EventModule : public AnalysisModule
+class EventModule : public ProductionModule
 {
     public:
         EventModule();
