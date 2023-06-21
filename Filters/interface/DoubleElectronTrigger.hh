@@ -12,7 +12,7 @@ class DoubleElectronTrigger : public RecoTrigger
     DoubleElectronTrigger(const double iPTCutoff = 25, const double iSecondPTCutoff = 25);
   
   protected:
-    bool checkTrigger(const InputModule* input) override;
+    bool checkTrigger(const EventInput* input) override;
 
   private:
     const double pTCutoff;

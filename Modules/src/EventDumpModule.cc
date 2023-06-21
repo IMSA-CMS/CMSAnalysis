@@ -9,7 +9,7 @@
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/FWLite/interface/Event.h"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 
 EventDumpModule::EventDumpModule( bool iGenSim, bool iReco, int inumOfEvents):
@@ -34,7 +34,7 @@ bool EventDumpModule::process()
     std::ofstream my_file;
     if(genSim)
     {
-      auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::none());
+      auto genParticles = getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::none());
       my_file.open("GenSimEventDump.txt", std::ios::app);
       printGenSimParticleCollection(genParticles, my_file);
       //std::cout << "\nAn event was printed";
@@ -42,7 +42,7 @@ bool EventDumpModule::process()
     }
     if(reco)
     {
-      auto recoParticles = getInput()->getParticles(InputModule::RecoLevel::Reco, ParticleType::none());
+      auto recoParticles = getInput()->getParticles(EventInput::RecoLevel::Reco, ParticleType::none());
       my_file.open("RecoEventDump.txt", std::ios::app);
       printRecoParticleCollection(recoParticles, my_file);
       //std::cout << "\nAn event was printed";

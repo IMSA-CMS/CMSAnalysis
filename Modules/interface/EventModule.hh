@@ -12,7 +12,7 @@
 #include "CMSAnalysis/Filters/interface/Selector.hh"
 #include "CMSAnalysis/Filters/interface/Cut.hh"
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
-#include "CMSAnalysis/Modules/interface/LocalEventInputModule.hh"
+#include "CMSAnalysis/Modules/interface/LocalEventEventInput.hh"
 #include "CMSAnalysis/Utility/interface/SingleParticleHist.hh"
 
 // EventModule allows an Analyzer to select events and apply cuts.
@@ -34,14 +34,14 @@ class EventModule : public AnalysisModule
         std::shared_ptr<HistogramOutputModule> getHistogramModule() {return histMod;}
 
         // Returns an input module that can be used to make these events the input to other modules
-        const InputModule* getEventInputModule() const {return &localInput;}
+        const EventInput* getEventEventInput() const {return &localInput;}
 
     protected:
         bool process() override;
 
         // function to generate lambda functions for HistogramPrototype1DGeneral, so that they don't have to be explicitly declared
-        std::function<std::vector<double>(const InputModule*)> findNthParticleFunction(int n, 
-        const ParticleType& particleType, InputModule::RecoLevel typeGenSim, double (Particle::* valueFunction)() const) const;
+        std::function<std::vector<double>(const EventInput*)> findNthParticleFunction(int n, 
+        const ParticleType& particleType, EventInput::RecoLevel typeGenSim, double (Particle::* valueFunction)() const) const;
 
         // adds all Nth Highest Phi/Eta/Invariant Mass histograms for specified particleType up to the ith particle 
         // of that particle type
@@ -61,7 +61,7 @@ class EventModule : public AnalysisModule
         Event event;
 
         std::shared_ptr<HistogramOutputModule> histMod = std::make_shared<HistogramOutputModule>();
-        LocalEventInputModule localInput;
+        LocalEventEventInput localInput;
 
         // Used for keeping track of which sets of histograms have been added
         std::unordered_map<std::string,std::shared_ptr<SingleParticleHist>> particleHistograms;

@@ -1,11 +1,11 @@
 #include "CMSAnalysis/Histograms/interface/PhotonElectronInvariantMassHist.hh"
 
-PhotonElectronInvariantMassHist::PhotonElectronInvariantMassHist(InputModule::RecoLevel typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum) :
+PhotonElectronInvariantMassHist::PhotonElectronInvariantMassHist(EventInput::RecoLevel typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum) :
   GenSimRecoPrototype(typeSwitch, iname, iNBins, iminimum, imaximum)
 {
 }
 
-std::vector<double> PhotonElectronInvariantMassHist::protectedValue(InputModule::RecoLevel typeGenSim) const
+std::vector<double> PhotonElectronInvariantMassHist::protectedValue(EventInput::RecoLevel typeGenSim) const
 {
     auto photons = getInput()->getParticles(typeGenSim, ParticleType::photon());
     auto electrons = getInput()->getParticles(typeGenSim, ParticleType::electron());

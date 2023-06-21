@@ -30,7 +30,7 @@ void HistogramOutputModule::addHistogram(std::shared_ptr<HistogramPrototype> his
   histograms.push_back(hist);
 }
 
-void HistogramOutputModule::setInput(const InputModule *iInput) {
+void HistogramOutputModule::setInput(const EventInput *iInput) {
   if (!getInput())
   {
     Module::setInput(iInput);

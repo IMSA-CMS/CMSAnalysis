@@ -10,7 +10,7 @@ class TFile;
 
 //GenSim implementation of root file
 //Created in EventLoader
-//Member functions are accessed in InputModules
+//Member functions are accessed in EventInputs
 class GenSimEventFile : public EventFile
 {
     public:

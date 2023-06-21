@@ -2,7 +2,7 @@
 #define DOUBLEMUONTRIGGER_HH
 
 #include "Trigger.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "RecoTrigger.hh"
 
   // Trigger Code to analyze HLT Simulations, for double muons
@@ -12,7 +12,7 @@ class DoubleMuonTrigger : public RecoTrigger
     DoubleMuonTrigger(const double iPTCutoff = 37, const double iSecondPTCutoff = 27);
   
   protected:
-    bool checkTrigger(const InputModule* input) override;
+    bool checkTrigger(const EventInput* input) override;
 
   private:
     const double pTCutoff;

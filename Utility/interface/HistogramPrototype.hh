@@ -11,7 +11,7 @@ namespace edm
   class EventBase;
 }
 
-class InputModule;
+class EventInput;
 class FilterModule;
 class TH1;
 
@@ -22,7 +22,7 @@ public:
 		name(iname)
 	{}
 
-	void setInput(const InputModule* iInput);
+	void setInput(const EventInput* iInput);
 
 	virtual ~HistogramPrototype() {} // Empty virtual destructor
 	
@@ -43,10 +43,10 @@ public:
 
 
 protected:
-	const InputModule* getInput() const {return input;}
+	const EventInput* getInput() const {return input;}
 	void setName(std::string newName) {name = newName;}
 private:
-	const InputModule* input;
+	const EventInput* input;
 	std::string name;
 	std::vector<std::shared_ptr<Filter>> filters; // Vector of FilterModule&'s
 };

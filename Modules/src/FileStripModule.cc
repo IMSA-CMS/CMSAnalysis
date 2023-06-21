@@ -1,6 +1,6 @@
 #include "CMSAnalysis/Modules/interface/FileStripModule.hh"
 #include "CMSAnalysis/Utility/interface/ParticleType.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "TFile.h"
 
 FileStripModule::FileStripModule(std::string iname):
@@ -59,7 +59,7 @@ void FileStripModule::initialize()
 bool FileStripModule::process()
 {
 
-	auto electrons = getInput()->getParticles(InputModule::RecoLevel::Reco, ParticleType::electron());
+	auto electrons = getInput()->getParticles(EventInput::RecoLevel::Reco, ParticleType::electron());
 	elecSize = electrons.getNumParticles();
 	for (auto& electron : electrons)
         {
@@ -75,7 +75,7 @@ bool FileStripModule::process()
         }
 	
 
-	 auto muons = getInput()->getParticles(InputModule::RecoLevel::Reco, ParticleType::muon());
+	 auto muons = getInput()->getParticles(EventInput::RecoLevel::Reco, ParticleType::muon());
 	 muonSize = muons.getNumParticles();
 
 	 for (auto& muon : muons)
@@ -99,7 +99,7 @@ bool FileStripModule::process()
 
 	// Only work with particles in CandidateImplementation:
 
-	// auto jets = getInput()->getJets(InputModule::RecoLevel::Reco);
+	// auto jets = getInput()->getJets(EventInput::RecoLevel::Reco);
 	// jetSize = jets.getNumParticles();
 
 	// for (auto& jet : jets)
@@ -109,7 +109,7 @@ bool FileStripModule::process()
 	// 	jetMass.push_back(jet.getMass());
 	// 	jetPt.push_back(jet.getPt());
 	// }
-	// auto genSim = getInput()->getParticles(InputModule::RecoLevel::GenSim);
+	// auto genSim = getInput()->getParticles(EventInput::RecoLevel::GenSim);
 	// genSize = genSim.getNumParticles();
 
 	// for (auto& particle : genSim)
