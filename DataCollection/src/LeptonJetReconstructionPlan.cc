@@ -52,11 +52,11 @@ void LeptonJetReconstructionPlan::initialize()
   //eventMod->addSelector(std::make_shared<LeptonJetSelector>());	
 
   auto matchMod = std::make_shared<MatchingModule>();
-  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(1);
+  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(24/1024.0);
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
   auto eventDumpMod = std::make_shared<EventDumpModule>(true,true);
   auto lepMatchMod =
-      std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 64/64.0);
+      std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.1);
   auto histOutputMod = std::make_shared<HistogramOutputModule>();
   //auto mlMod = std::make_shared<LeptonJetMLCalculator>();
 
@@ -71,7 +71,7 @@ void LeptonJetReconstructionPlan::initialize()
   // auto matchPhiHist = std::make_shared<MatchingPhiHist>(lepMatchMod, "Differences in Phi for Matched Lepton Jets", 100, 0, 3.15);
   // auto matchEtaHist = std::make_shared<MatchingEtaHist>(lepMatchMod, "Differences in Eta for Matched Lepton Jets", 100, -1, 1);
 
-  auto relIsoHist = std::make_shared<IsolationHist>(InputModule::RecoLevel::Reco, "Jet pT Rel", 10000, 0, 100);
+  //auto relIsoHist = std::make_shared<IsolationHist>(InputModule::RecoLevel::Reco, "Jet pT Rel", 10000, 0, 100); GAVIN CHANGED
  // auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(InputModule::RecoLevel::Reco, "NN Classifier Output Distribution", 100, 0, 1, mlMod, lepRecoMod);
 //uncomented
   eventHistMod->addHistogram(deltaRHist);
@@ -79,7 +79,7 @@ void LeptonJetReconstructionPlan::initialize()
   histOutputMod->addHistogram(pTHist);
   histOutputMod->addHistogram(matchedLeptonJetHist);
   histOutputMod->addHistogram(unmatchedLeptonJetHist);
-  histOutputMod->addHistogram(relIsoHist);
+  //histOutputMod->addHistogram(relIsoHist); GAVIN CHANGED
  // histOutputMod->addHistogram(leptonJetMLHist);
 
 //   histOutputMod->addHistogram(matchDeltaRHist);

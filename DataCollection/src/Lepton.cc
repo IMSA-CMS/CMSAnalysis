@@ -16,11 +16,11 @@ Particle(pParticle)
 {
 
 }
-double Lepton::getIsolation() const
-{
-  checkIsNull();
-  return getParticle()->getInfo("Isolation");
-}
+// double Lepton::getIsolation() const GAVIN CHANGED
+// {
+//   checkIsNull();
+//   return getParticle()->getInfo("Isolation");
+// }
 
 bool Lepton::isTight() const
 {

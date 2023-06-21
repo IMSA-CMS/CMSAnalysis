@@ -48,7 +48,7 @@ Particle GenSimSimpleImplementation::daughter(int i) const
   return newPart;
 }
 
-bool GenSimSimpleImplementation::doesHaveMother()
+bool GenSimSimpleImplementation::doesHaveMother() const
 {
   if( motherParticle == nullptr)
   {

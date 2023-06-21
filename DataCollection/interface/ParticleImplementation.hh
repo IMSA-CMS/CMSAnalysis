@@ -20,7 +20,7 @@ public:
 
   virtual int pdgId() const = 0;
   virtual int status() const = 0;
-  virtual bool doesHaveMother() = 0;
+  virtual bool doesHaveMother() const = 0;
   virtual Particle mother() const = 0;
   virtual Particle daughter(int i) const = 0;
   virtual int numberOfDaughters() const = 0;
