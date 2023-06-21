@@ -12,8 +12,8 @@
 #include <memory>
 #include <vector>
 #include <fstream>
-#include "CMSAnalysis/DataCollection/interface/Utility.hh"
-
+#include "CMSAnalysis/Utility/interface/Utility.hh"
+#include "CMSAnalysis/Analysis/interface/Systematic.hh"
 //Channel::Channel(std::string name, std::string iYAxisName, std::vector<std::shared_ptr<Process>> iProcesses) : name(name), yAxisName(iYAxisName)
 Channel::Channel(std::string name, std::vector<std::shared_ptr<Process>> iProcesses) : name(name)
 {
@@ -21,7 +21,15 @@ Channel::Channel(std::string name, std::vector<std::shared_ptr<Process>> iProces
 	{
 		processes.push_back(process);
 	}
+}    
+
+
+void addGlobalSystematic(Systematic& systematic)
+{
+
+ 
 }
+
 
 const std::shared_ptr<Process> Channel::findProcess(std::string processName) const
 {
@@ -132,14 +140,14 @@ std::vector<std::string> Channel::getNames() const
 	return names;
 }
 
-THStack* Channel::getStack(std::string histType, std::string label, bool scaleToExpected) const
+THStack* Channel::getStack(std::string histType, std::string label, bool scaleToExpected, int rebinConstant) const
 {
 	THStack* superPlot = new THStack(name.c_str(), name.c_str());
 	if (label == "")
 	{
 		for (auto process : processes)
 		{	
-			superPlot->Add(process->getHist(histType, scaleToExpected));
+			superPlot->Add(process->getHist(histType, scaleToExpected)->Rebin(rebinConstant));
 		}
 	}
 	else
@@ -156,6 +164,7 @@ THStack* Channel::getStack(std::string histType, std::string label, bool scaleTo
 				//hist->SetLineColor(kBlack);
 				//hist->SetLineWidth(1);
 			}
+			hist->Rebin(rebinConstant);
 			superPlot->Add(hist);
 		}
 	}

@@ -1,5 +1,5 @@
 #include "CMSAnalysis/DataCollection/interface/RootEventInterface.hh"
-#include "CMSAnalysis/DataCollection/interface/EventFile.hh"
+#include "CMSAnalysis/EventFiles/interface/EventFile.hh"
 
 ParticleCollection<GenSimParticle> RootEventInterface::getGenSimParticles() const
 {

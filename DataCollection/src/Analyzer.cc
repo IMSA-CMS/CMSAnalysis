@@ -9,16 +9,16 @@
 #include "TFile.h"
 #include "TH1.h"
 
-#include "CMSAnalysis/DataCollection/interface/AnalysisModule.hh"
-#include "CMSAnalysis/DataCollection/interface/FilterModule.hh"
-#include "CMSAnalysis/DataCollection/interface/ProductionModule.hh"
+#include "CMSAnalysis/Modules/interface/AnalysisModule.hh"
+#include "CMSAnalysis/Modules/interface/FilterModule.hh"
+#include "CMSAnalysis/Modules/interface/ProductionModule.hh"
 #include "CMSAnalysis/DataCollection/interface/EventLoader.hh"
 #include "FWCore/Framework/interface/Event.h"
 #include "DataFormats/FWLite/interface/Event.h"
-#include "CMSAnalysis/DataCollection/interface/Module.hh"
-#include "CMSAnalysis/DataCollection/interface/TDisplayText.h"
+#include "CMSAnalysis/Modules/interface/Module.hh"
+#include "CMSAnalysis/Utility/interface/TDisplayText.h"
 #include "CMSAnalysis/DataCollection/interface/ProcessDictionary.hh"
-#include "CMSAnalysis/DataCollection/interface/AnalyzerInputModule.hh"
+#include "CMSAnalysis/Modules/interface/AnalyzerInputModule.hh"
 
 Analyzer::Analyzer() : 
 eventInterface(nullptr),
@@ -28,7 +28,6 @@ input(new AnalyzerInputModule(&eventInterface))
 
 Analyzer::Analyzer(const Analyzer &analyzer)
 {
-
   input = analyzer.input;
 }
 
@@ -36,7 +35,6 @@ Analyzer::~Analyzer()
 {
   delete input;
 }
-
 
 void Analyzer::writeOutputFile(const std::string &outputFile)
 {
@@ -60,6 +58,7 @@ void Analyzer::writeOutputFile(const std::string &outputFile)
     module->doneProcessing();
     if (filterModules.size() != 0)
     {
+      module->finalize();
       for (auto &str : filterNames) //writes analysis modules by filter string
       {
         auto it = filterDirectories.find(str);
@@ -69,14 +68,12 @@ void Analyzer::writeOutputFile(const std::string &outputFile)
         }
         filterDirectories[str]->cd();
         module->setFilterString(str);
-        module->finalize();
-        module->writeAll(); //writes files to folder
+        module->finalizeFilterString();
         outputRootFile->cd();
       }
     } else {
       module->setFilterString("");
       module->finalize();
-      module->writeAll();
     }
   }
 
@@ -115,7 +112,10 @@ void Analyzer::initialize()
   // Initialize all modules
   for (auto module : getAllModules())
   {
-    module->setInput(input);
+    if (!module->getInput())
+    {
+      module->setInput(input);
+    }
     module->initialize();
   }
 }
@@ -151,6 +151,7 @@ void Analyzer::processOneEvent(const EventInterface *eInterface)
         {
           filterString += module->getFilterString();
         }
+        filterString += "_";
       }
 
       // Processes event through analysis modules
