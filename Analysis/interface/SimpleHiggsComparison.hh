@@ -12,7 +12,7 @@ class SimpleHiggsComparison : public SimpleAnalysis
     public:
         SimpleHiggsComparison();
         std::shared_ptr<SimpleChannel> getChannel(std::string name) override;
-	std::vector<std::shared_ptr<SimpleChannel>> getChannels() {return channels;}
+	    std::vector<std::shared_ptr<SimpleChannel>> getChannels() {return channels;}
 
     private:
         std::vector<std::shared_ptr<SimpleChannel>> channels;

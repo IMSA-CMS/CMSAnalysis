@@ -5,19 +5,14 @@
 
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
 
-//#include "CMSAnalysis/DataCollection/interface/GenSimIdentificationModule.hh"
-//#include "CMSAnalysis/DataCollection/interface/RecoIdentificationModule.hh"
-#include "CMSAnalysis/DataCollection/interface/MatchingModule.hh"
-#include "CMSAnalysis/DataCollection/interface/MassFilter.hh"
-#include "CMSAnalysis/DataCollection/interface/BarrelStateFilter.hh"
-#include "CMSAnalysis/DataCollection/interface/SignFlipModule.hh"
-#include "CMSAnalysis/DataCollection/interface/MassBinFilter.hh"
-#include "CMSAnalysis/DataCollection/interface/ResolutionModule.hh"
-//#include "CMSAnalysis/DataCollection/interface/MassResolutionModule.hh"
-// #include "CMSAnalysis/DataCollection/interface/WeightingModule.hh"
-//#include "CMSAnalysis/DataCollection/interface/Histograms.hh"
-#include "CMSAnalysis/DataCollection/interface/TotalEventsHist.hh"
-#include "CMSAnalysis/DataCollection/interface/CIAcceptedEventsHist.hh"
+#include "CMSAnalysis/Modules/interface/MatchingModule.hh"
+#include "CMSAnalysis/Filters/interface/MassFilter.hh"
+#include "CMSAnalysis/Filters/interface/BarrelStateFilter.hh"
+#include "CMSAnalysis/Modules/interface/SignFlipModule.hh"
+#include "CMSAnalysis/Filters/interface/MassBinFilter.hh"
+#include "CMSAnalysis/Modules/interface/ResolutionModule.hh"
+#include "CMSAnalysis/Histograms/interface/TotalEventsHist.hh"
+#include "CMSAnalysis/Histograms/interface/CIAcceptedEventsHist.hh"
 
 using std::make_shared;
 

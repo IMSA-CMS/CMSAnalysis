@@ -16,17 +16,16 @@
 #include "CMSAnalysis/DataCollection/interface/DataCollectionPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/AnalyzerOptions.hh"
 #include "CMSAnalysis/DataCollection/interface/ModuleOptions.hh"
-//#include "CMSAnalysis/DataCollection/bin/massResolutionAnalysis.cc"
-//#include "CMSAnalysis/DataCollection/bin/HPlusPlusMassAnalysis.cc"
-//#include "CMSAnalysis/DataCollection/bin/leptonJetReconstructionAnalysis.cc"
-//#include "CMSAnalysis/DataCollection/bin/displacedVertexAnalysis.cc"
-//#include "CMSAnalysis/DataCollection/bin/massAcceptanceAnalysis.cc"
-//#include "CMSAnalysis/DataCollection/bin/triggerAnalysis.cc"
-//#include "CMSAnalysis/DataCollection/bin/invariantMassAnalysis.cc"
-//#include "CMSAnalysis/DataCollection/bin/HiggsBackgroundAnalysis.cc"
-//#include "CMSAnalysis/DataCollection/bin/LeptonJetBackgroundAnalysis.cc"
-//#include "CMSAnalysis/DataCollection/bin/FilestripAnalysis.cc"
-
+// #include "CMSAnalysis/DataCollection/bin/massResolutionAnalysis.cc"
+// #include "CMSAnalysis/DataCollection/bin/HPlusPlusMassAnalysis.cc"
+// #include "CMSAnalysis/DataCollection/bin/leptonJetReconstructionAnalysis.cc"
+// #include "CMSAnalysis/DataCollection/bin/displacedVertexAnalysis.cc"
+// #include "CMSAnalysis/DataCollection/bin/massAcceptanceAnalysis.cc"
+// #include "CMSAnalysis/DataCollection/bin/triggerAnalysis.cc"
+// #include "CMSAnalysis/DataCollection/bin/invariantMassAnalysis.cc"
+// #include "CMSAnalysis/DataCollection/bin/HiggsBackgroundAnalysis.cc"
+// #include "CMSAnalysis/DataCollection/bin/LeptonJetBackgroundAnalysis.cc"
+// #include "CMSAnalysis/DataCollection/bin/FilestripAnalysis.cc"
 
 int main(int argc, char **argv)
 {
@@ -42,7 +41,7 @@ int main(int argc, char **argv)
   parser.addOption("output", optutl::CommandLineParser::kString, "Particle", "");
 
   parser.addOption("input", optutl::CommandLineParser::kString, "Input", "");
-  parser.addOption("numFiles", optutl::CommandLineParser::kInteger, "Number of Files", -1);
+  parser.addOption("numFiles", optutl::CommandLineParser::kInteger, "Number of Files", -1); // Change last input to -1 later
 
   parser.addOption("analysis", optutl::CommandLineParser::kString, "Type of Analysis", "");
   parser.addOption("moduleOptions", optutl::CommandLineParser::kString, "Module Specific Options", "");
@@ -82,7 +81,7 @@ int main(int argc, char **argv)
   // analyzer.run(inputFile, outputFile, outputEvery, numFiles);
 
   // analysisPlans[analysisType]->runAnalyzer(inputFile, outputFile, outputEvery, numFiles);
-  
+
   DataCollectionPlan *plan = options.getAnalysisPlans().at(analysis);
 
   auto moduleOptionsPtr = std::make_shared<ModuleOptions>();
@@ -94,9 +93,6 @@ int main(int argc, char **argv)
 
   plan->initialize();
   plan->runEventLoader(inputFile, outputFile, outputEvery, numFiles, maxEvents);
-
-  // HiggsBackgroundPlan plan;
-  // plan.runAnalyzer(inputFile, outputFile, outputEvery, numFiles);
 
   std::cout << "Processing complete!" << std::endl;
   std::cout << "Output written to " << outputFile << std::endl;

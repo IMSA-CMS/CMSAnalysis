@@ -1,7 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 import FWCore.PythonUtilities.LumiList as LumiList
 from FWCore.ParameterSet.VarParsing import VarParsing
-
 options = VarParsing ('analysis')
 
 options.register ('input',
@@ -51,6 +50,11 @@ with open(dataFileName, 'r') as file:
 dataArray = datatxt.split()
 
 #----------------------------------------------------------------------------------------------------------
+import os
+
+for rfile in dataArray:
+	req = 'dasgoclient --query="run file="'+rfile
+	os.system(req)
 
 process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring(dataArray))
 
@@ -74,3 +78,5 @@ process.demo = cms.EDAnalyzer('RunAnalyzerWrapper',
 
 
 process.p = cms.Path(process.demo)
+
+

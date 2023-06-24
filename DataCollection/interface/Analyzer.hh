@@ -8,7 +8,7 @@
 #include <memory>
 #include <unordered_set>
 #include "FileParams.hh"
-#include "InputModule.hh"
+#include "CMSAnalysis/Modules/interface/InputModule.hh"
 #include "ProcessDictionary.hh"
 #include "RootEventInterface.hh"
 
