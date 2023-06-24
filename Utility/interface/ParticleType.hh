@@ -44,6 +44,11 @@ class ParticleType
 
     static const ParticleType& none();
 
+    //Used to register particleTypes from file
+    static const ParticleType& registerType(std::string typeName, int typepdgId, double charge, std::vector<SingleParticleHist> typeParticleHists, std::vector<CollectionHist> typeCollectionHists);//, std::vector<CollectionHist> collectionhist);
+
+    ParticleType(std::string typeName, int typepdgId, double charge, std::vector<SingleParticleHist> typeParticleHists, std::vector<CollectionHist> typeCollectionHists);//, std::vector<CollectionHist> collectionhists);
+    
     bool operator== (const ParticleType type) const;
     bool operator!= (const ParticleType type) const;
 
@@ -64,12 +69,9 @@ class ParticleType
     static CollectionHist getSameSignInvariantMassHist();
     static CollectionHist getOppositeSignInvariantMassHist();
 
-    ParticleType(std::string typeName, int typepdgId, double charge, std::vector<SingleParticleHist> typeParticleHists, std::vector<CollectionHist> typeCollectionHists);//, std::vector<CollectionHist> collectionhists);
-
     static std::unordered_map<std::string,ParticleType> typeList;
 
     //Adds type object to list if it does not exist and then refrence it
-    static const ParticleType& registerType(std::string typeName, int typepdgId, double charge, std::vector<SingleParticleHist> typeParticleHists, std::vector<CollectionHist> typeCollectionHists);//, std::vector<CollectionHist> collectionhist);
 };
 
 #endif
