@@ -22,6 +22,9 @@ public:
   const std::vector<Particle>& getParticles() const {return cast()->getParticles();}
   void addParticle(const Particle particle) {cast()->addParticle(particle);}
   int getNumParticles() const {return cast()->getNumParticles();}
+  // Gets the "width" or biggest possible DeltaR from all particles
+  // Returns 0 if only 1 particle
+  double getDeltaR() const;
 
 private:
 
