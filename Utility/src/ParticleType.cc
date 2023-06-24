@@ -49,6 +49,7 @@ const ParticleType& ParticleType::registerType(std::string typeName, int typepdg
         ParticleType particleType = ParticleType(typeName,typepdgId,typeCharge,typeParticleHists,typeCollectionHists);
         typeList.insert({typeName, particleType});
     } 
+
     it = typeList.find(typeName);
     return it->second;
 }
