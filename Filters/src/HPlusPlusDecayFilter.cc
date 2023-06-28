@@ -1,17 +1,17 @@
 #include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
-#include "CMSAnalysis/Modules/interface/LocalEventInputModule.hh"
+#include "CMSAnalysis/Modules/interface/LocalEventInput.hh"
 
-HPlusPlusDecayFilter::HPlusPlusDecayFilter(InputModule::RecoLevel isGenSim):
+HPlusPlusDecayFilter::HPlusPlusDecayFilter(EventInput::RecoLevel isGenSim):
 typeGenSim(isGenSim)
 {};
 
-std::string HPlusPlusDecayFilter::getFilterString(const InputModule* inputMod) const
+std::string HPlusPlusDecayFilter::getFilterString(const EventInput* inputMod) const
 {
   int higgsPlus = 0;
   int higgsMinus = 0;
-  if (typeGenSim == InputModule::RecoLevel::GenSim)
+  if (typeGenSim == EventInput::RecoLevel::GenSim)
   {
-    auto particles = inputMod->getParticles(InputModule::RecoLevel::GenSim);
+    auto particles = inputMod->getParticles(EventInput::RecoLevel::GenSim);
     for (const auto &particle : particles) //cycles through to find the doubly charged higgs
     {
       GenSimParticle genSimParticle = GenSimParticle(particle);
@@ -28,9 +28,9 @@ std::string HPlusPlusDecayFilter::getFilterString(const InputModule* inputMod) c
         break;
       }
     }
-  } else if (typeGenSim == InputModule::RecoLevel::Reco)
+  } else if (typeGenSim == EventInput::RecoLevel::Reco)
   {
-    auto leptons = inputMod->getLeptons(InputModule::RecoLevel::Reco);
+    auto leptons = inputMod->getLeptons(EventInput::RecoLevel::Reco);
 
     for (const auto &lepton : leptons)
     {
@@ -142,7 +142,7 @@ std::string HPlusPlusDecayFilter::getState(ParticleCollection<Particle> genSim, 
 {
   int higgsPlus = 0;
   int higgsMinus = 0;
-  if (typeGenSim == InputModule::RecoLevel::GenSim)
+  if (typeGenSim == EventInput::RecoLevel::GenSim)
   {
     auto particles = genSim;
     for (const auto &particle : particles) //cycles through to find the doubly charged higgs
@@ -171,7 +171,7 @@ std::string HPlusPlusDecayFilter::getState(ParticleCollection<Particle> genSim, 
         break;
       }
     }
-  } else if (typeGenSim == InputModule::RecoLevel::Reco)
+  } else if (typeGenSim == EventInput::RecoLevel::Reco)
   {
     auto leptons = reco;
     std::string leps;

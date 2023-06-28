@@ -1,7 +1,7 @@
 #include "CMSAnalysis/Modules/interface/HiggsDataStripModule.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetMatchingModule.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "TFile.h"
 #include "TTree.h"
 
@@ -36,7 +36,7 @@ void HiggsDataStripModule::finalize()
 
 bool HiggsDataStripModule::process()
 {
-	auto leptons = getInput()->getLeptons(InputModule::RecoLevel::Reco);
+	auto leptons = getInput()->getLeptons(EventInput::RecoLevel::Reco);
 	double cutoff = 100;
 	if (leptons.getNumParticles() < 2)
 	{

@@ -7,7 +7,7 @@
 class SnowmassCutFilter : public Filter
 {
     protected:
-        virtual std::string getFilterString(const InputModule* inputMod) const override;
+        virtual std::string getFilterString(const EventInput* inputMod) const override;
 
     private:
         // Checks to see if opposite-sign invariant mass is vetoed

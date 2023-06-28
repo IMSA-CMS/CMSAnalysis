@@ -39,7 +39,7 @@ public:
 
   // Methods for use as trigger object
   // [Defunct]
-  virtual std::map<std::string, bool> checkEvent(std::shared_ptr<InputModule> input);
+  virtual std::map<std::string, bool> checkEvent(std::shared_ptr<EventInput> input);
   virtual std::vector<std::string> getNames() {return triggerNames;}
   // [/Defunct]
 

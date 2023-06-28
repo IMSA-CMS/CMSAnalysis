@@ -16,7 +16,7 @@
 #include "CMSAnalysis/Filters/interface/HiggsSelector.hh"
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
-#include "CMSAnalysis/Modules/interface/LocalEventInputModule.hh"
+#include "CMSAnalysis/Modules/interface/LocalEventInput.hh"
 #include "CMSAnalysis/Filters/interface/LeptonFilter.hh"
 #include "CMSAnalysis/Modules/interface/LeptonEfficiency.hh"
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
@@ -67,12 +67,12 @@ void HiggsBackgroundPlan::initialize()
     auto triggerMod = make_shared<TriggerModule>();
     auto metMod = make_shared<METModule>();
     auto bJetFilter = make_shared<BJetFilter>();
-    auto higgsFilter = make_shared<HPlusPlusDecayFilter>(InputModule::RecoLevel::Reco);
+    auto higgsFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::Reco);
 
-    auto recoDecayFilter = make_shared<HPlusPlusDecayFilter>(InputModule::RecoLevel::Reco);
+    auto recoDecayFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::Reco);
     auto recoDecayFilterMod = make_shared<FilterModule>(recoDecayFilter);
-    recoDecayFilterMod->setInput(eventMod->getEventInputModule());
-    auto genSimDecayFilter = make_shared<HPlusPlusDecayFilter>(InputModule::RecoLevel::GenSim);
+    recoDecayFilterMod->setInput(eventMod->getEventInput());
+    auto genSimDecayFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::GenSim);
     //analyzer.addFilterModule(make_shared<FilterModule>(recoDecayFilter));
     //analyzer.addFilterModule(make_shared<FilterModule>(genSimDecayFilter));
     auto filterStringModule = make_shared<FilterStringModule>();
@@ -87,22 +87,22 @@ void HiggsBackgroundPlan::initialize()
 
     auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
 
-    auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::GenSim, "Electron GenSim Same Sign Invariant Mass", 100, 0, 1000, false, false);
-    auto elecGenSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::GenSim, "Electron GenSim Same Sign Invariant Mass", 100, 0, 1000, false, false);
-    auto elecRecoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "Electron Reco Same Sign Invariant Mass", 1000, 0, 2000, false, false);
-    auto muonGenSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::GenSim, "Muon GenSim Same Sign Invariant Mass", 100, 0, 1000, false, false);
-    auto muonRecoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "Muon Reco Same Sign Invariant Mass", 1000, 0, 500, false, false);
+    auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::GenSim, "Electron GenSim Same Sign Invariant Mass", 100, 0, 1000, false, false);
+    auto elecGenSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::GenSim, "Electron GenSim Same Sign Invariant Mass", 100, 0, 1000, false, false);
+    auto elecRecoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::Reco, "Electron Reco Same Sign Invariant Mass", 1000, 0, 2000, false, false);
+    auto muonGenSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::GenSim, "Muon GenSim Same Sign Invariant Mass", 100, 0, 1000, false, false);
+    auto muonRecoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::Reco, "Muon Reco Same Sign Invariant Mass", 1000, 0, 500, false, false);
     //auto positiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);
 
     auto eventHistMod = eventMod->getHistogramModule();
     
     //eventHistMod->addHistogram(recoSameSignInvMassHist);
 
-    auto elecRecoPt = make_shared<PtHist>(InputModule::RecoLevel::Reco, "Electron Reco Leading lepton pT", 500, 0, 1000);
-    auto elecGenSimPt = make_shared<PtHist>(InputModule::RecoLevel::GenSim, "Electron GenSim Leading lepton pT", 500, 0, 1000);
-    auto muonRecoPt = make_shared<PtHist>(InputModule::RecoLevel::Reco, "Muon Reco Leading lepton pT", 500, 0, 1000);
-    auto muonGenSimPt = make_shared<PtHist>(InputModule::RecoLevel::GenSim, "Muon GenSim Leading lepton pT", 500, 0, 1000);
-    //auto recoInvMass = make_shared<InvariantMassHist>(InputModule::RecoLevel::Reco, "Opposite-sign dilepton mass", 1000, 0, 2000);
+    auto elecRecoPt = make_shared<PtHist>(EventInput::RecoLevel::Reco, "Electron Reco Leading lepton pT", 500, 0, 1000);
+    auto elecGenSimPt = make_shared<PtHist>(EventInput::RecoLevel::GenSim, "Electron GenSim Leading lepton pT", 500, 0, 1000);
+    auto muonRecoPt = make_shared<PtHist>(EventInput::RecoLevel::Reco, "Muon Reco Leading lepton pT", 500, 0, 1000);
+    auto muonGenSimPt = make_shared<PtHist>(EventInput::RecoLevel::GenSim, "Muon GenSim Leading lepton pT", 500, 0, 1000);
+    //auto recoInvMass = make_shared<InvariantMassHist>(EventInput::RecoLevel::Reco, "Opposite-sign dilepton mass", 1000, 0, 2000);
     auto elecMetHist = make_shared<METHist>(metMod, "MET", 500, 0, 1000);
     // Add the histogram(s) created above to histMod
     // histMod->addHistogram(elecRecoPt);
@@ -117,13 +117,13 @@ void HiggsBackgroundPlan::initialize()
     // histMod->addHistogram(elecMetHist);
     // histMod->addHistogram(muonMetHist);
 
-    //auto elecRecoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "Electron Reco Same Sign Invariant Mass", 1000, 0, 2000, false, false);
+    //auto elecRecoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::Reco, "Electron Reco Same Sign Invariant Mass", 1000, 0, 2000, false, false);
     auto elecPositiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Electron Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);
-    //auto muonRecoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "Muon Reco Same Sign Invariant Mass", 1000, 0, 2000, false, false);
+    //auto muonRecoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::Reco, "Muon Reco Same Sign Invariant Mass", 1000, 0, 2000, false, false);
     auto muonPositiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Muon Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);
 
-    //auto elecGenSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::GenSim, "Electron GenSim Same Sign Invariant Mass", 1000, 0, 2000, false, false);
-    //auto muonGenSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::GenSim, "Muon GenSim Same Sign Invariant Mass", 1000, 0, 2000, false, false);
+    //auto elecGenSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::GenSim, "Electron GenSim Same Sign Invariant Mass", 1000, 0, 2000, false, false);
+    //auto muonGenSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::GenSim, "Muon GenSim Same Sign Invariant Mass", 1000, 0, 2000, false, false);
 
     auto elecFilter = make_shared<LeptonFilter>(ParticleType::electron(), 4, "Electron");
     auto muonFilter = make_shared<LeptonFilter>(ParticleType::muon(), 4, "Muon");
@@ -159,6 +159,8 @@ void HiggsBackgroundPlan::initialize()
     // eventHistMod->addHistogram(muonPositiveNegativeInvMassHist);
 
     analyzer.addProductionModule(metMod);
+    //Changed because EventModule inherits from ProductionModule now
+    analyzer.addProductionModule(eventMod);
 
 
     // analyzer.addFilterModule(make_shared<FilterModule>(bJetFilter));
@@ -167,7 +169,7 @@ void HiggsBackgroundPlan::initialize()
     analyzer.addFilterModule(recoDecayFilterMod);
 
     //analyzer.addProductionModule(matchMod);
-    analyzer.addAnalysisModule(eventMod);
+    //analyzer.addAnalysisModule(eventMod);
     analyzer.addAnalysisModule(eventHistMod);    
     analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
     //analyzer.addAnalysisModule(eventDump);

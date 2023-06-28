@@ -1,5 +1,5 @@
-#ifndef LOCALEVENTINPUTMODULE_HH
-#define LOCALEVENTINPUTMODULE_HH
+#ifndef LOCALEVENTINPUT_HH
+#define LOCALEVENTINPUT_HH
 
 #include <memory>
 
@@ -9,16 +9,16 @@
 #include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "FWCore/Common/interface/TriggerNames.h"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/Lepton.hh"
 #include "CMSAnalysis/Utility/interface/Event.hh"
 class TFile;
 
 
-class LocalEventInputModule : public InputModule
+class LocalEventInput : public EventInput
 {
     public:
-        LocalEventInputModule(const Event* event1);
+        LocalEventInput(const Event* event1);
 
         virtual ParticleCollection<Lepton> getLeptons(RecoLevel level) const override;
         virtual ParticleCollection<Particle> getParticles(RecoLevel level, const ParticleType& particleType = ParticleType::none()) const override;

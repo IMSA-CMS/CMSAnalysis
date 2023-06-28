@@ -29,7 +29,7 @@ void UnmatchedParticleModule::initialize()
 
 bool UnmatchedParticleModule::process()
 {
-  auto genParticles = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
+  auto genParticles = getInput()->getLeptons(EventInput::RecoLevel::GenSim);
   auto genParticlesVector = genParticles.getParticles();
 
 

@@ -9,13 +9,13 @@
 //Selects relevant particles for GenSim H++ Events (and feeds them to an EventModule)
 //Implement in a DataCollectionPlan with a shared pointer then add to an EventModule with ->addSelector() function
 
-class InputModule;
+class EventInput;
 
 class HPlusPlusGenSimSelector : public Selector
 {
     public:
         //Selects H++s, their Lepton Daughters, and Z Bosons
-        void selectParticles(const InputModule* input, Event& event) const override;
+        void selectParticles(const EventInput* input, Event& event) const override;
 };
 
 #endif
