@@ -1,5 +1,5 @@
 #include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
-#include "CMSAnalysis/Modules/interface/LocalEventEventInput.hh"
+#include "CMSAnalysis/Modules/interface/LocalEventInput.hh"
 
 HPlusPlusDecayFilter::HPlusPlusDecayFilter(EventInput::RecoLevel isGenSim):
 typeGenSim(isGenSim)

@@ -1,5 +1,5 @@
-#ifndef PARTICLEINPUTMODULE_HH
-#define PARTICLEINPUTMODULE_HH
+#ifndef PARTICLEEVENTINPUT_HH
+#define PARTICLEEVENTINPUT_HH
 
 #include "EventInput.hh"
 #include "Particle.hh"
