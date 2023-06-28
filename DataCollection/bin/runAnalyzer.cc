@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <filesystem>
+#include <chrono>
 
 #include "TROOT.h"
 #include "TSystem.h"
@@ -15,20 +16,21 @@
 #include "CMSAnalysis/DataCollection/interface/DataCollectionPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/AnalyzerOptions.hh"
 #include "CMSAnalysis/DataCollection/interface/ModuleOptions.hh"
-//#include "CMSAnalysis/DataCollection/bin/massResolutionAnalysis.cc"
-//#include "CMSAnalysis/DataCollection/bin/HPlusPlusMassAnalysis.cc"
-//#include "CMSAnalysis/DataCollection/bin/leptonJetReconstructionAnalysis.cc"
-//#include "CMSAnalysis/DataCollection/bin/displacedVertexAnalysis.cc"
-//#include "CMSAnalysis/DataCollection/bin/massAcceptanceAnalysis.cc"
-//#include "CMSAnalysis/DataCollection/bin/triggerAnalysis.cc"
-//#include "CMSAnalysis/DataCollection/bin/invariantMassAnalysis.cc"
-//#include "CMSAnalysis/DataCollection/bin/HiggsBackgroundAnalysis.cc"
-//#include "CMSAnalysis/DataCollection/bin/LeptonJetBackgroundAnalysis.cc"
-//#include "CMSAnalysis/DataCollection/bin/FilestripAnalysis.cc"
-
+// #include "CMSAnalysis/DataCollection/bin/massResolutionAnalysis.cc"
+// #include "CMSAnalysis/DataCollection/bin/HPlusPlusMassAnalysis.cc"
+// #include "CMSAnalysis/DataCollection/bin/leptonJetReconstructionAnalysis.cc"
+// #include "CMSAnalysis/DataCollection/bin/displacedVertexAnalysis.cc"
+// #include "CMSAnalysis/DataCollection/bin/massAcceptanceAnalysis.cc"
+// #include "CMSAnalysis/DataCollection/bin/triggerAnalysis.cc"
+// #include "CMSAnalysis/DataCollection/bin/invariantMassAnalysis.cc"
+// #include "CMSAnalysis/DataCollection/bin/HiggsBackgroundAnalysis.cc"
+// #include "CMSAnalysis/DataCollection/bin/LeptonJetBackgroundAnalysis.cc"
+// #include "CMSAnalysis/DataCollection/bin/FilestripAnalysis.cc"
 
 int main(int argc, char **argv)
 {
+  auto start = std::chrono::steady_clock::now();
+
   gROOT->SetBatch(true);
   gSystem->Load("libFWCoreFWLite");
   FWLiteEnabler::enable();
@@ -39,7 +41,7 @@ int main(int argc, char **argv)
   parser.addOption("output", optutl::CommandLineParser::kString, "Particle", "");
 
   parser.addOption("input", optutl::CommandLineParser::kString, "Input", "");
-  parser.addOption("numFiles", optutl::CommandLineParser::kInteger, "Number of Files", -1);
+  parser.addOption("numFiles", optutl::CommandLineParser::kInteger, "Number of Files", -1); // Change last input to -1 later
 
   parser.addOption("analysis", optutl::CommandLineParser::kString, "Type of Analysis", "");
   parser.addOption("moduleOptions", optutl::CommandLineParser::kString, "Module Specific Options", "");
@@ -67,6 +69,8 @@ int main(int argc, char **argv)
 
   unsigned outputEvery = parser.integerValue("outputEvery");
 
+  unsigned maxEvents = parser.integerValue("maxEvents");
+
   //   Selection of data collection plan has moved to command line argument "analysis"
   //   The key for each Plan can now be found in AnalyzerOptions.cc
 
@@ -77,7 +81,7 @@ int main(int argc, char **argv)
   // analyzer.run(inputFile, outputFile, outputEvery, numFiles);
 
   // analysisPlans[analysisType]->runAnalyzer(inputFile, outputFile, outputEvery, numFiles);
-  
+
   DataCollectionPlan *plan = options.getAnalysisPlans().at(analysis);
 
   auto moduleOptionsPtr = std::make_shared<ModuleOptions>();
@@ -88,13 +92,15 @@ int main(int argc, char **argv)
   }
 
   plan->initialize();
-  plan->runEventLoader(inputFile, outputFile, outputEvery, numFiles);
-
-  // HiggsBackgroundPlan plan;
-  // plan.runAnalyzer(inputFile, outputFile, outputEvery, numFiles);
+  plan->runEventLoader(inputFile, outputFile, outputEvery, numFiles, maxEvents);
 
   std::cout << "Processing complete!" << std::endl;
   std::cout << "Output written to " << outputFile << std::endl;
 
+  auto end = std::chrono::steady_clock::now();
+
+  std::chrono::duration<double> processingTime = end - start;
+
+  std::cout<<"Processing time: "<<processingTime.count()<<"s"<<std::endl;
   return 0;
 }

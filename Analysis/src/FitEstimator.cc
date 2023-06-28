@@ -7,7 +7,7 @@
 #include "TF1.h"
 #include "TFile.h"
 #include "TH1F.h"
-#include "TAxis.h"
+#include "TAxis.h" 
 #include "TFitResult.h"
 #include <sstream>
 #include <fstream>
@@ -34,7 +34,7 @@ double FitEstimator::getExpectedYield(const SingleProcess* process, std::string 
     int totalEventsInt = process->getTotalEvents();
     //Takes the fit histogram wanted from the file, assigns it hist 
     TH1 *hist = getFitHist(dataType);
-
+    
     //Creates a power law fit function
     // TF1 *fitfunc = new TF1("fitfunc", "[0]*pow((x + [2]), [1])", 150, 3000);
     TF1 *fitfunc = new TF1("fitfunc", "[0] * pow(x, [1])", 150, 3000);
