@@ -16,7 +16,7 @@
 #include "CMSAnalysis/Filters/interface/HiggsSelector.hh"
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
-#include "CMSAnalysis/Modules/interface/LocalEventEventInput.hh"
+#include "CMSAnalysis/Modules/interface/LocalEventInput.hh"
 #include "CMSAnalysis/Filters/interface/LeptonFilter.hh"
 #include "CMSAnalysis/Modules/interface/LeptonEfficiency.hh"
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
@@ -71,7 +71,7 @@ void HiggsBackgroundPlan::initialize()
 
     auto recoDecayFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::Reco);
     auto recoDecayFilterMod = make_shared<FilterModule>(recoDecayFilter);
-    recoDecayFilterMod->setInput(eventMod->getEventEventInput());
+    recoDecayFilterMod->setInput(eventMod->getEventInput());
     auto genSimDecayFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::GenSim);
     //analyzer.addFilterModule(make_shared<FilterModule>(recoDecayFilter));
     //analyzer.addFilterModule(make_shared<FilterModule>(genSimDecayFilter));
@@ -159,6 +159,8 @@ void HiggsBackgroundPlan::initialize()
     // eventHistMod->addHistogram(muonPositiveNegativeInvMassHist);
 
     analyzer.addProductionModule(metMod);
+    //Changed because EventModule inherits from ProductionModule now
+    analyzer.addProductionModule(eventMod);
 
 
     // analyzer.addFilterModule(make_shared<FilterModule>(bJetFilter));
@@ -167,7 +169,7 @@ void HiggsBackgroundPlan::initialize()
     analyzer.addFilterModule(recoDecayFilterMod);
 
     //analyzer.addProductionModule(matchMod);
-    analyzer.addAnalysisModule(eventMod);
+    //analyzer.addAnalysisModule(eventMod);
     analyzer.addAnalysisModule(eventHistMod);    
     analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
     //analyzer.addAnalysisModule(eventDump);

@@ -63,7 +63,9 @@ void GenSimPlan::initialize()
 
     //analyzer.addFilterModule(hppFilter);
     analyzer.addProductionModule(metMod);
-    analyzer.addAnalysisModule(eventMod);
+    //Changed because EventModule inherits from ProductionModule now
+    analyzer.addProductionModule(eventMod);
+    //analyzer.addAnalysisModule(eventMod);
     analyzer.addAnalysisModule(eventHistMod);
 
     auto hPlusPlusEfficiency = make_shared<HPlusPlusEfficiency>();

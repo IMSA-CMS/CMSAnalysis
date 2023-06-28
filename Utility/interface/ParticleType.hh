@@ -13,7 +13,7 @@
 //ParticleType object which may be assigned to a particle. 
 //All usages of ParticleType are refrences to the "typeList" variable.
 //To access any of the types call the static member function associated with that particle.
-//The type of a Particle is identified in the identifyType() function in Particle.cc
+//The type of a Particle is identified in the getPDGType() function in Particle.cc
 //Particle types have hists attached to them which are used in EventModule
 class ParticleType
 {
@@ -24,13 +24,20 @@ class ParticleType
     std::vector<std::shared_ptr<SingleParticleHist>> getParticleHists() const;
     std::vector<std::shared_ptr<CollectionHist>> getCollectionHists() const;
 
+    static const ParticleType& getPDGType(int pdgID);
+
     //Member function used to check type
     static const ParticleType& electron();
     static const ParticleType& muon();
     static const ParticleType& jet(); 
     static const ParticleType& tau();
     static const ParticleType& leptonJet(); 
-    static const ParticleType& quark();
+    static const ParticleType& up();
+    static const ParticleType& down();
+    static const ParticleType& strange();
+    static const ParticleType& charm();
+    static const ParticleType& top();
+    static const ParticleType& bottom();
     static const ParticleType& photon();
     static const ParticleType& darkPhoton();
     static const ParticleType& neutralino();
@@ -44,6 +51,12 @@ class ParticleType
 
     static const ParticleType& none();
 
+    static bool loadParticleDatabase(const std::string& fileName);
+
+    //Default constructor necessary for std::unordered_map for allocating new elements with [] operator
+    ParticleType();
+    ParticleType(std::string typeName, int typepdgId, double charge, std::vector<SingleParticleHist> typeParticleHists, std::vector<CollectionHist> typeCollectionHists);//, std::vector<CollectionHist> collectionhists);
+    
     bool operator== (const ParticleType type) const;
     bool operator!= (const ParticleType type) const;
 
@@ -64,12 +77,15 @@ class ParticleType
     static CollectionHist getSameSignInvariantMassHist();
     static CollectionHist getOppositeSignInvariantMassHist();
 
-    ParticleType(std::string typeName, int typepdgId, double charge, std::vector<SingleParticleHist> typeParticleHists, std::vector<CollectionHist> typeCollectionHists);//, std::vector<CollectionHist> collectionhists);
+    static bool loadParticle(std::ifstream& file);
+    //Lets you manually change the particle types in the method definition
+    static void particleTypeOverrides();
+    //Should probably be changed to void and replaced with getPDGType()
+    static const ParticleType& registerType(std::string typeName, int typepdgId, double charge, std::vector<SingleParticleHist> typeParticleHists, std::vector<CollectionHist> typeCollectionHists);//, std::vector<CollectionHist> collectionhist);
 
-    static std::unordered_map<std::string,ParticleType> typeList;
+    static std::unordered_map<int, ParticleType> typeList;
 
     //Adds type object to list if it does not exist and then refrence it
-    static const ParticleType& registerType(std::string typeName, int typepdgId, double charge, std::vector<SingleParticleHist> typeParticleHists, std::vector<CollectionHist> typeCollectionHists);//, std::vector<CollectionHist> collectionhist);
 };
 
 #endif
