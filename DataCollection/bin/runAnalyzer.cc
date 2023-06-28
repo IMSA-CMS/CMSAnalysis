@@ -16,7 +16,6 @@
 #include "CMSAnalysis/DataCollection/interface/DataCollectionPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/AnalyzerOptions.hh"
 #include "CMSAnalysis/DataCollection/interface/ModuleOptions.hh"
-//#include "CMSAnalysis/Utility/interface/LoadParticleDataScript.hh"
 // #include "CMSAnalysis/DataCollection/bin/massResolutionAnalysis.cc"
 // #include "CMSAnalysis/DataCollection/bin/HPlusPlusMassAnalysis.cc"
 // #include "CMSAnalysis/DataCollection/bin/leptonJetReconstructionAnalysis.cc"
@@ -30,7 +29,17 @@
 
 int main(int argc, char **argv)
 {
-  //testLoadParticleScript();
+  std::string particleDatabase("ParticleData.txt");
+  if (ParticleType::loadParticleDatabase(particleDatabase))
+  {
+    std::cout << particleDatabase << " has been loaded properly!\n";
+  }
+  else
+  {
+    std::cout << particleDatabase << " has not been loaded properly!\n";
+  }
+
+
   auto start = std::chrono::steady_clock::now();
 
   gROOT->SetBatch(true);
