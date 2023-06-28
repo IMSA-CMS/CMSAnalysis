@@ -13,7 +13,7 @@ LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<MatchingModule> imatchM
 
 bool LeptonEfficiency::process()
 {
-  auto genSim = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
+  auto genSim = getInput()->getLeptons(EventInput::RecoLevel::GenSim);
 
   
 

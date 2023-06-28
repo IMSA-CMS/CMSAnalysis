@@ -5,12 +5,12 @@
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
 #include "CMSAnalysis/Utility/interface/Lepton.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/Event.hh"
 
-void HPlusPlusGenSimSelector::selectParticles(const InputModule *input, Event &event) const
+void HPlusPlusGenSimSelector::selectParticles(const EventInput *input, Event &event) const
 {
-    auto particles = input->getParticles(InputModule::RecoLevel::GenSim);
+    auto particles = input->getParticles(EventInput::RecoLevel::GenSim);
     for (const auto &particle : particles)
     {
         GenSimParticle genSimParticle = GenSimParticle(particle);

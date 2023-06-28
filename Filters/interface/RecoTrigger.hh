@@ -10,7 +10,7 @@ class RecoTrigger : public Trigger
     RecoTrigger(std::string iName);
 
   protected:
-    virtual bool checkTrigger(const InputModule* input) = 0;    // Returns true if the trigger is passed
+    virtual bool checkTrigger(const EventInput* input) = 0;    // Returns true if the trigger is passed
 };
 
 #endif

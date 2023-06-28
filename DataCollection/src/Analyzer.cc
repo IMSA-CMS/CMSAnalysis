@@ -18,11 +18,11 @@
 #include "CMSAnalysis/Modules/interface/Module.hh"
 #include "CMSAnalysis/Utility/interface/TDisplayText.h"
 #include "CMSAnalysis/DataCollection/interface/ProcessDictionary.hh"
-#include "CMSAnalysis/Modules/interface/AnalyzerInputModule.hh"
+#include "CMSAnalysis/Modules/interface/AnalyzerEventInput.hh"
 
 Analyzer::Analyzer() : 
 eventInterface(nullptr),
-input(new AnalyzerInputModule(&eventInterface))
+input(new AnalyzerEventInput(&eventInterface))
 {
 }
 
@@ -52,12 +52,16 @@ void Analyzer::writeOutputFile(const std::string &outputFile)
 
   outputRootFile->cd();
   //Finalize separately for each filterString, to be safe
+  //std::cout << "There are " << analysisModules.size() << " analysis modules\n";
   for (auto module : analysisModules)
   {
     // Write the output
     module->doneProcessing();
-    if (filterModules.size() != 0)
+    //std::cout << "FilterModules size : " << filterModules.size() << "\n";
+    // if (filterModules.size() != 0)
+    if (true)
     {
+      //std::cout << "Finalizing analysis module: " << module->getFilter() << "\n";
       module->finalize();
       for (auto &str : filterNames) //writes analysis modules by filter string
       {

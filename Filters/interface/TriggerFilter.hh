@@ -10,7 +10,7 @@ class TriggerFilter : public Filter
   public:
     TriggerFilter(const std::shared_ptr<Trigger> iTrigger);
   protected:
-    virtual std::string getFilterString(const InputModule* inputMod) const override;
+    virtual std::string getFilterString(const EventInput* inputMod) const override;
   private:
     const std::shared_ptr<Trigger> trigger;
 };

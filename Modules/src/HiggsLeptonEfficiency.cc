@@ -12,7 +12,7 @@ HiggsLeptonEfficiency::HiggsLeptonEfficiency(const std::shared_ptr<MatchingModul
 
 bool HiggsLeptonEfficiency::process()
 {
-  auto genSim = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
+  auto genSim = getInput()->getLeptons(EventInput::RecoLevel::GenSim);
 
   for(const auto &particle : genSim.getParticles())
   {

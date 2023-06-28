@@ -6,13 +6,13 @@
 #include "TSystem.h"
 
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
-#include "CMSAnalysis/Histograms/interface/DeltaRHist.hh"
 #include "CMSAnalysis/Filters/interface/DoubleMuonTrigger.hh"
 #include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
 #include "CMSAnalysis/Modules/interface/GenSimParticleModule.hh"
 #include "CMSAnalysis/Histograms/interface/GetNthHighestPtHist.hh"
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/Modules/interface/LeptonEfficiency.hh"
+#include "CMSAnalysis/Histograms/interface/LeptonJetDeltaRHist.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetEfficiency.hh"
 #include "CMSAnalysis/Utility/interface/LeptonJet.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetMatchingModule.hh"
@@ -60,7 +60,7 @@ void LeptonJetReconstructionPlan::initialize()
   auto mlMod = std::make_shared<LeptonJetMLCalculator>();
 
   // Histograms
-  auto deltaRHist = std::make_shared<DeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.1); // VIKRAM CHANGED
+  auto deltaRHist = std::make_shared<LeptonJetDeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.1); // VIKRAM CHANGED
   auto pTHist = std::make_shared<LeptonJetPtHist>(lepRecoMod, "pT Values (Reconstructed Jets)", 100, 0, 200);
 
   auto matchedLeptonJetHist = std::make_shared<MatchedLeptonJetHist>("Matched Lepton Jet Hist HadET", 100, 0, 10, lepMatchMod, lepRecoMod, true);
@@ -74,9 +74,9 @@ void LeptonJetReconstructionPlan::initialize()
   // auto matchPhiHist = std::make_shared<MatchingPhiHist>(lepMatchMod, "Differences in Phi for Matched Lepton Jets", 100, 0, 3.15);
   // auto matchEtaHist = std::make_shared<MatchingEtaHist>(lepMatchMod, "Differences in Eta for Matched Lepton Jets", 100, -1, 1);
 
-  //auto relIsoHist = std::make_shared<IsolationHist>(InputModule::RecoLevel::Reco, "Jet pT Rel", 10000, 0, 100);
- // auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(InputModule::RecoLevel::Reco, "NN Classifier Output Distribution", 100, 0, 1, mlMod, lepRecoMod);
-//uncomented
+  //  auto relIsoHist = std::make_shared<IsolationHist>(EventInput::RecoLevel::Reco, "Jet pT Rel", 10000, 0, 100);
+  auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(EventInput::RecoLevel::Reco, "NN Classifier Output Distribution", 100, 0, 1, mlMod, lepRecoMod);
+  // uncomented
   eventHistMod->addHistogram(deltaRHist);
   histOutputMod->addHistogram(deltaRHist);
   histOutputMod->addHistogram(pTHist);
@@ -99,9 +99,9 @@ void LeptonJetReconstructionPlan::initialize()
   auto nLeptonsHist = std::make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
   auto nElectronsHist = std::make_shared<NLeptonsHist>(matchMod, "Matched Electrons", 10, 0, 10, 11);
   auto nMuonsHist = std::make_shared<NLeptonsHist>(matchMod, "Matched Muons", 10, 0, 10, 13);
-  auto recoThirdMuonPtHist = std::make_shared<GetNthHighestPtHist>(InputModule::RecoLevel::Reco, "Reconstructed Third Muon Transverse Momentum", 50, 0, 100, 3);
-  auto recoSecondMuonPtHist = std::make_shared<GetNthHighestPtHist>(InputModule::RecoLevel::Reco, "Reconstructed Second Muon Transverse Momentum", 50, 0, 100, 2);
-  auto recoFirstMuonPtHist = std::make_shared<GetNthHighestPtHist>(InputModule::RecoLevel::Reco, "Reconstructed First Muon Transverse Momentum", 50, 0, 100, 1);
+  auto recoThirdMuonPtHist = std::make_shared<GetNthHighestPtHist>(EventInput::RecoLevel::Reco, "Reconstructed Third Muon Transverse Momentum", 50, 0, 100, 3);
+  auto recoSecondMuonPtHist = std::make_shared<GetNthHighestPtHist>(EventInput::RecoLevel::Reco, "Reconstructed Second Muon Transverse Momentum", 50, 0, 100, 2);
+  auto recoFirstMuonPtHist = std::make_shared<GetNthHighestPtHist>(EventInput::RecoLevel::Reco, "Reconstructed First Muon Transverse Momentum", 50, 0, 100, 1);
 
   // auto nLeptonsHist = std::make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
 
@@ -163,6 +163,6 @@ void LeptonJetReconstructionPlan::initialize()
   //analyzer.addAnalysisModule(recoEventDumpMod);
   /* auto selector = make_shared<SnowmassLeptonSelector>(5);
 
-  analyzer.getInputModule()->setLeptonSelector(selector);
+  analyzer.getEventInput()->setLeptonSelector(selector);
   */
 }
