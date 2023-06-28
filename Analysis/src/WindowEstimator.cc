@@ -15,7 +15,6 @@
 #include <string>
 #include <cstdlib>
 #include "CMSAnalysis/Analysis/interface/WindowEstimator.hh"
-#include "CMSAnalysis/DataCollection/interface/TDisplayText.h"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 
 
@@ -23,8 +22,9 @@ double WindowEstimator::getExpectedYield(const SingleProcess* process, std::stri
 {
     //Takes the histogram wanted from the file, assigns it hist
     TH1 *hist = dynamic_cast<TH1 *>(process->getHist(dataType));
-    if (!hist)
+    if (!hist) {
         throw std::runtime_error("Hist not found");
+    }
 
     int totalEventsInt = process->getTotalEvents();
 

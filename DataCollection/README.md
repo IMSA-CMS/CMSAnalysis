@@ -85,3 +85,8 @@ GenSimEventModule also has a numEvents parmeter if you wish to only process a ce
 auto eventMod = make_shared<GenSimEventModule>(100);
 analyzer.addAnalysisModule(eventDump);
 ```
+
+# Extra Input Line Options
+
+outputEvery: Analyzer will print a short statement every n events. Particularly useful for long jobs.
+maxEvents: Analyzer will only process n events. Helpful for debugging and testing features.

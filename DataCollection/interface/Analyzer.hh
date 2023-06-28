@@ -8,7 +8,7 @@
 #include <memory>
 #include <unordered_set>
 #include "FileParams.hh"
-#include "InputModule.hh"
+#include "CMSAnalysis/Modules/interface/InputModule.hh"
 #include "ProcessDictionary.hh"
 #include "RootEventInterface.hh"
 
@@ -63,8 +63,7 @@ private:
   std::unordered_map<std::string, TDirectory*> filterDirectories;
 
   int numOfEvents = 0;
-  int numOfEvents124 = 0;
-  int numOfEvents137 = 0;
+
 
   
   const EventInterface *eventInterface;
