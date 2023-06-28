@@ -29,7 +29,7 @@
 
 int main(int argc, char **argv)
 {
-  std::string particleDatabase("ParticleData.txt");
+  std::string particleDatabase("textfiles/ParticleData.txt");
   if (ParticleType::loadParticleDatabase(particleDatabase))
   {
     std::cout << particleDatabase << " has been loaded properly!\n";
