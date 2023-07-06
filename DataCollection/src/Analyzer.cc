@@ -113,6 +113,17 @@ void Analyzer::initialize()
   TH1::AddDirectory(kFALSE);
   TH1::SetDefaultSumw2(kTRUE);
 
+  // Checks if all dependencies are loaded properly
+  for (auto module : getAllModules())
+  {
+    if (!checkModuleDependencies(module))
+    {
+      std::cout << typeid(*module).name() << "'s dependencies have not been loaded properly!\n";
+    }
+  }
+
+  std::cout << "Finished checking module dependencies\n";
+
   // Initialize all modules
   for (auto module : getAllModules())
   {
@@ -177,3 +188,31 @@ void Analyzer::processOneEvent(const EventInterface *eInterface)
 
 }
 
+void Analyzer::addProductionModule(std::shared_ptr<ProductionModule> module)
+{
+  productionModules.push_back(module);
+}
+
+void Analyzer::addFilterModule(std::shared_ptr<FilterModule> module)
+{
+  filterModules.push_back(module);
+}
+void Analyzer::addAnalysisModule(std::shared_ptr<AnalysisModule> module)
+{
+  analysisModules.push_back(module);
+}
+
+bool Analyzer::checkModuleDependencies(std::shared_ptr<Module> module)
+{
+  auto modules = getAllModules();
+  auto dependencies = module->getDependencies();
+  for (auto modulePtr : dependencies)
+  {
+    if (std::find(modules.begin(), modules.end(), modulePtr) == modules.end())
+    {
+      return false;
+    } 
+  }
+
+  return true;
+}

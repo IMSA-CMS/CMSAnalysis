@@ -22,7 +22,7 @@ public:
 
   // This is called once before any files are accessed
   // Used to set up objects such as histograms
-  virtual void initialize() {}
+  virtual void initialize() {};
 
   // This is called once after all files are processed
   // Used for cleanup and to create final graphs and plots
@@ -48,14 +48,17 @@ public:
     return 0;
     }
 
+  inline std::vector<std::shared_ptr<Module>> getDependencies() const { return dependencies; }
+  inline void addRequiredModule(std::shared_ptr<Module> module) { dependencies.push_back(module); }
+
 protected:
+  std::vector<std::shared_ptr<Module>> dependencies;
   // This is called once per event, with the event object passed in.
   // Most of the work should happen here.
   // Return false to stop execution on this event, which should only be done
   // if you are deliberately filtering events.
   // In most cases, you should return true.
   virtual bool process() = 0;
-
 
 private:
   static std::unordered_map<std::string, double> parameters;
