@@ -9,6 +9,7 @@ LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<MatchingModule> imatchM
   EfficiencyModule(),
   matchModule(imatchModule)
 {
+  addRequiredModule(imatchModule);
 }
 
 bool LeptonEfficiency::process()

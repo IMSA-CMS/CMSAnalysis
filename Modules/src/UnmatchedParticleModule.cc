@@ -9,6 +9,7 @@ UnmatchedParticleModule::UnmatchedParticleModule(const std::shared_ptr<MatchingM
   //genSim(genSimModule),
   matching(matchingModule)
 {
+	addRequiredModule(matchingModule);
 }
 
 void UnmatchedParticleModule::initialize()
