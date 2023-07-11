@@ -1,4 +1,6 @@
 H++toLL
 Mass:	900
 Run:	2
-Lepton:	LL
+Lepton:	All
+Format:	MiniAOD
+Period:	2018

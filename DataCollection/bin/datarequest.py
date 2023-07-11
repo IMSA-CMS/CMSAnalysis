@@ -6,7 +6,7 @@ import os;
 
 from subprocess import Popen, PIPE
 
-stdout = Popen('dasgoclient --query="dataset dataset=/HPlusPlus*HTo2L*/RunIISummer20UL*/NANOAODSIM"', shell=True, stdout=PIPE).stdout
+stdout = Popen('dasgoclient --query="dataset dataset=/HPlusPlus*HTo2L*/RunIISummer20UL*/MiniAODSIM"', shell=True, stdout=PIPE).stdout
 output = stdout.read()
 
 datasets = output.split()
@@ -18,7 +18,7 @@ for dataset in datasets:
 	if "APV" in dataset:
 		period += "APV"
 	aod = dataset[-10 : -6].lower().capitalize()
-	name = "H++toLL_Lepton_All_Mass_"+mass+"_Period_20"+period+"_Run_2_Format_"+aod+"AOD.txt"
+	name = "H++toLL_Format_"+aod+"AOD_Lepton_All_Mass_"+mass+"_Period_20"+period+"_Run_2.txt"
 	#open('textfiles/Data/'+name, 'w') 
 	req = 'dasgoclient --query="file dataset=' + dataset + '" > textfiles/H++toLL/'+name
 	print("making "+name)
