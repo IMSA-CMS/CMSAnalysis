@@ -21,6 +21,7 @@ class NanoAODEventFile : public EventFile
         virtual ParticleCollection<GenSimParticle> getGenSimParticles() const override;
         virtual ParticleCollection<Particle> getRecoParticles() const override;
         virtual ParticleCollection<Particle> getRecoJets() const override;
+        virtual int getNumOfEvents() const override {return tree->GetEntries();}
         //virtual GenEventInfoProduct getGenInfo() const override;
         virtual double getMET() const override;
         virtual int getNumPileUpInteractions() const override;

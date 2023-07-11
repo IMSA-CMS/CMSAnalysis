@@ -48,10 +48,10 @@ void LeptonJetReconstructionPlan::initialize()
 
   auto eventMod = std::make_shared<EventModule>();
   auto eventHistMod = eventMod->getHistogramModule();
-  //eventMod->addSelector(std::make_shared<LeptonJetSelector>());
+  eventMod->addSelector(std::make_shared<LeptonJetSelector>());
 
   auto matchMod = std::make_shared<MatchingModule>();
-  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
+  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.01);
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
   auto eventDumpMod = std::make_shared<EventDumpModule>(true, true);
   auto lepMatchMod = std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.5);
@@ -82,8 +82,8 @@ void LeptonJetReconstructionPlan::initialize()
   histOutputMod->addHistogram(pTHist);
   histOutputMod->addHistogram(matchedLeptonJetHist);
   histOutputMod->addHistogram(unmatchedLeptonJetHist);
-  //  histOutputMod->addHistogram(relIsoHist);
-  histOutputMod->addHistogram(leptonJetMLHist);
+  //histOutputMod->addHistogram(relIsoHist);
+ // histOutputMod->addHistogram(leptonJetMLHist);
 
   //   histOutputMod->addHistogram(matchDeltaRHist);
   //   histOutputMod->addHistogram(matchPtHist);
@@ -113,9 +113,7 @@ void LeptonJetReconstructionPlan::initialize()
 
   // Efficiency Modules
   auto leptonEfficiency = std::make_shared<LeptonEfficiency>(matchMod);
-  // auto leptonJetEfficiency = std::make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
-
- 
+  auto leptonJetEfficiency = std::make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
 
   // Add the histogram(s) created above to histMod
   // eventHistMod->addHistogram(nLeptonsHist);
@@ -154,15 +152,15 @@ void LeptonJetReconstructionPlan::initialize()
   analyzer.addAnalysisModule(eventHistMod);
 
   // analyzer.addProductionModule(triggerMod);
-  // analyzer.addAnalysisModule(leptonEfficiency);
-  // analyzer.addAnalysisModule(leptonJetEfficiency);
-  // analyzer.addAnalysisModule(massRecoEfficiency200);
-  // analyzer.addAnalysisModule(massRecoEfficiency500);
-  // analyzer.addAnalysisModule(massRecoEfficiency800);
-  // analyzer.addAnalysisModule(massRecoEfficiency1000);
-  // analyzer.addAnalysisModule(massRecoEfficiency1300);
-  // analyzer.addAnalysisModule(eventDumpMod);
-  // analyzer.addAnalysisModule(recoEventDumpMod);
+  //analyzer.addAnalysisModule(leptonEfficiency);
+  analyzer.addAnalysisModule(leptonJetEfficiency);
+  //analyzer.addAnalysisModule(massRecoEfficiency200);
+  //analyzer.addAnalysisModule(massRecoEfficiency500);
+  //analyzer.addAnalysisModule(massRecoEfficiency800);
+  //analyzer.addAnalysisModule(massRecoEfficiency1000);
+  //analyzer.addAnalysisModule(massRecoEfficiency1300);
+  analyzer.addAnalysisModule(eventDumpMod);
+  //analyzer.addAnalysisModule(recoEventDumpMod);
   /* auto selector = make_shared<SnowmassLeptonSelector>(5);
 
   analyzer.getEventInput()->setLeptonSelector(selector);
