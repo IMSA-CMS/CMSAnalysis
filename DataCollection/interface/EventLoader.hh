@@ -31,6 +31,12 @@ class EventLoader
         //Calls process Root files
         void run(int outputEvery, int nFiles, int maxEvents);
 
+        int getNumOfEvents() const {return numOfEvents;}
+
+
+    protected:
+        int numOfEvents;
+
     private:
         void beginJob();
         void analyze(const RootEventInterface);

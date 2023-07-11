@@ -12,7 +12,7 @@
 #include "CMSAnalysis/Filters/interface/Selector.hh"
 #include "CMSAnalysis/Filters/interface/Cut.hh"
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
-#include "CMSAnalysis/Modules/interface/LocalEventInputModule.hh"
+#include "CMSAnalysis/Modules/interface/LocalEventInput.hh"
 #include "CMSAnalysis/Utility/interface/SingleParticleHist.hh"
 
 // EventModule allows an Analyzer to select events and apply cuts.
@@ -34,7 +34,7 @@ class EventModule : public ProductionModule
         std::shared_ptr<HistogramOutputModule> getHistogramModule() {return histMod;}
 
         // Returns an input module that can be used to make these events the input to other modules
-        const EventInput* getEventInputModule() const {return &localInput;}
+        const EventInput* getEventInput() const {return &localInput;}
 
     protected:
         bool process() override;
@@ -61,7 +61,7 @@ class EventModule : public ProductionModule
         Event event;
 
         std::shared_ptr<HistogramOutputModule> histMod = std::make_shared<HistogramOutputModule>();
-        LocalEventInputModule localInput;
+        LocalEventInput localInput;
 
         // Used for keeping track of which sets of histograms have been added
         std::unordered_map<std::string,std::shared_ptr<SingleParticleHist>> particleHistograms;

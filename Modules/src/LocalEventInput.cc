@@ -1,4 +1,4 @@
-#include "CMSAnalysis/Modules/interface/LocalEventInputModule.hh"
+#include "CMSAnalysis/Modules/interface/LocalEventInput.hh"
 
 #include "CMSAnalysis/Modules/interface/Module.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
@@ -9,12 +9,12 @@
 #include "CMSAnalysis/Utility/interface/Lepton.hh"
 #include "CMSAnalysis/Utility/interface/Event.hh"
 
-LocalEventInputModule::LocalEventInputModule(const Event* event1)
+LocalEventInput::LocalEventInput(const Event* event1)
 {
     event = event1;
 }
 
-ParticleCollection<Lepton> LocalEventInputModule::getLeptons(RecoLevel level) const
+ParticleCollection<Lepton> LocalEventInput::getLeptons(RecoLevel level) const
 {
     ParticleCollection<Lepton> leptons;
     auto electrons = getParticles(level, ParticleType::electron()).getParticles();
@@ -30,7 +30,7 @@ ParticleCollection<Lepton> LocalEventInputModule::getLeptons(RecoLevel level) co
     return leptons;
 }
 
-ParticleCollection<Particle> LocalEventInputModule::getParticles(RecoLevel level, const ParticleType& particleType) const
+ParticleCollection<Particle> LocalEventInput::getParticles(RecoLevel level, const ParticleType& particleType) const
 {
     ParticleCollection<Particle> particleList;
     auto particles = event->getParticles().getParticles();
@@ -45,37 +45,37 @@ ParticleCollection<Particle> LocalEventInputModule::getParticles(RecoLevel level
 }
 
 /* TODO: getJets */
-ParticleCollection<Particle> LocalEventInputModule::getJets(RecoLevel level) const
+ParticleCollection<Particle> LocalEventInput::getJets(RecoLevel level) const
 {
     return event->getJets();
 }
 
-int LocalEventInputModule::getNumPileUpInteractions() const
+int LocalEventInput::getNumPileUpInteractions() const
 {
     throw std::runtime_error("GenSimEventFile has no implementation of getNumPileUpInteractions");
 }
 
-double LocalEventInputModule::getMET() const
+double LocalEventInput::getMET() const
 {
     return event->getMET();
 } 
 
-std::vector<bool> LocalEventInputModule::getTriggerResults(std::string subProcess) const
+std::vector<bool> LocalEventInput::getTriggerResults(std::string subProcess) const
 {
     throw std::runtime_error("calling getTrigger___() on a local event doesn't make sense");
 }
 
-std::vector<std::string> LocalEventInputModule::getTriggerNames(std::string subProcess) const
+std::vector<std::string> LocalEventInput::getTriggerNames(std::string subProcess) const
 {
     throw std::runtime_error("calling getTrigger___() on a local event doesn't make sense");
 }
 
-bool LocalEventInputModule::checkTrigger(std::string triggerName, std::string subProcess) const
+bool LocalEventInput::checkTrigger(std::string triggerName, std::string subProcess) const
 {
     throw std::runtime_error("calling getTrigger___() on a local event doesn't make sense");
 }
 
-ParticleCollection<Particle> LocalEventInputModule::getSpecial(std::string key) const
+ParticleCollection<Particle> LocalEventInput::getSpecial(std::string key) const
 {
     return event->getSpecial(key);
 }

@@ -6,6 +6,8 @@
 MassResolutionModule::MassResolutionModule(const std::shared_ptr<MatchingModule> matchingModule, std::string bin, const int minMass, const int maxMass, const int massIntervalSize) :
   ResolutionModule(matchingModule, bin, minMass, maxMass, massIntervalSize)
 {
+  // Dependency added in ResolutionModule constructor
+  //addRequiredModule(matchingModule);
 }
 
 void MassResolutionModule::fillError(const MatchingPairCollection& bestPairs)

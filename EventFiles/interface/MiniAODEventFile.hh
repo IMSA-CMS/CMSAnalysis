@@ -18,10 +18,12 @@ class MiniAODEventFile : public EventFile
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;
         virtual int getNumPileUpInteractions() const override;
+        virtual int getNumOfEvents() const override {return event->size();}
         virtual bool checkTrigger(std::string triggerName, std::string subProcess) const override; //checks if event passes trigger criteria
     protected:
         //virtual void getLeptons(RecoLevel level) override;
         virtual ParticleCollection<GenSimParticle> getGenSimParticles() const override;
+        
         virtual ParticleCollection<Particle> getRecoParticles() const override;
         virtual ParticleCollection<Particle> getRecoJets() const override;
         

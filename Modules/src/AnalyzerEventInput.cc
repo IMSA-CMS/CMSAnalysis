@@ -1,14 +1,14 @@
-#include "CMSAnalysis/Modules/interface/AnalyzerInputModule.hh"
+#include "CMSAnalysis/Modules/interface/AnalyzerEventInput.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include "CMSAnalysis/DataCollection/interface/EventLoader.hh"
 #include "CMSAnalysis/Filters/interface/Selector.hh"
 
-AnalyzerInputModule::AnalyzerInputModule(const EventInterface **iEventInterface) : eventInterface(iEventInterface)
+AnalyzerEventInput::AnalyzerEventInput(const EventInterface **iEventInterface) : eventInterface(iEventInterface)
 {
 }
 
-ParticleCollection<Lepton> AnalyzerInputModule::getLeptons(RecoLevel level) const
+ParticleCollection<Lepton> AnalyzerEventInput::getLeptons(RecoLevel level) const
 {
     ParticleCollection<Lepton> leptons;
     auto electrons = getParticles(level, ParticleType::electron()).getParticles();
@@ -25,7 +25,7 @@ ParticleCollection<Lepton> AnalyzerInputModule::getLeptons(RecoLevel level) cons
     return leptons;
 }
 
-ParticleCollection<Particle> AnalyzerInputModule::getParticles(RecoLevel level, const ParticleType& particleType) const
+ParticleCollection<Particle> AnalyzerEventInput::getParticles(RecoLevel level, const ParticleType& particleType) const
 {
     ParticleCollection<Particle> particleList;
     if (level == RecoLevel::GenSim)
@@ -49,7 +49,7 @@ ParticleCollection<Particle> AnalyzerInputModule::getParticles(RecoLevel level, 
              if (p.getType() == particleType || particleType == ParticleType::none()) //&& p.isFinalState())
             {
                 particleList.addParticle(p);
-                //std::cout << "AnalyzerInputModule +1" ;
+                //std::cout << "AnalyzerEventInput +1" ;
             }
         }
     }
@@ -57,7 +57,7 @@ ParticleCollection<Particle> AnalyzerInputModule::getParticles(RecoLevel level, 
 }
 
 /* TODO: getJets */
-ParticleCollection<Particle> AnalyzerInputModule::getJets(RecoLevel level) const
+ParticleCollection<Particle> AnalyzerEventInput::getJets(RecoLevel level) const
 {
     ParticleCollection<Particle> particleList;
     if (level == RecoLevel::GenSim)
@@ -75,27 +75,27 @@ ParticleCollection<Particle> AnalyzerInputModule::getJets(RecoLevel level) const
     return particleList;
 }
 
-int AnalyzerInputModule::getNumPileUpInteractions() const
+int AnalyzerEventInput::getNumPileUpInteractions() const
 {
     return (*eventInterface)->getNumPileUpInteractions();
 }
 
-double AnalyzerInputModule::getMET() const
+double AnalyzerEventInput::getMET() const
 {
     return (*eventInterface)->getMET();
 }
 
-std::vector<bool> AnalyzerInputModule::getTriggerResults(std::string subProcess) const
+std::vector<bool> AnalyzerEventInput::getTriggerResults(std::string subProcess) const
 {
     return (*eventInterface)->getTriggerResults(subProcess);
 }
 
-std::vector<std::string> AnalyzerInputModule::getTriggerNames(std::string subProcess) const
+std::vector<std::string> AnalyzerEventInput::getTriggerNames(std::string subProcess) const
 {
     return (*eventInterface)->getTriggerNames(subProcess);
 }
 
-bool AnalyzerInputModule::checkTrigger(std::string triggerName, std::string subProcess) const
+bool AnalyzerEventInput::checkTrigger(std::string triggerName, std::string subProcess) const
 {
     return (*eventInterface)->checkTrigger(triggerName, subProcess);
 }
