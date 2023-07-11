@@ -49,7 +49,7 @@ public:
     }
 
   inline std::vector<std::shared_ptr<Module>> getDependencies() const { return dependencies; }
-  inline void addRequiredModule(std::shared_ptr<Module> module) { dependencies.push_back(module); }
+  void addRequiredModule(std::shared_ptr<Module> module);
 
 protected:
   std::vector<std::shared_ptr<Module>> dependencies;

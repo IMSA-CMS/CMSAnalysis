@@ -146,7 +146,7 @@ void LeptonJetReconstructionPlan::initialize()
   // analyzer.addProductionModule(genSimEventDumpMod);
   // analyzer.addProductionModule(recoEventDumpMod);
   analyzer.addProductionModule(matchMod);
-  analyzer.addProductionModule(lepRecoMod);
+  //analyzer.addProductionModule(lepRecoMod);
   // analyzer.addProductionModule(genPartMod);
   analyzer.addProductionModule(lepMatchMod);
 
