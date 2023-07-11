@@ -1,10 +1,10 @@
-#ifndef PARTICLEINPUTMODULE_HH
-#define PARTICLEINPUTMODULE_HH
+#ifndef PARTICLEEVENTINPUT_HH
+#define PARTICLEEVENTINPUT_HH
 
 #include "EventInput.hh"
 #include "Particle.hh"
 
-class ParticleInputModule : public EventInput 
+class ParticleEventInput : public EventInput 
 {
     public:
         std::ParticleCollection getLeptons() {return leptons;}

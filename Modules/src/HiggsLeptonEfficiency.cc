@@ -8,6 +8,7 @@ HiggsLeptonEfficiency::HiggsLeptonEfficiency(const std::shared_ptr<MatchingModul
   EfficiencyModule(),
   matchModule(imatchModule)
 {
+  addRequiredModule(imatchModule);
 }
 
 bool HiggsLeptonEfficiency::process()

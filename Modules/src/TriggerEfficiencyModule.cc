@@ -10,6 +10,7 @@ TriggerEfficiencyModule::TriggerEfficiencyModule(const std::shared_ptr<MatchingM
   lowerWidth(iLowerWidth),
   upperWidth(iUpperWidth)
 {
+  addRequiredModule(iMatchMod);
 }
 
 bool TriggerEfficiencyModule::process()
