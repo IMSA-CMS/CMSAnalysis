@@ -1,5 +1,5 @@
 #include "CMSAnalysis/EventFiles/interface/NanoAODEventFile.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "CMSAnalysis/Utility/interface/GenSimSimpleImplementation.hh"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"

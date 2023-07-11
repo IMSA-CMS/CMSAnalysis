@@ -8,7 +8,7 @@ METTrigger::METTrigger(std::shared_ptr<METModule> iMETMod, const double iMETCuto
 {
 }
 
-bool METTrigger::checkTrigger(const InputModule* input)
+bool METTrigger::checkTrigger(const EventInput* input)
 {
   auto mET = mETMod->getMet();
 

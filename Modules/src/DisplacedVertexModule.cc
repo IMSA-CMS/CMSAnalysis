@@ -37,7 +37,7 @@ DisplacedVertexModule::DisplacedVertexModule()
 
 bool DisplacedVertexModule::process()
 {
-  std::vector<Lepton> recoCandidates(getInput()->getLeptons(InputModule::RecoLevel::Reco).getParticles());
+  std::vector<Lepton> recoCandidates(getInput()->getLeptons(EventInput::RecoLevel::Reco).getParticles());
 
   for (auto& inputPart : recoCandidates)
   {

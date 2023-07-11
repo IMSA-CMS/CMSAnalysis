@@ -10,7 +10,7 @@ class SingleIsolatedMuonTrigger : public RecoTrigger
     SingleIsolatedMuonTrigger(const double iPTCutoff = 24);
   
   protected:
-    bool checkTrigger(const InputModule* input) override; //checks if event passes trigger criteria
+    bool checkTrigger(const EventInput* input) override; //checks if event passes trigger criteria
 
   private:
     const double pTCutoff;

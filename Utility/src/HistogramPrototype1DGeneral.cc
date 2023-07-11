@@ -5,7 +5,7 @@
 
 #include <string>
 
-HistogramPrototype1DGeneral::HistogramPrototype1DGeneral(const std::string& iname, int inBins, double iminimum, double imaximum, std::function<std::vector<double>(const InputModule*)>function):
+HistogramPrototype1DGeneral::HistogramPrototype1DGeneral(const std::string& iname, int inBins, double iminimum, double imaximum, std::function<std::vector<double>(const EventInput*)>function):
     HistogramPrototype1D(iname, inBins, iminimum,imaximum), 
     vecOne(function)
 {}

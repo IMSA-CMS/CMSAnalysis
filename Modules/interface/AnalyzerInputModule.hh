@@ -9,13 +9,13 @@
 #include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "FWCore/Common/interface/TriggerNames.h"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/Lepton.hh"
 class TFile;
 class EventLoader;
 class EventInterface;
 
-class AnalyzerInputModule : public InputModule
+class AnalyzerInputModule : public EventInput
 {
     public:
         AnalyzerInputModule(const EventInterface** eventInterface);

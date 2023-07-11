@@ -7,8 +7,8 @@ eventOutput(writeOutput)
 }
 bool RecoGenSimComparisonModule::process()
 {
-    auto recoParticles = getInput()->getParticles(InputModule::RecoLevel::Reco, ParticleType::none());
-    auto genParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::none());
+    auto recoParticles = getInput()->getParticles(EventInput::RecoLevel::Reco, ParticleType::none());
+    auto genParticles = getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::none());
     
     printMatchInfo(recoParticles, genParticles);
     return true;

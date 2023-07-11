@@ -1,6 +1,6 @@
 #include "CMSAnalysis/Filters/interface/MassBinFilter.hh"
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/FWLite/interface/Event.h"
@@ -11,7 +11,7 @@ MassBinFilter::MassBinFilter(const std::shared_ptr<MatchingModule> matchingModul
                                                                                                                                    maximum(imaximum),
                                                                                                                                    nBins(iNBins){};
 
-std::string MassBinFilter::getFilterString(const InputModule* inputMod) const
+std::string MassBinFilter::getFilterString(const EventInput* inputMod) const
 {
   auto bestPairs = matching->getMatchingBestPairs(); // Get the matching pairs
 

@@ -92,10 +92,10 @@ bool EventModule::process ()
     return true;
 }
 
-std::function<std::vector<double>(const InputModule*)> EventModule::findNthParticleFunction(int n, 
-            const ParticleType& particleType, InputModule::RecoLevel typeGenSim, double (Particle::* valueFunction)() const) const
+std::function<std::vector<double>(const EventInput*)> EventModule::findNthParticleFunction(int n, 
+            const ParticleType& particleType, EventInput::RecoLevel typeGenSim, double (Particle::* valueFunction)() const) const
 {
-    std::function<std::vector<double>(const InputModule*)> NThParticleFunction = [n, particleType, typeGenSim, valueFunction] (const InputModule* input) -> std::vector<double> 
+    std::function<std::vector<double>(const EventInput*)> NThParticleFunction = [n, particleType, typeGenSim, valueFunction] (const EventInput* input) -> std::vector<double> 
     {
         auto particles = input->getParticles(typeGenSim, particleType).getParticles();
         if (particles.size() > static_cast<size_t>(n))

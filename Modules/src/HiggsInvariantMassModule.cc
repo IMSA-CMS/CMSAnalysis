@@ -1,6 +1,6 @@
 #include "CMSAnalysis/Modules/interface/HiggsInvariantMassModule.hh"
 #include "CMSAnalysis/Utility/interface/ParticleType.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "TFile.h"
 
 HiggsInvariantMassModule::HiggsInvariantMassModule(std::string iname):
@@ -21,7 +21,7 @@ void HiggsInvariantMassModule::initialize()
 bool HiggsInvariantMassModule::process()
 {
 // loop through, make a collection that has pt greater than 5
-    auto muons = getInput()->getParticles(InputModule::RecoLevel::Reco, ParticleType::muon());
+    auto muons = getInput()->getParticles(EventInput::RecoLevel::Reco, ParticleType::muon());
     ParticleCollection highPtMuons;
 
     for (const auto& _muon : muons)
