@@ -1,5 +1,5 @@
 #include "CMSAnalysis/EventFiles/interface/DelphesEventFile.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"

@@ -3,9 +3,9 @@ DoubleMuonTrigger::DoubleMuonTrigger(double iPTCutoff, double iSecondPTCutoff) :
                                                                                  pTCutoff(iPTCutoff),
                                                                                  secondPTCutoff(iSecondPTCutoff){};
 
-bool DoubleMuonTrigger::checkTrigger(const InputModule *input)
+bool DoubleMuonTrigger::checkTrigger(const EventInput *input)
 {
-  auto particles = input->getParticles(InputModule::RecoLevel::Reco, ParticleType::muon());
+  auto particles = input->getParticles(EventInput::RecoLevel::Reco, ParticleType::muon());
 
   // If there aren't enough muons, then automatically fail the trigger
   if (particles.getNumParticles() < 2)

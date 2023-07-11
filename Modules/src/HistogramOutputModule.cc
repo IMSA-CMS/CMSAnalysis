@@ -30,7 +30,7 @@ void HistogramOutputModule::addHistogram(std::shared_ptr<HistogramPrototype> his
   histograms.push_back(hist);
 }
 
-void HistogramOutputModule::setInput(const InputModule *iInput) {
+void HistogramOutputModule::setInput(const EventInput *iInput) {
   if (!getInput())
   {
     Module::setInput(iInput);
@@ -145,7 +145,7 @@ bool HistogramOutputModule::process() {
     bool draw = hist->shouldDraw(); // call the shouldDraw function so we can
                                     // call process on the FilterModules
     // 2/2/2023 investigating shouldDraw problem, this comment is just a placeholder
-    
+
     if(draw)
     {
       // If the histogram without mass bin doesn't exist, make it
@@ -166,6 +166,10 @@ bool HistogramOutputModule::process() {
 
       // Fill the histogram if shouldDraw(event) (draw) returns true
       //if (draw) {
+      // for (double value : hist->value())
+      // {
+      //   std::cout << hist->getFilteredName() << " has " << value << "\n";
+      // }
       fillHistogram(hist->getFilteredName(), hist->value());
     }
   }
@@ -174,14 +178,24 @@ bool HistogramOutputModule::process() {
 
 void HistogramOutputModule::finalize()
 {
+  // std::cout << "Starting histogram finalization \n";
+  // std::cout << "There are " << histograms.size() << " histograms in this event\n";
   for (auto hist : histograms) 
   {
+    // std::cout << "Histogram filtered name = " << hist->getFilteredName() << "\n";
     auto Thist = getHistogram(hist->getFilteredName());
+
+    // for (int i = 1; i < Thist->GetEntries(); ++i)
+    // {
+    //   std::cout << "Bin " << Thist->GetBinWidth(i) * i << "has " << Thist->GetBinContent(i) << " entries\n";
+    // }
+    
     if (Thist && Thist->GetEntries() == 0)
     {
       auto it = baseObjects.find(getObjectName(hist->getFilteredName()));
       if (it != baseObjects.end())
       {
+        // std::cout << "Deleting " << hist->getFilteredName() << " histogram\n";
         baseObjects.erase(it);
         //should probably remove hist from histograms tho not sure how to do that - George 2/23/23
       }

@@ -3,14 +3,14 @@
 
 #include "CMSAnalysis/Utility/interface/Filter.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 
 class InvariantMassFilter : public Filter
 {
     public:
-        InvariantMassFilter(double cut, InputModule::RecoLevel inputLvl = InputModule::RecoLevel::Reco);
+        InvariantMassFilter(double cut, EventInput::RecoLevel inputLvl = EventInput::RecoLevel::Reco);
     protected:
-        virtual std::string getFilterString(const InputModule* inputMod) const override;
+        virtual std::string getFilterString(const EventInput* inputMod) const override;
 
     private:
         // Checks to see if opposite-sign invariant mass is vetoed
@@ -23,7 +23,7 @@ class InvariantMassFilter : public Filter
         bool checkSign(Particle p1, Particle p2);
 
         double cut;
-        InputModule::RecoLevel inputLevel;
+        EventInput::RecoLevel inputLevel;
 };
 
 #endif

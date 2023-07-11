@@ -7,13 +7,13 @@
 
 #include <vector>
 
-std::vector<double> PhotonsHist::protectedValue(InputModule::RecoLevel typeGenSim) const
+std::vector<double> PhotonsHist::protectedValue(EventInput::RecoLevel typeGenSim) const
 {
   // std::cerr << "photons hist " << EventLoader.use_count() << "\n";
-  if (typeGenSim == InputModule::RecoLevel::GenSim)      // typeGenSim == true, so we want the GenSim values
+  if (typeGenSim == EventInput::RecoLevel::GenSim)      // typeGenSim == true, so we want the GenSim values
   {
     ParticleCollection<GenSimParticle> finalPhotons;
-    auto lepVector = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::photon()).getParticles();
+    auto lepVector = getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::photon()).getParticles();
     ParticleCollection<GenSimParticle> lepCollection;
 
     for (auto lepton : lepVector)
@@ -27,7 +27,7 @@ std::vector<double> PhotonsHist::protectedValue(InputModule::RecoLevel typeGenSi
     auto particleVectorPosSign = posSignLep.getParticles();
     auto particleVectorOppSign = oppSignLep.getParticles();
     
-    auto tempPhotons = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::photon()).getParticles();
+    auto tempPhotons = getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::photon()).getParticles();
     std::vector<GenSimParticle> photons;
     for (auto photon : tempPhotons)
     {
@@ -70,7 +70,7 @@ std::vector<double> PhotonsHist::protectedValue(InputModule::RecoLevel typeGenSi
     // ParticleCollection oppSignLep;
     // auto recoPhotonParticles =
     std::vector<Particle> photons; 
-    photons = getInput()->getParticles(InputModule::RecoLevel::Reco, ParticleType::photon()).getParticles();
+    photons = getInput()->getParticles(EventInput::RecoLevel::Reco, ParticleType::photon()).getParticles();
     std::vector<double> photonPT;
 
     for(auto currentParticle : photons)

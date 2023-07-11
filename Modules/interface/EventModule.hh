@@ -7,7 +7,7 @@
 #include <vector>
 #include <memory>
 
-#include "CMSAnalysis/Modules/interface/AnalysisModule.hh"
+#include "CMSAnalysis/Modules/interface/ProductionModule.hh"
 #include "CMSAnalysis/Utility/interface/Event.hh"
 #include "CMSAnalysis/Filters/interface/Selector.hh"
 #include "CMSAnalysis/Filters/interface/Cut.hh"
@@ -18,7 +18,7 @@
 // EventModule allows an Analyzer to select events and apply cuts.
 // Additionally, contains a HistogramOutputModule to generate basic histograms for events.
 // Add as an AnalysisModule in a Plan
-class EventModule : public AnalysisModule
+class EventModule : public ProductionModule
 {
     public:
         EventModule();
@@ -34,14 +34,14 @@ class EventModule : public AnalysisModule
         std::shared_ptr<HistogramOutputModule> getHistogramModule() {return histMod;}
 
         // Returns an input module that can be used to make these events the input to other modules
-        const InputModule* getEventInputModule() const {return &localInput;}
+        const EventInput* getEventInputModule() const {return &localInput;}
 
     protected:
         bool process() override;
 
         // function to generate lambda functions for HistogramPrototype1DGeneral, so that they don't have to be explicitly declared
-        std::function<std::vector<double>(const InputModule*)> findNthParticleFunction(int n, 
-        const ParticleType& particleType, InputModule::RecoLevel typeGenSim, double (Particle::* valueFunction)() const) const;
+        std::function<std::vector<double>(const EventInput*)> findNthParticleFunction(int n, 
+        const ParticleType& particleType, EventInput::RecoLevel typeGenSim, double (Particle::* valueFunction)() const) const;
 
         // adds all Nth Highest Phi/Eta/Invariant Mass histograms for specified particleType up to the ith particle 
         // of that particle type

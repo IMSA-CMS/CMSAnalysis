@@ -1,5 +1,5 @@
-#ifndef INPUTMODULE_HH
-#define INPUTMODULE_HH
+#ifndef EVENTINPUT_HH
+#define EVENTINPUT_HH
 
 #include <memory>
 
@@ -17,10 +17,10 @@ class TFile;
 class EventLoader;
 class Selector;
 
-class InputModule
+class EventInput
 {
 public:
-    virtual ~InputModule(){}
+    virtual ~EventInput(){}
 
     enum class RecoLevel
     {

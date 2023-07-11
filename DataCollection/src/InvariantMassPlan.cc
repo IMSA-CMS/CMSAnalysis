@@ -32,14 +32,14 @@ void InvariantMassPlan::initialize()
   // Create necessary histogram(s), as well as histMod
   auto histMod = make_shared<HistogramOutputModule>();
   
-  // auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "same_Sign_Invariant_Mass", 300, 0, 1000);
-  // auto invMassHist = make_shared<InvariantMassHist>(InputModule::RecoLevel::Reco, "invariant_Mass", 300, 0, 1000);
-  auto photonElectronHist = make_shared<PhotonElectronInvariantMassHist>(InputModule::RecoLevel::Reco, "photon_Electron_Invariant_Mass", 300, 0, 1000);
+  // auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::Reco, "same_Sign_Invariant_Mass", 300, 0, 1000);
+  // auto invMassHist = make_shared<InvariantMassHist>(EventInput::RecoLevel::Reco, "invariant_Mass", 300, 0, 1000);
+  auto photonElectronHist = make_shared<PhotonElectronInvariantMassHist>(EventInput::RecoLevel::Reco, "photon_Electron_Invariant_Mass", 300, 0, 1000);
 
 
 
-  auto ssInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "Drell-Yan Same Sign Invariant Mass", 300, 1, 1000);
-  auto highSsInvMassHist = make_shared<SameSignInvariantMassHist>(InputModule::RecoLevel::Reco, "Drell-Yan Same Sign Invariant Mass > 500 GeV", 200, 500, 1000);
+  auto ssInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::Reco, "Drell-Yan Same Sign Invariant Mass", 300, 1, 1000);
+  auto highSsInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::Reco, "Drell-Yan Same Sign Invariant Mass > 500 GeV", 200, 500, 1000);
   // Create necessary module(s) for the filter(s)
 
   // Create necessary filter(s)

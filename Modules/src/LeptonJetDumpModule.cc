@@ -9,7 +9,7 @@
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/FWLite/interface/Event.h"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 
 LeptonJetDumpModule::LeptonJetDumpModule(std::shared_ptr<LeptonJetMatchingModule> iLepJet, std::shared_ptr<MatchingModule> iMatch, int inumEvents):
@@ -48,7 +48,7 @@ bool LeptonJetDumpModule::process()
 
 void LeptonJetDumpModule::printLeptons(std::ofstream& my_file)
 {
-    std::vector<Particle> genSim(getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::none()).getParticles());
+    std::vector<Particle> genSim(getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::none()).getParticles());
 
     std::vector<GenSimParticle> genSimVector;
 
@@ -149,7 +149,7 @@ void LeptonJetDumpModule::printRecoJets(std::ofstream& my_file)
 }
 void LeptonJetDumpModule::printWrongRecoLeptons(std::ofstream& my_file)
 {
-    std::vector<Particle> genSim(getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::none()).getParticles());
+    std::vector<Particle> genSim(getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::none()).getParticles());
 
     std::vector<GenSimParticle> genSimVector;
 
