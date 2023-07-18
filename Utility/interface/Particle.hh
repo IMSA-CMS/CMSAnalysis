@@ -66,9 +66,6 @@ class Particle
     reco::Candidate::LorentzVector getFourVector() const;
     const ParticleType& getType() const;
 
-    // Static function to identify type of any particle based on pdgid.
-    static const ParticleType& identifyType(int pdgid); 
-
 protected:
   Particle(std::shared_ptr<ParticleImplementation> particle);
 

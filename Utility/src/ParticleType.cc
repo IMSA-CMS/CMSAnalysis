@@ -1,15 +1,18 @@
 #include "CMSAnalysis/Utility/interface/ParticleType.hh"
-#include "CMSAnalysis/Utility/interface/SingleParticleHist.hh"
+#include "CMSAnalysis/Utility/interface/HistParams.hh"
 #include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 
+#include <fstream>
 #include<string>
 #include<vector>
 #include<functional>
 
-std::unordered_map<std::string,ParticleType> ParticleType::typeList = std::unordered_map<std::string,ParticleType>();
+std::unordered_map<int,ParticleType> ParticleType::typeList = std::unordered_map<int,ParticleType>();
 
-ParticleType::ParticleType(std::string typeName, int typepdgId, double typeCharge, std::vector<SingleParticleHist> typeParticleHists, std::vector<CollectionHist> typeCollectionHists)
+ParticleType::ParticleType() {}
+
+ParticleType::ParticleType(std::string typeName, int typepdgId, double typeCharge, std::vector<HistParams> typeParticleHists, std::vector<CollectionHistParams> typeCollectionHists)
 {
     name = typeName;
     pdgId = typepdgId;
@@ -18,75 +21,183 @@ ParticleType::ParticleType(std::string typeName, int typepdgId, double typeCharg
     collectionHists = typeCollectionHists;
 }
 
-std::vector<std::shared_ptr<SingleParticleHist>> ParticleType::getParticleHists() const
+std::vector<HistParams> ParticleType::getParticleHists() const
 {
-    std::vector<std::shared_ptr<SingleParticleHist>> newHists = std::vector<std::shared_ptr<SingleParticleHist>>{};
-    for (auto hist : particleHists)
-    {
-        //histograms need to be cloned otherwise they would all point to the same object
-        newHists.push_back(std::make_shared<SingleParticleHist>(hist.clone())); 
-    }
-    return newHists;
+    return particleHists;
 }
 
-std::vector<std::shared_ptr<CollectionHist>> ParticleType::getCollectionHists() const
+std::vector<CollectionHistParams> ParticleType::getCollectionHists() const
 {
-    std::vector<std::shared_ptr<CollectionHist>> newHists = std::vector<std::shared_ptr<CollectionHist>>{};
-    for (auto hist : collectionHists)
+    /*std::vector<std::shared_ptr<CollectionHistParams>> newHists = std::vector<std::shared_ptr<CollectionHistParams>>{};
+    for (auto hist : CollectionHistParams)
     {
         //histograms need to be cloned otherwise they would all point to the same object
-        newHists.push_back(std::make_shared<CollectionHist>(hist.clone())); 
-    }
-    return newHists;
+        newHists.push_back(std::make_shared<CollectionHistParams>(hist.clone())); 
+    }*/
+    return collectionHists;
 }
 
-const ParticleType& ParticleType::registerType(std::string typeName, int typepdgId, double typeCharge, std::vector<SingleParticleHist> typeParticleHists, std::vector<CollectionHist> typeCollectionHists)
+const ParticleType& ParticleType::registerType(std::string typeName, int typepdgId, double typeCharge, std::vector<HistParams> typeParticleHists, std::vector<CollectionHistParams> typeCollectionHistParamss)
 {
     //particleTypes are not automatically stored, rather they are created the first time the function is called and then subsequently refrenced
-    auto it = typeList.find(typeName);
+    auto it = typeList.find(typepdgId);
     if (it == typeList.end())
     {
-        ParticleType particleType = ParticleType(typeName,typepdgId,typeCharge,typeParticleHists,typeCollectionHists);
-        typeList.insert({typeName, particleType});
+        ParticleType particleType = ParticleType(typeName,typepdgId,typeCharge,typeParticleHists,typeCollectionHistParamss);
+        typeList.insert({typepdgId, particleType});
     } 
-    it = typeList.find(typeName);
-    return it->second;
+
+    return getPDGType(typepdgId);
 }
 
 
-SingleParticleHist ParticleType::getPtHist()
+bool ParticleType::loadParticle(std::ifstream& file)
 {
-    return SingleParticleHist("Pt", 150, 0, 1000, [](Particle particle){return std::vector<double>{particle.getPt()};});
+    char tempString[100];
+    int pdgID;
+    std::string name;
+    double chargeType;
+
+    file.ignore(100, '\"');
+    file.getline(tempString, 100, '\"');
+
+    pdgID = std::stoi(std::string(tempString));
+
+    file.ignore(100, '\"');
+    file.getline(tempString, 100, '\"');
+
+    name = std::string(tempString);
+
+    //Skip to chargeType
+    file.ignore(100, '\"');
+    file.ignore(100, '\"');
+    file.ignore(100, '\"');
+    file.ignore(100, '\"');
+    file.ignore(100, '\"');
+
+    file.getline(tempString, 100, '\"');
+    chargeType = std::stoi(std::string(tempString)) / 3.0;
+
+    std::vector<HistParams> defaultHistParams = {getPtHist(),getPhiHist(),getEtaHist()};
+    std::vector<CollectionHistParams> defaultCollectionHistParams = {getNumberHist()}; 
+    
+    registerType(name, pdgID, chargeType, defaultHistParams, defaultCollectionHistParams);
+
+    return true;
 }
 
-SingleParticleHist ParticleType::getPhiHist()
+
+bool ParticleType::loadParticleDatabase(const std::string& fileName)
 {
-    return SingleParticleHist("Phi", 150, -4, 4, [](Particle particle){return std::vector<double>{particle.getPhi()};});
+    std::ifstream file;
+
+    if (!file.is_open())
+    {
+        file.open(fileName);
+        // std::cout << "File opened successfully\n";
+        // char stringOne[100];
+        // file.getline(stringOne, 100, '\n');
+        // std::cout << stringOne << "\n";
+    }
+    else
+    {
+        std::cout << fileName << " is already open!\n";
+        return false;
+    }
+
+    for (int i = 0; true; ++i)
+    {
+        //std::cout << "Iteration number " << i << "\n";
+        char peekedChar = file.peek();
+
+        //std::cout << "Peeked char = " << peekedChar << "\n";
+
+        if (peekedChar == 'p')
+        {
+            //Adds particle to map
+            loadParticle(file);
+            //std::cout << "Particle key " << i << "\n";
+        }
+        else if (peekedChar == EOF)
+        {
+            //std::cout << "End of file reached\n";
+            break;
+        }
+        file.ignore(100, '\n');
+        
+    }
+
+    file.close();
+    return true;
 }
 
-SingleParticleHist ParticleType::getEtaHist()
+const ParticleType& ParticleType::getPDGType(int pdgID)
 {
-    return SingleParticleHist("Eta", 150, -10, 10, [](Particle particle){return std::vector<double>{particle.getEta()};});
+    int absolutePdgID = std::abs(pdgID);
+    if (typeList.find(absolutePdgID) != typeList.end())
+        return typeList[absolutePdgID];
+    else
+        return typeList[0];
 }
 
-CollectionHist ParticleType::getNumberHist()
+void ParticleType::particleTypeOverrides()
 {
-    return CollectionHist("Number", 11, -0.5, 10.5, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->getNumParticles()};});
+    typeList[11].collectionHists.push_back(getSameSignInvariantMassHist());
+    typeList[11].collectionHists.push_back(getOppositeSignInvariantMassHist());
+
+    typeList[13].collectionHists.push_back(getSameSignInvariantMassHist());
+    typeList[13].collectionHists.push_back(getOppositeSignInvariantMassHist());
+
+    registerType("Meson",26,0,
+    std::vector<HistParams>{getPtHist(),getPhiHist(),getEtaHist()},
+    std::vector<CollectionHistParams>{getNumberHist()}); 
+
+    registerType("Baryon",27,0,
+    std::vector<HistParams>{getPtHist(),getPhiHist(),getEtaHist()},
+    std::vector<CollectionHistParams>{getNumberHist()}); 
+
+    registerType("Jet",28,0,
+    std::vector<HistParams>{getPtHist(),getPhiHist(),getEtaHist()},
+    std::vector<CollectionHistParams>{getNumberHist()}); 
+
+    registerType("Lepton Jet",29,0,
+    std::vector<HistParams>{getPtHist(),getPhiHist(),getEtaHist()},
+    std::vector<CollectionHistParams>{getNumberHist()}); 
 }
 
-CollectionHist ParticleType::getSameSignInvariantMassHist()
+HistParams ParticleType::getPtHist()
 {
-    return CollectionHist("Same Sign Invariant Mass", 150, 0, 2000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateSameSignInvariantMass()};});
+    return HistParams("Pt", 150, 0, 1000, [](Particle particle){return std::vector<double>{particle.getPt()};});
 }
 
-CollectionHist ParticleType::getOppositeSignInvariantMassHist()
+HistParams ParticleType::getPhiHist()
 {
-    return CollectionHist("Opposite Sign Invariant Mass", 150, 0, 1000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateOppositeSignInvariantMass()};});
+    return HistParams("Phi", 150, -4, 4, [](Particle particle){return std::vector<double>{particle.getPhi()};});
 }
 
-SingleParticleHist ParticleType::getDaughterDeltaRHist()
+HistParams ParticleType::getEtaHist()
 {
-    return SingleParticleHist("Daughter Delta R", 150, 0, 3, [](Particle particle)
+    return HistParams("Eta", 150, -10, 10, [](Particle particle){return std::vector<double>{particle.getEta()};});
+}
+
+CollectionHistParams ParticleType::getNumberHist()
+{
+    return CollectionHistParams("Number", 11, -0.5, 10.5, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->getNumParticles()};});
+}
+
+CollectionHistParams ParticleType::getSameSignInvariantMassHist()
+{
+    return CollectionHistParams("Same Sign Invariant Mass", 150, 0, 2000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateSameSignInvariantMass()};});
+}
+
+CollectionHistParams ParticleType::getOppositeSignInvariantMassHist()
+{
+    return CollectionHistParams("Opposite Sign Invariant Mass", 150, 0, 1000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateOppositeSignInvariantMass()};});
+}
+
+HistParams ParticleType::getDaughterDeltaRHist()
+{
+    return HistParams("Daughter Delta R", 150, 0, 3, [](Particle particle)
     {
         GenSimParticle genSimParticle = GenSimParticle(particle);
         if (genSimParticle.numberOfDaughters() == 2)
@@ -100,121 +211,112 @@ SingleParticleHist ParticleType::getDaughterDeltaRHist()
 
 const ParticleType& ParticleType::electron()
 {
-    return registerType("Electron",11,-1,
-    std::vector<SingleParticleHist>{getPtHist(),getPhiHist(),getEtaHist()},
-    std::vector<CollectionHist>{getNumberHist(),getSameSignInvariantMassHist(),getOppositeSignInvariantMassHist()}); 
+    return getPDGType(11);
 }
 
 const ParticleType& ParticleType::muon()
 {
-    return registerType("Muon",13,-1,
-    std::vector<SingleParticleHist>{getPtHist(),getPhiHist(),getEtaHist()},
-    std::vector<CollectionHist>{getNumberHist(),getSameSignInvariantMassHist(),getOppositeSignInvariantMassHist()}); 
+    return getPDGType(13);
 }
 
 const ParticleType& ParticleType::tau()
 {
-    return registerType("Tau",15,-1,
-    std::vector<SingleParticleHist>{},
-    std::vector<CollectionHist>{getNumberHist()}); 
+    return getPDGType(15);
 }
 
 const ParticleType& ParticleType::jet()
 {
-    return registerType("Jet",0,0,
-    std::vector<SingleParticleHist>{getPtHist(),getPhiHist(),getEtaHist()},
-    std::vector<CollectionHist>{getNumberHist()}); 
+    return getPDGType(28);
 }
 
 const ParticleType& ParticleType::leptonJet()
 {
-    return registerType("Lepton Jet",0,0,
-    std::vector<SingleParticleHist>{getPtHist(),getPhiHist(),getEtaHist()},
-    std::vector<CollectionHist>{getNumberHist()}); 
+    return getPDGType(29);
 }
 
 const ParticleType& ParticleType::photon()
 {
-    return registerType("Photon",22,0,
-    std::vector<SingleParticleHist>{},
-    std::vector<CollectionHist>{getNumberHist()}); 
+    return getPDGType(22);
 }
 
-const ParticleType& ParticleType::quark()
+const ParticleType& ParticleType::down()
 {
-    return registerType("Quark",1,0,
-    std::vector<SingleParticleHist>{},
-    std::vector<CollectionHist>{getNumberHist()}); 
+    return getPDGType(1);
+}
+
+const ParticleType& ParticleType::up()
+{
+    return getPDGType(2);
+}
+
+const ParticleType& ParticleType::strange()
+{
+    return getPDGType(3);
+}
+
+const ParticleType& ParticleType::charm()
+{
+    return getPDGType(4);
+}
+
+const ParticleType& ParticleType::bottom()
+{
+    return getPDGType(5);
+}
+
+const ParticleType& ParticleType::top()
+{
+    return getPDGType(6);
 }
 
 const ParticleType& ParticleType::darkPhoton()
 {
-    return registerType("Dark Photon",4900022,0,
-    std::vector<SingleParticleHist>{getPtHist(),getPhiHist(),getEtaHist(),getDaughterDeltaRHist()},
-    std::vector<CollectionHist>{getNumberHist()}); 
+    return getPDGType(4900022);
 }
 
 const ParticleType& ParticleType::neutralino()
 {
-    return registerType("Neutralino",1000022,0,
-    std::vector<SingleParticleHist>{},
-    std::vector<CollectionHist>{getNumberHist()}); 
+    return getPDGType(1000022);
 }
 
 const ParticleType& ParticleType::leftDoublyHiggs()
 {
-    return registerType("Left Doubly Charged Higgs",9900041,2,
-    std::vector<SingleParticleHist>{},
-    std::vector<CollectionHist>{getNumberHist()}); 
+    return getPDGType(9900041);
 }
 
 const ParticleType& ParticleType::rightDoublyHiggs()
 {
-    return registerType("Right Doubly Charged Higgs",9900042,2,
-    std::vector<SingleParticleHist>{},
-    std::vector<CollectionHist>{getNumberHist()}); 
+    return getPDGType(9900042);
 }
 
 const ParticleType& ParticleType::z()
 {
-    return registerType("Z Boson",23,0,
-    std::vector<SingleParticleHist>{},
-    std::vector<CollectionHist>{getNumberHist()}); 
+    return getPDGType(23);
 }
 
 const ParticleType& ParticleType::w()
 {
-    return registerType("W Boson",24,1,
-    std::vector<SingleParticleHist>{},
-    std::vector<CollectionHist>{getNumberHist()}); 
+    return getPDGType(24);
 }
 
 const ParticleType& ParticleType::higgs()
 {
-    return registerType("Higgs Boson",25,0,
-    std::vector<SingleParticleHist>{},
-    std::vector<CollectionHist>{getNumberHist()}); 
+    return getPDGType(25);
 }
 
 const ParticleType& ParticleType::meson() //place holder because we don't care (same for mesons, jets, leptonjets and none)
 {
-    return registerType("Meson",0,0,
-    std::vector<SingleParticleHist>{},
-    std::vector<CollectionHist>{getNumberHist()}); 
+    return getPDGType(26);
 } 
 
 const ParticleType& ParticleType::baryon()
 {
-    return registerType("Baryon",0,0,
-    std::vector<SingleParticleHist>{},
-    std::vector<CollectionHist>{getNumberHist()}); 
+    return getPDGType(26);
 } 
 
 const ParticleType& ParticleType::none()
 {
-    return registerType("None",0,0,
-    std::vector<SingleParticleHist>{},
-    std::vector<CollectionHist>{}); 
+    return getPDGType(0);
 }
 
 bool ParticleType::operator== (const ParticleType type) const

@@ -125,7 +125,7 @@ const ParticleType& CandidateImplementation::getType() const {
   else if (auto genp = dynamic_cast<const reco::GenParticle*>(particle))
   {
     //std::cout << "CI call identify type\n";
-    return Particle::identifyType(genp->pdgId());
+    return ParticleType::getPDGType(genp->pdgId());
   }
   else {
     return ParticleType::none();
