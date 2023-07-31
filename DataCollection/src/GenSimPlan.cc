@@ -39,11 +39,11 @@ using std::make_shared;
 
 void GenSimPlan::initialize()
 {
-    
+    auto histOutputMod = std::make_shared<HistogramOutputModule>();
+
     Analyzer& analyzer = getAnalyzer();
 
     auto deltaR = make_shared<GenSimDeltaRHist>("Delta R", 100, 0, 2);
-
     auto eventMod = make_shared<EventModule>();
     auto dpSelector = make_shared<DarkPhotonGenSimSelector>();
     auto hppSelector = make_shared<HPlusPlusGenSimSelector>();
@@ -56,6 +56,8 @@ void GenSimPlan::initialize()
     histMod->addHistogram(deltaR);
     histMod->addHistogram(gammahist);
 
+    histOutputMod->addHistogram(deltaR);
+
     //eventMod->addSelector(dpSelector);
     eventMod->addSelector(hppSelector);
     auto eventHistMod = eventMod->getHistogramModule();
@@ -67,6 +69,7 @@ void GenSimPlan::initialize()
     analyzer.addProductionModule(eventMod);
     //analyzer.addAnalysisModule(eventMod);
     analyzer.addAnalysisModule(eventHistMod);
+    analyzer.addAnalysisModule(histOutputMod);
 
     auto hPlusPlusEfficiency = make_shared<HPlusPlusEfficiency>();
 	analyzer.addAnalysisModule(hPlusPlusEfficiency);

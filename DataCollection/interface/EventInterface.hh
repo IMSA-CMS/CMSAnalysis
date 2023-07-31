@@ -8,6 +8,7 @@ class EventInterface
     public:
         virtual ~EventInterface();
         virtual ParticleCollection<GenSimParticle> getGenSimParticles() const = 0;
+        
         virtual ParticleCollection<Particle> getRecoParticles() const = 0;
         virtual ParticleCollection<Particle> getRecoJets() const = 0;
         virtual double getMET() const = 0;
