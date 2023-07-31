@@ -60,7 +60,7 @@ void HPlusPlusMassPlan::initialize()
   auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod);
   auto signFlip = make_shared<SignFlipModule>(matchMod);
 
-  auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(InputModule::RecoLevel::Reco, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
+  auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(EventInput::RecoLevel::Reco, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
   
   //auto genSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
   // Go up to 2000 - Andy, 09/02 - and make more bins. Modifications also made for picking files

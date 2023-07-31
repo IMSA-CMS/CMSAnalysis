@@ -1,7 +1,7 @@
 #include "CMSAnalysis/Histograms/interface/DarkPhotonMassHist.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/GenSimSimpleImplementation.hh"
 #include <iostream>
 #include <math.h>
@@ -20,7 +20,7 @@ std::vector<double> DarkPhotonMassHist::value() const
   const double darkPseudoScalarMass = 2;//50
   const double darkPhotonMass = 0.3;
   
-  auto particles = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::darkPhoton()); 
+  auto particles = getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::darkPhoton()); 
 
   std::vector<double> gammaVector{}; 
   std::vector<double> massVector{};

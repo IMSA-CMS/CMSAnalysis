@@ -16,7 +16,7 @@ bool FilterModule::process()
   ++counterMap[filterString];
 
   return !filterString.empty();
-}
+} 
 
 void FilterModule::finalize()
 {
