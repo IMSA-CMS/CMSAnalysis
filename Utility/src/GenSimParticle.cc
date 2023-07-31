@@ -183,6 +183,39 @@ GenSimParticle GenSimParticle::sharedMother(int motherPDGID, std::vector<Particl
   }
   return finalMother;
 }
+/*
+std::ostream& operator<<(std::ostream& str, const std::pair<GenSimParticle, std::vector<GenSimParticle>> genParticles)
+{
+  GenSimParticle part = genParticles.first;
+  std::vector<GenSimParticle> genParts = genParticles.second;
+  str << "| " << std::setw(9) << part.pdgId() << "| " << std::setw(8) << part.status() << "| ";
+  //print mothers
+  str << std::setw(18) << "0" << "| ";
+    //str << std::setw(motherColumnWidth - 2) << formatMotherParticles(part, genParts) << "| ";
+    // Print daughters
+    //formatDaughterParticles(part, particleGroup) was replaced by function not working string
+  str << std::setw(18) << EventDumpModule::formatDaughterParticles(part, genParts) << "| ";
+    // Particle properties
+  str << std::setw(13) << part.getPt() << "| " << std::setw(13) << part.getEta() << "| " << std::setw(13) << part.getPhi() << "| ";
+  str << std::setw(13) << part.getEnergy() << "| " << std::setw(13) << part.getMass();
+  return str;
+}
+
+std::ostream& operator<<(std::ostream& str, const GenSimParticle part)
+{
+  str << "| " << std::setw(9) << part.pdgId() << "| " << std::setw(8) << part.status() << "| ";
+  //print mothers
+  str << std::setw(18) << "" << "| ";
+    //str << std::setw(motherColumnWidth - 2) << formatMotherParticles(part, genParts) << "| ";
+    // Print daughters
+    //formatDaughterParticles(part, particleGroup)     // was replaced by function not working string
 
 
-
+  
+  str << std::setw(18) << "| "; //changing
+    // Particle properties
+  str << std::setw(13) << part.getPt() << "| " << std::setw(13) << part.getEta() << "| " << std::setw(13) << part.getPhi() << "| ";
+  str << std::setw(13) << part.getEnergy() << "| " << std::setw(13) << part.getMass();
+  return str;
+}
+*/

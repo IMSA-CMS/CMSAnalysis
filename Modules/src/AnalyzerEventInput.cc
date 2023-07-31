@@ -61,7 +61,7 @@ ParticleCollection<Particle> AnalyzerEventInput::getJets(RecoLevel level) const
 {
     ParticleCollection<Particle> particleList;
     if (level == RecoLevel::GenSim)
-    {
+    {        
         throw std::runtime_error("GenSim Jets not implemented");
     }
     else if (level == RecoLevel::Reco)

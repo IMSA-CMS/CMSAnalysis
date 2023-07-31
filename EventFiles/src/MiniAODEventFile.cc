@@ -45,7 +45,7 @@ ParticleCollection<Particle> MiniAODEventFile::getRecoParticles() const
 
         for (const auto& p : *electrons)
 	    {       
-	        recoParticles.addParticle(Particle(&p)); 
+            recoParticles.addParticle(Particle(&p)); 
 	    }
 
         edm::Handle<std::vector<pat::Muon>> muons;
@@ -53,7 +53,7 @@ ParticleCollection<Particle> MiniAODEventFile::getRecoParticles() const
 
         for (const auto& p : *muons)
 	    {       
-	        recoParticles.addParticle(Particle(&p));
+            recoParticles.addParticle(Particle(&p));
         }
 
         edm::Handle<std::vector<pat::Photon>> photons;
@@ -61,7 +61,7 @@ ParticleCollection<Particle> MiniAODEventFile::getRecoParticles() const
 
         for (const auto& p : *photons)
 	    {       
-	        recoParticles.addParticle(Particle(&p));
+            recoParticles.addParticle(Particle(&p));
         }
         return recoParticles;
 }

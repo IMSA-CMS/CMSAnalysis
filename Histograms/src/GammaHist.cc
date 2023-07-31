@@ -1,7 +1,7 @@
-#include "CMSAnalysis/DataCollection/interface/GammaHist.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonJetReconstructionModule.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonJet.hh"
-#include "CMSAnalysis/DataCollection/interface/Particle.hh"
+#include "CMSAnalysis/Histograms/interface/GammaHist.hh"
+#include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
+#include "CMSAnalysis/Utility/interface/LeptonJet.hh"
+#include "CMSAnalysis/Utility/interface/Particle.hh"
 
 #include <vector>
 
@@ -13,7 +13,7 @@ GammaHist::GammaHist(std::shared_ptr<LeptonJetReconstructionModule> iLeptonJetRe
 
 std::vector<double> GammaHist::value() const
 {
-  const std::vector<LeptonJet>& LeptonJets = leptonJetRecoModule->getLeptonJets();
+  const std::vector<LeptonJet> LeptonJets = leptonJetRecoModule->getLeptonJets();
 
   std::vector<double> gamma_leptonJets; 
 

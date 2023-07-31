@@ -79,7 +79,7 @@ void HiggsBackgroundPlan::initialize()
     analyzer.addAnalysisModule(filterStringModule);
     
 
-
+ 
     auto nLeptonsFilter = make_shared<NLeptonsFilter>();
     
     auto histMod = make_shared<HistogramOutputModule>();
@@ -166,10 +166,11 @@ void HiggsBackgroundPlan::initialize()
     // analyzer.addFilterModule(make_shared<FilterModule>(bJetFilter));
     // analyzer.addFilterModule(snowmassCut);
     // analyzer.addFilterModule(nLeptonsFilter);
-    analyzer.addFilterModule(recoDecayFilterMod);
+    
+    //broken
+    analyzer.addFilterModule(recoDecayFilterMod); 
 
     //analyzer.addProductionModule(matchMod);
-    //analyzer.addAnalysisModule(eventMod);
     analyzer.addAnalysisModule(eventHistMod);    
     analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
     //analyzer.addAnalysisModule(eventDump);
