@@ -7,8 +7,6 @@
 
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
 
-
-//uncomented
 #include "CMSAnalysis/Histograms/interface/DeltaRHist.hh"
 #include "CMSAnalysis/Filters/interface/DoubleMuonTrigger.hh"
 #include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
@@ -46,7 +44,7 @@
 #include "CMSAnalysis/Histograms/interface/GammaHist.hh"
 #include "CMSAnalysis/Histograms/interface/GammaDeltaRHist2D.hh"
 #include "CMSAnalysis/Histograms/interface/GenSimGammaHist.hh"
-#include "CMSAnalysis/Filters/interface/NLeptonJetsFilter.hh"
+//#include "CMSAnalysis/Filters/interface/NLeptonJetsFilter.hh"
 #include "CMSAnalysis/Histograms/interface/GenSimDeltaRPsedoFilteredHist.hh"
 #include "CMSAnalysis/Histograms/interface/GenSimGammaPsedoFilteredHist.hh"
 #include "CMSAnalysis/Histograms/interface/DarkPhotonMassHist.hh"
@@ -149,7 +147,7 @@ void LeptonJetReconstructionPlan::initialize()
   // auto triggerMod = std::make_shared<TriggerModule>();
  
   auto nLeptonsFilter = std::make_shared<NLeptonsFilter>(); 
-  auto nLeptonJetsFilter =std::make_shared<NLeptonJetsFilter>(lepRecoMod);
+  //auto nLeptonJetsFilter =std::make_shared<NLeptonJetsFilter>(lepRecoMod);
 
   //auto nLeptonsFilter = std::make_shared<NLeptonsFilter>(); // Needs to be updated with shared pointers
  

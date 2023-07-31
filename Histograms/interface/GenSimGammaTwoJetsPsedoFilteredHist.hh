@@ -1,8 +1,8 @@
 #ifndef GENSIMGAMMATWOJETSPSEDOFILTEREDHIST_HH
 #define GENSIMGAMMATWOJETSPSEDOFILTEREDHIST_HH
 
-#include "HistogramPrototype1D.hh"
-#include "LeptonJetReconstructionModule.hh"
+#include "CMSAnalysis/Utility/interface/HistogramPrototype1D.hh"
+#include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh" 
 
 
 class GenSimGammaTwoJetsPsedoFilteredHist : public HistogramPrototype1D

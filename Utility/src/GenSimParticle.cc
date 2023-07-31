@@ -183,7 +183,7 @@ GenSimParticle GenSimParticle::sharedMother(int motherPDGID, std::vector<Particl
   }
   return finalMother;
 }
-
+/*
 std::ostream& operator<<(std::ostream& str, const std::pair<GenSimParticle, std::vector<GenSimParticle>> genParticles)
 {
   GenSimParticle part = genParticles.first;
@@ -218,3 +218,4 @@ std::ostream& operator<<(std::ostream& str, const GenSimParticle part)
   str << std::setw(13) << part.getEnergy() << "| " << std::setw(13) << part.getMass();
   return str;
 }
+*/

@@ -18,7 +18,9 @@ ParticleCollection<Lepton> LocalEventInputModule::getLeptons(RecoLevel level) co
 {
     ParticleCollection<Lepton> leptons;
     auto electrons = getParticles(level, ParticleType::electron()).getParticles();
+    std::cout << "Got Electrons" << "\n";
     auto muons = getParticles(level, ParticleType::muon()).getParticles();
+    std::cout << "Got Muons" << "\n";
     for (const auto &p : electrons)
     {
         leptons.addParticle(p);
@@ -34,12 +36,14 @@ ParticleCollection<Particle> LocalEventInputModule::getParticles(RecoLevel level
 {
     ParticleCollection<Particle> particleList;
     auto particles = event->getParticles().getParticles();
+    std::cout << "got particles: " << "\n";
     for (const auto &p : particles)
     {
         if (p.getType() == particleType || particleType == ParticleType::none())
         {
             particleList.addParticle(p);
         }
+        std::cout << "particleList size: " << particleList.size() << '\n';
     }
     return particleList;
 }

@@ -1,8 +1,8 @@
-#include "CMSAnalysis/DataCollection/interface/GenSimGammaHist.hh"
-#include "CMSAnalysis/DataCollection/interface/Particle.hh"
-#include "CMSAnalysis/DataCollection/interface/GenSimParticle.hh"
-#include "CMSAnalysis/DataCollection/interface/InputModule.hh"
-#include "CMSAnalysis/DataCollection/interface/GenSimSimpleImplementation.hh"
+#include "CMSAnalysis/Histograms/interface/GenSimGammaHist.hh"
+#include "CMSAnalysis/Utility/interface/Particle.hh"
+#include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
+#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Utility/interface/GenSimSimpleImplementation.hh"
 #include <iostream>
 
 GenSimGammaHist::GenSimGammaHist(const std::string& iname, int iNBins, double iminimum, double imaximum):

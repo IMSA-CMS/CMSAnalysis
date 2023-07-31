@@ -9,7 +9,6 @@
 #include "TStyle.h"
 #include "TCanvas.h"
 #include "CMSAnalysis/Analysis/interface/Process.hh"
-#include "CMSAnalysis/Analysis/interface/Channel.hh"
 #include "THStack.h"
 
 void Test() {
@@ -56,8 +55,9 @@ void Test() {
 
     //TH1* hist = analysis->getDecayHist("Same Sign Inv Mass", "ZZ Background", 900, false);
     
-    std::string histvariable = "Same Sign Inv Mass";
-    double massTarget = 900;
+    //Choices for plotting are GenSim Same Sign Inv Mass, Same Sign Inv Mass, Invariant Mass, GenSim pT, pT, Eta, Phi, MET (caps matter)
+    std::string histvariable = "Invariant Mass";
+    double massTarget = 1400;
 
     std::vector<std::shared_ptr<Channel>> channels = analysis->getChannels();
     std::shared_ptr<Channel> processes = channels.at(0);
@@ -72,8 +72,9 @@ void Test() {
     }
     THStack* background = new THStack("background", "background");
     for(TH1* backgroundHist : backgroundHists) {
+        //Rebin to number of background processes
         backgroundHist->Rebin(4);
         background->Add(backgroundHist);
     }    
-    signal->Draw("HIST");
+    background->Draw("HIST");
 }

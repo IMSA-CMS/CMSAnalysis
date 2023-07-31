@@ -1,9 +1,9 @@
-#include "CMSAnalysis/DataCollection/interface/GenSimGammaPsedoFilteredHist.hh"
-#include "CMSAnalysis/DataCollection/interface/Particle.hh"
-#include "CMSAnalysis/DataCollection/interface/GenSimParticle.hh"
-#include "CMSAnalysis/DataCollection/interface/InputModule.hh"
-#include "CMSAnalysis/DataCollection/interface/GenSimSimpleImplementation.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonJetReconstructionModule.hh"
+#include "CMSAnalysis/Histograms/interface/GenSimGammaPsedoFilteredHist.hh"
+#include "CMSAnalysis/Utility/interface/Particle.hh"
+#include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
+#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Utility/interface/GenSimSimpleImplementation.hh"
+#include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
 
 
 #include <iostream>

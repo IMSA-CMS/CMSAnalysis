@@ -1,7 +1,7 @@
 #ifndef DARKPHOTONMASSHIST_HH
 #define DARKPHOTONMASSHIST_HH
 
-#include "HistogramPrototype1D.hh"
+#include "CMSAnalysis/Utility/interface/HistogramPrototype1D.hh"
 
 class DarkPhotonMassHist : public HistogramPrototype1D
 {
