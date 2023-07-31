@@ -2,7 +2,7 @@ from subprocess import run
 from multiprocessing import Process
 
 def loopRun(*fileList):
-	path = "textfiles/"
+	path = "textfiles/SingleMassSnowmass/"
 	for file in fileList:
 		# Filling in the parameters of runAnalyzer
 		analysis = "HiggsBackground"
@@ -15,20 +15,21 @@ def loopRun(*fileList):
 		analysisName = "analysis=" + analysis
 		# calls runAnalyzer
 		print("Creating " + outputString)
-		run(["nohup", "runAnalyzer", inputString, outputString, analysisName], check=True)
+		run(["runAnalyzer", inputString, outputString, analysisName], check=True)
 
 if __name__ == '__main__':
 	# jobs grouped by process
 	# If a job only has one pickfile in it, make sure to add a comma at the end so that python thinks it is a tuple
-	higgs = ("newHiggs/Higgs900.txt", )
-
+	
 	dy50 = ("DY50Run2.txt", )
 
 	qcd500 = ("Run2QCD/QCD500.txt", )
 
+	zz = ("SingleMassSnowmass/ZZ/ZZPick4.txt", )
 
+	ttBar = ("SingleMassSnowmass/TTBar/TTBarPick500.txt", )
 	# List of jobs to run on from those above
-	jobsList = [higgs, dy50, qcd500]
+	jobsList = [dy50, qcd500, zz, ttBar]
 	# list of processes
 	processes = []
 	for job in jobsList:
