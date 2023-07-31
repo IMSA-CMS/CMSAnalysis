@@ -11,7 +11,7 @@ CrossSectionReader::CrossSectionReader(std::string fileAddress)
 
   if (!weightsFile)
     {
-      throw std::runtime_error("Weights File not Found!");
+      throw std::runtime_error("Weights File not Found!"); // hello wooaojo
     }
 
 

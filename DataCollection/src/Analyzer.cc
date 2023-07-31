@@ -9,26 +9,25 @@
 #include "TFile.h"
 #include "TH1.h"
 
-#include "CMSAnalysis/DataCollection/interface/AnalysisModule.hh"
-#include "CMSAnalysis/DataCollection/interface/FilterModule.hh"
-#include "CMSAnalysis/DataCollection/interface/ProductionModule.hh"
+#include "CMSAnalysis/Modules/interface/AnalysisModule.hh"
+#include "CMSAnalysis/Modules/interface/FilterModule.hh"
+#include "CMSAnalysis/Modules/interface/ProductionModule.hh"
 #include "CMSAnalysis/DataCollection/interface/EventLoader.hh"
 #include "FWCore/Framework/interface/Event.h"
 #include "DataFormats/FWLite/interface/Event.h"
-#include "CMSAnalysis/DataCollection/interface/Module.hh"
-#include "CMSAnalysis/DataCollection/interface/TDisplayText.h"
+#include "CMSAnalysis/Modules/interface/Module.hh"
+#include "CMSAnalysis/Utility/interface/TDisplayText.h"
 #include "CMSAnalysis/DataCollection/interface/ProcessDictionary.hh"
-#include "CMSAnalysis/DataCollection/interface/AnalyzerInputModule.hh"
+#include "CMSAnalysis/Modules/interface/AnalyzerEventInput.hh"
 
 Analyzer::Analyzer() : 
 eventInterface(nullptr),
-input(new AnalyzerInputModule(&eventInterface))
+input(new AnalyzerEventInput(&eventInterface))
 {
 }
 
 Analyzer::Analyzer(const Analyzer &analyzer)
 {
-
   input = analyzer.input;
 }
 
@@ -36,7 +35,6 @@ Analyzer::~Analyzer()
 {
   delete input;
 }
-
 
 void Analyzer::writeOutputFile(const std::string &outputFile)
 {
@@ -53,25 +51,39 @@ void Analyzer::writeOutputFile(const std::string &outputFile)
   }
 
   outputRootFile->cd();
-  // Finalize separately for each filterString, to be safe
+  //Finalize separately for each filterString, to be safe
+  //std::cout << "There are " << analysisModules.size() << " analysis modules\n";
   for (auto module : analysisModules)
   {
+    // Write the output
     module->doneProcessing();
-    for (auto &str : filterNames)
+    //std::cout << "FilterModules size : " << filterModules.size() << "\n";
+    // if (filterModules.size() != 0)
+    if (true)
     {
-      module->setFilterString(str);
+      //std::cout << "Finalizing analysis module: " << module->getFilter() << "\n";
+      module->finalize();
+      for (auto &str : filterNames) //writes analysis modules by filter string
+      {
+        auto it = filterDirectories.find(str);
+        if (it == filterDirectories.end())
+        {
+          filterDirectories.insert({str,outputRootFile->mkdir((str + "_hists").c_str())});
+        }
+        filterDirectories[str]->cd();
+        module->setFilterString(str);
+        module->finalizeFilterString();
+        outputRootFile->cd();
+      }
+    } else {
+      module->setFilterString("");
       module->finalize();
     }
-    // Write the output
-    module->writeAll();
   }
+
   // Write total number of events
   auto eventsText = new TDisplayText(std::to_string(numOfEvents).c_str());
   eventsText->Write("NEvents");
-  auto eventsText1 = new TDisplayText(std::to_string(numOfEvents124).c_str());
-  eventsText1->Write("NEvents124");
-  auto eventsText2 = new TDisplayText(std::to_string(numOfEvents137).c_str());
-  eventsText2->Write("NEvents137");
   // Clean up
   outputRootFile->Close();
   delete outputRootFile;
@@ -101,10 +113,24 @@ void Analyzer::initialize()
   TH1::AddDirectory(kFALSE);
   TH1::SetDefaultSumw2(kTRUE);
 
+  // Checks if all dependencies are loaded properly
+  for (auto module : getAllModules())
+  {
+    if (!checkModuleDependencies(module))
+    {
+      std::cout << typeid(*module).name() << "'s dependencies have not been loaded properly!\n";
+    }
+  }
+
+  std::cout << "Finished checking module dependencies\n";
+
   // Initialize all modules
   for (auto module : getAllModules())
   {
-    module->setInput(input);
+    if (!module->getInput())
+    {
+      module->setInput(input);
+    }
     module->initialize();
   }
 }
@@ -112,6 +138,7 @@ void Analyzer::initialize()
 void Analyzer::processOneEvent(const EventInterface *eInterface)
 {
       eventInterface = eInterface;
+      numOfEvents++;
 
       bool continueProcessing = true;
       std::string filterString;
@@ -125,7 +152,7 @@ void Analyzer::processOneEvent(const EventInterface *eInterface)
         }
 
       }
-      numOfEvents124++;
+   
 
       // Processes event through filter modules
       for (auto module : filterModules)
@@ -139,15 +166,14 @@ void Analyzer::processOneEvent(const EventInterface *eInterface)
         {
           filterString += module->getFilterString();
         }
+        filterString += "_";
       }
-      numOfEvents137++;
 
       // Processes event through analysis modules
       if (continueProcessing)
       {
 
         filterNames.insert(filterString);
-        numOfEvents++;
 
         for (auto module : analysisModules)
         {
@@ -162,3 +188,31 @@ void Analyzer::processOneEvent(const EventInterface *eInterface)
 
 }
 
+void Analyzer::addProductionModule(std::shared_ptr<ProductionModule> module)
+{
+  productionModules.push_back(module);
+}
+
+void Analyzer::addFilterModule(std::shared_ptr<FilterModule> module)
+{
+  filterModules.push_back(module);
+}
+void Analyzer::addAnalysisModule(std::shared_ptr<AnalysisModule> module)
+{
+  analysisModules.push_back(module);
+}
+
+bool Analyzer::checkModuleDependencies(std::shared_ptr<Module> module)
+{
+  auto modules = getAllModules();
+  auto dependencies = module->getDependencies();
+  for (auto modulePtr : dependencies)
+  {
+    if (std::find(modules.begin(), modules.end(), modulePtr) == modules.end())
+    {
+      return false;
+    } 
+  }
+
+  return true;
+}

@@ -1,5 +1,5 @@
 #include "CMSAnalysis/DataCollection/interface/FileParams.hh"
-#include "CMSAnalysis/DataCollection/interface/Utility.hh"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 #include <sstream>
 #include <fstream>
 
@@ -21,7 +21,7 @@ std::string FileParams::getFileName() const
     stream << ".txt";
     std::string fileName = stream.str();
     fileName = Utility::substitute(fileName, " ", "_");
-    std::cout << "Filename: " << fileName << '\n';
+    std::cout << "Name of file list: " << fileName << '\n';
     return fileName;
 }
 
