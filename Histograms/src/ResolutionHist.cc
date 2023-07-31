@@ -1,7 +1,7 @@
 #include "CMSAnalysis/Histograms/interface/ResolutionHist.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/GenSimSimpleImplementation.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetMatchingModule.hh"
 #include <iostream>

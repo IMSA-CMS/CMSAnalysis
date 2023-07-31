@@ -32,7 +32,7 @@ std::string HPlusPlusDecayFilter::getFilterString(const EventInput* inputMod) co
   {
     std::cout << "before" << "\n";
     
-    auto leptons = inputMod->getLeptons(InputModule::RecoLevel::Reco);
+    auto leptons = inputMod->getLeptons(EventInput::RecoLevel::Reco);
 
     std::cout << "after" << "\n";
     

@@ -80,7 +80,7 @@ void LeptonJetReconstructionPlan::initialize()
   auto resolutionHist = std::make_shared<ResolutionHist>(lepMatchMod, "Gamma Resolution", 1000, -1, 1); 
    
   auto gammaHist = std::make_shared<GammaHist>(lepRecoMod, "Gamma Values", 100, 1, 1000); 
-  auto deltaRHist = std::make_shared<DeltaRHist>(lepRecoMod, "Delta R Values", 100, 0, 0.1); 
+  auto deltaRHist = std::make_shared<DeltaRHist>(lepRecoMod, "Delta R Values", 100, 0, 0.1);  
   
   auto genSimGammaHist = std::make_shared<GenSimGammaHist>("Gen Sim Gamma", 100, 1, 1000);
   auto genSimGammaPsedoFilteredHist = std::make_shared<GenSimGammaPsedoFilteredHist>("Gen Sim Gamma (Reconstructed 1 Jets)", 100, 1, 1000, lepRecoMod); 

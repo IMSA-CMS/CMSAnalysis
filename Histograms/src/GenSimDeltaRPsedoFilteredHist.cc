@@ -2,7 +2,7 @@
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
 #include "DataFormats/Math/interface/deltaR.h"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/GenSimSimpleImplementation.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
 
@@ -25,7 +25,7 @@ std::vector<double> GenSimDeltaRPsedoFilteredHist::value() const
   //call getparticles or getInput getparticles in input module level-gensim, particle type called darkphoton in particle class
   //particles = GetInput() from input module?
   //not in particle.cc, just pdgid == 4900022 for identifying dark photons
-  auto particles = getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::darkPhoton());
+  auto particles = getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::darkPhoton());
   //
   // particles is an empty vector,
   //std::cout<<particles[0];
