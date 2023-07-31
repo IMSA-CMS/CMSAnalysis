@@ -1,9 +1,9 @@
-#include "CMSAnalysis/DataCollection/interface/ResolutionHist.hh"
-#include "CMSAnalysis/DataCollection/interface/Particle.hh"
-#include "CMSAnalysis/DataCollection/interface/GenSimParticle.hh"
-#include "CMSAnalysis/DataCollection/interface/InputModule.hh"
-#include "CMSAnalysis/DataCollection/interface/GenSimSimpleImplementation.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonJetMatchingModule.hh"
+#include "CMSAnalysis/Histograms/interface/ResolutionHist.hh"
+#include "CMSAnalysis/Utility/interface/Particle.hh"
+#include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
+#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Utility/interface/GenSimSimpleImplementation.hh"
+#include "CMSAnalysis/Modules/interface/LeptonJetMatchingModule.hh"
 #include <iostream>
 
 ResolutionHist::ResolutionHist(std::shared_ptr<LeptonJetMatchingModule> ileptonJetMatchModule, const std::string& iname, int iNBins, double iminimum, double imaximum):

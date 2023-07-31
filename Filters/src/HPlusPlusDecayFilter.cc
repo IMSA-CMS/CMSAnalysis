@@ -9,7 +9,7 @@ std::string HPlusPlusDecayFilter::getFilterString(const InputModule* inputMod) c
 {
   int higgsPlus = 0;
   int higgsMinus = 0;
-  if (typeGenSim == InputModule::RecoLevel::GenSim)
+  if (typeGenSim == InputModule::RecoLevel::GenSim) 
   {
     auto particles = inputMod->getParticles(InputModule::RecoLevel::GenSim);
     for (const auto &particle : particles) //cycles through to find the doubly charged higgs
@@ -30,8 +30,12 @@ std::string HPlusPlusDecayFilter::getFilterString(const InputModule* inputMod) c
     }
   } else if (typeGenSim == InputModule::RecoLevel::Reco)
   {
+    std::cout << "before" << "\n";
+    
     auto leptons = inputMod->getLeptons(InputModule::RecoLevel::Reco);
 
+    std::cout << "after" << "\n";
+    
     for (const auto &lepton : leptons)
     {
       if (lepton.getCharge() > 0)

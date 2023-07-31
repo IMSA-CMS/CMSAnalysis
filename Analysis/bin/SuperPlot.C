@@ -25,7 +25,8 @@ void SuperPlot()
 	//Change extra text here (keep drawLogo to false for now)
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation)");
 	//Change the string for the channel you want, if using one channel. Otherwise use the loop.
-	std::shared_ptr<Channel> leptonBackgrounds = higgsAnalysis->getChannel("none900");
+	double massTarget = 1400;
+	std::shared_ptr<Channel> leptonBackgrounds = higgsAnalysis->getChannel("eeee" + std::to_string((int) massTarget));
 	//SINGLE CHANNEL CODE HERE
 	// for(std::string processName : leptonBackgrounds->getNames()) {
 	// 	//std::cout << processName << std::endl;
@@ -62,7 +63,7 @@ void SuperPlot()
 	std::shared_ptr<Process> process = leptonBackgrounds->findProcess("Higgs Data");
 
 	//Write axis titles here
-	TString xAxisTitle = "SSDL [GeV]";
+	TString xAxisTitle = "OSDL [GeV]";
 	TString yAxisTitle = "Events";
 
 	//Creates the graph
@@ -73,7 +74,7 @@ void SuperPlot()
 	//TCanvas *canvas = plotFormatter->simple2DHist(process, "Invariant Mass", xAxisTitle, yAxisTitle);
 	//TCanvas *canvas = plotFormatter->simpleStackHist(leptonBackgrounds, "Same Sign Inv Mass", xAxisTitle, yAxisTitle);
 	//TCanvas *canvas = plotFormatter->superImposedHist(leptonBackgrounds, "MET", xAxisTitle, yAxisTitle);
-	TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Same Sign Inv Mass", xAxisTitle, yAxisTitle, 900);
+	TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisTitle, yAxisTitle, massTarget);
 	
 
 	//Uncomment to save a png picture in your bin folder

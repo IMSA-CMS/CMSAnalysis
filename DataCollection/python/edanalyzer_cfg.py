@@ -52,9 +52,9 @@ dataArray = datatxt.split()
 #----------------------------------------------------------------------------------------------------------
 import os
 
-for rfile in dataArray:
-	req = 'dasgoclient --query="run file="'+rfile
-	os.system(req)
+#for rfile in dataArray:
+#	req = 'dasgoclient --query="run file="'+rfile
+#	os.system(req)
 
 process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring(dataArray))
 
@@ -68,8 +68,8 @@ process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring(data
  
                             
 #Luminosity Filter
-if options.luminosityFilter!="":
-	process.source.lumisToProcess = LumiList.LumiList(filename = 'data/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt').getVLuminosityBlockRange()
+#if options.luminosityFilter=="":
+#	process.source.lumisToProcess = LumiList.LumiList(filename = 'data/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt').getVLuminosityBlockRange()
 
 process.demo = cms.EDAnalyzer('RunAnalyzerWrapper',
     analyzerType   = cms.untracked.string(options.analysis),

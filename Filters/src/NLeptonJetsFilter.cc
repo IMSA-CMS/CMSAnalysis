@@ -1,6 +1,7 @@
-#include "CMSAnalysis/DataCollection/interface/NLeptonJetsFilter.hh"
-#include "CMSAnalysis/DataCollection/interface/Selector.hh"
-#include<iostream>
+/*
+#include "CMSAnalysis/Filters/interface/NLeptonJetsFilter.hh"
+#include "CMSAnalysis/Filters/interface/Selector.hh"
+#include <iostream>
 
 NLeptonJetsFilter::NLeptonJetsFilter(std::shared_ptr<LeptonJetReconstructionModule> lepJetModule) : 
   leptonJets(lepJetModule)
@@ -34,3 +35,4 @@ std::string NLeptonJetsFilter::makeFilterString()
 };
 //look at lepton jet matching module
 //get number of jets from lepton jet reconstruction modeule
+*/

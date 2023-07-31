@@ -622,6 +622,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     TH1* signal;
     THStack* background;
     if(channelName == "") {
+        std::cout << "Inside" << "\n";
         std::vector<std::shared_ptr<Channel>> channels = analysis->getChannels();
         processes = channels.at(0);
         std::vector<std::string> backgroundNames = processes->getNamesWithLabel("background");
@@ -642,6 +643,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
         data->Rebin(4);
     }
     else {
+        std::cout << "Outside" << "\n";
         processes = analysis->getChannel(channelName);
         background = processes->getStack(histvariable, "background", true, 4);
 	    signal = processes->findProcess(processes->getNamesWithLabel("signal").at(0))->getHist(histvariable, true);

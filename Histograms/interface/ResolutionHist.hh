@@ -1,9 +1,9 @@
 #ifndef RESOLUTIONHIST_HH
 #define RESOLUTIONHIST_HH
 
-#include "HistogramPrototype1D.hh"
-#include "LeptonJetMatchingModule.hh"
-#include "LeptonJet.hh"
+#include "CMSAnalysis/Utility/interface/HistogramPrototype1D.hh"
+#include "CMSAnalysis/Modules/interface/LeptonJetMatchingModule.hh"
+#include "CMSAnalysis/Utility/interface/LeptonJet.hh"
 
 class LeptonJetMatchingModule;
 

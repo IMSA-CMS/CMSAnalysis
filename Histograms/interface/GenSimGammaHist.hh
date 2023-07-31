@@ -1,7 +1,7 @@
 #ifndef GENSIMGAMMAHIST_HH
 #define GENSIMGAMMAHIST_HH
 
-#include "HistogramPrototype1D.hh"
+#include "CMSAnalysis/Utility/interface/HistogramPrototype1D.hh"
 
 class GenSimGammaHist : public HistogramPrototype1D
 {
