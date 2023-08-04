@@ -104,14 +104,17 @@ bool returnState(TString &myMethodList)
     // input signal file here
     // string sgFile = "photons0_5.root";
     // string sgFile = "photons0_9.root";
-    string sgFile = "photonsBaseline.root";
+    //error on type line 108 and 111
+    string sgFile = "dp2.root";
 
     // input background files here
     string bgFiles[] =
         {
             //"dy4.root"
             //"dy10.root",
-            "DY50Run2.root",
+            //"DY50.root",
+            //"qcd1.root",
+            "dyN2.root"
             // "qcd500.root",
             // "qcd700.root",
             // "qcd1k.root",
@@ -151,7 +154,7 @@ bool returnState(TString &myMethodList)
     // Register the training and test trees
 
     // TTree *signalTree = (TTree *)input->Get("Signal");
-    TTree *signalTree = (TTree *)input->Get("Matched Signal");
+    TTree *signalTree = (TTree *)input->Get("Signal");
 
     // Create a ROOT output file where TMVA will store ntuples, histograms, etc.
     TString outfileName("TMVA.root");
@@ -167,11 +170,12 @@ bool returnState(TString &myMethodList)
     dataloader->AddVariable("leadingPt", "Leading Lepton Transverse Momentum", "", 'F');
     dataloader->AddVariable("nParticles", "Number of Particles", "", 'F');
     dataloader->AddVariable("eta", "Pseudorapidity", "", 'F');
-    dataloader->AddVariable("phi", "Azimuthal Angle", "", 'F');
+    //dataloader->AddVariable("phi", "Azimuthal Angle", "", 'F'); //recompile
     // dataloader->AddVariable("mass", "Mass", "", 'F');
     dataloader->AddVariable("deltaR", "Jet Width", "", 'F');
     dataloader->AddVariable("sumPt", "Total Transverse Momentum", "", 'F');
-    // dataloader->AddVariable("deltaPt", "Leading Change in Transverse Momentum", "", 'F'); // Difference in transverse momentum between leading and runner up highest transverse momentum particles.
+    dataloader->AddVariable("numMuons", "Number of Muons", "", 'F');
+    dataloader->AddVariable("deltaPt", "Leading Change in Transverse Momentum", "", 'F'); // Difference in transverse momentum between leading and runner up highest transverse momentum particles.
     //  dataloader->AddSpectator("spec1 := jetIndex*2", "Spectator 1", "units", 'F');
 
     // global event weights per tree (see below for setting event-wise weights)

@@ -20,9 +20,11 @@ void LeptonJetDataStripModule::initialize()
         // treeId->Branch("mass", &mass, "mass/F");
         treeId->Branch("deltaR", &deltaR, "deltaR/F");
         treeId->Branch("sumPt", &sumPt, "pt/F");
-        // treeId->Branch("deltaPt", &deltaPt, "pt/F");
+        treeId->Branch("deltaPt", &deltaPt, "pt/F");
+        treeId->Branch("numMuons", &numMuons, "numMuons/I");
 
-        std::cout << treeId->GetListOfBranches();
+
+        //std::cout << treeId->GetListOfBranches();
     }
 }
 
@@ -54,8 +56,9 @@ bool LeptonJetDataStripModule::process()
         // mass = leptonJet.getMass();
         deltaR = 0;
         leadingPt = 0;
-        // double runnerUpPt = 0;
-        // deltaPt = 0;
+        double runnerUpPt = 0;
+        deltaPt = 0;
+        numMuons = 0;
 
         for (Particle p : leptonJet.getParticles())
         {
@@ -68,12 +71,17 @@ bool LeptonJetDataStripModule::process()
             }
             if (p.getPt() > leadingPt)
             {
-                // runnerUpPt = leadingPt;
+                runnerUpPt = leadingPt;
                 leadingPt = p.getPt();
             }
             sumPt += p.getPt();
+             
+            if (p.getType() == ParticleType::muon())
+            {
+                numMuons++;
+            }
         }
-        // deltaPt = leadingPt - runnerUpPt;
+        deltaPt = leadingPt - runnerUpPt;
         tree->Fill();
     }
 
@@ -88,8 +96,10 @@ bool LeptonJetDataStripModule::process()
         // mass = fil.getMass();
         deltaR = 0;
         leadingPt = 0;
-        // double runnerUpPt = 0;
-        // deltaPt = 0;
+        double runnerUpPt = 0;
+        deltaPt = 0;
+        numMuons = 0;
+
 
         for (Particle p : fil.getParticles())
         {
@@ -105,7 +115,14 @@ bool LeptonJetDataStripModule::process()
                 // runnerUpPt = leadingPt;
                 leadingPt = p.getPt();
             }
+            sumPt += p.getPt();
+             
+            if (p.getType() == ParticleType::muon())
+            {
+                numMuons++;
+            }
         }
+        deltaPt = leadingPt - runnerUpPt;
         // deltaPt = leadingPt - runnerUpPt;
         tree2->Fill();
     }
