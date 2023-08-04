@@ -10,7 +10,10 @@ LeptonJetEfficiency::LeptonJetEfficiency(const std::shared_ptr<LeptonJetReconstr
     EfficiencyModule(),
     lepRecoMod(iLepRecoMod),
     lepMatchMod(iLepMatchMod)
-{}
+{
+    addRequiredModule(iLepRecoMod);
+    addRequiredModule(iLepMatchMod);
+}
 
 void LeptonJetEfficiency::doCounters()
 {

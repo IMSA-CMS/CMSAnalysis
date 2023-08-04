@@ -72,7 +72,7 @@ ParticleCollection<GenSimParticle> DelphesEventFile::getGenSimParticles() const
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i], gen_eta[i], gen_phi[i], gen_mass[i])),
         gen_pid[i], gen_status[i], gen_m1[i], gen_m2[i], gen_d1[i], gen_d2[i]);
         
-        particle.addInfo("Isolation", 0); 
+        //particle.addInfo("Isolation", 0); GAVIN CHANGED
         genParticles.addParticle(particle);
     }
     return genParticles;
@@ -105,7 +105,7 @@ ParticleCollection<Particle> DelphesEventFile::getRecoParticles() const
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],elec_eta[i], elec_phi[i], elec_mass[i])),
         charge, ParticleType::electron(), fit);
 
-        particle.addInfo("Isolation", elec_reliso[i]);
+        //particle.addInfo("Isolation", elec_reliso[i]); GAVIN CHANGED
         recoParticles.addParticle(particle);
     }
 
@@ -132,7 +132,7 @@ ParticleCollection<Particle> DelphesEventFile::getRecoParticles() const
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],muon_eta[i], muon_phi[i], muon_mass[i])),
         charge, ParticleType::muon(), fit);
 
-        particle.addInfo("Isolation", muon_reliso[i]);
+        //particle.addInfo("Isolation", muon_reliso[i]); GAVIN CHANGED
         recoParticles.addParticle(particle);
     }
     return recoParticles;

@@ -13,6 +13,7 @@
 std::shared_ptr<EventFile> EventLoader::changeFileFormat(TFile* ifile)
 {
     auto eventsBranch = dynamic_cast<TTree*>(ifile->Get("Events"));
+    if (eventsBranch) std::cout << "File contains " << eventsBranch->GetEntries() << " events\n";
     if (dynamic_cast<TTree*>(ifile->Get("myana/mytree"))) //myana/mytree is exclusive to Delphes
     {
         return std::make_shared<DelphesEventFile> (ifile);
