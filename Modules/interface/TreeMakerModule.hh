@@ -17,10 +17,10 @@ public:
 	enum VariableType {Integer, Float, IntegerArray, FloatArray};
 
 	template<typename T>
-	void addValue<T>(std::string name, T type);
+	void addValue(std::string name, T type);
 
 	template<typename T>
-	T getValue<T>(std::string name);
+	T getValue(std::string name);
 
 	TTree* makeTree();
 
@@ -38,13 +38,13 @@ private:
 };
 
 template<typename T>
-inline void addValue<T>(std::string name, T type)
+inline void addValue(std::string name, T type)
 {
 
 }
 
 template<typename T>
-T getValue<T>(std::string name)
+T getValue(std::string name)
 {
 
 }
