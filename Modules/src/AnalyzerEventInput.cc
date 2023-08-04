@@ -13,6 +13,7 @@ ParticleCollection<Lepton> AnalyzerEventInput::getLeptons(RecoLevel level) const
     ParticleCollection<Lepton> leptons;
     auto electrons = getParticles(level, ParticleType::electron()).getParticles();
     auto muons = getParticles(level, ParticleType::muon()).getParticles();
+    //std::cout << "Electrons: " << electrons.size() << "\nMuons: " << muons.size() << "\n";
     for (const auto &p : electrons)
     {
         leptons.addParticle(p);
@@ -30,6 +31,7 @@ ParticleCollection<Particle> AnalyzerEventInput::getParticles(RecoLevel level, c
     if (level == RecoLevel::GenSim)
     {
         auto particles = (*eventInterface)->getGenSimParticles().getParticles();
+        //std::cout << particles.size() << "\n";
         for (const auto &p : particles)
         {
              if ((p.getType() == particleType || particleType == ParticleType::none())) //&& p.isFinalState())

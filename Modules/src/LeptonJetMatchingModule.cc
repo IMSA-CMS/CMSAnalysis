@@ -10,7 +10,7 @@ LeptonJetMatchingModule::LeptonJetMatchingModule(std::shared_ptr<LeptonJetRecons
   lepJet(lepJetModule),
   deltaRCutoff(deltaRCut)
 {
-  
+  addRequiredModule(lepJetModule);
 }
 bool latch = true; 
 bool LeptonJetMatchingModule::process()

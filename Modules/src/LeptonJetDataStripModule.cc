@@ -28,9 +28,12 @@ void LeptonJetDataStripModule::initialize()
     }
 }
 
-LeptonJetDataStripModule::LeptonJetDataStripModule(const std::string outputFileName, std::shared_ptr<LeptonJetReconstructionModule> iRecomod, std::shared_ptr<LeptonJetMatchingModule> iMatchmod) : recomod(iRecomod),
-                                                                                                                                                                                                    matchmod(iMatchmod)
+LeptonJetDataStripModule::LeptonJetDataStripModule(const std::string outputFileName, std::shared_ptr<LeptonJetReconstructionModule> iRecomod, std::shared_ptr<LeptonJetMatchingModule> iMatchmod) : 
+recomod(iRecomod),
+matchmod(iMatchmod)
 {
+    addRequiredModule(iRecomod);
+    addRequiredModule(iMatchmod);
 }
 
 void LeptonJetDataStripModule::finalize()
