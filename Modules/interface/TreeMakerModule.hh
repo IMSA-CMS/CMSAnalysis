@@ -26,15 +26,17 @@ public:
 
 	void addVariablesToReader(TMVA::Reader* reader);
 
+	virtual bool process() override;
+
 protected:
 	void addVariable(std::string name, VariableType type);
+	virtual void addVariables() = 0;
 
 private:
-	std::unordered_map<std::string, int> indices;
-	std::vector<Int_t> integers;
-	std::vector<Float_t> floats;
-	std::vector<std::vector<Int_t>> arraysOfIntegers;
-	std::vector<std::vector<Float_t>> arraysOfFloats;
+	std::unordered_map<std::string, Int_t> integers;
+	std::unordered_map<std::string, Float_t> floats;
+	std::unordered_map<std::string, std::vector<Int_t>> arraysOfIntegers;
+	std::unordered_map<std::string, std::vector<Float_t>> arraysOfFloats;
 };
 
 template<typename T>
