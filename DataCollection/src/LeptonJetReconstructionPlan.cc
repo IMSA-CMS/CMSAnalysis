@@ -83,7 +83,7 @@ void LeptonJetReconstructionPlan::initialize()
   histOutputMod->addHistogram(matchedLeptonJetHist);
   histOutputMod->addHistogram(unmatchedLeptonJetHist);
   //histOutputMod->addHistogram(relIsoHist);
- // histOutputMod->addHistogram(leptonJetMLHist);
+  histOutputMod->addHistogram(leptonJetMLHist);
 
   //   histOutputMod->addHistogram(matchDeltaRHist);
   //   histOutputMod->addHistogram(matchPtHist);
@@ -145,6 +145,7 @@ void LeptonJetReconstructionPlan::initialize()
   // analyzer.addProductionModule(recoEventDumpMod);
   analyzer.addProductionModule(matchMod);
   analyzer.addProductionModule(lepRecoMod);
+  analyzer.addProductionModule(mlMod);
   // analyzer.addProductionModule(genPartMod);
   analyzer.addProductionModule(lepMatchMod);
 
