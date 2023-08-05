@@ -66,7 +66,7 @@ ParticleCollection<GenSimParticle> StrippedEventFile::getGenSimParticles() const
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(genPt[i],genEta[i], genPhi[i], genMass[i])),
         genPID[i],genStatus[i],genM1[i],genM2[i],genD1[i],genD2[i]);
-        particle.addInfo("Isolation", 0);
+        //particle.addInfo("Isolation", 0); GAVIN CHANGED
         genParticles.addParticle(particle);
     }
     return genParticles;
@@ -96,8 +96,13 @@ ParticleCollection<Particle> StrippedEventFile::getRecoParticles() const
         // Lorentz four-vector
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elecPt[i],elecEta[i], elecPhi[i], elecMass[i])),
+<<<<<<< HEAD
         0, 0, charge, ParticleType::electron(), fit);
         particle.addInfo("Isolation", elecReliso[i]);
+=======
+        charge, ParticleType::electron(), fit);
+        //particle.addInfo("Isolation", elecReliso[i]); GAVIN CHANGED
+>>>>>>> 2fbc925a2fe50c534ceef168982aa22ae2897395
         recoParticles.addParticle(particle);
     }
     for (UInt_t i = 0; i < *muonSize; i++)
@@ -124,7 +129,7 @@ ParticleCollection<Particle> StrippedEventFile::getRecoParticles() const
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muonPt[i],muonEta[i], muonPhi[i], muonMass[i])),
         0, 0, charge, ParticleType::muon(), fit);
         
-        particle.addInfo("Isolation", muonReliso[i]);
+        //particle.addInfo("Isolation", muonReliso[i]); GAVIN CHANGED
         recoParticles.addParticle(particle);
         
     }
