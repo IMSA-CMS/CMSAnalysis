@@ -237,15 +237,9 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         getArrayElement<Float_t>("muon_dxy", i),
         getArrayElement<Float_t>("muon_dz", i),
         charge, ParticleType::muon(), fit);
-<<<<<<< HEAD
         particle.addInfo("Isolation", getArrayElement<Float_t>("muon_reliso", i));
         // particle.addInfo("dxy", getArrayElement<Float_t>("muon_dxy", i));
         // particle.addInfo("dz", getArrayElement<Float_t>("muon_dz", i));
-=======
-        //particle.addInfo("Isolation", getArrayElement<Float_t>("muon_reliso", i)); GAVIN CHANGED
-        particle.addInfo("dxy", getArrayElement<Float_t>("muon_dxy", i));
-        particle.addInfo("dz", getArrayElement<Float_t>("muon_dz", i));
->>>>>>> 2fbc925a2fe50c534ceef168982aa22ae2897395
         recoParticles.addParticle(particle);
     }
     for (UInt_t i = 0; i < getVariable<UInt_t>("photon_size"); i++)
