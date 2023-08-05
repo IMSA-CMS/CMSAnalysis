@@ -26,7 +26,11 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
     {
         if (particle.getType() == ParticleType::electron()) 
 		{
-            if (Lepton(particle).isLoose() && particle.getPt() > 5)
+            if(Lepton(particle).isLoose()  
+                && particle.getPt() > 5 
+                && std::abs(particle.getDXY()) < 0.01
+                && std::abs(particle.getDZ()) < 0.025
+            )
             {
                 event.addElectron(particle);
 
@@ -43,8 +47,13 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
         // if (particle.getType() == Particle::Type::Muon && particle.getPt() > 40 && std::abs(particle.getEta()) < 2.8) 
 		if (particle.getType() == ParticleType::muon())
         {
-            if(Lepton(particle).isLoose() && particle.getPt() > 5)
+            if(Lepton(particle).isLoose()  
+                && particle.getPt() > 5 
+                && std::abs(particle.getDXY()) < 0.003125
+                && std::abs(particle.getDZ()) < 0.0078125
+            )
             {
+
                 event.addMuon(particle);
             }
             // if (particle.getCharge() > 0) {

@@ -96,7 +96,7 @@ ParticleCollection<Particle> StrippedEventFile::getRecoParticles() const
         // Lorentz four-vector
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elecPt[i],elecEta[i], elecPhi[i], elecMass[i])),
-        charge, ParticleType::electron(), fit);
+        0, 0, charge, ParticleType::electron(), fit);
         particle.addInfo("Isolation", elecReliso[i]);
         recoParticles.addParticle(particle);
     }
@@ -122,7 +122,7 @@ ParticleCollection<Particle> StrippedEventFile::getRecoParticles() const
         // Lorentz four-vector
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muonPt[i],muonEta[i], muonPhi[i], muonMass[i])),
-        charge, ParticleType::muon(), fit);
+        0, 0, charge, ParticleType::muon(), fit);
         
         particle.addInfo("Isolation", muonReliso[i]);
         recoParticles.addParticle(particle);
@@ -136,7 +136,7 @@ ParticleCollection<Particle> StrippedEventFile::getRecoJets() const
     ParticleCollection<Particle> recoParticles;
     for(UInt_t i = 0; i < *jetSize; i++) 
     {
-    recoParticles.addParticle(Particle(reco::Candidate::LorentzVector(jetPt[i], jetEta[i], jetPhi[i], jetMass[i]),0,ParticleType::jet()));      
+    recoParticles.addParticle(Particle(reco::Candidate::LorentzVector(jetPt[i], jetEta[i], jetPhi[i], jetMass[i]), 0, 0, 0,ParticleType::jet()));      
     }
     return recoParticles;
 }
