@@ -206,15 +206,9 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         getArrayElement<Float_t>("elec_dxy", i),
         getArrayElement<Float_t>("elec_dz", i),
         charge, ParticleType::electron(), fit);
-<<<<<<< HEAD
         particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i));
         // particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
         // particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
-=======
-        //particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i)); GAVIN CHANGED
-        particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
-        particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
->>>>>>> 2fbc925a2fe50c534ceef168982aa22ae2897395
         recoParticles.addParticle(particle);
     }
 
