@@ -203,10 +203,12 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("elec_pt", i),
         getArrayElement<Float_t>("elec_eta", i), getArrayElement<Float_t>("elec_phi", i), getArrayElement<Float_t>("elec_mass", i))),
+        getArrayElement<Float_t>("elec_dxy", i),
+        getArrayElement<Float_t>("elec_dz", i),
         charge, ParticleType::electron(), fit);
         particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i));
-        particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
-        particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
+        // particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
+        // particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
         recoParticles.addParticle(particle);
     }
 
@@ -232,10 +234,12 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("muon_pt", i),
         getArrayElement<Float_t>("muon_eta", i), getArrayElement<Float_t>("muon_phi", i), getArrayElement<Float_t>("muon_mass", i))),
+        getArrayElement<Float_t>("muon_dxy", i),
+        getArrayElement<Float_t>("muon_dz", i),
         charge, ParticleType::muon(), fit);
         particle.addInfo("Isolation", getArrayElement<Float_t>("muon_reliso", i));
-        particle.addInfo("dxy", getArrayElement<Float_t>("muon_dxy", i));
-        particle.addInfo("dz", getArrayElement<Float_t>("muon_dz", i));
+        // particle.addInfo("dxy", getArrayElement<Float_t>("muon_dxy", i));
+        // particle.addInfo("dz", getArrayElement<Float_t>("muon_dz", i));
         recoParticles.addParticle(particle);
     }
     for (UInt_t i = 0; i < getVariable<UInt_t>("photon_size"); i++)
@@ -245,7 +249,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("photon_pt", i),
         getArrayElement<Float_t>("photon_eta", i), getArrayElement<Float_t>("photon_phi", i), 0)),
-        0, ParticleType::photon(), fit);
+        0, 0, 0, ParticleType::photon(), fit);
         recoParticles.addParticle(particle);
     }
     
@@ -258,7 +262,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoJets() const
     for(UInt_t i = 0; i < getVariable<UInt_t>("jet_size"); i++) {
         recoParticles.addParticle(
         Particle(reco::Candidate::LorentzVector(getArrayElement<Float_t>("jet_pt", i), getArrayElement<Float_t>("jet_eta", i), getArrayElement<Float_t>("jet_phi", i), getArrayElement<Float_t>("jet_mass", i)), 
-        0, 
+        0, 0, 0, 
         ParticleType::jet()));        
     }
     return recoParticles;
