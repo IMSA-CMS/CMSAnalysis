@@ -96,13 +96,8 @@ ParticleCollection<Particle> StrippedEventFile::getRecoParticles() const
         // Lorentz four-vector
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elecPt[i],elecEta[i], elecPhi[i], elecMass[i])),
-<<<<<<< HEAD
         0, 0, charge, ParticleType::electron(), fit);
         particle.addInfo("Isolation", elecReliso[i]);
-=======
-        charge, ParticleType::electron(), fit);
-        //particle.addInfo("Isolation", elecReliso[i]); GAVIN CHANGED
->>>>>>> 2fbc925a2fe50c534ceef168982aa22ae2897395
         recoParticles.addParticle(particle);
     }
     for (UInt_t i = 0; i < *muonSize; i++)
