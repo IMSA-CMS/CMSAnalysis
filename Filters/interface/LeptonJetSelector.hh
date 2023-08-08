@@ -12,7 +12,7 @@ class LeptonJetSelector : public Selector
 {
     public:
         //Selects particles, keeping only loose muons with pT greater than 5.
-        void selectParticles(const InputModule* input, Event& event) const override;
+        void selectParticles(const EventInput* input, Event& event) const override;
 
     private:
         std::shared_ptr<LeptonJetReconstructionModule> recoMod;

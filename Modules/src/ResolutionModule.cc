@@ -17,6 +17,7 @@ ResolutionModule::ResolutionModule(const std::shared_ptr<MatchingModule> matchin
   maxCut(max),
   interval(intervalSize)
 {
+  addRequiredModule(matchingModule);
 }
 
 bool ResolutionModule::process()

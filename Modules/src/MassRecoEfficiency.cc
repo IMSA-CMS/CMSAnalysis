@@ -1,5 +1,5 @@
 #include "CMSAnalysis/Modules/interface/MassRecoEfficiency.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 //#include "CMSAnalysis/DataCollection/interface/RecoIdentificationModule.hh"
 
 MassRecoEfficiency::MassRecoEfficiency(double iHiggsMass, double iLowerWidth, double iUpperWidth):
@@ -13,7 +13,7 @@ MassRecoEfficiency::MassRecoEfficiency(double iHiggsMass, double iLowerWidth, do
 
 bool MassRecoEfficiency::process()
 {
-  auto reco = getInput()->getLeptons(InputModule::RecoLevel::Reco);
+  auto reco = getInput()->getLeptons(EventInput::RecoLevel::Reco);
   double invMass = reco.calculateSameSignInvariantMass();
   int size = reco.getNumParticles();
   int nMuons = reco.getLeptonTypeCount(ParticleType::muon());

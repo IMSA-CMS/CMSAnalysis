@@ -1,5 +1,5 @@
-#ifndef CollectionHistParams_HH
-#define CollectionHistParams_HH
+#ifndef COLLECTIONHISTPARAMS_HH
+#define COLLECTIONHISTPARAMS_HH
 
 #include <functional>
 #include <memory>
@@ -23,8 +23,9 @@ private:
 public:
     CollectionHistParams(const std::string& iname, int iNBins, double iminimum, double imaximum, std::function<std::vector<double>(std::shared_ptr<ParticleCollection<Particle>>)> function);
 
+    void setName(std::string);
     std::string getName() const;
-    int getNBins() const;
+    int getBins() const;
     double getMinimum() const;
     double getMaximum() const;
     std::function<std::vector<double>(std::shared_ptr<ParticleCollection<Particle>>)> getValueFunction() const;

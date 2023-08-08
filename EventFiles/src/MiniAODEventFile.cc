@@ -1,5 +1,5 @@
 #include "CMSAnalysis/EventFiles/interface/MiniAODEventFile.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
@@ -12,8 +12,6 @@ MiniAODEventFile::MiniAODEventFile(TFile* ifile) :
 EventFile(ifile)
 {
     event = std::make_shared<fwlite::Event> (getFile());
-    std::cerr << "Events: " << event->size() << std::endl;
-    setNumOfEvents(getNumOfEvents() + event->size());
     setEventCount(1);
     event->toBegin();
 }

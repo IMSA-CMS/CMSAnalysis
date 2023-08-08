@@ -18,11 +18,11 @@
 #include "CMSAnalysis/Modules/interface/Module.hh"
 #include "CMSAnalysis/Utility/interface/TDisplayText.h"
 #include "CMSAnalysis/DataCollection/interface/ProcessDictionary.hh"
-#include "CMSAnalysis/Modules/interface/AnalyzerInputModule.hh"
+#include "CMSAnalysis/Modules/interface/AnalyzerEventInput.hh"
 
 Analyzer::Analyzer() : 
 eventInterface(nullptr),
-input(new AnalyzerInputModule(&eventInterface))
+input(new AnalyzerEventInput(&eventInterface))
 {
 }
 
@@ -52,12 +52,16 @@ void Analyzer::writeOutputFile(const std::string &outputFile)
 
   outputRootFile->cd();
   //Finalize separately for each filterString, to be safe
+  //std::cout << "There are " << analysisModules.size() << " analysis modules\n";
   for (auto module : analysisModules)
   {
     // Write the output
     module->doneProcessing();
-    if (filterModules.size() != 0)
+    //std::cout << "FilterModules size : " << filterModules.size() << "\n";
+    // if (filterModules.size() != 0)
+    if (true)
     {
+      //std::cout << "Finalizing analysis module: " << module->getFilter() << "\n";
       module->finalize();
       for (auto &str : filterNames) //writes analysis modules by filter string
       {
@@ -108,6 +112,17 @@ void Analyzer::initialize()
   // This keeps the histograms separate from the files they came from, avoiding errors
   TH1::AddDirectory(kFALSE);
   TH1::SetDefaultSumw2(kTRUE);
+
+  // Checks if all dependencies are loaded properly
+  for (auto module : getAllModules())
+  {
+    if (!checkModuleDependencies(module))
+    {
+      std::cout << typeid(*module).name() << "'s dependencies have not been loaded properly!\n";
+    }
+  }
+
+  std::cout << "Finished checking module dependencies\n";
 
   // Initialize all modules
   for (auto module : getAllModules())
@@ -173,3 +188,31 @@ void Analyzer::processOneEvent(const EventInterface *eInterface)
 
 }
 
+void Analyzer::addProductionModule(std::shared_ptr<ProductionModule> module)
+{
+  productionModules.push_back(module);
+}
+
+void Analyzer::addFilterModule(std::shared_ptr<FilterModule> module)
+{
+  filterModules.push_back(module);
+}
+void Analyzer::addAnalysisModule(std::shared_ptr<AnalysisModule> module)
+{
+  analysisModules.push_back(module);
+}
+
+bool Analyzer::checkModuleDependencies(std::shared_ptr<Module> module)
+{
+  auto modules = getAllModules();
+  auto dependencies = module->getDependencies();
+  for (auto modulePtr : dependencies)
+  {
+    if (std::find(modules.begin(), modules.end(), modulePtr) == modules.end())
+    {
+      return false;
+    } 
+  }
+
+  return true;
+}

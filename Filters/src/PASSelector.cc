@@ -4,13 +4,13 @@
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "CMSAnalysis/Utility/interface/Lepton.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/Event.hh"
 
-void PASSelector::selectParticles(const InputModule* input, Event& event) const
+void PASSelector::selectParticles(const EventInput* input, Event& event) const
 {
     std::vector<Particle> selected;
-    auto particles = input->getLeptons(InputModule::RecoLevel::Reco).getParticles();
+    auto particles = input->getLeptons(EventInput::RecoLevel::Reco).getParticles();
 
     
     for (const auto& particle : particles)

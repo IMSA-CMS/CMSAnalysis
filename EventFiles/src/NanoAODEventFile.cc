@@ -1,5 +1,5 @@
 #include "CMSAnalysis/EventFiles/interface/NanoAODEventFile.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "CMSAnalysis/Utility/interface/GenSimSimpleImplementation.hh"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
@@ -204,7 +204,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("elec_pt", i),
         getArrayElement<Float_t>("elec_eta", i), getArrayElement<Float_t>("elec_phi", i), getArrayElement<Float_t>("elec_mass", i))),
         charge, ParticleType::electron(), fit);
-        particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i));
+        //particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i)); GAVIN CHANGED
         particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
         particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
         recoParticles.addParticle(particle);
@@ -233,7 +233,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("muon_pt", i),
         getArrayElement<Float_t>("muon_eta", i), getArrayElement<Float_t>("muon_phi", i), getArrayElement<Float_t>("muon_mass", i))),
         charge, ParticleType::muon(), fit);
-        particle.addInfo("Isolation", getArrayElement<Float_t>("muon_reliso", i));
+        //particle.addInfo("Isolation", getArrayElement<Float_t>("muon_reliso", i)); GAVIN CHANGED
         particle.addInfo("dxy", getArrayElement<Float_t>("muon_dxy", i));
         particle.addInfo("dz", getArrayElement<Float_t>("muon_dz", i));
         recoParticles.addParticle(particle);

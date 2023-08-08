@@ -21,7 +21,7 @@ std::string FileParams::getFileName() const
     stream << ".txt";
     std::string fileName = stream.str();
     fileName = Utility::substitute(fileName, " ", "_");
-    std::cout << "Filename: " << fileName << '\n';
+    std::cout << "Name of file list: " << fileName << '\n';
     return fileName;
 }
 

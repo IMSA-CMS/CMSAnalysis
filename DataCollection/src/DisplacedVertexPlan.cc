@@ -31,7 +31,7 @@ void DisplacedVertexPlan::initialize()
 
   // Create necessary histogram(s), as well as histMod
   auto histMod = make_shared<HistogramOutputModule>();
-  auto PTHist = make_shared<PhotonsHist>(InputModule::RecoLevel::Reco, "Photon_PT", 100, 0, 1000);
+  auto PTHist = make_shared<PhotonsHist>(EventInput::RecoLevel::Reco, "Photon_PT", 100, 0, 1000);
 
   // Add the histogram(s) created above to histMod
   histMod->addHistogram(PTHist);

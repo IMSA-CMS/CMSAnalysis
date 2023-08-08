@@ -15,8 +15,8 @@ bool MatchingModule::process()
 	matchingBestPairs.clear();
 
 	// Make a copy so we don't modify the original
-	std::vector<Particle> GenSimParticle(getInput()->getParticles(InputModule::RecoLevel::GenSim).getParticles());
-	std::vector<Particle> recoCandidates(getInput()->getParticles(InputModule::RecoLevel::Reco).getParticles());
+	std::vector<Particle> GenSimParticle(getInput()->getParticles(EventInput::RecoLevel::GenSim).getParticles());
+	std::vector<Particle> recoCandidates(getInput()->getParticles(EventInput::RecoLevel::Reco).getParticles());
 	return match(GenSimParticle, recoCandidates);
 }
   
