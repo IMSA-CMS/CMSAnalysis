@@ -1,17 +1,14 @@
-#ifndef HistParams_HPP
-#define HistParams_HPP
-
+#ifndef HISTPARAMS_HH
+#define HISTPARAMS_HH
 #include <functional>
 #include <string>
 #include <vector>
-
 
 class Particle;  // Forward declaration of the Particle class
 
 class HistParams {
 private:
     std::function<std::vector<double>(Particle)> valueFunction;
-
     std::string name;
     int bins;
     double minimum;
@@ -31,6 +28,10 @@ public:
     double getMinimum() const;
     
     double getMaximum() const;
+
+    void setName(std::string);
+
+    
 };
 
 #endif 

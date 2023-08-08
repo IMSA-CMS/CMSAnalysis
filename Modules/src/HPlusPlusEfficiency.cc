@@ -11,11 +11,11 @@ bool HPlusPlusEfficiency::process()
 {
   std::string cstr[] = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu"};
 
-  auto genSim = getInput()->getParticles(InputModule::RecoLevel::GenSim);
-  auto reco = getInput()->getLeptons(InputModule::RecoLevel::Reco);
+  auto genSim = getInput()->getParticles(EventInput::RecoLevel::GenSim);
+  auto reco = getInput()->getLeptons(EventInput::RecoLevel::Reco);
 
   // Reco stuff
-  HPlusPlusDecayFilter recoEvent(InputModule::RecoLevel::Reco);
+  HPlusPlusDecayFilter recoEvent(EventInput::RecoLevel::Reco);
   std::string recoDecay = recoEvent.getState(genSim, reco);
 
   for (int i = 0; i < 12; i++)
@@ -58,7 +58,7 @@ bool HPlusPlusEfficiency::process()
   }
 
   // GenSim stuff
-  HPlusPlusDecayFilter genSimEvent(InputModule::RecoLevel::GenSim);
+  HPlusPlusDecayFilter genSimEvent(EventInput::RecoLevel::GenSim);
   std::string genSimDecay = genSimEvent.getState(genSim, reco);
 
   if  (genSimDecay.compare("none") != 0)

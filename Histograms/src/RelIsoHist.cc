@@ -9,10 +9,10 @@ RelIsoHist::RelIsoHist(const std::string &iname, int iNBins, double iminimum, do
 std::vector<double> RelIsoHist::value() const
 {
   std::vector<double> output;
-  for (auto particle : getInput()->getLeptons(InputModule::RecoLevel::Reco))
+  for (auto particle : getInput()->getLeptons(EventInput::RecoLevel::Reco))
   {
-    double isolation = particle.getIsolation();
-    output.push_back(isolation);
+    //double isolation = particle.getIsolation(); GAVIN CHANGED
+    //output.push_back(isolation);
   }
   return output;
 };

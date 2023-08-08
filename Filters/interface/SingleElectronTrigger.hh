@@ -11,7 +11,7 @@ class SingleElectronTrigger : public RecoTrigger
     SingleElectronTrigger(const double iPTCutoff = 28);
   
   protected:
-    bool checkTrigger(const InputModule* input) override; //checks if event passes trigger criteria
+    bool checkTrigger(const EventInput* input) override; //checks if event passes trigger criteria
 
   private:
     const double pTCutoff;

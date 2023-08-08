@@ -12,7 +12,7 @@
 class TObject;
 class PtResolutionModule;
 class HistogramPrototype;
-class InputModule;
+class EventInput;
 
 // An AnalysisModule designed to fill histograms into a Root file
 class HistogramOutputModule : public AnalysisModule
@@ -23,7 +23,7 @@ public:
   virtual void finalize() override;
   virtual bool process() override;    // Fills the histograms
   void addHistogram(std::shared_ptr<HistogramPrototype> hist); // Adds a HistogramPrototype* to histogram (the vector)
-  virtual void setInput(const InputModule* iInput) override;
+  virtual void setInput(const EventInput* iInput) override;
 
 protected:
   // This adds an object to the collection to be written.

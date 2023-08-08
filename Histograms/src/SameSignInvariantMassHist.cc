@@ -3,7 +3,7 @@
 #include "CMSAnalysis/Filters/interface/Selector.hh"
 
 
-SameSignInvariantMassHist::SameSignInvariantMassHist(InputModule::RecoLevel typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum, 
+SameSignInvariantMassHist::SameSignInvariantMassHist(EventInput::RecoLevel typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum, 
   bool iUsingPhi, bool iMultipleMasses) :
   GenSimRecoPrototype(typeSwitch, iname, iNBins, iminimum, imaximum),
   usingPhi(iUsingPhi),
@@ -11,7 +11,7 @@ SameSignInvariantMassHist::SameSignInvariantMassHist(InputModule::RecoLevel type
 {
 }
 
-std::vector<double> SameSignInvariantMassHist::protectedValue(InputModule::RecoLevel typeGenSim) const
+std::vector<double> SameSignInvariantMassHist::protectedValue(EventInput::RecoLevel typeGenSim) const
 {
   if (multipleMasses)
   {

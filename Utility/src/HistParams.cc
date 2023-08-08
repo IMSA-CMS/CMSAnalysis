@@ -13,22 +13,32 @@ HistParams::HistParams(const std::string& iname, int inBins, double iminimum, do
     maximum(imaximum)
     {}
 
-std::string HistParams::getName() const {
+std::string HistParams::getName() const
+{
     return name;
 }
 
-int HistParams::getBins() const {
+int HistParams::getBins() const 
+{
     return bins;
 }
 
-double HistParams::getMinimum() const {
+double HistParams::getMinimum() const 
+{
     return minimum;
 }
 
-double HistParams::getMaximum() const {
+double HistParams::getMaximum() const 
+{
     return maximum;
 }
 
-std::function<std::vector<double>(Particle)> HistParams::getValueFunction() const {
+void HistParams::setName(std::string newName)
+{
+    name = newName;
+}
+
+std::function<std::vector<double>(Particle)> HistParams::getValueFunction() const 
+{
     return valueFunction;
 }

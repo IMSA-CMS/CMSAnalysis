@@ -13,11 +13,16 @@ CollectionHistParams::CollectionHistParams(const std::string& iname, int iNBins,
     valueFunction(function)
 {}
 
+void CollectionHistParams::setName(std::string newName)
+{
+    name = newName;
+}
+
 std::string CollectionHistParams::getName() const {
     return name;
 }
 
-int CollectionHistParams::getNBins() const {
+int CollectionHistParams::getBins() const {
     return NBins;
 }
 

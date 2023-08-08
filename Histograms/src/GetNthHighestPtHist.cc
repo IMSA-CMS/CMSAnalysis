@@ -4,14 +4,14 @@
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 
-GetNthHighestPtHist::GetNthHighestPtHist(InputModule::RecoLevel typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum, int inthMuon, const ParticleType& parType) :
+GetNthHighestPtHist::GetNthHighestPtHist(EventInput::RecoLevel typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum, int inthMuon, const ParticleType& parType) :
   GenSimRecoPrototype(typeSwitch, iname, iNBins, iminimum, imaximum),
   nthMuon(inthMuon),
   particleType(parType)
 {}
 
 
-std::vector<double> GetNthHighestPtHist::protectedValue(InputModule::RecoLevel typeGenSim) const
+std::vector<double> GetNthHighestPtHist::protectedValue(EventInput::RecoLevel typeGenSim) const
 {
   auto particles = getInput()->getLeptons(typeGenSim);
   if (particleType == ParticleType::none())
