@@ -29,12 +29,12 @@ void LeptonJetEfficiency::doCounters()
         incrementCounter("Double Jet Events", 1);
     }
     
-    for(int i = 0; i <= recoLeptonJets.size(); ++i)
+    for (auto leptonJet : recoLeptonJets)
     {
-         if (recoLeptonJets[1] == 1)
-    {
-        incrementCounter("Single Jet Events", 1);
-    }
+         if ()
+        {
+            incrementCounter("Single Jet Events", 1);
+        }
 
     }
 
