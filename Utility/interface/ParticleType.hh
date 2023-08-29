@@ -6,9 +6,9 @@
 #include <vector>
 #include <functional>
 
-#include "CMSAnalysis/Utility/interface/SingleParticleHist.hh"
+#include "HistParams.hh"
 #include "Particle.hh"
-#include "CollectionHist.hh"
+#include "CollectionHistParams.hh"
 
 //ParticleType object which may be assigned to a particle. 
 //All usages of ParticleType are refrences to the "typeList" variable.
@@ -21,8 +21,8 @@ class ParticleType
     std::string getName() const {return name;};
     int getpdgId() const {return pdgId;};
     double getCharge() const {return charge;};
-    std::vector<std::shared_ptr<SingleParticleHist>> getParticleHists() const;
-    std::vector<std::shared_ptr<CollectionHist>> getCollectionHists() const;
+    std::vector<HistParams> getParticleHists() const;
+    std::vector<CollectionHistParams> getCollectionHists() const;
 
     static const ParticleType& getPDGType(int pdgID);
 
@@ -55,7 +55,7 @@ class ParticleType
 
     //Default constructor necessary for std::unordered_map for allocating new elements with [] operator
     ParticleType();
-    ParticleType(std::string typeName, int typepdgId, double charge, std::vector<SingleParticleHist> typeParticleHists, std::vector<CollectionHist> typeCollectionHists);//, std::vector<CollectionHist> collectionhists);
+    ParticleType(std::string typeName, int typepdgId, double charge, std::vector<HistParams> typeParticleHists, std::vector<CollectionHistParams> typeCollectionHists); //std::vector<CollectionHistParams> CollectionHistParamss);
     
     bool operator== (const ParticleType type) const;
     bool operator!= (const ParticleType type) const;
@@ -64,24 +64,24 @@ class ParticleType
     std::string name;
     int pdgId;
     double charge;
-    std::vector<SingleParticleHist> particleHists;
-    std::vector<CollectionHist> collectionHists;
+    std::vector<HistParams> particleHists;
+    std::vector<CollectionHistParams> collectionHists;
 
     //Avaliable hists for ParticleTypes
-    static SingleParticleHist getPtHist();
-    static SingleParticleHist getPhiHist();
-    static SingleParticleHist getEtaHist();
-    static SingleParticleHist getDaughterDeltaRHist();
+    static HistParams getPtHist();
+    static HistParams getPhiHist();
+    static HistParams getEtaHist();
+    static HistParams getDaughterDeltaRHist();
 
-    static CollectionHist getNumberHist();
-    static CollectionHist getSameSignInvariantMassHist();
-    static CollectionHist getOppositeSignInvariantMassHist();
+    static CollectionHistParams getNumberHist();
+    static CollectionHistParams getSameSignInvariantMassHist();
+    static CollectionHistParams getOppositeSignInvariantMassHist();
 
     static bool loadParticle(std::ifstream& file);
     //Lets you manually change the particle types in the method definition
     static void particleTypeOverrides();
     //Should probably be changed to void and replaced with getPDGType()
-    static const ParticleType& registerType(std::string typeName, int typepdgId, double charge, std::vector<SingleParticleHist> typeParticleHists, std::vector<CollectionHist> typeCollectionHists);//, std::vector<CollectionHist> collectionhist);
+    static const ParticleType& registerType(std::string typeName, int typepdgId, double charge, std::vector<HistParams> typeParticleHists, std::vector<CollectionHistParams> typeCollectionHistParams);//, std::vector<CollectionHistParams> CollectionHistParams);
 
     static std::unordered_map<int, ParticleType> typeList;
 
