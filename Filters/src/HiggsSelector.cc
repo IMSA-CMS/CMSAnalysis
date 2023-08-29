@@ -50,7 +50,7 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
             if(Lepton(particle).isLoose()  
                 && particle.getPt() > 5 
                 // && std::abs(particle.getDXY()) < 0.003125
-                // && std::abs(particle.getDZ()) < 0.0078125
+                // && std::abs(particle.getDZ()) < 0.007183
             )
             {
 
