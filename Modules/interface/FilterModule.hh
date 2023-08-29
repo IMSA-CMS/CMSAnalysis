@@ -12,6 +12,8 @@ namespace edm
   class EventBase;
 }
 
+class Filter;
+
 // This class provides a way to filter events based on some criteria
 // Events can be distributed or rejected outright
 class FilterModule : public Module

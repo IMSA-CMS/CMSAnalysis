@@ -1,5 +1,4 @@
 #include "CMSAnalysis/Utility/interface/HistogramPrototype1D.hh"
-
 #include "TH1.h"
 
 HistogramPrototype1D::HistogramPrototype1D(const std::string& iname, int inBins, double iminimum, double imaximum) :
