@@ -1,4 +1,4 @@
-#include "CMSAnalysis/Utility/interface/HistogramPrototype1DGeneral.hh"
+#include "CMSAnalysis/Histograms/interface/HistogramPrototype1DGeneral.hh"
 
 #include "TH1.h"
 #include <functional>
