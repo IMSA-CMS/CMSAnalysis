@@ -32,7 +32,7 @@
 #include "CMSAnalysis/Modules/interface/LeptonEfficiency.hh"
 #include "CMSAnalysis/Filters/interface/METTrigger.hh"
 #include "CMSAnalysis/Modules/interface/SignFlipModule.hh"
-#include "CMSAnalysis/Utility/interface/HistogramPrototype1DGeneral.hh"
+#include "CMSAnalysis/Histograms/interface/HistogramPrototype1DGeneral.hh"
 #include "CMSAnalysis/Modules/interface/FilterModule.hh"
 
 
