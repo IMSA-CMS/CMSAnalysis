@@ -1,4 +1,4 @@
-#include "CMSAnalysis/Utility/interface/CollectionHist.hh"
+#include "CMSAnalysis/Modules/interface/CollectionHist.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 
@@ -11,6 +11,10 @@ CollectionHist::CollectionHist(const std::string& iname, int inBins, double imin
     HistogramPrototype1D(iname, inBins, iminimum, imaximum),
     collection(std::make_shared<ParticleCollection<Particle>>()),
     valueFunction(function)
+{}
+
+CollectionHist::CollectionHist(const CollectionHistParams& params):
+    CollectionHist(params.getName(), params.getBins(), params.getMinimum(), params.getMaximum(), params.getValueFunction() )
 {}
 
 void CollectionHist::clear()

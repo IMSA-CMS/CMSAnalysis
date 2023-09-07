@@ -1,8 +1,9 @@
 #ifndef COLLECTIONHIST_HH
 #define COLLECTIONHIST_HH
 
-#include "HistogramPrototype1D.hh"
-#include "Particle.hh"
+#include "CMSAnalysis/Utility/interface/HistogramPrototype1D.hh"
+#include "CMSAnalysis/Utility/interface/Particle.hh"
+#include "CMSAnalysis/Utility/interface/CollectionHistParams.hh"
 
 #include <functional>
 
@@ -21,9 +22,7 @@ class CollectionHist : public HistogramPrototype1D
   public:
   // Constructor / takes a value function
   CollectionHist(const std::string& iname, int iNBins, double iminimum, double imaximum, std::function<std::vector<double>(std::shared_ptr<ParticleCollection<Particle>>)>function);
-
-  //Clones histogram
-  CollectionHist clone() {return CollectionHist(getName(),getNBins(),getMinimum(),getMaximum(),valueFunction);};
+  CollectionHist(const CollectionHistParams& params);
 
   // Sets nullptr to hist to avoid null pointer error
   void clear();
