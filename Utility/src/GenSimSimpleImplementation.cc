@@ -33,7 +33,7 @@ bool GenSimSimpleImplementation::operator== (const ParticleImplementation& other
 
 int GenSimSimpleImplementation::pdgId() const
 {
-  return particleCharge * currentPdgId;
+  return currentPdgId;
 }
 
 reco::Candidate::LorentzVector GenSimSimpleImplementation::getFourVector() const

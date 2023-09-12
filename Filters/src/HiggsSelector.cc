@@ -21,18 +21,21 @@ void HiggsSelector::selectParticles(const InputModule* input, Event& event) cons
     // int posMuonCount = 0;
     // int negMuonCount = 0;
     
+    // std::cout << "-----" << std::endl;
     
     for (const auto& particle : particles)
     {
         if (particle.getType() == ParticleType::electron()) 
 		{
+            // event.addElectron(particle);
             if (Lepton(particle).isLoose() && particle.getPt() > 5)
             {
                 event.addElectron(particle);
-
+                // std::cout << particle.getName() << ": " << std::to_string(particle.getCharge()) << std::endl;
             }
-            // electronCount++;
 
+            // electronCount++;
+            
             // if (particle.getCharge() > 0) {
             //     posElecs.push_back(Particle(particle));
             // } 
@@ -40,12 +43,13 @@ void HiggsSelector::selectParticles(const InputModule* input, Event& event) cons
             //     negElecs.push_back(Particle(particle));
             // }
         }
-        // if (particle.getType() == Particle::Type::Muon && particle.getPt() > 40 && std::abs(particle.getEta()) < 2.8) 
-		if (particle.getType() == ParticleType::muon())
+        else if (particle.getType() == ParticleType::muon()) // if (particle.getType() == Particle::Type::Muon && particle.getPt() > 40 && std::abs(particle.getEta()) < 2.8) 
         {
+            // event.addMuon(particle);
             if(Lepton(particle).isLoose() && particle.getPt() > 5)
             {
                 event.addMuon(particle);
+                // std::cout << particle.getName() << ": " << std::to_string(particle.getCharge()) << std::endl;
             }
             // if (particle.getCharge() > 0) {
             //     posMuonCount++;
@@ -57,6 +61,8 @@ void HiggsSelector::selectParticles(const InputModule* input, Event& event) cons
             // }
         }
     }
+
+    // std::cout << "-" << std::endl;
     
     // int index1 = 0;
     // int index2 = 0;
