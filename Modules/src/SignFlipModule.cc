@@ -4,6 +4,7 @@
 SignFlipModule::SignFlipModule(const std::shared_ptr<MatchingModule> imatchModule):
   matchModule(imatchModule)
 {
+  addRequiredModule(imatchModule);
 }
 
 bool SignFlipModule::process()

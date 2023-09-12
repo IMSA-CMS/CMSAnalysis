@@ -12,7 +12,7 @@
 #include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
 #include "CMSAnalysis/Filters/interface/Selector.hh"
 #include "CMSAnalysis/Filters/interface/Cut.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 
 
 Event::Event()
@@ -20,11 +20,11 @@ Event::Event()
 
 }
 
-ParticleCollection<Particle> Event::getParticles(InputModule::RecoLevel level) const
+ParticleCollection<Particle> Event::getParticles(EventInput::RecoLevel level) const
 {
     ParticleCollection<Particle> particleList;
    
-    if (level == InputModule::RecoLevel::Reco)
+    if (level == EventInput::RecoLevel::Reco)
     {
         for (const auto& p: electrons.getParticles())
         {
@@ -54,7 +54,7 @@ ParticleCollection<Particle> Event::getParticles(InputModule::RecoLevel level) c
             }
         }
     }
-    else if (level == InputModule::RecoLevel::GenSim)
+    else if (level == EventInput::RecoLevel::GenSim)
     {
         for (const auto& p: genSimParticles.getParticles())
         {

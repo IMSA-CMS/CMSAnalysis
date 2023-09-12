@@ -31,6 +31,16 @@ int main(int argc, char **argv)
 {
   auto start = std::chrono::steady_clock::now();
 
+  std::string particleDatabase("textfiles/ParticleData.txt");
+  if (ParticleType::loadParticleDatabase(particleDatabase))
+  {
+    std::cout << particleDatabase << " has been loaded properly!\n";
+  }
+  else
+  {
+    std::cout << particleDatabase << " has not been loaded properly!\n";
+  }
+
   gROOT->SetBatch(true);
   gSystem->Load("libFWCoreFWLite");
   FWLiteEnabler::enable();
@@ -101,6 +111,6 @@ int main(int argc, char **argv)
 
   std::chrono::duration<double> processingTime = end - start;
 
-  std::cout<<"Processing time: "<<processingTime.count()<<"s"<<std::endl;
+  std::cout << "Processing time: "<<processingTime.count()<<"s"<<std::endl;
   return 0;
 }

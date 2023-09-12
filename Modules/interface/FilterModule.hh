@@ -5,12 +5,14 @@
 #include <map>
 
 #include "Module.hh"
-#include "InputModule.hh"
+#include "EventInput.hh"
 
 namespace edm
 {
   class EventBase;
 }
+
+class Filter;
 
 // This class provides a way to filter events based on some criteria
 // Events can be distributed or rejected outright
@@ -44,6 +46,8 @@ private:
   std::map<std::string, int> counterMap;
 
   std::shared_ptr<Filter> filter;
+
+  int getTotalCounters();
 };
 
 #endif

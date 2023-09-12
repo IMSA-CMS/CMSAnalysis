@@ -26,6 +26,8 @@ public:
   virtual int numberOfDaughters() const = 0;
   virtual const ParticleType& getType() const = 0;
   virtual Particle::SelectionFit getSelectionFit() const = 0;
+  virtual double getDXY() const;
+  virtual double getDZ() const;
   virtual bool isNotNull() const = 0;
   // virtual const reco::Candidate* getUnderlyingParticle() const = 0;
   virtual bool isFinalState() const = 0;

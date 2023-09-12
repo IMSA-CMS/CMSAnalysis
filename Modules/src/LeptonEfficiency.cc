@@ -9,11 +9,12 @@ LeptonEfficiency::LeptonEfficiency(const std::shared_ptr<MatchingModule> imatchM
   EfficiencyModule(),
   matchModule(imatchModule)
 {
+  addRequiredModule(imatchModule);
 }
 
 bool LeptonEfficiency::process()
 {
-  auto genSim = getInput()->getLeptons(InputModule::RecoLevel::GenSim);
+  auto genSim = getInput()->getLeptons(EventInput::RecoLevel::GenSim);
 
   incrementCounter("genSimElectron", 0);
   incrementCounter("genSimMuon", 0);

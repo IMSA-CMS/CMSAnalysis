@@ -17,12 +17,12 @@ std::vector<double> LeptonJetRecoHist::value() const
 {
     //const auto &jets = leptonJetRecoModule->getLeptonJets();
     std::vector<double> counts;
-    //const ParticleCollection<GenSimParticle> allGenParticles = getInput()->getParticles(InputModule::RecoLevel::GenSim);
-    //const ParticleCollection<Particle> allRecoParticles = getInput()->getParticles(InputModule::RecoLevel::Reco);
-    std::vector<Particle> allGenParticles(getInput()->getParticles(InputModule::RecoLevel::GenSim).getParticles());
-    std::vector<Particle> recoCandidates(getInput()->getParticles(InputModule::RecoLevel::Reco).getParticles());
-    //std::cout<<"size of GenParticles "<<getInput()->getParticles(InputModule::RecoLevel::GenSim).getParticles().size()<<std::endl;
-    //std::cout<<"size of RecoParticles "<<getInput()->getParticles(InputModule::RecoLevel::Reco).getParticles().size()<<std::endl;
+    //const ParticleCollection<GenSimParticle> allGenParticles = getInput()->getParticles(EventInput::RecoLevel::GenSim);
+    //const ParticleCollection<Particle> allRecoParticles = getInput()->getParticles(EventInput::RecoLevel::Reco);
+    std::vector<Particle> allGenParticles(getInput()->getParticles(EventInput::RecoLevel::GenSim).getParticles());
+    std::vector<Particle> recoCandidates(getInput()->getParticles(EventInput::RecoLevel::Reco).getParticles());
+    //std::cout<<"size of GenParticles "<<getInput()->getParticles(EventInput::RecoLevel::GenSim).getParticles().size()<<std::endl;
+    //std::cout<<"size of RecoParticles "<<getInput()->getParticles(EventInput::RecoLevel::Reco).getParticles().size()<<std::endl;
 
     const MatchingPairCollection& bestLeptonPairs = recoMatchingModule->getMatchingBestPairs();
     const ParticleCollection<GenSimParticle> underlyingLepton = bestLeptonPairs.getGenParticles();

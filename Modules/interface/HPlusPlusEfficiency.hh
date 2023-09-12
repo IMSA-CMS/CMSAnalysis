@@ -3,8 +3,6 @@
 
 #include "EfficiencyModule.hh"
 
-#include "CMSAnalysis/Modules/interface/MatchingModule.hh"
-
 //Calculates reconstruction efficiency for H++
 class HPlusPlusEfficiency : public EfficiencyModule
 {

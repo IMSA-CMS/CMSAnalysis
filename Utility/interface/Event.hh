@@ -9,7 +9,7 @@
 #include "CMSAnalysis/Utility/interface/Photon.hh"
 #include "CMSAnalysis/Utility/interface/Jet.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 
 // Stores an event by containing ParticleCollections of different types of Particles, as well as MET.
 // Used in EventModule, where cuts are applied to it.
@@ -27,7 +27,7 @@ class Event
         // gets a special object by key
         ParticleCollection<Particle> getSpecial(std::string key) const;
         // get all particles
-        ParticleCollection<Particle> getParticles(InputModule::RecoLevel level = InputModule::RecoLevel::Reco) const;
+        ParticleCollection<Particle> getParticles(EventInput::RecoLevel level = EventInput::RecoLevel::Reco) const;
 
         void addElectron(Electron electron);
         void addMuon(Muon muon);

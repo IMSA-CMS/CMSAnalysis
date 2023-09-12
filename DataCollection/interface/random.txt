@@ -1,7 +1,7 @@
 -bash-4.2$ scram b -j
 >> Local Products Rules ..... started
 >> Local Products Rules ..... done
-Unknow target src/CMSAnalysis/DataCollection/interface/EventLoaderInputModule.hh
+Unknow target src/CMSAnalysis/DataCollection/interface/EventLoaderEventInput.hh
 >> Creating project symlinks
 >> Entering Package CMSAnalysis/DataCollection
 >> Compiling  /uscms/homes/k/kmhuang/practice/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/src/Analyzer.cc

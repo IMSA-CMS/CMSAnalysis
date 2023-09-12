@@ -30,7 +30,8 @@ DataStripModule::DataStripModule(const std::string outputFileName, std::shared_p
 recomod(iRecomod),
 matchmod(iMatchmod)
 {
-    
+    addRequiredModule(iRecomod);
+    addRequiredModule(iMatchmod);
 }
 
 void DataStripModule::finalize()

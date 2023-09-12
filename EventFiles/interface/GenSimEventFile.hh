@@ -10,7 +10,7 @@ class TFile;
 
 //GenSim implementation of root file
 //Created in EventLoader
-//Member functions are accessed in InputModules
+//Member functions are accessed in EventInputs
 class GenSimEventFile : public EventFile
 {
     public:
@@ -20,6 +20,7 @@ class GenSimEventFile : public EventFile
         virtual ParticleCollection<GenSimParticle> getGenSimParticles() const override;
         virtual ParticleCollection<Particle> getRecoParticles() const override; //not implemented
         virtual ParticleCollection<Particle> getRecoJets() const override; //not implemented
+        virtual int getNumOfEvents() const override {return event->size();}
         virtual int getNumPileUpInteractions() const override; //not implemented
         virtual double getMET() const override;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;

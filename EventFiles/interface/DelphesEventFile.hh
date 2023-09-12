@@ -21,6 +21,8 @@ class DelphesEventFile : public EventFile
         virtual ParticleCollection<GenSimParticle> getGenSimParticles() const override;
         virtual ParticleCollection<Particle> getRecoParticles() const override;
         virtual ParticleCollection<Particle> getRecoJets() const override;
+        virtual int getNumOfEvents() const override {return tree->GetEntries();}
+
         //virtual GenEventInfoProduct getGenInfo() const override;
         virtual double getMET() const override;
         virtual int getNumPileUpInteractions() const override {throw std::runtime_error("not implemented yet");}
@@ -33,6 +35,8 @@ class DelphesEventFile : public EventFile
         TTreeReader treeReader;
 
         mutable TTreeReaderValue<Int_t> elec_size; // nanoAOD wants UInt, Delphes wants Int (for all size variables)
+        mutable TTreeReaderArray<Float_t> elec_dxy;
+        mutable TTreeReaderArray<Float_t> elec_dz;
         mutable TTreeReaderArray<Float_t> elec_eta;
         mutable TTreeReaderArray<Float_t> elec_phi;
         mutable TTreeReaderArray<Float_t> elec_mass;
@@ -41,6 +45,8 @@ class DelphesEventFile : public EventFile
         mutable TTreeReaderArray<Float_t> elec_reliso;
 
         mutable TTreeReaderValue<Int_t> muon_size;
+        mutable TTreeReaderArray<Float_t> muon_dxy;
+        mutable TTreeReaderArray<Float_t> muon_dz;
         mutable TTreeReaderArray<Float_t> muon_eta;
         mutable TTreeReaderArray<Float_t> muon_phi;
         mutable TTreeReaderArray<Float_t> muon_mass;
