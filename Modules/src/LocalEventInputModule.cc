@@ -33,7 +33,7 @@ ParticleCollection<Lepton> LocalEventInputModule::getLeptons(RecoLevel level) co
 ParticleCollection<Particle> LocalEventInputModule::getParticles(RecoLevel level, const ParticleType& particleType) const
 {
     ParticleCollection<Particle> particleList;
-    auto particles = event->getParticles().getParticles();
+    auto particles = event->getParticles(level).getParticles();
     for (const auto &p : particles)
     {
         if (p.getType() == particleType || particleType == ParticleType::none())

@@ -1,282 +1,273 @@
 #include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
 #include "CMSAnalysis/Modules/interface/LocalEventInputModule.hh"
 
+
 HPlusPlusDecayFilter::HPlusPlusDecayFilter(InputModule::RecoLevel isGenSim):
 typeGenSim(isGenSim)
 {};
 
-std::string HPlusPlusDecayFilter::getFilterString(const InputModule* inputMod) const
+
+int HPlusPlusDecayFilter::getIndex(std::string* arr, std::string elem, int size)
 {
-  int higgsPlus = 0;
-  int higgsMinus = 0;
-  if (typeGenSim == InputModule::RecoLevel::GenSim)
+  for (int i = 0; i < size; i++)
   {
-    auto particles = inputMod->getParticles(InputModule::RecoLevel::GenSim);
-    for (const auto &particle : particles) //cycles through to find the doubly charged higgs
+    if (arr[i].compare(elem) == 0)
     {
-      GenSimParticle genSimParticle = GenSimParticle(particle);
-      if ((genSimParticle.pdgId() == 9900041 || genSimParticle.pdgId() == 9900042) && genSimParticle == genSimParticle.finalDaughter() && genSimParticle.numberOfDaughters() == 2) // H++
-      {
-        higgsPlus = std::abs(genSimParticle.daughter(0).pdgId() + genSimParticle.daughter(1).pdgId()); //adds the pdgid of the particles for easier processing
-      } else if ((genSimParticle.pdgId() == -9900041 || genSimParticle.pdgId() == -9900042) && 
-      genSimParticle == genSimParticle.finalDaughter() && genSimParticle.numberOfDaughters() == 2) // H--
-      {
-        higgsMinus = std::abs(genSimParticle.daughter(0).pdgId() + genSimParticle.daughter(1).pdgId());
-      }
-      if (higgsMinus != 0 && higgsPlus != 0) //exits once both are found
-      {
-        break;
-      }
-    }
-  } else if (typeGenSim == InputModule::RecoLevel::Reco)
-  {
-    auto leptons = inputMod->getLeptons(InputModule::RecoLevel::Reco);
-
-    for (const auto &lepton : leptons)
-    {
-      if (lepton.getCharge() > 0)
-      {
-        if (lepton.getType() == ParticleType::electron())
-        {
-          higgsPlus += 11;
-        } else if (lepton.getType() == ParticleType::muon())
-        {
-          higgsPlus += 13;
-        }
-      } else if (lepton.getCharge() < 0)
-      {
-        if (lepton.getType() == ParticleType::electron())
-        {
-          higgsMinus += 11;
-        } else if (lepton.getType() == ParticleType::muon())
-        {
-          higgsMinus += 13;
-        }
-      }
+      return i;
     }
   }
-
-  if (higgsPlus == 22) //classifies them based off of pdgID: 22 is ee, 24 is eu, 26 is uu, 11 is single e, 13 is single u
-  {
-    if (higgsMinus == 22)
-    {
-      return "eeee";
-    } else if (higgsMinus == 24)
-    {
-      return "eeeu";
-    } else if (higgsMinus == 26)
-    {
-      return "eeuu";
-    } else if (higgsMinus == 11)
-    {
-      return "eee";
-    } else if (higgsMinus == 13)
-    {
-      return "eeu";
-    }
-  } else if (higgsPlus == 26)
-  {
-    if (higgsMinus == 22)
-    {
-      return "eeuu";
-    } else if (higgsMinus == 24)
-    {
-      return "euuu";
-    } else if (higgsMinus == 26)
-    {
-      return "uuuu";
-    } else if (higgsMinus == 11)
-    {
-      return "uue";
-    } else if (higgsMinus == 13)
-    {
-      return "uuu";
-    }
-  } else if (higgsPlus == 24)
-  {
-    if (higgsMinus == 22)
-    {
-      return "eeeu";
-    } else if (higgsMinus == 24)
-    {
-      return "eueu";
-    } else if (higgsMinus == 26)
-    {
-      return "euuu";
-    } else if (higgsMinus == 11)
-    {
-      return "eue";
-    } else if (higgsMinus == 13)
-    {
-      return "euu";
-    }
-  } else if (higgsPlus == 11)
-  {
-    if (higgsMinus == 22)
-    {
-      return "eee";
-    } else if (higgsMinus == 24)
-    {
-      return "eue";
-    } else if (higgsMinus == 26)
-    {
-      return "uue";
-    }
-  } else if (higgsPlus == 13)
-  {
-    if (higgsMinus == 22)
-    {
-      return "eeu";
-    } else if (higgsMinus == 24)
-    {
-      return "euu";
-    } else if (higgsMinus == 26)
-    {
-      return "uuu";
-    }
-  }
-  return "none";
+  return -1;
 }
 
-std::string HPlusPlusDecayFilter::getState(ParticleCollection<Particle> genSim, ParticleCollection<Particle> reco)
+
+std::string HPlusPlusDecayFilter::getFilterString(const InputModule* inputMod) const
 {
-  int higgsPlus = 0;
-  int higgsMinus = 0;
+  return getState(inputMod);
+}
+
+
+std::string HPlusPlusDecayFilter::getState(const InputModule* inputMod) const
+{
+  auto genSim = inputMod->getParticles(InputModule::RecoLevel::GenSim);
+  auto reco = inputMod->getLeptons(InputModule::RecoLevel::Reco);
+
+
   if (typeGenSim == InputModule::RecoLevel::GenSim)
   {
-    auto particles = genSim;
-    for (const auto &particle : particles) //cycles through to find the doubly charged higgs
+    std::string hPlus = "";
+    std::string hMinus = "";
+
+
+    std::string c1str[] = {"e", "u", "t"};
+    std::string c2str[] = {"ee", "eu", "et", "uu", "ut", "tt"};
+
+    for (const auto &particle : genSim) //cycles through to find the doubly charged higgs
     {
       GenSimParticle genSimParticle = GenSimParticle(particle);
-      // if(true)
-      // {
-      //   std::cout << particle.getName() << " " << genSimParticle.pdgId() << " " << particle.getCharge() << " " << genSimParticle.numberOfDaughters() << std::endl;
-      // }
-      if (genSimParticle.numberOfDaughters() == 2 && genSimParticle.daughter(0).getName() != "Tau" && genSimParticle.daughter(1).getName() != "Tau")
+
+      if (inputMod->getParticles(InputModule::RecoLevel::GenSim, ParticleType::electron()).size() < 2)
       {
-        if ((genSimParticle.pdgId() == 19800084) && (particle.getCharge() > 0)) // H++
+        // std::cout << particle.getName() << " (" << genSimParticle.pdgId() << "): " << std::to_string(particle.getCharge()) << std::endl;
+      }
+
+      if ((genSimParticle.pdgId() == 9900041 || genSimParticle.pdgId() == 9900042) && genSimParticle == genSimParticle.finalDaughter() && genSimParticle.numberOfDaughters() == 2) // H++
+      {
+        int p1i = (std::abs((genSimParticle.daughter(0).pdgId())) - 11) / 2;
+        int p2i = (std::abs((genSimParticle.daughter(1).pdgId())) - 11) / 2;
+
+        std::string p1 = c1str[p1i];
+        std::string p2 = c1str[p2i];
+
+        if (p1i <= p2i)
         {
-          higgsPlus = std::abs(genSimParticle.daughter(0).pdgId() + genSimParticle.daughter(1).pdgId());
-          //std::cout << genSimParticle.daughter(0).getName() + " " + genSimParticle.daughter(1).getName() << std::endl;
-          //std::cout << std::to_string(std::abs(genSimParticle.daughter(0).pdgId())) << "+" << std::to_string(std::abs(genSimParticle.daughter(0).pdgId())) << "=" << std::to_string(higgsPlus) << std::endl;
-        } else if ((genSimParticle.pdgId() == 19800084) && (particle.getCharge() < 0)) // H--
+          hPlus = p1 + p2;
+        }
+        else
         {
-          higgsMinus = std::abs(genSimParticle.daughter(0).pdgId() + genSimParticle.daughter(1).pdgId());
-          //std::cout << genSimParticle.daughter(0).getName() + " " + genSimParticle.daughter(1).getName() << std::endl;
-          //std::cout << std::to_string(std::abs(genSimParticle.daughter(0).pdgId())) << "+" << std::to_string(std::abs(genSimParticle.daughter(0).pdgId())) << "=" << std::to_string(higgsMinus) << std::endl;
+          hPlus = p2 + p1;
         }
       }
-      if (higgsMinus != 0 && higgsPlus != 0) //exits once both are found
+      else if ((genSimParticle.pdgId() == -9900041 || genSimParticle.pdgId() == -9900042) && genSimParticle == genSimParticle.finalDaughter() && genSimParticle.numberOfDaughters() == 2) // H--
+      {
+        int p1i = (std::abs((genSimParticle.daughter(0).pdgId())) - 11) / 2;
+        int p2i = (std::abs((genSimParticle.daughter(1).pdgId())) - 11) / 2;
+
+        std::string p1 = c1str[p1i];
+        std::string p2 = c1str[p2i];
+
+        if (p1i <= p2i)
+        {
+          hMinus = p1 + p2;
+        }
+        else
+        {
+          hMinus = p2 + p1;
+        }
+      }
+      // std::cout << hPlus << std::endl;
+      // std::cout << hMinus << std::endl;
+      if (hMinus != "" && hPlus != "") //exits once both are found
       {
         break;
       }
     }
-  } else if (typeGenSim == InputModule::RecoLevel::Reco)
-  {
-    auto leptons = reco;
-    std::string leps;
-    for (const auto &lepton : leptons) //cycles through to find the doubly charged higgs
+
+    if (hMinus == "" && hPlus == "")
     {
-      leps += lepton.getName() + " ";
+      return "none";
+    }
+
+    if (getIndex(c2str, hPlus, 6) <= getIndex(c2str, hMinus, 6))
+    {
+      // std::cout << hPlus << "," << hMinus << std::endl;
+      return hPlus + hMinus;
+    }
+    else
+    {
+      // std::cout << hMinus << "," << hPlus << std::endl;
+      return hMinus + hPlus;
+    }
+  }
+  else if (typeGenSim == InputModule::RecoLevel::Reco)
+  {
+    int higgsPlus = 0;
+    int higgsMinus = 0;
+
+    int numLeptons = 0;
+
+    for (const auto &lepton : reco)
+    {
+      if (inputMod->getParticles(InputModule::RecoLevel::Reco, ParticleType::electron()).size() < 2)
+      {
+        // std::cout << lepton.getName() << ": " << std::to_string(lepton.getCharge()) << std::endl;
+      }
+
+      //std::cout << "GENSIM/RECO " << lepton.getName() << " (" << genSimParticle.pdgId() << "): " << std::to_string(lepton.getCharge()) << std::endl;
+      //std::cout << "DAUGHTER " << genSimParticle.finalDaughter().getName() << " (" << genSimParticle.finalDaughter().pdgId() << "): " << std::to_string(genSimParticle.finalDaughter().getCharge()) << std::endl;
+
       if (lepton.getCharge() > 0)
       {
-        if (lepton.getName() == "Electron")
+        if (lepton.getType() == ParticleType::electron())
         {
           higgsPlus += 11;
-        } else if (lepton.getName() == "Muon")
+          numLeptons++;
+        } else if (lepton.getType() == ParticleType::muon())
         {
           higgsPlus += 13;
+          numLeptons++;
         }
       } else if (lepton.getCharge() < 0)
       {
-        if (lepton.getName() == "Electron")
+        if (lepton.getType() == ParticleType::electron())
         {
           higgsMinus += 11;
-        } else if (lepton.getName() == "Muon")
+          numLeptons++;
+        } else if (lepton.getType() == ParticleType::muon())
         {
           higgsMinus += 13;
+          numLeptons++;
         }
       }
     }
-    //std::cout << leps << std::to_string(higgsPlus) << " " << std::to_string(higgsMinus) << std::endl;
-  }
-  if (higgsPlus == 22) //classifies them based off of pdgID: 22 is ee, 24 is eu, 26 is uu, 11 is single e, 13 is single u
-  {
-    if (higgsMinus == 22)
+
+    //std::cout << std::to_string(higgsPlus) << " " << std::to_string(higgsMinus) << std::endl;
+
+    if (numLeptons > 4)
     {
-      return "eeee";
-    } else if (higgsMinus == 24)
-    {
-      return "eeeu";
-    } else if (higgsMinus == 26)
-    {
-      return "eeuu";
-    } else if (higgsMinus == 11)
-    {
-      return "eee";
-    } else if (higgsMinus == 13)
-    {
-      return "eeu";
+      return "high";
     }
-  } else if (higgsPlus == 26)
-  {
-    if (higgsMinus == 22)
+
+    if (higgsPlus == 22) //classifies them based off of pdgID: 22 is ee, 24 is eu, 26 is uu, 11 is single e, 13 is single u
     {
-      return "eeuu";
-    } else if (higgsMinus == 24)
+      if (higgsMinus == 22)
+      {
+        return "eeee";
+      } else if (higgsMinus == 24)
+      {
+        return "eeeu";
+      } else if (higgsMinus == 26)
+      {
+        return "eeuu";
+      } else if (higgsMinus == 11)
+      {
+        return "eee";
+      } else if (higgsMinus == 13)
+      {
+        return "eeu";
+      } else if (higgsMinus == 0)
+      {
+        return "ee";
+      }
+    } else if (higgsPlus == 26)
     {
-      return "euuu";
-    } else if (higgsMinus == 26)
+      if (higgsMinus == 22)
+      {
+        return "eeuu";
+      } else if (higgsMinus == 24)
+      {
+        return "euuu";
+      } else if (higgsMinus == 26)
+      {
+        return "uuuu";
+      } else if (higgsMinus == 11)
+      {
+        return "uue";
+      } else if (higgsMinus == 13)
+      {
+        return "uuu";
+      } else if (higgsMinus == 0)
+      {
+        return "uu";
+      }
+    } else if (higgsPlus == 24)
     {
-      return "uuuu";
-    } else if (higgsMinus == 11)
+      if (higgsMinus == 22)
+      {
+        return "eeeu";
+      } else if (higgsMinus == 24)
+      {
+        return "eueu";
+      } else if (higgsMinus == 26)
+      {
+        return "euuu";
+      } else if (higgsMinus == 11)
+      {
+        return "eue";
+      } else if (higgsMinus == 13)
+      {
+        return "euu";
+      } else if (higgsMinus == 0)
+      {
+        return "eu";
+      }
+    } else if (higgsPlus == 11)
     {
-      return "uue";
-    } else if (higgsMinus == 13)
+      if (higgsMinus == 22)
+      {
+        return "eee";
+      } else if (higgsMinus == 24)
+      {
+        return "eue";
+      } else if (higgsMinus == 26)
+      {
+        return "uue";
+      } else if (higgsMinus == 11)
+      {
+        return "e e";
+      } else if (higgsMinus == 13)
+      {
+        return "e u";
+      }
+    } else if (higgsPlus == 13)
     {
-      return "uuu";
-    }
-  } else if (higgsPlus == 24)
-  {
-    if (higgsMinus == 22)
+      if (higgsMinus == 22)
+      {
+        return "eeu";
+      } else if (higgsMinus == 24)
+      {
+        return "euu";
+      } else if (higgsMinus == 26)
+      {
+        return "uuu";
+      } else if (higgsMinus == 11)
+      {
+        return "e u";
+      } else if (higgsMinus == 13)
+      {
+        return "u u";
+      }
+    } else if (higgsPlus == 0)
     {
-      return "eeeu";
-    } else if (higgsMinus == 24)
-    {
-      return "eueu";
-    } else if (higgsMinus == 26)
-    {
-      return "euuu";
-    } else if (higgsMinus == 11)
-    {
-      return "eue";
-    } else if (higgsMinus == 13)
-    {
-      return "euu";
-    }
-  } else if (higgsPlus == 11)
-  {
-    if (higgsMinus == 22)
-    {
-      return "eee";
-    } else if (higgsMinus == 24)
-    {
-      return "eue";
-    } else if (higgsMinus == 26)
-    {
-      return "uue";
-    }
-  } else if (higgsPlus == 13)
-  {
-    if (higgsMinus == 22)
-    {
-      return "eeu";
-    } else if (higgsMinus == 24)
-    {
-      return "euu";
-    } else if (higgsMinus == 26)
-    {
-      return "uuu";
+      if (higgsMinus == 22)
+      {
+        return "ee";
+      } else if (higgsMinus == 24)
+      {
+        return "eu";
+      } else if (higgsMinus == 26)
+      {
+        return "uu";
+      }
     }
   }
   return "none";

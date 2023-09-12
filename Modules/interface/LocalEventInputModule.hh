@@ -12,6 +12,7 @@
 #include "CMSAnalysis/Modules/interface/InputModule.hh"
 #include "CMSAnalysis/Utility/interface/Lepton.hh"
 #include "CMSAnalysis/Utility/interface/Event.hh"
+#include "CMSAnalysis/DataCollection/interface/RootEventInterface.hh"
 class TFile;
 
 
@@ -21,7 +22,7 @@ class LocalEventInputModule : public InputModule
         LocalEventInputModule(const Event* event1);
 
         virtual ParticleCollection<Lepton> getLeptons(RecoLevel level) const override;
-        virtual ParticleCollection<Particle> getParticles(RecoLevel level, const ParticleType& particleType = ParticleType::none()) const override;
+        virtual ParticleCollection<Particle> getParticles(RecoLevel level = InputModule::RecoLevel::Reco, const ParticleType& particleType = ParticleType::none()) const override;
         virtual ParticleCollection<Particle> getJets(RecoLevel level) const override;
         virtual ParticleCollection<Particle> getSpecial(std::string key) const override;
         virtual int getNumPileUpInteractions() const override;
@@ -31,5 +32,6 @@ class LocalEventInputModule : public InputModule
         virtual bool checkTrigger(std::string triggerName, std::string subProcess) const override;
     private:
         const Event* event = nullptr;
+        const RootEventInterface* eInterface = nullptr;
 };
 #endif
