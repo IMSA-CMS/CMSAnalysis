@@ -27,3 +27,20 @@ std::shared_ptr<LeptonJetImplementation> LeptonJet::cast() const
     throw std::runtime_error("Null pointer");
   }
 }
+
+double LeptonJet::getDeltaR() const
+{
+    auto leptons = getParticles();
+    double maxDeltaR = 0;
+    for (size_t i = 0 ; i < leptons.size(); ++i)
+    {
+        for (size_t j = i + 1; j < leptons.size(); ++j)
+        {
+            double deltaR = leptons[i].getDeltaR(leptons[j]);
+            if (deltaR > maxDeltaR)
+                maxDeltaR = deltaR;
+        }
+    }
+
+    return maxDeltaR;
+}

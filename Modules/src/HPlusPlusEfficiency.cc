@@ -5,7 +5,7 @@
 
 #include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
 #include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
-#include "CMSAnalysis/Modules/interface/MatchingModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 
 HPlusPlusEfficiency::HPlusPlusEfficiency():
   EfficiencyModule()
@@ -25,10 +25,10 @@ void HPlusPlusEfficiency::doCounters()
   //   }
   // }
 
-  HPlusPlusDecayFilter genSimEvent(InputModule::RecoLevel::GenSim);
+  HPlusPlusDecayFilter genSimEvent(EventInput::RecoLevel::GenSim);
   std::string genSimDecay = genSimEvent.getState(getInput());
 
-  HPlusPlusDecayFilter recoEvent(InputModule::RecoLevel::Reco);
+  HPlusPlusDecayFilter recoEvent(EventInput::RecoLevel::Reco);
   std::string recoDecay = recoEvent.getState(getInput());
 
   std::string decay = genSimDecay + "->" + recoDecay;

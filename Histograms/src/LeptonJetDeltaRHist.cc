@@ -13,13 +13,12 @@ LeptonJetDeltaRHist::LeptonJetDeltaRHist(std::shared_ptr<LeptonJetReconstruction
 
 std::vector<double> LeptonJetDeltaRHist::value() const
 {
-  const std::vector<double>& deltaRValues = leptonJetRecoModule->getDeltaRValues();
-  if (deltaRValues.size() > 0)
+  std::vector<double> leptonJetDeltaRs;
+  auto leptonJets = leptonJetRecoModule->getLeptonJets();
+  for (auto leptonJet : leptonJets)
   {
-      return {deltaRValues[0]};
+    leptonJetDeltaRs.push_back(leptonJet.getDeltaR());
   }
-  else
-  {
-      return {-1};
-  }  
+
+  return leptonJetDeltaRs;
 }

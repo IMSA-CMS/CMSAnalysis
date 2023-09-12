@@ -18,3 +18,11 @@ void Module::writeText(std::string par, std::string name) const
   printPar->Write(name.c_str());
   std::cout << name << " : " << par << std::endl;
 }
+
+void Module::addRequiredModule(std::shared_ptr<Module> module)
+{
+  if (std::find(dependencies.begin(), dependencies.end(), module) == dependencies.end())
+  {
+    dependencies.push_back(module);
+  }
+}

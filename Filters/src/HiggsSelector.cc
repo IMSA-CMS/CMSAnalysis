@@ -4,18 +4,18 @@
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "CMSAnalysis/Utility/interface/Lepton.hh"
-#include "CMSAnalysis/Modules/interface/InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/ParticleType.hh"
 #include "CMSAnalysis/Utility/interface/Event.hh"
 
-void HiggsSelector::selectParticles(const InputModule* input, Event& event) const
+void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
 {
     std::vector<Particle> selected;
     // std::vector<Particle> posElecs(0);
     // std::vector<Particle> negElecs(0);
     // std::vector<Particle> posMuons(0);
     // std::vector<Particle> negMuons(0);
-    auto particles = input->getLeptons(InputModule::RecoLevel::Reco).getParticles();
+    auto particles = input->getLeptons(EventInput::RecoLevel::Reco).getParticles();
 
     // int electronCount = 0;
     // int posMuonCount = 0;
@@ -27,8 +27,11 @@ void HiggsSelector::selectParticles(const InputModule* input, Event& event) cons
     {
         if (particle.getType() == ParticleType::electron()) 
 		{
-            // event.addElectron(particle);
-            if (Lepton(particle).isLoose() && particle.getPt() > 5)
+            if(Lepton(particle).isLoose()  
+                && particle.getPt() > 5 
+                // && std::abs(particle.getDXY()) < 0.01
+                // && std::abs(particle.getDZ()) < 0.025
+            )
             {
                 event.addElectron(particle);
                 // std::cout << particle.getName() << ": " << std::to_string(particle.getCharge()) << std::endl;
@@ -45,9 +48,13 @@ void HiggsSelector::selectParticles(const InputModule* input, Event& event) cons
         }
         else if (particle.getType() == ParticleType::muon()) // if (particle.getType() == Particle::Type::Muon && particle.getPt() > 40 && std::abs(particle.getEta()) < 2.8) 
         {
-            // event.addMuon(particle);
-            if(Lepton(particle).isLoose() && particle.getPt() > 5)
+            if(Lepton(particle).isLoose()  
+                && particle.getPt() > 5 
+                // && std::abs(particle.getDXY()) < 0.003125
+                // && std::abs(particle.getDZ()) < 0.007183
+            )
             {
+
                 event.addMuon(particle);
                 // std::cout << particle.getName() << ": " << std::to_string(particle.getCharge()) << std::endl;
             }

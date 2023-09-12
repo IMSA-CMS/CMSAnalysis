@@ -1,8 +1,8 @@
 #include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
-#include "CMSAnalysis/Modules/interface/LocalEventInputModule.hh"
+#include "CMSAnalysis/Modules/interface/LocalEventInput.hh"
 
 
-HPlusPlusDecayFilter::HPlusPlusDecayFilter(InputModule::RecoLevel isGenSim):
+HPlusPlusDecayFilter::HPlusPlusDecayFilter(EventInput::RecoLevel isGenSim):
 typeGenSim(isGenSim)
 {};
 
@@ -20,19 +20,19 @@ int HPlusPlusDecayFilter::getIndex(std::string* arr, std::string elem, int size)
 }
 
 
-std::string HPlusPlusDecayFilter::getFilterString(const InputModule* inputMod) const
+std::string HPlusPlusDecayFilter::getFilterString(const EventInput* inputMod) const
 {
   return getState(inputMod);
 }
 
 
-std::string HPlusPlusDecayFilter::getState(const InputModule* inputMod) const
+std::string HPlusPlusDecayFilter::getState(const EventInput* inputMod) const
 {
-  auto genSim = inputMod->getParticles(InputModule::RecoLevel::GenSim);
-  auto reco = inputMod->getLeptons(InputModule::RecoLevel::Reco);
+  auto genSim = inputMod->getParticles(EventInput::RecoLevel::GenSim);
+  auto reco = inputMod->getLeptons(EventInput::RecoLevel::Reco);
 
 
-  if (typeGenSim == InputModule::RecoLevel::GenSim)
+  if (typeGenSim == EventInput::RecoLevel::GenSim)
   {
     std::string hPlus = "";
     std::string hMinus = "";
@@ -45,7 +45,7 @@ std::string HPlusPlusDecayFilter::getState(const InputModule* inputMod) const
     {
       GenSimParticle genSimParticle = GenSimParticle(particle);
 
-      if (inputMod->getParticles(InputModule::RecoLevel::GenSim, ParticleType::electron()).size() < 2)
+      if (inputMod->getParticles(EventInput::RecoLevel::GenSim, ParticleType::electron()).size() < 2)
       {
         // std::cout << particle.getName() << " (" << genSimParticle.pdgId() << "): " << std::to_string(particle.getCharge()) << std::endl;
       }
@@ -108,16 +108,16 @@ std::string HPlusPlusDecayFilter::getState(const InputModule* inputMod) const
       return hMinus + hPlus;
     }
   }
-  else if (typeGenSim == InputModule::RecoLevel::Reco)
+  else if (typeGenSim == EventInput::RecoLevel::Reco)
   {
     int higgsPlus = 0;
     int higgsMinus = 0;
 
-    int numLeptons = 0;
+    int leptons = 0;
 
     for (const auto &lepton : reco)
     {
-      if (inputMod->getParticles(InputModule::RecoLevel::Reco, ParticleType::electron()).size() < 2)
+      if (inputMod->getParticles(EventInput::RecoLevel::Reco, ParticleType::electron()).size() < 2)
       {
         // std::cout << lepton.getName() << ": " << std::to_string(lepton.getCharge()) << std::endl;
       }
@@ -130,29 +130,29 @@ std::string HPlusPlusDecayFilter::getState(const InputModule* inputMod) const
         if (lepton.getType() == ParticleType::electron())
         {
           higgsPlus += 11;
-          numLeptons++;
+          leptons++;
         } else if (lepton.getType() == ParticleType::muon())
         {
           higgsPlus += 13;
-          numLeptons++;
+          leptons++;
         }
       } else if (lepton.getCharge() < 0)
       {
         if (lepton.getType() == ParticleType::electron())
         {
           higgsMinus += 11;
-          numLeptons++;
+          leptons++;
         } else if (lepton.getType() == ParticleType::muon())
         {
           higgsMinus += 13;
-          numLeptons++;
+          leptons++;
         }
       }
     }
 
     //std::cout << std::to_string(higgsPlus) << " " << std::to_string(higgsMinus) << std::endl;
 
-    if (numLeptons > 4)
+    if (leptons > 4)
     {
       return "high";
     }

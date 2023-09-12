@@ -5,11 +5,10 @@
 #include "DataFormats/PatCandidates/interface/Photon.h"
 #include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
 
-GenSimSimpleImplementation::GenSimSimpleImplementation(reco::Candidate::LorentzVector vec, int ch, const ParticleType& type, int ipdgId, const Particle* imotherParticle, std::vector<const GenSimParticle*> idaughters, const int status):
+GenSimSimpleImplementation::GenSimSimpleImplementation(reco::Candidate::LorentzVector vec, int ch, const ParticleType& type, const Particle* imotherParticle, std::vector<const GenSimParticle*> idaughters, const int status):
 lorentzVec(vec), 
 particleCharge(ch),
 particleType(type),
-currentPdgId(ipdgId),
 motherParticle(imotherParticle),
 daughters(idaughters),
 particleStatus(status)
@@ -33,7 +32,14 @@ bool GenSimSimpleImplementation::operator== (const ParticleImplementation& other
 
 int GenSimSimpleImplementation::pdgId() const
 {
-  return currentPdgId;
+  if (particleCharge == particleType.getCharge())
+  {
+    return particleType.getpdgId();
+  }
+  else
+  {
+    return -particleType.getpdgId();
+  }
 }
 
 reco::Candidate::LorentzVector GenSimSimpleImplementation::getFourVector() const

@@ -17,7 +17,7 @@ class AllLeptonInvariantMassHist : public GenSimRecoPrototype
 {
   using GenSimRecoPrototype::GenSimRecoPrototype;
 
-  std::vector<double> protectedValue(InputModule::RecoLevel level) const
+  std::vector<double> protectedValue(EventInput::RecoLevel level) const
   {
     auto particles = getInput()->getLeptons(level);
     auto inv = particles.calculateAllLeptonInvariantMass();
@@ -29,7 +29,7 @@ class InvariantMassHist : public GenSimRecoPrototype
 {
   using GenSimRecoPrototype::GenSimRecoPrototype;
 
-  std::vector<double> protectedValue(InputModule::RecoLevel level) const
+  std::vector<double> protectedValue(EventInput::RecoLevel level) const
   {
     auto particles = getInput()->getLeptons(level);
     auto inv = particles.getInvariantMass();
@@ -51,7 +51,7 @@ class OppositeSignInvariantMassHist : public GenSimRecoPrototype
 {
   using GenSimRecoPrototype::GenSimRecoPrototype;
 
-  std::vector<double> protectedValue(InputModule::RecoLevel level) const
+  std::vector<double> protectedValue(EventInput::RecoLevel level) const
   {
     auto particles = getInput()->getLeptons(level);
     auto inv = particles.calculateOppositeSignInvariantMass();
@@ -63,7 +63,7 @@ class PtHist : public GenSimRecoPrototype
 {
   using GenSimRecoPrototype::GenSimRecoPrototype;
 
-  std::vector<double> protectedValue(InputModule::RecoLevel level) const
+  std::vector<double> protectedValue(EventInput::RecoLevel level) const
   {
     auto particles = getInput()->getLeptons(level);
     auto Pt = particles.getLeadingTransverseMomentum();
@@ -86,7 +86,7 @@ class ThirdMuonPtHist : public GenSimRecoPrototype
 {
   using GenSimRecoPrototype::GenSimRecoPrototype;
 
-  std::vector<double> protectedValue(InputModule::RecoLevel level) const
+  std::vector<double> protectedValue(EventInput::RecoLevel level) const
   {
     auto particles = getInput()->getLeptons(level);
     auto Pt = particles.getNthHighestPt(3);
@@ -100,7 +100,7 @@ class GammaHistogram : public GenSimRecoPrototype
 {
   using GenSimRecoPrototype::GenSimRecoPrototype;
 
-  std::vector<double> protectedValue(InputModule::RecoLevel level) const
+  std::vector<double> protectedValue(EventInput::RecoLevel level) const
   {
     auto particles = getInput()->getParticles(level, ParticleType::darkPhoton());
     std::vector<double> outputs;
@@ -113,7 +113,7 @@ class GammaHistogram : public GenSimRecoPrototype
   }
   
     
-  };
+};
 
 
 
@@ -131,14 +131,14 @@ class PileUpHist : public HistogramPrototype1D
 class LeptonJetMLHist : public GenSimRecoPrototype
 {
 public:
-  LeptonJetMLHist(InputModule::RecoLevel type, const std::string &iname, int iNBins, double iminimum, double imaximum, std::shared_ptr<LeptonJetMLCalculator> iMlCalc, std::shared_ptr<LeptonJetReconstructionModule> iRecoCalc) : GenSimRecoPrototype(type, iname, iNBins, iminimum, imaximum),
+  LeptonJetMLHist(EventInput::RecoLevel type, const std::string &iname, int iNBins, double iminimum, double imaximum, std::shared_ptr<LeptonJetMLCalculator> iMlCalc, std::shared_ptr<LeptonJetReconstructionModule> iRecoCalc) : GenSimRecoPrototype(type, iname, iNBins, iminimum, imaximum),
                                                                                                                                                                                                                                    mLCalc(iMlCalc),
                                                                                                                                                                                                                                    recoCalc(iRecoCalc)
   {
   }
 
 protected:
-  std::vector<double> protectedValue(InputModule::RecoLevel level) const
+  std::vector<double> protectedValue(EventInput::RecoLevel level) const
   {
     auto jets = recoCalc->getLeptonJets();
     std::vector<double> outputs;
@@ -159,7 +159,7 @@ class IsolationHist : public GenSimRecoPrototype
 {
   using GenSimRecoPrototype::GenSimRecoPrototype;
 
-  std::vector<double> protectedValue(InputModule::RecoLevel level) const
+  std::vector<double> protectedValue(EventInput::RecoLevel level) const
   {
     auto particles = getInput()->getLeptons(level);
     std::vector<double> isolation;
@@ -175,37 +175,40 @@ class IsolationHist : public GenSimRecoPrototype
 class DxyHist : public GenSimRecoPrototype
 {
   using GenSimRecoPrototype::GenSimRecoPrototype;
-
-  std::vector<double> protectedValue(InputModule::RecoLevel level) const
-  {
-    auto particles = getInput()->getLeptons(level);
-    std::vector<double> dxy;
-    for(auto particle : particles.getParticles()) {
-      double particleDxy = particle.getInfo("dxy");
-      if(particleDxy != 0) {
-	      dxy.push_back(particleDxy);
-    	}
+  public:
+    DxyHist(EventInput::RecoLevel type, const std::string &iname, int iNBins, double iminimum, double imaximum) : 
+      GenSimRecoPrototype(type, iname, iNBins, iminimum, imaximum) {}
+  protected:
+    std::vector<double> protectedValue(EventInput::RecoLevel level) const
+    {
+      auto particles = getInput()->getLeptons(level);
+      std::vector<double> dxy;
+      for(auto particle : particles.getParticles()) {
+        double particleDxy = particle.getDXY();
+        dxy.push_back(particleDxy);
+      }
+      return dxy;
     }
-    return dxy;
-  }
 };
 
 class DzHist : public GenSimRecoPrototype
 {
   using GenSimRecoPrototype::GenSimRecoPrototype;
+  public:
+    DzHist(EventInput::RecoLevel type, const std::string &iname, int iNBins, double iminimum, double imaximum) : 
+      GenSimRecoPrototype(type, iname, iNBins, iminimum, imaximum) {}
 
-  std::vector<double> protectedValue(InputModule::RecoLevel level) const
-  {
-    auto particles = getInput()->getLeptons(level);
-    std::vector<double> dz;
-    for(auto particle : particles.getParticles()) {
-      double particleDz = particle.getInfo("dz");
-      if(particleDz != 0) {
-	      dz.push_back(particleDz);
-    	}
+  protected:
+    std::vector<double> protectedValue(EventInput::RecoLevel level) const
+    {
+      auto particles = getInput()->getLeptons(level);
+      std::vector<double> dz;
+      for(auto particle : particles.getParticles()) {
+        double particleDz = particle.getDZ();
+        dz.push_back(particleDz);
+      }
+      return dz;
     }
-    return dz;
-  }
 };
 
 // plots highest lepton-photon invariant mass in the event
@@ -213,7 +216,7 @@ class PhotonInvariantMassHist : public GenSimRecoPrototype
 {
   using GenSimRecoPrototype::GenSimRecoPrototype;
 
-  std::vector<double> protectedValue(InputModule::RecoLevel level) const
+  std::vector<double> protectedValue(EventInput::RecoLevel level) const
   {
     auto particles = getInput()->getParticles(level);
     bool ePlusGamma = false;

@@ -52,7 +52,7 @@ void GenSimPlan::initialize()
     auto hppSelector = make_shared<HiggsSelector>();
     auto hppGenSimSelector = make_shared<HPlusPlusGenSimSelector>();
     auto metMod = make_shared<METModule>();
-    auto gammahist = make_shared<GammaHistogram>(InputModule::RecoLevel::GenSim, "Gamma", 100, 0, 1000);
+    auto gammahist = make_shared<GammaHistogram>(EventInput::RecoLevel::GenSim, "Gamma", 100, 0, 1000);
     auto eventDump = make_shared<GenSimEventDumpModule>();
     auto matchMod = make_shared<MatchingModule>();
     auto higgsCut = make_shared<HiggsCut>();
@@ -62,8 +62,8 @@ void GenSimPlan::initialize()
     auto hPlusPlusEfficiency = make_shared<HPlusPlusEfficiency>();
     //auto leptonEfficiency = make_shared<HiggsLeptonEfficiency>(matchMod);
 
-    hPlusPlusEfficiency->setInput(eventMod->getEventInputModule());
-    //leptonEfficiency->setInput(eventMod->getEventInputModule());
+    hPlusPlusEfficiency->setInput(eventMod->getEventInput());
+    //leptonEfficiency->setInput(eventMod->getEventInput());
 
     histMod->addHistogram(deltaR);
     histMod->addHistogram(gammahist);
@@ -72,13 +72,15 @@ void GenSimPlan::initialize()
     eventMod->addSelector(hppSelector);
     eventMod->addSelector(hppGenSimSelector);
     auto eventHistMod = eventMod->getHistogramModule();
-    //auto hppFilter = make_shared<HPlusPlusDecayFilter>(InputModule::RecoLevel::GenSim);
+    //auto hppFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::GenSim);
 
     //eventMod->addCut(higgsCut);
 
     //analyzer.addFilterModule(hppFilter);
     analyzer.addProductionModule(metMod);
-    analyzer.addAnalysisModule(eventMod);
+    //Changed because EventModule inherits from ProductionModule now
+    analyzer.addProductionModule(eventMod);
+    //analyzer.addAnalysisModule(eventMod);
     analyzer.addAnalysisModule(eventHistMod);
 
 	analyzer.addAnalysisModule(hPlusPlusEfficiency);

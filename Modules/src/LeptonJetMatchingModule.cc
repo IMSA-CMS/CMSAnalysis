@@ -10,15 +10,15 @@ LeptonJetMatchingModule::LeptonJetMatchingModule(std::shared_ptr<LeptonJetRecons
   lepJet(lepJetModule),
   deltaRCutoff(deltaRCut)
 {
-  
+  addRequiredModule(lepJetModule);
 }
 bool latch = true; 
 bool LeptonJetMatchingModule::process()
 {
     matchingPairs.clear();
-    auto darkPhotons(getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::darkPhoton()).getParticles());
-    auto recoParticles(getInput()->getParticles(InputModule::RecoLevel::Reco, ParticleType::none()).getParticles());
-    auto genSim(getInput()->getParticles(InputModule::RecoLevel::GenSim, ParticleType::none()).getParticles());
+    auto darkPhotons(getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::darkPhoton()).getParticles());
+    auto recoParticles(getInput()->getParticles(EventInput::RecoLevel::Reco, ParticleType::none()).getParticles());
+    auto genSim(getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::none()).getParticles());
 
     //std::cout<< __LINE__ << std::endl;
     MatchingModule::match(genSim, recoParticles);
