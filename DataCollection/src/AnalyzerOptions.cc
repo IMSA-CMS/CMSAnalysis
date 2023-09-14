@@ -14,12 +14,13 @@
 #include "CMSAnalysis/DataCollection/interface/LeptonJetReconstructionPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/MassAcceptancePlan.hh"
 #include "CMSAnalysis/DataCollection/interface/MassResolutionPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/Trigger.hh"
+#include "CMSAnalysis/Filters/interface/Trigger.hh"
 #include "CMSAnalysis/DataCollection/interface/TriggerPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/GenSimPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/FileStripPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/MLVariablesPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/HiggsDataStripPlan.hh"
+#include "CMSAnalysis/DataCollection/interface/HiggsInvariantMassPlan.hh"
 
 AnalyzerOptions::AnalyzerOptions()
 {
@@ -35,6 +36,7 @@ AnalyzerOptions::AnalyzerOptions()
   analysisPlans["FileStrip"] = new FileStripPlan();
   analysisPlans["LeptonJetDataStrip"] = new MLVariablesPlan();
   analysisPlans["HiggsDataStrip"] = new HiggsDataStripPlan();
+  analysisPlans["HiggsInvariantMass"] = new HiggsInvariantMassPlan();
 }
 
 std::string AnalyzerOptions::pickfileInterface()
@@ -63,7 +65,9 @@ std::string AnalyzerOptions::pickfileInterface()
 std::vector<std::string> AnalyzerOptions::processNames()
 {
   std::vector<std::string> processes;
-  std::ifstream textfile("textfiles/processes.txt");
+  std::ifstream textfile(Utility::getFullPath("processes.txt"));
+  
+
   if (!(textfile))
   {
     throw std::runtime_error("Make sure there is a file called processes.txt in the folder textfiles. Also, make sure you're running from the bin folder");
