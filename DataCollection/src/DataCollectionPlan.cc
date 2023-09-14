@@ -24,7 +24,8 @@ void DataCollectionPlan::runEventLoader(const std::string& inputFile, const std:
 std::vector<std::string> DataCollectionPlan::fetchRootFiles(const std::string &configFile) const
 {
   ProcessDictionary dictionary;
-  dictionary.loadProcesses("textfiles/processes.txt");
+  dictionary.loadProcesses(Utility::getFullPath("processes.txt"));
+  /*location + "/src/CMSAnalysis/DataCollection/bin/textfiles/processes.txt");*/
   auto substringFound = configFile.find(".root");
   bool isLocalFile = substringFound != std::string::npos;
   std::vector<std::string> rootFiles;
