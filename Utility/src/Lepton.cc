@@ -12,7 +12,7 @@
 #include "CMSAnalysis/Utility/interface/LeptonJetImplementation.hh"
 
 Lepton::Lepton(const Particle &pParticle):
-Particle(pParticle)
+RecoParticle(pParticle)
 {
 
 }
