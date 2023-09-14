@@ -39,3 +39,13 @@ bool Lepton::isLoose() const
     checkIsNull();
     return isMedium() || getParticle()->getSelectionFit() == Particle::SelectionFit::Loose;
 }
+
+double Lepton::getDXY() const
+{
+    return getParticle()->getDXY();
+}
+
+double Lepton::getDZ() const
+{
+    return getParticle()->getDZ();
+}

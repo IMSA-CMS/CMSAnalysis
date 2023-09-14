@@ -17,10 +17,10 @@ public:
 	enum VariableType {Integer, Float, IntegerArray, FloatArray};
 
 	template<typename T>
-	void addValue(std::string name, T type);
+	void addValue(std::string name, T type) = delete;
 
 	template<typename T>
-	T getValue(std::string name);
+	T getValue(std::string name) = delete;
 
 	TTree* makeTree();
 
@@ -39,16 +39,42 @@ private:
 	std::unordered_map<std::string, std::vector<Float_t>> arraysOfFloats;
 };
 
-template<typename T>
-inline void addValue(std::string name, T type)
+template<>
+inline void TreeMakerModule::addValue(std::string name, Int_t type)
 {
-
+	integers[name] = type;
 }
 
-template<typename T>
-T getValue(std::string name)
+template<>
+inline void TreeMakerModule::addValue(std::string name, Float_t type)
 {
+	floats[name] = type;
+}
 
+template<>
+inline Int_t TreeMakerModule::getValue(std::string name)
+{
+	if (auto it = integers.find(name); it == integers.end())
+	{
+		throw std::runtime_error("Integer " + name + " not found in tree");
+	}
+	else
+	{
+		return it->second;
+	}
+}
+
+template<>
+inline Float_t TreeMakerModule::getValue(std::string name)
+{
+	if (auto it = floats.find(name); it == floats.end())
+	{
+		throw std::runtime_error("Float " + name + " not found in tree");
+	}
+	else
+	{
+		return it->second;
+	}
 }
 
 #endif
