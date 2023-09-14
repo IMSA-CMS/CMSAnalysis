@@ -8,21 +8,20 @@
 
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
 
-#include "CMSAnalysis/DataCollection/interface/DisplacedVertexModule.hh"
-#include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
-#include "CMSAnalysis/DataCollection/interface/METModule.hh"
-#include "CMSAnalysis/DataCollection/interface/TriggerModule.hh"
-#include "CMSAnalysis/DataCollection/interface/METTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/SingleMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/DoubleMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/TripleMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/SingleElectronTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/DoubleElectronTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/SingleIsolatedMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/DoubleIsolatedMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/DisplacedVertexModule.hh"
-#include "CMSAnalysis/DataCollection/interface/PhotonsHist.hh"
-#include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
+#include "CMSAnalysis/Modules/interface/DisplacedVertexModule.hh"
+#include "CMSAnalysis/Modules/interface/METModule.hh"
+#include "CMSAnalysis/Modules/interface/TriggerModule.hh"
+#include "CMSAnalysis/Filters/interface/METTrigger.hh"
+#include "CMSAnalysis/Filters/interface/SingleMuonTrigger.hh"
+#include "CMSAnalysis/Filters/interface/DoubleMuonTrigger.hh"
+#include "CMSAnalysis/Filters/interface/TripleMuonTrigger.hh"
+#include "CMSAnalysis/Filters/interface/SingleElectronTrigger.hh"
+#include "CMSAnalysis/Filters/interface/DoubleElectronTrigger.hh"
+#include "CMSAnalysis/Filters/interface/SingleIsolatedMuonTrigger.hh"
+#include "CMSAnalysis/Filters/interface/DoubleIsolatedMuonTrigger.hh"
+#include "CMSAnalysis/Modules/interface/DisplacedVertexModule.hh"
+#include "CMSAnalysis/Histograms/interface/PhotonsHist.hh"
+#include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 
 using std::make_shared;
 
@@ -32,7 +31,7 @@ void DisplacedVertexPlan::initialize()
 
   // Create necessary histogram(s), as well as histMod
   auto histMod = make_shared<HistogramOutputModule>();
-  auto PTHist = make_shared<PhotonsHist>(InputModule::RecoLevel::Reco, "Photon_PT", 100, 0, 1000);
+  auto PTHist = make_shared<PhotonsHist>(EventInput::RecoLevel::Reco, "Photon_PT", 100, 0, 1000);
 
   // Add the histogram(s) created above to histMod
   histMod->addHistogram(PTHist);

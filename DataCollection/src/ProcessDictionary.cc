@@ -8,6 +8,7 @@
 #include <vector>
 #include <unordered_map>
 #include <boost/algorithm/string.hpp>
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 
 void ProcessDictionary::loadProcesses(std::string filename) 
 {
@@ -59,7 +60,7 @@ void ProcessDictionary::loadProcesses(std::string filename)
 std::vector<FileParams> ProcessDictionary::readFile(std::string filename)
 {
   std::string line;
-  std::ifstream textfile(filename);
+  std::ifstream textfile(Utility::getFullPath(filename));
   std::string process;
   std::vector<std::string> values;
   std::unordered_map<std::string, std::vector<std::string>> idTypes; 

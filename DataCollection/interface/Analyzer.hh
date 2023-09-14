@@ -8,7 +8,7 @@
 #include <memory>
 #include <unordered_set>
 #include "FileParams.hh"
-#include "InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "ProcessDictionary.hh"
 #include "RootEventInterface.hh"
 
@@ -33,26 +33,26 @@ public:
   Analyzer(const Analyzer& analyzer1);
   ~Analyzer();
 
-InputModule* getInputModule() {return input;}
+EventInput* getEventInput() {return input;}
 
-const InputModule* getInputModule() const {return input;}
+const EventInput* getEventInput() const {return input;}
 
   // Add a production module, which is guaranteed to run before any analysis or filter
   // module (in the order added)
-  void addProductionModule(std::shared_ptr<ProductionModule> module) {productionModules.push_back(module);}
+  void addProductionModule(std::shared_ptr<ProductionModule> module);
 
   // Add a filter module, which runs after production modules and before analysis
   // modules (in the order added)
-  void addFilterModule(std::shared_ptr<FilterModule> module) {filterModules.push_back(module);}
+  void addFilterModule(std::shared_ptr<FilterModule> module);
 
   // Add an analysis module, which runs after all production and filter modules and
   // produces output (duplicated if filter modules cause multiple paths)
-  void addAnalysisModule(std::shared_ptr<AnalysisModule> module) {analysisModules.push_back(module);}
+  void addAnalysisModule(std::shared_ptr<AnalysisModule> module);
   
   void writeOutputFile(const std::string& outputFile);
   void processOneEvent(const EventInterface *eventInterface);
   void initialize();
-
+  bool checkModuleDependencies(std::shared_ptr<Module> module);
  
 
 private:
@@ -67,7 +67,7 @@ private:
 
   
   const EventInterface *eventInterface;
-  InputModule* input;
+  EventInput* input;
 
 
   // Simple utility function allowing an operation to be performed on all

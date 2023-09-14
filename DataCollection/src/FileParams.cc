@@ -1,5 +1,5 @@
 #include "CMSAnalysis/DataCollection/interface/FileParams.hh"
-#include "CMSAnalysis/DataCollection/interface/Utility.hh"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 #include <sstream>
 #include <fstream>
 
@@ -13,7 +13,7 @@ parameters(iparameters)
 std::string FileParams::getFileName() const
 {
     std::ostringstream stream;
-    stream << "textfiles/" << process << "/" << process;
+    stream << process << "/" << process;
     for (auto parameter : parameters) 
     {
         stream << "_" << parameter.first << "_" << parameter.second;
@@ -21,7 +21,8 @@ std::string FileParams::getFileName() const
     stream << ".txt";
     std::string fileName = stream.str();
     fileName = Utility::substitute(fileName, " ", "_");
-    std::cout << "Filename: " << fileName << '\n';
+    fileName = Utility::getFullPath(fileName);
+    std::cout << "Name of file list: " << fileName << '\n';
     return fileName;
 }
 
