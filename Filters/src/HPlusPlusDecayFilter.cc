@@ -152,9 +152,9 @@ std::string HPlusPlusDecayFilter::getState(const EventInput* inputMod) const
 
     //std::cout << std::to_string(higgsPlus) << " " << std::to_string(higgsMinus) << std::endl;
 
-    if (leptons > 4)
+    if (higgsPlus > 26 || higgsMinus > 26)
     {
-      return "high";
+      return "none";
     }
 
     if (higgsPlus == 22) //classifies them based off of pdgID: 22 is ee, 24 is eu, 26 is uu, 11 is single e, 13 is single u

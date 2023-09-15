@@ -130,28 +130,26 @@ void HPlusPlusEfficiency::finalize()
 
   std::string filestr = "\n";
 
-  // for (int i = 0; i < 21; i++)
-  // {
-  //   for (int j = 0; j < 20; j++)
-  //   {
-  //     try
-  //     {
-  //       std::string decay = genSimDecays.at(i) + "->" + recoDecays.at(j);
-  //       filestr += std::to_string(getCounter(decay)/(double)getCounter(genSimDecays.at(i)));
-  //     }
-  //     catch (std::out_of_range&)
-  //     {
-  //       filestr += "0";
-  //     }
-  //     if (j != 19)
-  //     {
-  //       filestr += ",";
-  //     }
-  //   }
-  //   filestr += "\n";
-  // }
-
-  // filestr += "\n\n";
+  for (int i = 0; i < 21; i++)
+  {
+    for (int j = 0; j < 19; j++)
+    {
+      try
+      {
+        std::string decay = genSimDecays.at(i) + "->" + recoDecays.at(j);
+        filestr += std::to_string(getCounter(decay)/(double)getCounter(genSimDecays.at(i)));
+      }
+      catch (std::out_of_range&)
+      {
+        filestr += "0";
+      }
+      if (j != 18)
+      {
+        filestr += ",";
+      }
+    }
+    filestr += "\n";
+  }
 
   // for (int i = 0; i < 19; i++)
   // {
@@ -174,9 +172,9 @@ void HPlusPlusEfficiency::finalize()
   //   filestr += "\n";
   // }
 
-  // filestr += "\n";
+  filestr += "-----\n";
   
-  for (int i = 0; i < 20; i++)
+  for (int i = 0; i < 19; i++)
   {
     try
     {
@@ -186,13 +184,13 @@ void HPlusPlusEfficiency::finalize()
     {
       filestr += "0";
     }
-    if (i != 19)
+    if (i != 18)
     {
       filestr += ",";
     }
   }
 
-  filestr += "\n\n";
+  filestr += "\n";
 
   // std::ofstream file("data.txt");
   // file << filestr;
