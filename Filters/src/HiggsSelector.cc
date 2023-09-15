@@ -97,12 +97,12 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
 
     // std::cout << "-" << std::endl;
     
-    // int index1 = -1;
-    // int index2 = -1;
+    // int index1 = 0;
+    // int index2 = 0;
     // double largestMass = 0.0f;
     // if (posElecs.size() > 0) 
     // {
-    //     for (int i = 0; i < posElecs.size() - 1; i++) 
+    //     for (int i = 0; i < int(posElecs.size()) - 1; i++) 
     //     {
     //         for (int j = i+1; j < int(posElecs.size()); j++)
     //         {
@@ -118,14 +118,14 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
     //     selected.push_back(posElecs[index1]);
     //     selected.push_back(posElecs[index2]);
     // }
-    // index1 = -1;
-    // index2 = -1;
+    // index1 = 0;
+    // index2 = 0;
     // largestMass = 0.0f;
     // if (negElecs.size() > 0)
     // {
-    //     for (int i = 0; i < negElecs.size() - 1; i++) 
+    //     for (int i = 0; i < int(negElecs.size()) - 1; i++) 
     //     {
-    //         for (int j = i+1; j < negElecs.size(); j++)
+    //         for (int j = i+1; j < int(negElecs.size()); j++)
     //         {
     //             if (negElecs[i].getType() == negElecs[j].getType() && (negElecs[i].getFourVector() + negElecs[j].getFourVector()).M() > largestMass)
     //             {
@@ -138,10 +138,8 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
     //     selected.push_back(negElecs[index1]);
     //     selected.push_back(negElecs[index2]);
     // }
-
-    // index1 = -1;
-    // index2 = -1;
-
+    // index1 = 0;
+    // index2 = 0;
     // if (posMuonCount > 0)
     // {
     //     for (int i = 0; i < posMuonCount - 1; i++) 
@@ -157,20 +155,17 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
     //             }
     //         }
     //     }
-    //     if (index1 != -1 && index2 != -1)
-    //     {
-    //         selected.push_back(posMuons[index1]);
-    //         selected.push_back(posMuons[index2]);
-    //     }
+    //     selected.push_back(posMuons[index1]);
+    //     selected.push_back(posMuons[index2]);
     // }
-    // index1 = -1;
-    // index2 = -1;
+    // index1 = 0;
+    // index2 = 0;
     // largestMass = 0.0f;
     // if (negMuonCount > 0)
     // {
-    //     for (int i = 0; i < negMuonCount - 1; i++) 
+    //     for (int i = 0; i < negMuonCount-1; i++) 
     //     {
-    //         for (int j = i + 1; j < negMuonCount; j++)
+    //         for (int j = i+1; j < negMuonCount; j++)
     //         {
     //             if (negMuons[i].getType() == negMuons[j].getType() && (negMuons[i].getFourVector() + negMuons[j].getFourVector()).M() > largestMass)
     //             {
@@ -180,32 +175,11 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
     //             }
     //         }
     //     }
-    //     if (index1 != -1 && index2 != -1)
-    //     {
-    //         selected.push_back(negMuons[index1]);
-    //         selected.push_back(negMuons[index2]);
-    //     }
+    //     selected.push_back(negMuons[index1]);
+    //     selected.push_back(negMuons[index2]);
     // }
-
     // if (posMuonCount + negMuonCount < 4 && electronCount < 4)
     // {
     //     return std::vector<Particle>(0);
-    // }
-
-    // for (auto &part : posElecs)
-    // {
-    //     selected.push_back(part);
-    // }
-    // for (auto &part : negElecs)
-    // {
-    //     selected.push_back(part);
-    // }
-    // for (auto &part : posMuons)
-    // {
-    //     selected.push_back(part);
-    // }
-    // for (auto &part : negMuons)
-    // {
-    //     selected.push_back(part);
     // }
 }
