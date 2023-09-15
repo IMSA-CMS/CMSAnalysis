@@ -46,6 +46,8 @@ private:
   std::map<std::string, int> counterMap;
 
   std::shared_ptr<Filter> filter;
+
+  int getTotalCounters();
 };
 
 #endif

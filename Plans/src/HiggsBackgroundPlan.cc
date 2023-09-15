@@ -104,6 +104,8 @@ void HiggsBackgroundPlan::initialize()
     auto muonGenSimPt = make_shared<PtHist>(EventInput::RecoLevel::GenSim, "Muon GenSim Leading lepton pT", 500, 0, 1000);
     //auto recoInvMass = make_shared<InvariantMassHist>(EventInput::RecoLevel::Reco, "Opposite-sign dilepton mass", 1000, 0, 2000);
     auto elecMetHist = make_shared<METHist>(metMod, "MET", 500, 0, 1000);
+    auto deltaXYHist = std::make_shared<DxyHist>(EventInput::RecoLevel::Reco, "Vertex Delta XY from Primary Vertex", 50, 0, 5);
+    auto deltaZHist = std::make_shared<DzHist>(EventInput::RecoLevel::Reco, "Vertex Delta Z from Primary Vertex", 50, 0, 5);
     // Add the histogram(s) created above to histMod
     // histMod->addHistogram(elecRecoPt);
     // histMod->addHistogram(elecGenSimPt);
@@ -141,8 +143,9 @@ void HiggsBackgroundPlan::initialize()
     //muonGenSimSameSignInvMassHist->addFilter(muonFilter);
     //elecMetHist->addFilter(elecFilter);
 
-
     eventHistMod->addHistogram(sameSignInvMassHist);
+    eventHistMod->addHistogram(deltaXYHist);
+    eventHistMod->addHistogram(deltaZHist);
     // eventHistMod->addHistogram(elecRecoPt);
     // eventHistMod->addHistogram(elecGenSimPt);
     // eventHistMod->addHistogram(muonRecoPt);
@@ -170,8 +173,8 @@ void HiggsBackgroundPlan::initialize()
 
     //analyzer.addProductionModule(matchMod);
     //analyzer.addAnalysisModule(eventMod);
-    analyzer.addAnalysisModule(eventHistMod);    
-    analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
+    //analyzer.addAnalysisModule(eventHistMod);    
+    //analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
     //analyzer.addAnalysisModule(eventDump);
 
 }
