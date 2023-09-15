@@ -13,7 +13,7 @@ parameters(iparameters)
 std::string FileParams::getFileName() const
 {
     std::ostringstream stream;
-    stream << "textfiles/" << process << "/" << process;
+    stream << process << "/" << process;
     for (auto parameter : parameters) 
     {
         stream << "_" << parameter.first << "_" << parameter.second;
@@ -21,6 +21,7 @@ std::string FileParams::getFileName() const
     stream << ".txt";
     std::string fileName = stream.str();
     fileName = Utility::substitute(fileName, " ", "_");
+    fileName = Utility::getFullPath(fileName);
     std::cout << "Name of file list: " << fileName << '\n';
     return fileName;
 }

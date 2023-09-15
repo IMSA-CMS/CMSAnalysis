@@ -32,7 +32,10 @@
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
 #include "CMSAnalysis/Filters/interface/DarkPhotonGenSimSelector.hh"
 #include "CMSAnalysis/Filters/interface/HPlusPlusGenSimSelector.hh"
+#include "CMSAnalysis/Filters/interface/HiggsSelector.hh"
+#include "CMSAnalysis/Filters/interface/HiggsCut.hh"
 #include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
+#include "CMSAnalysis/Modules/interface/HiggsLeptonEfficiency.hh"
 
 
 using std::make_shared;
@@ -46,20 +49,32 @@ void GenSimPlan::initialize()
 
     auto eventMod = make_shared<EventModule>();
     auto dpSelector = make_shared<DarkPhotonGenSimSelector>();
-    auto hppSelector = make_shared<HPlusPlusGenSimSelector>();
+    auto hppSelector = make_shared<HiggsSelector>();
+    auto hppGenSimSelector = make_shared<HPlusPlusGenSimSelector>();
     auto metMod = make_shared<METModule>();
     auto gammahist = make_shared<GammaHistogram>(EventInput::RecoLevel::GenSim, "Gamma", 100, 0, 1000);
     auto eventDump = make_shared<GenSimEventDumpModule>();
+    auto matchMod = make_shared<MatchingModule>();
+    auto higgsCut = make_shared<HiggsCut>();
     
     auto histMod = make_shared<HistogramOutputModule>();
+
+    auto hPlusPlusEfficiency = make_shared<HPlusPlusEfficiency>();
+    //auto leptonEfficiency = make_shared<HiggsLeptonEfficiency>(matchMod);
+
+    hPlusPlusEfficiency->setInput(eventMod->getEventInput());
+    //leptonEfficiency->setInput(eventMod->getEventInput());
 
     histMod->addHistogram(deltaR);
     histMod->addHistogram(gammahist);
 
     //eventMod->addSelector(dpSelector);
     eventMod->addSelector(hppSelector);
+    eventMod->addSelector(hppGenSimSelector);
     auto eventHistMod = eventMod->getHistogramModule();
     //auto hppFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::GenSim);
+
+    //eventMod->addCut(higgsCut);
 
     //analyzer.addFilterModule(hppFilter);
     analyzer.addProductionModule(metMod);
@@ -68,8 +83,8 @@ void GenSimPlan::initialize()
     //analyzer.addAnalysisModule(eventMod);
     analyzer.addAnalysisModule(eventHistMod);
 
-    auto hPlusPlusEfficiency = make_shared<HPlusPlusEfficiency>();
 	analyzer.addAnalysisModule(hPlusPlusEfficiency);
+    //analyzer.addAnalysisModule(leptonEfficiency);
 
     analyzer.addAnalysisModule(histMod);
     //analyzer.addAnalysisModule(eventDump);
