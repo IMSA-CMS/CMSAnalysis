@@ -2,16 +2,16 @@
 #define LEPTON_HH
 #include <vector>
 #include "DataFormats/Candidate/interface/Candidate.h"
-#include "CMSAnalysis/Utility/interface/Particle.hh"
+#include "CMSAnalysis/Utility/interface/RecoParticle.hh"
 
 
 class LeptonJet;
 
 //Lepton
-class Lepton : public Particle
+class Lepton : public RecoParticle
 {
     public:
-        using Particle::Particle;
+        using RecoParticle::RecoParticle;
 
         Lepton(const Particle &particle);
 
