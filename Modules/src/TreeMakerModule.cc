@@ -3,4 +3,5 @@
 bool TreeMakerModule::process()
 {
 	addVariables();
+	return true;
 }

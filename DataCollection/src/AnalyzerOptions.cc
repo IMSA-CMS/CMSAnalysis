@@ -6,21 +6,21 @@
 #include <string>
 #include <vector>
 
-#include "CMSAnalysis/DataCollection/interface/DisplacedVertexPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/HiggsBackgroundPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/HPlusPlusMassPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/InvariantMassPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonJetBackgroundPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonJetReconstructionPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/MassAcceptancePlan.hh"
-#include "CMSAnalysis/DataCollection/interface/MassResolutionPlan.hh"
+#include "CMSAnalysis/Plans/interface/DisplacedVertexPlan.hh"
+#include "CMSAnalysis/Plans/interface/HiggsBackgroundPlan.hh"
+#include "CMSAnalysis/Plans/interface/HPlusPlusMassPlan.hh"
+#include "CMSAnalysis/Plans/interface/InvariantMassPlan.hh"
+#include "CMSAnalysis/Plans/interface/LeptonJetBackgroundPlan.hh"
+#include "CMSAnalysis/Plans/interface/LeptonJetReconstructionPlan.hh"
+#include "CMSAnalysis/Plans/interface/MassAcceptancePlan.hh"
+#include "CMSAnalysis/Plans/interface/MassResolutionPlan.hh"
 #include "CMSAnalysis/Filters/interface/Trigger.hh"
-#include "CMSAnalysis/DataCollection/interface/TriggerPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/GenSimPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/FileStripPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/MLVariablesPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/HiggsDataStripPlan.hh"
-#include "CMSAnalysis/DataCollection/interface/HiggsInvariantMassPlan.hh"
+#include "CMSAnalysis/Plans/interface/TriggerPlan.hh"
+#include "CMSAnalysis/Plans/interface/GenSimPlan.hh"
+#include "CMSAnalysis/Plans/interface/FileStripPlan.hh"
+#include "CMSAnalysis/Plans/interface/MLVariablesPlan.hh"
+#include "CMSAnalysis/Plans/interface/HiggsDataStripPlan.hh"
+#include "CMSAnalysis/Plans/interface/HiggsInvariantMassPlan.hh"
 
 AnalyzerOptions::AnalyzerOptions()
 {
