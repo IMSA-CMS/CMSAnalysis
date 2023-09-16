@@ -244,7 +244,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
     }
     for (UInt_t i = 0; i < getVariable<UInt_t>("photon_size"); i++)
     {
-        Particle::SelectionFit fit;
+        Particle::SelectionFit fit = Particle::SelectionFit::Loose;
 
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("photon_pt", i),
