@@ -5,6 +5,7 @@
 #include "CMSAnalysis/EventFiles/interface/NanoAODEventFile.hh"
 #include "CMSAnalysis/EventFiles/interface/StrippedEventFile.hh"
 #include "CMSAnalysis/EventFiles/interface/EventFile.hh"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "TFile.h"
 #include "TTree.h"
 #include <iostream>
@@ -41,10 +42,10 @@ std::shared_ptr<EventFile> EventLoader::changeFileFormat(TFile* ifile)
 }
 
 
-std::vector<std::string> EventLoader::fetchRootFiles(const std::string &configFile) 
+std::vector<std::string> EventLoader::fetchRootFiles(const std::string& configFile) 
 {
   ProcessDictionary dictionary;
-  dictionary.loadProcesses("textfiles/processes.txt");
+  dictionary.loadProcesses(Utility::getFullPath("processes.txt"));
   auto substringFound = configFile.find(".root");
   bool isLocalFile = substringFound != std::string::npos;
   std::vector<std::string> rootFiles;
