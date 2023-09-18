@@ -16,7 +16,7 @@ using std::make_shared;
 
 void MLVariablesPlan::initialize()
 {
-    auto analyzer = getAnalyzer();
+    auto& analyzer = getAnalyzer();
     auto leptonJetRecoMod = make_shared<LeptonJetReconstructionModule>(0.5);
     auto leptonJetMatchingMod = make_shared<LeptonJetMatchingModule>(leptonJetRecoMod, 0.5);
     auto dataStripMod = make_shared<LeptonJetDataStripModule>("data.root", leptonJetRecoMod, leptonJetMatchingMod);

@@ -18,7 +18,7 @@ using std::make_shared;
 
 void MassAcceptancePlan::initialize()
 {
-    auto analyzer = getAnalyzer();
+    auto& analyzer = getAnalyzer();
 
   //auto genSimMod = make_shared<GenSimIdentificationModule>();
   //auto recoMod = make_shared<RecoIdentificationModule>(50);

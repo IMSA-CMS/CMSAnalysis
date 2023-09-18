@@ -17,7 +17,7 @@ using std::make_shared;
 
 void TriggerPlan::initialize()
 {
-  auto analyzer = getAnalyzer();
+  auto& analyzer = getAnalyzer();
 
   // Create objects
   auto trigSimMod = make_shared<TriggerSimModule>("HLT");

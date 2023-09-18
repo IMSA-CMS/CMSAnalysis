@@ -43,7 +43,7 @@ using std::make_shared;
 void GenSimPlan::initialize()
 {
     
-    auto analyzer = getAnalyzer();
+    auto& analyzer = getAnalyzer();
 
     auto deltaR = make_shared<GenSimDeltaRHist>("Delta R", 100, 0, 2);
 
