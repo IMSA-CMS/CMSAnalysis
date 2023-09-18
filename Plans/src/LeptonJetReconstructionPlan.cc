@@ -44,7 +44,7 @@ using std::make_shared;
 
 void LeptonJetReconstructionPlan::initialize()
 {
-  auto analyzer = getAnalyzer();
+  auto& analyzer = getAnalyzer();
 
   auto eventMod = std::make_shared<EventModule>();
   auto eventHistMod = eventMod->getHistogramModule();

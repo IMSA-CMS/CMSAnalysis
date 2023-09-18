@@ -21,7 +21,7 @@ using std::make_shared;
 
 void LeptonJetBackgroundPlan::initialize()
 {
-    auto analyzer = getAnalyzer();
+    auto& analyzer = getAnalyzer();
 
     // auto genSimMod = make_shared<GenSimIdentificationModule>(1000022, true);
     // auto recoMod = make_shared<RecoIdentificationModule>(5);

@@ -28,7 +28,7 @@ using std::make_shared;
 void InvariantMassPlan::initialize() 
 {
   
-auto analyzer = getAnalyzer();
+auto& analyzer = getAnalyzer();
   // Create necessary histogram(s), as well as histMod
   auto histMod = make_shared<HistogramOutputModule>();
   

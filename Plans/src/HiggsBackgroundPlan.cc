@@ -45,7 +45,7 @@ using std::make_shared;
 void HiggsBackgroundPlan::initialize()
 {
     
-    auto analyzer = getAnalyzer();
+    auto& analyzer = getAnalyzer();
     
     auto eventMod = make_shared<EventModule>();
     //auto pasSelector = make_shared<PASSelector>();
@@ -174,7 +174,6 @@ void HiggsBackgroundPlan::initialize()
     //analyzer.addProductionModule(matchMod);
     //analyzer.addAnalysisModule(eventMod);
     //analyzer.addAnalysisModule(eventHistMod);    
-    //analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
+    analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
     //analyzer.addAnalysisModule(eventDump);
-
 }

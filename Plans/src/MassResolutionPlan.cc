@@ -17,7 +17,7 @@ using std::make_shared;
 
 void MassResolutionPlan::initialize()
 {
-  auto analyzer = getAnalyzer();
+  auto& analyzer = getAnalyzer();
 
   auto matchMod = make_shared<MatchingModule>();
   auto barrelStateFilter = make_shared<BarrelStateFilter>(matchMod);
