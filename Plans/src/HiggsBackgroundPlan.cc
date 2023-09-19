@@ -58,7 +58,7 @@ void HiggsBackgroundPlan::initialize()
 
     //eventMod->addSelector(pasSelector);
     eventMod->addSelector(higgsSelector);
-    eventMod->addCut(higgsCut);
+    // eventMod->addCut(higgsCut);
     //eventMod->addCut(fourLeptonCut);
     //eventMod->addCut(zVetoCut);
     //eventMod->addCut(quarkoniaCut);
