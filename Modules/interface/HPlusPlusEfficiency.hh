@@ -9,15 +9,14 @@ class HPlusPlusEfficiency : public EfficiencyModule
 public:
   HPlusPlusEfficiency();
 
-  bool process() override;
+  void doCounters() override;
   void finalize() override;
   
 private:
 
-  //counters for ammount of reco and gensim leptons / these are used to calculate the efficiency
-  //int genSimMuons, genSimElectrons, genSimHPlusPlus;
-
-  void doCounters() override{}
+  const std::vector<std::string> genSimDecays{"eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet", "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt"};
+  const std::vector<std::string> recoDecays{"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u", "none"};
+  std::map<std::string, int> numbers;
 };
 
 #endif
