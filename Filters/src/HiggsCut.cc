@@ -2,8 +2,8 @@
 
 #include "CMSAnalysis/Utility/interface/Event.hh"
 
-double HiggsCut::electronThreeChannelCut = 5;
-double HiggsCut::muonThreeChannelCut = 5;
+double HiggsCut::electronThreeChannelCut = 100;
+double HiggsCut::muonThreeChannelCut = 100;
 
 bool HiggsCut::checkEventInternal(const Event& event) const
 {
@@ -49,16 +49,13 @@ bool HiggsCut::checkEventInternal(const Event& event) const
 
         if (leptonType == ParticleType::electron() && leptonPt > electronThreeChannelCut)
         {
-            std::cout << true << '\n';
             return true;
         }
         else if (leptonType == ParticleType::muon() && leptonPt > muonThreeChannelCut)
         {
-            std::cout << true << '\n';
             return true;
         }
     }
 
-    std::cout << false << '\n';
     return false;
 }

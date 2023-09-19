@@ -36,7 +36,7 @@ void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) c
     // // add leptons to the event addSpecialObject
     // for (const auto& jet : leptonJets)
     // {
-    //     event.addSpecialObject("leptonJet", jet);
+    //     event.addSpecialObject("leptonJet", jet, InputModule::RecoLevel::Reco);
     // }
 
     // then cut is easier (add directional cut) *elsewhere
