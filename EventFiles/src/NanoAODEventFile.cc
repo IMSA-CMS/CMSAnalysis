@@ -80,7 +80,8 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_phi", "Jet_phi"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_mass", "Jet_mass"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_pt", "Jet_pt"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("elec_idpass", "Electron_cutBased_HEEP"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("elec_idpass", "Electron_cutBased"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("elec_cutBasedHEEP", "Electron_cutBased_HEEP"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_looseid", "Muon_looseId"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_mediumid", "Muon_mediumId"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_tightid", "Muon_tightId"),
@@ -207,8 +208,8 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         getArrayElement<Float_t>("elec_dxy", i),
         getArrayElement<Float_t>("elec_dz", i),
         charge, ParticleType::electron(), fit);
-        particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i));
         particle.addInfo("CutBasedHEEP", getArrayElement<Bool_t>("elec_cutBasedHEEP", i));
+        particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i));
         // particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
         // particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
         recoParticles.addParticle(particle);
