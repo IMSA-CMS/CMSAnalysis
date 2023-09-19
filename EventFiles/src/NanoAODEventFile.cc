@@ -79,7 +79,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_phi", "Jet_phi"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_mass", "Jet_mass"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_pt", "Jet_pt"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("elec_idpass", "Electron_cutBased"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("elec_idpass", "Electron_cutBased_HEEP"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_looseid", "Muon_looseId"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_mediumid", "Muon_mediumId"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_tightid", "Muon_tightId"),
@@ -244,7 +244,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
     }
     for (UInt_t i = 0; i < getVariable<UInt_t>("photon_size"); i++)
     {
-        Particle::SelectionFit fit;
+        Particle::SelectionFit fit = Particle::SelectionFit::Loose;
 
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("photon_pt", i),
