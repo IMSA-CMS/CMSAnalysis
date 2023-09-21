@@ -89,7 +89,7 @@ int main(int argc, char **argv)
 
   std::string analysis = options.checkSelectedAnalysis(analysisType);
   std::cout << "Reading input file " << inputFile << std::endl;
-  // analyzer.run(inputFile, outputFile, outputEvery, numFiles);
+  // modules.run(inputFile, outputFile, outputEvery, numFiles);
 
   // analysisPlans[analysisType]->runAnalyzer(inputFile, outputFile, outputEvery, numFiles);
 
@@ -104,7 +104,7 @@ int main(int argc, char **argv)
 
   plan->initialize();   
   Analyzer analyzer;
-  auto modules = plan->getAnalyzer();
+  auto modules = plan->getModules();
   analyzer.addModules(modules);
    EventLoader eventLoader(EventLoader::fetchRootFiles(inputFile), &analyzer);
     analyzer.initialize();

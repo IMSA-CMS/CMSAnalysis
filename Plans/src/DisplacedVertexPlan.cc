@@ -27,7 +27,7 @@ using std::make_shared;
 
 void DisplacedVertexPlan::initialize()
 {
-  auto& analyzer = getAnalyzer();
+  auto& modules = getModules();
 
   // Create necessary histogram(s), as well as histMod
   auto histMod = make_shared<HistogramOutputModule>();
@@ -37,5 +37,5 @@ void DisplacedVertexPlan::initialize()
   histMod->addHistogram(PTHist);
 
   // Hopefully doesn't break
-  analyzer.addAnalysisModule(histMod);
+  modules.addAnalysisModule(histMod);
 }

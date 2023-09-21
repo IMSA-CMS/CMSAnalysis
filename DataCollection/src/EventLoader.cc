@@ -128,7 +128,7 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents)
         break;
       }
       ++count; 
-      analyzer->processOneEvent(&eventInterface); //EventInterface will loop through all event files in analyzer
+      modules->processOneEvent(&eventInterface); //EventInterface will loop through all event files in analyzer
       file->nextEvent();
       if (outputEvery != 0 && count%outputEvery == 0)
       {
