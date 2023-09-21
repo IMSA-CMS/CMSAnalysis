@@ -16,15 +16,15 @@
 #include "CMSAnalysis/Utility/interface/ParticleType.hh"
 
 //added for dxy, dz
-Particle::Particle(reco::Candidate::LorentzVector vec, int pid, Particle::SelectionFit fit)
+Particle::Particle(reco::Candidate::LorentzVector vec, double dxy, double dz, int pid, Particle::SelectionFit fit)
 {
   auto type = ParticleType::getPDGType(pid);
   int charge = type.getCharge()* (std::signbit(pid) ? -1 : 1);
-  particle = std::make_shared<SimpleImplementation>(vec, charge, type, fit);
+  particle = std::make_shared<SimpleImplementation>(vec, dxy, dz, charge, type, fit);
 }
 
-Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, Particle::SelectionFit fit):
-particle(std::make_shared<SimpleImplementation>(vec, charge, type, fit))
+Particle::Particle(reco::Candidate::LorentzVector vec, double dxy, double dz, int charge, const ParticleType& type, Particle::SelectionFit fit):
+particle(std::make_shared<SimpleImplementation>(vec, dxy, dz, charge, type, fit))
 {
 }
 

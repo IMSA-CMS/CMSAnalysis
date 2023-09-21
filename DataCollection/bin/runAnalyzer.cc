@@ -13,9 +13,10 @@
 #include "CMSAnalysis/DataCollection/interface/IDType.hh"
 #include "FWCore/FWLite/interface/FWLiteEnabler.h"
 #include "PhysicsTools/FWLite/interface/CommandLineParser.h"
-#include "CMSAnalysis/DataCollection/interface/DataCollectionPlan.hh"
+#include "CMSAnalysis/Plans/interface/DataCollectionPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/AnalyzerOptions.hh"
-#include "CMSAnalysis/DataCollection/interface/ModuleOptions.hh"
+#include "CMSAnalysis/Plans/interface/ModuleOptions.hh"
+#include "CMSAnalysis/DataCollection/interface/EventLoader.hh"
 // #include "CMSAnalysis/DataCollection/bin/massResolutionAnalysis.cc"
 // #include "CMSAnalysis/DataCollection/bin/HPlusPlusMassAnalysis.cc"
 // #include "CMSAnalysis/DataCollection/bin/leptonJetReconstructionAnalysis.cc"
@@ -29,6 +30,8 @@
 
 int main(int argc, char **argv)
 {
+  auto start = std::chrono::steady_clock::now();
+
   std::string particleDatabase("textfiles/ParticleData.txt");
   if (ParticleType::loadParticleDatabase(particleDatabase))
   {
@@ -38,9 +41,6 @@ int main(int argc, char **argv)
   {
     std::cout << particleDatabase << " has not been loaded properly!\n";
   }
-
-
-  auto start = std::chrono::steady_clock::now();
 
   gROOT->SetBatch(true);
   gSystem->Load("libFWCoreFWLite");
@@ -102,9 +102,16 @@ int main(int argc, char **argv)
     plan->getOptions(moduleOptionsPtr);
   }
 
-  plan->initialize();
-  plan->runEventLoader(inputFile, outputFile, outputEvery, numFiles, maxEvents);
+  plan->initialize();   
+  Analyzer analyzer;
+  auto modules = plan->getAnalyzer();
+  analyzer.addModules(modules);
+   EventLoader eventLoader(EventLoader::fetchRootFiles(inputFile), &analyzer);
+    analyzer.initialize();
+    eventLoader.run(outputEvery, numFiles, maxEvents);
+    analyzer.writeOutputFile(outputFile);
 
+  
   std::cout << "Processing complete!" << std::endl;
   std::cout << "Output written to " << outputFile << std::endl;
 
@@ -112,6 +119,6 @@ int main(int argc, char **argv)
 
   std::chrono::duration<double> processingTime = end - start;
 
-  std::cout<<"Processing time: "<<processingTime.count()<<"s"<<std::endl;
+  std::cout << "Processing time: "<<processingTime.count()<<"s"<<std::endl;
   return 0;
 }

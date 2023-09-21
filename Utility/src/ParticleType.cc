@@ -1,5 +1,5 @@
 #include "CMSAnalysis/Utility/interface/ParticleType.hh"
-#include "CMSAnalysis/Utility/interface/SingleParticleHist.hh"
+#include "CMSAnalysis/Utility/interface/HistParams.hh"
 #include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 
@@ -12,7 +12,7 @@ std::unordered_map<int,ParticleType> ParticleType::typeList = std::unordered_map
 
 ParticleType::ParticleType() {}
 
-ParticleType::ParticleType(std::string typeName, int typepdgId, double typeCharge, std::vector<SingleParticleHist> typeParticleHists, std::vector<CollectionHist> typeCollectionHists)
+ParticleType::ParticleType(std::string typeName, int typepdgId, double typeCharge, std::vector<HistParams> typeParticleHists, std::vector<CollectionHistParams> typeCollectionHists)
 {
     name = typeName;
     pdgId = typepdgId;
@@ -21,35 +21,29 @@ ParticleType::ParticleType(std::string typeName, int typepdgId, double typeCharg
     collectionHists = typeCollectionHists;
 }
 
-std::vector<std::shared_ptr<SingleParticleHist>> ParticleType::getParticleHists() const
+std::vector<HistParams> ParticleType::getParticleHists() const
 {
-    std::vector<std::shared_ptr<SingleParticleHist>> newHists = std::vector<std::shared_ptr<SingleParticleHist>>{};
-    for (auto hist : particleHists)
-    {
-        //histograms need to be cloned otherwise they would all point to the same object
-        newHists.push_back(std::make_shared<SingleParticleHist>(hist.clone())); 
-    }
-    return newHists;
+    return particleHists;
 }
 
-std::vector<std::shared_ptr<CollectionHist>> ParticleType::getCollectionHists() const
+std::vector<CollectionHistParams> ParticleType::getCollectionHists() const
 {
-    std::vector<std::shared_ptr<CollectionHist>> newHists = std::vector<std::shared_ptr<CollectionHist>>{};
-    for (auto hist : collectionHists)
+    /*std::vector<std::shared_ptr<CollectionHistParams>> newHists = std::vector<std::shared_ptr<CollectionHistParams>>{};
+    for (auto hist : CollectionHistParams)
     {
         //histograms need to be cloned otherwise they would all point to the same object
-        newHists.push_back(std::make_shared<CollectionHist>(hist.clone())); 
-    }
-    return newHists;
+        newHists.push_back(std::make_shared<CollectionHistParams>(hist.clone())); 
+    }*/
+    return collectionHists;
 }
 
-const ParticleType& ParticleType::registerType(std::string typeName, int typepdgId, double typeCharge, std::vector<SingleParticleHist> typeParticleHists, std::vector<CollectionHist> typeCollectionHists)
+const ParticleType& ParticleType::registerType(std::string typeName, int typepdgId, double typeCharge, std::vector<HistParams> typeParticleHists, std::vector<CollectionHistParams> typeCollectionHistParamss)
 {
     //particleTypes are not automatically stored, rather they are created the first time the function is called and then subsequently refrenced
     auto it = typeList.find(typepdgId);
     if (it == typeList.end())
     {
-        ParticleType particleType = ParticleType(typeName,typepdgId,typeCharge,typeParticleHists,typeCollectionHists);
+        ParticleType particleType = ParticleType(typeName,typepdgId,typeCharge,typeParticleHists,typeCollectionHistParamss);
         typeList.insert({typepdgId, particleType});
     } 
 
@@ -84,9 +78,10 @@ bool ParticleType::loadParticle(std::ifstream& file)
     file.getline(tempString, 100, '\"');
     chargeType = std::stoi(std::string(tempString)) / 3.0;
 
-    std::vector<SingleParticleHist> defaultSingleParticleHist = {getPtHist(),getPhiHist(),getEtaHist()};
-    std::vector<CollectionHist> defaultCollectionHist = {getNumberHist()}; 
-    registerType(name, pdgID, chargeType, defaultSingleParticleHist, defaultCollectionHist);
+    std::vector<HistParams> defaultHistParams = {getPtHist(),getPhiHist(),getEtaHist()};
+    std::vector<CollectionHistParams> defaultCollectionHistParams = {getNumberHist()}; 
+    
+    registerType(name, pdgID, chargeType, defaultHistParams, defaultCollectionHistParams);
 
     return true;
 }
@@ -154,55 +149,55 @@ void ParticleType::particleTypeOverrides()
     typeList[13].collectionHists.push_back(getOppositeSignInvariantMassHist());
 
     registerType("Meson",26,0,
-    std::vector<SingleParticleHist>{getPtHist(),getPhiHist(),getEtaHist()},
-    std::vector<CollectionHist>{getNumberHist()}); 
+    std::vector<HistParams>{getPtHist(),getPhiHist(),getEtaHist()},
+    std::vector<CollectionHistParams>{getNumberHist()}); 
 
     registerType("Baryon",27,0,
-    std::vector<SingleParticleHist>{getPtHist(),getPhiHist(),getEtaHist()},
-    std::vector<CollectionHist>{getNumberHist()}); 
+    std::vector<HistParams>{getPtHist(),getPhiHist(),getEtaHist()},
+    std::vector<CollectionHistParams>{getNumberHist()}); 
 
     registerType("Jet",28,0,
-    std::vector<SingleParticleHist>{getPtHist(),getPhiHist(),getEtaHist()},
-    std::vector<CollectionHist>{getNumberHist()}); 
+    std::vector<HistParams>{getPtHist(),getPhiHist(),getEtaHist()},
+    std::vector<CollectionHistParams>{getNumberHist()}); 
 
     registerType("Lepton Jet",29,0,
-    std::vector<SingleParticleHist>{getPtHist(),getPhiHist(),getEtaHist()},
-    std::vector<CollectionHist>{getNumberHist()}); 
+    std::vector<HistParams>{getPtHist(),getPhiHist(),getEtaHist()},
+    std::vector<CollectionHistParams>{getNumberHist()}); 
 }
 
-SingleParticleHist ParticleType::getPtHist()
+HistParams ParticleType::getPtHist()
 {
-    return SingleParticleHist("Pt", 150, 0, 1000, [](Particle particle){return std::vector<double>{particle.getPt()};});
+    return HistParams("Pt", 150, 0, 1000, [](Particle particle){return std::vector<double>{particle.getPt()};});
 }
 
-SingleParticleHist ParticleType::getPhiHist()
+HistParams ParticleType::getPhiHist()
 {
-    return SingleParticleHist("Phi", 150, -4, 4, [](Particle particle){return std::vector<double>{particle.getPhi()};});
+    return HistParams("Phi", 150, -4, 4, [](Particle particle){return std::vector<double>{particle.getPhi()};});
 }
 
-SingleParticleHist ParticleType::getEtaHist()
+HistParams ParticleType::getEtaHist()
 {
-    return SingleParticleHist("Eta", 150, -10, 10, [](Particle particle){return std::vector<double>{particle.getEta()};});
+    return HistParams("Eta", 150, -10, 10, [](Particle particle){return std::vector<double>{particle.getEta()};});
 }
 
-CollectionHist ParticleType::getNumberHist()
+CollectionHistParams ParticleType::getNumberHist()
 {
-    return CollectionHist("Number", 11, -0.5, 10.5, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->getNumParticles()};});
+    return CollectionHistParams("Number", 11, -0.5, 10.5, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->getNumParticles()};});
 }
 
-CollectionHist ParticleType::getSameSignInvariantMassHist()
+CollectionHistParams ParticleType::getSameSignInvariantMassHist()
 {
-    return CollectionHist("Same Sign Invariant Mass", 150, 0, 2000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateSameSignInvariantMass()};});
+    return CollectionHistParams("Same Sign Invariant Mass", 150, 0, 2000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateSameSignInvariantMass()};});
 }
 
-CollectionHist ParticleType::getOppositeSignInvariantMassHist()
+CollectionHistParams ParticleType::getOppositeSignInvariantMassHist()
 {
-    return CollectionHist("Opposite Sign Invariant Mass", 150, 0, 1000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateOppositeSignInvariantMass()};});
+    return CollectionHistParams("Opposite Sign Invariant Mass", 150, 0, 1000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateOppositeSignInvariantMass()};});
 }
 
-SingleParticleHist ParticleType::getDaughterDeltaRHist()
+HistParams ParticleType::getDaughterDeltaRHist()
 {
-    return SingleParticleHist("Daughter Delta R", 150, 0, 3, [](Particle particle)
+    return HistParams("Daughter Delta R", 150, 0, 3, [](Particle particle)
     {
         GenSimParticle genSimParticle = GenSimParticle(particle);
         if (genSimParticle.numberOfDaughters() == 2)

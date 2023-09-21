@@ -56,7 +56,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_mass", "Electron_mass"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("elec_charge", "Electron_charge"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_pt", "Electron_pt"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_reliso", "Electron_miniPFRelIso_all"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_reliso", "Electron_pfRelIso03_all"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dxy", "Electron_dxy"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dz", "Electron_dz"),
 		std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("muon_size", "nMuon"),
@@ -66,6 +66,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
 		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("muon_charge", "Muon_charge"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_pt", "Muon_pt"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_reliso", "Muon_miniPFRelIso_all"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_tkreliso", "Muon_tkRelIso"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_dxy", "Muon_dxy"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_dz", "Muon_dz"),
 		std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("photon_size", "nPhoton"),
@@ -80,6 +81,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_mass", "Jet_mass"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_pt", "Jet_pt"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("elec_idpass", "Electron_cutBased"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("elec_cutBasedHEEP", "Electron_cutBased_HEEP"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_looseid", "Muon_looseId"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_mediumid", "Muon_mediumId"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_tightid", "Muon_tightId"),
@@ -228,10 +230,13 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("elec_pt", i),
         getArrayElement<Float_t>("elec_eta", i), getArrayElement<Float_t>("elec_phi", i), getArrayElement<Float_t>("elec_mass", i))),
+        getArrayElement<Float_t>("elec_dxy", i),
+        getArrayElement<Float_t>("elec_dz", i),
         charge, ParticleType::electron(), fit);
-        //particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i)); GAVIN CHANGED
-        particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
-        particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
+        particle.addInfo("CutBasedHEEP", getArrayElement<Bool_t>("elec_cutBasedHEEP", i));
+        particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i));
+        // particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
+        // particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
         recoParticles.addParticle(particle);
     }
 
@@ -257,20 +262,22 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("muon_pt", i),
         getArrayElement<Float_t>("muon_eta", i), getArrayElement<Float_t>("muon_phi", i), getArrayElement<Float_t>("muon_mass", i))),
+        getArrayElement<Float_t>("muon_dxy", i),
+        getArrayElement<Float_t>("muon_dz", i),
         charge, ParticleType::muon(), fit);
-        //particle.addInfo("Isolation", getArrayElement<Float_t>("muon_reliso", i)); GAVIN CHANGED
-        particle.addInfo("dxy", getArrayElement<Float_t>("muon_dxy", i));
-        particle.addInfo("dz", getArrayElement<Float_t>("muon_dz", i));
+        particle.addInfo("Isolation", getArrayElement<Float_t>("muon_tkreliso", i));
+        // particle.addInfo("dxy", getArrayElement<Float_t>("muon_dxy", i));
+        // particle.addInfo("dz", getArrayElement<Float_t>("muon_dz", i));
         recoParticles.addParticle(particle);
     }
     for (UInt_t i = 0; i < getVariable<UInt_t>("photon_size"); i++)
     {
-        Particle::SelectionFit fit;
+        Particle::SelectionFit fit = Particle::SelectionFit::Loose;
 
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("photon_pt", i),
         getArrayElement<Float_t>("photon_eta", i), getArrayElement<Float_t>("photon_phi", i), 0)),
-        0, ParticleType::photon(), fit);
+        0, 0, 0, ParticleType::photon(), fit);
         recoParticles.addParticle(particle);
     }
     
@@ -283,7 +290,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoJets() const
     for(UInt_t i = 0; i < getVariable<UInt_t>("jet_size"); i++) {
         recoParticles.addParticle(
         Particle(reco::Candidate::LorentzVector(getArrayElement<Float_t>("jet_pt", i), getArrayElement<Float_t>("jet_eta", i), getArrayElement<Float_t>("jet_phi", i), getArrayElement<Float_t>("jet_mass", i)), 
-        0, 
+        0, 0, 0, 
         ParticleType::jet()));        
     }
     return recoParticles;

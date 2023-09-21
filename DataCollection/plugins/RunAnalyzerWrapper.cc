@@ -37,7 +37,7 @@
 #include "../../DataCollection/interface/Analyzer.hh"
 #include "../../DataCollection/interface/CmsswEventInterface.hh"
 #include "../../DataCollection/interface/AnalyzerOptions.hh"
-#include "../../DataCollection/interface/DataCollectionPlan.hh"
+#include "../../Plans/interface/DataCollectionPlan.hh"
 
 #include "DataFormats/Common/interface/DetSetVector.h"
 #include "FWCore/Utilities/interface/EDGetToken.h"
@@ -80,6 +80,7 @@ private:
   std::string analyzerType_;  //used to select what tracks to read from configuration file
   std::string rootOutFile_;
   Analyzer* analyzer = nullptr; 
+  //ModuleCollection modules;
   edm::EDGetTokenT<pat::ElectronCollection> ElectronToken_; 
   edm::EDGetTokenT<pat::MuonCollection> MuonToken_;
   edm::EDGetTokenT<pat::PhotonCollection> PhotonToken_;
@@ -135,7 +136,9 @@ RunAnalyzerWrapper::RunAnalyzerWrapper(const edm::ParameterSet& iConfig)
   std::string analysis = options.checkSelectedAnalysis(analyzerType_);
   DataCollectionPlan *plan = options.getAnalysisPlans().at(analysis);
   plan->initialize();
-  analyzer = &(plan->getAnalyzer());
+  
+  auto modulizer = plan->getAnalyzer();
+  analyzer->addModules(modulizer);
 }
 
 RunAnalyzerWrapper::~RunAnalyzerWrapper() {

@@ -36,6 +36,8 @@ class DelphesEventFile : public EventFile
         TTreeReader treeReader;
 
         mutable TTreeReaderValue<Int_t> elec_size; // nanoAOD wants UInt, Delphes wants Int (for all size variables)
+        mutable TTreeReaderArray<Float_t> elec_dxy;
+        mutable TTreeReaderArray<Float_t> elec_dz;
         mutable TTreeReaderArray<Float_t> elec_eta;
         mutable TTreeReaderArray<Float_t> elec_phi;
         mutable TTreeReaderArray<Float_t> elec_mass;
@@ -44,6 +46,8 @@ class DelphesEventFile : public EventFile
         mutable TTreeReaderArray<Float_t> elec_reliso;
 
         mutable TTreeReaderValue<Int_t> muon_size;
+        mutable TTreeReaderArray<Float_t> muon_dxy;
+        mutable TTreeReaderArray<Float_t> muon_dz;
         mutable TTreeReaderArray<Float_t> muon_eta;
         mutable TTreeReaderArray<Float_t> muon_phi;
         mutable TTreeReaderArray<Float_t> muon_mass;

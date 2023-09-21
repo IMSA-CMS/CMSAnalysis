@@ -20,7 +20,7 @@ void LeptonJetEfficiency::doCounters()
     auto recoLeptonJets = lepRecoMod->getLeptonJets();
     double muonCount = 0;
     double electronCount = 0;
-    double pairMatch = 0;
+
     incrementCounter("Number of Reconstructed Jets", recoLeptonJets.size());
     if (recoLeptonJets.size() > 1) 
     {

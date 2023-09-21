@@ -2,15 +2,15 @@
 #define LEPTONJET_HH
 
 #include <vector>
-#include "CMSAnalysis/Utility/interface/Particle.hh"
+#include "CMSAnalysis/Utility/interface/RecoParticle.hh"
 #include "CMSAnalysis/Utility/interface/LeptonJetImplementation.hh"
 
 // This class is responsible for storing lepton jets, to use this function, construct a lepton jet by using the empty constructor
 
-class LeptonJet : public Particle
+class LeptonJet : public RecoParticle
 {
 public:
-  using Particle::Particle;
+  using RecoParticle::RecoParticle;
 
   //An empty constructor that intializes the pointer towards Lepton Jet Implementation
   LeptonJet();

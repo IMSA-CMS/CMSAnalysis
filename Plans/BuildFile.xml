@@ -13,6 +13,9 @@
 <use   name="rootgraphics"/>
 <use   name="roottmva"/>
 <use   name="CMSAnalysis/Utility"/>
+<use   name="CMSAnalysis/Histograms"/>
+<use   name="CMSAnalysis/Modules"/>
+<use   name="CMSAnalysis/Filters"/>
 <export>
    <lib name="1"/>
 </export>
