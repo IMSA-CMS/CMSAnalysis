@@ -13,11 +13,14 @@
 #include "CMSAnalysis/Filters/interface/Cut.hh"
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/Modules/interface/LocalEventInput.hh"
-#include "CMSAnalysis/Utility/interface/SingleParticleHist.hh"
+
 
 // EventModule allows an Analyzer to select events and apply cuts.
 // Additionally, contains a HistogramOutputModule to generate basic histograms for events.
 // Add as an AnalysisModule in a Plan
+
+class SingleParticleHist;
+class CollectionHist;
 class EventModule : public ProductionModule
 {
     public:

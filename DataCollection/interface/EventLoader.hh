@@ -33,6 +33,7 @@ class EventLoader
 
         int getNumOfEvents() const {return numOfEvents;}
 
+        static std::vector<std::string> fetchRootFiles(const std::string &configFile);
 
     protected:
         int numOfEvents;

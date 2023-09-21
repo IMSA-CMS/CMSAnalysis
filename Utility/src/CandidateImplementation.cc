@@ -113,13 +113,13 @@ const ParticleType& CandidateImplementation::getType() const {
     return ParticleType::none();
   }
 
-  if (dynamic_cast<const pat::Muon *>(particle)) {
+  if (dynamic_cast<const pat::Muon*>(particle)) {
     return ParticleType::muon();
   }
-  else if (dynamic_cast<const pat::Electron *>(particle)) {
+
+  else if (dynamic_cast<const pat::Electron*>(particle)) {
     return ParticleType::electron();
-  } 
-  else if (dynamic_cast<const pat::Photon *>(particle)) {
+  } else if (dynamic_cast<const pat::Photon*>(particle)) {
     return ParticleType::photon();
   }
   else if (auto genp = dynamic_cast<const reco::GenParticle*>(particle))

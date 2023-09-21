@@ -38,6 +38,7 @@ genSimToken(iGenSimToken)
 
 }
 
+
 ParticleCollection<GenSimParticle> CmsswEventInterface::getGenSimParticles() const
 {
     ParticleCollection<GenSimParticle> genParticles;
