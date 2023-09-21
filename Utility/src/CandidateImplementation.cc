@@ -106,14 +106,13 @@ int CandidateImplementation::numberOfDaughters() const {
   // std::cout << "Num Daugters\n";
   checkIsNull();
   return particle->numberOfDaughters();
-}
+} 
 
 const ParticleType& CandidateImplementation::getType() const {
   if (!particle) {
     return ParticleType::none();
   }
 
-  std::cout << "Particle Type: " << particle << "\n";
   if (dynamic_cast<const pat::Muon *>(particle)) {
     return ParticleType::muon();
   }

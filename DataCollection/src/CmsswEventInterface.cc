@@ -61,12 +61,11 @@ ParticleCollection<Particle> CmsswEventInterface::getRecoParticles() const
     ParticleCollection<Particle> recoParticles;
     //This seems problematic
     
-        edm::Handle<std::vector<pat::Electron>> electrons;
+        edm::Handle<std::vector<pat::Electron>> electrons; 
         event->getByToken(electronToken, electrons);
 
         for (const auto& p : *electrons)
 	    {   
-	        std::cout << "Electron: " << &p << "\n";
             recoParticles.addParticle(Particle(&p));
 	    }
 
@@ -75,7 +74,6 @@ ParticleCollection<Particle> CmsswEventInterface::getRecoParticles() const
 
         for (const auto& p : *muons)
 	    {   
-	        std::cout << "muon: " << &p << "\n";
             recoParticles.addParticle(Particle(&p));
         }
 
@@ -84,7 +82,6 @@ ParticleCollection<Particle> CmsswEventInterface::getRecoParticles() const
 
         for (const auto& p : *photons)
 	    {       
-	        std::cout << "photon: " << &p << "\n";
             recoParticles.addParticle(Particle(&p));
         }
         return recoParticles;

@@ -30,11 +30,7 @@ std::string HPlusPlusDecayFilter::getFilterString(const EventInput* inputMod) co
     }
   } else if (typeGenSim == EventInput::RecoLevel::Reco)
   {
-    std::cout << "before" << "\n";
-    
     auto leptons = inputMod->getLeptons(EventInput::RecoLevel::Reco);
-
-    std::cout << "after" << "\n";
     
     for (const auto &lepton : leptons)
     {

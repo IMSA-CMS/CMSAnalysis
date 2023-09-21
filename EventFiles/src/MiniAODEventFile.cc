@@ -100,6 +100,11 @@ double MiniAODEventFile::getMET() const
     throw std::runtime_error("There are no MET objects found");
 }
 
+long MiniAODEventFile::getEventIDNum() const
+{
+    throw std::runtime_error("MiniAODEventFile has no implementation of getEventIDNum"); 
+}
+
 std::vector<bool> MiniAODEventFile::getTriggerResults(std::string subProcess) const
 {
     edm::Handle<edm::TriggerResults> triggerResults;

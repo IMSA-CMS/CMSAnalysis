@@ -86,7 +86,6 @@ bool ParticleType::loadParticle(std::ifstream& file)
 
     std::vector<SingleParticleHist> defaultSingleParticleHist = {getPtHist(),getPhiHist(),getEtaHist()};
     std::vector<CollectionHist> defaultCollectionHist = {getNumberHist()}; 
-    
     registerType(name, pdgID, chargeType, defaultSingleParticleHist, defaultCollectionHist);
 
     return true;

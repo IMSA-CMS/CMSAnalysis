@@ -17,6 +17,10 @@ double RootEventInterface::getMET() const
 {
     return eventFile->getMET();
 }
+long RootEventInterface::getEventIDNum() const
+{
+    return eventFile->getEventIDNum();
+}
 std::vector<bool> RootEventInterface::getTriggerResults(std::string subProcess) const
 {
     return eventFile->getTriggerResults(subProcess);

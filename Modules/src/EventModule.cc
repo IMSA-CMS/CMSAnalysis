@@ -65,6 +65,7 @@ bool EventModule::process ()
     if (!passesCuts){
         return false;
     }
+
     addBasicHistograms(ParticleType::electron(), event.getElectrons());
     addBasicHistograms(ParticleType::muon(), event.getMuons());
     addBasicHistograms(ParticleType::photon(), event.getPhotons());

@@ -294,6 +294,11 @@ double NanoAODEventFile::getMET() const
     return static_cast<double>(getArrayElement<Float_t>("met_pt", 0));
 }
 
+long NanoAODEventFile::getEventIDNum() const
+{
+    throw std::runtime_error("NanoAODEventFile has no implementation of getEventIDNum");  
+}
+
 int NanoAODEventFile::getNumPileUpInteractions() const
 {
     return 1;
