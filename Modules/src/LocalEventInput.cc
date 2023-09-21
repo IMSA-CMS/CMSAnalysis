@@ -12,15 +12,13 @@
 LocalEventInput::LocalEventInput(const Event* event1)
 {
     event = event1;
-}
+} 
 
 ParticleCollection<Lepton> LocalEventInput::getLeptons(RecoLevel level) const
-{
+{ 
     ParticleCollection<Lepton> leptons;
     auto electrons = getParticles(level, ParticleType::electron()).getParticles();
-    std::cout << "Got Electrons" << "\n";
     auto muons = getParticles(level, ParticleType::muon()).getParticles();
-    std::cout << "Got Muons" << "\n";
     for (const auto &p : electrons)
     {
         leptons.addParticle(p);
@@ -36,14 +34,12 @@ ParticleCollection<Particle> LocalEventInput::getParticles(RecoLevel level, cons
 {
     ParticleCollection<Particle> particleList;
     auto particles = event->getParticles().getParticles();
-    std::cout << "got particles: " << "\n";
     for (const auto &p : particles)
     {
         if (p.getType() == particleType || particleType == ParticleType::none())
         {
             particleList.addParticle(p);
         }
-        std::cout << "particleList size: " << particleList.size() << '\n';
     }
     return particleList;
 }
@@ -62,6 +58,12 @@ int LocalEventInput::getNumPileUpInteractions() const
 double LocalEventInput::getMET() const
 {
     return event->getMET();
+}
+
+long LocalEventInput::getEventIDNum() const
+{
+    //return event->getEventIDNum();
+    throw std::runtime_error("GenSimEventFile has no implementation of getEventIDNum"); 
 } 
 
 std::vector<bool> LocalEventInput::getTriggerResults(std::string subProcess) const

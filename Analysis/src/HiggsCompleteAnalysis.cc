@@ -81,9 +81,11 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
             //corrections.push_back(correction);
 
             auto higgsData = std::make_shared<Process>("Higgs Data", 1);
-            higgsData->addProcess(makeSignalProcess(histVariables, filePath, "data_singleMuon.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
-            higgsData->addProcess(makeSignalProcess(histVariables, filePath, "data_singleElectron.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
-            
+            //higgsData->addProcess(makeSignalProcess(histVariables, filePath, "data_singleMuon.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
+            //higgsData->addProcess(makeSignalProcess(histVariables, filePath, "data_singleElectron.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
+            higgsData->addProcess(makeSignalProcess(histVariables, filePath, "../python/pythonPlotFull.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
+
+
             std::vector<std::shared_ptr<Process>> backgroundProcesses = {ttbarBackground, zzBackground, dyBackground, multiBosonBackground, higgsSignal, higgsData};
             
             auto leptonBackgrounds = std::make_shared<Channel>(name  + std::to_string((int) massTarget), backgroundProcesses);
