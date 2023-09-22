@@ -17,7 +17,7 @@ using std::make_shared;
 
 void TriggerPlan::initialize()
 {
-  auto& analyzer = getAnalyzer();
+  auto& modules = getModules();
 
   // Create objects
   auto trigSimMod = make_shared<TriggerSimModule>("HLT");
@@ -51,11 +51,11 @@ void TriggerPlan::initialize()
 
   // triggerMod->addTrigger(testTrig);
 
-  // Add objects to analyzer
-  analyzer.addProductionModule(trigSimMod);
-  analyzer.addProductionModule(triggerMod);
-  // analyzer.addProductionModule(recoTriggerMod);
+  // Add objects to modules
+  modules.addProductionModule(trigSimMod);
+  modules.addProductionModule(triggerMod);
+  // modules.addProductionModule(recoTriggerMod);
 
-  // analyzer.addAnalysisModule(EventDumpMod);
+  // modules.addAnalysisModule(EventDumpMod);
 
 }
