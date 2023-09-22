@@ -45,7 +45,7 @@ using std::make_shared;
 void HiggsBackgroundPlan::initialize()
 {
     
-    auto& analyzer = getAnalyzer();
+    auto& modules = getModules();
     
     auto eventMod = make_shared<EventModule>();
     //auto pasSelector = make_shared<PASSelector>();
@@ -58,7 +58,7 @@ void HiggsBackgroundPlan::initialize()
 
     //eventMod->addSelector(pasSelector);
     eventMod->addSelector(higgsSelector);
-    eventMod->addCut(higgsCut);
+    // eventMod->addCut(higgsCut);
     //eventMod->addCut(fourLeptonCut);
     //eventMod->addCut(zVetoCut);
     //eventMod->addCut(quarkoniaCut);
@@ -73,10 +73,10 @@ void HiggsBackgroundPlan::initialize()
     auto recoDecayFilterMod = make_shared<FilterModule>(recoDecayFilter);
     recoDecayFilterMod->setInput(eventMod->getEventInput());
     auto genSimDecayFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::GenSim);
-    //analyzer.addFilterModule(make_shared<FilterModule>(recoDecayFilter));
-    //analyzer.addFilterModule(make_shared<FilterModule>(genSimDecayFilter));
+    //modules.addFilterModule(make_shared<FilterModule>(recoDecayFilter));
+    //modules.addFilterModule(make_shared<FilterModule>(genSimDecayFilter));
     auto filterStringModule = make_shared<FilterStringModule>();
-    analyzer.addAnalysisModule(filterStringModule);
+    modules.addAnalysisModule(filterStringModule);
     
 
 
@@ -161,19 +161,19 @@ void HiggsBackgroundPlan::initialize()
     // //histMod->addHistogram(muonRecoSameSignInvMassHist);
     // eventHistMod->addHistogram(muonPositiveNegativeInvMassHist);
 
-    analyzer.addProductionModule(metMod);
+    modules.addProductionModule(metMod);
     //Changed because EventModule inherits from ProductionModule now
-    analyzer.addProductionModule(eventMod);
+    modules.addProductionModule(eventMod);
 
 
-    // analyzer.addFilterModule(make_shared<FilterModule>(bJetFilter));
-    // analyzer.addFilterModule(snowmassCut);
-    // analyzer.addFilterModule(nLeptonsFilter);
-    analyzer.addFilterModule(recoDecayFilterMod);
+    // modules.addFilterModule(make_shared<FilterModule>(bJetFilter));
+    // modules.addFilterModule(snowmassCut);
+    // modules.addFilterModule(nLeptonsFilter);
+    modules.addFilterModule(recoDecayFilterMod);
 
-    //analyzer.addProductionModule(matchMod);
-    //analyzer.addAnalysisModule(eventMod);
-    //analyzer.addAnalysisModule(eventHistMod);    
-    analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
-    //analyzer.addAnalysisModule(eventDump);
+    //modules.addProductionModule(matchMod);
+    //modules.addAnalysisModule(eventMod);
+    //modules.addAnalysisModule(eventHistMod);    
+    modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
+    //modules.addAnalysisModule(eventDump);
 }

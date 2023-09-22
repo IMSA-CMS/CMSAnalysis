@@ -43,7 +43,7 @@ using std::make_shared;
 void GenSimPlan::initialize()
 {
     
-    auto& analyzer = getAnalyzer();
+    auto& modules = getModules();
 
     auto deltaR = make_shared<GenSimDeltaRHist>("Delta R", 100, 0, 2);
 
@@ -77,16 +77,16 @@ void GenSimPlan::initialize()
 
     //eventMod->addCut(higgsCut);
 
-    //analyzer.addFilterModule(hppFilter);
-    analyzer.addProductionModule(metMod);
+    //modules.addFilterModule(hppFilter);
+    modules.addProductionModule(metMod);
     //Changed because EventModule inherits from ProductionModule now
-    analyzer.addProductionModule(eventMod);
-    //analyzer.addAnalysisModule(eventMod);
-    analyzer.addAnalysisModule(eventHistMod);
+    modules.addProductionModule(eventMod);
+    //modules.addAnalysisModule(eventMod);
+    modules.addAnalysisModule(eventHistMod);
 
-	analyzer.addAnalysisModule(hPlusPlusEfficiency);
-    //analyzer.addAnalysisModule(leptonEfficiency);
+	modules.addAnalysisModule(hPlusPlusEfficiency);
+    //modules.addAnalysisModule(leptonEfficiency);
 
-    analyzer.addAnalysisModule(histMod);
-    //analyzer.addAnalysisModule(eventDump);
+    modules.addAnalysisModule(histMod);
+    //modules.addAnalysisModule(eventDump);
 }

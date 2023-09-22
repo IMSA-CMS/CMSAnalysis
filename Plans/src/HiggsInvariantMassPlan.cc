@@ -6,5 +6,5 @@ void HiggsInvariantMassPlan::initialize()
     auto fileMod = std::make_shared<HiggsInvariantMassModule>("invariantMassFile.root");
 
 
-   	getAnalyzer().addAnalysisModule(fileMod);
+   	getModules().addAnalysisModule(fileMod);
 }

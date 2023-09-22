@@ -4,5 +4,5 @@
 void FileStripPlan::initialize()
 {
 	auto fileMod = std::make_shared<FileStripModule>("~/nobackup/DY50_stripped.root");
-	getAnalyzer().addAnalysisModule(fileMod);
+	getModules().addAnalysisModule(fileMod);
 }
