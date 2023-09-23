@@ -11,6 +11,7 @@
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "ProcessDictionary.hh"
 #include "RootEventInterface.hh"
+#include "CMSAnalysis/Plans/interface/ModuleCollection.hh"
 
 //#include "ProductionModule.hh"
 
@@ -53,19 +54,19 @@ const EventInput* getEventInput() const {return input;}
   void processOneEvent(const EventInterface *eventInterface);
   void initialize();
   bool checkModuleDependencies(std::shared_ptr<Module> module);
+  void addModules(ModuleCollection modules);
  
 
 private:
-  std::vector<std::shared_ptr<ProductionModule>> productionModules;
-  std::vector<std::shared_ptr<FilterModule>> filterModules;
-  std::vector<std::shared_ptr<AnalysisModule>> analysisModules;
+  std::vector<std::shared_ptr<ProductionModule>> productionModules; //= ModuleCollection.getProductionModules();
+  std::vector<std::shared_ptr<FilterModule>> filterModules; //= ModuleCollection.getFilterModules();
+  std::vector<std::shared_ptr<AnalysisModule>> analysisModules;// = ModuleCollection.getAnalysisModules();
   std::unordered_set<std::string> filterNames;
   std::unordered_map<std::string, TDirectory*> filterDirectories;
 
   int numOfEvents = 0;
 
 
-  
   const EventInterface *eventInterface;
   EventInput* input;
 

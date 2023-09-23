@@ -25,4 +25,16 @@ void FilterModule::finalize()
     std::string name = entry.first.empty() ? "Events failed filter" : entry.first;
     writeText(std::to_string(entry.second), name);
   }
+
+  writeText(std::to_string(getTotalCounters()), "Total");
+}
+
+int FilterModule::getTotalCounters()
+{
+  int totalCounters = 0;
+  for (auto pair : counterMap)
+  {
+    totalCounters += pair.second;
+  }
+  return totalCounters;
 }

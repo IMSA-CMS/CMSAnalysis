@@ -113,7 +113,7 @@ class GammaHistogram : public GenSimRecoPrototype
   }
   
     
-  };
+};
 
 
 
@@ -179,37 +179,40 @@ class IsolationHist : public GenSimRecoPrototype
 class DxyHist : public GenSimRecoPrototype
 {
   using GenSimRecoPrototype::GenSimRecoPrototype;
-
-  std::vector<double> protectedValue(EventInput::RecoLevel level) const
-  {
-    auto particles = getInput()->getLeptons(level);
-    std::vector<double> dxy;
-    for(auto particle : particles.getParticles()) {
-      double particleDxy = particle.getInfo("dxy");
-      if(particleDxy != 0) {
-	      dxy.push_back(particleDxy);
-    	}
+  public:
+    DxyHist(EventInput::RecoLevel type, const std::string &iname, int iNBins, double iminimum, double imaximum) : 
+      GenSimRecoPrototype(type, iname, iNBins, iminimum, imaximum) {}
+  protected:
+    std::vector<double> protectedValue(EventInput::RecoLevel level) const
+    {
+      auto particles = getInput()->getLeptons(level);
+      std::vector<double> dxy;
+      for(auto particle : particles.getParticles()) {
+        double particleDxy = particle.getDXY();
+        dxy.push_back(particleDxy);
+      }
+      return dxy;
     }
-    return dxy;
-  }
 };
 
 class DzHist : public GenSimRecoPrototype
 {
   using GenSimRecoPrototype::GenSimRecoPrototype;
+  public:
+    DzHist(EventInput::RecoLevel type, const std::string &iname, int iNBins, double iminimum, double imaximum) : 
+      GenSimRecoPrototype(type, iname, iNBins, iminimum, imaximum) {}
 
-  std::vector<double> protectedValue(EventInput::RecoLevel level) const
-  {
-    auto particles = getInput()->getLeptons(level);
-    std::vector<double> dz;
-    for(auto particle : particles.getParticles()) {
-      double particleDz = particle.getInfo("dz");
-      if(particleDz != 0) {
-	      dz.push_back(particleDz);
-    	}
+  protected:
+    std::vector<double> protectedValue(EventInput::RecoLevel level) const
+    {
+      auto particles = getInput()->getLeptons(level);
+      std::vector<double> dz;
+      for(auto particle : particles.getParticles()) {
+        double particleDz = particle.getDZ();
+        dz.push_back(particleDz);
+      }
+      return dz;
     }
-    return dz;
-  }
 };
 
 // plots highest lepton-photon invariant mass in the event
