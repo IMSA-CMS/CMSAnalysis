@@ -44,3 +44,8 @@ void TreeMakerModule::addVariablesToTree(TTree *tree) const
 }
 
 
+bool TreeMakerModule::process()
+{
+	addVariables();
+	return true;
+}

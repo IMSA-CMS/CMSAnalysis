@@ -1,7 +1,7 @@
 #ifndef GENSIMRECOPROTOTYPE_HH
 #define GENSIMRECOPROTOTYPE_HH
 
-#include "CMSAnalysis/Utility/interface/HistogramPrototype1D.hh"
+#include"CMSAnalysis/Utility/interface/HistogramPrototype1D.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 
 #include <string>

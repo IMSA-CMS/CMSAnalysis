@@ -16,7 +16,10 @@ bool LeptonEfficiency::process()
 {
   auto genSim = getInput()->getLeptons(EventInput::RecoLevel::GenSim);
 
-  
+  incrementCounter("genSimElectron", 0);
+  incrementCounter("genSimMuon", 0);
+  incrementCounter("recoElectron", 0);
+  incrementCounter("recoMuon", 0);
 
   for(const auto &particle : genSim.getParticles())
   {
@@ -58,7 +61,7 @@ void LeptonEfficiency::finalize()
 {
   std::string muonEndcapOutputString = std::to_string(getCounter("recoMuon")/(double)getCounter("genSimMuon"));
   writeText(muonEndcapOutputString, "Muon Efficiency");
-
+  
   std::string electronBarrelOutputString = std::to_string(getCounter("recoElectron")/(double)getCounter("genSimElectron"));
   writeText(electronBarrelOutputString, "Electron Efficiency");
 }

@@ -1,7 +1,7 @@
 #ifndef DELTARHIST_HH
 #define DELTARHIST_HH
 
-#include "CMSAnalysis/Utility/interface/HistogramPrototype1D.hh"
+#include "HistogramPrototype1D.hh"
 
 class LeptonJetReconstructionModule;
 

@@ -9,9 +9,14 @@
 #include "TFile.h"
 #include "TH1.h"
 
-#include "CMSAnalysis/Modules/interface/AnalysisModule.hh"
-#include "CMSAnalysis/Modules/interface/FilterModule.hh"
-#include "CMSAnalysis/Modules/interface/ProductionModule.hh"
+#include "CMSAnalysis/Plans/interface/ModuleCollection.hh"
+
+//trying to get rid of these
+//#include "CMSAnalysis/Modules/interface/AnalysisModule.hh"
+//#include "CMSAnalysis/Modules/interface/FilterModule.hh"
+//#include "CMSAnalysis/Modules/interface/ProductionModule.hh"
+
+
 #include "CMSAnalysis/DataCollection/interface/EventLoader.hh"
 #include "FWCore/Framework/interface/Event.h"
 #include "DataFormats/FWLite/interface/Event.h"
@@ -89,6 +94,14 @@ void Analyzer::writeOutputFile(const std::string &outputFile)
   delete outputRootFile;
 }
 
+//gets modules from module collection
+void Analyzer::addModules(ModuleCollection modules)
+{
+    productionModules = modules.getProductionModules();
+    filterModules = modules.getFilterModules();
+    analysisModules = modules.getAnalysisModules();
+}
+
 std::vector<std::shared_ptr<Module>> Analyzer::getAllModules() const
 {
   std::vector<std::shared_ptr<Module>> modules;
@@ -150,9 +163,7 @@ void Analyzer::processOneEvent(const EventInterface *eInterface)
           continueProcessing = false;
           break;
         }
-
       }
-   
 
       // Processes event through filter modules
       for (auto module : filterModules)

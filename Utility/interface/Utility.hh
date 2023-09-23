@@ -17,6 +17,8 @@ namespace Utility
   std::vector<std::string> channelMaker(std::vector<std::string> particles, int length, bool sameSign);
   bool comparator(std::string a, std::string b);
   int gcf(std::vector<int> nums);
+  // Given the name of a file that should be in bin/textfiles, gives the full path so it can be easily located
+  std::string getFullPath(std::string fileName);
 }
 
 inline bool Utility::comparator(std::string a, std::string b) {return a<b;}
