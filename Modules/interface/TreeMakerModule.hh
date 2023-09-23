@@ -16,11 +16,12 @@ class TreeMakerModule : public ProductionModule
 public:
 	enum VariableType {Integer, Float, IntegerArray, FloatArray};
 
-	template<typename T>
-	void addValue(std::string name, T type) = delete;
+	virtual void initialize() override;
 
-	template<typename T>
-	T getValue(std::string name) = delete;
+	void addValue(std::string name, Int_t value);
+	void addValue(std::string name, Float_t value);
+	void addValue(std::string name, std::vector<Int_t> value);
+	void addValue(std::string name, std::vector<Float_t> value);
 
 	TTree* makeTree();
 
@@ -32,49 +33,41 @@ protected:
 	void addVariable(std::string name, VariableType type);
 	virtual void addVariables() = 0;
 
+	virtual void calculateVariables() = 0;
+
 private:
 	std::unordered_map<std::string, Int_t> integers;
 	std::unordered_map<std::string, Float_t> floats;
 	std::unordered_map<std::string, std::vector<Int_t>> arraysOfIntegers;
 	std::unordered_map<std::string, std::vector<Float_t>> arraysOfFloats;
+
+	template<typename T>
+	void addValue(std::string name,
+		std::unordered_map<std::string, T, std::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<const std::string, T>>> map,
+		T value);
+
+	template<typename T>
+	void addVariable(std::string name,
+		std::unordered_map<std::string, T, std::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<const std::string, T>>> map);
 };
 
-template<>
-inline void TreeMakerModule::addValue(std::string name, Int_t type)
+template<typename T>
+inline void TreeMakerModule::addValue(std::string name, 
+	std::unordered_map<std::string, T, std::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<const std::string, T>>> map,
+	T value)
 {
-	integers[name] = type;
+	if (map.find(name) != map.end())
+	{
+		throw std::runtime_error("Variable " + name + " already exists");
+	}
+	map[name] = value;
 }
 
-template<>
-inline void TreeMakerModule::addValue(std::string name, Float_t type)
+template<typename T>
+inline void TreeMakerModule::addVariable(std::string name,
+	std::unordered_map<std::string, T, std::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<const std::string, T>>> map)
 {
-	floats[name] = type;
-}
-
-template<>
-inline Int_t TreeMakerModule::getValue(std::string name)
-{
-	if (auto it = integers.find(name); it == integers.end())
-	{
-		throw std::runtime_error("Integer " + name + " not found in tree");
-	}
-	else
-	{
-		return it->second;
-	}
-}
-
-template<>
-inline Float_t TreeMakerModule::getValue(std::string name)
-{
-	if (auto it = floats.find(name); it == floats.end())
-	{
-		throw std::runtime_error("Float " + name + " not found in tree");
-	}
-	else
-	{
-		return it->second;
-	}
+	map[name]; // Creates a new one if it doesn't exist
 }
 
 #endif
