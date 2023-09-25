@@ -11,10 +11,10 @@
 void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
 {
     std::vector<Particle> selected;
-    std::vector<Particle> posElecs;
-    std::vector<Particle> negElecs;
-    std::vector<Particle> posMuons;
-    std::vector<Particle> negMuons;
+    // std::vector<Particle> posElecs;
+    // std::vector<Particle> negElecs;
+    // std::vector<Particle> posMuons;
+    // std::vector<Particle> negMuons;
     auto particles = input->getLeptons(EventInput::RecoLevel::Reco).getParticles();
 
     std::vector<Particle> leptons;
@@ -22,9 +22,9 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
     // int posLeptonCount = 0;
     // int negLeptonCount = 0;
 
-    int electronCount = 0;
-    int posMuonCount = 0;
-    int negMuonCount = 0;
+    // int electronCount = 0;
+    // int posMuonCount = 0;
+    // int negMuonCount = 0;
     
     // std::cout << "-----" << std::endl;
     
@@ -39,7 +39,7 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
                 // && std::abs(particle.getDZ()) < 0.025
             )
             {
-                event.addElectron(particle);
+                leptons.push_back(particle);
                 // leptons.push_back(particle);
                 // if (particle.getCharge() > 0)
                 // {
@@ -52,14 +52,14 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
 
                 // std::cout << particle.getName() << ": " << std::to_string(particle.getCharge()) << std::endl;
 
-                electronCount++;
+                // electronCount++;
             
-                if (particle.getCharge() > 0) {
-                    posElecs.push_back(particle);
-                } 
-                else {
-                    negElecs.push_back(particle);
-                }
+                // if (particle.getCharge() > 0) {
+                //     posElecs.push_back(particle);
+                // } 
+                // else {
+                //     negElecs.push_back(particle);
+                // }
             }
         }
         else if (particle.getType() == ParticleType::muon()) // if (particle.getType() == Particle::Type::Muon && particle.getPt() > 40 && std::abs(particle.getEta()) < 2.8) 
@@ -71,7 +71,7 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
                 // && std::abs(particle.getDZ()) < 0.007183
             )
             {
-                event.addMuon(particle);
+                leptons.push_back(particle);
                 // leptons.push_back(particle);
                 // if (particle.getCharge() > 0)
                 // {
@@ -83,15 +83,57 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
                 // }
 
                 // std::cout << particle.getName() << ": " << std::to_string(particle.getCharge()) << std::endl;
-                if (particle.getCharge() > 0) {
-                    posMuonCount++;
-                    posMuons.push_back(particle);
-                } 
-                else {
-                    negMuonCount++;
-                    negMuons.push_back(particle);
-                }
+                // if (particle.getCharge() > 0) {
+                //     posMuonCount++;
+                //     posMuons.push_back(particle);
+                // } 
+                // else {
+                //     negMuonCount++;
+                //     negMuons.push_back(particle);
+                // }
             }
+        }
+    }
+
+    while (leptons.size() > 4)
+    {
+        // posLeptonCount = 0;
+        // negLeptonCount = 0;
+        std::vector<double> pTs;
+        for (auto particle : leptons)
+        {
+            pTs.push_back(particle.getPt());
+            // if (particle.getCharge() > 0)
+            // {
+            //     posLeptonCount++;
+            // }
+            // else
+            // {
+            //     negLeptonCount++;
+            // }
+        }
+        double minPt = *min_element(pTs.begin(), pTs.end());
+        int index = find(pTs.begin(), pTs.end(), minPt) - pTs.begin();
+        // if (leptons.at(index).getCharge() > 0)
+        // {
+        //     posLeptonCount--;
+        // }
+        // else if (leptons.at(index).getCharge() < 0)
+        // {
+        //     negLeptonCount--;
+        // }
+        leptons.erase(leptons.begin() + index);
+    }
+
+    for (auto particle : leptons)
+    {
+        if (particle.getType() == ParticleType::electron())
+        {
+            event.addElectron(particle);
+        }
+        else if (particle.getType() == ParticleType::muon())
+        {
+            event.addMuon(particle);
         }
     }
 
