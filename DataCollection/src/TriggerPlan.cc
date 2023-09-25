@@ -12,6 +12,8 @@
 #include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
 #include "CMSAnalysis/Filters/interface/SingleMuonTrigger.hh"
 #include "CMSAnalysis/Filters/interface/SingleElectronTrigger.hh"
+#include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
+#include "CMSAnalysis/Modules/interface/FilterModule.hh"
 
 using std::make_shared;
 
@@ -25,9 +27,11 @@ void TriggerPlan::initialize()
   auto simTrigSingleElectron = make_shared<SimTrigger>("singleElectron", TriggerSimModule::EnumTriggers::singleElectronTriggers, trigSimMod);
   auto simTrigSingleMuon = make_shared<SimTrigger>("singleMuon", TriggerSimModule::EnumTriggers::singleMuonTriggers, trigSimMod);
   // added new parts like MuonElectron
-  // auto simTrigMuonElectron = make_shared<SimTrigger>("muonElectron", TriggerSimModule::EnumTriggers::muonElectronTriggers, trigSimMod);
-  // auto simTrigDoubleMuon = make_shared<SimTrigger>("doubleMuon", TriggerSimModule::EnumTriggers::doubleMuonTriggers, trigSimMod);
-  // auto simTrigDoubleElectron = make_shared<SimTrigger>("doubleElectron", TriggerSimModule::EnumTriggers::doubleElectronTriggers, trigSimMod);
+  // auto higgsFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::GenSim);
+  // auto higgsFilterMod = make_shared<FilterModule>(higgsFilter);
+  auto simTrigMuonElectron = make_shared<SimTrigger>("muonElectron", TriggerSimModule::EnumTriggers::muonElectronTriggers, trigSimMod);
+  auto simTrigDoubleMuon = make_shared<SimTrigger>("doubleMuon", TriggerSimModule::EnumTriggers::doubleMuonTriggers, trigSimMod);
+  auto simTrigDoubleElectron = make_shared<SimTrigger>("doubleElectron", TriggerSimModule::EnumTriggers::doubleElectronTriggers, trigSimMod);
   // auto simTrigPhoton = make_shared<SimTrigger>("photon", TriggerSimModule::EnumTriggers::photonTriggers, trigSimMod);
   // auto testTrig = make_shared<SingleElectronTrigger>();
   auto triggerMod = make_shared<TriggerModule>();
@@ -37,7 +41,7 @@ void TriggerPlan::initialize()
 
 
   // Configure objects
-  //trigSimMod->enableAllTriggers(); // For testing purposes. You should probably remove this, if I haven't already
+  trigSimMod->enableAllTriggers(); // For testing purposes. You should probably remove this, if I haven't already
   // simTrigSingleElectron->enableAllTriggers();
   // simTrigSingleMuon->enableAllTriggers();
   // simTrigPhoton->enableAllTriggers();
@@ -53,9 +57,10 @@ void TriggerPlan::initialize()
 
   // Add objects to analyzer
   analyzer.addProductionModule(trigSimMod);
-  analyzer.addProductionModule(triggerMod);
+  analyzer.addAnalysisModule(triggerMod);
   // analyzer.addProductionModule(recoTriggerMod);
 
   // analyzer.addAnalysisModule(EventDumpMod);
+  // analyzer.addFilterModule(higgsFilterMod);
 
 }
