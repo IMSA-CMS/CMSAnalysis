@@ -1,7 +1,7 @@
 #ifndef HISTOGRAMPROTOTYPE1D_HH
 #define HISTOGRAMPROTOTYPE1D_HH
 
-#include "HistogramPrototype.hh"
+#include "CMSAnalysis/Utility/interface/HistogramPrototype.hh"
 
 #include "TH1.h"
 
