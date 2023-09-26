@@ -43,10 +43,19 @@ process.options = cms.untracked.PSet( SkipEvent = cms.untracked.vstring('Product
 if options.input=="":
 	print("INPUT FILE MISSING!")
 
-dataFileName = "../bin/textfiles/Data/" + options.input
+#dataFileName = "../bin/textfiles/Data/" + options.input
 #BTagCSVRun2017B-UL2017_MiniAODv2-v1.txt
-with open(dataFileName, 'r') as file:
-    datatxt = file.read()
+#with open(dataFileName, 'r') as file:
+  #  datatxt = file.read()
+#dataArray = datatxt.split()
+
+import subprocess
+getFileList = "../bin/getFileList"
+shellCommand = f"{getFileList} {options.input}"
+try: 
+    datatxt = subprocess.run(shellCommand, shell=True, check=True, capture_output=True)
+except subprocess.CalledProcessError as e:
+    print(f"Error: {e}")
 dataArray = datatxt.split()
 
 #----------------------------------------------------------------------------------------------------------
