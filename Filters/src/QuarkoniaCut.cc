@@ -13,7 +13,7 @@
 #include "CMSAnalysis/Utility/interface/Event.hh"
 #include "CMSAnalysis/Filters/interface/Cut.hh"
 
-bool QuarkoniaCut::checkEventInternal(const Event& event) const
+bool QuarkoniaCut::checkEventInternal(const Event& event, const EventInput* input) const
 {
     const std::vector<Muon>& muons = event.getMuons().getParticles();
     const std::vector<Electron>& electrons = event.getElectrons().getParticles();

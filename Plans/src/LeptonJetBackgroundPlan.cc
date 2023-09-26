@@ -21,7 +21,7 @@ using std::make_shared;
 
 void LeptonJetBackgroundPlan::initialize()
 {
-    auto& analyzer = getAnalyzer();
+    auto& modules = getModules();
 
     // auto genSimMod = make_shared<GenSimIdentificationModule>(1000022, true);
     // auto recoMod = make_shared<RecoIdentificationModule>(5);
@@ -43,15 +43,15 @@ void LeptonJetBackgroundPlan::initialize()
     histMod->addHistogram(metHist);
     histMod->addHistogram(nLeptonJetsHist);
 
-    // analyzer.addProductionModule(genSimMod);
-    // analyzer.addProductionModule(recoMod);
-    analyzer.addProductionModule(leptonJetRecoModule);
-    analyzer.addProductionModule(metMod);
+    // modules.addProductionModule(genSimMod);
+    // modules.addProductionModule(recoMod);
+    modules.addProductionModule(leptonJetRecoModule);
+    modules.addProductionModule(metMod);
 
-    analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
-    analyzer.addAnalysisModule(eventDump);
+    modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
+    modules.addAnalysisModule(eventDump);
     /*
     auto leptonSelector = std::make_shared<SnowmassLeptonSelector>(5);
-    analyzer.getEventInput()->setLeptonSelector(leptonSelector);
+    modules.getEventInput()->setLeptonSelector(leptonSelector);
     */
 }
