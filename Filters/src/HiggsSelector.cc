@@ -27,18 +27,34 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
     int negMuonCount = 0;
     
     // std::cout << "-----" << std::endl;
-    
+    std::cout << "NumOfParticles: " << particles.size() << '\n';
+    std::cout << "ElectronID: " << ParticleType::electron().getpdgId() << '\n';
+    std::cout << "MuonID: " << ParticleType::muon().getpdgId() << '\n';
+
+    int numOfElectrons = 0;
+    for (auto particle : particles)
+    {
+        if (particle.getType() == ParticleType::electron())
+        {
+            numOfElectrons++;
+        }
+    }
+
+    std::cout << "NumOfElectron: " << numOfElectrons << '\n';
+
     for (const auto& particle : particles)
     {
         if (particle.getType() == ParticleType::electron()) 
 		{
             std::cout << "In Electron \n";
-            auto lepton = Lepton(particle);
-            if(lepton.isLoose()
-                && particle.getPt() > 5 
-                && particle.getInfo("CutBasedHEEP")
+            std::cout << particle << '\n';
+            //auto lepton = Lepton(particle);
+            if( // lepton.isLoose()
+                // && particle.getPt() > 5 
+                particle.getInfo("CutBasedHEEP")
             )
             {
+                std::cout << "Call CutBasedHEEP \n";
                 event.addElectron(particle);
                 // leptons.push_back(particle);
                 // if (particle.getCharge() > 0)
