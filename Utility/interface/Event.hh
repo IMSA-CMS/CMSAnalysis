@@ -36,7 +36,7 @@ class Event
         void addGenSimParticle(GenSimParticle particle);
         void addSpecialObject(std::string key, Particle obj); 
         void setMET(double newMET) {MET = newMET;}
-        
+
         // returns true if the event contains any particles
         bool containsParticles() const;
 

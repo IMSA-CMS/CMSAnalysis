@@ -89,19 +89,11 @@ bool ParticleType::loadParticle(std::ifstream& file)
 
 bool ParticleType::loadParticleDatabase(const std::string& fileName)
 {
-    std::ifstream file;
+    std::ifstream file(fileName);
 
-    if (!file.is_open())
+    if (!file)
     {
-        file.open(fileName);
-        // std::cout << "File opened successfully\n";
-        // char stringOne[100];
-        // file.getline(stringOne, 100, '\n');
-        // std::cout << stringOne << "\n";
-    }
-    else
-    {
-        std::cout << fileName << " is already open!\n";
+        std::cout << fileName << " could not be opened!\n";
         return false;
     }
 
@@ -126,8 +118,6 @@ bool ParticleType::loadParticleDatabase(const std::string& fileName)
         file.ignore(100, '\n');
         
     }
-
-    file.close();
     return true;
 }
 
