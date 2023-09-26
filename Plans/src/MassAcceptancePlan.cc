@@ -18,7 +18,7 @@ using std::make_shared;
 
 void MassAcceptancePlan::initialize()
 {
-    auto& analyzer = getAnalyzer();
+    auto& modules = getModules();
 
   //auto genSimMod = make_shared<GenSimIdentificationModule>();
   //auto recoMod = make_shared<RecoIdentificationModule>(50);
@@ -32,9 +32,9 @@ void MassAcceptancePlan::initialize()
   // Add the histogram(s) created above to histMod
   histMod->addHistogram(totalEventsHist);
 
-  analyzer.addProductionModule(matchMod);
-  analyzer.addAnalysisModule(signFlipMod);
+  modules.addProductionModule(matchMod);
+  modules.addAnalysisModule(signFlipMod);
 
-  analyzer.addAnalysisModule(histMod);
+  modules.addAnalysisModule(histMod);
 
 }
