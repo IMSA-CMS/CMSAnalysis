@@ -88,7 +88,7 @@ double AnalyzerEventInput::getMET() const
 long AnalyzerEventInput::getEventIDNum() const
 {
     return (*eventInterface)->getEventIDNum();
-}
+} 
 
 std::vector<bool> AnalyzerEventInput::getTriggerResults(std::string subProcess) const
 {

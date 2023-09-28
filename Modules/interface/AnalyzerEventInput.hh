@@ -29,7 +29,7 @@ class AnalyzerEventInput : public EventInput
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;
         virtual double getMET() const override;
-        virtual long getEventIDNum() const override;
+        virtual long getEventIDNum() const override; 
         virtual bool checkTrigger(std::string triggerName, std::string subProcess) const override;
     private:
         const EventInterface** eventInterface;

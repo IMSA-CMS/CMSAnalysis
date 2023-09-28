@@ -70,11 +70,12 @@ process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring(data
 #Luminosity Filter
 #if options.luminosityFilter=="":
 #	process.source.lumisToProcess = LumiList.LumiList(filename = 'data/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt').getVLuminosityBlockRange()
+process.source.lumisToProcess = LumiList.LumiList(filename = options.luminosityFilter).getVLuminosityBlockRange()
 
 process.demo = cms.EDAnalyzer('RunAnalyzerWrapper',
     analyzerType   = cms.untracked.string(options.analysis),
     rootOutFile = cms.untracked.string(options.output)
-                              )
+                            )
 
 
 process.p = cms.Path(process.demo)

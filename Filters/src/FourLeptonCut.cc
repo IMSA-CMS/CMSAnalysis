@@ -11,7 +11,7 @@
 #include "CMSAnalysis/Utility/interface/Event.hh"
 #include "CMSAnalysis/Filters/interface/Cut.hh"
 
-bool FourLeptonCut::checkEventInternal(const Event& event) const
+bool FourLeptonCut::checkEventInternal(const Event& event, const EventInput* input) const
 {
     if (event.getMuons().getParticles().size() + event.getElectrons().getParticles().size() < 4)
     {

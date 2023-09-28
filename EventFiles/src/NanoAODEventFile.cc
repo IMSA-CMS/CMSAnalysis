@@ -40,9 +40,13 @@ std::vector<std::string> NanoAODEventFile::getTriggerNames(std::string subProces
 
 bool NanoAODEventFile::checkTrigger(std::string triggerName, std::string subProcess) const
 {
-    // add cout statement to check, it in fact does pass through this code
-    // std::cout << "Does this Trigger work?" << "\n";
-    return *(triggers.find(triggerName)->second);
+    auto triggerIterator = triggers.find(triggerName);
+    if(triggerIterator == triggers.end())
+    {
+        std::cout << "Trigger " << triggerName << " not found" << std::endl;
+        return false;
+    }
+    return *(triggerIterator->second);
 }
 
 NanoAODEventFile::NanoAODEventFile(TFile *ifile) : 
@@ -95,7 +99,6 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pt", "GenPart_pt"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_m1", "GenPart_genPartIdxMother"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pileup", "Pileup_nTrueInt")
-		//std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("CutBasedHEEP", "Electron_cutBased_HEEP")
     };
 
     tree = getFile()->Get<TTree>("Events");

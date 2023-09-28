@@ -63,7 +63,7 @@ double GenSimEventFile::getMET() const
 
 long GenSimEventFile::getEventIDNum() const
 {
-    throw std::runtime_error("GenSimEventFile has no implementation of getEventIDNum");
+    throw std::runtime_error("GenSimEventFile has no implementation of getEventIDNum"); 
 }
 
 std::vector<bool> GenSimEventFile::getTriggerResults(std::string subProcess) const
