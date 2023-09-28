@@ -1,4 +1,4 @@
-#include "CMSAnalysis/Filters/interface/DuplicateNumsFilter.hh"
+/*#include "CMSAnalysis/Filters/interface/DuplicateNumsFilter.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 
 DuplicateNumsFilter::DuplicateNumsFilter():
@@ -17,4 +17,4 @@ std::string DuplicateNumsFilter::getFilterString() const
     {
         return "";
     }
-    };
+    };*/
