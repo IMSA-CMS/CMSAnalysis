@@ -113,6 +113,11 @@ double CmsswEventInterface::getMET() const
     throw std::runtime_error("There are no MET objects found");
 }
 
+long CmsswEventInterface::getEventIDNum() const
+{
+    throw std::runtime_error("Not implemented yet");
+}
+
 std::vector<bool> CmsswEventInterface::getTriggerResults(std::string subProcess) const
 {   
     edm::Handle<std::vector<pat::TriggerEvent>> triggerResults;

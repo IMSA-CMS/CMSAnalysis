@@ -1,4 +1,4 @@
-#ifndef DUPLICATENUMSFILTER_HH
+/*#ifndef DUPLICATENUMSFILTER_HH
 #define DUPLICATENUMSFILTER_HH
 
 #include <memory>
@@ -15,4 +15,4 @@ protected:
   virtual std::string getFilterString() const override;
 };
 
-#endif
+#endif*/
