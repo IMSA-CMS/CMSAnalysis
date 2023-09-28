@@ -44,7 +44,7 @@ void GenSimPlan::initialize()
 {
     auto histOutputMod = std::make_shared<HistogramOutputModule>();
     
-    auto& analyzer = getAnalyzer();
+    auto& modules = getModules();
 
     auto deltaR = make_shared<GenSimDeltaRHist>("Delta R", 100, 0, 2);
     auto eventMod = make_shared<EventModule>();
@@ -79,17 +79,16 @@ void GenSimPlan::initialize()
 
     //eventMod->addCut(higgsCut);
 
-    //analyzer.addFilterModule(hppFilter);
-    analyzer.addProductionModule(metMod);
+    //modules.addFilterModule(hppFilter);
+    modules.addProductionModule(metMod);
     //Changed because EventModule inherits from ProductionModule now
-    analyzer.addProductionModule(eventMod);
-    //analyzer.addAnalysisModule(eventMod);
-    analyzer.addAnalysisModule(eventHistMod);
-    analyzer.addAnalysisModule(histOutputMod);
+    modules.addProductionModule(eventMod);
+    //modules.addAnalysisModule(eventMod);
+    modules.addAnalysisModule(eventHistMod);
 
-	analyzer.addAnalysisModule(hPlusPlusEfficiency);
-    //analyzer.addAnalysisModule(leptonEfficiency);
+	modules.addAnalysisModule(hPlusPlusEfficiency);
+    //modules.addAnalysisModule(leptonEfficiency);
 
-    analyzer.addAnalysisModule(histMod);
-    //analyzer.addAnalysisModule(eventDump);
+    modules.addAnalysisModule(histMod);
+    //modules.addAnalysisModule(eventDump);
 }

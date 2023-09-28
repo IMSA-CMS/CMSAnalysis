@@ -148,10 +148,11 @@ double StrippedEventFile::getMET() const
 
 long StrippedEventFile::getEventIDNum() const
 {
-    throw std::runtime_error("StrippedEventFile has no implementation of getEventIDNum"); 
+    throw std::runtime_error("StrippedEventFile has no implementation of getEventIDNum");  
 }
 
 bool StrippedEventFile::isDone() const
 {
     return getEventCount() > tree->GetEntries();
 }
+

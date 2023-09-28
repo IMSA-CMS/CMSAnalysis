@@ -33,7 +33,7 @@ ParticleCollection<Lepton> LocalEventInput::getLeptons(RecoLevel level) const
 ParticleCollection<Particle> LocalEventInput::getParticles(RecoLevel level, const ParticleType& particleType) const
 {
     ParticleCollection<Particle> particleList;
-    auto particles = event->getParticles(level).getParticles();
+    auto particles = event->getParticles().getParticles();
     for (const auto &p : particles)
     {
         if (p.getType() == particleType || particleType == ParticleType::none())
@@ -63,7 +63,7 @@ double LocalEventInput::getMET() const
 long LocalEventInput::getEventIDNum() const
 {
     //return event->getEventIDNum();
-    throw std::runtime_error("GenSimEventFile has no implementation of getEventIDNum"); 
+    throw std::runtime_error("GenSimEventFile has no implementation of getEventIDNum");  
 } 
 
 std::vector<bool> LocalEventInput::getTriggerResults(std::string subProcess) const

@@ -17,7 +17,7 @@ using std::make_shared;
 
 void MassResolutionPlan::initialize()
 {
-  auto& analyzer = getAnalyzer();
+  auto& modules = getModules();
 
   auto matchMod = make_shared<MatchingModule>();
   auto barrelStateFilter = make_shared<BarrelStateFilter>(matchMod);
@@ -43,9 +43,9 @@ void MassResolutionPlan::initialize()
   histMod->addHistogram(massResHist);
   histMod->addHistogram(ptResHist);
 
-  analyzer.addProductionModule(matchMod);
+  modules.addProductionModule(matchMod);
   
-  //analyzer.addAnalysisModule(massResMod);
-  //analyzer.addAnalysisModule(ptResMod);
-  analyzer.addAnalysisModule(histMod);
+  //modules.addAnalysisModule(massResMod);
+  //modules.addAnalysisModule(ptResMod);
+  modules.addAnalysisModule(histMod);
 }

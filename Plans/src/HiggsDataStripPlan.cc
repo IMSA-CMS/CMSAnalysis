@@ -18,14 +18,14 @@ using std::make_shared;
 
 void HiggsDataStripPlan::initialize()
 {
-	auto& analyzer = getAnalyzer();
+	auto& modules = getModules();
 	auto leptonJetRecoMod = make_shared<LeptonJetReconstructionModule>(0.1);
 	auto leptonJetMatchingMod = make_shared<LeptonJetMatchingModule>(leptonJetRecoMod, 0.1);
 	auto dataStripMod = make_shared<HiggsDataStripModule>("data.root", leptonJetRecoMod, leptonJetMatchingMod);
 	auto matchMod = make_shared<MatchingModule>();
 	auto hPlusPlusEfficiency = make_shared<HPlusPlusEfficiency>();
-	analyzer.addAnalysisModule(hPlusPlusEfficiency);
-	analyzer.addProductionModule(leptonJetRecoMod);
-	analyzer.addProductionModule(leptonJetMatchingMod);
-	analyzer.addAnalysisModule(dataStripMod);
+	modules.addAnalysisModule(hPlusPlusEfficiency);
+	modules.addProductionModule(leptonJetRecoMod);
+	modules.addProductionModule(leptonJetMatchingMod);
+	modules.addAnalysisModule(dataStripMod);
 }

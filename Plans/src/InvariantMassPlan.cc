@@ -28,7 +28,7 @@ using std::make_shared;
 void InvariantMassPlan::initialize() 
 {
   
-auto& analyzer = getAnalyzer();
+auto& modules = getModules();
   // Create necessary histogram(s), as well as histMod
   auto histMod = make_shared<HistogramOutputModule>();
   
@@ -64,7 +64,7 @@ auto& analyzer = getAnalyzer();
   //auto eventDump = make_shared<EventDumpModule>(1, 1);
   auto compMod = make_shared<RecoGenSimComparisonModule>("mother", true);
   // Hopefully doesn't break // <- this is profound
-  analyzer.addAnalysisModule(histMod);
-  //analyzer.addAnalysisModule(eventDump);
-  analyzer.addAnalysisModule(compMod);
+  modules.addAnalysisModule(histMod);
+  //modules.addAnalysisModule(eventDump);
+  modules.addAnalysisModule(compMod);
 }

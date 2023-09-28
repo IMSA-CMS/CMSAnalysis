@@ -161,7 +161,7 @@ double DelphesEventFile::getMET() const
 
 long DelphesEventFile::getEventIDNum() const
 {
-    throw std::runtime_error("DelphesEventFile has no implementation of getEventIDNum");
+    throw std::runtime_error("DelphesEventFile has no implementation of getEventIDNum"); 
 }
 
 bool DelphesEventFile::isDone() const

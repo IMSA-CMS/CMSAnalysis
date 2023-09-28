@@ -137,7 +137,7 @@ RunAnalyzerWrapper::RunAnalyzerWrapper(const edm::ParameterSet& iConfig)
   DataCollectionPlan *plan = options.getAnalysisPlans().at(analysis);
   plan->initialize();
   
-  auto modulizer = plan->getAnalyzer();
+  auto modulizer = plan->getModules();
   analyzer->addModules(modulizer);
 }
 
