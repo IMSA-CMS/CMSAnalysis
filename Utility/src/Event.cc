@@ -17,7 +17,6 @@
 
 Event::Event()
 {
-
 }
 
 ParticleCollection<Particle> Event::getParticles(EventInput::RecoLevel level) const

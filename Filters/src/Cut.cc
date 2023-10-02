@@ -10,10 +10,10 @@
 #include "CMSAnalysis/Utility/interface/Event.hh"
 #include "CMSAnalysis/Filters/interface/Cut.hh"
 
-bool Cut::checkEvent(const Event& event, bool dependent)
+bool Cut::checkEvent(const Event& event, const EventInput* input, bool dependent)
 {
     
-    bool check = checkEventInternal(event);
+    bool check = checkEventInternal(event, input);
     
     if (dependent)
     {

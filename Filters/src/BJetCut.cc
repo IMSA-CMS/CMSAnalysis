@@ -5,7 +5,7 @@
 #include "CMSAnalysis/Utility/interface/Event.hh"
 
 
-bool BJetCut::checkEventInternal(const Event& event) const
+bool BJetCut::checkEventInternal(const Event& event, const EventInput* input) const
 {
     const std::vector<Jet>& jets = event.getJets().getParticles();
     for (int i = 0; i < int(jets.size()); i++) 
