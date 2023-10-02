@@ -23,6 +23,7 @@ void TriggerPlan::initialize()
 
   // Create objects
   auto trigSimMod = make_shared<TriggerSimModule>("HLT");
+  //auto trigSimMod = make_shared<ProductionModule>("HLT");
   // add lines from my trigger data [insert!]
   auto simTrigSingleElectron = make_shared<SimTrigger>("singleElectron", TriggerSimModule::EnumTriggers::singleElectronTriggers, trigSimMod);
   auto simTrigSingleMuon = make_shared<SimTrigger>("singleMuon", TriggerSimModule::EnumTriggers::singleMuonTriggers, trigSimMod);
@@ -57,7 +58,7 @@ void TriggerPlan::initialize()
 
   // // Add objects to analyzer
   // analyzer.addProductionModule(trigSimMod);
-  // analyzer.addAnalysisModule(triggerMod);
+   modules.addAnalysisModule(triggerMod);
   // // analyzer.addProductionModule(recoTriggerMod);
 
   // // analyzer.addAnalysisModule(EventDumpMod);
@@ -66,7 +67,7 @@ void TriggerPlan::initialize()
   
   // Add objects to modules
   modules.addProductionModule(trigSimMod);
-  modules.addProductionModule(triggerMod);
+  // modules.addProductionModule(triggerMod);
   // modules.addProductionModule(recoTriggerMod);
 
   // modules.addAnalysisModule(EventDumpMod);
