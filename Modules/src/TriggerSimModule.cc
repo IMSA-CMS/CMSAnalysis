@@ -103,6 +103,15 @@ bool TriggerSimModule::removeTrigger(const std::vector<std::string> _triggerName
   return passed;
 };
 
+// ?
+void TriggerSimModule::initialize()
+{
+  for (auto name : triggerNames)
+  {
+    triggerResultsData.insert({name, {0, 0}});
+  }
+}
+
 // For use as a production module
 void TriggerSimModule::finalize()
 {
@@ -124,9 +133,10 @@ bool TriggerSimModule::process()
   passedTriggers.clear();
 
   // Get the triggers regarding the event
-  const auto triggerResults = getInput()->getTriggerResults(subProcess);
+  // const auto triggerResults = getInput()->getTriggerResults(subProcess);
 
-  const auto names = getInput()->getTriggerNames(subProcess);
+  // const auto names = getInput()->getTriggerNames(subProcess);
+
 
   /*
     // Example code from the twiki on trigger bits
@@ -141,43 +151,65 @@ bool TriggerSimModule::process()
   */
 
   // bool passAnyTrigger = false; // True if the event passes any of the triggers
-  bool passCurrentTrigger;     // True if the event passes the current trigger
 
-  for (unsigned int i = 0, n = triggerResults.size(); i < n; ++i)
+  if (enableAll) 
   {
-    // Checks if the current trigger is meant to be analyzed
-    if (enableAll || std::find(triggerNames.begin(), triggerNames.end(), names[i]) != triggerNames.end())
-    {
-      //std::cout << names[i] << "\n";
+    auto allTriggerNames = getInput()->getTriggerNames(subProcess);
     
-      // This line is where the trigger is actually checked
-      passCurrentTrigger = triggerResults[i];
-
-      // Set passAnyTrigger to true once the event passes one trigger
-      // Since passAnyTrigger is automatically false, if the event doesn't pass any triggers
-      //    then passAnyTrigger remains false
-      // if (passCurrentTrigger)
+    for (unsigned int i = 0, n = allTriggerNames.size(); i < n; ++i)
+    {
+      // std::cout << allTriggerNames[i];
+      // this creates a map key if it doesn't already exist
+      triggerResultsData[allTriggerNames[i]];
+      auto results = getInput()->getTriggerResults(subProcess);
+      for (auto result : results) 
+      {
+        if (result) 
+        {
+          ++triggerResultsData[allTriggerNames[i]].passed;
+          passedTriggers.push_back(allTriggerNames[i]);
+        }
+      }
+      // if (getInput()->checkTrigger(allTriggerNames[i], subProcess))
       // {
-      //   passAnyTrigger = true;
+        
       // }
+    }
+  } 
+  else 
+  {
+    for (unsigned int i = 0, n = triggerNames.size(); i < n; ++i)
+    {
+      // Checks if the current trigger is meant to be analyzed 
+      
+      // if (enableAll || std::find(triggerNames.begin(), triggerNames.end(), names[i]) != triggerNames.end())
+      // if (enableAll || std::find(triggerNames.begin(), triggerNames.end(), names[i].substr(0, names[i].find("_v") + 2)) != triggerNames.end())
+      
+      if (getInput()->checkTrigger(triggerNames[i], subProcess))
+      {
+        //std::cout << names[i] << "\n";
+      
+        // This line is where the trigger is actually checked
 
-      if (triggerResultsData.find(names[i]) == triggerResultsData.end())
-      {
-        // if not in there, add a log to the map, make value 1 if it passed
-        triggerResultsData.insert({names[i], {(int)passCurrentTrigger, 1}});
-      }
-      else
-      {
+        // Set passAnyTrigger to true once the event passes one trigger
+        // Since passAnyTrigger is automatically false, if the event doesn't pass any triggers
+        //    then passAnyTrigger remains false
+        // if (passCurrentTrigger)
+        // {
+        //   passAnyTrigger = true;
+        // }
+
         // if in there, just increment 1 if it passed
-        triggerResultsData[names[i]].passed += (int)passCurrentTrigger;
-        ++triggerResultsData[names[i]].total;
-      }
-
-      if (passCurrentTrigger)
-      {
-        passedTriggers.push_back(names[i]);
+        ++triggerResultsData[triggerNames[i]].passed;
+        //std::cout << triggerNames[i] << " : " << triggerResultsData[triggerNames[i]].passed << "\n";
+        passedTriggers.push_back(triggerNames[i]);
       }
     }
+  }
+
+  for (auto& pair : triggerResultsData)
+  {
+    ++pair.second.total;
   }
 
   // return passAnyTrigger;
@@ -212,6 +244,10 @@ std::map<std::string, bool> TriggerSimModule::checkEvent(std::shared_ptr<EventIn
   // const edm::TriggerNames &triggerNames = input->getTriggerNames(subProcess);
   std::map<std::string, bool> results;
 
+  for (auto name : triggerNames)
+  {
+    results.insert({name, getInput()->checkTrigger(name, subProcess)});
+  }
   // for (unsigned int i = 0, n = triggerResults->size(); i < n; ++i)
   // {
   //   // Checks if the current trigger is meant to be analyzed

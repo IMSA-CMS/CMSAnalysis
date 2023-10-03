@@ -42,7 +42,14 @@ bool NanoAODEventFile::checkTrigger(std::string triggerName, std::string subProc
 {
     // add cout statement to check, it in fact does pass through this code
     // std::cout << "Does this Trigger work?" << "\n";
-    return *(triggers.find(triggerName)->second);
+    //std::cout << triggerName << "\n";
+    auto trigger = triggers.find(triggerName);
+    if (trigger == triggers.end()) 
+    {
+        return false;
+    }
+    return *(trigger->second);
+     
 }
 
 NanoAODEventFile::NanoAODEventFile(TFile *ifile) : 
