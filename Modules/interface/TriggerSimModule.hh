@@ -34,6 +34,7 @@ public:
 
   // Methods for use as production module
   virtual void finalize() override;
+  virtual void initialize() override;
   bool processEvent() {return process();} // Event Counter that calls virtual process function
   bool checkTrigger(EnumTriggers name);
 
@@ -60,18 +61,15 @@ private:
   std::vector<std::string> passedTriggers;
   const std::map<EnumTriggers, std::vector<std::string>> triggerEnumNameMap = {
     { EnumTriggers::singleMuonTriggers, {
-        "HLT_IsoMu24_v7",
-        "HLT_IsoMu24_v6",
-        "HLT_IsoMu24_v5",
-        "HLT_IsoMu24_v13",
-        ""} },
+        "HLT_IsoMu24"
+         } },
     { EnumTriggers::muonElectronTriggers, {
       // do not delete these, add in the right version numbers (from new data spreadsheet)
       // new trigger
         
-        "HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v4",
+        "HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ",
         "HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v6",
-        "HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v6",
+        "HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
         "HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v5",
         "HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v8",
         "HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v13",
@@ -84,10 +82,8 @@ private:
         "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v14"
         } },
     { EnumTriggers::singleElectronTriggers, {
-        "HLT_Ele27_WPTight_Gsf_v10",
-        "HLT_Ele27_WPTight_Gsf_v9",
-        "HLT_Ele27_WPTight_Gsf_v16", 
-        ""} },
+        "HLT_Ele27_WPTight_Gsf"
+         } },
 
     { EnumTriggers::doubleElectronTriggers, {
         "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_v12",
