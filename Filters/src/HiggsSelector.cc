@@ -14,16 +14,17 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
 
     for (const auto& particle : particles)
     {
+        // std::cout << "Electron ID: " << ParticleType::electron().getpdgId() << '\n';
         if (particle.getType() == ParticleType::electron()) 
 		{
             auto lepton = Lepton(particle);
-            std::cout << "Particle type: " << particle.getType().getName() << '\n';
+            // std::cout << "Particle type: " << particle.getType().getName() << '\n';
             if(lepton.isLoose()
                 && particle.getPt() > 5 
                 && particle.getInfo("CutBasedHEEP")
             )
             {
-                std::cout << "Call CutBasedHEEP \n";
+                // std::cout << "Call CutBasedHEEP \n";
                 event.addElectron(particle);
             }
         }
