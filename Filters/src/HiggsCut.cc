@@ -2,8 +2,8 @@
 
 #include "CMSAnalysis/Utility/interface/Event.hh"
 
-double HiggsCut::electronThreeChannelCut = 5;
-double HiggsCut::muonThreeChannelCut = 5;
+double HiggsCut::electronThreeChannelCut = 350;
+double HiggsCut::muonThreeChannelCut = 350;
 
 bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) const
 {
