@@ -3,10 +3,10 @@
 
 #include <memory>
 
-#include "ProductionModule.hh"
+#include "AnalysisModule.hh"
 #include "CMSAnalysis/Filters/interface/Trigger.hh"
 
-class TriggerModule : public ProductionModule
+class TriggerModule : public AnalysisModule
 {
 public:
   TriggerModule();
@@ -30,6 +30,8 @@ private:
   std::vector<int> highestEffCombo;
   int passAny;
   int total;
+  std::map<std::string, int> passedFilterCount;
+  std::map<std::string, int> totalFilterCount;
 };
 
 #endif
