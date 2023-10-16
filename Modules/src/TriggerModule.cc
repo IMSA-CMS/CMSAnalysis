@@ -19,22 +19,30 @@ bool TriggerModule::process()
 
   //keeps track of exactly which triggers the event passes
   std::vector<bool> passSingleTrigger;
-
+  ++totalFilterCount[getFilter()];
   for (auto trigger : triggers)
   {
     passCurrentTrigger = trigger->checkEvent(getInput());
 
     // Set passAnyTrigger to true once the event passes one trigger
     // Since passAnyTrigger is automatically false, if the event doesn't pass any triggers, passAnyTrigger remains false
+  
     if (passCurrentTrigger)
     {
       passAnyTrigger = true;
+      
+      //Print results in finalize!
       passSingleTrigger.push_back(true);
     }
     else
     {
       passSingleTrigger.push_back(false);
     }
+  }
+
+  if (passAnyTrigger)
+  {
+    ++passedFilterCount[getFilter()];
   }
 
   
@@ -159,6 +167,13 @@ void TriggerModule::finalize()
   {
     int passCombo = nTriggerOverlap(trigCombos[i]);
     printComboEfficiency(passCombo, trigCombos[i]);
+  }
+
+  std::map<std::string, int>::iterator it = passedFilterCount.begin();
+  while (it != passedFilterCount.end())
+  {
+    std::cout << it->first << ": " << (1.0*it->second)/totalFilterCount[it->first] << " = " << it->second << "/" << totalFilterCount[it->first] << "\n";
+    ++it;
   }
 
   printOverallEfficiency();

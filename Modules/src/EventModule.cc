@@ -48,22 +48,24 @@ bool EventModule::process ()
 {
     clearHistograms(); //all histograms are cleared and we only fill the ones we are using for this event
     event.clear();
-    for (auto selector : selectors) {
+    for (auto selector : selectors)
+    {
         selector->selectParticles(getInput(),event);
     }
     event.setMET(getInput()->getMET());
     bool passesCuts = true;
-    if (event.containsParticles())
+
+    for (size_t i = 0; i < cuts.size(); i++) 
     {
-        for (size_t i = 0; i < cuts.size(); i++) 
+        if (!(cuts[i]->checkEvent(event, getInput(), passesCuts)))
         {
-            if (!(cuts[i]->checkEvent(event, passesCuts)))
-            {
-                passesCuts = false;
-            }
+            passesCuts = false;
+            break;
         }
     }
-    if (!passesCuts){
+    
+    if (!passesCuts)
+    {
         return false;
     }
     addBasicHistograms(ParticleType::electron(), event.getElectrons());

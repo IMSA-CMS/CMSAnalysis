@@ -6,7 +6,7 @@
 class HiggsCut : public Cut
 {
     protected:
-        bool checkEventInternal(const Event& event) const override;
+        bool checkEventInternal(const Event& event, const EventInput* input) const override;
     private:
         static double electronThreeChannelCut;
         static double muonThreeChannelCut;

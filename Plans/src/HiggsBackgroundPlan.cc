@@ -31,6 +31,7 @@
 #include "CMSAnalysis/Filters/interface/SnowmassLeptonSelector.hh"
 #include "CMSAnalysis/Histograms/interface/Histograms.hh"
 #include "CMSAnalysis/Modules/interface/TriggerModule.hh"
+#include "CMSAnalysis/Filters/interface/TriggerCut.hh"
 #include "CMSAnalysis/Filters/interface/TripleMuonTrigger.hh"
 #include "CMSAnalysis/Histograms/interface/TwoInvariantMassesHist.hh"
 #include "CMSAnalysis/Filters/interface/BJetFilter.hh"
@@ -56,8 +57,11 @@ void HiggsBackgroundPlan::initialize()
     //auto zVetoCut = make_shared<ZVetoCut>();
     //auto quarkoniaCut = make_shared<QuarkoniaCut>();
 
+    auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
+
     //eventMod->addSelector(pasSelector);
     eventMod->addSelector(higgsSelector);
+    eventMod->addCut(triggerCut);
     // eventMod->addCut(higgsCut);
     //eventMod->addCut(fourLeptonCut);
     //eventMod->addCut(zVetoCut);
