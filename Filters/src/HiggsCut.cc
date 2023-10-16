@@ -5,7 +5,7 @@
 double HiggsCut::electronThreeChannelCut = 100;
 double HiggsCut::muonThreeChannelCut = 100;
 
-bool HiggsCut::checkEventInternal(const Event& event) const
+bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) const
 {
     const auto particles = event.getParticles();
 

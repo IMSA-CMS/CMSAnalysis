@@ -17,22 +17,13 @@
 #include "CMSAnalysis/DataCollection/interface/AnalyzerOptions.hh"
 #include "CMSAnalysis/Plans/interface/ModuleOptions.hh"
 #include "CMSAnalysis/DataCollection/interface/EventLoader.hh"
-// #include "CMSAnalysis/DataCollection/bin/massResolutionAnalysis.cc"
-// #include "CMSAnalysis/DataCollection/bin/HPlusPlusMassAnalysis.cc"
-// #include "CMSAnalysis/DataCollection/bin/leptonJetReconstructionAnalysis.cc"
-// #include "CMSAnalysis/DataCollection/bin/displacedVertexAnalysis.cc"
-// #include "CMSAnalysis/DataCollection/bin/massAcceptanceAnalysis.cc"
-// #include "CMSAnalysis/DataCollection/bin/triggerAnalysis.cc"
-// #include "CMSAnalysis/DataCollection/bin/invariantMassAnalysis.cc"
-// #include "CMSAnalysis/DataCollection/bin/HiggsBackgroundAnalysis.cc"
-// #include "CMSAnalysis/DataCollection/bin/LeptonJetBackgroundAnalysis.cc"
-// #include "CMSAnalysis/DataCollection/bin/FilestripAnalysis.cc"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 
 int main(int argc, char **argv)
 {
   auto start = std::chrono::steady_clock::now();
 
-  std::string particleDatabase("textfiles/ParticleData.txt");
+  std::string particleDatabase(Utility::getFullPath("ParticleData.txt"));
   if (ParticleType::loadParticleDatabase(particleDatabase))
   {
     std::cout << particleDatabase << " has been loaded properly!\n";

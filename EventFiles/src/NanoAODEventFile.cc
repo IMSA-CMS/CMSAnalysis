@@ -11,6 +11,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 
 std::vector<bool> NanoAODEventFile::getTriggerResults(std::string subProcess) const
 {
@@ -42,7 +43,14 @@ bool NanoAODEventFile::checkTrigger(std::string triggerName, std::string subProc
 {
     // add cout statement to check, it in fact does pass through this code
     // std::cout << "Does this Trigger work?" << "\n";
-    return *(triggers.find(triggerName)->second);
+    //std::cout << triggerName << "\n";
+    auto trigger = triggers.find(triggerName);
+    if (trigger == triggers.end()) 
+    {
+        return false;
+    }
+    return *(trigger->second);
+     
 }
 
 NanoAODEventFile::NanoAODEventFile(TFile *ifile) : 
@@ -111,7 +119,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
     }
 
     //initializing triggers from header file
-    std::ifstream triggerNameFile("betterValidTriggers.txt");
+    std::ifstream triggerNameFile(Utility::getFullPath("betterValidTriggers.txt"));
 
     if(triggerNameFile)
     {
@@ -119,12 +127,12 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
 
         while(getline(triggerNameFile, nameoftrigger))
         {
-            std::cout << nameoftrigger << "Does this work?" << "\n";
+            //std::cout << nameoftrigger << "Does this work?" << "\n";
             if(tree->GetBranch(nameoftrigger.c_str()))
             {
                 TTreeReaderValue<Bool_t> intermediate(treeReader, nameoftrigger.c_str());
                 triggers.emplace(nameoftrigger, intermediate);
-                std::cout << nameoftrigger <<"\n";
+                //std::cout << nameoftrigger <<"\n";
             }
         }
     }    

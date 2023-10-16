@@ -133,20 +133,35 @@ bool MiniAODEventFile::checkTrigger(std::string triggerName, std::string subProc
     // std::cout << "Is this part running?" << "\n";
     auto names = getTriggerNames(subProcess);
     auto results = getTriggerResults(subProcess);
+    triggerName += "_v";
 
-    auto it = find(names.begin(), names.end(), triggerName);
-    if(it != names.end())
+    // auto it = find(names.begin(), names.end(), triggerName);
+
+    // std::cout << "names[0].substr(0, triggerName.length()).compare(triggerName)" << "\n";
+    for (auto i = 0; static_cast<std::vector<std::__cxx11::basic_string<char> >::size_type>(i) < names.size(); ++i) 
     {
-        // cout statement (if it is false in here)
+
+        if (names[i].substr(0, triggerName.length()).compare(triggerName) == 0 && results[i])
+        {
+            // std::cout << "Is THISIS part running?" << "\n";
+            return true;
+        }
         // std::cout << "Is this part running?" << "\n";
-        return results.at(it - names.begin());
     }
-    else
-    {
-        // cout statement (if it is false in here)
-        // std::cout << "Is this part running?" << "\n";
-        return false;
-    }
+    return false;
+
+    // if(it != names.end())
+    // {
+    //     // cout statement (if it is false in here)
+    //     // std::cout << "Is this part running?" << "\n";
+    //     return results.at(it - names.begin());
+    // }
+    // else
+    // {
+    //     // cout statement (if it is false in here)
+    //     // std::cout << "Is this part running?" << "\n";
+    //     return false;
+    // }
 }
 
 bool MiniAODEventFile::isDone() const
