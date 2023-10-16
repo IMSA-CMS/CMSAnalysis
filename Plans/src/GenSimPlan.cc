@@ -34,6 +34,7 @@
 #include "CMSAnalysis/Filters/interface/HPlusPlusGenSimSelector.hh"
 #include "CMSAnalysis/Filters/interface/HiggsSelector.hh"
 #include "CMSAnalysis/Filters/interface/HiggsCut.hh"
+#include "CMSAnalysis/Filters/interface/HiggsMassCut.hh"
 #include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
 #include "CMSAnalysis/Modules/interface/HiggsLeptonEfficiency.hh"
 
@@ -43,7 +44,7 @@ using std::make_shared;
 void GenSimPlan::initialize()
 {
     
-    auto& analyzer = getAnalyzer();
+    auto& modules = getModules();
 
     auto deltaR = make_shared<GenSimDeltaRHist>("Delta R", 100, 0, 2);
 
@@ -56,6 +57,7 @@ void GenSimPlan::initialize()
     auto eventDump = make_shared<GenSimEventDumpModule>();
     auto matchMod = make_shared<MatchingModule>();
     auto higgsCut = make_shared<HiggsCut>();
+    auto higgsMassCut = make_shared<HiggsMassCut>();
     
     auto histMod = make_shared<HistogramOutputModule>();
 
@@ -71,21 +73,21 @@ void GenSimPlan::initialize()
     //eventMod->addSelector(dpSelector);
     eventMod->addSelector(hppSelector);
     eventMod->addSelector(hppGenSimSelector);
+    eventMod->addCut(higgsCut);
+    eventMod->addCut(higgsMassCut);
     auto eventHistMod = eventMod->getHistogramModule();
     //auto hppFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::GenSim);
 
-    //eventMod->addCut(higgsCut);
-
-    //analyzer.addFilterModule(hppFilter);
-    analyzer.addProductionModule(metMod);
+    //modules.addFilterModule(hppFilter);
+    modules.addProductionModule(metMod);
     //Changed because EventModule inherits from ProductionModule now
-    analyzer.addProductionModule(eventMod);
-    //analyzer.addAnalysisModule(eventMod);
-    analyzer.addAnalysisModule(eventHistMod);
+    modules.addProductionModule(eventMod);
+    //modules.addAnalysisModule(eventMod);
+    modules.addAnalysisModule(eventHistMod);
 
-	analyzer.addAnalysisModule(hPlusPlusEfficiency);
-    //analyzer.addAnalysisModule(leptonEfficiency);
+	modules.addAnalysisModule(hPlusPlusEfficiency);
+    //modules.addAnalysisModule(leptonEfficiency);
 
-    analyzer.addAnalysisModule(histMod);
-    //analyzer.addAnalysisModule(eventDump);
+    modules.addAnalysisModule(histMod);
+    //modules.addAnalysisModule(eventDump);
 }

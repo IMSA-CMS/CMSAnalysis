@@ -12,8 +12,8 @@
 #include "CMSAnalysis/Analysis/interface/HiggsCutsAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/DYComparisonAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/PlotFormatter.hh"
-#include "CMSAnalysis/Analysis/interface/TableData.hh"
-#include "CMSAnalysis/Analysis/interface/HTMLTable.hh"
+#include "CMSAnalysis/Utility/interface/TableData.hh"
+#include "CMSAnalysis/Utility/interface/HTMLTable.hh"
 #include "CMSAnalysis/Analysis/interface/SimpleAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/SimpleHiggsComparison.hh"
 #include <fstream>
