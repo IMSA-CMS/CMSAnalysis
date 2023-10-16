@@ -187,12 +187,12 @@ CollectionHistParams ParticleType::getNumberHist()
 
 CollectionHistParams ParticleType::getSameSignInvariantMassHist()
 {
-    return CollectionHistParams("Same Sign Invariant Mass", 150, 0, 2000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateSameSignInvariantMass()};});
+    return CollectionHistParams("Same Sign Invariant Mass", 150, 0, 2000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateSameSignInvariantMass(false, true)};});
 }
 
 CollectionHistParams ParticleType::getOppositeSignInvariantMassHist()
 {
-    return CollectionHistParams("Opposite Sign Invariant Mass", 150, 0, 1000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateOppositeSignInvariantMass()};});
+    return CollectionHistParams("Opposite Sign Invariant Mass", 150, 0, 1000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateOppositeSignInvariantMass(true)};});
 }
 
 HistParams ParticleType::getDaughterDeltaRHist()

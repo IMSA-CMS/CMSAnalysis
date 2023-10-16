@@ -45,13 +45,13 @@ bool HiggsDataStripModule::process()
 	{
 		return true;
 	}
-	auto twoLeptons = leptons.chooseParticles(false);
+	auto twoLeptons = leptons.chooseParticles(false, true);
 	ParticleCollection<Particle> particles;
 	particles.addParticle(twoLeptons.first);
 	particles.addParticle(twoLeptons.second);
 	if (twoLeptons.first.isNotNull() && twoLeptons.second.isNotNull())
 	{
-		if (particles.calculateSameSignInvariantMass(false) > cutoff)
+		if (particles.calculateSameSignInvariantMass(false, true) > cutoff)
 		{
 			pt1 = twoLeptons.first.getPt();
 			phi1 = twoLeptons.first.getPhi();

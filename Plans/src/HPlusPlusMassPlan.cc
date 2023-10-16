@@ -34,13 +34,14 @@
 #include "CMSAnalysis/Modules/interface/SignFlipModule.hh"
 #include "CMSAnalysis/Histograms/interface/HistogramPrototype1DGeneral.hh"
 #include "CMSAnalysis/Modules/interface/FilterModule.hh"
+#include "CMSAnalysis/Histograms/interface/HistogramPrototype1DGeneral.hh"
 
 
 using std::make_shared;
 
 void HPlusPlusMassPlan::initialize()
 {
-  auto& analyzer = getAnalyzer();
+  auto& modules = getModules();
 
   auto eventDump = make_shared<EventDumpModule>(true,true);
 
@@ -68,10 +69,10 @@ void HPlusPlusMassPlan::initialize()
   // auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
   // 
   auto genSimSameSignInvMassHist = make_shared<HistogramPrototype1DGeneral>("GenSim Same Sign Invariant Mass", 100, 0, 1000,
-[](const EventInput* input){return std::vector<double>{input -> getParticles(EventInput::RecoLevel::GenSim).calculateSameSignInvariantMass()};});
+[](const EventInput* input){return std::vector<double>{input -> getParticles(EventInput::RecoLevel::GenSim).calculateSameSignInvariantMass(false, true)};});
 
   auto recoSameSignInvMassHist = make_shared<HistogramPrototype1DGeneral>("Reco Same Sign Invariant Mass", 100, 0, 1000,
-  [](const EventInput* input){return std::vector<double>{input -> getParticles(EventInput::RecoLevel::Reco).calculateSameSignInvariantMass()};});
+  [](const EventInput* input){return std::vector<double>{input -> getParticles(EventInput::RecoLevel::Reco).calculateSameSignInvariantMass(false, true)};});
   // auto genSimHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
   // auto recoHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, false, "Reco H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
   // auto genSimHMinusMinusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H-- Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, -9900041);
@@ -111,19 +112,19 @@ void HPlusPlusMassPlan::initialize()
   triggerMod->addTrigger(tripleMuonTrigger);
   triggerMod->addTrigger(mETTrigger);
 
-  //analyzer.addProductionModule(genSimMod);
-  //analyzer.addProductionModule(recoMod);
-  analyzer.addProductionModule(matchMod);
-  // analyzer.addProductionModule(triggerMod); 
-  analyzer.addProductionModule(mETMod);
+  //modules.addProductionModule(genSimMod);
+  //modules.addProductionModule(recoMod);
+  modules.addProductionModule(matchMod);
+  // modules.addProductionModule(triggerMod); 
+  modules.addProductionModule(mETMod);
 
   // Filters
   // 09/12: Add nLeptons filer 
-  analyzer.addFilterModule(make_shared<FilterModule>(nLeptonsFilter));
-  //analyzer.addFilterModule(unusualFinalStateFilter);
+  modules.addFilterModule(make_shared<FilterModule>(nLeptonsFilter));
+  //modules.addFilterModule(unusualFinalStateFilter);
 
-  analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
-  analyzer.addAnalysisModule(signFlip);
-  //analyzer.addAnalysisModule(eventDump);
-  analyzer.addAnalysisModule(leptonEfficiency);
+  modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
+  modules.addAnalysisModule(signFlip);
+  //modules.addAnalysisModule(eventDump);
+  modules.addAnalysisModule(leptonEfficiency);
 }

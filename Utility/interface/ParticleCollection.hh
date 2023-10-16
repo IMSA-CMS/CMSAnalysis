@@ -35,7 +35,8 @@ public:
   ParticleCollection<T> getNegParticles() const;
   double getNumPosParticles() const { return getPosParticles().getNumParticles(); }
   double getNumNegParticles() const { return getNegParticles().getNumParticles(); }
-  double getInvariantMass() const;
+  double getInvariantMass(bool sameType = true) const;
+  double getHighestInvariantMass() const;
   double getLeadingTransverseMomentum() const;
   double getNthHighestPt(int n) const;
   double getLeadingPt() const;
@@ -43,9 +44,9 @@ public:
   bool isBB() const;
   bool isBE() const;
   double calculateAllLeptonInvariantMass() const;
-  double calculateSameSignInvariantMass(bool usingPhi = false) const;
-  std::vector<double> calculateSameSignInvariantMasses(bool usingPhi = false) const;
-  double calculateOppositeSignInvariantMass() const;
+  double calculateSameSignInvariantMass(bool usingPhi, bool sameType) const;
+  std::vector<double> calculateSameSignInvariantMasses(bool usingPhi, bool sameType) const;
+  double calculateOppositeSignInvariantMass(bool sameType) const;
   double calculateRecoveredInvariantMass(int nLeptons, int motherPDGID) const;
   T getLeadingPtLepton() const;
   int getLeptonTypeCount(const ParticleType &leptonType) const;
@@ -59,11 +60,12 @@ public:
   auto begin() const { return cbegin(); }
   auto end() const { return cend(); }
   void sort() { std::sort(begin(), end(), std::greater<T>()); };
-  std::pair<T, T> chooseParticles(bool oppositeSigns) const; // picks particles given if they are opposite signs or not
+  // 1->2  0->1
+  std::pair<T, T> chooseParticles(bool oppositeSigns, bool sameType) const; // picks particles given if they are opposite signs or not, sameType = false does not exclude same-type particles
+  std::pair<T, T> chooseParticles(bool sameType) const;// picks particles with greatest invariant mass
 
 private:
   std::vector<T> particles;
-  std::pair<T, T> chooseParticles() const; // picks particles with greatest invariant mass
   std::pair<T, T> chooseParticlesByPhi(bool oppositeSigns) const; // picks particles by the Phi angle
   bool checkSigns(T particle1, T particle2) const;
   double calculateInvariantMass(T particle1, T particle2) const;
@@ -122,7 +124,21 @@ inline ParticleCollection<T> ParticleCollection<T>::getNegParticles() const
 } // ParticleCollection of just the negatively charged particles
 
 template <typename T>
-inline double ParticleCollection<T>::getInvariantMass() const
+inline double ParticleCollection<T>::getInvariantMass(bool sameType) const
+{
+  auto particlePair = chooseParticles(true, sameType);
+  if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
+  {
+    return calculateInvariantMass(particlePair.first, particlePair.second);
+  }
+  else
+  {
+    return -1;
+  }
+}
+
+template <typename T>
+inline double ParticleCollection<T>::getHighestInvariantMass() const
 {
   auto particlePair = chooseParticles(true);
   if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
@@ -138,7 +154,7 @@ inline double ParticleCollection<T>::getInvariantMass() const
 template <typename T>
 inline double ParticleCollection<T>::getLeadingTransverseMomentum() const
 {
-  auto particlePair = chooseParticles();
+  auto particlePair = chooseParticles(true);
   if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
   {
 
@@ -193,7 +209,7 @@ inline double ParticleCollection<T>::getLeadingPt() const
 template <typename T>
 inline double ParticleCollection<T>::getCollinsSoper() const
 {
-  auto particlePair = chooseParticles();
+  auto particlePair = chooseParticles(true);
 
   // guarantees that the particle has to have a negative charge or the antiparticle has to have a positve charge
   // if both particles have the same sign (i.e. electrons), the situation is solved at the start of calculateCollinsSoper()
@@ -219,7 +235,7 @@ inline double ParticleCollection<T>::getCollinsSoper() const
 template <typename T>
 inline bool ParticleCollection<T>::isBB() const
 {
-  auto particlePair = chooseParticles();
+  auto particlePair = chooseParticles(true);
   if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
   {
     if (particlePair.first.getBarrelState() == Particle::BarrelState::Barrel && particlePair.second.getBarrelState() == Particle::BarrelState::Barrel)
@@ -233,7 +249,7 @@ inline bool ParticleCollection<T>::isBB() const
 template <typename T>
 inline bool ParticleCollection<T>::isBE() const
 {
-  auto particlePair = chooseParticles();
+  auto particlePair = chooseParticles(true);
   if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
   {
     if ((particlePair.first.getBarrelState() == Particle::BarrelState::Barrel && particlePair.second.getBarrelState() == Particle::BarrelState::Endcap) || (particlePair.first.getBarrelState() == Particle::BarrelState::Endcap && particlePair.second.getBarrelState() == Particle::BarrelState::Barrel))
@@ -264,7 +280,7 @@ inline double ParticleCollection<T>::calculateAllLeptonInvariantMass() const
 }
 
 template <typename T>
-inline double ParticleCollection<T>::calculateSameSignInvariantMass(bool usingPhi) const
+inline double ParticleCollection<T>::calculateSameSignInvariantMass(bool usingPhi, bool sameType) const
 {
  // std::cout << "Particle Collection SameSignIM Vector Size:" << particles.size();
   T iPointer = Particle::nullParticle();
@@ -279,7 +295,7 @@ inline double ParticleCollection<T>::calculateSameSignInvariantMass(bool usingPh
   else
   {
     //std::cout << "Line B2";
-    particlePair = chooseParticles(false); // we want same sign particles with highest invariant mass
+    particlePair = chooseParticles(false, sameType); // we want same sign particles with highest invariant mass
   }
   //std::cout << "Line B3";
   if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
@@ -293,13 +309,13 @@ inline double ParticleCollection<T>::calculateSameSignInvariantMass(bool usingPh
 }
 
 template <typename T>
-inline std::vector<double> ParticleCollection<T>::calculateSameSignInvariantMasses(bool usingPhi) const
+inline std::vector<double> ParticleCollection<T>::calculateSameSignInvariantMasses(bool usingPhi, bool sameType) const
 {
   std::vector<double> sameSignInvariantMasses;
 
   if (getPosParticles().getNumParticles() >= 2)
   {
-    double inv = getPosParticles().calculateSameSignInvariantMass(usingPhi);
+    double inv = getPosParticles().calculateSameSignInvariantMass(usingPhi, sameType);
     // std::cout << inv << '\t';
     sameSignInvariantMasses.push_back(inv);
     // sameSignInvariantMasses.push_back(getPosParticles().calculateSameSignInvariantMass(usingPhi));
@@ -312,7 +328,7 @@ inline std::vector<double> ParticleCollection<T>::calculateSameSignInvariantMass
 
   if (getNegParticles().getNumParticles() >= 2)
   {
-    double inv = getNegParticles().calculateSameSignInvariantMass(usingPhi);
+    double inv = getNegParticles().calculateSameSignInvariantMass(usingPhi, sameType);
     // std::cout << inv << '\n';
     sameSignInvariantMasses.push_back(inv);
     // sameSignInvariantMasses.push_back(getNegParticles().calculateSameSignInvariantMass(usingPhi));
@@ -326,9 +342,9 @@ inline std::vector<double> ParticleCollection<T>::calculateSameSignInvariantMass
   return sameSignInvariantMasses;
 }
 template <typename T>
-inline double ParticleCollection<T>::calculateOppositeSignInvariantMass() const
+inline double ParticleCollection<T>::calculateOppositeSignInvariantMass(bool sameType) const
 {
-  auto particlePair = chooseParticles(true); // we want opposite sign particles with highest invariant mass
+  auto particlePair = chooseParticles(true, sameType); // we want opposite sign particles with highest invariant mass
   if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
   {
     return calculateInvariantMass(particlePair.first, particlePair.second);
@@ -422,19 +438,19 @@ inline int ParticleCollection<T>::getLeptonTypeCount(const ParticleType &leptonT
 }
 
 template <typename T>
-inline typename std::pair<T, T> ParticleCollection<T>::chooseParticles() const
+inline typename std::pair<T, T> ParticleCollection<T>::chooseParticles(bool sameType) const
 {
-  auto particlePair = chooseParticles(true); // opposite signs
+  auto particlePair = chooseParticles(true, sameType); // opposite signs
 
   if (!(particlePair.first.isNotNull() && particlePair.second.isNotNull())) // If the particle pair is empty, then test same signs
   {
-    particlePair = chooseParticles(false);
+    particlePair = chooseParticles(false, sameType);
   }
 
   return particlePair;
 }
 template <typename T>
-inline typename std::pair<T, T> ParticleCollection<T>::chooseParticles(bool oppositeSigns) const
+inline typename std::pair<T, T> ParticleCollection<T>::chooseParticles(bool oppositeSigns, bool sameType) const
 {
   double maxInvariantMass = 0;
   T iPointer = Particle::nullParticle();
@@ -444,7 +460,7 @@ inline typename std::pair<T, T> ParticleCollection<T>::chooseParticles(bool oppo
   {
     for (int j = i + 1; j < static_cast<int>(particles.size()); ++j)
     {
-      if (particles[i].getType() == particles[j].getType())
+      if (particles[i].getType() == particles[j].getType() || !sameType)
       {
 
         if (checkSigns(particles[i], particles[j]) == oppositeSigns) // Check if the particle pairs' signs match with what we want
