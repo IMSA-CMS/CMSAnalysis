@@ -160,8 +160,8 @@ void HPlusPlusEfficiency::finalize()
   file1.open(filename1);
   file2.open(filename2);
 
-  table1.makeTable(p1, file1);
-  table2.makeTable(p2, file2);
+  table1.makeTable(p1, std::cout);
+  table2.makeTable(p2, std::cout);
 
   file1.close();
   file2.close();

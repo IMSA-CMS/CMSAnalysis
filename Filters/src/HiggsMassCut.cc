@@ -2,7 +2,7 @@
 
 #include "CMSAnalysis/Utility/interface/Event.hh"
 
-bool HiggsMassCut::checkEventInternal(const Event& event) const
+bool HiggsMassCut::checkEventInternal(const Event& event, const EventInput* input) const
 {
     const auto particles = event.getParticles();
 
