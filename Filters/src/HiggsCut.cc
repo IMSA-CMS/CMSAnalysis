@@ -2,13 +2,12 @@
 
 #include "CMSAnalysis/Utility/interface/Event.hh"
 
-double HiggsCut::electronThreeChannelCut = 350;
-double HiggsCut::muonThreeChannelCut = 350;
+double HiggsCut::electronThreeChannelCut = 250;
+double HiggsCut::muonThreeChannelCut = 250;
 
 bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) const
 {
     const auto particles = event.getParticles();
-
 
     int numLeptons = particles.getLeptonTypeCount(ParticleType::electron()) + particles.getLeptonTypeCount(ParticleType::muon());
     double leptonPt; 
@@ -17,11 +16,6 @@ bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) c
     // Finds the third lepton pt
     if(numLeptons == 3) 
     {
-        // for (auto particle : particles)
-        // {
-        //     std::cout << particle << '\n';
-        // }
-
         if (particles.getNumPosParticles() == 2)
         {
             auto particle = particles.getNegParticles()[0];
@@ -55,7 +49,11 @@ bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) c
         {
             return true;
         }
-    }
 
-    return false;
+        return false;
+    } 
+    else
+    {
+        return true;
+    }
 }
