@@ -209,6 +209,8 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
             continue;
         }
 
+
+        // std::cout << "Loading electron from NanoAOD\n";
         // Lorentz four-vector
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("elec_pt", i),
@@ -216,11 +218,13 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         getArrayElement<Float_t>("elec_dxy", i),
         getArrayElement<Float_t>("elec_dz", i),
         charge, ParticleType::electron(), fit);
+        // std::cout << "NanoAOD: " << getArrayElement<Bool_t>("elec_cutBasedHEEP", i) << '\n';
         particle.addInfo("CutBasedHEEP", getArrayElement<Bool_t>("elec_cutBasedHEEP", i));
         particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i));
         // particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
         // particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
         recoParticles.addParticle(particle);
+        // std::cout << "Particle: " << particle.getInfo("CutBasedHEEP") << '\n';
     }
 
     for (UInt_t i = 0; i < getVariable<UInt_t>("muon_size"); i++)
@@ -241,6 +245,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
             continue;
         }
 
+        // std::cout << "Loading muon from NanoAOD\n";
         // Lorentz four-vector
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("muon_pt", i),
@@ -257,6 +262,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
     {
         Particle::SelectionFit fit = Particle::SelectionFit::Loose;
 
+        // std::cout << "Loading photon from NanoAOD\n";
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("photon_pt", i),
         getArrayElement<Float_t>("photon_eta", i), getArrayElement<Float_t>("photon_phi", i), 0)),
