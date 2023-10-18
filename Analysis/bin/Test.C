@@ -77,4 +77,5 @@ void Test() {
         background->Add(backgroundHist);
     }    
     background->Draw("HIST");
+    //data->Draw("HIST");
 }
