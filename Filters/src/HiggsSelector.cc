@@ -18,6 +18,7 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
 		{
             auto lepton = Lepton(particle);
             if(lepton.isLoose()
+                && particle.getPt() > 5
                 && particle.getInfo("CutBasedHEEP")
             )
             {
@@ -28,6 +29,7 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
         {
             auto lepton = Lepton(particle);
             if (lepton.isLoose()  
+                && particle.getPt() > 5
                 && particle.getInfo("Isolation") < 0.05
                 && lepton.getDXY() < 0.025
                 && lepton.getDZ() < 0.05
