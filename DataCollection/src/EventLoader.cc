@@ -58,14 +58,16 @@ std::vector<std::string> EventLoader::fetchRootFiles(const std::string& configFi
     std::ifstream textFile(configFile); 
     std::string line;
     getline(textFile, line);
-    if(line.substr(0,1) == "/") {
+    if (line.substr(0,1) == "/") 
+    {
       rootFiles.push_back("root://cmsxrootd.fnal.gov//" + line);
-      while(getline(textFile, line)) {
+      while (getline(textFile, line)) 
+      {
         rootFiles.push_back("root://cmsxrootd.fnal.gov//" + line);
       }
-      textFile.close();
     }
-    else {
+    else 
+    {
       auto fileparams = dictionary.readFile(configFile);
       for (auto &filepar : fileparams)
       {
