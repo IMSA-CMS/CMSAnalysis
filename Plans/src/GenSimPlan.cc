@@ -71,7 +71,7 @@ void GenSimPlan::initialize()
     //eventMod->addSelector(dpSelector);
     eventMod->addSelector(hppSelector);
     eventMod->addSelector(hppGenSimSelector);
-    eventMod->addCut(higgsCut);
+    // eventMod->addCut(higgsCut);
     auto eventHistMod = eventMod->getHistogramModule();
     //auto hppFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::GenSim);
 

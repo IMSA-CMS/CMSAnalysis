@@ -1,0 +1,215 @@
+/uscms/homes/i/ichen2/analysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/textfiles/ParticleData.txt has been loaded properly!
+Reading input file DY50Run2.txt
+Drell-Yan
+Name of file list: /uscms/homes/i/ichen2/analysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/textfiles/Drell-Yan/Drell-Yan_Format_NanoAOD_MassCut_50-inf_Period_2018_Run_2.txt
+# of root files: 204
+Finished checking module dependencies
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/230000/7B930101-EB91-4F4E-9B90-0861460DBD94.root
+File contains 832249 events
+Number of events in file: 832249
+Processed 832249 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/230000/BF8F0CF8-4DD5-904E-AD60-2E425E19EC6F.root
+File contains 850585 events
+Number of events in file: 850585
+Processed 850585 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/230000/85999D7A-3836-6446-AED2-136D6FC874BA.root
+File contains 817814 events
+Number of events in file: 817814
+Processed 817814 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/230000/1A59D67A-325A-E742-BFFE-2FE5F69EB01B.root
+File contains 59430 events
+Number of events in file: 59430
+Processed 59430 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/2500000/9C45DDF3-EEB4-864E-81BB-8F6D61F957D2.root
+File contains 24914 events
+Number of events in file: 24914
+Processed 24914 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/40000/F876F630-2286-684B-81E3-A2D6DF65DC07.root
+File contains 232423 events
+Number of events in file: 232423
+Processed 232423 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/40000/C040F82F-D473-0845-BA41-2E3E1CD53756.root
+File contains 792411 events
+Number of events in file: 792411
+Processed 792411 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/40000/B85DEDF9-44AA-A34E-B679-332589784E73.root
+File contains 83574 events
+Number of events in file: 83574
+Processed 83574 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/250000/2F466C29-CA04-B74D-9563-BF7FC1A6FD5D.root
+File contains 32876 events
+Number of events in file: 32876
+Processed 32876 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/250000/972D1B10-3E68-FF4D-9E1F-0095B3F223A8.root
+File contains 852022 events
+Number of events in file: 852022
+Processed 852022 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/250000/7626A99B-CD6D-7B40-A0C8-DB525EC989BB.root
+File contains 823428 events
+Number of events in file: 823428
+Processed 823428 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/250000/309DA45C-5CC6-CD47-8639-72EDBC60D1EB.root
+File contains 914929 events
+Number of events in file: 914929
+Processed 914929 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/250000/64D4AC34-BD99-B748-BE5A-4EF45AEB61D0.root
+File contains 221638 events
+Number of events in file: 221638
+Processed 221638 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/40000/D96A489E-58B6-4745-B3C3-C65750EE1411.root
+File contains 828428 events
+Number of events in file: 828428
+Processed 828428 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/40000/916F7D7B-FDCD-EA43-BDCE-A987F0C7A563.root
+File contains 996739 events
+Number of events in file: 996739
+Processed 996739 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/40000/4D777E19-4F7A-DA40-B5ED-9796010688F9.root
+File contains 1147642 events
+Number of events in file: 1147642
+Processed 1147642 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/40000/9933D9C1-8F76-244A-A8DF-0B6640443A44.root
+File contains 1277602 events
+Number of events in file: 1277602
+Processed 1277602 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/40000/AF3A157E-7915-0E49-8A0B-743C3E297FE4.root
+File contains 525469 events
+Number of events in file: 525469
+Processed 525469 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/230000/1A909DE6-CA08-434B-BDBB-B648B95BEFDF.root
+File contains 83372 events
+Number of events in file: 83372
+Processed 83372 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/230000/DD127F84-3949-4F4D-8C44-F6BB75080565.root
+File contains 814929 events
+Number of events in file: 814929
+Processed 814929 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/230000/C560EE88-D5D9-B14F-B8B0-435F67395BCD.root
+File contains 915669 events
+Number of events in file: 915669
+Processed 915669 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/230000/2E019199-EAF7-8049-8CBB-0E4DC7D42614.root
+File contains 896856 events
+Number of events in file: 896856
+Processed 896856 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/230000/79DBF4D4-C66C-1047-93BE-5B7AD53C2445.root
+File contains 886654 events
+Number of events in file: 886654
+Processed 886654 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/230000/FE385FBC-3376-1644-99D6-C9E8000FA488.root
+File contains 962102 events
+Number of events in file: 962102
+Processed 962102 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/230000/E0A7C66D-95B9-5746-90D5-F00DC8AF742F.root
+File contains 831238 events
+Number of events in file: 831238
+Processed 831238 Events
+number of root files: 25
+reeuu: 8
+reeuu efficiency : 4.78899e-07
+reeee: 41
+reeee efficiency : 2.45436e-06
+none->eeee: 41
+none->eeee efficiency : 2.45436e-06
+none->euuu: 413
+none->euuu efficiency : 2.47231e-05
+ruue: 1114
+ruue efficiency : 6.66866e-05
+none->uue: 1114
+none->uue efficiency : 6.66866e-05
+reuuu: 413
+reuuu efficiency : 2.47231e-05
+reueu: 668
+reueu efficiency : 3.9988e-05
+rnone: 1.18539e+07
+rnone efficiency : 0.709604
+none->eeuu: 8
+none->eeuu efficiency : 4.78899e-07
+re u: 103279
+re u efficiency : 0.00618252
+ruuu: 59945
+ruuu efficiency : 0.00358845
+ru u: 2.67053e+06
+ru u efficiency : 0.159864
+none->u u: 2.67053e+06
+none->u u efficiency : 0.159864
+none->e e: 1.84248e+06
+none->e e efficiency : 0.110295
+none->ee: 32486
+none->ee efficiency : 0.00194469
+events: 1.6705e+07
+events efficiency : 1
+none->uuu: 59945
+none->uuu efficiency : 0.00358845
+none->none: 1.18539e+07
+none->none efficiency : 0.709604
+reue: 35905
+reue efficiency : 0.00214936
+none: 1.6705e+07
+none efficiency : 1
+ree: 32486
+ree efficiency : 0.00194469
+reeeu: 228
+reeeu efficiency : 1.36486e-05
+re e: 1.84248e+06
+re e efficiency : 0.110295
+reu: 35534
+reu efficiency : 0.00212715
+none->euu: 24913
+none->euu efficiency : 0.00149135
+none->eeeu: 228
+none->eeeu efficiency : 1.36486e-05
+none->uu: 26533
+none->uu efficiency : 0.00158833
+ruu: 26533
+ruu efficiency : 0.00158833
+reuu: 24913
+reuu efficiency : 0.00149135
+none->e u: 103279
+none->e u efficiency : 0.00618252
+none->uuuu: 1063
+none->uuuu efficiency : 6.36337e-05
+none->eue: 35905
+none->eue efficiency : 0.00214936
+none->eee: 15282
+none->eee efficiency : 0.000914816
+none->eu: 35534
+none->eu efficiency : 0.00212715
+ruuuu: 1063
+ruuuu efficiency : 6.36337e-05
+reee: 15282
+reee efficiency : 0.000914816
+none->eeu: 629
+none->eeu efficiency : 3.76534e-05
+reeu: 629
+reeu efficiency : 3.76534e-05
+none->eueu: 668
+none->eueu efficiency : 3.9988e-05
+
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+-----
+0.000002,0.000014,0.000000,0.000040,0.000025,0.000064,0.000915,0.000038,0.002149,0.001491,0.000067,0.003588,0.001945,0.110295,0.002127,0.006183,0.001588,0.159864,0.709604
+
+Processing complete!
+Output written to higgsVertexCuts.root
+Processing time: 5196.34s
