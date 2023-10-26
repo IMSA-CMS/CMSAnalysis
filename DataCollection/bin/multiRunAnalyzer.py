@@ -41,10 +41,12 @@ if __name__ == '__main__':
 
 	higgsSignal = ("Higgs1400.txt", )
 
-	higgsData = ("Data/SingleMuonRun2017B-UL2017_MiniAODv2-v1.txt", )
+	#higgsData = ("Data/SingleMuonRun2017B-UL2017_MiniAODv2-v1.txt", "Data/SingleElectronRun2017B-UL2017_MiniAODv2-v1.txt")
+	higgsData = ("H++toLL/H++toLL_Format_NanoAOD_Lepton_All_Mass_1400_Period_2017_Run_2.txt", )
 
 	# List of jobs to run on from those above
 	jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData]
+	
 	# list of processes
 	processes = []
 	for job in jobsList:
