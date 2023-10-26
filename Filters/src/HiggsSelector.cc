@@ -17,9 +17,8 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
         if (particle.getType() == ParticleType::electron()) 
 		{
             auto lepton = Lepton(particle);
-            std::cout << "Particle type: " << particle.getType().getName() << '\n';
             if(lepton.isLoose()
-                && particle.getPt() > 5 
+                && particle.getPt() > 5
                 && particle.getInfo("CutBasedHEEP")
             )
             {
@@ -30,10 +29,10 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
         {
             auto lepton = Lepton(particle);
             if (lepton.isLoose()  
-                && particle.getPt() > 5 
-                && particle.getInfo("Isolation") < 0.025
-                && particle.getDXY() < 0.025
-                && particle.getDZ() < 0.0625
+                && particle.getPt() > 5
+                && particle.getInfo("Isolation") < 0.05
+                && lepton.getDXY() < 0.025
+                && lepton.getDZ() < 0.05
             )
             {
                 event.addMuon(particle);
