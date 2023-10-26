@@ -26,7 +26,9 @@ void SuperPlot()
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation)");
 	//Change the string for the channel you want, if using one channel. Otherwise use the loop.
 	double massTarget = 1400;
-	std::shared_ptr<Channel> leptonBackgrounds = higgsAnalysis->getChannel("eeee" + std::to_string((int) massTarget));
+	
+	//std::shared_ptr<Channel> leptonBackgrounds = higgsAnalysis->getChannel("eeee" + std::to_string((int) massTarget));
+	
 	//SINGLE CHANNEL CODE HERE
 	// for(std::string processName : leptonBackgrounds->getNames()) {
 	// 	//std::cout << processName << std::endl;
@@ -60,7 +62,7 @@ void SuperPlot()
 	}
 
 	//This is for making single hist graphs. Just change the process name to the one you want. Not all processes or qualities allow 2D hists.
-	std::shared_ptr<Process> process = leptonBackgrounds->findProcess("Higgs Data");
+	//std::shared_ptr<Process> process = leptonBackgrounds->findProcess("Higgs Data");
 
 	//Write axis titles here
 	TString xAxisTitle = "OSDL [GeV]";
@@ -78,5 +80,5 @@ void SuperPlot()
 	
 
 	//Uncomment to save a png picture in your bin folder
-	//canvas->SaveAs("SuperPlot.png");
+	canvas->SaveAs("SuperPlot.png");
 }
