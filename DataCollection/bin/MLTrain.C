@@ -17,6 +17,9 @@
 #include "TMVA/Tools.h"
 #include "TMVA/TMVAGui.h"
 #include "TMVA/IMethod.h"
+#include "CMSAnalysis/Modules/interface/LeptonJetMLStripModule.hh"
+
+//caete mlstrpi, and use addto dataloader
 
 // To predict if a lepton jet is real, I am using a combination of CUDA-accelerated
 // and Multi-core accelerated DNN's. I am using all of the data reduction methods.
@@ -167,15 +170,9 @@ bool returnState(TString &myMethodList)
 
     // change var1 to index and var2 to pt
     // dataloader->AddVariable("jetIndex", "Jet Index", "", 'F');
-    dataloader->AddVariable("leadingPt", "Leading Lepton Transverse Momentum", "", 'F');
-    dataloader->AddVariable("nParticles", "Number of Particles", "", 'F');
-    dataloader->AddVariable("eta", "Pseudorapidity", "", 'F');
-    //dataloader->AddVariable("phi", "Azimuthal Angle", "", 'F'); //recompile
-    // dataloader->AddVariable("mass", "Mass", "", 'F');
-    dataloader->AddVariable("deltaR", "Jet Width", "", 'F');
-    dataloader->AddVariable("sumPt", "Total Transverse Momentum", "", 'F');
-    dataloader->AddVariable("numMuons", "Number of Muons", "", 'F');
-    dataloader->AddVariable("deltaPt", "Leading Change in Transverse Momentum", "", 'F'); // Difference in transverse momentum between leading and runner up highest transverse momentum particles.
+    LeptonJetMLStripModule leptonMod(nullptr); 
+    leptonmod.addVariablesToDataLoader(dataloader);
+    // Difference in transverse momentum between leading and runner up highest transverse momentum particles.
     //  dataloader->AddSpectator("spec1 := jetIndex*2", "Spectator 1", "units", 'F');
 
     // global event weights per tree (see below for setting event-wise weights)
@@ -304,7 +301,7 @@ bool returnState(TString &myMethodList)
     return false;
 }
 
-void PredictJet() // int argc, char** argv)
+void MLTrain() // int argc, char** argv)
 {
     // Select methods (don't look at this code - not of interest)
     TString methodList;
