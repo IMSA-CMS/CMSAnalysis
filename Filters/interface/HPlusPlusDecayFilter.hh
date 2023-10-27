@@ -10,10 +10,11 @@ class HPlusPlusDecayFilter : public Filter
 {
 public:
   HPlusPlusDecayFilter(EventInput::RecoLevel isGenSim);
-  std::string getState(ParticleCollection<Particle> genSim, ParticleCollection<Particle> reco);
+  std::string getState(const EventInput* inputMod) const;
 
 protected:
   EventInput::RecoLevel typeGenSim;
+  static int getIndex(std::string* arr, std::string elem, int size);
   virtual std::string getFilterString(const EventInput* inputMod) const override; 
   };
 

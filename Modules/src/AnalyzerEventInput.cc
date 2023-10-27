@@ -92,9 +92,10 @@ std::vector<bool> AnalyzerEventInput::getTriggerResults(std::string subProcess) 
 
 std::vector<std::string> AnalyzerEventInput::getTriggerNames(std::string subProcess) const
 {
+    
     return (*eventInterface)->getTriggerNames(subProcess);
 }
-
+//hmm
 bool AnalyzerEventInput::checkTrigger(std::string triggerName, std::string subProcess) const
 {
     return (*eventInterface)->checkTrigger(triggerName, subProcess);

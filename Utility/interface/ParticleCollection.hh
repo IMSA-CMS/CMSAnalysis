@@ -27,7 +27,7 @@ public:
   template <typename U>
   ParticleCollection(const ParticleCollection<U>& pc1);
   ParticleCollection(std::vector<T> collectionVector);
-  int size(){return particles.size();}
+  int size() const {return particles.size();}
   void addParticle(T particle) { particles.push_back(particle); }
   const std::vector<T> &getParticles() const { return particles; }
   double getNumParticles() const { return particles.size(); }
@@ -36,6 +36,7 @@ public:
   double getNumPosParticles() const { return getPosParticles().getNumParticles(); }
   double getNumNegParticles() const { return getNegParticles().getNumParticles(); }
   double getInvariantMass() const;
+  double getHighestInvariantMass() const;
   double getLeadingTransverseMomentum() const;
   double getNthHighestPt(int n) const;
   double getLeadingPt() const;
@@ -60,10 +61,10 @@ public:
   auto end() const { return cend(); }
   void sort() { std::sort(begin(), end(), std::greater<T>()); };
   std::pair<T, T> chooseParticles(bool oppositeSigns) const; // picks particles given if they are opposite signs or not
+  std::pair<T, T> chooseParticles() const;// picks particles with greatest invariant mass
 
 private:
   std::vector<T> particles;
-  std::pair<T, T> chooseParticles() const; // picks particles with greatest invariant mass
   std::pair<T, T> chooseParticlesByPhi(bool oppositeSigns) const; // picks particles by the Phi angle
   bool checkSigns(T particle1, T particle2) const;
   double calculateInvariantMass(T particle1, T particle2) const;
@@ -125,6 +126,20 @@ template <typename T>
 inline double ParticleCollection<T>::getInvariantMass() const
 {
   auto particlePair = chooseParticles(true);
+  if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
+  {
+    return calculateInvariantMass(particlePair.first, particlePair.second);
+  }
+  else
+  {
+    return -1;
+  }
+}
+
+template <typename T>
+inline double ParticleCollection<T>::getHighestInvariantMass() const
+{
+  auto particlePair = chooseParticles();
   if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
   {
     return calculateInvariantMass(particlePair.first, particlePair.second);
@@ -433,6 +448,7 @@ inline typename std::pair<T, T> ParticleCollection<T>::chooseParticles() const
 
   return particlePair;
 }
+
 template <typename T>
 inline typename std::pair<T, T> ParticleCollection<T>::chooseParticles(bool oppositeSigns) const
 {
@@ -444,17 +460,13 @@ inline typename std::pair<T, T> ParticleCollection<T>::chooseParticles(bool oppo
   {
     for (int j = i + 1; j < static_cast<int>(particles.size()); ++j)
     {
-      if (particles[i].getType() == particles[j].getType())
+      if (checkSigns(particles[i], particles[j]) == oppositeSigns) // Check if the particle pairs' signs match with what we want
       {
-
-        if (checkSigns(particles[i], particles[j]) == oppositeSigns) // Check if the particle pairs' signs match with what we want
+        if (calculateInvariantMass(particles[i], particles[j]) > maxInvariantMass)
         {
-          if (calculateInvariantMass(particles[i], particles[j]) > maxInvariantMass)
-          {
-            maxInvariantMass = calculateInvariantMass(particles[i], particles[j]);
-            iPointer = particles[i];
-            jPointer = particles[j];
-          }
+          maxInvariantMass = calculateInvariantMass(particles[i], particles[j]);
+          iPointer = particles[i];
+          jPointer = particles[j];
         }
       }
     }

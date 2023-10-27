@@ -5,6 +5,7 @@
 #include "CMSAnalysis/EventFiles/interface/NanoAODEventFile.hh"
 #include "CMSAnalysis/EventFiles/interface/StrippedEventFile.hh"
 #include "CMSAnalysis/EventFiles/interface/EventFile.hh"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "TFile.h"
 #include "TTree.h"
 #include <iostream>
@@ -38,6 +39,55 @@ std::shared_ptr<EventFile> EventLoader::changeFileFormat(TFile* ifile)
     {
         throw std::runtime_error ("File format not recognized");
     }
+}
+
+
+std::vector<std::string> EventLoader::fetchRootFiles(const std::string& configFile) 
+{
+  ProcessDictionary dictionary;
+  dictionary.loadProcesses(Utility::getFullPath("processes.txt"));
+  auto substringFound = configFile.find(".root");
+  bool isLocalFile = substringFound != std::string::npos;
+  std::vector<std::string> rootFiles;
+  if (isLocalFile)
+  {
+    rootFiles.push_back(configFile);
+  }
+  else
+  {
+    std::ifstream textFile(configFile); 
+    std::string line;
+    getline(textFile, line);
+    if (line.substr(0,1) == "/") 
+    {
+      rootFiles.push_back("root://cmsxrootd.fnal.gov//" + line);
+      while (getline(textFile, line)) 
+      {
+        rootFiles.push_back("root://cmsxrootd.fnal.gov//" + line);
+      }
+    }
+    else 
+    {
+      auto fileparams = dictionary.readFile(configFile);
+      for (auto &filepar : fileparams)
+      {
+        // Get a list of Root files for each filpar object
+        auto tempFiles = filepar.getFileList();
+        rootFiles.insert(rootFiles.end(), tempFiles.begin(), tempFiles.end());
+      }
+      for (auto &fileName : rootFiles)
+      {
+        // Adds prefix necessary to read remote files
+        const std::string eossrc = "root://cmsxrootd.fnal.gov//";
+        fileName = eossrc + fileName;
+      }
+    }
+  }
+  std::cout << "# of root files: " << rootFiles.size() << std::endl;
+  // for(auto file : rootFiles) {
+  //   std::cout << file << std::endl;
+  // }
+  return rootFiles;
 }
 
 void EventLoader::run(int outputEvery, int nFiles, int maxEvents)
@@ -80,7 +130,7 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents)
         break;
       }
       ++count; 
-      analyzer->processOneEvent(&eventInterface); //EventInterface will loop through all event files in analyzer
+      modules->processOneEvent(&eventInterface); //EventInterface will loop through all event files in analyzer
       file->nextEvent();
       if (outputEvery != 0 && count%outputEvery == 0)
       {

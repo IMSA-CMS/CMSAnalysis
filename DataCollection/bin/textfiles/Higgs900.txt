@@ -1,6 +1,6 @@
 H++toLL
-Mass:	900
-Run:	2
+Format:	NanoAOD
 Lepton:	All
-Format:	MiniAOD
+Mass:	1000
 Period:	2018
+Run:	2

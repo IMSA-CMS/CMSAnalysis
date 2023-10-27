@@ -483,8 +483,7 @@ void RecoGenSimComparisonModule::fakePhotonComparison(const ParticleCollection<P
         std::ostream& output)
 {
     int recoEventElement = 1;
-    int genEventElement = 1;
-    bool fakePhoton = false;
+    
     bool highInvMass = false;
     auto recoType = ParticleType::photon();
     for(auto &recoPart : recoParts)
