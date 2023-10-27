@@ -12,5 +12,6 @@
 <use   name="pythia8"/>
 <environment>
   <bin   file="runAnalyzer.cc"/>
+  <bin  file="getFileList.cc"/>
 <use name="CMSAnalysis/DataCollection"/>
 </environment>
