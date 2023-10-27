@@ -1,12 +1,12 @@
 #include "CMSAnalysis/Utility/interface/LeptonJet.hh"
 
 LeptonJet::LeptonJet():
-Particle(std::make_shared<LeptonJetImplementation>()){
+RecoParticle(std::make_shared<LeptonJetImplementation>()){
   
 }
 
 LeptonJet::LeptonJet (const Particle& particle):
-Particle(particle){}
+RecoParticle(particle){}
 
 
 

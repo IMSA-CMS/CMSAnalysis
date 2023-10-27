@@ -9,42 +9,58 @@
 #include "CMSAnalysis/Utility/interface/Electron.hh"
 #include "CMSAnalysis/Utility/interface/Muon.hh"
 #include "CMSAnalysis/Utility/interface/Jet.hh"
+#include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
 #include "CMSAnalysis/Filters/interface/Selector.hh"
 #include "CMSAnalysis/Filters/interface/Cut.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 
 
 Event::Event()
 {
-
 }
 
-ParticleCollection<Particle> Event::getParticles() const
+ParticleCollection<Particle> Event::getParticles(EventInput::RecoLevel level) const
 {
     ParticleCollection<Particle> particleList;
    
-    for (const auto& p: muons.getParticles())
+    if (level == EventInput::RecoLevel::Reco)
     {
-        particleList.addParticle(Particle(p));
-    }
-    for (const auto& p: electrons.getParticles())
-    {
-        particleList.addParticle(Particle(p));
-    }
-    for (const auto& p: photons.getParticles())
-    {
-        particleList.addParticle(Particle(p));
-    }
-    for (const auto& p: jets.getParticles())
-    {
-        particleList.addParticle(Particle(p));
-    }
-    for (auto& [key,value] : specialObjects)
-    {
-        for (const auto& p: value.getParticles())
+        for (const auto& p: electrons.getParticles())
         {
-           particleList.addParticle(Particle(p)); 
+            particleList.addParticle(Particle(p));
+        }
+        for (const auto& p: muons.getParticles())
+        {
+            particleList.addParticle(Particle(p));
+        }
+        for (const auto& p: photons.getParticles())
+        {
+            particleList.addParticle(Particle(p));
+        }
+        for (const auto& p: jets.getParticles())
+        {
+            particleList.addParticle(Particle(p));
+        }
+        for (const auto& p: jets.getParticles())
+        {
+            particleList.addParticle(Particle(p));
+        }
+        for (auto& [key,value] : specialObjects)
+        {
+            for (const auto& p: value.getParticles())
+            {
+            particleList.addParticle(Particle(p)); 
+            }
         }
     }
+    else if (level == EventInput::RecoLevel::GenSim)
+    {
+        for (const auto& p: genSimParticles.getParticles())
+        {
+            particleList.addParticle(Particle(p));
+        }
+    }
+
     return particleList;
 }
 
@@ -70,6 +86,12 @@ void Event::addJet(Jet jet)
 {
     jets.addParticle(jet); 
     jets.sort();
+}
+
+void Event::addGenSimParticle(GenSimParticle particle) 
+{
+    genSimParticles.addParticle(particle);
+    genSimParticles.sort();
 }
 
 void Event::addSpecialObject(std::string key, Particle obj) 
@@ -107,6 +129,7 @@ void Event::clear()
     muons = ParticleCollection<Muon>();
     photons = ParticleCollection<Photon>();
     jets = ParticleCollection<Jet>();
+    genSimParticles = ParticleCollection<GenSimParticle>();
     specialObjects.clear();
     MET = 0.0f;
 }

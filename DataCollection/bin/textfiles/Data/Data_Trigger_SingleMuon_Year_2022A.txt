@@ -1,0 +1,6 @@
+/store/data/Run2022A/SingleMuon/NANOAOD/22Sep2023-v1/40000/ac0d4fcd-39da-4537-bfa9-d12453e9388b.root
+/store/data/Run2022A/SingleMuon/NANOAOD/22Sep2023-v1/40000/f8a03be0-cbbf-4f3a-9bc0-6c4d5a339df6.root
+/store/data/Run2022A/SingleMuon/NANOAOD/22Sep2023-v1/40000/fbf9a8ba-e56c-4239-8cd4-c90d15c2dbd9.root
+/store/data/Run2022A/SingleMuon/NANOAOD/22Sep2023-v1/40000/1183d49a-a938-4732-8b2e-6f07f2a88385.root
+/store/data/Run2022A/SingleMuon/NANOAOD/22Sep2023-v1/40000/bf493c5a-fad7-4de4-9967-8d397b8b49c8.root
+/store/data/Run2022A/SingleMuon/NANOAOD/22Sep2023-v1/40000/7de6e8b9-216d-4824-b4ee-680b8035037d.root
