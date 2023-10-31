@@ -46,7 +46,21 @@ bool NanoAODEventFile::checkTrigger(std::string triggerName, std::string subProc
     auto trigger = triggers.find(triggerName);
     if (trigger == triggers.end()) 
     {
+       // return false;
+       if(!tree->GetBranch(triggerName.c_str()))
+       {
+        std::cout << triggerName << " doesn't exist/n";
         return false;
+       }
+        auto currentEntry = treeReader.GetCurrentEntry();
+        treeReader.Restart();
+        TTreeReaderValue<Bool_t> intermediate(treeReader, triggerName.c_str());
+        trigger = triggers.emplace(triggerName, intermediate).first;
+        std::cout << triggerName <<"\n";
+        treeReader.SetTree(tree);
+        treeReader.SetEntry(currentEntry-1);
+        treeReader.Next();
+        // call Restart() which calls next but goes back to first entry, then we go to SetEntry again then treeReader.Next again, do this after setTree
     }
     return *(trigger->second);
      
@@ -116,25 +130,6 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
             variables.emplace(var->getName(), var->makeReader(treeReader));
         }
     }
-
-    //initializing triggers from header file
-    std::ifstream triggerNameFile("betterValidTriggers.txt");
-
-    if(triggerNameFile)
-    {
-        std::string nameoftrigger;
-
-        while(getline(triggerNameFile, nameoftrigger))
-        {
-            std::cout << nameoftrigger << "Does this work?" << "\n";
-            if(tree->GetBranch(nameoftrigger.c_str()))
-            {
-                TTreeReaderValue<Bool_t> intermediate(treeReader, nameoftrigger.c_str());
-                triggers.emplace(nameoftrigger, intermediate);
-                std::cout << nameoftrigger <<"\n";
-            }
-        }
-    }    
     treeReader.SetTree(tree);
     setEventCount(1);
     treeReader.Next(); 
