@@ -61,34 +61,52 @@ private:
   std::vector<std::string> passedTriggers;
   const std::map<EnumTriggers, std::vector<std::string>> triggerEnumNameMap = {
     { EnumTriggers::singleMuonTriggers, {
+        
         "HLT_IsoMu24"
+        //"HLT_IsoMu27_MET90"
+        //"HLT_Mu8",
+        //"HLT_Mu8_TrkIsoVVL",
+        // "HLT_Mu12",
+        // "HLT_Mu15",
+        // "HLT_Mu17",
+        // "HLT_Mu19",
+        // "HLT_Mu20",
+        //"HLT_L1SingleMu18"
+        
          } },
     { EnumTriggers::muonElectronTriggers, {
       // do not delete these, add in the right version numbers (from new data spreadsheet)
       // new trigger
         
-        "HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ",
-        "HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v6",
-        "HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
-        "HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v5",
-        "HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v8",
-        "HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v13",
-        "HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v15"
+        // "HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ",
+        // "HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v6",
+        // "HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",
+        // "HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v5",
+        // "HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v8",
+        // "HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v13",
+        // "HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v15"
     } },
     { EnumTriggers::doubleMuonTriggers, {
-        "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v7",
-        "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v9",
-        "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v8",
-        "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v14"
+        // "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v7",
+        // "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v9",
+        // "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v8",
+        // "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v14"
+        //"HLT_DoubleTrkMu_16_6_NoFiltersNoVtx"
+        //"HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ"
+        "HLT_Mu37_TkMu27"
+        //"HLT_DoubleL2Mu50"
         } },
     { EnumTriggers::singleElectronTriggers, {
-        "HLT_Ele27_WPTight_Gsf"
+        // "HLT_Ele27_WPTight_Gsf"
+        //"HLT_TripleMu_12_10_5"
+        "HLT_TripleMu_10_5_5_DZ"
+        //"HLT_TripleMu_5_3_3_Mass3p8_DZ"
          } },
 
     { EnumTriggers::doubleElectronTriggers, {
-        "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_v12",
-        "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_v11",
-        "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_v19",
+        // "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_v12",
+        // "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_v11",
+        // "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_v19",
         ""} },
     { EnumTriggers::isoSingleMuonTriggers, {
         "",
