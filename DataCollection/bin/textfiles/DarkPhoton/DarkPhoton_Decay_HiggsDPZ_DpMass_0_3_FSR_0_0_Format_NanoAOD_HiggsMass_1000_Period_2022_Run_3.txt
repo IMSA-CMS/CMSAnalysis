@@ -1,0 +1,11 @@
+/store/mc/Run3Summer22MiniAODv3/HToZandDarkPhoton_HMass-1000_DPMass-0p3_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_v12-v2/2560000/fc2e1b44-fffe-46db-8ab5-e9c3604d804f.root
+/store/mc/Run3Summer22MiniAODv3/HToZandDarkPhoton_HMass-1000_DPMass-0p3_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_v12-v2/2560000/b7d9f0e9-2894-47a5-8b92-3ebc8a9f6277.root
+/store/mc/Run3Summer22MiniAODv3/HToZandDarkPhoton_HMass-1000_DPMass-0p3_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_v12-v2/2560000/fe05b9da-b54e-48c2-842e-78c51ebafd6a.root
+/store/mc/Run3Summer22MiniAODv3/HToZandDarkPhoton_HMass-1000_DPMass-0p3_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_v12-v2/2560000/0e11278f-30ee-4aa9-a78a-ec3800b0f42b.root
+/store/mc/Run3Summer22MiniAODv3/HToZandDarkPhoton_HMass-1000_DPMass-0p3_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_v12-v2/2560000/9799e8bb-6eb0-4d3a-8d0b-976fb49ff7ea.root
+/store/mc/Run3Summer22MiniAODv3/HToZandDarkPhoton_HMass-1000_DPMass-0p3_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_v12-v2/2560000/8530330a-58cf-4389-96d1-57db338a50b8.root
+/store/mc/Run3Summer22MiniAODv3/HToZandDarkPhoton_HMass-1000_DPMass-0p3_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_v12-v2/2560000/e5e2ca16-e9a1-460f-a258-619ff2b9bc65.root
+/store/mc/Run3Summer22MiniAODv3/HToZandDarkPhoton_HMass-1000_DPMass-0p3_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_v12-v2/2560000/6decd454-6edd-4441-bef0-937ae717308a.root
+/store/mc/Run3Summer22MiniAODv3/HToZandDarkPhoton_HMass-1000_DPMass-0p3_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_v12-v2/2560000/76dcebf0-53ef-415b-8540-5d35e25e4f00.root
+/store/mc/Run3Summer22MiniAODv3/HToZandDarkPhoton_HMass-1000_DPMass-0p3_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_v12-v2/2560000/466df474-3a91-4472-9ef5-4bcf5a35d702.root
+/store/mc/Run3Summer22MiniAODv3/HToZandDarkPhoton_HMass-1000_DPMass-0p3_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_v12-v2/70000/e417fa78-e372-4f77-a722-9b2d991f3a95.root

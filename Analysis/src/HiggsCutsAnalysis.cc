@@ -12,6 +12,8 @@
 #include <memory>	
 #include <iostream>
 #include <vector>
+#include "TList.h"
+#include "TH1.h"
 
 HiggsCutsAnalysis::HiggsCutsAnalysis() {
     std::vector<double> massTargets = {300, 500, 700, 900, 1100, 1300, 1500};

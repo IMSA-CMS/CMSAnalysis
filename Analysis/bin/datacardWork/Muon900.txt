@@ -1,0 +1,6 @@
+
+imax    1 number of bins
+jmax    _______ number of processes minus 1
+----------------------------------------------------------------------------------------------------------------------------------
+binMuon900             Muon900             Muon900             Muon900             Muon900             process             TTBar_Background    ZZ_Background       DY_Background       QCD_Background      Higgs_Signal        
+rate                0.050043            0.001007            0.380224            1.615050            43.191983           

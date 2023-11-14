@@ -8,30 +8,32 @@
 #include "TSystem.h"
 
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
-#include "CMSAnalysis/DataCollection/interface/DoubleMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/EventDumpModule.hh"
-#include "CMSAnalysis/DataCollection/interface/HistogramOutputModule.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonEfficiency.hh"
-#include "CMSAnalysis/DataCollection/interface/MassRecoEfficiency.hh"
-#include "CMSAnalysis/DataCollection/interface/MatchingModule.hh"
-#include "CMSAnalysis/DataCollection/interface/NLeptonsFilter.hh"
-#include "CMSAnalysis/DataCollection/interface/NLeptonsHist.hh"
-#include "CMSAnalysis/DataCollection/interface/PhotonsHist.hh"
-#include "CMSAnalysis/DataCollection/interface/RecoveredInvariantMassHist.hh"
-#include "CMSAnalysis/DataCollection/interface/SameSignInvariantMassHist.hh"
-#include "CMSAnalysis/DataCollection/interface/SingleMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/TriggerModule.hh"
-#include "CMSAnalysis/DataCollection/interface/TripleMuonTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/TwoInvariantMassesHist.hh"
-#include "CMSAnalysis/DataCollection/interface/UnusualFinalStateFilter.hh"
-#include "CMSAnalysis/DataCollection/interface/PhotonsHist.hh"
-#include "CMSAnalysis/DataCollection/interface/METModule.hh"
-#include "CMSAnalysis/DataCollection/interface/METHist.hh"
-#include "CMSAnalysis/DataCollection/interface/Histograms.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonEfficiency.hh"
-#include "CMSAnalysis/DataCollection/interface/METTrigger.hh"
-#include "CMSAnalysis/DataCollection/interface/SignFlipModule.hh"
-#include "CMSAnalysis/DataCollection/interface/HistogramPrototype1DGeneral.hh"
+#include "CMSAnalysis/Filters/interface/DoubleMuonTrigger.hh"
+#include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
+#include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
+#include "CMSAnalysis/Modules/interface/LeptonEfficiency.hh"
+#include "CMSAnalysis/Modules/interface/MassRecoEfficiency.hh"
+#include "CMSAnalysis/Modules/interface/MatchingModule.hh"
+#include "CMSAnalysis/Filters/interface/NLeptonsFilter.hh"
+#include "CMSAnalysis/Histograms/interface/NLeptonsHist.hh"
+#include "CMSAnalysis/Histograms/interface/PhotonsHist.hh"
+#include "CMSAnalysis/Histograms/interface/RecoveredInvariantMassHist.hh"
+#include "CMSAnalysis/Histograms/interface/SameSignInvariantMassHist.hh"
+#include "CMSAnalysis/Filters/interface/SingleMuonTrigger.hh"
+#include "CMSAnalysis/Modules/interface/TriggerEfficiencyModule.hh"
+#include "CMSAnalysis/Modules/interface/TriggerModule.hh"
+#include "CMSAnalysis/Filters/interface/TripleMuonTrigger.hh"
+#include "CMSAnalysis/Histograms/interface/TwoInvariantMassesHist.hh"
+#include "CMSAnalysis/Filters/interface/UnusualFinalStateFilter.hh"
+#include "CMSAnalysis/Histograms/interface/PhotonsHist.hh"
+#include "CMSAnalysis/Modules/interface/METModule.hh"
+#include "CMSAnalysis/Histograms/interface/METHist.hh"
+#include "CMSAnalysis/Histograms/interface/Histograms.hh"
+#include "CMSAnalysis/Modules/interface/LeptonEfficiency.hh"
+#include "CMSAnalysis/Filters/interface/METTrigger.hh"
+#include "CMSAnalysis/Modules/interface/SignFlipModule.hh"
+#include "CMSAnalysis/Utility/interface/HistogramPrototype1DGeneral.hh"
+#include "CMSAnalysis/Modules/interface/FilterModule.hh"
 
 
 using std::make_shared;
@@ -58,8 +60,7 @@ void HPlusPlusMassPlan::initialize()
   auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod);
   auto signFlip = make_shared<SignFlipModule>(matchMod);
 
-  auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(InputModule::RecoLevel::Reco, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
-  
+  auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(EventInput::RecoLevel::Reco, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
   //auto genSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
   // Go up to 2000 - Andy, 09/02 - and make more bins. Modifications also made for picking files
   //auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "Reco Same Sign Invariant Mass", 1000, 0, 2000);
@@ -67,10 +68,10 @@ void HPlusPlusMassPlan::initialize()
   // auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
   // 
   auto genSimSameSignInvMassHist = make_shared<HistogramPrototype1DGeneral>("GenSim Same Sign Invariant Mass", 100, 0, 1000,
-[](const InputModule* input){return std::vector<double>{input -> getParticles(InputModule::RecoLevel::GenSim).calculateSameSignInvariantMass()};});
+[](const EventInput* input){return std::vector<double>{input -> getParticles(EventInput::RecoLevel::GenSim).calculateSameSignInvariantMass()};});
 
   auto recoSameSignInvMassHist = make_shared<HistogramPrototype1DGeneral>("Reco Same Sign Invariant Mass", 100, 0, 1000,
-  [](const InputModule* input){return std::vector<double>{input -> getParticles(InputModule::RecoLevel::Reco).calculateSameSignInvariantMass()};});
+  [](const EventInput* input){return std::vector<double>{input -> getParticles(EventInput::RecoLevel::Reco).calculateSameSignInvariantMass()};});
   // auto genSimHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
   // auto recoHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, false, "Reco H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
   // auto genSimHMinusMinusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H-- Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, -9900041);
@@ -118,7 +119,7 @@ void HPlusPlusMassPlan::initialize()
 
   // Filters
   // 09/12: Add nLeptons filer 
-  analyzer.addFilterModule(nLeptonsFilter);
+  analyzer.addFilterModule(make_shared<FilterModule>(nLeptonsFilter));
   //analyzer.addFilterModule(unusualFinalStateFilter);
 
   analyzer.addAnalysisModule(histMod); // Don't remove unless you don't want histograms

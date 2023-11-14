@@ -1,7 +1,7 @@
 #ifndef GAMMAHIST_HH
 #define GAMMAHIST_HH
 
-#include "HistogramPrototype1D.hh"
+#include "CMSAnalysis/Utility/interface/HistogramPrototype1D.hh"
 
 class LeptonJetReconstructionModule;
 

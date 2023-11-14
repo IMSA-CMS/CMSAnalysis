@@ -1,7 +1,7 @@
 #ifndef EVENTINTERFACE_HH
 #define EVENTINTERFACE_HH
 
-#include "ParticleCollection.hh"
+#include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 
 class EventInterface
 {

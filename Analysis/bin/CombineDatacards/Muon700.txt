@@ -1,0 +1,16 @@
+
+imax    1 number of bins
+jmax    4 number of processes minus 1
+kmax 0 number of nuisance parameters
+----------------------------------------------------------------------------------------------------------------------------------
+shapes    TTBar_Background             Muon700                Genhiggsworkspace.root  higgsworkspace.root:TTBar_Background
+shapes       ZZ_Background             Muon700                Genhiggsworkspace.root  higgsworkspace.root:ZZ_Background
+shapes       DY_Background             Muon700                Genhiggsworkspace.root  higgsworkspace.root:DY_Background
+shapes      QCD_Background             Muon700                Genhiggsworkspace.root  higgsworkspace.root:QCD_Background
+shapes        Higgs_Signal             Muon700                Genhiggsworkspace.root  higgsworkspace.root:Higgs_Signal
+shapes    data_obs             Muon700         Genhiggsworkspace.root Genhiggsworkspace:Muon700Events
+----------------------------------------------------------------------------------------------------------------------------------
+bin    Muon700             Muon700             Muon700             Muon700             Muon700             
+process             TTBar_Background    ZZ_Background       DY_Background       QCD_Background      Higgs_Signal        
+process             0                   1                   2                   3                   -1                  
+rate                0.131346            0.002500            0.701366            2.703651            172.697136          

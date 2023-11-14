@@ -49,7 +49,7 @@
 // #include "TROOT.h"
 // #include "TMinuit2TraceObject.h"
 //#include "MinimizerOptions.h"
-#include "CMSAnalysis/DataCollection/interface/TDisplayText.h"
+#include "CMSAnalysis/Utility/interface/TDisplayText.h"
 
 //swap out_file to cout if you want to print to terminal.
 #define outout std::cout //out_file

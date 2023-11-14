@@ -8,7 +8,7 @@
 #include <memory>
 #include <unordered_set>
 #include "FileParams.hh"
-#include "InputModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "ProcessDictionary.hh"
 #include "RootEventInterface.hh"
 
@@ -33,9 +33,9 @@ public:
   Analyzer(const Analyzer& analyzer1);
   ~Analyzer();
 
-InputModule* getInputModule() {return input;}
+EventInput* getEventInput() {return input;}
 
-const InputModule* getInputModule() const {return input;}
+const EventInput* getEventInput() const {return input;}
 
   // Add a production module, which is guaranteed to run before any analysis or filter
   // module (in the order added)
@@ -67,7 +67,7 @@ private:
 
   
   const EventInterface *eventInterface;
-  InputModule* input;
+  EventInput* input;
 
 
   // Simple utility function allowing an operation to be performed on all

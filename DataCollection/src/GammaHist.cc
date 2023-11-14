@@ -1,7 +1,7 @@
 #include "CMSAnalysis/DataCollection/interface/GammaHist.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonJetReconstructionModule.hh"
-#include "CMSAnalysis/DataCollection/interface/LeptonJet.hh"
-#include "CMSAnalysis/DataCollection/interface/Particle.hh"
+#include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
+#include "CMSAnalysis/Utility/interface/LeptonJet.hh"
+#include "CMSAnalysis/Utility/interface/Particle.hh"
 
 #include <vector>
 
