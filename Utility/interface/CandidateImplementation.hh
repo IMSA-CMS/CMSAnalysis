@@ -30,6 +30,8 @@ public:
   virtual Particle daughter(int i) const override;
   virtual bool doesHaveMother() const override {return true;}
   virtual int numberOfDaughters() const override;
+  inline virtual double getDXY() const override { return deltaXY; }
+  inline virtual double getDZ() const override { return deltaZ; }
   virtual bool isNotNull() const override {return particle;}
   virtual const ParticleType& getType() const override;
   virtual Particle::SelectionFit getSelectionFit() const override;
@@ -42,6 +44,8 @@ private:
   void checkIsNull() const;
   const pat::Muon* getMuon() const;
   const pat::Electron* getElectron() const;
+  double deltaXY;
+  double deltaZ;
 };
 
 #endif

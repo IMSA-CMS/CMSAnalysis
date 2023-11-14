@@ -16,8 +16,9 @@
 #include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
 
 #include "CMSAnalysis/Histograms/interface/GetNthHighestPtHist.hh"
-#include "CMSAnalysis/Utility/interface/SingleParticleHist.hh"
-#include "CMSAnalysis/Utility/interface/HistogramPrototype1DGeneral.hh"
+#include "CMSAnalysis/Modules/interface/SingleParticleHist.hh"
+#include "CMSAnalysis/Modules/interface/CollectionHist.hh"
+#include "CMSAnalysis/Histograms/interface/HistogramPrototype1DGeneral.hh"
 
 EventModule::EventModule():
     localInput(&event)
@@ -47,22 +48,24 @@ bool EventModule::process ()
 {
     clearHistograms(); //all histograms are cleared and we only fill the ones we are using for this event
     event.clear();
-    for (auto selector : selectors) {
+    for (auto selector : selectors)
+    {
         selector->selectParticles(getInput(),event);
     }
     event.setMET(getInput()->getMET());
     bool passesCuts = true;
-    if (event.containsParticles())
+
+    for (size_t i = 0; i < cuts.size(); i++) 
     {
-        for (size_t i = 0; i < cuts.size(); i++) 
+        if (!(cuts[i]->checkEvent(event, getInput(), passesCuts)))
         {
-            if (!(cuts[i]->checkEvent(event, passesCuts)))
-            {
-                passesCuts = false;
-            }
+            passesCuts = false;
+            break;
         }
     }
-    if (!passesCuts){
+    
+    if (!passesCuts)
+    {
         return false;
     }
     addBasicHistograms(ParticleType::electron(), event.getElectrons());
@@ -115,14 +118,15 @@ void EventModule::addBasicHistograms(const ParticleType& particleType, const Par
     for (auto part : parts)
     {   
 
-        for (auto hist : particleType.getParticleHists())
+        for (auto params : particleType.getParticleHists())
         {
-            auto histName = getBasicHistogramTitle(count,particleType,hist->getName());
+            auto histName = getBasicHistogramTitle(count,particleType,params.getName());
             if (!checkHist(histName))
             {
-                hist->changeName(histName);
-                particleHistograms.insert({histName,hist});
-                histMod->addHistogram(hist);
+                params.setName(histName);
+                auto histogram = std::make_shared<SingleParticleHist>(params);
+                particleHistograms.insert({histName,histogram});
+                histMod->addHistogram(histogram);
 
             }
             particleHistograms[histName]->setParticle(part);
@@ -132,17 +136,19 @@ void EventModule::addBasicHistograms(const ParticleType& particleType, const Par
     }
 }
 
+//CollectionHistparams ^^^
 void EventModule::addCountHistograms(const ParticleType& particleType, const std::shared_ptr<ParticleCollection<Particle>> particles)
 {
-    for (auto hist : particleType.getCollectionHists())
+    for (auto params : particleType.getCollectionHists())
     {
-        auto histName = particleType.getName() + " " + hist->getName();
+        auto histName = params.getName();
         if (!checkHist(histName))
         {
-            hist->changeName(histName);
-            collectionHistograms.insert({histName,hist});
+            params.setName(histName);
+            auto hist = std::make_shared<CollectionHist>(params);
+            collectionHistograms.insert({histName, hist});
             histMod->addHistogram(hist);
-        }
+        } 
         collectionHistograms[histName]->setCollection(particles);
     }
 }

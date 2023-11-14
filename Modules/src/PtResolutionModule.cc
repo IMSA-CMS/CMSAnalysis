@@ -6,6 +6,8 @@
 PtResolutionModule::PtResolutionModule(const std::shared_ptr<MatchingModule> matchingModule, std::string bin, const int minPt, const int maxPt, const int pTIntervalSize) :
   ResolutionModule(matchingModule, bin, minPt, maxPt, pTIntervalSize)
 {
+  // Dependency added in ResolutionModule constructor
+  // addRequiredModule(matchingModule);
 }
 
 void PtResolutionModule::fillError(const MatchingPairCollection& bestPairs)

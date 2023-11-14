@@ -14,6 +14,8 @@ class StrippedEventFile : public EventFile
 {
   public:
     StrippedEventFile(TFile* ifile);
+    virtual int getNumOfEvents() const override {return tree->GetEntries();}
+
   protected:
     virtual void nextEvent() override;
     virtual bool isDone() const override;

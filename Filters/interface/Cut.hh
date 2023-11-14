@@ -5,6 +5,7 @@
 class Particle;
 class Lepton;
 class Event;
+class EventInput;
 
 // Interface for Cut objects, which apply cuts in EventModule. Contains counters which help it to determine
 // its overall dependent and independent efficiencies (dependent = in sequence with other cuts, indep = as if only this single cut was applied)
@@ -22,11 +23,11 @@ class Cut
 
         // Check whether event passes the cut. Do not override, instead override checkEventInternal().
         // Simply calls checkEventInternal(), increments passCount if the event passes, and increments checkCount if true
-        bool checkEvent(const Event& event, bool dependent = true);
+        bool checkEvent(const Event& event, const EventInput* input, bool dependent = true);
             
     protected: 
         // The function to be overridden by children. Called immediately by the public checkEvent.
-        virtual bool checkEventInternal(const Event& event) const = 0;
+        virtual bool checkEventInternal(const Event& event, const EventInput* input) const = 0;
     private:
         int passCount = 0;
         int checkCount = 0;

@@ -2,14 +2,14 @@
 #define JET_HH
 #include <vector>
 #include "DataFormats/Candidate/interface/Candidate.h"
-#include "CMSAnalysis/Utility/interface/Particle.hh"
+#include "CMSAnalysis/Utility/interface/RecoParticle.hh"
 
 
 
-class Jet : public Particle
+class Jet : public RecoParticle
 {
     public:
-        using Particle::Particle;
+        using RecoParticle::RecoParticle;
         Jet(const Particle &particle);
 
         // bool isBJet();

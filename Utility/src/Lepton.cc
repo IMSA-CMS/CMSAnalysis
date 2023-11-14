@@ -12,15 +12,15 @@
 #include "CMSAnalysis/Utility/interface/LeptonJetImplementation.hh"
 
 Lepton::Lepton(const Particle &pParticle):
-Particle(pParticle)
+RecoParticle(pParticle)
 {
 
 }
-double Lepton::getIsolation() const
-{
-  checkIsNull();
-  return getParticle()->getInfo("Isolation");
-}
+// double Lepton::getIsolation() const GAVIN CHANGED
+// {
+//   checkIsNull();
+//   return getParticle()->getInfo("Isolation");
+// }
 
 bool Lepton::isTight() const
 {
@@ -38,4 +38,14 @@ bool Lepton::isLoose() const
 {
     checkIsNull();
     return isMedium() || getParticle()->getSelectionFit() == Particle::SelectionFit::Loose;
+}
+
+double Lepton::getDXY() const
+{
+    return getParticle()->getDXY();
+}
+
+double Lepton::getDZ() const
+{
+    return getParticle()->getDZ();
 }
