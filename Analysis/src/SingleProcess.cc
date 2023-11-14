@@ -12,20 +12,23 @@
 #include "TH2.h"
 #include "TH2F.h"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
+#include "CMSAnalysis/Analysis/interface/Correction.hh"
 #include <unordered_map>
 
 TH1* SingleProcess::getHist(std::string histType, bool scaleToExpected) const
 {
+    TH1* hist = input->getHist(histType);
     if(scaleToExpected) {
-        TH1* hist = input->getHist(histType);
         double yield = getExpectedYield(histType);
         double events = hist->Integral();
-        hist->Scale(yield/events);
-        return hist;
+        if(events != 0) {
+            hist->Scale(yield/events);
+        }
     }
-    else {
-        return input->getHist(histType);
+    for(auto correction : corrections) {
+        hist = correction->correctHist(hist);
     }
+    return hist;
 }
 
 TH1* SingleProcess::get2DHist(std::string histType) const
@@ -50,6 +53,7 @@ bool SingleProcess::checkValidity()
     std::vector<HistVariable> histVariables = input->getHistVariables();
     for(HistVariable histVar : histVariables) {
         if(input->getHist(histVar.getName()) == 0) {
+            //std::cout << crossSectionName << " failed on " << histVar.getName() << std::endl;
             validProcess = false;
         }
     }    

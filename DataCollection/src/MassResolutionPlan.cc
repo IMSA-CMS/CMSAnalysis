@@ -5,13 +5,13 @@
 
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
 
-#include "CMSAnalysis/DataCollection/interface/MatchingModule.hh"
-#include "CMSAnalysis/DataCollection/interface/MassFilter.hh"
-#include "CMSAnalysis/DataCollection/interface/BarrelStateFilter.hh"
-#include "CMSAnalysis/DataCollection/interface/MassBinFilter.hh"
-#include "CMSAnalysis/DataCollection/interface/ResolutionModule.hh"
-#include "CMSAnalysis/DataCollection/interface/MassResolutionModule.hh"
-#include "CMSAnalysis/DataCollection/interface/Histograms.hh"
+#include "CMSAnalysis/Modules/interface/MatchingModule.hh"
+#include "CMSAnalysis/Filters/interface/MassFilter.hh"
+#include "CMSAnalysis/Filters/interface/BarrelStateFilter.hh"
+#include "CMSAnalysis/Filters/interface/MassBinFilter.hh"
+#include "CMSAnalysis/Modules/interface/ResolutionModule.hh"
+#include "CMSAnalysis/Modules/interface/MassResolutionModule.hh"
+#include "CMSAnalysis/Histograms/interface/Histograms.hh"
 
 using std::make_shared;
 

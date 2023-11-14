@@ -1,14 +1,73 @@
-Reading input file textfiles/darkPhotonsRun2.txt
-DarkPhotonSUSY
-Filename: textfiles/DarkPhotonSUSY/DarkPhotonSUSY_Mass_0_3_Run_2.txt
-# of root files: 99
-Lepton Jets Found: 27093
-Number of Dark Photons: 74372
-Lepton Jet Matching Efficiency: 0.323751
+Reading input file textfiles/newHiggs/Higgs700.txt
+Test1Test2Test2H++toLL
+Filename: textfiles/H++toLL/H++toLL_Lepton_LL_Mass_700_Run_2.txt
+# of root files: 1
+0x5b28b68Lepton Jets Found: 215
+Number of Dark Photons: 0
+Lepton Jet Matching Efficiency: -nan
 Leptons From Quarks 0
 Leptons From Dark Photons 0
 Leptons From Squarks 0
 Leptons From Protons 0
+There are 2 analysis modules
+FilterModules size : 0
+Finalizing analysis module: 
+eeee -> eeee : 0.465201
+eeee -> eee : 0.320147
+eeee lost : 0.214652
+eeeu -> eeeu : 0.544959
+eeeu -> eee : 0.017818
+eeeu -> eeu : 0.087980
+eeeu -> eue : 0.179745
+eeeu lost : 0.169498
+eeuu -> eeuu : 0.619569
+eeuu -> eeu : 0.036266
+eeuu -> uue : 0.199551
+eeuu lost : 0.144614
+eueu -> eueu : 0.625472
+eueu -> eue : 0.040755
+eueu -> euu : 0.211321
+eueu lost : 0.122453
+euuu -> euuu : 0.714023
+euuu -> euu : 0.044420
+euuu -> uue : 0.022210
+euuu -> uuu : 0.115272
+euuu lost : 0.104075
+uuuu -> uuuu : 0.804165
+uuuu -> uuu : 0.107965
+uuuu lost : 0.087870
+eeee <- eeee : 0.660942
+eeee fake : 0.339058
+eeeu <- eeeu : 0.546929
+eeeu fake : 0.453071
+eeuu <- eeuu : 0.649233
+eeuu fake : 0.350767
+eueu <- eueu : 0.450408
+eueu fake : 0.549592
+euuu <- euuu : 0.528712
+euuu fake : 0.471288
+uuuu <- uuuu : 0.622103
+uuuu fake : 0.377897
+eee <- eeee : 0.184233
+eee <- eeeu : 0.020341
+eee fake : 0.795426
+eeu <- eeeu : 0.097454
+eeu <- eeuu : 0.041313
+eeu fake : 0.861233
+eue <- eeeu : 0.150116
+eue <- eueu : 0.016654
+eue fake : 0.833231
+euu <- eueu : 0.082093
+euu <- euuu : 0.035476
+euu fake : 0.882431
+uue <- eeuu : 0.179289
+uue <- euuu : 0.019518
+uue fake : 0.801194
+uuu <- euuu : 0.094337
+uuu <- uuuu : 0.044389
+uuu fake : 0.861274
+FilterModules size : 0
+Finalizing analysis module: 
 Processing complete!
-Output written to test.root
-Processing time: 298.451s
+Output written to output700.root
+Processing time: 240.906s

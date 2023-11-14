@@ -1,0 +1,8 @@
+
+imax    1 number of bins
+jmax    _______ number of processes minus 1
+----------------------------------------------------------------------------------------------------------------------------------
+binElectron300         Electron300         Electron300         Electron300         Electron300         
+process             TTBar_Background    ZZ_Background       DY_Background       QCD_Background      Higgs_Signal
+process         
+rate                0.613020            0.031475            0.000000            1.215847            5227.827339         

@@ -1,8 +1,8 @@
 #ifndef GENSIMDELTARPSEDOFILTEREDHIST_HH
 #define GENSIMDELTARPSEDOFILTEREDHIST_HH
 
-#include "HistogramPrototype1D.hh"
-#include "LeptonJetReconstructionModule.hh"
+#include "CMSAnalysis/Utility/interface/HistogramPrototype1D.hh"
+#include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
 
 
 class GenSimDeltaRPsedoFilteredHist : public HistogramPrototype1D

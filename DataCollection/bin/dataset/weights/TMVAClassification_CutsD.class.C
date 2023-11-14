@@ -10,10 +10,10 @@ Method         : Cuts::CutsD
 TMVA Release   : 4.2.1         [262657]
 ROOT Release   : 6.24/07       [399367]
 Creator        : kzhang1
-Date           : Tue Nov 29 15:39:59 2022
+Date           : Mon Apr  3 23:23:05 2023
 Host           : Linux cmsbuild02.cern.ch 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
 Dir            : /uscms/homes/k/kzhang1/practice/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin
-Training events: 4302
+Training events: 60497
 Analysis type  : [Classification]
 
 
@@ -34,27 +34,31 @@ CutRangeMin[0]: "-1.000000e+00" [Minimum of allowed cut range (set per variable)
     CutRangeMin[2]: "-1.000000e+00"
     CutRangeMin[3]: "-1.000000e+00"
     CutRangeMin[4]: "-1.000000e+00"
+    CutRangeMin[5]: "-1.000000e+00"
 CutRangeMax[0]: "-1.000000e+00" [Maximum of allowed cut range (set per variable)]
     CutRangeMax[1]: "-1.000000e+00"
     CutRangeMax[2]: "-1.000000e+00"
     CutRangeMax[3]: "-1.000000e+00"
     CutRangeMax[4]: "-1.000000e+00"
+    CutRangeMax[5]: "-1.000000e+00"
 VarProp[0]: "FSmart" [Categorisation of cuts]
     VarProp[1]: "FSmart"
     VarProp[2]: "FSmart"
     VarProp[3]: "FSmart"
     VarProp[4]: "FSmart"
+    VarProp[5]: "FSmart"
 ##
 
 
 #VAR -*-*-*-*-*-*-*-*-*-*-*-* variables *-*-*-*-*-*-*-*-*-*-*-*-
 
-NVar 5
-pt                            pt                            pt                            Transverse Momentum                                             'F'    [8.94119262695,2084.13500977]
+NVar 6
+leadingPt                     leadingPt                     leadingPt                     Leading Lepton Transverse Momentum                                  'F'    [5.0726776123,21324.2890625]
 nParticles                    nParticles                    nParticles                    Number of Particles                                             'F'    [2,5]
-eta                           eta                           eta                           Pseudorapidity                                                  'F'    [-3.1376721859,3.12934875488]
-phi                           phi                           phi                           Azimuthal Angle                                                 'F'    [-3.13815546036,3.13753390312]
-deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.191068515182]
+eta                           eta                           eta                           Pseudorapidity                                                  'F'    [-2.51045441628,2.50291919708]
+phi                           phi                           phi                           Azimuthal Angle                                                 'F'    [-3.14158964157,3.14142203331]
+deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.876891136169]
+sumPt                         sumPt                         sumPt                         Total Transverse Momentum                                       'F'    [10.112449646,21441.2851562]
 NSpec 0
 
 
@@ -98,10 +102,10 @@ class ReadCutsD : public IClassifierReader {
    ReadCutsD( std::vector<std::string>& theInputVars )
       : IClassifierReader(),
         fClassName( "ReadCutsD" ),
-        fNvars( 5 )
+        fNvars( 6 )
    {
       // the training input variables
-      const char* inputVars[] = { "pt", "nParticles", "eta", "phi", "deltaR" };
+      const char* inputVars[] = { "leadingPt", "nParticles", "eta", "phi", "deltaR", "sumPt" };
 
       // sanity checks
       if (theInputVars.size() <= 0) {
@@ -125,16 +129,18 @@ class ReadCutsD : public IClassifierReader {
       }
 
       // initialize min and max vectors (for normalisation)
-      fVmin[0] = 0.133817344903946;
-      fVmax[0] = 32.4347038269043;
-      fVmin[1] = -0.136816993355751;
-      fVmax[1] = 15.2444744110107;
-      fVmin[2] = -2.58723998069763;
-      fVmax[2] = 2.10679125785828;
-      fVmin[3] = -1.84133875370026;
-      fVmax[3] = 1.7782427072525;
-      fVmin[4] = -3.07141947746277;
-      fVmax[4] = 4.86423254013062;
+      fVmin[0] = -7.21912670135498;
+      fVmax[0] = 47.6308135986328;
+      fVmin[1] = 9.31505680084229;
+      fVmax[1] = 30.9186553955078;
+      fVmin[2] = -1.90314626693726;
+      fVmax[2] = 1.9017698764801;
+      fVmin[3] = -1.71615946292877;
+      fVmax[3] = 1.7729868888855;
+      fVmin[4] = -1.30296158790588;
+      fVmax[4] = 5.37613105773926;
+      fVmin[5] = 0.0665036588907242;
+      fVmax[5] = 26.5135974884033;
 
       // initialize input variable types
       fType[0] = 'F';
@@ -142,6 +148,7 @@ class ReadCutsD : public IClassifierReader {
       fType[2] = 'F';
       fType[3] = 'F';
       fType[4] = 'F';
+      fType[5] = 'F';
 
       // initialize constants
       Initialize();
@@ -167,7 +174,7 @@ class ReadCutsD : public IClassifierReader {
 
    // input variable transformation
 
-   double fDecTF_1[3][5][5];
+   double fDecTF_1[3][6][6];
    void InitTransform_1();
    void Transform_1( std::vector<double> & iv, int sigOrBgd ) const;
    void InitTransform();
@@ -181,15 +188,15 @@ class ReadCutsD : public IClassifierReader {
    char   GetType( int ivar ) const { return fType[ivar]; }
 
    // normalisation of input variables
-   double fVmin[5];
-   double fVmax[5];
+   double fVmin[6];
+   double fVmax[6];
    double NormVariable( double x, double xmin, double xmax ) const {
       // normalise to output range: [-1, 1]
       return 2*(x - xmin)/(xmax - xmin) - 1.0;
    }
 
    // type of input variable: 'F' or 'I'
-   char   fType[5];
+   char   fType[6];
 
    // initialize internal variables
    void Initialize();
@@ -221,81 +228,114 @@ inline double ReadCutsD::GetMvaValue( const std::vector<double>& inputValues ) c
 inline void ReadCutsD::InitTransform_1()
 {
    // Decorrelation transformation, initialisation
-   fDecTF_1[0][0][0] = 0.0126625708402;
-   fDecTF_1[0][0][1] = -0.00269608449589;
-   fDecTF_1[0][0][2] = 0.000231938750251;
-   fDecTF_1[0][0][3] = 8.04170018278e-05;
-   fDecTF_1[0][0][4] = 0.00689620242321;
-   fDecTF_1[0][1][0] = -0.00269608449589;
-   fDecTF_1[0][1][1] = 2.46542700512;
-   fDecTF_1[0][1][2] = -0.00671017784957;
-   fDecTF_1[0][1][3] = -0.00535261570345;
-   fDecTF_1[0][1][4] = -1.12603298545;
-   fDecTF_1[0][2][0] = 0.000231938750251;
-   fDecTF_1[0][2][1] = -0.00671017784957;
-   fDecTF_1[0][2][2] = 0.916401795094;
-   fDecTF_1[0][2][3] = -0.0430874894374;
-   fDecTF_1[0][2][4] = 0.0201729983599;
-   fDecTF_1[0][3][0] = 8.04170018278e-05;
-   fDecTF_1[0][3][1] = -0.00535261570345;
-   fDecTF_1[0][3][2] = -0.0430874894374;
-   fDecTF_1[0][3][3] = 0.561003328889;
-   fDecTF_1[0][3][4] = 0.00140032111531;
-   fDecTF_1[0][4][0] = 0.00689620242321;
-   fDecTF_1[0][4][1] = -1.12603298545;
-   fDecTF_1[0][4][2] = 0.0201729983599;
-   fDecTF_1[0][4][3] = 0.00140032111531;
-   fDecTF_1[0][4][4] = 41.6787006352;
-   fDecTF_1[1][0][0] = 0.0225926375449;
-   fDecTF_1[1][0][1] = -0.00312848104407;
-   fDecTF_1[1][0][2] = -0.00285750738458;
-   fDecTF_1[1][0][3] = -0.000515456201501;
-   fDecTF_1[1][0][4] = 0.00253224936072;
-   fDecTF_1[1][1][0] = -0.00312848104407;
-   fDecTF_1[1][1][1] = 6.55544353183;
-   fDecTF_1[1][1][2] = -0.00904425381399;
-   fDecTF_1[1][1][3] = -0.00436583398833;
-   fDecTF_1[1][1][4] = -1.41728115433;
-   fDecTF_1[1][2][0] = -0.00285750738458;
-   fDecTF_1[1][2][1] = -0.00904425381399;
-   fDecTF_1[1][2][2] = 0.628496123449;
-   fDecTF_1[1][2][3] = -0.0754083679766;
-   fDecTF_1[1][2][4] = 0.00378980959416;
-   fDecTF_1[1][3][0] = -0.000515456201501;
-   fDecTF_1[1][3][1] = -0.00436583398833;
-   fDecTF_1[1][3][2] = -0.0754083679766;
-   fDecTF_1[1][3][3] = 0.522511806823;
-   fDecTF_1[1][3][4] = 0.00297438078509;
-   fDecTF_1[1][4][0] = 0.00253224936072;
-   fDecTF_1[1][4][1] = -1.41728115433;
-   fDecTF_1[1][4][2] = 0.00378980959416;
-   fDecTF_1[1][4][3] = 0.00297438078509;
-   fDecTF_1[1][4][4] = 73.6594386162;
-   fDecTF_1[2][0][0] = 0.0155651874987;
-   fDecTF_1[2][0][1] = -0.00316895346677;
-   fDecTF_1[2][0][2] = -0.000702885170523;
-   fDecTF_1[2][0][3] = -9.39774224432e-05;
-   fDecTF_1[2][0][4] = 0.00337982998117;
-   fDecTF_1[2][1][0] = -0.00316895346677;
-   fDecTF_1[2][1][1] = 3.22732701601;
-   fDecTF_1[2][1][2] = -0.00344969791949;
-   fDecTF_1[2][1][3] = -0.00418787133852;
-   fDecTF_1[2][1][4] = -1.09543078124;
-   fDecTF_1[2][2][0] = -0.000702885170523;
-   fDecTF_1[2][2][1] = -0.00344969791949;
-   fDecTF_1[2][2][2] = 0.726868077681;
-   fDecTF_1[2][2][3] = -0.0649660330498;
-   fDecTF_1[2][2][4] = -0.0108496693341;
-   fDecTF_1[2][3][0] = -9.39774224432e-05;
-   fDecTF_1[2][3][1] = -0.00418787133852;
-   fDecTF_1[2][3][2] = -0.0649660330498;
-   fDecTF_1[2][3][3] = 0.540145092243;
-   fDecTF_1[2][3][4] = 0.00132386173476;
-   fDecTF_1[2][4][0] = 0.00337982998117;
-   fDecTF_1[2][4][1] = -1.09543078124;
-   fDecTF_1[2][4][2] = -0.0108496693341;
-   fDecTF_1[2][4][3] = 0.00132386173476;
-   fDecTF_1[2][4][4] = 30.7685805371;
+   fDecTF_1[0][0][0] = 0.011661779784;
+   fDecTF_1[0][0][1] = 0.00206664533603;
+   fDecTF_1[0][0][2] = 7.73025982566e-05;
+   fDecTF_1[0][0][3] = 3.98689410142e-05;
+   fDecTF_1[0][0][4] = -0.00308307786383;
+   fDecTF_1[0][0][5] = -0.0101227713632;
+   fDecTF_1[0][1][0] = 0.00206664533603;
+   fDecTF_1[0][1][1] = 5.09397966695;
+   fDecTF_1[0][1][2] = -0.000679987565139;
+   fDecTF_1[0][1][3] = 0.0094479763421;
+   fDecTF_1[0][1][4] = -2.17782757083;
+   fDecTF_1[0][1][5] = -0.00215803081818;
+   fDecTF_1[0][2][0] = 7.73025982566e-05;
+   fDecTF_1[0][2][1] = -0.000679987565139;
+   fDecTF_1[0][2][2] = 1.0186677504;
+   fDecTF_1[0][2][3] = -0.000853103396123;
+   fDecTF_1[0][2][4] = 0.0207112209109;
+   fDecTF_1[0][2][5] = -5.12292657098e-05;
+   fDecTF_1[0][3][0] = 3.98689410142e-05;
+   fDecTF_1[0][3][1] = 0.0094479763421;
+   fDecTF_1[0][3][2] = -0.000853103396123;
+   fDecTF_1[0][3][3] = 0.54780477787;
+   fDecTF_1[0][3][4] = 0.00523067599249;
+   fDecTF_1[0][3][5] = -1.3826934092e-05;
+   fDecTF_1[0][4][0] = -0.00308307786383;
+   fDecTF_1[0][4][1] = -2.17782757083;
+   fDecTF_1[0][4][2] = 0.0207112209109;
+   fDecTF_1[0][4][3] = 0.00523067599249;
+   fDecTF_1[0][4][4] = 18.2937562282;
+   fDecTF_1[0][4][5] = 0.00310234135778;
+   fDecTF_1[0][5][0] = -0.0101227713632;
+   fDecTF_1[0][5][1] = -0.00215803081818;
+   fDecTF_1[0][5][2] = -5.12292657098e-05;
+   fDecTF_1[0][5][3] = -1.3826934092e-05;
+   fDecTF_1[0][5][4] = 0.00310234135778;
+   fDecTF_1[0][5][5] = 0.0111674728433;
+   fDecTF_1[1][0][0] = 0.0485186998165;
+   fDecTF_1[1][0][1] = 0.00292190506895;
+   fDecTF_1[1][0][2] = -0.000192197741781;
+   fDecTF_1[1][0][3] = 0.000429763925109;
+   fDecTF_1[1][0][4] = -0.00302821644545;
+   fDecTF_1[1][0][5] = -0.0313703601749;
+   fDecTF_1[1][1][0] = 0.00292190506895;
+   fDecTF_1[1][1][1] = 10.7837045284;
+   fDecTF_1[1][1][2] = -0.00056465489655;
+   fDecTF_1[1][1][3] = 0.0036829961873;
+   fDecTF_1[1][1][4] = -0.164920131548;
+   fDecTF_1[1][1][5] = -0.00234622321893;
+   fDecTF_1[1][2][0] = -0.000192197741781;
+   fDecTF_1[1][2][1] = -0.00056465489655;
+   fDecTF_1[1][2][2] = 0.630310960953;
+   fDecTF_1[1][2][3] = 0.00450284536015;
+   fDecTF_1[1][2][4] = -0.00797623829843;
+   fDecTF_1[1][2][5] = 0.000153123368145;
+   fDecTF_1[1][3][0] = 0.000429763925109;
+   fDecTF_1[1][3][1] = 0.0036829961873;
+   fDecTF_1[1][3][2] = 0.00450284536015;
+   fDecTF_1[1][3][3] = 0.551305552783;
+   fDecTF_1[1][3][4] = 0.00780303123408;
+   fDecTF_1[1][3][5] = -0.00020113590091;
+   fDecTF_1[1][4][0] = -0.00302821644545;
+   fDecTF_1[1][4][1] = -0.164920131548;
+   fDecTF_1[1][4][2] = -0.00797623829843;
+   fDecTF_1[1][4][3] = 0.00780303123408;
+   fDecTF_1[1][4][4] = 6.56388143794;
+   fDecTF_1[1][4][5] = 0.000836113075299;
+   fDecTF_1[1][5][0] = -0.0313703601749;
+   fDecTF_1[1][5][1] = -0.00234622321893;
+   fDecTF_1[1][5][2] = 0.000153123368145;
+   fDecTF_1[1][5][3] = -0.00020113590091;
+   fDecTF_1[1][5][4] = 0.000836113075299;
+   fDecTF_1[1][5][5] = 0.0333480408085;
+   fDecTF_1[2][0][0] = 0.0141683962552;
+   fDecTF_1[2][0][1] = 0.00244368510784;
+   fDecTF_1[2][0][2] = 6.55474551679e-05;
+   fDecTF_1[2][0][3] = 1.40165141298e-05;
+   fDecTF_1[2][0][4] = -0.00504645402544;
+   fDecTF_1[2][0][5] = -0.011869852736;
+   fDecTF_1[2][1][0] = 0.00244368510784;
+   fDecTF_1[2][1][1] = 6.24662323025;
+   fDecTF_1[2][1][2] = 0.000707108639536;
+   fDecTF_1[2][1][3] = 0.00722928394209;
+   fDecTF_1[2][1][4] = -0.505907876114;
+   fDecTF_1[2][1][5] = -0.00257144371406;
+   fDecTF_1[2][2][0] = 6.55474551679e-05;
+   fDecTF_1[2][2][1] = 0.000707108639536;
+   fDecTF_1[2][2][2] = 0.757968542511;
+   fDecTF_1[2][2][3] = 0.0026484385375;
+   fDecTF_1[2][2][4] = -0.00331638866911;
+   fDecTF_1[2][2][5] = -4.80775348932e-05;
+   fDecTF_1[2][3][0] = 1.40165141298e-05;
+   fDecTF_1[2][3][1] = 0.00722928394209;
+   fDecTF_1[2][3][2] = 0.0026484385375;
+   fDecTF_1[2][3][3] = 0.549510215505;
+   fDecTF_1[2][3][4] = 0.00593478613372;
+   fDecTF_1[2][3][5] = 1.55767949608e-05;
+   fDecTF_1[2][4][0] = -0.00504645402544;
+   fDecTF_1[2][4][1] = -0.505907876114;
+   fDecTF_1[2][4][2] = -0.00331638866911;
+   fDecTF_1[2][4][3] = 0.00593478613372;
+   fDecTF_1[2][4][4] = 7.3617014562;
+   fDecTF_1[2][4][5] = 0.00523530148984;
+   fDecTF_1[2][5][0] = -0.011869852736;
+   fDecTF_1[2][5][1] = -0.00257144371406;
+   fDecTF_1[2][5][2] = -4.80775348932e-05;
+   fDecTF_1[2][5][3] = 1.55767949608e-05;
+   fDecTF_1[2][5][4] = 0.00523530148984;
+   fDecTF_1[2][5][5] = 0.0130418861019;
 }
 
 //_______________________________________________________________________
@@ -318,6 +358,7 @@ inline void ReadCutsD::Transform_1( std::vector<double>& iv, int cls) const
       indicesGet.push_back( 2);
       indicesGet.push_back( 3);
       indicesGet.push_back( 4);
+      indicesGet.push_back( 5);
    }
    if ( indicesPut.empty() ) {
       indicesPut.reserve(fNvars);
@@ -326,16 +367,17 @@ inline void ReadCutsD::Transform_1( std::vector<double>& iv, int cls) const
       indicesPut.push_back( 2);
       indicesPut.push_back( 3);
       indicesPut.push_back( 4);
+      indicesPut.push_back( 5);
    }
 
    std::vector<double> tv;
-   for (int i=0; i<5;i++) {
+   for (int i=0; i<6;i++) {
       double v = 0;
-      for (int j=0; j<5; j++)
+      for (int j=0; j<6; j++)
          v += iv[indicesGet.at(j)] * fDecTF_1[cls][i][j];
       tv.push_back(v);
    }
-   for (int i=0; i<5;i++) iv[indicesPut.at(i)] = tv[i];
+   for (int i=0; i<6;i++) iv[indicesPut.at(i)] = tv[i];
 }
 
 //_______________________________________________________________________
