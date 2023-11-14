@@ -1,3 +1,4 @@
+
 import os;
 
 #parser = argparse.ArgumentParser()
@@ -6,23 +7,21 @@ import os;
 
 from subprocess import Popen, PIPE
 
-stdout = Popen('dasgoclient --query="dataset dataset=/*/Run2017B*UL*v2-v1/MINIAOD"', shell=True, stdout=PIPE).stdout
+stdout = Popen('dasgoclient -query="dataset dataset=/*SingleElectron*/*/NANOAOD", shell=True, stdout=PIPE', shell=True, stdout=PIPE).stdout
 output = stdout.read()
 
 datasets = output.split()
 
 print(datasets)
+    #mass = dataset[dataset.find("M-") + 2 : dataset.find("00_Tune") + 2]
+	#period = dataset[dataset.find("20UL") + 4 : dataset.find("20UL") + 6]
 for dataset in datasets:
-	parser = dataset.split("/")
-	name = parser[1]+parser[2]+".txt"
-	open('textfiles/Data/'+name, 'w') 
-	req = 'dasgoclient --query="file dataset=' + dataset + '" > textfiles/Data/'+name
-	print("making "+dataset)
-	os.system(req) 
+    if "/SingleElectron/Run2016B-02Apr2020_ver2-v1/NANOAOD" in dataset and "HIPM" not in dataset:
+        period = dataset[dataset.find("Run")+3:dataset.find("Run")+8]
+        name ="Data_Trigger_SingleElectron_Year_" + "2016B" + ".txt"
+        #open('textfiles/Data/'+name, 'w') 
+        req = 'dasgoclient --query="file dataset=' + dataset + '" > textfiles/Data/'+name
+        print("making "+name)
+        os.system(req) 
 
 print("request complete")
-
-
-
-
-

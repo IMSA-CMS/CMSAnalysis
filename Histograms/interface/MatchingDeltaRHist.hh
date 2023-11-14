@@ -2,6 +2,7 @@
 #define MATCHINGDELTARHIST_HH
 
 #include "CMSAnalysis/Utility/interface/HistogramPrototype1D.hh"
+//#define HistogramPrototype1D_HH
 
 class LeptonJetMatchingModule;
 

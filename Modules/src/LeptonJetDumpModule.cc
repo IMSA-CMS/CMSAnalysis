@@ -17,6 +17,9 @@ LeptonJetDumpModule::LeptonJetDumpModule(std::shared_ptr<LeptonJetMatchingModule
     matchMod(iMatch),
     numEvents(inumEvents)
 {
+  addRequiredModule(iLepJet);
+  addRequiredModule(iMatch);
+  
     counter = 1;
     std::ofstream my_file;
     my_file.open("LeptonJetDump.txt", std::ofstream::out | std::ofstream::trunc);

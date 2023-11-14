@@ -19,7 +19,7 @@ class EventLoader
 {
     public:
         //Constructor
-        EventLoader(std::vector<std::string> fileList, Analyzer *nAnalyzer){rootFiles = fileList; analyzer = nAnalyzer;}
+        EventLoader(std::vector<std::string> fileList, Analyzer *nAnalyzer){rootFiles = fileList; modules = nAnalyzer;}
 
         //Changes file to approproate format
         std::shared_ptr<EventFile> changeFileFormat(TFile* ifile);
@@ -31,6 +31,13 @@ class EventLoader
         //Calls process Root files
         void run(int outputEvery, int nFiles, int maxEvents);
 
+        int getNumOfEvents() const {return numOfEvents;}
+
+        static std::vector<std::string> fetchRootFiles(const std::string &configFile);
+
+    protected:
+        int numOfEvents;
+
     private:
         void beginJob();
         void analyze(const RootEventInterface);
@@ -39,7 +46,7 @@ class EventLoader
         void processRootFiles(int outputEvery, int nFiles, int maxEvents);
 
         std::vector<std::string> rootFiles;
-        Analyzer *analyzer; 
+        Analyzer *modules; 
         std::shared_ptr<EventFile> file = nullptr;
         RootEventInterface eventInterface = RootEventInterface();
         

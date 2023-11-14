@@ -9,6 +9,7 @@
 #include "CMSAnalysis/Utility/interface/Photon.hh"
 #include "CMSAnalysis/Utility/interface/Jet.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 
 // Stores an event by containing ParticleCollections of different types of Particles, as well as MET.
 // Used in EventModule, where cuts are applied to it.
@@ -26,15 +27,16 @@ class Event
         // gets a special object by key
         ParticleCollection<Particle> getSpecial(std::string key) const;
         // get all particles
-        ParticleCollection<Particle> getParticles() const;
+        ParticleCollection<Particle> getParticles(EventInput::RecoLevel level = EventInput::RecoLevel::Reco) const;
 
         void addElectron(Electron electron);
         void addMuon(Muon muon);
         void addPhoton(Photon photon);
         void addJet(Jet jet);
+        void addGenSimParticle(GenSimParticle particle);
         void addSpecialObject(std::string key, Particle obj); 
         void setMET(double newMET) {MET = newMET;}
-        
+
         // returns true if the event contains any particles
         bool containsParticles() const;
 
@@ -46,6 +48,7 @@ class Event
         ParticleCollection<Muon> muons;
         ParticleCollection<Photon> photons;
         ParticleCollection<Jet> jets;
+        ParticleCollection<GenSimParticle> genSimParticles;
         double MET;
         std::map<std::string, ParticleCollection<Particle>> specialObjects;
 };

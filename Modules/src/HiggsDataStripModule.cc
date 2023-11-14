@@ -28,9 +28,12 @@ void HiggsDataStripModule::initialize()
 	}
 }
 
-HiggsDataStripModule::HiggsDataStripModule(const std::string outputFileName, std::shared_ptr<LeptonJetReconstructionModule> iRecomod, std::shared_ptr<LeptonJetMatchingModule> iMatchmod) : recomod(iRecomod),
-																																															matchmod(iMatchmod)
+HiggsDataStripModule::HiggsDataStripModule(const std::string outputFileName, std::shared_ptr<LeptonJetReconstructionModule> iRecomod, std::shared_ptr<LeptonJetMatchingModule> iMatchmod) : 
+recomod(iRecomod),
+matchmod(iMatchmod)
 {
+	addRequiredModule(iRecomod);
+	addRequiredModule(iMatchmod);
 }
 
 void HiggsDataStripModule::finalize()

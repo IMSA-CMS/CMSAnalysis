@@ -15,7 +15,7 @@
 class ZVetoCut : public Cut
 {
     protected:
-        bool checkEventInternal(const Event& event) const override;
+        bool checkEventInternal(const Event& event, const EventInput* input) const override;
 };
 
 #endif

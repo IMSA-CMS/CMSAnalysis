@@ -13,13 +13,18 @@ DelphesEventFile::DelphesEventFile(TFile *ifile) :
     // These objects take the value of the branch. 
     // They change as the treereader advances to the next event. 
     elec_size(treeReader, "elec_size"),
+    elec_dxy(treeReader, "elec_dxy"),
+    elec_dz(treeReader, "elec_dz"),
     elec_eta(treeReader, "elec_phi"),
+    //Is this normal?
     elec_phi(treeReader, "elec_phi"),
     elec_mass(treeReader, "elec_mass"),
     elec_charge(treeReader, "elec_charge"),
     elec_pt(treeReader, "elec_pt"),
     elec_reliso(treeReader, "elec_reliso"),
     muon_size(treeReader, "muon_size"),
+    muon_dxy(treeReader, "muon_dxy"),
+    muon_dz(treeReader, "muon_dz"),
     muon_eta(treeReader, "muon_eta"),
     muon_phi(treeReader, "muon_phi"),
     muon_mass(treeReader, "muon_mass"),
@@ -72,7 +77,7 @@ ParticleCollection<GenSimParticle> DelphesEventFile::getGenSimParticles() const
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(gen_pt[i], gen_eta[i], gen_phi[i], gen_mass[i])),
         gen_pid[i], gen_status[i], gen_m1[i], gen_m2[i], gen_d1[i], gen_d2[i]);
         
-        particle.addInfo("Isolation", 0); 
+        //particle.addInfo("Isolation", 0); GAVIN CHANGED
         genParticles.addParticle(particle);
     }
     return genParticles;
@@ -103,9 +108,9 @@ ParticleCollection<Particle> DelphesEventFile::getRecoParticles() const
         // Lorentz four-vector
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],elec_eta[i], elec_phi[i], elec_mass[i])),
-        charge, ParticleType::electron(), fit);
+        elec_dxy[i], elec_dz[i], charge, ParticleType::electron(), fit);
 
-        particle.addInfo("Isolation", elec_reliso[i]);
+        //particle.addInfo("Isolation", elec_reliso[i]); GAVIN CHANGED
         recoParticles.addParticle(particle);
     }
 
@@ -130,9 +135,9 @@ ParticleCollection<Particle> DelphesEventFile::getRecoParticles() const
         // Lorentz four-vector
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],muon_eta[i], muon_phi[i], muon_mass[i])),
-        charge, ParticleType::muon(), fit);
+        muon_dxy[i], muon_dz[i], charge, ParticleType::muon(), fit);
 
-        particle.addInfo("Isolation", muon_reliso[i]);
+        //particle.addInfo("Isolation", muon_reliso[i]); GAVIN CHANGED
         recoParticles.addParticle(particle);
     }
     return recoParticles;
@@ -144,7 +149,7 @@ ParticleCollection<Particle> DelphesEventFile::getRecoJets() const
     for(Int_t i = 0; i < *jet_size; i++) 
     {
         recoParticles.addParticle(
-        Particle(reco::Candidate::LorentzVector(jet_pt[i], jet_eta[i], jet_phi[i], jet_mass[i]),0,ParticleType::jet()));     
+        Particle(reco::Candidate::LorentzVector(jet_pt[i], jet_eta[i], jet_phi[i], jet_mass[i]), 0, 0, 0,ParticleType::jet()));     
     }
     return recoParticles;
 }

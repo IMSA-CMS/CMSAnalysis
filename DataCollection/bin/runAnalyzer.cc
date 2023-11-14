@@ -13,23 +13,25 @@
 #include "CMSAnalysis/DataCollection/interface/IDType.hh"
 #include "FWCore/FWLite/interface/FWLiteEnabler.h"
 #include "PhysicsTools/FWLite/interface/CommandLineParser.h"
-#include "CMSAnalysis/DataCollection/interface/DataCollectionPlan.hh"
+#include "CMSAnalysis/Plans/interface/DataCollectionPlan.hh"
 #include "CMSAnalysis/DataCollection/interface/AnalyzerOptions.hh"
-#include "CMSAnalysis/DataCollection/interface/ModuleOptions.hh"
-// #include "CMSAnalysis/DataCollection/bin/massResolutionAnalysis.cc"
-// #include "CMSAnalysis/DataCollection/bin/HPlusPlusMassAnalysis.cc"
-// #include "CMSAnalysis/DataCollection/bin/leptonJetReconstructionAnalysis.cc"
-// #include "CMSAnalysis/DataCollection/bin/displacedVertexAnalysis.cc"
-// #include "CMSAnalysis/DataCollection/bin/massAcceptanceAnalysis.cc"
-// #include "CMSAnalysis/DataCollection/bin/triggerAnalysis.cc"
-// #include "CMSAnalysis/DataCollection/bin/invariantMassAnalysis.cc"
-// #include "CMSAnalysis/DataCollection/bin/HiggsBackgroundAnalysis.cc"
-// #include "CMSAnalysis/DataCollection/bin/LeptonJetBackgroundAnalysis.cc"
-// #include "CMSAnalysis/DataCollection/bin/FilestripAnalysis.cc"
+#include "CMSAnalysis/Plans/interface/ModuleOptions.hh"
+#include "CMSAnalysis/DataCollection/interface/EventLoader.hh"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 
 int main(int argc, char **argv)
 {
   auto start = std::chrono::steady_clock::now();
+
+  std::string particleDatabase(Utility::getFullPath("ParticleData.txt"));
+  if (ParticleType::loadParticleDatabase(particleDatabase))
+  {
+    std::cout << particleDatabase << " has been loaded properly!\n";
+  }
+  else
+  {
+    std::cout << particleDatabase << " has not been loaded properly!\n";
+  }
 
   gROOT->SetBatch(true);
   gSystem->Load("libFWCoreFWLite");
@@ -78,7 +80,7 @@ int main(int argc, char **argv)
 
   std::string analysis = options.checkSelectedAnalysis(analysisType);
   std::cout << "Reading input file " << inputFile << std::endl;
-  // analyzer.run(inputFile, outputFile, outputEvery, numFiles);
+  // modules.run(inputFile, outputFile, outputEvery, numFiles);
 
   // analysisPlans[analysisType]->runAnalyzer(inputFile, outputFile, outputEvery, numFiles);
 
@@ -91,9 +93,16 @@ int main(int argc, char **argv)
     plan->getOptions(moduleOptionsPtr);
   }
 
-  plan->initialize();
-  plan->runEventLoader(inputFile, outputFile, outputEvery, numFiles, maxEvents);
+  plan->initialize();   
+  Analyzer analyzer;
+  auto modules = plan->getModules();
+  analyzer.addModules(modules);
+   EventLoader eventLoader(EventLoader::fetchRootFiles(inputFile), &analyzer);
+    analyzer.initialize();
+    eventLoader.run(outputEvery, numFiles, maxEvents);
+    analyzer.writeOutputFile(outputFile);
 
+  
   std::cout << "Processing complete!" << std::endl;
   std::cout << "Output written to " << outputFile << std::endl;
 
@@ -101,6 +110,6 @@ int main(int argc, char **argv)
 
   std::chrono::duration<double> processingTime = end - start;
 
-  std::cout<<"Processing time: "<<processingTime.count()<<"s"<<std::endl;
+  std::cout << "Processing time: "<<processingTime.count()<<"s"<<std::endl;
   return 0;
 }

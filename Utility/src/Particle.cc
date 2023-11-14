@@ -16,15 +16,15 @@
 #include "CMSAnalysis/Utility/interface/ParticleType.hh"
 
 //added for dxy, dz
-Particle::Particle(reco::Candidate::LorentzVector vec, int pid, Particle::SelectionFit fit)
+Particle::Particle(reco::Candidate::LorentzVector vec, double dxy, double dz, int pid, Particle::SelectionFit fit)
 {
-  auto type = identifyType(pid);
+  auto type = ParticleType::getPDGType(pid);
   int charge = type.getCharge()* (std::signbit(pid) ? -1 : 1);
-  particle = std::make_shared<SimpleImplementation>(vec, charge, type, fit);
+  particle = std::make_shared<SimpleImplementation>(vec, dxy, dz, charge, type, fit);
 }
 
-Particle::Particle(reco::Candidate::LorentzVector vec, int charge, const ParticleType& type, Particle::SelectionFit fit):
-particle(std::make_shared<SimpleImplementation>(vec, charge, type, fit))
+Particle::Particle(reco::Candidate::LorentzVector vec, double dxy, double dz, int charge, const ParticleType& type, Particle::SelectionFit fit):
+particle(std::make_shared<SimpleImplementation>(vec, dxy, dz, charge, type, fit))
 {
 }
 
@@ -41,7 +41,7 @@ particle(std::make_shared<LeptonJetImplementation>(iparticle))
 
 Particle::Particle(reco::Candidate::LorentzVector vec, int pid, int status, int m1, int m2,int d1, int d2)
 {
-  auto type = identifyType(pid);
+  auto type = ParticleType::getPDGType(pid);
   int charge = type.getCharge() * (pid < 0 ? -1 : 1);
   particle = std::make_shared<DelphesImplementation>(vec,charge,type,pid,status,m1,m2,d1,d2);
 }
@@ -49,9 +49,9 @@ Particle::Particle(reco::Candidate::LorentzVector vec, int pid, int status, int 
 
 Particle::Particle(reco::Candidate::LorentzVector vec, int pid, const Particle* motherParticle, std::vector<const GenSimParticle*> daughters, const int status)
 {
-  auto type = identifyType(pid);
+  auto type = ParticleType::getPDGType(pid);
   int charge = type.getCharge() * (pid < 0 ? -1 : 1);
-  particle = std::make_shared<GenSimSimpleImplementation>(vec, charge, type, pid, motherParticle, daughters, status);
+  particle = std::make_shared<GenSimSimpleImplementation>(vec, charge, type, motherParticle, daughters, status);
 }
 
 Particle::Particle(const Particle& particle1):
@@ -257,70 +257,6 @@ const ParticleType& Particle::getType() const{
 //   }
 //   return false;
 // }
-
-const ParticleType& Particle::identifyType(int pdgid)
-{
-    if (pdgid > 0 && pdgid < 7)
-    {
-      return ParticleType::quark();
-    }
-    if (pdgid == 11 || pdgid == -11)
-    {
-      return ParticleType::electron();
-    }
-    else if (pdgid == 13 || pdgid == -13)
-    {
-      return ParticleType::muon();
-    }
-    else if (pdgid == 15 || pdgid == -15)
-    {
-      return ParticleType::tau();
-    }
-    else if (pdgid == 22)
-    {
-      return ParticleType::photon();
-    }
-    else if (pdgid == 4900022)
-    {
-      return ParticleType::darkPhoton();
-    }
-    else if (pdgid == 1000022)
-    {
-      return ParticleType::neutralino();
-    }
-    else if (pdgid == 9900041 || pdgid == -9900041)
-    {
-      return ParticleType::leftDoublyHiggs();
-    }
-    else if (pdgid == 9900042 || pdgid == -9900042)
-    {
-      return ParticleType::rightDoublyHiggs();
-    }
-    else if (pdgid == 23)
-    {
-      return ParticleType::z();
-    } 
-    else if (pdgid == 24 || pdgid == -24)
-    {
-      return ParticleType::w();
-    } 
-    else if (pdgid == 25)
-    {
-      return ParticleType::higgs();
-    } 
-    else if ((99 < pdgid && pdgid < 1000) || (-99 > pdgid && pdgid > -1000))
-    {
-      return ParticleType::meson();
-    }
-    else if ((999 < pdgid && pdgid < 10000) || (-999 > pdgid && pdgid > -10000))
-    {
-      return ParticleType::baryon();
-    }
-    else
-    {
-      return ParticleType::none();
-    }
-}
 int Particle::getCharge() const
 {
   checkIsNull();
