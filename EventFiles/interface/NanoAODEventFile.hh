@@ -24,7 +24,7 @@ class NanoAODEventFile : public EventFile
         virtual int getNumOfEvents() const override {return tree->GetEntries();}
         //virtual GenEventInfoProduct getGenInfo() const override;
         virtual double getMET() const override;
-        virtual long getEventIDNum() const override; 
+        virtual unsigned long long getEventIDNum() const override; 
         virtual int getNumPileUpInteractions() const override;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;

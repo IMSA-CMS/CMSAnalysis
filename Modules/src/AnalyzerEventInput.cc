@@ -85,7 +85,7 @@ double AnalyzerEventInput::getMET() const
     return (*eventInterface)->getMET();
 }
 
-long AnalyzerEventInput::getEventIDNum() const
+unsigned long long AnalyzerEventInput::getEventIDNum() const
 {
     return (*eventInterface)->getEventIDNum();
 } 

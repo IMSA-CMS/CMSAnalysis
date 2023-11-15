@@ -27,6 +27,9 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     const std::vector<std::string> genSimDecays{"eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet", "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt"};
     const std::vector<std::string> recoDecays{"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u", "none"};
     
+    //const std::vector<std::string> genSimDecays{"eeee"};
+    //const std::vector<std::string> recoDecays{"eeee"};
+
     //Change this file to your folder to use your own cross sections
     //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
     auto reader = std::make_shared<CrossSectionReader>("/uscms/home/vrao/analysis/CMSSW_12_4_3/src/CMSAnalysis/Analysis/bin/crossSections.txt");
@@ -83,7 +86,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
             auto higgsData = std::make_shared<Process>("Higgs Data", 1);
             //higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "SingleMuonRun2017B-UL2017_MiniAODv2-v1.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
             //higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "SingleElectronRun2017B-UL2017_MiniAODv2-v1.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
-            higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "H++toLL_Format_NanoAOD_Lepton_All_Mass_1400_Period_2017_Run_2.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
+            higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018A.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
 
             std::vector<std::shared_ptr<Process>> backgroundProcesses = {ttbarBackground, zzBackground, dyBackground, multiBosonBackground, higgsSignal, higgsData};
             

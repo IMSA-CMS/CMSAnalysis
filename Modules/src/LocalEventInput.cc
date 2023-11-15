@@ -60,7 +60,7 @@ double LocalEventInput::getMET() const
     return event->getMET();
 }
 
-long LocalEventInput::getEventIDNum() const
+unsigned long long LocalEventInput::getEventIDNum() const
 {
     //return event->getEventIDNum();
     throw std::runtime_error("GenSimEventFile has no implementation of getEventIDNum");  

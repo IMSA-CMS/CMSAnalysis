@@ -102,7 +102,8 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_mass", "GenPart_mass"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pt", "GenPart_pt"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_m1", "GenPart_genPartIdxMother"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pileup", "Pileup_nTrueInt")
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pileup", "Pileup_nTrueInt"),
+        std::make_shared<TreeVariable<TTreeReaderValue<ULong64_t>>>("event", "event")
     };
 
     tree = getFile()->Get<TTree>("Events");
@@ -314,9 +315,9 @@ double NanoAODEventFile::getMET() const
     return static_cast<double>(getArrayElement<Float_t>("met_pt", 0));
 }
 
-long NanoAODEventFile::getEventIDNum() const
+unsigned long long NanoAODEventFile::getEventIDNum() const
 {
-    throw std::runtime_error("NanoAODEventFile has no implementation of getEventIDNum");   
+    return getVariable<ULong64_t>("event");
 }
 
 int NanoAODEventFile::getNumPileUpInteractions() const

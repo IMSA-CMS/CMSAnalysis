@@ -159,7 +159,7 @@ double DelphesEventFile::getMET() const
     return static_cast<double>(met_pt[0]);
 }
 
-long DelphesEventFile::getEventIDNum() const
+unsigned long long DelphesEventFile::getEventIDNum() const
 {
     throw std::runtime_error("DelphesEventFile has no implementation of getEventIDNum"); 
 }

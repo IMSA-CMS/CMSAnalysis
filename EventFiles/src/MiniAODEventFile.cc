@@ -100,7 +100,7 @@ double MiniAODEventFile::getMET() const
     throw std::runtime_error("There are no MET objects found");
 }
 
-long MiniAODEventFile::getEventIDNum() const
+unsigned long long MiniAODEventFile::getEventIDNum() const
 {
     throw std::runtime_error("MiniAODEventFile has no implementation of getEventIDNum");
 }
