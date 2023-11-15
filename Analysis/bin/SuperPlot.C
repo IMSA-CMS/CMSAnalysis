@@ -52,6 +52,7 @@ void SuperPlot()
 			if(processName == "Higgs Signal") {
 				channel->labelProcess("signal", processName);
 			}
+			// "Monte Carlo Data"
 			else if(processName == "Higgs Data") { //This line is only used for complete plots
 				channel->labelProcess("data", processName);
 			}
@@ -76,7 +77,7 @@ void SuperPlot()
 	//TCanvas *canvas = plotFormatter->simple2DHist(process, "Invariant Mass", xAxisTitle, yAxisTitle);
 	//TCanvas *canvas = plotFormatter->simpleStackHist(leptonBackgrounds, "Same Sign Inv Mass", xAxisTitle, yAxisTitle);
 	//TCanvas *canvas = plotFormatter->superImposedHist(leptonBackgrounds, "MET", xAxisTitle, yAxisTitle);
-	TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisTitle, yAxisTitle, massTarget);
+	TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisTitle, yAxisTitle, massTarget, true);
 	
 
 	//Uncomment to save a png picture in your bin folder

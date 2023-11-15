@@ -61,7 +61,7 @@ double GenSimEventFile::getMET() const
     throw std::runtime_error("There are no MET objects found");
 }
 
-long GenSimEventFile::getEventIDNum() const
+unsigned long long GenSimEventFile::getEventIDNum() const
 {
     throw std::runtime_error("GenSimEventFile has no implementation of getEventIDNum"); 
 }

@@ -23,8 +23,8 @@ def loopRun(*fileList):
 		
 		# calls runAnalyzer
 		print("Creating " + outputString)
-		run(["nohup", "runAnalyzer", inputString, outputString, analysisName, numFiles], check=True)
-		#run(["nohup", "runAnalyzer", inputString, outputString, analysisName], check=True)
+		#run(["nohup", "runAnalyzer", inputString, outputString, analysisName, numFiles], check=True)
+		run(["nohup", "runAnalyzer", inputString, outputString, analysisName], check=True)
 
 if __name__ == '__main__':
 	# jobs grouped by process
@@ -42,11 +42,12 @@ if __name__ == '__main__':
 	higgsSignal = ("Higgs1400.txt", )
 
 	#higgsData = ("Data/SingleMuonRun2017B-UL2017_MiniAODv2-v1.txt", "Data/SingleElectronRun2017B-UL2017_MiniAODv2-v1.txt")
-	higgsData = ("H++toLL/H++toLL_Format_NanoAOD_Lepton_All_Mass_1400_Period_2017_Run_2.txt", )
+	higgsData = ("Data/Data_Trigger_SingleMuon_Year_2018A.txt", )
 
 	# List of jobs to run on from those above
-	jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData]
-	
+	#jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData]
+	jobsList = [zz]
+
 	# list of processes
 	processes = []
 	for job in jobsList:

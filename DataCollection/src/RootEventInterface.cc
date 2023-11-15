@@ -17,7 +17,7 @@ double RootEventInterface::getMET() const
 {
     return eventFile->getMET();
 }
-long RootEventInterface::getEventIDNum() const
+unsigned long long RootEventInterface::getEventIDNum() const
 {
     return eventFile->getEventIDNum(); 
 }

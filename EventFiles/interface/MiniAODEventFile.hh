@@ -29,7 +29,7 @@ class MiniAODEventFile : public EventFile
         
         //virtual std::vector<PileupSummaryInfo> getPileupInfo() const override;
         virtual double getMET() const override;
-        virtual long getEventIDNum() const override; 
+        virtual unsigned long long getEventIDNum() const override; 
     private:
         std::shared_ptr<fwlite::Event> event = nullptr;
 };
