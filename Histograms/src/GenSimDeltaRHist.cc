@@ -4,6 +4,7 @@
 #include "DataFormats/Math/interface/deltaR.h"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/GenSimSimpleImplementation.hh"
+#include <iostream>
 
 GenSimDeltaRHist::GenSimDeltaRHist(const std::string& iname, int iNBins, double iminimum, double imaximum):
  HistogramPrototype1D(iname, iNBins, iminimum, imaximum)

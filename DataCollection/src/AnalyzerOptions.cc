@@ -8,6 +8,7 @@
 
 #include "CMSAnalysis/Plans/interface/DisplacedVertexPlan.hh"
 #include "CMSAnalysis/Plans/interface/HiggsBackgroundPlan.hh"
+#include "CMSAnalysis/Plans/interface/HiggsSignalPlan.hh"
 #include "CMSAnalysis/Plans/interface/HPlusPlusMassPlan.hh"
 #include "CMSAnalysis/Plans/interface/InvariantMassPlan.hh"
 #include "CMSAnalysis/Plans/interface/LeptonJetBackgroundPlan.hh"
@@ -37,6 +38,7 @@ AnalyzerOptions::AnalyzerOptions()
   analysisPlans["LeptonJetDataStrip"] = new MLVariablesPlan();
   analysisPlans["HiggsDataStrip"] = new HiggsDataStripPlan();
   analysisPlans["HiggsInvariantMass"] = new HiggsInvariantMassPlan();
+  analysisPlans["HiggsSignal"] = new HiggsSignalPlan();
 }
 
 std::string AnalyzerOptions::pickfileInterface()
