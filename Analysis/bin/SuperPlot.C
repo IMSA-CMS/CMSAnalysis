@@ -21,6 +21,8 @@
 
 void SuperPlot()
 {
+	    //std::vector<double> massTargets {900};
+
 	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
 	//Change extra text here (keep drawLogo to false for now)
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation)");

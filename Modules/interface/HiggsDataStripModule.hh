@@ -28,6 +28,7 @@ private:
 	Float_t eta1;
 	Float_t eta2;
 	Float_t deltaR;
+	Float_t mass;
 
 	const std::shared_ptr<LeptonJetReconstructionModule> recomod;
 	const std::shared_ptr<LeptonJetMatchingModule> matchmod;
