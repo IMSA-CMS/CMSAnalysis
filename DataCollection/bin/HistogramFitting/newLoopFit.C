@@ -29,6 +29,17 @@
 #include <gsl/gsl_sf_gamma.h>
 
 // Fits multiple graphs with the same function
+class fitInformation {
+	public:
+		std::vector<double> results;
+		std::vector<double> errors;
+		std::vector<std::pair<double,double>> ResultError;
+		std::string fittedFunction;
+		std::string baseFunction;
+		int numParams;
+		std::string paramName;
+}; 
+
 void multipleFits();
 
 TH1* getHist(string name, TFile* file);
@@ -48,11 +59,11 @@ std::vector<std::string> tokenize(std::string line);
 std::vector<std::string> generateHistNames();
 // Graphs the values of the parameters
 void graph(std::map<std::string, std::vector<std::vector<double>>> data, std::string filename);
-std::pair<std::string,std::pair<std::pair<std::string,std::string>,std::vector<std::pair<double,double>>>> mapMaker9000(TFitResultPtr Result, bool power, std::string var);
+fitInformation mapMaker9000(TFitResultPtr Result, bool power, std::string var);
 
 // Fits the graphs of parameters to curves
 // must be manually changed 
-std::vector<std::pair<std::string,std::pair<std::pair<std::string,std::string>,std::vector<std::pair<double,double>>>>> fitParameters(std::string filename, std::string paramGraphsName);
+std::vector<fitInformation> fitParameters(std::string filename, std::string paramGraphsName);
 
 double DoubleSidedCrystalballFunction(double *x, double *par);
 double expGaussExp(double *x, double *par);
@@ -70,6 +81,7 @@ TFitResultPtr fitToHyperbolicSecant(char const* name, TH1* hist, TFile* file, st
 TFitResultPtr fitToPearson(char const* name, TH1* hist, TFile* file, std::vector<double> params, int i);
 TFitResultPtr fitToPearsonIV(std::string name, TH1* hist, TFile* file, std::vector<double> params, std::string histsname);
 
+
 void newLoopFit()
 {
 	multipleFits();
@@ -82,19 +94,11 @@ void multipleFits()
 {
 	std::vector<std::vector<double>> results;
 	std::vector<std::vector<double>> errors;
-
 	std::vector<std::vector<std::string>> fittedParameters = {{"Channel Name", "a", "m", "mu", "nu", "n"}};
-
 	// Filenames of root files that have the graphs to fit in them
-	//~vrao/analysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/Higgs1400.root 
-	
 	std::vector<char const*> fileNames{"Higgs1400.root"};
-	//std::vector<char const*> fileNames{"~vrao/analysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/Higgs1400.root"};
 	// The name of the histogram in the root files above that is bing fitted
-	//std::string histType = "MuonMuon Reco Same Sign Invariant Mass;1";
-	std::vector<std::string> histTypes = generateHistNames();
-	//std::string histType = "eeuu_Muon Same Sign Invariant Mass;1";
-	
+	std::vector<std::string> histTypes = generateHistNames();	
 	// This script creates three root files:
 	// The name of the root file the fitted histograms are to be stored
 	std::string fitHistsName = "NewpearsonFitHists.root";
@@ -102,14 +106,15 @@ void multipleFits()
 	std::string paramGraphsName = "pearsonParamGraphs.root";
 	// The name of the root file the fitted parameter graphs are to be stored
 	std::string fitParamsName = "fitParams.root";
-
+	// The name of the text file with all parametrizations
+	std::string parametrizedFunction = "functionParametrizations.txt";
 	TFile* file = TFile::Open(fitHistsName.c_str(), "RECREATE");
 	//delete file;
 
 
-	int Masscounter = 5;
+	int time = 0;
 	for (auto Histname : histTypes){
-
+		bool doFit = true;
 
 		for (auto filename : fileNames){
 			TFile* histFile = TFile::Open(filename);
@@ -152,6 +157,7 @@ void multipleFits()
 						auto result = fitToPearsonIV(name, histY, file, params, fitHistsName);
 						results.push_back(result->Parameters());
 						errors.push_back(result->Errors());
+						doFit = false;
 						}
 					}
 					else{
@@ -197,7 +203,30 @@ void multipleFits()
 	graph(params, paramGraphsName); //should generally work still
 	std::cout<<"Graphed!\n";
 	// uncomment the below line if ready to fit the values of the parameters (the code for fitting parameters is found in fitParameters())
-	auto finalParameters = fitParameters(fitParamsName, paramGraphsName);
+	if(doFit){
+		auto finalParameters = fitParameters(fitParamsName, paramGraphsName);
+		FILE *fptr;
+		if(time == 0){
+		fptr = fopen(parametrizedFunction.c_str(), "w");}
+		else{
+			fptr = fopen(parametrizedFunction.c_str(), "a");
+		}
+		std::string aparam = finalParameters.at(0).fittedFunction;
+		std::string mparam = finalParameters.at(1).fittedFunction;
+		std::string massparam = finalParameters.at(2).fittedFunction;
+		std::string nuparam = finalParameters.at(3).fittedFunction;		
+		std::string nparam = finalParameters.at(4).fittedFunction;
+		for(auto param : finalParameters){
+			std::cout<< param.paramName << "\n";
+		}
+
+		std::string functionString = "("+ nparam +") * std::pow(1 + std::pow((x-("+ massparam +")) / ("+aparam+"),2), -("+mparam+")) * std::exp(-("+nuparam+") * std::atan((x-("+massparam+"))/("+aparam+")))";
+
+		std::string printString = Histname + "|||" + functionString + "\n"; 
+		fprintf(fptr, printString.c_str());
+		fclose(fptr);
+	}
+	time++;
 }
 }
 
@@ -354,7 +383,6 @@ void graph(std::map<std::string, std::vector<std::vector<double>>> data, std::st
 	// int i = 0;
 	for (auto const& value : data)
 	{
-		std::cout<<"Cehckpoint Grpah";
 		TCanvas* c1 = new TCanvas("c1", "Graph Canvas", 800, 500);
 		const int numPoints = 1;//------------------------------------------------------------------------------------------
 		const double* x = value.second.at(0).data();
@@ -373,31 +401,20 @@ void graph(std::map<std::string, std::vector<std::vector<double>>> data, std::st
 
 		// Uncomment the following two lines for graphs drawn on canvases:
 		graph->Draw("AP");
-		paramGraphs->WriteObject(c1, name.c_str());
 		paramGraphs->WriteObject(graph, name.c_str());
 	}
 	paramGraphs->Close();
 
  }
 
-std::vector<std::pair<std::string,std::pair<std::pair<std::string,std::string>,std::vector<std::pair<double,double>>>>> fitParameters(std::string filename, std::string paramGraphsName)
+std::vector<fitInformation> fitParameters(std::string filename, std::string paramGraphsName)
 {	
 	TFile* fitParams = TFile::Open(filename.c_str(), "RECREATE");
 	TFile* paramGraphs = TFile::Open(paramGraphsName.c_str());
+
 	TCanvas* c1 = new TCanvas("c1", "Fit Canvas", 800, 500);
 	TF1* powerLaw = new TF1("powerLaw", "[0]*(x-[1])^[2] + [3]", 0, 800);
-	std::cout<<"checkpoint1";
-	//TGraph* mass = paramGraphs->Get<TGraph>("mass;1");
-	auto mass = dynamic_cast<TGraph*>(paramGraphs->FindObjectAny("mass;1"));
-
-	if(mass){
-		std::cout<<"not null";
-	}
-	if(!mass){
-		std::cout<<"null";
-	}
-	std::cout<<"checkpoint2";
-
+	auto mass = dynamic_cast<TGraph*>(paramGraphs->FindObjectAny("mass"));
 	auto fitResultMass = mass->Fit("pol1", "S");
 	std::cout<<"checkpoint3";
 
@@ -408,7 +425,7 @@ std::vector<std::pair<std::string,std::pair<std::pair<std::string,std::string>,s
 
 
 
-	TGraph* a = paramGraphs->Get<TGraph>("a;1");
+	auto a = dynamic_cast<TGraph*>(paramGraphs->FindObjectAny("a"));
 	powerLaw->SetParameters(.5, 0, 2, 0);
 	powerLaw->FixParameter(1, 0);
 	gStyle->SetOptFit(1111);
@@ -419,7 +436,7 @@ std::vector<std::pair<std::string,std::pair<std::pair<std::string,std::string>,s
 	auto aResult = mapMaker9000(fitResultA, false, "a");
 
 	
-	TGraph* m = paramGraphs->Get<TGraphErrors>("m;1");
+	auto m = dynamic_cast<TGraph*>(paramGraphs->FindObjectAny("m"));
 	powerLaw->SetParameters(.5, 0, 2, 0);
 	gStyle->SetOptFit(1111);
 	auto fitResultM = m->Fit("powerLaw", "S");
@@ -428,7 +445,7 @@ std::vector<std::pair<std::string,std::pair<std::pair<std::string,std::string>,s
 	auto mResult = mapMaker9000(fitResultM, false, "m");
 
 
-	TGraph* n = paramGraphs->Get<TGraph>("n;1");
+	auto n = dynamic_cast<TGraph*>(paramGraphs->FindObjectAny("n"));
 	powerLaw->SetParameters(-107378, 195.667, -.505356, 25964.5);
 	gStyle->SetOptFit(1111);
 	auto fitResultN = n->Fit("powerLaw", "S");
@@ -437,11 +454,11 @@ std::vector<std::pair<std::string,std::pair<std::pair<std::string,std::string>,s
 	auto nResult = mapMaker9000(fitResultN, false, "n");
 
 
-	TGraph* nu = paramGraphs->Get<TGraph>("nu;1");
+	auto nu = dynamic_cast<TGraph*>(paramGraphs->FindObjectAny("nu"));
 	powerLaw->SetParameters(-107378, 195.667, -.505356, 25964.5);
 	gStyle->SetOptFit(1111);
-	auto fitResultNu = n->Fit("powerLaw", "S");
-	n->Draw("AP");
+	auto fitResultNu = nu->Fit("powerLaw", "S");
+	nu->Draw("AP");
 	fitParams->WriteObject(c1, "nu");
 	auto nuResult = mapMaker9000(fitResultN, false, "nu");
 
@@ -453,17 +470,18 @@ std::vector<std::pair<std::string,std::pair<std::pair<std::string,std::string>,s
 	//map-->name and info 
 	//info --> pair with function string and a vector w/ param+error/paramname(fitted function's)
 	//vector(map(str,pair(pair(function w/ param, function w/ param variables),vector(pair(param name, pair(par/err))))))
-	std::vector<std::pair<std::string,std::pair<std::pair<std::string,std::string>,std::vector<std::pair<double,double>>>>> returnResult;
-	returnResult.push_back(nuResult);
-	returnResult.push_back(nResult);
+	std::vector<fitInformation> returnResult;
+	returnResult.push_back(aResult);
 	returnResult.push_back(mResult);
 	returnResult.push_back(massResult);
-	returnResult.push_back(aResult);
+	returnResult.push_back(nuResult);
+	returnResult.push_back(nResult);
+
 	return returnResult;
 }
 
-std::pair<std::string,std::pair<std::pair<std::string,std::string>,std::vector<std::pair<double,double>>>> mapMaker9000(TFitResultPtr Result, bool power, std::string var){
-	
+fitInformation mapMaker9000(TFitResultPtr Result, bool power, std::string var){
+	fitInformation rfitInformation;
 	auto params = Result->Parameters();
 	auto errors = Result->Errors();
 	int i = 0;
@@ -473,20 +491,25 @@ std::pair<std::string,std::pair<std::pair<std::string,std::string>,std::vector<s
 		paramVector.push_back(resultPair);
 		i++;
 	}
-	std::pair<std::string,std::string> functionPair;
+	rfitInformation.errors = errors;
+	rfitInformation.results = params;
+	rfitInformation.ResultError = paramVector;
 	if(power){
-		std::string finalFunction = std::to_string(std::get<0>(paramVector[0])) + "* std::pow(x-" +std::to_string(std::get<0>(paramVector[1])) + ","+std::to_string(std::get<0>(paramVector[2])) +") +" + std::to_string(std::get<0>(paramVector[3]));
-		functionPair.first = "[0]*(x-[1])^[2] + [3]:4";
-		functionPair.second = finalFunction;
+		//x is the true mass
+		std::string finalFunction = std::to_string(std::get<0>(paramVector[0])) + "* std::pow([0]-" +std::to_string(std::get<0>(paramVector[1])) + ","+std::to_string(std::get<0>(paramVector[2])) +") +" + std::to_string(std::get<0>(paramVector[3]));
+		rfitInformation.baseFunction = "[0]*(x-[1])^[2] + [3]";
+		rfitInformation.numParams = 4;
+		rfitInformation.fittedFunction = finalFunction;
 	}
 	else if(!power){
 		std::string finalFunction = std::to_string(std::get<0>(paramVector[0])) + "+" + std::to_string(std::get<0>(paramVector[1])) + "*x";
-		functionPair.first = "[0]+[1]*x:2";
-		functionPair.second = finalFunction;
+		rfitInformation.baseFunction = "[0]+[1]*x";
+		rfitInformation.numParams = 2;
+		rfitInformation.fittedFunction = finalFunction;
+
 	}
-	std::pair<std::pair<std::string,std::string>,std::vector<std::pair<double,double>>> tPair(functionPair,paramVector);
-	std::pair<std::string,std::pair<std::pair<std::string,std::string>,std::vector<std::pair<double,double>>>> map(var, tPair);
-	return map;
+	rfitInformation.paramName = var;
+	return rfitInformation;
 }
 
 double DoubleSidedCrystalballFunction(double *x, double *par)
