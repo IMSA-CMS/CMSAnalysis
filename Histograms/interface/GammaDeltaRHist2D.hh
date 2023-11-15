@@ -1,7 +1,7 @@
 #ifndef GAMMADELTARHIST2D_HH
 #define GAMMADELTARHIST2D_HH
 
-#include "CMSAnalysis/Utility/interface/HistogramPrototype1D.hh"
+#include "CMSAnalysis/Utility/interface/HistogramPrototype2D.hh"
 
 class LeptonJetReconstructionModule;
 

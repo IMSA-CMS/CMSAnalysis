@@ -62,12 +62,12 @@ ParticleCollection<Particle> CmsswEventInterface::getRecoParticles() const
     ParticleCollection<Particle> recoParticles;
     //This seems problematic
     
-        edm::Handle<std::vector<pat::Electron>> electrons;
+        edm::Handle<std::vector<pat::Electron>> electrons; 
         event->getByToken(electronToken, electrons);
 
         for (const auto& p : *electrons)
 	    {   
-	        recoParticles.addParticle(Particle(&p));
+            recoParticles.addParticle(Particle(&p));
 	    }
 
         edm::Handle<std::vector<pat::Muon>> muons;
@@ -75,7 +75,7 @@ ParticleCollection<Particle> CmsswEventInterface::getRecoParticles() const
 
         for (const auto& p : *muons)
 	    {   
-	        recoParticles.addParticle(Particle(&p));
+            recoParticles.addParticle(Particle(&p));
         }
 
         edm::Handle<std::vector<pat::Photon>> photons;
@@ -83,7 +83,7 @@ ParticleCollection<Particle> CmsswEventInterface::getRecoParticles() const
 
         for (const auto& p : *photons)
 	    {       
-	        recoParticles.addParticle(Particle(&p));
+            recoParticles.addParticle(Particle(&p));
         }
         return recoParticles;
 }
@@ -111,6 +111,11 @@ double CmsswEventInterface::getMET() const
         return p.corPt(pat::MET::METCorrectionLevel::Type1);
     }
     throw std::runtime_error("There are no MET objects found");
+}
+
+unsigned long long CmsswEventInterface::getEventIDNum() const
+{
+    throw std::runtime_error("Not implemented yet");
 }
 
 std::vector<bool> CmsswEventInterface::getTriggerResults(std::string subProcess) const

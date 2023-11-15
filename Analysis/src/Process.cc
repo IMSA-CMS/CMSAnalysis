@@ -19,16 +19,16 @@ TH1* Process::getHist(std::string histType, bool scaleToExpected) const
 		for (const auto& singleProcess : processes)
 		{
 			singleProcessNumber++;
-			if (singleProcess.getHist(histType, false) == 0) {
+			if (singleProcess.getHist(histType, scaleToExpected) == 0) {
 				throw std::runtime_error("Histogram not found in process: " + this->name + "\nIn singleProcess number: " + singleProcessNumber);
 			}
-			if (singleProcess.getHist(histType, false)->GetNbinsX() > maxBinNum)
+			if (singleProcess.getHist(histType, scaleToExpected)->GetNbinsX() > maxBinNum)
 			{
-				maxBinNum = singleProcess.getHist(histType, false)->GetNbinsX();
+				maxBinNum = singleProcess.getHist(histType, scaleToExpected)->GetNbinsX();
 			}
-			if ((singleProcess.getHist(histType, false)->GetXaxis()->GetBinWidth(maxBinNum)) > maxBarWidth)
+			if ((singleProcess.getHist(histType, scaleToExpected)->GetXaxis()->GetBinWidth(maxBinNum)) > maxBarWidth)
 			{
-				maxBarWidth = (singleProcess.getHist(histType, false)->GetXaxis()->GetBinWidth(maxBinNum));
+				maxBarWidth = (singleProcess.getHist(histType, scaleToExpected)->GetXaxis()->GetBinWidth(maxBinNum));
 			}
 		}
 		hist = new TH1F(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * maxBarWidth);
@@ -43,11 +43,12 @@ TH1* Process::getHist(std::string histType, bool scaleToExpected) const
 		hist->SetLineColor(color);
 		hist->SetFillColor(color);
 	}
-	//If you want yield to print while running SuperPlot uncomment the print statement (only prints the yield for the first MassTarget in the process)
-	//std::cout << "Total yield for mass target " << processes.at(0).getMassTarget() << " is " << getYield(processes.at(0).getMassTarget()) << std::endl;
 	else{
 		hist = new TH1F(name.c_str(), name.c_str(), 1, 0, 1);
 	}
+	//If you want yield to print while running SuperPlot uncomment the print statement (only prints the yield for the first MassTarget in the process)
+	//std::cout << "Total yield for mass target " << processes.at(0).getMassTarget() << " is " << getYield("processes.at(0).getMassTarget()") << std::endl;
+	
 	return hist;
 }
 

@@ -1,4 +1,4 @@
-#include "CMSAnalysis/DataCollection/interface/GammaHist.hh"
+#include "CMSAnalysis/Histograms/interface/GammaHist.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
 #include "CMSAnalysis/Utility/interface/LeptonJet.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
