@@ -13,6 +13,6 @@
 <use   name="CMSAnalysis/DataCollection"/>
 <environment>
   <bin   file="BackgroundEstimate.cc"/>
-  <bin   file="datacardWork/MakeDatacards.cc"/>
+  <!--<bin   file="datacardWork/MakeDatacards.cc"/>-->
 <use name="CMSAnalysis/Analysis"/>
 </environment>
