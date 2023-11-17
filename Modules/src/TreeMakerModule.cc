@@ -3,8 +3,9 @@
 #include "TTree.h"
 
 
-TreeMakerModule::TreeMakerModule(std::shared_ptr<SpecialVariableModule> iSpecialVariable):
-specialVariable(iSpecialVariable)
+TreeMakerModule::TreeMakerModule(std::shared_ptr<SpecialVariableModule> iSpecialVariable, std::string iName):
+specialVariable(iSpecialVariable),
+name(iName)
 {
     
 }

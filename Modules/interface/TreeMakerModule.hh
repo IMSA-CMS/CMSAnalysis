@@ -12,11 +12,11 @@ class TreeMakerModule : public AnalysisModule
 
     
     public:
-    TreeMakerModule(std::shared_ptr<SpecialVariableModule> specialVariable); //do the same thing for recomod in leptonjetMLStripModule
+    TreeMakerModule(std::shared_ptr<SpecialVariableModule> specialVariable, std::string name); //do the same thing for recomod in leptonjetMLStripModule
     virtual bool process() override;
     virtual void initialize() override;
     virtual void finalize() override;
-    std::string name;
+
 
 
 
@@ -25,7 +25,7 @@ class TreeMakerModule : public AnalysisModule
     private:
     std::shared_ptr<SpecialVariableModule> specialVariable;//same here
     TTree* tree;
-
+    std::string name;
 
 };
 
