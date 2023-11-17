@@ -52,31 +52,31 @@ private:
 	
 	template<typename T>
 	void addValue(std::string name,
-		std::unordered_map<std::string, T, std::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<const std::string, T>>> map,
+		std::unordered_map<std::string, T, std::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<const std::string, T>>>& map,
 		T value);
 
 	template<typename T>
 	void addVariable(std::string name,
-		std::unordered_map<std::string, T, std::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<const std::string, T>>> map);
+		std::unordered_map<std::string, T, std::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<const std::string, T>>>& map);
 };
 
 template<typename T>
 inline void SpecialVariableModule::addValue(std::string name, 
-	std::unordered_map<std::string, T, std::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<const std::string, T>>> map,
+	std::unordered_map<std::string, T, std::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<const std::string, T>>>& map,
 	T value)
 {
-	if (map.find(name) != map.end())
-	{
-		throw std::runtime_error("Variable " + name + " already exists");
-	}
 	map[name] = value;
 }
 
 template<typename T>
 inline void SpecialVariableModule::addVariable(std::string name,
-	std::unordered_map<std::string, T, std::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<const std::string, T>>> map)
+	std::unordered_map<std::string, T, std::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<const std::string, T>>>& map)
 {
-	map[name]; // Creates a new one if it doesn't exist
+	if (map.find(name) != map.end())
+	{
+		throw std::runtime_error("Variable " + name + " already exists");
+	}
+	map.insert({name, T()}); // Creates a new one if it doesn't exist
 }
 //make tree, add =variables to reader
 

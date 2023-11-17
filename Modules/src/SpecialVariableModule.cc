@@ -29,12 +29,14 @@ void SpecialVariableModule::addVariablesToTree(TTree *tree) const
 {
 	for (auto pair : integers)
 	{
+		std::cout << "Adding variable " << pair.first << '\n';
 		tree->Branch(pair.first.c_str(), &pair.second, (pair.first+"/I").c_str());
 	}
 	
 	
 	for (auto pair : floats)
 	{
+		std::cout << "Adding variable " << pair.first << '\n';
 		tree->Branch(pair.first.c_str(), &pair.second, (pair.first+"/F").c_str());
 	}
 }
@@ -43,19 +45,26 @@ void SpecialVariableModule::addVariablesToDataLoader(TMVA::DataLoader *dataloade
 {
 	for (auto pair : integers)
 	{
+		std::cout << "Adding variable " << pair.first << '\n';
 		dataloader->AddVariable(pair.first.c_str(), pair.first.c_str(), "", 'I');
 	}
 	
 	
 	for (auto pair : floats)
 	{
+		std::cout << "Adding variable " << pair.first << '\n';
 		dataloader->AddVariable(pair.first.c_str(), pair.first.c_str(), "", 'F');
 	}
 }
 
 void SpecialVariableModule::initialize()
 {
+	std::cout << "Initializing ";
 	addVariables();
+	for (auto val : floats)
+	{
+		std::cout << "Entry key " << val.first << '\n';
+	}
 }
 
 bool SpecialVariableModule::process()

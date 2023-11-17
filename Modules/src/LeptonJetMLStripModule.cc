@@ -15,7 +15,7 @@ void LeptonJetMLStripModule::addVariables()
     addVariable("leadingPt", SpecialVariableModule::VariableType::Float);
     addVariable("nParticles", SpecialVariableModule::VariableType::Integer);
 	addVariable("eta", SpecialVariableModule::VariableType::Float);
-	//reader.AddVariable("phi", &phi);
+	addVariable("phi", SpecialVariableModule::VariableType::Float);
 	// reader.AddVariable("mass", &mass);
 	addVariable("deltaR", SpecialVariableModule::VariableType::Float);
 	addVariable("sumPt", SpecialVariableModule::VariableType::Float);
@@ -33,7 +33,7 @@ void LeptonJetMLStripModule::calculateVariables()
 
     for (const auto &leptonJet : leptonJets)
     {
-    	addValue("numParticles", leptonJet.getNumParticles());
+    	addValue("nParticles", leptonJet.getNumParticles());
 		double sumPt = 0;
         // jetIndex = jetIterator;
 		addValue("phi", leptonJet.getPhi());

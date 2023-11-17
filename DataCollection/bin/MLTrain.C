@@ -46,11 +46,11 @@ bool returnState(TString &myMethodList)
     std::map<std::string, int> Use;
 
     // Cut optimisation
-    Use["Cuts"] = 1;
-    Use["CutsD"] = 1;
-    Use["CutsPCA"] = 1;
-    Use["CutsGA"] = 1;
-    Use["CutsSA"] = 1;
+    Use["Cuts"] = 0;
+    Use["CutsD"] = 0;
+    Use["CutsPCA"] = 0;
+    Use["CutsGA"] = 0;
+    Use["CutsSA"] = 0;
 
     // Neural Networks (all are feed-forward Multilayer Perceptrons)
     Use["MLP"] = 1;      // Recommended ANN
@@ -73,9 +73,9 @@ bool returnState(TString &myMethodList)
 #endif
 
 #ifdef R__HAS_TMVACPU
-    Use["DNN_CPU"] = 1; // Multi-core accelerated DNN.
+    Use["DNN_CPU"] = 0; // Multi-core accelerated DNN.
 #else
-    Use["DNN_CPU"] = 1;
+    Use["DNN_CPU"] = 0;
 #endif
 
     std::cout << std::endl;
@@ -108,7 +108,7 @@ bool returnState(TString &myMethodList)
     // string sgFile = "photons0_5.root";
     // string sgFile = "photons0_9.root";
     //error on type line 108 and 111
-    string sgFile = "dp2.root";
+    string sgFile = "higgstest2.root";
 
     // input background files here
     string bgFiles[] =
@@ -117,7 +117,7 @@ bool returnState(TString &myMethodList)
             //"dy10.root",
             //"DY50.root",
             //"qcd1.root",
-            "dyN2.root"
+            "DYN3.root"
             // "qcd500.root",
             // "qcd700.root",
             // "qcd1k.root",
@@ -171,7 +171,8 @@ bool returnState(TString &myMethodList)
     // change var1 to index and var2 to pt
     // dataloader->AddVariable("jetIndex", "Jet Index", "", 'F');
     LeptonJetMLStripModule leptonMod(nullptr); 
-    leptonmod.addVariablesToDataLoader(dataloader);
+    leptonMod.initialize();
+    leptonMod.addVariablesToDataLoader(dataloader);
     // Difference in transverse momentum between leading and runner up highest transverse momentum particles.
     //  dataloader->AddSpectator("spec1 := jetIndex*2", "Spectator 1", "units", 'F');
 
