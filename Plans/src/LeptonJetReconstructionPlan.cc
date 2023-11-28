@@ -6,6 +6,8 @@
 #include "TSystem.h"
 
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
+
+#include "CMSAnalysis/Histograms/interface/DeltaRHist.hh"
 #include "CMSAnalysis/Filters/interface/DoubleMuonTrigger.hh"
 #include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
 #include "CMSAnalysis/Modules/interface/GenSimParticleModule.hh"
@@ -37,8 +39,20 @@
 #include "CMSAnalysis/Modules/interface/LeptonJetMLCalculator.hh"
 #include "CMSAnalysis/Filters/interface/LeptonJetSelector.hh"
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
-
+#include "CMSAnalysis/Histograms/interface/GenSimDeltaRHist.hh"
 #include "CMSAnalysis/Histograms/interface/LeptonJetRecoHist.hh"
+
+#include "CMSAnalysis/Histograms/interface/GammaHist.hh"
+#include "CMSAnalysis/Histograms/interface/GammaDeltaRHist2D.hh"
+#include "CMSAnalysis/Histograms/interface/GenSimGammaHist.hh"
+//#include "CMSAnalysis/Filters/interface/NLeptonJetsFilter.hh"
+#include "CMSAnalysis/Histograms/interface/GenSimDeltaRPsedoFilteredHist.hh"
+#include "CMSAnalysis/Histograms/interface/GenSimGammaPsedoFilteredHist.hh"
+#include "CMSAnalysis/Histograms/interface/DarkPhotonMassHist.hh"
+#include "CMSAnalysis/Histograms/interface/GenSimDeltaRTwoJetsPsedoFilteredHist.hh"
+#include "CMSAnalysis/Histograms/interface/GenSimGammaTwoJetsPsedoFilteredHist.hh"
+#include "CMSAnalysis/Histograms/interface/ResolutionHist.hh"
+
 
 using std::make_shared;
 
@@ -60,7 +74,24 @@ void LeptonJetReconstructionPlan::initialize()
   //auto mlMod = std::make_shared<LeptonJetMLCalculator>();
 
   // Histograms
-  auto deltaRHist = std::make_shared<LeptonJetDeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.1); // VIKRAM CHANGED
+  //uncomented 
+  auto gammaDeltaRHist2D = std::make_shared<GammaDeltaRHist2D>(lepRecoMod, "Gamma Delta R Hist", 100, 100, 1, 0, 500, 0.25);
+  //auto darkPhotonMassHist = std::make_shared<DarkPhotonMassHist>("Higgs Mass", 100, 0, 1500);
+  auto resolutionHist = std::make_shared<ResolutionHist>(lepMatchMod, "Gamma Resolution", 1000, -1, 1); 
+   
+  auto gammaHist = std::make_shared<GammaHist>(lepRecoMod, "Gamma Values", 100, 1, 1000); 
+  auto deltaRHist = std::make_shared<DeltaRHist>(lepRecoMod, "Delta R Values", 100, 0, 0.1);  
+  
+  auto genSimGammaHist = std::make_shared<GenSimGammaHist>("Gen Sim Gamma", 100, 1, 1000);
+  auto genSimGammaPsedoFilteredHist = std::make_shared<GenSimGammaPsedoFilteredHist>("Gen Sim Gamma (Reconstructed 1 Jets)", 100, 1, 1000, lepRecoMod); 
+  auto genSimGammaTwoJetsPsedoFilteredHist = std::make_shared<GenSimGammaTwoJetsPsedoFilteredHist>("Gen Sim Gamma (Reconstructed 2 Jets)", 100, 1, 1000, lepRecoMod); 
+
+
+  auto genSimDeltaRHist = std::make_shared<GenSimDeltaRHist>("Gen Sim Delta R", 100, 0, 0.5);
+  //auto genSimDeltaRPsedoFilteredHist = std::make_shared<GenSimDeltaRPsedoFilteredHist>("Gen Sim Delta R (Reconstructed 1 Jets)", 100, 0, 0.5, lepRecoMod);
+  auto genSimDeltaRTwoJetsPsedoFilteredHist = std::make_shared<GenSimDeltaRTwoJetsPsedoFilteredHist>("Gen Sim Delta R (Reconstructed 2 Jets)", 100, 0, 0.5, lepRecoMod);
+
+
   auto pTHist = std::make_shared<LeptonJetPtHist>(lepRecoMod, "pT Values (Reconstructed Jets)", 100, 0, 200);
 
   auto matchedLeptonJetHist = std::make_shared<MatchedLeptonJetHist>("Matched Lepton Jet Hist HadET", 100, 0, 10, lepMatchMod, lepRecoMod, true);
@@ -87,11 +118,27 @@ void LeptonJetReconstructionPlan::initialize()
   eventHistMod->addHistogram(zoomedInLeptonJetInvMassHist);
   histOutputMod->addHistogram(deltaRHist);
   histOutputMod->addHistogram(pTHist);
-  histOutputMod->addHistogram(matchedLeptonJetHist);
+  histOutputMod->addHistogram(matchedLeptonJetHist); 
   histOutputMod->addHistogram(unmatchedLeptonJetHist);
   // eventHistMod->addHistogram(deltaXYHist);
   // eventHistMod->addHistogram(deltaZHist);
   //histOutputMod->addHistogram(relIsoHist);
+  histOutputMod->addHistogram(genSimDeltaRHist);
+  eventHistMod->addHistogram(genSimDeltaRHist);
+  histOutputMod->addHistogram(genSimGammaHist);
+  eventHistMod->addHistogram(genSimGammaHist);
+  //histOutputMod->addHistogram(darkPhotonMassHist);
+  //eventHistMod->addHistogram(darkPhotonMassHist);
+  //histOutputMod->addHistogram(genSimDeltaRPsedoFilteredHist);
+  //eventHistMod->addHistogram(genSimDeltaRPsedoFilteredHist);
+  histOutputMod->addHistogram(genSimGammaPsedoFilteredHist);
+  eventHistMod->addHistogram(genSimGammaPsedoFilteredHist);
+  histOutputMod->addHistogram(genSimDeltaRTwoJetsPsedoFilteredHist);
+  eventHistMod->addHistogram(genSimDeltaRTwoJetsPsedoFilteredHist);
+  histOutputMod->addHistogram(genSimGammaTwoJetsPsedoFilteredHist);
+  eventHistMod->addHistogram(genSimGammaTwoJetsPsedoFilteredHist);
+
+
  // histOutputMod->addHistogram(leptonJetMLHist);
 
   //   histOutputMod->addHistogram(matchDeltaRHist);
@@ -102,8 +149,11 @@ void LeptonJetReconstructionPlan::initialize()
   // auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>();
   // auto recoEventDumpMod = std::make_shared<RecoEventDumpModule>();
   // auto triggerMod = std::make_shared<TriggerModule>();
+ 
+  auto nLeptonsFilter = std::make_shared<NLeptonsFilter>(); 
+  //auto nLeptonJetsFilter =std::make_shared<NLeptonJetsFilter>(lepRecoMod);
 
-  auto nLeptonsFilter = std::make_shared<NLeptonsFilter>(); // Needs to be updated with shared pointers
+  //auto nLeptonsFilter = std::make_shared<NLeptonsFilter>(); // Needs to be updated with shared pointers
  
   auto nLeptonsHist = std::make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
   auto nElectronsHist = std::make_shared<NLeptonsHist>(matchMod, "Matched Electrons", 10, 0, 10, 11);

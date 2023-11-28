@@ -14,6 +14,7 @@
 #include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
 
+
 using std::make_shared;
 
 void HiggsDataStripPlan::initialize()

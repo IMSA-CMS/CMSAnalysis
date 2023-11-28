@@ -1,35 +1,53 @@
 from subprocess import run
-from multiprocessing import Process
+from multiprocessing import Process 
 
 def loopRun(*fileList):
-	path = "textfiles/SingleMassSnowmass/"
+	path = "textfiles/"
 	for file in fileList:
 		# Filling in the parameters of runAnalyzer
-		analysis = "HiggsBackground"
-		inputString = "input=" + path + file
+		analysisBackground = "HiggsBackground"
+		analysisSignal = "HiggsSignal"
 		nameLocation = file.rfind("/") + 1
 		nameEnd = len(file) - 4
 		name = file[nameLocation:nameEnd]
-		outputString = "output=" + name + "_" + analysis + ".root"
+		#process = file[0:file.rfind("/")]
+		outputString = "output=" + name + ".root"
+				
+		if file == "Higgs1400.txt":	
+			analysisName = "analysis=" + analysisSignal
+			inputString = "input=" + file
+		else:
+			analysisName = "analysis=" + analysisBackground
+			inputString = "input=" + path + file
+		numFiles = "numFiles=1"
 		
-		analysisName = "analysis=" + analysis
 		# calls runAnalyzer
 		print("Creating " + outputString)
-		run(["runAnalyzer", inputString, outputString, analysisName], check=True)
+		#run(["nohup", "runAnalyzer", inputString, outputString, analysisName, numFiles], check=True)
+		run(["nohup", "runAnalyzer", inputString, outputString, analysisName], check=True)
 
 if __name__ == '__main__':
 	# jobs grouped by process
 	# If a job only has one pickfile in it, make sure to add a comma at the end so that python thinks it is a tuple
 	
-	dy50 = ("DY50Run2.txt", )
+	ttBar = ("TTbar/TTbar_Boson_NA_Decay_LL_Run_2.txt", "TTbar/TTbar_Boson_W_Decay_L_Run_2.txt", "TTbar/TTbar_Boson_Z_Decay_LL_Run_2.txt")
 
-	qcd500 = ("Run2QCD/QCD500.txt", )
+	zz = ("ZZ/ZZ_Decay_2e2mu_Run_2.txt", "ZZ/ZZ_Decay_2e2tau_Run_2.txt", "ZZ/ZZ_Decay_2mu2tau_Run_2.txt", "ZZ/ZZ_Decay_4e_Run_2.txt", "ZZ/ZZ_Decay_4L_Run_2.txt", "ZZ/ZZ_Decay_4mu_Run_2.txt", "ZZ/ZZ_Decay_4tau_Run_2.txt")
+	
+	dy50 = ("Drell-Yan/Drell-Yan_MassCut_10-50_Run_2.txt", "Drell-Yan/Drell-Yan_MassCut_50-inf_Run_2.txt")
 
-	zz = ("SingleMassSnowmass/ZZ/ZZPick4.txt", )
+	multiBoson = ("MultiBoson/MultiBoson_Bosons_WW_Decay_2L_Run_2.txt", "MultiBoson/MultiBoson_Bosons_WWW_Decay_NA_Run_2.txt", "MultiBoson/MultiBoson_Bosons_WWZJets_Decay_4L_Run_2.txt",
+	"MultiBoson/MultiBoson_Bosons_WZ_Decay_3L_Run_2.txt", "MultiBoson/MultiBoson_Bosons_WZZ_Decay_NA_Run_2.txt", "MultiBoson/MultiBoson_Bosons_ZZZ_Decay_NA_Run_2.txt")
 
-	ttBar = ("SingleMassSnowmass/TTBar/TTBarPick500.txt", )
+	higgsSignal = ("Higgs1400.txt", )
+
+	#higgsData = ("Data/SingleMuonRun2017B-UL2017_MiniAODv2-v1.txt", "Data/SingleElectronRun2017B-UL2017_MiniAODv2-v1.txt")
+	higgsData = ("Data/Data_Trigger_SingleMuon_Year_2018A.txt", )
+
 	# List of jobs to run on from those above
-	jobsList = [dy50, qcd500, zz, ttBar]
+	#jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData]
+	jobsList = [zz]
+
 	# list of processes
 	processes = []
 	for job in jobsList:
