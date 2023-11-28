@@ -48,7 +48,7 @@ void LeptonJetReconstructionPlan::initialize()
 
   auto eventMod = std::make_shared<EventModule>();
   auto eventHistMod = eventMod->getHistogramModule();
-  eventMod->addSelector(std::make_shared<LeptonJetSelector>());
+  eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5));
 
   auto matchMod = std::make_shared<MatchingModule>();
   auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.01);
@@ -57,7 +57,7 @@ void LeptonJetReconstructionPlan::initialize()
   auto lepMatchMod =
       std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.1);
   auto histOutputMod = std::make_shared<HistogramOutputModule>();
-  auto mlMod = std::make_shared<LeptonJetMLCalculator>();
+  //auto mlMod = std::make_shared<LeptonJetMLCalculator>();
 
   // Histograms
   auto deltaRHist = std::make_shared<LeptonJetDeltaRHist>(lepRecoMod, "Delta R Values (Reconstructed Jets)", 100, 0, 0.1); // VIKRAM CHANGED
@@ -75,13 +75,16 @@ void LeptonJetReconstructionPlan::initialize()
   // auto matchEtaHist = std::make_shared<MatchingEtaHist>(lepMatchMod, "Differences in Eta for Matched Lepton Jets", 100, -1, 1);
 
   //  auto relIsoHist = std::make_shared<IsolationHist>(EventInput::RecoLevel::Reco, "Jet pT Rel", 10000, 0, 100);
-  auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(EventInput::RecoLevel::Reco, "NN Classifier Output Distribution", 100, 0, 1, mlMod, lepRecoMod);
-
+ // auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(EventInput::RecoLevel::Reco, "NN Classifier Output Distribution", 100, 0, 1, mlMod, lepRecoMod);
+  auto leptonJetInvMassHist = std::make_shared<LeptonJetInvariantMassHist>("Lepton Jet Invariant Mass", 1000, 0, 100);
+  auto zoomedInLeptonJetInvMassHist = std::make_shared<LeptonJetInvariantMassHist>("Zoomed In Lepton Jet Invariant Mass", 1000, 0, 10);
   // auto deltaXYHist = std::make_shared<DxyHist>(EventInput::RecoLevel::Reco, "Vertex Delta XY from Primary Vertex", 50, 0, 5);
   // auto deltaZHist = std::make_shared<DzHist>(EventInput::RecoLevel::Reco, "Vertex Delta Z from Primary Vertex", 50, 0, 5);
   // uncomented
 
   eventHistMod->addHistogram(deltaRHist);
+  eventHistMod->addHistogram(leptonJetInvMassHist);
+  eventHistMod->addHistogram(zoomedInLeptonJetInvMassHist);
   histOutputMod->addHistogram(deltaRHist);
   histOutputMod->addHistogram(pTHist);
   histOutputMod->addHistogram(matchedLeptonJetHist);
@@ -152,7 +155,7 @@ void LeptonJetReconstructionPlan::initialize()
   modules.addProductionModule(lepRecoMod);
   // modules.addProductionModule(genPartMod);
   modules.addProductionModule(lepMatchMod);
-
+  modules.addProductionModule(eventMod);
   modules.addAnalysisModule(histOutputMod);
   modules.addAnalysisModule(eventHistMod);
 
