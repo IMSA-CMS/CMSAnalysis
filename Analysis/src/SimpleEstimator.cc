@@ -19,11 +19,11 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, std::stri
     double efficiency = hist->GetEntries() / totaleventsran;
 
     double signalest = crosssection * 1000 * luminosity * efficiency;
-    // std::cout << "process " << process->getName() << std::endl; 
-    // std::cout << "efficiency " << efficiency << std::endl;
-    // std::cout << "luminosity " << luminosity << std::endl;
-    // std::cout << "cross section " << crosssection << std::endl;
-    // std::cout << "integral " << hist->Integral() << std::endl;
-    // std::cout << "yield for " << process->getName() << " is " << signalest << std::endl;
+     std::cout << "process " << process->getName() << std::endl; 
+     std::cout << "efficiency " << efficiency << std::endl;
+     std::cout << "luminosity " << luminosity << std::endl;
+     std::cout << "cross section " << crosssection << std::endl;
+     std::cout << "integral " << hist->Integral() << std::endl;
+     std::cout << "yield for " << process->getName() << " is " << signalest << std::endl;
     return signalest;
 }
