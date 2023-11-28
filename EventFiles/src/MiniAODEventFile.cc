@@ -168,3 +168,8 @@ bool MiniAODEventFile::isDone() const
 {
     return event->atEnd();
 }
+
+std::vector<double> MiniAODEventFile::getPDFWeights() const
+{
+    throw "Function not implemented";
+}

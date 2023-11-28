@@ -26,6 +26,8 @@ class LocalEventInput : public EventInput
         virtual ParticleCollection<Particle> getJets(RecoLevel level) const override;
         virtual ParticleCollection<Particle> getSpecial(std::string key) const override;
         virtual int getNumPileUpInteractions() const override;
+
+        virtual std::vector<double> getPDFWeights() const override;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;
         virtual double getMET() const override;

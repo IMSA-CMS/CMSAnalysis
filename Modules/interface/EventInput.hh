@@ -33,6 +33,7 @@ public:
     virtual ParticleCollection<Particle> getJets(RecoLevel level) const = 0;
     virtual ParticleCollection<Particle> getSpecial(std::string key) const = 0;
     virtual int getNumPileUpInteractions() const = 0;
+    virtual std::vector<double> getPDFWeights() const = 0;
 
     virtual std::vector<bool> getTriggerResults(std::string subProcess) const = 0;
     virtual std::vector<std::string> getTriggerNames(std::string subProcess) const= 0;

@@ -43,17 +43,29 @@ bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) c
 
         if (leptonType == ParticleType::electron() && leptonPt > electronThreeChannelCut)
         {
-            return true;
+            return false;
         }
         else if (leptonType == ParticleType::muon() && leptonPt > muonThreeChannelCut)
         {
-            return true;
+            return false;
         }
 
         return false;
     } 
     else
     {
-        return true;
+        // auto electrons = event.getElectrons();
+        // auto muons = event.getMuons();
+        // if (numLeptons == 4 
+        // && electrons.size() == 2 
+        // && muons.size() == 2
+        // && electrons[0].getCharge() == electrons[1].getCharge()
+        // && muons[0].getCharge() == muons[1].getCharge()
+        // && electrons[0].getCharge() != muons[0].getCharge()
+        // ) 
+        // {
+        //     return true;
+        // }
+        return false;
     }
 }
