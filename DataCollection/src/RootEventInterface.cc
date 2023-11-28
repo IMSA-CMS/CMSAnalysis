@@ -34,3 +34,8 @@ bool RootEventInterface::checkTrigger(std::string triggerName, std::string subPr
 {
    return eventFile->checkTrigger(triggerName, subProcess);
 }
+
+std::vector<double> RootEventInterface::getPDFWeights() const
+{
+    return eventFile->getPDFWeights();
+}

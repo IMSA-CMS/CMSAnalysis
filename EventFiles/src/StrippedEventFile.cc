@@ -150,3 +150,8 @@ bool StrippedEventFile::isDone() const
 {
     return getEventCount() > tree->GetEntries();
 }
+
+std::vector<double> StrippedEventFile::getPDFWeights() const
+{
+    throw "Function not implemented";
+}
