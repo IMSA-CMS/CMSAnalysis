@@ -94,13 +94,11 @@ private:
         //"HLT_DoubleTrkMu_16_6_NoFiltersNoVtx"
         //"HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ"
         "HLT_Mu37_TkMu27"
-        //"HLT_DoubleL2Mu50"
         } },
     { EnumTriggers::singleElectronTriggers, {
-        // "HLT_Ele27_WPTight_Gsf"
+        //"HLT_Ele27_WPTight_Gsf"
         //"HLT_TripleMu_12_10_5"
-        "HLT_TripleMu_10_5_5_DZ"
-        //"HLT_TripleMu_5_3_3_Mass3p8_DZ"
+        //"HLT_TripleMu_10_5_5_DZ"
          } },
 
     { EnumTriggers::doubleElectronTriggers, {

@@ -43,6 +43,11 @@ void LeptonJetEfficiency::doCounters()
             {
                 electronCount++;
             }
+
+            //do here
+            //count passed mass > 10
+            //change values maybe
+            //signal should drop a lot, signal should drop little
             
             if (particle.getType() == ParticleType::muon())
             {
