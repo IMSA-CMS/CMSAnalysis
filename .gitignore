@@ -19,6 +19,7 @@
 
 # Text Files
 **/bin/*.txt
+*.txt
 
 # Keep all textfiles in textfiles
 !DataCollection/bin/textfiles/*.txt

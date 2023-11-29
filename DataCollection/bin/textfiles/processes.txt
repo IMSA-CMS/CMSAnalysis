@@ -15,11 +15,14 @@ QCD
 HTCut:	50-100	100-200	200-300	300-500	500-700	700-1000	1000-1500	1500-2000	2000-inf
 Run:	HLLHC	2
 
-TTbartoLL
-Run:	HLLHC
-
-ZZto4L
+TTbar
+Boson:	WJets	Z	NA
+Decay	L	LL
 Run:	HLLHC	2
+
+ZZ
+Decay:	2e2mu	2e2tau	2mu2tau	4e	4mu	4tau	4L
+Run: 	HLLHC	2
 
 DarkPhotonSUSY
 Mass:	0_1	0_2	0_3	0_4	0_5	0_7	0_9	1_2	1_5	2_0	2_5
@@ -38,6 +41,11 @@ JPsi
 Run:	2
 
 Data
-Trigger:	EGamma	DoubleMuon
-Year:	2017a
+Trigger:	EGamma	DoubleMuon	SingleMuon
+Year:	2016B	2016C	2016D	2016E	2016F	2016G	2016H	2017a	2017B	2017C	2017D	2017E	2017F	2017G	2017H	2018A	2018B	2018C	2018D	2022A	2022B	2022C
+
+MultiBoson
+Bosons:	WW	WZ	WWW	WZZ	ZZZ	WWZJets
+Decay:	2L	3L	4L	NA
+Run:	2
 
