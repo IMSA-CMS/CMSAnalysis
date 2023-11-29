@@ -80,6 +80,7 @@ void RecoGenSimComparisonModule::finalize()
         std::cout << "\nMuon events with ISR " << muonIsrCounter/(double)numOfDesiredEvents << "\n";
         std::cout << "Muon events with FSR " << muonFsrCounter/(double)numOfDesiredEvents << "\n";
         std::cout << "No match muon events: " << muonNoMatchCounter/(double)numOfDesiredEvents << "\n\n";
+        std::cout << "Fraction with Mu24 " << muon24Count/(double)eventCounter << "\n\n";
     }
 }
 void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particle>& recoParts, 
@@ -540,6 +541,7 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
     int leptonCount = 0;
     int elecCount = 0;
     int muonCount = 0;
+    bool moun24Found = false;
     int fromQuark = 0;
     int fromLep = 0;
     bool elecEvent = false;
@@ -557,8 +559,14 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
         {
             muonCount++;
             leptonCount++;
+            moun24Found = moun24Found || recoPart.getPt() > 24;
         }
     }
+    if (moun24Found) 
+    {
+        ++muon24Count; 
+    }
+    
     if (leptonCount < 4)
     {
         return;
@@ -598,6 +606,7 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
                 }
 
                 //
+                std::cout << !GenSimParticle(genPart).hasUniqueMother();
                 if (!GenSimParticle(genPart).hasUniqueMother())
                 {
                     if (eventOutput) output << std::endl;
@@ -625,14 +634,14 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
                     fromQuark++;
                 }
 
-                
-                if (recoPart.getType()==genPart.getType())
-                {
-                    if((recoPart.getPt() - genPart.getPt())/genPart.getPt() < 0.25 && genPart.getCharge() == recoPart.getCharge())
-                    {
+                // I do not know what this is
+                // if (recoPart.getType()==genPart.getType())
+                // {
+                //     if((recoPart.getPt() - genPart.getPt())/genPart.getPt() < 0.25 && genPart.getCharge() == recoPart.getCharge())
+                //     {
                         
-                    }
-                }
+                //     }
+                // }
             }
             genEventElement++;
         }

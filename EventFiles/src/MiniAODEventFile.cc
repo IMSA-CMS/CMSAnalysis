@@ -143,7 +143,7 @@ bool MiniAODEventFile::checkTrigger(std::string triggerName, std::string subProc
 
         if (names[i].substr(0, triggerName.length()).compare(triggerName) == 0 && results[i])
         {
-            // std::cout << "Is THISIS part running?" << "\n";
+            // std::cout << "Is THIS part running?" << "\n";
             return true;
         }
         // std::cout << "Is this part running?" << "\n";

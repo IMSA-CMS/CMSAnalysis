@@ -42,12 +42,13 @@ void TriggerPlan::initialize()
 
 
   // Configure objects
+  //trigSimMod->enableAllTriggers();
   trigSimMod->disableAllTriggers(); // For testing purposes. You should probably remove this, if I haven't already
   // simTrigSingleElectron->enableAllTriggers();
   // simTrigSingleMuon->enableAllTriggers();
   // simTrigPhoton->enableAllTriggers();
   // USE these lines as template add my own lines
-  triggerMod->addTrigger(simTrigSingleElectron);
+  //triggerMod->addTrigger(simTrigSingleElectron);
   triggerMod->addTrigger(simTrigSingleMuon);
   triggerMod->addTrigger(simTrigDoubleMuon);
   // triggerMod->addTrigger(simTrigDoubleElectron);

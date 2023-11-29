@@ -81,6 +81,10 @@ bool GenSimParticle::hasUniqueMother() const
 GenSimParticle GenSimParticle::uniqueMother() const
 {
   checkIsNull();
+  if (!hasMother()) 
+  {
+    throw std::runtime_error("No mother found!");
+  }
   // The mother that is not itself
   auto mom = mother();
   mom.checkIsNull();
@@ -89,7 +93,6 @@ GenSimParticle GenSimParticle::uniqueMother() const
   {
     return mom.uniqueMother(); //Recursive back to itself, so it will keep going until it returns a mother that is not the particle
   }
-
   return mom;
 }
 

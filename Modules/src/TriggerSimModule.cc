@@ -119,7 +119,7 @@ void TriggerSimModule::finalize()
   std::cout << std::endl;
   auto iter = triggerResultsData.begin();
   //Do every other trigger because the entire list of triggers is too long to fit in the terminal
-  iter++;
+  //iter++;
   while (iter != triggerResultsData.end())
   {
     std::cout << iter->first << " : Passed " << iter->second.passed << " : Total " << iter->second.total << " : Passed/Total "

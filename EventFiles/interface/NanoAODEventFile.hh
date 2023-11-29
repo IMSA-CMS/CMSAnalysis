@@ -31,7 +31,7 @@ class NanoAODEventFile : public EventFile
     private:
 
         TTree* tree;
-        TTreeReader treeReader;
+        mutable TTreeReader treeReader;
 
         class TreeVariableBase
         {

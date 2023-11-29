@@ -43,20 +43,47 @@ process.options = cms.untracked.PSet( SkipEvent = cms.untracked.vstring('Product
 if options.input=="":
 	print("INPUT FILE MISSING!")
 
-dataFileName = "../bin/textfiles/Data/" + options.input
+#dataFileName = "../bin/textfiles/Data/" + options.input
 #BTagCSVRun2017B-UL2017_MiniAODv2-v1.txt
-with open(dataFileName, 'r') as file:
-    datatxt = file.read()
-dataArray = datatxt.split()
+#with open(dataFileName, 'r') as file:
+  #  datatxt = file.read()
+#dataArray = datatxt.split()
+
+import subprocess
+getFileList = "getFileList"
+shellCommand = f"{getFileList} {options.input}"
+try: 
+    datatxt = subprocess.run(shellCommand, shell=True, text=True, check=True, capture_output=True)
+except subprocess.CalledProcessError as e:
+    print(f"Error: {e}")
+dataArray = datatxt.stdout.split()
+
+def isolateName(dataArray):
+    index = dataArray.find("/store")
+    newName = dataArray[index:]
+    return(newName)
+
+newDataArray = []
+for file in dataArray:
+    if not file.startswith("root:"):
+        continue
+    newFileName = isolateName(file)
+    print(newFileName)
+    newDataArray.append(newFileName)
+
+
+
+
+#root://cmsxrootd.fnal.gov///store/data/Run2017B/DoubleMuon/MINIAOD/UL2017_MiniAODv2-v1/260000/824747C8-7A0A-3145-901F-3D3FA5B6D112.root
 
 #----------------------------------------------------------------------------------------------------------
 import os
 
-for rfile in dataArray:
-	req = 'dasgoclient --query="run file="'+rfile
-	os.system(req)
+# for rfile in dataArray:
+# 	req = 'dasgoclient --query="run file="'+rfile
+# 	os.system(req)
 
-process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring(dataArray))
+process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring(newDataArray))
 
 #'file:/afs/cern.ch/cms/Tutorials/TWIKI_DATA/TTJets_8TeV_53X.root'
 #'/store/data/Run2016C/DoubleEG/MINIAOD/03Feb2017-v1/80000/EAEBC799-70EC-E611-A18A-02163E019D0D.root'
