@@ -6,4 +6,5 @@
 <use name="DataFormats/TrackReco"/>
 <use name="CMSAnalysis/DataCollection"/>
 <flags EDM_PLUGIN="1"/>
+<flags CXXFLAGS="-g"/>
 

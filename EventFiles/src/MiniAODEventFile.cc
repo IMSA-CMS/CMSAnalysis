@@ -45,7 +45,7 @@ ParticleCollection<Particle> MiniAODEventFile::getRecoParticles() const
 
         for (const auto& p : *electrons)
 	    {       
-	        recoParticles.addParticle(Particle(&p)); 
+            recoParticles.addParticle(Particle(&p)); 
 	    }
 
         edm::Handle<std::vector<pat::Muon>> muons;
@@ -53,7 +53,7 @@ ParticleCollection<Particle> MiniAODEventFile::getRecoParticles() const
 
         for (const auto& p : *muons)
 	    {       
-	        recoParticles.addParticle(Particle(&p));
+            recoParticles.addParticle(Particle(&p));
         }
 
         edm::Handle<std::vector<pat::Photon>> photons;
@@ -61,7 +61,7 @@ ParticleCollection<Particle> MiniAODEventFile::getRecoParticles() const
 
         for (const auto& p : *photons)
 	    {       
-	        recoParticles.addParticle(Particle(&p));
+            recoParticles.addParticle(Particle(&p));
         }
         return recoParticles;
 }
@@ -98,6 +98,11 @@ double MiniAODEventFile::getMET() const
         return p.corPt(pat::MET::METCorrectionLevel::Type1);
     }
     throw std::runtime_error("There are no MET objects found");
+}
+
+unsigned long long MiniAODEventFile::getEventIDNum() const
+{
+    throw std::runtime_error("MiniAODEventFile has no implementation of getEventIDNum");
 }
 
 std::vector<bool> MiniAODEventFile::getTriggerResults(std::string subProcess) const
