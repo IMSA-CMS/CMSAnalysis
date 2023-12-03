@@ -1,6 +1,9 @@
 #ifndef LEPTONJETSELECTOR_HH
 #define LEPTONJETSELECTOR_HH
 #include <memory>
+#include <vector>
+#include "CMSAnalysis/Utility/interface/Lepton.hh"
+#include "CMSAnalysis/Utility/interface/LeptonJet.hh"
 
 #include "CMSAnalysis/Filters/interface/Selector.hh"
 
@@ -13,9 +16,13 @@ class LeptonJetSelector : public Selector
     public:
         //Selects particles, keeping only loose muons with pT greater than 5.
         void selectParticles(const EventInput* input, Event& event) const override;
+        LeptonJetSelector(double deltaRCut = .5);
 
     private:
-        std::shared_ptr<LeptonJetReconstructionModule> recoMod;
+        std::vector<LeptonJet> findLeptonJets(ParticleCollection<Lepton> recoCandidates) const;
+        LeptonJet createLeptonJet(Lepton highestPtLepton) const;
+        Particle findHighestPtLepton(std::vector<Lepton> leptons) const;
+        double deltaRCut;
 };
 
 #endif
