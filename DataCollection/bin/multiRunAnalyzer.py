@@ -13,9 +13,12 @@ def loopRun(*fileList):
 		#process = file[0:file.rfind("/")]
 		outputString = "output=" + name + ".root"
 				
-		if file == "Higgs1400.txt":	
+		if file == "Higgs1400.txt" or file == "Higgs600.txt" or file == "Higgs800.txt" or file == "Higgs1000.txt" or file == "Higgs1200.txt":	
 			analysisName = "analysis=" + analysisSignal
-			inputString = "input=" + file
+			inputString = "input=" +file
+		# elif file == "Higgs1300.txt" or file == "Higgs1500.txt":
+		# 	analysisName = "analysis=" + analysisSignal
+		# 	inputString = "input=" + path + file
 		else:
 			analysisName = "analysis=" + analysisBackground
 			inputString = "input=" + path + file
@@ -24,7 +27,7 @@ def loopRun(*fileList):
 		# calls runAnalyzer
 		print("Creating " + outputString)
 		#run(["nohup", "runAnalyzer", inputString, outputString, analysisName, numFiles], check=True)
-		run(["nohup", "runAnalyzer", inputString, outputString, analysisName], check=True)
+		run(["nohup", "runAnalyzer", inputString, outputString, analysisName, "numFiles=3"], check=True)
 
 if __name__ == '__main__':
 	# jobs grouped by process
@@ -39,14 +42,14 @@ if __name__ == '__main__':
 	multiBoson = ("MultiBoson/MultiBoson_Bosons_WW_Decay_2L_Run_2.txt", "MultiBoson/MultiBoson_Bosons_WWW_Decay_NA_Run_2.txt", "MultiBoson/MultiBoson_Bosons_WWZJets_Decay_4L_Run_2.txt",
 	"MultiBoson/MultiBoson_Bosons_WZ_Decay_3L_Run_2.txt", "MultiBoson/MultiBoson_Bosons_WZZ_Decay_NA_Run_2.txt", "MultiBoson/MultiBoson_Bosons_ZZZ_Decay_NA_Run_2.txt")
 
-	higgsSignal = ("Higgs1400.txt", )
+	higgsSignal = ("Higgs800.txt","Higgs1000.txt","Higgs1200.txt", )
 
 	#higgsData = ("Data/SingleMuonRun2017B-UL2017_MiniAODv2-v1.txt", "Data/SingleElectronRun2017B-UL2017_MiniAODv2-v1.txt")
 	higgsData = ("Data/Data_Trigger_SingleMuon_Year_2018A.txt", )
 
 	# List of jobs to run on from those above
-	#jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData]
-	jobsList = [zz]
+	jobsList = [higgsSignal]
+	#jobsList = [zz]
 
 	# list of processes
 	processes = []
