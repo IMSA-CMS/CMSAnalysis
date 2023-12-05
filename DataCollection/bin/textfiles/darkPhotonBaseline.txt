@@ -1,7 +1,3 @@
-DarkPhoton
-DpMass:	0_3
-HiggsMass:	1000
-FSR:	0_0
-Decay:	Higgs2DP
-Format:	MiniAOD
-Run:	2
+QCD
+HTCut:	1000-1500
+Run:	HLLHC

@@ -10,7 +10,14 @@
 
 void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
 {
+    std::cout << "Getting leptons\n";
+    std::cout << "Print electron id" << ParticleType::electron().getpdgId() << '\n';
     auto particles = input->getLeptons(EventInput::RecoLevel::Reco).getParticles();
+
+    for (const auto& particle : particles)
+    {
+        std::cout << particle;
+    }
 
     for (const auto& particle : particles)
     {

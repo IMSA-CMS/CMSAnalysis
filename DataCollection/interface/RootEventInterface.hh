@@ -19,6 +19,7 @@ class RootEventInterface : public EventInterface
         ParticleCollection<Particle> getRecoJets() const override;
         double getMET() const override;
         std::vector<double> getPDFWeights() const override;
+        unsigned long long getEventIDNum() const override; 
         std::vector<bool> getTriggerResults(std::string subProcess) const override;
         std::vector<std::string> getTriggerNames(std::string subProcess) const override;
         virtual int getNumPileUpInteractions() const override;
