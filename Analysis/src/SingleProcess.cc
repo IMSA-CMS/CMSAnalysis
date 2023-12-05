@@ -23,6 +23,7 @@ TH1* SingleProcess::getHist(std::string histType, bool scaleToExpected) const
         double events = hist->Integral();
         if(events != 0) {
             hist->Scale(yield/events);
+            //std::cout << "Scale: " << (yield/events) << "\n";
         }
     }
     for(auto correction : corrections) {
