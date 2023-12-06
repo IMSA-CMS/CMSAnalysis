@@ -151,7 +151,7 @@ void ParticleType::particleTypeOverrides()
     std::vector<CollectionHistParams>{getNumberHist()}); 
 
     registerType("Lepton Jet",29,0,
-    std::vector<HistParams>{getPtHist(),getPhiHist(),getEtaHist()},
+    std::vector<HistParams>{getPtHist(),getPhiHist(),getEtaHist(),getDaughterDeltaRHist()},
     std::vector<CollectionHistParams>{getNumberHist()}); 
 }
 

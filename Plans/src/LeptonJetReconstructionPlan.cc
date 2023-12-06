@@ -48,14 +48,14 @@ void LeptonJetReconstructionPlan::initialize()
 
   auto eventMod = std::make_shared<EventModule>();
   auto eventHistMod = eventMod->getHistogramModule();
-  eventMod->addSelector(std::make_shared<LeptonJetSelector>());
+  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.01);
+  eventMod->addSelector(std::make_shared<LeptonJetSelector>(0.0001, 0.0005));
 
   auto matchMod = std::make_shared<MatchingModule>();
-  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.01);
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
   auto eventDumpMod = std::make_shared<EventDumpModule>(true,true);
   auto lepMatchMod =
-      std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.1);
+      std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.1); // this
   auto histOutputMod = std::make_shared<HistogramOutputModule>();
   auto mlMod = std::make_shared<LeptonJetMLCalculator>();
 
@@ -77,8 +77,8 @@ void LeptonJetReconstructionPlan::initialize()
   //  auto relIsoHist = std::make_shared<IsolationHist>(EventInput::RecoLevel::Reco, "Jet pT Rel", 10000, 0, 100);
   auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(EventInput::RecoLevel::Reco, "NN Classifier Output Distribution", 100, 0, 1, mlMod, lepRecoMod);
 
-  // auto deltaXYHist = std::make_shared<DxyHist>(EventInput::RecoLevel::Reco, "Vertex Delta XY from Primary Vertex", 50, 0, 5);
-  // auto deltaZHist = std::make_shared<DzHist>(EventInput::RecoLevel::Reco, "Vertex Delta Z from Primary Vertex", 50, 0, 5);
+   auto deltaXYHist = std::make_shared<DxyHist>(EventInput::RecoLevel::Reco, "Vertex Delta XY from Primary Vertex", 50, 0, 5);
+   auto deltaZHist = std::make_shared<DzHist>(EventInput::RecoLevel::Reco, "Vertex Delta Z from Primary Vertex", 50, 0, 5);
   // uncomented
 
   eventHistMod->addHistogram(deltaRHist);
@@ -86,8 +86,8 @@ void LeptonJetReconstructionPlan::initialize()
   histOutputMod->addHistogram(pTHist);
   histOutputMod->addHistogram(matchedLeptonJetHist);
   histOutputMod->addHistogram(unmatchedLeptonJetHist);
-  // eventHistMod->addHistogram(deltaXYHist);
-  // eventHistMod->addHistogram(deltaZHist);
+  histOutputMod->addHistogram(deltaXYHist);
+  histOutputMod->addHistogram(deltaZHist);
   //histOutputMod->addHistogram(relIsoHist);
  // histOutputMod->addHistogram(leptonJetMLHist);
 
@@ -119,6 +119,7 @@ void LeptonJetReconstructionPlan::initialize()
   // Efficiency Modules
   auto leptonEfficiency = std::make_shared<LeptonEfficiency>(matchMod);
   auto leptonJetEfficiency = std::make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
+  leptonJetEfficiency->setInput(eventMod->getEventInput());
 
   // Add the histogram(s) created above to histMod
   // eventHistMod->addHistogram(nLeptonsHist);
@@ -152,6 +153,7 @@ void LeptonJetReconstructionPlan::initialize()
   modules.addProductionModule(lepRecoMod);
   // modules.addProductionModule(genPartMod);
   modules.addProductionModule(lepMatchMod);
+  modules.addProductionModule(eventMod);
 
   modules.addAnalysisModule(histOutputMod);
   modules.addAnalysisModule(eventHistMod);
