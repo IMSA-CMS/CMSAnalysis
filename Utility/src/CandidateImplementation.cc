@@ -106,7 +106,7 @@ int CandidateImplementation::numberOfDaughters() const {
   // std::cout << "Num Daugters\n";
   checkIsNull();
   return particle->numberOfDaughters();
-}
+} 
 
 const ParticleType& CandidateImplementation::getType() const {
   if (!particle) {

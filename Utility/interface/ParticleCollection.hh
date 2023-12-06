@@ -323,7 +323,7 @@ inline std::vector<double> ParticleCollection<T>::calculateSameSignInvariantMass
   else
   {
     // std::cout << "0\t";
-    sameSignInvariantMasses.push_back(0);
+    //sameSignInvariantMasses.push_back(0);
   }
 
   if (getNegParticles().getNumParticles() >= 2)
@@ -336,7 +336,7 @@ inline std::vector<double> ParticleCollection<T>::calculateSameSignInvariantMass
   else
   {
     // std::cout << "0\n";
-    sameSignInvariantMasses.push_back(0);
+    //sameSignInvariantMasses.push_back(0);
   }
 
   return sameSignInvariantMasses;
@@ -449,6 +449,7 @@ inline typename std::pair<T, T> ParticleCollection<T>::chooseParticles(bool same
 
   return particlePair;
 }
+
 template <typename T>
 inline typename std::pair<T, T> ParticleCollection<T>::chooseParticles(bool oppositeSigns, bool sameType) const
 {
@@ -460,17 +461,13 @@ inline typename std::pair<T, T> ParticleCollection<T>::chooseParticles(bool oppo
   {
     for (int j = i + 1; j < static_cast<int>(particles.size()); ++j)
     {
-      if (particles[i].getType() == particles[j].getType() || !sameType)
+      if (checkSigns(particles[i], particles[j]) == oppositeSigns) // Check if the particle pairs' signs match with what we want
       {
-
-        if (checkSigns(particles[i], particles[j]) == oppositeSigns) // Check if the particle pairs' signs match with what we want
+        if (calculateInvariantMass(particles[i], particles[j]) > maxInvariantMass)
         {
-          if (calculateInvariantMass(particles[i], particles[j]) > maxInvariantMass)
-          {
-            maxInvariantMass = calculateInvariantMass(particles[i], particles[j]);
-            iPointer = particles[i];
-            jPointer = particles[j];
-          }
+          maxInvariantMass = calculateInvariantMass(particles[i], particles[j]);
+          iPointer = particles[i];
+          jPointer = particles[j];
         }
       }
     }

@@ -130,6 +130,12 @@ double Particle::getMass() const
   checkIsNull();
   return particle->getFourVector().mass();
 }
+double Particle::getGamma() const
+{
+  checkIsNull();
+  return particle->getFourVector().Gamma();
+}
+
 
 double Particle::getInfo(std::string mapKey) const
 {

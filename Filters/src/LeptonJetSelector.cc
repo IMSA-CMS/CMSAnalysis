@@ -6,9 +6,10 @@
 #include "CMSAnalysis/Utility/interface/Lepton.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/Event.hh"
+#include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
 #include "DataFormats/Math/interface/deltaR.h"
 
-LeptonJetSelector::LeptonJetSelector(double idXYCut, double idZCut) : dXYCut(idXYCut), dZCut(idZCut)
+LeptonJetSelector::LeptonJetSelector(double ideltaRCut, double idXYCut, double idZCut) : deltaRCut(ideltaRCut), dXYCut(idXYCut), dZCut(idZCut)
 { }
 
 void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) const
@@ -42,38 +43,21 @@ void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) c
     }
 
     //auto recoLeptons = event.getMuons();
-    auto leptonJets = findLeptonJets(selected, 0.5);
+    auto leptonJets = findLeptonJets(selected);
 
     for (const auto& jet : leptonJets)
     {
       event.addSpecialObject("leptonJet", jet);
-      bool mixed = false;
-      auto type = jet.getParticles().at(0).getType();
-      for (auto p : jet.getParticles())
-      {
-        if (p.getType() != type)
-        {
-          mixed = true;
-          break;
-        }
-      }
-
-      if (mixed)
-      {
-        event.addSpecialObject("mixedLeptonJet", jet);
-      }
     }
 }
 
-std::vector<LeptonJet> LeptonJetSelector::findLeptonJets(ParticleCollection<Lepton> recoCandidates, double DeltaRCut)
+std::vector<LeptonJet> LeptonJetSelector::findLeptonJets(ParticleCollection<Lepton> recoCandidates) const
 {
   auto recoLeptons = recoCandidates.getParticles();
-  //std::cout << "# of muons: " << recoLeptons.size() << std::endl;
   std::vector<LeptonJet> leptonJetList;
   while (recoLeptons.size() != 0)
   {
     Lepton highestPtLepton = findHighestPtLepton(recoLeptons);
-    //std::cout << "Highest lepton pT: " << highestPtLepton.getPt() << std::endl;
     if (highestPtLepton.getPt() <= 5)
     {
       break;
@@ -93,16 +77,16 @@ std::vector<LeptonJet> LeptonJetSelector::findLeptonJets(ParticleCollection<Lept
     {
       auto fourVector = recoLeptons[i].getFourVector();
       double deltaR = reco::deltaR(highestPtLeptonFourVector, fourVector);
-      //std::cout << "delta r: " << deltaR << " delta r cut: " << DeltaRCut << "\n";
+      // std::cout << "delta r: " << deltaR << " delta r cut: " << DeltaRCut << "\n";
       // std::cout << "The value of Eta is "<< abs(recoLeptons[i].getEta()) <<std::endl;
-      if (deltaR < DeltaRCut && recoLeptons[i].getPt() >= 5 && abs(recoLeptons[i].getEta()) <= 3)
+      if (deltaR < deltaRCut && recoLeptons[i].getPt() >= 5 && abs(recoLeptons[i].getEta()) <= 3)
       {
         jet.addParticle(recoLeptons[i]);
         recoLeptons.erase(recoLeptons.begin() + i);
         --i;
       }
-    }
 
+    }
     // std::cout << "numParticles: " << jet.getNumParticles() << "\n";
     if (jet.getNumParticles() > 1)
     {
@@ -117,14 +101,21 @@ std::vector<LeptonJet> LeptonJetSelector::findLeptonJets(ParticleCollection<Lept
       // if (!close) {
       // std::cout << "adding jet\n";
       leptonJetList.push_back(jet);
-      //std::cout << "Lepton jet added!" << std::endl;
       //}
     }
   }
   return leptonJetList;
 }
 
-Particle LeptonJetSelector::findHighestPtLepton(std::vector<Lepton> leptons)
+LeptonJet LeptonJetSelector::createLeptonJet(Lepton highestPtLepton) const
+{
+  LeptonJet leptonJet;
+  leptonJet.addParticle(highestPtLepton);
+  return leptonJet;
+}
+//runAnalyzer input=darkPhotonBaselineRun2.txt analysis=LeptonJetReconstruction output=leptonjetinvmasshist.root numFiles=1
+//root leptonjetinvmasshist.root then type TBrowser h
+Particle LeptonJetSelector::findHighestPtLepton(std::vector<Lepton> leptons) const
 {
   double highestPt = 0;
   for (auto lepton : leptons)
@@ -145,11 +136,4 @@ Particle LeptonJetSelector::findHighestPtLepton(std::vector<Lepton> leptons)
   }
 
   throw std::runtime_error("No highest pT lepton!");
-}
-
-LeptonJet LeptonJetSelector::createLeptonJet(Lepton highestPtLepton)
-{
-  LeptonJet leptonJet;
-  leptonJet.addParticle(highestPtLepton);
-  return leptonJet;
 }
