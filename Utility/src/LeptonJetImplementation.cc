@@ -26,11 +26,11 @@ reco::Candidate::LorentzVector LeptonJetImplementation::getFourVector() const
 
 bool LeptonJetImplementation::operator==(const ParticleImplementation& userParticle) const
 {
-    std::cout << "operator\n";
+    // std::cout << "operator\n";
     try
     {
       auto candidateImp = dynamic_cast<const LeptonJetImplementation&>(userParticle);
-      std::cout << "operator try\n";
+      // std::cout << "operator try\n";
       return candidateImp.getFourVector() == getFourVector() && candidateImp.getParticles() == getParticles();
     }
     catch(std::bad_cast&)
@@ -41,7 +41,7 @@ bool LeptonJetImplementation::operator==(const ParticleImplementation& userParti
 
 const ParticleType& LeptonJetImplementation::getType() const
 {
-  std::cout << "LJI get type\n";
+  // std::cout << "LJI get type\n";
   return ParticleType::leptonJet();
 
 }

@@ -9,6 +9,7 @@
 #include "CMSAnalysis/Utility/interface/TableWriter.hh"
 #include "CMSAnalysis/Utility/interface/TableData.hh"
 #include "CMSAnalysis/Utility/interface/LatexTable.hh"
+#include "CMSAnalysis/Utility/interface/PowerpointTable.hh"
 
 HPlusPlusEfficiency::HPlusPlusEfficiency():
   EfficiencyModule()
@@ -142,8 +143,8 @@ void HPlusPlusEfficiency::finalize()
   // }
   // std::cout << str << std::endl;
 
-  LatexTable table1;
-  LatexTable table2;
+  PowerpointTable table1;
+  PowerpointTable table2;
 
   TableData separatedData(separatedValues);
   TableData wholeData(wholeValues);

@@ -1,4 +1,4 @@
-#include "CMSAnalysis/Filters/interface/LeptonJetSelector.hh"
+#include "CMSAnalysis/Filters/interface/LeptonJetAntiSelector.hh"
 #include <vector>
 
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
@@ -8,10 +8,10 @@
 #include "CMSAnalysis/Utility/interface/Event.hh"
 #include "DataFormats/Math/interface/deltaR.h"
 
-LeptonJetSelector::LeptonJetSelector(double idXYCut, double idZCut) : dXYCut(idXYCut), dZCut(idZCut)
+LeptonJetAntiSelector::LeptonJetAntiSelector(double idXYCut, double idZCut) : dXYCut(idXYCut), dZCut(idZCut)
 { }
 
-void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) const
+void LeptonJetAntiSelector::selectParticles(const EventInput* input, Event& event) const
 {
   // GenSim stuff
   auto particlesGenSim = input->getParticles(EventInput::RecoLevel::GenSim).getParticles();
@@ -29,7 +29,7 @@ void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) c
       if (particle.getType() == ParticleType::muon() && particle.getPt() > 5) 
       {
         auto lepton = Lepton(particle);
-        if(lepton.isLoose() && lepton.getDXY() < dXYCut && lepton.getDZ() < dZCut)
+        if(lepton.isLoose() && lepton.getDXY() > dXYCut && lepton.getDZ() > dZCut)
         {
           selected.addParticle(particle);
         }
@@ -65,7 +65,7 @@ void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) c
     }
 }
 
-std::vector<LeptonJet> LeptonJetSelector::findLeptonJets(ParticleCollection<Lepton> recoCandidates, double DeltaRCut)
+std::vector<LeptonJet> LeptonJetAntiSelector::findLeptonJets(ParticleCollection<Lepton> recoCandidates, double DeltaRCut)
 {
   auto recoLeptons = recoCandidates.getParticles();
   //std::cout << "# of muons: " << recoLeptons.size() << std::endl;
@@ -124,7 +124,7 @@ std::vector<LeptonJet> LeptonJetSelector::findLeptonJets(ParticleCollection<Lept
   return leptonJetList;
 }
 
-Particle LeptonJetSelector::findHighestPtLepton(std::vector<Lepton> leptons)
+Particle LeptonJetAntiSelector::findHighestPtLepton(std::vector<Lepton> leptons)
 {
   double highestPt = 0;
   for (auto lepton : leptons)
@@ -147,7 +147,7 @@ Particle LeptonJetSelector::findHighestPtLepton(std::vector<Lepton> leptons)
   throw std::runtime_error("No highest pT lepton!");
 }
 
-LeptonJet LeptonJetSelector::createLeptonJet(Lepton highestPtLepton)
+LeptonJet LeptonJetAntiSelector::createLeptonJet(Lepton highestPtLepton)
 {
   LeptonJet leptonJet;
   leptonJet.addParticle(highestPtLepton);
