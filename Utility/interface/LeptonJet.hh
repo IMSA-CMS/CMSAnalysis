@@ -25,6 +25,7 @@ public:
   // Gets the "width" or biggest possible DeltaR from all particles
   // Returns 0 if only 1 particle
   double getDeltaR() const;
+  double getMass() const;
 
 private:
 

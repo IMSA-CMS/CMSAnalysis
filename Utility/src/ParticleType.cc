@@ -79,7 +79,7 @@ bool ParticleType::loadParticle(std::ifstream& file)
     chargeType = std::stoi(std::string(tempString)) / 3.0;
 
     std::vector<HistParams> defaultHistParams = {getPtHist(),getPhiHist(),getEtaHist()};
-    std::vector<CollectionHistParams> defaultCollectionHistParams = {getNumberHist()}; 
+    std::vector<CollectionHistParams> defaultCollectionHistParams = {getNumberHist(), getSameSignInvariantMassHist(), getOppositeSignInvariantMassHist()}; 
     
     registerType(name, pdgID, chargeType, defaultHistParams, defaultCollectionHistParams);
 

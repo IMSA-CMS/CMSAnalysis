@@ -2,6 +2,9 @@
 #include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetMatchingModule.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
+#include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
+#include "CMSAnalysis/Utility/interface/ParticleType.hh"
+
 #include "TFile.h"
 #include "TTree.h"
 
@@ -19,6 +22,7 @@ void HiggsDataStripModule::initialize()
 		treeId->Branch("eta", &eta1, "eta1/F");
 		treeId->Branch("eta", &eta2, "eta2/F");
 		treeId->Branch("deltaR", &deltaR, "deltaR/F");
+		treeId->Branch("mass", &mass, "mass/F");
 
 		std::cout << treeId->GetListOfBranches();
 	}
@@ -53,6 +57,8 @@ bool HiggsDataStripModule::process()
 	{
 		if (particles.calculateSameSignInvariantMass(false, true) > cutoff)
 		{
+			if(particles.getLeptonTypeCount(ParticleType::muon()) == 2)
+			{
 			pt1 = twoLeptons.first.getPt();
 			phi1 = twoLeptons.first.getPhi();
 			eta1 = twoLeptons.first.getEta();
@@ -60,7 +66,9 @@ bool HiggsDataStripModule::process()
 			phi2 = twoLeptons.second.getPhi();
 			eta2 = twoLeptons.second.getEta();
 			deltaR = twoLeptons.second.getDeltaR(twoLeptons.first);
+			mass = particles.calculateSameSignInvariantMass(false);
 			tree->Fill();
+			}
 		}
 	}
 	return true;

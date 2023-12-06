@@ -121,7 +121,17 @@ RunAnalyzerWrapper::RunAnalyzerWrapper(const edm::ParameterSet& iConfig)
 	 TriggerToken_(consumes<pat::TriggerEvent>(edm::InputTag("triggerEvent"))),
 	 GenSimToken_(consumes<reco::GenParticleCollection>(edm::InputTag("GenericParticle"))),
      eventInterface(ElectronToken_,MuonToken_,PhotonToken_,JetToken_,METToken_,TriggerToken_,GenSimToken_)
-{
+{ 
+  std::string particleDatabase("../../DataCollection/bin/textfiles/ParticleData.txt");
+  if (ParticleType::loadParticleDatabase(particleDatabase))
+  {
+    std::cout << particleDatabase << " has been loaded properly!\n";
+  }
+  else
+  {
+    std::cout << particleDatabase << " has not been loaded properly!\n";
+  }
+
   AnalyzerOptions options;
   std::string analysis = options.checkSelectedAnalysis(analyzerType_);
   DataCollectionPlan *plan = options.getAnalysisPlans().at(analysis);
