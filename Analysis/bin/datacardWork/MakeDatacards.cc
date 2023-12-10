@@ -16,7 +16,7 @@
 #include "CMSAnalysis/Analysis/interface/Process.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsPlusPlusAnalysis.hh"
 
-int main(){
+int MakeDatacards(){
         HiggsPlusPlusAnalysis analysisObj;
         auto channels = analysisObj.getChannels();
 

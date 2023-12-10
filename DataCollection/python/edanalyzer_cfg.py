@@ -19,7 +19,7 @@ options.register ('analysis',
               VarParsing.varType.string,
               "Analysis Plan")
 options.register ('events',
-              1000,
+              -1,
 			  VarParsing.multiplicity.singleton,
               VarParsing.varType.int,
               "Maximum events to process")
@@ -34,8 +34,8 @@ options.parseArguments()
 process = cms.Process("Demo")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
-
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.events))
+if options.events != -1:
+    process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.events))
 
 process.options = cms.untracked.PSet( SkipEvent = cms.untracked.vstring('ProductNotFound'))
 
@@ -95,13 +95,14 @@ process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring(newD
  
                             
 #Luminosity Filter
-if options.luminosityFilter!="":
-	process.source.lumisToProcess = LumiList.LumiList(filename = 'data/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt').getVLuminosityBlockRange()
+#if options.luminosityFilter=="":
+#	process.source.lumisToProcess = LumiList.LumiList(filename = 'data/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt').getVLuminosityBlockRange()
+process.source.lumisToProcess = LumiList.LumiList(filename = options.luminosityFilter).getVLuminosityBlockRange()
 
 process.demo = cms.EDAnalyzer('RunAnalyzerWrapper',
     analyzerType   = cms.untracked.string(options.analysis),
     rootOutFile = cms.untracked.string(options.output)
-                              )
+                            )
 
 
 process.p = cms.Path(process.demo)

@@ -4,6 +4,7 @@
 #include "DataFormats/Math/interface/deltaR.h"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/GenSimSimpleImplementation.hh"
+#include <iostream>
 
 GenSimDeltaRHist::GenSimDeltaRHist(const std::string& iname, int iNBins, double iminimum, double imaximum):
  HistogramPrototype1D(iname, iNBins, iminimum, imaximum)
@@ -34,8 +35,9 @@ std::vector<double> GenSimDeltaRHist::value() const
   // }
   std::vector<double> deltaRVector{};
 
-  for (GenSimParticle particle : particles.getParticles()) 
+  for (auto iparticle : particles.getParticles()) 
   { 
+    GenSimParticle particle(iparticle);
     // std::cout << "Particle/n ";
     // if (particle.getType() == Particle::Type::DarkPhoton)
     // {
@@ -49,6 +51,8 @@ std::vector<double> GenSimDeltaRHist::value() const
 
     std::vector<Particle> leptons;
     //looping through lepton decays (should be only 2) and pushing to lepton list
+    //std::cout<<"ParticleType: " << particle.getName() << "\n";
+    //std::cout<<"Daughters: " << particle.numberOfDaughters() << "\n";
 
     for (int j = 0; j < particle.numberOfDaughters(); ++j)
     {
@@ -59,7 +63,7 @@ std::vector<double> GenSimDeltaRHist::value() const
       }
     }
 
-  // std::cout << leptons.size();
+   //std::cout << leptons.size();
 
     if (leptons.size() >= 2)
     {

@@ -322,7 +322,7 @@ inline std::vector<double> ParticleCollection<T>::calculateSameSignInvariantMass
   else
   {
     // std::cout << "0\t";
-    sameSignInvariantMasses.push_back(0);
+    //sameSignInvariantMasses.push_back(0);
   }
 
   if (getNegParticles().getNumParticles() >= 2)
@@ -335,7 +335,7 @@ inline std::vector<double> ParticleCollection<T>::calculateSameSignInvariantMass
   else
   {
     // std::cout << "0\n";
-    sameSignInvariantMasses.push_back(0);
+    //sameSignInvariantMasses.push_back(0);
   }
 
   return sameSignInvariantMasses;
