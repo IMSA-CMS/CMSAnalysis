@@ -1,5 +1,5 @@
 H++toLL
-Mass:	500
+Mass:	600
 Run:	2
 Lepton:	All
 Period:	2018
