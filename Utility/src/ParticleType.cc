@@ -2,11 +2,12 @@
 #include "CMSAnalysis/Utility/interface/HistParams.hh"
 #include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
+#include "CMSAnalysis/Utility/interface/LeptonJet.hh"
 
 #include <fstream>
-#include<string>
-#include<vector>
-#include<functional>
+#include <string>
+#include <vector>
+#include <functional>
 
 std::unordered_map<int,ParticleType> ParticleType::typeList = std::unordered_map<int,ParticleType>();
 
@@ -151,7 +152,8 @@ void ParticleType::particleTypeOverrides()
     std::vector<CollectionHistParams>{getNumberHist()}); 
 
     registerType("Lepton Jet",29,0,
-    std::vector<HistParams>{getPtHist(),getPhiHist(),getEtaHist()},
+    std::vector<HistParams>{getPtHist(),getPhiHist(),getEtaHist(), getLeptonJetDeltaRHist(), getLeptonJetMassHist(),
+        getLeptonJetMassHistZoomed()},
     std::vector<CollectionHistParams>{getNumberHist()}); 
 }
 
@@ -196,6 +198,30 @@ HistParams ParticleType::getDaughterDeltaRHist()
             return std::vector<double>{deltaR};
         }
         return std::vector<double>{};
+    });
+}
+
+HistParams ParticleType::getLeptonJetDeltaRHist()
+{
+   return HistParams("Lepton Jet Delta R", 100, 0, 5, [](Particle particle){
+    auto leptonJet = LeptonJet(particle);
+    return std::vector<double>{leptonJet.getDeltaR()};
+    });
+}
+
+HistParams ParticleType::getLeptonJetMassHist()
+{
+    return HistParams("Lepton Jet Mass", 100, 0, 100, [](Particle particle){
+    auto leptonJet = LeptonJet(particle);
+    return std::vector<double>{leptonJet.getMass()};
+    });
+}
+
+HistParams ParticleType::getLeptonJetMassHistZoomed()
+{
+    return HistParams("Lepton Jet Mass", 100, 0, 10, [](Particle particle){
+    auto leptonJet = LeptonJet(particle);
+    return std::vector<double>{leptonJet.getMass()};
     });
 }
 
