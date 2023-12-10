@@ -615,12 +615,13 @@ TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, std:
 
 
 
-TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std::string histvariable, TString xAxisTitle, TString yAxisTitle, double massTarget, std::string channelName)
+TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std::string histvariable, TString xAxisTitle, TString yAxisTitle, double massTarget, bool scaleTodata, std::string channelName)
 {
     std::shared_ptr<Channel> processes = 0;
     TH1* data;
     TH1* signal;
     THStack* background;
+    int upperMasslimit = 2000;
     if(channelName == "") {
         std::vector<std::shared_ptr<Channel>> channels = analysis->getChannels();
         processes = channels.at(0);
@@ -628,10 +629,33 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
         std::vector<std::string> signalNames = processes->getNamesWithLabel("signal");
         std::vector<std::string> dataNames = processes->getNamesWithLabel("data");
         data = analysis->getDecayHist(histvariable, dataNames.at(0), massTarget, false);
+        int numberBinsData = data->GetNbinsX();
+        int lowerDataIntegralLimit = 50*(static_cast<double>(numberBinsData)/upperMasslimit);
+        float dataIntegral = data->Integral(lowerDataIntegralLimit, numberBinsData);
+        std::cout << "lowerDataIntegralLimit: " << lowerDataIntegralLimit << "\n";
+        std::cout << "numberBinsData: " << numberBinsData << "\n";
         signal = analysis->getDecayHist(histvariable, signalNames.at(0), massTarget, true);
         std::vector<TH1*> backgroundHists;
         for(std::string name : backgroundNames) {
             backgroundHists.push_back(analysis->getDecayHist(histvariable, name, massTarget, true));
+        }
+        float backgroundIntegral = 0;
+        for (auto backgroundHist : backgroundHists)
+        {
+            int numberBinsBackground = backgroundHist->GetNbinsX();
+            int lowerBackgroundIntegralLimit = 50*(static_cast<double>(numberBinsBackground)/upperMasslimit);
+            backgroundIntegral += backgroundHist->Integral(lowerBackgroundIntegralLimit, numberBinsBackground);
+            std::cout << "lowerBackgroundIntegralLimit: " << lowerBackgroundIntegralLimit << "\n";
+            std::cout << "numberBinsBackground: " << numberBinsBackground << "\n";
+        }
+        float scaleFactor = dataIntegral/backgroundIntegral;
+        std::cout << "scaleFactor: " << scaleFactor << "\n";
+        if (scaleTodata == true)
+        {
+            for (auto backgroundHist : backgroundHists)
+            {
+                backgroundHist->Scale(scaleFactor);
+            }
         }
         background = new THStack("background", "background");
         for(TH1* backgroundHist : backgroundHists) {
@@ -692,10 +716,10 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     if(first == 0) {
         for(const auto&& obj2 : *background->GetHists()) {
             TH1* backgroundHist = dynamic_cast<TH1*>(obj2);
-            backgroundHist->GetXaxis()->SetLimits(300, 2000);
+            backgroundHist->GetXaxis()->SetLimits(0, upperMasslimit);
             //backgroundHist->SetMaximum(10000);
         }
-        background->SetMaximum(10000);
+        //background->SetMaximum(10000);
         background->Draw("HIST");
         stackVector.push_back(background);
     }
@@ -704,14 +728,14 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
         //signal->SetMaximum(10000);
         signal->Draw("HIST");
         histVector.push_back(signal);
-        signal->GetXaxis()->SetLimits(300, 2000);
+        signal->GetXaxis()->SetLimits(0, upperMasslimit);
     }
     else {
         //data->SetMinimum(1);
         //data->SetMaximum(10000);
         data->Draw("PHIST");
         histVector.push_back(data);
-        data->GetXaxis()->SetLimits(300, 2000);
+        data->GetXaxis()->SetLimits(0, upperMasslimit);
     }
 
 
