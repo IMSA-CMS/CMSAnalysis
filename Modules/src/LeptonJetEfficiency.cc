@@ -47,7 +47,7 @@ void LeptonJetEfficiency::doCounters()
             //do here
             //count passed mass > 10
             //change values maybe
-            //signal should drop a lot, signal should drop little
+            //signal should drop a lot, background should drop little
             
             if (particle.getType() == ParticleType::muon())
             {
@@ -72,8 +72,11 @@ void LeptonJetEfficiency::doCounters()
             incrementCounter("Number of fake jets", 1);
         }
 
-        
-
+        // if (leptonJet.getMass() < 10) 
+        // {
+        //     incrementCounter("Jets Cut", 1);
+        // }
+        // incrementCounter("Total Jets", 1);
     }
 
     
@@ -85,7 +88,11 @@ void LeptonJetEfficiency::doCounters()
 
 void LeptonJetEfficiency::finalize()
 {
+    std::cout << "hellO22\n";
     EfficiencyModule::finalize();
 
+    std::cout << "hellO\n";
     std::cout << "Lepton Jet Efficiency: " << getCounter("Number of matched jets") / getCounter("Number of Reconstructed Jets") << "\n";
+
+    //std::cout << "\nFraction Cut: " << getCounter("Jets Cut") * 1.0 / getCounter("Total Jets") << "\n\n";
 }
