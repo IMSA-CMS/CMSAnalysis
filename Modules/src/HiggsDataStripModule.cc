@@ -66,7 +66,7 @@ bool HiggsDataStripModule::process()
 			phi2 = twoLeptons.second.getPhi();
 			eta2 = twoLeptons.second.getEta();
 			deltaR = twoLeptons.second.getDeltaR(twoLeptons.first);
-			mass = particles.calculateSameSignInvariantMass(false);
+			mass = particles.calculateSameSignInvariantMass(false, true);
 			tree->Fill();
 			}
 		}
