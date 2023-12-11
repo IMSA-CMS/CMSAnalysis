@@ -572,6 +572,7 @@ TFitResultPtr fitToPearsonIV(std::string name, TH1* hist, TFile* file, std::vect
 	f1->SetParNames("a", "m", "mass", "nu", "n");
 	f1->SetRange(1200, 2000);
 	//1200,1600
+	f1->S
 	f1->SetParameters(50, 5, 1400, 5, 62000);
 
 	//f1->Draw();
