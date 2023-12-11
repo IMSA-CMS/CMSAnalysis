@@ -2,12 +2,8 @@
 #define LeptonJetAntiSelector_HH
 #include <memory>
 #include <vector>
-<<<<<<< HEAD
-=======
 #include "CMSAnalysis/Utility/interface/Lepton.hh"
 #include "CMSAnalysis/Utility/interface/LeptonJet.hh"
->>>>>>> 4bf776d4a82ffdc1e0fa6d26886598b0215cc0df
-
 #include "CMSAnalysis/Filters/interface/Selector.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "CMSAnalysis/Utility/interface/LeptonJet.hh"

@@ -207,10 +207,6 @@ void LeptonJetReconstructionPlan::initialize()
   // modules.addProductionModule(genPartMod);
   modules.addProductionModule(lepMatchMod);
   modules.addProductionModule(eventMod);
-<<<<<<< HEAD
-
-=======
->>>>>>> 4bf776d4a82ffdc1e0fa6d26886598b0215cc0df
   modules.addAnalysisModule(histOutputMod);
   modules.addAnalysisModule(eventHistMod);
 
