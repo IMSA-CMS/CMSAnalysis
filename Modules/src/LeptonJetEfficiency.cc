@@ -88,10 +88,8 @@ void LeptonJetEfficiency::doCounters()
 
 void LeptonJetEfficiency::finalize()
 {
-    std::cout << "hellO22\n";
     EfficiencyModule::finalize();
 
-    std::cout << "hellO\n";
     std::cout << "Lepton Jet Efficiency: " << getCounter("Number of matched jets") / getCounter("Number of Reconstructed Jets") << "\n";
 
     //std::cout << "\nFraction Cut: " << getCounter("Jets Cut") * 1.0 / getCounter("Total Jets") << "\n\n";
