@@ -41,7 +41,7 @@
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
 #include "CMSAnalysis/Histograms/interface/GenSimDeltaRHist.hh"
 #include "CMSAnalysis/Histograms/interface/LeptonJetRecoHist.hh"
-
+#include "CMSAnalysis/Filters/interface/TriggerCut.hh"
 #include "CMSAnalysis/Histograms/interface/GammaHist.hh"
 #include "CMSAnalysis/Histograms/interface/GammaDeltaRHist2D.hh"
 #include "CMSAnalysis/Histograms/interface/GenSimGammaHist.hh"
@@ -63,7 +63,8 @@ void LeptonJetReconstructionPlan::initialize()
   auto eventMod = std::make_shared<EventModule>();
   auto eventHistMod = eventMod->getHistogramModule();
   eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5));
-
+  auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Mu37_TkMu27", "HLT_IsoMu24"});
+  eventMod->addCut(triggerCut);
   auto matchMod = std::make_shared<MatchingModule>();
   auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.01);
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
