@@ -59,9 +59,11 @@ bool LeptonEfficiency::process()
 
 void LeptonEfficiency::finalize()
 {
+  std::cout << "beginning\n";
   std::string muonEndcapOutputString = std::to_string(getCounter("recoMuon")/(double)getCounter("genSimMuon"));
   writeText(muonEndcapOutputString, "Muon Efficiency");
-  
+  std::cout << "middle\n";
   std::string electronBarrelOutputString = std::to_string(getCounter("recoElectron")/(double)getCounter("genSimElectron"));
   writeText(electronBarrelOutputString, "Electron Efficiency");
+  std::cout << "end\n";
 }
