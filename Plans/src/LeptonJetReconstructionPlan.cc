@@ -38,6 +38,7 @@
 #include "CMSAnalysis/Histograms/interface/RelIsoHist.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetMLCalculator.hh"
 #include "CMSAnalysis/Filters/interface/LeptonJetSelector.hh"
+#include "CMSAnalysis/Filters/interface/LeptonJetAntiSelector.hh"
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
 #include "CMSAnalysis/Histograms/interface/GenSimDeltaRHist.hh"
 #include "CMSAnalysis/Histograms/interface/LeptonJetRecoHist.hh"
@@ -62,8 +63,9 @@ void LeptonJetReconstructionPlan::initialize()
 
   auto eventMod = std::make_shared<EventModule>();
   auto eventHistMod = eventMod->getHistogramModule();
-  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.01);
-  eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5, 0.0001, 0.0005));
+  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
+  //eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5, 0.0001, 0.0005));
+  eventMod->addSelector(std::make_shared<LeptonJetAntiSelector>(.5, 0.0001, 0.0005));
 
   auto matchMod = std::make_shared<MatchingModule>();
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
