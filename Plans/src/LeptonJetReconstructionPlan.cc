@@ -54,6 +54,7 @@
 #include "CMSAnalysis/Histograms/interface/GenSimGammaTwoJetsPsedoFilteredHist.hh"
 #include "CMSAnalysis/Histograms/interface/ResolutionHist.hh"
 
+#include "CMSAnalysis/Filters/interface/DarkPhotonHighMassCut.hh"
 
 using std::make_shared;
 
@@ -64,8 +65,10 @@ void LeptonJetReconstructionPlan::initialize()
   auto eventMod = std::make_shared<EventModule>();
   auto eventHistMod = eventMod->getHistogramModule();
   auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
-  //eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5, 0.0001, 0.0005));
-  eventMod->addSelector(std::make_shared<LeptonJetAntiSelector>(.5, 0.0001, 0.0005));
+  eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5, 0.0001, 0.0005));
+  //eventMod->addSelector(std::make_shared<LeptonJetAntiSelector>(.5, 0.0001, 0.0005));
+
+  eventMod->addCut(std::make_shared<DarkPhotonHighMassCut>());
 
   auto matchMod = std::make_shared<MatchingModule>();
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);

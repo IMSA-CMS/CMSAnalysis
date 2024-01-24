@@ -54,7 +54,6 @@ void Analyzer::writeOutputFile(const std::string &outputFile)
   {
     module->finalize();
   }
-
   outputRootFile->cd();
   //Finalize separately for each filterString, to be safe
   //std::cout << "There are " << analysisModules.size() << " analysis modules\n";
@@ -62,11 +61,11 @@ void Analyzer::writeOutputFile(const std::string &outputFile)
   {
     // Write the output
     module->doneProcessing();
-    //std::cout << "FilterModules size : " << filterModules.size() << "\n";
+    std::cout << "FilterModules size : " << filterModules.size() << "\n";
     // if (filterModules.size() != 0)
     if (true)
     {
-      //std::cout << "Finalizing analysis module: " << module->getFilter() << "\n";
+      std::cout << "Finalizing analysis module: " << module->getFilter() << "\n";
       module->finalize();
       for (auto &str : filterNames) //writes analysis modules by filter string
       {
