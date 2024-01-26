@@ -1,6 +1,8 @@
 #ifndef HISTOGRAMS_HH
 #define HISTOGRAMS_HH
 
+#include <iostream>
+
 #include "CMSAnalysis/Histograms/interface/GenSimRecoPrototype.hh"
 #include "CMSAnalysis/Histograms/interface/ResolutionPrototype.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetMLCalculator.hh"
@@ -37,6 +39,25 @@ class InvariantMassHist : public GenSimRecoPrototype
   }
 };
 
+class LeptonJetInvariantMassHist : public HistogramPrototype1D
+{
+  using HistogramPrototype1D::HistogramPrototype1D;
+  std::vector<double> value() const
+  {
+    std::vector<double> invariantMass;
+      auto particles = getInput()->getSpecial("leptonJet");
+      for (auto particle: particles)
+      {
+        LeptonJet lj(particle);
+        auto inv = lj.getMass();
+        invariantMass.push_back(inv);
+      }
+      return invariantMass;
+  }
+
+};
+//for (LeptonJet lj(part))
+// Utility LeptonJet.hh and .cc add function getMass(), copy it from .cc, call getParticles(), instead of calculating maxdeltaR, calculate invariant mass, put into a particle collection, particlecollection.hh has a function calculateAllLeptonINvariatnMass(), that'll put them all together and calculate invmass of them all, return that value, then in this histogram, for loop that calls that function each time
 class MassResolutionHist : public ResolutionPrototype
 {
   using ResolutionPrototype::ResolutionPrototype;
@@ -54,7 +75,7 @@ class OppositeSignInvariantMassHist : public GenSimRecoPrototype
   std::vector<double> protectedValue(EventInput::RecoLevel level) const
   {
     auto particles = getInput()->getLeptons(level);
-    auto inv = particles.calculateOppositeSignInvariantMass();
+    auto inv = particles.calculateOppositeSignInvariantMass(true);
     return {inv};
   }
 };

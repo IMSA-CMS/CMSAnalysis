@@ -6,11 +6,12 @@ TwoInvariantMassesHist::TwoInvariantMassesHist(const std::string &iname, int iNB
 
 std::vector<std::pair<double, double>> TwoInvariantMassesHist::value2D() const
 {
-  auto invMasses = getInput()->getLeptons(EventInput::RecoLevel::Reco).calculateSameSignInvariantMasses();
+  auto invMasses = getInput()->getLeptons(EventInput::RecoLevel::Reco).calculateSameSignInvariantMasses(false, true);
 
   if (invMasses.size() != 2)
   {
-    throw std::runtime_error("Incorrect number of invariant masses calculated!");
+    return {};
+    // std::runtime_error("Incorrect number of invariant masses calculated!");
   }
 
   return {{invMasses[0], invMasses[1]}};

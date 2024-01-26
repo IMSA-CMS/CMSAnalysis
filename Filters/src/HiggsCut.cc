@@ -13,6 +13,11 @@ bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) c
     double leptonPt; 
     ParticleType leptonType;
 
+    if (numLeptons == 4 || numLeptons == 2)
+    {
+        return true;
+    }
+
     // Finds the third lepton pt
     if(numLeptons == 3) 
     {
@@ -30,7 +35,7 @@ bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) c
         }
         else
         {
-            auto particlePair = particles.chooseParticles();
+            auto particlePair = particles.chooseParticles(true);
             for (auto particle : particles)
             {
                 if (particle != particlePair.first && particle != particlePair.second)

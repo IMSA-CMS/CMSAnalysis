@@ -68,6 +68,7 @@ bool EventModule::process ()
     {
         return false;
     }
+
     addBasicHistograms(ParticleType::electron(), event.getElectrons());
     addBasicHistograms(ParticleType::muon(), event.getMuons());
     addBasicHistograms(ParticleType::photon(), event.getPhotons());
@@ -75,6 +76,8 @@ bool EventModule::process ()
 
     for (auto& [key,value] : event.getSpecials())
     {
+
+        // CODE IS NOT GETTING HERE FOR SOME REASON, DEBUG THIS
         auto specialPtr = std::make_shared<ParticleCollection<Particle>>(value);
         addBasicHistograms(value.getParticles()[0].getType(), value);
         addCountHistograms(value.getParticles()[0].getType(), specialPtr); 
@@ -141,7 +144,7 @@ void EventModule::addCountHistograms(const ParticleType& particleType, const std
 {
     for (auto params : particleType.getCollectionHists())
     {
-        auto histName = params.getName();
+        auto histName = getCountHistogramTitle(particleType, params.getName());
         if (!checkHist(histName))
         {
             params.setName(histName);
@@ -186,6 +189,11 @@ std::string EventModule::getBasicHistogramTitle(int n, const ParticleType& parti
         rank = "rd Highest ";
     }
     return std::to_string(n) + rank + particleType.getName() + " " + valueName;
+}
+
+std::string EventModule::getCountHistogramTitle(const ParticleType& particleType, std::string valueName) const
+{
+    return particleType.getName() + " " + valueName;
 }
 
 void EventModule::clearHistograms()
