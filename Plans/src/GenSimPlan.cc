@@ -34,6 +34,7 @@
 #include "CMSAnalysis/Filters/interface/HPlusPlusGenSimSelector.hh"
 #include "CMSAnalysis/Filters/interface/HiggsSelector.hh"
 #include "CMSAnalysis/Filters/interface/HiggsCut.hh"
+#include "CMSAnalysis/Filters/interface/HiggsMassCut.hh"
 #include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
 #include "CMSAnalysis/Modules/interface/HiggsLeptonEfficiency.hh"
 
@@ -42,11 +43,13 @@ using std::make_shared;
 
 void GenSimPlan::initialize()
 {
+    auto histOutputMod = std::make_shared<HistogramOutputModule>();
     
     auto& modules = getModules();
 
-    auto deltaR = make_shared<GenSimDeltaRHist>("Delta R", 100, 0, 2);
+    //Analyzer& analyzer = getAnalyzer();
 
+    auto deltaR = make_shared<GenSimDeltaRHist>("Delta R", 100, 0, 2);
     auto eventMod = make_shared<EventModule>();
     auto dpSelector = make_shared<DarkPhotonGenSimSelector>();
     auto hppSelector = make_shared<HiggsSelector>();
@@ -56,6 +59,7 @@ void GenSimPlan::initialize()
     auto eventDump = make_shared<GenSimEventDumpModule>();
     auto matchMod = make_shared<MatchingModule>();
     auto higgsCut = make_shared<HiggsCut>();
+    auto higgsMassCut = make_shared<HiggsMassCut>();
     
     auto histMod = make_shared<HistogramOutputModule>();
 
@@ -68,14 +72,15 @@ void GenSimPlan::initialize()
     histMod->addHistogram(deltaR);
     histMod->addHistogram(gammahist);
 
+    histOutputMod->addHistogram(deltaR);
+
     //eventMod->addSelector(dpSelector);
     eventMod->addSelector(hppSelector);
     eventMod->addSelector(hppGenSimSelector);
     eventMod->addCut(higgsCut);
+    eventMod->addCut(higgsMassCut);
     auto eventHistMod = eventMod->getHistogramModule();
     //auto hppFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::GenSim);
-
-    //eventMod->addCut(higgsCut);
 
     //modules.addFilterModule(hppFilter);
     modules.addProductionModule(metMod);

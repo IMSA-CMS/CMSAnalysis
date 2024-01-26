@@ -91,7 +91,7 @@ void EventDumpModule::printRecoParticleCollection(const ParticleCollection<Parti
   my_file << "--------------------------------------------------------" << std::endl;
   my_file << "EVENT #" << (counter + 1) <<std::endl;
   my_file << "all lepton invariant mass: " << recoParts.calculateAllLeptonInvariantMass() 
-    << " | same sign invariant mass: " << recoParts.calculateSameSignInvariantMass() << "\n";
+    << " | same sign invariant mass: " << recoParts.calculateSameSignInvariantMass(false, true) << "\n";
   my_file << "--------------------------------------------------------" << std::endl;
 
   my_file << std::left << std::setw(8) << "element" << std::setw(11) << "| type"

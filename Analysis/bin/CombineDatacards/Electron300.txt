@@ -1,0 +1,16 @@
+
+imax    1 number of bins
+jmax    4 number of processes minus 1
+kmax 0 number of nuisance parameters
+----------------------------------------------------------------------------------------------------------------------------------
+shapes    TTBar_Background         Electron300                Genhiggsworkspace.root  higgsworkspace.root:TTBar_Background
+shapes       ZZ_Background         Electron300                Genhiggsworkspace.root  higgsworkspace.root:ZZ_Background
+shapes       DY_Background         Electron300                Genhiggsworkspace.root  higgsworkspace.root:DY_Background
+shapes      QCD_Background         Electron300                Genhiggsworkspace.root  higgsworkspace.root:QCD_Background
+shapes        Higgs_Signal         Electron300                Genhiggsworkspace.root  higgsworkspace.root:Higgs_Signal
+shapes    data_obs         Electron300         Genhiggsworkspace.root Genhiggsworkspace:Electron300Events
+----------------------------------------------------------------------------------------------------------------------------------
+bin    Electron300         Electron300         Electron300         Electron300         Electron300         
+process             TTBar_Background    ZZ_Background       DY_Background       QCD_Background      Higgs_Signal        
+process             0                   1                   2                   3                   -1                  
+rate                0.613020            0.031475            0.000000            1.215847            5227.827339         

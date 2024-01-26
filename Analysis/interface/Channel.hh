@@ -37,6 +37,8 @@ class Channel
 		void addProcessLabel(std::string label, std::vector<std::shared_ptr<Process>> processes);
 
 		void makeDatacard(std::shared_ptr<Channel> channel);
+		
+		void CombineDatacard(std::shared_ptr<Channel> channel);
 
 		void addGlobalSystematic(Systematic& systematic);
 
