@@ -17,9 +17,11 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
         if (particle.getType() == ParticleType::electron()) 
 		{
             auto lepton = Lepton(particle);
+            int heepMap = static_cast<int>(particle.getInfo("HEEP_map"));
+
             if(lepton.isLoose()
-                && particle.getPt() > 10
-                
+                && particle.getPt() > 5
+                && (heepMap & 0b111111111110) == 0b111111111110
             )
             {
                 event.addElectron(particle);
