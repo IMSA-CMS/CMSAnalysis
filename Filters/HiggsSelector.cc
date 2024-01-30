@@ -12,19 +12,19 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
 {
     auto particles = input->getLeptons(EventInput::RecoLevel::Reco).getParticles();
 
-    std::vector<Particle> leptons;
-
     for (const auto& particle : particles)
     {
         if (particle.getType() == ParticleType::electron()) 
 		{
             auto lepton = Lepton(particle);
+            int heepMap = static_cast<int>(particle.getInfo("HEEP_map"));
+
             if(lepton.isLoose()
-                && particle.getPt() > 10
-                
+                && particle.getPt() > 5
+                && (heepMap & 0b111111111110) == 0b111111111110
             )
             {
-                leptons.push_back(particle);
+                event.addElectron(particle);
             }
         }
         else if (particle.getType() == ParticleType::muon())
@@ -37,32 +37,8 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
                 && lepton.getDZ() < 0.05
             )
             {
-                leptons.push_back(particle);
-            }
-        }
-    }
-
-    while (leptons.size() > 4)
-    {
-        std::vector<double> pTs;
-        for (auto particle : leptons)
-        {
-            pTs.push_back(particle.getPt());
-        }
-        double minPt = *min_element(pTs.begin(), pTs.end());
-        int index = find(pTs.begin(), pTs.end(), minPt) - pTs.begin();
-        leptons.erase(leptons.begin() + index);
-    }
-
-    for (auto particle : leptons)
-    {
-        if (particle.getType() == ParticleType::electron())
-        {
-            event.addElectron(particle);
-        }
-        else if (particle.getType() == ParticleType::muon())
-        {
-            event.addMuon(particle);
+                event.addMuon(particle);
+            }            
         }
     }
 }
