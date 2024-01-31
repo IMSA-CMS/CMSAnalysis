@@ -12,9 +12,17 @@ name(iName)
 
 bool TreeMakerModule::process()
 {
-    specialVariable->calculateVariables();
-    tree->Fill();
-
+    auto leptonJets = getInput()->getSpecial("LeptonJet");
+    for (const auto &leptonJet : leptonJets)
+    {
+        specialVariable->calculateVariables(leptonJet);//enum as parameter?; f
+        tree->Fill();
+    }
+    //specialVariable->calculateVariables();//enum as parameter?; f
+    //tree->Fill();
+    //auto leptonJets = getInput()->getSpecial("LeptonJet");//do foreach over
+    // this like in leptonjetddatastrip, put the prior two lines in at the eend, 
+    //MAKE THIS FUNCTION that overrides (new process fucntion in a new class that inherits from TreeMaker module)
     return true;
 } 
 

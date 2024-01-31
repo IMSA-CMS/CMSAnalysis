@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include "Rtypes.h"
 #include "ProductionModule.hh"
+#include "EventInput.hh"
 
 class TTree;
 namespace TMVA
@@ -25,22 +26,20 @@ public:
 	void addValue(std::string name, std::vector<Int_t> value);
 	void addValue(std::string name, std::vector<Float_t> value);
 
-	void addVariablesToTree(TTree* tree) const; //same thing as prior just datastrip stuff
+	void addVariablesToTree(TTree* tree); //same thing as prior just datastrip stuff
 	void addVariablesToReader(TMVA::Reader *reader) const;
 	void addVariablesToDataLoader(TMVA::DataLoader *dataloader) const;
-	void makeTree();
-	
+
 
 	virtual bool process() override;
 
-	virtual void calculateVariables() = 0;
+	virtual void calculateVariables(Particle particle) = 0;
 
 
 protected:
 	void addVariable(std::string name, VariableType type);
 	
 	virtual void addVariables() = 0;
-
 
 private:
 	std::unordered_map<std::string, Int_t> integers;

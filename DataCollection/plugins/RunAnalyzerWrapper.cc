@@ -121,7 +121,17 @@ RunAnalyzerWrapper::RunAnalyzerWrapper(const edm::ParameterSet& iConfig)
 	 TriggerToken_(consumes<pat::TriggerEvent>(edm::InputTag("triggerEvent"))),
 	 GenSimToken_(consumes<reco::GenParticleCollection>(edm::InputTag("GenericParticle"))),
      eventInterface(ElectronToken_,MuonToken_,PhotonToken_,JetToken_,METToken_,TriggerToken_,GenSimToken_)
-{
+{ 
+  std::string particleDatabase("../../DataCollection/bin/textfiles/ParticleData.txt");
+  if (ParticleType::loadParticleDatabase(particleDatabase))
+  {
+    std::cout << particleDatabase << " has been loaded properly!\n";
+  }
+  else
+  {
+    std::cout << particleDatabase << " has not been loaded properly!\n";
+  }
+
   AnalyzerOptions options;
   std::string analysis = options.checkSelectedAnalysis(analyzerType_);
   DataCollectionPlan *plan = options.getAnalysisPlans().at(analysis);
@@ -150,14 +160,14 @@ void RunAnalyzerWrapper::analyze(const edm::Event& iEvent, const edm::EventSetup
 
 // ------------ method called once each job just before starting event loop  ------------
 void RunAnalyzerWrapper::beginJob() {
-  analyzer->initialize();
+  analyzer->initialize(rootOutFile_);
 
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
 void RunAnalyzerWrapper::endJob() {
   // please remove this method if not needed
-  analyzer->writeOutputFile(rootOutFile_);
+  analyzer->writeOutputFile();
 }
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------

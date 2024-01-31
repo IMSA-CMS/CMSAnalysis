@@ -50,9 +50,9 @@ const EventInput* getEventInput() const {return input;}
   // produces output (duplicated if filter modules cause multiple paths)
   void addAnalysisModule(std::shared_ptr<AnalysisModule> module);
   
-  void writeOutputFile(const std::string& outputFile);
+  void writeOutputFile();
   void processOneEvent(const EventInterface *eventInterface);
-  void initialize();
+  void initialize(const std::string& outputFile);
   bool checkModuleDependencies(std::shared_ptr<Module> module);
   void addModules(ModuleCollection modules);
  
@@ -63,6 +63,7 @@ private:
   std::vector<std::shared_ptr<AnalysisModule>> analysisModules;// = ModuleCollection.getAnalysisModules();
   std::unordered_set<std::string> filterNames;
   std::unordered_map<std::string, TDirectory*> filterDirectories;
+  TFile* outputRootFile = nullptr;
 
   int numOfEvents = 0;
 
