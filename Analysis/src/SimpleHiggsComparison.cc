@@ -16,26 +16,31 @@
 #include <vector>
 
 SimpleHiggsComparison::SimpleHiggsComparison() {
-    std::vector<double> massTargets {300, 500, 700, 900, 1100, 1300};
-    std::vector<std::string> names = {"Muon", "Electron"};
-    for(std::string name : names) {
+    std::vector<double> massTargets {1400};
+    const std::vector<std::string> genSimDecays{"eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet", "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt"};
+    const std::vector<std::string> recoDecays{"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u", "none"};
+    //std::vector<std::string> names = {"Muon", "Electron"};
+    //for(std::string name : names) {
+    for (std::string recoDecay : recoDecays){
         for(double massTarget : massTargets) {
             std::vector<HistVariable> histVariables;
             //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
-            const std::string filePath = "/uscms/home/fciancio/practice/CMSSW_11_0_2/src/CMSAnalysis/DataCollection/bin/";
+            const std::string filePath = "/uscms/home/vrao/analysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/";
 	        //Add your hists here
-            histVariables.push_back(HistVariable::InvariantMass(name + name + " Reco Invariant Mass Background"));
-            histVariables.push_back(HistVariable::SameSignMass(name + name + " Reco Same Sign Invariant Mass"));
-	    histVariables.push_back(HistVariable::GenSimSameSignMass(name + name + " GenSim Same Sign Invariant Mass"));
-            histVariables.push_back(HistVariable::Pt(name + name + " Reco Leading lepton pT"));
-	    histVariables.push_back(HistVariable::GenSimPt(name + name + " GenSim Leading lepton pT"));
-            histVariables.push_back(HistVariable::MET(name + "MET"));
-	    auto newHiggs = std::make_shared<SimpleProcess>("Run 2", filePath, 1);
-	    newHiggs->addFile("Higgs" + std::to_string((int) massTarget) + "_HiggsBackground.root", histVariables);
-            auto higgsSignal = std::make_shared<SimpleProcess>("Delphes", filePath, 2);
-	    higgsSignal->addFile("HiggsPick" + std::to_string((int) massTarget) + "_HiggsBackground.root", histVariables);
+            histVariables.push_back(HistVariable::InvariantMass(recoDecay + "__hists/" + recoDecay + "_Reco Invariant Mass Background"));
+            histVariables.push_back(HistVariable::SameSignMass(recoDecay + "__hists/" + recoDecay + "_Reco Same Sign Invariant Mass"));
+	        histVariables.push_back(HistVariable::GenSimSameSignMass(recoDecay + "__hists/" + recoDecay + "_GenSim Same Sign Invariant Mass"));
+            histVariables.push_back(HistVariable::Pt(recoDecay + "__hists/" + recoDecay + "_Reco Leading lepton pT"));
+	        histVariables.push_back(HistVariable::GenSimPt(recoDecay + "__hists/" + recoDecay + "_GenSim Leading lepton pT"));
+            histVariables.push_back(HistVariable::MET(recoDecay + "__hists/" + recoDecay + "_MET"));
+	    
+        auto newHiggs = std::make_shared<SimpleProcess>("Run 2", filePath, 1);
+	    newHiggs->addFile("Higgs" + std::to_string((int) massTarget) + ".root", histVariables);
+        
+        auto higgsSignal = std::make_shared<SimpleProcess>("Delphes", filePath, 2);
+	    higgsSignal->addFile("HiggsPick" + std::to_string((int) massTarget) + ".root", histVariables);
 	    std::vector<std::shared_ptr<SimpleProcess>> higgsProcesses = { newHiggs, higgsSignal };
-            auto higgsChannels = std::make_shared<SimpleChannel>(name + std::to_string((int) massTarget));
+            auto higgsChannels = std::make_shared<SimpleChannel>(recoDecay + std::to_string((int) massTarget));
 	    for(std::shared_ptr<SimpleProcess> process : higgsProcesses) {
 		higgsChannels->addProcess(process);
 	    }

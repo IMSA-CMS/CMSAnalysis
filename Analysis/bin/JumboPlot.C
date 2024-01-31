@@ -9,6 +9,7 @@
 #include "CMSAnalysis/Analysis/interface/HiggsPlusPlusAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsComparisonAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsGenComparisonAnalysis.hh"
+#include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCutsAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/DYComparisonAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/PlotFormatter.hh"
@@ -27,7 +28,7 @@
 #include <vector>
 #include <map>
 #include <string>
-#include "CMSAnalysis/DataCollection/interface/Utility.hh"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "CMSAnalysis/Analysis/interface/SimpleChannel.hh"
 
 void JumboPlot() {
@@ -37,22 +38,25 @@ void JumboPlot() {
 	auto higgsStackAnalysis = std::make_shared<HiggsCutsAnalysis>();
 	auto higgsSuperImpAnalysis = std::make_shared<HiggsCutsAnalysis>();
 	auto simpleAnalysis = std::make_shared<SimpleHiggsComparison>();
+	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
 	//Extra text is the second parameter
-	auto plotFormatter = std::make_shared<PlotFormatter>(false, "");
+	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation)");
 	std::vector<std::shared_ptr<Channel>> stackChannels = higgsStackAnalysis->getChannels();
-	std::vector<std::shared_ptr<Channel>> superImpChannels = higgsSuperImpAnalysis->getChannels();
+	std::vector<std::shared_ptr<Channel>> superImpChannels = higgsSuperImpAnalysis->getChannels(); 
+	//add functionality
+	std::vector<std::shared_ptr<Channel>> higgsChannels = higgsAnalysis->getChannels();
 	//Controls what graph types to make. 1 is stacked only, 2 is superimposed only, 3 is both. 4 is for SimpleAnalysis only
-	int graphSwitch = 2;
+	int graphSwitch = 3;
 	//Put all variables you can graph here
 	//Choices are GenSim Same Sign Inv Mass, Same Sign Inv Mass, Invariant Mass, GenSim pT, pT, Eta, Phi, MET (caps matter)
-	std::vector<std::string> graphableTypes = {"Same Sign Inv Mass"};
+	std::vector<std::string> graphableTypes = {"Invariant Mass"};
 	//Change this to whatever process your signal is
 	std::string signalName = "Higgs Signal";
 	TString units = " [GEV]";
 
 
 
-	//You don't have to change anything here, unless your y axis is something other than Events
+	//You don't have to change anything here, unless your y axis is something other than "Events"
 	TCanvas* canvas;
 	std::string fileName;
 	std::string dataName; 
@@ -71,6 +75,7 @@ void JumboPlot() {
 					channel->labelProcess("signal", processName);
 				}
 			}
+
 			for(std::string processName : superImpChannels.at(count)->getNames()) {
 		    //Change this to your signal process name
 		    if(processName != signalName) {
@@ -79,6 +84,22 @@ void JumboPlot() {
 		    else {
 				superImpChannels.at(count)->labelProcess("signal", processName);
 		    }
+			}
+		for(std::shared_ptr<Channel> channel : higgsChannels) {
+			for(std::string processName : channel->getNames()) {
+				//std::cout << processName << std::endl;
+				//Change this line to make the described name your signal process name.
+				if(processName == "Higgs Signal") {
+					channel->labelProcess("signal", processName);
+				}
+				// "Monte Carlo Data"
+				else if(processName == "Higgs Data") { //This line is only used for complete plots
+					channel->labelProcess("data", processName);
+				}
+				else {
+					channel->labelProcess("background", processName);
+				}
+			}
 		}
 			std::string channelName = channel->getName();
 			//toAdd.push_back(channelName);

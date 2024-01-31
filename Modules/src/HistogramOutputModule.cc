@@ -45,7 +45,7 @@ void HistogramOutputModule::addObject(const std::string &name, TObject *obj) {
   if (baseObjects.find(name) == baseObjects.end()) {
     baseObjects.insert({name, obj});
   } else {
-    baseObjects[name] = obj;
+    baseObjects[name] = obj; 
     
   }
 
@@ -128,6 +128,7 @@ void HistogramOutputModule::fillHistogram(const std::string &name,
   else // If the hist is 1D hist
   {
     for (double currentNum : values) {
+      //std::cout << "currentNum: " << currentNum << "\n"; 
       hist->Fill(currentNum, weight);
     }
   }
@@ -170,6 +171,7 @@ bool HistogramOutputModule::process() {
       // {
       //   std::cout << hist->getFilteredName() << " has " << value << "\n";
       // }
+      //std::cout << "filling hist" << "name: " << hist->getFilteredName() << "\n";
       fillHistogram(hist->getFilteredName(), hist->value());
     }
   }

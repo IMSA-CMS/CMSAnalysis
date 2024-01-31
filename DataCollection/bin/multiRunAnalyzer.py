@@ -42,11 +42,46 @@ if __name__ == '__main__':
 	higgsSignal = ("Higgs1400.txt", )
 
 	#higgsData = ("Data/SingleMuonRun2017B-UL2017_MiniAODv2-v1.txt", "Data/SingleElectronRun2017B-UL2017_MiniAODv2-v1.txt")
-	higgsData = ("Data/Data_Trigger_SingleMuon_Year_2018A.txt", )
+	higgsData = (
+		#"Data/Data_Trigger_SingleMuon_Year_2016B.txt", 
+		#"Data/Data_Trigger_SingleMuon_Year_2016C.txt",
+		#"Data/Data_Trigger_SingleMuon_Year_2016D.txt", 
+		#"Data/Data_Trigger_SingleMuon_Year_2016E.txt", 
+		#"Data/Data_Trigger_SingleMuon_Year_2016F.txt",
+		#"Data/Data_Trigger_SingleMuon_Year_2016G.txt",
+		#"Data/Data_Trigger_SingleMuon_Year_2016H.txt",
+		"Data/Data_Trigger_SingleMuon_Year_2017a.txt",
+		"Data/Data_Trigger_SingleMuon_Year_2017B.txt",
+		"Data/Data_Trigger_SingleMuon_Year_2017C.txt",
+		"Data/Data_Trigger_SingleMuon_Year_2017D.txt",
+		"Data/Data_Trigger_SingleMuon_Year_2017E.txt",
+		"Data/Data_Trigger_SingleMuon_Year_2017F.txt"
+		"Data/Data_Trigger_SingleMuon_Year_2017G.txt",
+		"Data/Data_Trigger_SingleMuon_Year_2017H.txt",
+		#"Data/Data_Trigger_SingleMuon_Year_2018A.txt",
+		"Data/Data_Trigger_SingleMuon_Year_2018B.txt",
+		"Data/Data_Trigger_SingleMuon_Year_2018C.txt",
+		"Data/Data_Trigger_SingleMuon_Year_2018D.txt",
+		"Data/Data_Trigger_SingleMuon_Year_2022A.txt",
+		"Data/Data_Trigger_SingleMuon_Year_2022B.txt",
+		"Data/Data_Trigger_SingleMuon_Year_2022C.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2016B.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2016C.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2016D.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2016E.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2016F.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2016G.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2016H.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2017B.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2017C.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2017D.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2017E.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2017F.txt"
+		)
 
 	# List of jobs to run on from those above
 	#jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData]
-	jobsList = [zz]
+	jobsList = [higgsData]
 
 	# list of processes
 	processes = []

@@ -38,6 +38,7 @@ TH1* RootFileInput::getHist(std::string histType) const
 		std::string folder = name.substr(0,pos);
 		std::string histName = name.substr(pos+1);
 		TDirectory* dir = (TDirectory*)file->GetDirectory(folder.c_str());
+		//std::cout << "histName: " << histName << "\n";
 		if (dir)
 		{
 			dir->cd();
@@ -64,7 +65,10 @@ TH1* RootFileInput::getHist(std::string histType) const
 		//std::cout << "returning newHist " << newhist << std::endl;
 		return newhist;
 	}	
-	return hist;
+	//std::cout << "preIntegral " << hist->Integral() << std::endl;
+	//std::cout << "preMax " << hist->GetMaximum() << std::endl;
+	// returns a clone to prevent constantly overriding the same hist pointer
+	return dynamic_cast<TH1*>(hist->Clone());
 }
 
 TH1* RootFileInput::get2DHist(std::string histType) const
@@ -81,7 +85,7 @@ TH1* RootFileInput::get2DHist(std::string histType) const
 		throw std::runtime_error("File doesn't contain: " + name);
 	}
 	//Since only windowEstimator uses this, windowEstimator will proceed with using 1D hists instead of 2D if no 2D hist.
-	return hist;
+	return dynamic_cast<TH1*>(hist->Clone());
 }
 
 int RootFileInput::getTotalEvents() const
