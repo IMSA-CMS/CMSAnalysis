@@ -10,7 +10,8 @@ std::vector<std::pair<double, double>> TwoInvariantMassesHist::value2D() const
 
   if (invMasses.size() != 2)
   {
-    throw std::runtime_error("Incorrect number of invariant masses calculated!");
+    return {};
+    // std::runtime_error("Incorrect number of invariant masses calculated!");
   }
 
   return {{invMasses[0], invMasses[1]}};

@@ -3,8 +3,7 @@
 
 
 
-LeptonJetMLStripModule::LeptonJetMLStripModule(std::shared_ptr<LeptonJetReconstructionModule> irecomod): 
-recomod(irecomod)
+LeptonJetMLStripModule::LeptonJetMLStripModule()
 {
     
 }
@@ -12,27 +11,32 @@ recomod(irecomod)
 
 void LeptonJetMLStripModule::addVariables()
 {
-    addVariable("leadingPt", SpecialVariableModule::VariableType::Float);
+    //addVariable("leadingPt", SpecialVariableModule::VariableType::Float);
     addVariable("nParticles", SpecialVariableModule::VariableType::Integer);
 	addVariable("eta", SpecialVariableModule::VariableType::Float);
-	addVariable("phi", SpecialVariableModule::VariableType::Float);
+	//addVariable("phi", SpecialVariableModule::VariableType::Float);
 	// reader.AddVariable("mass", &mass);
 	addVariable("deltaR", SpecialVariableModule::VariableType::Float);
-	addVariable("sumPt", SpecialVariableModule::VariableType::Float);
-	addVariable("numMuons", SpecialVariableModule::VariableType::Integer);
+	//addVariable("sumPt", SpecialVariableModule::VariableType::Float);
+	//addVariable("numMuons", SpecialVariableModule::VariableType::Integer);
 	addVariable("deltaPt", SpecialVariableModule::VariableType::Float);
+	//addVariable("maxDXY", SpecialVariableModule::VariableType::Float);
+	//addVariable("maxDZ", SpecialVariableModule::VariableType::Float);
+	//addVariable("maxIsolation", SpecialVariableModule::VariableType::Float);
+
 
 }
 
-void LeptonJetMLStripModule::calculateVariables()
+void LeptonJetMLStripModule::calculateVariables(Particle particle)
 {
-
-	auto leptonJets = recomod->getLeptonJets();            // inputs from LeptonJet
+	LeptonJet leptonJet(particle);//no need for loop
+	//auto leptonJets = recomod->getLeptonJets();            // inputs from LeptonJet
 
     // int jetIterator = 0;
 
-    for (const auto &leptonJet : leptonJets)
-    {
+    //for (const auto &leptonJet : leptonJets)
+    //{
+        //std::cout << "Calling addValue for " << leptonJet.getNumParticles() <<'\n';
     	addValue("nParticles", leptonJet.getNumParticles());
 		double sumPt = 0;
         // jetIndex = jetIterator;
@@ -40,6 +44,9 @@ void LeptonJetMLStripModule::calculateVariables()
 		addValue("eta", leptonJet.getEta());
 		double deltaR = 0;
 		double leadingPt = 0;
+		double tempMaxDXY = 0;
+		double tempMaxDZ = 0;
+		double tempMaxIso = 0;
 
         // mass = leptonJet.getMass();
        
@@ -50,6 +57,8 @@ void LeptonJetMLStripModule::calculateVariables()
 
         for (Particle p : leptonJet.getParticles())
         {
+			
+			//p.getInfo("dxy");//max for dxy dz and islotion. simple max formula
             for (Particle q : leptonJet.getParticles())
             {
                 if (p.getDeltaR(q) > deltaR)
@@ -63,18 +72,39 @@ void LeptonJetMLStripModule::calculateVariables()
                 leadingPt = p.getPt();
             }
             sumPt += p.getPt();
-             
-            if (p.getType() == ParticleType::muon())
-            {
-                numMuons++;
-            }
+
+
+//new stuff
+			if (p.getInfo("dxy") > tempMaxDXY)
+			{
+				tempMaxDXY = p.getInfo("dxy");
+			}
+
+
+			if (p.getInfo("dz") > tempMaxDZ)
+			{
+				tempMaxDZ = p.getInfo("dz");
+			}
+
+
+			if (p.getInfo("Isolation") > tempMaxIso)
+			{
+				tempMaxIso = p.getInfo("Isolation");
+			} 
+            //if (p.getType() == ParticleType::muon())
+            //{
+            //    numMuons++;
+            //}
         }
 		addValue("deltaR", deltaR);
 		addValue("deltaPt", leadingPt - runnerUpPt);
-		addValue("leadingPt", leadingPt);
+		//addValue("leadingPt", leadingPt);
 		addValue("sumPt", sumPt);
-		addValue("numMuons", numMuons);
+		addValue("maxDXY", tempMaxDXY);
+		addValue("maxDZ", tempMaxDZ);
+		addValue("maxIsolation", tempMaxIso);
+		//addValue("numMuons", numMuons);
 
 
-    }
+    //}
 }

@@ -3,7 +3,7 @@
 
 #include "CMSAnalysis/Histograms/interface/GenSimRecoPrototype.hh"
 #include "CMSAnalysis/Histograms/interface/ResolutionPrototype.hh"
-#include "CMSAnalysis/Modules/interface/LeptonJetMLCalculator.hh"
+#include "CMSAnalysis/Modules/interface/MLCalculator.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
 
 // This file was created by Liam Nelson, IMSA class of 2022.
@@ -131,7 +131,7 @@ class PileUpHist : public HistogramPrototype1D
 class LeptonJetMLHist : public GenSimRecoPrototype
 {
 public:
-  LeptonJetMLHist(EventInput::RecoLevel type, const std::string &iname, int iNBins, double iminimum, double imaximum, std::shared_ptr<LeptonJetMLCalculator> iMlCalc, std::shared_ptr<LeptonJetReconstructionModule> iRecoCalc) : GenSimRecoPrototype(type, iname, iNBins, iminimum, imaximum),
+  LeptonJetMLHist(EventInput::RecoLevel type, const std::string &iname, int iNBins, double iminimum, double imaximum, std::shared_ptr<MLCalculator> iMlCalc, std::shared_ptr<LeptonJetReconstructionModule> iRecoCalc) : GenSimRecoPrototype(type, iname, iNBins, iminimum, imaximum),
                                                                                                                                                                                                                                    mLCalc(iMlCalc),
                                                                                                                                                                                                                                    recoCalc(iRecoCalc)
   {
@@ -144,7 +144,7 @@ protected:
     std::vector<double> outputs;
     for (LeptonJet jet : jets)
     {
-      outputs.push_back(mLCalc->CalculateMLValue(jet));
+      outputs.push_back(mLCalc->getOutput(jet));
       
       //print here
       //look at the prior fucntion
@@ -154,7 +154,7 @@ protected:
   }
 
 private:
-  std::shared_ptr<LeptonJetMLCalculator> mLCalc;
+  std::shared_ptr<MLCalculator> mLCalc;
   std::shared_ptr<LeptonJetReconstructionModule> recoCalc;
 };
 

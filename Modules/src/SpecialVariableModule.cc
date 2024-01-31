@@ -25,20 +25,23 @@ void SpecialVariableModule::addVariablesToReader(TMVA::Reader *reader) const
 	}
 }
 
-void SpecialVariableModule::addVariablesToTree(TTree *tree) const
+void SpecialVariableModule::addVariablesToTree(TTree *tree)
 {
-	for (auto pair : integers)
+	for (auto& pair : integers)
 	{
 		std::cout << "Adding variable " << pair.first << '\n';
-		tree->Branch(pair.first.c_str(), &pair.second, (pair.first+"/I").c_str());
+		// auto ptm = &std::pair<std::string, int>::second;
+		tree->Branch(pair.first.c_str(), reinterpret_cast<void*>(&(pair.second)), (pair.first+"/I").c_str());
 	}
 	
 	
-	for (auto pair : floats)
+	for (auto& pair : floats)
 	{
 		std::cout << "Adding variable " << pair.first << '\n';
-		tree->Branch(pair.first.c_str(), &pair.second, (pair.first+"/F").c_str());
+		tree->Branch(pair.first.c_str(), reinterpret_cast<void*>(&(pair.second)), (pair.first+"/F").c_str());
 	}
+
+	//std::cout << "Address of numLeptons: " << &(integers.find("nParticles")->second) << '\n';
 }
 
 void SpecialVariableModule::addVariablesToDataLoader(TMVA::DataLoader *dataloader) const
@@ -69,13 +72,14 @@ void SpecialVariableModule::initialize()
 
 bool SpecialVariableModule::process()
 {
-	calculateVariables();
+	//calculateVariables();
 	return true;
 }
 
 void SpecialVariableModule::addValue(std::string name, Int_t value)
 {
 	addValue(name, integers, value);
+	//std::cout << "New Address of numLeptons: " << &(integers["nParticles"]) << '\n';
 }
 
 void SpecialVariableModule::addValue(std::string name, Float_t value)

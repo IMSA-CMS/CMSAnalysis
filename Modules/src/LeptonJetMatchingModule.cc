@@ -220,5 +220,3 @@ const bool LeptonJetMatchingModule::isSquark(GenSimParticle lepton)
   }
   return false;
 }
-
-

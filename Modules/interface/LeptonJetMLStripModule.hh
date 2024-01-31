@@ -10,16 +10,17 @@ class LeptonJetMLStripModule: public SpecialVariableModule
 {
     
     public:
-    LeptonJetMLStripModule(std::shared_ptr<LeptonJetReconstructionModule> recomod); //do the same thing for recomod in leptonjetMLStripModule
+    LeptonJetMLStripModule(); //do the same thing for recomod in leptonjetMLStripModule
 
     private:
-    std::shared_ptr<LeptonJetReconstructionModule> recomod;//same here
 
 
     protected:
     virtual void addVariables() override;
 
-	virtual void calculateVariables() override;
+	virtual void calculateVariables(Particle particle) override;
+
+
 };
 
 
