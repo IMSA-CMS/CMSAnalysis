@@ -1,6 +1,8 @@
 #ifndef HISTOGRAMS_HH
 #define HISTOGRAMS_HH
 
+#include <iostream>
+
 #include "CMSAnalysis/Histograms/interface/GenSimRecoPrototype.hh"
 #include "CMSAnalysis/Histograms/interface/ResolutionPrototype.hh"
 #include "CMSAnalysis/Modules/interface/MLCalculator.hh"
@@ -37,6 +39,24 @@ class InvariantMassHist : public GenSimRecoPrototype
   }
 };
 
+class LeptonJetInvariantMassHist : public HistogramPrototype1D
+{
+  using HistogramPrototype1D::HistogramPrototype1D;
+  std::vector<double> value() const
+  {
+    std::vector<double> invariantMass;
+      auto particles = getInput()->getSpecial("leptonJet");
+      for (auto particle: particles)
+      {
+        LeptonJet lj(particle);
+        auto inv = lj.getMass();
+        invariantMass.push_back(inv);
+      }
+      return invariantMass;
+  }
+
+};
+
 class MassResolutionHist : public ResolutionPrototype
 {
   using ResolutionPrototype::ResolutionPrototype;
@@ -54,7 +74,7 @@ class OppositeSignInvariantMassHist : public GenSimRecoPrototype
   std::vector<double> protectedValue(EventInput::RecoLevel level) const
   {
     auto particles = getInput()->getLeptons(level);
-    auto inv = particles.calculateOppositeSignInvariantMass();
+    auto inv = particles.calculateOppositeSignInvariantMass(true);
     return {inv};
   }
 };

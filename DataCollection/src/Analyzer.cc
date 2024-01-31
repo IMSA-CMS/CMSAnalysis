@@ -53,7 +53,6 @@ void Analyzer::writeOutputFile()
   {
     module->finalize();
   }
-
   outputRootFile->cd();
   //Finalize separately for each filterString, to be safe
   //std::cout << "There are " << analysisModules.size() << " analysis modules\n";
@@ -61,11 +60,11 @@ void Analyzer::writeOutputFile()
   {
     // Write the output
     module->doneProcessing();
-    //std::cout << "FilterModules size : " << filterModules.size() << "\n";
+    std::cout << "FilterModules size : " << filterModules.size() << "\n";
     // if (filterModules.size() != 0)
     if (true)
     {
-      //std::cout << "Finalizing analysis module: " << module->getFilter() << "\n";
+      std::cout << "Finalizing analysis module: " << module->getFilter() << "\n";
       module->finalize();
       for (auto &str : filterNames) //writes analysis modules by filter string
       {
@@ -96,6 +95,18 @@ void Analyzer::writeOutputFile()
 //gets modules from module collection
 void Analyzer::addModules(ModuleCollection modules)
 {
+  if (modules.getProductionModules().size() == 0)
+  {
+    std::cout << "You have no production modules!" << std::endl;
+  }
+  if (modules.getFilterModules().size() == 0)
+  {
+    std::cout << "You have no filter modules!" << std::endl;
+  }
+  if (modules.getAnalysisModules().size() == 0)
+  {
+    std::cout << "You have no analysis modules!" << std::endl;
+  }
     productionModules = modules.getProductionModules();
     filterModules = modules.getFilterModules();
     analysisModules = modules.getAnalysisModules();

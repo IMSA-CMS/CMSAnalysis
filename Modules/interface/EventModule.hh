@@ -55,6 +55,7 @@ class EventModule : public ProductionModule
 
         // returns "[n]th Highest [particle type] [value name]" e.g. 4th Highest Muon Eta
         std::string getBasicHistogramTitle(int n, const ParticleType& particleType, std::string valueName) const;
+        std::string getCountHistogramTitle(const ParticleType& particleType, std::string valueName) const;
         bool checkHist(std::string histName) const;
 
     private:
