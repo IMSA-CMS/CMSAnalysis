@@ -140,7 +140,7 @@ std::string HistogramOutputModule::getObjectName(const std::string &str) const {
 }
 
 bool HistogramOutputModule::process() {
-  std::cout << "HistOutMod running \n";
+  //std::cout << "HistOutMod running \n";
   for (auto hist : histograms) {
     bool draw = hist->shouldDraw(); // call the shouldDraw function so we can
                                     // call process on the FilterModules

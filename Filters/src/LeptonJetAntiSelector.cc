@@ -1,4 +1,4 @@
-#include "CMSAnalysis/Filters/interface/LeptonJetSelector.hh"
+#include "CMSAnalysis/Filters/interface/LeptonJetAntiSelector.hh"
 #include <vector>
 
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
@@ -9,10 +9,10 @@
 #include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
 #include "DataFormats/Math/interface/deltaR.h"
 
-LeptonJetSelector::LeptonJetSelector(double ideltaRCut, double idXYCut, double idZCut) : deltaRCut(ideltaRCut), dXYCut(idXYCut), dZCut(idZCut)
+LeptonJetAntiSelector::LeptonJetAntiSelector(double ideltaRCut, double idXYCut, double idZCut) : deltaRCut(ideltaRCut), dXYCut(idXYCut), dZCut(idZCut)
 { }
 
-void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) const
+void LeptonJetAntiSelector::selectParticles(const EventInput* input, Event& event) const
 {
   // GenSim stuff
   auto particlesGenSim = input->getParticles(EventInput::RecoLevel::GenSim).getParticles();
@@ -30,7 +30,7 @@ void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) c
       if (particle.getType() == ParticleType::muon() && particle.getPt() > 5) 
       {
         auto lepton = Lepton(particle);
-        if(lepton.isLoose() && lepton.getDXY() < dXYCut && lepton.getDZ() < dZCut)
+        if(lepton.isLoose() && lepton.getDXY() > dXYCut && lepton.getDZ() > dZCut)
         {
           selected.addParticle(particle);
         }
@@ -51,7 +51,7 @@ void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) c
     }
 }
 
-std::vector<LeptonJet> LeptonJetSelector::findLeptonJets(ParticleCollection<Lepton> recoCandidates) const
+std::vector<LeptonJet> LeptonJetAntiSelector::findLeptonJets(ParticleCollection<Lepton> recoCandidates) const
 {
   auto recoLeptons = recoCandidates.getParticles();
   std::vector<LeptonJet> leptonJetList;
@@ -107,7 +107,7 @@ std::vector<LeptonJet> LeptonJetSelector::findLeptonJets(ParticleCollection<Lept
   return leptonJetList;
 }
 
-LeptonJet LeptonJetSelector::createLeptonJet(Lepton highestPtLepton) const
+LeptonJet LeptonJetAntiSelector::createLeptonJet(Lepton highestPtLepton) const
 {
   LeptonJet leptonJet;
   leptonJet.addParticle(highestPtLepton);
@@ -115,7 +115,7 @@ LeptonJet LeptonJetSelector::createLeptonJet(Lepton highestPtLepton) const
 }
 //runAnalyzer input=darkPhotonBaselineRun2.txt analysis=LeptonJetReconstruction output=leptonjetinvmasshist.root numFiles=1
 //root leptonjetinvmasshist.root then type TBrowser h
-Particle LeptonJetSelector::findHighestPtLepton(std::vector<Lepton> leptons) const
+Particle LeptonJetAntiSelector::findHighestPtLepton(std::vector<Lepton> leptons) const
 {
   double highestPt = 0;
   for (auto lepton : leptons)

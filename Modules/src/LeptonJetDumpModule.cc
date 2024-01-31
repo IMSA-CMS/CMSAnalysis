@@ -102,7 +102,7 @@ void LeptonJetDumpModule::printLeptons(std::ofstream& my_file)
       particleParentage.insert(particleParentage.begin(), recoLepton);
       particleParentage.insert(particleParentage.begin(), Particle::nullParticle()); //will be used as new line for each lepton lineage
 
-      while(particle.isNotNull() && !(lepJet -> isQuark(particle) || lepJet -> isSquark(particle) || particle.status() == 4))
+      while(particle.isNotNull() && !(lepJet -> isQuark(particle) || lepJet -> isSquark(particle) || lepJet -> isHiggs(particle) || particle.status() == 4))
       {
 
         particleParentage.insert(particleParentage.begin(), particle);

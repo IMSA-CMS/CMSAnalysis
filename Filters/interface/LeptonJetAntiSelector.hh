@@ -1,5 +1,5 @@
-#ifndef LEPTONJETSELECTOR_HH
-#define LEPTONJETSELECTOR_HH
+#ifndef LeptonJetAntiSelector_HH
+#define LeptonJetAntiSelector_HH
 #include <memory>
 #include <vector>
 #include "CMSAnalysis/Utility/interface/Lepton.hh"
@@ -12,12 +12,12 @@
 
 //To implement a selector, add it to an EventModule in a DataCollectionPlan, then add the histograms to that EventModule's EventHistogramModule
 
-class LeptonJetSelector : public Selector
+class LeptonJetAntiSelector : public Selector
 {
     public:
-        LeptonJetSelector(double ideltaRCut = .5, double idXYCut = 100, double idZCut = 100);
+        LeptonJetAntiSelector(double ideltaRCut = .5, double idXYCut = 0, double idZCut = 0);
 
-        //Selects particles, keeping only loose muons with pT greater than 5 that have a dXY and dZ less than the given values.
+        //Selects particles for a control region, keeping only loose muons with pT greater than 5 that have a dXY and dZ greater than the given values.
         void selectParticles(const EventInput* input, Event& event) const override;
     private:
         std::vector<LeptonJet> findLeptonJets(ParticleCollection<Lepton> recoCandidates) const;
