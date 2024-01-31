@@ -65,6 +65,7 @@ fitInformation mapMaker9000(TFitResultPtr Result, std::string type, std::string 
 // must be manually changed 
 std::vector<fitInformation> fitParameters(std::string filename, std::string paramGraphsName, int time, std::string Histname);
 
+double ParametrizedDoubleSidedCrystalballFunction(double *x, double *par);
 double DoubleSidedCrystalballFunction(double *x, double *par);
 double expGaussExp(double *x, double *par);
 double breitWigner(double *x, double *par);
@@ -73,13 +74,15 @@ double studentsT(double *x, double *par);
 double hyperbolicSecant(double *x, double *par);
 double pearsonIV(double *x, double *par);
 
-TFitResultPtr fitToDSCB(char const* name, TH1* hist, TFile* file, std::vector<double> params);
+TFitResultPtr fitToDSCB(std::string name, TH1* hist, TFile* file, std::vector<double> params,std::string histsname);
 TFitResultPtr fitToAlternative(char const* name, TH1* hist, TFile* file, std::vector<double> params);
 TFitResultPtr fitToBW(char const* name, TH1* hist, TFile* file, std::vector<double> params);
 TFitResultPtr fitToStudentsT(char const* name, TH1* hist, TFile* file, std::vector<double> params);
 TFitResultPtr fitToHyperbolicSecant(char const* name, TH1* hist, TFile* file, std::vector<double> params);
 TFitResultPtr fitToPearson(char const* name, TH1* hist, TFile* file, std::vector<double> params, int i);
 TFitResultPtr fitToPearsonIV(std::string name, TH1* hist, TFile* file, std::vector<double> params, std::string histsname);
+void parametrizationGraph(std::vector<fitInformation> fitinformation, std::string saveName, TH1* hist, double mass);
+void parametrizationCheck(std::vector<fitInformation> fitinformation, std::vector<char const*> filenames, std::string histname);
 double globalNorm;
 int globalCounter = 0;
 
@@ -95,10 +98,11 @@ void multipleFits()
 {
 	// Filenames of root files that have the graphs to fit in them
 	std::vector<char const*> fileNames{"Higgs500.root","Higgs600.root","Higgs700.root","Higgs800.root","Higgs900.root","Higgs1000.root","Higgs1100.root","Higgs1200.root","Higgs1300.root","Higgs1400.root","Higgs1500.root"};
+	//std::vector<char const*> fileNames{"Higgs700.root","Higgs800.root","Higgs900.root","Higgs1000.root","Higgs1100.root","Higgs1200.root","Higgs1300.root","Higgs1400.root","Higgs1500.root"};
 	// The name of the histogram in the root files above that is bing fitted
 
 	std::vector<std::string> histTypes = generateHistNames();
-	//std::vector<std::string> histTypes = {"eeee_eeee_Reco Invariant Mass Background;1X"};//Testing purposes
+	//std::vector<std::string> histTypes = {"eee_eeee_Same Sign Invariant Mass;1"};//Testing purposes
 	
 	// This script creates three root files:
 	// The name of the root file the fitted histograms are to be stored
@@ -106,12 +110,15 @@ void multipleFits()
 	// The name of the root file graphs of parameter values are to be stored
 	std::string paramGraphsName = "pearsonParamGraphs.root";
 	// The name of the root file the fitted parameter graphs are to be stored
-	std::string fitParamsName = "fitParams.root";
+	std::string fitParamsName = "fitParamsNoLow.root";
 	// The name of the text file with all parametrizations
 	std::string parametrizedFunction = "functionParametrizations.txt";
 	TFile* file = TFile::Open(fitHistsName.c_str(), "RECREATE");
 	//delete file;
 	std::ofstream paramsFile(parametrizedFunction);
+
+	std::string pString = "Histname|||a_low|||a_high|||n_low|||n_high|||mean|||sigma\n";
+	paramsFile << pString << '\n';
 
 	int time = 0;	
 
@@ -142,7 +149,8 @@ void multipleFits()
 								std::string rootName(filename);
 								int rootPos = rootName.length() - 5;
 								std::string name = rootName.substr(0, rootPos) + Histname;
-								auto result = fitToPearsonIV(name, histX, file, params, fitHistsName);
+								auto result = fitToDSCB(name, histX, file, params, fitHistsName);
+								
 								results.push_back(result->Parameters());
 								errors.push_back(result->Errors());
 								doFit = true;
@@ -183,7 +191,9 @@ void multipleFits()
 						std::string rootName(filename);
 						int rootPos = rootName.length() - 5;
 						std::string name = rootName.substr(0, rootPos) + Histname;
-						auto result = fitToPearsonIV(name, hist, file, params, fitHistsName);
+						//auto result = fitToPearsonIV(name, hist, file, params, fitHistsName);
+						auto result = fitToDSCB(name, hist, file, params, fitHistsName);
+
 						results.push_back(result->Parameters());
 						errors.push_back(result->Errors());
 					}
@@ -191,29 +201,98 @@ void multipleFits()
 			}
 			histFile->Close();
 		}
-	// uncomment the below line if ready to fit the values of the parameters (the code for fitting parameters is found in fitParameters())
-	
-
+	//doFit = false;
 	if(doFit){
 		auto params = paramsFromFits(results, errors);
 		graph(params, paramGraphsName); //should generally work still
 
 		auto finalParameters = fitParameters(fitParamsName, paramGraphsName,time, Histname);
 
-		std::string aparam = finalParameters.at(0).fittedFunction;
-		std::string mparam = finalParameters.at(1).fittedFunction;
-		std::string massparam = finalParameters.at(2).fittedFunction;
-		std::string nuparam = finalParameters.at(3).fittedFunction;		
-		//std::string functionString = "("+ nparam +") * std::pow(1 + std::pow((x-("+ massparam +")) / ("+aparam+"),2), -("+mparam+")) * std::exp(-("+nuparam+") * std::atan((x-("+massparam+"))/("+aparam+")))";
-		//std::string printString = Histname + "|||" + functionString + "\n"; 
-		std::string printString = Histname + "|||\n"; 
+		std::string ahparam = finalParameters.at(0).fittedFunction;
+		std::string alparam = finalParameters.at(1).fittedFunction;
+		std::string nlparam = finalParameters.at(2).fittedFunction;
+		std::string nhparam = finalParameters.at(3).fittedFunction;
+		std::string sigmaparam = finalParameters.at(4).fittedFunction;		
+		
+		std::string massparam = finalParameters.at(5).fittedFunction;		
 
+		//std::string functionString = "("+ nparam +") * std::pow(1 + std::pow((x-("+ massparam +")) / ("+aparam+"),2), -("+mparam+")) * std::exp(-("+nuparam+") * std::atan((x-("+massparam+"))/("+aparam+")))";
+		std::string printString = Histname + "|||" + ahparam + "|||" + alparam + "|||" + nlparam + "|||" + nhparam + "|||" + massparam + "|||" + sigmaparam; 
+		std::cout<< printString << "\n";
 		paramsFile << printString << '\n';
+		
+		parametrizationCheck(finalParameters, fileNames, Histname);
+
 	}
 	time++;
 	std::cout<<Histname << "Done! \n";
+
 }
 }
+
+void parametrizationCheck(std::vector<fitInformation> fitinformation, std::vector<char const*> filenames, std::string histname){
+	double mass = 500;
+	for(auto filename : filenames){
+		TFile* histFile = TFile::Open(filename);
+		std::string Sfilename(filename);
+
+		if(histname.substr(9,5) == "_Reco"){
+			int nameLength = histname.length();
+			std::string nHistname = histname.substr(0,nameLength-1);
+			TH2* hist = dynamic_cast<TH2*>(histFile->FindObjectAny(nHistname.c_str()));
+			TH1D* histX = hist->ProjectionX();
+			std::string saveNameX = "DBSCOverlay_" + Sfilename + histname + "X.png"; 
+			parametrizationGraph(fitinformation, saveNameX, histX, mass);
+			TH1D* histY = hist->ProjectionY();
+			std::string saveNameY = "DBSCOverlay_" + Sfilename + histname + "Y.png"; 
+			parametrizationGraph(fitinformation, saveNameY, histY, mass);
+		}
+		else{
+			TH1* hist = getHist(histname.c_str(), histFile);
+			std::string saveName = "DBSCOverlay_" + Sfilename + histname + ".png"; 
+			parametrizationGraph(fitinformation, saveName, hist,mass);
+		}
+		std::cout<<mass;
+		mass += 100;
+	}
+}
+void parametrizationGraph(std::vector<fitInformation> fitinformation, std::string saveName, TH1* hist, double mass){
+	TCanvas *c1 = new TCanvas("c1", "Superimposed Canvas", 0,0, 1500,500);
+	TF1* f1 = new TF1 ("f1", ParametrizedDoubleSidedCrystalballFunction, 0, 2000, 23);
+	//al,ah,nl,nh,sigma, mean
+	//f1->Setparameters
+	globalNorm = hist->Integral("width");
+
+	for(int i=0;i<22;i++){
+		int number = (i)/4;
+		double value;
+		if(number < 5){
+			value = fitinformation.at(number).results.at(i%4);
+			f1->FixParameter(i, value);
+			// std::cout<< "i: " + std::to_string(i) + "| Fitted Parameter name: " + fitinformation.at(number).paramName + "| Fitted Parameter number: " + std::to_string(i%4) + "| Fitted Parameter value:  " + std::to_string(value) + "\n";
+			// if(number == 0){
+			// 	std::cout<< value << "\n";
+			// }
+		}
+		if(number == 5){
+			value = fitinformation.at(5).results.at(i%4);
+			f1->FixParameter(i, value);
+			//std::cout<< "i: " + std::to_string(i) + "| Fitted Parameter name: " + fitinformation.at(number).paramName + "| Fitted Parameter number: " + std::to_string(i%4) + "| Fitted Parameter value:  " + std::to_string(value) + "\n";
+		}
+	}
+	f1->FixParameter(22, mass);
+	f1->SetNpx(1000);
+	//hist->GetXaxis()->SetLimits(mass-500,mass+300);
+	hist->Draw();
+
+	f1->Draw("SAME");
+	c1->Update();
+	c1->SaveAs(saveName.c_str());
+	c1->Close();
+
+}
+
+
 
 TH1* getHist(std::string name, TFile* file)
     {
@@ -223,7 +302,8 @@ TH1* getHist(std::string name, TFile* file)
 }
 std::vector<std::string> generateHistNames() {
 	std::vector<std::string> Channels;
-	std::vector<std::string> recoChannels = {"eeee","eeeu","eeuu","eueu","euuu","uuuu","eee","eeu","eue","euu","uue","uuu","ee","e e","eu","e u","uu","u u"};
+	//std::vector<std::string> recoChannels = {"eeee","eeeu","eeuu","eueu","euuu","uuuu","eee","eeu","eue","euu","uue","uuu","ee","e e","eu","e u","uu","u u"};
+	std::vector<std::string> recoChannels = {"eeee","eeeu","eeuu","eueu","euuu","uuuu"};
 	std::vector<std::string> genSimChannels = {"eeee","eeeu", "eeuu", "eueu", "euuu","uuuu"};
 	for(auto reco : recoChannels){
 		for(auto genSim : genSimChannels){
@@ -247,8 +327,10 @@ std::map<std::string, std::vector<std::vector<double>>> paramsFromFits(std::vect
 {
 	std::map<std::string, std::vector<std::vector<double>>> data;
 	std::vector<double> x{500.0,600.0,700.0,800.0,900.0,1000.0,1100.0,1200.0, 1300.0, 1400.0, 1500.0};
+	//std::vector<double> x{700.0,800.0,900.0,1000.0,1100.0,1200.0, 1300.0, 1400.0, 1500.0};
+
 	//std::vector<std::string> names{"a", "m", "mass", "nu", "n"};
-	std::vector<std::string> names{"a", "m", "mass", "nu"};
+	std::vector<std::string> names{"alpha_{low}","alpha_{high}","n_{low}", "n_{high}", "mean", "sigma"};
 
 	for (int i = 0; i < names.size(); i++)
 	{
@@ -400,55 +482,90 @@ std::vector<fitInformation> fitParameters(std::string filename, std::string para
 	TFile* paramGraphs = TFile::Open(paramGraphsName.c_str());
 	TFile* fitParams = TFile::Open(filename.c_str(), "update");
 
-	std::string mname = newHistname + "mass";
+	 //"n_{high}", "mean", "sigma"
+
+	std::string mname = newHistname + "mean";
 	TCanvas* mcanvas = new TCanvas(mname.c_str(),mname.c_str() , 800, 500);
 	TF1* powerLaw = new TF1("powerLaw", "[0]*(x-[1])^[2] + [3]", 0, 2000);
-	auto mass = dynamic_cast<TGraph*>(paramGraphs->FindObjectAny("mass"));
+
+	auto mass = dynamic_cast<TGraph*>(paramGraphs->FindObjectAny("mean"));
 	auto fitResultMass = mass->Fit("pol1", "S");
 	mass->Draw("AP");
 	//fitParams->WriteObject(mcanvas, mname.c_str());	
 	fitParams->cd();
 	mcanvas->Write();
-	auto massResult = mapMaker9000(fitResultMass, "pol1", "mass");
+	auto massResult = mapMaker9000(fitResultMass, "pol1", "mean");
 
-	std::string aname = newHistname + "a";
-	TCanvas* acanvas = new TCanvas(aname.c_str(),aname.c_str() , 800, 500);
-	auto a = dynamic_cast<TGraph*>(paramGraphs->FindObjectAny("a"));
+
+	std::string alname = newHistname + "alpha_{low}";
+	TCanvas* alcanvas = new TCanvas(alname.c_str(),alname.c_str() , 800, 500);
+	auto al = dynamic_cast<TGraph*>(paramGraphs->FindObjectAny("alpha_{low}"));
 	powerLaw->SetParameters(.5, 0, 2, 0);
-	powerLaw->FixParameter(1, 0);
+	//powerLaw->FixParameter(1, 0);
 	gStyle->SetOptFit(1111);
-	auto fitResultA = a->Fit("powerLaw", "S");
-	a->Draw("AP");
+	auto fitResultal = al->Fit("powerLaw", "S");
+	al->Draw("AP");
 	//fitParams->WriteObject(acanvas, aname.c_str());
 	fitParams->cd();
-	acanvas->Write();
+	alcanvas->Write();
 	powerLaw->ReleaseParameter(1);
-	auto aResult = mapMaker9000(fitResultA, "powerLaw",  "a");
+	auto alResult = mapMaker9000(fitResultal, "powerLaw",  "alpha_{low}");
 
 
-	std::string m2name = newHistname + "m";	
-	TCanvas* m2canvas = new TCanvas(m2name.c_str(),m2name.c_str() , 800, 500);
-	auto m = dynamic_cast<TGraph*>(paramGraphs->FindObjectAny("m"));
+	std::string ahname = newHistname + "alpha_{high}";	
+	TCanvas* ahcanvas = new TCanvas(ahname.c_str(),ahname.c_str() , 800, 500);
+	auto ah = dynamic_cast<TGraph*>(paramGraphs->FindObjectAny("alpha_{high}"));
 	powerLaw->SetParameters(.5, 0, 2, 0);
 	gStyle->SetOptFit(1111);
-	auto fitResultM = m->Fit("powerLaw", "S");
-	m->Draw("AP");
+	auto fitResultah = ah->Fit("powerLaw", "S");
+	ah->Draw("AP");
 	//fitParams->WriteObject(m2canvas, m2name.c_str());
 	fitParams->cd();
-	m2canvas->Write();
-	auto mResult = mapMaker9000(fitResultM, "powerLaw", "m");
+	ahcanvas->Write();
+	auto ahResult = mapMaker9000(fitResultah, "powerLaw", "alpha_{high}");
 
-	std::string nuname = newHistname + "nu";
-	TCanvas* nucanvas = new TCanvas(nuname.c_str(),nuname.c_str() , 800, 500);
-	auto nu = dynamic_cast<TGraph*>(paramGraphs->FindObjectAny("nu"));
+
+
+	std::string nlname = newHistname + "n_{low}";
+	TCanvas* nlcanvas = new TCanvas(nlname.c_str(),nlname.c_str() , 800, 500);
+	auto nl = dynamic_cast<TGraph*>(paramGraphs->FindObjectAny("n_{low}"));
 	powerLaw->SetParameters(0.5, 0, 2, .5);
 	gStyle->SetOptFit(1111);
-	auto fitResultNu = nu->Fit("powerLaw", "S");
-	nu->Draw("AP");
+	powerLaw->SetMinimum(0.0);
+	auto fitResultnl = nl->Fit("powerLaw", "S");
+	nl->Draw("AP");
 	//fitParams->WriteObject(nucanvas,nuname.c_str());
 	fitParams->cd();
-	nucanvas->Write();
-	auto nuResult = mapMaker9000(fitResultNu, "powerLaw", "nu");
+	nlcanvas->Write();
+	auto nlResult = mapMaker9000(fitResultnl, "powerLaw", "n_{low}");
+
+
+	std::string nhname = newHistname + "n_{high}";
+	TCanvas* nhcanvas = new TCanvas(nhname.c_str(),nhname.c_str() , 800, 500);
+	auto nh = dynamic_cast<TGraph*>(paramGraphs->FindObjectAny("n_{high}"));
+	powerLaw->SetParameters(0.5, 0, 2, .5);
+	gStyle->SetOptFit(1111);
+	auto fitResultnh = nh->Fit("powerLaw", "S");
+	nh->Draw("AP");
+	//fitParams->WriteObject(nucanvas,nuname.c_str());
+	fitParams->cd();
+	nhcanvas->Write();
+	auto nhResult = mapMaker9000(fitResultnh, "powerLaw", "n_{high}");
+
+
+
+	powerLaw->SetMinimum(-10000000.0);
+	std::string sigmaname = newHistname + "sigma";
+	TCanvas* sigmacanvas = new TCanvas(sigmaname.c_str(),sigmaname.c_str() , 800, 500);
+	auto sigma = dynamic_cast<TGraph*>(paramGraphs->FindObjectAny("sigma"));
+	powerLaw->SetParameters(0.5, 0, 2, .5);
+	gStyle->SetOptFit(1111);
+	auto fitResultsigma = sigma->Fit("powerLaw", "S");
+	sigma->Draw("AP");
+	//fitParams->WriteObject(nucanvas,nuname.c_str());
+	fitParams->cd();
+	sigmacanvas->Write();
+	auto sigmaResult = mapMaker9000(fitResultsigma, "powerLaw", "sigma");
 
 	// auto n = dynamic_cast<TGraph*>(paramGraphs->FindObjectAny("n"));
 	// powerLaw->SetParameters(-107378, 195.667, -.505356, 25964.5);
@@ -462,18 +579,24 @@ std::vector<fitInformation> fitParameters(std::string filename, std::string para
 
 	std::vector<fitInformation> returnResult;
 	
-	returnResult.push_back(aResult);
-	returnResult.push_back(mResult);
+	returnResult.push_back(alResult);
+	returnResult.push_back(ahResult);
+	returnResult.push_back(nlResult);
+	returnResult.push_back(nhResult);
+	returnResult.push_back(sigmaResult);
+
 	returnResult.push_back(massResult);
-	returnResult.push_back(nuResult);
 	//returnResult.push_back(nResult);
 
 	fitParams->Close();
 
 	mcanvas->Close();
-	m2canvas->Close();
-	acanvas->Close();
-	nucanvas->Close();
+	alcanvas->Close();
+	ahcanvas->Close();
+	nlcanvas->Close();
+	nhcanvas->Close();
+	sigmacanvas->Close();
+
 	return returnResult;
 }
 
@@ -484,8 +607,16 @@ fitInformation mapMaker9000(TFitResultPtr Result, std::string type, std::string 
 	int i = 0;
 	std::vector<std::pair<double,double>> paramVector;
 	for(auto param : params){
+		if(i ==0){
+			double newParam = param * 10000;
+			std::pair<double,double> resultPair(newParam,errors[i]);
+			paramVector.push_back(resultPair);
+		}
+		else{
 		std::pair<double,double> resultPair(param,errors[i]);
 		paramVector.push_back(resultPair);
+
+		}
 		i++;
 	}
 	rfitInformation.errors = errors;
@@ -493,14 +624,14 @@ fitInformation mapMaker9000(TFitResultPtr Result, std::string type, std::string 
 	rfitInformation.ResultError = paramVector;
 	if(type == "powerLaw"){
 		//x is the true mass
-		std::string finalFunction = std::to_string(std::get<0>(paramVector[0])) + "* std::pow([0]-" +std::to_string(std::get<0>(paramVector[1])) + ","+std::to_string(std::get<0>(paramVector[2])) +") +" + std::to_string(std::get<0>(paramVector[3]));
+		std::string finalFunction = std::to_string(std::get<0>(paramVector[0])) + "*std::pow(10,-4)* std::pow([0]-" +std::to_string(std::get<0>(paramVector[1])) + ","+std::to_string(std::get<0>(paramVector[2])) +") +" + std::to_string(std::get<0>(paramVector[3]));
 		rfitInformation.baseFunction = "[0]*(x-[1])^[2] + [3]";
 		rfitInformation.numParams = 4;
 		rfitInformation.fittedFunction = finalFunction;
 	}
 	else if(type == "pol1"){
 		std::string finalFunction = std::to_string(std::get<0>(paramVector[0])) + "+" + std::to_string(std::get<0>(paramVector[1])) + "*x";
-		rfitInformation.baseFunction = "[0]+[1]*x";
+		rfitInformation.baseFunction = "[0]* std::pow(10,-4) +[1]*x";
 		rfitInformation.numParams = 2;
 		rfitInformation.fittedFunction = finalFunction;
 
@@ -524,15 +655,22 @@ fitInformation mapMaker9000(TFitResultPtr Result, std::string type, std::string 
 	return rfitInformation;
 }
 
-double DoubleSidedCrystalballFunction(double *x, double *par)
+
+double ParametrizedDoubleSidedCrystalballFunction(double *x, double *par)
 {
-	double alpha_l = par[0]; 
-	double alpha_h = par[1]; 
-	double n_l     = par[2]; 
-	double n_h     = par[3]; 
-	double mean	= par[4]; 
-	double sigma	= par[5];
-	double N	= par[6];
+	double alpha_l = par[0]  * std::pow(par[22]-par[1],par[2]) + par[3]; 
+	double alpha_h = par[4]  * std::pow(par[22]-par[5],par[6]) + par[7]; 
+	double n_l     = par[8]  * std::pow(par[22]-par[9],par[10]) + par[11]; 
+	double n_h     = par[12] * std::pow(par[22]-par[13],par[14]) + par[15]; 
+	double sigma   = par[16] * std::pow(par[22]-par[17],par[18]) + par[19];
+	double mean	= par[20] + par[21]*par[22]; 
+
+	//if(par[22] == 1100){
+		//std::cout<< alpha_l << "|" << alpha_h << "|" << n_l << "|" << n_h << "|" << sigma << "\n";
+	//}
+	//I HAVE NO CLUE WHY THIS IS BROKEN FOR EEE_EEEE 1100 
+
+	double N = globalNorm;
 	float t = (x[0]-mean)/sigma;
 	double result;
 	double fact1TLessMinosAlphaL = alpha_l/n_l;
@@ -540,6 +678,7 @@ double DoubleSidedCrystalballFunction(double *x, double *par)
 	double fact1THihgerAlphaH = alpha_h/n_h;
 	double fact2THigherAlphaH = (n_h/alpha_h) - alpha_h +t;
 
+	double root2 = std::pow(2,0.5);
 	if (-alpha_l <= t && alpha_h >= t)
 	{
 		result = exp(-0.5*t*t);
@@ -552,7 +691,65 @@ double DoubleSidedCrystalballFunction(double *x, double *par)
 	{
 		result = exp(-0.5*alpha_h*alpha_h)*pow(fact1THihgerAlphaH*fact2THigherAlphaH, -n_h);
 	}
-	return N*result;
+	
+	double lowTailNorm = (n_l/std::abs(alpha_l)) * 1/(n_l - 1) * std::exp(-0.5 * alpha_l * alpha_l);
+	double highTailNorm = (n_h/std::abs(alpha_h)) * 1/(n_h - 1) * std::exp(-0.5 * alpha_h * alpha_h);
+	double gaussianNormA = erf(std::abs(alpha_l/root2)) + erf(std::abs(alpha_h/root2));  
+	double gaussianNormB = std::pow(M_PI/2, 0.5) * gaussianNormA;
+	double functionNormalization = std::pow(sigma * (gaussianNormB + lowTailNorm + highTailNorm ), -1);
+
+
+	globalCounter++;
+	if(globalCounter%1000 == 0){
+	// std::cout<<"Result:" << result << "\n";
+	// std::cout<<"Global norm: " << globalNorm << "\n";
+	// std::cout<<"Function Norm: " << functionNormalization << "\n";
+	}
+	return N * functionNormalization * result;
+}
+
+double DoubleSidedCrystalballFunction(double *x, double *par)
+{
+	double alpha_l = par[0]; 
+	double alpha_h = par[1]; 
+	double n_l     = par[2]; 
+	double n_h     = par[3]; 
+	double mean	= par[4]; 
+	double sigma	= par[5];
+	double N	= globalNorm;
+	float t = (x[0]-mean)/sigma;
+	double result;
+	double fact1TLessMinosAlphaL = alpha_l/n_l;
+	double fact2TLessMinosAlphaL = (n_l/alpha_l) - alpha_l -t;
+	double fact1THihgerAlphaH = alpha_h/n_h;
+	double fact2THigherAlphaH = (n_h/alpha_h) - alpha_h +t;
+
+	double root2 = std::pow(2,0.5);
+	if (-alpha_l <= t && alpha_h >= t)
+	{
+		result = exp(-0.5*t*t);
+	}
+	else if (t < -alpha_l)
+	{
+		result = exp(-0.5*alpha_l*alpha_l)*pow(fact1TLessMinosAlphaL*fact2TLessMinosAlphaL, -n_l);
+	}
+	else if (t > alpha_h)
+	{
+		result = exp(-0.5*alpha_h*alpha_h)*pow(fact1THihgerAlphaH*fact2THigherAlphaH, -n_h);
+	}
+	
+	double lowTailNorm = (n_l/std::abs(alpha_l)) * 1/(n_l - 1) * std::exp(-0.5 * alpha_l * alpha_l);
+	double highTailNorm = (n_h/std::abs(alpha_h)) * 1/(n_h - 1) * std::exp(-0.5 * alpha_h * alpha_h);
+	double gaussianNormA = erf(std::abs(alpha_l/root2)) + erf(std::abs(alpha_h/root2));  
+	double gaussianNormB = std::pow(M_PI/2, 0.5) * gaussianNormA;
+	double functionNormalization = std::pow(sigma * (gaussianNormB + lowTailNorm + highTailNorm ), -1);
+
+
+	globalCounter++;
+	if(globalCounter%1000 == 0){
+	std::cout<<"Global norm: " << globalNorm << "\n";
+	}
+	return N * functionNormalization * result;
 }
 double expGaussExp(double *x, double *par)
 {
@@ -660,25 +857,52 @@ double hyperbolicSecant(double *x, double *par)
 	return n * result;
 }
 
-TFitResultPtr fitToDSCB(char const* name, TH1* hist, TFile* file, std::vector<double> params)
+TFitResultPtr fitToDSCB(std::string name, TH1* hist, TFile* file, std::vector<double> params,std::string histsname)
 {
 	std::cout << "fitting crystal ball\n";
-	TF1* f1 = new TF1 ("f1", DoubleSidedCrystalballFunction, 0, 2000, 7);
-	f1->SetNpx(500);
+	TF1* f1 = new TF1 ("f1", DoubleSidedCrystalballFunction, 0, 2000, 6);
+	f1->SetNpx(1000);
 	double mass = params[1];
 	// alpha low, alpha high, n low, n high, mean, sigma, norm
-	f1->SetParameters(2.82606, 5.442, 1.08, 1.136, params[1], params[2], params[0]);
-	f1->SetParNames ("alpha_{low}","alpha_{high}","n_{low}", "n_{high}", "mean", "sigma", "Norm"); 
-	// f1->FixParameter(0, 2.7213);
-	// f1->FixParameter(1, 3.21973);
-	// f1->FixParameter(2, 1.08);
-	// f1->FixParameter(3, 1.13612);
+	globalNorm = hist->Integral("width");
+
+	f1->SetParameters(2.82606, 2.5, 1.08, 1.136, params[1], params[2]);
+	f1->SetParNames("alpha_{low}","alpha_{high}","n_{low}", "n_{high}", "mean", "sigma"); 
+	f1->SetParLimits(0,0, 10);
+	f1->SetParLimits(1,0, 10);
+	f1->SetParLimits(2,1,10);
+	f1->SetParLimits(3,1,10);
+	f1->SetParLimits(4,400,1600);
+	if(name.substr(8,8) == "eee_eeee" || name.substr(9,8) == "eee_eeee"){
+		std::cout<<"EXCEPTION EXCEPTED\n";
+		if(name.substr(5,3) == "500"){
+			f1->SetParameters(1.624,1.439,1.288,3.151,498.9,5.451);
+		} 
+		else if(name.substr(6,3) == "1300" || name.substr(6,3) == "1500" ){
+			f1->SetParLimits(6,3,25);
+			std::cout<<"exception found";
+		}
+		else{
+			f1->SetParLimits(6,3,20);
+		}
+	}
+	
+
+
 	f1->SetRange(0, 2000);
 	f1->SetLineColor(kRed);
 	TCanvas *c1 = new TCanvas("c1","Fit Canvas",0,0,1500,500);
-	TFitResultPtr results = hist->Fit(f1, "SRL");
+	TFitResultPtr results = hist->Fit(f1, "SE");
 	gStyle->SetOptFit(111111);
-	file->WriteObject(c1, name);
+	//file->WriteObject(c1, name);
+	std::string Graphname = name + "DBSCball"+ ".png";
+	TPaveStats *st = (TPaveStats*)hist->FindObject("stats");
+	st->SetX1NDC(0.1);
+	st->SetX2NDC(0.5);
+	//hist->GetXaxis()->SetRange(mass-450, mass + 350);
+	c1->SaveAs(Graphname.c_str());
+	c1->Close();
+
 	return results;
 }
 TFitResultPtr fitToAlternative(char const* name, TH1* hist, TFile* file, std::vector<double> params)
@@ -689,7 +913,7 @@ TFitResultPtr fitToAlternative(char const* name, TH1* hist, TFile* file, std::ve
 	// k low, k high, mean, sigma, norm
 	f1->SetParameters(3, 3, params[1], params[2], params[0]);
 	f1->SetParNames("k_{low}","k_{high}", "mean", "sigma", "Norm");
-	f1->SetLineColor(kRed);
+	f1->SetLineColor(kRed);	
 	f1->SetNpx(500);
 	TCanvas *c1 = new TCanvas("c1","Fit Canvas",0,0,1500,500);
 	TFitResultPtr results = hist->Fit(f1, "L");
@@ -783,7 +1007,6 @@ TFitResultPtr fitToPearsonIV(std::string name, TH1* hist, TFile* file, std::vect
 	f1->SetParLimits(2, 250, 2000);
 	f1->SetParLimits(3, -2, 4);
 
-
 	//f1->SetParLimits(4, 10, 10000);
 
 	TFitResultPtr result = hist->Fit("pearsonIV", "S");
@@ -793,8 +1016,6 @@ TFitResultPtr fitToPearsonIV(std::string name, TH1* hist, TFile* file, std::vect
 	TPaveStats *st = (TPaveStats*)hist->FindObject("stats");
 	st->SetX1NDC(0.1);
 	st->SetX2NDC(0.5);
-
-
 	//file->WriteObject(c1, name.c_str());
 	//f1->Draw("C");
 	c1->SaveAs(Graphname.c_str());
@@ -803,5 +1024,6 @@ TFitResultPtr fitToPearsonIV(std::string name, TH1* hist, TFile* file, std::vect
 
 	return result;
 }
-//integral comman isn't taking the right integral, its too small
 
+//fix euuu,uuuu
+//make talk

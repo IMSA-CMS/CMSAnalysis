@@ -19,6 +19,7 @@ using std::make_shared;
 
 void TriggerPlan::initialize()
 {
+  //std::cout << "Triggers Are Running" << '\n';
   auto& modules = getModules();
 
   // Create objects
