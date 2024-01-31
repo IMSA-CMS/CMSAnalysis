@@ -84,6 +84,7 @@ bool ParticleType::loadParticle(std::ifstream& file)
     
     registerType(name, pdgID, chargeType, defaultHistParams, defaultCollectionHistParams);
 
+
     return true;
 }
 
@@ -119,6 +120,7 @@ bool ParticleType::loadParticleDatabase(const std::string& fileName)
         file.ignore(100, '\n');
         
     }
+    particleTypeOverrides();
     return true;
 }
 
@@ -219,7 +221,7 @@ HistParams ParticleType::getLeptonJetMassHist()
 
 HistParams ParticleType::getLeptonJetMassHistZoomed()
 {
-    return HistParams("Lepton Jet Mass", 100, 0, 10, [](Particle particle){
+    return HistParams("Lepton Jet Mass Zoom", 100, 0, 10, [](Particle particle){
     auto leptonJet = LeptonJet(particle);
     return std::vector<double>{leptonJet.getMass()};
     });
