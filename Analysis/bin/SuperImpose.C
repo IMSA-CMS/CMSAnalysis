@@ -27,6 +27,10 @@ void SuperImpose() {
     std::vector<std::string> hists = {"Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values"};
     std::vector<TString> names = {"Higgs to 2 Dark Photon", "Higgs to Z and Dark Photon", "Z Prime", "SUSY", "Higgs to 4 Dark Photon"};
 
+    // std::vector<std::string> files = {"dpc.root", "dyc.root", "dpa.root", "dya.root"};
+    // std::vector<std::string> hists = {"Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values"};
+    // std::vector<TString> names = {"Dark Photon Cut", "Drell Yan Cut", "Dark Photon Anticut", "Drell Yan Anticut"};
+
     //Colors go here
     std::vector<int> colors = {1, 2, 3, 4, 5};
     //Change x and y axis titles here
