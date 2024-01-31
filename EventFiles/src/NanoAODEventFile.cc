@@ -240,7 +240,8 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         charge, ParticleType::electron(), fit);
         // std::cout << "NanoAOD: " << getArrayElement<Bool_t>("elec_cutBasedHEEP", i) << '\n';
         particle.addInfo("CutBasedHEEP", getArrayElement<Bool_t>("elec_cutBasedHEEP", i));
-        particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i)); 
+        particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i));
+        particle.addInfo("HEEP_map", getArrayElement<Int_t>("HEEP_bitmap", i)); 
         particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
         particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
         recoParticles.addParticle(particle);
