@@ -18,6 +18,7 @@ public:
     const std::vector<std::pair<Particle, LeptonJet>> getMatchingPairs() const;
     const bool isQuark(GenSimParticle lepton);
     const bool isSquark(GenSimParticle lepton);
+    const bool isHiggs(GenSimParticle lepton);
 
 private:
     double findMatchingPairDeltaR(MatchingPair pair);

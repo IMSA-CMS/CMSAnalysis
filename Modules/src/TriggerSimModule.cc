@@ -118,11 +118,17 @@ void TriggerSimModule::finalize()
   // Prints out a summary of the results
   std::cout << std::endl;
   auto iter = triggerResultsData.begin();
+  //Do every other trigger because the entire list of triggers is too long to fit in the terminal
+  //iter++;
   while (iter != triggerResultsData.end())
   {
     std::cout << iter->first << " : Passed " << iter->second.passed << " : Total " << iter->second.total << " : Passed/Total "
               << iter->second.passed / (double)iter->second.total << "\n";
     iter++;
+    if (iter != triggerResultsData.end()) 
+    {
+      iter++;
+    }
   }
   std::cout << std::endl;
 };
@@ -156,20 +162,21 @@ bool TriggerSimModule::process()
   {
     auto allTriggerNames = getInput()->getTriggerNames(subProcess);
     
+    auto results = getInput()->getTriggerResults(subProcess);
+
     for (unsigned int i = 0, n = allTriggerNames.size(); i < n; ++i)
     {
       // std::cout << allTriggerNames[i];
       // this creates a map key if it doesn't already exist
       triggerResultsData[allTriggerNames[i]];
-      auto results = getInput()->getTriggerResults(subProcess);
-      for (auto result : results) 
+      
+      
+      if (results[i]) 
       {
-        if (result) 
-        {
-          ++triggerResultsData[allTriggerNames[i]].passed;
-          passedTriggers.push_back(allTriggerNames[i]);
-        }
+        ++triggerResultsData[allTriggerNames[i]].passed;
+        passedTriggers.push_back(allTriggerNames[i]);
       }
+      
       // if (getInput()->checkTrigger(allTriggerNames[i], subProcess))
       // {
         

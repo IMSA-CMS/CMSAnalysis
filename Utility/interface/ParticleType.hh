@@ -77,6 +77,10 @@ class ParticleType
     static CollectionHistParams getSameSignInvariantMassHist();
     static CollectionHistParams getOppositeSignInvariantMassHist();
 
+    static HistParams getLeptonJetDeltaRHist();
+    static HistParams getLeptonJetMassHist();
+    static HistParams getLeptonJetMassHistZoomed();
+
     static bool loadParticle(std::ifstream& file);
     //Lets you manually change the particle types in the method definition
     static void particleTypeOverrides();

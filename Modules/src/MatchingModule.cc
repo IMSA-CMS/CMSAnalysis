@@ -25,6 +25,7 @@ bool MatchingModule::match(std::vector<Particle> genSimParticles, std::vector<Pa
 {
 
    matchingBestPairs.clear();
+   unmatched.clear();
     while (!checkIsNull(genSimParticles) && !checkIsNull(recoCandidates))
     {
       //start with a high value, only really needs to be higher than the cutoff delta R

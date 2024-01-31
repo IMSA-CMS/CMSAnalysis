@@ -10,7 +10,6 @@
 #include "DataFormats/PatCandidates/interface/TriggerEvent.h"
 #include "DataFormats/PatCandidates/interface/GenericParticle.h"
 
-
 /*
 std::vector<PileupSummaryInfo> MiniAODEventLoader::getPileupInfo() const
 {
@@ -20,37 +19,34 @@ std::vector<PileupSummaryInfo> MiniAODEventLoader::getPileupInfo() const
 }
 */
 CmsswEventInterface::CmsswEventInterface(
-    edm::EDGetTokenT<pat::ElectronCollection>& iElectronToken,
-    edm::EDGetTokenT<pat::MuonCollection>& iMuonToken,
-    edm::EDGetTokenT<pat::PhotonCollection>& iPhotonToken,
-    edm::EDGetTokenT<pat::JetCollection>& iJetToken,
-    edm::EDGetTokenT<pat::METCollection>& iMETToken,
-	edm::EDGetTokenT<pat::TriggerEvent>& iTriggerToken,
-	edm::EDGetTokenT<reco::GenParticleCollection>& iGenSimToken):
-electronToken(iElectronToken),
-muonToken(iMuonToken),
-photonToken(iPhotonToken),
-jetToken(iJetToken),
-metToken(iMETToken),
-triggerToken(iTriggerToken),
-genSimToken(iGenSimToken)
+    edm::EDGetTokenT<pat::ElectronCollection> &iElectronToken,
+    edm::EDGetTokenT<pat::MuonCollection> &iMuonToken,
+    edm::EDGetTokenT<pat::PhotonCollection> &iPhotonToken,
+    edm::EDGetTokenT<pat::JetCollection> &iJetToken,
+    edm::EDGetTokenT<pat::METCollection> &iMETToken,
+    edm::EDGetTokenT<pat::TriggerEvent> &iTriggerToken,
+    edm::EDGetTokenT<reco::GenParticleCollection> &iGenSimToken) : electronToken(iElectronToken),
+                                                                   muonToken(iMuonToken),
+                                                                   photonToken(iPhotonToken),
+                                                                   jetToken(iJetToken),
+                                                                   metToken(iMETToken),
+                                                                   triggerToken(iTriggerToken),
+                                                                   genSimToken(iGenSimToken)
 {
-
 }
-
 
 ParticleCollection<GenSimParticle> CmsswEventInterface::getGenSimParticles() const
 {
     ParticleCollection<GenSimParticle> genParticles;
 
-    //edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
+    // edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
 
-	edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
-	event->getByToken(genSimToken, genParticlesHandle);
+    edm::Handle<std::vector<reco::GenParticle>> genParticlesHandle;
+    event->getByToken(genSimToken, genParticlesHandle);
 
-    //event->getByLabel(std::string("prunedGenParticles"), genParticlesHandle);
-    
-    for (const auto &p : *genParticlesHandle) 
+    // event->getByLabel(std::string("prunedGenParticles"), genParticlesHandle);
+
+    for (const auto &p : *genParticlesHandle)
     {
         genParticles.addParticle(GenSimParticle(&p));
     }
@@ -60,44 +56,44 @@ ParticleCollection<GenSimParticle> CmsswEventInterface::getGenSimParticles() con
 ParticleCollection<Particle> CmsswEventInterface::getRecoParticles() const
 {
     ParticleCollection<Particle> recoParticles;
-    //This seems problematic
-    
-        edm::Handle<std::vector<pat::Electron>> electrons; 
-        event->getByToken(electronToken, electrons);
+    // This seems problematic
 
-        for (const auto& p : *electrons)
-	    {   
-            recoParticles.addParticle(Particle(&p));
-	    }
+    edm::Handle<std::vector<pat::Electron>> electrons;
+    event->getByToken(electronToken, electrons);
 
-        edm::Handle<std::vector<pat::Muon>> muons;
-        event->getByToken(muonToken, muons);
+    for (const auto &p : *electrons)
+    {
+        recoParticles.addParticle(Particle(&p));
+    }
 
-        for (const auto& p : *muons)
-	    {   
-            recoParticles.addParticle(Particle(&p));
-        }
+    edm::Handle<std::vector<pat::Muon>> muons;
+    event->getByToken(muonToken, muons);
 
-        edm::Handle<std::vector<pat::Photon>> photons;
-        event->getByToken(photonToken, photons);
+    for (const auto &p : *muons)
+    {
+        recoParticles.addParticle(Particle(&p));
+    }
 
-        for (const auto& p : *photons)
-	    {       
-            recoParticles.addParticle(Particle(&p));
-        }
-        return recoParticles;
+    edm::Handle<std::vector<pat::Photon>> photons;
+    event->getByToken(photonToken, photons);
+
+    for (const auto &p : *photons)
+    {
+        recoParticles.addParticle(Particle(&p));
+    }
+    return recoParticles;
 }
 
 ParticleCollection<Particle> CmsswEventInterface::getRecoJets() const
 {
     ParticleCollection<Particle> recoParticles;
-        edm::Handle<std::vector<pat::Jet>> jets;
-        event->getByToken(jetToken, jets);
-        for (const auto& j : *jets)
-	    {       
-	        recoParticles.addParticle(Particle(&j));
-        }
-        return recoParticles;
+    edm::Handle<std::vector<pat::Jet>> jets;
+    event->getByToken(jetToken, jets);
+    for (const auto &j : *jets)
+    {
+        recoParticles.addParticle(Particle(&j));
+    }
+    return recoParticles;
 }
 
 double CmsswEventInterface::getMET() const
@@ -106,7 +102,7 @@ double CmsswEventInterface::getMET() const
 
     event->getByToken(metToken, mets);
 
-    for (const auto& p : *mets)
+    for (const auto &p : *mets)
     {
         return p.corPt(pat::MET::METCorrectionLevel::Type1);
     }
@@ -119,10 +115,10 @@ unsigned long long CmsswEventInterface::getEventIDNum() const
 }
 
 std::vector<bool> CmsswEventInterface::getTriggerResults(std::string subProcess) const
-{   
+{
     edm::Handle<std::vector<pat::TriggerEvent>> triggerResults;
-	event->getByToken(triggerToken, triggerResults);
-    //event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
+    event->getByToken(triggerToken, triggerResults);
+    // event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
     std::vector<bool> v_results = {};
     for (unsigned int i = 0; i < triggerResults->size(); i++)
     {
@@ -132,12 +128,12 @@ std::vector<bool> CmsswEventInterface::getTriggerResults(std::string subProcess)
 }
 
 std::vector<std::string> CmsswEventInterface::getTriggerNames(std::string subProcess) const
-{   
+{
 
     edm::Handle<std::vector<pat::TriggerEvent>> triggerResults;
-	event->getByToken(triggerToken, triggerResults);
-    //event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
-   // const edm::TriggerNames names = event->triggerNames(*triggerResults);
+    event->getByToken(triggerToken, triggerResults);
+    // event->getByLabel(edm::InputTag("TriggerResults", "", subProcess), triggerResults);
+    // const edm::TriggerNames names = event->triggerNames(*triggerResults);
     std::vector<std::string> v_names = {};
     for (unsigned int i = 0; i < triggerResults->size(); i++)
     {
@@ -147,17 +143,17 @@ std::vector<std::string> CmsswEventInterface::getTriggerNames(std::string subPro
 }
 
 int CmsswEventInterface::getNumPileUpInteractions() const
-{   
+{
     return 1;
-   // return static_cast<int>(gen_pileup[0]);
+    // return static_cast<int>(gen_pileup[0]);
 }
 bool CmsswEventInterface::checkTrigger(std::string triggerName, std::string subProcess) const
-{   
-	auto names = getTriggerNames(subProcess);
+{
+    auto names = getTriggerNames(subProcess);
     auto results = getTriggerResults(subProcess);
 
     auto it = find(names.begin(), names.end(), triggerName);
-    if(it != names.end())
+    if (it != names.end())
     {
         return results.at(it - names.begin());
     }
@@ -165,5 +161,5 @@ bool CmsswEventInterface::checkTrigger(std::string triggerName, std::string subP
     {
         return false;
     }
-    //return *(triggers.find(triggerName)->second);
+    // return *(triggers.find(triggerName)->second);
 }

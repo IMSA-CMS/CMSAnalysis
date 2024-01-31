@@ -1,4 +1,5 @@
 #include "CMSAnalysis/Utility/interface/LeptonJet.hh"
+#include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 
 LeptonJet::LeptonJet():
 RecoParticle(std::make_shared<LeptonJetImplementation>()){
@@ -27,6 +28,16 @@ std::shared_ptr<LeptonJetImplementation> LeptonJet::cast() const
     throw std::runtime_error("Null pointer");
   }
 }
+
+double LeptonJet::getMass() const
+{
+  auto leptons = getParticles();
+  double leptonJetInvMass = 0;
+  ParticleCollection<Particle> collection(leptons);
+  leptonJetInvMass = collection.calculateAllLeptonInvariantMass();
+  return leptonJetInvMass;
+}
+
 
 double LeptonJet::getDeltaR() const
 {
