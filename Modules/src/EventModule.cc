@@ -74,15 +74,18 @@ bool EventModule::process ()
     addBasicHistograms(ParticleType::photon(), event.getPhotons());
     addBasicHistograms(ParticleType::jet(), event.getJets());
 
+    std::cout << event.getSpecials().empty();
+
+    //std::cout << "\nstart@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@";
     for (auto& [key,value] : event.getSpecials())
     {
-
         // CODE IS NOT GETTING HERE FOR SOME REASON, DEBUG THIS
         auto specialPtr = std::make_shared<ParticleCollection<Particle>>(value);
         addBasicHistograms(value.getParticles()[0].getType(), value);
         addCountHistograms(value.getParticles()[0].getType(), specialPtr); 
 
     }
+    //std::cout << "end\n";
     
     auto electronCollection = std::make_shared<ParticleCollection<Particle>>(event.getElectrons());
     auto muonCollection = std::make_shared<ParticleCollection<Particle>>(event.getMuons());
