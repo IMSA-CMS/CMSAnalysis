@@ -56,8 +56,7 @@ class LeptonJetInvariantMassHist : public HistogramPrototype1D
   }
 
 };
-//for (LeptonJet lj(part))
-// Utility LeptonJet.hh and .cc add function getMass(), copy it from .cc, call getParticles(), instead of calculating maxdeltaR, calculate invariant mass, put into a particle collection, particlecollection.hh has a function calculateAllLeptonINvariatnMass(), that'll put them all together and calculate invmass of them all, return that value, then in this histogram, for loop that calls that function each time
+
 class MassResolutionHist : public ResolutionPrototype
 {
   using ResolutionPrototype::ResolutionPrototype;

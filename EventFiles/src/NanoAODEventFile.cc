@@ -42,7 +42,7 @@ std::vector<std::string> NanoAODEventFile::getTriggerNames(std::string subProces
 bool NanoAODEventFile::checkTrigger(std::string triggerName, std::string subProcess) const
 {
     // add cout statement to check, it in fact does pass through this code
-    // std::cout << "Does this Trigger work?" << "\n";
+    //std::cout << "Does this Trigger work?" << "\n";
     //std::cout << triggerName << "\n";
     auto trigger = triggers.find(triggerName);
     if (trigger == triggers.end()) 
