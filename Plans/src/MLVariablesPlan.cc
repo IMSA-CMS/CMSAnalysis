@@ -26,10 +26,12 @@ void MLVariablesPlan::initialize()
     auto leptonJetRecoMod = make_shared<LeptonJetReconstructionModule>(0.5);
     auto leptonJetMatchingMod = make_shared<LeptonJetMatchingModule>(leptonJetRecoMod, 0.5);
     auto eventMod = std::make_shared<EventModule>();
-    eventMod->addSelector(std::make_shared<LeptonJetSelector>(leptonJetRecoMod));//(leptonJetRecoMod)
+    eventMod->addSelector(std::make_shared<LeptonJetSelector>(0.5));//(leptonJetRecoMod)
     auto leptonJetMLStripMod = make_shared<LeptonJetMLStripModule>();
     leptonJetMLStripMod->setInput(eventMod->getEventInput());
     auto treeMakerMod = make_shared<TreeMakerModule>(leptonJetMLStripMod, "Signal");
+    treeMakerMod->setInput(eventMod->getEventInput());
+    modules.addProductionModule(eventMod);
     modules.addProductionModule(leptonJetRecoMod);
     modules.addProductionModule(leptonJetMatchingMod);
     modules.addProductionModule(leptonJetMLStripMod);
