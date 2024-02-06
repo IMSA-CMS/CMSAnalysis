@@ -67,7 +67,7 @@ void LeptonJetReconstructionPlan::initialize()
   auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Mu37_TkMu27", "HLT_IsoMu24"});
   eventMod->addCut(triggerCut);
   auto matchMod = std::make_shared<MatchingModule>();
-  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.01);
+  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
   auto eventDumpMod = std::make_shared<EventDumpModule>(true,true);
   auto lepMatchMod =
@@ -213,14 +213,14 @@ void LeptonJetReconstructionPlan::initialize()
   modules.addAnalysisModule(eventHistMod);
 
   // modules.addProductionModule(triggerMod);
-  modules.addAnalysisModule(leptonEfficiency);
-  modules.addAnalysisModule(leptonJetEfficiency);
+  //modules.addAnalysisModule(leptonEfficiency);
+  //modules.addAnalysisModule(leptonJetEfficiency);
   //modules.addAnalysisModule(massRecoEfficiency200);
   //modules.addAnalysisModule(massRecoEfficiency500);
   //modules.addAnalysisModule(massRecoEfficiency800);
   //modules.addAnalysisModule(massRecoEfficiency1000);
   //modules.addAnalysisModule(massRecoEfficiency1300);
-  modules.addAnalysisModule(eventDumpMod);
+  //modules.addAnalysisModule(eventDumpMod);
   //modules.addAnalysisModule(recoEventDumpMod);
   /* auto selector = make_shared<SnowmassLeptonSelector>(5);
 
