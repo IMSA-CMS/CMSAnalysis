@@ -51,11 +51,11 @@ std::vector<std::string> EventLoader::fetchRootFiles(const std::string& configFi
   std::vector<std::string> rootFiles;
   if (isLocalFile)
   {
-    rootFiles.push_back(configFile);
+    rootFiles.push_back(Utility::getFullPath(configFile));
   }
   else
   {
-    std::ifstream textFile(configFile); 
+    std::ifstream textFile(Utility::getFullPath(configFile)); 
     std::string line;
     getline(textFile, line);
     if (line.substr(0,1) == "/") 
