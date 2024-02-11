@@ -35,6 +35,7 @@
 #include "CMSAnalysis/Filters/interface/HPlusPlusGenSimSelector.hh"
 #include "CMSAnalysis/Filters/interface/HiggsSelector.hh"
 #include "CMSAnalysis/Filters/interface/HiggsCut.hh"
+#include "CMSAnalysis/Filters/interface/HiggsMassCut.hh"
 #include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
 #include "CMSAnalysis/Modules/interface/HiggsLeptonEfficiency.hh"
 
@@ -60,6 +61,7 @@ void GenSimPlan::initialize()
     auto recoGenMatch = make_shared<RecoGenSimComparisonModule>("perParticle", true);
     auto matchMod = make_shared<MatchingModule>();
     auto higgsCut = make_shared<HiggsCut>();
+    auto higgsMassCut = make_shared<HiggsMassCut>();
     
     auto histMod = make_shared<HistogramOutputModule>();
 
@@ -78,10 +80,9 @@ void GenSimPlan::initialize()
     eventMod->addSelector(hppSelector);
     eventMod->addSelector(hppGenSimSelector);
     eventMod->addCut(higgsCut);
+    eventMod->addCut(higgsMassCut);
     auto eventHistMod = eventMod->getHistogramModule();
     //auto hppFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::GenSim);
-
-    //eventMod->addCut(higgsCut);
 
     //modules.addFilterModule(hppFilter);
     modules.addProductionModule(metMod);

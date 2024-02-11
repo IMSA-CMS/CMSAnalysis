@@ -29,7 +29,7 @@ Mass:	0_1	0_2	0_3	0_4	0_5	0_7	0_9	1_2	1_5	2_0	2_5
 Run:	HLLHC	2
 
 DarkPhoton
-DpMass: 0_1	0_25	0_3	0_4	0_6	0_9	1_2	1_5	2_5	4_0
+DpMass:	0_1	0_25	0_3	0_4	0_6	0_9	1_2	1_5	2_5	4_0
 HiggsMass:	125	300	1000
 FSR:	0_0	0_1	0_3
 Decay:	Higgs2DP	Higgs4DP	HiggsDPZ	SUSY	ZPrime

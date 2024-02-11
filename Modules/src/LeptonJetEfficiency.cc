@@ -17,11 +17,27 @@ LeptonJetEfficiency::LeptonJetEfficiency(const std::shared_ptr<LeptonJetReconstr
 
 void LeptonJetEfficiency::doCounters()
 {
-    auto recoLeptonJets = lepRecoMod->getLeptonJets();
+    //auto recoLeptonJets = lepRecoMod->getLeptonJets();
+    auto recoLeptonJets = getInput()->getSpecial("leptonJet");
+    auto genSimParticles = getInput()->getParticles(EventInput::RecoLevel::GenSim);
     double muonCount = 0;
     double electronCount = 0;
 
+    incrementCounter("Number of GenSim Jets", 0);
+    for (auto particle : genSimParticles)
+    {
+        GenSimParticle genSimParticle(particle);
+        if (particle.getType() == ParticleType::darkPhoton() && genSimParticle == genSimParticle.finalDaughter())
+        {
+            incrementCounter("Number of GenSim Jets", 1);
+        }
+    }
+
     incrementCounter("Number of Reconstructed Jets", recoLeptonJets.size());
+
+    incrementCounter("Multiple Jet Events", 0);
+    incrementCounter("Single Jet Events", 0);
+
     if (recoLeptonJets.size() > 1) 
     {
         incrementCounter("Multiple Jet Events", 1);
@@ -35,14 +51,20 @@ void LeptonJetEfficiency::doCounters()
         incrementCounter("Double Jet Events", 1);
     }
      
-    for (auto leptonJet : recoLeptonJets)
+    for (auto leptonJetParticle : recoLeptonJets)
     {
+        LeptonJet leptonJet(leptonJetParticle);
         for (auto particle : leptonJet.getParticles())
         {
             if (particle.getType() == ParticleType::electron())
             {
                 electronCount++;
             }
+
+            //do here
+            //count passed mass > 10
+            //change values maybe
+            //signal should drop a lot, background should drop little
             
             if (particle.getType() == ParticleType::muon())
             {
@@ -60,15 +82,18 @@ void LeptonJetEfficiency::doCounters()
                 if (pair.second == leptonJet)
                 {
                     incrementCounter("Fake pair match", 1);
-                    std::cout << "electon count " << electronCount << "\n";
+                    std::cout << "electron count " << electronCount << "\n";
                     std::cout << "muon count " << muonCount << "\n\n";
                 }
             }
             incrementCounter("Number of fake jets", 1);
         }
 
-        
-
+        // if (leptonJet.getMass() < 10) 
+        // {
+        //     incrementCounter("Jets Cut", 1);
+        // }
+        // incrementCounter("Total Jets", 1);
     }
 
     
@@ -82,5 +107,11 @@ void LeptonJetEfficiency::finalize()
 {
     EfficiencyModule::finalize();
 
-    std::cout << "Lepton Jet Efficiency: " << getCounter("Number of matched jets") / getCounter("Number of Reconstructed Jets") << "\n";
+    std::cout << "Matched / Reconstructed Efficiency: " << getCounter("Number of matched jets") / getCounter("Number of Reconstructed Jets") << "\n";
+    std::cout << "Reconstructed / # Dark Photons Efficiency: " << getCounter("Number of Reconstructed Jets") / getCounter("Number of GenSim Jets") << "\n";
+    std::cout << "Matched / # Dark Photons Efficiency: " << getCounter("Number of matched jets") / getCounter("Number of GenSim Jets") << "\n";
+    double count = getCounter("Multiple Jet Events") + getCounter("Single Jet Events");
+    std::cout << "Efficiency: " << count / 24400 << "\n";
+    std::cout << "% of Original LJ Efficiency: " << 100 * count / 10879 << "\n";
+    std::cout << "% of Original DY Efficiency: " << 100 * count / 25 << "\n";
 }

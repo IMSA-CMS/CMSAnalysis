@@ -40,5 +40,4 @@ bool LeptonJetImplementation::operator==(const ParticleImplementation& userParti
 const ParticleType& LeptonJetImplementation::getType() const
 {
   return ParticleType::leptonJet();
-
 }
