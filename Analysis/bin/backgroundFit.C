@@ -20,8 +20,24 @@
 #include "TFitResult.h"
 #include "TGraphErrors.h"
 #include "CMSAnalysis/Analysis/interface/FitFunction.hh"
+#include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
 
 #define _USE_MATH_DEFINES
+
+
+double pearson(double *x, double *par)
+{
+	double a = par[0];
+	double m = par[1];
+	double mass = par[2];
+	double n = par[3];
+	double result;
+
+	double constant = n * std::tgamma(m) / (a * std::sqrt(M_PI) * std::tgamma(m - 0.5));
+	result = constant * std::pow((1 + ((x[0]-mass)/a) * ((x[0]-mass)/a)), -m);
+
+	return result;
+}
 
 std::vector<std::string> channelTypes =
 {
@@ -68,26 +84,22 @@ TFitResultPtr fitToExponential(char const* name, TH1* hist, TFile* file, std::ve
 
 void backgroundFit()
 {
-	std::vector<FitFunction> functions;
-	TF1 funcOne("testOne", "x*[0]", 0, 10);
-	funcOne.SetParName(0, "ParameterOne");
-	funcOne.SetParameter(0, 1);
-	funcOne.SetParError(0, 1);
+	
+	auto f1 = new TF1("pearsonTest", FitFunction::pearson, 0, 2000, 4);
 
-	TF1 funcTwo("testTwo", "[0]*sin(x)+[1]", 0, 5);
-	funcTwo.SetParNames("ParamTwo", "ParamThree");
-	funcTwo.SetParameter(0, 3);
-	funcTwo.SetParameter(1, 4);
-	funcTwo.SetParError(0, 5);
-	funcTwo.SetParError(1, 6);
 
-	functions.push_back(FitFunction(funcOne));
-	functions.push_back(FitFunction(funcTwo));
+	// // std::cout << f1.GetNpar() << '\n';
 
-	FitFunction::saveFunctions(functions, "testFunctions.txt");
-	auto functionsTwo = FitFunction::loadFunctions("testFunctions.txt");
+	FitFunctionCollection functions;
+	FitFunction f2(f1, FitFunction::FunctionType::DOUBLE_SIDED_CRYSTAL_BALL);
+	// std::cout << f2;
+	functions.insert(f2);
+	// std::cout << functions[0];
+	functions.saveFunctions("testFunctions.txt");	
+	
+	auto funcs = FitFunctionCollection::loadFunctions("testFunctions.txt");
 
-	std::cout << functionsTwo[0] << functionsTwo[1];
+	std::cout << funcs["pearsonTest"];
 	// multipleFits();
 	// auto paramData = getParams();
 	// graph(paramData);
