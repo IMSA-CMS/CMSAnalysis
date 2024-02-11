@@ -16,39 +16,39 @@ bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) c
     // Finds the third lepton pt
     if(numLeptons == 3) 
     {
-        if (particles.getNumPosParticles() == 2)
-        {
-            auto particle = particles.getNegParticles()[0];
-            leptonPt = particle.getPt();
-            leptonType = particle.getType();
-        }
-        else if (particles.getNumNegParticles() == 2)
-        {
-            auto particle = particles.getPosParticles()[0];
-            leptonPt = particle.getPt();
-            leptonType = particle.getType();
-        }
-        else
-        {
-            auto particlePair = particles.chooseParticles();
-            for (auto particle : particles)
-            {
-                if (particle != particlePair.first && particle != particlePair.second)
-                {
-                    leptonPt = particle.getPt();
-                    leptonType = particle.getType();
-                }
-            }
-        }
+        // if (particles.getNumPosParticles() == 2)
+        // {
+        //     auto particle = particles.getNegParticles()[0];
+        //     leptonPt = particle.getPt();
+        //     leptonType = particle.getType();
+        // }
+        // else if (particles.getNumNegParticles() == 2)
+        // {
+        //     auto particle = particles.getPosParticles()[0];
+        //     leptonPt = particle.getPt();
+        //     leptonType = particle.getType();
+        // }
+        // else
+        // {
+        //     auto particlePair = particles.chooseParticles();
+        //     for (auto particle : particles)
+        //     {
+        //         if (particle != particlePair.first && particle != particlePair.second)
+        //         {
+        //             leptonPt = particle.getPt();
+        //             leptonType = particle.getType();
+        //         }
+        //     }
+        // }
 
-        if (leptonType == ParticleType::electron() && leptonPt > electronThreeChannelCut)
-        {
-            return true;
-        }
-        else if (leptonType == ParticleType::muon() && leptonPt > muonThreeChannelCut)
-        {
-            return true;
-        }
+        // if (leptonType == ParticleType::electron() && leptonPt > electronThreeChannelCut)
+        // {
+        //     return true;
+        // }
+        // else if (leptonType == ParticleType::muon() && leptonPt > muonThreeChannelCut)
+        // {
+        //     return true;
+        // }
 
         return false;
         // return false;
@@ -57,8 +57,7 @@ bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) c
     {
         auto electrons = event.getElectrons();
         auto muons = event.getMuons();
-        if (numLeptons == 4 
-        && electrons.size() == 2 
+        if (electrons.size() == 2 
         && muons.size() == 2
         && electrons[0].getCharge() == electrons[1].getCharge()
         && muons[0].getCharge() == muons[1].getCharge()
@@ -67,6 +66,6 @@ bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) c
         {
             return true;
         }
-        return true;
+        return false;
     }
 }

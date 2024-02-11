@@ -57,7 +57,7 @@ void GenSimPlan::initialize()
     auto metMod = make_shared<METModule>();
     auto gammahist = make_shared<GammaHistogram>(EventInput::RecoLevel::GenSim, "Gamma", 100, 0, 1000);
     auto eventDump = make_shared<GenSimEventDumpModule>();
-    auto recoGenMatch = make_shared<RecoGenSimComparisonModule>();
+    auto recoGenMatch = make_shared<RecoGenSimComparisonModule>("perParticle", true);
     auto matchMod = make_shared<MatchingModule>();
     auto higgsCut = make_shared<HiggsCut>();
     
