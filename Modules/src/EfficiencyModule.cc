@@ -32,7 +32,14 @@ void EfficiencyModule::incrementCounter(std::string name, double increment)
 
 double EfficiencyModule::getCounter(std::string name) const
 {
-    return counters.at(name);
+    if (counters.find(name) == counters.end())
+    {
+        return 0;
+    }
+    else
+    {
+        return counters.at(name);
+    }
 }
 
 double EfficiencyModule::getEfficiency(std::string name) const

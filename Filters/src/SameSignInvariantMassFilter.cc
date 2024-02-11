@@ -10,7 +10,7 @@ cut(sameSignInvariantMassCut)
 std::string SameSignInvariantMassFilter::getFilterString(const EventInput* inputMod) const
 {
     auto leptons = inputMod->getParticles(EventInput::RecoLevel::Reco);
-    auto inv = leptons.calculateSameSignInvariantMass();
+    auto inv = leptons.calculateSameSignInvariantMass(false, true);
     if (inv < cut)
     {
         return "lowMass";

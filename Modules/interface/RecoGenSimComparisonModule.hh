@@ -75,6 +75,8 @@ class RecoGenSimComparisonModule : public AnalysisModule
     int elecFsrCounter = 0;
     int muonIsrCounter = 0;
     int muonFsrCounter = 0;
+
+    int muon24Count = 0;
 };
 
 #endif

@@ -1,25 +1,57 @@
+#include "CMSAnalysis/Filters/interface/LeptonJetAntiSelector.hh"
+#include <vector>
+
+#include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
+#include "CMSAnalysis/Utility/interface/Particle.hh"
+#include "CMSAnalysis/Utility/interface/Lepton.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
+#include "CMSAnalysis/Utility/interface/Event.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
 #include "DataFormats/Math/interface/deltaR.h"
-#include "CMSAnalysis/Filters/interface/Selector.hh"
-#include <iostream>
 
-LeptonJetReconstructionModule::LeptonJetReconstructionModule(double deltaRCut) : DeltaRCut(deltaRCut)
+LeptonJetAntiSelector::LeptonJetAntiSelector(double ideltaRCut, double idXYCut, double idZCut) : deltaRCut(ideltaRCut), dXYCut(idXYCut), dZCut(idZCut)
+{ }
+
+void LeptonJetAntiSelector::selectParticles(const EventInput* input, Event& event) const
 {
+  // GenSim stuff
+  auto particlesGenSim = input->getParticles(EventInput::RecoLevel::GenSim).getParticles();
+  for (auto particle : particlesGenSim)
+  {
+    event.addGenSimParticle(particle);
+  }
+
+  // Reco stuff
+    ParticleCollection<Muon> selected;
+    auto particles = input->getLeptons(EventInput::RecoLevel::Reco).getParticles();
+    
+    for (const auto& particle : particles)
+    {
+      if (particle.getType() == ParticleType::muon() && particle.getPt() > 5) 
+      {
+        auto lepton = Lepton(particle);
+        if(lepton.isLoose() && lepton.getDXY() > dXYCut && lepton.getDZ() > dZCut)
+        {
+          selected.addParticle(particle);
+        }
+      }
+    }
+
+    for (auto lepton : selected.getParticles())
+    {
+      event.addMuon(lepton);
+    }
+
+    //auto recoLeptons = event.getMuons();
+    auto leptonJets = findLeptonJets(selected);
+
+    for (const auto& jet : leptonJets)
+    {
+      event.addSpecialObject("leptonJet", jet);
+    }
 }
 
-bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
-{
-  // std::cout << "LeptonJetReconstruction process()";
-  //  std::cout << "Lepton jet selector: " << leptonSelector << '\n';
-  const auto &recoCandidates = getInput()->getLeptons(EventInput::RecoLevel::Reco);
-  leptonJets = findLeptonJets(recoCandidates);
-  findDeltaRValues();
-  findPtValues();
-  // std::cout << "LJ:" << leptonJets.size() << "\n";
-  return true;
-}
-
-const std::vector<LeptonJet> LeptonJetReconstructionModule::findLeptonJets(ParticleCollection<Lepton> recoCandidates)
+std::vector<LeptonJet> LeptonJetAntiSelector::findLeptonJets(ParticleCollection<Lepton> recoCandidates) const
 {
   auto recoLeptons = recoCandidates.getParticles();
   std::vector<LeptonJet> leptonJetList;
@@ -47,7 +79,7 @@ const std::vector<LeptonJet> LeptonJetReconstructionModule::findLeptonJets(Parti
       double deltaR = reco::deltaR(highestPtLeptonFourVector, fourVector);
       // std::cout << "delta r: " << deltaR << " delta r cut: " << DeltaRCut << "\n";
       // std::cout << "The value of Eta is "<< abs(recoLeptons[i].getEta()) <<std::endl;
-      if (deltaR < DeltaRCut && recoLeptons[i].getPt() >= 5 && abs(recoLeptons[i].getEta()) <= 3)
+      if (deltaR < deltaRCut && recoLeptons[i].getPt() >= 5 && abs(recoLeptons[i].getEta()) <= 3)
       {
         jet.addParticle(recoLeptons[i]);
         recoLeptons.erase(recoLeptons.begin() + i);
@@ -75,14 +107,15 @@ const std::vector<LeptonJet> LeptonJetReconstructionModule::findLeptonJets(Parti
   return leptonJetList;
 }
 
-LeptonJet LeptonJetReconstructionModule::createLeptonJet(Lepton highestPtLepton) const
+LeptonJet LeptonJetAntiSelector::createLeptonJet(Lepton highestPtLepton) const
 {
   LeptonJet leptonJet;
   leptonJet.addParticle(highestPtLepton);
   return leptonJet;
 }
-
-Particle LeptonJetReconstructionModule::findHighestPtLepton(std::vector<Lepton> leptons) const
+//runAnalyzer input=darkPhotonBaselineRun2.txt analysis=LeptonJetReconstruction output=leptonjetinvmasshist.root numFiles=1
+//root leptonjetinvmasshist.root then type TBrowser h
+Particle LeptonJetAntiSelector::findHighestPtLepton(std::vector<Lepton> leptons) const
 {
   double highestPt = 0;
   for (auto lepton : leptons)
@@ -103,42 +136,4 @@ Particle LeptonJetReconstructionModule::findHighestPtLepton(std::vector<Lepton> 
   }
 
   throw std::runtime_error("No highest pT lepton!");
-}
-
-void LeptonJetReconstructionModule::findDeltaRValues()
-{
-  deltaRValues.clear();
-  for (LeptonJet jet : leptonJets)
-  {
-    auto jetParticles = jet.getParticles();
-
-    for (Particle particle : jetParticles)
-    {
-      auto initFourVector = particle.getFourVector();
-      for (Particle part : jetParticles)
-      {
-        if (part != particle)
-        {
-          auto nextFourVector = part.getFourVector();
-          double deltaR = reco::deltaR(initFourVector, nextFourVector);
-          deltaRValues.push_back(deltaR);
-        }
-      }
-    }
-  }
-}
-
-void LeptonJetReconstructionModule::findPtValues()
-{
-  pTValues.clear();
-  for (LeptonJet jet : leptonJets)
-  {
-    auto jetParticles = jet.getParticles();
-
-    for (Particle part : jetParticles)
-    {
-      double pT = part.getPt();
-      pTValues.push_back(pT);
-    }
-  }
 }
