@@ -9,44 +9,46 @@
 #include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
 #include "DataFormats/Math/interface/deltaR.h"
 
-LeptonJetSelector::LeptonJetSelector(double ideltaRCut):
-    deltaRCut(ideltaRCut)
-{
-    
-}
+LeptonJetSelector::LeptonJetSelector(double ideltaRCut, double idXYCut, double idZCut) : deltaRCut(ideltaRCut), dXYCut(idXYCut), dZCut(idZCut)
+{ }
+
 void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) const
 {
-    std::vector<Particle> selected;
+  // GenSim stuff
+  auto particlesGenSim = input->getParticles(EventInput::RecoLevel::GenSim).getParticles();
+  for (auto particle : particlesGenSim)
+  {
+    event.addGenSimParticle(particle);
+  }
+
+  // Reco stuff
+    ParticleCollection<Muon> selected;
     auto particles = input->getLeptons(EventInput::RecoLevel::Reco).getParticles();
-    
     
     for (const auto& particle : particles)
     {
-        if (particle.getType() == ParticleType::muon() && particle.getPt() > 5) 
+      if (particle.getType() == ParticleType::muon() && particle.getPt() > 5) 
+      {
+        auto lepton = Lepton(particle);
+        if(lepton.isLoose() && lepton.getDXY() < dXYCut && lepton.getDZ() < dZCut)
         {
-            if(Lepton(particle).isLoose())
-            {
-                event.addMuon(particle);
-            }
+          selected.addParticle(particle);
         }
+      }
     }
 
-    // add jet loop here
-    auto recoLeptons = event.getMuons();
+    for (auto lepton : selected.getParticles())
+    {
+      event.addMuon(lepton);
+    }
 
+    //auto recoLeptons = event.getMuons();
+    auto leptonJets = findLeptonJets(selected);
 
-
-    auto leptonJets = findLeptonJets(recoLeptons);
-
-
-    // add leptons to the event addSpecialObject
     for (const auto& jet : leptonJets)
     {
-        event.addSpecialObject("leptonJet", jet);
+      event.addSpecialObject("leptonJet", jet);
     }
-
-   // then cut is easier (add directional cut) *elsewhere
-
 }
 
 std::vector<LeptonJet> LeptonJetSelector::findLeptonJets(ParticleCollection<Lepton> recoCandidates) const

@@ -69,10 +69,10 @@ void HPlusPlusMassPlan::initialize()
   // auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
   // 
   auto genSimSameSignInvMassHist = make_shared<HistogramPrototype1DGeneral>("GenSim Same Sign Invariant Mass", 100, 0, 1000,
-[](const EventInput* input){return std::vector<double>{input -> getParticles(EventInput::RecoLevel::GenSim).calculateSameSignInvariantMass()};});
+[](const EventInput* input){return std::vector<double>{input -> getParticles(EventInput::RecoLevel::GenSim).calculateSameSignInvariantMass(false, true)};});
 
   auto recoSameSignInvMassHist = make_shared<HistogramPrototype1DGeneral>("Reco Same Sign Invariant Mass", 100, 0, 1000,
-  [](const EventInput* input){return std::vector<double>{input -> getParticles(EventInput::RecoLevel::Reco).calculateSameSignInvariantMass()};});
+  [](const EventInput* input){return std::vector<double>{input -> getParticles(EventInput::RecoLevel::Reco).calculateSameSignInvariantMass(false, true)};});
   // auto genSimHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
   // auto recoHPlusPlusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, false, "Reco H++ Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, 9900041);
   // auto genSimHMinusMinusRecoveredInvMassHist = make_shared<RecoveredInvariantMassHist>(genSimMod, recoMod, true, "GenSim H-- Recovered Invariant Mass with 3 Leptons", 100, 0, 1000, 3, -9900041);

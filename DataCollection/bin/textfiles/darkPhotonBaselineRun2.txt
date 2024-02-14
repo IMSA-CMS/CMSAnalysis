@@ -1,8 +1,8 @@
 DarkPhoton
-DpMass:	0_9
+DpMass:	4_0
 HiggsMass:	1000
 FSR:	0_0
 Decay:	Higgs2DP
-Format:	MiniAOD
+Format:	NanoAOD
 Run:	2
 Period:	2018

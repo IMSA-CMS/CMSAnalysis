@@ -114,3 +114,8 @@ bool GenSimEventFile::isDone() const
 {
     return event->atEnd();
 }
+
+std::vector<double> GenSimEventFile::getPDFWeights() const
+{
+    throw "Function not implemented";
+}
