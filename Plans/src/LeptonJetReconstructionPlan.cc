@@ -42,7 +42,7 @@
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
 #include "CMSAnalysis/Histograms/interface/GenSimDeltaRHist.hh"
 #include "CMSAnalysis/Histograms/interface/LeptonJetRecoHist.hh"
-
+#include "CMSAnalysis/Filters/interface/TriggerCut.hh"
 #include "CMSAnalysis/Histograms/interface/GammaHist.hh"
 #include "CMSAnalysis/Histograms/interface/GammaDeltaRHist2D.hh"
 #include "CMSAnalysis/Histograms/interface/GenSimGammaHist.hh"
@@ -54,7 +54,6 @@
 #include "CMSAnalysis/Histograms/interface/GenSimGammaTwoJetsPsedoFilteredHist.hh"
 #include "CMSAnalysis/Histograms/interface/ResolutionHist.hh"
 
-#include "CMSAnalysis/Filters/interface/DarkPhotonHighMassCut.hh"
 
 using std::make_shared;
 
@@ -64,13 +63,11 @@ void LeptonJetReconstructionPlan::initialize()
 
   auto eventMod = std::make_shared<EventModule>();
   auto eventHistMod = eventMod->getHistogramModule();
-  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
-  eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5, 0.0001, 0.0005));
-  //eventMod->addSelector(std::make_shared<LeptonJetAntiSelector>(.5, 0.0001, 0.0005));
-
-  eventMod->addCut(std::make_shared<DarkPhotonHighMassCut>());
-
+  eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5));
+  auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Mu37_TkMu27", "HLT_IsoMu24"});
+  eventMod->addCut(triggerCut);
   auto matchMod = std::make_shared<MatchingModule>();
+  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.01);
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
   auto eventDumpMod = std::make_shared<EventDumpModule>(true,true);
   auto lepMatchMod =
@@ -223,7 +220,7 @@ void LeptonJetReconstructionPlan::initialize()
   //modules.addAnalysisModule(massRecoEfficiency800);
   //modules.addAnalysisModule(massRecoEfficiency1000);
   //modules.addAnalysisModule(massRecoEfficiency1300);
-  modules.addAnalysisModule(eventDumpMod);
+  //modules.addAnalysisModule(eventDumpMod);
   //modules.addAnalysisModule(recoEventDumpMod);
   /* auto selector = make_shared<SnowmassLeptonSelector>(5);
 
