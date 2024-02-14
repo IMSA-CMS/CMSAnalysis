@@ -1,2 +1,3 @@
-ZZto4L
+ZZ
 Run:	2
+Decay:	4L
