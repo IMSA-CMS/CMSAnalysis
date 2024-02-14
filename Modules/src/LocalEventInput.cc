@@ -85,3 +85,8 @@ ParticleCollection<Particle> LocalEventInput::getSpecial(std::string key) const
 {
     return event->getSpecial(key);
 }
+
+std::vector<double> LocalEventInput::getPDFWeights() const
+{
+    throw "Function not implemented";
+}
