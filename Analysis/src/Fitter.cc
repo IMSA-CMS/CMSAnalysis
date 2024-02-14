@@ -1,4 +1,7 @@
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
+#include <TStyle.h>
+#include <TH1.h>
+#include <TCanvas.h>
 
 Fitter::Fitter() {}
 
@@ -46,10 +49,32 @@ void Fitter::setParameterOutput(const std::string& fileName)
 
 TCanvas* Fitter::fitExpressionFormula(TH1* histogram, FitFunction& fitFunction)
 {
-	return new TCanvas();
+	TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
+	c1->SetLogy();
+
+	TFitResultPtr result = histogram->Fit(fitFunction.getFunction(), "SL", "", fitFunction.getMin(), fitFunction.getMax());
+
+	gStyle->SetOptFit(1111);
+
+	return c1;
 }
 // TCanvas* fitDSCB(TH1* histogram, FitFunction& fitFunction);
 TCanvas* Fitter::fitPowerLaw(TH1* histogram, FitFunction& fitFunction)
 {
-	return new TCanvas();
+	TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
+	c1->SetLogy();
+
+	TFitResultPtr result = histogram->Fit(fitFunction.getFunction(), "SL", "", fitFunction.getMin(), fitFunction.getMax());
+
+	// double chi2 = __DBL_MAX__;
+	// while (result->Chi2() < chi2)
+	// {
+	// 	chi2 = result->Chi2();
+	// 	f1->SetParameters(result->Parameter(0), result->Parameter(1), result->Parameter(2));
+	// 	result = hist->Fit("powerLaw", "SL", "", lowerBound, upperBound);
+	// }
+
+	gStyle->SetOptFit(1111);
+
+	return c1;
 }
