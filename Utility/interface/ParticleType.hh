@@ -18,9 +18,9 @@
 class ParticleType
 {
     public:
-    std::string getName() const {return name;};
-    int getpdgId() const {return pdgId;};
-    double getCharge() const {return charge;};
+    std::string getName() const {return name;}
+    int getpdgId() const { return pdgId;}
+    double getCharge() const {return charge;}
     std::vector<HistParams> getParticleHists() const;
     std::vector<CollectionHistParams> getCollectionHists() const;
 

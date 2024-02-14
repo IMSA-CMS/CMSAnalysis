@@ -15,6 +15,7 @@
 #include "CMSAnalysis/Filters/interface/HiggsCut.hh"
 #include "CMSAnalysis/Filters/interface/RepeatedEventCuts.hh"
 #include "CMSAnalysis/Filters/interface/HiggsSelector.hh"
+#include "CMSAnalysis/Filters/interface/HPlusPlusGenSimSelector.hh"
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
 #include "CMSAnalysis/Modules/interface/LocalEventInput.hh"
@@ -32,6 +33,7 @@
 #include "CMSAnalysis/Filters/interface/SnowmassLeptonSelector.hh"
 #include "CMSAnalysis/Histograms/interface/Histograms.hh"
 #include "CMSAnalysis/Modules/interface/TriggerModule.hh"
+#include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
 #include "CMSAnalysis/Filters/interface/TriggerCut.hh"
 #include "CMSAnalysis/Filters/interface/TripleMuonTrigger.hh"
 #include "CMSAnalysis/Histograms/interface/TwoInvariantMassesHist.hh"
@@ -51,6 +53,7 @@ void HiggsBackgroundPlan::initialize()
     
     auto eventMod = make_shared<EventModule>();
     //auto pasSelector = make_shared<PASSelector>();
+    auto hppSelector = make_shared<HPlusPlusGenSimSelector>();
     auto higgsSelector = make_shared<HiggsSelector>();
     auto higgsCut = make_shared<HiggsCut>();
     auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
@@ -62,8 +65,9 @@ void HiggsBackgroundPlan::initialize()
     auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
 
     //eventMod->addSelector(pasSelector);
+    eventMod->addSelector(hppSelector);
     eventMod->addSelector(higgsSelector);
-    //eventMod->addCut(triggerCut);
+    eventMod->addCut(triggerCut);
     eventMod->addCut(higgsCut);
     eventMod->addCut(repeatedEventCuts);
     //eventMod->addCut(fourLeptonCut);
@@ -165,4 +169,8 @@ void HiggsBackgroundPlan::initialize()
     modules.addAnalysisModule(eventHistMod);    
     modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
     //modules.addAnalysisModule(eventDump);
-} 
+
+    auto hPlusPlusEfficiency = make_shared<HPlusPlusEfficiency>();
+    hPlusPlusEfficiency->setInput(eventMod->getEventInput());
+    //modules.addAnalysisModule(hPlusPlusEfficiency);
+}
