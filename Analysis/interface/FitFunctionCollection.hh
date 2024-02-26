@@ -15,8 +15,10 @@ public:
 	FitFunctionCollection(std::vector<FitFunction>& functions);
 	FitFunctionCollection(size_t size);
 
+	void insert(const std::string& key, FitFunction& function);
 	void insert(FitFunction& function);
 	size_t size() const;
+	FitFunction& get(const std::string& index);
 	void saveFunctions(const std::string& fileName);
 
 	FitFunction& operator[](const std::string& index);
