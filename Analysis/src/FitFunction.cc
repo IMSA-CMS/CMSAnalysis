@@ -8,9 +8,48 @@ double FitFunction::powerLaw(double *x, double *par)
 
 double FitFunction::DSCB(double *x, double *par)
 {
-	return par[0] * pow(x[0] - par[1], par[2]);
-}
+	double alpha_l = par[0]; 
+	double alpha_h = par[1]; 
+	double n_l     = par[2]; 
+	double n_h     = par[3]; 
+	double mean	= par[4]; 
+	double sigma	= par[5];
+	// double N	= globalNorm;
+	double N	= 1;
+	float t = (x[0]-mean)/sigma;
+	double result;
+	double fact1TLessMinosAlphaL = alpha_l/n_l;
+	double fact2TLessMinosAlphaL = (n_l/alpha_l) - alpha_l -t;
+	double fact1THihgerAlphaH = alpha_h/n_h;
+	double fact2THigherAlphaH = (n_h/alpha_h) - alpha_h +t;
 
+	double root2 = std::pow(2,0.5);
+	if (-alpha_l <= t && alpha_h >= t)
+	{
+		result = exp(-0.5*t*t);
+	}
+	else if (t < -alpha_l)
+	{
+		result = exp(-0.5*alpha_l*alpha_l)*pow(fact1TLessMinosAlphaL*fact2TLessMinosAlphaL, -n_l);
+	}
+	else if (t > alpha_h)
+	{
+		result = exp(-0.5*alpha_h*alpha_h)*pow(fact1THihgerAlphaH*fact2THigherAlphaH, -n_h);
+	}
+	
+	double lowTailNorm = (n_l/std::abs(alpha_l)) * 1/(n_l - 1) * std::exp(-0.5 * alpha_l * alpha_l);
+	double highTailNorm = (n_h/std::abs(alpha_h)) * 1/(n_h - 1) * std::exp(-0.5 * alpha_h * alpha_h);
+	double gaussianNormA = erf(std::abs(alpha_l/root2)) + erf(std::abs(alpha_h/root2));  
+	double gaussianNormB = std::pow(M_PI/2, 0.5) * gaussianNormA;
+	double functionNormalization = std::pow(sigma * (gaussianNormB + lowTailNorm + highTailNorm ), -1);
+
+
+	// globalCounter++;
+	// if(globalCounter%1000 == 0){
+	// //std::cout<<"Global norm: " << globalNorm << "\n";
+	// }
+	return N * functionNormalization * result;	
+}
 
 FitFunction::FitFunction() {}
 
@@ -105,7 +144,7 @@ double FitFunction::getMax()
 // 	}
 // }
 
-TF1* FitFunction::createFunctionOfType(FunctionType functionType, const std::string& name, const std::string& expFormula, double min, double max)
+FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const std::string& name, const std::string& expFormula, double min, double max)
 {
 	TF1* func;
 	// std::cout << "ExpressionFormula enum: " << FunctionType::EXPRESSION_FORMULA << '\n';
@@ -118,7 +157,7 @@ TF1* FitFunction::createFunctionOfType(FunctionType functionType, const std::str
 			break;
 		case FunctionType::DOUBLE_SIDED_CRYSTAL_BALL:
 			// std::cout << "Crystal ball\n";
-			func = new TF1(name.data(), DSCB, min, max, 3);
+			func = new TF1(name.data(), DSCB, min, max, 6);
 			break;
 		case FunctionType::POWER_LAW:
 			func = new TF1(name.data(), powerLaw, min, max, 3);
@@ -127,7 +166,7 @@ TF1* FitFunction::createFunctionOfType(FunctionType functionType, const std::str
 			throw std::invalid_argument("Not a valid FunctionType enum value");
 	};
 
-	return func;
+	return FitFunction(func, functionType);
 }
 
 std::ostream& operator<<(std::ostream& stream, FitFunction& function)
@@ -161,7 +200,14 @@ std::ostream& operator<<(std::ostream& stream, FitFunction& function)
 	stream << "Range: " << min << ' ' << max << '\n';
 	stream << "NumOfParameters: " << func->GetNpar() << '\n';
 
-	stream << "Parameters: ";
+	stream << "ParaNames: ";
+	for (int i = 0; i < func->GetNpar(); ++i)
+	{
+		stream << func->GetParName(i) << ' ';
+		// stream << 1 << ' ';
+	}
+
+	stream << '\n' << "Parameters: ";
 	for (int i = 0; i < func->GetNpar(); ++i)
 	{
 		stream << func->GetParameter(i) << ' ';
@@ -234,60 +280,42 @@ std::istream& operator>>(std::istream& stream, FitFunction& func)
 	funcType = (FitFunction::FunctionType) tempFuncType;
 	stream >> ignore >> expFormula;
 
-	// if (funcType == FitFunction::FunctionType::EXPRESSION_FORMULA)
-	// 	stream >> ignore >> expFormula;
-	// else
-	// 	stream >> ignore >> ignore;
-
 
 	stream >> ignore >> min >> max;
 	stream >> ignore >> params;
 
-	// std::cout << "Params: " << params << '\n';
-
-	// std::cout << "Read all values\n";
-
+	std::vector<std::string> paramNames(params);
 	std::vector<double> paramValues(params);
 	std::vector<double> paramErrors(params);
 
 	stream >> ignore;
 	for (int i = 0; i < params; ++i)
 	{
+		stream >> paramNames[i];
+	}
+
+
+	stream >> ignore;
+	for (int i = 0; i < params; ++i)
+	{
 		stream >> paramValues[i];
 	}
-	
+
 	stream >> ignore;
 	for (int i = 0; i < params; ++i)
 	{
 		stream >> paramErrors[i];
 	}
-	// std::cout << "Read all parameters\n";
 
-	TF1* function = FitFunction::createFunctionOfType(funcType, name, expFormula, min, max);
-
-	// std::cout << "Created function\n";
-	// auto iterator = std::find(FitFunction::functionList.begin(), FitFunction::functionList.end(), formula);
-	// if (iterator != FitFunction::functionList.end())
-	// {
-	// 	auto& funcName = *iterator;
-	// 	if (funcName == "pearson")
-	// 	{
-	// 		function = new TF1(name.data(), FitFunction::pearson, min, max, 4);
-	// 		function->SetParNames("a", "m", "mass", "n");
-	// 	}
-	// }	
-	// else
-	// {
-	// 	function = new TF1(name.data(), formula.data(), min, max);
-	// }
+	FitFunction function = FitFunction::createFunctionOfType(funcType, name, expFormula, min, max);
 
 	for (int i = 0; i < params; ++i)
 	{
-		function->SetParameter(i, paramValues[i]);
-		function->SetParError(i, paramErrors[i]);
+		function.getFunction()->SetParName(i, paramNames[i].c_str());
+		function.getFunction()->SetParameter(i, paramValues[i]);
+		function.getFunction()->SetParError(i, paramErrors[i]);
 	}
-
-	func.setFunction(function, funcType);
+	func = function;
 
 	// std::cout << "Set function\n";
 

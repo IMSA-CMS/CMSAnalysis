@@ -10,14 +10,16 @@
 class Fitter
 {
 public:
-	std::string functionFile;
+	TFile* histogramFile;
+	TFile* fitOutputFile;
 	std::string parameterFile;
-	std::unordered_map<std::string, TH1*> histograms;
 	FitFunctionCollection functions;
 
-	Fitter();
+	Fitter(const std::string& histogramFile, const std::string& functionFile, const std::string& parameterFile);
+	~Fitter();
+	
 	void loadFunctions(const FitFunctionCollection& fitFunctions);
-	void loadHistogram(const std::unordered_map<std::string, TH1*>& hists);
+	// void loadHistogram(const std::vector<string>& histNames);
 
 	void fitFunctions();
 
@@ -26,8 +28,10 @@ public:
 
 private:
 	TCanvas* fitExpressionFormula(TH1* histogram, FitFunction& fitFunction);
-	// TCanvas* fitDSCB(TH1* histogram, FitFunction& fitFunction);
+	TCanvas* fitDSCB(TH1* histogram, FitFunction& fitFunction);
 	TCanvas* fitPowerLaw(TH1* histogram, FitFunction& fitFunction);
+
+	TH1* readHistogram(const std::string& name);
 };
 
 #endif
