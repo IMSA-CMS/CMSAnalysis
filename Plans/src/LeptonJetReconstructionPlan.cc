@@ -54,7 +54,7 @@
 #include "CMSAnalysis/Histograms/interface/GenSimGammaTwoJetsPsedoFilteredHist.hh"
 #include "CMSAnalysis/Histograms/interface/ResolutionHist.hh"
 
-#include "CMSAnalysis/Filters/interface/DarkPhotonHighMassCut.hh"
+#include "CMSAnalysis/Filters/interface/DarkPhotonHighMassFilter.hh"
 
 using std::make_shared;
 
@@ -68,7 +68,8 @@ void LeptonJetReconstructionPlan::initialize()
   eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5, 0.0001, 0.0005));
   //eventMod->addSelector(std::make_shared<LeptonJetAntiSelector>(.5, 0.0001, 0.0005));
 
-  eventMod->addCut(std::make_shared<DarkPhotonHighMassCut>());
+  auto darkPhotonFilter = std::make_shared<FilterModule>(std::make_shared<DarkPhotonHighMassFilter>(10));
+  darkPhotonFilter->setInput(eventMod->getEventInput());
 
   auto matchMod = std::make_shared<MatchingModule>();
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
@@ -121,27 +122,27 @@ void LeptonJetReconstructionPlan::initialize()
   eventHistMod->addHistogram(deltaRHist);
   eventHistMod->addHistogram(leptonJetInvMassHist);
   eventHistMod->addHistogram(zoomedInLeptonJetInvMassHist);
-  histOutputMod->addHistogram(deltaRHist);
-  histOutputMod->addHistogram(pTHist);
-  histOutputMod->addHistogram(matchedLeptonJetHist); 
-  histOutputMod->addHistogram(unmatchedLeptonJetHist);
+  // histOutputMod->addHistogram(deltaRHist);
+  // histOutputMod->addHistogram(pTHist);
+  // histOutputMod->addHistogram(matchedLeptonJetHist); 
+  // histOutputMod->addHistogram(unmatchedLeptonJetHist);
   histOutputMod->addHistogram(deltaXYHist);
   histOutputMod->addHistogram(deltaZHist);
   //histOutputMod->addHistogram(relIsoHist);
-  histOutputMod->addHistogram(genSimDeltaRHist);
-  eventHistMod->addHistogram(genSimDeltaRHist);
-  histOutputMod->addHistogram(genSimGammaHist);
-  eventHistMod->addHistogram(genSimGammaHist);
-  //histOutputMod->addHistogram(darkPhotonMassHist);
-  //eventHistMod->addHistogram(darkPhotonMassHist);
-  //histOutputMod->addHistogram(genSimDeltaRPsedoFilteredHist);
-  //eventHistMod->addHistogram(genSimDeltaRPsedoFilteredHist);
-  histOutputMod->addHistogram(genSimGammaPsedoFilteredHist);
-  eventHistMod->addHistogram(genSimGammaPsedoFilteredHist);
-  histOutputMod->addHistogram(genSimDeltaRTwoJetsPsedoFilteredHist);
-  eventHistMod->addHistogram(genSimDeltaRTwoJetsPsedoFilteredHist);
-  histOutputMod->addHistogram(genSimGammaTwoJetsPsedoFilteredHist);
-  eventHistMod->addHistogram(genSimGammaTwoJetsPsedoFilteredHist);
+  // histOutputMod->addHistogram(genSimDeltaRHist);
+  // eventHistMod->addHistogram(genSimDeltaRHist);
+  // histOutputMod->addHistogram(genSimGammaHist);
+  // eventHistMod->addHistogram(genSimGammaHist);
+  // //histOutputMod->addHistogram(darkPhotonMassHist);
+  // //eventHistMod->addHistogram(darkPhotonMassHist);
+  // //histOutputMod->addHistogram(genSimDeltaRPsedoFilteredHist);
+  // //eventHistMod->addHistogram(genSimDeltaRPsedoFilteredHist);
+  // histOutputMod->addHistogram(genSimGammaPsedoFilteredHist);
+  // eventHistMod->addHistogram(genSimGammaPsedoFilteredHist);
+  // histOutputMod->addHistogram(genSimDeltaRTwoJetsPsedoFilteredHist);
+  // eventHistMod->addHistogram(genSimDeltaRTwoJetsPsedoFilteredHist);
+  // histOutputMod->addHistogram(genSimGammaTwoJetsPsedoFilteredHist);
+  // eventHistMod->addHistogram(genSimGammaTwoJetsPsedoFilteredHist);
 
 
  // histOutputMod->addHistogram(leptonJetMLHist);
@@ -212,6 +213,7 @@ void LeptonJetReconstructionPlan::initialize()
   // modules.addProductionModule(genPartMod);
   modules.addProductionModule(lepMatchMod);
   modules.addProductionModule(eventMod);
+  modules.addFilterModule(darkPhotonFilter);
   modules.addAnalysisModule(histOutputMod);
   modules.addAnalysisModule(eventHistMod);
 
@@ -223,7 +225,7 @@ void LeptonJetReconstructionPlan::initialize()
   //modules.addAnalysisModule(massRecoEfficiency800);
   //modules.addAnalysisModule(massRecoEfficiency1000);
   //modules.addAnalysisModule(massRecoEfficiency1300);
-  modules.addAnalysisModule(eventDumpMod);
+  //modules.addAnalysisModule(eventDumpMod);
   //modules.addAnalysisModule(recoEventDumpMod);
   /* auto selector = make_shared<SnowmassLeptonSelector>(5);
 
