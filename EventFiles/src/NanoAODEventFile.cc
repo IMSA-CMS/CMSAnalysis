@@ -263,7 +263,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         particle.addInfo("HEEP_map", getArrayElement<Int_t>("HEEP_bitmap", i)); 
         particle.addInfo("Electron_map", getArrayElement<Int_t>("Electron_bitmap", i)); 
         particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
-        particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
+        particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));`
         recoParticles.addParticle(particle);
         // std::cout << "Particle: " << particle.getInfo("CutBasedHEEP") << '\n';
     }
