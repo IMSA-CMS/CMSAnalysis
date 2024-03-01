@@ -14,6 +14,7 @@ public:
 		POWER_LAW
 	};
 
+	static int globalNorm;
 	// static const std::vector<std::string> functionList;
 	static FitFunction createFunctionOfType(FunctionType functionType, const std::string& name, const std::string& expFormula, double min, double max);
 
