@@ -4,15 +4,16 @@
 #include <string>
 #include <unordered_map>
 #include <memory>
+#include <vector>
 
-#include "CMSAnalysis/DataCollection/interface/FileParams.hh"
+class FileParams;
+class EventInput;
 
 namespace edm
 {
   class EventBase;
 }
 
-class EventInput;
 
 // The base class for all modules used in the Analyzer framework
 class Module
@@ -43,13 +44,11 @@ public:
   // Writes text to screen and to Root file
   // par is the text itself while name is the name of the variable in the Root file
   void writeText(std::string par, std::string name) const;
-  const int getInputPublic() const {
-    if(input){return 1;}
-    return 0;
-    }
 
   inline std::vector<std::shared_ptr<Module>> getDependencies() const { return dependencies; }
   void addRequiredModule(std::shared_ptr<Module> module);
+
+  const FileParams* getFileParams() const;
 
 protected:
   std::vector<std::shared_ptr<Module>> dependencies;

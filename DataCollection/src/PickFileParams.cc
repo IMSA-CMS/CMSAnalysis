@@ -1,20 +1,13 @@
-#include "CMSAnalysis/DataCollection/interface/FileParams.hh"
-#include "CMSAnalysis/Utility/interface/Utility.hh"
+#include "CMSAnalysis/DataCollection/interface/PickFileParams.hh"
 #include <sstream>
 #include <fstream>
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 
-FileParams::FileParams(std::string iprocess, std::map<std::string, std::string> iparameters):
-process(iprocess),
-parameters(iparameters)
-{
-
-}
-
-std::string FileParams::getFileName() const
+std::string PickFileParams::getFileName() const
 {
     std::ostringstream stream;
-    stream << process << "/" << process;
-    for (auto parameter : parameters) 
+    stream << getProcess() << "/" << getProcess();
+    for (auto parameter : getParameters()) 
     {
         stream << "_" << parameter.first << "_" << parameter.second;
     }
@@ -26,7 +19,7 @@ std::string FileParams::getFileName() const
     return fileName;
 }
 
-std::vector<std::string> FileParams::getFileList() const
+std::vector<std::string> PickFileParams::getFileList() const
 {
     std::string file = getFileName();
     std::vector<std::string> fileList;
@@ -43,4 +36,3 @@ std::vector<std::string> FileParams::getFileList() const
     return fileList;
 
 }
-// call getFileName(), open that file, read from the list into a vector of strings and return

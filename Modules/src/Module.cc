@@ -1,5 +1,6 @@
 #include "CMSAnalysis/Modules/interface/Module.hh"
 #include "CMSAnalysis/Utility/interface/TDisplayText.h"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 
 // Static initialization
 std::unordered_map<std::string, double> Module::parameters;
@@ -25,4 +26,9 @@ void Module::addRequiredModule(std::shared_ptr<Module> module)
   {
     dependencies.push_back(module);
   }
+}
+
+const FileParams* Module::getFileParams() const 
+{
+  return input->getFileParams();
 }

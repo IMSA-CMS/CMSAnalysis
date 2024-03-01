@@ -3,6 +3,8 @@
 
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 
+class FileParams;
+
 class EventInterface
 {
     public:
@@ -15,7 +17,7 @@ class EventInterface
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const = 0;
         virtual int getNumPileUpInteractions() const = 0;
         virtual bool checkTrigger(std::string triggerName, std::string subProcess) const = 0;
-
+        virtual const std::shared_ptr<FileParams> getFileParams() const = 0;
 };
 
 #endif
