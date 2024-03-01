@@ -68,7 +68,7 @@ void LeptonJetReconstructionPlan::initialize()
   eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5, 0.0001, 0.0005));
   //eventMod->addSelector(std::make_shared<LeptonJetAntiSelector>(.5, 0.0001, 0.0005));
 
-  eventMod->addCut(std::make_shared<DarkPhotonHighMassCut>());
+//  eventMod->addCut(std::make_shared<DarkPhotonHighMassCut>());
 
   auto matchMod = std::make_shared<MatchingModule>();
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
