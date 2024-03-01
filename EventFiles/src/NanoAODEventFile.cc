@@ -53,8 +53,8 @@ bool NanoAODEventFile::checkTrigger(std::string triggerName, std::string subProc
      
 }
 
-NanoAODEventFile::NanoAODEventFile(TFile *ifile) : 
-    EventFile(ifile)
+NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> iparams) : 
+    EventFile(ifile, iparams)
     {
     //initializing variables from header file
     std::vector<std::shared_ptr<TreeVariableBase>> treeVariables = {

@@ -13,7 +13,7 @@ class TTree;
 class StrippedEventFile : public EventFile
 {
   public:
-    StrippedEventFile(TFile* ifile);
+    StrippedEventFile(TFile* ifile, std::shared_ptr<FileParams> iparams);
     virtual int getNumOfEvents() const override {return tree->GetEntries();}
 
   protected:

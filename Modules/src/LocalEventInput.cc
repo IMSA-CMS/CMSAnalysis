@@ -9,10 +9,6 @@
 #include "CMSAnalysis/Utility/interface/Lepton.hh"
 #include "CMSAnalysis/Utility/interface/Event.hh"
 
-LocalEventInput::LocalEventInput(const Event* event1)
-{
-    event = event1;
-}
 
 ParticleCollection<Lepton> LocalEventInput::getLeptons(RecoLevel level) const
 {
@@ -78,4 +74,9 @@ bool LocalEventInput::checkTrigger(std::string triggerName, std::string subProce
 ParticleCollection<Particle> LocalEventInput::getSpecial(std::string key) const
 {
     return event->getSpecial(key);
+}
+
+const std::shared_ptr<FileParams> LocalEventInput::getFileParams() const 
+{
+    throw std::runtime_error("getFileParams not implemented for localEventInput");
 }

@@ -2,16 +2,16 @@
 #define FILEPARAMS_HH
 #include <iostream>
 #include <map>
-#include "IDType.hh"
+#include <vector>
 
 class FileParams
 {
 public:
     FileParams(std::string process,  std::map<std::string, std::string> parameters);
+    virtual ~FileParams() {}
     std::string getProcess() const {return process;}
-    std::map<std::string, std::string> getParameters() const {return parameters;}
-    std::string getFileName() const;
-    std::vector<std::string> getFileList() const;
+    const std::map<std::string, std::string>& getParameters() const {return parameters;}
+    virtual std::vector<std::string> getFileList() const = 0;
     // call getFileName(), open that file, read from the list into a vector of strings and return
 
 private:

@@ -1,6 +1,6 @@
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/Utility/interface/HistogramPrototype.hh"
-#include "CMSAnalysis/DataCollection/interface/FileParams.hh"
+#include "CMSAnalysis/Utility/interface/FileParams.hh"
 #include "CMSAnalysis/Modules/interface/PtResolutionModule.hh"
 #include "CMSAnalysis/Modules/interface/Module.hh"
 #include "CMSAnalysis/Modules/interface/AnalysisModule.hh"
