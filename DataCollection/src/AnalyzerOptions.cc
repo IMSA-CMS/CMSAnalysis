@@ -22,6 +22,7 @@
 #include "CMSAnalysis/Plans/interface/MLVariablesPlan.hh"
 #include "CMSAnalysis/Plans/interface/HiggsDataStripPlan.hh"
 #include "CMSAnalysis/Plans/interface/HiggsInvariantMassPlan.hh"
+#include "CMSAnalysis/Plans/interface/PdfWeightingPlan.hh"
 
 AnalyzerOptions::AnalyzerOptions()
 {
@@ -39,6 +40,7 @@ AnalyzerOptions::AnalyzerOptions()
   analysisPlans["HiggsDataStrip"] = new HiggsDataStripPlan();
   analysisPlans["HiggsInvariantMass"] = new HiggsInvariantMassPlan();
   analysisPlans["HiggsSignal"] = new HiggsSignalPlan();
+  analysisPlans["PdfWeighting"] = new PdfWeightingPlan();
 }
 
 std::string AnalyzerOptions::pickfileInterface()
