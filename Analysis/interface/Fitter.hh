@@ -7,6 +7,17 @@
 #include <TFile.h>
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
 
+
+struct ParameterizationData
+{
+	double* x;
+ 	double* y;
+	double* error;
+	double* zero;
+	int size;
+	std::string name;
+};
+
 class Fitter
 {
 public:
@@ -25,13 +36,15 @@ public:
 
 	void setFunctionOutput(const std::string& fileName);
 	void setParameterOutput(const std::string& fileName);
-
+	FitFunctionCollection parameterizeFunctions(std::unordered_map<std::string, double>& xData);
 private:
 	TCanvas* fitExpressionFormula(TH1* histogram, FitFunction& fitFunction);
 	TCanvas* fitDSCB(TH1* histogram, FitFunction& fitFunction);
 	TCanvas* fitPowerLaw(TH1* histogram, FitFunction& fitFunction);
 
 	TH1* readHistogram(const std::string& name);
+	std::unique_ptr<std::vector<ParameterizationData>> getParameterData(std::unordered_map<std::string, double>& xData);
+	FitFunction parameterizeFunction(ParameterizationData& parameterData);
 };
 
 #endif

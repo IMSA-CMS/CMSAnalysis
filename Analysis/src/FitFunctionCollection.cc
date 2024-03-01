@@ -99,3 +99,32 @@ void FitFunctionCollection::insert(const std::string& key, FitFunction& func)
 // {
 // 	return functions[(size_t) index];
 // }
+
+bool FitFunctionCollection::checkFunctionsSimilar()
+{
+	if (size() > 0)
+	{
+		FitFunction& compareFunc = functions.begin()->second;
+		for (auto& pair : functions)
+		{
+			if (pair.second.getFunctionType() != compareFunc.getFunctionType()
+			|| pair.second.getFunction()->GetNpar() != compareFunc.getFunction()->GetNpar())
+			{
+				return false;
+			}
+			else
+			{
+				for (int i = 0; i < compareFunc.getFunction()->GetNpar(); ++i)
+				{
+					if (compareFunc.getFunction()->GetParName(i) != pair.second.getFunction()->GetParName(i))
+						return false;
+				}
+			}
+		}
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}

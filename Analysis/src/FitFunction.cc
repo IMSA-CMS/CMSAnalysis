@@ -1,6 +1,8 @@
 #include "CMSAnalysis/Analysis/interface/FitFunction.hh"
 #include <fstream>
 
+int FitFunction::globalNorm = 0;
+
 double FitFunction::powerLaw(double *x, double *par)
 {
 	return par[0] * pow(x[0] - par[1], par[2]);
@@ -14,8 +16,7 @@ double FitFunction::DSCB(double *x, double *par)
 	double n_h     = par[3]; 
 	double mean	= par[4]; 
 	double sigma	= par[5];
-	// double N	= globalNorm;
-	double N	= 1;
+	double N	= globalNorm;
 	float t = (x[0]-mean)/sigma;
 	double result;
 	double fact1TLessMinosAlphaL = alpha_l/n_l;

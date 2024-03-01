@@ -3,6 +3,8 @@
 #include <TH1.h>
 #include <TFitResult.h>
 #include <TCanvas.h>
+#include <TPaveStats.h>
+#include <TGraphErrors.h>
 
 Fitter::Fitter(const std::string& histogramFile, const std::string& functionFile, const std::string& parameterFile) 
 	: histogramFile(TFile::Open(histogramFile.c_str())), 
@@ -88,7 +90,52 @@ TCanvas* Fitter::fitExpressionFormula(TH1* histogram, FitFunction& fitFunction)
 }
 TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction)
 {
-	return new TCanvas();
+	std::cout << "fitting crystal ball\n";
+	TF1* f1 = fitFunction.getFunction();
+	TFitResultPtr gausResult = histogram->Fit("gaus", "SQ", "", 250,2000);
+	auto params = gausResult->Parameters();
+	// TF1* f1 = new TF1 ("f1", DoubleSidedCrystalballFunction, 0, 2000, 6);
+	f1->SetNpx(1000);
+	double mass = params[1];
+	// alpha low, alpha high, n low, n high, mean, sigma, norm
+	FitFunction::globalNorm = histogram->Integral("width");
+
+	f1->SetParameters(2.82606, 2.5, 1.08, 1.136, params[1], params[2]);
+	f1->SetParNames("alpha_{low}","alpha_{high}","n_{low}", "n_{high}", "mean", "sigma"); 
+	f1->SetParLimits(0,0, 10);
+	f1->SetParLimits(1,0, 10);
+	f1->SetParLimits(2,1,10);
+	f1->SetParLimits(3,1,10);
+	f1->SetParLimits(4,400,1600);
+	// if(name.substr(8,8) == "eee_eeee" || name.substr(9,8) == "eee_eeee"){
+	// 	std::cout<<"EXCEPTION EXCEPTED\n";
+	// 	if(name.substr(5,3) == "500"){
+	// 		f1->SetParameters(1.624,1.439,1.288,3.151,498.9,5.451);
+	// 	} 
+	// 	else if(name.substr(6,3) == "1300" || name.substr(6,3) == "1500" ){
+	// 		f1->SetParLimits(6,3,25);
+	// 		std::cout<<"exception found";
+	// 	}
+	// 	else{
+	// 		f1->SetParLimits(6,3,20);
+	// 	}
+	// }
+	
+	f1->SetRange(0, 2000);
+	f1->SetLineColor(kRed);
+	TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
+	TFitResultPtr results = histogram->Fit(f1, "SE");
+	gStyle->SetOptFit(111111);
+	//file->WriteObject(c1, name);
+	// std::string Graphname = name + "DBSCball"+ ".png";
+	TPaveStats *st = (TPaveStats*)histogram->FindObject("stats");
+	st->SetX1NDC(0.1);
+	st->SetX2NDC(0.5);
+	//hist->GetXaxis()->SetRange(mass-450, mass + 350);
+	// c1->SaveAs(Graphname.c_str());
+	// c1->Close();
+
+	return c1;
 }
 TCanvas* Fitter::fitPowerLaw(TH1* histogram, FitFunction& fitFunction)
 {
@@ -111,4 +158,66 @@ TCanvas* Fitter::fitPowerLaw(TH1* histogram, FitFunction& fitFunction)
 	gStyle->SetOptFit(1111);
 
 	return c1;
+}
+
+std::unique_ptr<std::vector<ParameterizationData>> Fitter::getParameterData(std::unordered_map<std::string, double>& xData)
+{
+	if (functions.checkFunctionsSimilar() && functions.size() > 0)
+	{
+		int params = functions.functions.begin()->second.getFunction()->GetNpar();
+		auto data = std::make_unique<std::vector<ParameterizationData>>(params);
+		for (int i = 0; i < params; ++i) {
+			data->push_back(ParameterizationData {
+				new double[functions.size()],
+				new double[functions.size()],
+				new double[functions.size()],
+				new double[functions.size()],
+				i,
+				functions.functions.begin()->second.getFunction()->GetParName(i)
+			});
+		}
+
+		int i = functions.functions.begin()->second.getFunction()->GetNpar();
+		for (auto& pair : functions.functions)
+		{
+			for (int j = 0; j < params; ++j) 
+			{
+				data->at(j).x[i] = xData[pair.first];
+				data->at(j).y[i] = pair.second.getFunction()->GetParameter(j);
+				data->at(j).error[i] = pair.second.getFunction()->GetParError(j);
+				data->at(j).zero[i] = 0;
+			}
+			++i;
+		}
+
+		return data;
+	}
+	else
+	{
+		throw std::invalid_argument("FitFunctionCollection is not comprised on similar functions");
+	}
+}
+
+FitFunction Fitter::parameterizeFunction(ParameterizationData& parameterData)
+{
+	auto graph = new TGraphErrors(parameterData.size, parameterData.x, parameterData.y, parameterData.zero, parameterData.error);
+	FitFunction function = FitFunction::createFunctionOfType(FitFunction::FunctionType::POWER_LAW, parameterData.name, "", 0, 2000);
+
+	graph->Fit(function.getFunction(), "S");
+
+	return function;
+}
+
+FitFunctionCollection Fitter::parameterizeFunctions(std::unordered_map<std::string, double>& xData)
+{
+	std::unique_ptr<std::vector<ParameterizationData>> totalParameterData = getParameterData(xData);
+	FitFunctionCollection functions;
+
+	for (size_t i = 0; i < totalParameterData->size(); ++i)
+	{
+		FitFunction func = parameterizeFunction(totalParameterData->at(i));
+		functions.insert(func);
+	}
+
+	return functions;
 }
