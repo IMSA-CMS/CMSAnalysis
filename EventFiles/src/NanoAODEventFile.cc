@@ -281,18 +281,24 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         particle.addInfo("dz", getArrayElement<Float_t>("muon_dz", i));
         recoParticles.addParticle(particle);
     }
-    for (UInt_t i = 0; i < getVariable<UInt_t>("photon_size"); i++)
+    for (auto& particle: recoParticles)
     {
-        Particle::SelectionFit fit;
+        for (UInt_t i = 0; i < getVariable<UInt_t>("photon_size"); i++)
+        {
+            Particle::SelectionFit fit;
 
-        // std::cout << "Loading photon from NanoAOD\n";
-        auto particle = Particle(
-        reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("photon_pt", i),
-        getArrayElement<Float_t>("photon_eta", i), getArrayElement<Float_t>("photon_phi", i), 0)),
-        0, 0, 0, ParticleType::photon(), fit);
-        recoParticles.addParticle(particle);
+            // std::cout << "Loading photon from NanoAOD\n";
+            auto particle = Particle(
+            reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("photon_pt", i),
+            getArrayElement<Float_t>("photon_eta", i), getArrayElement<Float_t>("photon_phi", i), 0)),
+            0, 0, 0, ParticleType::photon(), fit);
+            recoParticles.addParticle(particle);
+        }
+            for UInt_t i=0; i < getVariable<UInt_t>("num_pdfs"); ++i)
+        {
+            particle.addInfo("PDFWeight"+std::to_string(i), getArrayElement<Float_t>("pdf_weight",i));
+        }
     }
-    
     return recoParticles;
 }
 
@@ -306,6 +312,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoJets() const
         0, 0, 0,
         ParticleType::jet()));        
     }
+
     return recoParticles;
 }
 

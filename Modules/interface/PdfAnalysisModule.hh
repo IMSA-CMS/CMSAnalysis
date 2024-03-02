@@ -19,6 +19,9 @@ private:
   int high;
   // the forward and backward histograms are cut in this # of bins
   const int histBins = 1000;
+  vector<TH1*> histVec;
+  vector<vector<double>> histogramBinsRatios;
+  
 
 };
 
