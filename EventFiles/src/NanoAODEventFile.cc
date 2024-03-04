@@ -117,6 +117,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pt", "GenPart_pt"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_m1", "GenPart_genPartIdxMother"),
         std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("pdf_weight", "LHEPdfWeight"),
+        std::make_shared<TreeVariable<TTreeReaderArray<UInt_t>>>("pdf_weightSum", "LHEPdfSumw"),
         std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("num_pdfs", "nLHEPdfWeight"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pileup", "Pileup_nTrueInt"),
         std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("HEEP_bitmap", "Electron_vidNestedWPBitmapHEEP"),
@@ -246,7 +247,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i));
 //        particle.addInfo("HEEP_map", getArrayElement<Int_t>("HEEP_bitmap", i)); 
         particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
-        particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));`
+        particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
         recoParticles.addParticle(particle);
         // std::cout << "Particle: " << particle.getInfo("CutBasedHEEP") << '\n';
     }
@@ -299,6 +300,28 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
             particle.addInfo("PDFWeight"+std::to_string(i), getArrayElement<Float_t>("pdf_weight",i));
         }
     }
+<<<<<<< HEAD
+=======
+    for (auto& particle : recoParticles)
+    {
+        for(UInt_t i = 0; i < getVariable<UInt_t>("num_pdfs"); ++i)
+        {
+            particle.addInfo("PDFWeight"+std::to_string(i), getArrayElement<Float_t>("pdf_weight", i));
+        }
+     
+    }
+    for (UInt_t i = 0; i < getVariable<UInt_t>("LHEPdfWeight"); i++)
+    {
+        Particle::SelectionFit fit;
+        // std::cout << "Loading photon from NanoAOD\n";
+        auto particle = Particle(
+        reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("photon_pt", i),
+        getArrayElement<Float_t>("photon_eta", i), getArrayElement<Float_t>("photon_phi", i), 0)),
+        0, 0, 0, ParticleType::photon(), fit);
+        recoParticles.addParticle(particle);
+    }
+    
+>>>>>>> 40ef6ba76041433554543b1c08c4f2e964d3efb7
     return recoParticles;
 }
 
