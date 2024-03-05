@@ -30,6 +30,7 @@
 #include "CMSAnalysis/Modules/interface/GenSimEventDumpModule.hh"
 
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
+#include "CMSAnalysis/Modules/interface/RecoGenSimComparisonModule.hh"
 #include "CMSAnalysis/Filters/interface/DarkPhotonGenSimSelector.hh"
 #include "CMSAnalysis/Filters/interface/HPlusPlusGenSimSelector.hh"
 #include "CMSAnalysis/Filters/interface/HiggsSelector.hh"
@@ -57,6 +58,7 @@ void GenSimPlan::initialize()
     auto metMod = make_shared<METModule>();
     auto gammahist = make_shared<GammaHistogram>(EventInput::RecoLevel::GenSim, "Gamma", 100, 0, 1000);
     auto eventDump = make_shared<GenSimEventDumpModule>();
+    auto recoGenMatch = make_shared<RecoGenSimComparisonModule>("perParticle", true);
     auto matchMod = make_shared<MatchingModule>();
     auto higgsCut = make_shared<HiggsCut>();
     auto higgsMassCut = make_shared<HiggsMassCut>();
@@ -91,7 +93,7 @@ void GenSimPlan::initialize()
 
 	modules.addAnalysisModule(hPlusPlusEfficiency);
     //modules.addAnalysisModule(leptonEfficiency);
-
+    modules.addAnalysisModule(recoGenMatch);
     modules.addAnalysisModule(histMod);
     //modules.addAnalysisModule(eventDump);
 }

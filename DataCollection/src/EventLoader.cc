@@ -55,13 +55,14 @@ std::vector<std::string> EventLoader::fetchRootFiles(const std::string& configFi
   }
   else
   {
-    std::ifstream textFile(configFile); 
+    std::ifstream textFile(Utility::getFullPath(configFile)); 
     std::string line;
-    getline(textFile, line);
+    std::getline(textFile, line);
+    std::cout << "First line: " << line << '\n';
     if (line.substr(0,1) == "/") 
     {
       rootFiles.push_back("root://cmsxrootd.fnal.gov//" + line);
-      while (getline(textFile, line)) 
+      while (std::getline(textFile, line)) 
       {
         rootFiles.push_back("root://cmsxrootd.fnal.gov//" + line);
       }
