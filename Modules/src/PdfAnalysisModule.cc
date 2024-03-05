@@ -10,12 +10,11 @@ PdfAnalysisModule::PdfAnalysisModule(int low, int high, int histBins) :
   this->high = high;
   this->histBins = histBins;
 }
-//?? some error here idk
+
 
 void PdfAnalysisModule::initialize()
 {  
-
-  std::cout << "Initializing PdfAnalysisModule" << std::endl;  
+  
   bool oldVal = TH1::GetDefaultSumw2();
   defHist = new TH1F("Unweighted", "Unweighted", histBins, low, high);
   TH1::SetDefaultSumw2(kTRUE);
@@ -32,15 +31,19 @@ void PdfAnalysisModule::initialize()
 
 void PdfAnalysisModule::finalize()
 {
+  std::cout << "PdfAnalysisModule Finalize Started" << std::endl;
   for(int i = 0; i < 100; ++i){
     auto hist = histVec[i];
     std::vector<double> binRatios;
-    for(int j = 0; j < 1000; ++j){
+    std::cout << "Filling RatiosHistogram " << i << std::endl;
+    for(int j = 0; j < histBins; ++j){
+      std::cout << "At Bin: " << j << std::endl;
       auto binContent = hist->GetBinContent(j);
       double binRatio = binContent/(defHist->GetBinContent(j));
       binRatios.push_back(binRatio);
+      std::cout << "Added Ratio" << std::endl;
       //Some problem here as well 
-      
+   
     }
     std::sort(binRatios.begin(), binRatios.end());
     histogramBinRatios.push_back(binRatios);
@@ -52,10 +55,7 @@ void PdfAnalysisModule::finalize()
 
 bool PdfAnalysisModule::process()
 {
-  //auto genParticles = getInput()->getLeptons(EventInput::RecoLevel::GenSim);
-  //auto genSimCS = genParticles.getCollinsSoper();
-  //auto genSimInvMass = genParticles.getInvariantMass();
-
+  
   auto recoParticles = getInput()->getLeptons(EventInput::RecoLevel::Reco);
   //auto recoCS = recoParticles.getCollinsSoper();
   auto recoInvMass = recoParticles.getInvariantMass();
@@ -68,9 +68,6 @@ bool PdfAnalysisModule::process()
     auto hist = histVec[i];
     hist->Fill(recoInvMass, pdfWeight);
   }
-
+  std::cout << "PdfAnalysisModule Process Ended" << std::endl;
   return true;
 }
-
-
-
