@@ -15,8 +15,8 @@ public:
   virtual void finalize() override;
 
 private:
-  Double_t low;
-  Double_t high;
+  Double_t low=0;
+  Double_t high=1000;
   //# of bins
   Int_t histBins = 1000;
   std::vector<TH1*> histVec;
