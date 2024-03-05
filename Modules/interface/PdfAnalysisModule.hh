@@ -15,13 +15,6 @@ public:
   virtual void finalize() override;
 
 private:
-  int low;
-  int high;
-  // the forward and backward histograms are cut in this # of bins
-  int histBins = 1000;
-  std::vector<TH1*> histVec;
-  std::vector<vector<double>> histogramBinsRatios;
-  
   Double_t low;
   Double_t high;
   //# of bins
