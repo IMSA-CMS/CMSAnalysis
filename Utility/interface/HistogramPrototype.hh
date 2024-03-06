@@ -27,6 +27,7 @@ public:
 	virtual ~HistogramPrototype() {} // Empty virtual destructor
 	
 	virtual std::vector<double> value() const = 0;
+	virtual double eventWeight() const {return 1;}
 
     std::string getName() const {return name;}
 

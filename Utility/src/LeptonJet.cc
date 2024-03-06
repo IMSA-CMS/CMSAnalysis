@@ -1,5 +1,6 @@
 #include "CMSAnalysis/Utility/interface/LeptonJet.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
+#include "CMSAnalysis/Utility/interface/Lepton.hh"
 
 LeptonJet::LeptonJet():
 RecoParticle(std::make_shared<LeptonJetImplementation>()){
@@ -36,6 +37,36 @@ double LeptonJet::getMass() const
   ParticleCollection<Particle> collection(leptons);
   leptonJetInvMass = collection.calculateAllLeptonInvariantMass();
   return leptonJetInvMass;
+}
+
+double LeptonJet::getMaxDXY() const
+{
+  auto particles = getParticles();
+  auto maxDXY = 0;
+  for (const auto& particle : particles)
+  {
+    auto lepton = Lepton(particle);
+    if (lepton.getDXY() > maxDXY) 
+    {
+      maxDXY = lepton.getDXY();
+    }
+  }
+  return maxDXY;
+}
+
+double LeptonJet::getMaxDZ() const
+{
+  auto particles = getParticles();
+  auto maxDZ = 0;
+  for (const auto& particle : particles)
+  {
+    auto lepton = Lepton(particle);
+    if (lepton.getDZ() > maxDZ) 
+    {
+      maxDZ = lepton.getDZ();
+    }
+  }
+  return maxDZ;
 }
 
 
