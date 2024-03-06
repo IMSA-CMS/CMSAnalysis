@@ -168,3 +168,8 @@ bool DelphesEventFile::isDone() const
 {
     return getEventCount() > tree->GetEntries();
 }
+
+std::vector<double> DelphesEventFile::getPDFWeights() const
+{
+    throw "Function not implemented";
+}
