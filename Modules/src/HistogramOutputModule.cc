@@ -170,7 +170,7 @@ bool HistogramOutputModule::process() {
       // {
       //   std::cout << hist->getFilteredName() << " has " << value << "\n";
       // }
-      fillHistogram(hist->getFilteredName(), hist->value());
+      fillHistogram(hist->getFilteredName(), hist->value(), hist->eventWeight());
     }
   }
   return true;

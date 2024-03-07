@@ -48,7 +48,7 @@ public:
   inline std::vector<std::shared_ptr<Module>> getDependencies() const { return dependencies; }
   void addRequiredModule(std::shared_ptr<Module> module);
 
-  const FileParams* getFileParams() const;
+  const std::shared_ptr<FileParams> getFileParams() const;
 
 protected:
   std::vector<std::shared_ptr<Module>> dependencies;

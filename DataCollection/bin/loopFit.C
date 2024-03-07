@@ -6,6 +6,8 @@
 #include <cmath>
 #include <math.h>
 #include <map>
+#include <algorithm>
+#include <complex>
 #include "TH1.h"
 #include "TF1.h"
 #include "TFile.h"
@@ -17,9 +19,18 @@
 #include "TFormula.h"
 #include "TFitResult.h"
 #include "TGraphErrors.h"
+#include "TROOT.h"
+#include "TPaveStats.h"
+#include "TStyle.h"
+#include "TLegend.h"
+#include "TLatex.h"
+#include <gsl/gsl_sf_result.h>
+#include <gsl/gsl_sf_gamma.h>
 
 // Fits multiple graphs with the same function
 void multipleFits();
+
+TH1* getHist(string name, TFile* file);
 
 // Gets params from the fits and arranges them into a map
 std::map<std::string, std::vector<std::vector<double>>> paramsFromFits(std::vector<std::vector<double>> results, 
@@ -45,6 +56,7 @@ double breitWigner(double *x, double *par);
 double pearson(double *x, double *par);
 double studentsT(double *x, double *par);
 double hyperbolicSecant(double *x, double *par);
+double pearsonIV(double *x, double *par);
 
 TFitResultPtr fitToDSCB(char const* name, TH1* hist, TFile* file, std::vector<double> params);
 TFitResultPtr fitToAlternative(char const* name, TH1* hist, TFile* file, std::vector<double> params);
@@ -52,6 +64,7 @@ TFitResultPtr fitToBW(char const* name, TH1* hist, TFile* file, std::vector<doub
 TFitResultPtr fitToStudentsT(char const* name, TH1* hist, TFile* file, std::vector<double> params);
 TFitResultPtr fitToHyperbolicSecant(char const* name, TH1* hist, TFile* file, std::vector<double> params);
 TFitResultPtr fitToPearson(char const* name, TH1* hist, TFile* file, std::vector<double> params, int i);
+TFitResultPtr fitToPearsonIV(std::string name, TH1* hist, TFile* file, std::vector<double> params, std::string histsname);
 
 void loopFit()
 {
@@ -67,60 +80,88 @@ void multipleFits()
 	std::vector<std::vector<double>> errors;
 
 	// Filenames of root files that have the graphs to fit in them
-	std::vector<char const*> fileNames{"HiggsPick300_HiggsBackground.root", "HiggsPick500_HiggsBackground.root", 
-	"HiggsPick700_HiggsBackground.root", "HiggsPick900_HiggsBackground.root", "HiggsPick1100_HiggsBackground.root",
-	"HiggsPick1300_HiggsBackground.root"};
-
+	//~vrao/analysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/Higgs1400.root 
+	
+	std::vector<char const*> fileNames{"test.root"};
+	//std::vector<char const*> fileNames{"~vrao/analysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/Higgs1400.root"};
 	// The name of the histogram in the root files above that is bing fitted
-	std::string histType = "MuonMuon Reco Same Sign Invariant Mass;1";
-
+	//std::string histType = "MuonMuon Reco Same Sign Invariant Mass;1";
+	std::vector<std::string> histTypes = {"eeuu_Reco Same Sign Invariant Mass;1"};
+	std::string histType = "eeuu_Reco Same Sign Invariant Mass;1";
+	//std::string histType = "eeuu_Muon Same Sign Invariant Mass;1";
+	
 	// This script creates three root files:
 	// The name of the root file the fitted histograms are to be stored
-	std::string fitHistsName = "pearsonFitHists.root";
+	std::string fitHistsName = "NewpearsonFitHists.root";
 	// The name of the root file graphs of parameter values are to be stored
 	std::string paramGraphsName = "pearsonParamGraphs.root";
 	// The name of the root file the fitted parameter graphs are to be stored
 	std::string fitParamsName = "fitParams.root";
 
 	TFile* file = TFile::Open(fitHistsName.c_str(), "RECREATE");
+	//delete file;
 
-	int counter = 0;
 
+	int Masscounter = 5;
+	for (auto Histname : histTypes){
 	for (auto filename : fileNames)
 	{
 		TFile* histFile = TFile::Open(filename);
-		TH1* hist = histFile->Get<TH1>(histType.c_str());
+		//TH1* hist = histFile->Get<TH1>(histType.c_str());
+		TH1* hist = getHist(Histname.c_str(), histFile);
 
+		hist->DrawCopy();
+		hist->SetStats(0);
 		// Get initial parameters from a gaussian
-		TFitResultPtr gausResult = hist->Fit("gaus", "SQ");
+		TFitResultPtr gausResult = hist->Fit("gaus", "SQ", "", 1000,2000);
 		// The params vector is ordered norm, mean, sigma
 		auto params = gausResult->Parameters();
 
+
 		std::string rootName(filename);
 		int rootPos = rootName.length() - 5;
-		std::string name = rootName.substr(0, rootPos);
-
-		int mass = counter*200 + 300;
+		std::string name = rootName.substr(0, rootPos) + Histname;
 		
-		auto result = fitToPearson(name.c_str(), hist, file, params, counter);
+		//int mass = counter*200 + 300;
+		int mass = 1400;
+		
+		//auto result = fitToHyperbolicSecant(name.c_str(), hist, file, params);
+		auto result = fitToPearsonIV(name, hist, file, params, fitHistsName);
+		//auto result = fitToPearson(name.c_str(), hist, file, params,counter);
+		//auto result = fitToStudentsT(name.c_str(), hist, file, params);
+		//auto result = fitToBW(name.c_str(), hist, file, params);
+		//auto result = fitToDSCB(name.c_str(), hist, file, params);
+		//auto result = fitToAlternative(name.c_str(), hist, file, params);
+		
+		
 		results.push_back(result->Parameters());
 		errors.push_back(result->Errors());
-		counter++;
+		Masscounter++;
 	}
+
+
 	auto params = paramsFromFits(results, errors);
-	graph(params, paramGraphsName);
+	//graph(params, paramGraphsName);
 
 	// uncomment the below line if ready to fit the values of the parameters (the code for fitting parameters is found in fitParameters())
 	// fitParameters(fitParamsName, paramGraphsName);
 }
+}
 
+TH1* getHist(std::string name, TFile* file)
+    {
+    auto hist = dynamic_cast<TH1*>(file->FindObjectAny(name.c_str()));
+    if (!hist)
+        throw std::runtime_error(name + " not found!");
+    return hist;
+}
 std::map<std::string, std::vector<std::vector<double>>> paramsFromFits(std::vector<std::vector<double>> results, std::vector<std::vector<double>> errors)
 {
 	std::map<std::string, std::vector<std::vector<double>>> data;
-	std::vector<double> x{300.0, 500.0, 700.0, 900.0, 1100.0, 1300.0};
-	std::vector<std::string> names{"a", "m", "mu", "n"};
+	std::vector<double> x{1400.0};
+	std::vector<std::string> names{"a", "m", "mu", "nu", "n"};
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		std::vector<double> y;
 		std::vector<double> e;
@@ -131,10 +172,12 @@ std::map<std::string, std::vector<std::vector<double>>> paramsFromFits(std::vect
 		for (const auto& error : errors)
 		{
 			e.push_back(error.at(i));
+
 		}
 		std::string name = joinTitles({names.at(i), "mass", names.at(i), "error"});
 		data.insert({name, {x, y, e}});
 	}	
+	return data;
 }
 
 std::map<std::string, std::vector<std::vector<double>>> getParams()
@@ -254,8 +297,8 @@ void graph(std::map<std::string, std::vector<std::vector<double>>> data, std::st
 		std::string name = value.first.substr(0, titleIndex);
 
 		// Uncomment the following two lines for graphs drawn on canvases:
-		// graph->Draw("AP");
-		// paramGraphs->WriteObject(c1, name.c_str());
+		graph->Draw("AP");
+		paramGraphs->WriteObject(c1, name.c_str());
 		paramGraphs->WriteObject(graph, name.c_str());
 	
 	}
@@ -327,7 +370,6 @@ double DoubleSidedCrystalballFunction(double *x, double *par)
 	}
 	return N*result;
 }
-
 double expGaussExp(double *x, double *par)
 {
 	double k_l = par[0]; 
@@ -352,7 +394,6 @@ double expGaussExp(double *x, double *par)
 	}
 	return N*result;
 }
-
 double breitWigner(double *x, double *par)
 {
 	//Parameters are ordered m, gamma 
@@ -366,7 +407,6 @@ double breitWigner(double *x, double *par)
 	result = k / ((x[0] * x[0] - m*m) * (x[0] * x[0] - m*m) + m*m * gamma*gamma);
 	return result;
 }
-
 double pearson(double *x, double *par)
 {
 	double a = par[0];
@@ -380,7 +420,29 @@ double pearson(double *x, double *par)
 
 	return result;
 }
+double pearsonIV(double *x, double *par)
+{
+	double a = par[0];
+	double m = par[1];
+	double mass = par[2];
+	double nu = par[3];
+	double n = par[4];
+	double result;
 
+	//std::complex<double> i(0, 1);
+	//double _Complex z = 0 + 1 * _Complex_I;
+	gsl_sf_result  resultR;
+	gsl_sf_result  resultArg;
+
+
+	int gammaResult = gsl_sf_lngamma_complex_e(m, (nu/2), &resultR, &resultArg);
+	double val = resultR.val;
+
+	double constant = n * std::abs(std::pow(10, resultR.val) / (std::tgamma(m)))/(a * std::beta(m-0.5,0.5));
+	result = constant * std::pow(1 + std::pow((x[0]-mass) / a,2), -m) * std::exp(-nu * std::atan((x[0]-mass)/a));
+
+	return result;
+}
 double studentsT(double *x, double *par)
 {
 	double nu = par[0];
@@ -395,7 +457,6 @@ double studentsT(double *x, double *par)
 	result = c * d * std::pow(b, -a);
 	return result;
 }
-
 double hyperbolicSecant(double *x, double *par)
 {
 	double mass = par[0];
@@ -407,7 +468,7 @@ double hyperbolicSecant(double *x, double *par)
 TFitResultPtr fitToDSCB(char const* name, TH1* hist, TFile* file, std::vector<double> params)
 {
 	std::cout << "fitting crystal ball\n";
-	TF1* f1 = new TF1 ("f1", DoubleSidedCrystalballFunction, 0, 1500, 7);
+	TF1* f1 = new TF1 ("f1", DoubleSidedCrystalballFunction, 0, 2000, 7);
 	f1->SetNpx(500);
 	double mass = params[1];
 	// alpha low, alpha high, n low, n high, mean, sigma, norm
@@ -417,7 +478,7 @@ TFitResultPtr fitToDSCB(char const* name, TH1* hist, TFile* file, std::vector<do
 	// f1->FixParameter(1, 3.21973);
 	// f1->FixParameter(2, 1.08);
 	// f1->FixParameter(3, 1.13612);
-	f1->SetRange(mass-50, mass+50);
+	f1->SetRange(0, 2000);
 	f1->SetLineColor(kRed);
 	TCanvas *c1 = new TCanvas("c1","Fit Canvas",0,0,1500,500);
 	TFitResultPtr results = hist->Fit(f1, "SRL");
@@ -425,7 +486,6 @@ TFitResultPtr fitToDSCB(char const* name, TH1* hist, TFile* file, std::vector<do
 	file->WriteObject(c1, name);
 	return results;
 }
-
 TFitResultPtr fitToAlternative(char const* name, TH1* hist, TFile* file, std::vector<double> params)
 {
 	
@@ -442,7 +502,6 @@ TFitResultPtr fitToAlternative(char const* name, TH1* hist, TFile* file, std::ve
 	file->WriteObject(c1, name);
 	return results;
 }
-
 TFitResultPtr fitToBW(char const* name, TH1* hist, TFile* file, std::vector<double> params)
 {
 	TCanvas *c1 = new TCanvas("c1","Fit Canvas",0,0,1500,500);
@@ -457,7 +516,6 @@ TFitResultPtr fitToBW(char const* name, TH1* hist, TFile* file, std::vector<doub
 	gStyle->SetOptFit(111111);
 	return results;
 }
-
 TFitResultPtr fitToStudentsT(char const* name, TH1* hist, TFile* file, std::vector<double> params)
 {
 
@@ -474,7 +532,6 @@ TFitResultPtr fitToStudentsT(char const* name, TH1* hist, TFile* file, std::vect
 	file->WriteObject(c1, name);
 	return results;
 }
-
 TFitResultPtr fitToHyperbolicSecant(char const* name, TH1* hist, TFile* file, std::vector<double> params)
 {
 	TCanvas *c1 = new TCanvas("c1","Fit Canvas",0,0,1500,500);
@@ -485,11 +542,11 @@ TFitResultPtr fitToHyperbolicSecant(char const* name, TH1* hist, TFile* file, st
 	f1->SetParameters(2*params[0], params[1]);
 	// f1->Draw();
 	f1->SetNpx(1000);
-	hist->Fit("hyperbolic_secant", "L");
+	TFitResultPtr result = hist->Fit("hyperbolic_secant", "L");
 	file->WriteObject(c1, name);
 	gStyle->SetOptFit(1111);
+	return result;
 }
-
 TFitResultPtr fitToPearson(char const* name, TH1* hist, TFile* file, std::vector<double> params, int i)
 {
 	TCanvas *c1 = new TCanvas("c1","Fit Canvas",0,0,1500,500);
@@ -503,5 +560,36 @@ TFitResultPtr fitToPearson(char const* name, TH1* hist, TFile* file, std::vector
 	TFitResultPtr result = hist->Fit("pearson", "RSL");
 	gStyle->SetOptFit(1111);
 	file->WriteObject(c1, name);
+	return result;
+}
+
+TFitResultPtr fitToPearsonIV(std::string name, TH1* hist, TFile* file, std::vector<double> params, std::string histsname)
+{
+
+	TCanvas *c1 = new TCanvas("c1","Fit Canvas",0,0,1500,500);
+	std::cout << "fitting pearson to: " << name << "\n";
+	auto f1 = new TF1("pearsonIV", pearsonIV, 0, 2000, 5);
+	f1->SetParNames("a", "m", "mass", "nu", "n");
+	f1->SetRange(1200, 2000);
+	//1200,1600
+	f1->S
+	f1->SetParameters(50, 5, 1400, 5, 62000);
+
+	//f1->Draw();
+	// f1->SetNpx(1000);
+
+	TFitResultPtr result = hist->Fit("pearsonIV", "S");
+	gStyle->SetOptFit(1111);
+	//writes to the file
+	std::string Graphname = name + ".png";
+	//file->WriteObject(c1, name.c_str());
+	TFile* Savefile = TFile::Open(histsname.c_str());
+	c1->Write(name.c_str());
+	hist->Write("test2");
+
+	
+
+	c1->SaveAs(Graphname.c_str());
+	//c1->SaveAll(file);
 	return result;
 }

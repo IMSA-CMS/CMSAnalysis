@@ -19,6 +19,7 @@ using std::make_shared;
 
 void TriggerPlan::initialize()
 {
+  //std::cout << "Triggers Are Running" << '\n';
   auto& modules = getModules();
 
   // Create objects
@@ -42,13 +43,15 @@ void TriggerPlan::initialize()
 
 
   // Configure objects
-  trigSimMod->enableAllTriggers(); // For testing purposes. You should probably remove this, if I haven't already
+  //trigSimMod->enableAllTriggers();
+  trigSimMod->disableAllTriggers(); // For testing purposes. You should probably remove this, if I haven't already
   // simTrigSingleElectron->enableAllTriggers();
   // simTrigSingleMuon->enableAllTriggers();
   // simTrigPhoton->enableAllTriggers();
   // USE these lines as template add my own lines
-  triggerMod->addTrigger(simTrigSingleElectron);
+  //triggerMod->addTrigger(simTrigSingleElectron);
   triggerMod->addTrigger(simTrigSingleMuon);
+  triggerMod->addTrigger(simTrigDoubleMuon);
   // triggerMod->addTrigger(simTrigDoubleElectron);
   // triggerMod->addTrigger(simTrigMuonElectron);
   // triggerMod->addTrigger(simTrigDoubleMuon);

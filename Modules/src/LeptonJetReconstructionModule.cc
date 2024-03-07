@@ -50,9 +50,10 @@ const std::vector<LeptonJet> LeptonJetReconstructionModule::findLeptonJets(Parti
       if (deltaR < DeltaRCut && recoLeptons[i].getPt() >= 5 && abs(recoLeptons[i].getEta()) <= 3)
       {
         jet.addParticle(recoLeptons[i]);
+        recoLeptons.erase(recoLeptons.begin() + i);
+        --i;
       }
-      recoLeptons.erase(recoLeptons.begin() + i);
-      --i;
+
     }
     // std::cout << "numParticles: " << jet.getNumParticles() << "\n";
     if (jet.getNumParticles() > 1)
