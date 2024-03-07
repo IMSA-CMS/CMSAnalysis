@@ -96,18 +96,6 @@ void Analyzer::writeOutputFile(const std::string &outputFile)
 //gets modules from module collection
 void Analyzer::addModules(ModuleCollection modules)
 {
-  if (modules.getProductionModules().size() == 0)
-  {
-    std::cout << "You have no production modules!" << std::endl;
-  }
-  if (modules.getFilterModules().size() == 0)
-  {
-    std::cout << "You have no filter modules!" << std::endl;
-  }
-  if (modules.getAnalysisModules().size() == 0)
-  {
-    std::cout << "You have no analysis modules!" << std::endl;
-  }
     productionModules = modules.getProductionModules();
     filterModules = modules.getFilterModules();
     analysisModules = modules.getAnalysisModules();
