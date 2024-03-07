@@ -19,6 +19,7 @@ class MiniAODEventFile : public EventFile
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;
         virtual int getNumPileUpInteractions() const override;
         virtual int getNumOfEvents() const override {return event->size();}
+        virtual std::vector<double> getPDFWeights() const override;
         virtual bool checkTrigger(std::string triggerName, std::string subProcess) const override; //checks if event passes trigger criteria
     protected:
         //virtual void getLeptons(RecoLevel level) override;
@@ -29,7 +30,7 @@ class MiniAODEventFile : public EventFile
         
         //virtual std::vector<PileupSummaryInfo> getPileupInfo() const override;
         virtual double getMET() const override;
-        
+        virtual unsigned long long getEventIDNum() const override; 
     private:
         std::shared_ptr<fwlite::Event> event = nullptr;
 };

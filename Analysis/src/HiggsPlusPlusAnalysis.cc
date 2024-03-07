@@ -17,7 +17,12 @@
 
 HiggsPlusPlusAnalysis::HiggsPlusPlusAnalysis() {
     std::vector<double> massTargets {300, 500, 700, 900, 1100, 1300, 1500, 1700};
+    //std::vector<double> massTargets {900};
     std::vector<std::string> names = {"Muon", "Electron"};
+    
+    //std::vector<std::string> particles = {"e", "u"};
+    //std::vector<std::string> names = Utility::channelMaker(particles, 4, true);
+
     TH1::SetDefaultSumw2();
     for(std::string name : names) {
         for(double massTarget : massTargets) {

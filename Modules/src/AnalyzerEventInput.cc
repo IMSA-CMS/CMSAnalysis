@@ -61,7 +61,7 @@ ParticleCollection<Particle> AnalyzerEventInput::getJets(RecoLevel level) const
 {
     ParticleCollection<Particle> particleList;
     if (level == RecoLevel::GenSim)
-    {
+    {        
         throw std::runtime_error("GenSim Jets not implemented");
     }
     else if (level == RecoLevel::Reco)
@@ -85,6 +85,11 @@ double AnalyzerEventInput::getMET() const
     return (*eventInterface)->getMET();
 }
 
+unsigned long long AnalyzerEventInput::getEventIDNum() const
+{
+    return (*eventInterface)->getEventIDNum();
+} 
+
 std::vector<bool> AnalyzerEventInput::getTriggerResults(std::string subProcess) const
 {
     return (*eventInterface)->getTriggerResults(subProcess);
@@ -104,4 +109,8 @@ bool AnalyzerEventInput::checkTrigger(std::string triggerName, std::string subPr
 const std::shared_ptr<FileParams> AnalyzerEventInput::getFileParams() const
 {
     return (*eventInterface)->getFileParams();
+}
+std::vector<double> AnalyzerEventInput::getPDFWeights() const
+{
+    return (*eventInterface)->getPDFWeights();
 }

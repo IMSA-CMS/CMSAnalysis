@@ -17,6 +17,10 @@ double RootEventInterface::getMET() const
 {
     return eventFile->getMET();
 }
+unsigned long long RootEventInterface::getEventIDNum() const
+{
+    return eventFile->getEventIDNum(); 
+}
 std::vector<bool> RootEventInterface::getTriggerResults(std::string subProcess) const
 {
     return eventFile->getTriggerResults(subProcess);
@@ -37,4 +41,8 @@ bool RootEventInterface::checkTrigger(std::string triggerName, std::string subPr
 const std::shared_ptr<FileParams> RootEventInterface::getFileParams() const
 {
     return eventFile->getFileParams();
+}
+std::vector<double> RootEventInterface::getPDFWeights() const
+{
+    return eventFile->getPDFWeights();
 }

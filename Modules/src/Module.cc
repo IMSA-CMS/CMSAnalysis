@@ -28,7 +28,7 @@ void Module::addRequiredModule(std::shared_ptr<Module> module)
   }
 }
 
-const FileParams* Module::getFileParams() const 
+const std::shared_ptr<FileParams> Module::getFileParams() const 
 {
   return input->getFileParams();
 }

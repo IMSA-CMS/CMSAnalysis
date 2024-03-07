@@ -45,7 +45,7 @@ ParticleCollection<Particle> MiniAODEventFile::getRecoParticles() const
 
         for (const auto& p : *electrons)
 	    {       
-	        recoParticles.addParticle(Particle(&p)); 
+            recoParticles.addParticle(Particle(&p)); 
 	    }
 
         edm::Handle<std::vector<pat::Muon>> muons;
@@ -53,7 +53,7 @@ ParticleCollection<Particle> MiniAODEventFile::getRecoParticles() const
 
         for (const auto& p : *muons)
 	    {       
-	        recoParticles.addParticle(Particle(&p));
+            recoParticles.addParticle(Particle(&p));
         }
 
         edm::Handle<std::vector<pat::Photon>> photons;
@@ -61,7 +61,7 @@ ParticleCollection<Particle> MiniAODEventFile::getRecoParticles() const
 
         for (const auto& p : *photons)
 	    {       
-	        recoParticles.addParticle(Particle(&p));
+            recoParticles.addParticle(Particle(&p));
         }
         return recoParticles;
 }
@@ -98,6 +98,11 @@ double MiniAODEventFile::getMET() const
         return p.corPt(pat::MET::METCorrectionLevel::Type1);
     }
     throw std::runtime_error("There are no MET objects found");
+}
+
+unsigned long long MiniAODEventFile::getEventIDNum() const
+{
+    throw std::runtime_error("MiniAODEventFile has no implementation of getEventIDNum");
 }
 
 std::vector<bool> MiniAODEventFile::getTriggerResults(std::string subProcess) const
@@ -143,7 +148,7 @@ bool MiniAODEventFile::checkTrigger(std::string triggerName, std::string subProc
 
         if (names[i].substr(0, triggerName.length()).compare(triggerName) == 0 && results[i])
         {
-            // std::cout << "Is THISIS part running?" << "\n";
+            // std::cout << "Is THIS part running?" << "\n";
             return true;
         }
         // std::cout << "Is this part running?" << "\n";
@@ -167,4 +172,9 @@ bool MiniAODEventFile::checkTrigger(std::string triggerName, std::string subProc
 bool MiniAODEventFile::isDone() const
 {
     return event->atEnd();
+}
+
+std::vector<double> MiniAODEventFile::getPDFWeights() const
+{
+    throw "Function not implemented";
 }

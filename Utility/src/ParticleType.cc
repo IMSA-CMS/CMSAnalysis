@@ -2,11 +2,12 @@
 #include "CMSAnalysis/Utility/interface/HistParams.hh"
 #include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
+#include "CMSAnalysis/Utility/interface/LeptonJet.hh"
 
 #include <fstream>
-#include<string>
-#include<vector>
-#include<functional>
+#include <string>
+#include <vector>
+#include <functional>
 
 std::unordered_map<int,ParticleType> ParticleType::typeList = std::unordered_map<int,ParticleType>();
 
@@ -79,9 +80,10 @@ bool ParticleType::loadParticle(std::ifstream& file)
     chargeType = std::stoi(std::string(tempString)) / 3.0;
 
     std::vector<HistParams> defaultHistParams = {getPtHist(),getPhiHist(),getEtaHist()};
-    std::vector<CollectionHistParams> defaultCollectionHistParams = {getNumberHist()}; 
+    std::vector<CollectionHistParams> defaultCollectionHistParams = {getNumberHist(), getSameSignInvariantMassHist(), getOppositeSignInvariantMassHist()}; 
     
     registerType(name, pdgID, chargeType, defaultHistParams, defaultCollectionHistParams);
+
 
     return true;
 }
@@ -118,6 +120,7 @@ bool ParticleType::loadParticleDatabase(const std::string& fileName)
         file.ignore(100, '\n');
         
     }
+    particleTypeOverrides();
     return true;
 }
 
@@ -151,7 +154,8 @@ void ParticleType::particleTypeOverrides()
     std::vector<CollectionHistParams>{getNumberHist()}); 
 
     registerType("Lepton Jet",29,0,
-    std::vector<HistParams>{getPtHist(),getPhiHist(),getEtaHist()},
+    std::vector<HistParams>{getPtHist(),getPhiHist(),getEtaHist(), getLeptonJetDeltaRHist(), getLeptonJetMassHist(),
+        getLeptonJetMassHistZoomed()},
     std::vector<CollectionHistParams>{getNumberHist()}); 
 }
 
@@ -177,12 +181,12 @@ CollectionHistParams ParticleType::getNumberHist()
 
 CollectionHistParams ParticleType::getSameSignInvariantMassHist()
 {
-    return CollectionHistParams("Same Sign Invariant Mass", 150, 0, 2000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateSameSignInvariantMass()};});
+    return CollectionHistParams("Same Sign Invariant Mass", 150, 0, 2000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateSameSignInvariantMass(false, true)};});
 }
 
 CollectionHistParams ParticleType::getOppositeSignInvariantMassHist()
 {
-    return CollectionHistParams("Opposite Sign Invariant Mass", 150, 0, 1000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateOppositeSignInvariantMass()};});
+    return CollectionHistParams("Opposite Sign Invariant Mass", 150, 0, 1000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateOppositeSignInvariantMass(true)};});
 }
 
 HistParams ParticleType::getDaughterDeltaRHist()
@@ -196,6 +200,30 @@ HistParams ParticleType::getDaughterDeltaRHist()
             return std::vector<double>{deltaR};
         }
         return std::vector<double>{};
+    });
+}
+
+HistParams ParticleType::getLeptonJetDeltaRHist()
+{
+   return HistParams("Lepton Jet Delta R", 100, 0, 5, [](Particle particle){
+    auto leptonJet = LeptonJet(particle);
+    return std::vector<double>{leptonJet.getDeltaR()};
+    });
+}
+
+HistParams ParticleType::getLeptonJetMassHist()
+{
+    return HistParams("Lepton Jet Mass", 100, 0, 100, [](Particle particle){
+    auto leptonJet = LeptonJet(particle);
+    return std::vector<double>{leptonJet.getMass()};
+    });
+}
+
+HistParams ParticleType::getLeptonJetMassHistZoomed()
+{
+    return HistParams("Lepton Jet Mass Zoom", 100, 0, 10, [](Particle particle){
+    auto leptonJet = LeptonJet(particle);
+    return std::vector<double>{leptonJet.getMass()};
     });
 }
 

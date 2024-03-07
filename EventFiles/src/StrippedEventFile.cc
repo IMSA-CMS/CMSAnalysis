@@ -146,7 +146,17 @@ double StrippedEventFile::getMET() const
     return static_cast<double>(0);
 }
 
+unsigned long long StrippedEventFile::getEventIDNum() const
+{
+    throw std::runtime_error("StrippedEventFile has no implementation of getEventIDNum");  
+}
+
 bool StrippedEventFile::isDone() const
 {
     return getEventCount() > tree->GetEntries();
+}
+
+std::vector<double> StrippedEventFile::getPDFWeights() const
+{
+    throw "Function not implemented";
 }

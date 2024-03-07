@@ -24,10 +24,12 @@ class EventFile
         virtual int getNumOfEvents() const = 0;
         int getEventCount() const {return eventCount;}
         virtual double getMET() const = 0;
+        virtual unsigned long long getEventIDNum() const = 0; 
         virtual int getNumPileUpInteractions() const = 0;
         TFile* getFile() {return file;}
         virtual bool checkTrigger(std::string triggerName, std::string subProcess) const = 0; //checks if event passes trigger criteria
-        virtual void nextEvent() = 0;
+        virtual void nextEvent()=0;
+        virtual std::vector<double> getPDFWeights() const = 0;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const = 0;
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const = 0;
         const std::shared_ptr<FileParams> getFileParams() const {return params;}

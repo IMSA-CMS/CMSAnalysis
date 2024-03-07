@@ -18,9 +18,9 @@
 class ParticleType
 {
     public:
-    std::string getName() const {return name;};
-    int getpdgId() const {return pdgId;};
-    double getCharge() const {return charge;};
+    std::string getName() const {return name;}
+    int getpdgId() const { return pdgId;}
+    double getCharge() const {return charge;}
     std::vector<HistParams> getParticleHists() const;
     std::vector<CollectionHistParams> getCollectionHists() const;
 
@@ -76,6 +76,10 @@ class ParticleType
     static CollectionHistParams getNumberHist();
     static CollectionHistParams getSameSignInvariantMassHist();
     static CollectionHistParams getOppositeSignInvariantMassHist();
+
+    static HistParams getLeptonJetDeltaRHist();
+    static HistParams getLeptonJetMassHist();
+    static HistParams getLeptonJetMassHistZoomed();
 
     static bool loadParticle(std::ifstream& file);
     //Lets you manually change the particle types in the method definition

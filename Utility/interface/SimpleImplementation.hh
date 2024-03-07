@@ -16,7 +16,8 @@ class SimpleImplementation : public ParticleImplementation
         virtual reco::Candidate::LorentzVector getFourVector() const override;
         virtual int charge() const override;
 
-        virtual int pdgId() const override{throw std::runtime_error("pdgId() error");}
+        // virtual int pdgId() const override{ throw std::runtime_error("pdgId() error");}
+        virtual int pdgId() const override{ return getType().getpdgId(); }
         virtual int status() const override{throw std::runtime_error("status() error");}
         virtual Particle mother() const override{throw std::runtime_error("mother() error");}
         virtual Particle daughter(int i) const override{throw std::runtime_error("daughter() error");}

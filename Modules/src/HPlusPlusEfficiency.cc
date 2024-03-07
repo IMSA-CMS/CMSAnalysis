@@ -6,6 +6,10 @@
 #include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
 #include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
+#include "CMSAnalysis/Utility/interface/TableWriter.hh"
+#include "CMSAnalysis/Utility/interface/TableData.hh"
+#include "CMSAnalysis/Utility/interface/LatexTable.hh"
+#include "CMSAnalysis/Utility/interface/PowerpointTable.hh"
 
 HPlusPlusEfficiency::HPlusPlusEfficiency():
   EfficiencyModule()
@@ -38,163 +42,128 @@ void HPlusPlusEfficiency::doCounters()
   incrementCounter("r" + recoDecay, 1);
 
   incrementCounter("events", 1);
-
-  
-
-  // auto genSim = getInput()->getParticles(InputModule::RecoLevel::GenSim);
-  // auto reco = getInput()->getParticles(InputModule::RecoLevel::Reco);
-
-  // std::vector<GenSimParticle> pair;
-
-  // for(auto &particle1 : genSim)
-  // {
-  //   auto particle = GenSimParticle(particle1);
-  //   if(particle.getType() == ParticleType::electron() || particle.getType() == ParticleType::muon())
-  //   {
-  //     if(pair.size() == 0)
-  //     {
-  //       if(particle.isFinalDaughter() && particle.mother().getType() == ParticleType::photon())
-  //       {
-  //         pair.push_back(particle);
-  //       }
-  //     }
-  //     else if(pair.size() == 1)
-  //     {
-  //       if(particle.isFinalDaughter() && particle.mother().getType() == ParticleType::photon() && pair.at(0).mother() == particle.mother())
-  //       {
-  //         pair.push_back(particle);
-  //       }
-  //     }
-  //   }
-  //   if(pair.size() == 2)
-  //   {
-  //     break;
-  //   }
-  // }
-
-  // ParticleType type = pair.at(0).getType();
-
-  // std::vector<Particle> rpair;
-
-  // double charge = 0;
-
-  // for(auto &particle : reco)
-  // {
-  //   if(pair.size() == 0)
-  //   {
-  //     if(particle.getType() == type)
-  //     {
-  //       charge = particle.getCharge();
-  //       rpair.push_back(particle);
-  //     }
-  //   }
-  //   else if(pair.size() == 1)
-  //   {
-  //     if(particle.getType() == type && particle.getCharge() == -charge)
-  //     {
-  //       rpair.push_back(particle);
-  //     }
-  //   }
-  //   if(rpair.size() == 2)
-  //   {
-  //     break;
-  //   }
-  // }
-
-  // if(rpair.size() == 0)
-  // {
-  //   for(int i = 0; i < 2; i++)
-  //   {
-  //     std::cout << "Eta: " << pair.at(i).getEta() << std::endl;
-  //     std::cout << "pT: " << pair.at(i).getPt() << std::endl;
-  //   }
-  // }
-  // else if(rpair.size() == 1)
-  // {
-  //   for(int i = 0; i < 2; i++)
-  //   {
-  //     if(pair.at(i).getCharge() == -rpair.at(0).getCharge())
-  //     {
-  //       std::cout << "Eta: " << pair.at(i).getEta() << std::endl;
-  //       std::cout << "pT: " << pair.at(i).getPt() << std::endl;
-  //     }
-  //   }
-  // }
-
-  // std::cout << "-----" << std::endl;
 }
 
 void HPlusPlusEfficiency::finalize()
 {
   EfficiencyModule::finalize();
 
-  std::string filestr = "\n";
+  bool hardCoded = true;
+
+  std::vector<std::vector<std::string>> separatedValues;
+  std::vector<std::vector<std::string>> wholeValues;
+
+  std::vector<double> genDecayCounts;
+  double eventNum;
+
+  if (hardCoded)
+  {
+    genDecayCounts = genSimDecayCounts;
+    
+    eventNum = numEvents;
+  }
+  else
+  {
+    for (auto decay : genSimDecays)
+    {
+      try
+      {
+        genDecayCounts.push_back(getCounter(decay));
+      }
+      catch(std::out_of_range&)
+      {
+        genDecayCounts.push_back(0);
+      }
+    }
+
+    eventNum = getCounter("events");
+  }
 
   for (int i = 0; i < 21; i++)
   {
     for (int j = 0; j < 19; j++)
     {
+      std::string value;
+
       try
       {
         std::string decay = genSimDecays.at(i) + "->" + recoDecays.at(j);
-        filestr += std::to_string(getCounter(decay)/(double)getCounter(genSimDecays.at(i)));
+        if (genDecayCounts.at(i) == 0)
+        {
+          value = "0";
+        }
+        else
+        {
+          value = std::to_string(getCounter(decay)/genDecayCounts.at(i));
+        }
       }
       catch (std::out_of_range&)
       {
-        filestr += "0";
+        value = "0";
       }
-      if (j != 18)
-      {
-        filestr += ",";
-      }
+      
+      std::vector<std::string> input = {recoDecays.at(j), genSimDecays.at(i), value};
+      separatedValues.push_back(input);
     }
-    filestr += "\n";
   }
-
-  // for (int i = 0; i < 19; i++)
-  // {
-  //   for (int j = 0; j < 21; j++)
-  //   {
-  //     try
-  //     {
-  //       std::string decay = genSimDecays.at(j) + "->" + recoDecays.at(i);
-  //       filestr += std::to_string(getCounter(decay)/(double)getCounter(recoDecays.at(i)));
-  //     }
-  //     catch (std::out_of_range&)
-  //     {
-  //       filestr += "0";
-  //     }
-  //     if (j != 20)
-  //     {
-  //       filestr += ",";
-  //     }
-  //   }
-  //   filestr += "\n";
-  // }
-
-  filestr += "-----\n";
   
   for (int i = 0; i < 19; i++)
   {
+    std::string value;
+
     try
     {
-      filestr += std::to_string(getCounter("r" + recoDecays.at(i))/(double)getCounter("events"));
+      value = std::to_string(getCounter("r" + recoDecays.at(i))/eventNum);
     }
     catch (std::out_of_range&)
     {
-      filestr += "0";
+      value = "0";
     }
-    if (i != 18)
-    {
-      filestr += ",";
-    }
+
+    std::vector<std::string> input = {recoDecays.at(i), "all", value};
+    wholeValues.push_back(input);
   }
 
-  filestr += "\n";
+  // This is to find hard-coded denominators (use with no cuts applied)
+  // std::string str;
+  // for (int i = 0; i < 21; i++)
+  // {
+  //   try
+  //   {
+  //     str += std::to_string(getCounter(genSimDecays.at(i)));
+  //   }
+  //   catch (std::out_of_range&)
+  //   {
+  //     str += "0";
+  //   }
+  //   if (i != 20)
+  //   {
+  //     str += ", ";
+  //   }
+  // }
+  // std::cout << str << std::endl;
 
-  // std::ofstream file("data.txt");
-  // file << filestr;
-  // file.close();
+  PowerpointTable table1;
+  PowerpointTable table2;
 
-  std::cout << filestr << std::endl;
+  TableData separatedData(separatedValues);
+  TableData wholeData(wholeValues);
+
+  auto p1 = std::make_shared<TableData>(separatedData);
+  auto p2 = std::make_shared<TableData>(wholeData);
+
+  std::string filename1 = "CMSAnalysis/Modules/separatedTable.txt";
+  std::string filename2 = "CMSAnalysis/Modules/wholeTable.txt";
+
+  std::ofstream file1;
+  std::ofstream file2;
+
+  file1.open(filename1);
+  file2.open(filename2);
+
+  table1.makeTable(p1, std::cout);
+  table2.makeTable(p2, std::cout);
+
+  file1.close();
+  file2.close();
 }

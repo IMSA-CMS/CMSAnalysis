@@ -20,6 +20,8 @@ void HPlusPlusGenSimSelector::selectParticles(const EventInput *input, Event &ev
     {
         GenSimParticle genSimParticle = GenSimParticle(particle);
 
+        // std::cout << particle.getName() << " (" << genSimParticle.pdgId() << "): " << std::to_string(particle.getCharge()) << std::endl;
+
         // if(particle.getType() == ParticleType::electron() || particle.getType() == ParticleType::muon())
         // {
         //     std::cout << particle.getName() << " (" << genSimParticle.pdgId() << "): " << std::to_string(particle.getCharge()) << std::endl;

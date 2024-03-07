@@ -56,7 +56,7 @@ bool LeptonJetMatchingModule::process()
       bool passedDarkPhoton = false;
       GenSimParticle particle = lepton;
       bool forgetIt = false;
-      while(!(isQuark(particle) || isSquark(particle) || particle.status() == 4))
+      while(!(isQuark(particle) || isSquark(particle) || isHiggs(particle) || particle.status() == 4))
       {
         if(particle.hasMother() == false) break;
         particle = particle.mother();
@@ -84,6 +84,13 @@ bool LeptonJetMatchingModule::process()
         else
         {
           squark++;
+        }
+      }
+      if(isHiggs(particle))
+      {
+        if(passedDarkPhoton)
+        {
+          darkPhotonOrigin++;
         }
       }
       if(particle.status() == 4)
@@ -192,6 +199,7 @@ const std::vector<std::pair<Particle,LeptonJet>> LeptonJetMatchingModule::getMat
   }
   return matchedLeptonJets;
 }
+
 const bool LeptonJetMatchingModule::isQuark(GenSimParticle lepton) 
 {
   if(abs(lepton.pdgId()) == 1 || abs(lepton.pdgId()) == 2 || abs(lepton.pdgId()) == 3 || abs(lepton.pdgId()) == 4)
@@ -220,5 +228,11 @@ const bool LeptonJetMatchingModule::isSquark(GenSimParticle lepton)
   }
   return false;
 }
-
-
+const bool LeptonJetMatchingModule::isHiggs(GenSimParticle lepton)
+{
+  if(abs(lepton.pdgId()) == 25)
+  {
+    return true;
+  }
+  return false;
+}

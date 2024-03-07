@@ -3,6 +3,10 @@
 #include <fstream>
 #include "CMSAnalysis/Utility/interface/Utility.hh"
 
+PickFileParams::PickFileParams(std::string process,  std::map<std::string, std::string> parameters) :
+    FileParams(process, parameters)
+{}
+
 std::string PickFileParams::getFileName() const
 {
     std::ostringstream stream;

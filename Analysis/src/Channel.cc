@@ -89,6 +89,7 @@ void Channel::makeDatacard(std::shared_ptr<Channel> channel)
    
 
     datacard<< std::setw(20) << std::left << "process"<< std::left;
+	datacard<<"\n";
 
     for(auto process : channel->getProcesses())
     {
@@ -106,6 +107,71 @@ void Channel::makeDatacard(std::shared_ptr<Channel> channel)
     }
 	datacard<<"\n";
 }
+
+
+void Channel::CombineDatacard(std::shared_ptr<Channel> channel)
+{
+	std::string channelName = channel->getName();
+	std::string filename=channelName+".txt";
+	std::ofstream datacard (filename);
+	if(!datacard)
+	{
+		throw std::runtime_error("Unable to create file");
+	}
+	
+	datacard << "\nimax    1 number of bins\n";
+    datacard << "jmax    4 number of processes minus 1\n";
+	datacard << "kmax 0 number of nuisance parameters\n";
+    datacard << "----------------------------------------------------------------------------------------------------------------------------------\n";
+    for(auto process : channel->getProcesses())
+    {
+        auto processName=Utility::substitute(process->getName()," ", "_");
+    	datacard<< "shapes" << std::setw(20)<< processName << std::setw(20) << channelName << std::setw(40) << "Genhiggsworkspace.root  " << "higgsworkspace.root:" << processName << "\n"; 
+    }
+	datacard<< "shapes				data_obs" << std::setw(20) <<channelName << std::setw(50) <<"Genhiggsworkspace.root Genhiggsworkspace:" << channelName << "Events\n";
+
+	datacard << "----------------------------------------------------------------------------------------------------------------------------------\n";
+	datacard <<"bin    ";
+	
+	for (auto i = 0; i < 5; i++) 
+	{
+  		 datacard <<std::setw(20) << std::left << channelName;
+	}
+   
+	datacard<<"\n";
+
+    datacard<< std::setw(20) << std::left << "process"<< std::left;
+
+    for(auto process : channel->getProcesses())
+    {
+        auto processName=Utility::substitute(process->getName()," ", "_");
+    	datacard<< std::setw(20) << std::left << processName;
+    }
+	datacard<<"\n";
+	
+	datacard<< std::setw(20) << std::left << "process"<< std::left;
+
+	for (auto i = 0; i < 5; i++) 
+	{
+		if(i <4)
+  		datacard <<std::setw(20) << std::left << i;
+		else
+		datacard <<std::setw(20) << std::left << -1;
+	}
+   
+
+
+    datacard<<"\n";
+    datacard<< std::setw(20) << std::left << "rate";
+            
+	for (auto process : channel->getProcesses())
+    {
+    	auto yield=std::to_string(process->getYield("Invariant Mass"));
+        datacard<< std::setw(20) << std::left <<yield;
+    }
+	datacard<<"\n";
+}
+
 
 void Channel::addProcessLabel(std::string label, std::vector<std::shared_ptr<Process>> processes)
 {
