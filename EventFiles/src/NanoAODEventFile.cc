@@ -295,9 +295,10 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
     }
     for (auto& particle : recoParticles)
     {
+        particle.addInfo("numPDFs", getVariable<UInt_t>("num_pdfs"));
         for(UInt_t i = 0; i < getVariable<UInt_t>("num_pdfs"); ++i)
         {
-            particle.addInfo("PDFWeight"+std::to_string(i), getArrayElement<Float_t>("pdf_weight", i));
+            particle.addInfo("pweight"+std::to_string(i), getArrayElement<Float_t>("pdf_weight", i));
         }
      
     }
