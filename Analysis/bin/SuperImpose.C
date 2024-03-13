@@ -19,18 +19,24 @@ void SuperImpose() {
     //Change extraText here
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary");
     //Change the filePath here. This should be the longest branch all input files have in common.
-    const std::string filePath = "/uscms/home/vrao/analysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/";
+    //const std::string filePath = "/uscms/home/vrao/analysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/";
+    const std::string filePath = "/uscms/home/gomalley/analysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/";
     //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
     //Write your graph names here (for the legend)
     
-    std::vector<std::string> files = {"test1000.root", "HiggsDPZ.root", "ZPrime.root", "SUSY.root", "Higgs4DP.root"};
-    std::vector<std::string> hists = {"Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values"};
-    std::vector<TString> names = {"Higgs to 2 Dark Photon", "Higgs to Z and Dark Photon", "Z Prime", "SUSY", "Higgs to 4 Dark Photon"};
+    // std::vector<std::string> files = {"test1000.root", "HiggsDPZ.root", "ZPrime.root", "SUSY.root", "Higgs4DP.root"};
+    // std::vector<std::string> hists = {"Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values"};
+    // std::vector<TString> names = {"Higgs to 2 Dark Photon", "Higgs to Z and Dark Photon", "Z Prime", "SUSY", "Higgs to 4 Dark Photon"};
+
+    std::vector<std::string> files = {"dyc.root", "dya.root", "dyu.root"};
+    std::vector<std::string> hists = {"1st Highest Lepton Jet Eta", "1st Highest Lepton Jet Eta", "1st Highest Lepton Jet Eta"};
+    std::vector<TString> names = {"Drell Yan Cut", "Drell Yan Anticut", "Drell Yan Uncut"};
 
     //Colors go here
-    std::vector<int> colors = {1, 2, 3, 4, 5};
+    std::vector<int> colors = {2, 4, 6, 1, 3};
     //Change x and y axis titles here
-    TString xTitle = "Gamma";
+    //TString xTitle = "Gamma";
+    TString xTitle = "Lepton Jet Delta R";
     TString yTitle = "Events (1/Integral)";
 
 
@@ -45,7 +51,11 @@ void SuperImpose() {
         if(!openedFile) {
             throw std::runtime_error("Cannot open file!");
             }
-        hist = dynamic_cast<TH1*>(openedFile->Get(hists.at(count).c_str()));
+        auto dir = openedFile->GetDirectory("_hists");
+        if(!dir) {
+            throw std::runtime_error("Cannot find directory!");
+            }
+        hist = dynamic_cast<TH1*>(dir->Get(hists.at(count).c_str()));
         if (!hist)
         {
             throw std::runtime_error("Histogram " + hists.at(count) + " not found!");

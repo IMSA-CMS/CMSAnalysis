@@ -2,8 +2,13 @@ from subprocess import run
 from multiprocessing import Process 
 
 def loopRun(*fileList):
+<<<<<<< HEAD
 	#path = "textfiles/"
 
+=======
+	path = "textfiles/"
+	#path = "newnewHiggs/"
+>>>>>>> b2da4b427dc2d0886fce69a47bbe8098528e7418
 	for file in fileList:
 		# Filling in the parameters of runAnalyzer
 		analysisBackground = "HiggsBackground"
@@ -14,9 +19,15 @@ def loopRun(*fileList):
 		#process = file[0:file.rfind("/")]
 		outputString = "output=" + name + ".root"
 				
-		if file == "Higgs1400.txt" or file == "Higgs600.txt" or file == "Higgs800.txt" or file == "Higgs1000.txt" or file == "Higgs1200.txt":	
+		if file[0:5] == "Higgs":	
 			analysisName = "analysis=" + analysisSignal
 			inputString = "input=" + file
+<<<<<<< HEAD
+=======
+		# elif file == "Higgs1300.txt" or file == "Higgs1500.txt":
+		# 	analysisName = "analysis=" + analysisSignal
+		# 	inputString = "input=" + path + file
+>>>>>>> b2da4b427dc2d0886fce69a47bbe8098528e7418
 		else:
 			analysisName = "analysis=" + analysisBackground
 			#inputString = "input=" + path + file
@@ -41,8 +52,12 @@ if __name__ == '__main__':
 	multiBoson = ("MultiBoson/MultiBoson_Bosons_WW_Decay_2L_Run_2.txt", "MultiBoson/MultiBoson_Bosons_WWW_Decay_NA_Run_2.txt", "MultiBoson/MultiBoson_Bosons_WWZJets_Decay_4L_Run_2.txt",
 	"MultiBoson/MultiBoson_Bosons_WZ_Decay_3L_Run_2.txt", "MultiBoson/MultiBoson_Bosons_WZZ_Decay_NA_Run_2.txt", "MultiBoson/MultiBoson_Bosons_ZZZ_Decay_NA_Run_2.txt")
 
+<<<<<<< HEAD
 	#higgsSignal = ("Higgs800.txt","Higgs1000.txt","Higgs1200.txt", )
 	higgsSignal = ("Higgs1400.txt", )
+=======
+	higgsSignal = ("Higgs500.txt","Higgs600.txt","Higgs700.txt","Higgs800.txt","Higgs900.txt","Higgs1000.txt","Higgs1100.txt","Higgs1200.txt","Higgs1300.txt","Higgs1400.txt","Higgs1500.txt" )
+>>>>>>> b2da4b427dc2d0886fce69a47bbe8098528e7418
 
 	#higgsData = ("Data/SingleMuonRun2017B-UL2017_MiniAODv2-v1.txt", "Data/SingleElectronRun2017B-UL2017_MiniAODv2-v1.txt")
 	higgsData = (

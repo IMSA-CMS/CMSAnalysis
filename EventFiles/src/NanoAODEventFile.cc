@@ -42,7 +42,7 @@ std::vector<std::string> NanoAODEventFile::getTriggerNames(std::string subProces
 bool NanoAODEventFile::checkTrigger(std::string triggerName, std::string subProcess) const
 {
     // add cout statement to check, it in fact does pass through this code
-    // std::cout << "Does this Trigger work?" << "\n";
+    //std::cout << "Does this Trigger work?" << "\n";
     //std::cout << triggerName << "\n";
     auto trigger = triggers.find(triggerName);
     if (trigger == triggers.end()) 
@@ -67,8 +67,8 @@ bool NanoAODEventFile::checkTrigger(std::string triggerName, std::string subProc
      
 }
 
-NanoAODEventFile::NanoAODEventFile(TFile *ifile) : 
-    EventFile(ifile)
+NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> iparams) : 
+    EventFile(ifile, iparams)
     {
     //initializing variables from header file
     std::vector<std::shared_ptr<TreeVariableBase>> treeVariables = {
@@ -116,6 +116,8 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_mass", "GenPart_mass"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pt", "GenPart_pt"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_m1", "GenPart_genPartIdxMother"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("pdf_weight", "LHEPdfWeight"),
+        std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("num_pdfs", "nLHEPdfWeight"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pileup", "Pileup_nTrueInt"),
         std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("HEEP_bitmap", "Electron_vidNestedWPBitmapHEEP"),
         std::make_shared<TreeVariable<TTreeReaderValue<ULong64_t>>>("event", "event")
@@ -240,9 +242,9 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         getArrayElement<Float_t>("elec_dz", i),
         charge, ParticleType::electron(), fit);
         // std::cout << "NanoAOD: " << getArrayElement<Bool_t>("elec_cutBasedHEEP", i) << '\n';
-        particle.addInfo("CutBasedHEEP", getArrayElement<Bool_t>("elec_cutBasedHEEP", i));  
+//        particle.addInfo("CutBasedHEEP", getArrayElement<Bool_t>("elec_cutBasedHEEP", i));
         particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i));
-        particle.addInfo("HEEP_map", getArrayElement<Int_t>("HEEP_bitmap", i)); 
+//        particle.addInfo("HEEP_map", getArrayElement<Int_t>("HEEP_bitmap", i)); 
         particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
         particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
         recoParticles.addParticle(particle);
@@ -325,4 +327,15 @@ int NanoAODEventFile::getNumPileUpInteractions() const
 bool NanoAODEventFile::isDone() const
 {
     return getEventCount() > tree->GetEntries();
+}
+
+std::vector<double> NanoAODEventFile::getPDFWeights() const
+{
+    std::vector<double> pdfWeights;
+    for (UInt_t i = 0; i < getVariable<UInt_t>("num_pdfs"); ++i)
+    {
+        pdfWeights.push_back((double) getArrayElement<Float_t>("pdf_weight", i));
+    }
+
+    return pdfWeights;
 }
