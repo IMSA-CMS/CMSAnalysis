@@ -10,7 +10,7 @@ bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) c
     const auto particles = event.getParticles();
 
     int numLeptons = particles.getLeptonTypeCount(ParticleType::electron()) + particles.getLeptonTypeCount(ParticleType::muon());
-    double leptonPt; 
+    // double leptonPt = 0; 
     ParticleType leptonType;
 
     if (numLeptons == 4 || numLeptons == 2)
@@ -24,13 +24,13 @@ bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) c
         if (particles.getNumPosParticles() == 2)
         {
             auto particle = particles.getNegParticles()[0];
-            leptonPt = particle.getPt();
+            // leptonPt = particle.getPt();
             leptonType = particle.getType();
         }
         else if (particles.getNumNegParticles() == 2)
         {
             auto particle = particles.getPosParticles()[0];
-            leptonPt = particle.getPt();
+            // leptonPt = particle.getPt();
             leptonType = particle.getType();
         }
         else
@@ -40,25 +40,37 @@ bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) c
             {
                 if (particle != particlePair.first && particle != particlePair.second)
                 {
-                    leptonPt = particle.getPt();
+                    // leptonPt = particle.getPt();
                     leptonType = particle.getType();
                 }
             }
         }
 
-        if (leptonType == ParticleType::electron() && leptonPt > electronThreeChannelCut)
-        {
-            return true;
-        }
-        else if (leptonType == ParticleType::muon() && leptonPt > muonThreeChannelCut)
-        {
-            return true;
-        }
+        // if (leptonType == ParticleType::electron() && leptonPt > electronThreeChannelCut)
+        // {
+        //     return true;
+        // }
+        // else if (leptonType == ParticleType::muon() && leptonPt > muonThreeChannelCut)
+        // {
+        //     return true;
+        // }
 
         return false;
+        // return false;
     } 
     else
     {
-        return true;
+        auto electrons = event.getElectrons();
+        auto muons = event.getMuons();
+        if (electrons.size() == 2 
+        && muons.size() == 2
+        && electrons[0].getCharge() == electrons[1].getCharge()
+        && muons[0].getCharge() == muons[1].getCharge()
+        && electrons[0].getCharge() != muons[0].getCharge()
+        ) 
+        {
+            return true;
+        }
+        return false;
     }
 }

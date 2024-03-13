@@ -9,6 +9,7 @@
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "RootEventInterface.hh"
 #include "Analyzer.hh"
+#include "CMSAnalysis/Utility/interface/FileParams.hh"
 
 class TFile;
 class EventFile;
@@ -19,10 +20,10 @@ class EventLoader
 {
     public:
         //Constructor
-        EventLoader(std::vector<std::string> fileList, Analyzer *nAnalyzer){rootFiles = fileList; modules = nAnalyzer;}
+        EventLoader(std::vector<std::shared_ptr<FileParams>> fileList, Analyzer *nAnalyzer);
 
         //Changes file to approproate format
-        std::shared_ptr<EventFile> changeFileFormat(TFile* ifile);
+        std::shared_ptr<EventFile> changeFileFormat(TFile* ifile, std::shared_ptr<FileParams> iparams);
         void initialize();
 
         //Advances to next file
@@ -33,7 +34,7 @@ class EventLoader
 
         int getNumOfEvents() const {return numOfEvents;}
 
-        static std::vector<std::string> fetchRootFiles(const std::string &configFile);
+        static std::vector<std::shared_ptr<FileParams>> fetchRootFiles(const std::string &configFile);
 
     protected:
         int numOfEvents;
@@ -45,7 +46,7 @@ class EventLoader
         
         void processRootFiles(int outputEvery, int nFiles, int maxEvents);
 
-        std::vector<std::string> rootFiles;
+        std::vector<std::shared_ptr<FileParams>> rootFiles;
         Analyzer *modules; 
         std::shared_ptr<EventFile> file = nullptr;
         RootEventInterface eventInterface = RootEventInterface();

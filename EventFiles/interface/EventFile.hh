@@ -9,13 +9,13 @@
 #include "CMSAnalysis/DataCollection/interface/EventInterface.hh"
 
 class TFile;
-
+class FileParams;
 
 //EventFile class is a container for a Tfile for events
 class EventFile
 {
     public:
-        EventFile(TFile* ifile): file(ifile) {}
+        EventFile(TFile* ifile, std::shared_ptr<FileParams> iparams): file(ifile), params(iparams) {}
         virtual bool isDone() const = 0;
         virtual ~EventFile() {}
         virtual ParticleCollection<GenSimParticle> getGenSimParticles() const = 0;
@@ -29,14 +29,17 @@ class EventFile
         TFile* getFile() {return file;}
         virtual bool checkTrigger(std::string triggerName, std::string subProcess) const = 0; //checks if event passes trigger criteria
         virtual void nextEvent()=0;
+        virtual std::vector<double> getPDFWeights() const = 0;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const = 0;
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const = 0;
+        const std::shared_ptr<FileParams> getFileParams() const {return params;}
     protected:
         void setEventCount(int newNum) {eventCount = newNum;}
 
     private:
         TFile* file;
         int eventCount;
+        const std::shared_ptr<FileParams> params;
         
 };
 
