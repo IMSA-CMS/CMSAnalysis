@@ -47,6 +47,8 @@ class RecoGenSimComparisonModule : public AnalysisModule
     int fakePhotonCounter = 0;
     int noMatchCounter = 0;
     int mismeasuredPtCounter = 0;
+    int wrongTypeCounter = 0;
+    int tauFakeCounter = 0;
     int accurateEventCounter = 0;
     // Essential event counters by particle type - only counts if the effect is a cause of the outlier mass
     // An event can add to more than one counter at a time
@@ -55,11 +57,15 @@ class RecoGenSimComparisonModule : public AnalysisModule
     int elecFakePhotonCounter = 0;
     int elecNoMatchCounter = 0;
     int elecMismeasuredPtCounter = 0;
+    int elecWrongTypeCounter = 0;
+    int elecFakeTauCounter = 0;
     int elecAccurateCounter = 0;
     int muonWrongChargeCounter = 0;
     int muonFakePhotonCounter = 0;
     int muonNoMatchCounter = 0;
     int muonMismeasuredPtCounter = 0;
+    int muonWrongTypeCounter = 0;
+    int muonFakeTauCounter = 0;
     int muonAccurateCounter = 0;
     // mothers vars
     int isrCounter = 0;

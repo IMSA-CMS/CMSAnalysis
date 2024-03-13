@@ -1,5 +1,5 @@
-#ifndef LeptonJetAntiSelector_HH
-#define LeptonJetAntiSelector_HH
+#ifndef LEPTONJETANTISELECTOR_HH
+#define LEPTONJETANTISELECTOR_HH
 #include <memory>
 #include <vector>
 #include "CMSAnalysis/Utility/interface/Lepton.hh"

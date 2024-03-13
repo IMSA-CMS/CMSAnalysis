@@ -12,18 +12,29 @@
 #include <vector>
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 
-RootFileInput::RootFileInput(std::string fileName, std::vector<HistVariable> iHistVariables) : histVariables(iHistVariables), fileSource(fileName),
-	file(TFile::Open(fileName.c_str(), "read")) 
+RootFileInput::RootFileInput(std::string fileName, std::vector<HistVariable> iHistVariables) : histVariables(iHistVariables), fileSource(fileName)
+{}
+	
+TFile* RootFileInput::getFile(std::string fileSource) const
+{
+	auto file = TFile::Open(fileSource.c_str(), "read");
+	if(!file)
 	{
-		if(!file)
-		{
-			throw std::runtime_error("Cannot open file!");
-		}
+		throw std::runtime_error("Cannot open file " + fileSource + "!");
 	}
+	else
+	{
+		return file;
+	}
+}
 
 
 TH1* RootFileInput::getHist(std::string histType) const
 {
+	//TH1::AddDirectory(kFALSE);
+	//TH1* response;
+	//response->SetDirectory(0);
+	std::cout << "start" << "\n";
 	std::string name = "";
 	for(HistVariable histVar : histVariables) {
 	    if(histVar.getName() == histType) {
@@ -33,10 +44,15 @@ TH1* RootFileInput::getHist(std::string histType) const
 
 	TH1* hist;
 	uint pos = name.find("/");
+	auto file = getFile(fileSource);
+	std::cout << "fileName: " << fileSource << "\n";
+	TH1* emptyHist = new TH1D("h1", "empty", 1, 0.0, 0.0);
 	if (pos != std::string::npos)
 	{
 		std::string folder = name.substr(0,pos);
+		std::cout << "folder: " << folder << "\n";
 		std::string histName = name.substr(pos+1);
+		std::cout << "name: " << histName << "\n";
 		TDirectory* dir = (TDirectory*)file->GetDirectory(folder.c_str());
 		if (dir)
 		{
@@ -45,17 +61,16 @@ TH1* RootFileInput::getHist(std::string histType) const
 		}
 		else
 		{
-			TH1* h1 = new TH1D("h1", "empty", 0, 0.0, 0.0);
-			return h1;
+			std::cout << "emptyHist" << "\n";
+			return emptyHist;
 		}
 	}
 	else
 	{
 		hist = dynamic_cast<TH1*>(file->Get(name.c_str()));
 	}
-
-	if (!hist)
-	{
+	if (!hist || hist->IsZombie())
+	{ 
 		throw std::runtime_error("File doesn't contain: " + name);
 	}
 	if(dynamic_cast<TH2 *>(hist) != 0) {
@@ -64,7 +79,30 @@ TH1* RootFileInput::getHist(std::string histType) const
 		//std::cout << "returning newHist " << newhist << std::endl;
 		return newhist;
 	}	
-	return hist;
+	if (hist->GetEntries() < 2.0)
+	{
+		return emptyHist;
+	}
+	else 
+	{
+		TH1* response = new TH1D();
+		// returns a clone to prevent constantly overriding the same hist pointer
+		std::cout << "(RootFileInput hist) numBins: " << hist->GetNbinsX() << "\n";
+		//hist->SetDirectory(0);
+		//TH1* response = (TH1*)hist->Clone();
+		
+		//response = (TH1*)hist->Clone("response");
+		response->Add(hist);
+		//response->SetDirectory(0);
+
+		//TH1* response = file->Copy(hist);
+		std::cout << "(RootFileInput response) numBins before: " << response->GetNbinsX() << "\n";
+		delete hist;
+		file->Close();
+		delete file;
+		std::cout << "(RootFileInput response) numBins after: " << response->GetNbinsX() << "\n";
+		return response;
+	}
 }
 
 TH1* RootFileInput::get2DHist(std::string histType) const
@@ -75,17 +113,22 @@ TH1* RootFileInput::get2DHist(std::string histType) const
 			name = histVar.getHistName();
 	    }
 	}
+	auto file = getFile(fileSource);
 	TH1* hist = (TH2F *)file->Get(name.c_str());
 	if (!hist)
 	{
 		throw std::runtime_error("File doesn't contain: " + name);
 	}
 	//Since only windowEstimator uses this, windowEstimator will proceed with using 1D hists instead of 2D if no 2D hist.
-	return hist;
+	TH1* response = dynamic_cast<TH1*>(hist->Clone());
+	delete hist;
+	file->Close();
+	return response;
 }
 
 TH1* RootFileInput::getHistFromName(std::string histName) const
 {
+	auto file = getFile(fileSource);
 	if(!file)
 	{
 		throw std::runtime_error("Cannot open file!");
@@ -105,6 +148,8 @@ TH1* RootFileInput::getHistFromName(std::string histName) const
 
 int RootFileInput::getTotalEvents() const
 {
+	auto file = getFile(fileSource);
 	TDisplayText *totalevents = file->Get<TDisplayText>("NEvents");
 	return std::stoi(totalevents->GetString().Data());
+	file->Close();
 }

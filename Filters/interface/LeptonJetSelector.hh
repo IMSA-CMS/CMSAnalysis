@@ -15,9 +15,9 @@
 class LeptonJetSelector : public Selector
 {
     public:
-        LeptonJetSelector(double ideltaRCut = .5, double idXYCut = 100, double idZCut = 100);
+        LeptonJetSelector(double ideltaRCut = .5, double idXYCut = 0, double idZCut = 0);
 
-        //Selects particles, keeping only loose muons with pT greater than 5 that have a dXY and dZ less than the given values.
+        //Selects particles for an inverse control region, keeping only loose muons with pT greater than 5 that have a dXY or dZ less than the given values.
         void selectParticles(const EventInput* input, Event& event) const override;
     private:
         std::vector<LeptonJet> findLeptonJets(ParticleCollection<Lepton> recoCandidates) const;

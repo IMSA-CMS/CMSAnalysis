@@ -14,7 +14,7 @@ class TTree;
 class NanoAODEventFile : public EventFile
 {
     public:
-        NanoAODEventFile(TFile* ifile);
+        NanoAODEventFile(TFile* ifile, std::shared_ptr<FileParams> iparams);
         virtual void nextEvent() override;
         virtual bool isDone() const override;
         // simply dumps gensim particles from event into ParticleCollection
@@ -26,6 +26,7 @@ class NanoAODEventFile : public EventFile
         virtual double getMET() const override;
         virtual unsigned long long getEventIDNum() const override; 
         virtual int getNumPileUpInteractions() const override;
+        virtual std::vector<double> getPDFWeights() const override;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;
         virtual bool checkTrigger(std::string triggerName, std::string subProcess) const override; //checks if event passes trigger criteria

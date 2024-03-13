@@ -30,7 +30,7 @@ void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) c
       if (particle.getType() == ParticleType::muon() && particle.getPt() > 5) 
       {
         auto lepton = Lepton(particle);
-        if(lepton.isLoose() && lepton.getDXY() < dXYCut && lepton.getDZ() < dZCut)
+        if(lepton.isLoose() && (lepton.getDXY() < dXYCut && lepton.getDZ() < dZCut))
         {
           selected.addParticle(particle);
         }

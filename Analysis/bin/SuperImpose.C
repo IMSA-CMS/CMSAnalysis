@@ -27,24 +27,22 @@ void SuperImpose() {
 
     // Plot of dXY, dZ without cuts for just background on a 2D plot
     
-    //std::vector<std::string> files = {"regularBackground.root", "invertedBackground.root"};
-    std::vector<std::string> files = {"regularSignal.root", "invertedSignal.root"};
-    //std::vector<std::string> files = {"noCutSignal.root", "noCutBackground.root"};
-
-    std::vector<std::string> hists = {"1st Highest Lepton Jet Pt", "1st Highest Lepton Jet Pt"};
-    //std::vector<std::string> his.ts = {"1st Highest Lepton Jet Lepton Jet Mass Zoom", "1st Highest Lepton Jet Lepton Jet Mass Zoom"};
-    //std::vector<std::string> hists = {"1st Highest Lepton Jet Lepton Jet Delta R", "1st Highest Lepton Jet Lepton Jet Delta R"};
-    //std::vector<std::string> hists = {"1st Highest Lepton Jet Eta", "1st Highest Lepton Jet Eta"};
-    //std::vector<std::string> hists = {"dXY dZ Hist", "dXY dZ Hist"};
-
-    std::vector<TString> names = {"Regular", "Inverted"};
-    //std::vector<TString> names = {"Signal", "Background"};
-
+    // std::vector<std::string> files = {"test1000.root", "HiggsDPZ.root", "ZPrime.root", "SUSY.root", "Higgs4DP.root"};
+    // std::vector<std::string> hists = {"Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values"};
+    // std::vector<TString> names = {"Higgs to 2 Dark Photon", "Higgs to Z and Dark Photon", "Z Prime", "SUSY", "Higgs to 4 Dark Photon"};
+    std::vector<std::string> files = {"controlled.root", "controlled.root", "controlled.root", "controlled.root"};
+    std::vector<std::string> hists = {
+        "Low Mass and Different Signs__hists/Low Mass and Different Signs_1st Highest Lepton Jet Eta", 
+        "High Mass and Different Signs__hists/High Mass and Different Signs_1st Highest Lepton Jet Eta", 
+        "Low Mass and Same Sign__hists/Low Mass and Same Sign_1st Highest Lepton Jet Eta", 
+        "High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest Lepton Jet Eta"};
+    std::vector<TString> names = {"Low Mass OS", "High Mass OS", "Low Mass SS", "High Mass SS"};
     //Colors go here
     std::vector<int> colors = {1, 2};
     //Change x and y axis titles here
-    TString xTitle = "";
-    TString yTitle = "";
+    //TString xTitle = "Gamma";
+    TString xTitle = "Lepton Jet Eta";
+    TString yTitle = "Events (1/Integral)";
 
 
     int count = 0;
@@ -58,11 +56,15 @@ void SuperImpose() {
         if(!openedFile) {
             throw std::runtime_error("Cannot open file!");
             }
-            auto dir = openedFile->GetDirectory("_hists");
-            if(!dir) {
-            throw std::runtime_error("Cannot open directory!");
+        std::string name = hists.at(count);
+        uint pos = name.find("/");
+        std::string folder = name.substr(0,pos);
+		std::string histName = name.substr(pos+1);
+        auto dir = openedFile->GetDirectory(folder.c_str());
+        if(!dir) {
+            throw std::runtime_error("Cannot find directory!");
             }
-        hist = dynamic_cast<TH1*>(dir->Get(hists.at(count).c_str()));
+        hist = dynamic_cast<TH1*>(dir->Get(histName.c_str()));
         if (!hist)
         {
             for (auto hist : hists)

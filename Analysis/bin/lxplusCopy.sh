@@ -1,2 +1,2 @@
-scp index.html dciancio@lxplus.cern.ch:/eos/user/d/dciancio/www
-scp jumboPlotStorage/*.png dciancio@lxplus.cern.ch:/eos/user/d/dciancio/www/jumboPlotStorage
+scp index.html virao@lxplus.cern.ch:/eos/user/v/virao/www
+scp jumboPlotStorage/*.png virao@lxplus.cern.ch:/eos/user/v/virao/www/jumboPlotStorage
