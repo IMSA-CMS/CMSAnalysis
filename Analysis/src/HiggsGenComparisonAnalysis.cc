@@ -58,7 +58,7 @@ std::shared_ptr<Channel> HiggsGenComparisonAnalysis::getChannel(std::string name
     throw std::runtime_error("Channel of name " + name + " not found.");
 }
 
-TH1* HiggsGenComparisonAnalysis::getDecayHist(std::string histType, std::string processName, double massTarget, bool scaleToExpected) const {
+TH1* HiggsGenComparisonAnalysis::getDecayHist(std::string histType, std::string processName, double massTarget, bool scaleToExpected, std::string channelName) const {
     int maxBinNum = 0;
 	double maxBarWidth = 0.0;
 	int channelNumber = 0;
