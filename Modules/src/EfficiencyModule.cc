@@ -1,4 +1,5 @@
 #include "CMSAnalysis/Modules/interface/EfficiencyModule.hh"
+#include <iostream>
 
 void EfficiencyModule::finalize()
 {

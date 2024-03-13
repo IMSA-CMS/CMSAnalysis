@@ -74,8 +74,6 @@ bool EventModule::process()
     addBasicHistograms(ParticleType::photon(), event.getPhotons());
     addBasicHistograms(ParticleType::jet(), event.getJets());
 
-    // std::cout << "THIS IS A TEST 1 -------------------------------------------------------------------------" << std::endl;
-
     //std::cout << event.getSpecials().empty();
 
     //std::cout << "\nstart@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@";

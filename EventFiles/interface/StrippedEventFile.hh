@@ -13,7 +13,7 @@ class TTree;
 class StrippedEventFile : public EventFile
 {
   public:
-    StrippedEventFile(TFile* ifile);
+    StrippedEventFile(TFile* ifile, std::shared_ptr<FileParams> iparams);
     virtual int getNumOfEvents() const override {return tree->GetEntries();}
 
   protected:
@@ -24,6 +24,7 @@ class StrippedEventFile : public EventFile
     virtual ParticleCollection<Particle> getRecoJets() const override;
     virtual int getNumPileUpInteractions() const override {throw std::runtime_error("not implemented yet for StrippedEventFile");}
     virtual double getMET() const override;
+    virtual std::vector<double> getPDFWeights() const override;
     virtual unsigned long long getEventIDNum() const override; 
     virtual std::vector<bool> getTriggerResults(std::string subProcess) const override {throw std::runtime_error("getTriggerResults not implemented yet for StrippedEventFile");}
     virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override {throw std::runtime_error("getTriggerNames not implemented yet for StrippedEventFile");}
