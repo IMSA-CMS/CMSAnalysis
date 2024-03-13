@@ -55,15 +55,19 @@ std::vector<std::string> EventLoader::fetchRootFiles(const std::string& configFi
   }
   else
   {
-    std::ifstream textFile(configFile); 
+    std::ifstream textFile(Utility::getFullPath(configFile));
     std::string line;
-    getline(textFile, line);
-    if (line.substr(0,1) == "/") 
+    std::getline(textFile, line);
+    if (line.find('/') != std::string::npos) 
     {
       rootFiles.push_back("root://cmsxrootd.fnal.gov//" + line);
       while (getline(textFile, line)) 
       {
-        rootFiles.push_back("root://cmsxrootd.fnal.gov//" + line);
+        //skips commented lines
+        if (line.find('#') == std::string::npos)
+        {
+          rootFiles.push_back("root://cmsxrootd.fnal.gov//" + line);
+        }
       }
     }
     else 
@@ -134,7 +138,7 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents)
       file->nextEvent();
       if (outputEvery != 0 && count%outputEvery == 0)
       {
-        std::cout<<"Processed "<<count<<" Events"<<std::endl;
+        std::cout<<"Processed " << count << " Events" <<std::endl;
       }
       if (count == maxEvents)
       {
@@ -142,7 +146,7 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents)
       }
     }
 
-    std::cout<<"Processed "<<count<<" Events"<<std::endl;
+    std::cout<<"Processed "<< count << " Events" <<std::endl;
     
     delete tFile;
 

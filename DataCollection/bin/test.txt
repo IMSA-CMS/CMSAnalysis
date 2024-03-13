@@ -1,0 +1,129 @@
+/uscms/homes/v/vrao/analysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/textfiles/ParticleData.txt has been loaded properly!
+Reading input file MultiBoson/MultiBoson_Bosons_WW_Decay_2L_Run_2.txt
+# of root files: 46
+Finished checking module dependencies
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/WWTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/106X_mc2017_realistic_v9-v2/260000/FD647975-0939-1A45-9864-E379D9614C27.root
+File contains 4000 events
+Number of events in file: 4000
+HLT_Ele27_WPTight_Gsf
+HLT_IsoMu24
+Processed 4000 Events
+Name of file: root://cmsxrootd.fnal.gov///store/mc/RunIISummer20UL17NanoAODv9/WWTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/106X_mc2017_realistic_v9-v2/260000/653FA787-C843-3E46-AD04-68194826653A.root
+File contains 304000 events 
+Number of events in file: 304000
+HLT_Ele27_WPTight_Gsf
+HLT_IsoMu24
+Processed 304000 Events
+number of root files: 2
+Dependent efficiency of 10TriggerCut: 0.532474
+Independent efficiency of 10TriggerCut: 0.532474
+Dependent efficiency of 8HiggsCut: 0.997006
+Independent efficiency of 8HiggsCut: 0.997006
+Dependent efficiency of 17RepeatedEventCuts: 1
+Independent efficiency of 17RepeatedEventCuts: 1
+
+
+e e : 16449
+e u : 42821
+ee : 492
+eee : 137
+eeeu : 9
+eeu : 208
+eeuu : 7
+eu : 2579
+eue : 1237
+eueu : 39
+euu : 1742
+euuu : 105
+none : 208500
+u u : 27606
+uu : 2557
+uue : 1401
+uuu : 2055
+uuuu : 56
+Total : 308000
+
+
+FilterModules size : 1
+Finalizing analysis module: uue_
+filterName: eeuu_
+eeuu_ : 2.000000
+filterName: eeeu_
+eeeu_ : 7.000000
+filterName: eeu_
+eeu_ : 144.000000
+filterName: e e_
+e e_ : 13343.000000
+filterName: euu_
+euu_ : 1302.000000
+filterName: uuuu_
+uuuu_ : 36.000000
+filterName: e u_
+e u_ : 35199.000000
+filterName: none_
+none_ : 83629.000000
+filterName: u u_
+u u_ : 22729.000000
+filterName: uuu_
+uuu_ : 1578.000000
+filterName: uue_
+uue_ : 1058.000000
+filterName: euuu_
+euuu_ : 76.000000
+filterName: eu_
+eu_ : 1554.000000
+filterName: uu_
+uu_ : 1498.000000
+filterName: ee_
+ee_ : 316.000000
+filterName: eueu_
+eueu_ : 26.000000
+filterName: eee_
+eee_ : 85.000000
+filterName: eue_
+eue_ : 929.000000
+
+FilterModules size : 1
+Finalizing analysis module: uue_
+filterName: eeuu_
+filterName: eeeu_
+filterName: eeu_
+filterName: e e_
+filterName: euu_
+filterName: uuuu_
+filterName: e u_
+filterName: none_
+filterName: u u_
+filterName: uuu_
+filterName: uue_
+filterName: euuu_
+filterName: eu_
+filterName: uu_
+filterName: ee_
+filterName: eueu_
+filterName: eee_
+filterName: eue_
+
+FilterModules size : 1
+Finalizing analysis module: uue_
+filterName: eeuu_
+filterName: eeeu_
+filterName: eeu_
+filterName: e e_
+filterName: euu_
+filterName: uuuu_
+filterName: e u_
+filterName: none_
+filterName: u u_
+filterName: uuu_
+filterName: uue_
+filterName: euuu_
+filterName: eu_
+filterName: uu_
+filterName: ee_
+filterName: eueu_
+filterName: eee_
+filterName: eue_
+Processing complete!
+Output written to MultiBoson_Bosons_WW_Decay_2L_Run_2TEST.root
+Processing time: 173.292s
