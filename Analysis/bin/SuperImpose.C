@@ -19,19 +19,32 @@ void SuperImpose() {
     //Change extraText here
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary");
     //Change the filePath here. This should be the longest branch all input files have in common.
-    const std::string filePath = "/uscms/home/vrao/analysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/";
+    const std::string filePath = "/uscms/home/cobriend/analysis/CMSSW_12_4_3/src/CMSAnalysis/Analysis/bin/";
     //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
     //Write your graph names here (for the legend)
+
+    // Run on eta, pT, mass, delta R
+
+    // Plot of dXY, dZ without cuts for just background on a 2D plot
     
-    std::vector<std::string> files = {"test1000.root", "HiggsDPZ.root", "ZPrime.root", "SUSY.root", "Higgs4DP.root"};
-    std::vector<std::string> hists = {"Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values"};
-    std::vector<TString> names = {"Higgs to 2 Dark Photon", "Higgs to Z and Dark Photon", "Z Prime", "SUSY", "Higgs to 4 Dark Photon"};
+    //std::vector<std::string> files = {"regularBackground.root", "invertedBackground.root"};
+    std::vector<std::string> files = {"regularSignal.root", "invertedSignal.root"};
+    //std::vector<std::string> files = {"noCutSignal.root", "noCutBackground.root"};
+
+    std::vector<std::string> hists = {"1st Highest Lepton Jet Pt", "1st Highest Lepton Jet Pt"};
+    //std::vector<std::string> his.ts = {"1st Highest Lepton Jet Lepton Jet Mass Zoom", "1st Highest Lepton Jet Lepton Jet Mass Zoom"};
+    //std::vector<std::string> hists = {"1st Highest Lepton Jet Lepton Jet Delta R", "1st Highest Lepton Jet Lepton Jet Delta R"};
+    //std::vector<std::string> hists = {"1st Highest Lepton Jet Eta", "1st Highest Lepton Jet Eta"};
+    //std::vector<std::string> hists = {"dXY dZ Hist", "dXY dZ Hist"};
+
+    std::vector<TString> names = {"Regular", "Inverted"};
+    //std::vector<TString> names = {"Signal", "Background"};
 
     //Colors go here
-    std::vector<int> colors = {1, 2, 3, 4, 5};
+    std::vector<int> colors = {1, 2};
     //Change x and y axis titles here
-    TString xTitle = "Gamma";
-    TString yTitle = "Events (1/Integral)";
+    TString xTitle = "";
+    TString yTitle = "";
 
 
     int count = 0;
@@ -45,9 +58,17 @@ void SuperImpose() {
         if(!openedFile) {
             throw std::runtime_error("Cannot open file!");
             }
-        hist = dynamic_cast<TH1*>(openedFile->Get(hists.at(count).c_str()));
+            auto dir = openedFile->GetDirectory("_hists");
+            if(!dir) {
+            throw std::runtime_error("Cannot open directory!");
+            }
+        hist = dynamic_cast<TH1*>(dir->Get(hists.at(count).c_str()));
         if (!hist)
         {
+            for (auto hist : hists)
+            {
+                std::cout << hist << std::endl;
+            }
             throw std::runtime_error("Histogram " + hists.at(count) + " not found!");
         }
         if(dynamic_cast<TH2 *>(hist) != 0) {
