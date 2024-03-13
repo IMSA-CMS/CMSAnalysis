@@ -45,8 +45,7 @@ TH1* RootFileInput::getHist(std::string histType) const
 		}
 		else
 		{
-			TH1* h1 = new TH1D("h1", "empty", 0, 0.0, 0.0);
-			return h1;
+			throw std::runtime_error("can't find directory " + folder);
 		}
 	}
 	else

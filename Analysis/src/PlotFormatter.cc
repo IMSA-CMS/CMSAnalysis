@@ -632,9 +632,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
         int numberBinsData = data->GetNbinsX();
         int lowerDataIntegralLimit = 50*(static_cast<double>(numberBinsData)/upperMasslimit);
         float dataIntegral = data->Integral(lowerDataIntegralLimit, numberBinsData);
-        std::cout << "lowerDataIntegralLimit: " << lowerDataIntegralLimit << "\n";
-        std::cout << "numberBinsData: " << numberBinsData << "\n";
-        signal = analysis->getDecayHist(histvariable, signalNames.at(0), massTarget, true);
+        signal = analysis->getDecayHist(histvariable, "Dark Photon Signal", massTarget, true);
         std::vector<TH1*> backgroundHists;
         for(std::string name : backgroundNames) {
             backgroundHists.push_back(analysis->getDecayHist(histvariable, name, massTarget, true));
@@ -645,11 +643,8 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
             int numberBinsBackground = backgroundHist->GetNbinsX();
             int lowerBackgroundIntegralLimit = 50*(static_cast<double>(numberBinsBackground)/upperMasslimit);
             backgroundIntegral += backgroundHist->Integral(lowerBackgroundIntegralLimit, numberBinsBackground);
-            std::cout << "lowerBackgroundIntegralLimit: " << lowerBackgroundIntegralLimit << "\n";
-            std::cout << "numberBinsBackground: " << numberBinsBackground << "\n";
         }
         float scaleFactor = dataIntegral/backgroundIntegral;
-        std::cout << "scaleFactor: " << scaleFactor << "\n";
         if (scaleTodata == true)
         {
             for (auto backgroundHist : backgroundHists)
