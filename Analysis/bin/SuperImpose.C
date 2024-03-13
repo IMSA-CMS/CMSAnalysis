@@ -23,8 +23,8 @@ void SuperImpose() {
     //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
     //Write your graph names here (for the legend)
     
-    std::vector<std::string> files = {"test1000.root", "HiggsDPZ.root", "ZPrime.root", "SUSY.root", "Higgs4DP.root"};
-    std::vector<std::string> hists = {"Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values"};
+    std::vector<std::string> files = {"testpdfbackground.root"};
+    std::vector<std::string> hists = {"Unweighted Histogram", "Low Histogram", "High Histogram"};
     std::vector<TString> names = {"Higgs to 2 Dark Photon", "Higgs to Z and Dark Photon", "Z Prime", "SUSY", "Higgs to 4 Dark Photon"};
 
     //Colors go here
