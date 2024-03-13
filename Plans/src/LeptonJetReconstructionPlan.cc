@@ -1,4 +1,3 @@
-
 #include "CMSAnalysis/Plans/interface/LeptonJetReconstructionPlan.hh"
 
 #include <iostream>
@@ -54,7 +53,6 @@
 #include "CMSAnalysis/Histograms/interface/GenSimDeltaRTwoJetsPsedoFilteredHist.hh"
 #include "CMSAnalysis/Histograms/interface/GenSimGammaTwoJetsPsedoFilteredHist.hh"
 #include "CMSAnalysis/Histograms/interface/ResolutionHist.hh"
-
 #include "CMSAnalysis/Filters/interface/DarkPhotonControlRegionFilter.hh"
 
 using std::make_shared;
