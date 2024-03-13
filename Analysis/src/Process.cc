@@ -19,16 +19,18 @@ TH1* Process::getHist(std::string histType, bool scaleToExpected) const
 		for (const auto& singleProcess : processes)
 		{
 			singleProcessNumber++;
-			if (singleProcess.getHist(histType, scaleToExpected) == 0) {
+			auto histogram = singleProcess.getHist(histType, scaleToExpected);
+			if (!histogram) 
+			{
 				throw std::runtime_error("Histogram not found in process: " + this->name + "\nIn singleProcess number: " + singleProcessNumber);
 			}
-			if (singleProcess.getHist(histType, scaleToExpected)->GetNbinsX() > maxBinNum)
+			if (histogram->GetNbinsX() > maxBinNum)
 			{
-				maxBinNum = singleProcess.getHist(histType, scaleToExpected)->GetNbinsX();
+				maxBinNum = histogram->GetNbinsX();
 			}
-			if ((singleProcess.getHist(histType, scaleToExpected)->GetXaxis()->GetBinWidth(maxBinNum)) > maxBarWidth)
+			if ((histogram->GetXaxis()->GetBinWidth(maxBinNum)) > maxBarWidth)
 			{
-				maxBarWidth = (singleProcess.getHist(histType, scaleToExpected)->GetXaxis()->GetBinWidth(maxBinNum));
+				maxBarWidth = (histogram->GetXaxis()->GetBinWidth(maxBinNum));
 			}
 		}
 		hist = new TH1F(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * maxBarWidth);
@@ -48,7 +50,6 @@ TH1* Process::getHist(std::string histType, bool scaleToExpected) const
 	}
 	//If you want yield to print while running SuperPlot uncomment the print statement (only prints the yield for the first MassTarget in the process)
 	//std::cout << "Total yield for mass target " << processes.at(0).getMassTarget() << " is " << getYield("processes.at(0).getMassTarget()") << std::endl;
-	
 	return hist;
 }
 
