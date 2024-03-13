@@ -1,6 +1,6 @@
-#include "CMSAnalysis/Analysis/interface/TableData.hh"
-#include "CMSAnalysis/Analysis/interface/TableWriter.hh"
-#include "CMSAnalysis/Analysis/interface/HTMLTable.hh"
+#include "CMSAnalysis/Utility/interface/TableData.hh"
+#include "CMSAnalysis/Utility/interface/TableWriter.hh"
+#include "CMSAnalysis/Utility/interface/HTMLTable.hh"
 #include <iostream>
 #include <vector>
 #include <string>

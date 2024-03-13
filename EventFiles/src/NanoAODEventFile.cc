@@ -50,7 +50,7 @@ bool NanoAODEventFile::checkTrigger(std::string triggerName, std::string subProc
        // return false;
        if(!tree->GetBranch(triggerName.c_str()))
        {
-        std::cout << triggerName << " doesn't exist/n";
+        std::cout << triggerName << " doesn't exist\n";
         return false;
        }
         auto currentEntry = treeReader.GetCurrentEntry();
@@ -117,6 +117,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile) :
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pt", "GenPart_pt"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_m1", "GenPart_genPartIdxMother"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pileup", "Pileup_nTrueInt"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("HEEP_bitmap", "Electron_vidNestedWPBitmapHEEP"),
         std::make_shared<TreeVariable<TTreeReaderValue<ULong64_t>>>("event", "event")
     };
 
@@ -143,7 +144,7 @@ void NanoAODEventFile::nextEvent()
 
     if(variables.find("gen_size") != variables.end() && getVariable<UInt_t>("gen_size") > 0)
     {
-        genSimParticles.clear();
+        genSimParticles.clear(); 
         genSimParticles.reserve(getVariable<UInt_t>("gen_size") );
 
         //construct daughters from mothers
@@ -239,8 +240,9 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         getArrayElement<Float_t>("elec_dz", i),
         charge, ParticleType::electron(), fit);
         // std::cout << "NanoAOD: " << getArrayElement<Bool_t>("elec_cutBasedHEEP", i) << '\n';
-        particle.addInfo("CutBasedHEEP", getArrayElement<Bool_t>("elec_cutBasedHEEP", i));
-        particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i)); 
+        particle.addInfo("CutBasedHEEP", getArrayElement<Bool_t>("elec_cutBasedHEEP", i));  
+        particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i));
+        particle.addInfo("HEEP_map", getArrayElement<Int_t>("HEEP_bitmap", i)); 
         particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
         particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
         recoParticles.addParticle(particle);

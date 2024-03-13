@@ -2,23 +2,25 @@ from subprocess import run
 from multiprocessing import Process 
 
 def loopRun(*fileList):
-	path = "textfiles/"
+	#path = "textfiles/"
+
 	for file in fileList:
 		# Filling in the parameters of runAnalyzer
 		analysisBackground = "HiggsBackground"
-		analysisSignal = "HiggsSignal"
+		analysisSignal = "HiggsSignal" 
 		nameLocation = file.rfind("/") + 1
 		nameEnd = len(file) - 4
 		name = file[nameLocation:nameEnd]
 		#process = file[0:file.rfind("/")]
 		outputString = "output=" + name + ".root"
 				
-		if file == "Higgs1400.txt":	
+		if file == "Higgs1400.txt" or file == "Higgs600.txt" or file == "Higgs800.txt" or file == "Higgs1000.txt" or file == "Higgs1200.txt":	
 			analysisName = "analysis=" + analysisSignal
 			inputString = "input=" + file
 		else:
 			analysisName = "analysis=" + analysisBackground
-			inputString = "input=" + path + file
+			#inputString = "input=" + path + file
+			inputString = "input=" + file	
 		numFiles = "numFiles=1"
 		
 		# calls runAnalyzer
@@ -39,6 +41,7 @@ if __name__ == '__main__':
 	multiBoson = ("MultiBoson/MultiBoson_Bosons_WW_Decay_2L_Run_2.txt", "MultiBoson/MultiBoson_Bosons_WWW_Decay_NA_Run_2.txt", "MultiBoson/MultiBoson_Bosons_WWZJets_Decay_4L_Run_2.txt",
 	"MultiBoson/MultiBoson_Bosons_WZ_Decay_3L_Run_2.txt", "MultiBoson/MultiBoson_Bosons_WZZ_Decay_NA_Run_2.txt", "MultiBoson/MultiBoson_Bosons_ZZZ_Decay_NA_Run_2.txt")
 
+	#higgsSignal = ("Higgs800.txt","Higgs1000.txt","Higgs1200.txt", )
 	higgsSignal = ("Higgs1400.txt", )
 
 	#higgsData = ("Data/SingleMuonRun2017B-UL2017_MiniAODv2-v1.txt", "Data/SingleElectronRun2017B-UL2017_MiniAODv2-v1.txt")
@@ -50,29 +53,28 @@ if __name__ == '__main__':
 		#"Data/Data_Trigger_SingleMuon_Year_2016F.txt",
 		#"Data/Data_Trigger_SingleMuon_Year_2016G.txt",
 		#"Data/Data_Trigger_SingleMuon_Year_2016H.txt",
-		"Data/Data_Trigger_SingleMuon_Year_2017a.txt",
-		"Data/Data_Trigger_SingleMuon_Year_2017B.txt",
-		"Data/Data_Trigger_SingleMuon_Year_2017C.txt",
-		"Data/Data_Trigger_SingleMuon_Year_2017D.txt",
-		"Data/Data_Trigger_SingleMuon_Year_2017E.txt",
-		"Data/Data_Trigger_SingleMuon_Year_2017F.txt"
-		"Data/Data_Trigger_SingleMuon_Year_2017G.txt",
-		"Data/Data_Trigger_SingleMuon_Year_2017H.txt",
+		#"Data/Data_Trigger_SingleMuon_Year_2017B.txt",
+		#"Data/Data_Trigger_SingleMuon_Year_2017C.txt",
+		#"Data/Data_Trigger_SingleMuon_Year_2017D.txt",
+		#"Data/Data_Trigger_SingleMuon_Year_2017E.txt",
+		#"Data/Data_Trigger_SingleMuon_Year_2017F.txt",
+		#"Data/Data_Trigger_SingleMuon_Year_2017G.txt",
+		#"Data/Data_Trigger_SingleMuon_Year_2017H.txt",
 		#"Data/Data_Trigger_SingleMuon_Year_2018A.txt",
-		"Data/Data_Trigger_SingleMuon_Year_2018B.txt",
-		"Data/Data_Trigger_SingleMuon_Year_2018C.txt",
-		"Data/Data_Trigger_SingleMuon_Year_2018D.txt",
-		"Data/Data_Trigger_SingleMuon_Year_2022A.txt",
-		"Data/Data_Trigger_SingleMuon_Year_2022B.txt",
-		"Data/Data_Trigger_SingleMuon_Year_2022C.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2016B.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2016C.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2016D.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2016E.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2016F.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2016G.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2016H.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2017B.txt",
+		#"Data/Data_Trigger_SingleMuon_Year_2018B.txt",
+		#"Data/Data_Trigger_SingleMuon_Year_2018C.txt",
+		#"Data/Data_Trigger_SingleMuon_Year_2018D.txt",
+		#"Data/Data_Trigger_SingleMuon_Year_2022A.txt",
+		#"Data/Data_Trigger_SingleMuon_Year_2022B.txt",
+		#"Data/Data_Trigger_SingleMuon_Year_2022C.txt",
+		#"Data/Data_Trigger_SingleElectron_Year_2016B.txt",
+		#"Data/Data_Trigger_SingleElectron_Year_2016C.txt",
+		#"Data/Data_Trigger_SingleElectron_Year_2016D.txt",
+		#"Data/Data_Trigger_SingleElectron_Year_2016E.txt",
+		#"Data/Data_Trigger_SingleElectron_Year_2016F.txt",
+		#"Data/Data_Trigger_SingleElectron_Year_2016G.txt",
+		#"Data/Data_Trigger_SingleElectron_Year_2016H.txt",
+		#"Data/Data_Trigger_SingleElectron_Year_2017B.txt",
 		"Data/Data_Trigger_SingleElectron_Year_2017C.txt",
 		"Data/Data_Trigger_SingleElectron_Year_2017D.txt",
 		"Data/Data_Trigger_SingleElectron_Year_2017E.txt",

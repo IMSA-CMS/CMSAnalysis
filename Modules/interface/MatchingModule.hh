@@ -20,6 +20,7 @@ class MatchingModule : public ProductionModule
   virtual bool process() override;
 
   const MatchingPairCollection& getMatchingBestPairs() const {return matchingBestPairs;} 
+  const std::vector<Particle> getUnmatched() const {return unmatched;}
   
   protected:
   virtual bool match(std::vector<Particle>genSimparticles, std::vector<Particle> recoCandidates);
@@ -33,6 +34,7 @@ class MatchingModule : public ProductionModule
   double deltaRCutoff; 
 
   MatchingPairCollection matchingBestPairs;
+  std::vector<Particle> unmatched;
 
   // template accepts a vector with either GenParticles and RecoCandidates
   // checks if the MatchingPairCollection is filled

@@ -21,9 +21,11 @@ TH1* Process::getHist(std::string histType, bool scaleToExpected) const
 		{
 			singleProcessNumber++;
 			hist = singleProcess.getHist(histType, scaleToExpected);
-			if (hist == 0) {
+			if (!hist || hist->IsZombie()) 
+			{
 				throw std::runtime_error("Histogram not found in process: " + this->name + "\nIn singleProcess number: " + singleProcessNumber);
 			}
+			std::cout << "numBins: " << hist->GetNbinsX() << "\n";
 			if (hist->GetNbinsX() > maxBinNum)
 			{
 				maxBinNum = hist->GetNbinsX();
@@ -46,7 +48,7 @@ TH1* Process::getHist(std::string histType, bool scaleToExpected) const
 		newHist->SetFillColor(color);
 	}
 	else{
-		newHist = new TH1F(name.c_str(), name.c_str(), 1, 0, 1);
+		newHist = new TH1D(name.c_str(), name.c_str(), 1, 0.0, 0.0);
 	}
 	//If you want yield to print while running SuperPlot uncomment the print statement (only prints the yield for the first MassTarget in the process)
 	//std::cout << "Total yield for mass target " << processes.at(0).getMassTarget() << " is " << getYield("processes.at(0).getMassTarget()") << std::endl;
