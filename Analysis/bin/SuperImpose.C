@@ -24,14 +24,14 @@ void SuperImpose() {
     //Write your graph names here (for the legend)
     
     std::vector<std::string> files = {"testpdfbackground.root"};
-    std::vector<std::string> hists = {"Unweighted Histogram", "Low Histogram", "High Histogram"};
-    std::vector<TString> names = {"Higgs to 2 Dark Photon", "Higgs to Z and Dark Photon", "Z Prime", "SUSY", "Higgs to 4 Dark Photon"};
+    std::vector<std::string> hists = {"DefaultHistogram", "LowHistogram", "HighHistogram"};
+    std::vector<TString> names = {"Default", "Low Weight", "High Weight"};
 
     //Colors go here
     std::vector<int> colors = {1, 2, 3, 4, 5};
     //Change x and y axis titles here
-    TString xTitle = "Gamma";
-    TString yTitle = "Events (1/Integral)";
+    TString xTitle = "Bins";
+    TString yTitle = "Same-sign Dilepton Mass (GeV)";
 
 
     int count = 0;
