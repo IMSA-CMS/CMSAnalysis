@@ -42,6 +42,14 @@ void PdfAnalysisModule::finalize()
   auto lowHist = new TH1F("low", "low", histBins, low, high);
   highHist->SetName("HighWeightedPdf");
   lowHist->SetName("LowWeightedPdf");
+  defHist->SetName("UnweightedPdf");
+  histVec[15]->SetName("LowHistogram");
+  histVec[82]->SetName("HighHistogram");
+  int count = 0;
+  double weight = 0;
+  double lWeight = 0;
+  double hWeight = 0;
+
   //Iterate through bins
   for(int i = 0; i < histBins; ++i){
     
@@ -62,43 +70,62 @@ void PdfAnalysisModule::finalize()
     }
     if(binRatios.size() == 0)
     {
-      //std::cout << "no ratios for bin " << i << std::endl;
-      highHist->SetBinContent(i, -1);
-      lowHist->SetBinContent(i, -1);
+      highHist->SetBinContent(i, 0);
+      lowHist->SetBinContent(i, 0);
     }
     else{
     std::sort(binRatios.begin(), binRatios.end());
-  //  std::cout << "Ratios for Bin " << i << std::endl;
-    //for(double ratio : binRatios)
-   // {
-  //    std::cout << ratio << " ";
-   // }
-  //  std::cout << std::endl;
+
     highHist->SetBinContent(i, binRatios[82]);
-  //  std::cout << "lowValue " << binRatios[15] << std::endl;
     lowHist->SetBinContent(i, binRatios[15]);
-  //  std::cout << "highValue " << binRatios[82] << std::endl;
-  // blah blah blah highHist->SetBinContent(i, 78.2);
+    lWeight+= binRatios[15];
+    hWeight+= binRatios[82];
+    count++;
+
     }
     histogramBinRatios.push_back(binRatios);
     //Add ratio set of weighted histogram to vector
     // #16-#83
 
   }
+  auto lowResHist = new TH1F("lowResidual", "lowResidual", histBins, low, high);
+  auto highResHist = new TH1F("highResidual", "highResidual", histBins, low, high);
+  lowResHist->SetName("LowResHistogram");
+  highResHist->SetName("HighResHistogram");
+
+  for(int i = 0; i < histBins; ++i)
+  {
+    auto lowBin = histVec[15]->GetBinContent(i);
+    auto highBin = histVec[82]->GetBinContent(i);
+    auto defBin = defHist->GetBinContent(i);
+    if (defBin != 0)
+    {
+      lowResHist->SetBinContent(i, (defBin - lowBin)/defBin);
+    highResHist->SetBinContent(i, (defBin - highBin)/defBin);
+    }
+    
+  }
   std::cout << "writing histograms" << std::endl;
+  std::cout << "Average Low Weight" << lWeight/count << std::endl;
+  std::cout << "Average High Weight" <<hWeight/count << std::endl;
   highHist->Write();
   lowHist->Write();
+  defHist->Write();
+  histVec[15]->Write();
+  histVec[82]->Write();
+  lowResHist->Write();
+  highResHist->Write();
   AnalysisModule::finalize();
 }
 
 bool PdfAnalysisModule::process()
 {
 
-  std::cout << "Processing" << std::endl;
+  //std::cout << "Processing" << std::endl;
   auto recoParticles = getInput()->getLeptons(EventInput::RecoLevel::Reco);
   if(recoParticles.size() == 0)
   {
-    std::cout << "No Reco Particles" << std::endl;
+ //   std::cout << "No Reco Particles" << std::endl;
     return true;
   }
   auto recoInvMass = recoParticles.getInvariantMass();
@@ -108,10 +135,7 @@ bool PdfAnalysisModule::process()
   {
     // 
     auto pdfWeight = particle.getInfo("pweight"+std::to_string(i));
-<<<<<<< HEAD
-=======
     //std::cout << "Weight " << pdfWeight << std::endl;
->>>>>>> 1ec330c7da40d961468ba5742976abbf02026714
     auto hist = histVec[i];
     hist->Fill(recoInvMass, pdfWeight);
     //std::cout << "Bin1 Process " << hist->GetBinContent(1) << std::endl;
