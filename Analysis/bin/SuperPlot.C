@@ -40,7 +40,7 @@ void SuperPlot()
 	// 	if(processName == "Dark Photon Signal") {
 	// 		leptonBackgrounds->labelProcess("signal", processName);
 	// 	}
-	// 	else if(processName == "Dark Photon Data") { //This line is only used for complete plots
+	// 	else if(processName == "Data") { //This line is only used for complete plots
 	// 		leptonBackgrounds->labelProcess("data", processName);
 	// 	}
 	// 	else {
@@ -57,7 +57,7 @@ void SuperPlot()
 				channel->labelProcess("signal", processName);
 			}
 			// "Monte Carlo Data"
-			else if(processName == "Dark Photon Data") { //This line is only used for complete plots
+			else if(processName == "Data") { //This line is only used for complete plots
 				channel->labelProcess("data", processName);
 			}
 			else {
@@ -67,8 +67,8 @@ void SuperPlot()
 	}
 
 	//This is for making single hist graphs. Just change the process name to the one you want. Not all processes or qualities allow 2D hists.
-	//std::shared_ptr<Process> process = leptonBackgrounds->findProcess("Higgs Data");
-
+	//std::shared_ptr<Process> process = leptonBackgrounds->findProcess("Data");
+ 
 	//Write axis titles here
 	TString xAxisTitle = "OSDL [GeV]";
 	TString yAxisTitle = "Events";
