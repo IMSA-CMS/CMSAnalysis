@@ -27,18 +27,14 @@ void SuperImpose() {
     // std::vector<std::string> files = {"test1000.root", "HiggsDPZ.root", "ZPrime.root", "SUSY.root", "Higgs4DP.root"};
     // std::vector<std::string> hists = {"Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values"};
     // std::vector<TString> names = {"Higgs to 2 Dark Photon", "Higgs to Z and Dark Photon", "Z Prime", "SUSY", "Higgs to 4 Dark Photon"};
-    std::vector<std::string> files = {"controlled.root", "controlled.root", "controlled.root", "controlled.root"};
-    std::vector<std::string> hists = {
-        "Low Mass and Different Signs__hists/Low Mass and Different Signs_1st Highest Lepton Jet Eta", 
-        "High Mass and Different Signs__hists/High Mass and Different Signs_1st Highest Lepton Jet Eta", 
-        "Low Mass and Same Sign__hists/Low Mass and Same Sign_1st Highest Lepton Jet Eta", 
-        "High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest Lepton Jet Eta"};
-    std::vector<TString> names = {"Low Mass OS", "High Mass OS", "Low Mass SS", "High Mass SS"};
+    std::vector<std::string> files = {"dya.root", "dyc.root"};
+    std::vector<std::string> hists = {"_hists/1st Highest Lepton Jet Pt", "_hists/1st Highest Lepton Jet Pt"};
+    std::vector<TString> names = {"Low Mass", "High Mass OS"};
     //Colors go here
     std::vector<int> colors = {1, 2, 3, 4, 5};
     //Change x and y axis titles here
     //TString xTitle = "Gamma";
-    TString xTitle = "Lepton Jet Eta";
+    TString xTitle = "Lepton Jet Transverse Momentum";
     TString yTitle = "Events (1/Integral)";
 
 
