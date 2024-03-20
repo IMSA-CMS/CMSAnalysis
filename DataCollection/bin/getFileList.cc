@@ -6,10 +6,12 @@ int main(int argc, char **argv)
 {
     auto files = EventLoader::fetchRootFiles(argv[1]);
 
-    for (const std::string fil : files) {
-
-        std::cout << fil << std::endl;
-
+    for (auto fil : files) 
+    {
+        for (auto name : fil->getFileList()) 
+        {
+            std::cout << name << std::endl;
+        }
     }
 
     return 0;

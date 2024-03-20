@@ -2,6 +2,7 @@
 #define HPLUSPLUSEFFICIENCY_HH
 
 #include "EfficiencyModule.hh"
+#include <map>
 
 //Calculates reconstruction efficiency for H++
 class HPlusPlusEfficiency : public EfficiencyModule

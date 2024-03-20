@@ -74,7 +74,7 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
             // auto correction = std::make_shared<ConstantCorrection>(2);
             //corrections.push_back(correction);
 
-            auto DarkPhotonData = std::make_shared<Process>("Dark Photon Data", 1);
+            auto DarkPhotonData = std::make_shared<Process>("Data", 1);
             //higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "SingleMuonRun2017B-UL2017_MiniAODv2-v1.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
             //higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "SingleElectronRun2017B-UL2017_MiniAODv2-v1.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
             DarkPhotonData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018A.root", "LeptonJet" + std::to_string((int) massTarget), reader, massTarget, luminosity));
@@ -96,7 +96,7 @@ std::shared_ptr<Channel> DarkPhotonCompleteAnalysis::getChannel(std::string name
     throw std::runtime_error("Channel of name " + name + " not found.");
 }
 
-TH1* DarkPhotonCompleteAnalysis::getDecayHist(std::string histType, std::string processName, double massTarget, bool scaleToExpected) const {
+TH1* DarkPhotonCompleteAnalysis::getDecayHist(std::string histType, std::string processName, double massTarget, bool scaleToExpected, std::string channelName) const {
     int maxBinNum = 0;
 	double maxBarWidth = 0.0;
 	int channelNumber = 0; 

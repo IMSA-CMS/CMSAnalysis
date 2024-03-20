@@ -27,6 +27,11 @@ public:
   double getDeltaR() const;
   double getMass() const;
 
+  double getMaxDXY() const;
+  double getMaxDZ() const;
+
+  bool allSameSign() const;
+
 private:
 
   // This method takes the particle shared ptr and and casts it into a lepton jet implementation and checks if the pointer is null
