@@ -9,21 +9,26 @@ SignFlipModule::SignFlipModule(const std::shared_ptr<MatchingModule> imatchModul
   addRequiredModule(imatchModule);
 }
 
+int numMatchedPairs=0;
+int  nTotalEvents=0;
+
 
 bool SignFlipModule::process()
 {
   const auto matched = matchModule->getMatchingBestPairs().getPairs();
   //std::cout << "Number of matched pairs: " << matched.size() << '\n';
 
-  
+ nTotalEvents++;
+ 
   for (const auto &particlePair : matched)
   {
-	  nTotalEvents++;
+   
+	  
+    numMatchedPairs++;
 	  
     auto particleType = particlePair.getGenParticle().getType();
-    std::cout << "do you ever feel like a plastic bag!" << std::endl;
     auto particlePt = particlePair.getGenParticle().getPt();
-    std::cout << "do you ever feel like a plastic bag!" << std::endl;
+
     if (particleType == ParticleType::electron()) 
     {
       if (particlePt > signFlipPtCut) 
@@ -39,6 +44,7 @@ bool SignFlipModule::process()
         nHighPtMuonEvents++;
       }
       nMuonEvents++;
+    
     }
 
     //std::cout << "Gen charge: " << particlePair.getGenParticle().getCharge() << "  Reco charge: " << particlePair.getRecoParticle().getCharge() << '\n';
@@ -71,10 +77,10 @@ bool SignFlipModule::process()
 void SignFlipModule::finalize()
 {
   std::cout << "Number of Events: " << nTotalEvents << std::endl;
+  std::cout << "Number of Matched Pairs: " << numMatchedPairs << std::endl;
   std::cout << "Number of Sign Flips: " << nSignFlips << std::endl;
   std::cout << "Electron Sign Efficiency: " << (1 - (double) nElectronFlips / nElectronEvents) << std::endl;
   std::cout << "Muon Sign Efficiency: " << (1 - (double) nMuonFlips / nMuonEvents) << std::endl;
-  std::cout << "do you ever feel like a plastic bag!" << std::endl;
   // Printing out rate of high pT sign flips and the number of high pT events
   std::cout << "High pT (> " << signFlipPtCut << "GeV) Electron Efficiency: " << (1 - (double) nHighPtElectronFlips / nHighPtElectronEvents) << " across " << nHighPtElectronEvents << " events." << std::endl;
   std::cout << "High pT (> " << signFlipPtCut << "GeV) Muon Efficiency: " << (1 - (double) nHighPtMuonFlips / nHighPtMuonEvents) << " across " << nHighPtMuonEvents << " events." << std::endl;
