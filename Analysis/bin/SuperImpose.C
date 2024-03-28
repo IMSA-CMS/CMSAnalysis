@@ -17,8 +17,6 @@
 
 void SuperImpose() {
 
-    //Change extraText here (for watermarking purposes)
-    auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary");
 
     //Change the filePath here. This should be the longest branch all input files have in common. CHANGE USERNAME TO YOUR USERNAME
     const std::string filePath = "/uscms/home/sdulam/analysis/CMSSW_12_4_3/src/CMSAnalysis/";
@@ -36,7 +34,7 @@ void SuperImpose() {
     std::vector<int> colors = {1, 2, 3, 4, 5};
     //Change x and y axis titles here
     TString xTitle = "Same-sign Dilepton Mass (GeV)";
-    TString yTitle = "Weights";
+    TString yTitle = "Number of Events";
 
 
     int count = 0;
@@ -68,6 +66,7 @@ void SuperImpose() {
             }
         }
     }
+
     std::cout << "SuperImpose Finished Iteration " << histVector.size() <<std::endl;
     TCanvas *canvas = plotFormatter->simpleSuperImposedHist(histVector, colors, names, xTitle, yTitle);
 }
