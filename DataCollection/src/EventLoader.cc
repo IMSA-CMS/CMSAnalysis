@@ -158,14 +158,13 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents)
           break;
         }
       }
-    delete tFile;
-    }
-
-
-    // Checks that the correct number of files are processed
-    if (nFiles != -1 && fileCounter >= nFiles)
-    {
-      break;
+      delete tFile;
+      
+      // Checks that the correct number of files are processed
+      if (nFiles != -1 && fileCounter >= nFiles)
+      {
+        break;
+      }
     }
   }
   std::cout << "number of root files: " << fileCounter << "\n";

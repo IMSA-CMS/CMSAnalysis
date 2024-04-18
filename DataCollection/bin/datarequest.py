@@ -7,7 +7,7 @@ import os;
 
 from subprocess import Popen, PIPE
 
-stdout = Popen('dasgoclient -query="dataset dataset=/*SingleElectron*/*/NANOAOD", shell=True, stdout=PIPE', shell=True, stdout=PIPE).stdout
+stdout = Popen('dasgoclient -query=”dataset dataset=/QCD_bEnriched_*/*UL*/NANOAODSIM”', shell=True, stdout=PIPE).stdout
 output = stdout.read()
 
 datasets = output.split()

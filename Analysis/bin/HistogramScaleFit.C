@@ -54,6 +54,9 @@ void HistogramScaleFit()
     std::vector<std::string> files = {"noCutSignal.root", "noCutSignal.root"};
     std::vector<std::string> hists = {"1st Highest Lepton Jet Lepton Jet Mass Zoom", "1st Highest Lepton Jet Lepton Jet Mass Zoom"};
 
+    // Run on Drell-Yan, fit it to data (muon trigger)
+
+
     // Change variables here too
     std::vector<HistVariable> scaleVar = {HistVariable::InvariantMass(hists.at(0))};
     std::vector<HistVariable> fitVar = {HistVariable::InvariantMass(hists.at(1))};
