@@ -117,7 +117,7 @@ void LeptonJetEfficiency::finalize()
     std::cout << "# Jet Events / Total # Events : " << getCounter("Jet Events") / getCounter("nEvents") << "\n";
 
     // std::cout << "Matched / Reconstructed Efficiency: " << getCounter("Number of matched jets") / getCounter("Number of Reconstructed Jets") << "\n";
-    // std::cout << "Reconstructed / # Dark Photons Efficiency: " << getCounter("Number of Reconstructed Jets") / getCounter("Number of GenSim Jets") << "\n";
+    std::cout << "Reconstructed / # Dark Photons Efficiency: " << getCounter("Number of Reconstructed Jets") / getCounter("Number of GenSim Jets") << "\n";
     // std::cout << "Matched / # Dark Photons Efficiency: " << getCounter("Number of matched jets") / getCounter("Number of GenSim Jets") << "\n";
     // double count = getCounter("Multiple Jet Events") + getCounter("Single Jet Events");
     // std::cout << "Efficiency: " << count / 24400 << "\n";

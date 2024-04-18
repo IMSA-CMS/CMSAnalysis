@@ -45,7 +45,6 @@
 #include "CMSAnalysis/Filters/interface/TriggerCut.hh"
 #include "CMSAnalysis/Histograms/interface/GammaHist.hh"
 #include "CMSAnalysis/Histograms/interface/GammaDeltaRHist2D.hh"
-#include "CMSAnalysis/Histograms/interface/DXYdZHist2D.hh"
 #include "CMSAnalysis/Histograms/interface/GenSimGammaHist.hh"
 //#include "CMSAnalysis/Filters/interface/NLeptonJetsFilter.hh"
 #include "CMSAnalysis/Histograms/interface/GenSimDeltaRPsedoFilteredHist.hh"
@@ -65,7 +64,7 @@ void LeptonJetReconstructionPlan::initialize()
   auto eventMod = std::make_shared<EventModule>();
   auto eventHistMod = eventMod->getHistogramModule();
   auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
-  eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5, 100, 100));
+  eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5));
   //eventMod->addSelector(std::make_shared<LeptonJetAntiSelector>(.5, 0.0001, 0.0005));
 
   auto darkPhotonFilter = std::make_shared<FilterModule>(std::make_shared<DarkPhotonControlRegionFilter>(10, 0.0001, 0.0005));
@@ -84,7 +83,7 @@ void LeptonJetReconstructionPlan::initialize()
   // Histograms
   //uncomented 
   auto gammaDeltaRHist2D = std::make_shared<GammaDeltaRHist2D>(lepRecoMod, "Gamma Delta R Hist", 100, 100, 1, 0, 500, 0.25);
-  //auto darkPhotonMassHist = std::make_shared<DarkPhotonMassHist>("Higgs Mass", 100, 0, 1500);
+  auto darkPhotonMassHist = std::make_shared<DarkPhotonMassHist>("Higgs Mass", 100, 0, 1500);
   auto resolutionHist = std::make_shared<ResolutionHist>(lepMatchMod, "Gamma Resolution", 1000, -1, 1); 
    
   auto gammaHist = std::make_shared<GammaHist>(lepRecoMod, "Gamma Values", 100, 1, 1000); 
@@ -119,7 +118,6 @@ void LeptonJetReconstructionPlan::initialize()
   auto zoomedInLeptonJetInvMassHist = std::make_shared<LeptonJetInvariantMassHist>("Zoomed In Lepton Jet Invariant Mass", 1000, 0, 10);
   auto deltaXYHist = std::make_shared<DxyHist>(EventInput::RecoLevel::Reco, "Vertex Delta XY from Primary Vertex", 50, 0, 5);
   auto deltaZHist = std::make_shared<DzHist>(EventInput::RecoLevel::Reco, "Vertex Delta Z from Primary Vertex", 50, 0, 5);
-  auto dXYdZHist = std::make_shared<DXYdZHist2D>("dXY dZ Hist", 50, 50, 0, 0, 0.1, 0.1);
   // uncomented
 
   eventHistMod->addHistogram(deltaRHist);
@@ -131,7 +129,6 @@ void LeptonJetReconstructionPlan::initialize()
   // histOutputMod->addHistogram(unmatchedLeptonJetHist);
   histOutputMod->addHistogram(deltaXYHist);
   histOutputMod->addHistogram(deltaZHist);
-  eventHistMod->addHistogram(dXYdZHist);
   //histOutputMod->addHistogram(relIsoHist);
   // histOutputMod->addHistogram(genSimDeltaRHist);
   // eventHistMod->addHistogram(genSimDeltaRHist);

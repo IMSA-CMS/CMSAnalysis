@@ -178,5 +178,5 @@ void HiggsBackgroundPlan::initialize()
 
     auto hPlusPlusEfficiency = make_shared<HPlusPlusEfficiency>();
     hPlusPlusEfficiency->setInput(eventMod->getEventInput());
-    //modules.addAnalysisModule(hPlusPlusEfficiency);
+    modules.addAnalysisModule(hPlusPlusEfficiency);
 }

@@ -9,7 +9,7 @@
 #include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
 #include "DataFormats/Math/interface/deltaR.h"
 
-LeptonJetSelector::LeptonJetSelector(double ideltaRCut, double idXYCut, double idZCut) : deltaRCut(ideltaRCut), dXYCut(idXYCut), dZCut(idZCut)
+LeptonJetSelector::LeptonJetSelector(double ideltaRCut) : deltaRCut(ideltaRCut)
 { }
 
 void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) const
@@ -30,7 +30,7 @@ void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) c
       if (particle.getType() == ParticleType::muon() && particle.getPt() > 5) 
       {
         auto lepton = Lepton(particle);
-        if(lepton.isLoose() && (lepton.getDXY() < dXYCut && lepton.getDZ() < dZCut))
+        if(lepton.isLoose())
         {
           selected.addParticle(particle);
         }
