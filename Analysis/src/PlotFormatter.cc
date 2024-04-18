@@ -604,6 +604,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
 
     TH1* hist;
     if(first == 0) {
+        std::cout << "check 1";
         hist = background->GetHistogram();
     }
     else if (first == 1){
@@ -633,6 +634,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     //legend->AddEntry(signal, " " + toAdd, "F");
     int count = 0;
     for(const auto&& obj2 : *background->GetHists()) {
+        std::cout << "count";
         name = processes->getNamesWithLabel("background").at(count);
         toAdd = name;
         legend->AddEntry(obj2, " " + toAdd, "F");
@@ -645,6 +647,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     //Draws the other histogram    
     if(first == 0) {
         //signal->Draw("HIST SAME");
+        std::cout << "first = 0";
         signal->SetLineColor(kBlack);
         signal->SetLineWidth(2);
         histVector.push_back(signal);
@@ -654,6 +657,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
         histVector.push_back(data);
     }
     else if(first == 1) {
+        std::cout << "first = 1";
         //background->SetLineColor(kBlack);
         background->Draw("HIST SAME");
         stackVector.push_back(background);
@@ -663,6 +667,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
         histVector.push_back(data);
     }
     else {
+        std::cout << "first = 2";
         //signal->Draw("HIST SAME");
         signal->SetLineColor(kBlack);
         signal->SetLineWidth(2); 
@@ -671,12 +676,15 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
         //background->SetLineColor(kBlack);
         stackVector.push_back(background);
     }
-    double x1[background->GetHistogram()->GetNbinsX()], y1[background->GetHistogram()->GetNbinsX()];
-    double xerror[background->GetHistogram()->GetNbinsX()], yerror[background->GetHistogram()->GetNbinsX()];
-
-    for(int i = 0; i < background->GetHistogram()->GetNbinsX(); i++) {
+    std::cout << "check 2";
+    auto nBins = dynamic_cast<TH1*>(background->GetHists()->First())->GetNbinsX();
+    double x1[nBins], y1[nBins];
+    std::cout << "check 3";
+    double xerror[nBins], yerror[nBins];
+    std::cout << "check 4";
+    for(int i = 0; i < nBins; i++) {
         double errortotal = 0;
-        x1[i] = i * background->GetHistogram()->GetBinWidth(0) - 0.5 * background->GetHistogram()->GetBinWidth(0);
+        x1[i] = i * dynamic_cast<TH1*>(background->GetHists()->First())->GetBinWidth(0) - 0.5 * dynamic_cast<TH1*>(background->GetHists()->First())->GetBinWidth(0);
         double bincontent = 0;
         for(const auto&& obj : *(background->GetHists())) {
             histLoop = dynamic_cast<TH1*>(obj);

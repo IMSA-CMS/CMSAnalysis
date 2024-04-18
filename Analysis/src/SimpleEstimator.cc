@@ -5,7 +5,7 @@
 
 double SimpleEstimator::getExpectedYield(const SingleProcess* process, std::string dataType, double luminosity) const {
     //Takes the histogram wanted from the file, assigns it hist
-    TH1 *hist = dynamic_cast<TH1 *>(process->getHist(dataType));
+    TH1 *hist = dynamic_cast<TH1 *>(process->getHist(dataType, false));
     if (!hist) {
         throw std::runtime_error("Hist not found");
     }

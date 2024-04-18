@@ -46,7 +46,7 @@ TH1* RootFileInput::getHist(std::string histType) const
 	uint pos = name.find("/");
 	auto file = getFile(fileSource);
 	std::cout << "fileName: " << fileSource << "\n";
-	TH1* emptyHist = new TH1D("h1", "empty", 1, 0.0, 0.0);
+	//TH1* emptyHist = new TH1D("h1", "empty", 1, 0.0, 0.0);
 	if (pos != std::string::npos)
 	{
 		std::string folder = name.substr(0,pos);
@@ -61,8 +61,7 @@ TH1* RootFileInput::getHist(std::string histType) const
 		}
 		else
 		{
-			std::cout << "emptyHist" << "\n";
-			return emptyHist;
+			throw std::runtime_error("can't find directory " + folder);
 		}
 	}
 	else
@@ -79,30 +78,30 @@ TH1* RootFileInput::getHist(std::string histType) const
 		//std::cout << "returning newHist " << newhist << std::endl;
 		return newhist;
 	}	
-	if (hist->GetEntries() < 2.0)
-	{
-		return emptyHist;
-	}
-	else 
-	{
-		TH1* response = new TH1D();
+	// if (hist->GetEntries() < 2.0)
+	// {
+	// 	//return emptyHist;
+	// }
+	// else 
+	// {
+		//TH1* response = new TH1D();
 		// returns a clone to prevent constantly overriding the same hist pointer
-		std::cout << "(RootFileInput hist) numBins: " << hist->GetNbinsX() << "\n";
+		//std::cout << "(RootFileInput hist) numBins: " << hist->GetNbinsX() << "\n";
 		//hist->SetDirectory(0);
-		//TH1* response = (TH1*)hist->Clone();
+		TH1* response = (TH1*)hist->Clone();
 		
 		//response = (TH1*)hist->Clone("response");
-		response->Add(hist);
+		//response->Add(hist);
 		//response->SetDirectory(0);
 
 		//TH1* response = file->Copy(hist);
 		std::cout << "(RootFileInput response) numBins before: " << response->GetNbinsX() << "\n";
-		delete hist;
-		file->Close();
-		delete file;
+		//delete hist;
+		//file->Close();
+		//delete file;
 		std::cout << "(RootFileInput response) numBins after: " << response->GetNbinsX() << "\n";
 		return response;
-	}
+//	}
 }
 
 TH1* RootFileInput::get2DHist(std::string histType) const
