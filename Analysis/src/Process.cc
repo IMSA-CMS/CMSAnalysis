@@ -15,7 +15,7 @@ TH1* Process::getHist(std::string histType, bool scaleToExpected) const
 	double maxBarWidth = 0.0;
 	int singleProcessNumber = 0;
 	TH1* newHist;
-	TH1* hist;
+	TH1* hist; 
 	if(processes.size() > 0) {
 		for (const auto& singleProcess : processes)
 		{
@@ -25,7 +25,7 @@ TH1* Process::getHist(std::string histType, bool scaleToExpected) const
 			{
 				throw std::runtime_error("Histogram not found in process: " + this->name + "\nIn singleProcess number: " + singleProcessNumber);
 			}
-			std::cout << "numBins: " << hist->GetNbinsX() << "\n";
+			//std::cout << "numBins: " << hist->GetNbinsX() << "\n";
 			if (hist->GetNbinsX() > maxBinNum)
 			{
 				maxBinNum = hist->GetNbinsX();

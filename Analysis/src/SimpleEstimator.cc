@@ -16,29 +16,28 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, std::stri
     //Finds crosssection (from spreadsheet)
     double crosssection = process->getCrossSection();
 
+//without integral code
+/*
+    double efficiency = hist->GetEntries() / totaleventsran;
+    double signalest = crosssection * 1000 * luminosity * efficiency;
+*/
+ 
+//commented out integral code
+// /*
     // integral/fit only calibrated after firstBin  
-    // needs to match the "firstBin" value in "PlotFormatter"
+    // needs to match the "firstBin" value in "PlotFormatter" if using integral scaling
     int firstBin = 50;
     // mass range
-    // needs to match the "upperMasslimit" value in "PlotFormatter"
-    int xAxisRange = 2000;
-    int numBins = hist->GetNbinsX(); 
+    // needs to match the "upperMasslimit" value in "PlotFormatter" if using integral scaling
+    double xAxisRange = 1200;
+    int numBins = hist->GetNbinsX();  
+    //std::cout << "numBins: " << numBins << "\n";
     int lowerLimit = firstBin * (static_cast<double>(numBins) / xAxisRange);
     double efficiency = (hist->Integral(lowerLimit, numBins)) / totaleventsran;
     double signalest = crosssection * 1000 * luminosity * efficiency;
-    //hist->GetNbinsX()
-     //for (int i = 1; i <= 10; i++)
-     //{
-        //preIntegral 1.57725e+08 (62858)
-        //preMax 2.86772e+07
-        //totalentries 44
-        //if (process->getName() == "dy10to50")
-        //{
-        //    std::cout << "bin" << 5 << ": " << hist->GetBinContent(5) << std::endl;
-        //}
-     //}
-    
-     /*std::cout << "postMax " << hist->GetMaximum() << std::endl;
+// */
+/*
+     std::cout << "postMax " << hist->GetMaximum() << std::endl;
      std::cout << "MaxContent " << hist->GetBinContent(hist->GetMaximumBin()) << std::endl;
      std::cout << "process " << process->getName() << std::endl; 
      std::cout << "totaleventsran " << totaleventsran << std::endl;
@@ -47,7 +46,7 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, std::stri
      std::cout << "luminosity " << luminosity << std::endl;
      std::cout << "cross section " << crosssection << std::endl;
      std::cout << "postIntegral " << hist->Integral(lowerLimit, numBins) << std::endl;
-     std::cout << "yield for " << process->getName() << " is " << signalest << std::endl;*/
-
+     std::cout << "yield for " << process->getName() << " is " << signalest << std::endl;
+*/
     return signalest;
 }
