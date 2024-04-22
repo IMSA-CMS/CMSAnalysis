@@ -27,16 +27,18 @@ void SuperImpose() {
     // std::vector<std::string> files = {"test1000.root", "HiggsDPZ.root", "ZPrime.root", "SUSY.root", "Higgs4DP.root"};
     // std::vector<std::string> hists = {"Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values"};
     // std::vector<TString> names = {"Higgs to 2 Dark Photon", "Higgs to Z and Dark Photon", "Z Prime", "SUSY", "Higgs to 4 Dark Photon"};
-
-    std::vector<std::string> files = {"dyc.root", "dya.root", "dyu.root"};
-    std::vector<std::string> hists = {"1st Highest Lepton Jet Eta", "1st Highest Lepton Jet Eta", "1st Highest Lepton Jet Eta"};
-    std::vector<TString> names = {"Drell Yan Cut", "Drell Yan Anticut", "Drell Yan Uncut"};
-
+    std::vector<std::string> files = {"controlled.root", "controlled.root", "controlled.root", "controlled.root"};
+    std::vector<std::string> hists = {
+        "Low Mass and Different Signs__hists/Low Mass and Different Signs_1st Highest Lepton Jet Eta", 
+        "High Mass and Different Signs__hists/High Mass and Different Signs_1st Highest Lepton Jet Eta", 
+        "Low Mass and Same Sign__hists/Low Mass and Same Sign_1st Highest Lepton Jet Eta", 
+        "High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest Lepton Jet Eta"};
+    std::vector<TString> names = {"Low Mass OS", "High Mass OS", "Low Mass SS", "High Mass SS"};
     //Colors go here
-    std::vector<int> colors = {2, 4, 6, 1, 3};
+    std::vector<int> colors = {1, 2, 3, 4, 5};
     //Change x and y axis titles here
     //TString xTitle = "Gamma";
-    TString xTitle = "Lepton Jet Delta R";
+    TString xTitle = "Lepton Jet Eta";
     TString yTitle = "Events (1/Integral)";
 
 
@@ -51,11 +53,15 @@ void SuperImpose() {
         if(!openedFile) {
             throw std::runtime_error("Cannot open file!");
             }
-        auto dir = openedFile->GetDirectory("_hists");
+        std::string name = hists.at(count);
+        uint pos = name.find("/");
+        std::string folder = name.substr(0,pos);
+		std::string histName = name.substr(pos+1);
+        auto dir = openedFile->GetDirectory(folder.c_str());
         if(!dir) {
             throw std::runtime_error("Cannot find directory!");
             }
-        hist = dynamic_cast<TH1*>(dir->Get(hists.at(count).c_str()));
+        hist = dynamic_cast<TH1*>(dir->Get(histName.c_str()));
         if (!hist)
         {
             throw std::runtime_error("Histogram " + hists.at(count) + " not found!");

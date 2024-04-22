@@ -31,30 +31,30 @@ bool EventDumpModule::process()
 {
   if(counter < numOfEvents || numOfEvents == -1)
   {
-    std::ofstream my_file;
-    if(genSim)
+    if (getFilter() == "Low Mass and Same Sign_") 
     {
-      auto genParticles = getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::none());
-      my_file.open("GenSimEventDump.txt", std::ios::app);
-      printGenSimParticleCollection(genParticles, my_file);
-      //std::cout << "\nAn event was printed";
-      my_file.close();
+      std::ofstream my_file;
+      if(genSim)
+      {
+        auto genParticles = getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::none());
+        my_file.open("GenSimEventDump.txt", std::ios::app);
+        printGenSimParticleCollection(genParticles, my_file);
+        //std::cout << "\nAn event was printed";
+        my_file.close();
+      }
+      if(reco)
+      {
+        auto recoParticles = getInput()->getParticles(EventInput::RecoLevel::Reco, ParticleType::none());
+        my_file.open("RecoEventDump.txt", std::ios::app);
+        printRecoParticleCollection(recoParticles, my_file);
+        //std::cout << "\nAn event was printed";
+        my_file.close();
+      }
+      counter++;
+      return true;
     }
-    if(reco)
-    {
-      auto recoParticles = getInput()->getParticles(EventInput::RecoLevel::Reco, ParticleType::none());
-      my_file.open("RecoEventDump.txt", std::ios::app);
-      printRecoParticleCollection(recoParticles, my_file);
-      //std::cout << "\nAn event was printed";
-      my_file.close();
-    }
-    counter++;
-    return true;
   }
-  else
-  {
-    return true;
-  }
+  return true;
 }
 
 void EventDumpModule::printGenSimParticleCollection(const ParticleCollection<GenSimParticle>& genParts,std::ofstream& my_file ) const
