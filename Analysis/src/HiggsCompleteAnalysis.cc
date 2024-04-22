@@ -42,7 +42,9 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
         for(double massTarget : massTargets) {
             std::vector<HistVariable> histVariablesBackground;
             histVariablesBackground.push_back(HistVariable::InvariantMass(recoDecay + "__hists/" + recoDecay + "_Opposite Sign Invariant Mass"));
-            
+            histVariablesBackground.push_back(HistVariable::InvariantMass(recoDecay + "__hists/" + recoDecay + "_1st Highest mu- Eta"));
+            //histVariablesBackground.push_back(HistVariable::InvariantMass(recoDecay + "__hists/" + recoDecay + "_1st Highest mu- Pt"));
+
             //cross sections should be all lowercase
             auto ttBarandMultiBosonandZZBackground = std::make_shared<Process>("t#bar{t}, WW, WZ, ZZ Background", 4);
             ttBarandMultiBosonandZZBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "TTbar_Boson_NA_Decay_LL_Run_2.root", "ttbar_lep50to500", reader, massTarget, luminosity));
@@ -73,18 +75,23 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
             dyBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Drell-Yan_MassCut_50-inf_Run_2.root", "dy50toinf", reader, massTarget, luminosity));
             
             auto higgsSignal = std::make_shared<Process>("Higgs Signal", 3);
+            std::vector<HistVariable> histVariablesSignal;
             for (std::string genSimDecay : genSimDecays)
             {
-                std::vector<HistVariable> histVariablesSignal;
+                histVariablesSignal.clear();
                 std::string decayName = genSimDecay + "_" + recoDecay;
-                histVariablesSignal.push_back(HistVariable::InvariantMass(decayName + "__hists/" + decayName + "_Opposite Sign Invariant Mass"));                
+                histVariablesSignal.push_back(HistVariable::InvariantMass(decayName + "__hists/" + decayName + "_Opposite Sign Invariant Mass"));
+                histVariablesSignal.push_back(HistVariable::InvariantMass(decayName + "__hists/" + decayName + "_1st Highest mu- Eta"));                
+                //histVariablesSignal.push_back(HistVariable::InvariantMass(decayName + "__hists/" + decayName + "_1st Highest mu- Pt"));
                 higgsSignal->addProcess(makeSignalProcess(histVariablesSignal, filePath, "Higgs" + std::to_string((int) massTarget) + ".root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
             }
             // std::vector<std::shared_ptr<Correction>> corrections = {};
             // auto correction = std::make_shared<ConstantCorrection>(2);
             //corrections.push_yzback(correction);
 
+
             auto higgsData = std::make_shared<Process>("Data", 1);
+            // 150022816 events in Data_Trigger_SingleMuon_Year_2016B.root before TriggerCut change
             higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016B.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
             higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016C.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
             higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016D.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));            

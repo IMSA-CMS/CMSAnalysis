@@ -134,10 +134,10 @@ void LeptonJetReconstructionPlan::initialize()
   // eventHistMod->addHistogram(genSimDeltaRHist);
   // histOutputMod->addHistogram(genSimGammaHist);
   // eventHistMod->addHistogram(genSimGammaHist);
-  // //histOutputMod->addHistogram(darkPhotonMassHist);
-  // //eventHistMod->addHistogram(darkPhotonMassHist);
-  // //histOutputMod->addHistogram(genSimDeltaRPsedoFilteredHist);
-  // //eventHistMod->addHistogram(genSimDeltaRPsedoFilteredHist);
+  //histOutputMod->addHistogram(darkPhotonMassHist);
+  //eventHistMod->addHistogram(darkPhotonMassHist);
+  //histOutputMod->addHistogram(genSimDeltaRPsedoFilteredHist);
+  //eventHistMod->addHistogram(genSimDeltaRPsedoFilteredHist);
   // histOutputMod->addHistogram(genSimGammaPsedoFilteredHist);
   // eventHistMod->addHistogram(genSimGammaPsedoFilteredHist);
   // histOutputMod->addHistogram(genSimDeltaRTwoJetsPsedoFilteredHist);
@@ -219,8 +219,8 @@ void LeptonJetReconstructionPlan::initialize()
   modules.addAnalysisModule(eventHistMod);
 
   // modules.addProductionModule(triggerMod);
-  modules.addAnalysisModule(leptonEfficiency);
-  modules.addAnalysisModule(leptonJetEfficiency);
+  //modules.addAnalysisModule(leptonEfficiency);
+  //modules.addAnalysisModule(leptonJetEfficiency);
   //modules.addAnalysisModule(massRecoEfficiency200);
   //modules.addAnalysisModule(massRecoEfficiency500);
   //modules.addAnalysisModule(massRecoEfficiency800);

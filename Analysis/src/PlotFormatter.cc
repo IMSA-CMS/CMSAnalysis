@@ -613,6 +613,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
 
     TH1* hist;
     if(first == 0) {
+        std::cout << "check 1";
         hist = background->GetHistogram();
     }
     else if (first == 1){
@@ -642,6 +643,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     //legend->AddEntry(signal, " " + toAdd, "F");
     int count = 0;
     for(const auto&& obj2 : *background->GetHists()) {
+        std::cout << "count";
         name = processes->getNamesWithLabel("background").at(count);
         toAdd = name;
         legend->AddEntry(obj2, " " + toAdd, "F");
@@ -654,6 +656,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     //Draws the other histogram    
     if(first == 0) {
         //signal->Draw("HIST SAME");
+        std::cout << "first = 0";
         signal->SetLineColor(kBlack);
         signal->SetLineWidth(2);
         histVector.push_back(signal);
@@ -663,6 +666,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
         histVector.push_back(data);
     }
     else if(first == 1) {
+        std::cout << "first = 1";
         //background->SetLineColor(kBlack);
         background->Draw("HIST SAME");
         stackVector.push_back(background);
@@ -672,6 +676,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
         histVector.push_back(data);
     }
     else {
+        std::cout << "first = 2";
         //signal->Draw("HIST SAME");
         signal->SetLineColor(kBlack);
         signal->SetLineWidth(2); 

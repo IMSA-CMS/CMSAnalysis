@@ -62,7 +62,6 @@ TH1* RootFileInput::getHist(std::string histType) const
 			delete dir;
 			delete hist;
 			delete file;
-			
 			return emptyHist;
 		}
 	}
