@@ -22,8 +22,8 @@ Implementation:
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
-#include "/cvmfs/cms.cern.ch/slc7_amd64_gcc820/cms/cmssw/CMSSW_10_6_4/src/FWCore/Framework/interface/Run.h"
-#include "FWCore/Framework/interface/EDAnalyzer.h"
+#include "FWCore/Framework/interface/Run.h"
+#include "FWCore/Framework/interface/one/EDAnalyzer.h"
 #include <FWCore/ServiceRegistry/interface/Service.h>
 #include <CommonTools/UtilAlgos/interface/TFileService.h>
 #include <TTree.h>
@@ -43,7 +43,7 @@ Implementation:
 // class declaration
 //
 
-class DimuonHiggsPlusPlus : public edm::EDAnalyzer {
+class DimuonHiggsPlusPlus : public edm::one::EDAnalyzer<edm::one::SharedResources> {
 public:
   explicit DimuonHiggsPlusPlus(const edm::ParameterSet&);
   ~DimuonHiggsPlusPlus();
@@ -67,7 +67,7 @@ private:
 
 
   //virtual void beginRun(edm::Run const&, edm::EventSetup const&) override;
-  virtual void endRun(edm::Run const& iRun, edm::EventSetup const& iEventSetup) override;
+  //virtual void endRun(edm::Run const& iRun, edm::EventSetup const& iEventSetup) override;
   //virtual void beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) override;
   //virtual void endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) override;
 
@@ -1342,18 +1342,18 @@ Dimuon::beginRun(edm::Run const& iRun, edm::EventSetup const& iEventSetup)
 
 // ------------ method called when ending the processing of a run  ------------
 
-void 
-  DimuonHiggsPlusPlus::endRun(edm::Run const& iRun, edm::EventSetup const& iEventSetup)
-  {
-   edm::Handle< GenRunInfoProduct > genInfoProduct;
-  iRun.getByToken(genInfoProductToken_, genInfoProduct );
-  crossSec = genInfoProduct->internalXSec().value();
-  std::cout<< "Cross Section is: "  << crossSec << std::endl;  
+// void 
+//   DimuonHiggsPlusPlus::endRun(edm::Run const& iRun, edm::EventSetup const& iEventSetup)
+//   {
+//    edm::Handle< GenRunInfoProduct > genInfoProduct;
+//   iRun.getByToken(genInfoProductToken_, genInfoProduct );
+//   crossSec = genInfoProduct->internalXSec().value();
+//   std::cout<< "Cross Section is: "  << crossSec << std::endl;  
 
-  double d = (double)countXY/(double)totalXY;
-  std::cout<< d << std::endl;
+//   double d = (double)countXY/(double)totalXY;
+//   std::cout<< d << std::endl;
  
-  }
+//   }
 
   
 // ------------ method called when starting to processes a luminosity block  ------------

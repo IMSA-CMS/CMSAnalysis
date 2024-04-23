@@ -111,6 +111,8 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents)
   // each iteration in for loop, processing file... # of events and name of file
 
   int fileCounter = 0;
+  int eventCounter = 0;
+  bool stopNow = false;
 
   // loop through all of the files
   for (auto &params : rootFiles)
@@ -126,7 +128,6 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents)
 
       std::cout << "Name of file: " << fileName << "\n";
 
-      ++fileCounter;
       TFile *tFile = TFile::Open(fileName.c_str(), "READ");
       // pass empty files
       if (!tFile)
@@ -139,34 +140,45 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents)
       std::cout << "Number of events in file: " << file->getNumOfEvents() << "\n";
 
       // Loops through every event in the file
-      int count = 0;
+
       while (true)
       {
         if (file->isDone())
         {
           break;
         }
-        ++count;
+
         modules->processOneEvent(&eventInterface); // EventInterface will loop through all event files in analyzer
         file->nextEvent();
-        if (outputEvery != 0 && count % outputEvery == 0)
+        ++eventCounter;
+        
+        if (outputEvery != 0 && eventCounter % outputEvery == 0)
         {
-          std::cout << "Processed " << count << " Events" << std::endl;
+          std::cout << "Processed " << eventCounter << " events" << std::endl;
         }
-        if (count == maxEvents)
+        if (maxEvents > 0 && eventCounter >= maxEvents)
         {
+          stopNow = true;
           break;
         }
+      }
+      
+      ++fileCounter;
+      if (nFiles > 0 && fileCounter >= nFiles)
+      {
+        stopNow = true;
+      }
+      if (stopNow)
+      {
+        break;
       }
     delete tFile;
     }
 
-
-    // Checks that the correct number of files are processed
-    if (nFiles != -1 && fileCounter >= nFiles)
+    if (stopNow)
     {
       break;
     }
   }
-  std::cout << "number of root files: " << fileCounter << "\n";
+  std::cout << "number of Root files processed: " << fileCounter << "\n";
 }
