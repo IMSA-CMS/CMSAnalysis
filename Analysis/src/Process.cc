@@ -14,24 +14,28 @@ TH1* Process::getHist(std::string histType, bool scaleToExpected) const
 	int maxBinNum = 0;
 	double maxBarWidth = 0.0;
 	int singleProcessNumber = 0;
-	TH1* hist;
+	TH1* newHist;
+	TH1* hist; 
 	if(processes.size() > 0) {
 		for (const auto& singleProcess : processes)
 		{
 			singleProcessNumber++;
-			if (singleProcess.getHist(histType, scaleToExpected) == 0) {
+			hist = singleProcess.getHist(histType, scaleToExpected);
+			if (!hist || hist->IsZombie()) 
+			{
 				throw std::runtime_error("Histogram not found in process: " + this->name + "\nIn singleProcess number: " + singleProcessNumber);
 			}
-			if (singleProcess.getHist(histType, scaleToExpected)->GetNbinsX() > maxBinNum)
+			//std::cout << "numBins: " << hist->GetNbinsX() << "\n";
+			if (hist->GetNbinsX() > maxBinNum)
 			{
-				maxBinNum = singleProcess.getHist(histType, scaleToExpected)->GetNbinsX();
+				maxBinNum = hist->GetNbinsX();
 			}
-			if ((singleProcess.getHist(histType, scaleToExpected)->GetXaxis()->GetBinWidth(maxBinNum)) > maxBarWidth)
+			if ((hist->GetXaxis()->GetBinWidth(maxBinNum)) > maxBarWidth)
 			{
-				maxBarWidth = (singleProcess.getHist(histType, scaleToExpected)->GetXaxis()->GetBinWidth(maxBinNum));
+				maxBarWidth = (hist->GetXaxis()->GetBinWidth(maxBinNum));
 			}
 		}
-		hist = new TH1F(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * maxBarWidth);
+		newHist = new TH1F(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * maxBarWidth);
 		TH1* toAdd;
 		TList* toMerge = new TList;
 		for (const auto& singleProcess : processes)	
@@ -39,17 +43,17 @@ TH1* Process::getHist(std::string histType, bool scaleToExpected) const
 			toAdd = singleProcess.getHist(histType, scaleToExpected);
 			toMerge->Add(toAdd);
 		}
-		hist->Merge(toMerge);
-		hist->SetLineColor(color);
-		hist->SetFillColor(color);
+		newHist->Merge(toMerge);
+		newHist->SetLineColor(color);
+		newHist->SetFillColor(color);
 	}
 	else{
-		hist = new TH1F(name.c_str(), name.c_str(), 1, 0, 1);
+		newHist = new TH1D(name.c_str(), name.c_str(), 1, 0.0, 0.0);
 	}
 	//If you want yield to print while running SuperPlot uncomment the print statement (only prints the yield for the first MassTarget in the process)
 	//std::cout << "Total yield for mass target " << processes.at(0).getMassTarget() << " is " << getYield("processes.at(0).getMassTarget()") << std::endl;
 	
-	return hist;
+	return newHist;
 }
 
 TH2* Process::get2DHist(std::string histType) const

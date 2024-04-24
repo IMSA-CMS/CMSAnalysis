@@ -14,7 +14,7 @@ class TTree;
 class DelphesEventFile : public EventFile
 {
     public:
-        DelphesEventFile(TFile* ifile);
+        DelphesEventFile(TFile* ifile, std::shared_ptr<FileParams> iparams);
         virtual void nextEvent() override;
         virtual bool isDone() const override;
         // simply dumps gensim particles from event into ParticleCollection

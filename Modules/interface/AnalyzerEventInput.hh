@@ -32,6 +32,8 @@ class AnalyzerEventInput : public EventInput
         virtual double getMET() const override;
         virtual unsigned long long getEventIDNum() const override; 
         virtual bool checkTrigger(std::string triggerName, std::string subProcess) const override;
+
+        virtual const std::shared_ptr<FileParams> getFileParams() const override;
     private:
         const EventInterface** eventInterface;
 };

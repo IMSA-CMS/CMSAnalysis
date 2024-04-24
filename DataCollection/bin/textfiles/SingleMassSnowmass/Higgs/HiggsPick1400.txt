@@ -1,0 +1,4 @@
+H++toLL
+Mass:	1400
+Run:	HLLHC
+Lepton:	LL

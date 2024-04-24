@@ -14,7 +14,7 @@ class TFile;
 class GenSimEventFile : public EventFile
 {
     public:
-        GenSimEventFile(TFile* ifile);
+        GenSimEventFile(TFile* ifile, std::shared_ptr<FileParams> iparams);
         virtual void nextEvent() override;
         virtual bool isDone() const override;
         virtual ParticleCollection<GenSimParticle> getGenSimParticles() const override;
