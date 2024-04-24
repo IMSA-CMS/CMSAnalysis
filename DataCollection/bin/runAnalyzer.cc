@@ -100,9 +100,9 @@ int main(int argc, char **argv)
   auto modules = plan->getModules();
   analyzer.addModules(modules);
    EventLoader eventLoader(EventLoader::fetchRootFiles(inputFile), &analyzer);
-    analyzer.initialize();
+    analyzer.initialize(outputFile);
     eventLoader.run(outputEvery, numFiles, maxEvents);
-    analyzer.writeOutputFile(outputFile);
+    analyzer.writeOutputFile();
 
   
   std::cout << "Processing complete!" << std::endl;
