@@ -13,15 +13,19 @@
 
 void SpecialVariableModule::addVariablesToReader(TMVA::Reader *reader) const
 {
-	for (auto pair : integers)
+	for (auto& pair : integers)
 	{
-		reader->AddVariable(pair.first, &pair.second);
+		tempRef = (&(pair.second));
+		reader->AddVariable((pair.first).c_str(), const_cast<Int_t*>(tempRef));
+		std::cout << "temporary int reference" << *tempRef;
 	}
 	
 	
-	for (auto pair : floats)
+	for (auto& pair : floats)
 	{
-		reader->AddVariable(pair.first, &pair.second);
+		tempRef1 = (&(pair.second));
+		reader->AddVariable((pair.first).c_str(), const_cast<Float_t*>(tempRef1)); // reinterpret_cast<Float_t*>
+		std::cout << "temporary float reference" << *tempRef1;
 	}
 }
 
@@ -31,7 +35,7 @@ void SpecialVariableModule::addVariablesToTree(TTree *tree)
 	{
 		std::cout << "Adding variable " << pair.first << '\n';
 		// auto ptm = &std::pair<std::string, int>::second;
-		tree->Branch(pair.first.c_str(), reinterpret_cast<void*>(&(pair.second)), (pair.first+"/I").c_str());
+		tree->Branch(pair.first.c_str(), reinterpret_cast<void*>(&(pair.second)), (pair.first+"/F").c_str());
 	}
 	
 	
@@ -49,7 +53,7 @@ void SpecialVariableModule::addVariablesToDataLoader(TMVA::DataLoader *dataloade
 	for (auto pair : integers)
 	{
 		std::cout << "Adding variable " << pair.first << '\n';
-		dataloader->AddVariable(pair.first.c_str(), pair.first.c_str(), "", 'I');
+		dataloader->AddVariable(pair.first.c_str(), pair.first.c_str(), "", 'F');
 	}
 	
 	

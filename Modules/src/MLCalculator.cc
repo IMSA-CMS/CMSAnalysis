@@ -18,6 +18,8 @@ void MLCalculator::initialize()
 double MLCalculator::getOutput(Particle part) const
 {
     specialVariable->calculateVariables(part);
+    //std::cout << "MLCalculator temporary float " << *(specialVariable->tempRef1) << '\n';
+    //std::cout << "MVA Output\n\n\n" << reader.EvaluateMVA(method);
     return reader.EvaluateMVA(method);
 }
 

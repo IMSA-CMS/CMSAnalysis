@@ -12,17 +12,19 @@ LeptonJetMLStripModule::LeptonJetMLStripModule()
 void LeptonJetMLStripModule::addVariables()
 {
     //addVariable("leadingPt", SpecialVariableModule::VariableType::Float);
-    addVariable("nParticles", SpecialVariableModule::VariableType::Integer);
-	addVariable("eta", SpecialVariableModule::VariableType::Float);
+    addVariable("nParticles", SpecialVariableModule::VariableType::Float);
+	
 	//addVariable("phi", SpecialVariableModule::VariableType::Float);
 	// reader.AddVariable("mass", &mass);
-	addVariable("deltaR", SpecialVariableModule::VariableType::Float);
-	//addVariable("sumPt", SpecialVariableModule::VariableType::Float);
+	
+	addVariable("sumPt", SpecialVariableModule::VariableType::Float);
 	//addVariable("numMuons", SpecialVariableModule::VariableType::Integer);
 	addVariable("deltaPt", SpecialVariableModule::VariableType::Float);
+	addVariable("deltaR", SpecialVariableModule::VariableType::Float);
+	addVariable("eta", SpecialVariableModule::VariableType::Float);
 	//addVariable("maxDXY", SpecialVariableModule::VariableType::Float);
 	//addVariable("maxDZ", SpecialVariableModule::VariableType::Float);
-	//addVariable("maxIsolation", SpecialVariableModule::VariableType::Float);
+	addVariable("maxIsolation", SpecialVariableModule::VariableType::Float);
 
 
 }
@@ -37,7 +39,7 @@ void LeptonJetMLStripModule::calculateVariables(Particle particle)
     //for (const auto &leptonJet : leptonJets)
     //{
         //std::cout << "Calling addValue for " << leptonJet.getNumParticles() <<'\n';
-    	addValue("nParticles", leptonJet.getNumParticles());
+    	addValue("nParticles", static_cast<float>(leptonJet.getNumParticles()));
 		double sumPt = 0;
         // jetIndex = jetIterator;
 		addValue("phi", leptonJet.getPhi());

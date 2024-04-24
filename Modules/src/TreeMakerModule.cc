@@ -12,15 +12,12 @@ name(iName)
 
 bool TreeMakerModule::process()
 {
-    auto leptonJets = getInput()->getSpecial("LeptonJet");
-    std::cout << __LINE__ << "\n";
+    auto leptonJets = getInput()->getSpecial("leptonJet");
     for (const auto &leptonJet : leptonJets)
     {
-        std::cout << __LINE__ << "\n";
+        //std::cout << "marker";
         specialVariable->calculateVariables(leptonJet);//enum as parameter?; f
-        std::cout << __LINE__ << "\n";
         tree->Fill();
-        std::cout << __LINE__ << "\n";
     }
     //specialVariable->calculateVariables();//enum as parameter?; f
     //tree->Fill();
