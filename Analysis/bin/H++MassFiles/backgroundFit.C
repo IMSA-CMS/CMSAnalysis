@@ -43,12 +43,12 @@ double pearson(double *x, double *par)
 
 std::vector<std::string> channelTypes =
 {
-	"eeee",
-	"eeeu",
-	"eueu",
-	"eeuu",
-	"euuu",
-	"uuuu"
+	"eeee_eeee",
+	"eeeu_eeeu",
+	"eueu_eueu",
+	"eeuu_eeuu",
+	"euuu_euuu",
+	"uuuu_uuuu"
 };
 
 std::vector<std::string> histogramTypes = 
@@ -99,6 +99,8 @@ TFitResultPtr fitToExponential(char const* name, TH1* hist, TFile* file, std::ve
 TFitResultPtr fitToPowerLaw(char const* name, TH1* hist, TFile* file, std::vector<double> params, double lowerBound, double upperBound, int iterations);
 TFitResultPtr fitToExponential(char const* name, TH1* hist, TFile* file, std::vector<double> params, double lowerBound, double upperBound, int iterationss);
 
+void fullSignalFit();
+
 void backgroundFit()
 {
 	
@@ -129,42 +131,129 @@ void backgroundFit()
 	// graph(paramData);
 	//	fitParameters();
 
-	multipleFits();
+	fullSignalFit();
 }
 
-void multipleFits()
+void fullSignalFit() 
 {
-	const double lowerBound = 150;
-	const double upperBound = 1000;
-	// Filename of root files that have the graphs to fit in them
-	std::string fileName = "ZZ_Decay_4L_Run_2.root";
+	const double min = 0;
+	const double max = 2000;
 
-	// This script creates three root files:
-	// The name of the root file the fitted histograms are to be stored
-	std::string fitHistsName = "fitHistograms.root";
-	std::string fitParameterValueFile = "ZZ_Decay_4L_Fit_Parameters.txt";
+	std::string fitHistsName = "histogramFits.root";
+	std::string fitParameterValueFile = "histogramFunctions.txt";
+	std::string parameterFits = "parameterFits.root";
+	std::string parameterFunctions = "parameterFunctions.txt";
+	std::vector<int> masses = {500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
 
-	FitFunctionCollection fitFunctions;
-	Fitter fitter(fileName, fitHistsName, fitParameterValueFile);
+	Fitter fitter(fitHistsName, fitParameterValueFile, parameterFits, parameterFunctions);
 
-	for (auto histType : histogramTypes)
+	std::vector<TFile*> files;
+	for (size_t i = 0; i < masses.size(); ++i) 
 	{
-		for (auto channel : channelTypes)
+		std::string massRootFile = "Higgs";
+		massRootFile += std::to_string(masses[i]).append(".root");
+		files.push_back(TFile::Open(massRootFile.c_str()));
+	}
+
+	for (const auto& histType : histogramTypes) 
+	{
+		for (const auto& channel : channelTypes) 
 		{
-			std::string histogramName = channel + "_" + histType;
-			FitFunction func = FitFunction::createFunctionOfType(
-				FitFunction::FunctionType::POWER_LAW, 
-				histogramName,
-				"",
-				150,
-				1500);
-			fitFunctions.insert(histogramName, func);
+			std::unordered_map<std::string, double> massValues;
+			std::unordered_map<std::string, TH1*> histogramMap;
+			std::vector<std::string> paramNames = {"alpha_{low}","alpha_{high}","n_{low}", "n_{high}", "mean", "sigma", "norm"};
+			std::vector<std::string> actualParams;
+			FitFunctionCollection currentFunctions;
+			for (size_t i = 0; i < paramNames.size(); ++i) {
+				actualParams.push_back(std::string(paramNames[i] + '_' + channel + '_' + histType));
+			}
+
+			for (size_t i = 0; i < masses.size(); ++i) 
+			{
+				std::string massRootFile = "Higgs";
+				massRootFile += std::to_string(masses[i]).append(".root");
+
+				std::string keyName = std::to_string(masses[i]) + '_' + channel + '_' + histType;
+
+				FitFunction func = FitFunction::createFunctionOfType(FitFunction::DOUBLE_SIDED_CRYSTAL_BALL, keyName, "", min, max);
+				currentFunctions.insert(func);
+				
+				std::string histogramName = channel + "_" + histType;
+				// std::cout << "Getting histogram" << '\n';
+				TH1* selectedHist = getHist(histogramName, files[i]);
+				// selectedHist->Draw();
+				// std::string wait;
+				// std::cin >> wait;
+
+				histogramMap.insert({keyName, selectedHist});
+				
+				massValues.insert({keyName, masses[i]});
+
+				// file->Close();
+				// selectedHist->Draw();
+				// std::string wait;
+				// std::cin >> wait;
+			}
+
+			fitter.histograms = histogramMap;
+			fitter.loadFunctions(currentFunctions);
+			fitter.fitFunctions();
+			fitter.parameterizeFunctions(massValues, actualParams);
 		}
 	}
-	fitter.loadFunctions(fitFunctions);
-	fitter.fitFunctions();
 
 }
+
+// void multipleFits()
+// {
+// 	const double lowerBound = 150;
+// 	const double upperBound = 2000;
+// 	// Filename of root files that have the graphs to fit in them
+
+// 	// This script creates three root files:
+// 	// The name of the root file the fitted histograms are to be stored
+// 	std::string fitHistsName = "histogramFits.root";
+// 	std::string fitParameterValueFile = "histogramFunctions.txt";
+// 	std::string parameterFits = "parameterFits.root";
+// 	std::string parameterFunctions = "parameterFunctions.txt";
+
+// 	std::vector<int> masses = {500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
+// 	FitFunctionCollection allFunctions;
+// 	std::unordered_map<std::string, TH1*> histograms;
+// 	std::unordered_map<std::string, double> paramData;
+
+// 	for (double mass : masses) 
+// 	{
+// 		std::string histogramFile = "Higgs" + std::to_string((int) mass) + ".root";
+// 		TFile* file = TFile::Open(histogramFile.c_str());
+// 		for (auto histType : histogramTypes)
+// 		{
+// 			for (auto channel : channelTypes)
+// 			{
+// 				std::string name = "Higgs" + std::to_string((int) mass) + channel;
+// 				std::string histogramName = channel + "_" + histType;
+// 				FitFunction func = FitFunction::createFunctionOfType(
+// 					FitFunction::FunctionType::DOUBLE_SIDED_CRYSTAL_BALL, 
+// 					name,
+// 					"",
+// 					150,
+// 					2000);
+// 				TH1* histogram = getHist(histogramName, file);
+// 				histograms.insert({name, histogram});
+// 				allFunctions.insert(name, func);
+// 				paramData.insert({name, mass});
+// 			}
+// 		}
+// 	}
+
+// 	Fitter fitter(fitHistsName, fitParameterValueFile);
+// 	fitter.histograms = histograms;
+
+// 	fitter.loadFunctions(allFunctions);
+// 	fitter.fitFunctions();
+// 	FitFunctionCollection parameterFuncs = fitter.parameterizeFunctions(paramData, parameterFits);
+// 	parameterFuncs.saveFunctions(parameterFunctions);
+// }
 
 // void multipleFits()
 // {
@@ -453,17 +542,17 @@ int getLowestDerivativeBin(TH1* histogram)
 	return minBin * histogram->GetBinWidth(1);
 }
 
-std::vector<double> randomizeParameters(const std::vector<double>& parameters)
-{
-	std::srand(std::time(nullptr));
+// std::vector<double> randomizeParameters(const std::vector<double>& parameters)
+// {
+// 	std::srand(std::time(nullptr));
 
-	std::vector randomParams(parameters);
+// 	std::vector<doubl randomParams(parameters);
 
-	for (size_t i = 0; i < randomParams.size(); ++i)
-	{
-		double randScalar = 10 * (((double)std::rand()) / RAND_MAX);
-		randomParams[i] *= randScalar;
-	}
+// 	for (size_t i = 0; i < randomParams.size(); ++i)
+// 	{
+// 		double randScalar = 10 * (((double)std::rand()) / RAND_MAX);
+// 		randomParams[i] *= randScalar;
+// 	}
 
-	return randomParams;
-}
+// 	return randomParams;
+// }
