@@ -20,11 +20,12 @@ public:
 	void insert(FitFunction& function);
 	size_t size() const;
 	FitFunction& get(const std::string& index);
-	void saveFunctions(const std::string& fileName);
+	void saveFunctions(const std::string& fileName, bool append = false);
 
 	FitFunction& operator[](const std::string& index);
 	// FitFunction& operator[](int index);
 	bool checkFunctionsSimilar();
+	void add(const FitFunction& function);
 };
 
 #endif
