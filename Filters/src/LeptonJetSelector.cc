@@ -9,7 +9,7 @@
 #include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
 #include "DataFormats/Math/interface/deltaR.h"
 
-LeptonJetSelector::LeptonJetSelector(double ideltaRCut, double idXYCut, double idZCut) : deltaRCut(ideltaRCut), dXYCut(idXYCut), dZCut(idZCut)
+LeptonJetSelector::LeptonJetSelector(double ideltaRCut) : deltaRCut(ideltaRCut)
 { }
 
 void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) const

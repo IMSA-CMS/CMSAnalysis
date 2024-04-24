@@ -1,8 +1,8 @@
 #include "CMSAnalysis/EventFiles/interface/StrippedEventFile.hh"
 
 
-StrippedEventFile::StrippedEventFile(TFile* ifile) : 
-    EventFile(ifile),
+StrippedEventFile::StrippedEventFile(TFile* ifile, std::shared_ptr<FileParams> iparams) : 
+    EventFile(ifile, iparams),
     elecSize(treeReader, "elecSize"),
     elecEta(treeReader, "elecEta"),
     elecPhi(treeReader, "elecPhi"),
@@ -156,3 +156,7 @@ bool StrippedEventFile::isDone() const
     return getEventCount() > tree->GetEntries();
 }
 
+std::vector<double> StrippedEventFile::getPDFWeights() const
+{
+    throw "Function not implemented";
+}

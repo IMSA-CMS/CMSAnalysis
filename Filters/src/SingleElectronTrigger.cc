@@ -15,6 +15,6 @@ bool SingleElectronTrigger::checkTrigger(const EventInput *input)
 
   double pT = particles.getLeadingTransverseMomentum();
 
-  // The particle passes the trigger if the transverse momentum is greater than the cutoff
+  // The event passes the trigger if the transverse momentum is greater than the cutoff
   return (pT >= pTCutoff);
 };

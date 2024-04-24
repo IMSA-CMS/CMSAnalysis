@@ -7,7 +7,6 @@
 #include <vector>
 #include <memory>
 #include <unordered_set>
-#include "FileParams.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "ProcessDictionary.hh"
 #include "RootEventInterface.hh"

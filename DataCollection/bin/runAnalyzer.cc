@@ -47,6 +47,8 @@ int main(int argc, char **argv)
 
   parser.addOption("analysis", optutl::CommandLineParser::kString, "Type of Analysis", "");
   parser.addOption("moduleOptions", optutl::CommandLineParser::kString, "Module Specific Options", "");
+
+//  parser.addOption("maxEvents", optutl::CommandLineParser::kInteger, "Number of events to process", -1);
   parser.parseArguments(argc, argv);
 
   std::string inputFile = parser.stringValue("input");
