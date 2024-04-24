@@ -11,7 +11,7 @@ bool LeptonJetReconstructionModule::process() // reco::deltaR(v1, v2)
 {
   // std::cout << "LeptonJetReconstruction process()";
   //  std::cout << "Lepton jet selector: " << leptonSelector << '\n';
-  const auto &recoCandidates = getInput()->getLeptons(EventInput::RecoLevel::Reco);
+  const auto &recoCandidates = getInput()->getParticles(EventInput::RecoLevel::Reco, ParticleType::muon());
   leptonJets = findLeptonJets(recoCandidates);
   findDeltaRValues();
   findPtValues();

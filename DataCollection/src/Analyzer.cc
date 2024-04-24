@@ -41,10 +41,9 @@ Analyzer::~Analyzer()
   delete input;
 }
 
-void Analyzer::writeOutputFile(const std::string &outputFile)
+void Analyzer::writeOutputFile()
 {
   // Create the output file
-  TFile *outputRootFile = new TFile(outputFile.c_str(), "RECREATE");
   // Finalize the modules
   for (auto module : productionModules)
   {
@@ -69,6 +68,7 @@ void Analyzer::writeOutputFile(const std::string &outputFile)
       module->finalize();
       for (auto &str : filterNames) //writes analysis modules by filter string
       {
+        //std::cout << "filterName: " << str << "\n";
         auto it = filterDirectories.find(str);
         if (it == filterDirectories.end())
         {
@@ -96,18 +96,6 @@ void Analyzer::writeOutputFile(const std::string &outputFile)
 //gets modules from module collection
 void Analyzer::addModules(ModuleCollection modules)
 {
-  if (modules.getProductionModules().size() == 0)
-  {
-    std::cout << "You have no production modules!" << std::endl;
-  }
-  if (modules.getFilterModules().size() == 0)
-  {
-    std::cout << "You have no filter modules!" << std::endl;
-  }
-  if (modules.getAnalysisModules().size() == 0)
-  {
-    std::cout << "You have no analysis modules!" << std::endl;
-  }
     productionModules = modules.getProductionModules();
     filterModules = modules.getFilterModules();
     analysisModules = modules.getAnalysisModules();
@@ -131,11 +119,13 @@ std::vector<std::shared_ptr<Module>> Analyzer::getAllModules() const
   return modules;
 }
 
-void Analyzer::initialize()
+void Analyzer::initialize(const std::string& outputFile)
 {
   // This keeps the histograms separate from the files they came from, avoiding errors
   TH1::AddDirectory(kFALSE);
   TH1::SetDefaultSumw2(kTRUE);
+  outputRootFile = new TFile(outputFile.c_str(), "RECREATE");
+
 
   // Checks if all dependencies are loaded properly
   for (auto module : getAllModules())

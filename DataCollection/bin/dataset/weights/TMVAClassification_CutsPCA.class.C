@@ -9,11 +9,11 @@
 Method         : Cuts::CutsPCA
 TMVA Release   : 4.2.1         [262657]
 ROOT Release   : 6.24/07       [399367]
-Creator        : kzhang1
-Date           : Mon Apr  3 23:23:08 2023
+Creator        : satyam
+Date           : Fri Aug  4 00:31:50 2023
 Host           : Linux cmsbuild02.cern.ch 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
-Dir            : /uscms/homes/k/kzhang1/practice/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin
-Training events: 60497
+Dir            : /uscms/homes/s/satyam/fakeAnalysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin
+Training events: 6973
 Analysis type  : [Classification]
 
 
@@ -35,30 +35,34 @@ CutRangeMin[0]: "-1.000000e+00" [Minimum of allowed cut range (set per variable)
     CutRangeMin[3]: "-1.000000e+00"
     CutRangeMin[4]: "-1.000000e+00"
     CutRangeMin[5]: "-1.000000e+00"
+    CutRangeMin[6]: "-1.000000e+00"
 CutRangeMax[0]: "-1.000000e+00" [Maximum of allowed cut range (set per variable)]
     CutRangeMax[1]: "-1.000000e+00"
     CutRangeMax[2]: "-1.000000e+00"
     CutRangeMax[3]: "-1.000000e+00"
     CutRangeMax[4]: "-1.000000e+00"
     CutRangeMax[5]: "-1.000000e+00"
+    CutRangeMax[6]: "-1.000000e+00"
 VarProp[0]: "FSmart" [Categorisation of cuts]
     VarProp[1]: "FSmart"
     VarProp[2]: "FSmart"
     VarProp[3]: "FSmart"
     VarProp[4]: "FSmart"
     VarProp[5]: "FSmart"
+    VarProp[6]: "FSmart"
 ##
 
 
 #VAR -*-*-*-*-*-*-*-*-*-*-*-* variables *-*-*-*-*-*-*-*-*-*-*-*-
 
-NVar 6
-leadingPt                     leadingPt                     leadingPt                     Leading Lepton Transverse Momentum                                  'F'    [5.0726776123,21324.2890625]
-nParticles                    nParticles                    nParticles                    Number of Particles                                             'F'    [2,5]
-eta                           eta                           eta                           Pseudorapidity                                                  'F'    [-2.51045441628,2.50291919708]
-phi                           phi                           phi                           Azimuthal Angle                                                 'F'    [-3.14158964157,3.14142203331]
-deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.876891136169]
-sumPt                         sumPt                         sumPt                         Total Transverse Momentum                                       'F'    [10.112449646,21441.2851562]
+NVar 7
+leadingPt                     leadingPt                     leadingPt                     Leading Lepton Transverse Momentum                                  'F'    [5.59494018555,19849.4726562]
+nParticles                    nParticles                    nParticles                    Number of Particles                                             'F'    [2,7]
+eta                           eta                           eta                           Pseudorapidity                                                  'F'    [-2.42465829849,2.49840736389]
+deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0.000141763171996,0.619156658649]
+sumPt                         sumPt                         sumPt                         Total Transverse Momentum                                       'F'    [10.9287805557,20096.2324219]
+numMuons                      numMuons                      numMuons                      Number of Muons                                                 'F'    [2,7]
+deltaPt                       deltaPt                       deltaPt                       Leading Change in Transverse Momentum                                  'F'    [5.59494018555,19849.4726562]
 NSpec 0
 
 
@@ -102,10 +106,10 @@ class ReadCutsPCA : public IClassifierReader {
    ReadCutsPCA( std::vector<std::string>& theInputVars )
       : IClassifierReader(),
         fClassName( "ReadCutsPCA" ),
-        fNvars( 6 )
+        fNvars( 7 )
    {
       // the training input variables
-      const char* inputVars[] = { "leadingPt", "nParticles", "eta", "phi", "deltaR", "sumPt" };
+      const char* inputVars[] = { "leadingPt", "nParticles", "eta", "deltaR", "sumPt", "numMuons", "deltaPt" };
 
       // sanity checks
       if (theInputVars.size() <= 0) {
@@ -129,18 +133,20 @@ class ReadCutsPCA : public IClassifierReader {
       }
 
       // initialize min and max vectors (for normalisation)
-      fVmin[0] = -89.8254852294922;
-      fVmax[0] = 30109.5234375;
-      fVmin[1] = -447.246154785156;
-      fVmax[1] = 1350.45166015625;
-      fVmin[2] = -3.27748370170593;
-      fVmax[2] = 3.28155159950256;
-      fVmin[3] = -2.55379700660706;
-      fVmax[3] = 2.61973905563354;
-      fVmin[4] = -0.746374785900116;
-      fVmax[4] = 0.193453341722488;
-      fVmin[5] = -2.96715497970581;
-      fVmax[5] = 0.310686767101288;
+      fVmin[0] = -359.605255126953;
+      fVmax[0] = 34146.7890625;
+      fVmin[1] = -534.09716796875;
+      fVmax[1] = 575.639526367188;
+      fVmin[2] = -2.42039513587952;
+      fVmax[2] = 2.498450756073;
+      fVmin[3] = -0.378962248563766;
+      fVmax[3] = 6.84301900863647;
+      fVmin[4] = -0.448450326919556;
+      fVmax[4] = 0.364216268062592;
+      fVmin[5] = -2.04085637278695e-10;
+      fVmax[5] = 1.04212483087451e-09;
+      fVmin[6] = -1.32781563522144e-10;
+      fVmax[6] = 2.64002153471665e-11;
 
       // initialize input variable types
       fType[0] = 'F';
@@ -149,6 +155,7 @@ class ReadCutsPCA : public IClassifierReader {
       fType[3] = 'F';
       fType[4] = 'F';
       fType[5] = 'F';
+      fType[6] = 'F';
 
       // initialize constants
       Initialize();
@@ -175,8 +182,8 @@ class ReadCutsPCA : public IClassifierReader {
    // input variable transformation
 
    void X2P_1( const double*, double*, int ) const;
-   double fMeanValues_1[3][6];
-   double fEigenVectors_1[3][6][6];
+   double fMeanValues_1[3][7];
+   double fEigenVectors_1[3][7][7];
 
    void InitTransform_1();
    void Transform_1( std::vector<double> & iv, int sigOrBgd ) const;
@@ -191,15 +198,15 @@ class ReadCutsPCA : public IClassifierReader {
    char   GetType( int ivar ) const { return fType[ivar]; }
 
    // normalisation of input variables
-   double fVmin[6];
-   double fVmax[6];
+   double fVmin[7];
+   double fVmax[7];
    double NormVariable( double x, double xmin, double xmax ) const {
       // normalise to output range: [-1, 1]
       return 2*(x - xmin)/(xmax - xmin) - 1.0;
    }
 
    // type of input variable: 'F' or 'I'
-   char   fType[6];
+   char   fType[7];
 
    // initialize internal variables
    void Initialize();
@@ -234,7 +241,7 @@ inline void ReadCutsPCA::X2P_1( const double* x, double* p, int index ) const
    // x, and return it in p (function extracted from TPrincipal::X2P)
    // It's the users responsibility to make sure that both x and p are
    // of the right size (i.e., memory must be allocated for p).
-   const int nVar = 6;
+   const int nVar = 7;
 
    for (int i = 0; i < nVar; i++) {
       p[i] = 0;
@@ -247,141 +254,183 @@ inline void ReadCutsPCA::InitTransform_1()
 {
    // PCA transformation, initialisation
    // initialise vector of mean values
-   fMeanValues_1[0][0] = 259.503470561;
-   fMeanValues_1[0][1] = 2.0372988786;
-   fMeanValues_1[0][2] = -0.0215239377191;
-   fMeanValues_1[0][3] = 0.0167058618449;
-   fMeanValues_1[0][4] = 0.0297202556853;
-   fMeanValues_1[0][5] = 335.255583709;
-   fMeanValues_1[1][0] = 45.4595056355;
-   fMeanValues_1[1][1] = 2.00849366079;
-   fMeanValues_1[1][2] = -0.0264860310738;
-   fMeanValues_1[1][3] = 0.0341655783285;
-   fMeanValues_1[1][4] = 0.195384204407;
-   fMeanValues_1[1][5] = 63.1546632767;
-   fMeanValues_1[2][0] = 59.9727599147;
-   fMeanValues_1[2][1] = 2.01044679901;
-   fMeanValues_1[2][2] = -0.0261495762588;
-   fMeanValues_1[2][3] = 0.0329817219883;
-   fMeanValues_1[2][4] = 0.184151357858;
-   fMeanValues_1[2][5] = 81.604470302;
+   fMeanValues_1[0][0] = 209.529003535;
+   fMeanValues_1[0][1] = 2.05333989824;
+   fMeanValues_1[0][2] = -0.0163799639032;
+   fMeanValues_1[0][3] = 0.0302315563783;
+   fMeanValues_1[0][4] = 280.486962554;
+   fMeanValues_1[0][5] = 2.05333989824;
+   fMeanValues_1[0][6] = 209.529003535;
+   fMeanValues_1[1][0] = 77.0864416101;
+   fMeanValues_1[1][1] = 2.14090909091;
+   fMeanValues_1[1][2] = 0.0740005741104;
+   fMeanValues_1[1][3] = 0.110043499677;
+   fMeanValues_1[1][4] = 100.178447126;
+   fMeanValues_1[1][5] = 2.14090909091;
+   fMeanValues_1[1][6] = 77.0864416101;
+   fMeanValues_1[2][0] = 192.814611668;
+   fMeanValues_1[2][1] = 2.06439122329;
+   fMeanValues_1[2][2] = -0.00497384409081;
+   fMeanValues_1[2][3] = 0.040303908322;
+   fMeanValues_1[2][4] = 257.731836557;
+   fMeanValues_1[2][5] = 2.06439122329;
+   fMeanValues_1[2][6] = 192.814611668;
 
    // initialise matrix of eigenvectors
-   fEigenVectors_1[0][0][0] = 0.698421677883;
-   fEigenVectors_1[0][0][1] = 0.715686389355;
-   fEigenVectors_1[0][0][2] = -6.93087308486e-05;
-   fEigenVectors_1[0][0][3] = 8.00713057639e-05;
-   fEigenVectors_1[0][0][4] = 0.000328563437887;
-   fEigenVectors_1[0][0][5] = 0.000181069620091;
-   fEigenVectors_1[0][1][0] = 1.93382578471e-05;
-   fEigenVectors_1[0][1][1] = -0.000512005657666;
-   fEigenVectors_1[0][1][2] = 0.00235886319006;
-   fEigenVectors_1[0][1][3] = -0.000503235634043;
-   fEigenVectors_1[0][1][4] = 0.987325319176;
-   fEigenVectors_1[0][1][5] = 0.158690371821;
-   fEigenVectors_1[0][2][0] = -1.7017539844e-05;
-   fEigenVectors_1[0][2][1] = -9.54777018078e-05;
-   fEigenVectors_1[0][2][2] = -0.00183404503021;
-   fEigenVectors_1[0][2][3] = 0.999997387247;
-   fEigenVectors_1[0][2][4] = 0.000701486046186;
-   fEigenVectors_1[0][2][5] = -0.00116631467829;
-   fEigenVectors_1[0][3][0] = -3.31917822478e-05;
-   fEigenVectors_1[0][3][1] = -6.53054658148e-05;
-   fEigenVectors_1[0][3][2] = -0.999995361476;
-   fEigenVectors_1[0][3][3] = -0.00183598236904;
-   fEigenVectors_1[0][3][4] = 0.00242070888269;
-   fEigenVectors_1[0][3][5] = -0.000202480138509;
-   fEigenVectors_1[0][4][0] = -1.33245748559e-06;
-   fEigenVectors_1[0][4][1] = 0.000178441279876;
-   fEigenVectors_1[0][4][2] = 0.000586361304498;
-   fEigenVectors_1[0][4][3] = -0.00126176358143;
-   fEigenVectors_1[0][4][4] = 0.158688795801;
-   fEigenVectors_1[0][4][5] = -0.987327655025;
-   fEigenVectors_1[0][5][0] = 0.715686494281;
-   fEigenVectors_1[0][5][1] = -0.69842156662;
-   fEigenVectors_1[0][5][2] = 2.115318088e-05;
-   fEigenVectors_1[0][5][3] = -5.443574767e-05;
-   fEigenVectors_1[0][5][4] = -0.000346891061775;
-   fEigenVectors_1[0][5][5] = -0.0001828648226;
-   fEigenVectors_1[1][0][0] = 0.618462626523;
-   fEigenVectors_1[1][0][1] = -0.785813448071;
-   fEigenVectors_1[1][0][2] = -0.000910400082612;
-   fEigenVectors_1[1][0][3] = 0.000307745096908;
-   fEigenVectors_1[1][0][4] = 0.000447812979814;
-   fEigenVectors_1[1][0][5] = 0.000283464169314;
-   fEigenVectors_1[1][1][0] = 6.3111117421e-06;
-   fEigenVectors_1[1][1][1] = 0.000342731211514;
-   fEigenVectors_1[1][1][2] = 0.000385104066833;
-   fEigenVectors_1[1][1][3] = -5.56573095645e-05;
-   fEigenVectors_1[1][1][4] = -0.0389922267534;
-   fEigenVectors_1[1][1][5] = 0.999239379401;
-   fEigenVectors_1[1][2][0] = 1.50086084041e-06;
-   fEigenVectors_1[1][2][1] = -0.00045491330574;
-   fEigenVectors_1[1][2][2] = 0.0568480334852;
-   fEigenVectors_1[1][2][3] = -0.998381829812;
-   fEigenVectors_1[1][2][4] = 0.00134737810983;
-   fEigenVectors_1[1][2][5] = -2.47853313879e-05;
-   fEigenVectors_1[1][3][0] = -0.000201268757371;
-   fEigenVectors_1[1][3][1] = 0.00097536598586;
-   fEigenVectors_1[1][3][2] = -0.998381292215;
-   fEigenVectors_1[1][3][3] = -0.0568502386198;
-   fEigenVectors_1[1][3][4] = -0.00132104438527;
-   fEigenVectors_1[1][3][5] = 0.000329723878968;
-   fEigenVectors_1[1][4][0] = 0.000185872022575;
-   fEigenVectors_1[1][4][1] = -0.000439312238232;
-   fEigenVectors_1[1][4][2] = 0.00138107748435;
-   fEigenVectors_1[1][4][3] = -0.00126872580518;
-   fEigenVectors_1[1][4][4] = -0.999237625216;
-   fEigenVectors_1[1][4][5] = -0.0389926117261;
-   fEigenVectors_1[1][5][0] = 0.785814166641;
-   fEigenVectors_1[1][5][1] = 0.618462412831;
-   fEigenVectors_1[1][5][2] = 0.000460364580435;
-   fEigenVectors_1[1][5][3] = -0.000254559439401;
-   fEigenVectors_1[1][5][4] = -0.000116117906775;
-   fEigenVectors_1[1][5][5] = -0.000221813601151;
-   fEigenVectors_1[2][0][0] = 0.673060797858;
-   fEigenVectors_1[2][0][1] = 0.739587058478;
-   fEigenVectors_1[2][0][2] = -7.56127096659e-05;
-   fEigenVectors_1[2][0][3] = -3.88827806059e-05;
-   fEigenVectors_1[2][0][4] = 0.000277584309155;
-   fEigenVectors_1[2][0][5] = -0.000247056771146;
-   fEigenVectors_1[2][1][0] = 2.46254230435e-05;
-   fEigenVectors_1[2][1][1] = -0.000334468056405;
-   fEigenVectors_1[2][1][2] = 0.000491274774636;
-   fEigenVectors_1[2][1][3] = 3.76992461597e-05;
-   fEigenVectors_1[2][1][4] = -0.0570010276141;
-   fEigenVectors_1[2][1][5] = -0.998373941769;
-   fEigenVectors_1[2][2][0] = -9.25010275189e-06;
-   fEigenVectors_1[2][2][1] = 6.51951366771e-05;
-   fEigenVectors_1[2][2][2] = 0.0463239990632;
-   fEigenVectors_1[2][2][3] = 0.998925672552;
-   fEigenVectors_1[2][2][4] = 0.00125831720821;
-   fEigenVectors_1[2][2][5] = -1.13493050166e-05;
-   fEigenVectors_1[2][3][0] = -6.99171644784e-05;
-   fEigenVectors_1[2][3][1] = -3.56664129628e-05;
-   fEigenVectors_1[2][3][2] = -0.998925289054;
-   fEigenVectors_1[2][3][3] = 0.0463257673024;
-   fEigenVectors_1[2][3][4] = -0.0014202019898;
-   fEigenVectors_1[2][3][5] = -0.000408701742211;
-   fEigenVectors_1[2][4][0] = -2.24206367596e-05;
-   fEigenVectors_1[2][4][1] = 0.000414368504283;
-   fEigenVectors_1[2][4][2] = 0.00145131123302;
-   fEigenVectors_1[2][4][3] = 0.00119093759032;
-   fEigenVectors_1[2][4][4] = -0.998372238418;
-   fEigenVectors_1[2][4][5] = 0.0570015501159;
-   fEigenVectors_1[2][5][0] = 0.739587152609;
-   fEigenVectors_1[2][5][1] = -0.673060691052;
-   fEigenVectors_1[2][5][2] = -2.5015482964e-05;
-   fEigenVectors_1[2][5][3] = 5.22932014503e-05;
-   fEigenVectors_1[2][5][4] = -0.000281101746672;
-   fEigenVectors_1[2][5][5] = 0.00025976511125;
+   fEigenVectors_1[0][0][0] = 0.569198374708;
+   fEigenVectors_1[0][0][1] = 0.419539223523;
+   fEigenVectors_1[0][0][2] = -3.47013385964e-05;
+   fEigenVectors_1[0][0][3] = 0.000210457594812;
+   fEigenVectors_1[0][0][4] = -6.82584424828e-05;
+   fEigenVectors_1[0][0][5] = -0.69634654339;
+   fEigenVectors_1[0][0][6] = 0.122888125989;
+   fEigenVectors_1[0][1][0] = 1.53781480372e-05;
+   fEigenVectors_1[0][1][1] = -0.00038436580065;
+   fEigenVectors_1[0][1][2] = -0.00129874714009;
+   fEigenVectors_1[0][1][3] = 0.704410987212;
+   fEigenVectors_1[0][1][4] = -0.0616711159049;
+   fEigenVectors_1[0][1][5] = -0.122888126008;
+   fEigenVectors_1[0][1][6] = -0.696346543272;
+   fEigenVectors_1[0][2][0] = -9.40304055727e-06;
+   fEigenVectors_1[0][2][1] = -6.89258320587e-05;
+   fEigenVectors_1[0][2][2] = -0.999998048304;
+   fEigenVectors_1[0][2][3] = -0.00176655413067;
+   fEigenVectors_1[0][2][4] = 0.000881949580162;
+   fEigenVectors_1[0][2][5] = 1.1584557596e-13;
+   fEigenVectors_1[0][2][6] = -6.99993435161e-13;
+   fEigenVectors_1[0][3][0] = -6.85300355804e-06;
+   fEigenVectors_1[0][3][1] = 0.000127684578092;
+   fEigenVectors_1[0][3][2] = 0.000724506438322;
+   fEigenVectors_1[0][3][3] = 0.0872176592908;
+   fEigenVectors_1[0][3][4] = 0.996189007492;
+   fEigenVectors_1[0][3][5] = 9.47371626712e-11;
+   fEigenVectors_1[0][3][6] = -5.83277047167e-10;
+   fEigenVectors_1[0][4][0] = 0.593318143875;
+   fEigenVectors_1[0][4][1] = -0.804967926891;
+   fEigenVectors_1[0][4][2] = 5.08087926648e-05;
+   fEigenVectors_1[0][4][3] = -0.000439339765199;
+   fEigenVectors_1[0][4][4] = 0.000145684578969;
+   fEigenVectors_1[0][4][5] = 1.13781456493e-14;
+   fEigenVectors_1[0][4][6] = -1.28286972663e-13;
+   fEigenVectors_1[0][5][0] = 1.53781480371e-05;
+   fEigenVectors_1[0][5][1] = -0.000384365800638;
+   fEigenVectors_1[0][5][2] = -0.00129874714005;
+   fEigenVectors_1[0][5][3] = 0.704410987056;
+   fEigenVectors_1[0][5][4] = -0.0616711150992;
+   fEigenVectors_1[0][5][5] = 0.12288812597;
+   fEigenVectors_1[0][5][6] = 0.696346543508;
+   fEigenVectors_1[0][6][0] = 0.569198374708;
+   fEigenVectors_1[0][6][1] = 0.419539223523;
+   fEigenVectors_1[0][6][2] = -3.4701338608e-05;
+   fEigenVectors_1[0][6][3] = 0.000210457649741;
+   fEigenVectors_1[0][6][4] = -6.82587236405e-05;
+   fEigenVectors_1[0][6][5] = 0.69634654339;
+   fEigenVectors_1[0][6][6] = -0.122888125989;
+   fEigenVectors_1[1][0][0] = 0.575128423516;
+   fEigenVectors_1[1][0][1] = -0.411292371943;
+   fEigenVectors_1[1][0][2] = -0.00124499294016;
+   fEigenVectors_1[1][0][3] = 0.00796425947578;
+   fEigenVectors_1[1][0][4] = -0.000949636589788;
+   fEigenVectors_1[1][0][5] = 0.26462543046;
+   fEigenVectors_1[1][0][6] = 0.655723555741;
+   fEigenVectors_1[1][1][0] = 1.37046306409e-06;
+   fEigenVectors_1[1][1][1] = 0.0136981909662;
+   fEigenVectors_1[1][1][2] = 0.0162418185831;
+   fEigenVectors_1[1][1][3] = 0.706082578518;
+   fEigenVectors_1[1][1][4] = -0.0315587577402;
+   fEigenVectors_1[1][1][5] = -0.655723555754;
+   fEigenVectors_1[1][1][6] = 0.264625430455;
+   fEigenVectors_1[1][2][0] = 0.000100642959652;
+   fEigenVectors_1[1][2][1] = 0.00361044536443;
+   fEigenVectors_1[1][2][2] = -0.999730264873;
+   fEigenVectors_1[1][2][3] = 0.0229402822598;
+   fEigenVectors_1[1][2][4] = 0.000309035103742;
+   fEigenVectors_1[1][2][5] = -3.23340771867e-13;
+   fEigenVectors_1[1][2][6] = -1.24918887993e-13;
+   fEigenVectors_1[1][3][0] = -1.15934284208e-07;
+   fEigenVectors_1[1][3][1] = -0.0014462129927;
+   fEigenVectors_1[1][3][2] = 0.00132811021998;
+   fEigenVectors_1[1][3][3] = 0.0446484105579;
+   fEigenVectors_1[1][3][4] = 0.999000832845;
+   fEigenVectors_1[1][3][5] = 1.94439645579e-11;
+   fEigenVectors_1[1][3][6] = 7.5280971385e-12;
+   fEigenVectors_1[1][4][0] = 0.581768495878;
+   fEigenVectors_1[1][4][1] = 0.813195402006;
+   fEigenVectors_1[1][4][2] = 0.00263443812081;
+   fEigenVectors_1[1][4][3] = -0.0157540034735;
+   fEigenVectors_1[1][4][4] = 0.00187788991965;
+   fEigenVectors_1[1][4][5] = 3.18866734957e-13;
+   fEigenVectors_1[1][4][6] = 1.29746920343e-13;
+   fEigenVectors_1[1][5][0] = 1.37046306405e-06;
+   fEigenVectors_1[1][5][1] = 0.0136981909662;
+   fEigenVectors_1[1][5][2] = 0.0162418185832;
+   fEigenVectors_1[1][5][3] = 0.706082578538;
+   fEigenVectors_1[1][5][4] = -0.0315587577627;
+   fEigenVectors_1[1][5][5] = 0.655723555728;
+   fEigenVectors_1[1][5][6] = -0.264625430465;
+   fEigenVectors_1[1][6][0] = 0.575128423516;
+   fEigenVectors_1[1][6][1] = -0.411292371943;
+   fEigenVectors_1[1][6][2] = -0.00124499294024;
+   fEigenVectors_1[1][6][3] = 0.00796425945751;
+   fEigenVectors_1[1][6][4] = -0.000949636568788;
+   fEigenVectors_1[1][6][5] = -0.26462543046;
+   fEigenVectors_1[1][6][6] = -0.655723555741;
+   fEigenVectors_1[2][0][0] = 0.568564764559;
+   fEigenVectors_1[2][0][1] = 0.420397491622;
+   fEigenVectors_1[2][0][2] = -1.83357698802e-05;
+   fEigenVectors_1[2][0][3] = 0.000207330323464;
+   fEigenVectors_1[2][0][4] = 0.00011923978923;
+   fEigenVectors_1[2][0][5] = -0.476393872625;
+   fEigenVectors_1[2][0][6] = 0.522540790872;
+   fEigenVectors_1[2][1][0] = 7.71460871344e-06;
+   fEigenVectors_1[2][1][1] = -0.000373223655536;
+   fEigenVectors_1[2][1][2] = 0.00076058485366;
+   fEigenVectors_1[2][1][3] = 0.705104020013;
+   fEigenVectors_1[2][1][4] = 0.0531752104393;
+   fEigenVectors_1[2][1][5] = 0.522540790993;
+   fEigenVectors_1[2][1][6] = 0.476393872609;
+   fEigenVectors_1[2][2][0] = -8.18681139551e-06;
+   fEigenVectors_1[2][2][1] = 5.53020229625e-05;
+   fEigenVectors_1[2][2][2] = 0.99999938752;
+   fEigenVectors_1[2][2][3] = -0.00105339387734;
+   fEigenVectors_1[2][2][4] = -0.000334957338184;
+   fEigenVectors_1[2][2][5] = -2.65021406407e-13;
+   fEigenVectors_1[2][2][6] = 3.43346164227e-14;
+   fEigenVectors_1[2][3][0] = -1.21058326681e-05;
+   fEigenVectors_1[2][3][1] = 0.00026210580272;
+   fEigenVectors_1[2][3][2] = -0.0002548067175;
+   fEigenVectors_1[2][3][3] = 0.0752015644046;
+   fEigenVectors_1[2][3][4] = -0.997168286168;
+   fEigenVectors_1[2][3][5] = -4.18354326381e-10;
+   fEigenVectors_1[2][3][6] = 5.3805071233e-11;
+   fEigenVectors_1[2][4][0] = 0.594531930742;
+   fEigenVectors_1[2][4][1] = -0.804071854828;
+   fEigenVectors_1[2][4][2] = 4.88150936719e-05;
+   fEigenVectors_1[2][4][3] = -0.000413331537273;
+   fEigenVectors_1[2][4][4] = -0.000249752045981;
+   fEigenVectors_1[2][4][5] = -1.6305428469e-13;
+   fEigenVectors_1[2][4][6] = 2.27360812447e-14;
+   fEigenVectors_1[2][5][0] = 7.71460871391e-06;
+   fEigenVectors_1[2][5][1] = -0.00037322365554;
+   fEigenVectors_1[2][5][2] = 0.000760584853684;
+   fEigenVectors_1[2][5][3] = 0.705104020141;
+   fEigenVectors_1[2][5][4] = 0.053175210836;
+   fEigenVectors_1[2][5][5] = -0.522540790752;
+   fEigenVectors_1[2][5][6] = -0.47639387264;
+   fEigenVectors_1[2][6][0] = 0.568564764559;
+   fEigenVectors_1[2][6][1] = 0.420397491622;
+   fEigenVectors_1[2][6][2] = -1.83357699074e-05;
+   fEigenVectors_1[2][6][3] = 0.000207330172528;
+   fEigenVectors_1[2][6][4] = 0.000119239321722;
+   fEigenVectors_1[2][6][5] = 0.476393872625;
+   fEigenVectors_1[2][6][6] = -0.522540790872;
 }
 
 //_______________________________________________________________________
 inline void ReadCutsPCA::Transform_1( std::vector<double>& iv, int cls ) const
 {
    // PCA transformation
-   const int nVar = 6;
+   const int nVar = 7;
    double *dv = new double[nVar];
    double *rv = new double[nVar];
    if (cls < 0 || cls > 2) {
@@ -401,6 +450,7 @@ inline void ReadCutsPCA::Transform_1( std::vector<double>& iv, int cls ) const
       indicesGet.push_back( 3);
       indicesGet.push_back( 4);
       indicesGet.push_back( 5);
+      indicesGet.push_back( 6);
    }
    if ( indicesPut.empty() ) {
       indicesPut.reserve(fNvars);
@@ -410,6 +460,7 @@ inline void ReadCutsPCA::Transform_1( std::vector<double>& iv, int cls ) const
       indicesPut.push_back( 3);
       indicesPut.push_back( 4);
       indicesPut.push_back( 5);
+      indicesPut.push_back( 6);
    }
 
    for (int ivar=0; ivar<nVar; ivar++) dv[ivar] = iv[indicesGet.at(ivar)];

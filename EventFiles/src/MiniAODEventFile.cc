@@ -8,8 +8,8 @@
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
 
-MiniAODEventFile::MiniAODEventFile(TFile* ifile) : 
-EventFile(ifile)
+MiniAODEventFile::MiniAODEventFile(TFile* ifile, std::shared_ptr<FileParams> iparams) : 
+EventFile(ifile, iparams)
 {
     event = std::make_shared<fwlite::Event> (getFile());
     setEventCount(1);
@@ -172,4 +172,9 @@ bool MiniAODEventFile::checkTrigger(std::string triggerName, std::string subProc
 bool MiniAODEventFile::isDone() const
 {
     return event->atEnd();
+}
+
+std::vector<double> MiniAODEventFile::getPDFWeights() const
+{
+    throw "Function not implemented";
 }
