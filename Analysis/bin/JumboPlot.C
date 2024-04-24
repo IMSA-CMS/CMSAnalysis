@@ -40,7 +40,7 @@ void JumboPlot() {
 	//auto simpleAnalysis = std::make_shared<SimpleHiggsComparison>();
 	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
 	//Extra text is the second parameter
-	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation)");
+	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation/Data)");
 	//std::vector<std::shared_ptr<Channel>> stackChannels = higgsStackAnalysis->getChannels();
 	//std::vector<std::shared_ptr<Channel>> superImpChannels = higgsSuperImpAnalysis->getChannels(); 
 	std::vector<std::shared_ptr<Channel>> higgsChannels = higgsAnalysis->getChannels();
@@ -82,7 +82,7 @@ void JumboPlot() {
 			for(std::string dataType : graphableTypes) {
 				entry = "";
 				TString xAxisName = "OSDL invariant mass" + units;
-				TString yAxisName = "Events";
+				TString yAxisName = "Relative number of events";
 				
 				toAdd.push_back(dataType);
 				toAdd.push_back(channelName);
