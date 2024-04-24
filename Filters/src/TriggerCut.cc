@@ -9,7 +9,20 @@ TriggerCut::TriggerCut(std::vector<std::string> itriggers) :
 bool TriggerCut::checkEventInternal(const Event& event, const EventInput* input) const
 {
 	auto params = input->getFileParams()->getParameters();
-	auto dataset = params.find("Trigger")->second;
+	auto iterator = params.find("Trigger");
+	if (iterator == params.end())
+	{
+		for (auto trigger : triggers) 
+		{
+			if (input->checkTrigger(trigger)) 
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	auto dataset = iterator->second;
+
 	if (dataset == "SingleElectron")
 	{
 		for (auto trigger : triggers) 
