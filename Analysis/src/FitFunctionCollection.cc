@@ -24,22 +24,27 @@ FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string& fi
 		throw std::runtime_error("File not loaded successfully");
 	}
 }
-void FitFunctionCollection::saveFunctions(const std::string& fileName)
+void FitFunctionCollection::saveFunctions(const std::string& fileName, bool append)
 {
-	std::fstream file(fileName, std::ios_base::out);
-	if (file.is_open())
+	std::fstream file;
+	if (!file.is_open()) 
 	{
-		file << functions.size() << '\n';
-		for (auto& funcPair : functions)
-		{
-			file << funcPair.second;
-		}
-		file.close();
-	}
-	else
+		if (append) 
+			file = std::fstream(fileName, std::ios_base::app);
+		else
+			file = std::fstream(fileName, std::ios_base::out);
+	} 
+	else 
 	{
-		throw std::runtime_error("File not saved successfully");
+		throw std::invalid_argument(fileName + " file is already open");
 	}
+
+	file << functions.size() << '\n';
+	for (auto& funcPair : functions)
+	{
+		file << funcPair.second;
+	}
+	file.close();
 }
 
 FitFunctionCollection::FitFunctionCollection() {}
@@ -116,8 +121,15 @@ bool FitFunctionCollection::checkFunctionsSimilar()
 			{
 				for (int i = 0; i < compareFunc.getFunction()->GetNpar(); ++i)
 				{
-					if (compareFunc.getFunction()->GetParName(i) != pair.second.getFunction()->GetParName(i))
+					std::string firstFunc(compareFunc.getFunction()->GetParName(i));
+					std::string secondFunc(pair.second.getFunction()->GetParName(i));
+					if (firstFunc != secondFunc)
+					{
+						std::cout << "compareFunc: " << compareFunc.getFunction()->GetParName(i) << '\n';
+						std::cout << "currentFunc: " << pair.second.getFunction()->GetParName(i) << '\n';
+						std::cout << "3\n";
 						return false;
+					}
 				}
 			}
 		}
