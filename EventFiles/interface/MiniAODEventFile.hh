@@ -11,7 +11,7 @@ class TFile;
 class MiniAODEventFile : public EventFile
 {
     public:
-        MiniAODEventFile(TFile* ifile);
+        MiniAODEventFile(TFile* ifile, std::shared_ptr<FileParams> iparams);
         // maybe just ++event
         virtual void nextEvent() override;
         virtual bool isDone() const override;

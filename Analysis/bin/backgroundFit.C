@@ -19,6 +19,7 @@
 #include "TFormula.h"
 #include "TFitResult.h"
 #include "TGraphErrors.h"
+#include "CMSAnalysis/Analysis/interface/Fitter.hh"
 #include "CMSAnalysis/Analysis/interface/FitFunction.hh"
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
 
@@ -39,6 +40,7 @@ double pearson(double *x, double *par)
 	return result;
 }
 
+
 std::vector<std::string> channelTypes =
 {
 	"eeee",
@@ -46,20 +48,35 @@ std::vector<std::string> channelTypes =
 	"eueu",
 	"eeuu",
 	"euuu",
-	"uuuu",
-	"eee",
-	"eeu",
-	"eue",
-	"euu",
-	"uue",
-	"uuu"
+	"uuuu"
 };
 
 std::vector<std::string> histogramTypes = 
 {
-	"Same Sign Invariant Mass",
-	"Reco Invariant Mass Background"
+	"Same Sign Invariant Mass"
 };
+
+// std::vector<std::string> channelTypes =
+// {
+// 	"eeee",
+// 	"eeeu",
+// 	"eueu",
+// 	"eeuu",
+// 	"euuu",
+// 	"uuuu",
+// 	"eee",
+// 	"eeu",
+// 	"eue",
+// 	"euu",
+// 	"uue",
+// 	"uuu"
+// };
+
+// std::vector<std::string> histogramTypes = 
+// {
+// 	"Same Sign Invariant Mass",
+// 	"Reco Invariant Mass Background"
+// };
 
 // Fits multiple graphs with the same function
 void multipleFits();
@@ -85,25 +102,34 @@ TFitResultPtr fitToExponential(char const* name, TH1* hist, TFile* file, std::ve
 void backgroundFit()
 {
 	
-	auto f1 = new TF1("pearsonTest", FitFunction::pearson, 0, 2000, 4);
 
 
 	// // std::cout << f1.GetNpar() << '\n';
 
-	FitFunctionCollection functions;
-	FitFunction f2(f1, FitFunction::FunctionType::DOUBLE_SIDED_CRYSTAL_BALL);
-	// std::cout << f2;
-	functions.insert(f2);
-	// std::cout << functions[0];
-	functions.saveFunctions("testFunctions.txt");	
-	
-	auto funcs = FitFunctionCollection::loadFunctions("testFunctions.txt");
+	// FitFunctionCollection functions;
+	// FitFunction f2 = FitFunction::createFunctionOfType(FitFunction::FunctionType::POWER_LAW,
+	// "test", "", 150, 1500);
+	// TF1* func = f2.getFunction();
 
-	std::cout << funcs["pearsonTest"];
+	// func->SetParNames("testOne", "testTwo", "testThree");
+	// func->SetParameters(3, 2, 1);
+	// double array[3] = {1, 2, 3};
+	// func->SetParErrors(array);
+
+	// // std::cout << f2;
+	// functions.insert(f2);
+	// // std::cout << functions[0];
+	// functions.saveFunctions("testFunctions.txt");	
+	
+	// auto funcs = FitFunctionCollection::loadFunctions("testFunctions.txt");
+
+	// std::cout << funcs["test"];
 	// multipleFits();
 	// auto paramData = getParams();
 	// graph(paramData);
 	//	fitParameters();
+
+	multipleFits();
 }
 
 void multipleFits()
@@ -118,52 +144,86 @@ void multipleFits()
 	std::string fitHistsName = "fitHistograms.root";
 	std::string fitParameterValueFile = "ZZ_Decay_4L_Fit_Parameters.txt";
 
-	TFile* histFile = TFile::Open(fileName.c_str());
-	TFile* fitFile = TFile::Open(fitHistsName.c_str(), "RECREATE");
-	std::fstream parameterFile;
-
-	if (!parameterFile.is_open())
-	{
-		parameterFile.open(fitParameterValueFile, std::ios_base::app);
-	}
+	FitFunctionCollection fitFunctions;
+	Fitter fitter(fileName, fitHistsName, fitParameterValueFile);
 
 	for (auto histType : histogramTypes)
 	{
 		for (auto channel : channelTypes)
 		{
 			std::string histogramName = channel + "_" + histType;
-			TH1* currentHist = getHist(histogramName.c_str(), histFile);
-
-			if (currentHist == nullptr)
-			{
-				continue;
-			}
-
-			if (checkToProject(currentHist))
-			{
-				TH1* positiveHist = getPositiveLeptonHist((TH2*) currentHist);
-				TH1* negativeHist = getNegativeLeptonHist((TH2*) currentHist);
-
-				auto positiveParams = getInitialPowerLawParams(positiveHist, lowerBound, upperBound);
-				auto negativeParams = getInitialPowerLawParams(negativeHist, lowerBound, upperBound);
-
-				auto positiveFit = fitToPowerLaw(positiveHist->GetName(), positiveHist, fitFile, positiveParams, lowerBound, 3000);
-				auto negativeFit = fitToPowerLaw(negativeHist->GetName(), negativeHist, fitFile, negativeParams, lowerBound, 3000);
-
-				writeHistogramFit(positiveFit, parameterFile);
-				writeHistogramFit(negativeFit, parameterFile);
-			}
-			else
-			{
-				auto params = getInitialPowerLawParams(currentHist, 200, 1000);
-				auto fit = fitToPowerLaw(currentHist->GetName(), currentHist, fitFile, params, lowerBound, 3000);
-				writeHistogramFit(fit, parameterFile);
-			}
+			FitFunction func = FitFunction::createFunctionOfType(
+				FitFunction::FunctionType::POWER_LAW, 
+				histogramName,
+				"",
+				150,
+				1500);
+			fitFunctions.insert(histogramName, func);
 		}
 	}
+	fitter.loadFunctions(fitFunctions);
+	fitter.fitFunctions();
 
-	parameterFile.close();
 }
+
+// void multipleFits()
+// {
+// 	const double lowerBound = 150;
+// 	const double upperBound = 1000;
+// 	// Filename of root files that have the graphs to fit in them
+// 	std::string fileName = "ZZ_Decay_4L_Run_2.root";
+
+// 	// This script creates three root files:
+// 	// The name of the root file the fitted histograms are to be stored
+// 	std::string fitHistsName = "fitHistograms.root";
+// 	std::string fitParameterValueFile = "ZZ_Decay_4L_Fit_Parameters.txt";
+
+// 	TFile* histFile = TFile::Open(fileName.c_str());
+// 	TFile* fitFile = TFile::Open(fitHistsName.c_str(), "RECREATE");
+// 	std::fstream parameterFile;
+
+// 	if (!parameterFile.is_open())
+// 	{
+// 		parameterFile.open(fitParameterValueFile, std::ios_base::app);
+// 	}
+
+// 	for (auto histType : histogramTypes)
+// 	{
+// 		for (auto channel : channelTypes)
+// 		{
+// 			std::string histogramName = channel + "_" + histType;
+// 			TH1* currentHist = getHist(histogramName.c_str(), histFile);
+
+// 			if (currentHist == nullptr)
+// 			{
+// 				continue;
+// 			}
+
+// 			if (checkToProject(currentHist))
+// 			{
+// 				TH1* positiveHist = getPositiveLeptonHist((TH2*) currentHist);
+// 				TH1* negativeHist = getNegativeLeptonHist((TH2*) currentHist);
+
+// 				auto positiveParams = getInitialPowerLawParams(positiveHist, lowerBound, upperBound);
+// 				auto negativeParams = getInitialPowerLawParams(negativeHist, lowerBound, upperBound);
+
+// 				auto positiveFit = fitToPowerLaw(positiveHist->GetName(), positiveHist, fitFile, positiveParams, lowerBound, 3000);
+// 				auto negativeFit = fitToPowerLaw(negativeHist->GetName(), negativeHist, fitFile, negativeParams, lowerBound, 3000);
+
+// 				writeHistogramFit(positiveFit, parameterFile);
+// 				writeHistogramFit(negativeFit, parameterFile);
+// 			}
+// 			else
+// 			{
+// 				auto params = getInitialPowerLawParams(currentHist, 200, 1000);
+// 				auto fit = fitToPowerLaw(currentHist->GetName(), currentHist, fitFile, params, lowerBound, 3000);
+// 				writeHistogramFit(fit, parameterFile);
+// 			}
+// 		}
+// 	}
+
+// 	parameterFile.close();
+// }
 
 double powerLaw(double *x, double *par)
 {

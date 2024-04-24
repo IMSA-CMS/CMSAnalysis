@@ -315,7 +315,7 @@ std::string getParameters(fitInformation fitinformation){
 }
 
 TH1* getHist(std::string name, TFile* file)
-    {
+{
     auto hist = dynamic_cast<TH1*>(file->FindObjectAny(name.c_str()));
     
     return hist;
