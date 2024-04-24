@@ -97,6 +97,21 @@ TH2* Process::get2DHist(std::string histType) const
 	return hist;
 }
 
+TH1* Process::getSingleProcessHist(const std::string& histType, const std::string& singleProcessName, bool scaleToExpected) const
+{
+	return getSingleProcess(singleProcessName).getHist(histType, scaleToExpected);
+}
+
+const SingleProcess& Process::getSingleProcess(const std::string& singleProcessName) const
+{
+	for (const auto& singleProcess : processes)
+	{
+		if (singleProcess.getName() == singleProcessName)
+			return singleProcess;
+	}
+
+	throw std::invalid_argument("There is no SingleProcess with such a name within this Process object");
+}
 
 double Process::getYield(std::string dataType) const
 {
