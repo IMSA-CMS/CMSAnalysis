@@ -161,14 +161,14 @@ void RunAnalyzerWrapper::analyze(edm::StreamID stream, const edm::Event& iEvent,
 
 // ------------ method called once each job just before starting event loop  ------------
 void RunAnalyzerWrapper::beginJob() {
-  analyzer->initialize();
+  analyzer->initialize(rootOutFile_);
 
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
 void RunAnalyzerWrapper::endJob() {
   // please remove this method if not needed
-  analyzer->writeOutputFile(rootOutFile_);
+  analyzer->writeOutputFile();
 }
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
