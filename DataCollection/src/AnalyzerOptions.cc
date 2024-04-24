@@ -35,7 +35,7 @@ AnalyzerOptions::AnalyzerOptions()
   analysisPlans["Trigger"] = new TriggerPlan();
   analysisPlans["GenSim"] = new GenSimPlan();
   analysisPlans["FileStrip"] = new FileStripPlan();
-  analysisPlans["LeptonJetDataStrip"] = new MLVariablesPlan();
+  analysisPlans["MLVariables"] = new MLVariablesPlan();
   analysisPlans["HiggsDataStrip"] = new HiggsDataStripPlan();
   analysisPlans["HiggsInvariantMass"] = new HiggsInvariantMassPlan();
   analysisPlans["HiggsSignal"] = new HiggsSignalPlan();

@@ -47,6 +47,8 @@ int main(int argc, char **argv)
 
   parser.addOption("analysis", optutl::CommandLineParser::kString, "Type of Analysis", "");
   parser.addOption("moduleOptions", optutl::CommandLineParser::kString, "Module Specific Options", "");
+
+//  parser.addOption("maxEvents", optutl::CommandLineParser::kInteger, "Number of events to process", -1);
   parser.parseArguments(argc, argv);
 
   std::string inputFile = parser.stringValue("input");
@@ -98,9 +100,9 @@ int main(int argc, char **argv)
   auto modules = plan->getModules();
   analyzer.addModules(modules);
    EventLoader eventLoader(EventLoader::fetchRootFiles(inputFile), &analyzer);
-    analyzer.initialize();
+    analyzer.initialize(outputFile);
     eventLoader.run(outputEvery, numFiles, maxEvents);
-    analyzer.writeOutputFile(outputFile);
+    analyzer.writeOutputFile();
 
   
   std::cout << "Processing complete!" << std::endl;
