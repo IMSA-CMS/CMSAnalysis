@@ -1,7 +1,7 @@
 #ifndef SPECIALVARIABLEMODULE_HH
 #define SPECIALVARIABLEMODULE_HH
 
-#include <unordered_map>
+#include <map>
 #include "Rtypes.h"
 #include "ProductionModule.hh"
 #include "EventInput.hh"
@@ -35,6 +35,9 @@ public:
 
 	virtual void calculateVariables(Particle particle) = 0;
 
+	mutable const int* tempRef;
+	mutable const float* tempRef1;
+
 
 protected:
 	void addVariable(std::string name, VariableType type);
@@ -42,34 +45,38 @@ protected:
 	virtual void addVariables() = 0;
 
 private:
-	std::unordered_map<std::string, Int_t> integers;
-	std::unordered_map<std::string, Float_t> floats;
-	std::unordered_map<std::string, std::vector<Int_t>> arraysOfIntegers;
-	std::unordered_map<std::string, std::vector<Float_t>> arraysOfFloats;
+	std::map<std::string, Int_t> integers;
+	std::map<std::string, Float_t> floats;
+	std::map<std::string, std::vector<Int_t>> arraysOfIntegers;
+	std::map<std::string, std::vector<Float_t>> arraysOfFloats;
 
 	TTree* tree = nullptr;
 	
 	template<typename T>
 	void addValue(std::string name,
-		std::unordered_map<std::string, T, std::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<const std::string, T>>>& map,
+		std::map<std::string, T, std::less<std::string>, std::allocator<std::pair<const std::string, T>>>& map,
 		T value);
 
 	template<typename T>
 	void addVariable(std::string name,
-		std::unordered_map<std::string, T, std::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<const std::string, T>>>& map);
+		std::map<std::string, T, std::less<std::string>, std::allocator<std::pair<const std::string, T>>>& map);
 };
 
 template<typename T>
 inline void SpecialVariableModule::addValue(std::string name, 
-	std::unordered_map<std::string, T, std::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<const std::string, T>>>& map,
+	std::map<std::string, T, std::less<std::string>, std::allocator<std::pair<const std::string, T>>>& map,
 	T value)
 {
 	map[name] = value;
+
+	//auto pair = map.find(name);
+	//std::cout << "For variable " << name << " storing value " << pair->second << " at memory address "
+	//<< &(pair->second) << '\n'; 
 }
 
 template<typename T>
 inline void SpecialVariableModule::addVariable(std::string name,
-	std::unordered_map<std::string, T, std::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<const std::string, T>>>& map)
+	std::map<std::string, T, std::less<std::string>, std::allocator<std::pair<const std::string, T>>>& map)
 {
 	if (map.find(name) != map.end())
 	{

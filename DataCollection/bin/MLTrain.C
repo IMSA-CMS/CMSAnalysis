@@ -108,7 +108,7 @@ bool returnState(TString &myMethodList)
     // string sgFile = "photons0_5.root";
     // string sgFile = "photons0_9.root";
     //error on type line 108 and 111
-    string sgFile = "higgstest2.root";
+    string sgFile = "dpNewReco2.root";
 
     // input background files here
     string bgFiles[] =
@@ -117,7 +117,7 @@ bool returnState(TString &myMethodList)
             //"dy10.root",
             //"DY50.root",
             //"qcd1.root",
-            "DYN4.root"
+            "DYNewML7.root"
             // "qcd500.root",
             // "qcd700.root",
             // "qcd1k.root",
@@ -170,7 +170,7 @@ bool returnState(TString &myMethodList)
 
     // change var1 to index and var2 to pt
     // dataloader->AddVariable("jetIndex", "Jet Index", "", 'F');
-    LeptonJetMLStripModule leptonMod(nullptr); 
+    LeptonJetMLStripModule leptonMod; 
     leptonMod.initialize();
     leptonMod.addVariablesToDataLoader(dataloader);
     // Difference in transverse momentum between leading and runner up highest transverse momentum particles.
