@@ -211,12 +211,12 @@ void multipleFits()
 		auto finalParameters = fitParameters(fitParamsName, paramGraphsName,time, Histname);
 
 		std::string alparam = getParameters(finalParameters.at(0)); //p[0] * 10^-4(x-1)^2 + p[3]
-		std::string ahparam = getParameters(finalParameters.at(0));
-		std::string nlparam = getParameters(finalParameters.at(0));
-		std::string nhparam = getParameters(finalParameters.at(0));
-		std::string sigmaparam = getParameters(finalParameters.at(0));	
+		std::string ahparam = getParameters(finalParameters.at(1));
+		std::string nlparam = getParameters(finalParameters.at(2));
+		std::string nhparam = getParameters(finalParameters.at(3));
+		std::string sigmaparam = getParameters(finalParameters.at(4));	
 		
-		std::string massparam = getParameters(finalParameters.at(0));	//[0] * 10^-4 + x* [1]	
+		std::string massparam = getParameters(finalParameters.at(5));	//[0] * 10^-4 + x* [1]	
 
 		//std::string functionString = "("+ nparam +") * std::pow(1 + std::pow((x-("+ massparam +")) / ("+aparam+"),2), -("+mparam+")) * std::exp(-("+nuparam+") * std::atan((x-("+massparam+"))/("+aparam+")))";
 		std::string printString = Histname + "|||" + alparam + ahparam  + nlparam + nhparam + sigmaparam + massparam; 
