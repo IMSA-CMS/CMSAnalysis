@@ -68,6 +68,7 @@ void Analyzer::writeOutputFile()
       module->finalize();
       for (auto &str : filterNames) //writes analysis modules by filter string
       {
+        //std::cout << "filterName: " << str << "\n";
         auto it = filterDirectories.find(str);
         if (it == filterDirectories.end())
         {
@@ -95,18 +96,6 @@ void Analyzer::writeOutputFile()
 //gets modules from module collection
 void Analyzer::addModules(ModuleCollection modules)
 {
-  if (modules.getProductionModules().size() == 0)
-  {
-    std::cout << "You have no production modules!" << std::endl;
-  }
-  if (modules.getFilterModules().size() == 0)
-  {
-    std::cout << "You have no filter modules!" << std::endl;
-  }
-  if (modules.getAnalysisModules().size() == 0)
-  {
-    std::cout << "You have no analysis modules!" << std::endl;
-  }
     productionModules = modules.getProductionModules();
     filterModules = modules.getFilterModules();
     analysisModules = modules.getAnalysisModules();

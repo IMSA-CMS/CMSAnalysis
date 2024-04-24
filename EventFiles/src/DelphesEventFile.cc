@@ -8,8 +8,8 @@
 #include "DataFormats/PatCandidates/interface/MET.h"
 
 
-DelphesEventFile::DelphesEventFile(TFile *ifile) : 
-    EventFile(ifile), 
+DelphesEventFile::DelphesEventFile(TFile *ifile, std::shared_ptr<FileParams> iparams) : 
+    EventFile(ifile, iparams),  
     // These objects take the value of the branch. 
     // They change as the treereader advances to the next event. 
     elec_size(treeReader, "elec_size"),
@@ -167,4 +167,9 @@ unsigned long long DelphesEventFile::getEventIDNum() const
 bool DelphesEventFile::isDone() const
 {
     return getEventCount() > tree->GetEntries();
+}
+
+std::vector<double> DelphesEventFile::getPDFWeights() const
+{
+    throw "Function not implemented";
 }
