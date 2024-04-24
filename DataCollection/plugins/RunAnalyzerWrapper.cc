@@ -21,7 +21,7 @@
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
-#include "FWCore/Framework/interface/one/EDAnalyzer.h"
+#include "FWCore/Framework/interface/global/EDAnalyzer.h"
 
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
@@ -62,7 +62,7 @@
 
 using reco::TrackCollection;
 
-class RunAnalyzerWrapper : public edm::one::EDAnalyzer<edm::one::SharedResources> {
+class RunAnalyzerWrapper : public edm::global::EDAnalyzer<> {
 public:
   explicit RunAnalyzerWrapper(const edm::ParameterSet&);
   ~RunAnalyzerWrapper() override;
@@ -72,7 +72,7 @@ public:
 private:
 
   void beginJob() override;
-  void analyze(const edm::Event&, const edm::EventSetup&) override;
+  void analyze(edm::StreamID, const edm::Event&, const edm::EventSetup&) const override;
   void endJob() override;
 
   // ----------member data ---------------------------
@@ -90,7 +90,7 @@ private:
   edm::EDGetTokenT<reco::GenParticleCollection> GenSimToken_;
 
 
-  CmsswEventInterface eventInterface;
+  mutable CmsswEventInterface eventInterface;
 
   
 
@@ -153,7 +153,8 @@ RunAnalyzerWrapper::~RunAnalyzerWrapper() {
 //
 
 // ------------ method called for each event  ------------
-void RunAnalyzerWrapper::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
+void RunAnalyzerWrapper::analyze(edm::StreamID stream, const edm::Event& iEvent, const edm::EventSetup& iSetup) const 
+{
   eventInterface.setEvent(&iEvent);
   analyzer->processOneEvent(&eventInterface); 
 }
