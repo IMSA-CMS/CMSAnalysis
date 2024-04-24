@@ -67,8 +67,8 @@ bool NanoAODEventFile::checkTrigger(std::string triggerName, std::string subProc
      
 }
 
-NanoAODEventFile::NanoAODEventFile(TFile *ifile) : 
-    EventFile(ifile)
+NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> iparams) : 
+    EventFile(ifile, iparams)
     {
     //initializing variables from header file
     std::vector<std::shared_ptr<TreeVariableBase>> treeVariables = {
@@ -146,7 +146,7 @@ void NanoAODEventFile::nextEvent()
 
     if(variables.find("gen_size") != variables.end() && getVariable<UInt_t>("gen_size") > 0)
     {
-        genSimParticles.clear();
+        genSimParticles.clear(); 
         genSimParticles.reserve(getVariable<UInt_t>("gen_size") );
 
         //construct daughters from mothers

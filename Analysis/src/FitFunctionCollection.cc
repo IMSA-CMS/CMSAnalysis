@@ -68,6 +68,19 @@ FitFunction& FitFunctionCollection::operator[](const std::string& index)
 	return functions[index];
 }
 
+FitFunction& FitFunctionCollection::get(const std::string& index)
+{
+	try 
+	{ 
+		return functions.at(index);
+	} 
+	catch (std::out_of_range e)
+	{
+		std::cout << "FitFunctionCollection Error: No FitFunction with string index of " << index << '\n';
+		throw e;
+	}
+}
+
 void FitFunctionCollection::insert(FitFunction& func)
 {
 	// std::cout << "Making function\n";
@@ -77,7 +90,41 @@ void FitFunctionCollection::insert(FitFunction& func)
 	// std::cout << "Pair";
 	functions.insert({func.getFunction()->GetName(), func});
 }
+
+void FitFunctionCollection::insert(const std::string& key, FitFunction& func)
+{
+	functions.insert({key, func});
+}
 // FitFunction& FitFunctionCollection::operator[](int index)
 // {
 // 	return functions[(size_t) index];
 // }
+
+bool FitFunctionCollection::checkFunctionsSimilar()
+{
+	if (size() > 0)
+	{
+		FitFunction& compareFunc = functions.begin()->second;
+		for (auto& pair : functions)
+		{
+			if (pair.second.getFunctionType() != compareFunc.getFunctionType()
+			|| pair.second.getFunction()->GetNpar() != compareFunc.getFunction()->GetNpar())
+			{
+				return false;
+			}
+			else
+			{
+				for (int i = 0; i < compareFunc.getFunction()->GetNpar(); ++i)
+				{
+					if (compareFunc.getFunction()->GetParName(i) != pair.second.getFunction()->GetParName(i))
+						return false;
+				}
+			}
+		}
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}

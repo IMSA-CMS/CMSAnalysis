@@ -19,18 +19,26 @@ void SuperImpose() {
     //Change extraText here
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary");
     //Change the filePath here. This should be the longest branch all input files have in common.
-    const std::string filePath = "/uscms/home/vrao/analysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/";
+    //const std::string filePath = "/uscms/home/vrao/analysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/";
+    const std::string filePath = "/uscms/home/gomalley/analysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/";
     //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
     //Write your graph names here (for the legend)
     
-    std::vector<std::string> files = {"test1000.root", "HiggsDPZ.root", "ZPrime.root", "SUSY.root", "Higgs4DP.root"};
-    std::vector<std::string> hists = {"Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values"};
-    std::vector<TString> names = {"Higgs to 2 Dark Photon", "Higgs to Z and Dark Photon", "Z Prime", "SUSY", "Higgs to 4 Dark Photon"};
-
+    // std::vector<std::string> files = {"test1000.root", "HiggsDPZ.root", "ZPrime.root", "SUSY.root", "Higgs4DP.root"};
+    // std::vector<std::string> hists = {"Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values"};
+    // std::vector<TString> names = {"Higgs to 2 Dark Photon", "Higgs to Z and Dark Photon", "Z Prime", "SUSY", "Higgs to 4 Dark Photon"};
+    std::vector<std::string> files = {"controlled.root", "controlled.root", "controlled.root", "controlled.root"};
+    std::vector<std::string> hists = {
+        "Low Mass and Different Signs__hists/Low Mass and Different Signs_1st Highest Lepton Jet Eta", 
+        "High Mass and Different Signs__hists/High Mass and Different Signs_1st Highest Lepton Jet Eta", 
+        "Low Mass and Same Sign__hists/Low Mass and Same Sign_1st Highest Lepton Jet Eta", 
+        "High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest Lepton Jet Eta"};
+    std::vector<TString> names = {"Low Mass OS", "High Mass OS", "Low Mass SS", "High Mass SS"};
     //Colors go here
     std::vector<int> colors = {1, 2, 3, 4, 5};
     //Change x and y axis titles here
-    TString xTitle = "Gamma";
+    //TString xTitle = "Gamma";
+    TString xTitle = "Lepton Jet Eta";
     TString yTitle = "Events (1/Integral)";
 
 
@@ -45,7 +53,15 @@ void SuperImpose() {
         if(!openedFile) {
             throw std::runtime_error("Cannot open file!");
             }
-        hist = dynamic_cast<TH1*>(openedFile->Get(hists.at(count).c_str()));
+        std::string name = hists.at(count);
+        uint pos = name.find("/");
+        std::string folder = name.substr(0,pos);
+		std::string histName = name.substr(pos+1);
+        auto dir = openedFile->GetDirectory(folder.c_str());
+        if(!dir) {
+            throw std::runtime_error("Cannot find directory!");
+            }
+        hist = dynamic_cast<TH1*>(dir->Get(histName.c_str()));
         if (!hist)
         {
             throw std::runtime_error("Histogram " + hists.at(count) + " not found!");

@@ -46,13 +46,16 @@ const std::shared_ptr<Process> Channel::findProcess(std::string processName) con
 std::vector<std::string> Channel::getNamesWithLabel(std::string label)
 {
 	std::vector<std::string> names;
-	for (const auto& process : map.find(label)->second)
+	auto processes = map.find(label);
+	if (processes == map.end())
+	{
+		throw std::runtime_error("No processes with the label " + label);		
+	}
+	for (const auto& process : processes->second)
 	{
 		names.push_back(process->getName());
 	}
-	if(names.size() == 0) {
-		throw std::runtime_error("No processes with the given label.");		
-	}
+	
 	return names;
 }
 

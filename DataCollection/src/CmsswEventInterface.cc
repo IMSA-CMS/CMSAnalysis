@@ -163,7 +163,10 @@ bool CmsswEventInterface::checkTrigger(std::string triggerName, std::string subP
     }
     //return *(triggers.find(triggerName)->second);
 }
-
+const std::shared_ptr<FileParams> CmsswEventInterface::getFileParams() const
+{
+    throw std::runtime_error("getFileParams not implemented for localEventInput");
+}
 std::vector<double> CmsswEventInterface::getPDFWeights() const
 {
     throw "Function not implemented yet";
