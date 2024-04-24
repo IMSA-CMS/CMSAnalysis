@@ -22,7 +22,7 @@ Implementation:
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
-#include "FWCore/Framework/interface/EDAnalyzer.h"
+#include "FWCore/Framework/interface/one/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Run.h"
 #include <FWCore/ServiceRegistry/interface/Service.h>
 #include <CommonTools/UtilAlgos/interface/TFileService.h>
@@ -46,7 +46,7 @@ Implementation:
 
 // std::cout << "Made it to line" << __LINE__ << std::endl;
 
-class DimuonDarkPhoton : public edm::EDAnalyzer {
+class DimuonDarkPhoton : public edm::one::EDAnalyzer<edm::one::SharedResources> {
 public:
   explicit DimuonDarkPhoton(const edm::ParameterSet&);
   ~DimuonDarkPhoton();
@@ -74,7 +74,7 @@ private:
   const void fillOSDLHistograms(const reco::Candidate* dileptons[]);
 
   //virtual void beginRun(edm::Run const&, edm::EventSetup const&) override;
-  virtual void endRun(edm::Run const& iRun, edm::EventSetup const& iEventSetup) override;
+  //virtual void endRun(edm::Run const& iRun, edm::EventSetup const& iEventSetup) override;
   //virtual void beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) override;
   //virtual void endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) override;
 
@@ -1337,14 +1337,14 @@ DimuonDarkPhoton::endJob()
 
 // ------------ method called when ending the processing of a run  ------------
 
-void 
-DimuonDarkPhoton::endRun(edm::Run const& iRun, edm::EventSetup const& iEventSetup)
-{
-  edm::Handle< GenRunInfoProduct > genInfoProduct;
-  iRun.getByToken(genInfoProductToken_, genInfoProduct );
-  crossSec = genInfoProduct->internalXSec().value();
-  std::cout<< "Cross Section is: "  << crossSec << std::endl;  
-}
+// void 
+// DimuonDarkPhoton::endRun(edm::Run const& iRun, edm::EventSetup const& iEventSetup)
+// {
+//   edm::Handle< GenRunInfoProduct > genInfoProduct;
+//   iRun.getByToken(genInfoProductToken_, genInfoProduct );
+//   crossSec = genInfoProduct->internalXSec().value();
+//   std::cout<< "Cross Section is: "  << crossSec << std::endl;  
+// }
 
   
 // ------------ method called when starting to processes a luminosity block  ------------
