@@ -33,7 +33,7 @@ public:
 
 	virtual bool process() override;
 
-	virtual void calculateVariables(Particle particle) = 0;
+	virtual void calculateVariables(ParticleCollection<Particle> particle) = 0;
 
 	mutable const int* tempRef;
 	mutable const float* tempRef1;

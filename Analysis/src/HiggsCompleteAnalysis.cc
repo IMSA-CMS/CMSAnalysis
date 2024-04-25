@@ -44,9 +44,9 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
 
     TH1::SetDefaultSumw2();
     //for(std::string name : names) {
-    for (std::string recoDecay : recoDecays){
+    for (const auto& recoDecay : recoDecays){
         std::vector<std::shared_ptr<Process>> processes;
-        for (std::string genSimDecay : genSimDecays)
+        for (const auto& genSimDecay : genSimDecays)
         {
             for(double massTarget : massTargets) 
             {
