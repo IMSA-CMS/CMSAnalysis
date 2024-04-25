@@ -59,7 +59,7 @@ void HiggsBackgroundPlan::initialize()
     auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
     auto eventDump = make_shared<GenSimEventDumpModule>();
     //auto fourLeptonCut = make_shared<FourLeptonCut>();
-    //auto zVetoCut = make_shared<ZVetoCut>();
+    auto zVetoCut = make_shared<ZVetoCut>();
     //auto quarkoniaCut = make_shared<QuarkoniaCut>();
 
     auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
@@ -69,9 +69,9 @@ void HiggsBackgroundPlan::initialize()
     eventMod->addSelector(higgsSelector);
     eventMod->addCut(triggerCut);
     eventMod->addCut(higgsCut);
-    eventMod->addCut(repeatedEventCuts);
+    //eventMod->addCut(repeatedEventCuts);
     //eventMod->addCut(fourLeptonCut);
-    //eventMod->addCut(zVetoCut);
+    eventMod->addCut(zVetoCut);
     //eventMod->addCut(quarkoniaCut);
 
     auto matchMod = make_shared<MatchingModule>();

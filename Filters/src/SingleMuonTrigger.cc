@@ -15,5 +15,5 @@ bool SingleMuonTrigger::checkTrigger(const EventInput *input)
 
   double pT = particles.getLeadingTransverseMomentum();
 
-  return (pT >= pTCutoff); // The particle passes the trigger if the transverse momentum is greater than the cutoff
+  return (pT >= pTCutoff); // The event passes the trigger if the transverse momentum is greater than the cutoff
 };
