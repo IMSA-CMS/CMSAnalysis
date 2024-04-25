@@ -44,7 +44,7 @@ void EventModule::finalize()
     }
 }
 
-bool EventModule::process ()
+bool EventModule::process()
 {
     clearHistograms(); //all histograms are cleared and we only fill the ones we are using for this event
     event.clear();
@@ -80,6 +80,7 @@ bool EventModule::process ()
     for (auto& [key,value] : event.getSpecials())
     {
         // CODE IS NOT GETTING HERE FOR SOME REASON, DEBUG THIS
+        // std::cout << "THIS IS A TEST 2 -------------------------------------------------------------------------" << std::endl;
         auto specialPtr = std::make_shared<ParticleCollection<Particle>>(value);
         addBasicHistograms(value.getParticles()[0].getType(), value);
         addCountHistograms(value.getParticles()[0].getType(), specialPtr); 
