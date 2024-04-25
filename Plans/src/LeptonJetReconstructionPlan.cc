@@ -55,6 +55,8 @@
 #include "CMSAnalysis/Histograms/interface/ResolutionHist.hh"
 #include "CMSAnalysis/Filters/interface/DarkPhotonControlRegionFilter.hh"
 
+// Use 700-1000 2018, DY50
+
 using std::make_shared;
 
 void LeptonJetReconstructionPlan::initialize()
@@ -67,7 +69,7 @@ void LeptonJetReconstructionPlan::initialize()
   eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5));
   //eventMod->addSelector(std::make_shared<LeptonJetAntiSelector>(.5, 0.0001, 0.0005));
 
-  auto darkPhotonFilter = std::make_shared<FilterModule>(std::make_shared<DarkPhotonControlRegionFilter>(10, 0.0001, 0.0005));
+  auto darkPhotonFilter = std::make_shared<FilterModule>(std::make_shared<DarkPhotonControlRegionFilter>(10));
   darkPhotonFilter->setInput(eventMod->getEventInput());
   auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Mu37_TkMu27", "HLT_IsoMu24"});
   //auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_IsoMu24"});
@@ -178,8 +180,8 @@ void LeptonJetReconstructionPlan::initialize()
 
   // Efficiency Modules
   auto leptonEfficiency = std::make_shared<LeptonEfficiency>(matchMod);
-  auto leptonJetEfficiency = std::make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
-  leptonJetEfficiency->setInput(eventMod->getEventInput());
+  //auto leptonJetEfficiency = std::make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
+  //leptonJetEfficiency->setInput(eventMod->getEventInput());
 
   // Add the histogram(s) created above to histMod
   // eventHistMod->addHistogram(nLeptonsHist);
