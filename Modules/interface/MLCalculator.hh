@@ -16,7 +16,7 @@ class MLCalculator : public ProductionModule
     MLCalculator(std::shared_ptr<SpecialVariableModule> specialVariable, std::string fileName, std::string method); //do the same thing for recomod in leptonjetMLStripModule
     virtual void initialize() override;
     virtual bool process() override {return true;}
-    double getOutput(Particle part) const;
+    double getOutput(ParticleCollection<Particle> part) const;
 
 
 

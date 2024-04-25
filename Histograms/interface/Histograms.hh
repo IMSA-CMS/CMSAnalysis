@@ -164,7 +164,9 @@ protected:
     std::vector<double> outputs;
     for (LeptonJet jet : jets)
     {
-      outputs.push_back(mLCalc->getOutput(jet));
+      ParticleCollection<Particle> collection;
+      collection.addParticle(jet);
+      outputs.push_back(mLCalc->getOutput(collection));
       //std::cout << mLCalc->getOutput(jet);
       //print here
       //look at the prior fucntion
