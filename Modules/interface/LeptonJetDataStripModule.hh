@@ -16,7 +16,7 @@ public:
 
     LeptonJetDataStripModule(std::string outputFileName, std::shared_ptr<LeptonJetReconstructionModule> recomod, std::shared_ptr<LeptonJetMatchingModule> matchmod);
 
-    virtual void finalize() override;
+    virtual void finalize() override;                                                     
 
 private:
     TFile *file;
@@ -30,7 +30,8 @@ private:
     Float_t mass;
     Float_t deltaR;
     Float_t sumPt;
-    // Float_t deltaPt;
+    Float_t deltaPt;
+    Int_t numMuons; //new one start working on this
 
     const std::shared_ptr<LeptonJetReconstructionModule> recomod;
     const std::shared_ptr<LeptonJetMatchingModule> matchmod;

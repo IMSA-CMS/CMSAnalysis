@@ -10,6 +10,7 @@ LeptonJetEfficiency::LeptonJetEfficiency(const std::shared_ptr<LeptonJetReconstr
     EfficiencyModule(),
     lepRecoMod(iLepRecoMod),
     lepMatchMod(iLepMatchMod)
+    //do the same thing using mlcalcualtor shared pointeer
 {
     addRequiredModule(iLepRecoMod);
     addRequiredModule(iLepMatchMod);
@@ -61,12 +62,32 @@ void LeptonJetEfficiency::doCounters()
     for (auto leptonJetParticle : recoLeptonJets)
     {
         LeptonJet leptonJet(leptonJetParticle);
+
+
+
+        //how to harvest signal and backgroumd
+
+        // how to get value of observation// what do we use for filename liek in mlcalculator 
+
+        //do we want to maxmize (eps)/(sqrt(2.5 + B))
+
+        //do everthing inside here
+
+        //do getoutoput of leptonjet
+
+        //ask cikram foor integral thigny
+
         for (auto particle : leptonJet.getParticles())
         {
             if (particle.getType() == ParticleType::electron())
             {
                 electronCount++;
             }
+
+            //use the mlcalculator output
+            //dont loop insane amount of time use finite guesses, one time is one runananalyzer output
+
+
 
             //do here
             //count passed mass > 10

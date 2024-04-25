@@ -14,6 +14,16 @@ output = stdout.read()
 datasets = output.split()
 
 print(datasets)
+    #mass = dataset[dataset.find("M-") + 2 : dataset.find("00_Tune") + 2]
+	#period = dataset[dataset.find("20UL") + 4 : dataset.find("20UL") + 6]
+for dataset in datasets:
+    if "2018" in dataset and "v2" in dataset and "HIPM" not in dataset:
+        period = dataset[dataset.find("Run")+3:dataset.find("Run")+8]
+        name ="Data_Trigger_SingleElectron_Year_" + "2018" + ".txt"
+        #open('textfiles/Data/'+name, 'w') 
+        #req = 'dasgoclient --query="file dataset=' + dataset + '" > textfiles/Data/'+name
+        print("making "+name)
+        os.system(req) 
 
 # Iterate over each dataset
 for dataset in datasets:
