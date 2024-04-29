@@ -175,11 +175,6 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents)
       }
     delete tFile;
     }
-
-    if (stopNow)
-    {
-      break;
-    }
   }
   std::cout << "number of Root files processed: " << fileCounter << "\n";
 }

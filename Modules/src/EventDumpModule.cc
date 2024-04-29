@@ -31,7 +31,7 @@ bool EventDumpModule::process()
 {
   if(counter < numOfEvents || numOfEvents == -1)
   {
-    if (getFilter() == "Low Mass and Same Sign_") 
+    if (getFilter() == "Low Mass and Different Signs_") 
     {
       std::ofstream my_file;
       if(genSim)

@@ -90,6 +90,19 @@ bool LeptonJet::allSameSign() const
   return !(positive && negative);
 }
 
+double LeptonJet::getTotalCharge() const
+{
+  auto particles = getParticles();
+  auto totalCharge = 0;
+
+  for (const auto& particle : particles)
+  {
+    totalCharge += particle.getCharge();
+  }
+
+  return totalCharge;
+}
+
 
 double LeptonJet::getDeltaR() const
 {
