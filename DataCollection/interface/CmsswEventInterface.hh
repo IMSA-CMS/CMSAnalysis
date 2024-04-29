@@ -47,6 +47,7 @@ class CmsswEventInterface : public EventInterface
         std::vector<std::string> getTriggerNames(std::string subProcess) const override;
         int getNumPileUpInteractions() const override;
         bool checkTrigger(std::string triggerName, std::string subProcess) const override;
+        const std::shared_ptr<FileParams> getFileParams() const override;
         
     private:
         const edm::Event* event = nullptr;

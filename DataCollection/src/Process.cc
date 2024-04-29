@@ -1,5 +1,6 @@
 #include "CMSAnalysis/DataCollection/interface/Process.hh"
 #include "CMSAnalysis/DataCollection/interface/IDType.hh"
+#include "CMSAnalysis/DataCollection/interface/PickFileParams.hh"
 
 Process::Process(std::string iname, std::vector<IDType> itype): 
 name(iname),
@@ -20,7 +21,7 @@ name(iname)
     }
 }
 
-FileParams Process::getParams(std::vector<std::string> params, double crossSection) const
+std::shared_ptr<FileParams> Process::getParams(std::vector<std::string> params, double crossSection) const
 {
     std::map<std::string, std::string> map;
     if (params.size() != 2*type.size())
@@ -53,6 +54,6 @@ FileParams Process::getParams(std::vector<std::string> params, double crossSecti
         map.insert({value, category});
     }
     // return FileParams(name, map, crossSection);
-    FileParams finalParams(name, map);
+    auto finalParams = std::make_shared<PickFileParams>(name, map);
     return finalParams;
 }

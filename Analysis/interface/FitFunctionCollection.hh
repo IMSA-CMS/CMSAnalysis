@@ -15,12 +15,17 @@ public:
 	FitFunctionCollection(std::vector<FitFunction>& functions);
 	FitFunctionCollection(size_t size);
 
+	FitFunctionCollection parameterizeFunctions(FitFunction::FunctionType funcType);
+	void insert(const std::string& key, FitFunction& function);
 	void insert(FitFunction& function);
 	size_t size() const;
-	void saveFunctions(const std::string& fileName);
+	FitFunction& get(const std::string& index);
+	void saveFunctions(const std::string& fileName, bool append = false);
 
 	FitFunction& operator[](const std::string& index);
 	// FitFunction& operator[](int index);
+	bool checkFunctionsSimilar();
+	void add(const FitFunction& function);
 };
 
 #endif

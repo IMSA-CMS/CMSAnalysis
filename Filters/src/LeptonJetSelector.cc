@@ -9,7 +9,7 @@
 #include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
 #include "DataFormats/Math/interface/deltaR.h"
 
-LeptonJetSelector::LeptonJetSelector(double ideltaRCut, double idXYCut, double idZCut) : deltaRCut(ideltaRCut), dXYCut(idXYCut), dZCut(idZCut)
+LeptonJetSelector::LeptonJetSelector(double ideltaRCut) : deltaRCut(ideltaRCut)
 { }
 
 void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) const
@@ -30,7 +30,7 @@ void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) c
       if (particle.getType() == ParticleType::muon() && particle.getPt() > 5) 
       {
         auto lepton = Lepton(particle);
-        if(lepton.isLoose() && lepton.getDXY() < dXYCut && lepton.getDZ() < dZCut)
+        if(lepton.isLoose())
         {
           selected.addParticle(particle);
         }
@@ -79,7 +79,7 @@ std::vector<LeptonJet> LeptonJetSelector::findLeptonJets(ParticleCollection<Lept
       double deltaR = reco::deltaR(highestPtLeptonFourVector, fourVector);
       // std::cout << "delta r: " << deltaR << " delta r cut: " << DeltaRCut << "\n";
       // std::cout << "The value of Eta is "<< abs(recoLeptons[i].getEta()) <<std::endl;
-      if (deltaR < deltaRCut && recoLeptons[i].getPt() >= 5 && abs(recoLeptons[i].getEta()) <= 3)
+      if (deltaR < deltaRCut)
       {
         jet.addParticle(recoLeptons[i]);
         recoLeptons.erase(recoLeptons.begin() + i);
