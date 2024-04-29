@@ -26,6 +26,12 @@ public:
   // Returns 0 if only 1 particle
   double getDeltaR() const;
   double getMass() const;
+  double getTotalCharge() const;
+
+  double getMaxDXY() const;
+  double getMaxDZ() const;
+
+  bool allSameSign() const;
 
 private:
 

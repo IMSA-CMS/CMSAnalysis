@@ -2,6 +2,7 @@
 #define MASSRECOEFFICIENCY_HH
 
 #include <memory>
+#include <map>
 #include "CMSAnalysis/Modules/interface/EfficiencyModule.hh"
 
 

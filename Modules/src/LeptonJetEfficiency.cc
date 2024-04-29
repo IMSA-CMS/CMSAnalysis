@@ -10,6 +10,7 @@ LeptonJetEfficiency::LeptonJetEfficiency(const std::shared_ptr<LeptonJetReconstr
     EfficiencyModule(),
     lepRecoMod(iLepRecoMod),
     lepMatchMod(iLepMatchMod)
+    //do the same thing using mlcalcualtor shared pointeer
 {
     addRequiredModule(iLepRecoMod);
     addRequiredModule(iLepMatchMod);
@@ -17,6 +18,8 @@ LeptonJetEfficiency::LeptonJetEfficiency(const std::shared_ptr<LeptonJetReconstr
 
 void LeptonJetEfficiency::doCounters()
 {
+    incrementCounter("nEvents", 1);
+
     //auto recoLeptonJets = lepRecoMod->getLeptonJets();
     auto recoLeptonJets = getInput()->getSpecial("leptonJet");
     auto genSimParticles = getInput()->getParticles(EventInput::RecoLevel::GenSim);
@@ -37,7 +40,12 @@ void LeptonJetEfficiency::doCounters()
 
     incrementCounter("Multiple Jet Events", 0);
     incrementCounter("Single Jet Events", 0);
+    incrementCounter("Jet Events", 0);
 
+    if (recoLeptonJets.size() >= 1) 
+    {
+        incrementCounter("Jet Events", 1);
+    }
     if (recoLeptonJets.size() > 1) 
     {
         incrementCounter("Multiple Jet Events", 1);
@@ -54,12 +62,32 @@ void LeptonJetEfficiency::doCounters()
     for (auto leptonJetParticle : recoLeptonJets)
     {
         LeptonJet leptonJet(leptonJetParticle);
+
+
+
+        //how to harvest signal and backgroumd
+
+        // how to get value of observation// what do we use for filename liek in mlcalculator 
+
+        //do we want to maxmize (eps)/(sqrt(2.5 + B))
+
+        //do everthing inside here
+
+        //do getoutoput of leptonjet
+
+        //ask cikram foor integral thigny
+
         for (auto particle : leptonJet.getParticles())
         {
             if (particle.getType() == ParticleType::electron())
             {
                 electronCount++;
             }
+
+            //use the mlcalculator output
+            //dont loop insane amount of time use finite guesses, one time is one runananalyzer output
+
+
 
             //do here
             //count passed mass > 10
@@ -107,11 +135,13 @@ void LeptonJetEfficiency::finalize()
 {
     EfficiencyModule::finalize();
 
-    std::cout << "Matched / Reconstructed Efficiency: " << getCounter("Number of matched jets") / getCounter("Number of Reconstructed Jets") << "\n";
+    std::cout << "# Jet Events / Total # Events : " << getCounter("Jet Events") / getCounter("nEvents") << "\n";
+
+    // std::cout << "Matched / Reconstructed Efficiency: " << getCounter("Number of matched jets") / getCounter("Number of Reconstructed Jets") << "\n";
     std::cout << "Reconstructed / # Dark Photons Efficiency: " << getCounter("Number of Reconstructed Jets") / getCounter("Number of GenSim Jets") << "\n";
-    std::cout << "Matched / # Dark Photons Efficiency: " << getCounter("Number of matched jets") / getCounter("Number of GenSim Jets") << "\n";
-    double count = getCounter("Multiple Jet Events") + getCounter("Single Jet Events");
-    std::cout << "Efficiency: " << count / 24400 << "\n";
-    std::cout << "% of Original LJ Efficiency: " << 100 * count / 10879 << "\n";
-    std::cout << "% of Original DY Efficiency: " << 100 * count / 25 << "\n";
+    // std::cout << "Matched / # Dark Photons Efficiency: " << getCounter("Number of matched jets") / getCounter("Number of GenSim Jets") << "\n";
+    // double count = getCounter("Multiple Jet Events") + getCounter("Single Jet Events");
+    // std::cout << "Efficiency: " << count / 24400 << "\n";
+    // std::cout << "% of Original LJ Efficiency: " << 100 * count / 10879 << "\n";
+    // std::cout << "% of Original DY Efficiency: " << 100 * count / 25 << "\n";
 }

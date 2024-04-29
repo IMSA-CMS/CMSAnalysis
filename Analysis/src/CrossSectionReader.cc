@@ -28,8 +28,12 @@ CrossSectionReader::CrossSectionReader(std::string fileAddress)
     else
     {
       std::getline(weightsFile, line);
+      if (line == "")
+      {
+        continue;
+      }
       std::istringstream str(line);
-      str>>key>>value;
+      str >> key >> value;
       boost::to_lower(key);
       weights[key] = value;
     }
@@ -39,6 +43,7 @@ CrossSectionReader::CrossSectionReader(std::string fileAddress)
 
 double CrossSectionReader::getCrossSection(std::string key) const
 {
+  boost::to_lower(key);
 	auto iterator = weights.find(key);
 	if (iterator == weights.end())
 	{

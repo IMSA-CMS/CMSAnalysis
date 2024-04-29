@@ -5,7 +5,7 @@
 
 #include "CMSAnalysis/Histograms/interface/GenSimRecoPrototype.hh"
 #include "CMSAnalysis/Histograms/interface/ResolutionPrototype.hh"
-#include "CMSAnalysis/Modules/interface/LeptonJetMLCalculator.hh"
+#include "CMSAnalysis/Modules/interface/MLCalculator.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
 
 // This file was created by Liam Nelson, IMSA class of 2022.
@@ -56,8 +56,7 @@ class LeptonJetInvariantMassHist : public HistogramPrototype1D
   }
 
 };
-//for (LeptonJet lj(part))
-// Utility LeptonJet.hh and .cc add function getMass(), copy it from .cc, call getParticles(), instead of calculating maxdeltaR, calculate invariant mass, put into a particle collection, particlecollection.hh has a function calculateAllLeptonINvariatnMass(), that'll put them all together and calculate invmass of them all, return that value, then in this histogram, for loop that calls that function each time
+
 class MassResolutionHist : public ResolutionPrototype
 {
   using ResolutionPrototype::ResolutionPrototype;
@@ -152,7 +151,7 @@ class PileUpHist : public HistogramPrototype1D
 class LeptonJetMLHist : public GenSimRecoPrototype
 {
 public:
-  LeptonJetMLHist(EventInput::RecoLevel type, const std::string &iname, int iNBins, double iminimum, double imaximum, std::shared_ptr<LeptonJetMLCalculator> iMlCalc, std::shared_ptr<LeptonJetReconstructionModule> iRecoCalc) : GenSimRecoPrototype(type, iname, iNBins, iminimum, imaximum),
+  LeptonJetMLHist(EventInput::RecoLevel type, const std::string &iname, int iNBins, double iminimum, double imaximum, std::shared_ptr<MLCalculator> iMlCalc, std::shared_ptr<LeptonJetReconstructionModule> iRecoCalc) : GenSimRecoPrototype(type, iname, iNBins, iminimum, imaximum),
                                                                                                                                                                                                                                    mLCalc(iMlCalc),
                                                                                                                                                                                                                                    recoCalc(iRecoCalc)
   {
@@ -165,13 +164,19 @@ protected:
     std::vector<double> outputs;
     for (LeptonJet jet : jets)
     {
-      outputs.push_back(mLCalc->CalculateMLValue(jet));
+      ParticleCollection<Particle> collection;
+      collection.addParticle(jet);
+      outputs.push_back(mLCalc->getOutput(collection));
+      //std::cout << mLCalc->getOutput(jet);
+      //print here
+      //look at the prior fucntion
     }
+    
     return outputs;
   }
 
 private:
-  std::shared_ptr<LeptonJetMLCalculator> mLCalc;
+  std::shared_ptr<MLCalculator> mLCalc;
   std::shared_ptr<LeptonJetReconstructionModule> recoCalc;
 };
 

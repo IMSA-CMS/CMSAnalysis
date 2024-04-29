@@ -12,7 +12,7 @@ TriggerModule::TriggerModule() :
 
 bool TriggerModule::process()
 {
-  //std::cerr << "Notice: TriggerModule::process is running\n";
+  //std::cout << "Notice: TriggerModule::process is running\n";
 
   bool passAnyTrigger = false;       // True if the event passes any of the triggers
   bool passCurrentTrigger;           // True if the event passes the current trigger
