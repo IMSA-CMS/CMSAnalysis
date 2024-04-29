@@ -20,10 +20,11 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
 		{
             auto lepton = Lepton(particle);
             if(lepton.isLoose()
-                && particle.getPt() > 10
+                //&& particle.getPt() > 10
                 
             )
             {
+                //std::cout << "PT: " << std::to_string(particle.getPt()) << std::endl;
                 leptons.push_back(particle);
             }
         }
