@@ -22,7 +22,7 @@ void SuperImpose() {
     const std::string filePath = "/uscms/home/sdulam/analysis/CMSSW_12_4_3/src/CMSAnalysis/";
 
     //Pick source files for histograms here
-    std::vector<std::string> files = {"testpdfbackground.root"};
+    std::vector<std::string> files = {"pdfdybackground.root"}; 
 
     //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
     std::vector<std::string> hists = {"DefaultHistogram", "LowHistogram", "HighHistogram"};
