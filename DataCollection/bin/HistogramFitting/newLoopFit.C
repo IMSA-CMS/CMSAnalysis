@@ -83,8 +83,10 @@ TFitResultPtr fitToPearson(char const* name, TH1* hist, TFile* file, std::vector
 TFitResultPtr fitToPearsonIV(std::string name, TH1* hist, TFile* file, std::vector<double> params, std::string histsname);
 void parametrizationGraph(std::vector<fitInformation> fitinformation, std::string saveName, TH1* hist, double mass);
 void parametrizationCheck(std::vector<fitInformation> fitinformation, std::vector<char const*> filenames, std::string histname);
+std::string getParameters(fitInformation fitinformation);
 double globalNorm;
 int globalCounter = 0;
+int Normalizationerrors;
 
 void newLoopFit()
 {
@@ -208,17 +210,17 @@ void multipleFits()
 
 		auto finalParameters = fitParameters(fitParamsName, paramGraphsName,time, Histname);
 
-		std::string ahparam = finalParameters.at(0).fittedFunction;
-		std::string alparam = finalParameters.at(1).fittedFunction;
-		std::string nlparam = finalParameters.at(2).fittedFunction;
-		std::string nhparam = finalParameters.at(3).fittedFunction;
-		std::string sigmaparam = finalParameters.at(4).fittedFunction;		
+		std::string alparam = getParameters(finalParameters.at(0)); //p[0] * 10^-4(x-1)^2 + p[3]
+		std::string ahparam = getParameters(finalParameters.at(1));
+		std::string nlparam = getParameters(finalParameters.at(2));
+		std::string nhparam = getParameters(finalParameters.at(3));
+		std::string sigmaparam = getParameters(finalParameters.at(4));	
 		
-		std::string massparam = finalParameters.at(5).fittedFunction;		
+		std::string massparam = getParameters(finalParameters.at(5));	//[0] * 10^-4 + x* [1]	
 
 		//std::string functionString = "("+ nparam +") * std::pow(1 + std::pow((x-("+ massparam +")) / ("+aparam+"),2), -("+mparam+")) * std::exp(-("+nuparam+") * std::atan((x-("+massparam+"))/("+aparam+")))";
-		std::string printString = Histname + "|||" + ahparam + "|||" + alparam + "|||" + nlparam + "|||" + nhparam + "|||" + massparam + "|||" + sigmaparam; 
-		std::cout<< printString << "\n";
+		std::string printString = Histname + "|||" + alparam + ahparam  + nlparam + nhparam + sigmaparam + massparam; 
+		//std::cout<< printString << "\n";
 		paramsFile << printString << '\n';
 		
 		parametrizationCheck(finalParameters, fileNames, Histname);
@@ -228,6 +230,7 @@ void multipleFits()
 	std::cout<<Histname << "Done! \n";
 
 }
+std::cout<< "number of errors: "<< Normalizationerrors;
 }
 
 void parametrizationCheck(std::vector<fitInformation> fitinformation, std::vector<char const*> filenames, std::string histname){
@@ -252,7 +255,7 @@ void parametrizationCheck(std::vector<fitInformation> fitinformation, std::vecto
 			std::string saveName = "DBSCOverlay_" + Sfilename + histname + ".png"; 
 			parametrizationGraph(fitinformation, saveName, hist,mass);
 		}
-		std::cout<<mass;
+		//std::cout<<mass;
 		mass += 100;
 	}
 }
@@ -261,23 +264,19 @@ void parametrizationGraph(std::vector<fitInformation> fitinformation, std::strin
 	TF1* f1 = new TF1 ("f1", ParametrizedDoubleSidedCrystalballFunction, 0, 2000, 23);
 	//al,ah,nl,nh,sigma, mean
 	//f1->Setparameters
+	std::cout<<"checking: " << saveName << "-----------------------------------------------\n";
 	globalNorm = hist->Integral("width");
-
+	//std::cout<< "Check 1: " <<globalNorm << "\n";
 	for(int i=0;i<22;i++){
 		int number = (i)/4;
 		double value;
 		if(number < 5){
 			value = fitinformation.at(number).results.at(i%4);
 			f1->FixParameter(i, value);
-			// std::cout<< "i: " + std::to_string(i) + "| Fitted Parameter name: " + fitinformation.at(number).paramName + "| Fitted Parameter number: " + std::to_string(i%4) + "| Fitted Parameter value:  " + std::to_string(value) + "\n";
-			// if(number == 0){
-			// 	std::cout<< value << "\n";
-			// }
 		}
 		if(number == 5){
 			value = fitinformation.at(5).results.at(i%4);
 			f1->FixParameter(i, value);
-			//std::cout<< "i: " + std::to_string(i) + "| Fitted Parameter name: " + fitinformation.at(number).paramName + "| Fitted Parameter number: " + std::to_string(i%4) + "| Fitted Parameter value:  " + std::to_string(value) + "\n";
 		}
 	}
 	f1->FixParameter(22, mass);
@@ -286,16 +285,37 @@ void parametrizationGraph(std::vector<fitInformation> fitinformation, std::strin
 	hist->Draw();
 
 	f1->Draw("SAME");
+	//std::cout << "After Integral: " << f1->Integral(0,2000) << "\n";
 	c1->Update();
+	// Normalization is .3w
+
+
 	c1->SaveAs(saveName.c_str());
 	c1->Close();
 
 }
 
+std::string getParameters(fitInformation fitinformation){
+	std::string returnString;
+	int i = 0;
+	for(auto result: fitinformation.results){
+		double rresult;
+		if(i == 0){
+			rresult = 10000 * result;
+		}
+		else{
+			rresult = result;
+		}
+		returnString += std::to_string(rresult);
+		returnString += "|||";
+		i++;
+	}
+	return returnString;
 
+}
 
 TH1* getHist(std::string name, TFile* file)
-    {
+{
     auto hist = dynamic_cast<TH1*>(file->FindObjectAny(name.c_str()));
     
     return hist;
@@ -303,7 +323,9 @@ TH1* getHist(std::string name, TFile* file)
 std::vector<std::string> generateHistNames() {
 	std::vector<std::string> Channels;
 	//std::vector<std::string> recoChannels = {"eeee","eeeu","eeuu","eueu","euuu","uuuu","eee","eeu","eue","euu","uue","uuu","ee","e e","eu","e u","uu","u u"};
+
 	std::vector<std::string> recoChannels = {"eeee","eeeu","eeuu","eueu","euuu","uuuu"};
+	//std::vector<std::string> recoChannels = {"eeeu"};
 	std::vector<std::string> genSimChannels = {"eeee","eeeu", "eeuu", "eueu", "euuu","uuuu"};
 	for(auto reco : recoChannels){
 		for(auto genSim : genSimChannels){
@@ -544,6 +566,7 @@ std::vector<fitInformation> fitParameters(std::string filename, std::string para
 	TCanvas* nhcanvas = new TCanvas(nhname.c_str(),nhname.c_str() , 800, 500);
 	auto nh = dynamic_cast<TGraph*>(paramGraphs->FindObjectAny("n_{high}"));
 	powerLaw->SetParameters(0.5, 0, 2, .5);
+	powerLaw->SetParLimits(1,170, 1000);
 	gStyle->SetOptFit(1111);
 	auto fitResultnh = nh->Fit("powerLaw", "S");
 	nh->Draw("AP");
@@ -555,6 +578,7 @@ std::vector<fitInformation> fitParameters(std::string filename, std::string para
 
 
 	powerLaw->SetMinimum(-10000000.0);
+	powerLaw->SetParLimits(1,-1000,1000);
 	std::string sigmaname = newHistname + "sigma";
 	TCanvas* sigmacanvas = new TCanvas(sigmaname.c_str(),sigmaname.c_str() , 800, 500);
 	auto sigma = dynamic_cast<TGraph*>(paramGraphs->FindObjectAny("sigma"));
@@ -630,7 +654,7 @@ fitInformation mapMaker9000(TFitResultPtr Result, std::string type, std::string 
 		rfitInformation.fittedFunction = finalFunction;
 	}
 	else if(type == "pol1"){
-		std::string finalFunction = std::to_string(std::get<0>(paramVector[0])) + "+" + std::to_string(std::get<0>(paramVector[1])) + "*x";
+		std::string finalFunction = std::to_string(std::get<0>(paramVector[0])) + "*std::pow(10,-4) +" + std::to_string(std::get<0>(paramVector[1])) + "*x";
 		rfitInformation.baseFunction = "[0]* std::pow(10,-4) +[1]*x";
 		rfitInformation.numParams = 2;
 		rfitInformation.fittedFunction = finalFunction;
@@ -665,11 +689,6 @@ double ParametrizedDoubleSidedCrystalballFunction(double *x, double *par)
 	double sigma   = par[16] * std::pow(par[22]-par[17],par[18]) + par[19];
 	double mean	= par[20] + par[21]*par[22]; 
 
-	//if(par[22] == 1100){
-		//std::cout<< alpha_l << "|" << alpha_h << "|" << n_l << "|" << n_h << "|" << sigma << "\n";
-	//}
-	//I HAVE NO CLUE WHY THIS IS BROKEN FOR EEE_EEEE 1100 
-
 	double N = globalNorm;
 	float t = (x[0]-mean)/sigma;
 	double result;
@@ -701,9 +720,11 @@ double ParametrizedDoubleSidedCrystalballFunction(double *x, double *par)
 
 	globalCounter++;
 	if(globalCounter%1000 == 0){
-	// std::cout<<"Result:" << result << "\n";
 	// std::cout<<"Global norm: " << globalNorm << "\n";
 	// std::cout<<"Function Norm: " << functionNormalization << "\n";
+	// std::cout<<"n_h: " << n_h << "\n";
+
+	//seems like the Function Normaliztion is being miscalculated
 	}
 	return N * functionNormalization * result;
 }
@@ -747,7 +768,7 @@ double DoubleSidedCrystalballFunction(double *x, double *par)
 
 	globalCounter++;
 	if(globalCounter%1000 == 0){
-	std::cout<<"Global norm: " << globalNorm << "\n";
+	//std::cout<<"Global norm: " << globalNorm << "\n";
 	}
 	return N * functionNormalization * result;
 }
@@ -981,7 +1002,6 @@ TFitResultPtr fitToPearson(char const* name, TH1* hist, TFile* file, std::vector
 	file->WriteObject(c1, name);
 	return result;
 }
-
 TFitResultPtr fitToPearsonIV(std::string name, TH1* hist, TFile* file, std::vector<double> params, std::string histsname)
 {
 
@@ -1024,6 +1044,3 @@ TFitResultPtr fitToPearsonIV(std::string name, TH1* hist, TFile* file, std::vect
 
 	return result;
 }
-
-//fix euuu,uuuu
-//make talk

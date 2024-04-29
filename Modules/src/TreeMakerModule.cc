@@ -1,57 +1,50 @@
 #include "CMSAnalysis/Modules/interface/TreeMakerModule.hh"
+#include "CMSAnalysis/Modules/interface/SpecialVariableModule.hh"
+#include "TTree.h"
 
-void TreeMakerModule::initialize()
+
+TreeMakerModule::TreeMakerModule(std::shared_ptr<SpecialVariableModule> iSpecialVariable, std::string iName):
+specialVariable(iSpecialVariable),
+name(iName)
 {
-	addVariables();
+    
 }
 
 bool TreeMakerModule::process()
 {
-	calculateVariables();
-	return true;
-}
+    auto particles = getParticles();
 
-void TreeMakerModule::addValue(std::string name, Int_t value)
+    for (const auto &particle : particles)
+    {
+        specialVariable->calculateVariables(particle);
+        tree->Fill();
+    }
+
+
+    //specialVariable->calculateVariables();//enum as parameter?; f
+    //tree->Fill();
+    //auto leptonJets = getInput()->getSpecial("LeptonJet");//do foreach over
+    // this like in leptonjetddatastrip, put the prior two lines in at the eend, 
+    //MAKE THIS FUNCTION that overrides (new process fucntion in a new class that inherits from TreeMaker module)
+    return true;
+} 
+
+
+
+void TreeMakerModule::initialize()
 {
-	addValue(name, integers, value);
-}
+    tree = new TTree(name.c_str(), name.c_str());//put in name
+    specialVariable->addVariablesToTree(tree);
+} 
 
-void TreeMakerModule::addValue(std::string name, Float_t value)
+
+void TreeMakerModule::finalize()
 {
-	addValue(name, floats, value);
-}
+    tree->Write();
+} 
 
-void TreeMakerModule::addValue(std::string name, std::vector<Int_t> value)
-{
-	addValue(name, arraysOfIntegers, value);
-}
 
-void TreeMakerModule::addValue(std::string name, std::vector<Float_t> value)
-{
-	addValue(name, arraysOfFloats, value);
-}
-
-void TreeMakerModule::addVariable(std::string name, VariableType type)
-{
-	switch (type)
-	{
-		case VariableType::Integer:
-			addVariable(name, integers);
-			break;
-		
-		case VariableType::Float:
-			addVariable(name, floats);
-			break;
-
-		case VariableType::IntegerArray:
-			addVariable(name, arraysOfIntegers);
-			break;
-
-		case VariableType::FloatArray:
-			addVariable(name, arraysOfFloats);
-			break;
-
-		default:
-			throw std::runtime_error("Unknown variable type");
-	}
-}
+//initialize craetes tree, call fucntion on isepcialtree (addvariables to tree )
+    //process calls calcaulte variables to ispeciatree, then can tree->fill from datastripp
+    //finalize needs to call tree-> write
+//create new class that inherits from specialVariableModule, and pass an object to this thing in the constructor,
