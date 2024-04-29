@@ -22,6 +22,8 @@
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
 #include "CMSAnalysis/Analysis/interface/FitFunction.hh"
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
+#include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
+
 
 #define _USE_MATH_DEFINES
 
@@ -43,12 +45,12 @@ double pearson(double *x, double *par)
 
 std::vector<std::string> channelTypes =
 {
-	"eeee_eeee",
-	"eeeu_eeeu",
-	"eueu_eueu",
-	"eeuu_eeuu",
-	"euuu_euuu",
-	"uuuu_uuuu"
+	"eeee",
+	"eeeu",
+	"eueu",
+	"eeuu",
+	"euuu",
+	"uuuu"
 };
 
 std::vector<std::string> histogramTypes = 
@@ -143,49 +145,40 @@ void fullSignalFit()
 	std::string fitParameterValueFile = "histogramFunctions.txt";
 	std::string parameterFits = "parameterFits.root";
 	std::string parameterFunctions = "parameterFunctions.txt";
-	std::vector<int> masses = {500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
+	std::vector<int> masses = {1000};
 
+	auto histogramSource = std::make_shared<HiggsCompleteAnalysis>();
 	Fitter fitter(fitHistsName, fitParameterValueFile, parameterFits, parameterFunctions);
-
-	std::vector<TFile*> files;
-	for (size_t i = 0; i < masses.size(); ++i) 
-	{
-		std::string massRootFile = "Higgs";
-		massRootFile += std::to_string(masses[i]).append(".root");
-		files.push_back(TFile::Open(massRootFile.c_str()));
-	}
 
 	for (const auto& histType : histogramTypes) 
 	{
 		for (const auto& channel : channelTypes) 
 		{
+			auto channelHists = histogramSource->getChannel(channel);
 			std::unordered_map<std::string, double> massValues;
 			std::unordered_map<std::string, TH1*> histogramMap;
 			std::vector<std::string> paramNames = {"alpha_{low}","alpha_{high}","n_{low}", "n_{high}", "mean", "sigma", "norm"};
 			std::vector<std::string> actualParams;
 			FitFunctionCollection currentFunctions;
 			for (size_t i = 0; i < paramNames.size(); ++i) {
-				actualParams.push_back(std::string(paramNames[i] + '_' + channel + '_' + histType));
+				actualParams.push_back(std::string(paramNames[i] + '_' + channel + '_' + channel + '_' + histType));
 			}
 
 			for (size_t i = 0; i < masses.size(); ++i) 
 			{
-				std::string massRootFile = "Higgs";
-				massRootFile += std::to_string(masses[i]).append(".root");
-
-				std::string keyName = std::to_string(masses[i]) + '_' + channel + '_' + histType;
+				auto higgsProcess = channelHists->findProcess("Higgs Signal " + std::to_string(masses[i]));
+				auto histogram = higgsProcess->getHist("Same Sign Inv Mass");
+				std::string keyName = std::to_string(masses[i]) + '_' + channel + '_' + channel + '_' + histType;
 
 				FitFunction func = FitFunction::createFunctionOfType(FitFunction::DOUBLE_SIDED_CRYSTAL_BALL, keyName, "", min, max);
 				currentFunctions.insert(func);
 				
-				std::string histogramName = channel + "_" + histType;
 				// std::cout << "Getting histogram" << '\n';
-				TH1* selectedHist = getHist(histogramName, files[i]);
 				// selectedHist->Draw();
 				// std::string wait;
 				// std::cin >> wait;
 
-				histogramMap.insert({keyName, selectedHist});
+				histogramMap.insert({keyName, histogram});
 				
 				massValues.insert({keyName, masses[i]});
 
