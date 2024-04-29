@@ -26,35 +26,50 @@ EventDumpModule::EventDumpModule( bool iGenSim, bool iReco, int inumOfEvents):
   my_file.close();
 }
 
+
+
+// void EventDumpModule::doCounters()
+// {
+//   std::cout << "here";
+// }
+
 //update this to remove event parameter
 bool EventDumpModule::process()
 {
-  if(counter < numOfEvents || numOfEvents == -1)
+  auto leptonJet = getInput()->getSpecial("leptonJet");
+  if((counter < numOfEvents || numOfEvents == -1) && leptonJet.size() > 0)
   {
     std::ofstream my_file;
     if(genSim)
     {
       auto genParticles = getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::none());
+      if(getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::none()).size() > 0){
+        std::cout << "found ";
+      }
       my_file.open("GenSimEventDump.txt", std::ios::app);
       printGenSimParticleCollection(genParticles, my_file);
-      //std::cout << "\nAn event was printed";
+      // std::cout << "Num Particles: " << genParticles.size();
       my_file.close();
     }
     if(reco)
     {
+      auto leptonJet = getInput()->getSpecial("leptonJet");
       auto recoParticles = getInput()->getParticles(EventInput::RecoLevel::Reco, ParticleType::none());
-      my_file.open("RecoEventDump.txt", std::ios::app);
-      printRecoParticleCollection(recoParticles, my_file);
+      // if(getInput()->getParticles(EventInput::RecoLevel::Reco, ParticleType::none()).size() > 0){
+      //   std::cout << "found ";
+      // }
+      // std::cout << "Num Particles: " << recoParticles.size();
+      if(leptonJet.getNumParticles()) {
+        std::cout << recoParticles.size();
+        my_file.open("RecoEventDump.txt", std::ios::app);
+        printRecoParticleCollection(recoParticles, my_file);
+        my_file.close();
+      }
       //std::cout << "\nAn event was printed";
-      my_file.close();
     }
-    counter++;
-    return true;
   }
-  else
-  {
-    return true;
-  }
+  counter++;
+  return true;
 }
 
 void EventDumpModule::printGenSimParticleCollection(const ParticleCollection<GenSimParticle>& genParts,std::ofstream& my_file ) const
@@ -62,6 +77,7 @@ void EventDumpModule::printGenSimParticleCollection(const ParticleCollection<Gen
   int eventElement = 1;
   int motherColumnWidth = 20;
   int daughterColumnWidth = 20;
+  // if(genParts.size() == 0) return;
   const auto& particleGroup = genParts.getParticles();
   my_file << "--------------------------------------------------------" << std::endl;
   my_file << "EVENT #" << (counter + 1) <<std::endl;
@@ -76,22 +92,29 @@ void EventDumpModule::printGenSimParticleCollection(const ParticleCollection<Gen
    << std::setw(15) << "| Phi"
    << std::setw(15) << "| E"
    << std::setw(5) << "| mass\n";
+
   //Prints out all of the particles
-  for(auto &part : particleGroup)
+  auto copy = std::make_shared<std::vector<GenSimParticle>>(particleGroup);
+  for(long unsigned int i = 0; i < copy->size();){
+    if((*copy)[i].getType().getpdgId() == 29) copy->erase(copy->begin() + i);
+    else ++i;
+  }
+  for(auto &part : *copy)
   {
-    my_file << std::setw(8) << eventElement << std::pair<GenSimParticle, std::vector<GenSimParticle>>{part, particleGroup} << std::endl;
+    std::cout << part.getType().getpdgId() << " ";
+    std::cout << std::setw(8) << eventElement << std::pair<GenSimParticle, std::vector<GenSimParticle>>{part, *copy} << std::endl;
     eventElement++;
   }
+  std::cout << "\n";
 }
-
 void EventDumpModule::printRecoParticleCollection(const ParticleCollection<Particle>& recoParts,std::ofstream& my_file ) const
 {
   int eventElement = 1;
   const auto& particleGroup = recoParts.getParticles();
   my_file << "--------------------------------------------------------" << std::endl;
   my_file << "EVENT #" << (counter + 1) <<std::endl;
-  my_file << "all lepton invariant mass: " << recoParts.calculateAllLeptonInvariantMass() 
-    << " | same sign invariant mass: " << recoParts.calculateSameSignInvariantMass(false, true) << "\n";
+  // my_file << "all lepton invariant mass: " << recoParts.calculateAllLeptonInvariantMass();
+    // << " | same sign invariant mass: " << recoParts.calculateSameSignInvariantMass(false, true) << "\n";
   my_file << "--------------------------------------------------------" << std::endl;
 
   my_file << std::left << std::setw(8) << "element" << std::setw(11) << "| type"
@@ -102,9 +125,17 @@ void EventDumpModule::printRecoParticleCollection(const ParticleCollection<Parti
    << std::setw(15) << "| E"
    << std::setw(5) << "| mass\n";
 
-  //Prints out all of the particles
   for(auto &part : particleGroup)
   {
+    if(part.getType().getpdgId() == 29) {
+      LeptonJet l(part);
+      my_file << "Lepton Jet:\n"; 
+      for(auto lepton: l.getParticles()){
+        my_file << std::setw(8) << eventElement << lepton << std::endl;
+        eventElement++;
+      }
+      continue;
+    }
     my_file << std::setw(8) << eventElement << part << std::endl;
     eventElement++;
   }
@@ -212,10 +243,10 @@ std::ostream& operator<<(std::ostream& str, const std::pair<GenSimParticle, std:
     //str << std::setw(motherColumnWidth - 2) << formatMotherParticles(part, genParts) << "| ";
     // Print daughters
     //formatDaughterParticles(part, particleGroup) was replaced by function not working string
-  str << std::setw(18) << EventDumpModule::formatDaughterParticles(part, genParts) << "| ";
+  // str << std::setw(18) << EventDumpModule::formatDaughterParticles(part, genParts) << "| ";
     // Particle properties
-  str << std::setw(13) << part.getPt() << "| " << std::setw(13) << part.getEta() << "| " << std::setw(13) << part.getPhi() << "| ";
-  str << std::setw(13) << part.getEnergy() << "| " << std::setw(13) << part.getMass();
+  // str << std::setw(13) << part.getPt() << "| " << std::setw(13) << part.getEta() << "| " << std::setw(13) << part.getPhi() << "| ";
+  // str << std::setw(13) << part.getEnergy() << "| " << std::setw(13) << part.getMass();
   return str;
 }
 

@@ -16,8 +16,8 @@ TriggerEfficiencyModule::TriggerEfficiencyModule(const std::shared_ptr<MatchingM
 bool TriggerEfficiencyModule::process()
 {
   auto genSimParticles = getInput()->getLeptons(EventInput::RecoLevel::GenSim).getParticles();  // Vector of Particles
-
-  // std::cout << "Number of GenSim Particles: " << genSimParticles.size() << '\n';
+  std::cout<< "Trigger Efficiency Module Working" << '\n';
+  //std::cout << "Number of GenSim Particles: " << genSimParticles.size() << '\n';
 
   for (size_t i = 0; i < genSimParticles.size(); ++i)
   {

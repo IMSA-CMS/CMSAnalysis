@@ -16,6 +16,7 @@
 #include "CMSAnalysis/Modules/interface/LeptonEfficiency.hh"
 #include "CMSAnalysis/Histograms/interface/LeptonJetDeltaRHist.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetEfficiency.hh"
+#include "CMSAnalysis/Modules/interface/LeptonJetPTDifferential.hh"
 #include "CMSAnalysis/Utility/interface/LeptonJet.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetMatchingModule.hh"
 #include "CMSAnalysis/Histograms/interface/LeptonJetPtHist.hh"
@@ -42,7 +43,7 @@
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
 #include "CMSAnalysis/Histograms/interface/GenSimDeltaRHist.hh"
 #include "CMSAnalysis/Histograms/interface/LeptonJetRecoHist.hh"
-
+#include "CMSAnalysis/Filters/interface/TriggerCut.hh"
 #include "CMSAnalysis/Histograms/interface/GammaHist.hh"
 #include "CMSAnalysis/Histograms/interface/GammaDeltaRHist2D.hh"
 #include "CMSAnalysis/Histograms/interface/GenSimGammaHist.hh"
@@ -53,8 +54,11 @@
 #include "CMSAnalysis/Histograms/interface/GenSimDeltaRTwoJetsPsedoFilteredHist.hh"
 #include "CMSAnalysis/Histograms/interface/GenSimGammaTwoJetsPsedoFilteredHist.hh"
 #include "CMSAnalysis/Histograms/interface/ResolutionHist.hh"
+#include "CMSAnalysis/Filters/interface/SameSignLeptonJetCut.hh"
+#include "CMSAnalysis/Modules/interface/GenSimEventDumpModule.hh"
+// #include "CMSAnalysis/Modules/interface/RecoEventDumpModule.hh"
+// #include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
 
-#include "CMSAnalysis/Filters/interface/DarkPhotonHighMassCut.hh"
 
 using std::make_shared;
 
@@ -64,15 +68,14 @@ void LeptonJetReconstructionPlan::initialize()
 
   auto eventMod = std::make_shared<EventModule>();
   auto eventHistMod = eventMod->getHistogramModule();
-  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
-  eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5, 0.0001, 0.0005));
-  //eventMod->addSelector(std::make_shared<LeptonJetAntiSelector>(.5, 0.0001, 0.0005));
-
-//  eventMod->addCut(std::make_shared<DarkPhotonHighMassCut>());
-
+  eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5));
+  auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Mu37_TkMu27", "HLT_IsoMu24"});
+  eventMod->addCut(triggerCut);
+  auto sameSignCut = make_shared<SameSignLeptonJetCut>();
+  eventMod->addCut(sameSignCut);
   auto matchMod = std::make_shared<MatchingModule>();
+  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.01);
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
-  auto eventDumpMod = std::make_shared<EventDumpModule>(true,true);
   auto lepMatchMod =
       std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.1); // this
   auto histOutputMod = std::make_shared<HistogramOutputModule>();
@@ -153,6 +156,9 @@ void LeptonJetReconstructionPlan::initialize()
   // auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>(3);
   // auto genSimEventDumpMod = std::make_shared<GenSimEventDumpModule>();
   // auto recoEventDumpMod = std::make_shared<RecoEventDumpModule>();
+  // genSimEventDumpMod->setInput(eventMod->getEventInput());
+  // recoEventDumpMod->setInput(eventMod->getEventInput());
+
   // auto triggerMod = std::make_shared<TriggerModule>();
  
   auto nLeptonsFilter = std::make_shared<NLeptonsFilter>(); 
@@ -177,7 +183,11 @@ void LeptonJetReconstructionPlan::initialize()
   // Efficiency Modules
   auto leptonEfficiency = std::make_shared<LeptonEfficiency>(matchMod);
   auto leptonJetEfficiency = std::make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
+  auto leptonJetPT = std::make_shared<LeptonJetPTDifferential>(lepRecoMod, lepMatchMod);
   leptonJetEfficiency->setInput(eventMod->getEventInput());
+  leptonJetPT->setInput(eventMod->getEventInput());
+  auto eventDumpMod = std::make_shared<EventDumpModule>(true,true);
+  eventDumpMod->setInput(eventMod->getEventInput());
 
   // Add the histogram(s) created above to histMod
   // eventHistMod->addHistogram(nLeptonsHist);
@@ -204,8 +214,6 @@ void LeptonJetReconstructionPlan::initialize()
   triggerMod->addTrigger(doubleMuonTrigger);
   triggerMod->addTrigger(tripleMuonTrigger);
   */
-
-  // modules.addProductionModule(genSimEventDumpMod);
   // modules.addProductionModule(recoEventDumpMod);
   modules.addProductionModule(matchMod);
   modules.addProductionModule(lepRecoMod);
@@ -218,13 +226,15 @@ void LeptonJetReconstructionPlan::initialize()
   // modules.addProductionModule(triggerMod);
   modules.addAnalysisModule(leptonEfficiency);
   modules.addAnalysisModule(leptonJetEfficiency);
+  modules.addAnalysisModule(leptonJetPT);
   //modules.addAnalysisModule(massRecoEfficiency200);
   //modules.addAnalysisModule(massRecoEfficiency500);
   //modules.addAnalysisModule(massRecoEfficiency800);
   //modules.addAnalysisModule(massRecoEfficiency1000);
   //modules.addAnalysisModule(massRecoEfficiency1300);
+  // modules.addAnalysisModule(genSimEventDumpMod);
   modules.addAnalysisModule(eventDumpMod);
-  //modules.addAnalysisModule(recoEventDumpMod);
+  // modules.addAnalysisModule(recoEventDumpMod);
   /* auto selector = make_shared<SnowmassLeptonSelector>(5);
 
   modules.getEventInput()->setLeptonSelector(selector);

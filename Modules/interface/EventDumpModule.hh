@@ -5,6 +5,7 @@
 
 #include "AnalysisModule.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
+#include "CMSAnalysis/Utility/interface/LeptonJet.hh"
 #include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 
@@ -43,5 +44,4 @@ std::ostream& operator<<(std::ostream& str, const std::pair<GenSimParticle, std:
 std::ostream& operator<<(std::ostream& str, const GenSimParticle part);
 
 #endif
-
 

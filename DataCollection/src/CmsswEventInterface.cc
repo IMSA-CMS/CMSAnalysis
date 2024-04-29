@@ -161,5 +161,10 @@ bool CmsswEventInterface::checkTrigger(std::string triggerName, std::string subP
     {
         return false;
     }
-    // return *(triggers.find(triggerName)->second);
+    //return *(triggers.find(triggerName)->second);
+}
+
+std::vector<double> CmsswEventInterface::getPDFWeights() const
+{
+    throw "Function not implemented yet";
 }

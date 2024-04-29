@@ -12,15 +12,6 @@
 LeptonJetSelector::LeptonJetSelector(double ideltaRCut, double idXYCut, double idZCut) : deltaRCut(ideltaRCut), dXYCut(idXYCut), dZCut(idZCut)
 { }
 
-bool oppositeChargeLeptonJetFilter(LeptonJet &jet){
-  auto leptons = jet.getParticles();
-  std::pair<int, int> charge_count = {0, 0};
-  for(auto lepton: leptons){
-    (lepton.getCharge() == 1) ? ++charge_count.first : ++charge_count.second;
-  }
-  if(charge_count.first == 2 || charge_count.second == 2) std::cout << "CBT";
-  return charge_count.first && charge_count.second;
-}
 
 void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) const
 {
@@ -99,7 +90,7 @@ std::vector<LeptonJet> LeptonJetSelector::findLeptonJets(ParticleCollection<Lept
     }
     // std::cout << oppositeChargeLeptonJetFilter(jet);
     // std::cout << "numParticles: " << jet.getNumParticles() << "\n";
-    if (jet.getNumParticles() > 1 && oppositeChargeLeptonJetFilter(jet))
+    if (jet.getNumParticles() > 1)
     {
       // auto inputJets = getInput()->getJets(EventInput::RecoLevel::Reco);
       // bool close = false;
