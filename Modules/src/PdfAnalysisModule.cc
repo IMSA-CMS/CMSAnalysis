@@ -3,8 +3,7 @@
 #include <iostream>
 
 
-PdfAnalysisModule::PdfAnalysisModule(int low, int high, int histBins) :
-  HistogramOutputModule()
+PdfAnalysisModule::PdfAnalysisModule(int low, int high, int histBins) : HistogramOutputModule()
 {
   this->low = low;
   this->high = high;
@@ -126,8 +125,7 @@ bool PdfAnalysisModule::process()
     //std::cout << "No Reco Particles" << std::endl;
     return true;
   }
-  auto recoInvMass = recoParticles.getInvariantMass();
-  defHist->Fill(recoInvMass, 1.0);
+  
   auto& particle = recoParticles[0];
   //No idea how to get particle info
   for(int i = 0; i < 100; ++i)
