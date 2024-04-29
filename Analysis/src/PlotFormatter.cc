@@ -487,7 +487,8 @@ TCanvas* PlotFormatter::noScaleSimpleSuperImposedHist(std::vector<TH1*> hists, s
 
     //Draws the legend
     auto legend = new TLegend(0.8-(right/width), 0.85-(top/height), 1-(right/width), 1-(top/height));
-    legend->SetTextSize(0.02);
+    legend->SetTextSize(0.015);
+    legend->SetMargin(0.1);
     count = 0;
     std::string name;
     TString toAdd;

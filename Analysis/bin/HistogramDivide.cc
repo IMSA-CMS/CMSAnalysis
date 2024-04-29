@@ -15,11 +15,11 @@
 #include "TH1.h"
 #include "TStyle.h"
 
-void SuperImpose() {
+void HistogramDivide() {
     //Change extraText here
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary");
     //Change the filePath here. This should be the longest branch all input files have in common.
-    const std::string filePath = "/uscms/home/rmandell/analysis/CMSSW_12_4_3/src/CMSAnalysis/MCGeneration/test";
+     const std::string filePath = "/uscms/home/rmandell/analysis/CMSSW_12_4_3/src/CMSAnalysis/MCGeneration/test";
     //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
     //Write your graph names here (for the legend)
     
@@ -35,6 +35,7 @@ void SuperImpose() {
 
 
     int count = 0;
+    int base = 3;
     TFile* openedFile;
     TH1* hist;
     std::vector<TH1*> histVector;
@@ -64,5 +65,47 @@ void SuperImpose() {
         }
         count++;
     }
+
+    for (int i = 0; i < count; i++)
+	{
+		histVector[i]->Rebin(10);
+	}
+
+    double average[count];
+
+    for (int i = 0; i < count; i++)
+    {
+        //histVector[i]->Add(histVector[base], -1);
+        //histVector[i]->Divide(histVector[base]);
+        for(int j = 0; j < (histVector[i]->GetNbinsX());j++)
+        {
+            double histValue = histVector[i]->GetBinContent(j);
+            double baseValue = histVector[base]->GetBinContent(j);
+            //std::cout<<baseValue<<"\n";
+            //std::cout<<histValue<<"\n";
+                
+            if(baseValue == 0)
+            {
+                histVector[i]->SetBinContent(j, 0);
+                average[i]+= 0;
+            }else
+            {
+                double ratio = (histValue-baseValue) / baseValue;
+                histVector[i]->SetBinContent(j, ratio);
+                average[i]+= ratio;
+            }
+        }
+
+        std::cout<<average[i]/histVector[i]->GetNbinsX() * 100<<"\n";
+    }
+
+
+
+    
+
+   
+   
+
     TCanvas *canvas = plotFormatter->noScaleSimpleSuperImposedHist(histVector, colors, names, xTitle, yTitle); 
+    
 }
