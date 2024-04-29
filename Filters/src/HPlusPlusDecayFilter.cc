@@ -34,6 +34,7 @@ std::string HPlusPlusDecayFilter::getState(const EventInput* inputMod) const
 
   if (typeGenSim == EventInput::RecoLevel::GenSim)
   {
+
     std::string hPlus = "";
     std::string hMinus = "";
 
@@ -43,8 +44,8 @@ std::string HPlusPlusDecayFilter::getState(const EventInput* inputMod) const
 
     for (const auto &particle : genSim) //cycles through to find the doubly charged higgs
     {
-      GenSimParticle genSimParticle = GenSimParticle(particle);
 
+      GenSimParticle genSimParticle = GenSimParticle(particle);
       if (inputMod->getParticles(EventInput::RecoLevel::GenSim, ParticleType::electron()).size() < 2)
       {
         // std::cout << particle.getName() << " (" << genSimParticle.pdgId() << "): " << std::to_string(particle.getCharge()) << std::endl;
@@ -54,10 +55,13 @@ std::string HPlusPlusDecayFilter::getState(const EventInput* inputMod) const
       {
         int p1i = (std::abs((genSimParticle.daughter(0).pdgId())) - 11) / 2;
         int p2i = (std::abs((genSimParticle.daughter(1).pdgId())) - 11) / 2;
-
+        if(p1i > 10|| p2i > 10){
+          std::cout<<"Error particle.";
+          return "none";
+          
+        }
         std::string p1 = c1str[p1i];
         std::string p2 = c1str[p2i];
-
         if (p1i <= p2i)
         {
           hPlus = p1 + p2;
@@ -68,13 +72,20 @@ std::string HPlusPlusDecayFilter::getState(const EventInput* inputMod) const
         }
       }
       else if ((genSimParticle.pdgId() == -9900041 || genSimParticle.pdgId() == -9900042) && genSimParticle == genSimParticle.finalDaughter() && genSimParticle.numberOfDaughters() == 2) // H--
-      {
+      {        
+
         int p1i = (std::abs((genSimParticle.daughter(0).pdgId())) - 11) / 2;
         int p2i = (std::abs((genSimParticle.daughter(1).pdgId())) - 11) / 2;
 
-        std::string p1 = c1str[p1i];
+        if(p1i > 10|| p2i > 10){
+          std::cout<<"Error particle.";
+          return "none";
+          
+        }
+        std::string p1 = c1str[p1i]; //BAD
         std::string p2 = c1str[p2i];
 
+        
         if (p1i <= p2i)
         {
           hMinus = p1 + p2;
@@ -83,6 +94,7 @@ std::string HPlusPlusDecayFilter::getState(const EventInput* inputMod) const
         {
           hMinus = p2 + p1;
         }
+
       }
       // std::cout << hPlus << std::endl;
       // std::cout << hMinus << std::endl;
@@ -96,7 +108,6 @@ std::string HPlusPlusDecayFilter::getState(const EventInput* inputMod) const
     {
       return "none";
     }
-
     if (getIndex(c2str, hPlus, 6) <= getIndex(c2str, hMinus, 6))
     {
       // std::cout << hPlus << "," << hMinus << std::endl;
@@ -108,8 +119,10 @@ std::string HPlusPlusDecayFilter::getState(const EventInput* inputMod) const
       return hMinus + hPlus;
     }
   }
+
   else if (typeGenSim == EventInput::RecoLevel::Reco)
   {
+
     int higgsPlus = 0;
     int higgsMinus = 0;
 
@@ -117,6 +130,7 @@ std::string HPlusPlusDecayFilter::getState(const EventInput* inputMod) const
 
     for (const auto &lepton : reco)
     {
+
       if (inputMod->getParticles(EventInput::RecoLevel::Reco, ParticleType::electron()).size() < 2)
       {
         // std::cout << lepton.getName() << ": " << std::to_string(lepton.getCharge()) << std::endl;
@@ -124,7 +138,6 @@ std::string HPlusPlusDecayFilter::getState(const EventInput* inputMod) const
 
       //std::cout << "GENSIM/RECO " << lepton.getName() << " (" << genSimParticle.pdgId() << "): " << std::to_string(lepton.getCharge()) << std::endl;
       //std::cout << "DAUGHTER " << genSimParticle.finalDaughter().getName() << " (" << genSimParticle.finalDaughter().pdgId() << "): " << std::to_string(genSimParticle.finalDaughter().getCharge()) << std::endl;
-
       if (lepton.getCharge() > 0)
       {
         if (lepton.getType() == ParticleType::electron())
@@ -149,9 +162,7 @@ std::string HPlusPlusDecayFilter::getState(const EventInput* inputMod) const
         }
       }
     }
-
     //std::cout << std::to_string(higgsPlus) << " " << std::to_string(higgsMinus) << std::endl;
-
     if (higgsPlus > 26 || higgsMinus > 26)
     {
       return "none";

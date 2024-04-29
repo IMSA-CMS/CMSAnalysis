@@ -22,7 +22,7 @@ Implementation:
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
-#include "FWCore/Framework/interface/EDAnalyzer.h"
+#include "FWCore/Framework/interface/one/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Run.h"
 #include <FWCore/ServiceRegistry/interface/Service.h>
 #include <CommonTools/UtilAlgos/interface/TFileService.h>
@@ -46,7 +46,7 @@ Implementation:
 
 // std::cout << "Made it to line" << __LINE__ << std::endl;
 
-class Quadlepton : public edm::EDAnalyzer {
+class Quadlepton : public edm::one::EDAnalyzer<edm::one::SharedResources> {
 public:
   explicit Quadlepton(const edm::ParameterSet&);
   ~Quadlepton();
@@ -73,7 +73,7 @@ private:
   const void printGenParticleCollection(const reco::GenParticleCollection& genParts);
 
   //virtual void beginRun(edm::Run const&, edm::EventSetup const&) override;
-  virtual void endRun(edm::Run const& iRun, edm::EventSetup const& iEventSetup) override;
+  //virtual void endRun(edm::Run const& iRun, edm::EventSetup const& iEventSetup) override;
   //virtual void beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) override;
   //virtual void endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&) override;
 
@@ -621,14 +621,14 @@ Quadlepton::endJob()
 
 // ------------ method called when ending the processing of a run  ------------
 
-void 
-Quadlepton::endRun(edm::Run const& iRun, edm::EventSetup const& iEventSetup)
-{
-  edm::Handle< GenRunInfoProduct > genInfoProduct;
-  iRun.getByToken(genInfoProductToken_, genInfoProduct );
-  crossSec = genInfoProduct->internalXSec().value();
-  std::cout<< "Cross Section is: "  << crossSec << std::endl;  
-}
+// void 
+// Quadlepton::endRun(edm::Run const& iRun, edm::EventSetup const& iEventSetup)
+// {
+//   edm::Handle< GenRunInfoProduct > genInfoProduct;
+//   iRun.getByToken(genInfoProductToken_, genInfoProduct );
+//   crossSec = genInfoProduct->internalXSec().value();
+//   std::cout<< "Cross Section is: "  << crossSec << std::endl;  
+// }
 
   
 // ------------ method called when starting to processes a luminosity block  ------------

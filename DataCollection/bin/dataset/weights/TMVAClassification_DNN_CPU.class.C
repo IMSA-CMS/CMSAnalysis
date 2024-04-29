@@ -9,11 +9,11 @@
 Method         : DL::DNN_CPU
 TMVA Release   : 4.2.1         [262657]
 ROOT Release   : 6.24/07       [399367]
-Creator        : kzhang1
-Date           : Mon Apr  3 23:28:16 2023
+Creator        : satyam
+Date           : Fri Aug  4 00:32:45 2023
 Host           : Linux cmsbuild02.cern.ch 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
-Dir            : /uscms/homes/k/kzhang1/practice/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin
-Training events: 60497
+Dir            : /uscms/homes/s/satyam/fakeAnalysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin
+Training events: 6973
 Analysis type  : [Classification]
 
 
@@ -41,13 +41,14 @@ ValidationSize: "20%" [Part of the training data to use for validation. Specify 
 
 #VAR -*-*-*-*-*-*-*-*-*-*-*-* variables *-*-*-*-*-*-*-*-*-*-*-*-
 
-NVar 6
-leadingPt                     leadingPt                     leadingPt                     Leading Lepton Transverse Momentum                                  'F'    [5.0726776123,21324.2890625]
-nParticles                    nParticles                    nParticles                    Number of Particles                                             'F'    [2,5]
-eta                           eta                           eta                           Pseudorapidity                                                  'F'    [-2.51045441628,2.50291919708]
-phi                           phi                           phi                           Azimuthal Angle                                                 'F'    [-3.14158964157,3.14142203331]
-deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.876891136169]
-sumPt                         sumPt                         sumPt                         Total Transverse Momentum                                       'F'    [10.112449646,21441.2851562]
+NVar 7
+leadingPt                     leadingPt                     leadingPt                     Leading Lepton Transverse Momentum                                  'F'    [5.59494018555,19849.4726562]
+nParticles                    nParticles                    nParticles                    Number of Particles                                             'F'    [2,7]
+eta                           eta                           eta                           Pseudorapidity                                                  'F'    [-2.42465829849,2.49840736389]
+deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0.000141763171996,0.619156658649]
+sumPt                         sumPt                         sumPt                         Total Transverse Momentum                                       'F'    [10.9287805557,20096.2324219]
+numMuons                      numMuons                      numMuons                      Number of Muons                                                 'F'    [2,7]
+deltaPt                       deltaPt                       deltaPt                       Leading Change in Transverse Momentum                                  'F'    [5.59494018555,19849.4726562]
 NSpec 0
 
 
@@ -91,10 +92,10 @@ class ReadDNN_CPU : public IClassifierReader {
    ReadDNN_CPU( std::vector<std::string>& theInputVars )
       : IClassifierReader(),
         fClassName( "ReadDNN_CPU" ),
-        fNvars( 6 )
+        fNvars( 7 )
    {
       // the training input variables
-      const char* inputVars[] = { "leadingPt", "nParticles", "eta", "phi", "deltaR", "sumPt" };
+      const char* inputVars[] = { "leadingPt", "nParticles", "eta", "deltaR", "sumPt", "numMuons", "deltaPt" };
 
       // sanity checks
       if (theInputVars.size() <= 0) {
@@ -130,6 +131,8 @@ class ReadDNN_CPU : public IClassifierReader {
       fVmax[4] = 1;
       fVmin[5] = -1;
       fVmax[5] = 1;
+      fVmin[6] = -1;
+      fVmax[6] = 1;
 
       // initialize input variable types
       fType[0] = 'F';
@@ -138,6 +141,7 @@ class ReadDNN_CPU : public IClassifierReader {
       fType[3] = 'F';
       fType[4] = 'F';
       fType[5] = 'F';
+      fType[6] = 'F';
 
       // initialize constants
       Initialize();
@@ -163,8 +167,8 @@ class ReadDNN_CPU : public IClassifierReader {
 
    // input variable transformation
 
-   double fOff_1[3][6];
-   double fScal_1[3][6];
+   double fOff_1[3][7];
+   double fScal_1[3][7];
    void InitTransform_1();
    void Transform_1( std::vector<double> & iv, int sigOrBgd ) const;
    void InitTransform();
@@ -178,15 +182,15 @@ class ReadDNN_CPU : public IClassifierReader {
    char   GetType( int ivar ) const { return fType[ivar]; }
 
    // normalisation of input variables
-   double fVmin[6];
-   double fVmax[6];
+   double fVmin[7];
+   double fVmax[7];
    double NormVariable( double x, double xmin, double xmax ) const {
       // normalise to output range: [-1, 1]
       return 2*(x - xmin)/(xmax - xmin) - 1.0;
    }
 
    // type of input variable: 'F' or 'I'
-   char   fType[6];
+   char   fType[7];
 
    // initialize internal variables
    void Initialize();
@@ -215,81 +219,93 @@ inline double ReadDNN_CPU::GetMvaValue( const std::vector<double>& inputValues )
 //_______________________________________________________________________
 inline void ReadDNN_CPU::InitTransform_1()
 {
-   double fMin_1[3][6];
-   double fMax_1[3][6];
+   double fMin_1[3][7];
+   double fMax_1[3][7];
    // Normalization transformation, initialisation
-   fMin_1[0][0] = 7.15252685547;
-   fMax_1[0][0] = 21324.2890625;
+   fMin_1[0][0] = 5.60636615753;
+   fMax_1[0][0] = 19849.4726562;
    fScal_1[0][0] = 2.0/(fMax_1[0][0]-fMin_1[0][0]);
    fOff_1[0][0] = fMin_1[0][0]*fScal_1[0][0]+1.;
-   fMin_1[1][0] = 5.0726776123;
-   fMax_1[1][0] = 7531.35742188;
+   fMin_1[1][0] = 5.59494018555;
+   fMax_1[1][0] = 5187.50830078;
    fScal_1[1][0] = 2.0/(fMax_1[1][0]-fMin_1[1][0]);
    fOff_1[1][0] = fMin_1[1][0]*fScal_1[1][0]+1.;
-   fMin_1[2][0] = 5.0726776123;
-   fMax_1[2][0] = 21324.2890625;
+   fMin_1[2][0] = 5.59494018555;
+   fMax_1[2][0] = 19849.4726562;
    fScal_1[2][0] = 2.0/(fMax_1[2][0]-fMin_1[2][0]);
    fOff_1[2][0] = fMin_1[2][0]*fScal_1[2][0]+1.;
    fMin_1[0][1] = 2;
-   fMax_1[0][1] = 5;
+   fMax_1[0][1] = 7;
    fScal_1[0][1] = 2.0/(fMax_1[0][1]-fMin_1[0][1]);
    fOff_1[0][1] = fMin_1[0][1]*fScal_1[0][1]+1.;
    fMin_1[1][1] = 2;
-   fMax_1[1][1] = 4;
+   fMax_1[1][1] = 6;
    fScal_1[1][1] = 2.0/(fMax_1[1][1]-fMin_1[1][1]);
    fOff_1[1][1] = fMin_1[1][1]*fScal_1[1][1]+1.;
    fMin_1[2][1] = 2;
-   fMax_1[2][1] = 5;
+   fMax_1[2][1] = 7;
    fScal_1[2][1] = 2.0/(fMax_1[2][1]-fMin_1[2][1]);
    fOff_1[2][1] = fMin_1[2][1]*fScal_1[2][1]+1.;
-   fMin_1[0][2] = -2.51045441628;
-   fMax_1[0][2] = 2.44306468964;
+   fMin_1[0][2] = -2.42465829849;
+   fMax_1[0][2] = 2.4539501667;
    fScal_1[0][2] = 2.0/(fMax_1[0][2]-fMin_1[0][2]);
    fOff_1[0][2] = fMin_1[0][2]*fScal_1[0][2]+1.;
-   fMin_1[1][2] = -2.49947762489;
-   fMax_1[1][2] = 2.50291919708;
+   fMin_1[1][2] = -2.38296580315;
+   fMax_1[1][2] = 2.49840736389;
    fScal_1[1][2] = 2.0/(fMax_1[1][2]-fMin_1[1][2]);
    fOff_1[1][2] = fMin_1[1][2]*fScal_1[1][2]+1.;
-   fMin_1[2][2] = -2.51045441628;
-   fMax_1[2][2] = 2.50291919708;
+   fMin_1[2][2] = -2.42465829849;
+   fMax_1[2][2] = 2.49840736389;
    fScal_1[2][2] = 2.0/(fMax_1[2][2]-fMin_1[2][2]);
    fOff_1[2][2] = fMin_1[2][2]*fScal_1[2][2]+1.;
-   fMin_1[0][3] = -3.14147877693;
-   fMax_1[0][3] = 3.14142203331;
+   fMin_1[0][3] = 0.000141763171996;
+   fMax_1[0][3] = 0.619156658649;
    fScal_1[0][3] = 2.0/(fMax_1[0][3]-fMin_1[0][3]);
    fOff_1[0][3] = fMin_1[0][3]*fScal_1[0][3]+1.;
-   fMin_1[1][3] = -3.14158964157;
-   fMax_1[1][3] = 3.1413936615;
+   fMin_1[1][3] = 0.00145230977796;
+   fMax_1[1][3] = 0.510687768459;
    fScal_1[1][3] = 2.0/(fMax_1[1][3]-fMin_1[1][3]);
    fOff_1[1][3] = fMin_1[1][3]*fScal_1[1][3]+1.;
-   fMin_1[2][3] = -3.14158964157;
-   fMax_1[2][3] = 3.14142203331;
+   fMin_1[2][3] = 0.000141763171996;
+   fMax_1[2][3] = 0.619156658649;
    fScal_1[2][3] = 2.0/(fMax_1[2][3]-fMin_1[2][3]);
    fOff_1[2][3] = fMin_1[2][3]*fScal_1[2][3]+1.;
-   fMin_1[0][4] = 0.00020114002109;
-   fMax_1[0][4] = 0.532191455364;
+   fMin_1[0][4] = 10.9406900406;
+   fMax_1[0][4] = 20096.2324219;
    fScal_1[0][4] = 2.0/(fMax_1[0][4]-fMin_1[0][4]);
    fOff_1[0][4] = fMin_1[0][4]*fScal_1[0][4]+1.;
-   fMin_1[1][4] = 0;
-   fMax_1[1][4] = 0.876891136169;
+   fMin_1[1][4] = 10.9287805557;
+   fMax_1[1][4] = 5217.421875;
    fScal_1[1][4] = 2.0/(fMax_1[1][4]-fMin_1[1][4]);
    fOff_1[1][4] = fMin_1[1][4]*fScal_1[1][4]+1.;
-   fMin_1[2][4] = 0;
-   fMax_1[2][4] = 0.876891136169;
+   fMin_1[2][4] = 10.9287805557;
+   fMax_1[2][4] = 20096.2324219;
    fScal_1[2][4] = 2.0/(fMax_1[2][4]-fMin_1[2][4]);
    fOff_1[2][4] = fMin_1[2][4]*fScal_1[2][4]+1.;
-   fMin_1[0][5] = 12.9089803696;
-   fMax_1[0][5] = 21441.2851562;
+   fMin_1[0][5] = 2;
+   fMax_1[0][5] = 7;
    fScal_1[0][5] = 2.0/(fMax_1[0][5]-fMin_1[0][5]);
    fOff_1[0][5] = fMin_1[0][5]*fScal_1[0][5]+1.;
-   fMin_1[1][5] = 10.112449646;
-   fMax_1[1][5] = 7566.41015625;
+   fMin_1[1][5] = 2;
+   fMax_1[1][5] = 6;
    fScal_1[1][5] = 2.0/(fMax_1[1][5]-fMin_1[1][5]);
    fOff_1[1][5] = fMin_1[1][5]*fScal_1[1][5]+1.;
-   fMin_1[2][5] = 10.112449646;
-   fMax_1[2][5] = 21441.2851562;
+   fMin_1[2][5] = 2;
+   fMax_1[2][5] = 7;
    fScal_1[2][5] = 2.0/(fMax_1[2][5]-fMin_1[2][5]);
    fOff_1[2][5] = fMin_1[2][5]*fScal_1[2][5]+1.;
+   fMin_1[0][6] = 5.60636615753;
+   fMax_1[0][6] = 19849.4726562;
+   fScal_1[0][6] = 2.0/(fMax_1[0][6]-fMin_1[0][6]);
+   fOff_1[0][6] = fMin_1[0][6]*fScal_1[0][6]+1.;
+   fMin_1[1][6] = 5.59494018555;
+   fMax_1[1][6] = 5187.50830078;
+   fScal_1[1][6] = 2.0/(fMax_1[1][6]-fMin_1[1][6]);
+   fOff_1[1][6] = fMin_1[1][6]*fScal_1[1][6]+1.;
+   fMin_1[2][6] = 5.59494018555;
+   fMax_1[2][6] = 19849.4726562;
+   fScal_1[2][6] = 2.0/(fMax_1[2][6]-fMin_1[2][6]);
+   fOff_1[2][6] = fMin_1[2][6]*fScal_1[2][6]+1.;
 }
 
 //_______________________________________________________________________
@@ -300,7 +316,7 @@ inline void ReadDNN_CPU::Transform_1( std::vector<double>& iv, int cls) const
    if (2 > 1 ) cls = 2;
       else cls = 2;
    }
-   const int nVar = 6;
+   const int nVar = 7;
 
    // get indices of used variables
 
@@ -316,6 +332,7 @@ inline void ReadDNN_CPU::Transform_1( std::vector<double>& iv, int cls) const
       indicesGet.push_back( 3);
       indicesGet.push_back( 4);
       indicesGet.push_back( 5);
+      indicesGet.push_back( 6);
    }
    if ( indicesPut.empty() ) {
       indicesPut.reserve(fNvars);
@@ -325,12 +342,13 @@ inline void ReadDNN_CPU::Transform_1( std::vector<double>& iv, int cls) const
       indicesPut.push_back( 3);
       indicesPut.push_back( 4);
       indicesPut.push_back( 5);
+      indicesPut.push_back( 6);
    }
 
    static std::vector<double> dv;
    dv.resize(nVar);
    for (int ivar=0; ivar<nVar; ivar++) dv[ivar] = iv[indicesGet.at(ivar)];
-   for (int ivar=0;ivar<6;ivar++) {
+   for (int ivar=0;ivar<7;ivar++) {
       double offset = fOff_1[cls][ivar];
       double scale  = fScal_1[cls][ivar];
       iv[indicesPut.at(ivar)] = scale*dv[ivar]-offset;

@@ -8,8 +8,8 @@
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
 
-GenSimEventFile::GenSimEventFile(TFile* ifile) : 
-EventFile(ifile)
+GenSimEventFile::GenSimEventFile(TFile* ifile, std::shared_ptr<FileParams> iparams) : 
+EventFile(ifile, iparams)
 {
     event = std::make_shared<fwlite::Event> (getFile());
     setEventCount(1);
