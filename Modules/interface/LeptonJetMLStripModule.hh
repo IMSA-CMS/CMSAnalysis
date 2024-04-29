@@ -18,7 +18,7 @@ class LeptonJetMLStripModule: public SpecialVariableModule
     protected:
     virtual void addVariables() override;
 
-	virtual void calculateVariables(Particle particle) override;
+	virtual void calculateVariables(ParticleCollection<Particle> particle) override;
 
 
 };
