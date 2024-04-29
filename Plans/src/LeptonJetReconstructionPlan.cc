@@ -57,6 +57,8 @@
 #include "CMSAnalysis/Filters/interface/DarkPhotonControlRegionFilter.hh"
 #include "CMSAnalysis/Modules/interface/RecoGenSimComparisonModule.hh"
 
+// Use 700-1000 2018, DY50
+
 using std::make_shared;
 
 void LeptonJetReconstructionPlan::initialize()
@@ -68,7 +70,7 @@ void LeptonJetReconstructionPlan::initialize()
   eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5));
   //eventMod->addSelector(std::make_shared<LeptonJetAntiSelector>(.5, 0.0001, 0.0005));
 
-  auto darkPhotonFilter = std::make_shared<FilterModule>(std::make_shared<DarkPhotonControlRegionFilter>(10, 0.0001, 0.0005));
+  auto darkPhotonFilter = std::make_shared<FilterModule>(std::make_shared<DarkPhotonControlRegionFilter>(10));
   darkPhotonFilter->setInput(eventMod->getEventInput());
   auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Mu37_TkMu27", "HLT_IsoMu24"});
   //auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_IsoMu24"});
@@ -88,7 +90,7 @@ void LeptonJetReconstructionPlan::initialize()
   // Histograms
   //uncomented 
   auto gammaDeltaRHist2D = std::make_shared<GammaDeltaRHist2D>(lepRecoMod, "Gamma Delta R Hist", 100, 100, 1, 0, 500, 0.25);
-  //auto darkPhotonMassHist = std::make_shared<DarkPhotonMassHist>("Higgs Mass", 100, 0, 1500);
+  auto darkPhotonMassHist = std::make_shared<DarkPhotonMassHist>("Higgs Mass", 100, 0, 1500);
   auto resolutionHist = std::make_shared<ResolutionHist>(lepMatchMod, "Gamma Resolution", 1000, -1, 1); 
    
   auto gammaHist = std::make_shared<GammaHist>(lepRecoMod, "Gamma Values", 100, 1, 1000); 
@@ -168,8 +170,8 @@ void LeptonJetReconstructionPlan::initialize()
 
   // Efficiency Modules
   auto leptonEfficiency = std::make_shared<LeptonEfficiency>(matchMod);
-  auto leptonJetEfficiency = std::make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
-  leptonJetEfficiency->setInput(eventMod->getEventInput());
+  //auto leptonJetEfficiency = std::make_shared<LeptonJetEfficiency>(lepRecoMod, lepMatchMod);
+  //leptonJetEfficiency->setInput(eventMod->getEventInput());
 
   // Add the histogram(s) created above to histMod
   // eventHistMod->addHistogram(nLeptonsHist);
