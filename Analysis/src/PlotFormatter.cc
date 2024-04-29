@@ -477,6 +477,7 @@ TCanvas* PlotFormatter::noScaleSimpleSuperImposedHist(std::vector<TH1*> hists, s
 
     //Draws the histogram with more events first (bigger axis);
     first->SetMinimum(lowValue);
+    //first->SetMinimum(-8);
     first->Draw("HIST");
     histVector.push_back(first);
 
@@ -487,7 +488,11 @@ TCanvas* PlotFormatter::noScaleSimpleSuperImposedHist(std::vector<TH1*> hists, s
 
     //Draws the legend
     auto legend = new TLegend(0.8-(right/width), 0.85-(top/height), 1-(right/width), 1-(top/height));
-    legend->SetTextSize(0.02);
+
+    // legend->SetTextSize(0.02);
+    legend->SetTextSize(0.015);
+    legend->SetMargin(0.1);
+
     count = 0;
     std::string name;
     TString toAdd;
@@ -504,7 +509,10 @@ TCanvas* PlotFormatter::noScaleSimpleSuperImposedHist(std::vector<TH1*> hists, s
     //Draws the other histogram    
     for(TH1* hist : hists) {
         if(find(hists.begin(), hists.end(), hist) - hists.begin() != firstIndex) {
-	    hist->Draw("HIST SAME");
+            // Double_t yminLimit = hist->GetMinimum();
+            // Double_t ymaxLimit = hist->GetMaximum();
+            // hist->GetYaxis()->SetRange(-10,10);
+	        hist->Draw("HIST SAME");
             histVector.push_back(hist);
         }
     }

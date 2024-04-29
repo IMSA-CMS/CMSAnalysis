@@ -16,7 +16,7 @@
 #include "TStyle.h"
 #include <fmt/core.h>
 
-void SuperImpose() {
+void SuperimposeRatio() {
     //Change extraText here
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary Data");
     //Change the filePath here. This should be the longest branch all input files have in common.
@@ -94,6 +94,52 @@ void SuperImpose() {
         }
 
         count++;
+    }
+ 
+	for (int i = 0; i < count; i++)
+	{
+		histVector[i]->Rebin(10);
+	}
+
+	// for (int i = 0; i < count; i++)
+	// {
+    //     histVector[i]->Add(histVector[count - 1], -1);
+	// 	   histVector[i]->Scale(100.0);
+
+    //     histVector[i]->Divide(histVector[count - 1]);
+
+	// 	//histVector[i]->Add(fa);
+
+	// 	TAxis* y = histVector[i]->GetYaxis();
+	// 	histVector[i]->ExtendAxis(-800, y);
+    // }
+
+    double average[count];
+
+    for (int i = 0; i < count; i++)
+    {
+        //histVector[i]->Add(histVector[base], -1);
+        //histVector[i]->Divide(histVector[base]);
+        for(int j = 0; j < (histVector[i]->GetNbinsX());j++)
+        {
+            double histValue = histVector[i]->GetBinContent(j);
+            double baseValue = histVector[3]->GetBinContent(j);
+            //std::cout<<baseValue<<"\n";
+            //std::cout<<histValue<<"\n";
+                
+            if(baseValue == 0)
+            {
+                histVector[i]->SetBinContent(j, 0);
+                average[i]+= 0;
+            }else
+            {
+                double ratio = (histValue-baseValue) / baseValue;
+                histVector[i]->SetBinContent(j, ratio);
+                average[i]+= ratio;
+            }
+        }
+
+        std::cout<<average[i]/histVector[i]->GetNbinsX() * 100<<"\n";
     }
 
     TCanvas *canvas = plotFormatter->noScaleSimpleSuperImposedHist(histVector, colors, names, xTitle, yTitle);

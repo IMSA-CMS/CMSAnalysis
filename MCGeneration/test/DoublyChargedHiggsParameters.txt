@@ -28,6 +28,12 @@ LeftRightSymmmetry:coupHmumu = 0.1
 LeftRightSymmmetry:coupHtaue = 0.1
 LeftRightSymmmetry:coupHtaumu = 0.1
 LeftRightSymmmetry:coupHtautau = 0.1
+# PDF:pSet=LHAPDF6:NNPDF23_nnlo_as_0119
+# PDF:pSet=LHAPDF6:NNPDF31_nnlo_as_0118 # original
+# PDF:pSet=12
+# PDF:pSet=9
+# PDF:pSet=6
+PDF:pSet=4
 
 # W Fusion decay
 #Vacuum Expectation in GeV default is 5
