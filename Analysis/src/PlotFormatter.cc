@@ -495,7 +495,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     
 
     //int firstBin = 0;
-    int numBins = 8;
+    int numBins = 5;
     
     std::vector<std::shared_ptr<Channel>> channels = analysis->getChannels();
     processes = channels.at(0);
@@ -505,9 +505,11 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     data = analysis->getDecayHist(histvariable, dataNames.at(0), massTarget, false, channelName);
     signal = analysis->getDecayHist(histvariable, signalNames.at(0), massTarget, true, channelName);
     std::vector<TH1*> backgroundHists;
+    std::cout << "number of bins is: " << data->GetNbinsX();
+    std::cout << "number of bins is: " << signal->GetNbinsX();
     for(std::string name : backgroundNames) {
         backgroundHists.push_back(analysis->getDecayHist(histvariable, name, massTarget, true, channelName));
-    }
+        }
 
 //commented out integral code
 // /*
@@ -590,7 +592,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
             TH1* backgroundHist = dynamic_cast<TH1*>(obj2);
             backgroundHist->SetLineColor(kBlack);
             backgroundHist->SetLineWidth(2);
-            backgroundHist->GetXaxis()->SetLimits(firstBin, upperMasslimit);
+           // backgroundHist->GetXaxis()->SetLimits(firstBin, upperMasslimit);
             backgroundHist->SetMinimum(xAxisMin);
         }
         background->Draw("HIST");
@@ -602,13 +604,13 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
         signal->SetMinimum(xAxisMin);
         //signal->Draw("HIST");
         histVector.push_back(signal);
-        signal->GetXaxis()->SetLimits(firstBin, upperMasslimit);
+       // signal->GetXaxis()->SetLimits(firstBin, upperMasslimit);
     }
     else {
         data->Draw("P E1 X0");
         data->SetMinimum(xAxisMin);
         histVector.push_back(data);
-        data->GetXaxis()->SetLimits(firstBin, upperMasslimit);
+        //data->GetXaxis()->SetLimits(firstBin, upperMasslimit);
     }
 
     TH1* hist;

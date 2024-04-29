@@ -43,7 +43,7 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
             ttbarBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "TTbar_Boson_Z_Decay_LL_Run_2.root", "TTZ", reader, massTarget, luminosity));
             
             auto zzBackground = std::make_shared<Process>("ZZ Background", 4);
-            //zzBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "ZZ_Decay_4L_Run_2.root", "ZZTo4L", reader, massTarget, luminosity));
+            zzBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "ZZ_Decay_4L_Run_2.root", "ZZTo4L", reader, massTarget, luminosity));
             zzBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "ZZ_Decay_2e2mu_Run_2.root", "ZZTo2e2mu", reader, massTarget, luminosity));
             zzBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "ZZ_Decay_2e2tau_Run_2.root", "ZZTo2e2tau", reader, massTarget, luminosity));
             zzBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "ZZ_Decay_2mu2tau_Run_2.root", "ZZTo2mu2tau", reader, massTarget, luminosity));
