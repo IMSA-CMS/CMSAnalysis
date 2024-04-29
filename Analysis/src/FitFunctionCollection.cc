@@ -24,22 +24,27 @@ FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string& fi
 		throw std::runtime_error("File not loaded successfully");
 	}
 }
-void FitFunctionCollection::saveFunctions(const std::string& fileName)
+void FitFunctionCollection::saveFunctions(const std::string& fileName, bool append)
 {
-	std::fstream file(fileName, std::ios_base::out);
-	if (file.is_open())
+	std::fstream file;
+	if (!file.is_open()) 
 	{
-		file << functions.size() << '\n';
-		for (auto& funcPair : functions)
-		{
-			file << funcPair.second;
-		}
-		file.close();
-	}
-	else
+		if (append) 
+			file = std::fstream(fileName, std::ios_base::app);
+		else
+			file = std::fstream(fileName, std::ios_base::out);
+	} 
+	else 
 	{
-		throw std::runtime_error("File not saved successfully");
+		throw std::invalid_argument(fileName + " file is already open");
 	}
+
+	file << functions.size() << '\n';
+	for (auto& funcPair : functions)
+	{
+		file << funcPair.second;
+	}
+	file.close();
 }
 
 FitFunctionCollection::FitFunctionCollection() {}
@@ -68,6 +73,19 @@ FitFunction& FitFunctionCollection::operator[](const std::string& index)
 	return functions[index];
 }
 
+FitFunction& FitFunctionCollection::get(const std::string& index)
+{
+	try 
+	{ 
+		return functions.at(index);
+	} 
+	catch (std::out_of_range e)
+	{
+		std::cout << "FitFunctionCollection Error: No FitFunction with string index of " << index << '\n';
+		throw e;
+	}
+}
+
 void FitFunctionCollection::insert(FitFunction& func)
 {
 	// std::cout << "Making function\n";
@@ -77,7 +95,48 @@ void FitFunctionCollection::insert(FitFunction& func)
 	// std::cout << "Pair";
 	functions.insert({func.getFunction()->GetName(), func});
 }
+
+void FitFunctionCollection::insert(const std::string& key, FitFunction& func)
+{
+	functions.insert({key, func});
+}
 // FitFunction& FitFunctionCollection::operator[](int index)
 // {
 // 	return functions[(size_t) index];
 // }
+
+bool FitFunctionCollection::checkFunctionsSimilar()
+{
+	if (size() > 0)
+	{
+		FitFunction& compareFunc = functions.begin()->second;
+		for (auto& pair : functions)
+		{
+			if (pair.second.getFunctionType() != compareFunc.getFunctionType()
+			|| pair.second.getFunction()->GetNpar() != compareFunc.getFunction()->GetNpar())
+			{
+				return false;
+			}
+			else
+			{
+				for (int i = 0; i < compareFunc.getFunction()->GetNpar(); ++i)
+				{
+					std::string firstFunc(compareFunc.getFunction()->GetParName(i));
+					std::string secondFunc(pair.second.getFunction()->GetParName(i));
+					if (firstFunc != secondFunc)
+					{
+						std::cout << "compareFunc: " << compareFunc.getFunction()->GetParName(i) << '\n';
+						std::cout << "currentFunc: " << pair.second.getFunction()->GetParName(i) << '\n';
+						std::cout << "3\n";
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}

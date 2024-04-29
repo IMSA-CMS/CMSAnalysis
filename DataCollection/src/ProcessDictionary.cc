@@ -1,14 +1,16 @@
 #include "CMSAnalysis/DataCollection/interface/ProcessDictionary.hh"
 #include "CMSAnalysis/DataCollection/interface/IDType.hh"
-#include "CMSAnalysis/DataCollection/interface/FileParams.hh"
+#include "CMSAnalysis/Utility/interface/FileParams.hh"
 #include <sstream>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
+#include <memory>
 #include <unordered_map>
 #include <boost/algorithm/string.hpp>
 #include "CMSAnalysis/Utility/interface/Utility.hh"
+#include "CMSAnalysis/DataCollection/interface/PickFileParams.hh"
 
 void ProcessDictionary::loadProcesses(std::string filename) 
 {
@@ -57,14 +59,14 @@ void ProcessDictionary::loadProcesses(std::string filename)
   processes.push_back(newProcess);
 }
 
-std::vector<FileParams> ProcessDictionary::readFile(std::string filename)
+std::vector<std::shared_ptr<FileParams>> ProcessDictionary::readFile(std::string filename)
 {
   std::string line;
   std::ifstream textfile(Utility::getFullPath(filename));
   std::string process;
   std::vector<std::string> values;
   std::unordered_map<std::string, std::vector<std::string>> idTypes; 
-  std::vector<FileParams> fileParamsVector;
+  std::vector<std::shared_ptr<FileParams>> fileParamsVector;
   std::vector<Process> pickfileProcesses;
 
   if (!textfile)
@@ -203,17 +205,17 @@ void ProcessDictionary::checkIDTypes(std::vector<IDType> idtypes, std::unordered
   }
 }
 
-FileParams ProcessDictionary::makeFileparams(Process& processName, std::vector<std::pair<std::string, std::string>> pairs) 
+std::shared_ptr<FileParams> ProcessDictionary::makeFileparams(Process& processName, std::vector<std::pair<std::string, std::string>> pairs) 
 {
   std::map<std::string, std::string> parameters;
   for (auto& pair : pairs)
   {
     parameters.insert(pair);
   }
-  return FileParams(processName.getName(), parameters);
+  return std::make_shared<PickFileParams>(processName.getName(), parameters);
 }
 
-FileParams ProcessDictionary::getFileparams(Process& processName, std::unordered_map<std::string, std::vector<std::string>> types, std::vector<int> indices)
+std::shared_ptr<FileParams> ProcessDictionary::getFileparams(Process& processName, std::unordered_map<std::string, std::vector<std::string>> types, std::vector<int> indices)
 {
   std::vector<std::pair<std::string, std::string>> parameters;
   int counter = 0; // notes which "type" to use, e.g. "mass", "lepton", etc.

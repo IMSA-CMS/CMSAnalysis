@@ -36,9 +36,12 @@ int RootEventInterface::getNumPileUpInteractions() const
 //hmm
 bool RootEventInterface::checkTrigger(std::string triggerName, std::string subProcess) const
 {
-   return eventFile->checkTrigger(triggerName, subProcess);
+    return eventFile->checkTrigger(triggerName, subProcess);
 }
-
+const std::shared_ptr<FileParams> RootEventInterface::getFileParams() const
+{
+    return eventFile->getFileParams();
+}
 std::vector<double> RootEventInterface::getPDFWeights() const
 {
     return eventFile->getPDFWeights();

@@ -14,11 +14,13 @@ private:
 	mutable Float_t leadingPt;
 	mutable Float_t phi;
 	mutable Float_t eta;
-	// mutable Float_t mass;
+	mutable Float_t mass;
 	mutable Float_t deltaR;
 	mutable Float_t nParticles;
 	mutable Float_t sumPt;
-	// mutable Int_t jetIndex;
+	mutable Float_t jetIndex;
+	mutable Float_t deltaPt;
+	mutable Float_t numMuons;
 	mutable TMVA::Reader reader;
 
 public:
