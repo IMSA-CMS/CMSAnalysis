@@ -14,27 +14,21 @@ using std::make_shared;
 
 void ChargeFlipPlan::initialize()
 {
-	std::cout<<"hi 1.0";
     auto& modules = getModules();
 
 
     auto eventMod = make_shared<EventModule>();
     eventMod->addSelector(make_shared<HiggsSelector>());
-    //std::cout<<"hi";
 
 
     auto matchMod = make_shared<MatchingModule>();
     //matchMod->setInput(eventMod->getEventInput());
-    //std::cout<<"we love french";
 
 
     auto signFlip = make_shared<SignFlipModule>(matchMod);
-    //std::cout<<"banananannanann";
     modules.addProductionModule(eventMod);
     modules.addProductionModule(matchMod);
-    //std::cout<<"hafgsyiasgifouqaiowsfh";
     modules.addAnalysisModule(signFlip);
-    //std::cout<<"anwita got blocked again";
 
 
 
