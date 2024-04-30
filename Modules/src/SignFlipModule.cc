@@ -20,7 +20,6 @@ SignFlipModule::SignFlipModule(const std::shared_ptr<MatchingModule> imatchModul
 
 bool SignFlipModule::process()
 {
-  //std::cout<<"it started";
   const auto matched = matchModule->getMatchingBestPairs().getPairs();
   //std::cout << "Number of matched pairs: " << matched.size() << '\n';
 
@@ -86,12 +85,10 @@ bool SignFlipModule::process()
         if (particlePt > signFlipPtCut) 
         {
           nHighPtElectronFlips++;
-          //std::cout<<"code";
         }
         //std::cout << __FILE__ << " " << __LINE__ << std::endl;
       }
 		  nSignFlips++;
-      //std::cout<<"anwita";
 	  }
   }
   return true;
