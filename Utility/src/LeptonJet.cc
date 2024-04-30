@@ -69,6 +69,27 @@ double LeptonJet::getMaxDZ() const
   return maxDZ;
 }
 
+bool LeptonJet::allSameSign() const
+{
+  auto particles = getParticles();
+  auto positive = false;
+  auto negative = false;
+
+  for (const auto& particle : particles)
+  {
+    if (particle.getCharge() > 0) 
+    {
+      positive = true;
+    }
+    else if (particle.getCharge() < 0)
+    {
+      negative = true;
+    }
+  }
+
+  return !(positive && negative);
+}
+
 
 double LeptonJet::getDeltaR() const
 {

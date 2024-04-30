@@ -21,7 +21,7 @@ TH1* SingleProcess::getHist(std::string histType, bool scaleToExpected) const
     if(scaleToExpected) {
         double yield = getExpectedYield(histType);
         double events = hist->Integral();
-        if(events != 0) {
+        if(events > 0) {
             hist->Scale(yield/events);
             //std::cout << "Scale: " << (yield/events) << "\n";
         }
@@ -44,6 +44,10 @@ int SingleProcess::getTotalEvents() const
 
 double SingleProcess::getExpectedYield(std::string dataType) const
 {
+    std::vector<HistVariable> histVariables = input->getHistVariables();
+    //for(HistVariable histVar : histVariables) {
+    //    std::cout << "histVars: " << histVar.getHistName() << std::endl;
+    //}
     double expectedYield = estimator->getExpectedYield(this, dataType, luminosity);
     return expectedYield;
 }

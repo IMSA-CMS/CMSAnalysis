@@ -89,7 +89,7 @@ void HiggsBackgroundPlan::initialize()
     auto filterStringModule = make_shared<FilterStringModule>();
     modules.addAnalysisModule(filterStringModule);
     
-
+ 
  
     auto nLeptonsFilter = make_shared<NLeptonsFilter>();
     
@@ -98,25 +98,27 @@ void HiggsBackgroundPlan::initialize()
 
     auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
 
-    auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::GenSim, "Same Sign Invariant Mass", 1000, 0, 2000, false, false);
+    auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::GenSim, "GenSim Same Sign Invariant Mass", 1000, 0, 2000, false, false);
+    auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::Reco, "Reco Same Sign Invariant Mass", 1000, 0, 2000);
     auto positiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);
-    auto oppositeSignInvMassHist = make_shared<OppositeSignInvariantMassHist>(EventInput::RecoLevel::GenSim, "Opposite Sign Invariant Mass", 1000, 0, 2000);
+    auto oppositeSignInvMassHist = make_shared<OppositeSignInvariantMassHist>(EventInput::RecoLevel::Reco, "Opposite Sign Invariant Mass", 1000, 0, 2000);
  
     auto eventHistMod = eventMod->getHistogramModule();
-    
-    //eventHistMod->addHistogram(recoSameSignInvMassHist);
 
-    auto elecRecoPt = make_shared<PtHist>(EventInput::RecoLevel::Reco, "Electron Reco Leading lepton pT", 500, 0, 1000);
-    auto elecGenSimPt = make_shared<PtHist>(EventInput::RecoLevel::GenSim, "Electron GenSim Leading lepton pT", 500, 0, 1000);
-    auto muonRecoPt = make_shared<PtHist>(EventInput::RecoLevel::Reco, "Muon Reco Leading lepton pT", 500, 0, 1000);
-    auto muonGenSimPt = make_shared<PtHist>(EventInput::RecoLevel::GenSim, "Muon GenSim Leading lepton pT", 500, 0, 1000);
+    auto RecoPt = make_shared<PtHist>(EventInput::RecoLevel::Reco, "Reco Leading lepton pT", 500, 0, 2000);
+    auto GenSimPt = make_shared<PtHist>(EventInput::RecoLevel::GenSim, "GenSim Leading lepton pT", 500, 0, 2000);
+
+    //auto elecRecoPt = make_shared<PtHist>(EventInput::RecoLevel::Reco, "Electron Reco Leading lepton pT", 500, 0, 1000);
+    //auto elecGenSimPt = make_shared<PtHist>(EventInput::RecoLevel::GenSim, "Electron GenSim Leading lepton pT", 500, 0, 1000);
+    //auto muonRecoPt = make_shared<PtHist>(EventInput::RecoLevel::Reco, "Muon Reco Leading lepton pT", 500, 0, 1000);
+    //auto muonGenSimPt = make_shared<PtHist>(EventInput::RecoLevel::GenSim, "Muon GenSim Leading lepton pT", 500, 0, 1000);
     //auto recoInvMass = make_shared<InvariantMassHist>(EventInput::RecoLevel::Reco, "Opposite-sign dilepton mass", 1000, 0, 2000);
-    auto elecMetHist = make_shared<METHist>(metMod, "MET", 500, 0, 1000);
+    auto MetHist = make_shared<METHist>(metMod, "MET", 500, 0, 2000);
     auto deltaXYHist = std::make_shared<DxyHist>(EventInput::RecoLevel::Reco, "Vertex Delta XY from Primary Vertex", 50, 0, 5);
     auto deltaZHist = std::make_shared<DzHist>(EventInput::RecoLevel::Reco, "Vertex Delta Z from Primary Vertex", 50, 0, 5);
     // Add the histogram(s) created above to histMod
     // histMod->addHistogram(elecRecoPt);
-    // histMod->addHistogram(elecGenSimPt);
+    // histMod->addHistogram(elecGenSimPt); 
     // histMod->addHistogram(muonRecoPt);
     // histMod->addHistogram(muonGenSimPt);
     // histMod->addHistogram(elecGenSimSameSignInvMassHist);
@@ -138,6 +140,10 @@ void HiggsBackgroundPlan::initialize()
     //muonGenSimSameSignInvMassHist->addFilter(muonFilter);
     //elecMetHist->addFilter(elecFilter);
 
+    eventHistMod->addHistogram(MetHist);
+    eventHistMod->addHistogram(RecoPt);
+    eventHistMod->addHistogram(GenSimPt);
+    eventHistMod->addHistogram(recoSameSignInvMassHist);
     eventHistMod->addHistogram(sameSignInvMassHist);
     eventHistMod->addHistogram(positiveNegativeInvMassHist);
     eventHistMod->addHistogram(oppositeSignInvMassHist);

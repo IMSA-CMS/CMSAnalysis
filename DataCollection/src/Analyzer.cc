@@ -69,6 +69,7 @@ void Analyzer::writeOutputFile(const std::string &outputFile)
       module->finalize();
       for (auto &str : filterNames) //writes analysis modules by filter string
       {
+        //std::cout << "filterName: " << str << "\n";
         auto it = filterDirectories.find(str);
         if (it == filterDirectories.end())
         {

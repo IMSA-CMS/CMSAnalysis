@@ -106,6 +106,10 @@ bool AnalyzerEventInput::checkTrigger(std::string triggerName, std::string subPr
     return (*eventInterface)->checkTrigger(triggerName, subProcess);
 }
 
+const std::shared_ptr<FileParams> AnalyzerEventInput::getFileParams() const
+{
+    return (*eventInterface)->getFileParams();
+}
 std::vector<double> AnalyzerEventInput::getPDFWeights() const
 {
     return (*eventInterface)->getPDFWeights();
