@@ -19,15 +19,33 @@ void SuperImpose() {
 
 
     //Change the filePath here. This should be the longest branch all input files have in common. CHANGE USERNAME TO YOUR USERNAME
-    const std::string filePath = "/uscms/home/sdulam/analysis/CMSSW_12_4_3/src/CMSAnalysis/";
+    const std::string filePath = "/uscms/home/ceddington/analysis/CMSSW_14_0_4/src/CMSAnalysis/";
 
     //Pick source files for histograms here
-    std::vector<std::string> files = {"pdfdybackground.root"}; 
+    std::vector<std::string> files = {"testpdfbackground.root"}; 
 
     //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
     std::vector<std::string> hists = {"DefaultHistogram", "LowHistogram", "HighHistogram"};
     //Write your graph names here (for the legend)
     std::vector<TString> names = {"Default", "Low Weight", "High Weight"};
+    
+    //find the integral of the three histograms
+    std::vector<double> integrals;
+    for(std::string file : files) {
+        TFile* openedFile = TFile::Open((filePath + file).c_str(), "read");
+        if(!openedFile) 
+        {
+            throw std::runtime_error("Cannot open file!");
+        }
+        for(int i = 0; i < hists.size(); i++){
+            TH1* hist = dynamic_cast<TH1*>(openedFile->Get(hists.at(i).c_str()));
+            if (!hist)
+            {
+                throw std::runtime_error("Histogram " + hists.at(i) + " not found!");
+            }
+            integrals.push_back(hist->Integral());
+        }
+    }
     
 
     //Colors go here
