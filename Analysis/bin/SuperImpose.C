@@ -47,6 +47,7 @@ void SuperImpose() {
         }
     }
     
+    
 
     //Colors go here
     std::vector<int> colors = {1, 2, 3, 4, 5};
