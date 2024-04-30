@@ -8,7 +8,6 @@
 //#include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/RecoCandidate/interface/RecoCandidate.h"
-#include "CMSAnalysis/Histograms/interface/ChargeFlipHist.hh"
 
 using std::make_shared;
 
@@ -38,11 +37,6 @@ void ChargeFlipPlan::initialize()
     //std::cout<<"anwita got blocked again";
 
 
-    auto histMod = make_shared<HistogramOutputModule>();
-    //auto chargeFlipHist = make_shared<ChargeFlipHist>(EventInput::RecoLevel::Reco, "Charge Flip Rates", 300, 0, 1000);
-    auto chargeFlipHist = make_shared<ChargeFlipHist>("Charge Flip Rates", 300, 0, 1000);
-    modules.addAnalysisModule(histMod);
-    histMod->addHistogram(chargeFlipHist);
 
 //Initializing Histograms, histBins: number of bins
 /*defHist = new TH1F("Unweighted", "Unweighted", histBins, low, high);
