@@ -10,6 +10,7 @@
 #include "CMSAnalysis/Analysis/interface/HiggsComparisonAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/PlotFormatter.hh"
+#include "CMSAnalysis/Analysis/interface/DarkPhotonCompleteAnalysis.hh"
 #include <fstream>
 #include "THStack.h"
 #include "TString.h"
@@ -23,10 +24,11 @@ void SuperPlot()
 {
 	    //std::vector<double> massTargets {900};
 
-	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
+	auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
 	//Change extra text here (keep drawLogo to false for now)
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation)");
 	//Change the string for the channel you want, if using one channel. Otherwise use the loop.
+	
 	double massTarget = 1400;
 	
 	//std::shared_ptr<Channel> leptonBackgrounds = higgsAnalysis->getChannel("eeee" + std::to_string((int) massTarget));
@@ -35,10 +37,10 @@ void SuperPlot()
 	// for(std::string processName : leptonBackgrounds->getNames()) {
 	// 	//std::cout << processName << std::endl;
 	// 	//Change this line to make the described name your signal process name.
-	// 	if(processName == "Higgs Signal") {
+	// 	if(processName == "Dark Photon Signal") {
 	// 		leptonBackgrounds->labelProcess("signal", processName);
 	// 	}
-	// 	else if(processName == "Higgs Data") { //This line is only used for complete plots
+	// 	else if(processName == "Data") { //This line is only used for complete plots
 	// 		leptonBackgrounds->labelProcess("data", processName);
 	// 	}
 	// 	else {
@@ -46,16 +48,16 @@ void SuperPlot()
 	// 	}
 	// }
 	//ALL CHANNEL CODE HERE
-	std::vector<std::shared_ptr<Channel>> channels = higgsAnalysis->getChannels();
+	std::vector<std::shared_ptr<Channel>> channels = DarkPhotonAnalysis->getChannels();
 	for(std::shared_ptr<Channel> channel : channels) {
 		for(std::string processName : channel->getNames()) {
 			//std::cout << processName << std::endl;
 			//Change this line to make the described name your signal process name.
-			if(processName == "Higgs Signal") {
+			if(processName == "Dark Photon Signal") {
 				channel->labelProcess("signal", processName);
 			}
 			// "Monte Carlo Data"
-			else if(processName == "Higgs Data") { //This line is only used for complete plots
+			else if(processName == "Data") { //This line is only used for complete plots
 				channel->labelProcess("data", processName);
 			}
 			else {
@@ -65,8 +67,8 @@ void SuperPlot()
 	}
 
 	//This is for making single hist graphs. Just change the process name to the one you want. Not all processes or qualities allow 2D hists.
-	//std::shared_ptr<Process> process = leptonBackgrounds->findProcess("Higgs Data");
-
+	//std::shared_ptr<Process> process = leptonBackgrounds->findProcess("Data");
+ 
 	//Write axis titles here
 	TString xAxisTitle = "OSDL [GeV]";
 	TString yAxisTitle = "Events";
@@ -79,7 +81,7 @@ void SuperPlot()
 	//TCanvas *canvas = plotFormatter->simple2DHist(process, "Invariant Mass", xAxisTitle, yAxisTitle);
 	//TCanvas *canvas = plotFormatter->simpleStackHist(leptonBackgrounds, "Same Sign Inv Mass", xAxisTitle, yAxisTitle);
 	//TCanvas *canvas = plotFormatter->superImposedHist(leptonBackgrounds, "MET", xAxisTitle, yAxisTitle);
-	TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisTitle, yAxisTitle, massTarget, true);
+	TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "Invariant Mass", xAxisTitle, yAxisTitle, massTarget, true);
 	
 
 	//Uncomment to save a png picture in your bin folder

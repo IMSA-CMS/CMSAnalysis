@@ -3,50 +3,66 @@
 #include "CMSAnalysis/Plans/interface/DataCollectionPlan.hh"
 
 
-SignFlipModule::SignFlipModule(const std::shared_ptr<MatchingModule> imatchModule):
+SignFlipModule::SignFlipModule(const std::shared_ptr<MatchingModule> imatchModule, int numMatchedPairs, int nTotalEvents, int nSignFlips, int nElectronFlips, int nElectronEvents, int nMuonFlips, int nMuonEvents):
   matchModule(imatchModule)
 {
   addRequiredModule(imatchModule);
+  this->numMatchedPairs = numMatchedPairs;
+  this->nTotalEvents = nTotalEvents;
+  this->nSignFlips = nSignFlips; 
+  this-> nElectronFlips = nElectronFlips;
+  this-> nElectronEvents = nElectronEvents;
+  this-> nMuonFlips = nMuonFlips;
+  this-> nMuonEvents = nMuonEvents;
 }
 
-int numMatchedPairs=0;
-int  nTotalEvents=0;
 
 
 bool SignFlipModule::process()
 {
+  //std::cout<<"it started";
   const auto matched = matchModule->getMatchingBestPairs().getPairs();
   //std::cout << "Number of matched pairs: " << matched.size() << '\n';
 
  nTotalEvents++;
- 
+
+  //std::cout<<"the number of matched pairs is: " + numMatchedPairs;
   for (const auto &particlePair : matched)
   {
-   
-	  
+
     numMatchedPairs++;
-	  
+  
     auto particleType = particlePair.getGenParticle().getType();
     auto particlePt = particlePair.getGenParticle().getPt();
-
+    //std::cout << __FILE__ << " " << __LINE__ << std::endl;
+    
+    std::cout<<"lol";
     if (particleType == ParticleType::electron()) 
     {
+      
       if (particlePt > signFlipPtCut) 
       {
         nHighPtElectronEvents++;
       }
+      //std::cout << __FILE__ << " " << __LINE__ << std::endl;
       nElectronEvents++;
+
+      //std::cout<<"hi";
+      
     } 
+    
     else if (particleType == ParticleType::muon())
     {
       if(particlePt > signFlipPtCut)
       {
         nHighPtMuonEvents++;
+        //std::cout<<"french";
       }
       nMuonEvents++;
+      //std::cout<<"spanish";
     
     }
-
+    //std::cout << __FILE__ << " " << __LINE__ << std::endl;
     //std::cout << "Gen charge: " << particlePair.getGenParticle().getCharge() << "  Reco charge: " << particlePair.getRecoParticle().getCharge() << '\n';
 
 	  if (particlePair.getGenParticle().getCharge() != particlePair.getRecoParticle().getCharge()) 
@@ -54,22 +70,28 @@ bool SignFlipModule::process()
       if (particleType == ParticleType::electron()) 
       {
         nElectronFlips++;
-
+        //std::cout<<"lol";
+        //std::cout << __FILE__ << " " << __LINE__ << std::endl;
         if (particlePt > signFlipPtCut) 
         {
           nHighPtElectronFlips++;
+          //std::cout<<"ahfiafpn";
         }
+        //std::cout << __FILE__ << " " << __LINE__ << std::endl;
       } 
       else if (particleType == ParticleType::muon()) 
       {
         nMuonFlips++;
-
+        //std::cout << __FILE__ << " " << __LINE__ << std::endl;
         if (particlePt > signFlipPtCut) 
         {
           nHighPtElectronFlips++;
+          //std::cout<<"code";
         }
+        //std::cout << __FILE__ << " " << __LINE__ << std::endl;
       }
 		  nSignFlips++;
+      //std::cout<<"anwita";
 	  }
   }
   return true;
