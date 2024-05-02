@@ -64,7 +64,6 @@ void LeptonJetReconstructionPlan::initialize()
 
   auto eventMod = std::make_shared<EventModule>();
   auto eventHistMod = eventMod->getHistogramModule();
-  auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
   eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5));
   //eventMod->addSelector(std::make_shared<LeptonJetAntiSelector>(.5, 0.0001, 0.0005));
 
