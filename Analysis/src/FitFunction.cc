@@ -1,8 +1,6 @@
 #include "CMSAnalysis/Analysis/interface/FitFunction.hh"
 #include <fstream>
 
-int FitFunction::globalNorm = 0;
-
 double FitFunction::powerLaw(double *x, double *par)
 {
 	return par[0] * pow(x[0] - par[1], par[2]);
@@ -16,7 +14,7 @@ double FitFunction::DSCB(double *x, double *par)
 	double n_h     = par[3]; 
 	double mean	= par[4]; 
 	double sigma	= par[5];
-	double N	= globalNorm;
+	double N	= par[6];
 	float t = (x[0]-mean)/sigma;
 	double result;
 	double fact1TLessMinosAlphaL = alpha_l/n_l;
@@ -158,7 +156,7 @@ FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const s
 			break;
 		case FunctionType::DOUBLE_SIDED_CRYSTAL_BALL:
 			// std::cout << "Crystal ball\n";
-			func = new TF1(name.data(), DSCB, min, max, 6);
+			func = new TF1(name.data(), DSCB, min, max, 7);
 			break;
 		case FunctionType::POWER_LAW:
 			func = new TF1(name.data(), powerLaw, min, max, 3);
