@@ -119,6 +119,26 @@ TH1* RootFileInput::get2DHist(std::string histType) const
 	return response;
 }
 
+TH1* RootFileInput::getHistFromName(std::string histName) const
+{
+	auto file = getFile(fileSource);
+	if(!file)
+	{
+		throw std::runtime_error("Cannot open file!");
+	}
+	auto dir = file->GetDirectory("_hists");
+	if(!dir)
+	{
+		throw std::runtime_error("Cannot open directory!");
+	}
+	auto hist = dynamic_cast<TH1*>(dir->Get(histName.c_str()));
+	if (!hist)
+	{
+		throw std::runtime_error("Histogram " + histName + " not found!");
+	}
+	return hist;
+}
+
 int RootFileInput::getTotalEvents() const
 {
 	auto file = getFile(fileSource);

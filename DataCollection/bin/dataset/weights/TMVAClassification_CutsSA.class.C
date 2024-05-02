@@ -9,11 +9,11 @@
 Method         : Cuts::CutsSA
 TMVA Release   : 4.2.1         [262657]
 ROOT Release   : 6.24/07       [399367]
-Creator        : kzhang1
-Date           : Mon Apr  3 23:23:59 2023
+Creator        : satyam
+Date           : Fri Aug  4 00:31:55 2023
 Host           : Linux cmsbuild02.cern.ch 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
-Dir            : /uscms/homes/k/kzhang1/practice/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin
-Training events: 60497
+Dir            : /uscms/homes/s/satyam/fakeAnalysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin
+Training events: 6973
 Analysis type  : [Classification]
 
 
@@ -35,30 +35,34 @@ CutRangeMin[0]: "-1.000000e+00" [Minimum of allowed cut range (set per variable)
     CutRangeMin[3]: "-1.000000e+00"
     CutRangeMin[4]: "-1.000000e+00"
     CutRangeMin[5]: "-1.000000e+00"
+    CutRangeMin[6]: "-1.000000e+00"
 CutRangeMax[0]: "-1.000000e+00" [Maximum of allowed cut range (set per variable)]
     CutRangeMax[1]: "-1.000000e+00"
     CutRangeMax[2]: "-1.000000e+00"
     CutRangeMax[3]: "-1.000000e+00"
     CutRangeMax[4]: "-1.000000e+00"
     CutRangeMax[5]: "-1.000000e+00"
+    CutRangeMax[6]: "-1.000000e+00"
 VarProp[0]: "NotEnforced" [Categorisation of cuts]
     VarProp[1]: "NotEnforced"
     VarProp[2]: "NotEnforced"
     VarProp[3]: "NotEnforced"
     VarProp[4]: "NotEnforced"
     VarProp[5]: "NotEnforced"
+    VarProp[6]: "NotEnforced"
 ##
 
 
 #VAR -*-*-*-*-*-*-*-*-*-*-*-* variables *-*-*-*-*-*-*-*-*-*-*-*-
 
-NVar 6
-leadingPt                     leadingPt                     leadingPt                     Leading Lepton Transverse Momentum                                  'F'    [5.0726776123,21324.2890625]
-nParticles                    nParticles                    nParticles                    Number of Particles                                             'F'    [2,5]
-eta                           eta                           eta                           Pseudorapidity                                                  'F'    [-2.51045441628,2.50291919708]
-phi                           phi                           phi                           Azimuthal Angle                                                 'F'    [-3.14158964157,3.14142203331]
-deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0,0.876891136169]
-sumPt                         sumPt                         sumPt                         Total Transverse Momentum                                       'F'    [10.112449646,21441.2851562]
+NVar 7
+leadingPt                     leadingPt                     leadingPt                     Leading Lepton Transverse Momentum                                  'F'    [5.59494018555,19849.4726562]
+nParticles                    nParticles                    nParticles                    Number of Particles                                             'F'    [2,7]
+eta                           eta                           eta                           Pseudorapidity                                                  'F'    [-2.42465829849,2.49840736389]
+deltaR                        deltaR                        deltaR                        Jet Width                                                       'F'    [0.000141763171996,0.619156658649]
+sumPt                         sumPt                         sumPt                         Total Transverse Momentum                                       'F'    [10.9287805557,20096.2324219]
+numMuons                      numMuons                      numMuons                      Number of Muons                                                 'F'    [2,7]
+deltaPt                       deltaPt                       deltaPt                       Leading Change in Transverse Momentum                                  'F'    [5.59494018555,19849.4726562]
 NSpec 0
 
 
@@ -102,10 +106,10 @@ class ReadCutsSA : public IClassifierReader {
    ReadCutsSA( std::vector<std::string>& theInputVars )
       : IClassifierReader(),
         fClassName( "ReadCutsSA" ),
-        fNvars( 6 )
+        fNvars( 7 )
    {
       // the training input variables
-      const char* inputVars[] = { "leadingPt", "nParticles", "eta", "phi", "deltaR", "sumPt" };
+      const char* inputVars[] = { "leadingPt", "nParticles", "eta", "deltaR", "sumPt", "numMuons", "deltaPt" };
 
       // sanity checks
       if (theInputVars.size() <= 0) {
@@ -141,6 +145,8 @@ class ReadCutsSA : public IClassifierReader {
       fVmax[4] = 0;
       fVmin[5] = 0;
       fVmax[5] = 0;
+      fVmin[6] = 0;
+      fVmax[6] = 0;
 
       // initialize input variable types
       fType[0] = 'F';
@@ -149,6 +155,7 @@ class ReadCutsSA : public IClassifierReader {
       fType[3] = 'F';
       fType[4] = 'F';
       fType[5] = 'F';
+      fType[6] = 'F';
 
       // initialize constants
       Initialize();
@@ -178,15 +185,15 @@ class ReadCutsSA : public IClassifierReader {
    char   GetType( int ivar ) const { return fType[ivar]; }
 
    // normalisation of input variables
-   double fVmin[6];
-   double fVmax[6];
+   double fVmin[7];
+   double fVmax[7];
    double NormVariable( double x, double xmin, double xmax ) const {
       // normalise to output range: [-1, 1]
       return 2*(x - xmin)/(xmax - xmin) - 1.0;
    }
 
    // type of input variable: 'F' or 'I'
-   char   fType[6];
+   char   fType[7];
 
    // initialize internal variables
    void Initialize();
