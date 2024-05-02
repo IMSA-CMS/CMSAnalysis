@@ -16,6 +16,7 @@ bool RecoGenSimComparisonModule::process()
 
 void RecoGenSimComparisonModule::finalize()
 {
+    std::cout << comparisonType << "\n\n";
     if (comparisonType == "SameSignInvariantMass")
     {
         std::cout << "\nPer reconstructed event counters:\n";
@@ -88,7 +89,6 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
         std::ostream& output)
 {
     eventCounter++;
-    
     
     if (comparisonType == "sameSignInvariantMass" && recoParts.calculateSameSignInvariantMass(false, true) > 500)
     {
@@ -174,10 +174,11 @@ void RecoGenSimComparisonModule::perParticleComparison(const ParticleCollection<
         for(auto &genPart : genParts){
             //match using deltaR (distance in phi-eta plane)
             double deltaR = std::sqrt( std::pow(recoPart.getPhi() - genPart.getPhi(), 2) + std::pow(recoPart.getEta() - genPart.getEta(), 2) );
-            if (deltaR < 0.1)
+            if (deltaR < 0.1 && getFilter() != "")
             {
                 if (eventOutput)
                 {
+                    output << getFilter() << "\n\n";
                     output << std::setw(8) << genEventElement << "| " << std::setw(9) << genPart.getName() << "| ";
                     // Particle properties
                     output << std::setw(13) << genPart.getCharge() << "| " 
