@@ -205,7 +205,7 @@ HistParams ParticleType::getDaughterDeltaRHist()
 
 HistParams ParticleType::getLeptonJetDeltaRHist()
 {
-   return HistParams("Lepton Jet Delta R", 100, 0, 5, [](Particle particle){
+   return HistParams("Lepton Jet Delta R", 100, 0, 0.5, [](Particle particle){
     auto leptonJet = LeptonJet(particle);
     return std::vector<double>{leptonJet.getDeltaR()};
     });

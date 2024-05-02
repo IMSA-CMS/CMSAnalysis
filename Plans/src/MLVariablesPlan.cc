@@ -12,11 +12,10 @@
 #include "CMSAnalysis/Modules/interface/LeptonJetDataStripModule.hh"
 #include "CMSAnalysis/Plans/interface/MLVariablesPlan.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetMLStripModule.hh"
+#include "CMSAnalysis/Modules/interface/LeptonJetTreeMakerModule.hh"
 #include "CMSAnalysis/Modules/interface/TreeMakerModule.hh"
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
 #include "CMSAnalysis/Filters/interface/LeptonJetSelector.hh"
-
-
 
 using std::make_shared;
 
@@ -29,7 +28,7 @@ void MLVariablesPlan::initialize()
     eventMod->addSelector(std::make_shared<LeptonJetSelector>(0.5));//(leptonJetRecoMod)
     auto leptonJetMLStripMod = make_shared<LeptonJetMLStripModule>();
     leptonJetMLStripMod->setInput(eventMod->getEventInput());
-    auto treeMakerMod = make_shared<TreeMakerModule>(leptonJetMLStripMod, "Signal");
+    auto treeMakerMod = make_shared<LeptonJetTreeMakerModule>(leptonJetMLStripMod, "Signal");
     treeMakerMod->setInput(eventMod->getEventInput());
     modules.addProductionModule(eventMod);
     modules.addProductionModule(leptonJetRecoMod);
