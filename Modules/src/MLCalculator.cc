@@ -15,7 +15,7 @@ void MLCalculator::initialize()
     reader.BookMVA(method, fileName);
 } 
 
-double MLCalculator::getOutput(Particle part) const
+double MLCalculator::getOutput(ParticleCollection<Particle> part) const
 {
     specialVariable->calculateVariables(part);
     //std::cout << "MLCalculator temporary float " << *(specialVariable->tempRef1) << '\n';

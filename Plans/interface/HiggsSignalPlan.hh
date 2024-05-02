@@ -1,7 +1,7 @@
 #ifndef HIGGSSIGNALPLAN_HH
 #define HIGGSSIGNALPLAN_HH
 
-#include "CMSAnalysis/Plans/interface/DataCollectionPlan.hh"
+#include "CMSAnalysis/Plans/interface/HiggsBackgroundPlan.hh"
 
 class HiggsSignalPlan : public HiggsBackgroundPlan
 {
