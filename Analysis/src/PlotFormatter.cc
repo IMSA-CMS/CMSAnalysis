@@ -477,7 +477,7 @@ TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, std:
     legend->Draw();
  
     writeText(width, height, top, bottom, left, right);
-
+    std::cout << name << "\n";
     canvas->Update();
     return canvas;
 }

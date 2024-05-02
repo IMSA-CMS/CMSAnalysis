@@ -19,7 +19,7 @@ void SuperImpose() {
     //Change extraText here
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary");
     //Change the filePath here. This should be the longest branch all input files have in common.
-    const std::string filePath = "/uscms/home/cobriend/analysis/CMSSW_12_4_3/src/CMSAnalysis/Analysis/bin/";
+    const std::string filePath = "/uscms/home/gomalley/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/";
     //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
     //Write your graph names here (for the legend)
 
@@ -30,18 +30,18 @@ void SuperImpose() {
     // std::vector<std::string> files = {"test1000.root", "HiggsDPZ.root", "ZPrime.root", "SUSY.root", "Higgs4DP.root"};
     // std::vector<std::string> hists = {"Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values"};
     // std::vector<TString> names = {"Higgs to 2 Dark Photon", "Higgs to Z and Dark Photon", "Z Prime", "SUSY", "Higgs to 4 Dark Photon"};
-    std::vector<std::string> files = {"signTest.root", "signTest.root", "signTest.root"};
+    std::vector<std::string> files = {"controlled.root", "controlled.root", "controlled.root", "controlled.root"};
     std::vector<std::string> hists = {"Low Mass and Different Signs__hists/Low Mass and Different Signs_1st Highest Lepton Jet Lepton Jet Delta R",  
-    "Low Mass and All Negative__hists/Low Mass and All Negative_1st Highest Lepton Jet Lepton Jet Delta R",  
-    "Low Mass and All Positive__hists/Low Mass and All Positive_1st Highest Lepton Jet Lepton Jet Delta R"};
-    std::vector<TString> names = {"Low Mass OS", "Low Mass -S", "Low Mass +S"};
+    "Low Mass and Same Sign__hists/Low Mass and Same Sign_1st Highest Lepton Jet Lepton Jet Delta R",  
+    "High Mass and Different Signs__hists/High Mass and Different Signs_1st Highest Lepton Jet Lepton Jet Delta R",  
+    "High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest Lepton Jet Lepton Jet Delta R"};
+    std::vector<TString> names = {"Different Signs", "Same Sign", "dd", "d"};
     //Colors go here
     std::vector<int> colors = {1, 2, 3, 4, 6, 7};
     //Change x and y axis titles here
     //TString xTitle = "Gamma";
     TString xTitle = "Lepton Jet Delta R";
     TString yTitle = "Events (1/Integral)";
-
 
     int count = 0;
     TFile* openedFile;
@@ -77,5 +77,10 @@ void SuperImpose() {
         }
         count++;
     }
+    //histVector[0]->Add(histVector[2]);
+    histVector[1]->Add(histVector[3]);
+    //histVector = {histVector[1]};
+    std::cout << histVector.size() << "\n";
+    std::cout << "histVectorsize() " << "\n";
     TCanvas *canvas = plotFormatter->simpleSuperImposedHist(histVector, colors, names, xTitle, yTitle);
 }
