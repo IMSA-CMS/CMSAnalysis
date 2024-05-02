@@ -11,6 +11,7 @@
 # Output files
 *.root
 *.png
+*.out
 
 # Root Build Files
 *.so

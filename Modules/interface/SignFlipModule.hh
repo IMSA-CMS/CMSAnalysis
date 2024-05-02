@@ -9,9 +9,11 @@ class GenSimIdentificationModule;
 class SignFlipModule : public AnalysisModule
 {
 public:
-  SignFlipModule(const std::shared_ptr<MatchingModule> imatchModule);
+  SignFlipModule(const std::shared_ptr<MatchingModule> imatchModule, int numMatchedPairs=0, int nTotalEvents=0, int nSignFlips=0, int nElectronFlips=0, int nElectronEvents=0, int nMuonFlips=0, int nMuonEvents=0);
+  void initialize() override {}; // empty function
   bool process() override;
   void finalize() override;
+
 private:
   const std::shared_ptr<MatchingModule> matchModule;
   int nSignFlips = 0;
@@ -20,6 +22,7 @@ private:
   int nMuonFlips = 0;
   int nMuonEvents = 0;
   int nTotalEvents = 0;
+  int numMatchedPairs = 0;
 
   // Define a pT cut to keep track of low- vs. high-pT events
   // This will also define a few more variables to keep track
