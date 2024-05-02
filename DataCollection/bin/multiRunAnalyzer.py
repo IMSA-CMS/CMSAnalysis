@@ -24,7 +24,8 @@ def loopRun(*fileList):
 		print("Creating " + outputString)
 		#run(["nohup", "runAnalyzer", inputString, outputString, analysisName, numFiles], check=True)
 		run(["nohup", "runAnalyzer", inputString, outputString, analysisName], check=True)
-
+	
+	#runAnalyzer input="Data/Data_Trigger_SingleMuon_Year_2016B.txt" output="Data_Trigger_SingleMuon_Year_2016B.root" analysis="HiggsBackground"
 if __name__ == '__main__':
 	# jobs grouped by process
 	# If a job only has one pickfile in it, make sure to add a comma at the end so that python thinks it is a tuple

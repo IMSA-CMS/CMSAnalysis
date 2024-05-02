@@ -20,11 +20,19 @@ TH1* Process::getHist(std::string histType, bool scaleToExpected) const
 		for (const auto& singleProcess : processes)
 		{
 			singleProcessNumber++;
-			hist = singleProcess.getHist(histType, scaleToExpected);
-			if (!hist || hist->IsZombie()) 
+			try
 			{
-				throw std::runtime_error("Histogram not found in process: " + this->name + "\nIn singleProcess number: " + singleProcessNumber);
+				hist = singleProcess.getHist(histType, scaleToExpected);
 			}
+			catch (std::runtime_error& error)
+			{
+				std::cout << "Error: " << error.what();
+				continue;
+			}
+			// if (!hist || hist->IsZombie()) 
+			// {
+			// 	throw std::runtime_error("Histogram not found in process: " + this->name + "\nIn singleProcess number: " + singleProcessNumber);
+			// }
 			//std::cout << "numBins: " << hist->GetNbinsX() << "\n";
 			if (hist->GetNbinsX() > maxBinNum)
 			{
