@@ -37,6 +37,7 @@
 #include "CMSAnalysis/Filters/interface/HiggsMassCut.hh"
 #include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
 #include "CMSAnalysis/Modules/interface/HiggsLeptonEfficiency.hh"
+#include "CMSAnalysis/Modules/interface/HiggsCombineStripModule.hh"
 
 
 using std::make_shared;
@@ -55,6 +56,7 @@ void GenSimPlan::initialize()
     auto metMod = make_shared<METModule>();
     //auto gammahist = make_shared<GammaHistogram>(EventInput::RecoLevel::GenSim, "Gamma", 100, 0, 1000);
     auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::GenSim, "Same Sign Invariant Mass", 1000, 0, 2000, false, false);
+
     auto eventDump = make_shared<GenSimEventDumpModule>();
     auto matchMod = make_shared<MatchingModule>();
     auto higgsCut = make_shared<HiggsCut>();
@@ -67,7 +69,6 @@ void GenSimPlan::initialize()
 
     hPlusPlusEfficiency->setInput(eventMod->getEventInput());
     //leptonEfficiency->setInput(eventMod->getEventInput());
-
     histMod->addHistogram(deltaR);
     //histMod->addHistogram(gammahist);
 
@@ -93,5 +94,6 @@ void GenSimPlan::initialize()
     //modules.addAnalysisModule(leptonEfficiency);
 
     modules.addAnalysisModule(histMod);
+
     //modules.addAnalysisModule(eventDump);
 }
