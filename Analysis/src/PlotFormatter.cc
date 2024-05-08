@@ -486,9 +486,14 @@ TCanvas* PlotFormatter::noScaleSimpleSuperImposedHist(std::vector<TH1*> hists, s
     return canvas;
 }
 
-TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, std::string histvariable, bool scaleToExpected, TString xAxisTitle, TString yAxisTitle) {
+TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, std::string histvariable, bool scaleToExpected, TString xAxisTitle, TString yAxisTitle) 
+{
     TH1* hist = process->getHist(histvariable, scaleToExpected);
- 
+    return simple1DHist(hist, xAxisTitle, yAxisTitle);
+}
+
+TCanvas* PlotFormatter::simple1DHist(TH1* hist, TString xAxisTitle, TString yAxisTitle)
+{
     //Setting size and margins
     int width = 800;
     int height = 600;
@@ -501,7 +506,9 @@ TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, std::stri
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
 
     //Draws the histogram
+    gStyle->SetOptStat(0);
     hist->Draw("HIST");
+    //hist->SetMaximum(100);
     histVector.push_back(hist);
  
     //Change axis and graph titles here
