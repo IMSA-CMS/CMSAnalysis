@@ -304,7 +304,7 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     for(TH1* hist : hists) {
         hist->Rebin(hist->GetNbinsX() / commonFactor);
     }
-
+   
     double maxBinWidth = hists.at(0)->GetXaxis()->GetBinWidth(0);
 
     for(TH1* hist : hists) {
@@ -312,9 +312,11 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
             maxBinWidth = hist->GetXaxis()->GetBinWidth(0);
         }
     }
+
     for(TH1* hist : hists) {
         hist->Rebin((int) (maxBinWidth / hist->GetXaxis()->GetBinWidth(0)));
     }     
+
 
     for(TH1* hist : hists) {
 	    if(hist->Integral() != 0 && !isnan(hist->Integral())) {
@@ -330,6 +332,16 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
         }
 	    count++;
     }
+    
+
+    int lowValue = maximum;
+    for(TH1* hist : hists) {
+        if(hist->GetMinimum() < lowValue) {
+            lowValue = hist->GetMinimum();
+        }
+    }
+
+
     //Setting size and margins
     int width = 800;
     int height = 600;
@@ -347,6 +359,7 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     //first->GetYaxis()->ExtendAxis(0,0.7);
     first->Draw("HIST");
     histVector.push_back(first);
+
 
     //Change axis and graph titles here
     first->GetXaxis()->SetTitle(xAxisTitle);
@@ -366,6 +379,7 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
         count++;
     }
     legend->Draw();
+
  
     writeText(width, height, top, bottom, left, right);
    
