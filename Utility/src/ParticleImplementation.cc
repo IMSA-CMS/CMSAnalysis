@@ -22,10 +22,12 @@ void ParticleImplementation::addInfo(std::string mapKey, double value)
 
 double ParticleImplementation::getDXY() const
 {
-	throw std::runtime_error("getDXY() is not implemented for this type of ParticleImplementation");
+	return 0;
+	//throw std::runtime_error("getDXY() is not implemented for this type of ParticleImplementation");
 }
 
 double ParticleImplementation::getDZ() const
 {
-	throw std::runtime_error("getDZ is not implemented for this type of ParticleImplementation");
+	return 0;
+	//throw std::runtime_error("getDZ is not implemented for this type of ParticleImplementation");
 }

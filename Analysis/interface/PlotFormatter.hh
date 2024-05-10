@@ -38,6 +38,8 @@ class PlotFormatter
         TCanvas* simple1DHist(std::shared_ptr<Process> process, std::string histvariable, bool scaleToExpected, 
             TString xAxisTitle, TString yAxisTitle);
 
+        TCanvas* simple1DHist(TH1* process, TString xAxisTitle, TString yAxisTitle);
+
         //Single 2D hist
         TCanvas* simple2DHist(std::shared_ptr<Process> process, std::string histvariable, 
             TString xAxisTitle, TString yAxisTitle);
