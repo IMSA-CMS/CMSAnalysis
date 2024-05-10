@@ -41,7 +41,10 @@ TH1* Process::getHist(std::string histType, bool scaleToExpected) const
 		for (const auto& singleProcess : processes)	
 		{
 			toAdd = singleProcess.getHist(histType, scaleToExpected);
-			toMerge->Add(toAdd);
+			//Add only if the hisogram exists
+			if (toAdd != nullptr) {
+				toMerge->Add(toAdd);
+			}
 		}
 		newHist->Merge(toMerge);
 		newHist->SetLineColor(color);

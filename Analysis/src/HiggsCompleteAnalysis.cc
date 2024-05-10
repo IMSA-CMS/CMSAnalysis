@@ -30,14 +30,14 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     std::vector<double> massTargets {500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
     //std::vector<std::string> particles = {"e", "u"};
     //std::vector<std::string> names = Utility::channelMaker(particles, 4, false);
-    const std::vector<std::string> genSimDecays{"eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet", "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt"};
-    
+    // const std::vector<std::string> genSimDecays{"eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet", "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt"};
+    const std::vector<std::string> genSimDecays{"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu"};
     const std::vector<std::string> recoDecays{"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u", "none"};
     //const std::vector<std::string> recoDecays{"e u", "ee", "eeu", "eeuu", "eu", "uu", "uue"};
 
     //Change this file to your folder to use your own cross sections
     //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
-    auto reader = std::make_shared<CrossSectionReader>("/uscms/home/vrao/analysis/CMSSW_12_4_3/src/CMSAnalysis/Analysis/bin/crossSections.txt");
+    auto reader = std::make_shared<CrossSectionReader>("/uscms/home/vrao/analysis/CMSSW_14_0_4/src/CMSAnalysis/Analysis/bin/crossSections.txt");
     const std::string filePath = "/uscms/home/vrao/analysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/"; 
     const std::string signalFilePath = "/uscms/home/ichen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Analysis/bin/H++MassFiles/";
     double luminosity = 139;
@@ -46,24 +46,24 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     //for(std::string name : names) {
     for (std::string recoDecay : recoDecays){
         std::vector<std::shared_ptr<Process>> processes;
-        for (std::string genSimDecay : genSimDecays)
+        for(double massTarget : massTargets) 
         {
-            for(double massTarget : massTargets) 
+            auto higgsSignal = std::make_shared<Process>("Higgs Signal " + std::to_string((int) massTarget), 5);
+            for (std::string genSimDecay : genSimDecays) 
             {
-                auto higgsSignal = std::make_shared<Process>("Higgs Signal " + std::to_string((int) massTarget), 5);
                 std::vector<HistVariable> histVariablesSignal;
-                std::string decayName = genSimDecay + "_" + recoDecay;
-                histVariablesSignal.push_back(HistVariable::InvariantMass(decayName + "__hists/" + decayName + "_Opposite Sign Invariant Mass"));                
+                std::string decayName = recoDecay + "_" + genSimDecay;
+                // histVariablesSignal.push_back(HistVariable::InvariantMass(decayName + "__hists/" + decayName + "_Opposite Sign Invariant Mass"));      
                 histVariablesSignal.push_back(HistVariable::SameSignMass(decayName + "__hists/" + decayName + "_Same Sign Invariant Mass")); 
-                histVariablesSignal.push_back(HistVariable::InvariantMass(decayName + "__hists/" + decayName + "_1st Highest mu- Eta"));         
+                // histVariablesSignal.push_back(HistVariable::InvariantMass(decayName + "__hists/" + decayName + "_1st Highest mu- Eta"));         
                 higgsSignal->addProcess(makeSignalProcess(histVariablesSignal, signalFilePath, "Higgs" + std::to_string((int) massTarget) + ".root", "higgs4l", reader, massTarget, luminosity));
-                processes.push_back(higgsSignal);
             }
-        }    
+            processes.push_back(higgsSignal);
+        }   
         std::vector<HistVariable> histVariablesBackground;
-        histVariablesBackground.push_back(HistVariable::InvariantMass(recoDecay + "__hists/" + recoDecay + "_Opposite Sign Invariant Mass"));
+        // histVariablesBackground.push_back(HistVariable::InvariantMass(recoDecay + "__hists/" + recoDecay + "_Opposite Sign Invariant Mass"));
         histVariablesBackground.push_back(HistVariable::SameSignMass(recoDecay + "__hists/" + recoDecay + "_Same Sign Invariant Mass"));
-        histVariablesBackground.push_back(HistVariable::InvariantMass(recoDecay + "__hists/" + recoDecay + "_1st Highest mu- Eta"));
+        // histVariablesBackground.push_back(HistVariable::InvariantMass(recoDecay + "__hists/" + recoDecay + "_1st Highest mu- Eta"));
         //histVariablesBackground.push_back(HistVariable::InvariantMass(recoDecay + "__hists/" + recoDecay + "_1st Highest mu- Pt"));
 
         //cross sections should be all lowercase

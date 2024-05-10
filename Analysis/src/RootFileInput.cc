@@ -59,10 +59,13 @@ TH1* RootFileInput::getHist(std::string histType) const
 		}
 		else
 		{
+			//We need the nullptr in when adding histograms to know to
+			//skip the histogram and not break histogram addition
+			std::cout << "No histogram named " + name + " found\n";
 			delete dir;
 			delete hist;
 			delete file;
-			return emptyHist;
+			return nullptr;
 		}
 	}
 	else
