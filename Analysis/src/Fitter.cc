@@ -115,15 +115,12 @@ TCanvas* Fitter::fitExpressionFormula(TH1* histogram, FitFunction& fitFunction)
 TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction)
 {
 	TCanvas *c2 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
-	std::cout << "Fitting: " << fitFunction.getName() << '\n';
 	TF1* f1 = fitFunction.getFunction();
 	// std::cout << "2:1\n";
 	// histogram->Draw();
 	// std::string wait;
 	// std::cin >> wait;
-	std::cout << "Hist Min: " << histogram->GetXaxis()->GetXmin() << '\n';
-	std::cout << "Hist Max: " << histogram->GetXaxis()->GetXmax() << '\n';
-	TFitResultPtr gausResult = histogram->Fit("gaus", "SQ", "", 250,1900);
+	TFitResultPtr gausResult = histogram->Fit("gaus", "SQ", "", 250,2000);
 	// std::cout << "2:2\n";
 	auto params = gausResult->Parameters();
 	// std::cout << "2:3\n";
@@ -158,7 +155,7 @@ TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction)
 	// 		f1->SetParLimits(6,3,20);
 	// 	}
 	// }
-	f1->SetRange(0, 1900);
+	f1->SetRange(0, 2000);
 	f1->SetLineColor(kRed);
 	TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
 	// std::cout << "2:7\n";
@@ -173,7 +170,12 @@ TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction)
 	TPaveStats *st = (TPaveStats*)histogram->FindObject("stats");
 	st->SetX1NDC(0.1);
 	st->SetX2NDC(0.5);
-	//hist->GetXaxis()->SetRange(mass-450, mass + 350);
+	// histogram->GetXaxis()->SetRange(900, 1100);
+    // histogram->SetTitle(("H++ Monte Carlo Invariant Mass Distribution at 1100 GeV for " + fitFunction.getName().substr(5, 4)).c_str());
+    // histogram->GetXaxis()->SetTitle("Same Sign Lepton Pair Invariant  Mass (GeV/c^2)");
+    // histogram->GetYaxis()->SetTitle("Number of Events");
+    // histogram->GetYaxis()->SetTitle("Number of Events");
+
 	// c1->SaveAs(Graphname.c_str());
 	// c1->Close();
 
