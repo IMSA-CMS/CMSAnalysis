@@ -613,11 +613,11 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     std::vector<std::string> backgroundNames = processes->getNamesWithLabel("background");
     std::vector<std::string> signalNames = processes->getNamesWithLabel("signal");
     std::vector<std::string> dataNames = processes->getNamesWithLabel("data");
-    data = analysis->getDecayHist(histvariable, dataNames.at(0), massTarget, false, channelName);
-    signal = analysis->getDecayHist(histvariable, signalNames.at(0), massTarget, true, channelName);
+    data = analysis->getHist(histvariable, dataNames.at(0), false, channelName);
+    signal = analysis->getHist(histvariable, signalNames.at(0), true, channelName);
     std::vector<TH1*> backgroundHists;
     for(std::string name : backgroundNames) {
-        backgroundHists.push_back(analysis->getDecayHist(histvariable, name, massTarget, true, channelName));
+        backgroundHists.push_back(analysis->getHist(histvariable, name, true, channelName));
     }
 
 //commented out integral code
