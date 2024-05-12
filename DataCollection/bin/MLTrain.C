@@ -3,6 +3,7 @@
 #include <map>
 #include <string>
 #include <cmath>
+#include <vector>
 
 #include "TChain.h"
 #include "TFile.h"
@@ -38,8 +39,6 @@ bool returnState(TString &myMethodList)
 {
 
     bool isReal;
-    //    TTree trainTree = DataStripModule :: tree;
-    //    TTree testTree = DataStripModule :: tree2;
 
     TMVA::Tools::Instance();
 
@@ -105,24 +104,12 @@ bool returnState(TString &myMethodList)
     }
 
     // input signal file here
-    // string sgFile = "photons0_5.root";
-    // string sgFile = "photons0_9.root";
-    //error on type line 108 and 111
-    string sgFile = "dpNewReco2.root";
+    std::string sgFile = "strippedSG_numFiles1.root";
 
     // input background files here
-    string bgFiles[] =
+    std::string bgFiles[] =
         {
-            //"dy4.root"
-            //"dy10.root",
-            //"DY50.root",
-            //"qcd1.root",
-            "DYNewML7.root"
-            // "qcd500.root",
-            // "qcd700.root",
-            // "qcd1k.root",
-            // "qcd1_5k.root",
-            // "qcd2k.root"
+            "strippedBG_numFiles1.root"
         };
 
     // (it is also possible to use ASCII format as input -> see TMVA Users Guide)
@@ -147,16 +134,11 @@ bool returnState(TString &myMethodList)
     // Registers background files in background chain
     TTree *bg = new TTree();
     TChain *backgroundTree = new TChain("Signal"); // Signal of background files
-    for (string file : bgFiles)
+    for (std::string file : bgFiles)
     {
         backgroundTree->Add(file.c_str());
     }
 
-    // TFile* input = TFile::Open("qcd2kTrain.root");
-
-    // Register the training and test trees
-
-    // TTree *signalTree = (TTree *)input->Get("Signal");
     TTree *signalTree = (TTree *)input->Get("Signal");
 
     // Create a ROOT output file where TMVA will store ntuples, histograms, etc.
@@ -169,22 +151,17 @@ bool returnState(TString &myMethodList)
     TMVA::DataLoader *dataloader = new TMVA::DataLoader("dataset");
 
     // change var1 to index and var2 to pt
-    // dataloader->AddVariable("jetIndex", "Jet Index", "", 'F');
     LeptonJetMLStripModule leptonMod; 
     leptonMod.initialize();
     leptonMod.addVariablesToDataLoader(dataloader);
     // Difference in transverse momentum between leading and runner up highest transverse momentum particles.
-    //  dataloader->AddSpectator("spec1 := jetIndex*2", "Spectator 1", "units", 'F');
 
     // global event weights per tree (see below for setting event-wise weights)
     Double_t signalWeight = 1.0;
     Double_t backgroundWeight = 1.0;
-
     // You can add an arbitrary number of signal or background trees
     dataloader->AddSignalTree(signalTree, signalWeight);
     dataloader->AddBackgroundTree(backgroundTree, backgroundWeight);
-
-    // dataloader->
 
     // I am using all of the data reduction methods
     if (Use["Cuts"])
@@ -217,7 +194,7 @@ bool returnState(TString &myMethodList)
     // Using both CUDA-Accelerated and Multi-core Accelerated Deep Neural Networks
     if (Use["DNN_CPU"] or Use["DNN_GPU"])
     {
-        // General layout.
+        // General layout
 
         TString layoutString("Layout=TANH|128,TANH|128,TANH|128,LINEAR");
 
@@ -228,7 +205,7 @@ bool returnState(TString &myMethodList)
                                           "WeightDecay=1e-4,Regularization=None,"
                                           "DropConfig=0.0+0.5+0.5+0.5");
 
-        // General Options.
+        // General Options
         TString dnnOptions("!H:V:ErrorStrategy=CROSSENTROPY:VarTransform=N:"
                            "WeightInitialization=XAVIERUNIFORM");
         dnnOptions.Append(":");
@@ -236,13 +213,13 @@ bool returnState(TString &myMethodList)
         dnnOptions.Append(":");
         dnnOptions.Append(trainingStrategyString);
 
-        // Cuda implementation.
+        // Cuda implementation
         if (Use["DNN_GPU"])
         {
             TString gpuOptions = dnnOptions + ":Architecture=GPU";
             factory->BookMethod(dataloader, TMVA::Types::kDL, "DNN_GPU", gpuOptions);
         }
-        // Multi-core CPU implementation.
+        // Multi-core CPU implementation
         if (Use["DNN_CPU"])
         {
             TString cpuOptions = dnnOptions + ":Architecture=CPU";
@@ -265,30 +242,6 @@ bool returnState(TString &myMethodList)
     std::cout << "==> Wrote root file: " << outputFile->GetName() << std::endl;
     std::cout << "==> TMVAClassification is done!" << std::endl;
 
-    // std::vector<std::string> meths;
-    // if (Use["MLP"])
-    // {
-    //     meths.push_back("MLP");
-    // }
-    // if (Use["DNN_CPU"])
-    // {
-    //     meths.push_back("DNN_CPU");
-    // }
-    // if (Use["DNN_GPU"])
-    // {
-    //     meths.push_back("DNN_GPU");
-    // }
-    // int totalFiles = 3;
-    // //int runFor = std::min(totalFiles, meths.size());
-    // int runFor = totalFiles < meths.size() ? totalFiles : meths.size();
-    // for (string m : meths)
-    // {
-    //     auto model = factory->GetMethod("dataset", TString(m));
-    //     TFile* s = new TFile("model" + m + ".root");
-    //     model->Write();
-    //     s.Close();
-    // }
-
     TFile *f = new TFile("TMVAfactory.root", "recreate");
     factory->Write();
     f->Close();
@@ -306,13 +259,5 @@ void MLTrain() // int argc, char** argv)
 {
     // Select methods (don't look at this code - not of interest)
     TString methodList;
-    /*
-    for (int i=1; i<argc; i++) {
-        TString regMethod(argv[i]);
-        if(regMethod=="-b" || regMethod=="--batch") continue;
-        if (!methodList.IsNull()) methodList += TString(",");
-        methodList += regMethod;
-    }
-    */
     returnState(methodList);
 }

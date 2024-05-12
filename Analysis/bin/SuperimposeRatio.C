@@ -16,8 +16,8 @@
 #include "TStyle.h"
 #include <fmt/core.h>
 
-void SuperimposeRatio() {
-    //Change extraText here
+void RunSuperimpose() {
+        //Change extraText here
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary Data");
     //Change the filePath here. This should be the longest branch all input files have in common.
     //const std::string filePath = "/uscms/home/jpalamad/analysis/CMSSW_12_4_3/src/CMSAnalysis/MCGeneration/test/";
@@ -143,4 +143,11 @@ void SuperimposeRatio() {
     }
 
     TCanvas *canvas = plotFormatter->noScaleSimpleSuperImposedHist(histVector, colors, names, xTitle, yTitle);
+}
+
+void SuperimposeRatio() {
+    int x = 3;
+    int y = 4;
+
+    RunSuperimpose();
 }
