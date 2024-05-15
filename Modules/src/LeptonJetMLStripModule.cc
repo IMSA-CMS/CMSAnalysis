@@ -29,9 +29,11 @@ void LeptonJetMLStripModule::addVariables()
 
 }
 
-void LeptonJetMLStripModule::calculateVariables(Particle particle)
+void LeptonJetMLStripModule::calculateVariables(ParticleCollection<Particle> particles)
 {
-	LeptonJet leptonJet(particle);//no need for loop
+	for (auto particle : particles)
+	{
+		LeptonJet leptonJet(particle);//no need for loop
 	//auto leptonJets = recomod->getLeptonJets();            // inputs from LeptonJet
 
     // int jetIterator = 0;
@@ -107,6 +109,6 @@ void LeptonJetMLStripModule::calculateVariables(Particle particle)
 		addValue("maxIsolation", tempMaxIso);
 		//addValue("numMuons", numMuons);
 
-
+	}
     //}
 }

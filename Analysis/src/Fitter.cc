@@ -170,7 +170,12 @@ TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction)
 	TPaveStats *st = (TPaveStats*)histogram->FindObject("stats");
 	st->SetX1NDC(0.1);
 	st->SetX2NDC(0.5);
-	//hist->GetXaxis()->SetRange(mass-450, mass + 350);
+	// histogram->GetXaxis()->SetRange(900, 1100);
+    // histogram->SetTitle(("H++ Monte Carlo Invariant Mass Distribution at 1100 GeV for " + fitFunction.getName().substr(5, 4)).c_str());
+    // histogram->GetXaxis()->SetTitle("Same Sign Lepton Pair Invariant  Mass (GeV/c^2)");
+    // histogram->GetYaxis()->SetTitle("Number of Events");
+    // histogram->GetYaxis()->SetTitle("Number of Events");
+
 	// c1->SaveAs(Graphname.c_str());
 	// c1->Close();
 
