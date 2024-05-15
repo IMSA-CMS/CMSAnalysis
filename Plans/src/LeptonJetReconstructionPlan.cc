@@ -81,11 +81,10 @@ void LeptonJetReconstructionPlan::initialize()
   auto eventDumpMod = std::make_shared<EventDumpModule>(true,true);
   auto lepMatchMod = std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.1); // this
   auto histOutputMod = std::make_shared<HistogramOutputModule>();
-  //auto mlMod = std::make_shared<LeptonJetMLCalculator>();
   auto recoGenSimComparisonMod = std::make_shared<RecoGenSimComparisonModule>();
-  // auto leptonJetMLStripMod = std::make_shared<LeptonJetMLStripModule>();
-  // leptonJetMLStripMod->setInput(eventMod->getEventInput());
-  // auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "dataset/weights/TMVAClassification_BDT.weights.xml", "BDT");
+  auto leptonJetMLStripMod = std::make_shared<LeptonJetMLStripModule>();
+  leptonJetMLStripMod->setInput(eventMod->getEventInput());
+  auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "dataset/weights/TMVAClassification_MLP.weights.xml", "MLP");
 
   // Histograms
   //uncomented 
@@ -113,7 +112,7 @@ void LeptonJetReconstructionPlan::initialize()
 
   auto lepJetRecoElec = std::make_shared<LeptonJetRecoHist>(lepMatchMod, true, lepRecoMod, "Number of Reconstructed Electrons",3,0,2);
   auto lepJetRecoMuon = std::make_shared<LeptonJetRecoHist>(lepMatchMod, false, lepRecoMod, "Number of Reconstructed Muons",3,0,2);
-  //auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(EventInput::RecoLevel::Reco, "LeptonJetMLOutput", 100, -.4, .4, mlMod, lepRecoMod);
+  auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(EventInput::RecoLevel::Reco, "LeptonJetMLOutput", 100, 0, 1, mlMod, lepRecoMod);
 
   // auto matchDeltaRHist = std::make_shared<MatchingDeltaRHist>(lepMatchMod, "Differences in Delta R for Matched Lepton Jets", 100, 0, 0.5);
   // auto matchPtHist = std::make_shared<MatchingPtHist>(lepMatchMod, "Differences in pT for Matched Lepton Jets", 100, -300, 300);
@@ -121,7 +120,7 @@ void LeptonJetReconstructionPlan::initialize()
   // auto matchEtaHist = std::make_shared<MatchingEtaHist>(lepMatchMod, "Differences in Eta for Matched Lepton Jets", 100, -1, 1);
 
   //  auto relIsoHist = std::make_shared<IsolationHist>(EventInput::RecoLevel::Reco, "Jet pT Rel", 10000, 0, 100);
- // auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(EventInput::RecoLevel::Reco, "NN Classifier Output Distribution", 100, 0, 1, mlMod, lepRecoMod);
+  //auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(EventInput::RecoLevel::Reco, "NN Classifier Output Distribution", 100, 0, 1, mlMod, lepRecoMod);
   auto leptonJetInvMassHist = std::make_shared<LeptonJetInvariantMassHist>("Lepton Jet Invariant Mass", 1000, 0, 100);
   auto zoomedInLeptonJetInvMassHist = std::make_shared<LeptonJetInvariantMassHist>("Zoomed In Lepton Jet Invariant Mass", 1000, 0, 10);
   auto deltaXYHist = std::make_shared<DxyHist>(EventInput::RecoLevel::Reco, "Vertex Delta XY from Primary Vertex", 50, 0, 5);
@@ -138,7 +137,7 @@ void LeptonJetReconstructionPlan::initialize()
   histOutputMod->addHistogram(deltaXYHist);
   histOutputMod->addHistogram(deltaZHist);
   //histOutputMod->addHistogram(relIsoHist);
-  //histOutputMod->addHistogram(leptonJetMLHist);
+  histOutputMod->addHistogram(leptonJetMLHist);
 
   //   histOutputMod->addHistogram(matchDeltaRHist);
   //   histOutputMod->addHistogram(matchPtHist);
@@ -205,8 +204,8 @@ void LeptonJetReconstructionPlan::initialize()
   modules.addProductionModule(lepRecoMod);
   // modules.addProductionModule(genPartMod);
   modules.addProductionModule(lepMatchMod);
-  //modules.addProductionModule(leptonJetMLStripMod);
-  //modules.addProductionModule(mlMod);
+  modules.addProductionModule(leptonJetMLStripMod);
+  modules.addProductionModule(mlMod);
 
 
   modules.addProductionModule(eventMod);
