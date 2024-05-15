@@ -209,7 +209,7 @@ void LeptonJetReconstructionPlan::initialize()
 
 
   modules.addProductionModule(eventMod);
-  modules.addFilterModule(darkPhotonFilter);
+  //modules.addFilterModule(darkPhotonFilter);
   modules.addAnalysisModule(histOutputMod);
   modules.addAnalysisModule(eventHistMod);
 
@@ -221,7 +221,7 @@ void LeptonJetReconstructionPlan::initialize()
   //modules.addAnalysisModule(massRecoEfficiency800);
   //modules.addAnalysisModule(massRecoEfficiency1000);
   //modules.addAnalysisModule(massRecoEfficiency1300);
-  modules.addAnalysisModule(recoGenSimComparisonMod);
+  //modules.addAnalysisModule(recoGenSimComparisonMod);
   //modules.addAnalysisModule(eventDumpMod);
   //modules.addAnalysisModule(recoEventDumpMod);
   /* auto selector = make_shared<SnowmassLeptonSelector>(5);

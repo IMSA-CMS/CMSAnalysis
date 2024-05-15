@@ -39,7 +39,7 @@ bool ZVetoCut::checkEventInternal(const Event& event, const EventInput* input) c
         {
              
             mass = (muons[i].getFourVector() + muons[j].getFourVector()).M();
-            if (muons[i].getCharge() != muons[j].getCharge() && (mass > 76 && mass < 106))
+            if (muons[i].getCharge() != muons[j].getCharge() && (mass > 71 && mass < 111))
             {
                 return false;
             }
