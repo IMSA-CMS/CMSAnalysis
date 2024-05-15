@@ -318,7 +318,7 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
 
     for(TH1* hist : hists) {
 	    if(hist->Integral() != 0 && !isnan(hist->Integral())) {
-	        //hist->Scale(1/hist->Integral());
+	        hist->Scale(1/hist->Integral());
             //hist->GetYaxis()->SetLimits(0,0.7);
 		    hist->SetFillColor(kWhite);
 	    }
@@ -373,7 +373,7 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     for(TH1* hist : hists) {
         if(find(hists.begin(), hists.end(), hist) - hists.begin() != firstIndex) {
             //hist->GetYaxis()->SetLimits(0,0.7);
-            //hist->Draw("HIST SAME");
+            hist->Draw("HIST SAME");
             histVector.push_back(hist);
         }
     }
