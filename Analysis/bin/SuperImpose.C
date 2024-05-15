@@ -19,7 +19,7 @@ void SuperImpose() {
     //Change extraText here
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary");
     //Change the filePath here. This should be the longest branch all input files have in common.
-    const std::string filePath = "/uscms/home/cobriend/analysis/CMSSW_12_4_3/src/CMSAnalysis/Analysis/bin/";
+    const std::string filePath = "/uscms/home/cobriend/analysis/CMSSW_14_0_4/src/CMSAnalysis/Analysis/bin/";
     //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
     //Write your graph names here (for the legend)
 
@@ -30,16 +30,37 @@ void SuperImpose() {
     // std::vector<std::string> files = {"test1000.root", "HiggsDPZ.root", "ZPrime.root", "SUSY.root", "Higgs4DP.root"};
     // std::vector<std::string> hists = {"Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values"};
     // std::vector<TString> names = {"Higgs to 2 Dark Photon", "Higgs to Z and Dark Photon", "Z Prime", "SUSY", "Higgs to 4 Dark Photon"};
-    std::vector<std::string> files = {"signTest.root", "signTest.root", "signTest.root"};
-    std::vector<std::string> hists = {"Low Mass and Different Signs__hists/Low Mass and Different Signs_1st Highest Lepton Jet Lepton Jet Delta R",  
-    "Low Mass and All Negative__hists/Low Mass and All Negative_1st Highest Lepton Jet Lepton Jet Delta R",  
-    "Low Mass and All Positive__hists/Low Mass and All Positive_1st Highest Lepton Jet Lepton Jet Delta R"};
-    std::vector<TString> names = {"Low Mass OS", "Low Mass -S", "Low Mass +S"};
+    std::string massRange = "100-200";
+    std::vector<std::string> files = {
+        "QCD200-300.root", 
+        "QCD700-1000.root", 
+        "QCD2000-inf.root"
+        };
+    //std::string histType = "Lepton Jet Delta R";
+    //std::string histType = "Eta";
+    std::string histType = "Lepton Jet Mass";
+    //std::string histType = "Pt";
+    std::string plot = "1st Highest Lepton Jet " + histType;
+    // std::vector<std::string> hists = {
+    //     "Low Mass and Different Signs__hists/Low Mass and Different Signs_" + plot, 
+    //     "Low Mass and Same Sign__hists/Low Mass and Same Sign_" + plot, 
+    //     "High Mass and Different Signs__hists/High Mass and Different Signs_" + plot, 
+    //     "High Mass and Same Sign__hists/High Mass and Same Sign_" + plot
+    //     };
+
+    std::vector<std::string> hists = {
+        "High Mass and Different Signs__hists/High Mass and Different Signs_" + plot,
+        "High Mass and Different Signs__hists/High Mass and Different Signs_" + plot,
+        "High Mass and Different Signs__hists/High Mass and Different Signs_" + plot
+        };
+        
+    std::cout << "Constructing superimposed histogram from:\n" << hists.at(0) << "\n" << hists.at(1) << "\n" << hists.at(2) << std::endl;
+    std::vector<TString> names = {"200-300", "700-1000", "2000-inf"};
     //Colors go here
-    std::vector<int> colors = {1, 2, 3, 4, 6, 7};
+    std::vector<int> colors = {1, 3, 2};
     //Change x and y axis titles here
     //TString xTitle = "Gamma";
-    TString xTitle = "Lepton Jet Delta R";
+    TString xTitle = histType;
     TString yTitle = "Events (1/Integral)";
 
 
@@ -74,6 +95,7 @@ void SuperImpose() {
         }
         else {
             histVector.push_back(hist);
+            // std::cout << "Added " << fileName << " to histVector" << std::endl;
         }
         count++;
     }
