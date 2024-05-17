@@ -44,6 +44,7 @@ Analyzer::~Analyzer()
 void Analyzer::writeOutputFile()
 {
   // Create the output file
+  outputRootFile->cd();
   // Finalize the modules
   for (auto module : productionModules)
   {
@@ -53,7 +54,7 @@ void Analyzer::writeOutputFile()
   {
     module->finalize();
   }
-  outputRootFile->cd();
+
   //Finalize separately for each filterString, to be safe
   //std::cout << "There are " << analysisModules.size() << " analysis modules\n";
   for (auto module : analysisModules)
