@@ -43,6 +43,7 @@
 #include "CMSAnalysis/Filters/interface/QuarkoniaCut.hh"
 #include "CMSAnalysis/Filters/interface/ZVetoCut.hh"
 #include "CMSAnalysis/Filters/interface/FourLeptonCut.hh"
+#include "CMSAnalysis/Modules/interface/HiggsCombineStripModule.hh"
 
 using std::make_shared;
 
@@ -108,6 +109,9 @@ void HiggsBackgroundPlan::initialize()
     auto RecoPt = make_shared<PtHist>(EventInput::RecoLevel::Reco, "Reco Leading lepton pT", 500, 0, 2000);
     auto GenSimPt = make_shared<PtHist>(EventInput::RecoLevel::GenSim, "GenSim Leading lepton pT", 500, 0, 2000);
 
+	// auto higgsCombineStripModule = make_shared<HiggsCombineStripModule>();
+    // higgsCombineStripModule->setInput(eventMod->getEventInput());
+
     //auto elecRecoPt = make_shared<PtHist>(EventInput::RecoLevel::Reco, "Electron Reco Leading lepton pT", 500, 0, 1000);
     //auto elecGenSimPt = make_shared<PtHist>(EventInput::RecoLevel::GenSim, "Electron GenSim Leading lepton pT", 500, 0, 1000);
     //auto muonRecoPt = make_shared<PtHist>(EventInput::RecoLevel::Reco, "Muon Reco Leading lepton pT", 500, 0, 1000);
@@ -164,6 +168,7 @@ void HiggsBackgroundPlan::initialize()
     modules.addProductionModule(metMod);
     //Changed because EventModule inherits from ProductionModule now
     modules.addProductionModule(eventMod);
+	//modules.addProductionModule(higgsCombineStripModule);
 
 
     // modules.addFilterModule(make_shared<FilterModule>(bJetFilter));
