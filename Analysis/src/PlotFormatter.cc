@@ -835,13 +835,13 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     double xerror2[data->GetNbinsX()];
     double yerror2[data->GetNbinsX()];
 
-    /*
+    
     double* x = nullptr;
     double* y = nullptr;
     double* xerror2 = nullptr;
     double* yerror2 = nullptr;
     GetBottomPadValues(data, background, x, y, xerror2, yerror2);
-    */
+    /*
     TH1* histLoop;
     double backgroundHistBinMax = 0;
     double value;
@@ -878,6 +878,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
             yerror2[i] = 0;
         }
     }
+    */
     
 
     auto graph = new TGraph(data->GetNbinsX(), x, y);
