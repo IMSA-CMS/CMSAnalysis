@@ -7,10 +7,10 @@
 
 bool BJetCut::checkEventInternal(const Event& event, const EventInput* input) const
 {
-    const std::vector<Jet>& jets = event.getJets().getParticles();
+    const auto jets = input->getJets(EventInput::RecoLevel::Reco).getParticles();
     for (int i = 0; i < int(jets.size()); i++) 
     {
-        if (jets[i].getInfo("bJet"))
+        if (jets[i].getInfo("bJet") > 0.9)
         {
             return false;
         }

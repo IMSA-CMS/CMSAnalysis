@@ -19,9 +19,16 @@ std::string Utility::substitute(std::string original, std::string target, std::s
 
 std::string Utility::getFullPath(std::string fileName)
 {
-  std::string location = std::getenv("CMSSW_BASE"); 
-  return (location + "/src/CMSAnalysis/DataCollection/bin/textfiles/" + fileName);
+
+  return (getBasePath()+"DataCollection/bin/textfiles/" + fileName);
 }
+
+std::string Utility::getBasePath()
+{
+  std::string location = std::getenv("CMSSW_BASE"); 
+  return (location + "/src/CMSAnalysis/");
+}
+
 
 std::string Utility::removeSpaces(std::string input) 
 {
