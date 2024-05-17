@@ -109,8 +109,6 @@ void HiggsBackgroundPlan::initialize()
     auto RecoPt = make_shared<PtHist>(EventInput::RecoLevel::Reco, "Reco Leading lepton pT", 500, 0, 2000);
     auto GenSimPt = make_shared<PtHist>(EventInput::RecoLevel::GenSim, "GenSim Leading lepton pT", 500, 0, 2000);
 
-<<<<<<< HEAD
-=======
 	// auto higgsCombineStripModule = make_shared<HiggsCombineStripModule>();
     // higgsCombineStripModule->setInput(eventMod->getEventInput());
 
@@ -119,7 +117,6 @@ void HiggsBackgroundPlan::initialize()
     //auto muonRecoPt = make_shared<PtHist>(EventInput::RecoLevel::Reco, "Muon Reco Leading lepton pT", 500, 0, 1000);
     //auto muonGenSimPt = make_shared<PtHist>(EventInput::RecoLevel::GenSim, "Muon GenSim Leading lepton pT", 500, 0, 1000);
     //auto recoInvMass = make_shared<InvariantMassHist>(EventInput::RecoLevel::Reco, "Opposite-sign dilepton mass", 1000, 0, 2000);
->>>>>>> 2b1df7182d7eb59dabfd1672a62ec482cebf568d
     auto MetHist = make_shared<METHist>(metMod, "MET", 500, 0, 2000);
     auto deltaXYHist = std::make_shared<DxyHist>(EventInput::RecoLevel::Reco, "Vertex Delta XY from Primary Vertex", 50, 0, 5);
     auto deltaZHist = std::make_shared<DzHist>(EventInput::RecoLevel::Reco, "Vertex Delta Z from Primary Vertex", 50, 0, 5);

@@ -56,14 +56,14 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
             dyBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Drell-Yan_MassCut_50-inf_Run_2.root", "dy50toInf", reader, massTarget, luminosity));
             
             auto qcdBackground = std::make_shared<Process>("QCD Background", 8);
-            qcdBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "QCD_HTCut_100-200_Run_2_Year_2018.root", "qcd100to200", reader, massTarget, luminosity));
-            qcdBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "QCD_HTCut_200-300_Run_2_Year_2018.root", "qcd200to300", reader, massTarget, luminosity));
-            qcdBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "QCD_HTCut_300-500_Run_2_Year_2018.root", "qcd300to500", reader, massTarget, luminosity));
-            qcdBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "QCD_HTCut_500-700_Run_2_Year_2018.root", "qcd500to700", reader, massTarget, luminosity));
-            qcdBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "QCD_HTCut_700-1000_Run_2_Year_2018.root", "qcd700to1000", reader, massTarget, luminosity));
-            qcdBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "QCD_HTCut_1000-1500_Run_2_Year_2018.root", "qcd1000to1500", reader, massTarget, luminosity));
-            qcdBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "QCD_HTCut_1500-2000_Run_2_Year_2018.root", "qcd1500to2000", reader, massTarget, luminosity));
-            qcdBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "QCD_HTCut_2000-Inf_Run_2_Year_2018.root", "qcd2000toInf", reader, massTarget, luminosity));
+            qcdBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "QCD_HTCut_100-200_Run_2_Year_2018.root", "QCD_100-200", reader, massTarget, luminosity));
+            qcdBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "QCD_HTCut_200-300_Run_2_Year_2018.root", "QCD_200-300", reader, massTarget, luminosity));
+            qcdBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "QCD_HTCut_300-500_Run_2_Year_2018.root", "QCD_300-500", reader, massTarget, luminosity));
+            qcdBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "QCD_HTCut_500-700_Run_2_Year_2018.root", "QCD_500-700", reader, massTarget, luminosity));
+            qcdBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "QCD_HTCut_700-1000_Run_2_Year_2018.root", "QCD_700-1000", reader, massTarget, luminosity));
+            qcdBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "QCD_HTCut_1000-1500_Run_2_Year_2018.root", "QCD_1000-1500", reader, massTarget, luminosity));
+            qcdBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "QCD_HTCut_1500-2000_Run_2_Year_2018.root", "QCD_1500-2000", reader, massTarget, luminosity));
+            qcdBackground->addProcess(makeSignalProcess(histVariablesBackground, filePath, "QCD_HTCut_2000-Inf_Run_2_Year_2018.root", "QCD_2000-inf", reader, massTarget, luminosity));
 
 
             // auto multiBosonBackground = std::make_shared<Process>("MultiBoson Background", 6);
