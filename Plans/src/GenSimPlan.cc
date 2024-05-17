@@ -13,7 +13,7 @@
 #include "CMSAnalysis/Filters/interface/LeptonFilter.hh"
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
 #include "CMSAnalysis/Histograms/interface/METHist.hh"
-#include "CMSAnalysis/Modules/interface/METModule.hh" \\
+#include "CMSAnalysis/Modules/interface/METModule.hh" 
 #include "CMSAnalysis/Filters/interface/NLeptonsFilter.hh"
 #include "CMSAnalysis/Histograms/interface/NLeptonsHist.hh"
 #include "CMSAnalysis/Histograms/interface/SameSignInvariantMassHist.hh"
@@ -27,14 +27,14 @@
 #include "CMSAnalysis/Histograms/interface/TwoInvariantMassesHist.hh"
 #include "CMSAnalysis/Filters/interface/BJetFilter.hh"
 
-#include "CMSAnalysis/Histograms/interface/GenSimDeltaRHist.hh" \\
+#include "CMSAnalysis/Histograms/interface/GenSimDeltaRHist.hh" 
 #include "CMSAnalysis/Modules/interface/GenSimEventDumpModule.hh"
 
-#include "CMSAnalysis/Modules/interface/EventModule.hh" \\
+#include "CMSAnalysis/Modules/interface/EventModule.hh" 
 #include "CMSAnalysis/Modules/interface/RecoGenSimComparisonModule.hh"
-#include "CMSAnalysis/Filters/interface/DarkPhotonGenSimSelector.hh" \\
-#include "CMSAnalysis/Filters/interface/HPlusPlusGenSimSelector.hh" \\
-#include "CMSAnalysis/Filters/interface/HiggsSelector.hh" \\
+#include "CMSAnalysis/Filters/interface/DarkPhotonGenSimSelector.hh" 
+#include "CMSAnalysis/Filters/interface/HPlusPlusGenSimSelector.hh" 
+#include "CMSAnalysis/Filters/interface/HiggsSelector.hh" 
 #include "CMSAnalysis/Filters/interface/HiggsCut.hh"
 #include "CMSAnalysis/Filters/interface/HiggsMassCut.hh"
 #include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
