@@ -1,4 +1,4 @@
 QCD
-HTCut:	500-700
+HTCut:	2000-inf
 Run:	2
 Year:	2018

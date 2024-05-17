@@ -18,8 +18,10 @@ class TreeMakerModule : public AnalysisModule
         virtual void finalize() override;
 
     protected:
-        void fillTree() {tree->Fill();}
+        virtual void fillTree() {tree->Fill();}
         virtual std::vector<ParticleCollection<Particle>> getParticles() const = 0;
+        std::shared_ptr<SpecialVariableModule> getSpecialVariable() {return specialVariable;}
+        std::string getName() {return name;}
 
     private:
     std::shared_ptr<SpecialVariableModule> specialVariable;//same here
