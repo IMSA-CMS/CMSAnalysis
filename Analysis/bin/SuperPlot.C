@@ -81,8 +81,22 @@ void SuperPlot()
 	//TCanvas *canvas = plotFormatter->simple2DHist(process, "Invariant Mass", xAxisTitle, yAxisTitle);
 	//TCanvas *canvas = plotFormatter->simpleStackHist(leptonBackgrounds, "Same Sign Inv Mass", xAxisTitle, yAxisTitle);
 	//TCanvas *canvas = plotFormatter->superImposedHist(leptonBackgrounds, "MET", xAxisTitle, yAxisTitle);
-	TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "Invariant Mass", xAxisTitle, yAxisTitle, massTarget, true);
 	
+	/*
+	std::shared_ptr<FullAnalysis> analysis = DarkPhotonAnalysis;
+	std::string channelName;
+	std::string histvariable = "Invariant Mass";
+	std::shared_ptr<Channel> processes = 0;
+	processes = channels.at(0);
+	std::vector<std::string> backgroundNames = processes->getNamesWithLabel("background");
+	std::vector<TH1*> backgroundHists;
+	for(std::string name : backgroundNames) {
+        backgroundHists.push_back(analysis->getDecayHist(histvariable, name, massTarget, true, channelName));
+	}
+	*/
+
+	TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "Invariant Mass", xAxisTitle, yAxisTitle, massTarget, true);
+	//TCanvas *canvas = plotFormatter->simpleAnalysisHist(backgroundHists, );
 
 	//Uncomment to save a png picture in your bin folder
 	canvas->SaveAs("SuperPlot.png");
