@@ -19,6 +19,7 @@ namespace Utility
   int gcf(std::vector<int> nums);
   // Given the name of a file that should be in bin/textfiles, gives the full path so it can be easily located
   std::string getFullPath(std::string fileName);
+  std::string getBasePath();
 }
 
 inline bool Utility::comparator(std::string a, std::string b) {return a<b;}
