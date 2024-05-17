@@ -51,7 +51,7 @@ class PlotFormatter
             
         //Complete Signal/Background plot
         TCanvas* completePlot(std::shared_ptr<FullAnalysis> analysis, std::string histvariable,
-            TString xAxisTitle, TString yAxisTitle, double massTarget, bool scaleTodata, std::string channelName = "");
+            TString xAxisTitle, TString yAxisTitle, bool scaleTodata, std::string channelName = "");
 
         //Formats the canvas based on the margins
         TCanvas* makeFormat(int w, int h, float t, float b, float l, float r);

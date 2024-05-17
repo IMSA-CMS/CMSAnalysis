@@ -89,7 +89,7 @@ void JumboPlot() {
 				dataName = Utility::removeSpaces(dataType);
 			
 				fileName = "jumboPlotStorage/" + channelName + dataName + "DataMC.png";
-				TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisName, yAxisName, massTarget, true, channelName);
+				TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisName, yAxisName, true, channelName);
 				//TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisName, yAxisName, massTarget, true);
 				canvas->SaveAs(fileName.c_str());
 				plotFormatter->deleteHists();
