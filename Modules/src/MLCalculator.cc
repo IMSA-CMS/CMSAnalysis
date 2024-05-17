@@ -6,12 +6,13 @@ specialVariable(iSpecialVariable),
 fileName(iFileName),
 method(iMethod)
 {
-    
+    addRequiredModule(specialVariable);
 }
 
 void MLCalculator::initialize()
 {
-    specialVariable->addVariablesToReader(&reader);
+    //std::cout << "testing intialize" << "\n\n\n\n\n\n\n\n";
+    specialVariable->addVariablesToReader(&reader); //probably something to do with reader parameter? its not initializer in constructor
     reader.BookMVA(method, fileName);
 } 
 
