@@ -603,7 +603,7 @@ TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, std:
     return canvas;
 }
 
-TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std::string histvariable, TString xAxisTitle, TString yAxisTitle, double massTarget, bool scaleTodata, std::string channelName)
+TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std::string histvariable, TString xAxisTitle, TString yAxisTitle, bool scaleTodata, std::string channelName)
 {
     std::shared_ptr<Channel> processes = 0;
 

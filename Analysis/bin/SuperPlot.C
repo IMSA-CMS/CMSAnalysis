@@ -95,7 +95,7 @@ void SuperPlot()
 	}
 	*/
 
-	TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "Invariant Mass", xAxisTitle, yAxisTitle, massTarget, true);
+	TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "Invariant Mass", xAxisTitle, yAxisTitle, true);
 	//TCanvas *canvas = plotFormatter->simpleAnalysisHist(backgroundHists, );
 
 	//Uncomment to save a png picture in your bin folder
