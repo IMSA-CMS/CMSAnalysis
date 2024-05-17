@@ -34,7 +34,7 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
     //for (std::string recoDecay : recoDecays){
       //  for(double massTarget : massTargets) {
             std::vector<HistVariable> histVariablesBackground;
-            histVariablesBackground.push_back(HistVariable::InvariantMass("_hists/1st Highest Lepton Jet Pt"));
+            histVariablesBackground.push_back(HistVariable::InvariantMass("High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest mu- Pt"));
             
             //cross sections should be all lowercase
             auto ttbarBackground = std::make_shared<Process>("TTBar Background", 3);
@@ -78,7 +78,7 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
            
             
                 std::vector<HistVariable> histVariablesSignal;
-                histVariablesSignal.push_back(HistVariable::InvariantMass("_hists/1st Highest Lepton Jet Pt"));                
+                histVariablesSignal.push_back(HistVariable::InvariantMass("High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest mu- Pt"));                
                 DarkPhotonSignal->addProcess(makeSignalProcess(histVariablesSignal, filePath, "darkPhotonBaselineRun2.root", "DarkPhoton", reader, massTarget, luminosity));
              
             // std::vector<std::shared_ptr<Correction>> corrections = {};
