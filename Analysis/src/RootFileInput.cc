@@ -72,8 +72,6 @@ TH1* RootFileInput::getHist(std::string histType) const
 	{
 		hist = dynamic_cast<TH1*>(file->Get(name.c_str()));
 	}
-	std::cout << "fileSource: " << fileSource << "\n";
-
 	if (!hist || hist->IsZombie())
 	{ 
 		throw std::runtime_error("File doesn't contain: " + name);
@@ -96,7 +94,6 @@ TH1* RootFileInput::getHist(std::string histType) const
 
 		delete hist;
 		delete file;
-
 		return response;
 	}
 }
