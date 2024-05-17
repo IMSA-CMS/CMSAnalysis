@@ -6,26 +6,11 @@
 #include "TROOT.h"
 #include "TSystem.h"
 
-#include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
-#include "CMSAnalysis/Filters/interface/DoubleElectronTrigger.hh"
-#include "CMSAnalysis/Filters/interface/DoubleMuonTrigger.hh"
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
-#include "CMSAnalysis/Filters/interface/LeptonFilter.hh"
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
-#include "CMSAnalysis/Histograms/interface/METHist.hh"
 #include "CMSAnalysis/Modules/interface/METModule.hh"
-#include "CMSAnalysis/Filters/interface/NLeptonsFilter.hh"
-#include "CMSAnalysis/Histograms/interface/NLeptonsHist.hh"
 #include "CMSAnalysis/Histograms/interface/SameSignInvariantMassHist.hh"
-#include "CMSAnalysis/Filters/interface/SingleElectronTrigger.hh"
-#include "CMSAnalysis/Filters/interface/SingleMuonTrigger.hh"
-#include "CMSAnalysis/Filters/interface/SnowmassCutFilter.hh"
-#include "CMSAnalysis/Filters/interface/SnowmassLeptonSelector.hh"
 #include "CMSAnalysis/Histograms/interface/Histograms.hh"
-#include "CMSAnalysis/Modules/interface/TriggerModule.hh"
-#include "CMSAnalysis/Filters/interface/TripleMuonTrigger.hh"
-#include "CMSAnalysis/Histograms/interface/TwoInvariantMassesHist.hh"
-#include "CMSAnalysis/Filters/interface/BJetFilter.hh"
 
 #include "CMSAnalysis/Histograms/interface/GenSimDeltaRHist.hh"
 #include "CMSAnalysis/Modules/interface/GenSimEventDumpModule.hh"
@@ -38,8 +23,6 @@
 #include "CMSAnalysis/Filters/interface/HiggsCut.hh"
 #include "CMSAnalysis/Filters/interface/HiggsMassCut.hh"
 #include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
-#include "CMSAnalysis/Modules/interface/HiggsLeptonEfficiency.hh"
-#include "CMSAnalysis/Modules/interface/HiggsCombineStripModule.hh"
 
 
 using std::make_shared;
