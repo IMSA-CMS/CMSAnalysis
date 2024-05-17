@@ -38,46 +38,46 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
             
             //cross sections should be all lowercase
             auto ttbarBackground = std::make_shared<Process>("TTBar Background", 2);
-            ttbarBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTbar_Boson_NA_Decay_LL_Run_2.root", "ttbar_lep", reader, massTarget, luminosity));
-            ttbarBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTbar_Boson_W_Decay_L_Run_2.root", "TTW", reader, massTarget, luminosity));
-            ttbarBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTbar_Boson_Z_Decay_LL_Run_2.root", "TTZ", reader, massTarget, luminosity));
+            ttbarBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTbar_Boson_NA_Decay_LL_Run_2.root", "ttbar_lep", reader, luminosity));
+            ttbarBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTbar_Boson_W_Decay_L_Run_2.root", "TTW", reader, luminosity));
+            ttbarBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTbar_Boson_Z_Decay_LL_Run_2.root", "TTZ", reader, luminosity));
             
             auto zzBackground = std::make_shared<Process>("ZZ Background", 4);
-            //zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_4L_Run_2.root", "ZZTo4L", reader, massTarget, luminosity));
-            zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_2e2mu_Run_2.root", "ZZTo2e2mu", reader, massTarget, luminosity));
-            zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_2e2tau_Run_2.root", "ZZTo2e2tau", reader, massTarget, luminosity));
-            zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_2mu2tau_Run_2.root", "ZZTo2mu2tau", reader, massTarget, luminosity));
-            zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_4e_Run_2.root", "ZZTo4e", reader, massTarget, luminosity));
-            zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_4mu_Run_2.root", "ZZTo4mu", reader, massTarget, luminosity));
-            zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_4tau_Run_2.root", "ZZTo4tau", reader, massTarget, luminosity));
+            //zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_4L_Run_2.root", "ZZTo4L", reader, luminosity));
+            zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_2e2mu_Run_2.root", "ZZTo2e2mu", reader, luminosity));
+            zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_2e2tau_Run_2.root", "ZZTo2e2tau", reader, luminosity));
+            zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_2mu2tau_Run_2.root", "ZZTo2mu2tau", reader, luminosity));
+            zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_4e_Run_2.root", "ZZTo4e", reader, luminosity));
+            zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_4mu_Run_2.root", "ZZTo4mu", reader, luminosity));
+            zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_4tau_Run_2.root", "ZZTo4tau", reader, luminosity));
 
             auto dyBackground = std::make_shared<Process>("DY Background", 3);
-            dyBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Drell-Yan_MassCut_10-50_Run_2.root", "dy10to50", reader, massTarget, luminosity));
-            dyBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Drell-Yan_MassCut_50-inf_Run_2.root", "dy50toInf", reader, massTarget, luminosity));
+            dyBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Drell-Yan_MassCut_10-50_Run_2.root", "dy10to50", reader, luminosity));
+            dyBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Drell-Yan_MassCut_50-inf_Run_2.root", "dy50toInf", reader, luminosity));
             
             auto multiBosonBackground = std::make_shared<Process>("MultiBoson Background", 6);
-            multiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "MultiBoson_Bosons_WW_Decay_2L_Run_2.root", "WWTo2L2Nu", reader, massTarget, luminosity));
-            multiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "MultiBoson_Bosons_WWW_Decay_NA_Run_2.root", "WWW", reader, massTarget, luminosity));
-            multiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "MultiBoson_Bosons_WWZJets_Decay_4L_Run_2.root", "WWZ", reader, massTarget, luminosity));
-            multiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "MultiBoson_Bosons_WZ_Decay_3L_Run_2.root", "WZTo3LNu", reader, massTarget, luminosity));
-            multiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "MultiBoson_Bosons_WZZ_Decay_NA_Run_2.root", "WWZ", reader, massTarget, luminosity));
-            multiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "MultiBoson_Bosons_ZZZ_Decay_NA_Run_2.root", "ZZZ", reader, massTarget, luminosity));
+            multiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "MultiBoson_Bosons_WW_Decay_2L_Run_2.root", "WWTo2L2Nu", reader, luminosity));
+            multiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "MultiBoson_Bosons_WWW_Decay_NA_Run_2.root", "WWW", reader, luminosity));
+            multiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "MultiBoson_Bosons_WWZJets_Decay_4L_Run_2.root", "WWZ", reader, luminosity));
+            multiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "MultiBoson_Bosons_WZ_Decay_3L_Run_2.root", "WZTo3LNu", reader, luminosity));
+            multiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "MultiBoson_Bosons_WZZ_Decay_NA_Run_2.root", "WWZ", reader, luminosity));
+            multiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "MultiBoson_Bosons_ZZZ_Decay_NA_Run_2.root", "ZZZ", reader, luminosity));
             
             auto DarkPhotonSignal = std::make_shared<Process>("Dark Photon Signal", 5);
            
             
                 std::vector<HistVariable> histVariablesSignal;
                 histVariablesSignal.push_back(HistVariable::InvariantMass("_hists/1st Highest Lepton Jet Pt"));                
-                DarkPhotonSignal->addProcess(makeBasicProcess(histVariablesSignal, filePath, "darkPhotonBaselineRun2.root", "DarkPhoton", reader, massTarget, luminosity));
+                DarkPhotonSignal->addProcess(makeBasicProcess(histVariablesSignal, filePath, "darkPhotonBaselineRun2.root", "DarkPhoton", reader, luminosity));
              
             // std::vector<std::shared_ptr<Correction>> corrections = {};
             // auto correction = std::make_shared<ConstantCorrection>(2);
             //corrections.push_back(correction);
 
             auto DarkPhotonData = std::make_shared<Process>("Data", 1);
-            //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "SingleMuonRun2017B-UL2017_MiniAODv2-v1.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
-            //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "SingleElectronRun2017B-UL2017_MiniAODv2-v1.root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
-            DarkPhotonData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018A.root", "LeptonJet" + std::to_string((int) massTarget), reader, massTarget, luminosity));
+            //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "SingleMuonRun2017B-UL2017_MiniAODv2-v1.root", "higgs4l" + std::to_string((int) massTarget), reader, luminosity));
+            //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "SingleElectronRun2017B-UL2017_MiniAODv2-v1.root", "higgs4l" + std::to_string((int) massTarget), reader, luminosity));
+            DarkPhotonData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018A.root", "LeptonJet" + std::to_string((int) massTarget), reader, luminosity));
 
             std::vector<std::shared_ptr<Process>> backgroundProcesses = {ttbarBackground, zzBackground, dyBackground, multiBosonBackground, DarkPhotonSignal, DarkPhotonData};
             
