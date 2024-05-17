@@ -50,22 +50,53 @@ void HistogramScaleFit()
 {
     // const std::string filePath = "/uscms/home/cobriend/analysis/CMSSW_12_4_3/src/CMSAnalysis/Analysis/bin/";
 
-    // Simulated data (histogram to scale) comes first, real data (histogram to fit to) comes second
-    std::vector<std::string> files = {"noCutSignal.root", "noCutSignal.root"};
-    std::vector<std::string> hists = {"1st Highest Lepton Jet Lepton Jet Mass Zoom", "1st Highest Lepton Jet Lepton Jet Mass Zoom"};
+    // // Monte Carlo (histogram to scale) comes first, real data (histogram to fit to) comes second
+    // std::vector<std::string> files = {"noCutSignal.root", "noCutSignal.root"};
+    // std::vector<std::string> hists = {"1st Highest Lepton Jet Lepton Jet Mass Zoom", "1st Highest Lepton Jet Lepton Jet Mass Zoom"};
 
-    // Run on Drell-Yan, fit it to data (muon trigger)
+    // // Change variable type here too (HistVariable::_)
+    // std::vector<HistVariable> scaleVar = {HistVariable::InvariantMass(hists.at(0))};
+    // std::vector<HistVariable> fitVar = {HistVariable::InvariantMass(hists.at(1))};
 
+    // RootFileInput scaleFile(files.at(0), scaleVar);
+    // RootFileInput fitFile(files.at(1), fitVar);
 
-    // Change variables here too
-    std::vector<HistVariable> scaleVar = {HistVariable::InvariantMass(hists.at(0))};
-    std::vector<HistVariable> fitVar = {HistVariable::InvariantMass(hists.at(1))};
+    // TH1* scaleHist = scaleFile.getHistFromName(hists.at(0));
+    // TH1* fitHist = fitFile.getHistFromName(hists.at(1));
 
-    RootFileInput scaleFile(files.at(0), scaleVar);
-    RootFileInput fitFile(files.at(1), fitVar);
+    // MAKE FUNCTIONALITY TO FIT QCD ESTIMATE TO DIFFERENCE HISTOGRAM (DIFF BETWEEN DATA AND SUM OF DRELL YAN + ZZ-BAR AND OTHER BACKGROUNDS)
+    std::string scaleFile = "QCD700-1000.root";
+    std::string dataFile = "dataFile.root";
+    std::vector<std::string> subtractFromDataFiles = {"someDrellYanFile.root", "someZZBarFile.root", "someOtherBackground.root"};
 
-    TH1* scaleHist = scaleFile.getHistFromName(hists.at(0));
-    TH1* fitHist = fitFile.getHistFromName(hists.at(1));
+    std::string hist = "1st Highest Lepton Jet Lepton Jet Mass Zoom";
+
+    // Change variable type here too (HistVariable::_)
+    std::vector<HistVariable> var = {HistVariable::InvariantMass(hist)};
+
+    RootFileInput scaleFileInput(scaleFile, var);
+    RootFileInput dataFileInput(dataFile, var);
+    std::vector<RootFileInput> subtractFromDataFilesInput;
+    for (auto str : subtractFromDataFiles)
+    {
+        RootFileInput input(str, var);
+        subtractFromDataFilesInput.push_back(input);
+    }
+
+    TH1* scaleHist = scaleFileInput.getHistFromName(hist);
+    TH1* dataHist = dataFileInput.getHistFromName(hist);
+    std::vector<TH1*> subtractFromDataHists;
+    for (auto input : subtractFromDataFilesInput)
+    {
+        TH1* hist1 = input.getHistFromName(hist);
+        subtractFromDataHists.push_back(hist1);
+    }
+
+    TH1* fitHist(dataHist);
+    for (auto hist1 : subtractFromDataHists)
+    {
+        fitHist->Add(hist1, -1);
+    }
 
     fitHistogram(scaleHist, fitHist, 0, 10, 100000);
 }
