@@ -141,8 +141,6 @@ TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction)
 	f1->SetParLimits(3,1,10);
 	f1->SetParLimits(4,400,1600);
 	f1->FixParameter(6,norm);
-	// std::cout << "2:6\n";
-
 
 	// if(name.substr(8,8) == "eee_eeee" || name.substr(9,8) == "eee_eeee"){
 	// 	std::cout<<"EXCEPTION EXCEPTED\n";
@@ -157,13 +155,13 @@ TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction)
 	// 		f1->SetParLimits(6,3,20);
 	// 	}
 	// }
-	
 	f1->SetRange(0, 2000);
 	f1->SetLineColor(kRed);
 	TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
 	// std::cout << "2:7\n";
 	
 	TFitResultPtr results = histogram->Fit(f1, "SEB");
+	f1->SetParError(6, norm / (sqrt(histogram->GetEntries())));
 	// std::cout << "2:8\n";
 
 	gStyle->SetOptFit(111111);
@@ -172,7 +170,12 @@ TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction)
 	TPaveStats *st = (TPaveStats*)histogram->FindObject("stats");
 	st->SetX1NDC(0.1);
 	st->SetX2NDC(0.5);
-	//hist->GetXaxis()->SetRange(mass-450, mass + 350);
+	// histogram->GetXaxis()->SetRange(900, 1100);
+    // histogram->SetTitle(("H++ Monte Carlo Invariant Mass Distribution at 1100 GeV for " + fitFunction.getName().substr(5, 4)).c_str());
+    // histogram->GetXaxis()->SetTitle("Same Sign Lepton Pair Invariant  Mass (GeV/c^2)");
+    // histogram->GetYaxis()->SetTitle("Number of Events");
+    // histogram->GetYaxis()->SetTitle("Number of Events");
+
 	// c1->SaveAs(Graphname.c_str());
 	// c1->Close();
 
@@ -241,7 +244,7 @@ std::vector<ParameterizationData> Fitter::getParameterData(std::unordered_map<st
 
 FitFunction Fitter::parameterizeFunction(ParameterizationData& parameterData)
 {
-
+	std::string in;
 	TCanvas* canvas = new TCanvas(parameterData.name.c_str(), parameterData.name.c_str(),0,0,2000,500);
 	auto graph = new TGraphErrors(parameterData.x.size(), parameterData.x.data(), parameterData.y.data(), parameterData.zero.data(), parameterData.error.data());
 	// std::cout << parameterData.name << '\n';
