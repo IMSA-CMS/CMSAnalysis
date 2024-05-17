@@ -704,6 +704,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
 
     //TH1* histLoop;
     //Draws the histogram with more events first (bigger axis)
+
     int xAxisMin = std::pow(1, -5);
     if(first == 0) {
         for(const auto&& obj2 : *background->GetHists()) {
@@ -830,10 +831,10 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     bottomPad->Draw();
     bottomPad->cd();
 
-    double x[data->GetNbinsX()];
-    double y[data->GetNbinsX()];
-    double xerror2[data->GetNbinsX()];
-    double yerror2[data->GetNbinsX()];
+    //double x[data->GetNbinsX()];
+    //double y[data->GetNbinsX()];
+    //double xerror2[data->GetNbinsX()];
+    //double yerror2[data->GetNbinsX()];
 
     
     double* x = nullptr;
@@ -916,6 +917,25 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     canvas->Update();
     return canvas;
 }
+
+/*
+void PlotFormatter::DrawOrder(int firstBin, int numberBinsData, int lowerDataIntegralLimit, float& dataIntegral, float& backgroundIntegral, float& scaleFacor)
+{
+    for (auto backgroundHist : backgroundHists)
+    {
+        int numberBinsBackground = backgroundHist->GetNbinsX();
+        int lowerBackgroundIntegralLimit = firstBin*(static_cast<double>(numberBinsBackground)/upperMasslimit);
+        backgroundIntegral += backgroundHist->Integral(lowerBackgroundIntegralLimit, numberBinsBackground);
+    }
+    if (scaleTodata == true)
+    {
+        for (auto backgroundHist : backgroundHists)
+        {
+            backgroundHist->Scale(scaleFactor);
+        }
+    }
+}
+*/
 
 void PlotFormatter::GetBottomPadValues(TH1* data, THStack* background, double*& x, double*& y, double*& xerror2, double*& yerror2)
 {
