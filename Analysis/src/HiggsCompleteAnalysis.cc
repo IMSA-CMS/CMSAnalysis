@@ -138,7 +138,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
 
         auto leptonProcesses = std::make_shared<Channel>(recoDecay, processes);
         //leptonBackgrounds->cleanProcesses();
-        getChannels().push_back(leptonProcesses);
+        getChannelsProtected().push_back(leptonProcesses);
     }
 }
 

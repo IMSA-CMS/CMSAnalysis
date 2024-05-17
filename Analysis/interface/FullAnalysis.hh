@@ -30,8 +30,11 @@ class FullAnalysis
         TH1* getHist(std::string histType, std::string processName, bool scaleToExpected = false, std::string channelName = "") const;
         // virtual bool checkChannelName(std::string channelName, double massTarget) const = 0;
         //Process makers for easy use when loading channels
-        static SingleProcess makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, int massTarget, double luminosity, std::vector<std::shared_ptr<Correction>> corrections = {});
+        static SingleProcess makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, double luminosity, std::vector<std::shared_ptr<Correction>> corrections = {});
 
+    protected:
+        std::vector<std::shared_ptr<Channel>>& getChannelsProtected() {return channels;}
+        
     private:
         std::vector<std::shared_ptr<Channel>> channels;
 

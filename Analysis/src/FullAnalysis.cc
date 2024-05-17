@@ -35,7 +35,7 @@ std::vector<TH1 *> FullAnalysis::getHistograms(const std::string &histType, cons
 }
 
 // Use this as long as you don't need to use scaleToExpected or don't have fit histograms.
-SingleProcess FullAnalysis::makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, int massTarget, double luminosity, std::vector<std::shared_ptr<Correction>> corrections)
+SingleProcess FullAnalysis::makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, double luminosity, std::vector<std::shared_ptr<Correction>> corrections)
 {
     auto inputFile = std::make_shared<RootFileInput>(filePathway + fileName, histVariables);
     auto histEstimator = std::make_shared<SimpleEstimator>();
