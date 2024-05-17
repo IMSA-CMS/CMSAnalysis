@@ -62,8 +62,10 @@ class PlotFormatter
 
         TLegend* GetLegend(THStack* background, std::shared_ptr<Channel> processes, TH1* data);
         
-        void GraphFormat(TGraph*& graph, TString xAxisTitle, float xLabelSize, float xTitleSize, float yLableSize, float yTitleSize, float markerSize, float maximum, float minimum);
+        void GraphFormat(TGraph*& graph, TString xAxisTitle, float xLabelSize, float xTitleSize, float yLableSize, float yTitleSize, float markerSize, float maximum, float minimum, float firstBin, float upperMasslimit);
         
+        void GetBottomPadValues(TH1* data, THStack* background, double*& x, double*& y, double*& xerror2, double*& yerror2);
+
     private:
         bool drawLogo;
         TString extraText;
