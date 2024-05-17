@@ -53,7 +53,7 @@ void Test() {
     canvas->SetTickx(0);
     canvas->SetTicky(0);
 
-    //TH1* hist = analysis->getDecayHist("Same Sign Inv Mass", "ZZ Background", 900, false);
+    //TH1* hist = analysis->getHist("Same Sign Inv Mass", "ZZ Background", 900, false);
     
     //Choices for plotting are GenSim Same Sign Inv Mass, Same Sign Inv Mass, Invariant Mass, GenSim pT, pT, Eta, Phi, MET (caps matter)
     std::string histvariable = "Invariant Mass";
@@ -64,11 +64,11 @@ void Test() {
     std::vector<std::string> backgroundNames = processes->getNamesWithLabel("background");
     std::vector<std::string> signalNames = processes->getNamesWithLabel("signal");
     std::vector<std::string> dataNames = processes->getNamesWithLabel("data");
-    TH1* data = analysis->getDecayHist(histvariable, dataNames.at(0), massTarget, false);
-    TH1* signal = analysis->getDecayHist(histvariable, signalNames.at(0), massTarget, true);
+    TH1* data = analysis->getHist(histvariable, dataNames.at(0), massTarget, false);
+    TH1* signal = analysis->getHist(histvariable, signalNames.at(0), massTarget, true);
     std::vector<TH1*> backgroundHists;
     for(std::string name : backgroundNames) {
-        backgroundHists.push_back(analysis->getDecayHist(histvariable, name, massTarget, true));
+        backgroundHists.push_back(analysis->getHist(histvariable, name, massTarget, true));
     }
     THStack* background = new THStack("background", "background");
     for(TH1* backgroundHist : backgroundHists) {

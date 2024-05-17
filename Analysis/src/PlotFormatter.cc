@@ -494,9 +494,14 @@ TCanvas* PlotFormatter::noScaleSimpleSuperImposedHist(std::vector<TH1*> hists, s
     return canvas;
 }
 
-TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, std::string histvariable, bool scaleToExpected, TString xAxisTitle, TString yAxisTitle) {
+TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, std::string histvariable, bool scaleToExpected, TString xAxisTitle, TString yAxisTitle) 
+{
     TH1* hist = process->getHist(histvariable, scaleToExpected);
- 
+    return simple1DHist(hist, xAxisTitle, yAxisTitle);
+}
+
+TCanvas* PlotFormatter::simple1DHist(TH1* hist, TString xAxisTitle, TString yAxisTitle)
+{
     //Setting size and margins
     //int width = 800;
     //int height = 600;
@@ -509,7 +514,9 @@ TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, std::stri
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
 
     //Draws the histogram
+    gStyle->SetOptStat(0);
     hist->Draw("HIST");
+    //hist->SetMaximum(100);
     histVector.push_back(hist);
  
     //Change axis and graph titles here
@@ -615,11 +622,11 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     std::vector<std::string> backgroundNames = processes->getNamesWithLabel("background");
     std::vector<std::string> signalNames = processes->getNamesWithLabel("signal");
     std::vector<std::string> dataNames = processes->getNamesWithLabel("data");
-    data = analysis->getDecayHist(histvariable, dataNames.at(0), massTarget, false, channelName);
-    signal = analysis->getDecayHist(histvariable, signalNames.at(0), massTarget, true, channelName);
+    data = analysis->getHist(histvariable, dataNames.at(0), false, channelName);
+    signal = analysis->getHist(histvariable, signalNames.at(0), true, channelName);
     std::vector<TH1*> backgroundHists;
     for(std::string name : backgroundNames) {
-        backgroundHists.push_back(analysis->getDecayHist(histvariable, name, massTarget, true, channelName));
+        backgroundHists.push_back(analysis->getHist(histvariable, name, true, channelName));
     }
 
 //commented out integral code
