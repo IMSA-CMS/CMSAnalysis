@@ -702,7 +702,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     topPad->Draw();
     topPad->cd();
 
-    TH1* histLoop;
+    //TH1* histLoop;
     //Draws the histogram with more events first (bigger axis)
     int xAxisMin = std::pow(1, -5);
     if(first == 0) {
@@ -834,8 +834,15 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     double y[data->GetNbinsX()];
     double xerror2[data->GetNbinsX()];
     double yerror2[data->GetNbinsX()];
-    GetBottomPad(x, y, xerror2, yerror2);
+
     /*
+    double* x = nullptr;
+    double* y = nullptr;
+    double* xerror2 = nullptr;
+    double* yerror2 = nullptr;
+    GetBottomPadValues(data, background, x, y, xerror2, yerror2);
+    */
+    TH1* histLoop;
     double backgroundHistBinMax = 0;
     double value;
     for(int i = 0; i < data->GetNbinsX(); i++) {
@@ -871,10 +878,10 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
             yerror2[i] = 0;
         }
     }
-    */
+    
 
     auto graph = new TGraph(data->GetNbinsX(), x, y);
-    GraphFormat(graph, xAxisTitle, 0.08, 0.04, 0.06, 0.07, 0.5, 1, -1);
+    GraphFormat(graph, xAxisTitle, 0.08, 0.04, 0.06, 0.07, 0.5, 1, -1, firstBin, upperMasslimit);
     graph->Draw("AP SAME");
 
     auto errorgraph2 = new TGraphErrors(data->GetNbinsX(), x, y, xerror2, yerror2);
@@ -909,8 +916,13 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     return canvas;
 }
 
-void GetBottomPadValues(ref double[] x, ref double[] y, ref double[] xerror2, ref double[] yerror2)
+void PlotFormatter::GetBottomPadValues(TH1* data, THStack* background, double*& x, double*& y, double*& xerror2, double*& yerror2)
 {
+    x = new double[data->GetNbinsX()];
+    y = new double[data->GetNbinsX()];
+    xerror2 = new double[data->GetNbinsX()];
+    yerror2 = new double[data->GetNbinsX()];
+    TH1* histLoop;
     double backgroundHistBinMax = 0;
     double value;
     for(int i = 0; i < data->GetNbinsX(); i++) {
@@ -949,7 +961,7 @@ void GetBottomPadValues(ref double[] x, ref double[] y, ref double[] xerror2, re
 }
 
 void PlotFormatter::GraphFormat(TGraph*& graph, TString xAxisTitle, float xLabelSize, float xTitleSize, float yLableSize, 
-float yTitleSize, float markerSize, float maximum, float minimum, float firstBin, float upperMassLimit)
+float yTitleSize, float markerSize, float maximum, float minimum, float firstBin, float upperMasslimit)
 {
     graph->SetTitle(";" + xAxisTitle +";(Data - Bkg) / Bkg");
     graph->GetXaxis()->SetLabelSize(xLabelSize);
