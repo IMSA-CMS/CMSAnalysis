@@ -30,6 +30,14 @@
 #include <vector>
 #include <cmath> 
 
+int width = 800;
+int height = 600;
+ 
+float top = 0.08*height;
+float bottom = 0.12*height;
+float left = 0.12*width;
+float right = 0.04*width;
+
 TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes, std::string histvariable, TString xAxisTitle, TString yAxisTitle)
 {
     THStack* background = processes->getStack(histvariable, "background", true);
@@ -48,13 +56,13 @@ TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes
     }
  
     //Setting size and margins
-    int width = 800;
-    int height = 600;
+    //int width = 800;
+    //int height = 600;
  
-    float top = 0.08*height;
-    float bottom = 0.12*height;
-    float left = 0.12*width;
-    float right = 0.04*width;
+    //float top = 0.08*height;
+    //float bottom = 0.12*height;
+    //float left = 0.12*width;
+    //float right = 0.04*width;
 
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
 
@@ -147,13 +155,13 @@ TCanvas* PlotFormatter::superImposedHist(std::shared_ptr<Channel> processes, std
     }
  
     //Setting size and margins
-    int width = 800;
-    int height = 600;
+    //int width = 800;
+    //int height = 600;
  
-    float top = 0.08*height;
-    float bottom = 0.12*height;
-    float left = 0.12*width;
-    float right = 0.04*width;
+    //float top = 0.08*height;
+    //float bottom = 0.12*height;
+    //float left = 0.12*width;
+    //float right = 0.04*width;
 
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
 
@@ -238,13 +246,13 @@ TCanvas* PlotFormatter::simpleAnalysisHist(std::vector<TH1*> hists, std::vector<
     }
  
     //Setting size and margins
-    int width = 800;
-    int height = 600;
+    //int width = 800;
+    //int height = 600;
  
-    float top = 0.08*height;
-    float bottom = 0.12*height;
-    float left = 0.12*width;
-    float right = 0.04*width;
+    //float top = 0.08*height;
+    //float bottom = 0.12*height;
+    //float left = 0.12*width;
+    //float right = 0.04*width;
 
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
 
@@ -331,13 +339,13 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
 	    count++;
     }
     //Setting size and margins
-    int width = 800;
-    int height = 600;
+    //int width = 800;
+    //int height = 600;
  
-    float top = 0.08*height;
-    float bottom = 0.12*height;
-    float left = 0.12*width;
-    float right = 0.04*width;
+    //float top = 0.08*height;
+    //float bottom = 0.12*height;
+    //float left = 0.12*width;
+    //float right = 0.04*width;
 
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
     gStyle->SetOptStat(0);
@@ -431,13 +439,13 @@ TCanvas* PlotFormatter::noScaleSimpleSuperImposedHist(std::vector<TH1*> hists, s
     }
 
     //Setting size and margins
-    int width = 800;
-    int height = 600;
+    //int width = 800;
+    //int height = 600;
  
-    float top = 0.08*height;
-    float bottom = 0.12*height;
-    float left = 0.12*width;
-    float right = 0.04*width;
+    //float top = 0.08*height;
+    //float bottom = 0.12*height;
+    //float left = 0.12*width;
+    //float right = 0.04*width;
 
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
 
@@ -490,13 +498,13 @@ TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, std::stri
     TH1* hist = process->getHist(histvariable, scaleToExpected);
  
     //Setting size and margins
-    int width = 800;
-    int height = 600;
+    //int width = 800;
+    //int height = 600;
  
-    float top = 0.08*height;
-    float bottom = 0.12*height;
-    float left = 0.12*width;
-    float right = 0.04*width;
+    //float top = 0.08*height;
+    //float bottom = 0.12*height;
+    //float left = 0.12*width;
+    //float right = 0.04*width;
 
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
 
@@ -518,13 +526,13 @@ TCanvas* PlotFormatter::simple2DHist(std::shared_ptr<Process> process, std::stri
     TH2* hist = process->get2DHist(histvariable);
  
     //Setting size and margins
-    int width = 800;
-    int height = 600;
+    //int width = 800;
+    //int height = 600;
  
-    float top = 0.08*height;
-    float bottom = 0.12*height;
-    float left = 0.12*width;
-    float right = 0.04*width;
+    //float top = 0.08*height;
+    //float bottom = 0.12*height;
+    //float left = 0.12*width;
+    //float right = 0.04*width;
 
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
 
@@ -546,13 +554,13 @@ TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, std:
     THStack* hists = processes->getStack(histvariable, "", true);
  
     //Setting size and margins
-    int width = 800;
-    int height = 600;
+    //int width = 800;
+    //int height = 600;
  
-    float top = 0.08*height;
-    float bottom = 0.12*height;
-    float left = 0.12*width;
-    float right = 0.04*width;
+    //float top = 0.08*height;
+    //float bottom = 0.12*height;
+    //float left = 0.12*width;
+    //float right = 0.04*width;
 
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
 
@@ -567,6 +575,7 @@ TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, std:
     hist->GetYaxis()->SetTitle(yAxisTitle);
  
     //Draws the legend
+    
     auto legend = new TLegend(0.8-(right/width), 0.85-(top/height), 1-(right/width), 1-(top/height));
     legend->SetTextSize(0.02);
     int count = 0;
@@ -578,6 +587,7 @@ TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, std:
         legend->AddEntry(obj, " " + toAdd, "L");
         count++;
     }
+    
     legend->Draw();
  
     writeText(width, height, top, bottom, left, right);
@@ -596,7 +606,6 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     // mass range
     // needs to match the "xAxisRange" value in "SimpleEstimator" if using integral scaling
     double upperMasslimit = 1200;
-    
 
     //int firstBin = 0;
     int numBins = 8;
@@ -669,13 +678,13 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     }
 
     //Setting size and margins
-    int width = 800;
-    int height = 600;
+    //int width = 800;
+    //int height = 600;
  
-    float top = 0.08*height;
-    float bottom = 0.12*height;
-    float left = 0.12*width;
-    float right = 0.04*width;
+    //float top = 0.08*height;
+    //float bottom = 0.12*height;
+    //float left = 0.12*width;
+    //float right = 0.04*width;
 
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
     TPad* topPad = new TPad("pad1", "", 0, 0.25, 1, 1);
@@ -735,6 +744,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     hist->SetTitleSize(0.04, "x");
     
     //Draws the legend
+    /*
     auto legend = new TLegend(0.55 - (right/width), 0.75 - (top/height), 1 - (right/width), 1 - (top/height));
     legend->SetTextSize(0.04);
     std::string name;
@@ -753,6 +763,8 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
         legend->AddEntry(obj2, " " + toAdd, "F");
         count++;
     }
+    */
+    auto legend = GetLegend(background, processes, data);
     legend->Draw();
     topPad->Update();
     writeText(width, height, top, bottom, left, right);
@@ -815,6 +827,8 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     double y[data->GetNbinsX()];
     double xerror2[data->GetNbinsX()];
     double yerror2[data->GetNbinsX()];
+    GetBottomPad(x, y, xerror2, yerror2);
+    /*
     double backgroundHistBinMax = 0;
     double value;
     for(int i = 0; i < data->GetNbinsX(); i++) {
@@ -850,9 +864,16 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
             yerror2[i] = 0;
         }
     }
+    */
+
+    auto graph = new TGraph(data->GetNbinsX(), x, y);
+    GraphFormat(graph, xAxisTitle, 0.08, 0.04, 0.06, 0.07, 0.5, 1, -1);
+    graph->Draw("AP SAME");
 
     auto errorgraph2 = new TGraphErrors(data->GetNbinsX(), x, y, xerror2, yerror2);
-
+    errorgraph2->SetFillColor(16);
+    errorgraph2->Draw("P SAME E0");
+    /*
     auto graph = new TGraph(data->GetNbinsX(), x, y);
     //sets an empty global title; xAxis' title; yAxis' title
     graph->SetTitle(";" + xAxisTitle +";(Data - Bkg) / Bkg");
@@ -864,19 +885,76 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     graph->SetMarkerStyle(kFullDotLarge);
     graph->SetMaximum(1);   
     graph->SetMinimum(-1);
-    TAxis *axis = graph->GetXaxis();
+    */
+    
+    //TAxis *axis = graph->GetXaxis();
     //axis->SetLimits(0, data->GetNbinsX() * data->GetBinWidth(data->GetNbinsX()));
-    axis->SetLimits(firstBin, upperMasslimit);
-    graph->Draw("AP SAME");
-    errorgraph2->SetFillColor(16);
+    //axis->SetLimits(firstBin, upperMasslimit);
+    //graph->Draw("AP SAME");
+    //errorgraph2->SetFillColor(16);
     //errorgraph2->Draw("P SAME E3");
-    errorgraph2->Draw("P SAME E0");
+    //errorgraph2->Draw("P SAME E0");
 
     bottomPad->Update();
     bottomPad->Modified();
 
     canvas->Update();
     return canvas;
+}
+
+void GetBottomPadValues(ref double[] x, ref double[] y, ref double[] xerror2, ref double[] yerror2)
+{
+    double backgroundHistBinMax = 0;
+    double value;
+    for(int i = 0; i < data->GetNbinsX(); i++) {
+        double total = 0;
+        x[i] = i * data->GetBinWidth(0);
+        for(const auto&& obj : *(background->GetHists())) { //How you iterate over a TList
+            histLoop = dynamic_cast<TH1*>(obj);
+            total+= histLoop->GetBinContent(i);
+        }
+        xerror2[i] = 0;
+        if(total != 0) {
+            y[i] = (data->GetBinContent(i) - total) / total;
+            backgroundHistBinMax = 0;
+            for(const auto&& obj2 : *background->GetHists()) {
+                TH1* backgroundHist = dynamic_cast<TH1*>(obj2);
+                value = backgroundHist->GetBinContent(i);
+                if (value > backgroundHistBinMax)
+                {
+                    backgroundHistBinMax = value;
+                }
+            }
+            if (backgroundHistBinMax != 0)
+            {
+                yerror2[i] = (data->GetBinError(i) / backgroundHistBinMax);
+            }
+            else
+            {
+                yerror2[i] = 0;
+            }
+        }
+        else {
+            y[i] = 0;
+            yerror2[i] = 0;
+        }
+    }
+}
+
+void PlotFormatter::GraphFormat(TGraph*& graph, TString xAxisTitle, float xLabelSize, float xTitleSize, float yLableSize, 
+float yTitleSize, float markerSize, float maximum, float minimum, float firstBin, float upperMassLimit)
+{
+    graph->SetTitle(";" + xAxisTitle +";(Data - Bkg) / Bkg");
+    graph->GetXaxis()->SetLabelSize(xLabelSize);
+    graph->GetXaxis()->SetTitleSize(xTitleSize);
+    graph->GetYaxis()->SetLabelSize(yLableSize);
+    graph->GetYaxis()->SetTitleSize(yTitleSize);
+    graph->SetMarkerSize(markerSize);
+    graph->SetMarkerStyle(kFullDotLarge);
+    graph->SetMaximum(maximum);   
+    graph->SetMinimum(minimum);
+    TAxis *axis = graph->GetXaxis();
+    axis->SetLimits(firstBin, upperMasslimit);
 }
 
 TCanvas* PlotFormatter::makeFormat(int w, int h, float t, float b, float l, float r) {
@@ -967,3 +1045,48 @@ void PlotFormatter::deleteHists() {
     stackVector.clear();
     th2Vector.clear();
 }
+
+TLegend* PlotFormatter::GetLegend(THStack* background, std::shared_ptr<Channel> processes, TH1* data)
+{
+    //Draws the legend
+    auto legend = new TLegend(0.55 - (right/width), 0.75 - (top/height), 1 - (right/width), 1 - (top/height));
+    legend->SetTextSize(0.04);
+    std::string name;
+    TString toAdd;
+    name = processes->getNamesWithLabel("data").at(0); 
+    toAdd = name;
+    legend->AddEntry(data, " " + toAdd, "L");
+    //name = processes->getNamesWithLabel("signal").at(0); 
+    //toAdd = name;
+    //legend->AddEntry(signal, " " + toAdd, "F");
+    int count = 0;
+    for(const auto&& obj2 : *background->GetHists()) {
+        std::cout << "count";
+        name = processes->getNamesWithLabel("background").at(count);
+        toAdd = name;
+        legend->AddEntry(obj2, " " + toAdd, "F");
+        count++;
+    }
+    return legend;
+}
+
+/*
+TLegend* PlotFormatter::GetLegend(std::vector<TH1*> hists, std::vector<TString> names)
+{
+    //Draws the legend
+    auto legend = new TLegend(0.8-(right/width), 0.85-(top/height), 1-(right/width), 1-(top/height));
+    legend->SetTextSize(0.02);
+    count = 0;
+    std::string name;
+    TString toAdd;
+    for(TH1* hist : hists) {
+        name = names.at(count); 
+        toAdd = name;
+        legend->AddEntry(hist, " " + toAdd, "L");
+        count++;
+    }
+    return legend;
+}
+*/
+
+

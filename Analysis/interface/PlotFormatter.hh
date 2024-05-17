@@ -12,6 +12,7 @@
 #include <vector>
 #include "TH1.h"
 #include "TH2.h"
+#include "TGraph.h"
 
 class PlotFormatter
 {
@@ -56,6 +57,11 @@ class PlotFormatter
         void writeText(int w, int h, float t, float b, float l, float r);
         //Deletes all hist pointers made with the PlotFormatter
         void deleteHists();
+
+        TLegend* GetLegend(THStack* background, std::shared_ptr<Channel> processes, TH1* data);
+        
+        void GraphFormat(TGraph*& graph, TString xAxisTitle, float xLabelSize, float xTitleSize, float yLableSize, float yTitleSize, float markerSize, float maximum, float minimum);
+        
     private:
         bool drawLogo;
         TString extraText;
