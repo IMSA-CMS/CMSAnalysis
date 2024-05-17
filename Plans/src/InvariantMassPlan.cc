@@ -3,24 +3,11 @@
 #include <iostream>
 #include <memory>
 
-#include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
 #include "CMSAnalysis/Histograms/interface/Histograms.hh"
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
-#include "CMSAnalysis/Modules/interface/MatchingModule.hh"
-#include "CMSAnalysis/Filters/interface/MassFilter.hh"
-#include "CMSAnalysis/Filters/interface/BarrelStateFilter.hh"
-#include "CMSAnalysis/Filters/interface/MassBinFilter.hh"
-#include "CMSAnalysis/Modules/interface/ResolutionModule.hh"
 #include "CMSAnalysis/Histograms/interface/SameSignInvariantMassHist.hh"
-#include "CMSAnalysis/Filters/interface/NLeptonsFilter.hh"
-#include "CMSAnalysis/Filters/interface/TriggerFilter.hh"
 #include "CMSAnalysis/Filters/interface/SameSignInvariantMassFilter.hh"
-#include "CMSAnalysis/Modules/interface/SimTrigger.hh"
-#include "CMSAnalysis/Modules/interface/TriggerSimModule.hh"
-#include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
 #include "CMSAnalysis/Modules/interface/RecoGenSimComparisonModule.hh"
-#include "CMSAnalysis/Modules/interface/EventModule.hh"
-#include "CMSAnalysis/Filters/interface/PileupFilter.hh"
 #include "CMSAnalysis/Histograms/interface/PhotonElectronInvariantMassHist.hh"
 
 using std::make_shared;
