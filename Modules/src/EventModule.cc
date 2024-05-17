@@ -97,7 +97,7 @@ bool EventModule::process ()
         std::cerr << "Exception caught: " << e.what() << std::endl;
     }
 
-    std::cout << "end\n";
+    //std::cout << "end\n";
 
     auto electronCollection = std::make_shared<ParticleCollection<Particle>>(event.getElectrons());
 
