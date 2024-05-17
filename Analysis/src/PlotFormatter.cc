@@ -603,8 +603,8 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     THStack* background;
     // mass range
     // needs to match the "xAxisRange" value in "SimpleEstimator" if using integral scaling
-    double upperMasslimit = 1200;
-    
+    //double upperMasslimit = 1200;
+    double upperMasslimit = 2000;
 
     //int firstBin = 0;
     int numBins = 5;
@@ -655,11 +655,14 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
         backgroundHist->Rebin(numBins);
         background->Add(backgroundHist);
     }
+    signal->Scale(std::pow(10, 6));
     signal->Rebin(numBins);
     data->Rebin(numBins);   
 
     signal->SetLineColor(6);
 	signal->SetFillColor(6);
+    signal->SetMarkerStyle(8);
+    signal->SetMarkerSize(0.5);
 
     data->SetLineColor(kBlack);
     data->SetFillColor(kWhite);
@@ -711,10 +714,13 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
         stackVector.push_back(background);  
     }
     else if(first == 1) {
-        signal->SetLineColor(kBlack);
+        //signal->SetLineColor(kBlack);
+        signal->SetLineColor(6);
+	    signal->SetFillColor(0);
         signal->SetLineWidth(2);
         signal->SetMinimum(xAxisMin);
         //signal->Draw("HIST");
+        signal->Draw("HIST");
         histVector.push_back(signal);
        // signal->GetXaxis()->SetLimits(firstBin, upperMasslimit);
     }
@@ -727,7 +733,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
 
     TH1* hist;
     if(first == 0) {
-        std::cout << "check 1";
+        //std::cout << "check 1" << "\n";
         hist = background->GetHistogram();
     }
     else if (first == 1){
@@ -752,12 +758,12 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     name = processes->getNamesWithLabel("data").at(0); 
     toAdd = name;
     legend->AddEntry(data, " " + toAdd, "L");
-    //name = processes->getNamesWithLabel("signal").at(0); 
+    name = processes->getNamesWithLabel("signal").at(0); 
     //toAdd = name;
-    //legend->AddEntry(signal, " " + toAdd, "F");
+    toAdd = name + "(x10^{6})";
+    legend->AddEntry(signal, " " + toAdd, "F");
     int count = 0;
     for(const auto&& obj2 : *background->GetHists()) {
-        std::cout << "count";
         name = processes->getNamesWithLabel("background").at(count);
         toAdd = name;
         legend->AddEntry(obj2, " " + toAdd, "F");
@@ -769,9 +775,12 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
 
     //Draws the other histogram    
     if(first == 0) {
-        //signal->Draw("HIST SAME");
-        std::cout << "first = 0";
-        signal->SetLineColor(kBlack);
+        //signal->Draw("P SAME E1 X0");
+        signal->Draw("HIST SAME");
+        //std::cout << "first = 0" << "\n";
+        //signal->SetLineColor(kBlack);
+        signal->SetLineColor(6);
+	    signal->SetFillColor(0);
         signal->SetLineWidth(2);
         histVector.push_back(signal);
         data->Draw("P SAME E1 X0");
@@ -780,7 +789,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
         histVector.push_back(data);
     }
     else if(first == 1) {
-        std::cout << "first = 1";
+        //std::cout << "first = 1" << "\n";
         //background->SetLineColor(kBlack);
         background->Draw("HIST SAME");
         stackVector.push_back(background);
@@ -790,9 +799,12 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
         histVector.push_back(data);
     }
     else {
-        std::cout << "first = 2";
-        //signal->Draw("HIST SAME");
-        signal->SetLineColor(kBlack);
+        //std::cout << "first = 2" << "\n";
+        //signal->Draw("P SAME E1 X0");
+        signal->Draw("HIST SAME");
+        //signal->SetLineColor(kBlack);
+        signal->SetLineColor(6);
+	    signal->SetFillColor(0);
         signal->SetLineWidth(2); 
         histVector.push_back(signal);
         background->Draw("HIST SAME");
