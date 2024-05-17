@@ -39,16 +39,14 @@
 #include "CMSAnalysis/Filters/interface/HiggsMassCut.hh"
 #include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
 #include "CMSAnalysis/Modules/interface/HiggsLeptonEfficiency.hh"
+#include "CMSAnalysis/Modules/interface/HiggsCombineStripModule.hh"
 
 
 using std::make_shared;
 
 void GenSimPlan::initialize()
-{
-    auto histOutputMod = std::make_shared<HistogramOutputModule>();
-    
+{    
     auto& modules = getModules();
-
 
 
     auto deltaR = make_shared<GenSimDeltaRHist>("Delta R", 100, 0, 2);
@@ -57,9 +55,10 @@ void GenSimPlan::initialize()
     auto hppSelector = make_shared<HiggsSelector>();
     auto hppGenSimSelector = make_shared<HPlusPlusGenSimSelector>();
     auto metMod = make_shared<METModule>();
-    auto gammahist = make_shared<GammaHistogram>(EventInput::RecoLevel::GenSim, "Gamma", 100, 0, 1000);
+
+    auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::GenSim, "Same Sign Invariant Mass", 1000, 0, 2000, false, false);
+
     auto eventDump = make_shared<GenSimEventDumpModule>();
-    auto recoGenMatch = make_shared<RecoGenSimComparisonModule>("perParticle", true);
     auto matchMod = make_shared<MatchingModule>();
     auto higgsCut = make_shared<HiggsCut>();
     auto higgsMassCut = make_shared<HiggsMassCut>();
@@ -71,17 +70,12 @@ void GenSimPlan::initialize()
 
     hPlusPlusEfficiency->setInput(eventMod->getEventInput());
 
-
     histMod->addHistogram(deltaR);
-    histMod->addHistogram(gammahist);
-
-    histOutputMod->addHistogram(deltaR);
+    histMod->addHistogram(sameSignInvMassHist);
 
 
     eventMod->addSelector(hppSelector);
     eventMod->addSelector(hppGenSimSelector);
-    eventMod->addCut(higgsCut);
-    eventMod->addCut(higgsMassCut);
     auto eventHistMod = eventMod->getHistogramModule();
 
     modules.addProductionModule(metMod);

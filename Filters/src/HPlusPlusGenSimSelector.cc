@@ -86,5 +86,13 @@ void HPlusPlusGenSimSelector::selectParticles(const EventInput *input, Event &ev
         //         }
         //     }
         // }
+        else if (genSimParticle.getType() == ParticleType::electron() && genSimParticle.getPt() > 5)
+        {
+            event.addElectron(genSimParticle);
+        }
+        else if (genSimParticle.getType() == ParticleType::muon() && genSimParticle.getPt() > 5)
+        {
+            event.addMuon(genSimParticle);
+        }
     }
 }
