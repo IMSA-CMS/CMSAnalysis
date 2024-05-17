@@ -60,7 +60,7 @@ bool returnState(TString &myMethodList)
     Use["TMlpANN"] = 0;  // ROOT's own ANN
 
     // Boosted Decision Trees
-    Use["BDT"] = 1;  // Boosted Decision Trees (Adaptive Boost, recommended)
+    Use["BDT"] = 0;  // Boosted Decision Trees (Adaptive Boost, recommended)
     Use["BDTG"] = 0; // uses Gradient Boost
     Use["BDTB"] = 0; // uses Bagging
     Use["BDTD"] = 0; // decorrelation + Adaptive Boost
@@ -108,7 +108,7 @@ bool returnState(TString &myMethodList)
     // string sgFile = "photons0_5.root";
     // string sgFile = "photons0_9.root";
     //error on type line 108 and 111
-    string sgFile = "dpNewReco2.root";
+    string sgFile = "darkphotonAllNewML.root";
 
     // input background files here
     string bgFiles[] =
@@ -117,7 +117,7 @@ bool returnState(TString &myMethodList)
             //"dy10.root",
             //"DY50.root",
             //"qcd1.root",
-            "DYNewML7.root"
+            "DYAllNewML.root"
             // "qcd500.root",
             // "qcd700.root",
             // "qcd1k.root",

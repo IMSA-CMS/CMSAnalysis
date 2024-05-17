@@ -50,7 +50,7 @@ void JumboPlot() {
 	//Choices are GenSim Same Sign Inv Mass, Same Sign Inv Mass, Invariant Mass, GenSim pT, pT, Eta, Phi, MET (caps matter)
 	std::vector<std::string> graphableTypes = {"Invariant Mass"};
 	//Change this to whatever process your signal is
-	std::string signalName = "Higgs Signal";
+	//std::string signalName = "Higgs Signal";
 	TString units = " [GEV]";
 	double massTarget = 1400;
 
@@ -87,7 +87,6 @@ void JumboPlot() {
 				toAdd.push_back(dataType);
 				toAdd.push_back(channelName);
 				dataName = Utility::removeSpaces(dataType);
-			
 				fileName = "jumboPlotStorage/" + channelName + dataName + "DataMC.png";
 				TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisName, yAxisName, massTarget, true, channelName);
 				//TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisName, yAxisName, massTarget, true);

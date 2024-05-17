@@ -15,9 +15,11 @@
 #include "TH1.h"
 #include "TStyle.h"
 
-void SuperImpose() {
+void SuperImpose()
+{
     //Change extraText here
-    auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary");
+    //auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary");
+    auto plotFormatter = std::make_shared<PlotFormatter>(false, "Simulation Preliminary");
     //Change the filePath here. This should be the longest branch all input files have in common.
     const std::string filePath = "/uscms/home/gomalley/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/";
     //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
@@ -48,32 +50,38 @@ void SuperImpose() {
     TH1* hist;
     std::vector<TH1*> histVector;
     std::string fileName;
-    for(std::string file : files) {
+    for(std::string file : files)
+    {
 	    fileName = filePath + file; 
         openedFile = TFile::Open(fileName.c_str(), "read");
-        if(!openedFile) {
+        if(!openedFile)
+        {
             throw std::runtime_error("Cannot open file!");
-            }
+        }
         std::string name = hists.at(count);
         uint pos = name.find("/");
         std::string folder = name.substr(0,pos);
 		std::string histName = name.substr(pos+1);
         auto dir = openedFile->GetDirectory(folder.c_str());
-        if(!dir) {
+        if (!dir)
+        {
             throw std::runtime_error("Cannot find directory!");
-            }
+        }
         hist = dynamic_cast<TH1*>(dir->Get(histName.c_str()));
         if (!hist)
         {
             throw std::runtime_error("Histogram " + histName + " not found!");
         }
-        if(dynamic_cast<TH2 *>(hist) != 0) {
+        if (dynamic_cast<TH2*>(hist))
+        {
             TH2* hist2D = dynamic_cast<TH2 *>(hist);
             TH1 *newhist = hist2D->ProjectionX("_px", 0, -1, "E");
             histVector.push_back(newhist);
         }
-        else {
+        else
+        {
             histVector.push_back(hist);
+            // std::cout << "Added " << fileName << " to histVector" << std::endl;
         }
         count++;
     }
