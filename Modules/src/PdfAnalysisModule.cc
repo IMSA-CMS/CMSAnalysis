@@ -131,7 +131,7 @@ bool PdfAnalysisModule::process()
  for(int i = 0; i < 100; ++i)
  {
    //
-   auto pdfWeight = particle.getInfo("PDFWeight"+std::to_string(i));
+   auto pdfWeight = particle.getInfo("pdfWeight"+std::to_string(i));
    auto hist = histVec[i];
    hist->Fill(recoInvMass, pdfWeight);
  }
