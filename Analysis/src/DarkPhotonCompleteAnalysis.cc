@@ -156,3 +156,8 @@ TH1* DarkPhotonCompleteAnalysis::getDecayHist(std::string histType, std::string 
 	hist->SetFillColor(channels.at(0)->findProcess(processName)->getColor());
 	return hist;
 }
+
+std::vector<TH1*> DarkPhotonCompleteAnalysis::getHistograms(const std::string& histType, const std::string& processName, const std::string& channel, bool scaleToExpected)
+{
+    return {nullptr};
+}
