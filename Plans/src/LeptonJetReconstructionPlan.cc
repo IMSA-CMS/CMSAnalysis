@@ -55,6 +55,8 @@
 #include "CMSAnalysis/Histograms/interface/ResolutionHist.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetMLStripModule.hh"
 #include "CMSAnalysis/Filters/interface/DarkPhotonControlRegionFilter.hh"
+#include "CMSAnalysis/Modules/interface/RecoGenSimComparisonModule.hh"
+#include "CMSAnalysis/Filters/interface/BJetCut.hh"
 
 using std::make_shared;
 
@@ -78,14 +80,16 @@ void LeptonJetReconstructionPlan::initialize()
   auto eventDumpMod = std::make_shared<EventDumpModule>(true,true);
   auto lepMatchMod =
       std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.1); // this
+  auto bJetCut = make_shared<BJetCut>();
+  eventMod->addCut(bJetCut);
   auto histOutputMod = std::make_shared<HistogramOutputModule>();
   //auto mlMod = std::make_shared<LeptonJetMLCalculator>();
   //$$$auto recoGenSimComparisonMod = std::make_shared<RecoGenSimComparisonModule>();
-  auto leptonJetMLStripMod = std::make_shared<LeptonJetMLStripModule>();
-  leptonJetMLStripMod->setInput(eventMod->getEventInput());
-  // auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "dataset/weights/TMVAClassification_BDT.weights.xml", "BDT");
+  //auto leptonJetMLStripMod = std::make_shared<LeptonJetMLStripModule>();
+  //leptonJetMLStripMod->setInput(eventMod->getEventInput());
+  //auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "dataset/weights/TMVAClassification_BDT.weights.xml", "BDT");
 
-  // Histograms
+  //Histograms
   //uncomented 
   auto gammaDeltaRHist2D = std::make_shared<GammaDeltaRHist2D>(lepRecoMod, "Gamma Delta R Hist", 100, 100, 1, 0, 500, 0.25);
   //auto darkPhotonMassHist = std::make_shared<DarkPhotonMassHist>("Higgs Mass", 100, 0, 1500);
@@ -203,7 +207,7 @@ void LeptonJetReconstructionPlan::initialize()
   modules.addProductionModule(lepRecoMod);
   // modules.addProductionModule(genPartMod);
   modules.addProductionModule(lepMatchMod);
-  modules.addProductionModule(leptonJetMLStripMod);
+  //modules.addProductionModule(leptonJetMLStripMod);
   //modules.addProductionModule(mlMod);
 
 
@@ -220,7 +224,7 @@ void LeptonJetReconstructionPlan::initialize()
   //modules.addAnalysisModule(massRecoEfficiency800);
   //modules.addAnalysisModule(massRecoEfficiency1000);
   //modules.addAnalysisModule(massRecoEfficiency1300);
-  //$$$modules.addAnalysisModule(recoGenSimComparisonMod)
+  //modules.addAnalysisModule(recoGenSimComparisonMod);
   //modules.addAnalysisModule(eventDumpMod);
   //modules.addAnalysisModule(recoEventDumpMod);
   /* auto selector = make_shared<SnowmassLeptonSelector>(5);
