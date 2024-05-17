@@ -64,7 +64,6 @@ void HistogramScaleFit()
     // TH1* scaleHist = scaleFile.getHistFromName(hists.at(0));
     // TH1* fitHist = fitFile.getHistFromName(hists.at(1));
 
-    // MAKE FUNCTIONALITY TO FIT QCD ESTIMATE TO DIFFERENCE HISTOGRAM (DIFF BETWEEN DATA AND SUM OF DRELL YAN + ZZ-BAR AND OTHER BACKGROUNDS)
     std::string scaleFile = "QCD700-1000.root";
     std::string dataFile = "dataFile.root";
     std::vector<std::string> subtractFromDataFiles = {"someDrellYanFile.root", "someZZBarFile.root", "someOtherBackground.root"};
