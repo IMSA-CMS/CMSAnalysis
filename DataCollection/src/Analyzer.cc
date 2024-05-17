@@ -90,7 +90,7 @@ void Analyzer::writeOutputFile()
   auto eventsText = new TDisplayText(std::to_string(numOfEvents).c_str());
   eventsText->Write("NEvents");
   // Clean up
-  outputRootFile->Close();
+  //outputRootFile->Close();
   delete outputRootFile;
 }
 
