@@ -7,18 +7,20 @@ TreeMakerModule::TreeMakerModule(std::shared_ptr<SpecialVariableModule> iSpecial
 specialVariable(iSpecialVariable),
 name(iName)
 {
-    
+    addRequiredModule(specialVariable);
 }
 
 bool TreeMakerModule::process()
 {
-    auto leptonJets = getInput()->getSpecial("leptonJet");
-    for (const auto &leptonJet : leptonJets)
+    auto particles = getParticles();
+
+    for (const auto &particle : particles)
     {
-        //std::cout << "marker";
-        specialVariable->calculateVariables(leptonJet);//enum as parameter?; f
+        specialVariable->calculateVariables(particle);
         tree->Fill();
     }
+
+
     //specialVariable->calculateVariables();//enum as parameter?; f
     //tree->Fill();
     //auto leptonJets = getInput()->getSpecial("LeptonJet");//do foreach over

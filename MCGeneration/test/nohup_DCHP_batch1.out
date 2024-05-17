@@ -1,0 +1,301 @@
+['LeftRightSymmmetry:ffbar2HLHL = on', 'LeftRightSymmmetry:ffbar2HRHR = off', 'LeftRightSymmmetry:coupHee = 0.1', 'LeftRightSymmmetry:coupHmue = 0.1', 'LeftRightSymmmetry:coupHmumu = 0.1', 'LeftRightSymmmetry:coupHtaue = 0.1', 'LeftRightSymmmetry:coupHtaumu = 0.1', 'LeftRightSymmmetry:coupHtautau = 0.1', 'PDF:pSet=1', 'LeftRightSymmmetry:vL = 0', '9900041:m0 = 500', '9900041:oneChannel = 1 0.33333 100 -11 -11', '9900041:addChannel = 1 0.33333 100 -11 -13', '9900041:addChannel = 1 0.33333 100 -13 -13']
+%MSG-w CondDBESSource:  (NoModuleName) 13-Mar-2024 16:47:27 CDT pre-events
+Plugin for Record PGeometricDetExtraRcd has not been found.
+%MSG
+
+ *------------------------------------------------------------------------------------* 
+ |                                                                                    | 
+ |  *------------------------------------------------------------------------------*  | 
+ |  |                                                                              |  | 
+ |  |                                                                              |  | 
+ |  |   PPP   Y   Y  TTTTT  H   H  III    A      Welcome to the Lund Monte Carlo!  |  | 
+ |  |   P  P   Y Y     T    H   H   I    A A     This is PYTHIA version 8.306      |  | 
+ |  |   PPP     Y      T    HHHHH   I   AAAAA    Last date of change: 28 Jun 2021  |  | 
+ |  |   P       Y      T    H   H   I   A   A                                      |  | 
+ |  |   P       Y      T    H   H  III  A   A    Now is 13 Mar 2024 at 16:47:37    |  | 
+ |  |                                                                              |  | 
+ |  |   Program documentation and an archive of historic versions is found on:     |  | 
+ |  |                                                                              |  | 
+ |  |                               https://pythia.org/                            |  | 
+ |  |                                                                              |  | 
+ |  |   PYTHIA is authored by a collaboration consisting of:                       |  | 
+ |  |                                                                              |  | 
+ |  |   Christian Bierlich, Nishita Desai, Leif Gellersen, Ilkka Helenius, Philip  |  | 
+ |  |   Ilten, Leif Lönnblad, Stephen Mrenna, Stefan Prestel, Christian Preuss,    |  | 
+ |  |   Torbjörn Sjöstrand, Peter Skands, Marius Utheim and Rob Verheyen.          |  | 
+ |  |                                                                              |  | 
+ |  |   The complete list of authors, including contact information and            |  | 
+ |  |   affiliations, can be found on https://pythia.org/.                         |  | 
+ |  |   Problems or bugs should be reported on email at authors@pythia.org.        |  | 
+ |  |                                                                              |  | 
+ |  |   The main program reference is 'An Introduction to PYTHIA 8.2',             |  | 
+ |  |   T. Sjöstrand et al, Comput. Phys. Commun. 191 (2015) 159                   |  | 
+ |  |   [arXiv:1410.3012 [hep-ph]]                                                 |  | 
+ |  |                                                                              |  | 
+ |  |   The main physics reference is the 'PYTHIA 6.4 Physics and Manual',         |  | 
+ |  |   T. Sjöstrand, S. Mrenna and P. Skands, JHEP05 (2006) 026 [hep-ph/0603175]  |  | 
+ |  |                                                                              |  | 
+ |  |   PYTHIA is released under the GNU General Public Licence version 2 or later.|  | 
+ |  |   Please respect the MCnet Guidelines for Event Generator Authors and Users. |  | 
+ |  |                                                                              |  | 
+ |  |   Disclaimer: this program comes without any guarantees.                     |  | 
+ |  |   Beware of errors and use common sense when interpreting results.           |  | 
+ |  |                                                                              |  | 
+ |  |   Copyright (C) 2021 Torbjörn Sjöstrand                                      |  | 
+ |  |                                                                              |  | 
+ |  |                                                                              |  | 
+ |  *------------------------------------------------------------------------------*  | 
+ |                                                                                    | 
+ *------------------------------------------------------------------------------------* 
+
+
+ *------------------------------------------------------------------------------------* 
+ |                                                                                    | 
+ |  *------------------------------------------------------------------------------*  | 
+ |  |                                                                              |  | 
+ |  |                                                                              |  | 
+ |  |   PPP   Y   Y  TTTTT  H   H  III    A      Welcome to the Lund Monte Carlo!  |  | 
+ |  |   P  P   Y Y     T    H   H   I    A A     This is PYTHIA version 8.306      |  | 
+ |  |   PPP     Y      T    HHHHH   I   AAAAA    Last date of change: 28 Jun 2021  |  | 
+ |  |   P       Y      T    H   H   I   A   A                                      |  | 
+ |  |   P       Y      T    H   H  III  A   A    Now is 13 Mar 2024 at 16:47:37    |  | 
+ |  |                                                                              |  | 
+ |  |   Program documentation and an archive of historic versions is found on:     |  | 
+ |  |                                                                              |  | 
+ |  |                               https://pythia.org/                            |  | 
+ |  |                                                                              |  | 
+ |  |   PYTHIA is authored by a collaboration consisting of:                       |  | 
+ |  |                                                                              |  | 
+ |  |   Christian Bierlich, Nishita Desai, Leif Gellersen, Ilkka Helenius, Philip  |  | 
+ |  |   Ilten, Leif Lönnblad, Stephen Mrenna, Stefan Prestel, Christian Preuss,    |  | 
+ |  |   Torbjörn Sjöstrand, Peter Skands, Marius Utheim and Rob Verheyen.          |  | 
+ |  |                                                                              |  | 
+ |  |   The complete list of authors, including contact information and            |  | 
+ |  |   affiliations, can be found on https://pythia.org/.                         |  | 
+ |  |   Problems or bugs should be reported on email at authors@pythia.org.        |  | 
+ |  |                                                                              |  | 
+ |  |   The main program reference is 'An Introduction to PYTHIA 8.2',             |  | 
+ |  |   T. Sjöstrand et al, Comput. Phys. Commun. 191 (2015) 159                   |  | 
+ |  |   [arXiv:1410.3012 [hep-ph]]                                                 |  | 
+ |  |                                                                              |  | 
+ |  |   The main physics reference is the 'PYTHIA 6.4 Physics and Manual',         |  | 
+ |  |   T. Sjöstrand, S. Mrenna and P. Skands, JHEP05 (2006) 026 [hep-ph/0603175]  |  | 
+ |  |                                                                              |  | 
+ |  |   PYTHIA is released under the GNU General Public Licence version 2 or later.|  | 
+ |  |   Please respect the MCnet Guidelines for Event Generator Authors and Users. |  | 
+ |  |                                                                              |  | 
+ |  |   Disclaimer: this program comes without any guarantees.                     |  | 
+ |  |   Beware of errors and use common sense when interpreting results.           |  | 
+ |  |                                                                              |  | 
+ |  |   Copyright (C) 2021 Torbjörn Sjöstrand                                      |  | 
+ |  |                                                                              |  | 
+ |  |                                                                              |  | 
+ |  *------------------------------------------------------------------------------*  | 
+ |                                                                                    | 
+ *------------------------------------------------------------------------------------* 
+
+
+ *-------  PYTHIA Process Initialization  --------------------------*
+ |                                                                  |
+ | We collide p+ with p+ at a CM energy of 1.300e+04 GeV            |
+ |                                                                  |
+ |------------------------------------------------------------------|
+ |                                                    |             |
+ | Subprocess                                    Code |   Estimated |
+ |                                                    |    max (mb) |
+ |                                                    |             |
+ |------------------------------------------------------------------|
+ |                                                    |             |
+ | f fbar -> H_L^++ H_L^--                       3126 |   5.001e-11 |
+ |                                                                  |
+ *-------  End PYTHIA Process Initialization -----------------------*
+
+ *-------  PYTHIA Multiparton Interactions Initialization  ---------* 
+ |                                                                  | 
+ |                   sigmaNonDiffractive =    55.51 mb              | 
+ |                                                                  | 
+ |    pT0 =  1.44 gives sigmaInteraction =  1794.81 mb: accepted    | 
+ |                                                                  | 
+ *-------  End PYTHIA Multiparton Interactions Initialization  -----* 
+
+ *-------  PYTHIA Flag + Mode + Parm + Word + FVec + MVec + PVec + WVec Settings (changes only)  ------------------* 
+ |                                                                                                                 | 
+ | Name                                          |                      Now |      Default         Min         Max | 
+ |                                               |                          |                                      | 
+ | Beams:eCM                                     |                13000.000 |    14000.000         0.0             | 
+ | Check:epTolErr                                |                0.0100000 |   1.0000e-04                         | 
+ | ColourReconnection:range                      |                  5.17600 |      1.80000         0.0    10.00000 | 
+ | LeftRightSymmmetry:coupHmue                   |                  0.10000 |    0.0100000         0.0             | 
+ | LeftRightSymmmetry:coupHtaue                  |                  0.10000 |    0.0100000         0.0             | 
+ | LeftRightSymmmetry:coupHtaumu                 |                  0.10000 |    0.0100000         0.0             | 
+ | LeftRightSymmmetry:coupHtautau                |                  0.10000 |      0.30000         0.0             | 
+ | LeftRightSymmmetry:ffbar2HLHL                 |                       on |          off                         | 
+ | LeftRightSymmmetry:vL                         |                      0.0 |      5.00000         0.0             | 
+ | Main:timesAllowErrors                         |                    10000 |           10           0             | 
+ | MultipartonInteractions:alphaSorder           |                        2 |            1           0           2 | 
+ | MultipartonInteractions:alphaSvalue           |                  0.11800 |      0.13000   0.0600000     0.25000 | 
+ | MultipartonInteractions:bProfile              |                        2 |            3           0           4 | 
+ | MultipartonInteractions:coreFraction          |                  0.63000 |      0.50000         0.0     1.00000 | 
+ | MultipartonInteractions:coreRadius            |                  0.76340 |      0.40000     0.10000     1.00000 | 
+ | MultipartonInteractions:ecmPow                |                0.0334400 |      0.21500         0.0     0.50000 | 
+ | MultipartonInteractions:pT0Ref                |                  1.41000 |      2.28000     0.50000    10.00000 | 
+ | Next:numberShowEvent                          |                        0 |            1           0             | 
+ | ParticleDecays:allowPhotonRadiation           |                       on |          off                         | 
+ | ParticleDecays:limitTau0                      |                       on |          off                         | 
+ | PDF:pSet                                      |                        1 |           13                         | 
+ | SigmaProcess:alphaSorder                      |                        2 |            1           0           2 | 
+ | SigmaProcess:alphaSvalue                      |                  0.11800 |      0.13000   0.0600000     0.25000 | 
+ | SigmaTotal:mode                               |                        0 |            1           0           4 | 
+ | SigmaTotal:sigmaEl                            |                 21.89000 |     25.00000         0.0             | 
+ | SigmaTotal:sigmaTot                           |                100.30900 |    100.00000         0.0             | 
+ | SigmaTotal:zeroAXB                            |                      off |           on                         | 
+ | SLHA:minMassSM                                |                 1000.000 |    100.00000                         | 
+ | SpaceShower:alphaSorder                       |                        2 |            1           0           2 | 
+ | SpaceShower:alphaSvalue                       |                  0.11800 |      0.13650   0.0600000     0.25000 | 
+ | TimeShower:alphaSorder                        |                        2 |            1           0           2 | 
+ | TimeShower:alphaSvalue                        |                  0.11800 |      0.13650   0.0600000     0.25000 | 
+ | Tune:preferLHAPDF                             |                        2 |            1           0           2 | 
+ | UncertaintyBands:doVariations                 |                       on |          off                         | 
+ | UncertaintyBands:FSRpTmin2Fac                 |                 20.00000 |      4.00000         0.0   100.00000 | 
+ | UncertaintyBands:ISRpTmin2Fac                 |                  1.00000 |      4.00000         0.0   100.00000 | 
+ | UncertaintyBands:List                         | isrRedHi isr:muRfac=0.707 | alphaShi fsr:muRfac=0.5 isr:muRfac=0.5 | 
+ |                                               | fsrRedHi fsr:muRfac=0.707 |   alphaSlo fsr:muRfac=2.0 isr:muRfac=2.0 | 
+ |                                               | isrRedLo isr:muRfac=1.414 |   hardHi fsr:cNS=2.0 isr:cNS=2.0    | 
+ |                                               | fsrRedLo fsr:muRfac=1.414 |  hardLo fsr:cNS=-2.0 isr:cNS=-2.0   | 
+ |                                               |  isrDefHi isr:muRfac=0.5 |                                      | 
+ |                                               |  fsrDefHi fsr:muRfac=0.5 |                                      | 
+ |                                               |  isrDefLo isr:muRfac=2.0 |                                      | 
+ |                                               |  fsrDefLo fsr:muRfac=2.0 |                                      | 
+ |                                               | isrConHi isr:muRfac=0.25 |                                      | 
+ |                                               | fsrConHi fsr:muRfac=0.25 |                                      | 
+ |                                               |  isrConLo isr:muRfac=4.0 |                                      | 
+ |                                               |  fsrConLo fsr:muRfac=4.0 |                                      | 
+ |                                               | fsr_G2GG_muR_dn fsr:G2GG:muRfac=0.5 |                           | 
+ |                                               | fsr_G2GG_muR_up fsr:G2GG:muRfac=2.0 |                           | 
+ |                                               | fsr_G2QQ_muR_dn fsr:G2QQ:muRfac=0.5 |                           | 
+ |                                               | fsr_G2QQ_muR_up fsr:G2QQ:muRfac=2.0 |                           | 
+ |                                               | fsr_Q2QG_muR_dn fsr:Q2QG:muRfac=0.5 |                           | 
+ |                                               | fsr_Q2QG_muR_up fsr:Q2QG:muRfac=2.0 |                           | 
+ |                                               | fsr_X2XG_muR_dn fsr:X2XG:muRfac=0.5 |                           | 
+ |                                               | fsr_X2XG_muR_up fsr:X2XG:muRfac=2.0 |                           | 
+ |                                               | fsr_G2GG_cNS_dn fsr:G2GG:cNS=-2.0 |                             | 
+ |                                               | fsr_G2GG_cNS_up fsr:G2GG:cNS=2.0 |                              | 
+ |                                               | fsr_G2QQ_cNS_dn fsr:G2QQ:cNS=-2.0 |                             | 
+ |                                               | fsr_G2QQ_cNS_up fsr:G2QQ:cNS=2.0 |                              | 
+ |                                               | fsr_Q2QG_cNS_dn fsr:Q2QG:cNS=-2.0 |                             | 
+ |                                               | fsr_Q2QG_cNS_up fsr:Q2QG:cNS=2.0 |                              | 
+ |                                               | fsr_X2XG_cNS_dn fsr:X2XG:cNS=-2.0 |                             | 
+ |                                               | fsr_X2XG_cNS_up fsr:X2XG:cNS=2.0 |                              | 
+ |                                               | isr_G2GG_muR_dn isr:G2GG:muRfac=0.5 |                           | 
+ |                                               | isr_G2GG_muR_up isr:G2GG:muRfac=2.0 |                           | 
+ |                                               | isr_G2QQ_muR_dn isr:G2QQ:muRfac=0.5 |                           | 
+ |                                               | isr_G2QQ_muR_up isr:G2QQ:muRfac=2.0 |                           | 
+ |                                               | isr_Q2QG_muR_dn isr:Q2QG:muRfac=0.5 |                           | 
+ |                                               | isr_Q2QG_muR_up isr:Q2QG:muRfac=2.0 |                           | 
+ |                                               | isr_X2XG_muR_dn isr:X2XG:muRfac=0.5 |                           | 
+ |                                               | isr_X2XG_muR_up isr:X2XG:muRfac=2.0 |                           | 
+ |                                               | isr_G2GG_cNS_dn isr:G2GG:cNS=-2.0 |                             | 
+ |                                               | isr_G2GG_cNS_up isr:G2GG:cNS=2.0 |                              | 
+ |                                               | isr_G2QQ_cNS_dn isr:G2QQ:cNS=-2.0 |                             | 
+ |                                               | isr_G2QQ_cNS_up isr:G2QQ:cNS=2.0 |                              | 
+ |                                               | isr_Q2QG_cNS_dn isr:Q2QG:cNS=-2.0 |                             | 
+ |                                               | isr_Q2QG_cNS_up isr:Q2QG:cNS=2.0 |                              | 
+ |                                               | isr_X2XG_cNS_dn isr:X2XG:cNS=-2.0 |                             | 
+ |                                               | isr_X2XG_cNS_up isr:X2XG:cNS=2.0 |                              | 
+ | UncertaintyBands:MPIshowers                   |                       on |          off                         | 
+ | UncertaintyBands:nFlavQ                       |                        4 |            6           2           6 | 
+ | UncertaintyBands:overSampleFSR                |                 10.00000 |      3.00000     1.00000    10.00000 | 
+ | UncertaintyBands:overSampleISR                |                 10.00000 |      2.00000     1.00000    10.00000 | 
+ |                                                                                                                 | 
+ *-------  End PYTHIA Flag + Mode + Parm + Word + FVec + MVec + PVec + WVec Settings  -----------------------------* 
+
+ --------  PYTHIA Particle Data Table (changed only)  ------------------------------------------------------------------------------
+ 
+      id   name            antiName         spn chg col      m0        mWidth      mMin       mMax       tau0    res dec ext vis wid
+             no onMode   bRatio   meMode     products 
+
+ 9900041  H_L++            H_L--              1   6   0  500.00000    0.88158   50.00000    0.00000  2.23833e-13   1   1   0   1   0
+              0     1   0.3333333  100      -11      -11 
+              1     1   0.3333333  100      -11      -13 
+              2     1   0.3333333  100      -13      -13 
+
+ --------  End PYTHIA Particle Data Table  -----------------------------------------------------------------------------------------
+
+
+ *-------  PYTHIA Flag + Mode + Parm + Word + FVec + MVec + PVec + WVec Settings (changes only)  ------------------* 
+ |                                                                                                                 | 
+ | Name                                          |                      Now |      Default         Min         Max | 
+ |                                               |                          |                                      | 
+ | Next:numberShowEvent                          |                        0 |            1           0             | 
+ | ParticleDecays:allowPhotonRadiation           |                       on |          off                         | 
+ | ParticleDecays:limitTau0                      |                       on |          off                         | 
+ | ProcessLevel:all                              |                      off |           on                         | 
+ |                                                                                                                 | 
+ *-------  End PYTHIA Flag + Mode + Parm + Word + FVec + MVec + PVec + WVec Settings  -----------------------------* 
+
+ --------  PYTHIA Particle Data Table (changed only)  ------------------------------------------------------------------------------
+ 
+      id   name            antiName         spn chg col      m0        mWidth      mMin       mMax       tau0    res dec ext vis wid
+             no onMode   bRatio   meMode     products 
+
+ no particle data has been changed from its default value 
+
+ --------  End PYTHIA Particle Data Table  -----------------------------------------------------------------------------------------
+
+Begin processing the 1st record. Run 1, Event 1, LumiSection 4002 on stream 0 at 13-Mar-2024 16:47:38.324 CDT
+ PYTHIA Warning in SimpleSpaceShower::pT2nextQCD: small daughter PDF  
+ PYTHIA Error in BeamRemnants::setKinematics: kinematics construction failed  
+
+ --------  PYTHIA Info Listing  ---------------------------------------- 
+ 
+ Beam A: id =   2212, pz =  6.500e+03, e =  6.500e+03, m =  9.383e-01.
+ Beam B: id =   2212, pz = -6.500e+03, e =  6.500e+03, m =  9.383e-01.
+
+ In 1: id =   -1, x =  2.826e-01, pdf =  1.522e-02 at Q2 =  6.146e+05.
+ In 2: id =    1, x =  5.425e-02, pdf =  4.157e-01 at same Q2.
+
+ Subprocess f fbar -> H_L^++ H_L^-- with code 3126 is 2 -> 2.
+ It has sHat =  2.591e+06,    tHat = -1.333e+06,    uHat = -7.592e+05,
+       pTHat =  6.053e+02,   m3Hat =  4.982e+02,   m4Hat =  5.012e+02,
+    thetaHat =  1.857e+00,  phiHat =  1.385e-02.
+     alphaEM =  8.013e-03,  alphaS =  9.071e-02    at Q2 =  6.161e+05.
+
+ Impact parameter b =  5.503e-01 gives enhancement factor =  2.574e+00.
+ Max pT scale for MPI =  1.300e+04, ISR =  1.300e+04, FSR =  1.300e+04.
+ Number of MPI =    32, ISR =    49, FSRproc =    82, FSRreson =     4.
+
+ --------  End PYTHIA Info Listing  ------------------------------------
+
+ --------  PYTHIA Event Listing  (hard process)  -----------------------------------------------------------------------------------
+ 
+    no         id  name            status     mothers   daughters     colours      p_x        p_y        p_z         e          m 
+     0         90  (system)           -11     0     0     0     0     0     0      0.000      0.000      0.000  13000.000  13000.000
+     1       2212  (p+)               -12     0     0     3     0     0     0      0.000      0.000   6500.000   6500.000      0.938
+     2       2212  (p+)               -12     0     0     4     0     0     0      0.000      0.000  -6500.000   6500.000      0.938
+     3         -1  (dbar)             -21     1     0     5     6     0   101      0.000      0.000   1837.100   1837.100      0.000
+     4          1  (d)                -21     2     0     5     6   101     0      0.000      0.000   -352.656    352.656      0.000
+     5    9900041  (H_L++)            -22     3     4     7     8     0     0    605.276      8.381    499.021    929.320    498.180
+     6   -9900041  (H_L--)            -22     3     4     9    10     0     0   -605.276     -8.381    985.423   1260.436    501.210
+     7        -11  e+                  23     5     0     0     0     0     0    324.118   -190.940     76.177    383.815      0.001
+     8        -11  e+                  23     5     0     0     0     0     0    281.158    199.321    422.844    545.505      0.001
+     9         13  mu-                 23     6     0     0     0     0     0   -314.521   -229.928    332.705    512.331      0.106
+    10         13  mu-                 23     6     0     0     0     0     0   -290.756    221.546    652.717    748.105      0.106
+                                   Charge sum:  0.000           Momentum sum:     -0.000      0.000   1484.444   2189.756   1609.800
+
+ --------  End PYTHIA Event Listing  -----------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------
+#                         FastJet release 3.4.0
+#                 M. Cacciari, G.P. Salam and G. Soyez                  
+#     A software package for jet finding and analysis at colliders      
+#                           http://fastjet.fr                           
+#	                                                                      
+# Please cite EPJC72(2012)1896 [arXiv:1111.6097] if you use this package
+# for scientific work and optionally PLB641(2006)57 [hep-ph/0512210].   
+#                                                                       
+# FastJet is provided without warranty under the GNU GPL v2 or higher.  
+# It uses T. Chan's closest pair algorithm, S. Fortune's Voronoi code
+# and 3rd party plugin jet algorithms. See COPYING file for details.
+#--------------------------------------------------------------------------
+ PYTHIA Warning in StringFragmentation::fragmentToJunction: bad convergence junction rest frame  
+ PYTHIA Error in SimpleSpaceShower::pT2nearThreshold: stuck in loop  
+Begin processing the 501st record. Run 1, Event 501, LumiSection 4002 on stream 0 at 13-Mar-2024 18:17:29.515 CDT

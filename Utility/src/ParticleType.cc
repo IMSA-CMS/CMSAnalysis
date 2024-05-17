@@ -171,7 +171,7 @@ HistParams ParticleType::getPhiHist()
 
 HistParams ParticleType::getEtaHist()
 {
-    return HistParams("Eta", 150, -10, 10, [](Particle particle){return std::vector<double>{particle.getEta()};});
+    return HistParams("Eta", 150, -3, 3, [](Particle particle){return std::vector<double>{particle.getEta()};});
 }
 
 CollectionHistParams ParticleType::getNumberHist()
@@ -205,7 +205,7 @@ HistParams ParticleType::getDaughterDeltaRHist()
 
 HistParams ParticleType::getLeptonJetDeltaRHist()
 {
-   return HistParams("Lepton Jet Delta R", 100, 0, 5, [](Particle particle){
+   return HistParams("Lepton Jet Delta R", 100, 0, 0.5, [](Particle particle){
     auto leptonJet = LeptonJet(particle);
     return std::vector<double>{leptonJet.getDeltaR()};
     });
