@@ -82,7 +82,7 @@ void LeptonJetReconstructionPlan::initialize()
   auto lepMatchMod = std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.1); // this
   auto histOutputMod = std::make_shared<HistogramOutputModule>();
   //auto mlMod = std::make_shared<LeptonJetMLCalculator>();
-  auto recoGenSimComparisonMod = std::make_shared<RecoGenSimComparisonModule>();
+  auto recoGenSimComparisonMod = std::make_shared<RecoGenSimComparisonModule>("perParticle", true);
   // auto leptonJetMLStripMod = std::make_shared<LeptonJetMLStripModule>();
   // leptonJetMLStripMod->setInput(eventMod->getEventInput());
   // auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "dataset/weights/TMVAClassification_BDT.weights.xml", "BDT");
@@ -222,7 +222,7 @@ void LeptonJetReconstructionPlan::initialize()
   //modules.addAnalysisModule(massRecoEfficiency800);
   //modules.addAnalysisModule(massRecoEfficiency1000);
   //modules.addAnalysisModule(massRecoEfficiency1300);
-  modules.addAnalysisModule(recoGenSimComparisonMod);
+  //modules.addAnalysisModule(recoGenSimComparisonMod);$$$$$$
   //modules.addAnalysisModule(eventDumpMod);
   //modules.addAnalysisModule(recoEventDumpMod);
   /* auto selector = make_shared<SnowmassLeptonSelector>(5);
