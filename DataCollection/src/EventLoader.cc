@@ -71,6 +71,7 @@ std::vector<std::shared_ptr<FileParams>> EventLoader::fetchRootFiles(const std::
     //need to add funcionality to skip commented lines
     if (line.substr(0, 1) == "/")
     {
+      
       return{std::make_shared<ListFileParams>(configFile)};
     }
     else

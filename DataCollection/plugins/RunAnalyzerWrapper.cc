@@ -49,6 +49,8 @@
 #include "DataFormats/PatCandidates/interface/MET.h"
 #include "DataFormats/PatCandidates/interface/TriggerEvent.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
+
 
 
 //
@@ -161,7 +163,7 @@ void RunAnalyzerWrapper::analyze(edm::StreamID stream, const edm::Event& iEvent,
 
 // ------------ method called once each job just before starting event loop  ------------
 void RunAnalyzerWrapper::beginJob() {
-  analyzer->initialize(rootOutFile_);
+  analyzer->initialize(Utility::getBasePath()+"Output/", rootOutFile_);
 
 }
 
