@@ -27,11 +27,9 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     double tempMass = 1400;
 
     //Actual masses for the Higgs signal
-    std::vector<double> massTargets {500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
-    //std::vector<std::string> particles = {"e", "u"};
-    //std::vector<std::string> names = Utility::channelMaker(particles, 4, false);
-    // const std::vector<std::string> genSimDecays{"eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet", "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt"};
-    const std::vector<std::string> genSimDecays{"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu"};
+    std::vector<double> massTargets {500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400};
+    const std::vector<std::string> genSimDecays{"eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet", "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt"};
+    
     const std::vector<std::string> recoDecays{"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u", "none"};
     //const std::vector<std::string> recoDecays{"e u", "ee", "eeu", "eeuu", "eu", "uu", "uue"};
 
@@ -46,24 +44,25 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     //for(std::string name : names) {
     for (std::string recoDecay : recoDecays){
         std::vector<std::shared_ptr<Process>> processes;
-        for(double massTarget : massTargets) 
+        auto higgsSignal = std::make_shared<Process>("Higgs Signal", 5);
+        for (const auto& genSimDecay : genSimDecays)
         {
-            auto higgsSignal = std::make_shared<Process>("Higgs Signal " + std::to_string((int) massTarget), 5);
-            for (std::string genSimDecay : genSimDecays) 
-            {
-                std::vector<HistVariable> histVariablesSignal;
-                std::string decayName = recoDecay + "_" + genSimDecay;
-                // histVariablesSignal.push_back(HistVariable::InvariantMass(decayName + "__hists/" + decayName + "_Opposite Sign Invariant Mass"));      
-                histVariablesSignal.push_back(HistVariable::SameSignMass(decayName + "__hists/" + decayName + "_Same Sign Invariant Mass")); 
-                // histVariablesSignal.push_back(HistVariable::InvariantMass(decayName + "__hists/" + decayName + "_1st Highest mu- Eta"));         
-                higgsSignal->addProcess(makeSignalProcess(histVariablesSignal, signalFilePath, "Higgs" + std::to_string((int) massTarget) + ".root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
-            }
-            processes.push_back(higgsSignal);
-        }   
+            //for(double massTarget : massTargets) 
+            //{
+                //auto higgsSignal = std::make_shared<Process>("Higgs Signal " + std::to_string((int) massTarget), 5);
+                
+            std::vector<HistVariable> histVariablesSignal;
+            std::string decayName = recoDecay + "_" + genSimDecay;
+            // histVariablesSignal.push_back(HistVariable::InvariantMass(decayName + "__hists/" + decayName + "_Opposite Sign Invariant Mass"));      
+            histVariablesSignal.push_back(HistVariable::SameSignMass(decayName + "__hists/" + decayName + "_Same Sign Invariant Mass")); 
+            // histVariablesSignal.push_back(HistVariable::InvariantMass(decayName + "__hists/" + decayName + "_1st Highest mu- Eta"));         
+            higgsSignal->addProcess(makeSignalProcess(histVariablesSignal, signalFilePath, "Higgs" + std::to_string((int) massTarget) + ".root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
+        }
+        
         std::vector<HistVariable> histVariablesBackground;
-        // histVariablesBackground.push_back(HistVariable::InvariantMass(recoDecay + "__hists/" + recoDecay + "_Opposite Sign Invariant Mass"));
-        histVariablesBackground.push_back(HistVariable::SameSignMass(recoDecay + "__hists/" + recoDecay + "_Same Sign Invariant Mass"));
-        // histVariablesBackground.push_back(HistVariable::InvariantMass(recoDecay + "__hists/" + recoDecay + "_1st Highest mu- Eta"));
+        histVariablesBackground.push_back(HistVariable::InvariantMass(recoDecay + "__hists/" + recoDecay + "_Opposite Sign Invariant Mass"));
+        //histVariablesBackground.push_back(HistVariable::SameSignMass(recoDecay + "__hists/" + recoDecay + "_Same Sign Invariant Mass"));
+        //histVariablesBackground.push_back(HistVariable::InvariantMass(recoDecay + "__hists/" + recoDecay + "_1st Highest mu- Eta"));
         //histVariablesBackground.push_back(HistVariable::InvariantMass(recoDecay + "__hists/" + recoDecay + "_1st Highest mu- Pt"));
 
         //cross sections should be all lowercase
@@ -117,9 +116,9 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
         // higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018B.root", "higgs4l" + std::to_string((int) tempMass), reader, tempMass, luminosity));
         // higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018C.root", "higgs4l" + std::to_string((int) tempMass), reader, tempMass, luminosity));
         // higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018D.root", "higgs4l" + std::to_string((int) tempMass), reader, tempMass, luminosity));
-        //higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2022A.root", "higgs4l" + std::to_string((int) tempMass), reader, tempMass, luminosity));
-        //higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2022B.root", "higgs4l" + std::to_string((int) tempMass), reader, tempMass, luminosity));
-        //higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2022C.root", "higgs4l" + std::to_string((int) tempMass), reader, tempMass, luminosity));
+        // higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2022A.root", "higgs4l" + std::to_string((int) tempMass), reader, tempMass, luminosity));
+        // higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2022B.root", "higgs4l" + std::to_string((int) tempMass), reader, tempMass, luminosity));
+        // higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2022C.root", "higgs4l" + std::to_string((int) tempMass), reader, tempMass, luminosity));
         // higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016B.root", "higgs4l" + std::to_string((int) tempMass), reader, tempMass, luminosity));
         // higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016C.root", "higgs4l" + std::to_string((int) tempMass), reader, tempMass, luminosity));
         // higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016D.root", "higgs4l" + std::to_string((int) tempMass), reader, tempMass, luminosity));
@@ -132,10 +131,10 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
         // higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017D.root", "higgs4l" + std::to_string((int) tempMass), reader, tempMass, luminosity));
         // higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017E.root", "higgs4l" + std::to_string((int) tempMass), reader, tempMass, luminosity));
         // higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017F.root", "higgs4l" + std::to_string((int) tempMass), reader, tempMass, luminosity));
-        // processes.push_back(ttBarandMultiBosonandZZBackground);
-        // processes.push_back(dyBackground);
-        // processes.push_back(higgsData);
-
+        processes.push_back(higgsSignal);
+        processes.push_back(ttBarandMultiBosonandZZBackground);
+        processes.push_back(dyBackground);
+        processes.push_back(higgsData);
         auto leptonProcesses = std::make_shared<Channel>(recoDecay, processes);
         //leptonBackgrounds->cleanProcesses();
         channels.push_back(leptonProcesses);
@@ -166,8 +165,7 @@ TH1* HiggsCompleteAnalysis::getDecayHist(std::string histType, std::string proce
 	for (const auto& channel : channels)
 	{
         std::string channelNameTemp = channel->getName();
-        channelNameTemp = channelNameTemp.substr((channelNameTemp.length() - 2) - int(log10((int) massTarget)) + 1, int(log10((int) massTarget)) + 1);
-        
+        //channelNameTemp = channelNameTemp.substr((channelNameTemp.length() - 2) - int(log10((int) massTarget)) + 1, int(log10((int) massTarget)) + 1);
         if(channelNameTemp == std::to_string((int) massTarget)) {
             channelNumber++;
             //std::vector<TH1*> channelHists = channel->getHists(histType, "signal", false);

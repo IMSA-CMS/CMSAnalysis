@@ -18,6 +18,7 @@
 void SuperImpose()
 {
     //Change extraText here
+    //auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary");
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Simulation Preliminary");
     //Change the filePath here. This should be the longest branch all input files have in common.
     const std::string filePath = "/uscms/home/gomalley/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/";
@@ -32,16 +33,16 @@ void SuperImpose()
     // std::vector<std::string> hists = {"Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values"};
     // std::vector<TString> names = {"Higgs to 2 Dark Photon", "Higgs to Z and Dark Photon", "Z Prime", "SUSY", "Higgs to 4 Dark Photon"};
     std::vector<std::string> files = {"controlled.root", "controlled.root", "controlled.root", "controlled.root"};
-    std::vector<std::string> hists = {"Low Mass and Different Signs__hists/Low Mass and Different Signs_1st Highest Lepton Jet Lepton Jet Mass",  
-    "Low Mass and Same Sign__hists/Low Mass and Same Sign_1st Highest Lepton Jet Lepton Jet Mass",  
-    "High Mass and Different Signs__hists/High Mass and Different Signs_1st Highest Lepton Jet Lepton Jet Mass",  
-    "High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest Lepton Jet Lepton Jet Mass"};
+    std::vector<std::string> hists = {"Low Mass and Different Signs__hists/Low Mass and Different Signs_1st Highest Lepton Jet Phi",  
+    "Low Mass and Same Sign__hists/Low Mass and Same Sign_1st Highest Lepton Jet Phi",  
+    "High Mass and Different Signs__hists/High Mass and Different Signs_1st Highest Lepton Jet Phi",  
+    "High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest Lepton Jet Phi"};
     std::vector<TString> names = {"Different Signs", "Same Sign"};
     //Colors go here
     std::vector<int> colors = {1, 2, 3, 4, 6, 7};
     //Change x and y axis titles here
     //TString xTitle = "Gamma";
-    TString xTitle = "Lepton Jet Invariant Mass";
+    TString xTitle = "Lepton Jet Phi";
     TString yTitle = "Events";
 
     int count = 0;
@@ -80,6 +81,7 @@ void SuperImpose()
         else
         {
             histVector.push_back(hist);
+            // std::cout << "Added " << fileName << " to histVector" << std::endl;
         }
         count++;
     }
