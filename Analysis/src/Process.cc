@@ -138,8 +138,10 @@ double Process::getYield(std::string dataType) const
 void Process::addProcess(SingleProcess process)
 {
 	if(process.checkValidity() == true) {
+		std::cout << "happy " << processes.size() << "\n";
 		processes.push_back(process);
-	}
+	} else std::cout << "mad" << "\n";
+	std::cout << "done!" << "\n";
 }
 
 void Process::addSystematic(std::shared_ptr<Systematic> systematic)
