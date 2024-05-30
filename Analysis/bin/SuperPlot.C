@@ -23,7 +23,6 @@
 void SuperPlot()
 {
 	    //std::vector<double> massTargets {900};
-
 	auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
 	//Change extra text here (keep drawLogo to false for now)
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation)");
@@ -65,7 +64,6 @@ void SuperPlot()
 			}
 		}
 	}
-
 	//This is for making single hist graphs. Just change the process name to the one you want. Not all processes or qualities allow 2D hists.
 	//std::shared_ptr<Process> process = leptonBackgrounds->findProcess("Data");
  
@@ -95,7 +93,9 @@ void SuperPlot()
 	}
 	*/
 
-	TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "Invariant Mass", xAxisTitle, yAxisTitle, true);
+	// std::cout << "here\n";
+	// return;
+	TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "Invariant Mass", xAxisTitle, yAxisTitle, true, "0.3");
 	//TCanvas *canvas = plotFormatter->simpleAnalysisHist(backgroundHists, );
 
 	//Uncomment to save a png picture in your bin folder
