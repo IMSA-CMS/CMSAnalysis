@@ -72,7 +72,7 @@ void LeptonJetReconstructionPlan::initialize()
 
   auto darkPhotonFilter = std::make_shared<FilterModule>(std::make_shared<DarkPhotonControlRegionFilter>(10));
   darkPhotonFilter->setInput(eventMod->getEventInput());
-  auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Mu37_TkMu27", "HLT_IsoMu24"});
+  auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
   //auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_IsoMu24"});
   eventMod->addCut(triggerCut);
   auto matchMod = std::make_shared<MatchingModule>();
