@@ -28,7 +28,7 @@ bool MatchingModule::process()
 	bool ret = match(GenSimParticle, recoCandidates);
 	//std::cout << __FILE__ << " " << __LINE__ << std::endl;
 
-	std::cout<<"ret is: " + ret;
+	//std::cout<<"ret is: " + ret;
 	return ret;
 }
   

@@ -5,6 +5,12 @@
 #include <TCanvas.h>
 #include <TPaveStats.h>
 #include <TGraphErrors.h>
+	
+std::vector<TF1*> Fitter::trialFitFunctions = {
+	new TF1("Power Law", "[0]*(x-[1])^[2]+[3]"),
+	new TF1("Exponential", "[0]*expo(x-[1]) + [2]"),
+	new TF1("Linear", "[0]*x + [1]")
+};
 
 Fitter::Fitter() {}
 
@@ -170,7 +176,12 @@ TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction)
 	TPaveStats *st = (TPaveStats*)histogram->FindObject("stats");
 	st->SetX1NDC(0.1);
 	st->SetX2NDC(0.5);
-	//hist->GetXaxis()->SetRange(mass-450, mass + 350);
+	// histogram->GetXaxis()->SetRange(900, 1100);
+    // histogram->SetTitle(("H++ Monte Carlo Invariant Mass Distribution at 1100 GeV for " + fitFunction.getName().substr(5, 4)).c_str());
+    // histogram->GetXaxis()->SetTitle("Same Sign Lepton Pair Invariant  Mass (GeV/c^2)");
+    // histogram->GetYaxis()->SetTitle("Number of Events");
+    // histogram->GetYaxis()->SetTitle("Number of Events");
+
 	// c1->SaveAs(Graphname.c_str());
 	// c1->Close();
 
@@ -239,29 +250,22 @@ std::vector<ParameterizationData> Fitter::getParameterData(std::unordered_map<st
 
 FitFunction Fitter::parameterizeFunction(ParameterizationData& parameterData)
 {
-	std::string in;
+	size_t fitLoops = 5;
+
 	TCanvas* canvas = new TCanvas(parameterData.name.c_str(), parameterData.name.c_str(),0,0,2000,500);
 	auto graph = new TGraphErrors(parameterData.x.size(), parameterData.x.data(), parameterData.y.data(), parameterData.zero.data(), parameterData.error.data());
-	// std::cout << parameterData.name << '\n';
-	// for (size_t i = 0; i < parameterData.x.size(); ++i) 
-	// {
-	// 	// std::cout << "Actual Data: " << parameterData.x[i] << ' ' << parameterData.y[i] << '\n';
-	// 	// std::cout << parameterData.x[i] << '\n';
-	// 	// std::cout << parameterData.y[i] << '\n';
 
-	// 	double x, y;
-	// 	graph->GetPoint(i, x, y);
-	// 	// std::cout << "Graph: " << x << ' ' << y << '\n';
-
-	// }
-
-	TF1* powerLaw = new TF1(parameterData.name.c_str(), "[0]*(x-[1])^[2] + [3]", 0, 2000);
-	FitFunction function(powerLaw, FitFunction::FunctionType::EXPRESSION_FORMULA);
-	powerLaw->SetParameters(.5, 0, 2, 0);
+	TF1* func = new TF1();
+	TFitResultPtr result = functionFittingLoop(graph, func);
+	
+	func->SetRange(0, 2000);
 	graph->SetTitle(parameterData.name.c_str());
 	graph->SetMarkerStyle(15);
 	graph->Draw("AP");
-	auto results = graph->Fit(function.getFunction(), "S");
+
+	// auto initialResults = fitSingleFunction(graph, powerLaw);
+
+	FitFunction function(func, FitFunction::FunctionType::EXPRESSION_FORMULA);
 
 	gStyle->SetOptFit(1111);
 	parameterRootFile->WriteObject(canvas, parameterData.name.c_str());
@@ -283,9 +287,98 @@ void Fitter::parameterizeFunctions(std::unordered_map<std::string, double>& xDat
 	for (size_t i = 0; i < totalParameterData.size(); ++i)
 	{
 		totalParameterData[i].name = paramNames[i];
+		std::cout << "Parameterizing parameter " << i << '\n';
 		FitFunction func = parameterizeFunction(totalParameterData[i]);
 		functions.insert(func);
 	}
 
 	functions.saveFunctions(parameterizationFunctionFile, true);
+}
+
+TF1* Fitter::seedInversePowerLaw(double x_0, double y_0, double x_1, double y_1, double x_2, double y_2)
+{
+	static double range = 1.0;
+	TF1* powerLaw = new TF1("", "[0]*(x-[1])^[2]");
+	powerLaw->SetParameter(0, y_0);
+	powerLaw->SetParameter(1, x_0 - 1);
+	powerLaw->SetParameter(2, -1);
+
+	powerLaw->SetParLimits(2, -10,0);
+
+	// powerLaw->SetParameter(1, 0);
+	// powerLaw->SetParameter(3, y_2);
+	// double logOne = std::log((y_1 - y_2) / (y_0 - y_2));
+	// double logTwo = std::log(x_1 / x_2);
+	// double c = logOne / logTwo;
+	// double a = (y_0 - y_2) / (std::pow(x_0, c));
+	// powerLaw->SetParameter(2, c);
+	// powerLaw->SetParameter(0, a);
+
+	return powerLaw;
+}
+
+TFitResultPtr Fitter::functionFittingLoop(TGraph* graph, TF1* function)
+{
+	TGraph* graphClone = (TGraph*) graph->Clone();
+
+	TF1* bestFunction = (TF1*) trialFitFunctions[0]->Clone();
+	TFitResultPtr bestResults = graphClone->Fit(bestFunction, "S");
+	double bestChi2 = bestResults->Chi2();
+	// bool isValid = bestResults->IsValid();
+
+	for (size_t i = 1; i < trialFitFunctions.size(); ++i)
+	{
+		// if (isValid)
+		// 	break;
+
+		TF1* trialFunction = (TF1*) trialFitFunctions[i]->Clone();
+		TFitResultPtr result = fitSingleFunction(graphClone, trialFunction, 3);
+		if (result->Chi2() < bestChi2) 
+		{
+			bestChi2 = result->Chi2();
+			// isValid = result->IsValid();
+			bestResults = result;
+			bestFunction = trialFunction;
+		}
+	}
+
+	graph->Fit(bestFunction, "S");
+	std::cout << "Preparing to copy function\n";
+	bestFunction->Copy(*function);
+	std::cout << "Finished copying function\n";
+
+	return bestResults;
+}
+
+TFitResultPtr Fitter::fitSingleFunction(TGraph* graph, TF1* function, size_t iterations)
+{
+	TGraph* graphClone = (TGraph*) graph->Clone();
+	TF1* initialFunction = (TF1*) function->Clone();
+	TFitResultPtr initialResults = graphClone->Fit(initialFunction, "S");
+
+	TFitResultPtr bestResults = initialResults;
+	TF1* bestFunction = initialFunction;
+	double bestChi2 = initialResults->Chi2();
+	bool fitSuccess = initialResults->IsValid();
+
+	for (size_t i = 0; i < iterations; ++i) 
+	{	
+		if (fitSuccess)
+			break;
+		
+		TF1* trialFunction = (TF1*) function->Clone();
+		auto results = graphClone->Fit(trialFunction, "S");
+
+		if (results->Chi2() < bestChi2)
+		{
+			bestFunction = trialFunction;
+			bestChi2 = results->Chi2();
+			bestResults = results;
+		}
+	}
+
+	bestFunction->Copy(*function);
+	TFitResultPtr finalResults = graph->Fit(function, "S");
+
+	return finalResults;
 }

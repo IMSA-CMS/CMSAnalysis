@@ -94,6 +94,7 @@ double FitFunction::getMax()
 	return max;
 }
 
+
 // std::string FitFunction::getFormulaName(const std::string& name)
 // {
 // 	auto index = name.find_first_of('_');
