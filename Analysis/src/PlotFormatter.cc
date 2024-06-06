@@ -318,7 +318,7 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
 
     for(TH1* hist : hists) {
 	    if(hist->Integral() != 0 && !isnan(hist->Integral())) {
-	        //hist->Scale(1/hist->Integral());
+	        hist->Scale(1/hist->Integral());
             //hist->GetYaxis()->SetLimits(0,0.7);
 		    hist->SetFillColor(kWhite);
 	    }
@@ -372,7 +372,8 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     //Draws the other histogram    
     for(TH1* hist : hists) {
         if(find(hists.begin(), hists.end(), hist) - hists.begin() != firstIndex) {
-	    hist->Draw("HIST SAME");
+            //hist->GetYaxis()->SetLimits(0,0.7);
+            hist->Draw("HIST SAME");
             histVector.push_back(hist);
         }
     }
@@ -486,9 +487,14 @@ TCanvas* PlotFormatter::noScaleSimpleSuperImposedHist(std::vector<TH1*> hists, s
     return canvas;
 }
 
-TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, std::string histvariable, bool scaleToExpected, TString xAxisTitle, TString yAxisTitle) {
+TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, std::string histvariable, bool scaleToExpected, TString xAxisTitle, TString yAxisTitle) 
+{
     TH1* hist = process->getHist(histvariable, scaleToExpected);
- 
+    return simple1DHist(hist, xAxisTitle, yAxisTitle);
+}
+
+TCanvas* PlotFormatter::simple1DHist(TH1* hist, TString xAxisTitle, TString yAxisTitle)
+{
     //Setting size and margins
     int width = 800;
     int height = 600;
@@ -501,7 +507,9 @@ TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, std::stri
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
 
     //Draws the histogram
+    gStyle->SetOptStat(0);
     hist->Draw("HIST");
+    //hist->SetMaximum(100);
     histVector.push_back(hist);
  
     //Change axis and graph titles here
@@ -581,7 +589,7 @@ TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, std:
     legend->Draw();
  
     writeText(width, height, top, bottom, left, right);
-
+    std::cout << name << "\n";
     canvas->Update();
     return canvas;
 }
@@ -595,11 +603,11 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     THStack* background;
     // mass range
     // needs to match the "xAxisRange" value in "SimpleEstimator" if using integral scaling
-    double upperMasslimit = 1200;
-    
+    //double upperMasslimit = 1200;
+    double upperMasslimit = 2000;
 
     //int firstBin = 0;
-    int numBins = 8;
+    int numBins = 5;
     
     std::vector<std::shared_ptr<Channel>> channels = analysis->getChannels();
     processes = channels.at(0);
@@ -609,9 +617,11 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     data = analysis->getDecayHist(histvariable, dataNames.at(0), massTarget, false, channelName);
     signal = analysis->getDecayHist(histvariable, signalNames.at(0), massTarget, true, channelName);
     std::vector<TH1*> backgroundHists;
+    std::cout << "number of bins is: " << data->GetNbinsX();
+    std::cout << "number of bins is: " << signal->GetNbinsX();
     for(std::string name : backgroundNames) {
         backgroundHists.push_back(analysis->getDecayHist(histvariable, name, massTarget, true, channelName));
-    }
+        }
 
 //commented out integral code
 // /*
@@ -645,11 +655,14 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
         backgroundHist->Rebin(numBins);
         background->Add(backgroundHist);
     }
+    signal->Scale(std::pow(10, 6));
     signal->Rebin(numBins);
     data->Rebin(numBins);   
 
     signal->SetLineColor(6);
 	signal->SetFillColor(6);
+    signal->SetMarkerStyle(8);
+    signal->SetMarkerSize(0.5);
 
     data->SetLineColor(kBlack);
     data->SetFillColor(kWhite);
@@ -694,30 +707,33 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
             TH1* backgroundHist = dynamic_cast<TH1*>(obj2);
             backgroundHist->SetLineColor(kBlack);
             backgroundHist->SetLineWidth(2);
-            backgroundHist->GetXaxis()->SetLimits(firstBin, upperMasslimit);
+           // backgroundHist->GetXaxis()->SetLimits(firstBin, upperMasslimit);
             backgroundHist->SetMinimum(xAxisMin);
         }
         background->Draw("HIST");
         stackVector.push_back(background);  
     }
     else if(first == 1) {
-        signal->SetLineColor(kBlack);
+        //signal->SetLineColor(kBlack);
+        signal->SetLineColor(6);
+	    signal->SetFillColor(0);
         signal->SetLineWidth(2);
         signal->SetMinimum(xAxisMin);
         //signal->Draw("HIST");
+        signal->Draw("HIST");
         histVector.push_back(signal);
-        signal->GetXaxis()->SetLimits(firstBin, upperMasslimit);
+       // signal->GetXaxis()->SetLimits(firstBin, upperMasslimit);
     }
     else {
         data->Draw("P E1 X0");
         data->SetMinimum(xAxisMin);
         histVector.push_back(data);
-        data->GetXaxis()->SetLimits(firstBin, upperMasslimit);
+        //data->GetXaxis()->SetLimits(firstBin, upperMasslimit);
     }
 
     TH1* hist;
     if(first == 0) {
-        std::cout << "check 1";
+        //std::cout << "check 1" << "\n";
         hist = background->GetHistogram();
     }
     else if (first == 1){
@@ -742,12 +758,12 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     name = processes->getNamesWithLabel("data").at(0); 
     toAdd = name;
     legend->AddEntry(data, " " + toAdd, "L");
-    //name = processes->getNamesWithLabel("signal").at(0); 
+    name = processes->getNamesWithLabel("signal").at(0); 
     //toAdd = name;
-    //legend->AddEntry(signal, " " + toAdd, "F");
+    toAdd = name + "(x10^{6})";
+    legend->AddEntry(signal, " " + toAdd, "F");
     int count = 0;
     for(const auto&& obj2 : *background->GetHists()) {
-        std::cout << "count";
         name = processes->getNamesWithLabel("background").at(count);
         toAdd = name;
         legend->AddEntry(obj2, " " + toAdd, "F");
@@ -759,9 +775,12 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
 
     //Draws the other histogram    
     if(first == 0) {
-        //signal->Draw("HIST SAME");
-        std::cout << "first = 0";
-        signal->SetLineColor(kBlack);
+        //signal->Draw("P SAME E1 X0");
+        signal->Draw("HIST SAME");
+        //std::cout << "first = 0" << "\n";
+        //signal->SetLineColor(kBlack);
+        signal->SetLineColor(6);
+	    signal->SetFillColor(0);
         signal->SetLineWidth(2);
         histVector.push_back(signal);
         data->Draw("P SAME E1 X0");
@@ -770,7 +789,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
         histVector.push_back(data);
     }
     else if(first == 1) {
-        std::cout << "first = 1";
+        //std::cout << "first = 1" << "\n";
         //background->SetLineColor(kBlack);
         background->Draw("HIST SAME");
         stackVector.push_back(background);
@@ -780,9 +799,12 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
         histVector.push_back(data);
     }
     else {
-        std::cout << "first = 2";
-        //signal->Draw("HIST SAME");
-        signal->SetLineColor(kBlack);
+        //std::cout << "first = 2" << "\n";
+        //signal->Draw("P SAME E1 X0");
+        signal->Draw("HIST SAME");
+        //signal->SetLineColor(kBlack);
+        signal->SetLineColor(6);
+	    signal->SetFillColor(0);
         signal->SetLineWidth(2); 
         histVector.push_back(signal);
         background->Draw("HIST SAME");

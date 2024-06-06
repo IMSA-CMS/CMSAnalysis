@@ -16,6 +16,7 @@ bool RecoGenSimComparisonModule::process()
 
 void RecoGenSimComparisonModule::finalize()
 {
+    std::cout << comparisonType << "\n\n";
     if (comparisonType == "SameSignInvariantMass")
     {
         std::cout << "\nPer reconstructed event counters:\n";
@@ -88,7 +89,6 @@ void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particl
         std::ostream& output)
 {
     eventCounter++;
-    
     
     if (comparisonType == "sameSignInvariantMass" && recoParts.calculateSameSignInvariantMass(false, true) > 500)
     {
@@ -165,19 +165,33 @@ void RecoGenSimComparisonModule::perParticleComparison(const ParticleCollection<
     bool accurate = false;
     bool noMatch = true;
     auto recoType = ParticleType::photon();
-    for(auto &recoPart : recoParts){
+    if (getFilter() != "") 
+    {
+        output << getFilter() << "\n\n";
+    }
+    for(auto &recoPart : recoParts)
+    {
         // Standard info
         printRecoPart(recoPart, recoEventElement, output);
         recoType = recoPart.getType();
         recoEventElement++;
+        genEventElement = 1;
         //loop through all gensim particles
-        for(auto &genPart : genParts){
+        for(auto &genPart : genParts)
+        {
+            GenSimParticle genSimPart(genPart);
+            if (!genSimPart.isFinalState())
+            {
+                continue;
+            }
             //match using deltaR (distance in phi-eta plane)
-            double deltaR = std::sqrt( std::pow(recoPart.getPhi() - genPart.getPhi(), 2) + std::pow(recoPart.getEta() - genPart.getEta(), 2) );
-            if (deltaR < 0.1)
+            double deltaR = recoPart.getDeltaR(genPart);
+            //double deltaR = std::sqrt( std::pow(recoPart.getPhi() - genPart.getPhi(), 2) + std::pow(recoPart.getEta() - genPart.getEta(), 2) );
+            if (deltaR < 0.1 && getFilter() != "")
             {
                 if (eventOutput)
                 {
+                    
                     output << std::setw(8) << genEventElement << "| " << std::setw(9) << genPart.getName() << "| ";
                     // Particle properties
                     output << std::setw(13) << genPart.getCharge() << "| " 
@@ -203,7 +217,7 @@ void RecoGenSimComparisonModule::perParticleComparison(const ParticleCollection<
                     {
                         // accurateMatchCounter++;
                         accurate = true;
-                        break;
+                        //break;
                     }
                     
                     if(!((recoPart.getPt() - genPart.getPt())/genPart.getPt() < 0.1))

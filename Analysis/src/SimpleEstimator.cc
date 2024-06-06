@@ -5,16 +5,27 @@
 
 double SimpleEstimator::getExpectedYield(const SingleProcess* process, std::string dataType, double luminosity) const {
     //Takes the histogram wanted from the file, assigns it hist
-    TH1 *hist = dynamic_cast<TH1 *>(process->getHist(dataType, false));
-    if (!hist) {
-        throw std::runtime_error("Hist not found");
+    //TH1 *hist = dynamic_cast<TH1 *>(process->getHist(dataType, false));
+    TH1 *hist;
+    try
+    {
+        hist = dynamic_cast<TH1 *>(process->getHist(dataType, false));
     }
+    catch (std::runtime_error& error)
+    {
+        std::cout << "Error: " << error.what();
+        return 0;
+    }   
+    //if (!hist) {
+    //    throw std::runtime_error("Hist not found");
+    //}
 
     int totalEventsInt = process->getTotalEvents();
     double totaleventsran = totalEventsInt;
 
     //Finds crosssection (from spreadsheet)
     double crosssection = process->getCrossSection();
+
 
 //without integral code
 /*
@@ -29,7 +40,7 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, std::stri
     int firstBin = 50;
     // mass range
     // needs to match the "upperMasslimit" value in "PlotFormatter" if using integral scaling
-    double xAxisRange = 1200;
+    double xAxisRange = 2000;
     int numBins = hist->GetNbinsX();  
     //std::cout << "numBins: " << numBins << "\n";
     int lowerLimit = firstBin * (static_cast<double>(numBins) / xAxisRange);
