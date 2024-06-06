@@ -68,6 +68,7 @@ std::vector<std::shared_ptr<FileParams>> EventLoader::fetchRootFiles(const std::
     std::string line;
     getline(textFile, line);
     
+    std::cout << "First line of file: " << line << "\n";
     //need to add funcionality to skip commented lines
     if (line.substr(0, 1) == "/")
     {
@@ -90,6 +91,7 @@ std::vector<std::shared_ptr<FileParams>> EventLoader::fetchRootFiles(const std::
         fileName = eossrc + fileName;
       }
       */
+      //std::cout << "Number of file parameters: " << fileparams.size() << "\n";
       return fileparams;
     }
   }
