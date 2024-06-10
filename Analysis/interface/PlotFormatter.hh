@@ -66,6 +66,18 @@ class PlotFormatter
         
         void GetBottomPadValues(TH1* data, THStack* background, double*& x, double*& y, double*& xerror2, double*& yerror2);
 
+        void IntegralScaling(double upperMasslimit, bool scaleTodata, std::vector<TH1*>& backgroundHists, int firstBin, int numberBinsData, int lowerDataIntegralLimit, float& dataIntegral, float& backgroundIntegral, float& scaleFactor);
+    
+        int GetOrder(TH1* data, TH1* signal, THStack* background);
+
+        TH1* DrawOrder(THStack*& background, TH1*& signal, TH1*& data, TPad*& topPad, float upperMasslimit, int firstBin, int first);
+
+        void DrawOtherHistograms(THStack*& background, TH1*& signal, TH1*& data, int first);
+
+        void ChangeAxisTitles(TH1*& hist, TString xAxisTitle, TString yAxisTitle);
+
+        void FormatSignalData(THStack*& background, TH1*& signal, TH1*& data, std::vector<TH1*>& backgroundHists, int numBins);
+    
     private:
         bool drawLogo;
         TString extraText;
