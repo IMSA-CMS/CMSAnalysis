@@ -81,6 +81,10 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_reliso", "Electron_miniPFRelIso_all"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dxy", "Electron_dxy"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dz", "Electron_dz"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEscaleDown", "Electron_dEscaleDown"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEscaleUp", "Electron_dEscaleUp"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEsigmaDown", "Electron_dEsigmaDown"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEsigmaUp", "Electron_dEsigmaUp"),
 		std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("muon_size", "nMuon"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_eta", "Muon_eta"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_phi", "Muon_phi"),
@@ -294,6 +298,17 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         0, 0, 0, ParticleType::photon(), fit);
         recoParticles.addParticle(particle);
     }
+    for (auto& particle : recoParticles)
+    {
+        if(particle.getType() == ParticleType::electron())
+        {
+        
+            particle.addInfo("eScaleDown", getVariable<UInt_t>("elec_dEscaleDown"));
+            particle.addInfo("eScaleUp", getVariable<UInt_t>("elec_dEscaleUp"));
+            particle.addInfo("eSigmaDown", getVariable<UInt_t>("elec_dEsigmaDown"));
+            particle.addInfo("eSigmaUp", getVariable<UInt_t>("elec_dEsigmaUp"));
+        }
+    }
     
     return recoParticles;
 }
@@ -344,3 +359,5 @@ std::vector<double> NanoAODEventFile::getPDFWeights() const
 
     return pdfWeights;
 }
+
+
