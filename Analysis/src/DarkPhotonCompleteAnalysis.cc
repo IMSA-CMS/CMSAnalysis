@@ -29,7 +29,7 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
     double luminosity = 20;
 
     TH1::SetDefaultSumw2();
-    double massTarget = 0.3;
+    std::string massTarget = "0.3";
     //for(std::string name : names) {
     //for (std::string recoDecay : recoDecays){
       //  for(double massTarget : massTargets) {
@@ -69,26 +69,27 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
                 std::vector<HistVariable> histVariablesSignal;
                 histVariablesSignal.push_back(HistVariable::InvariantMass("_hists/1st Highest Lepton Jet Pt"));                
                 DarkPhotonSignal->addProcess(makeBasicProcess(histVariablesSignal, filePath, "darkPhotonBaselineRun2.root", "DarkPhoton", reader, luminosity));
-             
             // std::vector<std::shared_ptr<Correction>> corrections = {};
             // auto correction = std::make_shared<ConstantCorrection>(2);
             //corrections.push_back(correction);
 
             auto DarkPhotonData = std::make_shared<Process>("Data", 1);
-            //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "SingleMuonRun2017B-UL2017_MiniAODv2-v1.root", "higgs4l" + std::to_string((int) massTarget), reader, luminosity));
-            //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "SingleElectronRun2017B-UL2017_MiniAODv2-v1.root", "higgs4l" + std::to_string((int) massTarget), reader, luminosity));
-            DarkPhotonData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018A.root", "LeptonJet" + std::to_string((int) massTarget), reader, luminosity));
+            //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "SingleMuonRun2017B-UL2017_MiniAODv2-v1.root", "higgs4l" + massTarget, reader, luminosity));
+            //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "SingleElectronRun2017B-UL2017_MiniAODv2-v1.root", "higgs4l" + massTarget, reader, luminosity));
+            
+            auto mbp = makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018A.root", "LeptonJet" + massTarget, reader, luminosity);
+            DarkPhotonData->addProcess(mbp);
 
             std::vector<std::shared_ptr<Process>> backgroundProcesses = {ttbarBackground, zzBackground, dyBackground, multiBosonBackground, DarkPhotonSignal, DarkPhotonData};
             
-            auto leptonBackgrounds = std::make_shared<Channel>(std::to_string((int) massTarget), backgroundProcesses);
+            auto leptonBackgrounds = std::make_shared<Channel>(massTarget, backgroundProcesses);
             //leptonBackgrounds->cleanProcesses();
-            channels.push_back(leptonBackgrounds);
+            getChannelsProtected().push_back(leptonBackgrounds);
 
 }
 
 // bool DarkPhotonCompleteAnalysis::checkChannelName(std::string channelName, double massTarget){
-//     return channelName == std::to_string((int) massTarget);
+//     return channelName == massTarget;
 // }
 // TH1* DarkPhotonCompleteAnalysis::getHist(std::string histType, std::string processName, double massTarget, bool scaleToExpected, std::string channelName) const {
 //     int maxBinNum = 0;
@@ -98,7 +99,7 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
 // 	for (const auto& channel : channels)
 // 	{
 //         std::string channelName = channel->getName();
-//         if(channelName == std::to_string((int) massTarget)) {
+//         if(channelName == massTarget) {
 //             channelNumber++;
 //             //std::vector<TH1*> channelHists = channel->getHists(histType, "signal", false);
             
