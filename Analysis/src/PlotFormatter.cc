@@ -628,6 +628,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     for(std::string name : backgroundNames) {
         backgroundHists.push_back(analysis->getHist(histvariable, name, true, channelName));
     }
+    std::cout << backgroundHists.size() << "\n";
 
     int firstBin = 50;
     
@@ -758,7 +759,6 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
 
     TH1* hist;
     if(first == 0) {
-        std::cout << "check 1";
         hist = background->GetHistogram();
     }
     else if (first == 1){
