@@ -629,10 +629,24 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
         backgroundHists.push_back(analysis->getHist(histvariable, name, true, channelName));
     }
 
+    int firstBin = 50;
+    
+    int numberBinsData = data->GetNbinsX();
+    int lowerDataIntegralLimit = firstBin*(static_cast<double>(numberBinsData)/upperMasslimit);
+    float dataIntegral = data->Integral(lowerDataIntegralLimit, numberBinsData);
+    
+    float backgroundIntegral = 0;
+    float scaleFactor = dataIntegral/backgroundIntegral;
+
+    IntegralScaling(upperMasslimit, scaleTodata, backgroundHists, firstBin, numberBinsData, 
+    lowerDataIntegralLimit, dataIntegral, 
+    backgroundIntegral, scaleFactor);
+
 //commented out integral code
 // /*
     // integral/fit only calibrated after firstBin
     // needs to match the "firstBin" value in "SimpleEstimator" if using integral scaling
+    /*
     int firstBin = 50;
     
     int numberBinsData = data->GetNbinsX();
@@ -654,9 +668,11 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
             backgroundHist->Scale(scaleFactor);
         }
     }
+    */
 // */
 
     background = new THStack("background", "background");
+    /*
     for(TH1* backgroundHist : backgroundHists) {
         backgroundHist->Rebin(numBins);
         background->Add(backgroundHist);
@@ -671,8 +687,13 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     data->SetFillColor(kWhite);
     data->SetMarkerStyle(8);
     data->SetMarkerSize(0.5);
+    */
+    FormatSignalData(background, signal, data, backgroundHists, numBins);
+
+    
 
     //Defines order to draw in so graph isn't cut off
+    /*
     int first;
     if(signal->GetMaximum() > background->GetMaximum() && signal->GetMaximum() > data->GetMaximum()) {
         first = 1;
@@ -683,6 +704,9 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     else {
         first = 0;
     }
+    */
+
+    int first = GetOrder(data, signal, background);
 
     //Setting size and margins
     //int width = 800;
@@ -698,13 +722,13 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     TPad* bottomPad = new TPad("pad2", "", 0, 0, 1, 0.25);
     topPad->SetLogy();
     gStyle->SetOptStat(0);
-
     topPad->Draw();
     topPad->cd();
 
     //TH1* histLoop;
     //Draws the histogram with more events first (bigger axis)
 
+    /*
     int xAxisMin = std::pow(1, -5);
     if(first == 0) {
         for(const auto&& obj2 : *background->GetHists()) {
@@ -744,12 +768,17 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
         hist = data;
     }
     topPad->Update();
-    
+    */
+    TH1* hist = DrawOrder(background, signal, data, topPad, upperMasslimit, firstBin, first);
     //Change axis and graph titles & sizes here
+    /*
     hist->GetYaxis()->SetTitle(yAxisTitle);
     hist->SetTitleSize(0.04, "y");
     hist->GetXaxis()->SetTitle(xAxisTitle);
     hist->SetTitleSize(0.04, "x");
+    */
+
+    ChangeAxisTitles(hist, xAxisTitle, yAxisTitle);
     
     //Draws the legend
     /*
@@ -777,7 +806,9 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     topPad->Update();
     writeText(width, height, top, bottom, left, right);
 
-    //Draws the other histogram    
+    //Draws the other histogram   
+    DrawOtherHistograms(background, signal, data, first); 
+    /*
     if(first == 0) {
         //signal->Draw("HIST SAME");
         std::cout << "first = 0";
@@ -810,6 +841,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
         stackVector.push_back(background);
         data->Draw("P SAME E1 X0");
     }
+    */
    
     /*
     //for signal errors
@@ -918,8 +950,128 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     return canvas;
 }
 
-/*
-void PlotFormatter::DrawOrder(int firstBin, int numberBinsData, int lowerDataIntegralLimit, float& dataIntegral, float& backgroundIntegral, float& scaleFacor)
+void PlotFormatter::FormatSignalData(THStack*& background, TH1*& signal, TH1*& data, std::vector<TH1*>& backgroundHists, int numBins)
+{
+    for(TH1* backgroundHist : backgroundHists) {
+        backgroundHist->Rebin(numBins);
+        background->Add(backgroundHist);
+    }
+    signal->Rebin(numBins);
+    data->Rebin(numBins);   
+
+    signal->SetLineColor(6);
+	signal->SetFillColor(6);
+
+    data->SetLineColor(kBlack);
+    data->SetFillColor(kWhite);
+    data->SetMarkerStyle(8);
+    data->SetMarkerSize(0.5);
+}
+
+void PlotFormatter::ChangeAxisTitles(TH1*& hist, TString xAxisTitle, TString yAxisTitle)
+{
+    hist->GetYaxis()->SetTitle(yAxisTitle);
+    hist->SetTitleSize(0.04, "y");
+    hist->GetXaxis()->SetTitle(xAxisTitle);
+    hist->SetTitleSize(0.04, "x");
+}
+
+void PlotFormatter::DrawOtherHistograms(THStack*& background, TH1*& signal, TH1*& data, int first)
+{
+    if(first == 0) {
+        //signal->Draw("HIST SAME");
+        std::cout << "first = 0";
+        signal->SetLineColor(kBlack);
+        signal->SetLineWidth(2);
+        histVector.push_back(signal);
+        data->Draw("P SAME E1 X0");
+        data->SetLineColor(kBlack);
+        data->SetLineWidth(2);
+        histVector.push_back(data);
+    }
+    else if(first == 1) {
+        std::cout << "first = 1";
+        //background->SetLineColor(kBlack);
+        background->Draw("HIST SAME");
+        stackVector.push_back(background);
+        data->Draw("P SAME E1 X0");
+        data->SetLineColor(kBlack);
+        data->SetLineWidth(2);
+        histVector.push_back(data);
+    }
+    else {
+        std::cout << "first = 2";
+        //signal->Draw("HIST SAME");
+        signal->SetLineColor(kBlack);
+        signal->SetLineWidth(2); 
+        histVector.push_back(signal);
+        background->Draw("HIST SAME");
+        //background->SetLineColor(kBlack);
+        stackVector.push_back(background);
+        data->Draw("P SAME E1 X0");
+    }
+}
+
+TH1* PlotFormatter::DrawOrder(THStack*& background, TH1*& signal, TH1*& data, TPad*& topPad, float upperMasslimit, int firstBin, int first)
+{
+    int xAxisMin = std::pow(1, -5);
+    if(first == 0) {
+        for(const auto&& obj2 : *background->GetHists()) {
+            TH1* backgroundHist = dynamic_cast<TH1*>(obj2);
+            backgroundHist->SetLineColor(kBlack);
+            backgroundHist->SetLineWidth(2);
+            backgroundHist->GetXaxis()->SetLimits(firstBin, upperMasslimit);
+            backgroundHist->SetMinimum(xAxisMin);
+        }
+        background->Draw("HIST");
+        stackVector.push_back(background);  
+    }
+    else if(first == 1) {
+        signal->SetLineColor(kBlack);
+        signal->SetLineWidth(2);
+        signal->SetMinimum(xAxisMin);
+        //signal->Draw("HIST");
+        histVector.push_back(signal);
+        signal->GetXaxis()->SetLimits(firstBin, upperMasslimit);
+    }
+    else {
+        data->Draw("P E1 X0");
+        data->SetMinimum(xAxisMin);
+        histVector.push_back(data);
+        data->GetXaxis()->SetLimits(firstBin, upperMasslimit);
+    }
+
+    TH1* hist;
+    if(first == 0) {
+        std::cout << "check 1";
+        hist = background->GetHistogram();
+    }
+    else if (first == 1){
+        hist = signal;
+    }
+    else {
+        hist = data;
+    }
+    topPad->Update();
+    return hist;
+}
+
+int PlotFormatter::GetOrder(TH1* data, TH1* signal, THStack* background)
+{
+    int first;
+    if(signal->GetMaximum() > background->GetMaximum() && signal->GetMaximum() > data->GetMaximum()) {
+        first = 1;
+    }
+    else if(data->GetMaximum() > background->GetMaximum() && data->GetMaximum() > signal->GetMaximum()) {
+        first = 2;
+    }
+    else {
+        first = 0;
+    }
+    return first;
+}
+
+void PlotFormatter::IntegralScaling(double upperMasslimit, bool scaleTodata, std::vector<TH1*>& backgroundHists, int firstBin, int numberBinsData, int lowerDataIntegralLimit, float& dataIntegral, float& backgroundIntegral, float& scaleFactor)
 {
     for (auto backgroundHist : backgroundHists)
     {
@@ -935,7 +1087,8 @@ void PlotFormatter::DrawOrder(int firstBin, int numberBinsData, int lowerDataInt
         }
     }
 }
-*/
+
+
 
 void PlotFormatter::GetBottomPadValues(TH1* data, THStack* background, double*& x, double*& y, double*& xerror2, double*& yerror2)
 {
