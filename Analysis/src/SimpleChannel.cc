@@ -3,12 +3,14 @@
 #include "TH1.h"
 #include "CMSAnalysis/Analysis/interface/SimpleProcess.hh"
 #include <memory>
+#include <iostream>
 
 std::vector<TH1*> SimpleChannel::getHists(std::string histType) {
     std::vector<TH1*> hists;
     for(std::shared_ptr<SimpleProcess> process : processes) {
         hists.push_back(process->getHist(histType));
     }
+
     return hists;
 }
 

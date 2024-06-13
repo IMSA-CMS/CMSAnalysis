@@ -59,18 +59,19 @@ TH1* RootFileInput::getHist(std::string histType) const
 		}
 		else
 		{
+			//We need the nullptr in when adding histograms to know to
+			//skip the histogram and not break histogram addition
+			// std::cout << "No histogram named " + name + " found\n";
 			delete dir;
 			delete hist;
 			delete file;
-			return emptyHist;
+			return nullptr;
 		}
 	}
 	else
 	{
 		hist = dynamic_cast<TH1*>(file->Get(name.c_str()));
 	}
-	std::cout << "fileSource: " << fileSource << "\n";
-
 	if (!hist || hist->IsZombie())
 	{ 
 		throw std::runtime_error("File doesn't contain: " + name);
@@ -93,7 +94,6 @@ TH1* RootFileInput::getHist(std::string histType) const
 
 		delete hist;
 		delete file;
-
 		return response;
 	}
 }

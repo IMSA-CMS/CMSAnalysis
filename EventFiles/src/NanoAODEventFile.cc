@@ -107,7 +107,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
 		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_mediumid", "Muon_mediumId"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_tightid", "Muon_tightId"),
 		std::make_shared<TreeVariable<TTreeReaderValue<ULong64_t>>>("event_number", "event"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_bTag", "Jet_btagCMVA"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_bTag", "Jet_btagCSVV2"),
 		std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("gen_size", "nGenPart"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_pid", "GenPart_pdgId"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_status", "GenPart_status"),
@@ -285,13 +285,13 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
     }
     for (UInt_t i = 0; i < getVariable<UInt_t>("photon_size"); i++)
     {
-        Particle::SelectionFit fit;
+        Particle::SelectionFit fit = Particle::SelectionFit::None;
 
         // std::cout << "Loading photon from NanoAOD\n";
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("photon_pt", i),
         getArrayElement<Float_t>("photon_eta", i), getArrayElement<Float_t>("photon_phi", i), 0)),
-        0, 0, 0, ParticleType::photon(), fit);
+            0, 0, 0, ParticleType::photon(), fit);
         recoParticles.addParticle(particle);
     }
     
@@ -301,12 +301,15 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
 ParticleCollection<Particle> NanoAODEventFile::getRecoJets() const
 {
     ParticleCollection<Particle> recoParticles;
-    for(UInt_t i = 0; i < getVariable<UInt_t>("jet_size"); i++) {
-        recoParticles.addParticle(
-        Particle(reco::Candidate::LorentzVector(getArrayElement<Float_t>("jet_pt", i), getArrayElement<Float_t>("jet_eta", i), getArrayElement<Float_t>("jet_phi", i), getArrayElement<Float_t>("jet_mass", i)), 
+    for(UInt_t i = 0; i < getVariable<UInt_t>("jet_size"); i++) 
+    {
+        Particle particle(reco::Candidate::LorentzVector(getArrayElement<Float_t>("jet_pt", i), getArrayElement<Float_t>("jet_eta", i), getArrayElement<Float_t>("jet_phi", i), getArrayElement<Float_t>("jet_mass", i)), 
         //getArrayElement<Float_t>("jet_dxy", i), getArrayElement<Float_t>("jet_dz", i), 0, 
         0, 0, 0,
-        ParticleType::jet()));        
+        ParticleType::jet());
+        particle.addInfo("bJet", getArrayElement<Float_t>("jet_bTag", i));
+        recoParticles.addParticle(particle);
+             
     }
     return recoParticles;
 }
