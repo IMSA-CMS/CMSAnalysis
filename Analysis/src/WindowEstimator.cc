@@ -34,7 +34,6 @@ double WindowEstimator::getExpectedYield(const SingleProcess* process, std::stri
     //Sets massbounds (to get the fraction inside window)
     double masslowaccepted = lowBound;
     double masshighaccepted = highBound;
-
     //Opens hist to analyze (checks whether hist is 2D or not) and runs estimator
     //Any lines that are the same in the two sides have to be in both. Having two "if's" with lines shared in the middle doesn't compile.
     if(dynamic_cast<TH2 *>(process->get2DHist(dataType)) == 0) {

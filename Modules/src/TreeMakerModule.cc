@@ -7,7 +7,7 @@ TreeMakerModule::TreeMakerModule(std::shared_ptr<SpecialVariableModule> iSpecial
 specialVariable(iSpecialVariable),
 name(iName)
 {
-    
+    addRequiredModule(specialVariable);
 }
 
 bool TreeMakerModule::process()

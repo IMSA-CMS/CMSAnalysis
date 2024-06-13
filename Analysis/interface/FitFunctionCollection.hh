@@ -25,7 +25,6 @@ public:
 	FitFunction& operator[](const std::string& index);
 	// FitFunction& operator[](int index);
 	bool checkFunctionsSimilar();
-	void add(const FitFunction& function);
 };
 
 #endif

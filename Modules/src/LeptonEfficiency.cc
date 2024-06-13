@@ -65,5 +65,5 @@ void LeptonEfficiency::finalize()
   std::cout << "middle\n";
   std::string electronBarrelOutputString = std::to_string(getCounter("recoElectron")/(double)getCounter("genSimElectron"));
   writeText(electronBarrelOutputString, "Electron Efficiency");
-  std::cout << "end\n";
+  //std::cout << "end\n";
 }
