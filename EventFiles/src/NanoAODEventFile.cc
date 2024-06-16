@@ -289,13 +289,13 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
     }
     for (UInt_t i = 0; i < getVariable<UInt_t>("photon_size"); i++)
     {
-        Particle::SelectionFit fit;
+        Particle::SelectionFit fit = Particle::SelectionFit::None;
 
         // std::cout << "Loading photon from NanoAOD\n";
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("photon_pt", i),
         getArrayElement<Float_t>("photon_eta", i), getArrayElement<Float_t>("photon_phi", i), 0)),
-        0, 0, 0, ParticleType::photon(), fit);
+            0, 0, 0, ParticleType::photon(), fit);
         recoParticles.addParticle(particle);
     }
     for (auto& particle : recoParticles)

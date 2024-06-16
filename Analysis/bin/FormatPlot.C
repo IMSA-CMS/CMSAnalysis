@@ -21,15 +21,15 @@ void FormatPlot()
     //Change extraText here
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Simulation Preliminary");
     //Change the filePath here. This should be the longest branch all input files have in common.
-    //const std::string filePath = "/uscms/home/mkubon/analysis/clean/CMSSW_12_4_3/src/CMSAnalysis/";
-    const std::string filePath = "";
+    const std::string filePath = "/uscms/home/mkubon/analysis/clean/CMSSW_12_4_3/src/CMSAnalysis/";
+    //const std::string filePath = "";
     //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
     //Write your graph names here (for the legend)
 
-    std::string file = "darkPhoton0_3.root";
+    std::string file = "leptonjetinvmasshist.root";
     std::string histName = "_hists/Zoomed In Lepton Jet Invariant Mass";
 
-    TString xTitle = "Lepton Jet Invariant Mass";
+    TString xTitle = "Lepton Jet Invariant Mass (GeV)";
     TString yTitle = "Events";
 
     TFile* openedFile;
@@ -67,6 +67,7 @@ void FormatPlot()
         histVector.push_back(hist);
     }
   
-
+    // histVector[0]->Rebin(4);
+    // histVector[0]->SetMaximum(400);
     TCanvas *canvas = plotFormatter->simple1DHist(histVector[0], xTitle, yTitle);
 }
