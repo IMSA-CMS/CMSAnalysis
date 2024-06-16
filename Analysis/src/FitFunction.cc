@@ -31,7 +31,7 @@ double FitFunction::DSCB(double *x, double *par)
 	{
 		result = exp(-0.5*alpha_l*alpha_l)*pow(fact1TLessMinosAlphaL*fact2TLessMinosAlphaL, -n_l);
 	}
-	else if (t > alpha_h)
+	else //if (t > alpha_h)
 	{
 		result = exp(-0.5*alpha_h*alpha_h)*pow(fact1THihgerAlphaH*fact2THigherAlphaH, -n_h);
 	}

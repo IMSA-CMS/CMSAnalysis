@@ -120,7 +120,7 @@ TCanvas* Fitter::fitExpressionFormula(TH1* histogram, FitFunction& fitFunction)
 }
 TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction)
 {
-	TCanvas *c2 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
+	//TCanvas *c2 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
 	TF1* f1 = fitFunction.getFunction();
 	// std::cout << "2:1\n";
 	// histogram->Draw();
@@ -250,7 +250,7 @@ std::vector<ParameterizationData> Fitter::getParameterData(std::unordered_map<st
 
 FitFunction Fitter::parameterizeFunction(ParameterizationData& parameterData)
 {
-	size_t fitLoops = 5;
+	//size_t fitLoops = 5;
 
 	TCanvas* canvas = new TCanvas(parameterData.name.c_str(), parameterData.name.c_str(),0,0,2000,500);
 	auto graph = new TGraphErrors(parameterData.x.size(), parameterData.x.data(), parameterData.y.data(), parameterData.zero.data(), parameterData.error.data());
@@ -297,7 +297,7 @@ void Fitter::parameterizeFunctions(std::unordered_map<std::string, double>& xDat
 
 TF1* Fitter::seedInversePowerLaw(double x_0, double y_0, double x_1, double y_1, double x_2, double y_2)
 {
-	static double range = 1.0;
+	//static double range = 1.0;
 	TF1* powerLaw = new TF1("", "[0]*(x-[1])^[2]");
 	powerLaw->SetParameter(0, y_0);
 	powerLaw->SetParameter(1, x_0 - 1);

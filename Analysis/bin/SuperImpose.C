@@ -42,7 +42,7 @@ void SuperImpose()
     std::vector<int> colors = {1, 2, 3, 4, 6, 7};
     //Change x and y axis titles here
     //TString xTitle = "Gamma";
-    TString xTitle = "Lepton Jet Phi";
+    TString xTitle = "Lepton Jet Invariant Mass (GeV)";
     TString yTitle = "Events";
 
     int count = 0;
