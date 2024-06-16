@@ -307,6 +307,11 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
             particle.addInfo("eScaleUp", getVariable<UInt_t>("elec_dEscaleUp"));
             particle.addInfo("eSigmaDown", getVariable<UInt_t>("elec_dEsigmaDown"));
             particle.addInfo("eSigmaUp", getVariable<UInt_t>("elec_dEsigmaUp"));
+
+            std::cout << "eScaleDown: " << getVariable<UInt_t>("elec_dEscaleDown") << '\n';
+            std::cout << "eScaleUp: " << getVariable<UInt_t>("elec_dEscaleUp") << '\n';
+            std::cout << "eSigmaDown: " << getVariable<UInt_t>("elec_dEsigmaDown") << '\n';
+            std::cout << "eSigmaUp: " << getVariable<UInt_t>("elec_dEsigmaUp") << '\n';
         }
     }
     

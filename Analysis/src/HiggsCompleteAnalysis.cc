@@ -54,9 +54,9 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
             std::vector<HistVariable> histVariablesSignal;
             std::string decayName = recoDecay + "_" + genSimDecay;
             // histVariablesSignal.push_back(HistVariable::InvariantMass(decayName + "__hists/" + decayName + "_Opposite Sign Invariant Mass"));      
-            histVariablesSignal.push_back(HistVariable::SameSignMass(decayName + "__hists/" + decayName + "_Same Sign Invariant Mass")); 
+            //histVariablesSignal.push_back(HistVariable::SameSignMass(decayName + "__hists/" + decayName + "_Same Sign Invariant Mass")); 
             // histVariablesSignal.push_back(HistVariable::InvariantMass(decayName + "__hists/" + decayName + "_1st Highest mu- Eta"));         
-            higgsSignal->addProcess(makeSignalProcess(histVariablesSignal, signalFilePath, "Higgs" + std::to_string((int) massTarget) + ".root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
+            //higgsSignal->addProcess(makeSignalProcess(histVariablesSignal, signalFilePath, "Higgs" + std::to_string((int) massTarget) + ".root", "higgs4l" + std::to_string((int) massTarget), reader, massTarget, luminosity));
         }
         
         std::vector<HistVariable> histVariablesBackground;
@@ -131,10 +131,10 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
         // higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017D.root", "higgs4l" + std::to_string((int) tempMass), reader, tempMass, luminosity));
         // higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017E.root", "higgs4l" + std::to_string((int) tempMass), reader, tempMass, luminosity));
         // higgsData->addProcess(makeSignalProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017F.root", "higgs4l" + std::to_string((int) tempMass), reader, tempMass, luminosity));
-        processes.push_back(higgsSignal);
-        processes.push_back(ttBarandMultiBosonandZZBackground);
-        processes.push_back(dyBackground);
-        processes.push_back(higgsData);
+        //processes.push_back(higgsSignal);
+        //processes.push_back(ttBarandMultiBosonandZZBackground);
+        //processes.push_back(dyBackground);
+        //processes.push_back(higgsData);
         auto leptonProcesses = std::make_shared<Channel>(recoDecay, processes);
         //leptonBackgrounds->cleanProcesses();
         channels.push_back(leptonProcesses);
