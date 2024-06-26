@@ -3,12 +3,10 @@
 
 #include "ProductionModule.hh"
 #include "CMSAnalysis/Utility/interface/MatchingPairCollection.hh"
-
 #include "TLorentzVector.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
 #include "DataFormats/Candidate/interface/CompositeRefCandidateT.h"
-
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
 

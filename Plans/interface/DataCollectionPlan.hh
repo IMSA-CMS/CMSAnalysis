@@ -21,7 +21,6 @@ class DataCollectionPlan
         virtual void initialize() = 0;
        
         const ModuleCollection& getModules() const {return modules;}
-
         // Returns the modules as a reference, typically for use within a ChildPlan constructor
  
         ModuleCollection& getModules() {return modules;}

@@ -13,6 +13,9 @@
 #include <string>
 #include "CMSAnalysis/Utility/interface/Utility.hh"
 
+int NanoAODEventFile::positiveCounter = 0;
+int NanoAODEventFile::negativeCounter = 0;
+
 std::vector<bool> NanoAODEventFile::getTriggerResults(std::string subProcess) const
 {
     // determines whether it passes the trigger"s criteria or not
@@ -181,6 +184,7 @@ void NanoAODEventFile::nextEvent()
             GenSimParticle *mother = nullptr;
             if(getArrayElement<Int_t>("gen_m1", i) != -1){
                  mother = &genSimParticles[getArrayElement<Int_t>("gen_m1", i)];
+                 std::cout<<mother;
             }
             genSimParticles.push_back(GenSimParticle(reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(
                 getArrayElement<Float_t>("gen_pt", i),
@@ -215,10 +219,21 @@ ParticleCollection<GenSimParticle> NanoAODEventFile::getGenSimParticles() const
 ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
 {
     ParticleCollection<Particle> recoParticles;
-
     for (UInt_t i = 0; i < getVariable<UInt_t>("elec_size"); i++)
     {
         int charge = getArrayElement<Int_t>("elec_charge", i);
+        //std::cout<<"Electron: " << charge << "\n";
+        if (charge == 1)
+        {
+            positiveCounter++;
+            //std::cout<<"\nPositive counter: " << positiveCounter << "\n";
+        }
+        else if (charge == -1)
+        {
+            negativeCounter++;
+            //std::cout<<"\nNegative counter: " << negativeCounter << "\n";
+        }
+
         Particle::SelectionFit fit;
         if (getArrayElement<Int_t>("elec_idpass", i) == 4) 
         {
@@ -256,6 +271,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
     for (UInt_t i = 0; i < getVariable<UInt_t>("muon_size"); i++)
     {
         int charge = getArrayElement<Int_t>("muon_charge", i);
+        //std::cout<<charge;
         Particle::SelectionFit fit;
 
         if (getArrayElement<Bool_t>("muon_tightid", i)) 
@@ -295,6 +311,9 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         recoParticles.addParticle(particle);
     }
     
+    //std::cout<<"Positive counter: " << positiveCounter << "\n";
+    //std::cout<<"Negative counter: " << negativeCounter << "\n";
+
     return recoParticles;
 }
 
