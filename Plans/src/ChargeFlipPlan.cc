@@ -16,12 +16,7 @@ void ChargeFlipPlan::initialize()
     auto eventMod = make_shared<EventModule>();
     eventMod->addSelector(make_shared<HiggsSelector>());
     auto matchMod = make_shared<MatchingModule>();
-<<<<<<< HEAD
-
-
-=======
-    //matchMod->setInput(eventMod->getEventInput());
->>>>>>> 26e4e24a (Fixed error with electron sign flip efficiency)
+    matchMod->setInput(eventMod->getEventInput());
     auto signFlip = make_shared<SignFlipModule>(matchMod);
     
     modules.addProductionModule(eventMod);
