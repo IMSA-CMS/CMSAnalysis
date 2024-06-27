@@ -29,18 +29,24 @@
 void higgsCompleteAnalysisTest()
 {
 	auto analysis = std::make_shared<HiggsCompleteAnalysis>();
-	std::vector<int> masses = {500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400};
+	std::vector<int> masses = {500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
 	TCanvas* canvas = new TCanvas("c1");
 
-	for (int mass : masses) 
-	{
-		auto channelTest = analysis->getChannel("eeuu");
-		auto higgsProcess = channelTest->findProcess("Higgs Signal " + std::to_string(mass));
-		TH1* signalHist = higgsProcess->getHist("Same Sign Inv Mass");
-		signalHist->DrawCopy();
-	}
+	auto channelTest = analysis->getChannel("eeee");
+	auto higgsProcess = channelTest->findProcess("Higgs Signal " + std::to_string(1300));
+	TH1* signalHist = higgsProcess->getHist("Same Sign Inv Mass");
+	signalHist->DrawCopy();
+	// std::cout << "Done loading HCA\n";
+	// for (int mass : masses) 
+	// {
+	// 	// std::cout << "Current mass " << mass << '\n';
+	// 	auto channelTest = analysis->getChannel("eeuu");
+	// 	auto higgsProcess = channelTest->findProcess("Higgs Signal " + std::to_string(mass));
+	// 	TH1* signalHist = higgsProcess->getHist("Same Sign Inv Mass");
+	// 	signalHist->DrawCopy();
+	// }
 
-	auto backgroundChannel = analysis->getChannel("eeuu");
-	auto zz_background = backgroundChannel->findProcess("ZZ Background");
+	// auto backgroundChannel = analysis->getChannel("eeuu");
+	// auto zz_background = backgroundChannel->findProcess("ZZ Background");
 	// zzHist->DrawCopy();
 }

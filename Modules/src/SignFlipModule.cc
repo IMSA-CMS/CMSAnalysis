@@ -16,8 +16,6 @@ SignFlipModule::SignFlipModule(const std::shared_ptr<MatchingModule> imatchModul
   this-> nMuonEvents = nMuonEvents;
 }
 
-
-
 bool SignFlipModule::process()
 {
   const auto matched = matchModule->getMatchingBestPairs().getPairs();
@@ -28,14 +26,11 @@ bool SignFlipModule::process()
   //std::cout<<"the number of matched pairs is: " + numMatchedPairs;
   for (const auto &particlePair : matched)
   {
-
     numMatchedPairs++;
-  
-    auto particleType = particlePair.getGenParticle().getType();
-    auto particlePt = particlePair.getGenParticle().getPt();
-    //std::cout << __FILE__ << " " << __LINE__ << std::endl;
+
+    auto particleType = particlePair.getRecoParticle().getType();
+    auto particlePt = particlePair.getRecoParticle().getPt();
     
-    std::cout<<"lol";
     if (particleType == ParticleType::electron()) 
     {
       
@@ -43,10 +38,7 @@ bool SignFlipModule::process()
       {
         nHighPtElectronEvents++;
       }
-      //std::cout << __FILE__ << " " << __LINE__ << std::endl;
       nElectronEvents++;
-
-      //std::cout<<"hi";
       
     } 
     
@@ -55,44 +47,44 @@ bool SignFlipModule::process()
       if(particlePt > signFlipPtCut)
       {
         nHighPtMuonEvents++;
-        //std::cout<<"french";
+
       }
       nMuonEvents++;
-      //std::cout<<"spanish";
+
     
     }
-    //std::cout << __FILE__ << " " << __LINE__ << std::endl;
     //std::cout << "Gen charge: " << particlePair.getGenParticle().getCharge() << "  Reco charge: " << particlePair.getRecoParticle().getCharge() << '\n';
 
 	  if (particlePair.getGenParticle().getCharge() != particlePair.getRecoParticle().getCharge()) 
     {
+      // static int positiveGenSimCounter = 0;
+      // static int negativeGenSimCounter = 0;
+      // static int positiveRecoCounter = 0;
+      // static int negativeRecoCounter = 0;
+
       if (particleType == ParticleType::electron()) 
       {
         nElectronFlips++;
-        //std::cout<<"lol";
-        //std::cout << __FILE__ << " " << __LINE__ << std::endl;
         if (particlePt > signFlipPtCut) 
         {
           nHighPtElectronFlips++;
-          //std::cout<<"ahfiafpn";
+
         }
-        //std::cout << __FILE__ << " " << __LINE__ << std::endl;
       } 
       else if (particleType == ParticleType::muon()) 
       {
         nMuonFlips++;
-        //std::cout << __FILE__ << " " << __LINE__ << std::endl;
         if (particlePt > signFlipPtCut) 
         {
           nHighPtElectronFlips++;
         }
-        //std::cout << __FILE__ << " " << __LINE__ << std::endl;
       }
 		  nSignFlips++;
 	  }
   }
   return true;
 }
+
 void SignFlipModule::finalize()
 {
   std::cout << "Number of Events: " << nTotalEvents << std::endl;

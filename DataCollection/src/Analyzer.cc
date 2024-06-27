@@ -120,12 +120,17 @@ std::vector<std::shared_ptr<Module>> Analyzer::getAllModules() const
   return modules;
 }
 
-void Analyzer::initialize(const std::string& outputFile)
+void Analyzer::initialize(const std::string& outputDirectory,const std::string& outputFile)// am I allowed to change this??
 {
+
+  std::string outputPath = outputDirectory + "/"+ outputFile;
+  
   // This keeps the histograms separate from the files they came from, avoiding errors
   TH1::AddDirectory(kFALSE);
   TH1::SetDefaultSumw2(kTRUE);
-  outputRootFile = new TFile(outputFile.c_str(), "RECREATE");
+
+
+  outputRootFile = new TFile(outputPath.c_str(), "RECREATE");//<<<<<<<<<<<<<<<
 
 
   // Checks if all dependencies are loaded properly
@@ -146,7 +151,7 @@ void Analyzer::initialize(const std::string& outputFile)
     {
       module->setInput(input);
     }
-    module->initialize();
+    module->initialize();//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<same initialize?
   }
 }
 

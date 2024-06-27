@@ -27,7 +27,7 @@ class GenSimSimpleImplementation : public ParticleImplementation
         virtual const ParticleType& getType() const  override{ return particleType; }
         virtual Particle::SelectionFit getSelectionFit() const override{throw std::runtime_error("selectionFit error");}
         virtual bool isNotNull() const override {return true;}
-        virtual bool isFinalState() const override {return true;}
+        virtual bool isFinalState() const override {return particleStatus == 1;}
         virtual bool operator== (const ParticleImplementation& other) const override;
         //virtual double isolation() const override{throw std::runtime_error("isolation error");}
 
