@@ -61,6 +61,7 @@ bool SingleProcess::checkValidity()
             //std::cout << crossSectionName << " failed on " << histVar.getName() << std::endl;
             validProcess = false;
         }
-    }    
+    }
+    std::cout << (validProcess ? "true" : "false");
     return validProcess;
 }
