@@ -64,9 +64,9 @@ class PlotFormatter
         
         void GraphFormat(TGraph*& graph, TString xAxisTitle, float xLabelSize, float xTitleSize, float yLableSize, float yTitleSize, float markerSize, float maximum, float minimum, float firstBin, float upperMasslimit);
         
-        void GetBottomPadValues(TH1* data, THStack* background, double*& x, double*& y, double*& xerror2, double*& yerror2);
+        void GetBottomPadValues(TH1*& data, THStack*& background, double (&x)[], double (&y)[], double (&xerror2)[], double (&yerror2)[]);
 
-        void IntegralScaling(double upperMasslimit, bool scaleTodata, std::vector<TH1*>& backgroundHists, int firstBin, int numberBinsData, int lowerDataIntegralLimit, float& dataIntegral, float& backgroundIntegral, float& scaleFactor);
+        void IntegralScaling(double& upperMasslimit, bool& scaleTodata, std::vector<TH1*>& backgroundHists, int& firstBin, int& numberBinsData, int& lowerDataIntegralLimit, float& dataIntegral, float& backgroundIntegral);
     
         int GetOrder(TH1* data, TH1* signal, THStack* background);
 
@@ -78,6 +78,22 @@ class PlotFormatter
 
         void FormatSignalData(THStack*& background, TH1*& signal, TH1*& data, std::vector<TH1*>& backgroundHists, int numBins);
     
+        TLegend* GetSimpleLegend(std::vector<TH1*> hists, std::vector<std::string> names);
+
+        TLegend* GetSimpleLegend(std::vector<TH1*> hists, std::vector<TString> names);
+
+        TLegend* GetSuperImposedLegend(std::shared_ptr<Channel> processes, std::string histvariable);
+
+        TLegend* GetStackedLegend(std::shared_ptr<Channel> processes, THStack* hists);
+
+        void DrawOtherHistograms(std::vector<TH1*>& hists, int& firstIndex);
+
+        void GetImposedOrder(THStack*& background, THStack*& signal, THStack*& first, THStack*& second);
+
+        void Bin(std::vector<TH1*>& hists, TH1*& first, int& firstIndex, double& maximum, int& count);
+
+        void GetOrder(std::vector<TH1*>& hists, TH1*& first, int& firstIndex, double& maximum);
+
     private:
         bool drawLogo;
         TString extraText;
