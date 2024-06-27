@@ -51,7 +51,7 @@ const EventInput* getEventInput() const {return input;}
   
   void writeOutputFile();
   void processOneEvent(const EventInterface *eventInterface);
-  void initialize(const std::string& outputFile);
+  void initialize(const std::string& outputDirectory, const std::string& outputFile);
   bool checkModuleDependencies(std::shared_ptr<Module> module);
   void addModules(ModuleCollection modules);
  

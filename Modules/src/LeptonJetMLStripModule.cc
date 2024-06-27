@@ -55,7 +55,7 @@ void LeptonJetMLStripModule::calculateVariables(ParticleCollection<Particle> par
         // mass = leptonJet.getMass();
        
 		double runnerUpPt = 0;
-		double numMuons = 0; //talk to dong about unadding after altering in 49, kind of weird that we don't have that
+		//double numMuons = 0; //talk to dong about unadding after altering in 49, kind of weird that we don't have that
 		//need to do this edit on 50;
         
 

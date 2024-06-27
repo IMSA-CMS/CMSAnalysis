@@ -44,11 +44,11 @@ void HPlusPlusEfficiency::doCounters()
 
     for (auto p : getInput()->getParticles(EventInput::RecoLevel::Reco))
     {
-      std::cout << "PT: " << std::to_string(p.getPt()) << std::endl;
+      //std::cout << "PT: " << std::to_string(p.getPt()) << std::endl;
 
       if (p.getPt() < 10)
       {
-        std::cout << "CUT!" << std::endl;
+        //std::cout << "CUT!" << std::endl;
         incrementCounter("eeeeCut", 1);
         break;
       }

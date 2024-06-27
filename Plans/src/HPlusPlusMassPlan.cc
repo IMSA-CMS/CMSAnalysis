@@ -7,35 +7,26 @@
 #include "TROOT.h"
 #include "TSystem.h"
 
-#include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
 #include "CMSAnalysis/Filters/interface/DoubleMuonTrigger.hh"
 #include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/Modules/interface/LeptonEfficiency.hh"
-#include "CMSAnalysis/Modules/interface/MassRecoEfficiency.hh"
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
 #include "CMSAnalysis/Filters/interface/NLeptonsFilter.hh"
 #include "CMSAnalysis/Histograms/interface/NLeptonsHist.hh"
-#include "CMSAnalysis/Histograms/interface/PhotonsHist.hh"
 #include "CMSAnalysis/Histograms/interface/RecoveredInvariantMassHist.hh"
 #include "CMSAnalysis/Histograms/interface/SameSignInvariantMassHist.hh"
 #include "CMSAnalysis/Filters/interface/SingleMuonTrigger.hh"
-#include "CMSAnalysis/Modules/interface/TriggerEfficiencyModule.hh"
 #include "CMSAnalysis/Modules/interface/TriggerModule.hh"
 #include "CMSAnalysis/Filters/interface/TripleMuonTrigger.hh"
-#include "CMSAnalysis/Histograms/interface/TwoInvariantMassesHist.hh"
 #include "CMSAnalysis/Filters/interface/UnusualFinalStateFilter.hh"
-#include "CMSAnalysis/Histograms/interface/PhotonsHist.hh"
 #include "CMSAnalysis/Modules/interface/METModule.hh"
 #include "CMSAnalysis/Histograms/interface/METHist.hh"
 #include "CMSAnalysis/Histograms/interface/Histograms.hh"
-#include "CMSAnalysis/Modules/interface/LeptonEfficiency.hh"
 #include "CMSAnalysis/Filters/interface/METTrigger.hh"
 #include "CMSAnalysis/Modules/interface/SignFlipModule.hh"
 #include "CMSAnalysis/Histograms/interface/HistogramPrototype1DGeneral.hh"
 #include "CMSAnalysis/Modules/interface/FilterModule.hh"
-#include "CMSAnalysis/Histograms/interface/HistogramPrototype1DGeneral.hh"
-
 
 using std::make_shared;
 
@@ -63,11 +54,10 @@ void HPlusPlusMassPlan::initialize()
 
   auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(EventInput::RecoLevel::Reco, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
   //auto genSimSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(true, "GenSim Same Sign Invariant Mass", 100, 0, 1000);
-  // Go up to 2000 - Andy, 09/02 - and make more bins. Modifications also made for picking files
+  //Go up to 2000 - Andy, 09/02 - and make more bins. Modifications also made for picking files
   //auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(false, "Reco Same Sign Invariant Mass", 1000, 0, 2000);
 
   // auto recoThirdMuonPtHist = make_shared<ThirdMuonPtHist>(genSimMod, recoMod, false, std::string("Reconstructed Third Muon Transverse Momentum"), 50, 0, 3000);
-  // 
   auto genSimSameSignInvMassHist = make_shared<HistogramPrototype1DGeneral>("GenSim Same Sign Invariant Mass", 100, 0, 1000,
 [](const EventInput* input){return std::vector<double>{input -> getParticles(EventInput::RecoLevel::GenSim).calculateSameSignInvariantMass(false, true)};});
 
@@ -80,17 +70,17 @@ void HPlusPlusMassPlan::initialize()
 
 
 
-  // Add the histogram(s) created above to histMod
+  //Add the histogram(s) created above to histMod
   //histMod->addHistogram(recoThirdMuonPtHist);
-  // histMod->addHistogram(sameSignInvMassHistGen);
+  //histMod->addHistogram(sameSignInvMassHistGen);
   //histMod->addHistogram(sameSignInvMassHistReco);
-  // histMod->addHistogram(genSimHPlusPlusRecoveredInvMassHist);
-  // histMod->addHistogram(recoHPlusPlusRecoveredInvMassHist);
-  // histMod->addHistogram(genSimHMinusMinusRecoveredInvMassHist);
-  // histMod->addHistogram(recoHMinusMinusRecoveredInvMassHist);
+  //histMod->addHistogram(genSimHPlusPlusRecoveredInvMassHist);
+  //histMod->addHistogram(recoHPlusPlusRecoveredInvMassHist);
+  //histMod->addHistogram(genSimHMinusMinusRecoveredInvMassHist);
+  //histMod->addHistogram(recoHMinusMinusRecoveredInvMassHist);
   
   //histMod->addHistogram(recoPhotonHist);
-  // histMod->addHistogram(nLeptonsHist);
+  //histMod->addHistogram(nLeptonsHist);
   //histMod->addHistogram(nElectronsHist);
   //histMod->addHistogram(nMuonsHist);
   //histMod->addHistogram(recoPhiSameSignInvMassHist);
@@ -106,7 +96,7 @@ void HPlusPlusMassPlan::initialize()
   auto tripleMuonTrigger = make_shared<TripleMuonTrigger>(10, 5, 5);
   auto mETTrigger = make_shared<METTrigger>(mETMod, 120);
 
-  // Add triggers to the TriggerModule
+  //Add triggers to the TriggerModule
   triggerMod->addTrigger(singleMuonTrigger);
   triggerMod->addTrigger(doubleMuonTrigger);
   triggerMod->addTrigger(tripleMuonTrigger);
@@ -115,7 +105,7 @@ void HPlusPlusMassPlan::initialize()
   //modules.addProductionModule(genSimMod);
   //modules.addProductionModule(recoMod);
   modules.addProductionModule(matchMod);
-  // modules.addProductionModule(triggerMod); 
+  //modules.addProductionModule(triggerMod); 
   modules.addProductionModule(mETMod);
 
   // Filters

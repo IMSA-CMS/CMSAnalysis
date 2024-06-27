@@ -46,19 +46,15 @@ void EventModule::finalize()
 
 bool EventModule::process ()
 { 
-    //std::cout<<"We have offically entered the method";
     clearHistograms(); //all histograms are cleared and we only fill the ones we are using for this event
     event.clear();
-
     for (auto selector : selectors)
     {
         selector->selectParticles(getInput(),event);
-        //std::cout << __FILE__ << " " << __LINE__ << std::endl;
     }
 
     event.setMET(getInput()->getMET());
     bool passesCuts = true;
-    //std::cout<<"right before for loop";
 
     //std::cout<<"\nthe cut size is: " <<cuts.size() << "\n";
     for (size_t i = 0; i < cuts.size(); i++) //The loop is not being entered because the cut size is 0 for our data set
@@ -69,7 +65,7 @@ bool EventModule::process ()
             break;
         }
     }
-    
+
     if (!passesCuts)
     {
         return false;
@@ -87,7 +83,6 @@ bool EventModule::process ()
     try{
         for (auto& [key,value] : event.getSpecials())
         {
-            // CODE IS NOT GETTING HERE FOR SOME REASON, DEBUG THIS
             auto specialPtr = std::make_shared<ParticleCollection<Particle>>(value);
             addBasicHistograms(value.getParticles()[0].getType(), value);
             addCountHistograms(value.getParticles()[0].getType(), specialPtr); 
@@ -97,36 +92,19 @@ bool EventModule::process ()
         std::cerr << "Exception caught: " << e.what() << std::endl;
     }
 
-    std::cout << "end\n";
-
     auto electronCollection = std::make_shared<ParticleCollection<Particle>>(event.getElectrons());
-
     auto muonCollection = std::make_shared<ParticleCollection<Particle>>(event.getMuons());
-
     auto photonCollection = std::make_shared<ParticleCollection<Particle>>(event.getPhotons());
-    //std::cout << __FILE__ << " " << __LINE__ << std::endl;
-
     auto jetCollection = std::make_shared<ParticleCollection<Particle>>(event.getJets());
-    //std::cout << __FILE__ << " " << __LINE__ << std::endl;
 
     addCountHistograms(ParticleType::electron(), electronCollection);
-    //std::cout << __FILE__ << " " << __LINE__ << std::endl;
-    
     addCountHistograms(ParticleType::muon(), muonCollection);
-    //std::cout << __FILE__ << " " << __LINE__ << std::endl;
-
     addCountHistograms(ParticleType::photon(), photonCollection);
-    //std::cout << __FILE__ << " " << __LINE__ << std::endl;
 
     try{addCountHistograms(ParticleType::jet(), jetCollection);
-    //std::cout << __FILE__ << " " << __LINE__ << std::endl;
     } catch (const std::runtime_error& e) {
         std::cerr << "Exception caught: " << e.what() << std::endl;
     }
-
-    //std::cout <<"IT worked, maya and anwita did it!!";
-
-
     return true;
 }
 
@@ -208,7 +186,7 @@ std::string EventModule::getBasicHistogramTitle(int n, const ParticleType& parti
 {
     n++;
     std::string rank = "th Highest ";
-    if (n%10 == 1 && n%100 != 11) //I hate english words
+    if (n%10 == 1 && n%100 != 11) 
     {
         rank = "st Highest ";
     }

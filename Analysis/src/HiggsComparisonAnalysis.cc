@@ -82,15 +82,20 @@ TH1* HiggsComparisonAnalysis::getDecayHist(std::string histType, std::string pro
         }
 	}
 	TH1* hist = new TH1F(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * maxBarWidth);
-	TH1* toAdd;
+	TH1* toAdd = nullptr;
 	TList* toMerge = new TList;
     TH1::AddDirectory(kFALSE);
 	for (const auto& channel : channels)	
 	{
         std::string channelName = channel->getName();
         channelName = channelName.substr((channelName.length() - 2) - int(log10((int) massTarget)) + 1, int(log10((int) massTarget)) + 1);
-		if(channelName == std::to_string((int) massTarget)) {
+		if(channelName == std::to_string((int) massTarget)) 
+        {
             toAdd = channel->findProcess(processName)->getHist(histType, scaleToExpected);
+        }
+        if (!toAdd)
+        {
+            throw std::runtime_error("Histogram not found in channel: " + channel->getName());
         }
         toMerge->Add(toAdd);
 	}

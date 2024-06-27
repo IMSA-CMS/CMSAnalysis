@@ -30,6 +30,8 @@ class NanoAODEventFile : public EventFile
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const override;
         virtual bool checkTrigger(std::string triggerName, std::string subProcess) const override; //checks if event passes trigger criteria
+        static int positiveCounter;
+        static int negativeCounter;
     private:
 
         TTree* tree;
