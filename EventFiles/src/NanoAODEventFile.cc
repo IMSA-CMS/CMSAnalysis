@@ -253,6 +253,14 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         particle.addInfo("Electron_map", getArrayElement<Int_t>("Electron_bitmap", i)); 
         particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
         particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
+        particle.addInfo("eScaleDown", getArrayElement<Float_t>("elec_dEscaleDown", i));
+        particle.addInfo("eScaleUp", getArrayElement<Float_t>("elec_dEscaleUp", i));
+        particle.addInfo("eSigmaDown", getArrayElement<Float_t>("elec_dEsigmaDown", i));
+        particle.addInfo("eSigmaUp", getArrayElement<Float_t>("elec_dEsigmaUp", i));
+
+
+
+   
         recoParticles.addParticle(particle);
         // std::cout << "Particle: " << particle.getInfo("CutBasedHEEP") << '\n';
     }
@@ -298,22 +306,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
             0, 0, 0, ParticleType::photon(), fit);
         recoParticles.addParticle(particle);
     }
-    for (auto& particle : recoParticles)
-    {
-        if(particle.getType() == ParticleType::electron())
-        {
-        
-            particle.addInfo("eScaleDown", getVariable<UInt_t>("elec_dEscaleDown"));
-            particle.addInfo("eScaleUp", getVariable<UInt_t>("elec_dEscaleUp"));
-            particle.addInfo("eSigmaDown", getVariable<UInt_t>("elec_dEsigmaDown"));
-            particle.addInfo("eSigmaUp", getVariable<UInt_t>("elec_dEsigmaUp"));
-
-            std::cout << "eScaleDown: " << getVariable<UInt_t>("elec_dEscaleDown") << '\n';
-            std::cout << "eScaleUp: " << getVariable<UInt_t>("elec_dEscaleUp") << '\n';
-            std::cout << "eSigmaDown: " << getVariable<UInt_t>("elec_dEsigmaDown") << '\n';
-            std::cout << "eSigmaUp: " << getVariable<UInt_t>("elec_dEsigmaUp") << '\n';
-        }
-    }
+    
     
     return recoParticles;
 }
