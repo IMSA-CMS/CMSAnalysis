@@ -1,3 +1,3 @@
 # in Analysis/bin run "bash lxplusCopy.sh"
-scp index.html virao@lxplus.cern.ch:/eos/user/v/virao/www
-scp jumboPlotStorage/*.png virao@lxplus.cern.ch:/eos/user/v/virao/www/jumboPlotStorage
+scp index.html chenm@lxplus.cern.ch:/eos/user/c/chenm/www
+scp jumboPlotStorage/*.png chenm@lxplus.cern.ch:/eos/user/c/chenm/www/jumboPlotStorage
