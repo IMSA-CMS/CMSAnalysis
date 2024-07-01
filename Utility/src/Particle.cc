@@ -155,15 +155,7 @@ void Particle::addInfo(std::string mapKey, double value)
 //   return particle->isolation();
 // }
 
-// double Particle::getDxy() const
-// {
-//     return particle->dxy();
-// }
 
-// double Particle::getDz() const
-// {
-//   return particle->dz();
-// }
 
 Particle::BarrelState Particle::getBarrelState() const
 {
@@ -272,6 +264,12 @@ reco::Candidate::LorentzVector Particle::getFourVector() const
 double Particle::getDeltaR(Particle part) const
 {
   return reco::deltaR(part.getFourVector(), getFourVector());
+}
+
+Particle::SelectionFit Particle::getSelectionFit() const
+{
+  checkIsNull();
+  return particle->getSelectionFit();
 }
 
 std::shared_ptr<ParticleImplementation> Particle::getParticleImplementation() 
