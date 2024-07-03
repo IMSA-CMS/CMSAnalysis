@@ -24,7 +24,7 @@ void HiggsDataStripModule::initialize()
 		treeId->Branch("deltaR", &deltaR, "deltaR/F");
 		treeId->Branch("mass", &mass, "mass/F");
 
-		std::cout << treeId->GetListOfBranches();
+		//std::cout << treeId->GetListOfBranches();
 	}
 }
 

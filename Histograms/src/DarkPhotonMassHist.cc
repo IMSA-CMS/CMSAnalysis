@@ -31,7 +31,7 @@ std::vector<double> DarkPhotonMassHist::value() const
 
     if (particle.finalDaughter() != particle)
     {
-      std::cout << "++";
+      //std::cout << "++";
       continue; 
     } 
 
