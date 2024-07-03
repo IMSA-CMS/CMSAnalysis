@@ -160,7 +160,7 @@ void TriggerModule::findMostEfficientCombo(double efficiency, int nPass, std::ve
 
 void TriggerModule::finalize()
 {
-  std::cout << '\n';
+ // std::cout << '\n';
 
   callTriggerCombo();
   for (size_t i = 0; i < trigCombos.size(); ++i)
