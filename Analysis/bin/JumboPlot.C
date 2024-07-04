@@ -31,6 +31,8 @@
 #include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "CMSAnalysis/Analysis/interface/SimpleChannel.hh"
 
+#include "CMSAnalysis/Analysis/interface/DarkPhotonCompleteAnalysis.hh"
+
 void JumboPlot() {
 	//Change things in this section
 
@@ -39,11 +41,13 @@ void JumboPlot() {
 	//auto higgsSuperImpAnalysis = std::make_shared<HiggsCutsAnalysis>();
 	//auto simpleAnalysis = std::make_shared<SimpleHiggsComparison>();
 	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
+	//auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
 	//Extra text is the second parameter
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation/Data)");
 	//std::vector<std::shared_ptr<Channel>> stackChannels = higgsStackAnalysis->getChannels();
 	//std::vector<std::shared_ptr<Channel>> superImpChannels = higgsSuperImpAnalysis->getChannels(); 
 	std::vector<std::shared_ptr<Channel>> higgsChannels = higgsAnalysis->getChannels();
+	//std::vector<std::shared_ptr<Channel>> channels = DarkPhotonAnalysis->getChannels();
 	//Controls what graph types to make. 1 is stacked only, 2 is superimposed only, 3 is both, 4 is for SimpleAnalysis only, and 5 is for higgsAnalysis.
 	int graphSwitch = 5;
 	//Put all variables you can graph here
@@ -63,9 +67,23 @@ void JumboPlot() {
 	std::vector<std::string> toAdd;
 	std::string entry = "";
 	if(graphSwitch == 5) {
-		for(std::shared_ptr<Channel> channel : higgsChannels) {
+		for(std::shared_ptr<Channel> channel : channels) { 
 			for(std::string processName : channel->getNames()) {
+				/*
+				//std::cout << processName << std::endl;
 				//Change this line to make the described name your signal process name.
+				if(processName == "Dark Photon Signal") {
+					channel->labelProcess("signal", processName);
+				}
+				// "Monte Carlo Data"
+				else if(processName == "Data") { //This line is only used for complete plots
+					channel->labelProcess("data", processName);
+				}
+				else {
+					channel->labelProcess("background", processName);
+				}
+				*/
+				
 				if(processName == "Higgs Signal") {
 					channel->labelProcess("signal", processName);
 				}
@@ -76,27 +94,28 @@ void JumboPlot() {
 				else {
 					channel->labelProcess("background", processName);
 				}
+				
 			}
 			std::string channelName = channel->getName();
 			//toAdd.push_back(channelName);
 			for(std::string dataType : graphableTypes) {
 				entry = "";
-				TString xAxisName = "OSDL invariant mass" + units;
-				TString yAxisName = "Relative number of events";
+				TString xAxisName = "OSDL " + units;
+				TString yAxisName = "Events";
 				
 				toAdd.push_back(dataType);
 				toAdd.push_back(channelName);
 				dataName = Utility::removeSpaces(dataType);
 				fileName = "jumboPlotStorage/" + channelName + dataName + "DataMC.png";
-				TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisName, yAxisName, massTarget, true, channelName);
-				//TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisName, yAxisName, massTarget, true);
+				//fileName = channelName + dataName + "DataMC.png";
+				//TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "Invariant Mass", xAxisName, yAxisName, true, "0.3");
+				TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisName, yAxisName, true, channelName);
 				canvas->SaveAs(fileName.c_str());
 				plotFormatter->deleteHists();
 				canvas->Close();
 				delete canvas;
 				
 				entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
-			
 			
 				toAdd.push_back(entry);
 				tableInput.push_back(toAdd);

@@ -116,7 +116,7 @@ void TriggerSimModule::initialize()
 void TriggerSimModule::finalize()
 {
   // Prints out a summary of the results
-  std::cout << std::endl;
+ // std::cout << std::endl;
   auto iter = triggerResultsData.begin();
   //Do every other trigger because the entire list of triggers is too long to fit in the terminal
   //iter++;
@@ -130,7 +130,7 @@ void TriggerSimModule::finalize()
       iter++;
     }
   }
-  std::cout << std::endl;
+ // std::cout << std::endl;
 };
 
 bool TriggerSimModule::process()
@@ -149,7 +149,7 @@ bool TriggerSimModule::process()
     // Available here: https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD2017#Trigger
     for (unsigned int i = 0, n = triggerBits->size(); i < n; ++i)
     {
-      std::cout << "Trigger " << names.triggerName(i) <<
+     //std::cout << "Trigger " << names.triggerName(i) <<
           ", prescale " << triggerPrescales->getPrescaleForIndex(i) <<
           ": " << (triggerBits->accept(i) ? "PASS" : "fail (or not run)")
           << std::endl;

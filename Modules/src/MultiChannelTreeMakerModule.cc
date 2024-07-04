@@ -42,7 +42,7 @@ void MultiChannelTreeMakerModule::finalize()
 {
     for(auto tree : trees)
     {
-        std::cout<<"Testing " << tree.first;
+       // std::cout<<"Testing " << tree.first;
         tree.second->Write();
     }
 

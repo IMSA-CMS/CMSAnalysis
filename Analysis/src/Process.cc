@@ -142,6 +142,9 @@ void Process::addProcess(SingleProcess process)
 {
 	if(process.checkValidity() == true) {
 		processes.push_back(process);
+	} 
+	else{ 
+		std::cout << "done!" << "\n";
 	}
 }
 
