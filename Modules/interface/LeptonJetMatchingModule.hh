@@ -20,6 +20,8 @@ public:
     const bool isSquark(GenSimParticle lepton);
     const bool isHiggs(GenSimParticle lepton);
 
+    virtual std::string getName() override {return "LeptonJetMatchingModule";}
+
 private:
     double findMatchingPairDeltaR(MatchingPair pair);
 

@@ -15,6 +15,8 @@ public:
   const std::vector<double> &getPtValues() const { return pTValues; }
   const std::vector<LeptonJet> findLeptonJets(ParticleCollection<Lepton> recoCandidates);
 
+  virtual std::string getName() override {return "LeptonJetReconstructionModule";}
+
 private:
   LeptonJet createLeptonJet(Lepton highestPtLepton) const;
   Particle findHighestPtLepton(std::vector<Lepton> particles) const;

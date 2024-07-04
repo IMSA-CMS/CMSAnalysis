@@ -19,6 +19,8 @@ public:
   virtual void initialize() override;
   virtual void finalize() override;
 
+  virtual std::string getName() override {return "ResolutionModule";}
+  
 protected:
   virtual void fillError(const MatchingPairCollection& matchingPairCollection) = 0;
   std::string pickBin(double value) const;
