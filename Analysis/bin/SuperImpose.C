@@ -17,9 +17,8 @@
 
 void SuperImpose() {
 
-
     //Change the filePath here. This should be the longest branch all input files have in common. CHANGE USERNAME TO YOUR USERNAME
-    const std::string filePath = "/uscms/home/ceddington/analysis/CMSSW_14_0_4/src/CMSAnalysis/";
+    const std::string filePath = "/uscms/home/ceddingt/analysis/CMSSW_14_0_4/src/CMSAnalysis/";
 
     //Pick source files for histograms here
     std::vector<std::string> files = {"testpdfbackground.root"}; 
@@ -66,7 +65,13 @@ void SuperImpose() {
             }
         }
     }
-
+    auto plotFormatter = std::make_shared<PlotFormatter>(false, "");
     std::cout << "SuperImpose Finished Iteration " << histVector.size() <<std::endl;
     TCanvas *canvas = plotFormatter->simpleSuperImposedHist(histVector, colors, names, xTitle, yTitle);
+
+    //find integral of the different histograms
+    for(int i = 0; i < histVector.size(); i++) {
+        std::cout << "Integral of " << names.at(i) << " is " << histVector.at(i)->Integral() << std::endl;
+    }
+    
 }

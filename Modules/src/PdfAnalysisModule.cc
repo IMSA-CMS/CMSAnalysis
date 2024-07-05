@@ -125,7 +125,9 @@ bool PdfAnalysisModule::process()
     //std::cout << "No Reco Particles" << std::endl;
     return true;
   }
-  
+  //auto recoCS = recoParticles.getCollinsSoper();
+  auto recoInvMass = recoParticles.getInvariantMass();
+  defHist->Fill(recoInvMass);
   auto& particle = recoParticles[0];
   //No idea how to get particle info
   for(int i = 0; i < 100; ++i)
@@ -134,7 +136,6 @@ bool PdfAnalysisModule::process()
     auto pdfWeight = particle.getInfo("pweight"+std::to_string(i));
     //std::cout << "Weight " << pdfWeight << std::endl;
     auto hist = histVec[i];
-    auto recoInvMass = recoParticles.getInvariantMass();
     hist->Fill(recoInvMass, pdfWeight);
     //std::cout << "Bin1 Process " << hist->GetBinContent(1) << std::endl;
   }
