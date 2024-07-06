@@ -17,6 +17,7 @@ public:
 
   TriggerSimModule(std::string _subProcess = "HLT"); // Defaults to HLT -- There are three main sub processes: HLT, SIM, and RECO. In data files, SIM is replaced with PAT
 
+  virtual std::string getName() override {return "TriggerSimModule";}
   // Methods to only enable specific triggers
   void addTrigger(const EnumTriggers triggerNameEnum);
   void addTrigger(const std::vector<EnumTriggers> triggerNameEnums);

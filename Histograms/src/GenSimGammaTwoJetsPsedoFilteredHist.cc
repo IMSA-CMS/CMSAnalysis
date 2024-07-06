@@ -34,7 +34,7 @@ std::vector<double> GenSimGammaTwoJetsPsedoFilteredHist::value() const
 
     if (particle.finalDaughter() != particle)
     {
-      std::cout << "++";
+      //std::cout << "++";
       continue;
     }
 
