@@ -193,7 +193,7 @@ private:
 
 void DimuonDarkPhoton::beginJob()
 {
-  std::cout << "Made it (in beginJob) to line" << __LINE__ << std::endl;
+  //std::cout << "Made it (in beginJob) to line" << __LINE__ << std::endl;
 
   //Pt Histogram Range
   double ptMaxRange = 2500;
@@ -406,7 +406,7 @@ DimuonDarkPhoton::DimuonDarkPhoton(const edm::ParameterSet& iConfig)
 
 {
 
-  std::cout << "Made it (in constructor) to line" << __LINE__ << std::endl;
+  //std::cout << "Made it (in constructor) to line" << __LINE__ << std::endl;
 
   debug_=iConfig.getParameter<int>("debug");
   genPartsTag_=iConfig.getParameter<edm::InputTag>("genPartsTag");
@@ -438,7 +438,7 @@ void
 DimuonDarkPhoton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
 
-  std::cout << "Made it (in analyze) to line" << __LINE__ << std::endl;
+  //std::cout << "Made it (in analyze) to line" << __LINE__ << std::endl;
   using namespace edm;
   edm::Handle<reco::GenParticleCollection> genPartsHandle;
   iEvent.getByToken(genPartsToken_,genPartsHandle);
@@ -486,42 +486,42 @@ DimuonDarkPhoton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   for(auto &part : genParts){
     //if the particle is H++ or H--
     if(abs(part.pdgId()) == 9900041 || abs(part.pdgId()) == 9900042) {
-      std::cout << "Found Higgs at line " << __LINE__ << std::endl;
+     // std::cout << "Found Higgs at line " << __LINE__ << std::endl;
       bool foundOriginalHiggs = false;
       if(!higgsPlus && part.pdgId() == 9900041) {//assuming only one pair of higgs are produces
 	higgsPlus = getLastDaughter(&part, part.pdgId());//To get the latest daughter of itself
-	std::cout << "Found last HiggsL++ at line " << __LINE__ << std::endl;
+	//std::cout << "Found last HiggsL++ at line " << __LINE__ << std::endl;
 	daughter1 = getLastDaughter(higgsPlus->daughter(0), higgsPlus->daughter(0)->pdgId());
-	std::cout << "Found last daughter1 at line " << __LINE__ << std::endl;
+	//std::cout << "Found last daughter1 at line " << __LINE__ << std::endl;
 	daughter2 = getLastDaughter(higgsPlus->daughter(1), higgsPlus->daughter(1)->pdgId());
-	std::cout << "Found last daughter2 at line " << __LINE__ << std::endl;
+	//std::cout << "Found last daughter2 at line " << __LINE__ << std::endl;
 	foundOriginalHiggs = true;
       }
       else if(!higgsMinus && part.pdgId() == -9900041) {
 	higgsMinus = getLastDaughter(&part, part.pdgId());//To get the latest daughter of itself
-	std::cout << "Found last HiggsL-- at line " << __LINE__ << std::endl;
+	//std::cout << "Found last HiggsL-- at line " << __LINE__ << std::endl;
 	daughter1 = getLastDaughter(higgsMinus->daughter(0), higgsMinus->daughter(0)->pdgId());
-	std::cout << "Found last daughter1 at line " << __LINE__ << std::endl;
+	//std::cout << "Found last daughter1 at line " << __LINE__ << std::endl;
 	daughter2 = getLastDaughter(higgsMinus->daughter(1), higgsMinus->daughter(1)->pdgId());
-	std::cout << "Found last daughter2 at line " << __LINE__ << std::endl;
+	//std::cout << "Found last daughter2 at line " << __LINE__ << std::endl;
 	foundOriginalHiggs = true;
       }
       else if(!higgsPlusRight && part.pdgId() == 9900042) {
 	higgsPlusRight = getLastDaughter(&part, part.pdgId());//To get the latest daughter of itself
-	std::cout << "Found last HiggsR++ at line " << __LINE__ << std::endl;
+	//std::cout << "Found last HiggsR++ at line " << __LINE__ << std::endl;
 	daughter1 = getLastDaughter(higgsPlusRight->daughter(0), higgsPlusRight->daughter(0)->pdgId());
-	std::cout << "Found last daughter1 at line " << __LINE__ << std::endl;
+	//std::cout << "Found last daughter1 at line " << __LINE__ << std::endl;
 	daughter2 = getLastDaughter(higgsPlusRight->daughter(1), higgsPlusRight->daughter(1)->pdgId());
-	std::cout << "Found last daughter2 at line " << __LINE__ << std::endl;
+	//std::cout << "Found last daughter2 at line " << __LINE__ << std::endl;
 	foundOriginalHiggs = true;
       }
       else if(!higgsMinusRight && part.pdgId() == -9900042) {
 	higgsMinusRight = getLastDaughter(&part, part.pdgId());//To get the latest daughter of itself
-	std::cout << "Found last HiggsR-- at line " << __LINE__ << std::endl;
+	//std::cout << "Found last HiggsR-- at line " << __LINE__ << std::endl;
 	daughter1 = getLastDaughter(higgsMinusRight->daughter(0), higgsMinusRight->daughter(0)->pdgId());
-	std::cout << "Found last daughter1 at line " << __LINE__ << std::endl;
+	//std::cout << "Found last daughter1 at line " << __LINE__ << std::endl;
 	daughter2 = getLastDaughter(higgsMinusRight->daughter(1), higgsMinusRight->daughter(1)->pdgId());
-	std::cout << "Found last daughter2 at line " << __LINE__ << std::endl;
+	//std::cout << "Found last daughter2 at line " << __LINE__ << std::endl;
 	foundOriginalHiggs = true;
       }
       
@@ -537,7 +537,7 @@ DimuonDarkPhoton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 	//No need for switch statement becuase only 3 possible leptons m,e,t
 	//tau is suppressed accordingn to ALTAS 2018 search for doubly charged Higgs boson in multi-lepton final states
 	if(abs(daughter1->pdgId()) == 13 && abs(daughter2->pdgId()) == 13) {
-	  std::cout << "Found muon pair at line " << __LINE__ << std::endl;
+	  //std::cout << "Found muon pair at line " << __LINE__ << std::endl;
 	  if(daughter1->pdgId() < 0) {//Same sign leptons
 	    mu1Plus = daughter1;
 	    mu2Plus = daughter2;
@@ -548,7 +548,7 @@ DimuonDarkPhoton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 	  }
 	}
 	else if(abs(daughter1->pdgId()) == 11 && abs(daughter2->pdgId()) == 11) {
-	  std::cout << "Found electron pair at line " << __LINE__ << std::endl;
+	  //std::cout << "Found electron pair at line " << __LINE__ << std::endl;
 	  if(daughter1->pdgId() < 0) {//Same sign leptons
 	    ele1Plus = daughter1;
 	    ele2Plus = daughter2;
@@ -576,30 +576,30 @@ DimuonDarkPhoton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
     if(part.pdgId() == 23) {
       if(!zBoson1 && zBoson1 != getLastDaughter(&part, part.pdgId())) {
 	zBoson1 = getLastDaughter(&part, part.pdgId());
-	std::cout << "Found last Z boson1 at line " << __LINE__ << "at index: " << getIndexOf(zBoson1,genParts) << std::endl;
+	//std::cout << "Found last Z boson1 at line " << __LINE__ << "at index: " << getIndexOf(zBoson1,genParts) << std::endl;
       }
       else if(!zBoson2 && zBoson2 != getLastDaughter(&part, part.pdgId())) {
 	zBoson2 = getLastDaughter(&part, part.pdgId());
-	std::cout << "Found last Z boson2 at line " << __LINE__ << "at index: " << getIndexOf(zBoson2,genParts) << std::endl;
+	//std::cout << "Found last Z boson2 at line " << __LINE__ << "at index: " << getIndexOf(zBoson2,genParts) << std::endl;
       }
     }
   }  
 
   //Begin Filling Histograms
-  std::cout << "Begin Filling Histograms at line " << __LINE__ << std::endl;
+  //std::cout << "Begin Filling Histograms at line " << __LINE__ << std::endl;
 
   //Doubly Charged Higgs Histograms
   //It is assumed that if there is a higgsPlus, then there is a higgsMinus due to feynman diagram.
   //Left Higgs
   if(higgsPlus) {
-    std::cout << "Filling HiggsL++ at line " << __LINE__ << std::endl;
+    //std::cout << "Filling HiggsL++ at line " << __LINE__ << std::endl;
     h_HigPlusMass->Fill(higgsPlus->mass());
     h_HigPlusPt->Fill(higgsPlus->pt());
     h_HigPlusEta->Fill(higgsPlus->eta());
     h_HigPlusPhi->Fill(higgsPlus->phi());
     h_HigPlusCharge->Fill(higgsPlus->charge());
     
-    std::cout << "Filling HiggsL-- at line " << __LINE__ << std::endl;
+    //std::cout << "Filling HiggsL-- at line " << __LINE__ << std::endl;
     h_HigMinusMass->Fill(higgsMinus->mass());
     h_HigMinusPt->Fill(higgsMinus->pt());
     h_HigMinusEta->Fill(higgsMinus->eta());
@@ -609,14 +609,14 @@ DimuonDarkPhoton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 
   //Right Higgs
   if(higgsPlusRight) {
-    std::cout << "Filling HiggsR++ at line " << __LINE__ << std::endl;
+    //std::cout << "Filling HiggsR++ at line " << __LINE__ << std::endl;
     h_HigPlusMass->Fill(higgsPlusRight->mass());
     h_HigPlusPt->Fill(higgsPlusRight->pt());
     h_HigPlusEta->Fill(higgsPlusRight->eta());
     h_HigPlusPhi->Fill(higgsPlusRight->phi());
     h_HigPlusCharge->Fill(higgsPlusRight->charge());
     
-    std::cout << "Filling HiggsR-- at line " << __LINE__ << std::endl;
+    //std::cout << "Filling HiggsR-- at line " << __LINE__ << std::endl;
     //It is assumed that if there is a higgsPlus, then there is a higgsMinus due to feynman diagram.
     h_HigMinusMass->Fill(higgsMinusRight->mass());
     h_HigMinusPt->Fill(higgsMinusRight->pt());
@@ -629,27 +629,27 @@ DimuonDarkPhoton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   //Histograms for individual particles
   //Muon
   if(mu1Minus) {
-    std::cout << "Filling muon1 at line " << __LINE__ << std::endl;
+    //std::cout << "Filling muon1 at line " << __LINE__ << std::endl;
     h_MuMinusMass->Fill(mu1Minus->mass());
     h_MuMinusPt->Fill(mu1Minus->pt());
     h_MuMinusEta->Fill(mu1Minus->eta());
     h_MuMinusPhi->Fill(mu1Minus->phi());
     h_thetaMuMinus->Fill(mu1Minus->theta());
 
-    std::cout << "Filling muon1 as high at line " << __LINE__ << std::endl;
+    //std::cout << "Filling muon1 as high at line " << __LINE__ << std::endl;
     h_MuMinusPt1->Fill(mu1Minus->pt());
     h_MuMinusEta1->Fill(mu1Minus->eta());
     h_MuMinusPhi1->Fill(mu1Minus->phi());
     //h_thetaMuMinus1->Fill(mu1Minus->theta());
 
-    std::cout << "Filling muon2 at line " << __LINE__ << std::endl;
+    //std::cout << "Filling muon2 at line " << __LINE__ << std::endl;
     h_MuMinusMass->Fill(mu2Minus->mass());
     h_MuMinusPt->Fill(mu2Minus->pt());
     h_MuMinusEta->Fill(mu2Minus->eta());
     h_MuMinusPhi->Fill(mu2Minus->phi());
     h_thetaMuMinus->Fill(mu2Minus->theta());
 
-    std::cout << "Filling muon2 as low at line " << __LINE__ << std::endl;
+    //std::cout << "Filling muon2 as low at line " << __LINE__ << std::endl;
     h_MuMinusPt2->Fill(mu2Minus->pt());
     h_MuMinusEta2->Fill(mu2Minus->eta());
     h_MuMinusPhi2->Fill(mu2Minus->phi());
@@ -658,27 +658,27 @@ DimuonDarkPhoton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 
   //Antimuon
   if(mu1Plus) {
-    std::cout << "Filling antimuon1 at line " << __LINE__ << std::endl;
+    //std::cout << "Filling antimuon1 at line " << __LINE__ << std::endl;
     h_MuPlusMass->Fill(mu1Plus->mass());
     h_MuPlusPt->Fill(mu1Plus->pt());
     h_MuPlusEta->Fill(mu1Plus->eta());
     h_MuPlusPhi->Fill(mu1Plus->phi());
     h_thetaMuPlus->Fill(mu1Plus->theta());
 
-    std::cout << "Filling antimuon1 as high at line " << __LINE__ << std::endl;
+    //std::cout << "Filling antimuon1 as high at line " << __LINE__ << std::endl;
     h_MuPlusPt1->Fill(mu1Plus->pt());
     h_MuPlusEta1->Fill(mu1Plus->eta());
     h_MuPlusPhi1->Fill(mu1Plus->phi());
     //h_thetaMuPlus1->Fill(mu1Plus->theta());
 
-    std::cout << "Filling antimuon2 at line " << __LINE__ << std::endl;
+    //std::cout << "Filling antimuon2 at line " << __LINE__ << std::endl;
     h_MuPlusMass->Fill(mu2Plus->mass());
     h_MuPlusPt->Fill(mu2Plus->pt());
     h_MuPlusEta->Fill(mu2Plus->eta());
     h_MuPlusPhi->Fill(mu2Plus->phi());
     h_thetaMuPlus->Fill(mu2Plus->theta());
 
-    std::cout << "Filling antimuon2 as low at line " << __LINE__ << std::endl;
+    //std::cout << "Filling antimuon2 as low at line " << __LINE__ << std::endl;
     h_MuPlusPt2->Fill(mu2Plus->pt());
     h_MuPlusEta2->Fill(mu2Plus->eta());
     h_MuPlusPhi2->Fill(mu2Plus->phi());
@@ -687,27 +687,27 @@ DimuonDarkPhoton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   
   //Electron
   if(ele1Minus) {
-    std::cout << "Filling electron1 at line " << __LINE__ << std::endl;
+    //std::cout << "Filling electron1 at line " << __LINE__ << std::endl;
     h_ElectMinusMass->Fill(ele1Minus->mass());
     h_ElectMinusPt->Fill(ele1Minus->pt());
     h_ElectMinusEta->Fill(ele1Minus->eta());
     h_ElectMinusPhi->Fill(ele1Minus->phi());
     h_thetaElectMinus->Fill(ele1Minus->theta());
 
-    std::cout << "Filling electron1 as high at line " << __LINE__ << std::endl;
+    //std::cout << "Filling electron1 as high at line " << __LINE__ << std::endl;
     h_ElectMinusPt1->Fill(ele1Minus->pt());
     h_ElectMinusEta1->Fill(ele1Minus->eta());
     h_ElectMinusPhi1->Fill(ele1Minus->phi());
     //h_thetaElectMinus1->Fill(ele1Minus->theta());
     
-    std::cout << "Filling electron2 at line " << __LINE__ << std::endl;
+    //std::cout << "Filling electron2 at line " << __LINE__ << std::endl;
     h_ElectMinusMass->Fill(ele2Minus->mass());
     h_ElectMinusPt->Fill(ele2Minus->pt());
     h_ElectMinusEta->Fill(ele2Minus->eta());
     h_ElectMinusPhi->Fill(ele2Minus->phi());
     h_thetaElectMinus->Fill(ele2Minus->theta());
 
-    std::cout << "Filling electron2 as low at line " << __LINE__ << std::endl;
+    //std::cout << "Filling electron2 as low at line " << __LINE__ << std::endl;
     h_ElectMinusPt2->Fill(ele2Minus->pt());
     h_ElectMinusEta2->Fill(ele2Minus->eta());
     h_ElectMinusPhi2->Fill(ele2Minus->phi());
@@ -716,27 +716,27 @@ DimuonDarkPhoton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 
   //Positron
   if(ele1Plus) {
-    std::cout << "Filling positron1 at line " << __LINE__ << std::endl;
+    //std::cout << "Filling positron1 at line " << __LINE__ << std::endl;
     h_ElectPlusMass->Fill(ele1Plus->mass());
     h_ElectPlusPt->Fill(ele1Plus->pt());
     h_ElectPlusEta->Fill(ele1Plus->eta());
     h_ElectPlusPhi->Fill(ele1Plus->phi());
     h_thetaElectPlus->Fill(ele1Plus->theta());
 
-    std::cout << "Filling positron1 as high at line " << __LINE__ << std::endl;
+    //std::cout << "Filling positron1 as high at line " << __LINE__ << std::endl;
     h_ElectPlusPt1->Fill(ele1Plus->pt());
     h_ElectPlusEta1->Fill(ele1Plus->eta());
     h_ElectPlusPhi1->Fill(ele1Plus->phi());
     //h_thetaElectPlus1->Fill(ele1Plus->theta());
     
-    std::cout << "Filling positron2 at line " << __LINE__ << std::endl;
+    //std::cout << "Filling positron2 at line " << __LINE__ << std::endl;
     h_ElectPlusMass->Fill(ele2Plus->mass());
     h_ElectPlusPt->Fill(ele2Plus->pt());
     h_ElectPlusEta->Fill(ele2Plus->eta());
     h_ElectPlusPhi->Fill(ele2Plus->phi());
     h_thetaElectPlus->Fill(ele2Plus->theta());
 
-    std::cout << "Filling positron2 as low at line " << __LINE__ << std::endl;
+    //std::cout << "Filling positron2 as low at line " << __LINE__ << std::endl;
     h_ElectPlusPt2->Fill(ele2Plus->pt());
     h_ElectPlusEta2->Fill(ele2Plus->eta());
     h_ElectPlusPhi2->Fill(ele2Plus->phi());
@@ -748,7 +748,7 @@ DimuonDarkPhoton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
                                       ele1Plus, ele2Plus, ele1Minus, ele2Minus};
 
   //Particles to Analyze
-  std::cout << "Four Lepton Output at line " << __LINE__ << std::endl;
+  //std::cout << "Four Lepton Output at line " << __LINE__ << std::endl;
   for(int i = 0; i < 8; i++) {
     if(dileptons[i]) {
       std::cout << dileptons[i]->pdgId() << ", ";
@@ -782,23 +782,23 @@ DimuonDarkPhoton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
       math::XYZTLorentzVectorD dilepton = lepton1->p4() + lepton2->p4();
 
       double pseudorapidity = asinh(dilepton.pz()/dilepton.pt());
-      std::cout << "Lepton Pair pseudorapidity is " << pseudorapidity << " eta at line " << __LINE__  << std::endl;
+      //std::cout << "Lepton Pair pseudorapidity is " << pseudorapidity << " eta at line " << __LINE__  << std::endl;
 
       double phi = acos(dilepton.px()/dilepton.pt());
-      std::cout << "Lepton Pair phi is " << phi << " phi at line " << __LINE__  << std::endl;
+      //std::cout << "Lepton Pair phi is " << phi << " phi at line " << __LINE__  << std::endl;
 
       //Decide if to put into seperate histograms
       if(abs(lepton1->pdgId()) == 13) {
 	h_DimuonPt->Fill(dilepton.pt());
 	h_DimuonEta->Fill(pseudorapidity);
 	h_DimuonPhi->Fill(phi);
-	std::cout << "Lepton Pair is muon pair at line " << __LINE__  << std::endl;
+	//std::cout << "Lepton Pair is muon pair at line " << __LINE__  << std::endl;
       }
       else if(abs(lepton1->pdgId()) == 11) {
 	h_DielectronPt->Fill(dilepton.pt());
 	h_DielectronEta->Fill(pseudorapidity);
 	h_DielectronPhi->Fill(phi);
-	std::cout << "Lepton Pair is electron pair at line " <<  __LINE__  << std::endl;
+	//std::cout << "Lepton Pair is electron pair at line " <<  __LINE__  << std::endl;
       }
 
       double dileptonQ = sqrt(pow(dilepton.energy(),2) - pow(dilepton.pt(),2) - pow(dilepton.pz(),2));
@@ -834,7 +834,7 @@ DimuonDarkPhoton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 
       double invariantMass = sqrt(2 * lepton1->pt() * lepton2->pt() *(cosh(lepton1->eta() - lepton2->eta()) - cos(TVector2::Phi_mpi_pi(lepton1->phi() - lepton2->phi()))));
       h_massInvar->Fill(invariantMass);
-      std::cout << "Lepton Pair invariant mass is " << invariantMass << " GeV at line " << __LINE__  << std::endl;
+      //std::cout << "Lepton Pair invariant mass is " << invariantMass << " GeV at line " << __LINE__  << std::endl;
       //h_massInvarWithZZBackground->Fill(invariantMass);
       
       //Dilepton invariant mass per values
@@ -1199,11 +1199,11 @@ const void DimuonDarkPhoton::fillOSDLHistograms(const reco::Candidate* dileptons
       }
     }
   }
-  std::cout << "The starting index is " << startingIndex
-	    << " at line " << __LINE__ << std::endl;
+  //std::cout << "The starting index is " << startingIndex
+	   // << " at line " << __LINE__ << std::endl;
 
   if(startingIndex >= 0) {
-    std::cout << "Begin filling OSDL Histograms at line " << __LINE__ << std::endl;
+    //std::cout << "Begin filling OSDL Histograms at line " << __LINE__ << std::endl;
     //Opposite sign leptons are paired by what order they are in terms of pt
     const reco::Candidate* lepton1Plus = dileptons[startingIndex];
     const reco::Candidate* lepton2Plus = dileptons[startingIndex+1];
@@ -1214,10 +1214,10 @@ const void DimuonDarkPhoton::fillOSDLHistograms(const reco::Candidate* dileptons
     math::XYZTLorentzVectorD dileptonPlus = lepton1Plus->p4() + lepton1Minus->p4();
 
     double pseudorapidityPlus = asinh(dileptonPlus.pz()/dileptonPlus.pt());
-    std::cout << "Lepton Pair Plus pseudorapidity is " << pseudorapidityPlus << " eta at line " << __LINE__  << std::endl;
+    //std::cout << "Lepton Pair Plus pseudorapidity is " << pseudorapidityPlus << " eta at line " << __LINE__  << std::endl;
 
     double phiPlus = acos(dileptonPlus.px()/dileptonPlus.pt());
-    std::cout << "Lepton Pair Plus phi is " << phiPlus << " phi at line " << __LINE__  << std::endl;
+    //std::cout << "Lepton Pair Plus phi is " << phiPlus << " phi at line " << __LINE__  << std::endl;
 
     double dileptonPlusInvariantMass = sqrt(2 * lepton1Plus->pt() * lepton1Minus->pt() *(cosh(lepton1Plus->eta() - lepton1Minus->eta()) - cos(TVector2::Phi_mpi_pi(lepton1Plus->phi() - lepton1Minus->phi()))));
     
@@ -1225,15 +1225,15 @@ const void DimuonDarkPhoton::fillOSDLHistograms(const reco::Candidate* dileptons
     math::XYZTLorentzVectorD dileptonMinus = lepton2Plus->p4() + lepton2Minus->p4();
 
     double pseudorapidityMinus = asinh(dileptonMinus.pz()/dileptonMinus.pt());
-    std::cout << "Lepton Pair Minus pseudorapidity is " << pseudorapidityMinus << " eta at line " << __LINE__  << std::endl;
+    //std::cout << "Lepton Pair Minus pseudorapidity is " << pseudorapidityMinus << " eta at line " << __LINE__  << std::endl;
 
     double phiMinus = acos(dileptonMinus.px()/dileptonMinus.pt());
-    std::cout << "Lepton Pair Minus phi is " << phiMinus << " phi at line " << __LINE__  << std::endl;
+    //std::cout << "Lepton Pair Minus phi is " << phiMinus << " phi at line " << __LINE__  << std::endl;
 
     double dileptonMinusInvariantMass = sqrt(2 * lepton2Plus->pt() * lepton2Minus->pt() *(cosh(lepton2Plus->eta() - lepton2Minus->eta()) - cos(TVector2::Phi_mpi_pi(lepton2Plus->phi() - lepton2Minus->phi()))));
     
     if(abs(lepton1Plus->pdgId()) == 13) {
-      std::cout << "Filling OSDL Muon Plus at line " << __LINE__ << std::endl;
+      //std::cout << "Filling OSDL Muon Plus at line " << __LINE__ << std::endl;
       h_MuPlusMassOSDL->Fill(lepton1Plus->mass());
       h_MuPlusMassOSDL->Fill(lepton1Minus->mass());
       h_MuPlusPtOSDL->Fill(lepton1Plus->pt());
@@ -1245,7 +1245,7 @@ const void DimuonDarkPhoton::fillOSDLHistograms(const reco::Candidate* dileptons
       h_thetaMuPlusOSDL->Fill(lepton1Plus->theta());
       h_thetaMuPlusOSDL->Fill(lepton1Minus->theta());
 
-      std::cout << "Filling OSDL Muon Minus at line " << __LINE__ << std::endl;
+      //std::cout << "Filling OSDL Muon Minus at line " << __LINE__ << std::endl;
       h_MuMinusMassOSDL->Fill(lepton2Plus->mass());
       h_MuMinusMassOSDL->Fill(lepton2Minus->mass());
       h_MuMinusPtOSDL->Fill(lepton2Plus->pt());
@@ -1268,7 +1268,7 @@ const void DimuonDarkPhoton::fillOSDLHistograms(const reco::Candidate* dileptons
       h_DimuonMassInvarOSDL->Fill(dileptonMinusInvariantMass);
     }
     else if(abs(lepton1Plus->pdgId()) == 11) {
-      std::cout << "Filling OSDL Electron Plus at line " << __LINE__ << std::endl;
+      //std::cout << "Filling OSDL Electron Plus at line " << __LINE__ << std::endl;
       h_ElectPlusMassOSDL->Fill(lepton1Plus->mass());
       h_ElectPlusMassOSDL->Fill(lepton1Minus->mass());
       h_ElectPlusPtOSDL->Fill(lepton1Plus->pt());
@@ -1280,7 +1280,7 @@ const void DimuonDarkPhoton::fillOSDLHistograms(const reco::Candidate* dileptons
       h_thetaElectPlusOSDL->Fill(lepton1Plus->theta());
       h_thetaElectPlusOSDL->Fill(lepton1Minus->theta());
 
-      std::cout << "Filling OSDL Electron Minus at line " << __LINE__ << std::endl;
+      //std::cout << "Filling OSDL Electron Minus at line " << __LINE__ << std::endl;
       h_ElectMinusMassOSDL->Fill(lepton2Plus->mass());
       h_ElectMinusMassOSDL->Fill(lepton2Minus->mass());
       h_ElectMinusPtOSDL->Fill(lepton2Plus->pt());

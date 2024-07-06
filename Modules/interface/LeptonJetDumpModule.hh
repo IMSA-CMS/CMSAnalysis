@@ -23,6 +23,8 @@ class LeptonJetDumpModule : public AnalysisModule
 
     void printWrongRecoLeptons(std::ofstream& my_file);
 
+    virtual std::string getName() override {return "LeptonJetDumpModule";}
+
     private:
 
     int counter;

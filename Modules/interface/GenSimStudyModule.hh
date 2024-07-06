@@ -22,6 +22,9 @@ class GenSimStudyModule : public ProductionModule
 public:
   GenSimStudyModule();
   virtual bool process() override;
+
+  virtual std::string getName() override {return "GenSimStudyModule";}
+
 private:
     int isPhoton;
 };
