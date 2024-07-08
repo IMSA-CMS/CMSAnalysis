@@ -28,6 +28,8 @@ public:
 	LeptonJetMLCalculator();
 	virtual double CalculateMLValue(LeptonJet jet) const;
 	virtual bool process() override { return true; }
+
+	virtual std::string getName() override {return "LeptonJetMLCalculator";}
 };
 
 #endif

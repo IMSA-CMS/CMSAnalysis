@@ -13,6 +13,7 @@ class EfficiencyModule : public AnalysisModule
 {
     public:
         void finalize() override;
+        virtual std::string getName() override {return "EfficiencyModule";}
 
     protected:
         //Adds the counter for a thing

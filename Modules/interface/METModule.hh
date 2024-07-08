@@ -20,6 +20,8 @@ public:
   double getMet() const {return met;}
   double getPhi() const {return phi;}
 
+  virtual std::string getName() override {return "METModule";}
+
 private:
   double met;
   double phi;
