@@ -1,4 +1,4 @@
-from subprocess import run
+from subprocess import Popen
 from multiprocessing import Process 
 
 def loopRun(*fileList):
@@ -18,12 +18,12 @@ def loopRun(*fileList):
 		else:
 			analysisName = "analysis=" + analysisBackground
 			inputString = "input=" + file	
-		numFiles = "numFiles=1"
+		numFiles = "numFiles=3"
 		
 		# calls runAnalyzer
 		print("Creating " + outputString)
-		#run(["nohup", "runAnalyzer", inputString, outputString, analysisName, numFiles], check=True)
-		run(["nohup", "runAnalyzer", inputString, outputString, analysisName], check=True)
+		Popen(["nohup", "runAnalyzer", inputString, outputString, analysisName, numFiles]) #testing 
+		# run(["nohup", "runAnalyzer", inputString, outputString, analysisName], check=True)
 	
 	#runAnalyzer input="Data/Data_Trigger_SingleMuon_Year_2016B.txt" output="Data_Trigger_SingleMuon_Year_2016B.root" analysis="HiggsBackground"
 if __name__ == '__main__':
@@ -39,48 +39,48 @@ if __name__ == '__main__':
 	multiBoson = ("MultiBoson/MultiBoson_Bosons_WW_Decay_2L_Run_2.txt", "MultiBoson/MultiBoson_Bosons_WWW_Decay_NA_Run_2.txt", "MultiBoson/MultiBoson_Bosons_WWZJets_Decay_4L_Run_2.txt",
 	"MultiBoson/MultiBoson_Bosons_WZ_Decay_3L_Run_2.txt", "MultiBoson/MultiBoson_Bosons_WZZ_Decay_NA_Run_2.txt", "MultiBoson/MultiBoson_Bosons_ZZZ_Decay_NA_Run_2.txt")
 
-	higgsSignal = ("Higgs1400.txt", )
-	#higgsSignal = ("Higgs500.txt","Higgs600.txt","Higgs700.txt","Higgs800.txt","Higgs900.txt","Higgs1000.txt","Higgs1100.txt","Higgs1200.txt","Higgs1300.txt","Higgs1400.txt","Higgs1500.txt" )
+	# higgsSignal = ("Higgs1400.txt", )
+	higgsSignal = ("Higgs500.txt","Higgs600.txt","Higgs700.txt","Higgs800.txt","Higgs900.txt","Higgs1000.txt","Higgs1100.txt","Higgs1200.txt","Higgs1300.txt","Higgs1400.txt","Higgs1500.txt" )
 
 	#higgsData = ("Data/SingleMuonRun2017B-UL2017_MiniAODv2-v1.txt", "Data/SingleElectronRun2017B-UL2017_MiniAODv2-v1.txt")
 	higgsData = (
-		#"Data/Data_Trigger_SingleMuon_Year_2016B.txt", 
-		#"Data/Data_Trigger_SingleMuon_Year_2016C.txt",
-		#"Data/Data_Trigger_SingleMuon_Year_2016D.txt", 
-		#"Data/Data_Trigger_SingleMuon_Year_2016E.txt", 
-		#"Data/Data_Trigger_SingleMuon_Year_2016F.txt",
-		#"Data/Data_Trigger_SingleMuon_Year_2016G.txt",
-		#"Data/Data_Trigger_SingleMuon_Year_2016H.txt",
-		#"Data/Data_Trigger_SingleMuon_Year_2017B.txt",
-		#"Data/Data_Trigger_SingleMuon_Year_2017C.txt",
-		#"Data/Data_Trigger_SingleMuon_Year_2017D.txt",
-		#"Data/Data_Trigger_SingleMuon_Year_2017E.txt",
-		#"Data/Data_Trigger_SingleMuon_Year_2017F.txt",
-		#"Data/Data_Trigger_SingleMuon_Year_2017G.txt",
-		#"Data/Data_Trigger_SingleMuon_Year_2017H.txt",
-		#"Data/Data_Trigger_SingleMuon_Year_2018A.txt",
-		#"Data/Data_Trigger_SingleMuon_Year_2018B.txt",
-		#"Data/Data_Trigger_SingleMuon_Year_2018C.txt",
-		#"Data/Data_Trigger_SingleMuon_Year_2018D.txt",
-		#"Data/Data_Trigger_SingleMuon_Year_2022A.txt",
-		#"Data/Data_Trigger_SingleMuon_Year_2022B.txt",
-		#"Data/Data_Trigger_SingleMuon_Year_2022C.txt",
-		#"Data/Data_Trigger_SingleElectron_Year_2016B.txt",
-		#"Data/Data_Trigger_SingleElectron_Year_2016C.txt",
-		#"Data/Data_Trigger_SingleElectron_Year_2016D.txt",
-		#"Data/Data_Trigger_SingleElectron_Year_2016E.txt",
-		#"Data/Data_Trigger_SingleElectron_Year_2016F.txt",
-		#"Data/Data_Trigger_SingleElectron_Year_2016G.txt",
-		#"Data/Data_Trigger_SingleElectron_Year_2016H.txt",
-		#"Data/Data_Trigger_SingleElectron_Year_2017B.txt",
-		#"Data/Data_Trigger_SingleElectron_Year_2017C.txt",
-		#"Data/Data_Trigger_SingleElectron_Year_2017D.txt",
-		#"Data/Data_Trigger_SingleElectron_Year_2017E.txt",
-		#"Data/Data_Trigger_SingleElectron_Year_2017F.txt"
+		"Data/Data_Trigger_SingleMuon_Year_2016B.txt", 
+		# "Data/Data_Trigger_SingleMuon_Year_2016C.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2016D.txt", 
+		# "Data/Data_Trigger_SingleMuon_Year_2016E.txt", 
+		# "Data/Data_Trigger_SingleMuon_Year_2016F.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2016G.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2016H.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2017B.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2017C.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2017D.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2017E.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2017F.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2017G.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2017H.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2018A.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2018B.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2018C.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2018D.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2022A.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2022B.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2022C.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2016B.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2016C.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2016D.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2016E.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2016F.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2016G.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2016H.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2017B.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2017C.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2017D.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2017E.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2017F.txt"
 		)
 
 	# List of jobs to run on from those above
-	#jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData]
+	# jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData]
 	jobsList = [higgsData]
 
 	# list of processes

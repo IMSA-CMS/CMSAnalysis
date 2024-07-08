@@ -16,6 +16,8 @@ class TriggerEfficiencyModule : public AnalysisModule
     bool process() override;
     void finalize() override;
     void printDebugLines(const Particle particle) const;
+
+    virtual std::string getName() override {return "TriggerEfficiencyModule";}
   private:
     const std::shared_ptr<MatchingModule> matchMod;
     //const std::shared_ptr<GenSimIdentificationModule> genSimMod;
