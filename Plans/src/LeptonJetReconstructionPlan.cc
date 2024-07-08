@@ -216,7 +216,7 @@ void LeptonJetReconstructionPlan::initialize()
 
   // modules.addProductionModule(triggerMod);
   //modules.addAnalysisModule(leptonEfficiency);
-  //modules.addAnalysisModule(leptonJetEfficiency);
+  modules.addAnalysisModule(leptonJetEfficiency);
   //modules.addAnalysisModule(massRecoEfficiency200);
   //modules.addAnalysisModule(massRecoEfficiency500);
   //modules.addAnalysisModule(massRecoEfficiency800);
