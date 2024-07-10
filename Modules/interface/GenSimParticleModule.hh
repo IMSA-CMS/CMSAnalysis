@@ -25,6 +25,8 @@ public:
   const ParticleCollection<GenSimParticle>& getGenParticles() const 
   {return genParticles;}
 
+  virtual std::string getName() override {return "GenSimParticleModule";}
+  
 private:
   ParticleCollection<GenSimParticle> genParticles;
   int targetPdgId;

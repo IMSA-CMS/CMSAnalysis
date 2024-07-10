@@ -13,6 +13,8 @@ public:
 
   bool process() override;
   void finalize() override;
+
+  virtual std::string getName() override {return "HiggsLeptonEfficiency";}
   
 private:
   const std::shared_ptr<MatchingModule> matchModule;

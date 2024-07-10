@@ -18,6 +18,8 @@ public:
 
 	virtual void finalize() override;
 
+	virtual std::string getName() override {return "HiggsDataStripModule";}
+
 private:
 	TFile *file;
 	TTree *tree;
