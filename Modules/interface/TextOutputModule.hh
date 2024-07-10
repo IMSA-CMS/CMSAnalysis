@@ -17,6 +17,8 @@ public:
 
   virtual void finalize() override;
 
+  virtual std::string getName() override {return "TextOutputModule";}
+
 protected:
   // Write one line (with a newline character) to the file.
   // Provided for convenience.

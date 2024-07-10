@@ -1,7 +1,7 @@
 #ifndef EFFICIENCYMODULE_HH
 #define EFFICIENCYMODULE_HH
 #include "AnalysisModule.hh"
-#include <unordered_map>
+#include <map>
 #include <string>
 #include <vector>
 #include <memory>
@@ -13,6 +13,7 @@ class EfficiencyModule : public AnalysisModule
 {
     public:
         void finalize() override;
+        virtual std::string getName() override {return "EfficiencyModule";}
 
     protected:
         //Adds the counter for a thing
@@ -30,7 +31,7 @@ class EfficiencyModule : public AnalysisModule
         virtual void doCounters() = 0; 
 
     private:
-        std::unordered_map<std::string, double> counters;
+        std::map<std::string, double> counters;
         double total;
 };
 

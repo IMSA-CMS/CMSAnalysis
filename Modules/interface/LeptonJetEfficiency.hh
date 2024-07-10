@@ -16,6 +16,8 @@ public:
     
     void finalize() override;
 
+    virtual std::string getName() override {return "LeptonJetEfficiency";}
+
 protected:
     virtual void doCounters() override;
 

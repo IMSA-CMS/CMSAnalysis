@@ -38,6 +38,7 @@ public:
 	mutable const int* tempRef;
 	mutable const float* tempRef1;
 
+	virtual std::string getName() override {return "SpecialVariableModule";}
 
 protected:
 	void addVariable(std::string name, VariableType type);

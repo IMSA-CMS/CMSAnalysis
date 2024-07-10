@@ -19,6 +19,8 @@ class MatchingModule : public ProductionModule
 
   const MatchingPairCollection& getMatchingBestPairs() const {return matchingBestPairs;} 
   const std::vector<Particle> getUnmatched() const {return unmatched;}
+
+  virtual std::string getName() override {return "MatchingModule";}
   
   protected:
   virtual bool match(std::vector<Particle>genSimparticles, std::vector<Particle> recoCandidates);

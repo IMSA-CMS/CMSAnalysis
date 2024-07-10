@@ -25,6 +25,7 @@ public:
 
   double closestApproach(reco::TrackRef& t1, reco::TrackRef& t2);
 
+  virtual std::string getName() override {return "DisplacedVertexModule";}
 };
 
 #endif

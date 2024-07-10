@@ -16,6 +16,8 @@ class HiggsInvariantMassModule : public AnalysisModule
     protected: 
     bool process() override;
 
+    virtual std::string getName() override {return "HiggsInvariantMassModule";}
+    
     private:
     std::string name;
     TFile* file;

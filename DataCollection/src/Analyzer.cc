@@ -48,11 +48,11 @@ void Analyzer::writeOutputFile()
   // Finalize the modules
   for (auto module : productionModules)
   {
-    module->finalize();
+    module->finalizeEvent();
   }
   for (auto module : filterModules)
   {
-    module->finalize();
+    module->finalizeEvent();
   }
 
   //Finalize separately for each filterString, to be safe
@@ -66,7 +66,7 @@ void Analyzer::writeOutputFile()
     if (true)
     {
       std::cout << "Finalizing analysis module: " << module->getFilter() << "\n";
-      module->finalize();
+      module->finalizeEvent();
       for (auto &str : filterNames) //writes analysis modules by filter string
       {
         //std::cout << "filterName: " << str << "\n";
@@ -82,9 +82,15 @@ void Analyzer::writeOutputFile()
       }
     } else {
       module->setFilterString("");
-      module->finalize();
+      module->finalizeEvent();
     }
   }
+
+  for (auto module : getAllModules())
+  {
+    std::cout << "Time taken by " << module->getName() << ": " << module->getElapsedTime() << " s\n";
+  }
+
 
   // Write total number of events
   auto eventsText = new TDisplayText(std::to_string(numOfEvents).c_str());

@@ -12,6 +12,8 @@ class LeptonJetMLStripModule: public SpecialVariableModule
     public:
     LeptonJetMLStripModule(); //do the same thing for recomod in leptonjetMLStripModule
 
+    virtual std::string getName() override {return "LeptonJetMLStripModule";}
+
     private:
 
 
