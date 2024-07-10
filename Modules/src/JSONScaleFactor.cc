@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
-#include <stdexcept>
+
 
 JSONScaleFactor::JSONScaleFactor(std::string filename) {
     std::ifstream file(filename);
@@ -60,11 +60,9 @@ double JSONScaleFactor::getScaleFactor(const EventInput* input) const {
         } else 
         {
             // Handle case when scale factor is not found
-            // For now, default to 1.0
             eventWeight *= 1.0;
         }
     }
-
     return eventWeight;
 }
 

@@ -147,7 +147,7 @@ void NanoAODEventFile::nextEvent()
 { 
     treeReader.Next(); 
     setEventCount(getEventCount() + 1);
-
+    
     if(variables.find("gen_size") != variables.end() && getVariable<UInt_t>("gen_size") > 0)
     {
         genSimParticles.clear(); 
