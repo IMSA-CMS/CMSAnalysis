@@ -22,7 +22,7 @@ void DataStripModule::initialize()
         treeId->Branch("mass", &mass, "mass/F");
         treeId->Branch("deltaR", &deltaR, "deltaR/F");
 
-        std::cout << treeId->GetListOfBranches();
+        // std::cout << treeId->GetListOfBranches();
     }
 }
 
