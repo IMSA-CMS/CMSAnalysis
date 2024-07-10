@@ -41,7 +41,7 @@ void HiggsBackgroundPlan::initialize()
     auto hppSelector = make_shared<HPlusPlusGenSimSelector>();
     auto higgsSelector = make_shared<HiggsSelector>();
     auto higgsCut = make_shared<HiggsCut>();
-    auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
+    //auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
     auto eventDump = make_shared<GenSimEventDumpModule>();
     auto zVetoCut = make_shared<ZVetoCut>();
 
