@@ -12,6 +12,8 @@
 #include "CMSAnalysis/Filters/interface/HiggsCut.hh"
 #include "CMSAnalysis/Filters/interface/RepeatedEventCuts.hh"
 #include "CMSAnalysis/Filters/interface/HiggsSelector.hh"
+#include "CMSAnalysis/Filters/interface/ElectronEnergyScaleUp.hh"
+#include "CMSAnalysis/Filters/interface/ElectronEnergyScaleDown.hh"
 #include "CMSAnalysis/Filters/interface/HPlusPlusGenSimSelector.hh"
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
@@ -41,9 +43,9 @@ void HiggsBackgroundPlan::initialize()
     
     auto eventMod = make_shared<EventModule>();
     auto hppSelector = make_shared<HPlusPlusGenSimSelector>();
-    auto higgsSelector = make_shared<HiggsSelector>();
+    auto higgsSelector = make_shared<ElectronEnergyScaleDown>();
     auto higgsCut = make_shared<HiggsCut>();
-    auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
+    //auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
     auto eventDump = make_shared<GenSimEventDumpModule>();
     auto zVetoCut = make_shared<ZVetoCut>();
     //auto quarkoniaCut = make_shared<QuarkoniaCut>();

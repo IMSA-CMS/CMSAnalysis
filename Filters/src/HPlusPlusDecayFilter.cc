@@ -55,7 +55,8 @@ std::string HPlusPlusDecayFilter::getState(const EventInput* inputMod) const
       {
         int p1i = (std::abs((genSimParticle.daughter(0).pdgId())) - 11) / 2;
         int p2i = (std::abs((genSimParticle.daughter(1).pdgId())) - 11) / 2;
-        if(p1i > 10|| p2i > 10){
+        if(p1i > 10|| p2i > 10)
+        {
           std::cout<<"Error particle.";
           return "none";
           
@@ -77,7 +78,8 @@ std::string HPlusPlusDecayFilter::getState(const EventInput* inputMod) const
         int p1i = (std::abs((genSimParticle.daughter(0).pdgId())) - 11) / 2;
         int p2i = (std::abs((genSimParticle.daughter(1).pdgId())) - 11) / 2;
 
-        if(p1i > 10|| p2i > 10){
+        if(p1i > 10|| p2i > 10)
+        {
           std::cout<<"Error particle.";
           return "none";
           
@@ -94,7 +96,6 @@ std::string HPlusPlusDecayFilter::getState(const EventInput* inputMod) const
         {
           hMinus = p2 + p1;
         }
-
       }
       // std::cout << hPlus << std::endl;
       // std::cout << hMinus << std::endl;
@@ -110,12 +111,10 @@ std::string HPlusPlusDecayFilter::getState(const EventInput* inputMod) const
     }
     if (getIndex(c2str, hPlus, 6) <= getIndex(c2str, hMinus, 6))
     {
-      // std::cout << hPlus << "," << hMinus << std::endl;
       return hPlus + hMinus;
     }
     else
     {
-      // std::cout << hMinus << "," << hPlus << std::endl;
       return hMinus + hPlus;
     }
   }

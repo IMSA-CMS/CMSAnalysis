@@ -84,6 +84,10 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_reliso", "Electron_miniPFRelIso_all"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dxy", "Electron_dxy"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dz", "Electron_dz"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEscaleDown", "Electron_dEscaleDown"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEscaleUp", "Electron_dEscaleUp"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEsigmaDown", "Electron_dEsigmaDown"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEsigmaUp", "Electron_dEsigmaUp"),
 		std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("muon_size", "nMuon"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_eta", "Muon_eta"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_phi", "Muon_phi"),
@@ -183,8 +187,9 @@ void NanoAODEventFile::nextEvent()
             }
             GenSimParticle *mother = nullptr;
             if(getArrayElement<Int_t>("gen_m1", i) != -1){
-                 mother = &genSimParticles[getArrayElement<Int_t>("gen_m1", i)];
-                 //std::cout<<mother;
+                mother = &genSimParticles[getArrayElement<Int_t>("gen_m1", i)];
+                //std::cout<<"Mother: "<<mother;
+                
             }
             genSimParticles.push_back(GenSimParticle(reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(
                 getArrayElement<Float_t>("gen_pt", i),
@@ -264,6 +269,14 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         particle.addInfo("Electron_map", getArrayElement<Int_t>("Electron_bitmap", i)); 
         particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
         particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
+        particle.addInfo("eScaleDown", getArrayElement<Float_t>("elec_dEscaleDown", i));
+        particle.addInfo("eScaleUp", getArrayElement<Float_t>("elec_dEscaleUp", i));
+        particle.addInfo("eSigmaDown", getArrayElement<Float_t>("elec_dEsigmaDown", i));
+        particle.addInfo("eSigmaUp", getArrayElement<Float_t>("elec_dEsigmaUp", i));
+
+
+
+   
         recoParticles.addParticle(particle);
         // std::cout << "Particle: " << particle.getInfo("CutBasedHEEP") << '\n';
     }
@@ -370,3 +383,5 @@ std::vector<double> NanoAODEventFile::getPDFWeights() const
 
     return pdfWeights;
 }
+
+
