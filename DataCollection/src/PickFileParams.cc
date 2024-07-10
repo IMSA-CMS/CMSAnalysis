@@ -25,6 +25,8 @@ std::string PickFileParams::getFileName() const
 
 std::vector<std::string> PickFileParams::getFileList() const
 {
+    const std::string eossrc = "root://cmsxrootd.fnal.gov//";
+
     std::string file = getFileName();
     std::vector<std::string> fileList;
 
@@ -34,7 +36,7 @@ std::vector<std::string> PickFileParams::getFileList() const
     {
         if(str.size() > 0)
         {
-            fileList.push_back(str);
+            fileList.push_back(eossrc + str);
         }
     }   
     return fileList;
