@@ -29,6 +29,8 @@
 #include "CMSAnalysis/Filters/interface/BJetFilter.hh"
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
 #include "CMSAnalysis/Filters/interface/ZVetoCut.hh"
+#include "CMSAnalysis/Filters/interface/FourLeptonCut.hh"
+#include "CMSAnalysis/Modules/interface/JSONScaleFactor.hh"
 
 using std::make_shared;
 
@@ -44,7 +46,8 @@ void HiggsBackgroundPlan::initialize()
     auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
     auto eventDump = make_shared<GenSimEventDumpModule>();
     auto zVetoCut = make_shared<ZVetoCut>();
-
+    //auto quarkoniaCut = make_shared<QuarkoniaCut>();
+    auto scaleFactor = make_shared<JSONScaleFactor>("ScaleFactors_Muon_highPt_RECO_2018_schemaV2.txt");
     auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
 
     eventMod->addSelector(hppSelector);
@@ -52,6 +55,8 @@ void HiggsBackgroundPlan::initialize()
     eventMod->addCut(triggerCut);
     eventMod->addCut(higgsCut);
     eventMod->addCut(zVetoCut);
+    //eventMod->addCut(quarkoniaCut);
+    eventMod->addScaleFactor(scaleFactor);
 
     auto matchMod = make_shared<MatchingModule>();
     auto triggerMod = make_shared<TriggerModule>();

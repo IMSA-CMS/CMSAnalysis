@@ -172,6 +172,7 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     first->Draw("HIST");
     histVector.push_back(first);
 
+
     //Change axis and graph titles here
     first->GetXaxis()->SetTitle(xAxisTitle);
     first->GetYaxis()->SetTitle(yAxisTitle);
@@ -179,6 +180,7 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     //Draws the legend
     auto legend = GetSimpleLegend(hists, names);
     legend->Draw();
+
  
     writeText(width, height, top, bottom, left, right);
    
