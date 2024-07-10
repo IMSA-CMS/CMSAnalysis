@@ -15,11 +15,13 @@
 void HistogramOutputModule::finalizeFilterString() {
   // Check if any baseObjects have not been copied to objects yet,
   // and fill them into the main map if not
-  // Then write all the objects to file
+  // Then write all the objects to file 
   for (auto &entry : baseObjects) {
-    if (entry.first.find(getFilter()) != std::string::npos || getFilter() == "")
+    if (entry.first.find(getFilter()) == 0 || getFilter() == "")
     {
+      
       entry.second->Write();
+      std::cout << "Going into: " << getFilter() << " and " << entry.first << "\n";
     }
   }
 }
@@ -41,7 +43,7 @@ void HistogramOutputModule::setInput(const EventInput *iInput) {
 }
 
 void HistogramOutputModule::addObject(const std::string &name, TObject *obj) {
-  // std::cout << "adding object " << name << " " << obj->ClassName() << "\n";
+  //std::cout << "adding object " << name << " " << obj->ClassName() << "\n";
   if (baseObjects.find(name) == baseObjects.end()) {
     baseObjects.insert({name, obj});
   } else {
@@ -49,7 +51,7 @@ void HistogramOutputModule::addObject(const std::string &name, TObject *obj) {
     
   }
 
-  // std::cout << "Histogram added: " << name << '\n';
+   std::cout << "Histogram added: " << name << '\n';
 }
 
 TObject* HistogramOutputModule::getObject(const std::string& name) 
@@ -179,11 +181,11 @@ bool HistogramOutputModule::process() {
 
 void HistogramOutputModule::finalize()
 {
-  // std::cout << "Starting histogram finalization \n";
+  //std::cout << "Starting histogram finalization \n";
   // std::cout << "There are " << histograms.size() << " histograms in this event\n";
   for (auto hist : histograms) 
   {
-    // std::cout << "Histogram filtered name = " << hist->getFilteredName() << "\n";
+    //std::cout << "Histogram filtered name = " << hist->getFilteredName() << "\n";
     auto Thist = getHistogram(hist->getFilteredName());
 
     // for (int i = 1; i < Thist->GetEntries(); ++i)
