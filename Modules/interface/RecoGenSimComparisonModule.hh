@@ -20,6 +20,8 @@ class RecoGenSimComparisonModule : public AnalysisModule
         virtual bool process() override;
         //prints information to the screen
         virtual void finalize() override;
+
+        virtual std::string getName() override {return "RecoGenSimComparisonModule";}
         
     private:
     // prints information to the screen

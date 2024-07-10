@@ -10,7 +10,6 @@ double func(double *x, double *par);
 
 void unbinnedFit()
 {
-    std::cout << "here!\n";
     std::string filename = "/eos/uscms/store/user/snowmass/Snowmass2021/DelphesNtuplizer/DYJetsToLL_M-50_HT-200to400_TuneCUETP8M1_14TeV-madgraphMLM-pythia8_200PU/DYJetsToLL_M-50_HT-200to400_TuneCUETP8M1_14TeV-madgraphMLM-pythia8_ntuple_9_1.root";
     TFile* file = TFile::Open(filename.c_str());
     TTree* tree = file->Get<TTree>("myana/mytree");
@@ -22,10 +21,9 @@ void unbinnedFit()
     // TF1* function = new TF1("newFunction", func, 0, 10, 0);
     gSystem->CompileMacro("unbinnedFitTest.C");
 
-    std::cout << "Here again!\n";
     tree->Draw("unbinnedFitTest(muon_pt)");
     int result = tree->UnbinnedFit("pearson", "unbinnedFitTest(muon_pt)", "", "V");
-    std::cout << "result: " << result << '\n';
+    //std::cout << "result: " << result << '\n';
 }
 
 double pearson(double *x, double *par)

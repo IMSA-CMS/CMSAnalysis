@@ -12,6 +12,8 @@ public:
 
   void doCounters() override;
   void finalize() override;
+
+  virtual std::string getName() override {return "HPlusPlusEfficiency";}
   
 private:
 

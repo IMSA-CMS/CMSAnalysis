@@ -187,8 +187,9 @@ void NanoAODEventFile::nextEvent()
             }
             GenSimParticle *mother = nullptr;
             if(getArrayElement<Int_t>("gen_m1", i) != -1){
-                 mother = &genSimParticles[getArrayElement<Int_t>("gen_m1", i)];
-                 //std::cout<<"Mother: "<<mother;
+                mother = &genSimParticles[getArrayElement<Int_t>("gen_m1", i)];
+                //std::cout<<"Mother: "<<mother;
+                
             }
             genSimParticles.push_back(GenSimParticle(reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(
                 getArrayElement<Float_t>("gen_pt", i),

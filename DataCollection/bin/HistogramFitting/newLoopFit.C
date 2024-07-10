@@ -880,7 +880,7 @@ double hyperbolicSecant(double *x, double *par)
 
 TFitResultPtr fitToDSCB(std::string name, TH1* hist, TFile* file, std::vector<double> params,std::string histsname)
 {
-	std::cout << "fitting crystal ball\n";
+	//std::cout << "fitting crystal ball\n";
 	TF1* f1 = new TF1 ("f1", DoubleSidedCrystalballFunction, 0, 2000, 6);
 	f1->SetNpx(1000);
 	double mass = params[1];

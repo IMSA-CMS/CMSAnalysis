@@ -1,4 +1,4 @@
-from subprocess import run
+from subprocess import Popen
 from multiprocessing import Process 
 
 def loopRun(*fileList):
@@ -22,7 +22,7 @@ def loopRun(*fileList):
 		# calls runAnalyzer
 		print("Creating " + outputString)
 		#run(["nohup", "runAnalyzer", inputString, outputString, analysisName, numFiles], check=True)
-		run(["nohup","runAnalyzer", inputString, outputString, analysisName, "numFiles=3"], check=True)
+		Popen(["nohup", "runAnalyzer", inputString, outputString, analysisName, numFiles])  
 
 if __name__ == '__main__':
 	# jobs grouped by process
