@@ -8,8 +8,19 @@ std::unordered_map<std::string, double> Module::parameters;
 // Event Counter that calls virtual process function
 bool Module::processEvent()
 {
-  return process();
+  auto start = std::chrono::steady_clock::now();
+  bool results = process();
+  auto end = std::chrono::steady_clock::now();
+  time += end - start;
+  return results;
 }
+
+void Module::finalizeEvent()
+{
+  finalize();
+
+}
+
 
 Module::~Module() {}
 

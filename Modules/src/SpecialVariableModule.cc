@@ -17,7 +17,7 @@ void SpecialVariableModule::addVariablesToReader(TMVA::Reader *reader) const
 	{
 		tempRef = (&(pair.second));
 		reader->AddVariable((pair.first).c_str(), const_cast<Int_t*>(tempRef));
-		std::cout << "temporary int reference" << *tempRef;
+		//std::cout << "temporary int reference" << *tempRef;
 	}
 	
 	
@@ -25,7 +25,7 @@ void SpecialVariableModule::addVariablesToReader(TMVA::Reader *reader) const
 	{
 		tempRef1 = (&(pair.second));
 		reader->AddVariable((pair.first).c_str(), const_cast<Float_t*>(tempRef1)); // reinterpret_cast<Float_t*>
-		std::cout << "temporary float reference" << *tempRef1;
+		//std::cout << "temporary float reference" << *tempRef1;
 	}
 }
 
@@ -33,7 +33,7 @@ void SpecialVariableModule::addVariablesToTree(TTree *tree)
 {
 	for (auto& pair : integers)
 	{
-		std::cout << "Adding variable " << pair.first << '\n';
+		//std::cout << "Adding variable " << pair.first << '\n';
 		// auto ptm = &std::pair<std::string, int>::second;
 		tree->Branch(pair.first.c_str(), reinterpret_cast<void*>(&(pair.second)), (pair.first+"/F").c_str());
 	}
@@ -41,7 +41,7 @@ void SpecialVariableModule::addVariablesToTree(TTree *tree)
 	
 	for (auto& pair : floats)
 	{
-		std::cout << "Adding variable " << pair.first << '\n';
+		//std::cout << "Adding variable " << pair.first << '\n';
 		tree->Branch(pair.first.c_str(), reinterpret_cast<void*>(&(pair.second)), (pair.first+"/F").c_str());
 	}
 
@@ -52,21 +52,21 @@ void SpecialVariableModule::addVariablesToDataLoader(TMVA::DataLoader *dataloade
 {
 	for (auto pair : integers)
 	{
-		std::cout << "Adding variable " << pair.first << '\n';
+		//std::cout << "Adding variable " << pair.first << '\n';
 		dataloader->AddVariable(pair.first.c_str(), pair.first.c_str(), "", 'F');
 	}
 	
 	
 	for (auto pair : floats)
 	{
-		std::cout << "Adding variable " << pair.first << '\n';
+		//std::cout << "Adding variable " << pair.first << '\n';
 		dataloader->AddVariable(pair.first.c_str(), pair.first.c_str(), "", 'F');
 	}
 }
 
 void SpecialVariableModule::initialize()
 {
-	std::cout << "Initializing ";
+	//std::cout << "Initializing ";
 	addVariables();
 	for (auto val : floats)
 	{

@@ -30,6 +30,8 @@ public:
   FilterModule(std::shared_ptr<Filter> filter); 
   // Gets the (already decided) filter string for later use
   std::string getFilterString() const {return filterString;}
+
+  virtual std::string getName() override {return "FilterModule";}
   
 protected:
   // This is the main function of the class.

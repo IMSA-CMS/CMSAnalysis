@@ -10,6 +10,8 @@ class QuickCheckModule : public AnalysisModule
         virtual bool process() override;
         virtual void finalize() override;
 
+        virtual std::string getName() override {return "QuickCheckModule";}
+
     private:
         int totalEvents = 0;
         int fourElectrons = 0;

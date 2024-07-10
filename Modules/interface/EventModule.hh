@@ -39,6 +39,8 @@ class EventModule : public ProductionModule
         // Returns an input module that can be used to make these events the input to other modules
         const EventInput* getEventInput() const {return &localInput;}
 
+        virtual std::string getName() override {return "EventModule";}
+
     protected:
         bool process() override;
 

@@ -17,7 +17,6 @@
 
 void FormatPlot()
 {
-    std::cout << "Hello!\n";
     //Change extraText here
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Simulation Preliminary");
     //Change the filePath here. This should be the longest branch all input files have in common.

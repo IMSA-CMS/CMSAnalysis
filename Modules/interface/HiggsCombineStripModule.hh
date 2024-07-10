@@ -9,6 +9,8 @@ class HiggsCombineStripModule: public SpecialVariableModule
     public:
     HiggsCombineStripModule(); //do the same thing for recomod in leptonjetMLStripModule
 
+    virtual std::string getName() override {return "HiggsCombineStripModule";}
+   
     private:
 
 

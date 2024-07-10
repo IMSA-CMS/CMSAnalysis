@@ -8,6 +8,7 @@ class ParticleEventInput : public EventInput
 {
     public:
         std::ParticleCollection getLeptons() {return leptons;}
+        
     protected:
         void addLepton(Particle particle) {lepton.push_back(particle);}
     private:
