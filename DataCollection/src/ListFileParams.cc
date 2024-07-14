@@ -10,12 +10,14 @@ filename(file)
 }
 std::vector<std::string> ListFileParams::getFileList() const
 {
+    const std::string eossrc = "root://cmsxrootd.fnal.gov//";
+
     std::ifstream textFile(Utility::getFullPath(filename));
     std::string line;
     std::vector<std::string> rootFiles;
     while (getline(textFile, line))
     {
-        rootFiles.push_back(line);
+        rootFiles.push_back(eossrc + line);
     }
     return rootFiles;
 }

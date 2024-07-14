@@ -151,9 +151,9 @@ double integrateDifference(double lower, double upper, TH1*& hist, TF1*& noPeakF
 
 	double noPeakIntegral = noPeakFit->Integral(lower, upper);
 	
-	std::cout<<"Histogram Integral: "<<peakIntegral<<endl
-	<< "No Peak Integral: " << noPeakIntegral << endl
-	<< "Difference: " << peakIntegral - noPeakIntegral << endl;
+	std::cout<<"Histogram Integral: "<<peakIntegral<< std::endl
+	<< "No Peak Integral: " << noPeakIntegral <<  std::endl
+	<< "Difference: " << peakIntegral - noPeakIntegral <<  std::endl;
 	return peakIntegral - noPeakIntegral;
 }
 
