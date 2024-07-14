@@ -1,4 +1,4 @@
-#include "CMSAnalysis/Filters/interface/HiggsSelector.hh"
+#include "CMSAnalysis/Filters/interface/ElectronEnergyScaleUp.hh"
 #include <vector>
 
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
@@ -8,7 +8,7 @@
 #include "CMSAnalysis/Utility/interface/ParticleType.hh"
 #include "CMSAnalysis/Utility/interface/Event.hh"
 
-void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
+void ElectronEnergyScaleUp::selectParticles(const EventInput* input, Event& event) const
 {
     auto particles = input->getLeptons(EventInput::RecoLevel::Reco).getParticles();
 
@@ -25,12 +25,19 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
             )
             {
                 //std::cout << "PT: " << std::to_string(particle.getPt()) << std::endl;
-                leptons.push_back(particle);
+				auto oldp4 = particle.getFourVector();
+                auto sf = particle.getInfo("eScaleDown") != 0 ? particle.getInfo("eScaleDown") : particle.getInfo("eSigmaUp");
+				auto newp4 = oldp4 * (1+sf);
+                // Not sure why ScaleDown is positive and ScaleUp is negative (and fixed for sigma)
+				//std::cout << "Old Energy: " << std::to_string(oldp4.E()) << std::endl;
+				//std::cout << "New Energy: " << std::to_string(newp4.E()) << std::endl;
+				auto scaleUpParticle = Particle(newp4, particle.getDXY(), particle.getDZ(), particle.getCharge(), particle.getType(), particle.getSelectionFit());
+
+                leptons.push_back(scaleUpParticle);
             }
         }
         else if (particle.getType() == ParticleType::muon())
         {
-            //std::cout << "In Muon Selection" << std::endl;
             auto lepton = Lepton(particle);
             if (lepton.isLoose()  
                 && particle.getPt() > 5
@@ -64,7 +71,6 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
         }
         else if (particle.getType() == ParticleType::muon())
         {
-            //std::cout << particle.getInfo("Isolation") << std::endl;
             event.addMuon(particle);
         }
     }

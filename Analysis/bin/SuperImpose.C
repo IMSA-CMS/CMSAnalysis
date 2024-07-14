@@ -21,7 +21,7 @@ void SuperImpose()
     //auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary");
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Simulation Preliminary");
     //Change the filePath here. This should be the longest branch all input files have in common.
-    const std::string filePath = "/uscms/home/gomalley/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/";
+    const std::string filePath = "/uscms/home/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/";
     //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
     //Write your graph names here (for the legend)
 
