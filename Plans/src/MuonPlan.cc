@@ -49,15 +49,17 @@ void MuonPlan::initialize()
 
     eventMod->addSelector(muonSelector);
     eventMod->addCut(triggerCut);
+
     auto recoDecayFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::Reco);
     auto recoDecayFilterMod = make_shared<FilterModule>(recoDecayFilter);
     recoDecayFilterMod->setInput(eventMod->getEventInput());
-
+    
     auto eventHistMod = eventMod->getHistogramModule();
 
     //Changed because EventModule inherits from ProductionModule now
     modules.addProductionModule(eventMod);
-    modules.addFilterModule(make_shared<FilterModule>(recoDecayFilter));
-    modules.addAnalysisModule(eventHistMod);    
+    modules.addFilterModule(recoDecayFilterMod);
+    modules.addAnalysisModule(eventHistMod);  
+      
 
 }
