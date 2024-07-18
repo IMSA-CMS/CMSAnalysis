@@ -7,7 +7,7 @@ double HiggsCut::muonThreeChannelCut = 250;
 
 bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) const
 {
-    const auto particles = event.getParticles();
+    const auto particles = event.getParticles(EventInput::RecoLevel::Reco);
 
     int numLeptons = particles.getLeptonTypeCount(ParticleType::electron()) + particles.getLeptonTypeCount(ParticleType::muon());
     // double leptonPt = 0; 
