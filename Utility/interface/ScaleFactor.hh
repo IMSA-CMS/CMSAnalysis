@@ -1,19 +1,22 @@
-#ifndef SCALEFACTOR_HH
-#define SCALEFACTOR_HH
+#ifndef JSONSCALEFACTOR_HH
+#define JSONSCALEFACTOR_HH
 
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <map>
 #include <iostream>
+#include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
 
 class EventInput;
-class ScaleFactor 
+class JSONScaleFactor: public ScaleFactor 
 {
-
 public:
-    virtual ~ScaleFactor() {}
-    virtual double getScaleFactor(const EventInput* input) const = 0;
+    JSONScaleFactor(std::string filename);
+    virtual double getScaleFactor(const EventInput* input) const override;
+    void printScaleFactors() const;  
+private:
+    std::map<double, std::map<double, double>> scaleFactors;
 };
 
 #endif // SCALEFACTOR_HH
