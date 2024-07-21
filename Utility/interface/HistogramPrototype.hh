@@ -39,7 +39,7 @@ public:
 	std::string getFilteredName() const {return (getFilterString() + getName());}
 
 	void addFilter(std::shared_ptr<Filter> filterMod) {filters.push_back(filterMod);} // Adds a FilterModule& to filters (the vector)
-	void addScaleFactor(std::shared_ptr<ScaleFactor> scaleFactor) {scaleFactors.push_back(scaleFactor);} // Adds a ScaleFactor& to scaleFactors (the vector)
+	void addScaleFactor(std::shared_ptr<JSONScaleFactor> scaleFactor) {scaleFactors.push_back(scaleFactor);} // Adds a ScaleFactor& to scaleFactors (the vector)
 
 	std::string getFilterString() const;
 
@@ -54,7 +54,7 @@ private:
 	const EventInput* input;
 	std::string name;
 	std::vector<std::shared_ptr<Filter>> filters; // Vector of FilterModule&'s
-	std::vector<std::shared_ptr<ScaleFactor>> scaleFactors; 
+	std::vector<std::shared_ptr<JSONScaleFactor>> scaleFactors; 
 };
 
 #endif

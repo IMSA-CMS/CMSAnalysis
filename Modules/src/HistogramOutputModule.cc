@@ -21,7 +21,7 @@ void HistogramOutputModule::finalizeFilterString() {
     {
       
       entry.second->Write();
-      std::cout << "Going into: " << getFilter() << " and " << entry.first << "\n";
+ //     std::cout << "Going into: " << getFilter() << " and " << entry.first << "\n";
     }
   }
 }
@@ -51,7 +51,7 @@ void HistogramOutputModule::addObject(const std::string &name, TObject *obj) {
     
   }
 
-   std::cout << "Histogram added: " << name << '\n';
+//   std::cout << "Histogram added: " << name << '\n';
 }
 
 TObject* HistogramOutputModule::getObject(const std::string& name) 

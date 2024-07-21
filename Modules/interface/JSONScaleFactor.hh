@@ -13,6 +13,7 @@ class JSONScaleFactor: public ScaleFactor
 public:
     JSONScaleFactor(std::string filename);
     virtual double getScaleFactor(const EventInput* input) const override;
+    void printScaleFactors() const;  
 private:
     std::map<double, std::map<double, double>> scaleFactors;
 };

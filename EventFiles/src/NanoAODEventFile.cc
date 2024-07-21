@@ -141,6 +141,10 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
             // std::cout << "Adding " << var->getBranchName() << std::endl;
             variables.emplace(var->getName(), var->makeReader(treeReader));
         }
+        else
+        {
+            std::cout << "Branch " << var->getBranchName() << " not found" << std::endl;
+        }
     }
     treeReader.SetTree(tree);
     setEventCount(1);
@@ -323,15 +327,15 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
             0, 0, 0, ParticleType::photon(), fit);
         recoParticles.addParticle(particle);
     }
-    for (auto& particle : recoParticles)
-    {
-        particle.addInfo("numPDFs", getVariable<UInt_t>("num_pdfs"));
-        for (UInt_t i = 0; i < getVariable<UInt_t>("num_pdfs"); i++)
-        {
-            auto weight = getArrayElement<Float_t>("pdf_weight", i);
-            particle.addInfo("pweight" + std::to_string(i), weight);
-        }
-    }    
+// //    for (auto& particle : recoParticles)
+// //    {
+//         particle.addInfo("numPDFs", getVariable<UInt_t>("num_pdfs"));
+//         for (UInt_t i = 0; i < getVariable<UInt_t>("num_pdfs"); i++)
+//         {
+//             auto weight = getArrayElement<Float_t>("pdf_weight", i);
+//             particle.addInfo("pweight" + std::to_string(i), weight);
+//         }
+//     }    
     return recoParticles;
 }
 
