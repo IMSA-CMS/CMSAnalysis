@@ -26,6 +26,9 @@ void SuperPlot()
 	auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
 	//Change extra text here (keep drawLogo to false for now)
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation)");
+	plotFormatter->setUpperMasslimit(2000);
+	plotFormatter->setNumBins(5);
+	plotFormatter->setFirstBin(50);
 	//Change the string for the channel you want, if using one channel. Otherwise use the loop.
 	
 	double massTarget = 1400;
@@ -95,7 +98,7 @@ void SuperPlot()
 
 	// std::cout << "here\n";
 	// return;
-	TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "Invariant Mass", xAxisTitle, yAxisTitle, true, "0.3");
+	TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "Pt High Mass and Same Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
 	//TCanvas *canvas = plotFormatter->simpleAnalysisHist(backgroundHists, );
 
 	//Uncomment to save a png picture in your bin folder
