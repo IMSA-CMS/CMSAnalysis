@@ -1,3 +1,4 @@
+
 #include "CMSAnalysis/Analysis/interface/DarkPhotonCompleteAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/FullAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/Channel.hh"
@@ -24,7 +25,9 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
 
     //Change this file to your folder to use your own cross sections
     //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
-    auto reader = std::make_shared<CrossSectionReader>("/uscms/home/mkubon/analysis/clean/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+    //auto reader = std::make_shared<CrossSectionReader>("/uscms/home/maxchen/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+    //const std::string filePath = "/uscms/home/maxchen/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/"; 
+	auto reader = std::make_shared<CrossSectionReader>("/uscms/home/mkubon/analysis/clean/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
     const std::string filePath = "/uscms/home/mkubon/analysis/clean/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/"; 
     double luminosity = 20;
 
@@ -33,9 +36,36 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
     //for(std::string name : names) {
     //for (std::string recoDecay : recoDecays){
       //  for(double massTarget : massTargets) {
+
+            std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Signs"};
+            std::vector<std::string> connecters = {"_1st Highest Lepton Jet "};
+            std::vector<std::string> columnNames = {"Eta", "Lepton Jet Delta R", "Lepton Jet Mass", "Phi", "Pt"};
+
             std::vector<HistVariable> histVariablesBackground;
-            histVariablesBackground.push_back(HistVariable::InvariantMass("High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest mu- Pt"));
-            
+
+            for (std::string rowName : rowNames)
+            {
+                for (std::string connecter : connecters)
+                {
+                    for (std::string columnName : columnNames)
+                    {
+                        histVariablesBackground.push_back(
+                            HistVariable(columnName + " " + rowName,
+                            rowName + "__hists/" + rowName + connecter + columnName));
+                            //"High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest mu- Pt"));
+                    }
+                }
+            }
+
+            //histVariablesBackground.push_back(HistVariable("Pt High Mass and Same Sign","High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest mu- Pt"));
+            //histVariablesBackground.push_back(HistVariable("Eta High Mass and Same Sign", "High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest mu- Eta"));
+
+			//histVariablesBackground.push_back(HistVariable("Pt Low Mass and Same Sign","Low Mass and Same Sign__hists/Low Mass and Same Sign_1st Highest mu- Pt"));
+			//histVariablesBackground.push_back(HistVariable("Eta Low Mass and Same Sign","Low Mass and Same Sign__hists/Low Mass and Same Sign_1st Highest mu- Eta"));
+
+			//histVariablesBackground.push_back(HistVariable("Pt High Mass and Different Signs","High Mass and Different Signs__hists/High Mass and Different Signs_1st Highest mu- Pt"));      
+			//histVariablesBackground.push_back(HistVariable("Eta High Mass and Different Signs", "High Mass and Different Signs__hists/High Mass and Different Signs_1st Highest mu- Eta")); 
+
             //cross sections should be all lowercase
             auto ttbarBackground = std::make_shared<Process>("TTBar Background", 2);
             ttbarBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTbar_Boson_NA_Decay_LL_Run_2.root", "ttbar_lep", reader, luminosity));
@@ -75,10 +105,20 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
             
             auto DarkPhotonSignal = std::make_shared<Process>("Dark Photon Signal", 5);
            
-            
+				/*
                 std::vector<HistVariable> histVariablesSignal;
-                histVariablesSignal.push_back(HistVariable::InvariantMass("High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest mu- Pt"));                
-                DarkPhotonSignal->addProcess(makeBasicProcess(histVariablesSignal, filePath, "darkPhotonBaselineRun2.root", "DarkPhoton", reader, luminosity));
+
+                histVariablesSignal.push_back(HistVariable::Pt("High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest mu- Pt"));      
+				histVariablesSignal.push_back(HistVariable::Eta("High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest mu- Eta"));  
+
+				histVariablesSignal.push_back(HistVariable::Pt("Low Mass and Same Sign__hists/Low Mass and Same Sign_1st Highest mu- Pt"));
+				histVariablesSignal.push_back(HistVariable::Eta("Low Mass and Same Sign__hists/Low Mass and Same Sign_1st Highest mu- Eta"));
+
+				histVariablesSignal.push_back(HistVariable::Pt("High Mass and Different Signs__hists/High Mass and Different Signs_1st Highest mu- Pt"));      
+				histVariablesSignal.push_back(HistVariable::Eta("High Mass and Different Signs__hists/High Mass and Different Signs_1st Highest mu- Eta"));  
+				*/
+
+                DarkPhotonSignal->addProcess(makeBasicProcess(histVariablesBackground, filePath, "darkPhotonBaselineRun2.root", "DarkPhoton", reader, luminosity));
              
             // std::vector<std::shared_ptr<Correction>> corrections = {};
             // auto correction = std::make_shared<ConstantCorrection>(2);

@@ -27,7 +27,8 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     double tempMass = 1400;
 
     //Actual masses for the Higgs signal
-    std::vector<double> massTargets {500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400};
+    //std::vector<double> massTargets {500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400};
+    std::vector<double> massTargets { 500, 600, 700, 800, 900, 1100, 1200, 1300, 1400};
     const std::vector<std::string> genSimDecays{"eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet", "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt"};
     
     const std::vector<std::string> recoDecays{"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u", "none"};
@@ -35,10 +36,34 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
 
     //Change this file to your folder to use your own cross sections
     //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
-    auto reader = std::make_shared<CrossSectionReader>("/uscms/home/ichen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
-    const std::string filePath = "/uscms/home/vrao/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/"; 
-    const std::string signalFilePath = "/uscms/home/ichen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Analysis/bin/H++MassFiles/";
+    //auto reader = std::make_shared<CrossSectionReader>("/uscms/home/ichen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+    //const std::string filePath = "/uscms/home/vrao/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/"; 
+    //const std::string signalFilePath = "/uscms/home/ichen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Analysis/bin/H++MassFiles/";
+    auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+    const std::string filePath = "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Muon"; 
+    const std::string signalFilePath = "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Muon/";
+    // Vincents: /uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output
     double luminosity = 139;
+
+    std::vector<HistVariable> histVariablesBackground;
+
+    std::vector<std::string> rowNames = {"none_eeut", "none_eeet"};
+    std::vector<std::string> connecters = {"_1st Highest e- "};
+    std::vector<std::string> columnNames = {"Eta", "Phi", "Pt"};
+
+    for (std::string rowName : rowNames)
+    {
+        for (std::string connecter : connecters)
+        {
+            for (std::string columnName : columnNames)
+            {
+                histVariablesBackground.push_back(
+                    HistVariable(columnName + " " + rowName,
+                    rowName + "__hists/" + rowName + connecter + columnName));
+                    //"High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest mu- Pt"));
+            }
+        }
+    }
 
     TH1::SetDefaultSumw2();
     //for(std::string name : names) {
@@ -61,7 +86,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
             }
         }
         
-        std::vector<HistVariable> histVariablesBackground;
+        //std::vector<HistVariable> histVariablesBackground;
         histVariablesBackground.push_back(HistVariable::InvariantMass(recoDecay + "__hists/" + recoDecay + "_Opposite Sign Invariant Mass"));
         histVariablesBackground.push_back(HistVariable::SameSignMass(recoDecay + "__hists/" + recoDecay + "_Same Sign Invariant Mass"));
         histVariablesBackground.push_back(HistVariable::InvariantMass(recoDecay + "__hists/" + recoDecay + "_1st Highest mu- Eta"));
