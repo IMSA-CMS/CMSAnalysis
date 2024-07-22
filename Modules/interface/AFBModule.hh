@@ -14,6 +14,8 @@ public:
   virtual bool process() override;
   virtual void finalize() override;
 
+  virtual std::string getName() override {return "AFBModule";}
+
 private:
   int minMassCut;
   int maxMassCut;
@@ -27,6 +29,9 @@ private:
   
   // calculates the value of Afb based on the bin contents in the forward and backward histograms
   double getAFB(std::string level, int binNumber); 
+
+
+
 };
 
 #endif

@@ -19,6 +19,9 @@ class FileStripModule : public AnalysisModule
     // Checks if a GenSimParticle is inside of the collection given
     int checkGenSim(const GenSimParticle &genSim, ParticleCollection<Particle> &collection);
     virtual void initialize() override;
+    
+    virtual std::string getName() override {return "FileStripModule";}
+
 
     protected:
     bool process() override;

@@ -13,6 +13,8 @@ public:
   bool process() override;
   void finalize() override;
 
+  virtual std::string getName() override {return "MassRecoEfiiciency";}
+
 private:
   double HiggsMass;
   double lowerWidth;     // Checks HiggsMass - lowerWidth, HiggsMass + higherWidth

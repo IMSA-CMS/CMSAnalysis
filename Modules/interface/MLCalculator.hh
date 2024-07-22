@@ -18,9 +18,7 @@ class MLCalculator : public ProductionModule
     virtual bool process() override {return true;}
     double getOutput(ParticleCollection<Particle> part) const;
 
-
-
-
+    virtual std::string getName() override {return "MLCalculator";}
 
     private:
     std::shared_ptr<SpecialVariableModule> specialVariable;//same here

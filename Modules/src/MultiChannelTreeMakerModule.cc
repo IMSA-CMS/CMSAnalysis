@@ -32,9 +32,9 @@ void MultiChannelTreeMakerModule::initialize()
 {
     std::vector<std::string> channels = {"eeee_", "eeeu_", "eeuu_", "eueu_", "euuu_", "uuuu_"};
     for(auto channel : channels){
-        std::string treeName = channel + this->getName();
+        std::string treeName = channel + getTreeName();
         TTree* channelTree = new TTree(treeName.c_str(), treeName.c_str());//put in name
-        this->getSpecialVariable()->addVariablesToTree(channelTree);
+        getSpecialVariable()->addVariablesToTree(channelTree);
         trees.insert({channel, channelTree});
     }
 }
@@ -42,7 +42,7 @@ void MultiChannelTreeMakerModule::finalize()
 {
     for(auto tree : trees)
     {
-        std::cout<<"Testing " << tree.first;
+       // std::cout<<"Testing " << tree.first;
         tree.second->Write();
     }
 

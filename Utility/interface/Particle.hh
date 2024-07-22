@@ -66,6 +66,7 @@ class Particle
     Particle::BarrelState getBarrelState() const;
     reco::Candidate::LorentzVector getFourVector() const;
     const ParticleType& getType() const;
+    Particle::SelectionFit getSelectionFit() const;
 
 protected:
   Particle(std::shared_ptr<ParticleImplementation> particle);

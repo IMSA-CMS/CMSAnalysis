@@ -12,6 +12,9 @@
 class ProductionModule : public Module
 {
 public:
+
+virtual std::string getName() override {return "ProductionModule";}
+
 };
 
 #endif

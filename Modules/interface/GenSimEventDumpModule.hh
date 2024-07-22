@@ -15,6 +15,8 @@ public:
 
   virtual bool process() override;
 
+  virtual std::string getName() override {return "GenSimEventDumpModule";}
+
 private:
   // prints information of a single event
   void printGenSimParticleCollection(const ParticleCollection<GenSimParticle>& genParts, std::ofstream& my_file) const;
