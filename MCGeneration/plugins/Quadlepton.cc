@@ -130,7 +130,7 @@ private:
 
 void Quadlepton::beginJob()
 {
-  std::cout << "Made it (in beginJob) to line" << __LINE__ << std::endl;
+  //std::cout << "Made it (in beginJob) to line" << __LINE__ << std::endl;
 
   //Pt Histogram Range
   double ptMaxRange = 1000;
@@ -182,7 +182,7 @@ Quadlepton::Quadlepton(const edm::ParameterSet& iConfig)
 
 {
 
-  std::cout << "Made it (in constructor) to line" << __LINE__ << std::endl;
+  //std::cout << "Made it (in constructor) to line" << __LINE__ << std::endl;
 
   debug_=iConfig.getParameter<int>("debug");
   genPartsTag_=iConfig.getParameter<edm::InputTag>("genPartsTag");
@@ -214,7 +214,7 @@ void
 Quadlepton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
 
-  std::cout << "Made it (in analyze) to line" << __LINE__ << std::endl;
+  //std::cout << "Made it (in analyze) to line" << __LINE__ << std::endl;
   using namespace edm;
   edm::Handle<reco::GenParticleCollection> genPartsHandle;
   iEvent.getByToken(genPartsToken_,genPartsHandle);
@@ -239,8 +239,8 @@ Quadlepton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       {
 	if(leptons.size() == 0)
 	  {
-	    std::cout << "Added first lepton found at line " << __LINE__ << std::endl;
-	    std::cout << "Inserted lepton " << part.pdgId() << " at line " << __LINE__ << " with pt " << part.pt() << " at index " << 0 << std::endl;
+	    //std::cout << "Added first lepton found at line " << __LINE__ << std::endl;
+	    //std::cout << "Inserted lepton " << part.pdgId() << " at line " << __LINE__ << " with pt " << part.pt() << " at index " << 0 << std::endl;
 	    leptons.push_back(part);
 	  }
 	else
@@ -248,11 +248,11 @@ Quadlepton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	    bool sortedLepton = false;
 	    for(int i = 0; !sortedLepton && i < (int) leptons.size(); i++)
 	      {
-		std::cout << "Checking lepton " << part.pdgId() << " at line " << __LINE__ << " with pt " << part.pt() << " compared to index " << i << std::endl;
+		//std::cout << "Checking lepton " << part.pdgId() << " at line " << __LINE__ << " with pt " << part.pt() << " compared to index " << i << std::endl;
 		if(part.pt() <= leptons[i].pt())
 		  {
 		    leptons.insert(leptons.begin() + i, part);
-		    std::cout << "Inserted lepton " << part.pdgId() << " at line " << __LINE__ << " with pt " << part.pt() << " at index " << i << std::endl;
+		    //std::cout << "Inserted lepton " << part.pdgId() << " at line " << __LINE__ << " with pt " << part.pt() << " at index " << i << std::endl;
 		    sortedLepton = true;
 		  }
 	      }
@@ -264,7 +264,7 @@ Quadlepton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       }
   }
 
-  std::cout << "Found " << leptons.size() << " Final State Leptons at line " << __LINE__ << std::endl;
+  //std::cout << "Found " << leptons.size() << " Final State Leptons at line " << __LINE__ << std::endl;
   for(int i = 0; i < (int) leptons.size(); i++)
     std::cout << &leptons.at(i) << " " << leptons.at(i).pdgId() << ", ";
 
@@ -311,7 +311,7 @@ Quadlepton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   //Invariant Mass cuts by pT in GeV
   double firstCut = 30, secondCut = 30, thirdCut = 20, fourthCut = 20;
-  std::cout << "Applying cuts: " << firstCut << ", " << secondCut << ", " << thirdCut << ", " << fourthCut << " from highest to lowest pt at line " << __LINE__ << std::endl;
+ // std::cout << "Applying cuts: " << firstCut << ", " << secondCut << ", " << thirdCut << ", " << fourthCut << " from highest to lowest pt at line " << __LINE__ << std::endl;
 
   std::vector<reco::GenParticle*> fourLeptonEvent = {leptonMinus1, leptonPlus1, leptonMinus2, leptonPlus2};
   for(int i = 0; i < (int) fourLeptonEvent.size(); i++)
@@ -331,13 +331,13 @@ Quadlepton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	      largestIndex = x;
 	    }
 	}
-      std::cout << "Found Largest at line " << __LINE__ << " with pt " << fourLeptonEvent[largestIndex]->pt() << std::endl;
+      //std::cout << "Found Largest at line " << __LINE__ << " with pt " << fourLeptonEvent[largestIndex]->pt() << std::endl;
       reco::GenParticle* temp = fourLeptonEvent[i];
       fourLeptonEvent[i] = fourLeptonEvent[largestIndex];
       fourLeptonEvent[largestIndex] = temp;
     }
   
-  std::cout << "Printing Sorted Four Leptons at line " << __LINE__ << std::endl;
+  //std::cout << "Printing Sorted Four Leptons at line " << __LINE__ << std::endl;
   for(int i = 0; i < (int) fourLeptonEvent.size(); i++)
     {
       std::cout << fourLeptonEvent.at(i) << ' ' << fourLeptonEvent.at(i)->pt() << std::endl;
@@ -372,13 +372,13 @@ Quadlepton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	  //Calculate number of accepted events for +-5 GeV and +-2 GeV
 	  double higgsMass = 200;//GeV
-	  std::cout << "Calculating acceptance for mass of " << higgsMass << " at line " << __LINE__ << std::endl;
+	  //std::cout << "Calculating acceptance for mass of " << higgsMass << " at line " << __LINE__ << std::endl;
 
 	  //+-5GeV 1 higgs event
 	  if(abs(invariantMass1 - higgsMass) <= 5 || abs(invariantMass2 - higgsMass) <= 5)
 	    {
 	      h_massInvarAcceptance5GeV1Higgs->Fill(higgsMass);
-	      std::cout << "Accepted event from masses " << invariantMass1 << " and " << invariantMass2 << " at line " << __LINE__ << " for +-5 GeV acceptance for 1 higgs" << std::endl;
+	      //std::cout << "Accepted event from masses " << invariantMass1 << " and " << invariantMass2 << " at line " << __LINE__ << " for +-5 GeV acceptance for 1 higgs" << std::endl;
 	    }
 	  else
 	    {
@@ -389,7 +389,7 @@ Quadlepton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	  if(abs(invariantMass1 - higgsMass) <= 2 || abs(invariantMass2 - higgsMass) <= 2)
 	    {
 	      h_massInvarAcceptance2GeV1Higgs->Fill(higgsMass);
-	      std::cout << "Accepted event from masses " << invariantMass1 << " and " << invariantMass2 << " at line " << __LINE__ << " for +-2 GeV acceptance for 1 higgs" << std::endl;
+	      //std::cout << "Accepted event from masses " << invariantMass1 << " and " << invariantMass2 << " at line " << __LINE__ << " for +-2 GeV acceptance for 1 higgs" << std::endl;
 	    }
 	  else
 	    {
@@ -400,7 +400,7 @@ Quadlepton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	  if(abs(invariantMass1 - higgsMass) <= 5 && abs(invariantMass2 - higgsMass) <= 5)
 	    {
 	      h_massInvarAcceptance5GeV2Higgs->Fill(higgsMass);
-	      std::cout << "Accepted event from masses " << invariantMass1 << " and " << invariantMass2 << " at line " << __LINE__ << " for +-5 GeV acceptance for 2 higgs" << std::endl;
+	     // std::cout << "Accepted event from masses " << invariantMass1 << " and " << invariantMass2 << " at line " << __LINE__ << " for +-5 GeV acceptance for 2 higgs" << std::endl;
 	    }
 	  else
 	    {
@@ -411,7 +411,7 @@ Quadlepton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	  if(abs(invariantMass1 - higgsMass) <= 2 && abs(invariantMass2 - higgsMass) <= 2)
 	    {
 	      h_massInvarAcceptance2GeV2Higgs->Fill(higgsMass);
-	      std::cout << "Accepted event from masses " << invariantMass1 << " and " << invariantMass2 << " at line " << __LINE__ << " for +-2 GeV acceptance for 2 higgs" << std::endl;
+	      //std::cout << "Accepted event from masses " << invariantMass1 << " and " << invariantMass2 << " at line " << __LINE__ << " for +-2 GeV acceptance for 2 higgs" << std::endl;
 	    }
 	  else
 	    {
@@ -426,7 +426,7 @@ Quadlepton::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   
   
 
-  std::cout << "\n\n===========================================================================================================" << std::endl;
+ // std::cout << "\n\n===========================================================================================================" << std::endl;
   tree_->Fill();  
 }
 

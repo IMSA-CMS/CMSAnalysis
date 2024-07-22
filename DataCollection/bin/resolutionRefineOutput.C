@@ -63,8 +63,6 @@ void setUpVariables(std::string currentLepton, TFile* genOutput)
 {
   //TFile* genOutput = TFile::Open("muonResolution.root");
   TFile* outputErrorGraphHists = TFile::Open("refinedOutputSignFlipMu16.root", "recreate");
- 
-  std::cerr << "broke at least one intervis rule" << endl;
 
   if (genOutput)
   {
@@ -93,8 +91,6 @@ void setUpVariables(std::string currentLepton, TFile* genOutput)
     std::string parameters [2] = {"Pt","Mass"};
     std::string errorTypes [2] = {"Mean","Sigma"};
 
-    std::cerr << "created a personal recipe at Sodexo" << endl;
-
     //loop through the different combinations of barrel states, parameters, and errortypes
     for (unsigned int a=0; a<2; a++)
     {
@@ -112,7 +108,7 @@ void setUpVariables(std::string currentLepton, TFile* genOutput)
 	{
 	  barrelState = barrelStates[a];
 	}
-	std::cerr << "brenda bazan" << endl;
+	
 	//this loop is only for the error graphs, not the histograms
 	for (unsigned int c=0; c<2; c++)
 	{
@@ -127,13 +123,13 @@ void setUpVariables(std::string currentLepton, TFile* genOutput)
 	    //drawErrorGraph(sigmaDivPtGraphName, genOutput);
 	  }
 	}
-	std::cerr << "3+ culture shows" << endl;
+	
 	if (parameter=="Pt")
 	{
 	  const char* xAxisTitle="p_{T} (GeV)";	  			      
 	  addToDividedCanvases(currentLepton,  minPtCut, maxPtRange, outputErrorGraphHists, xAxisTitle, canvasMap, parameter, barrelState, genOutput, ptIncrement);
 	}
-	std::cerr << "man you LOOK like 1 TeV" << endl;
+	
 	if (parameter=="Mass")
 	{
 	  const char* xAxisTitle="Dilepton Mass (GeV)";
@@ -142,18 +138,16 @@ void setUpVariables(std::string currentLepton, TFile* genOutput)
       }
     }
 	
-    std::cerr << "there's a posibility that if I swing my fist at your face, I might tunnel and miss. wanna try?" << endl;
+    
 
     std::string signFlipsName = "Percent of Sign Flip Matches vs. pT";
     //drawErrorGraph(signFlipsName, genOutput);
 
     //Ellyn & Eva: seg fault happening right after this line: on drawHistogram line	
-    std::cerr << "I miss drugs - debate resolution" << endl;
 
     //drawHistogram("histDeltaR",genOutput);
 
     //Ellyn & Eva: seg fault happens before this line
-    std::cerr << "we bouta make some gravitons outta you - Ray Shang, 2019" << endl;
   }
 }
 
@@ -168,8 +162,6 @@ void addToDividedCanvases(std::string currentLepton, int minCut,int maxRange,TFi
   //std::cerr << "canvasIncrement = " << canvasIncrement << endl;
   //std::cerr << "loopRange = " << loopRange << endl;
   //loop through the different intervals
-
-  std::cerr << "listened to someone complain about compusci/modphys" << endl;
 
   //vectors to hold error data
   std::vector<double> mean;
@@ -219,12 +211,10 @@ void addToDividedCanvases(std::string currentLepton, int minCut,int maxRange,TFi
       
     //get the histograms from the root file
     TH1* errorHist=dynamic_cast<TH1*>(genOutput->Get(histName.c_str()));
-    std::cout << "Enters hist loop with combo " + histName <<std::endl;
+    //std::cout << "Enters hist loop with combo " + histName <<std::endl;
 
     if (errorHist && !(errorHist->GetEntries() == 0))
     {
-      std::cerr << "fried rice" <<std::endl;
-
       outputErrorGraphHists->cd();
       errorHist->GetXaxis()->SetTitle(xAxisTitle);
       errorHist->Fit("gaus","","",-0.05,0.05);
@@ -233,15 +223,12 @@ void addToDividedCanvases(std::string currentLepton, int minCut,int maxRange,TFi
       gStyle->SetOptFit(0011);
       //errorHist->Draw();
 
-      std::cerr << "unorthodox display of hubris, but very well" <<std::endl;
-
+      
       auto function = errorHist->GetFunction("gaus"); //pulls fit function out of hist
       double currentMean = function->GetParameter(1); 
       double currentSD = function->GetParameter(2); 
       double currentMeanError = function->GetParError(1); //had 1 as argument
       double currentSDError = function->GetParError(2); //had 2 as argument
-
-      std::cerr << "So I made a flamethrower, as you do" << std::endl;
 
       //adds new data points to vectors
       mean.push_back (currentMean);
@@ -263,7 +250,6 @@ void addToDividedCanvases(std::string currentLepton, int minCut,int maxRange,TFi
     }
     else if (errorHist && errorHist->GetEntries() == 0)
     {
-      std::cerr << "I had a dream I ate a pie that tasted like cheese" << std::endl;
       mean.push_back (-1);
       sd.push_back (-1);
       meanError.push_back (1);
@@ -312,8 +298,6 @@ void addToDividedCanvases(std::string currentLepton, int minCut,int maxRange,TFi
   {
     createErrorGraph(currentLepton, "testing error graph", mean, sd, meanError, sdError, massBin, parameter, barrelState);
   }
-
-  std::cerr << "Then, rutabagas" << std::endl;
 	
   //std::cerr << "elements in sd: ";
   //for(int i=0; i < sd.size(); i++)
@@ -355,9 +339,6 @@ void drawHistogram(std::string histName, TFile* genOutput)
 
 void createErrorGraph(std::string currentLepton, std::string errorGraphName, vector<double> mean, vector<double> sd, vector<double> meanError, vector<double> sdError, vector<double> massBin, std::string parameter, std::string barrelState)
 {
-
-  std::cerr << "I lost my shoe :(" << endl;
-
   //find max & min y-values of points of both mean and SD vectors
   //same order for all (1. max y-value, 2. min y-value, 3. max error value):
   std::vector<Double_t> meanPointsAndErrors;
@@ -537,8 +518,6 @@ void drawErrorGraph(std::string errorGraphName, TFile* genOutput)
   TCanvas* errorGraphCanvas=new TCanvas(errorGraphName.c_str(), errorGraphName.c_str(), 500, 500);
   errorGraphCanvas->cd();
 
-  std::cerr << "made roommate do all of housekeeping" << endl;
-
   //supposed to remove points at the end that are 0, but it does not currently work
   if (errorGraphName == "Percent of Sign Flip Matches vs. pT")
   {
@@ -557,8 +536,6 @@ void drawErrorGraph(std::string errorGraphName, TFile* genOutput)
     errorGraph->GetYaxis()->SetTitle("Fraction of Sign Flips");
   }
 
-  std::cerr << "cried over clash" << endl;
-
   //checks if the graph exists
   if (errorGraph)
   {
@@ -574,6 +551,5 @@ void drawErrorGraph(std::string errorGraphName, TFile* genOutput)
   else
   {
     std::cout<<errorGraphName+" is not found"<<std::endl;
-  }
-  std::cerr << "man I eat 1 TeV for breakfast" << endl; 
+  } 
 }

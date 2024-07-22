@@ -18,6 +18,7 @@ class DataStripModule : public AnalysisModule
 
         virtual void finalize() override;
         
+        virtual std::string getName() override {return "DataStripModule";}
 
     private:
         TFile *file;

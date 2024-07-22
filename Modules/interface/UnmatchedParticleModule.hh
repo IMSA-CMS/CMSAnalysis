@@ -16,6 +16,8 @@ public:
   virtual bool process() override;
   virtual void finalize() {AnalysisModule::finalize();}
 
+  virtual std::string getName() override {return "UnmatchedPatchedModule";}
+  
 private:
   //const std::shared_ptr<GenSimIdentificationModule> genSim;
   const std::shared_ptr<MatchingModule> matching;

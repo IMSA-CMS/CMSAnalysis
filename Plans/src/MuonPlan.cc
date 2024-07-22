@@ -1,4 +1,4 @@
-#include "CMSAnalysis/Plans/interface/HiggsBackgroundPlan.hh"
+#include "CMSAnalysis/Plans/interface/MuonPlan.hh"
 
 #include <iostream>
 #include <memory>
@@ -31,74 +31,35 @@
 #include "CMSAnalysis/Filters/interface/BJetFilter.hh"
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
 #include "CMSAnalysis/Filters/interface/ZVetoCut.hh"
+#include "CMSAnalysis/Filters/interface/MuonSelector.hh"
 
 using std::make_shared;
 
-void HiggsBackgroundPlan::initialize()
+void MuonPlan::initialize()
 {
     
     auto& modules = getModules();
     
     auto eventMod = make_shared<EventModule>();
-    auto hppSelector = make_shared<HPlusPlusGenSimSelector>();
-    auto higgsSelector = make_shared<HiggsSelector>();
-    auto higgsCut = make_shared<HiggsCut>();
+    auto muonSelector = make_shared<MuonSelector>();
     //auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
     auto eventDump = make_shared<GenSimEventDumpModule>();
-    auto zVetoCut = make_shared<ZVetoCut>();
 
     auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
 
-    eventMod->addSelector(hppSelector);
-    eventMod->addSelector(higgsSelector);
+    eventMod->addSelector(muonSelector);
     eventMod->addCut(triggerCut);
-    eventMod->addCut(higgsCut);
-    eventMod->addCut(zVetoCut);
-
-    auto matchMod = make_shared<MatchingModule>();
-    auto triggerMod = make_shared<TriggerModule>();
-    auto metMod = make_shared<METModule>();
-    auto bJetFilter = make_shared<BJetFilter>();
-    auto higgsFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::Reco);
 
     auto recoDecayFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::Reco);
     auto recoDecayFilterMod = make_shared<FilterModule>(recoDecayFilter);
     recoDecayFilterMod->setInput(eventMod->getEventInput());
-    auto genSimDecayFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::GenSim);
-    auto filterStringModule = make_shared<FilterStringModule>();
-    modules.addAnalysisModule(filterStringModule);
     
- 
- 
-    auto nLeptonsFilter = make_shared<NLeptonsFilter>();
-    
-    auto histMod = make_shared<HistogramOutputModule>();
-
-    auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
-
-    auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::GenSim, "GenSim Same Sign Invariant Mass", 1000, 0, 2000, false, false);
-    auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::Reco, "Reco Same Sign Invariant Mass", 1000, 0, 2000);
-    auto positiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);
- 
     auto eventHistMod = eventMod->getHistogramModule();
 
-    auto MetHist = make_shared<METHist>(metMod, "MET", 500, 0, 2000);
-
-
-    eventHistMod->addHistogram(MetHist);
-    eventHistMod->addHistogram(recoSameSignInvMassHist);
-    eventHistMod->addHistogram(sameSignInvMassHist);
-    eventHistMod->addHistogram(positiveNegativeInvMassHist);
-
-
-    modules.addProductionModule(metMod);
     //Changed because EventModule inherits from ProductionModule now
     modules.addProductionModule(eventMod);
     modules.addFilterModule(recoDecayFilterMod);
-    modules.addAnalysisModule(eventHistMod);    
-    modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
+    modules.addAnalysisModule(eventHistMod);  
+      
 
-    auto hPlusPlusEfficiency = make_shared<HPlusPlusEfficiency>();
-    hPlusPlusEfficiency->setInput(eventMod->getEventInput());
-    modules.addAnalysisModule(hPlusPlusEfficiency);
 }

@@ -11,6 +11,7 @@ class SimTrigger : public Trigger
     SimTrigger(std::string iName, TriggerSimModule::EnumTriggers iTriggerEnum, std::shared_ptr<TriggerSimModule> iTrigSimMod);
     virtual std::vector<std::string> getNames() const {return trigSimMod->getNames();}
     
+
     // For debugging purposes
     void enableAllTriggers() {trigSimMod->enableAllTriggers();}
 
