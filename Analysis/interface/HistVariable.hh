@@ -20,9 +20,9 @@ class HistVariable
 	static HistVariable fourthPt(std::string histName) {return HistVariable("fourthPt", histName);}
 	std::string getName() {return name;}
 	std::string getHistName() {return graphName;}
-    
+    HistVariable(std::string iName, std::string iGraphName) : name(iName), graphName(iGraphName) {}
+
     private:
-	HistVariable(std::string iName, std::string iGraphName) : name(iName), graphName(iGraphName) {}
 	std::string name;
 	std::string graphName;
 };
