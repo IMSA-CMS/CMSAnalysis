@@ -68,9 +68,11 @@ std::vector<std::shared_ptr<FileParams>> EventLoader::fetchRootFiles(const std::
     std::string line;
     getline(textFile, line);
     
+    std::cout << "First line of file: " << line << "\n";
     //need to add funcionality to skip commented lines
     if (line.substr(0, 1) == "/")
     {
+      
       return{std::make_shared<ListFileParams>(configFile)};
     }
     else
@@ -90,6 +92,7 @@ std::vector<std::shared_ptr<FileParams>> EventLoader::fetchRootFiles(const std::
         fileName = eossrc + fileName;
       }
       */
+      //std::cout << "Number of file parameters: " << fileparams.size() << "\n";
       return fileparams;
     }
   }
@@ -123,8 +126,8 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents)
     for (auto &fileName : fileList)
     {
       // Adds prefix necessary to read remote files
-      const std::string eossrc = "root://cmsxrootd.fnal.gov//";
-      fileName = eossrc + fileName;
+      // const std::string eossrc = "root://cmsxrootd.fnal.gov//";
+      // fileName = eossrc + fileName;
 
       std::cout << "Name of file: " << fileName << "\n";
 

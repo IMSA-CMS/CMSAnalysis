@@ -26,7 +26,7 @@ TH1* Process::getHist(std::string histType, bool scaleToExpected) const
 			}
 			catch (std::runtime_error& error)
 			{
-				std::cout << "Error: " << error.what();
+				std::cout << "Error: " << error.what() << std::endl;
 				continue;
 			}
 			// if (!hist || hist->IsZombie()) 
@@ -142,6 +142,9 @@ void Process::addProcess(SingleProcess process)
 {
 	if(process.checkValidity() == true) {
 		processes.push_back(process);
+	} 
+	else{ 
+		std::cout << "done!" << "\n";
 	}
 }
 

@@ -34,10 +34,16 @@ int GenSimSimpleImplementation::pdgId() const
 {
   if (particleCharge == particleType.getCharge())
   {
+    //std::cout<<"The particle's charge is: "<<particleCharge<< "\n";
+    //int charge = particleType.getCharge();
+    //std::cout<<"The charge from the gensim is: " <<charge<<"\n\n";
     return particleType.getpdgId();
   }
   else
   {
+    //std::cout<<"The particle's charge is: "<<particleCharge<<"\n";
+    //int charge = particleType.getCharge();
+    //std::cout<<"The charge from the gensim is: " <<charge<<"\n\n";
     return -particleType.getpdgId();
   }
 }

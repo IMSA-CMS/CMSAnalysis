@@ -21,51 +21,22 @@ void RunSuperimpose() {
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary Data");
     //Change the filePath here. This should be the longest branch all input files have in common.
     //const std::string filePath = "/uscms/home/jpalamad/analysis/CMSSW_12_4_3/src/CMSAnalysis/MCGeneration/test/";
-	const std::string filePath = "/eos/uscms/store/user/jpalamad/output";
+	const std::string filePath = "/uscms/home/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/";
     //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
     //Write your graph names here (for the legend)
-    
-    std::vector<std::string> files = {};
-    std::vector<std::string> hists = {};
-    std::vector<TString> names = {};
+    std::vector<std::string> files = {"mctestdown.root", "mctestup.root", "mctestnorm.root"};
+    std::vector<std::string> hists = {"e e__hists/e e_e- Opposite Sign Invariant Mass", "e e__hists/e e_e- Opposite Sign Invariant Mass", "e e__hists/e e_e- Opposite Sign Invariant Mass"};
+
+    std::vector<TString> names = {"Electron Energy ScaleDown Ratio", "Electron Energy ScaleUp Ratio", "Electron Energy NoScale Ratio (0)"};
 
     //Colors go here
-    std::vector<int> colors = {};
+    std::vector<int> colors = {1,2,3};
 
-    const int base = 19;
-    const std::string baseName = "NNPDF3.1 QCD+LUXQED NLO";
-    const int run = 1;
-    const std::vector<std::string> pdfNames = {
-        "GRV 94L LO",
-        "CTEQ 5L LO",
-        "MRST LO",
-        "MRST LO",
-        "MSTW 2008 LO",
-        "MSTW 2008 NLO",
-        "CTEQ6L NLO",
-        "CTEQ6L1 LO",
-        "CTEQ66.00 NLO",
-        "CT09MC1 LO",
-        "CT09MCS NLO",
-        "NNPDF2.3 QCD+QED LO"
-    };
 
-	for (int i = (run - 1) * 3 + 1; i <= run * 3; i++)
-	{
-		files.push_back(fmt::format("/output_10000_pSet{}.root", i));
-		hists.push_back("Same Sign Invariant Mass");
-		names.push_back(pdfNames[i-1]);
-		colors.push_back(i + 3 - 3 * run);
-	}
-
-    files.push_back(fmt::format("/output_10000_pSet{}.root", base));
-    hists.push_back("Same Sign Invariant Mass");
-    names.push_back(baseName);
-    colors.push_back(4);
 
     //Change x and y axis titles here
-    TString xTitle = "Mass(GeV)";
-    TString yTitle = "Events";
+    TString xTitle = "Invariant Mass (GeV)";
+    TString yTitle = "Event Ratio";
 
     int count = 0;
     TFile* openedFile;
@@ -78,8 +49,7 @@ void RunSuperimpose() {
         if(!openedFile) {
             throw std::runtime_error("Cannot open file!");
             }
-        auto dir = openedFile->GetDirectory("_hists");
-        hist = dynamic_cast<TH1*>(dir->Get(hists.at(count).c_str()));
+        hist = dynamic_cast<TH1*>(openedFile->Get(hists.at(count).c_str()));
         if (!hist)
         {
             throw std::runtime_error("Histogram " + hists.at(count) + " not found!");
@@ -123,7 +93,7 @@ void RunSuperimpose() {
         for(int j = 0; j < (histVector[i]->GetNbinsX());j++)
         {
             double histValue = histVector[i]->GetBinContent(j);
-            double baseValue = histVector[3]->GetBinContent(j);
+            double baseValue = histVector[2]->GetBinContent(j);
             //std::cout<<baseValue<<"\n";
             //std::cout<<histValue<<"\n";
                 

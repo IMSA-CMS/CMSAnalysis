@@ -21,12 +21,10 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, std::stri
     //}
 
     int totalEventsInt = process->getTotalEvents();
-    std::cout << "1\n";
     double totaleventsran = totalEventsInt;
 
     //Finds crosssection (from spreadsheet)
     double crosssection = process->getCrossSection();
-    std::cout << "2\n";
 
 
 //without integral code
@@ -42,12 +40,11 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, std::stri
     int firstBin = 50;
     // mass range
     // needs to match the "upperMasslimit" value in "PlotFormatter" if using integral scaling
-    double xAxisRange = 1200;
+    double xAxisRange = 2000;
     int numBins = hist->GetNbinsX();  
     //std::cout << "numBins: " << numBins << "\n";
     int lowerLimit = firstBin * (static_cast<double>(numBins) / xAxisRange);
     double efficiency = (hist->Integral(lowerLimit, numBins)) / totaleventsran;
-    std::cout << "3\n";
     double signalest = crosssection * 1000 * luminosity * efficiency;
 // */
 /*

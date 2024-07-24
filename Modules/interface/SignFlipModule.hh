@@ -14,6 +14,8 @@ public:
   bool process() override;
   void finalize() override;
 
+  virtual std::string getName() override {return "SignFlipModule";}
+  
 private:
   const std::shared_ptr<MatchingModule> matchModule;
   int nSignFlips = 0;

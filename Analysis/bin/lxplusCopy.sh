@@ -1,3 +1,6 @@
 # in Analysis/bin run "bash lxplusCopy.sh"
-scp index.html virao@lxplus.cern.ch:/eos/user/v/virao/www
-scp jumboPlotStorage/*.png virao@lxplus.cern.ch:/eos/user/v/virao/www/jumboPlotStorage
+scp DarkPhotonSignal.html chenm@lxplus.cern.ch:/eos/user/c/chenm/www
+scp jumboPlotStorage/DarkPhotonSignal/*.png chenm@lxplus.cern.ch:/eos/user/c/chenm/www/jumboPlotStorage/DarkPhotonSignal
+
+scp HiggsSignal.html chenm@lxplus.cern.ch:/eos/user/c/chenm/www
+scp jumboPlotStorage/HiggsSignal/*.png chenm@lxplus.cern.ch:/eos/user/c/chenm/www/jumboPlotStorage/HiggsSignal

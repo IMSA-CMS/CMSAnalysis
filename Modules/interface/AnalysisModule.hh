@@ -28,6 +28,8 @@ public:
   // Gets the current filter string
   std::string getFilter() const {return currentFilter;}
 
+  virtual std::string getName() override {return "AnalysisModule";}
+
 protected:
   // Lets us know if processing has completed
   bool isDone() const {return isFinalStep;}
