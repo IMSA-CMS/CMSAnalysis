@@ -12,6 +12,8 @@ public:
   bool process() override;
   void finalizeFilterString() override;
   void finalize() override{};
+
+  virtual std::string getName() override {return "FilterStringModule";}
   
   protected:
   void doCounters() override{}

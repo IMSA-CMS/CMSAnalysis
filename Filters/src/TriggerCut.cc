@@ -2,9 +2,24 @@
 #include "CMSAnalysis/Utility/interface/FileParams.hh"
 #include "CMSAnalysis/Utility/interface/Event.hh"
 
-TriggerCut::TriggerCut(std::vector<std::string> itriggers) :
-	triggers(itriggers)
-{}
+TriggerCut::TriggerCut(std::vector<std::string> itrigger, std::string chosenDataset) :
+	triggers(itrigger)
+	
+{
+	this->chosenDataset=chosenDataset;
+	this->channelTriggerDict={ 
+		{"SingleElectron", triggers[0] },
+    	{ "SingleMuon", triggers[1] }
+	};
+	this->wrongChannelTriggerDict={
+        { "SingleElectron", triggers[1]},
+        { "SingleMuon", triggers[0]}
+    };
+	//Add the rest of trigger indices after converting map for 3+ triggers
+	
+}
+
+
  
 bool TriggerCut::checkEventInternal(const Event& event, const EventInput* input) const
 {
@@ -27,18 +42,20 @@ bool TriggerCut::checkEventInternal(const Event& event, const EventInput* input)
 	{
 		for (auto trigger : triggers) 
 		{	
-			if (trigger == "HLT_IsoMu24")
-			{
-				if (input->checkTrigger(trigger)) 
-				{
-					return false;
-				}
-			}
-			if (trigger == "HLT_Ele27_WPTight_Gsf")
+			// Replace equals with contains if checking multiple valid triggers 
+			if (trigger == channelTriggerDict.find(chosenDataset)->second)
 			{
 				if (input->checkTrigger(trigger)) 
 				{
 					return true;
+				}
+			}
+			// Account for double-counted triggers 
+			if (trigger == wrongChannelTriggerDict.find(chosenDataset)->second)
+			{
+				if (input->checkTrigger(trigger)) 
+				{
+					return false;
 				}
 			}
 			else
@@ -47,7 +64,7 @@ bool TriggerCut::checkEventInternal(const Event& event, const EventInput* input)
 			}
 		}
 	}
-	// Single Muon
+	// Single Muon (Assuming SingleElectron is the default dataset, not using mixed channels)
 	else
 	{
 		for (auto trigger : triggers) 
@@ -60,3 +77,5 @@ bool TriggerCut::checkEventInternal(const Event& event, const EventInput* input)
 	}
 	return false;
 }
+
+

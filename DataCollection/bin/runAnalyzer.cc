@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <chrono>
 
+
 #include "TROOT.h"
 #include "TSystem.h"
 
@@ -100,7 +101,7 @@ int main(int argc, char **argv)
   auto modules = plan->getModules();
   analyzer.addModules(modules);
    EventLoader eventLoader(EventLoader::fetchRootFiles(inputFile), &analyzer);
-    analyzer.initialize(outputFile);
+    analyzer.initialize(Utility::getBasePath()+"Output/", outputFile);
     eventLoader.run(outputEvery, numFiles, maxEvents);
     analyzer.writeOutputFile();
 

@@ -17,11 +17,13 @@ class TreeMakerModule : public AnalysisModule
         virtual void initialize() override;
         virtual void finalize() override;
 
+        virtual std::string getName() override {return "TreeMakerModule";}
+
     protected:
         virtual void fillTree() {tree->Fill();}
         virtual std::vector<ParticleCollection<Particle>> getParticles() const = 0;
         std::shared_ptr<SpecialVariableModule> getSpecialVariable() {return specialVariable;}
-        std::string getName() {return name;}
+        std::string getTreeName() {return name;}
 
     private:
     std::shared_ptr<SpecialVariableModule> specialVariable;//same here

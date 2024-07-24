@@ -40,7 +40,6 @@ private:
 };
 
 std::ostream& operator<<(std::ostream& stream, FitFunction& function);
-// std::ostream& operator<<(std::ostream& stream, TF1* function);
 std::istream& operator>>(std::istream& stream, FitFunction& function);
 
 #endif

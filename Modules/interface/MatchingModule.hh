@@ -3,12 +3,10 @@
 
 #include "ProductionModule.hh"
 #include "CMSAnalysis/Utility/interface/MatchingPairCollection.hh"
-
 #include "TLorentzVector.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
 #include "DataFormats/Candidate/interface/CompositeRefCandidateT.h"
-
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
 
@@ -21,6 +19,8 @@ class MatchingModule : public ProductionModule
 
   const MatchingPairCollection& getMatchingBestPairs() const {return matchingBestPairs;} 
   const std::vector<Particle> getUnmatched() const {return unmatched;}
+
+  virtual std::string getName() override {return "MatchingModule";}
   
   protected:
   virtual bool match(std::vector<Particle>genSimparticles, std::vector<Particle> recoCandidates);

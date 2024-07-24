@@ -24,6 +24,8 @@ public:
   virtual bool process() override;    // Fills the histograms
   void addHistogram(std::shared_ptr<HistogramPrototype> hist); // Adds a HistogramPrototype* to histogram (the vector)
   virtual void setInput(const EventInput* iInput) override;
+  
+  virtual std::string getName() override {return "HistogramOutputModule";}
 
 protected:
   // This adds an object to the collection to be written.

@@ -51,7 +51,28 @@ Particle::Particle(reco::Candidate::LorentzVector vec, int pid, const Particle* 
 {
   auto type = ParticleType::getPDGType(pid);
   int charge = type.getCharge() * (pid < 0 ? -1 : 1);
+  //static int counter = 0;
+  // if (pid == 11 || pid == -11)
+  // {
+  //   counter++;
+  // }
+
+  static int positiveCharge = 0;
+  static int negativeCharge = 0;
+  
+  if (charge == 1)
+  {
+    positiveCharge++;
+    //std::cout<<"The positive charge counter: " << positiveCharge <<"\n";
+  }
+  else if (charge == -1)
+  {
+    negativeCharge++;
+    //std::cout<<"The negative charge counter" << negativeCharge <<"\n";
+  }
+
   particle = std::make_shared<GenSimSimpleImplementation>(vec, charge, type, motherParticle, daughters, status);
+
 }
 
 Particle::Particle(const Particle& particle1):
@@ -102,6 +123,7 @@ double Particle::getPt() const
   checkIsNull();
   return particle->getFourVector().Pt();
 }
+
 
 double Particle::getPhi() const
 {
@@ -155,15 +177,7 @@ void Particle::addInfo(std::string mapKey, double value)
 //   return particle->isolation();
 // }
 
-// double Particle::getDxy() const
-// {
-//     return particle->dxy();
-// }
 
-// double Particle::getDz() const
-// {
-//   return particle->dz();
-// }
 
 Particle::BarrelState Particle::getBarrelState() const
 {
@@ -272,6 +286,12 @@ reco::Candidate::LorentzVector Particle::getFourVector() const
 double Particle::getDeltaR(Particle part) const
 {
   return reco::deltaR(part.getFourVector(), getFourVector());
+}
+
+Particle::SelectionFit Particle::getSelectionFit() const
+{
+  checkIsNull();
+  return particle->getSelectionFit();
 }
 
 std::shared_ptr<ParticleImplementation> Particle::getParticleImplementation() 

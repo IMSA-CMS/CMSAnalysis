@@ -23,10 +23,12 @@
 void SuperPlot()
 {
 	    //std::vector<double> massTargets {900};
-
 	auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
 	//Change extra text here (keep drawLogo to false for now)
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation)");
+	plotFormatter->setUpperMasslimit(2000);
+	plotFormatter->setNumBins(5);
+	plotFormatter->setFirstBin(50);
 	//Change the string for the channel you want, if using one channel. Otherwise use the loop.
 	
 	double massTarget = 1400;
@@ -65,7 +67,6 @@ void SuperPlot()
 			}
 		}
 	}
-
 	//This is for making single hist graphs. Just change the process name to the one you want. Not all processes or qualities allow 2D hists.
 	//std::shared_ptr<Process> process = leptonBackgrounds->findProcess("Data");
  
@@ -81,8 +82,24 @@ void SuperPlot()
 	//TCanvas *canvas = plotFormatter->simple2DHist(process, "Invariant Mass", xAxisTitle, yAxisTitle);
 	//TCanvas *canvas = plotFormatter->simpleStackHist(leptonBackgrounds, "Same Sign Inv Mass", xAxisTitle, yAxisTitle);
 	//TCanvas *canvas = plotFormatter->superImposedHist(leptonBackgrounds, "MET", xAxisTitle, yAxisTitle);
-	TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "Invariant Mass", xAxisTitle, yAxisTitle, massTarget, true);
 	
+	/*
+	std::shared_ptr<FullAnalysis> analysis = DarkPhotonAnalysis;
+	std::string channelName;
+	std::string histvariable = "Invariant Mass";
+	std::shared_ptr<Channel> processes = 0;
+	processes = channels.at(0);
+	std::vector<std::string> backgroundNames = processes->getNamesWithLabel("background");
+	std::vector<TH1*> backgroundHists;
+	for(std::string name : backgroundNames) {
+        backgroundHists.push_back(analysis->getDecayHist(histvariable, name, massTarget, true, channelName));
+	}
+	*/
+
+	// std::cout << "here\n";
+	// return;
+	TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "Pt High Mass and Same Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
+	//TCanvas *canvas = plotFormatter->simpleAnalysisHist(backgroundHists, );
 
 	//Uncomment to save a png picture in your bin folder
 	canvas->SaveAs("SuperPlot.png");
