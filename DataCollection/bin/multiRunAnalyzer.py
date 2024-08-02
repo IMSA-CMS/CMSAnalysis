@@ -109,7 +109,9 @@ if __name__ == '__main__':
 
 	# List of jobs to run on from those above
 	# jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
-	jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
+	
+	#jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
+	jobsList = [qcd]
 	
 	if os.path.exists("nohup.out") and (len(sys.argv) <= 2 or sys.argv[2] != "keep"):
 		os.remove("nohup.out")
