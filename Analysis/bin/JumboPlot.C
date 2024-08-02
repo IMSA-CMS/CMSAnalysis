@@ -35,7 +35,7 @@
 
 template <typename AnalysisType>
 void makePlots(std::string signal, std::shared_ptr<AnalysisType> analysis, std::vector<std::shared_ptr<Channel>> channels, 
-std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std::vector<TString> units)
+std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std::vector<TString> units, std::string channelName)
 {
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation/Data)");
 	plotFormatter->setUpperMasslimit(2000);
@@ -76,6 +76,9 @@ std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std:
 			int unitCounter = 0;
 			for(std::string dataType : graphableTypes) {
 				for (std::string rowName : rowNames) {
+					
+					//std::cout << dataType << " " << rowName << std::endl;
+
 					entry = "";
 					//TString xAxisName = "OSDL " + units[unitCounter];
 					TString xAxisName = units[unitCounter];
@@ -86,7 +89,7 @@ std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std:
 					fileName = "jumboPlotStorage/" + Utility::removeSpaces(signal) + "/" + Utility::removeSpaces(rowName) + dataName + "DataMC.png";
 					//fileName = channelName + dataName + "DataMC.png";
 					std::string fullDataType = dataType + " " + rowName;
-					TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, false, "0.3");
+					TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, false, channelName);
 					//TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisName, yAxisName, true, channelName);
 					canvas->SaveAs(fileName.c_str());
 					plotFormatter->deleteHists();
@@ -94,7 +97,7 @@ std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std:
 					delete canvas;
 				
 					entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
-			
+
 					toAdd.push_back(entry);
 					tableInput.push_back(toAdd);
 					toAdd.clear();
@@ -127,17 +130,21 @@ void JumboPlot()
     std::vector<std::string> graphableTypes = {"Eta", "Lepton Jet Delta R", "Lepton Jet Mass", "Phi", "Pt"};
 	std::vector<TString> units = {"ETA", "DELTA R", "GEV", "RAD", "GEV/C"};
 
-	makePlots("Dark Photon Signal", DarkPhotonAnalysis, channels, rowNames, graphableTypes, units);
+	std::string channelName = "0.3";
+
+	makePlots("Dark Photon Signal", DarkPhotonAnalysis, channels, rowNames, graphableTypes, units, channelName);
 
 	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
 	std::vector<std::shared_ptr<Channel>> higgsChannels = higgsAnalysis->getChannels();
 
 	//rowNames = {"eeeu__hists", "u u__hists", "uuu__hists", "uue__hists", "euuu__hists"};
-	rowNames = {"none_eeut", "none_eeet"};
-    graphableTypes = {"Eta", "Phi", "Pt"};
-	units = {"ETA", "RAD", "GEV/C"};
+	rowNames = {"u u"};
+    graphableTypes = {"Dxy", "Dz", "Eta", "Isolation", "Phi", "Pt"};
+	units = {"", "", "ETA", "", "RAD", "GEV/C"};
 
-	makePlots("Higgs Signal", higgsAnalysis, higgsChannels, rowNames, graphableTypes, units);
+	channelName = "u u";
+
+	makePlots("Higgs Signal", higgsAnalysis, higgsChannels, rowNames, graphableTypes, units, channelName);
 }
 
 void Temp() { //JumboPlot()
