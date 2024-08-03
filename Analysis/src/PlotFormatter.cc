@@ -197,12 +197,15 @@ TCanvas* PlotFormatter::noScaleSimpleSuperImposedHist(std::vector<TH1*> hists, s
     int count = 0;
 
     Bin(hists, first, firstIndex, maximum, count);
+    count=0;
 
     int lowValue = maximum;
     for(TH1* hist : hists) {
         if(hist->GetMinimum() < lowValue) {
             lowValue = hist->GetMinimum();
         }
+        hist->SetLineColor(colors.at(count));
+        count++;
     }
 
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);

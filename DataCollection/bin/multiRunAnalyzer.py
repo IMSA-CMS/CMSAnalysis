@@ -83,9 +83,9 @@ if __name__ == '__main__':
 		"Data/Data_Trigger_SingleMuon_Year_2018B.txt",
 		"Data/Data_Trigger_SingleMuon_Year_2018C.txt",
 		"Data/Data_Trigger_SingleMuon_Year_2018D.txt",
-		"Data/Data_Trigger_SingleMuon_Year_2022A.txt",
-		"Data/Data_Trigger_SingleMuon_Year_2022B.txt",
-		"Data/Data_Trigger_SingleMuon_Year_2022C.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2022A.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2022B.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2022C.txt",
 		"Data/Data_Trigger_SingleElectron_Year_2016B.txt",
 		"Data/Data_Trigger_SingleElectron_Year_2016C.txt",
 		"Data/Data_Trigger_SingleElectron_Year_2016D.txt",
@@ -108,8 +108,8 @@ if __name__ == '__main__':
 	darkPhotonSignal = ("darkPhotonBaselineRun2.txt", )
 
 	# List of jobs to run on from those above
-	# jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
-	jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
+	jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData, qcd] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
+	# jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 	
 	if os.path.exists("nohup.out") and (len(sys.argv) <= 2 or sys.argv[2] != "keep"):
 		os.remove("nohup.out")
