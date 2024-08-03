@@ -45,7 +45,7 @@ TH1* RootFileInput::getHist(std::string histType) const
 			name = histVar.getHistName();
 	    }
 	}
-
+	//std::cout << std::endl << name << std::endl;
 	TH1* hist;
 	uint pos = name.find("/");
 	auto file = getFile(fileSource);
@@ -78,6 +78,7 @@ TH1* RootFileInput::getHist(std::string histType) const
 	}
 	if (!hist || hist->IsZombie())
 	{ 
+		//std::cout << "Here" << std::endl;
 		throw std::runtime_error("File doesn't contain: " + histType);
 	}
 	if(dynamic_cast<TH2 *>(hist) != 0) {

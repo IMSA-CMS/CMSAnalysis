@@ -15,6 +15,7 @@ namespace TMVA
 
 class SpecialVariableModule : public ProductionModule
 {
+
 public:
 	enum VariableType {Integer, Float, IntegerArray, FloatArray};
 

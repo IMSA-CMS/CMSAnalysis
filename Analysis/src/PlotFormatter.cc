@@ -402,24 +402,27 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     bottomPad->Draw();
     bottomPad->cd();
     
-    double x[data->GetNbinsX()];
-    double y[data->GetNbinsX()];
-    double xerror2[data->GetNbinsX()];
-    double yerror2[data->GetNbinsX()];
+    double x[data->GetNbinsX() + 1];
+    double y[data->GetNbinsX() + 1];
+    double xerror2[data->GetNbinsX() + 1];
+    double yerror2[data->GetNbinsX() + 1];
 
     GetBottomPadValues(data, background, x, y, xerror2, yerror2);
 
-    auto graph = new TGraph(data->GetNbinsX(), x, y);
-    auto errorgraph2 = new TGraphErrors(data->GetNbinsX(), x, y, xerror2, yerror2);
+    auto graph = new TGraph(data->GetNbinsX() + 1, x, y);
+    //auto graph = new TGraph();
+    auto errorgraph2 = new TGraphErrors(data->GetNbinsX() + 1, x, y, xerror2, yerror2);
+    //auto errorgraph2 = new TGraphErrors();
     GraphFormat(graph, errorgraph2, xAxisTitle, 0.08, 0.04, 0.06, 0.07, 0.5, 1, -1, firstBin, upperMasslimit);
 
     TAxis *axis = graph->GetXaxis();
-    axis->SetLimits(firstBin, hist->GetXaxis()->GetXmax());
+    //axis->SetLimits(firstBin, hist->GetXaxis()->GetXmax());
+    axis->SetLimits(hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
 
     //graph->SetMaximum(10);
 
     graph->Draw("AP SAME");
-    errorgraph2->GetXaxis()->SetLimits(firstBin, hist->GetXaxis()->GetXmax());
+    errorgraph2->GetXaxis()->SetLimits(hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
     errorgraph2->SetFillColor(16);
     errorgraph2->Draw("P SAME E0");
 
@@ -582,9 +585,12 @@ void PlotFormatter::GetBottomPadValues(TH1*& data, THStack*& background, double 
     TH1* histLoop;
     double backgroundHistBinMax = 0;
     double value;
-    for(int i = 0; i < data->GetNbinsX(); i++) {
+
+    for(int i = 0; i <= data->GetNbinsX(); i++) 
+    {
         double total = 0;
-        x[i] = i * data->GetBinWidth(0);
+        //x[i] = i * data->GetBinWidth(0);
+        x[i] = data->GetBinCenter(i);
         for(const auto&& obj : *(background->GetHists())) { //How you iterate over a TList
             histLoop = dynamic_cast<TH1*>(obj);
             total+= histLoop->GetBinContent(i);
