@@ -53,7 +53,7 @@ bool NanoAODEventFile::checkTrigger(std::string triggerName, std::string subProc
        // return false;
        if(!tree->GetBranch(triggerName.c_str()))
        {
-        std::cout << triggerName << " doesn't exist\n";
+        //std::cout << triggerName << " doesn't exist\n";
         return false;
        }
         auto currentEntry = treeReader.GetCurrentEntry();
@@ -269,10 +269,10 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         particle.addInfo("Electron_map", getArrayElement<Int_t>("Electron_bitmap", i)); 
         particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
         particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
-        particle.addInfo("eScaleDown", getArrayElement<Float_t>("elec_dEscaleDown", i));
-        particle.addInfo("eScaleUp", getArrayElement<Float_t>("elec_dEscaleUp", i));
-        particle.addInfo("eSigmaDown", getArrayElement<Float_t>("elec_dEsigmaDown", i));
-        particle.addInfo("eSigmaUp", getArrayElement<Float_t>("elec_dEsigmaUp", i));
+        //particle.addInfo("eScaleDown", getArrayElement<Float_t>("elec_dEscaleDown", i));
+        //particle.addInfo("eScaleUp", getArrayElement<Float_t>("elec_dEscaleUp", i));
+        //particle.addInfo("eSigmaDown", getArrayElement<Float_t>("elec_dEsigmaDown", i));
+        //particle.addInfo("eSigmaUp", getArrayElement<Float_t>("elec_dEsigmaUp", i));
 
 
 
