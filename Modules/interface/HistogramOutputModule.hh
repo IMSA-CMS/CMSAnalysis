@@ -18,7 +18,7 @@ class EventInput;
 class HistogramOutputModule : public AnalysisModule
 {
 public:
-  virtual void finalizeFilterString();
+  virtual void finalizeFilterString() override;
   virtual void initialize() override {};     // Empty function
   virtual void finalize() override;
   virtual bool process() override;    // Fills the histograms

@@ -78,7 +78,7 @@ TH1* RootFileInput::getHist(std::string histType) const
 	}
 	if (!hist || hist->IsZombie())
 	{ 
-		throw std::runtime_error("File doesn't contain: " + histType);
+		throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType + "]");
 	}
 	if(dynamic_cast<TH2 *>(hist) != 0) {
 		TH2* hist2D = dynamic_cast<TH2 *>(hist);
