@@ -60,7 +60,7 @@ bool NanoAODEventFile::checkTrigger(std::string triggerName, std::string subProc
         treeReader.Restart();
         TTreeReaderValue<Bool_t> intermediate(treeReader, triggerName.c_str());
         trigger = triggers.emplace(triggerName, intermediate).first;
-        std::cout << triggerName <<"\n";
+        //std::cout << triggerName <<"\n";
         treeReader.SetTree(tree);
         treeReader.SetEntry(currentEntry-1);
         treeReader.Next();
