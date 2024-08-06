@@ -38,6 +38,29 @@ std::vector<CollectionHistParams> ParticleType::getCollectionHists() const
     return collectionHists;
 }
 
+bool ParticleType::isQuark() const
+{
+   int absID = std::abs(pdgId);
+   return absID<10; 
+}
+
+bool ParticleType::isMeson() const
+{
+    int absID = std::abs(pdgId);
+    return absID<1000 && absID>100;
+}
+
+bool ParticleType::isBaryon() const
+{
+    int absID = std::abs(pdgId);
+    return 1000<absID && 10000>absID;
+}
+
+bool ParticleType::isHadron() const
+{
+    return isMeson() || isBaryon();
+}
+
 const ParticleType& ParticleType::registerType(std::string typeName, int typepdgId, double typeCharge, std::vector<HistParams> typeParticleHists, std::vector<CollectionHistParams> typeCollectionHistParamss)
 {
     //particleTypes are not automatically stored, rather they are created the first time the function is called and then subsequently refrenced

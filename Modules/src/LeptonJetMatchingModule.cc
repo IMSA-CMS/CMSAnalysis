@@ -5,6 +5,16 @@
 #include <limits>
 #include <fstream>
 
+int numOfDarkPhotons = 0;
+int numOfPhotons = 0;
+int numOfElectronMatches = 0;
+int numOfMuonMatches = 0;
+int noMatch = 0;
+int numOfPhoton_Electron_Matches = 0;
+int numOfPhoton_Muon_Matches = 0;
+int numOfElectron_Muon_Matches = 0;
+int numOfMuon_Electron_Matches = 0;
+
 LeptonJetMatchingModule::LeptonJetMatchingModule(std::shared_ptr<LeptonJetReconstructionModule> lepJetModule, double deltaRCut) :
   //genSim(genSimModule),
   lepJet(lepJetModule),
@@ -15,12 +25,15 @@ LeptonJetMatchingModule::LeptonJetMatchingModule(std::shared_ptr<LeptonJetRecons
 bool latch = true; 
 bool LeptonJetMatchingModule::process()
 {
+    static int counter = 0;
+    //std::cout<<"the counter: " << counter <<"\n";
+    counter++;
     matchingPairs.clear();
     auto darkPhotons(getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::darkPhoton()).getParticles());
     auto recoParticles(getInput()->getParticles(EventInput::RecoLevel::Reco, ParticleType::none()).getParticles());
     auto genSim(getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::none()).getParticles());
 
-    //std::cout<< __LINE__ << std::endl;
+    //std::cout<< __LINE__ << " in the " << __FILE__ << std::endl;
     MatchingModule::match(genSim, recoParticles);
 
     const MatchingPairCollection& bestLeptonPairs = getMatchingBestPairs();
@@ -51,48 +64,126 @@ bool LeptonJetMatchingModule::process()
 
     //std::cout<< __LINE__ << std::endl;
     //std::vector<std::pair<GenSimParticle, GenSimParticle>> leptonOrigins;
+
     for(GenSimParticle lepton : underlyingLepton)
     {
+      //std::cout<< __LINE__ << " in the " << __FILE__ << std::endl;
+      if(!lepton.isFinalState() || lepton.getPt() < 5)
+      {
+        continue;
+      }
       bool passedDarkPhoton = false;
       GenSimParticle particle = lepton;
       bool forgetIt = false;
-      while(!(isQuark(particle) || isSquark(particle) || isHiggs(particle) || particle.status() == 4))
+      while(!(particle.getType().isQuark() || particle.getType() == ParticleType::higgs() || particle.status() == 4))
       {
-        if(particle.hasMother() == false) break;
-        particle = particle.mother();
+        //std::cout<< __LINE__ << " in the " << __FILE__ << std::endl;
+        if(particle.hasUniqueMother() == false) break;
+        
+        try{
+        particle = particle.uniqueMother();
+        //particle = particle.mother();
+        }catch (const std::exception& e) {
+        std::cerr << "Exception caught: " << e.what() << std::endl<<"\n";
+        //break;
+        //throw;
+        continue;
+        }
+        //std::cout<< __LINE__ << " in the " << __FILE__ << std::endl;
+
         if(particle.pdgId() == 0)
         {
           forgetIt = true;
           break;
         }
+
         if(particle.getType() == ParticleType::darkPhoton())
         {
+          //std::cout<< __LINE__ << " in the " << __FILE__ << std::endl;
           passedDarkPhoton = true;
+          numOfDarkPhotons++;
+          //std::cout<<"The particle's type is: "<<particle.getType().getName() << "\n";
+
+          //do delta r comparison
+          double minDeltaR = 500;
+          GenSimParticle closestMatch = lepton;
+
+          for (auto &newParticle : recoLeptons)
+          {
+              if(lepton.getDeltaR(newParticle) < 0.1 && lepton.getDeltaR(newParticle) < minDeltaR)
+              {
+                minDeltaR = lepton.getDeltaR(newParticle);
+                closestMatch = newParticle;
+                if(closestMatch.getType() ==  lepton.getType())
+                {
+                  if (closestMatch.getType() == ParticleType::muon())
+                  {
+                    //std::cout << "The closest match is: " << closestMatch.getType().getName() << " and the lepton is: " << lepton.getType().getName() << "\n";
+                    numOfMuonMatches++;
+                    //std::cout << "The num of muon matches is: " << numOfMuonMatches << "\n\n";
+                  }
+                  else if (closestMatch.getType() == ParticleType::electron())
+                  {
+                    //std::cout <<"The closest match is: " << closestMatch.getType().getName() << " and the lepton is: " << lepton.getType().getName() << "\n";
+                    numOfElectronMatches++;
+                    //std::cout << "The num of electron matches is: " << numOfElectronMatches << "\n\n";
+                  }
+                  else
+                  {
+                    std::cout <<"The closest match is: " << closestMatch.getType().getName() << " and the lepton is: " << lepton.getType().getName() << "\n";
+                  }
+                }
+                else
+                {
+                  noMatch++;
+                  if (closestMatch.getType() == ParticleType::photon() && lepton.getType() == ParticleType::electron())
+                  {
+                    numOfPhoton_Electron_Matches++;
+                    //std::cout<<"No match between closest match " << closestMatch.getType().getName() << " and  lepton " << lepton.getType().getName() << "\n";
+                  }
+                  else if(closestMatch.getType() == ParticleType::photon() && lepton.getType() == ParticleType::muon())
+                  {
+                    numOfPhoton_Muon_Matches++;
+                  }
+                  else if(closestMatch.getType() == ParticleType::electron() && lepton.getType() == ParticleType::muon())
+                  {
+                    numOfElectron_Muon_Matches++;
+                  }
+                  else if(closestMatch.getType() == ParticleType::muon() && lepton.getType() == ParticleType::electron())
+                  {
+                    numOfMuon_Electron_Matches++;
+                  }
+                  else
+                  {
+                    std::cout << "No match: The closest match: " << closestMatch.getType().getName() << " Lepton: " << lepton.getType().getName() << "\n";
+                  }
+                }
+              }
+
+          }
         }
       }
+      //std::cout<< __LINE__ << " in the " << __FILE__ << std::endl;
       if(forgetIt) break;
-      if(isQuark(particle))
+      if(particle.getType().isQuark())
       {
         quark++;
       }
-      if(isSquark(particle))
-      {
-        if(passedDarkPhoton)
-        {
-          darkPhotonOrigin++;
-        }
-        else
-        {
-          squark++;
-        }
-      }
-      if(isHiggs(particle))
+      
+      if(particle.getType() == ParticleType::higgs())
       {
         if(passedDarkPhoton)
         {
           darkPhotonOrigin++;
         }
       }
+
+      if(particle.getType() == ParticleType::photon())
+      {
+        numOfPhotons++;
+        std::cout<<"photon\n";
+      }
+
       if(particle.status() == 4)
       {
         proton++;
@@ -162,7 +253,7 @@ bool LeptonJetMatchingModule::process()
     // MatchingPair candidate;
     Particle nullParticle(Particle::nullParticle());
     LeptonJet nullJet(nullParticle);
-
+    //std::cout<<"The number of dark photons is: " << numOfDarkPhotons << "\n";
     return true;
 }
 
@@ -188,6 +279,13 @@ void LeptonJetMatchingModule::finalize()
   std::cout << "Leptons From Dark Photons " << (double) darkPhotonOrigin / genLeptons << std::endl;
   std::cout << "Leptons From Squarks " << (double) squark / genLeptons << std::endl;
   std::cout << "Leptons From Protons " << (double) proton / genLeptons << std::endl;
+  std::cout << "Number of Muon Matches " << numOfMuonMatches << std::endl;
+  std::cout << "Number of Electron Matches " << numOfElectronMatches << std::endl;
+  std::cout << "Number of No Matches " << noMatch << std::endl;
+  std::cout << "Number of Photon Electron Pairings " << numOfPhoton_Electron_Matches << std::endl;
+  std::cout << "Number of Photon Muon Pairings " << numOfPhoton_Muon_Matches << std::endl;
+  std::cout << "Number of Muon Electron Pairings " << numOfMuon_Electron_Matches << std::endl;
+  std::cout << "Number of Electron Muon Pairings " << numOfElectron_Muon_Matches << std::endl;
 }
 
 const std::vector<std::pair<Particle,LeptonJet>> LeptonJetMatchingModule::getMatchingPairs() const 

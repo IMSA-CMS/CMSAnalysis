@@ -92,17 +92,17 @@ void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) c
     {
       event.addSpecialObject("leptonJet", jet);
     }
-      std::cout<<"number of particles: " << numOfParticles << "\n";
+      // std::cout<<"number of particles: " << numOfParticles << "\n";
 
-      std::cout<<"muon efficiency: " << (muonCounter/numOfParticles)<<"\n";
-      std::cout<<"loose muon efficiency: " << (looseMuons/numOfParticles)<<"\n";
-      std::cout<<"Medium Muon efficiency: " << mediumMuons/numOfParticles << "\n";
-      std::cout<<"Tight Muon efficiency: " << tightMuons/numOfParticles << "\n\n";
+      // std::cout<<"muon efficiency: " << (muonCounter/numOfParticles)<<"\n";
+      // std::cout<<"loose muon efficiency: " << (looseMuons/numOfParticles)<<"\n";
+      // std::cout<<"Medium Muon efficiency: " << mediumMuons/numOfParticles << "\n";
+      // std::cout<<"Tight Muon efficiency: " << tightMuons/numOfParticles << "\n\n";
 
-      std::cout<<"Electron efficiency: " << (electronCounter/numOfParticles)<<"\n";
-      std::cout<<"loose electron efficiency: " << (looseElectrons/numOfParticles)<<"\n";
-      std::cout<<"Medium electron efficiency: " << mediumElectrons/numOfParticles << "\n";
-      std::cout<<"Tight electron efficiency: " << tightElectrons/numOfParticles << "\n\n";
+      // std::cout<<"Electron efficiency: " << (electronCounter/numOfParticles)<<"\n";
+      // std::cout<<"loose electron efficiency: " << (looseElectrons/numOfParticles)<<"\n";
+      // std::cout<<"Medium electron efficiency: " << mediumElectrons/numOfParticles << "\n";
+      // std::cout<<"Tight electron efficiency: " << tightElectrons/numOfParticles << "\n\n";
 }
 
 std::vector<LeptonJet> LeptonJetSelector::findLeptonJets(ParticleCollection<Lepton> recoCandidates) const

@@ -65,7 +65,7 @@ void Analyzer::writeOutputFile()
     // if (filterModules.size() != 0)
     if (true)
     {
-      std::cout << "Finalizing analysis module: " << module->getFilter() << "\n";
+      std::cout << "Finalizing analysis module: " << module->getName() << "\n";
       module->finalizeEvent();
       for (auto &str : filterNames) //writes analysis modules by filter string
       {
