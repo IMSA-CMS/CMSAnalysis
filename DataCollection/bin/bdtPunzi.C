@@ -16,39 +16,12 @@
 #include "TStyle.h"
 #include <fmt/core.h>
 
-void bdtPunzi() {
+void calculatePunzi() {
     //Change extraText here
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary Data");
     //Change the filePath here. This should be the longest branch all input files have in common.
     //const std::string filePath = "/uscms/home/jpalamad/analysis/CMSSW_12_4_3/src/CMSAnalysis/MCGeneration/test/";
-	const std::string fileName = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/bdt_numfiles1.root";
-    //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
-    //Write your graph names here (for the legend)
-    
-    
-    std::vector<std::string> hists = {};
-    std::vector<TString> names = {};
-
-    //Colors go here
-    std::vector<int> colors = {};
-
-    const int base = 19;
-    const std::string baseName = "NNPDF3.1 QCD+LUXQED NLO";
-    const int run = 1;
-    const std::vector<std::string> pdfNames = {
-        "GRV 94L LO",
-        "CTEQ 5L LO",
-        "MRST LO",
-        "MRST LO",
-        "MSTW 2008 LO",
-        "MSTW 2008 NLO",
-        "CTEQ6L NLO",
-        "CTEQ6L1 LO",
-        "CTEQ66.00 NLO",
-        "CT09MC1 LO",
-        "CT09MCS NLO",
-        "NNPDF2.3 QCD+QED LO"
-    };
+	const std::string fileName = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/bdt_modTraining.root";
 
     //Change x and y axis titles here
     TString xTitle = "BDT Response";
@@ -61,7 +34,7 @@ void bdtPunzi() {
         throw std::runtime_error("Cannot open file!");
         }
 
-    TCanvas *c = (TCanvas *)openedFile->Get("canvas2");
+    TCanvas *c = (TCanvas *)openedFile->Get("canvas1");
     TH1* sg_hist = (TH1*)c->GetPrimitive("MVA_BDT_S");
     TH1* bg_hist = (TH1*)c->GetPrimitive("MVA_BDT_B");
 
@@ -102,14 +75,20 @@ void bdtPunzi() {
     {
         double sgval = sg_hist->Integral(j, sg_hist->GetNbinsX());
         double bgval = bg_hist->Integral(j, bg_hist->GetNbinsX());
-        //std::cout<<sgval<<"\n";
-        //std::cout<<bgval<<"\n";
+        // std::cout<<sgval<<"\n";
+        // std::cout<<bgval<<"\n";
         double luminosity = 139000; //inverse picobarns
         double cross_section = 5735; // picobarns
-        double punzi = sgval / std::sqrt(2.5 + bgval * cross_section * luminosity);
-        std::cout << punzi << "\n";
+        double punzi = sgval / std::sqrt(2.5 + bgval * cross_section * luminosity / bg_hist->GetEntries());
+        std::cout << sg_hist->GetXaxis()->GetBinCenter(j) << "|" << sgval << "|" << bgval << "|" << punzi << "\n";
         punzi_hist->SetBinContent(j, punzi);
     }
 
     TCanvas *canvas = plotFormatter->simple1DHist(punzi_hist, xTitle, yTitle);
+    canvas->SaveAs("bdt_qcd_punzi.png");
+}
+
+void bdtPunzi()
+{
+    calculatePunzi();
 }

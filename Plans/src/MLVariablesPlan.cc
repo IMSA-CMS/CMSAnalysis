@@ -30,6 +30,7 @@ void MLVariablesPlan::initialize()
     leptonJetMLStripMod->setInput(eventMod->getEventInput());
     auto treeMakerMod = make_shared<LeptonJetTreeMakerModule>(leptonJetMLStripMod, "Signal");
     treeMakerMod->setInput(eventMod->getEventInput());
+
     modules.addProductionModule(eventMod);
     modules.addProductionModule(leptonJetRecoMod);
     modules.addProductionModule(leptonJetMatchingMod);

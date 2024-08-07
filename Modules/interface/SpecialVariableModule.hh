@@ -5,6 +5,7 @@
 #include "Rtypes.h"
 #include "ProductionModule.hh"
 #include "EventInput.hh"
+#include "HistogramOutputModule.hh"
 
 class TTree;
 namespace TMVA
@@ -30,7 +31,6 @@ public:
 	void addVariablesToTree(TTree* tree); //same thing as prior just datastrip stuff
 	void addVariablesToReader(TMVA::Reader *reader) const;
 	void addVariablesToDataLoader(TMVA::DataLoader *dataloader) const;
-
 
 	virtual bool process() override;
 

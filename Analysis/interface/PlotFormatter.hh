@@ -89,6 +89,8 @@ class PlotFormatter
 
         void DrawOtherHistograms(THStack*& background, TH1*& signal, TH1*& data, int first);
 
+        void DrawOtherHistograms(std::vector<TH1*>& hists, std::vector<int>& colors, int firstIndex);
+
         void ChangeAxisTitles(TH1*& hist, TString xAxisTitle, TString yAxisTitle);
 
         void FormatSignalData(THStack*& background, TH1*& signal, TH1*& data, std::vector<TH1*>& backgroundHists, int numBins);
