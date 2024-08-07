@@ -14,8 +14,6 @@ class LeptonJetMLStripModule: public SpecialVariableModule
 
     virtual std::string getName() override {return "LeptonJetMLStripModule";}
 
-    private:
-
 
     protected:
     virtual void addVariables() override;

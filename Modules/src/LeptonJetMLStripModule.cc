@@ -1,5 +1,6 @@
 #include "CMSAnalysis/Modules/interface/LeptonJetMLStripModule.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
+#include "CMSAnalysis/Histograms/interface/MLStripHist.hh"
 
 
 
@@ -31,6 +32,13 @@ void LeptonJetMLStripModule::addVariables()
 
 void LeptonJetMLStripModule::calculateVariables(ParticleCollection<Particle> particles)
 {
+	// deltaRValues.clear();
+	// deltaPtValues.clear();
+	// sumPtValues.clear();
+	// maxDXYValues.clear();
+	// maxDZValues.clear();
+	// maxIsolationValues.clear();
+
 	for (auto particle : particles)
 	{
 		LeptonJet leptonJet(particle);//no need for loop
@@ -100,6 +108,7 @@ void LeptonJetMLStripModule::calculateVariables(ParticleCollection<Particle> par
             //    numMuons++;
             //}
         }
+
 		addValue("deltaR", deltaR);
 		addValue("deltaPt", leadingPt - runnerUpPt);
 		//addValue("leadingPt", leadingPt);
@@ -110,5 +119,6 @@ void LeptonJetMLStripModule::calculateVariables(ParticleCollection<Particle> par
 		//addValue("numMuons", numMuons);
 
 	}
-    //}
+
+	//std::cout << "DELTA R SIZE: " << deltaRValues.size() << std::endl;
 }
