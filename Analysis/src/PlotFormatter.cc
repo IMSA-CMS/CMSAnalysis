@@ -169,6 +169,7 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     gStyle->SetOptStat(0);
 
     //Draws the histogram with more events first (bigger axis)
+    first->SetLineColor(colors.at(0));
     first->Draw("HIST");
     histVector.push_back(first);
 
@@ -183,7 +184,7 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     writeText(width, height, top, bottom, left, right);
    
     //Draws the other histogram    
-    DrawOtherHistograms(hists, firstIndex);
+    DrawOtherHistograms(hists, colors, firstIndex);
 
     canvas->Update();
     return canvas;
@@ -457,6 +458,19 @@ void PlotFormatter::ChangeAxisTitles(TH1*& hist, TString xAxisTitle, TString yAx
     hist->SetTitleSize(0.04, "y");
     hist->GetXaxis()->SetTitle(xAxisTitle);
     hist->SetTitleSize(0.04, "x");
+}
+
+void PlotFormatter::DrawOtherHistograms(std::vector<TH1*>& hists, std::vector<int>& colors, int firstIndex)
+{
+    for (size_t i = 0; i < hists.size(); ++i) {
+        if (static_cast<int>(i) == firstIndex) continue; // Skip the first histogram, already drawn
+
+        TH1* hist = hists[i];
+        hist->SetLineColor(colors[i]);
+        hist->SetLineWidth(2);
+        hist->Draw("HIST SAME");
+        histVector.push_back(hist);
+    }
 }
 
 void PlotFormatter::DrawOtherHistograms(THStack*& background, TH1*& signal, TH1*& data, int first)
