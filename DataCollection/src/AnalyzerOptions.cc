@@ -20,6 +20,7 @@
 #include "CMSAnalysis/Plans/interface/GenSimPlan.hh"
 #include "CMSAnalysis/Plans/interface/FileStripPlan.hh"
 #include "CMSAnalysis/Plans/interface/MLVariablesPlan.hh"
+#include "CMSAnalysis/Plans/interface/MLVariablesSplitPlan.hh"
 #include "CMSAnalysis/Plans/interface/HiggsDataStripPlan.hh"
 #include "CMSAnalysis/Plans/interface/HiggsInvariantMassPlan.hh"
 #include "CMSAnalysis/Plans/interface/ChargeFlipPlan.hh"
@@ -39,6 +40,7 @@ AnalyzerOptions::AnalyzerOptions()
   analysisPlans["GenSim"] = new GenSimPlan();
   analysisPlans["FileStrip"] = new FileStripPlan();
   analysisPlans["MLVariables"] = new MLVariablesPlan();
+  analysisPlans["MLVariablesSplit"] = new MLVariablesSplitPlan();
   analysisPlans["HiggsDataStrip"] = new HiggsDataStripPlan();
   analysisPlans["HiggsInvariantMass"] = new HiggsInvariantMassPlan();
   analysisPlans["HiggsSignal"] = new HiggsSignalPlan();

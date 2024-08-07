@@ -17,17 +17,154 @@
 
 void AutoSuperImpose() {
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary");
-    //Folder path for your files 
-    const std::string filePath = "~/";
-    const std::string outputFile = "AutoSuperImpose_Higgsto2ZDFermion.root";
+
+    //Folder path for your files     
+    const std::string filePath = "/uscms/homes/j/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_LepRecoInputs/"; 
+    //const std::string filePath = "/eos/uscms/store/user/jpalamad/rootBackups/MLOutputsBackup/";
+
+    ////////////////////////// LeptonJetReco
+
     //List of files to superimpose
-    std::vector<std::string> files = {"nobackup/rootfiles/Higgsto2ZD/Hist_Higgsto2ZD_300.root", "CMSAnalysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/Hist_Higgsto2ZD_Fermion100.root", "CMSAnalysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/Hist_Higgsto2ZD_Fermion150.root"};   
-    //List of histograms to be fetched in ever file
-    std::vector<std::string> histnames = {"1st Highest Dark Photon Pt","1st Highest Dark Photon Daughter Delta R","Delta R"};
+    std::vector<std::string> files = {
+        // "DarkPhoton_Decay_Higgs2DP_DpMass_0_1_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+        // "DarkPhoton_Decay_Higgs2DP_DpMass_0_2_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+        // "DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+        // "DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_125_Period_2018_Run_2.root",
+        // "DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_300_Period_2018_Run_2.root",
+        // "DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_1_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+        // "DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_3_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+        // "DarkPhoton_Decay_Higgs2DP_DpMass_0_4_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+        // "DarkPhoton_Decay_Higgs2DP_DpMass_0_6_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+        // "DarkPhoton_Decay_Higgs2DP_DpMass_0_9_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+        // "DarkPhoton_Decay_Higgs2DP_DpMass_1_2_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+        // "DarkPhoton_Decay_Higgs2DP_DpMass_1_5_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+        // "DarkPhoton_Decay_Higgs2DP_DpMass_2_5_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+        // "DarkPhoton_Decay_Higgs2DP_DpMass_4_0_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+        // "DarkPhoton_Decay_Higgs4DP_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+        "DarkPhoton_Decay_HiggsDPZ_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+        "DarkPhoton_Decay_SUSY_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+        "DarkPhoton_Decay_ZPrime_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root"
+    };   
+
+    // std::vector<std::string> files = {
+    //     "DarkPhoton_Decay_Higgs2DP_DpMass_0_2_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+    //     "DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+    //     "DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_1_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+    //     "DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_3_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+    //     "DarkPhoton_Decay_Higgs2DP_DpMass_0_4_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+    //     "DarkPhoton_Decay_Higgs2DP_DpMass_0_6_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+    //     "DarkPhoton_Decay_Higgs2DP_DpMass_0_9_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+    //     "DarkPhoton_Decay_Higgs2DP_DpMass_1_2_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+    //     "DarkPhoton_Decay_Higgs2DP_DpMass_1_5_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+    //     "DarkPhoton_Decay_Higgs2DP_DpMass_2_5_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+    //     "DarkPhoton_Decay_Higgs2DP_DpMass_4_0_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+    //     "DarkPhoton_Decay_HiggsDPZ_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+    //     "DarkPhoton_Decay_Higgs4DP_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+    //     "DarkPhoton_Decay_SUSY_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+    //     "DarkPhoton_Decay_ZPrime_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root"
+    // };  
+
+    // std::vector<std::string> files = {
+    //     "DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_125_Period_2018_Run_2.root",
+    //     "DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_300_Period_2018_Run_2.root",
+    // };  
+
+    // std::vector<std::string> files = {
+    //     "DarkPhoton_Decay_Higgs2DP_DpMass_0_1_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+    //     "DarkPhoton_Decay_Higgs2DP_DpMass_0_1_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.root",
+    // };  
+
+    std::string fileSet = "RetrainedBDT16-18"; // name to identify the fileset you're working with; only used for outputFile
+
+    //////////////////////////////// BDT
+
+    // //List of files to superimpose
+    // std::vector<std::string> files = {
+    //     // "TMVA_sgPropWeight_bfPropWeight_0_1_0_1.root",
+    //     // "TMVA_sgPropWeight_bfPropWeight_0_1_1_0.root",
+    //     // "TMVA_sgPropWeight_bfPropWeight_0_1_1_1.root",
+    //     // "TMVA_sgPropWeight_bfPropWeight_1_0_0_1.root",
+    //     // "TMVA_sgPropWeight_bfPropWeight_1_0_1_0.root",
+    //     // "TMVA_sgPropWeight_bfPropWeight_1_0_1_1.root",
+    //     // "TMVA_sgPropWeight_bfPropWeight_1_1_0_1.root",
+    //     // "TMVA_sgPropWeight_bfPropWeight_1_1_1_0.root",
+    //     // "TMVA_sgPropWeight_bfPropWeight_1_1_1_1.root",
+    //     // "TMVA_sgPropWeight_bfUniform_0_1_0_1.root",
+    //     // "TMVA_sgPropWeight_bfUniform_0_1_1_0.root",
+    //     // "TMVA_sgPropWeight_bfUniform_0_1_1_1.root",
+    //     // "TMVA_sgPropWeight_bfUniform_1_0_0_1.root",
+    //     // "TMVA_sgPropWeight_bfUniform_1_0_1_0.root",
+    //     //## "TMVA_sgPropWeight_bfUniform_1_0_1_1.root", // broken
+    //     //## "TMVA_sgPropWeight_bfUniform_1_1_0_1.root", // broken
+    //     //## "TMVA_sgPropWeight_bfUniform_1_1_1_0.root", // broken
+    //     //## "TMVA_sgPropWeight_bfUniform_1_1_1_1.root", // broken
+    //     //## "TMVA_sgUniform_bfPropWeight_0_1_0_1.root", // broken
+    //     //## "TMVA_sgUniform_bfPropWeight_0_1_1_0.root", // broken
+    //     // "TMVA_sgUniform_bfPropWeight_0_1_1_1.root",
+    //     // "TMVA_sgUniform_bfPropWeight_1_0_0_1.root",
+    //     // "TMVA_sgUniform_bfPropWeight_1_0_1_0.root",
+    //     // "TMVA_sgUniform_bfPropWeight_1_0_1_1.root",
+    //     // "TMVA_sgUniform_bfPropWeight_1_1_0_1.root",
+    //     // "TMVA_sgUniform_bfPropWeight_1_1_1_0.root",
+    //     "TMVA_sgUniform_bfPropWeight_1_1_1_1.root",
+    //     "TMVA_sgUniform_bfUniform_0_1_0_1.root",
+    //     "TMVA_sgUniform_bfUniform_0_1_1_0.root",
+    // };   
+
+    // std::string fileSet = "BDT20-23"; // name to identify the fileset you're working with; only used for outputFile
+    
     //Labels for the legend    
-    std::vector<TString> names = {"Higgsto2ZD", "Fermion100","Fermion150"};
+    //std::vector<TString> names = {"Higgsto2ZD", "Fermion100","Fermion150"};
+    std::vector<TString> names;
+
     //Colors go here
-    std::vector<int> colors = {1, 2, 3, 4, 5};
+    //std::vector<int> colors = {1, 2, 3, 4, 5};
+    std::vector<int> colors;
+
+    //List of histograms to be fetched in ever file
+
+    //std::vector<std::string> histnames = {"1st Highest Dark Photon Pt","1st Highest Dark Photon Daughter Delta R","Delta R"};
+
+    /////////////////////////////// LeptonJetReco
+
+    std::vector<std::string> histnames;
+    std::string section = "Low Mass and Different Signs"; // might cause issues because I changed it mid-processing to "Low Mass and Different Sign"
+    std::string sectionAbbr = "LMOS";
+
+    std::string varname = "LeptonJetMLOutput";
+    
+    const std::string outputFile = "SuperPlots/AutoSuperImpose_" + fileSet + "_" + varname + "_" + sectionAbbr + ".root";
+
+    histnames.push_back(section + "__hists/" + section + "_" + varname);
+
+    for (int i = 0; i < static_cast<int>(files.size()); ++i)
+    {
+
+        TString legendName = TString(files[i].substr(files[i].find("Decay_"), files[i].find("_Period")).c_str());
+        names.push_back(legendName);
+
+        colors.push_back(i + 1);
+    }
+
+    ///////////////////////////////// BDT
+
+    // std::vector<std::string> histnames;
+    // std::string varname = "MVA_BDT_B";
+    
+    // const std::string outputFile = "SuperPlots/AutoSuperImpose_" + fileSet + "_" + varname + ".root";
+
+    // histnames.push_back("dataset/Method_BDT/BDT/" + varname);
+
+    // for (int i = 0; i < static_cast<int>(files.size()); ++i)
+    // {
+    //     TString legendName = TString(files[i].substr(files[i].find("TMVA_"), files[i].find(".root")).c_str());
+    //     names.push_back(legendName);
+
+    //     colors.push_back(i + 1);
+    // }
+
+    ////////////////////////////////////////////////////
+
     TString yTitle = "Events (1/Integral)";
 
     TFile* openedFile;
@@ -58,7 +195,7 @@ void AutoSuperImpose() {
             }
             if(!hist)
             {
-                throw std::runtime_error("Cannot find hist: \"" + histname +"\"");
+                throw std::runtime_error("Cannot find hist: \"" + histname +"\"" + " in file " + file);
             }
         }
         histVectors.push_back(histVector);
