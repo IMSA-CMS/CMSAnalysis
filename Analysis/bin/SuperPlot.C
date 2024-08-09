@@ -23,7 +23,7 @@
 #include "TSystem.h"
 
 
-void SuperPlot()
+void SuperPlot(std::string plotName = "Input Eta Values High Mass and Different Sign", std::string outFile = "SuperPlots/superplot_RecoConfig1_Inputs_Eta_HMOS.root")
 {
 	//std::vector<double> massTargets {900};
 	auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
@@ -110,10 +110,10 @@ void SuperPlot()
 
 	//#TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "LeptonJetMLOutput High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
 	//#TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "LeptonJetMLOutput High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
-	TCanvas *canvas = plotFormatter->completePlot(InputAnalysis, "Input nParticles Values High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
+	TCanvas *canvas = plotFormatter->completePlot(InputAnalysis, plotName, xAxisTitle, yAxisTitle, true, false, "0.3");
 
 	//TCanvas *canvas = plotFormatter->simpleAnalysisHist(backgroundHists, );
 
 	//Uncomment to save a png picture in your bin folder
-	canvas->SaveAs("SuperPlots/superplot_RecoLarge_Inputs_nParticles_HMOS.root");
+	canvas->SaveAs(plotName, outFile);
 }

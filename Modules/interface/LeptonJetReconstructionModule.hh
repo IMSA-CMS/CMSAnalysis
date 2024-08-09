@@ -2,6 +2,9 @@
 #define LEPTONJETRECONSTRUCTIONMODULE_HH
 
 #include <vector>
+#include <unordered_map>
+#include <memory>
+#include <string>
 #include "CMSAnalysis/Modules/interface/ProductionModule.hh"
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/Histograms/interface/MLStripHist.hh"
@@ -10,50 +13,37 @@
 class LeptonJetReconstructionModule : public ProductionModule
 {
 public:
-  LeptonJetReconstructionModule(double deltaRCut);
-  virtual bool process() override;
-  const std::vector<LeptonJet> &getLeptonJets() const { return leptonJets; }
-  const std::vector<double> &getDeltaRValues() const { return deltaRValues; }
-  const std::vector<double> &getPtValues() const { return pTValues; }
-  const std::vector<LeptonJet> findLeptonJets(ParticleCollection<Lepton> recoCandidates);
+    LeptonJetReconstructionModule(double deltaRCut);
+    virtual bool process() override;
+    const std::vector<LeptonJet> &getLeptonJets() const { return leptonJets; }
+    const std::vector<double> &getDeltaRValues() const { return deltaRValues; }
+    const std::vector<double> &getPtValues() const { return pTValues; }
+    const std::vector<LeptonJet> findLeptonJets(ParticleCollection<Lepton> recoCandidates);
 
-  virtual std::string getName() override {return "LeptonJetReconstructionModule";}
+    virtual std::string getName() override { return "LeptonJetReconstructionModule"; }
 
-  std::vector<double> getDeltaRValues() {return inputDeltaRValues;};
-  std::vector<double> getDeltaPtValues() { return deltaPtValues; }
-  std::vector<double> getSumPtValues() { return sumPtValues; }
-  std::vector<double> getNParticlesValues() { return nParticlesValues; }
-  std::vector<double> getEtaValues() { return etaValues; }
-  std::vector<double> getMaxIsolationValues() { return maxIsolationValues; }
-
-	std::shared_ptr<HistogramOutputModule> getHistogramModule() { return histMod; };
+    std::shared_ptr<HistogramOutputModule> getHistogramModule() { return histMod; };
 
 private:
-	std::vector<double> inputDeltaRValues;
-	std::vector<double> deltaPtValues;
-	std::vector<double> sumPtValues;
-	std::vector<double> nParticlesValues;
-	std::vector<double> etaValues;
-	std::vector<double> maxIsolationValues;
+    LeptonJet histJet;
+    std::shared_ptr<HistogramOutputModule> histMod = std::make_shared<HistogramOutputModule>();
 
-	std::shared_ptr<HistogramOutputModule> histMod = std::make_shared<HistogramOutputModule>();
+    LeptonJet createLeptonJet(Lepton highestPtLepton) const;
+    Particle findHighestPtLepton(std::vector<Lepton> particles) const;
 
-  LeptonJet createLeptonJet(Lepton highestPtLepton) const;
-  Particle findHighestPtLepton(std::vector<Lepton> particles) const;
+    std::unordered_map<std::string, std::shared_ptr<MLStripHist>> particleHistograms;
 
-  std::unordered_map<std::string,std::shared_ptr<MLStripHist>> particleHistograms;
+    void findDeltaRValues();
+    void findPtValues();
+    void assignVariables(LeptonJet jet);
 
-  void findDeltaRValues();
-  void findPtValues();
-  void assignVariables(LeptonJet jet);
+    int count = 0;
 
-  int count = 0;
+    std::vector<LeptonJet> leptonJets;
+    std::vector<double> deltaRValues;
+    std::vector<double> pTValues;
 
-  std::vector<LeptonJet> leptonJets;
-  std::vector<double> deltaRValues;
-  std::vector<double> pTValues;
-
-  double DeltaRCut;
+    double DeltaRCut;
 };
 
 #endif

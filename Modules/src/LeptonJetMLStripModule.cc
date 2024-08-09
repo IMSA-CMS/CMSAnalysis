@@ -12,20 +12,20 @@ LeptonJetMLStripModule::LeptonJetMLStripModule()
 
 void LeptonJetMLStripModule::addVariables()
 {
-    //addVariable("leadingPt", SpecialVariableModule::VariableType::Float);
+    addVariable("leadingPt", SpecialVariableModule::VariableType::Float);
     addVariable("nParticles", SpecialVariableModule::VariableType::Float);
 	
 	//addVariable("phi", SpecialVariableModule::VariableType::Float);
 	// reader.AddVariable("mass", &mass);
 	
-	addVariable("sumPt", SpecialVariableModule::VariableType::Float);
+	//addVariable("sumPt", SpecialVariableModule::VariableType::Float);
 	//addVariable("numMuons", SpecialVariableModule::VariableType::Integer);
-	addVariable("deltaPt", SpecialVariableModule::VariableType::Float);
+	//addVariable("deltaPt", SpecialVariableModule::VariableType::Float);
 	addVariable("deltaR", SpecialVariableModule::VariableType::Float);
 	addVariable("eta", SpecialVariableModule::VariableType::Float);
 	//addVariable("maxDXY", SpecialVariableModule::VariableType::Float);
 	//addVariable("maxDZ", SpecialVariableModule::VariableType::Float);
-	addVariable("maxIsolation", SpecialVariableModule::VariableType::Float);
+	//addVariable("maxIsolation", SpecialVariableModule::VariableType::Float);
 
 
 }
@@ -82,6 +82,7 @@ void LeptonJetMLStripModule::calculateVariables(ParticleCollection<Particle> par
             {
                 runnerUpPt = leadingPt;
                 leadingPt = p.getPt();
+				addValue("leadingPt", leadingPt);
             }
             sumPt += p.getPt();
 
@@ -111,6 +112,7 @@ void LeptonJetMLStripModule::calculateVariables(ParticleCollection<Particle> par
 
 		addValue("deltaR", deltaR);
 		addValue("deltaPt", leadingPt - runnerUpPt);
+		addValue("leadingPt", leadingPt);
 		//addValue("leadingPt", leadingPt);
 		addValue("sumPt", sumPt);
 		addValue("maxDXY", tempMaxDXY);
