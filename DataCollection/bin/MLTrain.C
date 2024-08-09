@@ -132,7 +132,7 @@ bool returnState(TString &myMethodList, const char* sgMethod, const char* bgMeth
   // };
 
   std::vector<std::string> dpBaselineFiles = {
-    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config2/darkPhotonBaselineRun2.root"
+    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config1/darkPhotonBaselineRun2.root"
   };
 
   std::map<std::string, double> nanoCrossSections = {
@@ -161,7 +161,7 @@ bool returnState(TString &myMethodList, const char* sgMethod, const char* bgMeth
   // };
 
   std::map<std::string, double> dpCrossSections = {
-    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config2/darkPhotonBaselineRun2.root", 1},
+    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config1/darkPhotonBaselineRun2.root", 1},
   };
 
   std::vector<std::string> sgFiles = {};
@@ -193,14 +193,14 @@ bool returnState(TString &myMethodList, const char* sgMethod, const char* bgMeth
   // };
 
   std::vector<std::string> qcdFiles = {
-    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config2/QCD_HTCut_1000-1500_Run_2_Year_2018.root",
-    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config2/QCD_HTCut_100-200_Run_2_Year_2018.root",
-    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config2/QCD_HTCut_1500-2000_Run_2_Year_2018.root",
-    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config2/QCD_HTCut_2000-inf_Run_2_Year_2018.root",
-    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config2/QCD_HTCut_200-300_Run_2_Year_2018.root",
-    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config2/QCD_HTCut_300-500_Run_2_Year_2018.root",
-    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config2/QCD_HTCut_500-700_Run_2_Year_2018.root",
-    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config2/QCD_HTCut_700-1000_Run_2_Year_2018.root",
+    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config1/QCD_HTCut_1000-1500_Run_2_Year_2018.root",
+    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config1/QCD_HTCut_100-200_Run_2_Year_2018.root",
+    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config1/QCD_HTCut_1500-2000_Run_2_Year_2018.root",
+    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config1/QCD_HTCut_2000-inf_Run_2_Year_2018.root",
+    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config1/QCD_HTCut_200-300_Run_2_Year_2018.root",
+    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config1/QCD_HTCut_300-500_Run_2_Year_2018.root",
+    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config1/QCD_HTCut_500-700_Run_2_Year_2018.root",
+    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config1/QCD_HTCut_700-1000_Run_2_Year_2018.root",
   };
 
   std::vector<std::string> dyFiles = {
@@ -220,14 +220,14 @@ bool returnState(TString &myMethodList, const char* sgMethod, const char* bgMeth
   // };
 
   std::map<std::string, double> qcdCrossSections = {
-    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config2/QCD_HTCut_100-200_Run_2_Year_2018.root", 1122000},
-    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config2/QCD_HTCut_200-300_Run_2_Year_2018.root", 79760},
-    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config2/QCD_HTCut_300-500_Run_2_Year_2018.root", 16600},
-    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config2/QCD_HTCut_500-700_Run_2_Year_2018.root", 1503},
-    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config2/QCD_HTCut_700-1000_Run_2_Year_2018.root", 297.4},
-    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config2/QCD_HTCut_1000-1500_Run_2_Year_2018.root", 48.08},
-    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config2/QCD_HTCut_1500-2000_Run_2_Year_2018.root", 3.951},
-    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config2/QCD_HTCut_2000-inf_Run_2_Year_2018.root", 0.6957}
+    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config1/QCD_HTCut_100-200_Run_2_Year_2018.root", 1122000},
+    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config1/QCD_HTCut_200-300_Run_2_Year_2018.root", 79760},
+    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config1/QCD_HTCut_300-500_Run_2_Year_2018.root", 16600},
+    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config1/QCD_HTCut_500-700_Run_2_Year_2018.root", 1503},
+    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config1/QCD_HTCut_700-1000_Run_2_Year_2018.root", 297.4},
+    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config1/QCD_HTCut_1000-1500_Run_2_Year_2018.root", 48.08},
+    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config1/QCD_HTCut_1500-2000_Run_2_Year_2018.root", 3.951},
+    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_Config1/QCD_HTCut_2000-inf_Run_2_Year_2018.root", 0.6957}
   };
 
   std::map<std::string, double> dyCrossSections = {
