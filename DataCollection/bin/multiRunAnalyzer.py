@@ -7,7 +7,7 @@ analysis = 0
 
 def loopRun(*fileList):
 
-	path = "Higgs/" if analysis == 0 else "DarkPhoton_LepRecoInputs/" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 else "Muon/" if analysis == 2 else ""
+	path = "Higgs/" if analysis == 0 else "DarkPhoton_MLEval_Config1/" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 else "Muon/" if analysis == 2 else ""
 	os.makedirs(os.environ['CMSSW_BASE'] + "/src/CMSAnalysis/Output/" + path, exist_ok=True)
 
 	analysisBackground = "HiggsBackground" if analysis == 0 else "LeptonJetReconstruction" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 else "Muon" if analysis == 2 else ""
