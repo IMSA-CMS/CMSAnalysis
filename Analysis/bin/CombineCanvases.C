@@ -22,7 +22,7 @@ void CombineCanvases() {
     };
 
     // Create a large canvas to hold all the individual canvases
-    TCanvas *largeCanvas = new TCanvas("largeCanvas", "Combined Canvases", 3600, 7200);
+    TCanvas *largeCanvas = new TCanvas("largeCanvas", "Combined Canvases", 3600, 600 * static_cast<int>(fileList.size()));
     largeCanvas->Divide(2, fileList.size()); // Adjust the number of divisions as needed
 
     int padIndex = 1;
