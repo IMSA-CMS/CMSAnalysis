@@ -28,7 +28,7 @@ DarkPhotonInputAnalysis::DarkPhotonInputAnalysis() {
     //auto reader = std::make_shared<CrossSectionReader>("/uscms/home/maxchen/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
     //const std::string filePath = "/uscms/home/maxchen/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/"; 
 	auto reader = std::make_shared<CrossSectionReader>("/uscms/home/mkubon/analysis/clean/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
-    const std::string filePath = "/uscms/homes/j/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLEval_Config1/"; 
+    const std::string filePath = "/uscms/homes/j/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLEval_MuPtCut_Config1/"; 
     double luminosity = 20;
 
     TH1::SetDefaultSumw2();
@@ -38,7 +38,7 @@ DarkPhotonInputAnalysis::DarkPhotonInputAnalysis() {
       //  for(double massTarget : massTargets) {
 
     std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Sign"};
-    std::vector<std::string> LJVars = {"Input Delta Pt Values", "Input Delta R Values", "Input Eta Values", "Input MaxIsolation Values", "Input Sum Pt Values", "Input nParticles Values"};
+    std::vector<std::string> LJVars = {"Input Delta Pt Values", "Input Leading Pt Values", "Input Delta R Values", "Input Eta Values", "Input MaxIsolation Values", "Input Sum Pt Values", "Input nParticles Values", "1st Highest mu- Pt", "1st Highest Lepton Jet Pt"};
 
     //#std::vector<std::string> columnNames = {"Eta", "Lepton Jet Delta R", "Lepton Jet Mass", "Phi", "Pt"};
 
