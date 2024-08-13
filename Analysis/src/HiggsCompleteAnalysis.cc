@@ -131,14 +131,14 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
         
         
         auto qcdBackground = std::make_shared<Process>("QCD Background", 8);
-        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_100-200_Run_2_Year_2018.root", "QCD_100-200", reader, luminosity));
-        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_200-300_Run_2_Year_2018.root", "QCD_200-300", reader, luminosity));
-        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_300-500_Run_2_Year_2018.root", "QCD_300-500", reader, luminosity));
-        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_500-700_Run_2_Year_2018.root", "QCD_500-700", reader, luminosity));
-        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_700-1000_Run_2_Year_2018.root", "QCD_700-1000", reader, luminosity));
-        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_1000-1500_Run_2_Year_2018.root", "QCD_1000-1500", reader, luminosity));
-        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_1500-2000_Run_2_Year_2018.root", "QCD_1500-2000", reader, luminosity));
-        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_2000-inf_Run_2_Year_2018.root", "QCD_2000-inf", reader, luminosity));
+        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "plainQCD_HTCut_PSWeights_100-200_Run_2_Year_2018.root", "QCD_100-200", reader, luminosity));
+        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "plainQCD_HTCut_PSWeights_200-300_Run_2_Year_2018.root", "QCD_200-300", reader, luminosity));
+        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "plainQCD_HTCut_PSWeights_300-500_Run_2_Year_2018.root", "QCD_300-500", reader, luminosity));
+        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "plainQCD_HTCut_PSWeights_500-700_Run_2_Year_2018.root", "QCD_500-700", reader, luminosity));
+        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "plainQCD_HTCut_PSWeights_700-1000_Run_2_Year_2018.root", "QCD_700-1000", reader, luminosity));
+        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "plainQCD_HTCut_PSWeights_1000-1500_Run_2_Year_2018.root", "QCD_1000-1500", reader, luminosity));
+        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "plainQCD_HTCut_PSWeights_1500-2000_Run_2_Year_2018.root", "QCD_1500-2000", reader, luminosity));
+        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "plainQCD_HTCut_PSWeights_2000-Inf_Run_2_Year_2018.root", "QCD_2000-inf", reader, luminosity));
        
 
         auto higgsData = std::make_shared<Process>("Data", 1);
