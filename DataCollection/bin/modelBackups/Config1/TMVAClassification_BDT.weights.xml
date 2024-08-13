@@ -4,11 +4,11 @@
     <Info name="TMVA Release" value="4.2.1 [262657]"/>
     <Info name="ROOT Release" value="6.30/03 [400899]"/>
     <Info name="Creator" value="jpalamad"/>
-    <Info name="Date" value="Fri Aug  9 13:37:31 2024"/>
+    <Info name="Date" value="Tue Aug  6 12:16:12 2024"/>
     <Info name="Host" value="Linux cmsbuild105.cern.ch 4.18.0-513.9.1.el8_9.x86_64 #1 SMP Sat Dec 2 05:23:44 EST 2023 x86_64 x86_64 x86_64 GNU/Linux"/>
     <Info name="Dir" value="/uscms/homes/j/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin"/>
     <Info name="Training events" value="1437145"/>
-    <Info name="TrainingTime" value="4.76357132e+02"/>
+    <Info name="TrainingTime" value="4.56538917e+02"/>
     <Info name="AnalysisType" value="Classification"/>
   </GeneralInfo>
   <Options>
