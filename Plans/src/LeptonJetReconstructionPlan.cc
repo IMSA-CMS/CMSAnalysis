@@ -43,6 +43,7 @@
 #include "CMSAnalysis/Histograms/interface/GenSimDeltaRHist.hh"
 #include "CMSAnalysis/Histograms/interface/LeptonJetRecoHist.hh"
 #include "CMSAnalysis/Filters/interface/TriggerCut.hh"
+#include "CMSAnalysis/Filters/interface/HighestMuonPtCut.hh"
 #include "CMSAnalysis/Histograms/interface/GammaHist.hh"
 #include "CMSAnalysis/Histograms/interface/GammaDeltaRHist2D.hh"
 #include "CMSAnalysis/Histograms/interface/GenSimGammaHist.hh"
@@ -76,10 +77,13 @@ void LeptonJetReconstructionPlan::initialize()
   darkPhotonFilter->setInput(eventMod->getEventInput());
   
   /////////////// Is this an issue ///////////////
-  auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
-  //auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Mu37_TkMu27", "HLT_IsoMu24"}); // from mkubon reco
+  //auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
+  auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Mu37_TkMu27", "HLT_IsoMu24"}); // from mkubon reco
+  auto highestMuonPtCut = make_shared<HighestMuonPtCut>();
 
   eventMod->addCut(triggerCut);
+  eventMod->addCut(highestMuonPtCut);
+
   auto matchMod = std::make_shared<MatchingModule>();
   auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
   auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);

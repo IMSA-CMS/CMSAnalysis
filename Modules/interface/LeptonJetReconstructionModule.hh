@@ -21,6 +21,7 @@ public:
 
   std::vector<double> getDeltaRValues() {return inputDeltaRValues;};
   std::vector<double> getDeltaPtValues() { return deltaPtValues; }
+  std::vector<double> getLeadingPtValues() { return leadingPtValues; }
   std::vector<double> getSumPtValues() { return sumPtValues; }
   std::vector<double> getNParticlesValues() { return nParticlesValues; }
   std::vector<double> getEtaValues() { return etaValues; }
@@ -31,6 +32,7 @@ public:
 private:
 	std::vector<double> inputDeltaRValues;
 	std::vector<double> deltaPtValues;
+	std::vector<double> leadingPtValues;
 	std::vector<double> sumPtValues;
 	std::vector<double> nParticlesValues;
 	std::vector<double> etaValues;
