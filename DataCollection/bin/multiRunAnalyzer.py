@@ -15,7 +15,6 @@ def loopRun(*fileList):
 
 	# get rid of numFiles for a full run-through
 	numFiles = "numFiles=1"
-
 	for file in fileList:
 		# Filling in the parameters of runAnalyzer
 		analysisSignal = "HiggsSignal" if analysis == 0 else "MuonSignal" if analysis == 2 else ""
@@ -123,7 +122,15 @@ if __name__ == '__main__':
 		"Data/Data_Trigger_SingleElectron_Year_2018D.txt",
 		)
 	
-	qcd = ("QCD/QCD_HTCut_100-200_Run_2_Year_2018.txt", "QCD/QCD_HTCut_200-300_Run_2_Year_2018.txt", "QCD/QCD_HTCut_300-500_Run_2_Year_2018.txt", "QCD/QCD_HTCut_500-700_Run_2_Year_2018.txt", "QCD/QCD_HTCut_700-1000_Run_2_Year_2018.txt", "QCD/QCD_HTCut_1000-1500_Run_2_Year_2018.txt", "QCD/QCD_HTCut_1500-2000_Run_2_Year_2018.txt", "QCD/QCD_HTCut_2000-inf_Run_2_Year_2018.txt")
+	qcd = ("plainQCD/plainQCD_HTCut_PSWeights_100-200_Run_2_Year_2018.txt", 
+			"plainQCD/plainQCD_HTCut_PSWeights_200-300_Run_2_Year_2018.txt",
+			"plainQCD/plainQCD_HTCut_PSWeights_300-500_Run_2_Year_2018.txt", 
+			"plainQCD/plainQCD_HTCut_PSWeights_500-700_Run_2_Year_2018.txt",
+			"plainQCD/plainQCD_HTCut_PSWeights_700-1000_Run_2_Year_2018.txt",
+			"plainQCD/plainQCD_HTCut_PSWeights_1000-1500_Run_2_Year_2018.txt",
+			"plainQCD/plainQCD_HTCut_PSWeights_1500-2000_Run_2_Year_2018.txt",
+			"plainQCD/plainQCD_HTCut_PSWeights_2000-Inf_Run_2_Year_2018.txt",)
+
 	darkPhotonSignal = ("darkPhotonBaselineRun2.txt", )
 
 	darkPhotonNanoAOD = (
@@ -151,14 +158,16 @@ if __name__ == '__main__':
 	#background = qcd
 
 	# List of jobs to run on from those above
-	#jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData, qcd] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
+	# ttBar, zz, dy, multiBoson, higgsSignal, higgsData, qcd
+	jobsList = [dy] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
+	#jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal] if analysis == 1 else [background] if analysis == 3 else [darkPhotonNanoAOD] if analysis == 4 else [higgsData]
 	
-	#jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
-	#jobsList = [qcd]
-	jobsList = [qcd]
+	if os.path.exists("nohup.out") and (len(sys.argv) <= 2 or sys.argv[2] != "keep"):
+		os.remove("nohup.out")
 
 	# list of processes
 	processes = []
+	for job in jobsList:
 		newProcess = Process(target=loopRun, args=(job))
 		processes.append(newProcess)
 

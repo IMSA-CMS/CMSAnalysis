@@ -143,7 +143,7 @@ void JumboPlot()
 	//rowNames = {"eeeu__hists", "u u__hists", "uuu__hists", "uue__hists", "euuu__hists"};
 	std::vector<std::string> rowNames = {"u u", "uu", "uuu", "uuuu"};
     std::vector<std::string> graphableTypes = {"Dxy", "Dz", "Isolation"};
-	std::vector<TString> units = {"DXY", "DZ", "ISOLATION"};
+	std::vector<TString> units = {"DXY cm", "DZ cm", "ISOLATION"};
 
 	std::string channelName = "muons";
 
