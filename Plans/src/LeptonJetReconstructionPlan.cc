@@ -77,11 +77,11 @@ void LeptonJetReconstructionPlan::initialize()
   darkPhotonFilter->setInput(eventMod->getEventInput());
   
   /////////////// Is this an issue ///////////////
-  //auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
+  // auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
   auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Mu37_TkMu27", "HLT_IsoMu24"}); // from mkubon reco
   auto highestMuonPtCut = make_shared<HighestMuonPtCut>();
 
-  eventMod->addCut(triggerCut);
+  // eventMod->addCut(triggerCut);
   eventMod->addCut(highestMuonPtCut);
 
   auto matchMod = std::make_shared<MatchingModule>();
@@ -223,7 +223,7 @@ void LeptonJetReconstructionPlan::initialize()
 
 
   modules.addProductionModule(eventMod);
-  modules.addFilterModule(darkPhotonFilter);
+  // modules.addFilterModule(darkPhotonFilter);
   
   modules.addAnalysisModule(lepRecoHistMod);
   

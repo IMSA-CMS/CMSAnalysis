@@ -1,5 +1,5 @@
 
-#include "CMSAnalysis/Analysis/interface/DarkPhotonInputAnalysis.hh"
+#include "CMSAnalysis/Analysis/interface/DarkPhotonNoCutAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/FullAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/Channel.hh"
 #include "CMSAnalysis/Analysis/interface/SingleProcess.hh"
@@ -21,7 +21,7 @@
 #include "TH1.h"
 #include "TList.h"
  
-DarkPhotonInputAnalysis::DarkPhotonInputAnalysis(const std::string filePath) {
+DarkPhotonNoCutAnalysis::DarkPhotonNoCutAnalysis(const std::string filePath) {
     
     //Change this file to your folder to use your own cross sections
     //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
@@ -37,21 +37,28 @@ DarkPhotonInputAnalysis::DarkPhotonInputAnalysis(const std::string filePath) {
     //for (std::string recoDecay : recoDecays){
       //  for(double massTarget : massTargets) {
 
-    std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Sign"};
-    std::vector<std::string> LJVars = {"Input Delta Pt Values", "Input Leading Pt Values", "Input Delta R Values", "Input Eta Values", "Input MaxIsolation Values", "Input Sum Pt Values", "Input nParticles Values", "1st Highest mu- Pt", "1st Highest Lepton Jet Pt"};
+    // std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Sign"};
+    std::vector<std::string> LJVars = {
+        // "Input Delta Pt Values", 
+        // "Input Leading Pt Values", 
+        // "Input Delta R Values", 
+        // "Input Eta Values", 
+        // "Input MaxIsolation Values", 
+        // "Input Sum Pt Values", 
+        // "Input nParticles Values", 
+        "1st Highest mu- Pt", 
+        //"1st Highest Lepton Jet Pt"
+    };
 
     //#std::vector<std::string> columnNames = {"Eta", "Lepton Jet Delta R", "Lepton Jet Mass", "Phi", "Pt"};
 
     std::vector<HistVariable> histVariablesBackground;
 
-    for (std::string rowName : rowNames)
+    for (std::string LJVar : LJVars)
     {
-        for (std::string LJVar : LJVars)
-        {
-            histVariablesBackground.push_back(
-                HistVariable(LJVar + " " + rowName,
-                rowName + "__hists/" + rowName + "_" + LJVar));
-        }
+        histVariablesBackground.push_back(
+            HistVariable(LJVar,
+            "_hists/" + LJVar));
     }
 
     //histVariablesBackground.push_back(HistVariable("Pt High Mass and Same Sign","High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest mu- Pt"));

@@ -14,6 +14,7 @@
 #include "CMSAnalysis/Analysis/interface/DarkPhotonCompleteAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/DarkPhotonNanoAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/DarkPhotonInputAnalysis.hh"
+#include "CMSAnalysis/Analysis/interface/DarkPhotonNoCutAnalysis.hh"
 #include <fstream>
 #include "THStack.h"
 #include "TString.h"
@@ -23,12 +24,13 @@
 #include "TSystem.h"
 
 
-void SuperPlot(std::string plotName = "Input Leading Pt Values Low Mass and Same Sign", std::string outFile = "MultiSuperPlots/superplot_RecoConfig1_Inputs_LeadingPt_LMSS.root")
+void SuperPlot(const std::string inputAnalysisPath, const std::string plotName = "Input Leading Pt Values Low Mass and Same Sign", const std::string outFile = "MultiSuperPlots/superplot_RecoConfig1_Inputs_LeadingPt_LMSS.root")
 {
 	//std::vector<double> massTargets {900};
-	auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
-	auto InputAnalysis = std::make_shared<DarkPhotonInputAnalysis>();
-	auto NanoAnalysis = std::make_shared<DarkPhotonNanoAnalysis>(15, 17);
+	// auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
+	// auto InputAnalysis = std::make_shared<DarkPhotonInputAnalysis>(inputAnalysisPath);
+	// auto NanoAnalysis = std::make_shared<DarkPhotonNanoAnalysis>(15, 17);
+	auto NoCutAnalysis = std::make_shared<DarkPhotonNoCutAnalysis>(inputAnalysisPath);
 	//Change extra text here (keep drawLogo to false for now)
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation)");
 	plotFormatter->setUpperMasslimit(.5);
@@ -58,7 +60,8 @@ void SuperPlot(std::string plotName = "Input Leading Pt Values Low Mass and Same
 
 	//#std::vector<std::shared_ptr<Channel>> channels = DarkPhotonAnalysis->getChannels();
 	//#std::vector<std::shared_ptr<Channel>> channels = NanoAnalysis->getChannels();
-	std::vector<std::shared_ptr<Channel>> channels = InputAnalysis->getChannels();
+	//#std::vector<std::shared_ptr<Channel>> channels = InputAnalysis->getChannels();
+	std::vector<std::shared_ptr<Channel>> channels = NoCutAnalysis->getChannels();
 
 	for(std::shared_ptr<Channel> channel : channels) {
 		for(std::string processName : channel->getNames()) {
@@ -110,7 +113,8 @@ void SuperPlot(std::string plotName = "Input Leading Pt Values Low Mass and Same
 
 	//#TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "LeptonJetMLOutput High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
 	//#TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "LeptonJetMLOutput High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
-	TCanvas *canvas = plotFormatter->completePlot(InputAnalysis, plotName, xAxisTitle, yAxisTitle, true, false, "0.3");
+	//#TCanvas *canvas = plotFormatter->completePlot(InputAnalysis, plotName, xAxisTitle, yAxisTitle, true, false, "0.3");
+	TCanvas *canvas = plotFormatter->completePlot(NoCutAnalysis, plotName, xAxisTitle, yAxisTitle, true, false, "0.3");
 
 	//TCanvas *canvas = plotFormatter->simpleAnalysisHist(backgroundHists, );
 
