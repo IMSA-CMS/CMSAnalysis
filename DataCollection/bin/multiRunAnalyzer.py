@@ -19,7 +19,6 @@ def loopRun(*fileList):
 
 	# get rid of numFiles for a full run-through
 	numFiles = "numFiles=1"
-
 	for file in fileList:
 		# Filling in the parameters of runAnalyzer
 		analysisSignal = "HiggsSignal" if analysis == 0 else "MuonSignal" if analysis == 2 else ""
