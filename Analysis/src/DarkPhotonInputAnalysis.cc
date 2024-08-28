@@ -21,14 +21,14 @@
 #include "TH1.h"
 #include "TList.h"
  
-DarkPhotonInputAnalysis::DarkPhotonInputAnalysis() {
-
+DarkPhotonInputAnalysis::DarkPhotonInputAnalysis(const std::string filePath) {
+    
     //Change this file to your folder to use your own cross sections
     //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
     //auto reader = std::make_shared<CrossSectionReader>("/uscms/home/maxchen/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
     //const std::string filePath = "/uscms/home/maxchen/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/"; 
 	auto reader = std::make_shared<CrossSectionReader>("/uscms/home/mkubon/analysis/clean/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
-    const std::string filePath = "/uscms/homes/j/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_LepRecoInputs/"; 
+    // const std::string filePath = "/uscms/homes/j/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLEval_MuPtCut_Config1/"; 
     double luminosity = 20;
 
     TH1::SetDefaultSumw2();
@@ -38,7 +38,7 @@ DarkPhotonInputAnalysis::DarkPhotonInputAnalysis() {
       //  for(double massTarget : massTargets) {
 
     std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Sign"};
-    std::vector<std::string> LJVars = {"Input Delta Pt Values", "Input Delta R Values", "Input Eta Values", "Input MaxIsolation Values", "Input Sum Pt Values", "Input nParticles Values"};
+    std::vector<std::string> LJVars = {"Input Delta Pt Values", "Input Leading Pt Values", "Input Delta R Values", "Input Eta Values", "Input MaxIsolation Values", "Input Sum Pt Values", "Input nParticles Values", "1st Highest mu- Pt", "1st Highest Lepton Jet Pt"};
 
     //#std::vector<std::string> columnNames = {"Eta", "Lepton Jet Delta R", "Lepton Jet Mass", "Phi", "Pt"};
 
