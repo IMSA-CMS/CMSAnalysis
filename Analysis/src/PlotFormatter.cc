@@ -324,6 +324,16 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     
     std::vector<std::shared_ptr<Channel>> channels = analysis->getChannels();
     processes = channels.at(0);
+    /*
+    for (auto channel : channels)
+    {
+        std::cout << channel->getName() << std::endl;
+        for (auto process : channel->getNames())
+        {
+            std::cout << "Process: " << process << std::endl;
+        }
+    }
+    */
     std::vector<std::string> backgroundNames = processes->getNamesWithLabel("background");
     std::vector<std::string> signalNames = processes->getNamesWithLabel("signal");
     std::vector<std::string> dataNames = processes->getNamesWithLabel("data");
