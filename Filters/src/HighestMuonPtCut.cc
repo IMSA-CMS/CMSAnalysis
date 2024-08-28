@@ -27,8 +27,8 @@ bool HighestMuonPtCut::checkEventInternal(const Event& event, const EventInput* 
     const std::vector<Muon>& muons = event.getMuons().getParticles();
 
     double highestMuonPt = 0;
-    // double highestMuonPtCut = readHighestMuonPtCutFromFile("/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Filters/src/highestMuonPtCut.txt");
-    double highestMuonPtCut = 36;
+    double highestMuonPtCut = readHighestMuonPtCutFromFile("/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Filters/src/highestMuonPtCut.txt");
+    // double highestMuonPtCut = 36;
 
     for (auto muon : muons) {
         double pt = muon.getPt();

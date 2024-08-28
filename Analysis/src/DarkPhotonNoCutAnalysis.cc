@@ -27,7 +27,8 @@ DarkPhotonNoCutAnalysis::DarkPhotonNoCutAnalysis(const std::string filePath) {
     //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
     //auto reader = std::make_shared<CrossSectionReader>("/uscms/home/maxchen/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
     //const std::string filePath = "/uscms/home/maxchen/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/"; 
-	auto reader = std::make_shared<CrossSectionReader>("/uscms/home/mkubon/analysis/clean/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+	//auto reader = std::make_shared<CrossSectionReader>("/uscms/home/mkubon/analysis/clean/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+    auto reader = std::make_shared<CrossSectionReader>("/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
     // const std::string filePath = "/uscms/homes/j/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLEval_MuPtCut_Config1/"; 
     double luminosity = 20;
 
@@ -38,16 +39,19 @@ DarkPhotonNoCutAnalysis::DarkPhotonNoCutAnalysis(const std::string filePath) {
       //  for(double massTarget : massTargets) {
 
     // std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Sign"};
+    // std::vector<std::string> LJVars = {
+    //     "1st Highest mu- Pt"
+    // };
+
     std::vector<std::string> LJVars = {
-        // "Input Delta Pt Values", 
-        // "Input Leading Pt Values", 
-        // "Input Delta R Values", 
-        // "Input Eta Values", 
-        // "Input MaxIsolation Values", 
-        // "Input Sum Pt Values", 
-        // "Input nParticles Values", 
         "1st Highest mu- Pt", 
-        //"1st Highest Lepton Jet Pt"
+        "1st Highest mu- Eta", 
+        "2nd Highest mu- Pt", 
+        "2nd Highest mu- Eta", 
+        "mu- Opposite Sign Invariant Mass", 
+        "1st Highest Lepton Jet Pt", 
+        "1st Highest Lepton Jet Eta", 
+        "1st Highest Lepton Jet Lepton Jet Delta R"
     };
 
     //#std::vector<std::string> columnNames = {"Eta", "Lepton Jet Delta R", "Lepton Jet Mass", "Phi", "Pt"};
