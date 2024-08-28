@@ -33,6 +33,7 @@
 #include "CMSAnalysis/Filters/interface/ZVetoCut.hh"
 #include "CMSAnalysis/Filters/interface/FourLeptonCut.hh"
 #include "CMSAnalysis/Modules/interface/JSONScaleFactor.hh"
+#include "CMSAnalysis/Modules/interface/MultiYearScaleFactor.hh"
 
 using std::make_shared;
 
@@ -49,8 +50,14 @@ void HiggsBackgroundPlan::initialize()
     auto eventDump = make_shared<GenSimEventDumpModule>();
     auto zVetoCut = make_shared<ZVetoCut>();
     //auto quarkoniaCut = make_shared<QuarkoniaCut>();
-    auto scaleFactor = make_shared<JSONScaleFactor>("ScaleFactors_Muon_highPt_RECO_2018_schemaV2.txt");
+    // auto scaleFactor = make_shared<JSONScaleFactor>("ScaleFactors_Muon_highPt_RECO_2018_schemaV2.txt");
     auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
+    auto scaleFactor = make_shared<MultiYearScaleFactor>();
+    scaleFactor->addScaleFactor("2018", JSONScaleFactor("ScaleFactors_Muon_highPt_RECO_2018_schemaV2.json"));
+    scaleFactor->addScaleFactor("2017", JSONScaleFactor("ScaleFactors_Muon_highPt_RECO_2017_schemaV2.json"));
+    scaleFactor->addScaleFactor("2016", JSONScaleFactor("ScaleFactors_Muon_highPt_RECO_2016_schemaV2.json"));
+    scaleFactor->addScaleFactor("2016APV", JSONScaleFactor("ScaleFactors_Muon_highPt_RECO_2016_preVFP_schemaV2.json"));
+
 
     eventMod->addSelector(hppSelector);
     eventMod->addSelector(higgsSelector);
@@ -59,6 +66,7 @@ void HiggsBackgroundPlan::initialize()
     eventMod->addCut(zVetoCut);
     //eventMod->addCut(quarkoniaCut);
     eventMod->addScaleFactor(scaleFactor);
+
 
     auto matchMod = make_shared<MatchingModule>();
     auto triggerMod = make_shared<TriggerModule>();

@@ -21,7 +21,7 @@
 #include "CMSAnalysis/Histograms/interface/HistogramPrototype1DGeneral.hh"
 
 EventModule::EventModule():
-    localInput(&event)
+    event(nullptr), localInput(&event)
 {
     histMod->setInput(&localInput);
 }
@@ -110,6 +110,12 @@ bool EventModule::process ()
         std::cerr << "Exception caught: " << e.what() << std::endl;
     }
     return true;
+}
+
+void EventModule::setInput(const EventInput* input)
+{
+    Module::setInput(input);
+    event.setInput(input);
 }
 
 std::function<std::vector<double>(const EventInput*)> EventModule::findNthParticleFunction(int n, 

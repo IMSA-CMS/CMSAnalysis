@@ -1,54 +1,77 @@
-#include "CMSAnalysis/Modules/interface/JSONScaleFactor.hh"
-#include "CMSAnalysis/Utility/interface/Particle.hh"
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include <string>
-#include <vector>
-#include <unordered_map>
-#include "json/json.h"
+#include <regex>
+#include <map>
+#include "CMSAnalysis/Modules/interface/JSONScaleFactor.hh"
+#include "CMSAnalysis/Utility/interface/Particle.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
+#include "EventFilter/Utilities/interface/json.h"
+#include "TH1.h"
+#include "TH2.h"
+#include "TCanvas.h"
+#include "TFile.h"
+
+// Function to preprocess the JSON content
+std::string preprocessJSON(const std::string &filename) {
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        std::cerr << "Unable to open file: " << filename << std::endl;
+        return "";
+    }
+
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+    std::string jsonContent = buffer.str();
+
+    // Replace Infinity and NaN with specific values
+    jsonContent = std::regex_replace(jsonContent, std::regex("Infinity"), "1e30"); // or "null"
+    jsonContent = std::regex_replace(jsonContent, std::regex("NaN"), "null");
+
+    return jsonContent;
+}
 
 JSONScaleFactor::JSONScaleFactor(std::string filename) 
 {
-    std::ifstream file(filename);
-
-    if (!file.is_open()) {
-        std::cerr << "Unable to open file." << std::endl;
+    // Preprocess the JSON content
+    std::string jsonContent = preprocessJSON(filename);
+    if (jsonContent.empty()) {
         return;
     }
 
+    // Parse the preprocessed JSON content
+    std::istringstream jsonStream(jsonContent);
+    Json::Value output;
     Json::Reader reader;
-    Json::Value root;
-    if (!reader.parse(file, root)) {
-        std::cerr << "Failed to parse JSON file." << std::endl;
+    if (!reader.parse(jsonStream, output)) {
+        std::cerr << "Failed to parse JSON from file: " << filename << std::endl;
+        std::cerr << "Error: " << reader.getFormatedErrorMessages() << std::endl;
         return;
     }
+    for (auto memberName : output.getMemberNames()) {
+        std::cout << "memberName: " << memberName << std::endl;
+    }
+    Json::Value allCorrections = output["corrections"];
+    Json::Value allData = allCorrections[0u]["data"];
+    Json::Value allEdges = allData["edges"];
+    Json::Value allContent = allData["content"];
 
-    const Json::Value& corrections = root["corrections"];
-    for (const auto& correction : corrections) {
-        const auto& data = correction["data"];
-        const auto& absetaEdges = data["edges"];
-        const auto& absetaContent = data["content"];
+    for (size_t i = 0; i < allEdges.size(); i++) {
+        double eta_min = allEdges[i].asDouble();
 
-        for (Json::ArrayIndex i = 0; i < absetaEdges.size() - 1; ++i) {
-            double etaMin = absetaEdges[i].asDouble();
-            double etaMax = absetaEdges[i + 1].asDouble();
-            const auto& ptBinning = absetaContent[i];
+        Json::Value allptEdges = allContent[i]["edges"];
+        Json::Value allptContent = allContent[i]["content"];
 
-            const auto& ptEdges = ptBinning["edges"];
-            const auto& ptContent = ptBinning["content"];
+        for (size_t k = 0; k < allptEdges.size(); k++) {
+            double pt_max = allptEdges[k].asDouble();
+            Json::Value allsfContent = allptContent[k]["content"];
 
-            for (Json::ArrayIndex j = 0; j < ptEdges.size() - 1; ++j) {
-                double ptMin = ptEdges[j].asDouble();
-                double ptMax = ptEdges[j + 1].asDouble();
-                const auto& scaleFactors = ptContent[j]["content"];
-
-                for (const auto& scaleFactor : scaleFactors) {
-                    if (scaleFactor["key"].asString() == "nominal") {
-                        double nominal = scaleFactor["value"].asDouble();
-                        this->scaleFactors[etaMin][ptMin] = nominal;
-                    }
+            for (size_t j = 0; j < allsfContent.size(); j++) {
+                Json::Value key = allsfContent[j]["key"];
+                if (key.asString() == "nominal") {
+                    double scaleFactor = allsfContent[j]["value"].asDouble();
+                    scaleFactors[eta_min][pt_max] = scaleFactor;
                 }
             }
         }
@@ -64,16 +87,22 @@ double JSONScaleFactor::getScaleFactor(const EventInput* input) const
         double pt = lepton.getPt();
         double eta = lepton.getEta();
         
+        bool found = false;
         for (const auto& etaPair : scaleFactors) {
-            if (eta >= etaPair.first && eta < etaPair.second) {
+            if (eta >= etaPair.first) {
                 for (const auto& ptPair : etaPair.second) {
-                    if (pt >= ptPair.first && pt < ptPair.second) {
+                    if (pt >= ptPair.first) {
                         eventWeight *= ptPair.second;
+                        found = true;
                         break;
                     }
                 }
-                break;
             }
+            if (found) break;
+        }
+
+        if (!found) {
+            eventWeight *= 1.0;
         }
     }
     return eventWeight;
@@ -91,3 +120,5 @@ void JSONScaleFactor::printScaleFactors() const
         }
     }
 }
+
+
