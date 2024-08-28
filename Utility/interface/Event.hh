@@ -16,7 +16,7 @@
 class Event
 {
     public:
-        Event();
+        Event(const EventInput* input);
         const ParticleCollection<Electron>& getElectrons() const {return electrons;};
         const ParticleCollection<Muon>& getMuons() const {return muons;};
         const ParticleCollection<Photon>& getPhotons() const {return photons;};
@@ -42,6 +42,8 @@ class Event
 
         // Clears all ParticleCollections/specialObjects, for reuse of the same Event object
         void clear();
+        const std::shared_ptr<FileParams> getFileParams() const {return input->getFileParams();}
+        void setInput(const EventInput* input1) {input = input1;}
     private:
         //make particlecollections
         ParticleCollection<Electron> electrons;
@@ -51,5 +53,6 @@ class Event
         ParticleCollection<GenSimParticle> genSimParticles;
         double MET;
         std::map<std::string, ParticleCollection<Particle>> specialObjects;
+        const EventInput* input;
 };
 #endif
