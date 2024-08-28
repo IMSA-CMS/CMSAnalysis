@@ -30,6 +30,7 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
         }
         else if (particle.getType() == ParticleType::muon())
         {
+            //std::cout << "In Muon Selection" << std::endl;
             auto lepton = Lepton(particle);
             if (lepton.isLoose()  
                 && particle.getPt() > 5
@@ -63,6 +64,7 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
         }
         else if (particle.getType() == ParticleType::muon())
         {
+            //std::cout << particle.getInfo("Isolation") << std::endl;
             event.addMuon(particle);
         }
     }

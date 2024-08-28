@@ -7,7 +7,7 @@ double HiggsCut::muonThreeChannelCut = 250;
 
 bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) const
 {
-    const auto particles = event.getParticles();
+    const auto particles = event.getParticles(EventInput::RecoLevel::Reco);
 
     int numLeptons = particles.getLeptonTypeCount(ParticleType::electron()) + particles.getLeptonTypeCount(ParticleType::muon());
     // double leptonPt = 0; 
@@ -15,7 +15,21 @@ bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) c
 
     if (numLeptons == 4 || numLeptons == 2)
     {
-        return true;
+        for(auto particle : particles)
+        {
+            if (particle.getType() == ParticleType::electron() && particle.getPt() >= 40)
+            {
+                return true;
+            }
+            else if (particle.getType() == ParticleType::muon() && particle.getPt() >= 30)
+            {
+                return true;
+            }
+        }
+        return false; 
+        //return true;
+        //Higgs1000Run2 e-40 (1160/1404) or u-30 (1771/1795), eeuu (2860/3106)
+        //Dy50
     }
 
     // Finds the third lepton pt

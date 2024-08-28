@@ -13,6 +13,7 @@
 #include "TH1.h"
 #include "TH2.h"
 #include "TGraph.h"
+#include "TGraphErrors.h"
 
 class PlotFormatter
 {
@@ -51,19 +52,32 @@ class PlotFormatter
             
         //Complete Signal/Background plot
         TCanvas* completePlot(std::shared_ptr<FullAnalysis> analysis, std::string histvariable,
-            TString xAxisTitle, TString yAxisTitle, bool scaleTodata, std::string channelName = "");
+            TString xAxisTitle, TString yAxisTitle, bool scaleTodata, bool includeSignal, std::string channelName = "");
+
+        //Deletes all hist pointers made with the PlotFormatter
+        void deleteHists();
+
+        void setUpperMasslimit(double limit) { upperMasslimit = limit;}
+
+        double getUpperMasslimit() const { return upperMasslimit;}   
+
+        void setNumBins(int bins) { numBins = bins;}
+
+        int getNumBins() const { return numBins;} 
+
+        void setFirstBin(int bin) { firstBin = bin;}
+
+        int getFirstBin() const { return firstBin;} 
             
     private:
         //Formats the canvas based on the margins
         TCanvas* makeFormat(int w, int h, float t, float b, float l, float r);
         //Writes text and draws logo based on the margins
         void writeText(int w, int h, float t, float b, float l, float r);
-        //Deletes all hist pointers made with the PlotFormatter
-        void deleteHists();
     
         TLegend* GetLegend(THStack* background, std::shared_ptr<Channel> processes, TH1* data);
         
-        void GraphFormat(TGraph*& graph, TString xAxisTitle, float xLabelSize, float xTitleSize, float yLableSize, float yTitleSize, float markerSize, float maximum, float minimum, float firstBin, float upperMasslimit);
+        void GraphFormat(TGraph*& graph, TGraphErrors*& errorgraph2, TString xAxisTitle, float xLabelSize, float xTitleSize, float yLableSize, float yTitleSize, float markerSize, float maximum, float minimum, float firstBin, float upperMasslimit);
         
         void GetBottomPadValues(TH1*& data, THStack*& background, double (&x)[], double (&y)[], double (&xerror2)[], double (&yerror2)[]);
 
@@ -71,9 +85,11 @@ class PlotFormatter
     
         int GetOrder(TH1* data, TH1* signal, THStack* background);
 
-        TH1* DrawOrder(THStack*& background, TH1*& signal, TH1*& data, TPad*& topPad, float upperMasslimit, int firstBin, int first);
+        TH1* DrawFirst(THStack*& background, TH1*& signal, TH1*& data, TPad*& topPad, float upperMasslimit, int firstBin, int first);
 
         void DrawOtherHistograms(THStack*& background, TH1*& signal, TH1*& data, int first);
+
+        void DrawOtherHistograms(std::vector<TH1*>& hists, std::vector<int>& colors, int firstIndex);
 
         void ChangeAxisTitles(TH1*& hist, TString xAxisTitle, TString yAxisTitle);
 
@@ -100,6 +116,9 @@ class PlotFormatter
         std::vector<TH1*> histVector;
         std::vector<TH2*> th2Vector;
         std::vector<THStack*> stackVector;
+        double upperMasslimit;
+        int numBins;
+        int firstBin;
 
 
 };
