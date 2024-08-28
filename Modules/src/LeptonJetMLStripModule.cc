@@ -12,20 +12,20 @@ LeptonJetMLStripModule::LeptonJetMLStripModule()
 
 void LeptonJetMLStripModule::addVariables()
 {
-    //addVariable("leadingPt", SpecialVariableModule::VariableType::Float);
+    addVariable("leadingPt", SpecialVariableModule::VariableType::Float);
     addVariable("nParticles", SpecialVariableModule::VariableType::Float);
 	
 	//addVariable("phi", SpecialVariableModule::VariableType::Float);
 	// reader.AddVariable("mass", &mass);
 	
-	addVariable("sumPt", SpecialVariableModule::VariableType::Float);
+	//addVariable("sumPt", SpecialVariableModule::VariableType::Float);
 	//addVariable("numMuons", SpecialVariableModule::VariableType::Integer);
-	addVariable("deltaPt", SpecialVariableModule::VariableType::Float);
+	//addVariable("deltaPt", SpecialVariableModule::VariableType::Float);
 	addVariable("deltaR", SpecialVariableModule::VariableType::Float);
 	addVariable("eta", SpecialVariableModule::VariableType::Float);
 	//addVariable("maxDXY", SpecialVariableModule::VariableType::Float);
 	//addVariable("maxDZ", SpecialVariableModule::VariableType::Float);
-	addVariable("maxIsolation", SpecialVariableModule::VariableType::Float);
+	//addVariable("maxIsolation", SpecialVariableModule::VariableType::Float);
 
 
 }
@@ -78,11 +78,15 @@ void LeptonJetMLStripModule::calculateVariables(ParticleCollection<Particle> par
 					deltaR = p.getDeltaR(q);
                 }
             }
-            if (p.getPt() > leadingPt)
-            {
-                runnerUpPt = leadingPt;
-                leadingPt = p.getPt();
-            }
+
+			double pt = p.getPt();
+			if (pt > leadingPt) {
+				runnerUpPt = leadingPt;  // Previous leadingPt is now runner-up
+				leadingPt = pt;  // Update leadingPt to the new higher value
+			} else if (pt > runnerUpPt) {
+				runnerUpPt = pt;  // Update runnerUpPt if current pt is less than leadingPt but greater than runnerUpPt
+			}
+
             sumPt += p.getPt();
 
 
@@ -111,6 +115,7 @@ void LeptonJetMLStripModule::calculateVariables(ParticleCollection<Particle> par
 
 		addValue("deltaR", deltaR);
 		addValue("deltaPt", leadingPt - runnerUpPt);
+		addValue("leadingPt", leadingPt);
 		//addValue("leadingPt", leadingPt);
 		addValue("sumPt", sumPt);
 		addValue("maxDXY", tempMaxDXY);
