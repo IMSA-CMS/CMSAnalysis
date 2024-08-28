@@ -20,10 +20,13 @@
 #include "CMSAnalysis/Plans/interface/GenSimPlan.hh"
 #include "CMSAnalysis/Plans/interface/FileStripPlan.hh"
 #include "CMSAnalysis/Plans/interface/MLVariablesPlan.hh"
+#include "CMSAnalysis/Plans/interface/MLVariablesSplitPlan.hh"
 #include "CMSAnalysis/Plans/interface/HiggsDataStripPlan.hh"
 #include "CMSAnalysis/Plans/interface/HiggsInvariantMassPlan.hh"
 #include "CMSAnalysis/Plans/interface/ChargeFlipPlan.hh"
 #include "CMSAnalysis/Plans/interface/PdfWeightingPlan.hh"
+#include "CMSAnalysis/Plans/interface/MuonPlan.hh"
+#include "CMSAnalysis/Plans/interface/MuonSignalPlan.hh"
 
 AnalyzerOptions::AnalyzerOptions()
 {
@@ -38,11 +41,14 @@ AnalyzerOptions::AnalyzerOptions()
   analysisPlans["GenSim"] = new GenSimPlan();
   analysisPlans["FileStrip"] = new FileStripPlan();
   analysisPlans["MLVariables"] = new MLVariablesPlan();
+  analysisPlans["MLVariablesSplit"] = new MLVariablesSplitPlan();
   analysisPlans["HiggsDataStrip"] = new HiggsDataStripPlan();
   analysisPlans["HiggsInvariantMass"] = new HiggsInvariantMassPlan();
   analysisPlans["HiggsSignal"] = new HiggsSignalPlan();
   analysisPlans["ChargeFlip"] = new ChargeFlipPlan();
   analysisPlans["PdfWeighting"] = new PdfWeightingPlan();
+  analysisPlans["Muon"] = new MuonPlan();
+  analysisPlans["MuonSignal"] = new MuonSignalPlan();
 }
 
 std::string AnalyzerOptions::pickfileInterface()

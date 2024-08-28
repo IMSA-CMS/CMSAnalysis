@@ -88,11 +88,12 @@ void HPlusPlusGenSimSelector::selectParticles(const EventInput *input, Event &ev
         // }
         else if (genSimParticle.getType() == ParticleType::electron() && genSimParticle.getPt() > 5)
         {
-            event.addElectron(genSimParticle);
+            event.addGenSimParticle(genSimParticle);
         }
         else if (genSimParticle.getType() == ParticleType::muon() && genSimParticle.getPt() > 5)
         {
-            event.addMuon(genSimParticle);
+            genSimParticle.addInfo("Isolation", 0); //Dummy value for isolation for errors
+            event.addGenSimParticle(genSimParticle);
         }
     }
 }

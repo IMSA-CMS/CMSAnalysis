@@ -3,10 +3,10 @@
 
 #include <fstream>
 #include <string>
-#include <unordered_map>
+#include <map>
 #include <vector>
 #include <memory>
-#include <unordered_set>
+#include <set>
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "ProcessDictionary.hh"
 #include "RootEventInterface.hh"
@@ -60,8 +60,8 @@ private:
   std::vector<std::shared_ptr<ProductionModule>> productionModules; //= ModuleCollection.getProductionModules();
   std::vector<std::shared_ptr<FilterModule>> filterModules; //= ModuleCollection.getFilterModules();
   std::vector<std::shared_ptr<AnalysisModule>> analysisModules;// = ModuleCollection.getAnalysisModules();
-  std::unordered_set<std::string> filterNames;
-  std::unordered_map<std::string, TDirectory*> filterDirectories;
+  std::set<std::string> filterNames;
+  std::map<std::string, TDirectory*> filterDirectories;
   TFile* outputRootFile = nullptr;
 
   int numOfEvents = 0;

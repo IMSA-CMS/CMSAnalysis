@@ -72,7 +72,7 @@ private:
   static std::unordered_map<std::string, double> parameters;
   std::unordered_map<std::string, int> eventCount; 
   const EventInput* input = nullptr;
-  std::chrono::duration<double> time;
+  std::chrono::duration<double> time = std::chrono::duration<double>::zero();
 
 };
 

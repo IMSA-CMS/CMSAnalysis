@@ -44,7 +44,7 @@ void HiggsBackgroundPlan::initialize()
     
     auto eventMod = make_shared<EventModule>();
     auto hppSelector = make_shared<HPlusPlusGenSimSelector>();
-    auto higgsSelector = make_shared<ElectronEnergyScaleDown>();
+    auto higgsSelector = make_shared<HiggsSelector>();
     auto higgsCut = make_shared<HiggsCut>();
     //auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
     auto eventDump = make_shared<GenSimEventDumpModule>();
@@ -107,7 +107,7 @@ void HiggsBackgroundPlan::initialize()
     modules.addProductionModule(metMod);
     //Changed because EventModule inherits from ProductionModule now
     modules.addProductionModule(eventMod);
-    modules.addFilterModule(make_shared<FilterModule>(recoDecayFilter));
+    modules.addFilterModule(recoDecayFilterMod);
     modules.addAnalysisModule(eventHistMod);    
     modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
 
