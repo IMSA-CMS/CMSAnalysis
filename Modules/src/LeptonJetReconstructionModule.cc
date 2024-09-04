@@ -55,6 +55,22 @@ bool LeptonJetReconstructionModule::process()  // reco::deltaR(v1, v2)
   return true;
 }
 
+double readLeptonJetDeltaRCutFromFile(const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        throw std::runtime_error("Failed to open file: " + filename);
+    }
+
+    double LeptonJetDeltaRCut;
+    file >> LeptonJetDeltaRCut;
+
+    if (file.fail()) {
+        throw std::runtime_error("Error reading the delta R cut from file: " + filename);
+    }
+
+    return LeptonJetDeltaRCut;
+}
+
 const std::vector<LeptonJet> LeptonJetReconstructionModule::findLeptonJets(ParticleCollection<Lepton> recoCandidates) {
   auto recoLeptons = recoCandidates.getParticles();
   std::vector<LeptonJet> leptonJetList;
@@ -78,7 +94,9 @@ const std::vector<LeptonJet> LeptonJetReconstructionModule::findLeptonJets(Parti
       // std::cout << "delta r: " << deltaR << " delta r cut: " << DeltaRCut << "\n";
       // std::cout << "The value of Eta is "<< abs(recoLeptons[i].getEta()) <<std::endl;
 
-      if (deltaR < DeltaRCut && recoLeptons[i].getPt() >= 5 && abs(recoLeptons[i].getEta()) <= 3) {
+      double leptonJetDeltaRCut = readLeptonJetDeltaRCutFromFile("/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Filters/src/leptonJetDeltaRCut.txt");
+
+      if (deltaR < DeltaRCut && deltaR > leptonJetDeltaRCut && recoLeptons[i].getPt() >= 5 && abs(recoLeptons[i].getEta()) <= 3) {
         jet.addParticle(recoLeptons[i]);
         recoLeptons.erase(recoLeptons.begin() + i);
         --i;
