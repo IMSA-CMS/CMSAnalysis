@@ -3,6 +3,9 @@
 #include "CMSAnalysis/Filters/interface/Selector.hh"
 #include "CMSAnalysis/Histograms/interface/MLStripHist.hh"
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <stdexcept>
 
 LeptonJetReconstructionModule::LeptonJetReconstructionModule(double deltaRCut) : DeltaRCut(deltaRCut) {}
 
