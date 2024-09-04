@@ -38,6 +38,8 @@ private:
 	std::vector<double> etaValues;
 	std::vector<double> maxIsolationValues;
 
+  double readLeptonJetDeltaRCutFromFile(const std::string& filename)
+
 	std::shared_ptr<HistogramOutputModule> histMod = std::make_shared<HistogramOutputModule>();
 
   LeptonJet createLeptonJet(Lepton highestPtLepton) const;

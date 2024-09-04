@@ -1,14 +1,16 @@
 #!/bin/bash
 
-for i in $(seq 50 10 50)
+for ind in $(seq 1 1 5)
 do
-    echo "Current Mu pT cut: $i"
-    pathName="DarkPhoton_MLEval_MuPtCut_2Mu_$i/"
-    pathNameStr="DarkPhoton_MLEval_MuPtCut_2Mu_$i"
+    i="00${i}"
+    val="0.0${i}"
+    echo "Current LeptonJet DeltaR cut: $i"
+    pathName="DarkPhoton_MLEval_1MuPt50_2MuPt10_DeltaRCut_$i/"
+    pathNameStr="DarkPhoton_MLEval_1MuPt50_2MuPt10_DeltaRCut_$i"
     echo "Output Path: Output/$pathName"
 
-    # Populate the txt file with the current pt cut
-    #echo $i > /uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Filters/src/secondHighestMuonPtCut.txt
+    # Populate the txt file with the current cut
+    echo $val > /uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Filters/src/leptonJetDeltaRCut.txt
 
     dy=(
         "Drell-Yan/Drell-Yan_MassCut_10-50_Run_2.txt"
@@ -24,9 +26,9 @@ do
     done
 
     # Run other scripts in the background
-    # python3 multiRunAnalyzer.py DarkPhoton keep $pathName &
-    # python3 multiRunAnalyzer.py DPBackground keep $pathName &
-    # nohup runAnalyzer input=Data/Data_Trigger_SingleMuon_Year_2018A.txt output=${pathName}Data_Trigger_SingleMuon_Year_2018A.root analysis=LeptonJetReconstruction numFiles=3 &
+    python3 multiRunAnalyzer.py DarkPhoton keep $pathName &
+    python3 multiRunAnalyzer.py DPBackground keep $pathName &
+    nohup runAnalyzer input=Data/Data_Trigger_SingleMuon_Year_2018A.txt output=${pathName}Data_Trigger_SingleMuon_Year_2018A.root analysis=LeptonJetReconstruction numFiles=3 &
 
     ## Run additional replacements if uncommented
     ## runAnalyzer input=QCD/QCD_HTCut_1500-2000_Run_2_Year_2018.txt output=${pathName}QCD_HTCut_1500-2000_Run_2_Year_2018.root analysis=LeptonJetReconstruction numFiles=2 &
