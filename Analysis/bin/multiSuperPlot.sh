@@ -37,5 +37,5 @@ for varName in "${varNames[@]}"; do
     outputFile="${fileList}_$(echo $varName | tr -d ' ').root"
     
     # Run the ROOT macro
-    root -q "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Analysis/bin/SuperPlot.C(\"/uscms/homes/j/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/${fileList}/\", \"${varName}\", \"/uscms/homes/j/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Analysis/bin/MuPtAnalysisNT/superplot_${outputFile}\")"
+    root -q "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Analysis/bin/SuperPlot.C(\"/uscms/homes/j/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/${fileList}/\", \"${varName}\", \"/uscms/homes/j/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Analysis/bin/MuPtAnalysis2ndHighestMu-Pt/superplot_${outputFile}\")"
 done

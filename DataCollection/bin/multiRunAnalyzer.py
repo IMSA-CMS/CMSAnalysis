@@ -18,7 +18,7 @@ def loopRun(*fileList):
 	#analysisBackground = "MLVariables"
 
 	# get rid of numFiles for a full run-through
-	numFiles = "numFiles=2"
+	numFiles = "numFiles=3"
 	for file in fileList:
 		# Filling in the parameters of runAnalyzer
 		analysisSignal = "HiggsSignal" if analysis == 0 else "MuonSignal" if analysis == 2 else ""
