@@ -8,7 +8,7 @@ analysis = 0
 def loopRun(*fileList):
 
 	if len(sys.argv) <= 3:
-		path = "Higgs/" if analysis == 0 else "DarkPhoton_NoTriggerYesCut_BQCD/" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 or analysis == 6 or analysis == 7 else "Muon/" if analysis == 2 else ""
+		path = "Higgs/" if analysis == 0 else "DarkPhoton_EffectiveCS1/" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 or analysis == 6 or analysis == 7 else "Muon/" if analysis == 2 else ""
 	else:
 		path = sys.argv[3]
 
@@ -196,7 +196,11 @@ if __name__ == '__main__':
 	)
 
 	#background = ttBar + zz + dy + multiBoson + qcd # total 26 files
+
+	###########this one ######### background = qcd
 	background = qcd
+	#background = ttBar + zz + dy + multiBoson + qcd
+
 	#background = ttBar + zz + multiBoson + qcd # total 24 files - multiMuPtAnalysis coniguration
 	#background = ttBar + zz + multiBoson + bQCD
 	#background = dy # just dy configuration

@@ -2,8 +2,8 @@
 
 for ind in $(seq 1 1 5)
 do
-    i="00${i}"
-    val="0.0${i}"
+    i="00${ind}"
+    val="0.0${ind}"
     echo "Current LeptonJet DeltaR cut: $i"
     pathName="DarkPhoton_MLEval_1MuPt50_2MuPt10_DeltaRCut_$i/"
     pathNameStr="DarkPhoton_MLEval_1MuPt50_2MuPt10_DeltaRCut_$i"
