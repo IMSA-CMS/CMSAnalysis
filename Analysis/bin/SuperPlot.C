@@ -83,7 +83,7 @@ void SuperPlot(const std::string inputAnalysisPath, const std::string plotName =
 	//std::shared_ptr<Process> process = leptonBackgrounds->findProcess("Data");
  
 	//Write axis titles here
-	TString xAxisTitle = "BDT Number";
+	TString xAxisTitle = plotName;
 	TString yAxisTitle = "Events";
 
 	//Creates the graph
