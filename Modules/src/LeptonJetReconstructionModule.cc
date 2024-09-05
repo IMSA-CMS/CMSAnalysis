@@ -3,6 +3,9 @@
 #include "CMSAnalysis/Filters/interface/Selector.hh"
 #include "CMSAnalysis/Histograms/interface/MLStripHist.hh"
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <stdexcept>
 
 LeptonJetReconstructionModule::LeptonJetReconstructionModule(double deltaRCut) : DeltaRCut(deltaRCut) {}
 
@@ -85,6 +88,7 @@ const std::vector<LeptonJet> LeptonJetReconstructionModule::findLeptonJets(Parti
       }
     }
     // std::cout << "numParticles: " << jet.getNumParticles() << "\n";
+
     if (jet.getNumParticles() > 1) {
       // auto inputJets = getInput()->getJets(EventInput::RecoLevel::Reco);
       // bool close = false;
@@ -113,6 +117,36 @@ const std::vector<LeptonJet> LeptonJetReconstructionModule::findLeptonJets(Parti
       maxIsolationValues.clear();
     }
   }
+
+  
+  // double leptonJetDeltaRCut = readLeptonJetDeltaRCutFromFile("/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Filters/src/leptonJetDeltaRCut.txt");
+  // //double leptonJetDeltaRCut = 0;
+
+  // double highestDeltaR = 0;
+
+  // for (auto jet : leptonJetList)
+  // {
+  //   auto jetParticles = jet.getParticles();
+
+  //   for (Particle particle : jetParticles) {
+  //     auto initFourVector = particle.getFourVector();
+  //     for (Particle part : jetParticles) {
+  //       if (part != particle) {
+  //         auto nextFourVector = part.getFourVector();
+  //         double deltaR = reco::deltaR(initFourVector, nextFourVector);
+  //         if (deltaR > highestDeltaR)
+  //         {
+  //           highestDeltaR = deltaR;
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+
+  // if (highestDeltaR <= leptonJetDeltaRCut)
+  // {
+  //   leptonJetList.clear();
+  // }
 
   return leptonJetList;
 }
