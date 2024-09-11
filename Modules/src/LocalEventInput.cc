@@ -94,7 +94,7 @@ ParticleCollection<Particle> LocalEventInput::getSpecial(std::string key) const
 
 const std::shared_ptr<FileParams> LocalEventInput::getFileParams() const 
 {
-    throw std::runtime_error("getFileParams not implemented for localEventInput");
+    return event->getFileParams();
 }
 std::vector<double> LocalEventInput::getPDFWeights() const
 {
