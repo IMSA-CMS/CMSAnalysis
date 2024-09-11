@@ -175,6 +175,7 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents)
       {
         break;
       }
+    tFile->Close();
     delete tFile;
     }
   }
