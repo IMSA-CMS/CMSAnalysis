@@ -90,6 +90,11 @@ unsigned long long AnalyzerEventInput::getEventIDNum() const
     return (*eventInterface)->getEventIDNum();
 } 
 
+long AnalyzerEventInput::getRunNum() const
+{
+    return (*eventInterface)->getRunNum();
+}
+
 std::vector<bool> AnalyzerEventInput::getTriggerResults(std::string subProcess) const
 {
     return (*eventInterface)->getTriggerResults(subProcess);

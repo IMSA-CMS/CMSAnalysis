@@ -7,10 +7,10 @@ analysis = 0
 
 def loopRun(*fileList):
 
-	path = "Higgs/" if analysis == 0 else "DarkPhoton_MLEval_MuPtCut_Config1/" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 else "Muon/" if analysis == 2 else ""
+	path = "Higgs/" if analysis == 0 else "DarkPhoton_MLEval_MuPtCut_Config1/" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 else "Muon/" if analysis == 2 else "Counter/" if analysis == 6 else ""
 	os.makedirs(os.environ['CMSSW_BASE'] + "/src/CMSAnalysis/Output/" + path, exist_ok=True)
 
-	analysisBackground = "HiggsBackground" if analysis == 0 else "LeptonJetReconstruction" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 else "Muon" if analysis == 2 else ""
+	analysisBackground = "HiggsBackground" if analysis == 0 else "LeptonJetReconstruction" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 else "Muon" if analysis == 2 else "Counter" if analysis == 6 else ""
 	#analysisBackground = "MLVariables"
 
 	# get rid of numFiles for a full run-through
@@ -61,6 +61,9 @@ if __name__ == '__main__':
 		elif analysisName == "HiggsData":
 			print("Running HiggsData Analyses")
 			analysis = 5
+		elif analysisName == "Counter":
+			print("Running Counter Analyses")
+			analysis = 6
 		else:
 			print("Argument did not match any analysis, defaulting to Higgs")
 			analysis = 0
@@ -95,8 +98,8 @@ if __name__ == '__main__':
 		"Data/Data_Trigger_SingleMuon_Year_2017D.txt",
 		"Data/Data_Trigger_SingleMuon_Year_2017E.txt",
 		"Data/Data_Trigger_SingleMuon_Year_2017F.txt",
-		"Data/Data_Trigger_SingleMuon_Year_2017G.txt",
-		"Data/Data_Trigger_SingleMuon_Year_2017H.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2017G.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2017H.txt",
 		"Data/Data_Trigger_SingleMuon_Year_2018A.txt",
 		"Data/Data_Trigger_SingleMuon_Year_2018B.txt",
 		"Data/Data_Trigger_SingleMuon_Year_2018C.txt",
@@ -104,22 +107,22 @@ if __name__ == '__main__':
 		#"Data/Data_Trigger_SingleMuon_Year_2022A.txt",
 		#"Data/Data_Trigger_SingleMuon_Year_2022B.txt",
 		#"Data/Data_Trigger_SingleMuon_Year_2022C.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2016B.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2016C.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2016D.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2016E.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2016F.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2016G.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2016H.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2017B.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2017C.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2017D.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2017E.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2017F.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2018A.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2018B.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2018C.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2018D.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2016B.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2016C.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2016D.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2016E.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2016F.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2016G.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2016H.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2017B.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2017C.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2017D.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2017E.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2017F.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2018A.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2018B.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2018C.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2018D.txt",
 		)
 	
 	qcd = ("plainQCD/plainQCD_HTCut_PSWeights_100-200_Run_2_Year_2018.txt", 
@@ -159,9 +162,9 @@ if __name__ == '__main__':
 
 	# List of jobs to run on from those above
 	# ttBar, zz, dy, multiBoson, higgsSignal, higgsData, qcd
-	jobsList = [dy] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
+	#jobsList = [dy] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 	#jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal] if analysis == 1 else [background] if analysis == 3 else [darkPhotonNanoAOD] if analysis == 4 else [higgsData]
-	
+	jobsList = [higgsData]
 	if os.path.exists("nohup.out") and (len(sys.argv) <= 2 or sys.argv[2] != "keep"):
 		os.remove("nohup.out")
 
