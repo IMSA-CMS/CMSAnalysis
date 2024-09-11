@@ -66,6 +66,12 @@ unsigned long long LocalEventInput::getEventIDNum() const
     throw std::runtime_error("GenSimEventFile has no implementation of getEventIDNum");  
 } 
 
+long LocalEventInput::getRunNum() const
+{
+    //return event->getEventIDNum();
+    throw std::runtime_error("GenSimEventFile has no implementation of getRunNum");  
+} 
+
 std::vector<bool> LocalEventInput::getTriggerResults(std::string subProcess) const
 {
     throw std::runtime_error("calling getTrigger___() on a local event doesn't make sense");
