@@ -70,9 +70,9 @@ void Channel::labelProcess(std::string label, std::shared_ptr<Process> process)
 	map[label].push_back(process);
 }
 
-void Channel::makeDatacard(std::shared_ptr<Channel> channel)
+void Channel::makeDatacard(HistVariable histType)
 {
-	std::string channelName = channel->getName();
+	std::string channelName = getName();
 	std::string filename=channelName+".txt";
 	std::ofstream datacard (filename);
 	if(!datacard)
@@ -94,7 +94,7 @@ void Channel::makeDatacard(std::shared_ptr<Channel> channel)
     datacard<< std::setw(20) << std::left << "process"<< std::left;
 	datacard<<"\n";
 
-    for(auto process : channel->getProcesses())
+    for(auto process : getProcesses())
     {
         auto processName=Utility::substitute(process->getName()," ", "_");
     	datacard<< std::setw(20) << std::left << processName;
@@ -103,18 +103,18 @@ void Channel::makeDatacard(std::shared_ptr<Channel> channel)
     datacard<<"\n";
     datacard<< std::setw(20) << std::left << "rate";
             
-	for (auto process : channel->getProcesses())
+	for (auto process : getProcesses())
     {
-    	auto yield=std::to_string(process->getYield("Invariant Mass"));
+    	auto yield=std::to_string(process->getYield(histType));
         datacard<< std::setw(20) << std::left <<yield;
     }
 	datacard<<"\n";
 }
 
 
-void Channel::CombineDatacard(std::shared_ptr<Channel> channel)
+void Channel::CombineDatacard(HistVariable histType)
 {
-	std::string channelName = channel->getName();
+	std::string channelName = getName();
 	std::string filename=channelName+".txt";
 	std::ofstream datacard (filename);
 	if(!datacard)
@@ -126,7 +126,7 @@ void Channel::CombineDatacard(std::shared_ptr<Channel> channel)
     datacard << "jmax    4 number of processes minus 1\n";
 	datacard << "kmax 0 number of nuisance parameters\n";
     datacard << "----------------------------------------------------------------------------------------------------------------------------------\n";
-    for(auto process : channel->getProcesses())
+    for(auto process : getProcesses())
     {
         auto processName=Utility::substitute(process->getName()," ", "_");
     	datacard<< "shapes" << std::setw(20)<< processName << std::setw(20) << channelName << std::setw(40) << "Genhiggsworkspace.root  " << "higgsworkspace.root:" << processName << "\n"; 
@@ -145,7 +145,7 @@ void Channel::CombineDatacard(std::shared_ptr<Channel> channel)
 
     datacard<< std::setw(20) << std::left << "process"<< std::left;
 
-    for(auto process : channel->getProcesses())
+    for(auto process : getProcesses())
     {
         auto processName=Utility::substitute(process->getName()," ", "_");
     	datacard<< std::setw(20) << std::left << processName;
@@ -167,9 +167,9 @@ void Channel::CombineDatacard(std::shared_ptr<Channel> channel)
     datacard<<"\n";
     datacard<< std::setw(20) << std::left << "rate";
             
-	for (auto process : channel->getProcesses())
+	for (auto process : getProcesses())
     {
-    	auto yield=std::to_string(process->getYield("Invariant Mass"));
+    	auto yield=std::to_string(process->getYield(histType));
         datacard<< std::setw(20) << std::left <<yield;
     }
 	datacard<<"\n";
@@ -189,7 +189,7 @@ void Channel::addProcessLabel(std::string label, std::vector<std::shared_ptr<Pro
 	}
 }
 
-std::vector<double> Channel::getYields(std::string dataType) const
+std::vector<double> Channel::getYields(HistVariable dataType) const
 {
 	std::vector<double> yields;
 	for(auto process : processes)
@@ -209,7 +209,7 @@ std::vector<std::string> Channel::getNames() const
 	return names;
 }
 
-THStack* Channel::getStack(std::string histType, std::string label, bool scaleToExpected, int rebinConstant) const
+THStack* Channel::getStack(HistVariable histType, std::string label, bool scaleToExpected, int rebinConstant) const
 {
 	THStack* superPlot = new THStack(name.c_str(), name.c_str());
 	if (label == "")
@@ -240,7 +240,7 @@ THStack* Channel::getStack(std::string histType, std::string label, bool scaleTo
 	return superPlot;
 }
 
-std::vector<TH1*> Channel::getHists(std::string histType, std::string label, bool scaleToExpected) const
+std::vector<TH1*> Channel::getHists(HistVariable histType, std::string label, bool scaleToExpected) const
 {
 	std::vector<TH1*> hists;
 	if (label == "")

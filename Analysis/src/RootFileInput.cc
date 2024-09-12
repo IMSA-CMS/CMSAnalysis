@@ -31,7 +31,7 @@ TFile* RootFileInput::getFile(std::string fileSource) const
 }
 
 
-TH1* RootFileInput::getHist(std::string histType) const
+TH1* RootFileInput::getHist(HistVariable histType) const
 {
 	TH1::AddDirectory(kFALSE);
 
@@ -40,7 +40,7 @@ TH1* RootFileInput::getHist(std::string histType) const
 	for(HistVariable histVar : histVariables) 
 	{
 		//std::cout << histVar.getName() << std::endl;
-	    if(histVar.getName() == histType) 
+	    if(histVar.getName() == histType.getName()) 
 		{
 			name = histVar.getHistName();
 	    }
@@ -78,7 +78,7 @@ TH1* RootFileInput::getHist(std::string histType) const
 	}
 	if (!hist || hist->IsZombie())
 	{ 
-		throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType + "]");
+		throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getHistName() + "]");
 	}
 	if(dynamic_cast<TH2 *>(hist) != 0) {
 		TH2* hist2D = dynamic_cast<TH2 *>(hist);
@@ -102,11 +102,11 @@ TH1* RootFileInput::getHist(std::string histType) const
 	}
 }
 
-TH1* RootFileInput::get2DHist(std::string histType) const
+TH1* RootFileInput::get2DHist(HistVariable histType) const
 {
 	std::string name = "";
 	for(HistVariable histVar : histVariables) {
-	    if(histVar.getName() == histType) {
+	    if(histVar.getName() == histType.getName()) {
 			name = histVar.getHistName();
 	    }
 	}
