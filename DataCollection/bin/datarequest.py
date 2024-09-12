@@ -1,4 +1,5 @@
 import os
+import json
 
 # parser = argparse.ArgumentParser()
 # parser.add_argument("--trigger")
@@ -8,7 +9,11 @@ from subprocess import Popen, PIPE
 
 # Start a process to run the dasgoclient command and read the output
 # dasgoclient -query="dataset dataset=/*EGamma*/*/NANOAOD"
-stdout = Popen('dasgoclient -query="dataset dataset=/QCD_HT*CP5*/*UL*/NANOAODSIM"', shell=True, stdout=PIPE).stdout
+
+with open('dasgoclient_query_bqcd.json') as f:  # Replace 'data.json' with the actual file name
+    data = json.load(f)
+
+stdout = Popen('dasgoclient -query="dataset dataset=/QCD_bEnriched_HT*CP5*/*UL*/NANOAODSIM"', shell=True, stdout=PIPE).stdout
 output = stdout.read()
 
 # Split the output into a list of datasets
@@ -24,12 +29,13 @@ print("datasets\n")
 #         name ="Data_Trigger_SingleElectron_Year_2018D.txt"
 #         print("found\n")
 #         open('textfiles/Data/' + name, 'w')
-#         req = 'dasgoclient --query="file dataset=' + dataset.decode('utf-8') + '" > textfiles/plainQCD/' + name
+#         req = 'dasgoclient --query="file dataset=' + dataset.decode('utf-8') + '" > textfiles/PlainQCD/' + name
 #         os.system(req)
 #         print("Making " + name + "\n")
 #         os.system(req) 
 
 # Iterate over each dataset
+
 for dataset in datasets:
     mass = dataset.decode('utf-8')[dataset.decode('utf-8').find("HT") + 2 : dataset.decode('utf-8').find("_Tune")]
     mass = mass.replace("to", "-")
@@ -54,22 +60,39 @@ for dataset in datasets:
         PSWeights = True
     if b"MLM" in dataset:
         MLM = True
-    validPeriods = ["16", "17", "18"]
+    #validPeriods = ["16", "17", "18"]
+    validPeriods = ["17"]
+
+    # print("v9:", v9)
+    # print("not Jme:", not Jme)
+    # print("not bGen:", not bGen)
+    # print("period in validPeriods:", period in validPeriods)
+    # print("PSWeights:", PSWeights)
 
     # Check if the dataset is a specific case
-    if (v9 and not Jme and not bGen and period in validPeriods and PSWeights):
+    if (v9 and not Jme and not bGen and period in validPeriods):
 
         if((period == "16" or apv) and MLM):
             continue
 
-        print(dataset.decode('utf-8')+"\n")
+        # print(dataset.decode('utf-8')+"\n")
         # period = dataset[dataset.find("Run") + 3:dataset.find("Run") + 8]
         apvstr = "APV" if apv else ""
         psstr = "PSWeights_" if PSWeights else ""
-        name = "plainQCD_HTCut_" + psstr + mass + "_Run_2_Year_" + "20" + period + apvstr + ".txt"
+        name = "PlainQCD_HTCut_" + psstr + mass + "_Run_2_Year_" + "20" + period + apvstr + ".txt"
+
+        # fetch datase information
+        query_string = dataset.decode('utf-8').split("NanoAOD", 1)[0] + "MiniAOD"
+
+        for record in data:
+            if query_string in record['DAS']:
+                # Extract the relevant portions for the print statement
+                process_name_parts = record['process_name'].split('_')
+                print(f"QCD_{mass}  {record['cross_section']}   {record['total_uncertainty']}")
+
         # Open a text file in write mode
-        open('textfiles/plainQCD/' + name, 'w')
-        req = 'dasgoclient --query="file dataset=' + dataset.decode('utf-8') + '" > textfiles/plainQCD/' + name
+        open('textfiles/BQCD/' + name, 'w')
+        req = 'dasgoclient --query="file dataset=' + dataset.decode('utf-8') + '" > textfiles/BQCD/' + name
         print("Making " + name + "\n")
         os.system(req)
 

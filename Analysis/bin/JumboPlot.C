@@ -95,7 +95,8 @@ std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std:
 			for(std::string dataType : graphableTypes) {
 				for (std::string rowName : rowNames) {
 					
-					std::cout << "HERERERERERERERERERE" << std::endl;
+					//std::cout << "HERERERERERERERERERE" << std::endl;
+					std::string newRowName = Utility::substitute(rowName, " ", "-");
 
 					entry = "";
 					//TString xAxisName = "OSDL " + units[unitCounter];
@@ -108,7 +109,7 @@ std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std:
 					fileName = "jumboPlotStorage/" + Utility::removeSpaces(signal) + "/" + Utility::removeSpaces(newRowName) + dataName + "DataMC.png";
 					//fileName = channelName + dataName + "DataMC.png";
 					std::string fullDataType = dataType + " " + rowName;
-					TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, false, channel->getName());
+					TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, false, false, channel->getName());
 					//TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisName, yAxisName, true, channelName);
 					canvas->SaveAs(fileName.c_str());
 					plotFormatter->deleteHists();
@@ -154,17 +155,19 @@ void JumboPlot()
 
 	//makePlots("Dark Photon Signal", DarkPhotonAnalysis, channels, rowNames, graphableTypes, units, channelName);
 
-	std::vector<std::string> channelNames = {"0.3"};
+	//std::vector<std::string> channelNames = {"0.3"};
+
+	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
 	std::vector<std::shared_ptr<Channel>> higgsChannels = higgsAnalysis->getChannels();
 
 	//rowNames = {"u u"};
 	//rowNames = {"ee", "e e", "eu", "e u", "uu", "u u"};
-	rowNames = {"ee", "eu", "e u", "uu", "u u"};
-    graphableTypes = {"Dxy", "Dz", "Eta", "Isolation", "Phi", "Pt"};
-	units = {"", "", "ETA", "", "RAD", "GEV/C"};
+	std::vector<std::string> rowNames = {"u u", "uu", "uuu", "uuuu"};
+    std::vector<std::string> graphableTypes = {"Dxy", "Dz", "Isolation"};
+	std::vector<TString> units = {"dxy cm", "dz cm", "isolation"};
 
 	//channelNames = {"ee", "e e", "eu", "e u", "uu", "u u"};
-	channelNames = {"ee", "eu", "e u", "uu", "u u"};
+	std::vector<std::string> channelNames = {"ee", "eu", "e u", "uu", "u u"};
 
 	makePlots("Higgs Signal", higgsAnalysis, higgsChannels, rowNames, graphableTypes, units, channelNames);
 }

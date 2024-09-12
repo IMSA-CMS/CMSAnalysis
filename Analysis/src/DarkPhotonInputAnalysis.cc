@@ -21,14 +21,14 @@
 #include "TH1.h"
 #include "TList.h"
  
-DarkPhotonInputAnalysis::DarkPhotonInputAnalysis() {
-
+DarkPhotonInputAnalysis::DarkPhotonInputAnalysis(const std::string filePath) {
+    
     //Change this file to your folder to use your own cross sections
     //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
     //auto reader = std::make_shared<CrossSectionReader>("/uscms/home/maxchen/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
     //const std::string filePath = "/uscms/home/maxchen/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/"; 
 	auto reader = std::make_shared<CrossSectionReader>("/uscms/home/mkubon/analysis/clean/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
-    const std::string filePath = "/uscms/homes/j/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLEval_MuPtCut_Config1/"; 
+    // const std::string filePath = "/uscms/homes/j/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLEval_MuPtCut_Config1/"; 
     double luminosity = 20;
 
     TH1::SetDefaultSumw2();
