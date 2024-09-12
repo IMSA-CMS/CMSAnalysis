@@ -150,6 +150,10 @@ unsigned long long StrippedEventFile::getEventIDNum() const
 {
     throw std::runtime_error("StrippedEventFile has no implementation of getEventIDNum");  
 }
+long StrippedEventFile::getRunNum() const
+{
+    throw std::runtime_error("StrippedEventFile has no implementation of getRunNum");  
+}
 
 bool StrippedEventFile::isDone() const
 {

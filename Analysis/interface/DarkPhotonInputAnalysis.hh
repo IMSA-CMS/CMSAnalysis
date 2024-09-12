@@ -9,7 +9,7 @@
 class DarkPhotonInputAnalysis : public FullAnalysis
 {
     public:
-        DarkPhotonInputAnalysis();
+        DarkPhotonInputAnalysis(const std::string filePath);
 
     private:
         std::vector<std::shared_ptr<Channel>> channels;
