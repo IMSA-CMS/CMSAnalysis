@@ -25,6 +25,7 @@ class EventFile
         int getEventCount() const {return eventCount;}
         virtual double getMET() const = 0;
         virtual unsigned long long getEventIDNum() const = 0; 
+        virtual long getRunNum() const = 0; 
         virtual int getNumPileUpInteractions() const = 0;
         TFile* getFile() {return file;}
         virtual bool checkTrigger(std::string triggerName, std::string subProcess) const = 0; //checks if event passes trigger criteria
