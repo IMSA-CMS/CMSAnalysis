@@ -37,21 +37,30 @@ std::string roundDoubleString(double doub, int digits)
 
 //Converts channel data to something TableData can work with
 std::vector<std::vector<std::string>> makeTableInput(std::vector<std::vector<std::string>> oldInput, 
-HistVariable dataType, std::shared_ptr<Channel> channel, double massTarget)
+HistVariable dataType, std::shared_ptr<Channel> channel)
 {
-    std::vector<double> yields = channel->getYields(dataType.getName()); //error happens around here
+    std::vector<double> yields = channel->getYields(dataType); //error happens around here
     //probably an error with dataType.getName(), dataType is a histvariable so maybe the hist variable is wrong
     //find the right hist variable type
     std::vector<std::string> names = channel->getNames();
 
     std::vector<std::vector<std::string>> newInput = oldInput;
 
-    std::vector<std::string> toAdd(3, "");
+   
     int count = 0;
     for(std::string name : names) {
+        std::vector<std::string> toAdd(3, "");
+
+        
         toAdd.at(0) = names.at(count);
+        // std:: cout << "Name: " << toAdd.at(0) << std::endl;
+    
         toAdd.at(1) = channel->getName();
+        // std:: cout << "Channel: " << toAdd.at(1) << std::endl;
+
         toAdd.at(2) = roundDoubleString(yields.at(count), 4);
+        // std:: cout << "Yields: " << toAdd.at(2) << std::endl;
+
         newInput.push_back(toAdd);
         count++;
     }
@@ -66,15 +75,28 @@ void Table()
     std::vector<std::string> channels = Utility::channelMaker(particles, 4, true);
     //List massTargets here
     std::vector<double> massTargets = {900};
+
     //Change particle type here
-    auto higgsAnalysis = std::make_shared<HiggsPlusPlusAnalysis>();
-    //auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
-    for(std::string channel : channels) {
+     //auto higgsAnalysis = std::make_shared<HiggsPlusPlusAnalysis>();
+    auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
+
+    //This just adds space between cout statements so I can tell when higgscompleteanalysis is done
+  
+    // for (std::string channel: channels) {
+    //     std::cout << channel << std::endl;
+    // }
+
+
+    //Find following background decays and estimate quantity: Drell-Yan, WZ,   , QCD
+
+    for(std::string channel : channels) 
+    {
+        //std::cout << higgsAnalysis->getChannel(channel) << std::endl;
         input.clear();
-        for(double massTarget : massTargets) {
-            //Change the histVariable to analyze different properties
-            input = makeTableInput(input, HistVariable::SameSignMass("Cut4" + channel + channel + " Reco Invariant Mass Background"), higgsAnalysis->getChannel(channel + std::to_string((int) massTarget)), massTarget);
-        }
+
+   
+        input = makeTableInput(input, HistVariable::sameSignMass(channel + "__hists/" + channel + "_1st Highest mu- Dxy"), higgsAnalysis->getChannel(channel));
+        
         auto tableInput = std::make_shared<TableData>(input);
         //Change the type of table you want here
         auto table = std::make_shared<TextTable>();

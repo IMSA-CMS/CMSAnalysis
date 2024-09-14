@@ -128,7 +128,8 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pileup", "Pileup_nTrueInt"),
         std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("HEEP_bitmap", "Electron_vidNestedWPBitmapHEEP"),
         std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("Electron_bitmap", "Electron_vidNestedWPBitmap"),
-        std::make_shared<TreeVariable<TTreeReaderValue<ULong64_t>>>("event", "event")
+        std::make_shared<TreeVariable<TTreeReaderValue<ULong64_t>>>("event", "event"),
+        std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("run", "run")
     };
 
     tree = getFile()->Get<TTree>("Events");
@@ -218,6 +219,8 @@ void NanoAODEventFile::nextEvent()
 
         }
     }
+
+    //std::cout << "Run: " << getVariable<UInt_t>("run") << std::endl;
 }
 
 ParticleCollection<GenSimParticle> NanoAODEventFile::getGenSimParticles() const
@@ -365,6 +368,10 @@ double NanoAODEventFile::getMET() const
 unsigned long long NanoAODEventFile::getEventIDNum() const
 {
     return getVariable<ULong64_t>("event");
+}
+long NanoAODEventFile::getRunNum() const
+{
+    return getVariable<UInt_t>("run");
 }
 
 int NanoAODEventFile::getNumPileUpInteractions() const
