@@ -27,10 +27,10 @@
 void SuperPlot(const std::string inputAnalysisPath, const std::string plotName = "Input Leading Pt Values Low Mass and Same Sign", const std::string outFile = "MultiSuperPlots/superplot_RecoConfig1_Inputs_LeadingPt_LMSS.root")
 {
 	//std::vector<double> massTargets {900};
-	// auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
-	// auto InputAnalysis = std::make_shared<DarkPhotonInputAnalysis>(inputAnalysisPath);
+	//auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>(); // BDT Output Analysis (LeptonJetMLOutput)
+	auto DarkPhotonAnalysis = std::make_shared<DarkPhotonInputAnalysis>(inputAnalysisPath); // Variable Isolation Plots
 	// auto NanoAnalysis = std::make_shared<DarkPhotonNanoAnalysis>(15, 17);
-	auto NoCutAnalysis = std::make_shared<DarkPhotonNoCutAnalysis>(inputAnalysisPath);
+	//auto NoCutAnalysis = std::make_shared<DarkPhotonNoCutAnalysis>(inputAnalysisPath); // When control region filter disabled
 	//Change extra text here (keep drawLogo to false for now)
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation)");
 	plotFormatter->setUpperMasslimit(.5);
@@ -61,7 +61,7 @@ void SuperPlot(const std::string inputAnalysisPath, const std::string plotName =
 	//#std::vector<std::shared_ptr<Channel>> channels = DarkPhotonAnalysis->getChannels();
 	//#std::vector<std::shared_ptr<Channel>> channels = NanoAnalysis->getChannels();
 	//#std::vector<std::shared_ptr<Channel>> channels = InputAnalysis->getChannels();
-	std::vector<std::shared_ptr<Channel>> channels = NoCutAnalysis->getChannels();
+	std::vector<std::shared_ptr<Channel>> channels = DarkPhotonAnalysis->getChannels();
 
 	for(std::shared_ptr<Channel> channel : channels) {
 		for(std::string processName : channel->getNames()) {
@@ -114,7 +114,7 @@ void SuperPlot(const std::string inputAnalysisPath, const std::string plotName =
 	//#TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "LeptonJetMLOutput High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
 	//#TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "LeptonJetMLOutput High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
 	//#TCanvas *canvas = plotFormatter->completePlot(InputAnalysis, plotName, xAxisTitle, yAxisTitle, true, false, "0.3");
-	TCanvas *canvas = plotFormatter->completePlot(NoCutAnalysis, plotName, xAxisTitle, yAxisTitle, true, false, "0.3");
+	TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, plotName, xAxisTitle, yAxisTitle, true, false, "0.3");
 
 	//TCanvas *canvas = plotFormatter->simpleAnalysisHist(backgroundHists, );
 

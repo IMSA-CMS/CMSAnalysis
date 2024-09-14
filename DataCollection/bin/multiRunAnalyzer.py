@@ -8,17 +8,17 @@ analysis = 0
 def loopRun(*fileList):
 
 	if len(sys.argv) <= 3:
-		path = "Higgs/" if analysis == 0 else "DarkPhoton_EffectiveCS1/" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 or analysis == 6 or analysis == 7 else "Muon/" if analysis == 2 else ""
+		path = "Higgs/" if analysis == 0 else "DarkPhoton_MLStrip_CompleteCuts_ValidationConfig1/" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 or analysis == 6 or analysis == 7 else "Muon/" if analysis == 2 else ""
 	else:
 		path = sys.argv[3]
 
 	os.makedirs(os.environ['CMSSW_BASE'] + "/src/CMSAnalysis/Output/" + path, exist_ok=True)
 
-	analysisBackground = "HiggsBackground" if analysis == 0 else "LeptonJetReconstruction" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 or analysis == 6 or analysis == 7 else "Muon" if analysis == 2 else ""
-	#analysisBackground = "MLVariables"
+	#analysisBackground = "HiggsBackground" if analysis == 0 else "LeptonJetReconstruction" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 or analysis == 6 or analysis == 7 else "Muon" if analysis == 2 else ""
+	analysisBackground = "MLVariables"
 
 	# get rid of numFiles for a full run-through
-	numFiles = "numFiles=3"
+	numFiles = "numFiles=1"
 	for file in fileList:
 		# Filling in the parameters of runAnalyzer
 		analysisSignal = "HiggsSignal" if analysis == 0 else "MuonSignal" if analysis == 2 else ""
