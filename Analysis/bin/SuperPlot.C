@@ -27,8 +27,8 @@
 void SuperPlot(const std::string inputAnalysisPath, const std::string plotName = "Input Leading Pt Values Low Mass and Same Sign", const std::string outFile = "MultiSuperPlots/superplot_RecoConfig1_Inputs_LeadingPt_LMSS.root")
 {
 	//std::vector<double> massTargets {900};
-	//auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>(); // BDT Output Analysis (LeptonJetMLOutput)
-	auto DarkPhotonAnalysis = std::make_shared<DarkPhotonInputAnalysis>(inputAnalysisPath); // Variable Isolation Plots
+	auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>(inputAnalysisPath); // BDT Output Analysis (LeptonJetMLOutput)
+	//auto DarkPhotonAnalysis = std::make_shared<DarkPhotonInputAnalysis>(inputAnalysisPath); // Variable Isolation Plots
 	// auto NanoAnalysis = std::make_shared<DarkPhotonNanoAnalysis>(15, 17);
 	//auto NoCutAnalysis = std::make_shared<DarkPhotonNoCutAnalysis>(inputAnalysisPath); // When control region filter disabled
 	//Change extra text here (keep drawLogo to false for now)
@@ -114,7 +114,8 @@ void SuperPlot(const std::string inputAnalysisPath, const std::string plotName =
 	//#TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "LeptonJetMLOutput High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
 	//#TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "LeptonJetMLOutput High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
 	//#TCanvas *canvas = plotFormatter->completePlot(InputAnalysis, plotName, xAxisTitle, yAxisTitle, true, false, "0.3");
-	TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, plotName, xAxisTitle, yAxisTitle, true, false, "0.3");
+	auto nameVar = HistVariable(plotName, "SuperPlot");
+	TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, nameVar, xAxisTitle, yAxisTitle, true, false, "0.3");
 
 	//TCanvas *canvas = plotFormatter->simpleAnalysisHist(backgroundHists, );
 
