@@ -38,6 +38,8 @@ DarkPhotonInputAnalysis::DarkPhotonInputAnalysis(const std::string filePath) {
       //  for(double massTarget : massTargets) {
 
     std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Sign"};
+
+    // For when control region filter is off
     std::vector<std::string> LJVars = {"Input Delta Pt Values", "Input Leading Pt Values", "Input Delta R Values", "Input Eta Values", "Input MaxIsolation Values", "Input Sum Pt Values", "Input nParticles Values", "1st Highest Lepton Jet Pt", "1st Highest mu- Pt", "1st Highest mu- Eta", "2nd Highest mu- Pt", "2nd Highest mu- Eta", "1st Highest Lepton Jet Lepton Jet Delta R"};
 
     //#std::vector<std::string> columnNames = {"Eta", "Lepton Jet Delta R", "Lepton Jet Mass", "Phi", "Pt"};

@@ -11,8 +11,8 @@ fileList="$1"
 
 # Define the varNames array
 #varNames=("1st Highest mu- Pt" "1st Highest Lepton Jet Pt" "Input Delta Pt Values" "Input Leading Pt Values")
-#varNames=("1st Highest mu- Pt" "1st Highest mu- Eta" "2nd Highest mu- Pt" "2nd Highest mu- Eta" "mu- Opposite Sign Invariant Mass" "1st Highest Lepton Jet Pt" "1st Highest Lepton Jet Eta" "1st Highest Lepton Jet Lepton Jet Delta R")
-varNames=("1st Highest Lepton Jet Lepton Jet Delta R")
+varNames=("1st Highest mu- Pt" "1st Highest mu- Eta" "2nd Highest mu- Pt" "2nd Highest mu- Eta" "mu- Opposite Sign Invariant Mass" "1st Highest Lepton Jet Pt" "1st Highest Lepton Jet Eta" "1st Highest Lepton Jet Lepton Jet Delta R")
+#varNames=("1st Highest Lepton Jet Lepton Jet Delta R")
 
 # Loop through each region and variable (use when control region filter enabled)
 

@@ -13,9 +13,9 @@ LeptonJetMLStripModule::LeptonJetMLStripModule()
 void LeptonJetMLStripModule::addVariables()
 {
 	addVariable("deltaR", SpecialVariableModule::VariableType::Float);
-    //addVariable("nParticles", SpecialVariableModule::VariableType::Float);
-    //addVariable("leadingPt", SpecialVariableModule::VariableType::Float);
-	//addVariable("eta", SpecialVariableModule::VariableType::Float);
+    addVariable("nParticles", SpecialVariableModule::VariableType::Float);
+	// addVariable("eta", SpecialVariableModule::VariableType::Float);
+    // addVariable("leadingPt", SpecialVariableModule::VariableType::Float);
 	
 	//addVariable("phi", SpecialVariableModule::VariableType::Float);
 	// reader.AddVariable("mass", &mass);

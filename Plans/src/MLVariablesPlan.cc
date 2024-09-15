@@ -33,8 +33,8 @@ void MLVariablesPlan::initialize()
     auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Mu37_TkMu27", "HLT_IsoMu24"});
     auto highestMuonPtCut = make_shared<HighestMuonPtCut>();
 
-    eventMod->addCut(triggerCut);
-    eventMod->addCut(highestMuonPtCut);
+    // eventMod->addCut(triggerCut);
+    // eventMod->addCut(highestMuonPtCut);
 
     auto leptonJetMLStripMod = make_shared<LeptonJetMLStripModule>();
     leptonJetMLStripMod->setInput(eventMod->getEventInput());

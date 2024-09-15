@@ -39,7 +39,7 @@ qcd2000: 6.458
 //bg dy50run2
 //sg darkphotonbaselinerun2
 
-bool returnState(TString &myMethodList, const char* sgMethod, const char* bgMethod, int useDP, int useNano, int useDY, int useQCD) {
+bool returnState(TString &myMethodList, std::string trainPath, const char* sgMethod, const char* bgMethod, int useDP, int useNano, int useDY, int useQCD) {
   TMVA::Tools::Instance();
 
   std::map<std::string, int> Use;
@@ -132,7 +132,7 @@ bool returnState(TString &myMethodList, const char* sgMethod, const char* bgMeth
   // };
 
   std::vector<std::string> dpBaselineFiles = {
-    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts/darkPhotonBaselineRun2.root"
+    trainPath + "darkPhotonBaselineRun2.root"
   };
 
   std::map<std::string, double> nanoCrossSections = {
@@ -161,7 +161,7 @@ bool returnState(TString &myMethodList, const char* sgMethod, const char* bgMeth
   // };
 
   std::map<std::string, double> dpCrossSections = {
-    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts/darkPhotonBaselineRun2.root", 1},
+    {trainPath + "darkPhotonBaselineRun2.root", 1},
   };
 
   std::vector<std::string> sgFiles = {};
@@ -193,14 +193,14 @@ bool returnState(TString &myMethodList, const char* sgMethod, const char* bgMeth
   // };
 
   std::vector<std::string> qcdFiles = {
-    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts/QCD_HTCut_1000-1500_Run_2_Year_2018.root",
-    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts/QCD_HTCut_100-200_Run_2_Year_2018.root",
-    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts/QCD_HTCut_1500-2000_Run_2_Year_2018.root",
-    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts/QCD_HTCut_2000-inf_Run_2_Year_2018.root",
-    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts/QCD_HTCut_200-300_Run_2_Year_2018.root",
-    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts/QCD_HTCut_300-500_Run_2_Year_2018.root",
-    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts/QCD_HTCut_500-700_Run_2_Year_2018.root",
-    "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts/QCD_HTCut_700-1000_Run_2_Year_2018.root",
+    trainPath + "QCD_HTCut_1000-1500_Run_2_Year_2018.root",
+    trainPath + "QCD_HTCut_100-200_Run_2_Year_2018.root",
+    trainPath + "QCD_HTCut_1500-2000_Run_2_Year_2018.root",
+    trainPath + "QCD_HTCut_2000-inf_Run_2_Year_2018.root",
+    trainPath + "QCD_HTCut_200-300_Run_2_Year_2018.root",
+    trainPath + "QCD_HTCut_300-500_Run_2_Year_2018.root",
+    trainPath + "QCD_HTCut_500-700_Run_2_Year_2018.root",
+    trainPath + "QCD_HTCut_700-1000_Run_2_Year_2018.root",
   };
 
   std::vector<std::string> dyFiles = {
@@ -220,14 +220,14 @@ bool returnState(TString &myMethodList, const char* sgMethod, const char* bgMeth
   // };
 
   std::map<std::string, double> qcdCrossSections = {
-    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts/QCD_HTCut_100-200_Run_2_Year_2018.root", 1122000},
-    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts/QCD_HTCut_200-300_Run_2_Year_2018.root", 79760},
-    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts/QCD_HTCut_300-500_Run_2_Year_2018.root", 16600},
-    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts/QCD_HTCut_500-700_Run_2_Year_2018.root", 1503},
-    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts/QCD_HTCut_700-1000_Run_2_Year_2018.root", 297.4},
-    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts/QCD_HTCut_1000-1500_Run_2_Year_2018.root", 48.08},
-    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts/QCD_HTCut_1500-2000_Run_2_Year_2018.root", 3.951},
-    {"/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts/QCD_HTCut_2000-inf_Run_2_Year_2018.root", 0.6957}
+    {trainPath + "QCD_HTCut_100-200_Run_2_Year_2018.root", 1122000},
+    {trainPath + "QCD_HTCut_200-300_Run_2_Year_2018.root", 79760},
+    {trainPath + "QCD_HTCut_300-500_Run_2_Year_2018.root", 16600},
+    {trainPath + "QCD_HTCut_500-700_Run_2_Year_2018.root", 1503},
+    {trainPath + "QCD_HTCut_700-1000_Run_2_Year_2018.root", 297.4},
+    {trainPath + "QCD_HTCut_1000-1500_Run_2_Year_2018.root", 48.08},
+    {trainPath + "QCD_HTCut_1500-2000_Run_2_Year_2018.root", 3.951},
+    {trainPath + "QCD_HTCut_2000-inf_Run_2_Year_2018.root", 0.6957}
   };
 
   std::map<std::string, double> dyCrossSections = {
@@ -561,9 +561,9 @@ bool returnState(TString &myMethodList, const char* sgMethod, const char* bgMeth
 // @param useDY : whether or not to train on DY background files : 0, 1
 // @param useQCD : whether or not to train on QCD background files : 0, 1
 
-void MLTrain(const char* sgMethod, const char* bgMethod, int useDP, int useNano, int useDY, int useQCD)  // int argc, char** argv)
+void MLTrain(std::string trainPath, const char* sgMethod, const char* bgMethod, int useDP, int useNano, int useDY, int useQCD)  // int argc, char** argv)
 {
   // Select methods (don't look at this code - not of interest)
   TString methodList;
-  returnState(methodList, sgMethod, bgMethod, useDP, useNano, useDY, useQCD);
+  returnState(methodList, trainPath, sgMethod, bgMethod, useDP, useNano, useDY, useQCD);
 }
