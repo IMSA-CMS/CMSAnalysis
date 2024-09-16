@@ -21,7 +21,7 @@ TFile* RootFileInput::getFile(std::string fileSource) const
 	auto file = TFile::Open(fileSource.c_str(), "read");
 
 	std::cout << "Reading file: " << fileSource << std::endl;
-	
+
 	if(!file)
 	{
 		throw std::runtime_error("Cannot open file " + fileSource + "!");
@@ -33,7 +33,7 @@ TFile* RootFileInput::getFile(std::string fileSource) const
 }
 
 
-TH1* RootFileInput::getHist(std::string histType) const
+TH1* RootFileInput::getHist(HistVariable histType) const
 {
 	TH1::AddDirectory(kFALSE);
 
@@ -41,8 +41,8 @@ TH1* RootFileInput::getHist(std::string histType) const
 	//std::cout << "Histogram Type: " << histType << std::endl;
 	for(HistVariable histVar : histVariables) 
 	{
-		//std::cout << "histVarName: " << histVar.getName() << std::endl;
-	    if(histVar.getName() == histType) 
+		//std::cout << histVar.getName() << std::endl;
+	    if(histVar.getName() == histType.getName()) 
 		{
 			name = histVar.getHistName();
 	    }
@@ -81,7 +81,7 @@ TH1* RootFileInput::getHist(std::string histType) const
 
 	if (!hist || hist->IsZombie())
 	{ 
-		throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType + "]");
+		throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getHistName() + "]");
 	}
 
 	if (dynamic_cast<TH2 *>(hist) != 0) {
@@ -100,11 +100,11 @@ TH1* RootFileInput::getHist(std::string histType) const
 	
 }
 
-TH1* RootFileInput::get2DHist(std::string histType) const
+TH1* RootFileInput::get2DHist(HistVariable histType) const
 {
 	std::string name = "";
 	for(HistVariable histVar : histVariables) {
-	    if(histVar.getName() == histType) {
+	    if(histVar.getName() == histType.getName()) {
 			name = histVar.getHistName();
 	    }
 	}

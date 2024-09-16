@@ -13,32 +13,40 @@ void TextTable::makeTable(std::shared_ptr<TableData> data, std::ostream& outputS
     std::vector<std::vector<std::string>> entries = data->getEntries();
     std::string table = "";
     int colWidth = 0;
-    for(std::string rowName : rows) {
-        if((int) rowName.length() > colWidth) {
+    for(std::string rowName : rows)
+    {
+        if((int) rowName.length() > colWidth) 
+        {
             colWidth = (int) rowName.length();
         }
     }
-    for(std::string colName : cols) {
-        if((int) colName.length() > colWidth) {
+    for(std::string colName : cols) 
+    {
+        if((int) colName.length() > colWidth) 
+        {
             colWidth = (int) colName.length();
         }
     }
-    for(std::vector<std::string> row : entries) {
-        for(std::string entry : row) {
-            if((int) entry.length() > colWidth) {
+    for(std::vector<std::string> row : entries) 
+    {
+        for(std::string entry : row) 
+        {
+            if((int) entry.length() > colWidth) 
+            {
                 colWidth = (int) entry.length();
             }
         }
     }
-    table = table + makeDivider(colWidth, static_cast<int>(cols.size()));
-    table = table + makeRow("", cols, colWidth);
-    table = table + makeDivider(colWidth, static_cast<int>(cols.size()));
+    table += makeDivider(colWidth, static_cast<int>(cols.size()));
+    table += makeRow("", cols, colWidth);
+    table += makeDivider(colWidth, static_cast<int>(cols.size()));
     int count = 0;
-    while(static_cast<std::vector<int>::size_type>(count) < rows.size()) {
-        table = table + makeRow(rows.at(count), entries.at(count), colWidth);
+    while(static_cast<std::vector<int>::size_type>(count) < rows.size()) 
+    {
+        table += makeRow(rows.at(count), entries.at(count), colWidth);
         count++;
     }
-    table = table + makeDivider(colWidth, static_cast<int>(cols.size()));
+    table += makeDivider(colWidth, static_cast<int>(cols.size()));
     outputStream << table;
 }
 

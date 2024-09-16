@@ -19,14 +19,14 @@ class Channel
 		//Channel(std::string name, std::string iYAxisName, std::vector<std::shared_ptr<Process>> iProcesses);
 		Channel(std::string name, std::vector<std::shared_ptr<Process>> iProcesses);
 		//Gets data from all processes in the format needed to make table
-		std::vector<double> getYields(std::string dataType) const;
+		std::vector<double> getYields(HistVariable dataType) const;
 		std::vector<std::string> getNames() const;
 		std::string getName() {return name;}
 		std::vector<std::string> getNamesWithLabel(std::string label);
 		//Makes stacked histogram
-		THStack* getStack(std::string histType, std::string label = "", bool scaleToExpected = false, int rebinConstant = 1) const;
+		THStack* getStack(HistVariable histType, std::string label = "", bool scaleToExpected = false, int rebinConstant = 1) const;
 		
-		std::vector<TH1*> getHists(std::string histType, std::string label = "", bool scaleToExpected = false) const;
+		std::vector<TH1*> getHists(HistVariable histType, std::string label = "", bool scaleToExpected = false) const;
 
 		const std::shared_ptr<Process> findProcess(std::string processName) const;
 		
@@ -36,9 +36,9 @@ class Channel
 
 		void addProcessLabel(std::string label, std::vector<std::shared_ptr<Process>> processes);
 
-		void makeDatacard(std::shared_ptr<Channel> channel);
+		void makeDatacard(HistVariable histType);
 		
-		void CombineDatacard(std::shared_ptr<Channel> channel);
+		void CombineDatacard(HistVariable histType);
 
 		void addGlobalSystematic(Systematic& systematic);
 
