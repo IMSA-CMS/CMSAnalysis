@@ -46,7 +46,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     //auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Analysis/bin/crossSections.txt");
     const std::string filePath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Muon/"; 
     const std::string signalFilePath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Muon/";
-    // Vincents: /uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Outputcd 
+    // Vincents: /uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output 
     double luminosity = 0.02;
 
     std::vector<HistVariable> histVariablesBackground;
@@ -63,7 +63,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
             {
                 histVariablesBackground.push_back(
                     HistVariable(columnName + " " + rowName,
-                    rowName + "__hists/" + rowName + connecter + columnName));
+                    rowName + "_Pass_Run__hists/" + rowName + "_Pass_Run" + connecter + columnName));
                     //"High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest mu- Pt"));
             }
         }

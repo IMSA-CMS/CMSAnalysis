@@ -167,7 +167,8 @@ void JumboPlot()
 	std::vector<TString> units = {"dxy cm", "dz cm", "isolation"};
 
 	//channelNames = {"ee", "e e", "eu", "e u", "uu", "u u"};
-	std::vector<std::string> channelNames = {"ee", "eu", "e u", "uu", "u u"};
+	//std::vector<std::string> channelNames = {"ee", "eu", "e u", "uu", "u u"};
+	std::vector<std::string> channelNames = {"u u", "uu", "uuu", "uuuu"};
 
 	makePlots("Higgs Signal", higgsAnalysis, higgsChannels, rowNames, graphableTypes, units, channelNames);
 }

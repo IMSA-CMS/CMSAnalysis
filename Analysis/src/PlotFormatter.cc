@@ -346,13 +346,12 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     double maxCombinedY = signal->GetMaximum();
 
     std::vector<TH1*> backgroundHists;
-    std::cout << "number of bins is: " << data->GetNbinsX();
-    std::cout << "number of bins is: " << signal->GetNbinsX();
+    std::cout << "number of data bins is: " << data->GetNbinsX();
+    //std::cout << "number of signal bins is: " << signal->GetNbinsX();
     for(std::string name : backgroundNames) {
         backgroundHists.push_back(analysis->getHist(histvariable, name, true, channelName));
         maxCombinedY += analysis->getHist(histvariable, name, true, channelName)->GetMaximum();
     }
-    std::cout << backgroundHists.size() << "\n";
 
     //int firstBin = 50;
     int numberBinsData = data->GetNbinsX();
@@ -360,9 +359,9 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     float dataIntegral = data->Integral(lowerDataIntegralLimit, numberBinsData);
     float backgroundIntegral = 0;
 
-    IntegralScaling(upperMasslimit, scaleTodata, backgroundHists, firstBin, numberBinsData, 
-    lowerDataIntegralLimit, dataIntegral, backgroundIntegral);
-
+    IntegralScaling(upperMasslimit, scaleTodata, backgroundHists, firstBin, numberBinsData,
+        lowerDataIntegralLimit, dataIntegral, backgroundIntegral);
+    
     background = new THStack("background", "background");
 
     maxCombinedY *= 10;
@@ -376,6 +375,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     //Defines order to draw in so graph isn't cut off
     int first = GetOrder(data, signal, background);
 
+
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
     TPad* topPad = new TPad("pad1", "", 0, 0.25, 1, 1);
     TPad* bottomPad = new TPad("pad2", "", 0, 0, 1, 0.25);
@@ -383,6 +383,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     gStyle->SetOptStat(0);
     topPad->Draw();
     topPad->cd();
+
 
     //Draws the histogram with more events first (bigger axis)
     TH1* hist = DrawFirst(background, signal, data, topPad, upperMasslimit, firstBin, first);
@@ -404,6 +405,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     canvas->cd();
     bottomPad->Draw();
     bottomPad->cd();
+
     
     double x[data->GetNbinsX() + 1];
     double y[data->GetNbinsX() + 1];
