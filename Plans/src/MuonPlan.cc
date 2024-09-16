@@ -57,7 +57,7 @@ void MuonPlan::initialize()
     recoDecayFilterMod->setInput(eventMod->getEventInput());
 
     auto runFilter = make_shared<RunFilter>();
-    runFilter->addRunNumber(302337);
+    runFilter->addRunNumber(302573);
     auto runFilterMod = make_shared<FilterModule>(runFilter);
     
     auto eventHistMod = eventMod->getHistogramModule();
