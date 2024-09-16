@@ -28,7 +28,7 @@ std::shared_ptr<Channel> FullAnalysis::getChannel(std::string name)
     throw std::runtime_error("Channel of name " + name + " not found.");
 }
 
-std::vector<TH1 *> FullAnalysis::getHistograms(const std::string &histType, const std::string &processName, const std::string &channel, bool scaleToExpected)
+std::vector<TH1 *> FullAnalysis::getHistograms(const HistVariable &histType, const std::string &processName, const std::string &channel, bool scaleToExpected)
 {
     auto targetChannel = getChannel(channel);
     return targetChannel->getHists(histType, processName, scaleToExpected);
@@ -38,13 +38,13 @@ std::vector<TH1 *> FullAnalysis::getHistograms(const std::string &histType, cons
 SingleProcess FullAnalysis::makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, double luminosity, std::vector<std::shared_ptr<Correction>> corrections)
 {
     auto inputFile = std::make_shared<RootFileInput>(filePathway + fileName, histVariables);
-    std::cout << "inputFile works";
+    //std::cout << "inputFile works";
     auto histEstimator = std::make_shared<SimpleEstimator>();
-    std::cout << "histEstimator works";
+    //std::cout << "histEstimator works";
     return SingleProcess(crossSectionName, inputFile, crossReader, histEstimator, luminosity, corrections);
 }
 
-TH1 *FullAnalysis::getHist(std::string histType, std::string processName, bool scaleToExpected, std::string channelName) const
+TH1 *FullAnalysis::getHist(HistVariable histType, std::string processName, bool scaleToExpected, std::string channelName) const
 {
     // int maxBinNum = 0;
     // double maxBarWidth = 0.0;

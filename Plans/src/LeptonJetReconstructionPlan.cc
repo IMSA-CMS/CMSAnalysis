@@ -80,7 +80,7 @@ void LeptonJetReconstructionPlan::initialize()
   auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Mu37_TkMu27", "HLT_IsoMu24"});
   auto highestMuonPtCut = make_shared<HighestMuonPtCut>();
 
-  //eventMod->addCut(triggerCut);
+  eventMod->addCut(triggerCut);
   eventMod->addCut(highestMuonPtCut);
 
   auto matchMod = std::make_shared<MatchingModule>();
@@ -89,8 +89,8 @@ void LeptonJetReconstructionPlan::initialize()
   auto eventDumpMod = std::make_shared<EventDumpModule>(true,true);
   auto lepMatchMod = std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.1); // this
   
-  auto highestLeptonJetDeltaRCut = std::make_shared<HighestLeptonJetDeltaRCut>(lepRecoMod);
-  eventMod->addCut(highestLeptonJetDeltaRCut);
+  // auto highestLeptonJetDeltaRCut = std::make_shared<HighestLeptonJetDeltaRCut>(lepRecoMod);
+  // eventMod->addCut(highestLeptonJetDeltaRCut);
 
   //auto specialMod = std::make_shared<SpecialVariableModule>();
 
@@ -225,7 +225,7 @@ void LeptonJetReconstructionPlan::initialize()
 
 
   modules.addProductionModule(eventMod);
-  // modules.addFilterModule(darkPhotonFilter);
+  modules.addFilterModule(darkPhotonFilter);
   
   modules.addAnalysisModule(lepRecoHistMod);
   
