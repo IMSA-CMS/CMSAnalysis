@@ -4,7 +4,7 @@
 
 MLCalculator::MLCalculator(std::shared_ptr<SpecialVariableModule> iSpecialVariable, std::string iFileName, std::string iMethod):
 specialVariable(iSpecialVariable),
-fileName(Utility::getBasePath() + "DataCollection/bin/" + iFileName),
+fileName(Utility::getBasePath() + iFileName),
 method(iMethod)
 {
     addRequiredModule(specialVariable);

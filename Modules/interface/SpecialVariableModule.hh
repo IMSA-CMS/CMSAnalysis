@@ -5,6 +5,7 @@
 #include "Rtypes.h"
 #include "ProductionModule.hh"
 #include "EventInput.hh"
+#include "HistogramOutputModule.hh"
 
 class TTree;
 namespace TMVA
@@ -15,6 +16,7 @@ namespace TMVA
 
 class SpecialVariableModule : public ProductionModule
 {
+
 public:
 	enum VariableType {Integer, Float, IntegerArray, FloatArray};
 
@@ -29,7 +31,6 @@ public:
 	void addVariablesToTree(TTree* tree); //same thing as prior just datastrip stuff
 	void addVariablesToReader(TMVA::Reader *reader) const;
 	void addVariablesToDataLoader(TMVA::DataLoader *dataloader) const;
-
 
 	virtual bool process() override;
 

@@ -32,14 +32,12 @@ bool LeptonJetMatchingModule::process()
     auto darkPhotons(getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::darkPhoton()).getParticles());
     auto recoParticles(getInput()->getParticles(EventInput::RecoLevel::Reco, ParticleType::none()).getParticles());
     auto genSim(getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::none()).getParticles());
-
-    //std::cout<< __LINE__ << " in the " << __FILE__ << std::endl;
+    
     MatchingModule::match(genSim, recoParticles);
 
     const MatchingPairCollection& bestLeptonPairs = getMatchingBestPairs();
     const std::vector<GenSimParticle> underLepton = bestLeptonPairs.getGenParticles().getParticles();
     const std::vector<Particle> recoLeptons = bestLeptonPairs.getRecoParticles().getParticles();
-    //std::cout<< __LINE__ << std::endl;
     std::vector<Particle> underlyingLepton;
 
     for (Particle lepton : underLepton)
@@ -49,7 +47,6 @@ bool LeptonJetMatchingModule::process()
         underlyingLepton.push_back(lepton);
       }
     }
-    //std::cout<< __LINE__ << std::endl;
 
     genLeptons += underlyingLepton.size();
 
@@ -67,7 +64,6 @@ bool LeptonJetMatchingModule::process()
 
     for(GenSimParticle lepton : underlyingLepton)
     {
-      //std::cout<< __LINE__ << " in the " << __FILE__ << std::endl;
       if(!lepton.isFinalState() || lepton.getPt() < 5)
       {
         continue;
@@ -77,7 +73,6 @@ bool LeptonJetMatchingModule::process()
       bool forgetIt = false;
       while(!(particle.getType().isQuark() || particle.getType() == ParticleType::higgs() || particle.status() == 4))
       {
-        //std::cout<< __LINE__ << " in the " << __FILE__ << std::endl;
         if(particle.hasUniqueMother() == false) break;
         
         try{
@@ -85,8 +80,6 @@ bool LeptonJetMatchingModule::process()
         //particle = particle.mother();
         }catch (const std::exception& e) {
         std::cerr << "Exception caught: " << e.what() << std::endl<<"\n";
-        //break;
-        //throw;
         continue;
         }
         //std::cout<< __LINE__ << " in the " << __FILE__ << std::endl;
@@ -99,7 +92,6 @@ bool LeptonJetMatchingModule::process()
 
         if(particle.getType() == ParticleType::darkPhoton())
         {
-          //std::cout<< __LINE__ << " in the " << __FILE__ << std::endl;
           passedDarkPhoton = true;
           numOfDarkPhotons++;
           //std::cout<<"The particle's type is: "<<particle.getType().getName() << "\n";
@@ -163,7 +155,6 @@ bool LeptonJetMatchingModule::process()
           }
         }
       }
-      //std::cout<< __LINE__ << " in the " << __FILE__ << std::endl;
       if(forgetIt) break;
       if(particle.getType().isQuark())
       {
@@ -181,7 +172,7 @@ bool LeptonJetMatchingModule::process()
       if(particle.getType() == ParticleType::photon())
       {
         numOfPhotons++;
-        std::cout<<"photon\n";
+        //std::cout<<"photon\n";
       }
 
       if(particle.status() == 4)

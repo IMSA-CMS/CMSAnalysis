@@ -12,6 +12,8 @@
 #include "CMSAnalysis/Filters/interface/HiggsCut.hh"
 #include "CMSAnalysis/Filters/interface/RepeatedEventCuts.hh"
 #include "CMSAnalysis/Filters/interface/HiggsSelector.hh"
+#include "CMSAnalysis/Filters/interface/ElectronEnergyScaleUp.hh"
+#include "CMSAnalysis/Filters/interface/ElectronEnergyScaleDown.hh"
 #include "CMSAnalysis/Filters/interface/HPlusPlusGenSimSelector.hh"
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
@@ -29,6 +31,7 @@
 #include "CMSAnalysis/Filters/interface/BJetFilter.hh"
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
 #include "CMSAnalysis/Filters/interface/ZVetoCut.hh"
+#include "CMSAnalysis/Filters/interface/HiggsTriggerCut.hh"
 
 using std::make_shared;
 
@@ -41,11 +44,13 @@ void HiggsBackgroundPlan::initialize()
     auto hppSelector = make_shared<HPlusPlusGenSimSelector>();
     auto higgsSelector = make_shared<HiggsSelector>();
     auto higgsCut = make_shared<HiggsCut>();
-    auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
+    //auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
     auto eventDump = make_shared<GenSimEventDumpModule>();
     auto zVetoCut = make_shared<ZVetoCut>();
 
-    auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
+    auto triggerCut = make_shared<HiggsTriggerCut>();
+    //auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
+    //auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele32_WPTight_Gsf", "HLT_IsoMu24"});
 
     eventMod->addSelector(hppSelector);
     eventMod->addSelector(higgsSelector);
@@ -92,7 +97,7 @@ void HiggsBackgroundPlan::initialize()
     modules.addProductionModule(metMod);
     //Changed because EventModule inherits from ProductionModule now
     modules.addProductionModule(eventMod);
-    modules.addFilterModule(make_shared<FilterModule>(recoDecayFilter));
+    modules.addFilterModule(recoDecayFilterMod);
     modules.addAnalysisModule(eventHistMod);    
     modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
 
