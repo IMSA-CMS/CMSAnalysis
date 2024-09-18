@@ -31,13 +31,9 @@
 #include "CMSAnalysis/Filters/interface/BJetFilter.hh"
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
 #include "CMSAnalysis/Filters/interface/ZVetoCut.hh"
-<<<<<<< HEAD
-#include "CMSAnalysis/Filters/interface/HiggsTriggerCut.hh"
-=======
 #include "CMSAnalysis/Filters/interface/FourLeptonCut.hh"
 #include "CMSAnalysis/Modules/interface/JSONScaleFactor.hh"
 #include "CMSAnalysis/Modules/interface/MultiYearScaleFactor.hh"
->>>>>>> c0e8b455014c688c4c1c6b1a36a33a40eb2bcfaa
 
 using std::make_shared;
 
@@ -53,12 +49,6 @@ void HiggsBackgroundPlan::initialize()
     //auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
     auto eventDump = make_shared<GenSimEventDumpModule>();
     auto zVetoCut = make_shared<ZVetoCut>();
-<<<<<<< HEAD
-
-    auto triggerCut = make_shared<HiggsTriggerCut>();
-    //auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
-    //auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele32_WPTight_Gsf", "HLT_IsoMu24"});
-=======
     //auto quarkoniaCut = make_shared<QuarkoniaCut>();
     // auto scaleFactor = make_shared<JSONScaleFactor>("ScaleFactors_Muon_highPt_RECO_2018_schemaV2.txt");
     auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
@@ -68,7 +58,6 @@ void HiggsBackgroundPlan::initialize()
     scaleFactor->addScaleFactor("2016", JSONScaleFactor("ScaleFactors_Muon_highPt_RECO_2016_schemaV2.json"));
     scaleFactor->addScaleFactor("2016APV", JSONScaleFactor("ScaleFactors_Muon_highPt_RECO_2016_preVFP_schemaV2.json"));
 
->>>>>>> c0e8b455014c688c4c1c6b1a36a33a40eb2bcfaa
 
     eventMod->addSelector(hppSelector);
     eventMod->addSelector(higgsSelector);
