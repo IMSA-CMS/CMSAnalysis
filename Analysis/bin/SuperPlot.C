@@ -1,3 +1,4 @@
+
 #include "CMSAnalysis/Analysis/interface/Channel.hh"
 #include "CMSAnalysis/Analysis/interface/Process.hh"
 #include "CMSAnalysis/Analysis/interface/SingleProcess.hh"
@@ -11,6 +12,8 @@
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/PlotFormatter.hh"
 #include "CMSAnalysis/Analysis/interface/DarkPhotonCompleteAnalysis.hh"
+#include "CMSAnalysis/Analysis/interface/DarkPhotonNanoAnalysis.hh"
+#include "CMSAnalysis/Analysis/interface/DarkPhotonInputAnalysis.hh"
 #include <fstream>
 #include "THStack.h"
 #include "TString.h"
@@ -22,10 +25,15 @@
 
 void SuperPlot()
 {
-	    //std::vector<double> massTargets {900};
+	//std::vector<double> massTargets {900};
 	auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
+	auto InputAnalysis = std::make_shared<DarkPhotonInputAnalysis>();
+	auto NanoAnalysis = std::make_shared<DarkPhotonNanoAnalysis>(15, 17);
 	//Change extra text here (keep drawLogo to false for now)
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation)");
+	plotFormatter->setUpperMasslimit(.5);
+	plotFormatter->setNumBins(1);
+	plotFormatter->setFirstBin(-1);
 	//Change the string for the channel you want, if using one channel. Otherwise use the loop.
 	
 	double massTarget = 1400;
@@ -47,7 +55,11 @@ void SuperPlot()
 	// 	}
 	// }
 	//ALL CHANNEL CODE HERE
-	std::vector<std::shared_ptr<Channel>> channels = DarkPhotonAnalysis->getChannels();
+
+	//#std::vector<std::shared_ptr<Channel>> channels = DarkPhotonAnalysis->getChannels();
+	//#std::vector<std::shared_ptr<Channel>> channels = NanoAnalysis->getChannels();
+	std::vector<std::shared_ptr<Channel>> channels = InputAnalysis->getChannels();
+
 	for(std::shared_ptr<Channel> channel : channels) {
 		for(std::string processName : channel->getNames()) {
 			//std::cout << processName << std::endl;
@@ -68,7 +80,7 @@ void SuperPlot()
 	//std::shared_ptr<Process> process = leptonBackgrounds->findProcess("Data");
  
 	//Write axis titles here
-	TString xAxisTitle = "OSDL [GeV]";
+	TString xAxisTitle = "BDT Number";
 	TString yAxisTitle = "Events";
 
 	//Creates the graph
@@ -95,9 +107,13 @@ void SuperPlot()
 
 	// std::cout << "here\n";
 	// return;
-	TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "Invariant Mass", xAxisTitle, yAxisTitle, true, "0.3");
+
+	//#TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "LeptonJetMLOutput High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
+	//#TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "LeptonJetMLOutput High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
+	TCanvas *canvas = plotFormatter->completePlot(InputAnalysis, "Input nParticles Values High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
+
 	//TCanvas *canvas = plotFormatter->simpleAnalysisHist(backgroundHists, );
 
 	//Uncomment to save a png picture in your bin folder
-	canvas->SaveAs("SuperPlot.png");
+	canvas->SaveAs("SuperPlots/superplot_RecoLarge_Inputs_nParticles_HMOS.root");
 }

@@ -20,9 +20,13 @@
 #include "CMSAnalysis/Plans/interface/GenSimPlan.hh"
 #include "CMSAnalysis/Plans/interface/FileStripPlan.hh"
 #include "CMSAnalysis/Plans/interface/MLVariablesPlan.hh"
+#include "CMSAnalysis/Plans/interface/MLVariablesSplitPlan.hh"
 #include "CMSAnalysis/Plans/interface/HiggsDataStripPlan.hh"
 #include "CMSAnalysis/Plans/interface/HiggsInvariantMassPlan.hh"
 #include "CMSAnalysis/Plans/interface/ChargeFlipPlan.hh"
+#include "CMSAnalysis/Plans/interface/MuonPlan.hh"
+#include "CMSAnalysis/Plans/interface/MuonSignalPlan.hh"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 
 AnalyzerOptions::AnalyzerOptions()
 {
@@ -37,10 +41,13 @@ AnalyzerOptions::AnalyzerOptions()
   analysisPlans["GenSim"] = new GenSimPlan();
   analysisPlans["FileStrip"] = new FileStripPlan();
   analysisPlans["MLVariables"] = new MLVariablesPlan();
+  analysisPlans["MLVariablesSplit"] = new MLVariablesSplitPlan();
   analysisPlans["HiggsDataStrip"] = new HiggsDataStripPlan();
   analysisPlans["HiggsInvariantMass"] = new HiggsInvariantMassPlan();
   analysisPlans["HiggsSignal"] = new HiggsSignalPlan();
   analysisPlans["ChargeFlip"] = new ChargeFlipPlan();
+  analysisPlans["Muon"] = new MuonPlan();
+  analysisPlans["MuonSignal"] = new MuonSignalPlan();
 }
 
 std::string AnalyzerOptions::pickfileInterface()
@@ -106,10 +113,11 @@ std::vector<std::pair<std::string, std::string>> AnalyzerOptions::getProcessAndI
 
   // Ask for each IDType separately
   std::vector<IDType> idtypes = findProcessIDTypes(processName.second);
-  std::cout << "Process " << processName.second << " has " << idtypes.size() << " IDTypes.\n\n";
+  //std::cout << "Process " << processName.second << " has " << idtypes.size() << " IDTypes.\n\n";
 
   for (auto &idtype : idtypes)
   {
+    //std::cout<<"id: " << idtype.getName() << "\n";
     std::pair<std::string, std::string> newCategory = promptInput(idtype.getName(), idtype.getCategories());
     pickfileInfo.push_back(newCategory);
   }
@@ -134,6 +142,7 @@ bool AnalyzerOptions::checkFilename(std::string name)
 {
   if (name.substr(name.length() - 4, 4) != ".txt")
   {
+    //std::cout<<"File names\n";
     std::cout << "Please enter a file name with .txt\n\n";
     return false;
   }
@@ -256,7 +265,11 @@ bool AnalyzerOptions::checkInput(std::string input, std::vector<std::string> lis
 std::vector<IDType> AnalyzerOptions::findProcessIDTypes(std::string process)
 {
   std::vector<IDType> idtypes;
-  std::ifstream processes("textfiles/processes.txt");
+  std::ifstream processes(Utility::getFullPath("processes.txt"));
+  if(!processes)
+  {
+    throw std::runtime_error("process file not found");
+  }
   std::string line;
   bool foundProcess = false;
   std::vector<std::string> IDCategories;
@@ -264,6 +277,7 @@ std::vector<IDType> AnalyzerOptions::findProcessIDTypes(std::string process)
   // Reading processes.txt line by line
   while (getline(processes, line))
   {
+    //std::cout<<"line: " << line << "\n";
     if (line.empty())
     {
       // Go to the next line if this one is empty
@@ -292,6 +306,7 @@ std::vector<IDType> AnalyzerOptions::findProcessIDTypes(std::string process)
       // Separate the line by tabs and add each chunk to the categories vector
       while (getline(typeStream, category, '\t'))
       {
+        //std::cout<< "Category" << category << "\n";
         if (category.empty())
         {
           continue;

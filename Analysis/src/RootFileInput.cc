@@ -36,12 +36,16 @@ TH1* RootFileInput::getHist(std::string histType) const
 	TH1::AddDirectory(kFALSE);
 
 	std::string name = "";
-	for(HistVariable histVar : histVariables) {
-	    if(histVar.getName() == histType) {
+	//std::cout << "histype: " << histType << std::endl;
+	for(HistVariable histVar : histVariables) 
+	{
+		//std::cout << histVar.getName() << std::endl;
+	    if(histVar.getName() == histType) 
+		{
 			name = histVar.getHistName();
 	    }
 	}
-
+	//std::cout << std::endl << name << std::endl;
 	TH1* hist;
 	uint pos = name.find("/");
 	auto file = getFile(fileSource);
@@ -74,7 +78,7 @@ TH1* RootFileInput::getHist(std::string histType) const
 	}
 	if (!hist || hist->IsZombie())
 	{ 
-		throw std::runtime_error("File doesn't contain: " + name);
+		throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType + "]");
 	}
 	if(dynamic_cast<TH2 *>(hist) != 0) {
 		TH2* hist2D = dynamic_cast<TH2 *>(hist);

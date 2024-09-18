@@ -20,21 +20,20 @@ void NoScaleSuperImpose() {
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary");
     //Change the filePath here. This should be the longest branch all input files have in common.
     //const std::string filePath = "/uscms/home/aytang/RecoWidth/CMSSW_11_0_2/src/CMSAnalysis/DataCollection/bin/";
-    const std::string filePath = "/uscms/home/vrao/analysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/";
+    const std::string filePath = "/uscms/home/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Muon/";
     //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
     //std::vector<std::string> files = {"Delta RAcceptance1000.root", "Delta RAcceptance1000.root"};
-    std::vector<std::string> files = {"test1000.root", "HiggsDPZ.root", "ZPrime.root", "SUSY.root", "Higgs4DP.root"};
-    std::vector<std::string> hists = {"Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values"};
+    std::vector<std::string> files = {"Higgs1000Run2.root", "Data_Trigger_SingleMuon_Year_2017C.root", "Drell-Yan_MassCut_10-50_Run_2.root"};
+    std::vector<std::string> hists = {"uuuu_uuuu__hists/uuuu_uuuu_1st Highest mu- Isolation", "uuuu__hists/uuuu_1st Highest mu- Isolation", "uuuu__hists/uuuu_1st Highest mu- Isolation"};
     //std::vector<std::string> hists = {"Cut4MET", "Cut4MET", "Cut4MET"};
     //Write your graph names here (for the legend)
-    std::vector<TString> names = {"Higgs to 2 Dark Photon", "Higgs to Z and Dark Photon", "Z Prime", "SUSY", "Higgs to 4 Dark Photon"};
+    std::vector<TString> names = {"Higgs1000Run2Iso", "Data2017CIso", "DY1050Iso"};
     //Colors go here
-    std::vector<int> colors = {1, 2, 3, 4, 5};
+    std::vector<int> colors = {1, 3, 5};
     //Change x and y axis titles here
     //TString xTitle = "Delta R";
-    TString xTitle = "Gamma";
+    TString xTitle = "Invariant Mass (GeV)";
     TString yTitle = "Number of Events"; 
-
 
     int count = 0;
     TFile* openedFile;
@@ -43,6 +42,7 @@ void NoScaleSuperImpose() {
     std::string fileName;
     for(std::string file : files) {
 	    fileName = filePath + file; 
+        std::cout << fileName << std::endl;
         openedFile = TFile::Open(fileName.c_str(), "read");
         if(!openedFile) {
             throw std::runtime_error("Cannot open file!");
@@ -53,6 +53,7 @@ void NoScaleSuperImpose() {
             TH1 *newhist = hist2D->ProjectionX("_px", 0, -1, "E");
             histVector.push_back(newhist);
         }
+       
         else {
             histVector.push_back(hist);
         }
