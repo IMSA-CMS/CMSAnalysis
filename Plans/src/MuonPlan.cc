@@ -32,6 +32,8 @@
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
 #include "CMSAnalysis/Filters/interface/ZVetoCut.hh"
 #include "CMSAnalysis/Filters/interface/MuonSelector.hh"
+#include "CMSAnalysis/Filters/interface/RunFilter.hh"
+
 
 using std::make_shared;
 
@@ -53,13 +55,19 @@ void MuonPlan::initialize()
     auto recoDecayFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::Reco);
     auto recoDecayFilterMod = make_shared<FilterModule>(recoDecayFilter);
     recoDecayFilterMod->setInput(eventMod->getEventInput());
+
+    auto runFilter = make_shared<RunFilter>();
+    runFilter->addRunNumber(302337);
+    auto runFilterMod = make_shared<FilterModule>(runFilter);
     
     auto eventHistMod = eventMod->getHistogramModule();
 
     //Changed because EventModule inherits from ProductionModule now
     modules.addProductionModule(eventMod);
     modules.addFilterModule(recoDecayFilterMod);
+    modules.addFilterModule(runFilterMod);
     modules.addAnalysisModule(eventHistMod);  
+    
       
 
 }

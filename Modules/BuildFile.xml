@@ -14,6 +14,7 @@
 <use   name="roottmva"/>
 <use   name="CMSAnalysis/Utility"/>
 <use   name="CMSAnalysis/Filters"/>
+<use   name="EventFilter/Utilities"/>
 <export>
    <lib name="1"/>
 </export>

@@ -83,10 +83,10 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_reliso", "Electron_miniPFRelIso_all"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dxy", "Electron_dxy"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dz", "Electron_dz"),
-        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEscaleDown", "Electron_dEscaleDown"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEscaleUp", "Electron_dEscaleUp"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEsigmaDown", "Electron_dEsigmaDown"),
-        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEsigmaUp", "Electron_dEsigmaUp"),
+        //std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEscaleDown", "Electron_dEscaleDown"),
+		//std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEscaleUp", "Electron_dEscaleUp"),
+		//std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEsigmaDown", "Electron_dEsigmaDown"),
+        //std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEsigmaUp", "Electron_dEsigmaUp"),
 		std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("muon_size", "nMuon"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_eta", "Muon_eta"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_phi", "Muon_phi"),
@@ -129,7 +129,8 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pileup", "Pileup_nTrueInt"),
         std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("HEEP_bitmap", "Electron_vidNestedWPBitmapHEEP"),
         std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("Electron_bitmap", "Electron_vidNestedWPBitmap"),
-        std::make_shared<TreeVariable<TTreeReaderValue<ULong64_t>>>("event", "event")
+        std::make_shared<TreeVariable<TTreeReaderValue<ULong64_t>>>("event", "event"),
+        std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("run", "run")
     };
 
     // std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("elec_size", "nElectron"),
@@ -170,6 +171,10 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
             // std::cout << "Adding " << var->getBranchName() << std::endl;
             variables.emplace(var->getName(), var->makeReader(treeReader));
         }
+        else
+        {
+            std::cout << "Branch " << var->getBranchName() << " not found" << std::endl;
+        }
     }
     treeReader.SetTree(tree);
     setEventCount(1);
@@ -180,7 +185,7 @@ void NanoAODEventFile::nextEvent()
 { 
     treeReader.Next(); 
     setEventCount(getEventCount() + 1);
-
+    
     if(variables.find("gen_size") != variables.end() && getVariable<UInt_t>("gen_size") > 0)
     {
         genSimParticles.clear(); 
@@ -243,6 +248,8 @@ void NanoAODEventFile::nextEvent()
 
         }
     }
+
+    //std::cout << "Run: " << getVariable<UInt_t>("run") << std::endl;
 }
 
 ParticleCollection<GenSimParticle> NanoAODEventFile::getGenSimParticles() const
@@ -352,13 +359,19 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
             0, 0, 0, ParticleType::photon(), fit);
         recoParticles.addParticle(particle);
     }
-    
-    
-    //std::cout<<"Positive counter: " << positiveCounter << "\n";
-    //std::cout<<"Negative counter: " << negativeCounter << "\n";
-
+// //    for (auto& particle : recoParticles)
+// //    {
+//         particle.addInfo("numPDFs", getVariable<UInt_t>("num_pdfs"));
+//         for (UInt_t i = 0; i < getVariable<UInt_t>("num_pdfs"); i++)
+//         {
+//             auto weight = getArrayElement<Float_t>("pdf_weight", i);
+//             particle.addInfo("pweight" + std::to_string(i), weight);
+//         }
+//     }    
     return recoParticles;
 }
+
+
 
 ParticleCollection<Particle> NanoAODEventFile::getRecoJets() const
 {
@@ -384,6 +397,10 @@ double NanoAODEventFile::getMET() const
 unsigned long long NanoAODEventFile::getEventIDNum() const
 {
     return getVariable<ULong64_t>("event");
+}
+long NanoAODEventFile::getRunNum() const
+{
+    return getVariable<UInt_t>("run");
 }
 
 int NanoAODEventFile::getNumPileUpInteractions() const

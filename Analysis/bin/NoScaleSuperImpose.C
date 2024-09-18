@@ -24,7 +24,7 @@ void NoScaleSuperImpose() {
     //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
     //std::vector<std::string> files = {"Delta RAcceptance1000.root", "Delta RAcceptance1000.root"};
     std::vector<std::string> files = {"Higgs1000Run2.root", "Data_Trigger_SingleMuon_Year_2017C.root", "Drell-Yan_MassCut_10-50_Run_2.root"};
-    std::vector<std::string> hists = {"uuuu_uuuu__hists/uuuu_uuuu_1st Highest mu- Isolation", "uuuu__hists/uuuu_1st Highest mu- Isolation", "uuuu__hists/uuuu_1st Highest mu- Isolation"};
+    std::vector<std::string> hists = {"uuuu_uuuu__hists/uuuu_uuuu_1st Highest mu- Dz", "uuuu__hists/uuuu_1st Highest mu- Dz", "uuuu__hists/uuuu_1st Highest mu- Dz"};
     //std::vector<std::string> hists = {"Cut4MET", "Cut4MET", "Cut4MET"};
     //Write your graph names here (for the legend)
     std::vector<TString> names = {"Higgs1000Run2Iso", "Data2017CIso", "DY1050Iso"};

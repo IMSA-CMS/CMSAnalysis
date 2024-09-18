@@ -39,38 +39,65 @@ void MLTest(const char* sgFile, const char* bgFile, double stripVal) {
     TMVA::Reader* reader = new TMVA::Reader("!Color:!Silent");
 
     
-    Float_t nParticles, sumPt, deltaPt, deltaR, eta, maxIsolation;
+    Float_t nParticles, sumPt, deltaPt, deltaR, eta, maxIsolation, leadingPt;
 
     // Initialize LeptonJetMLStripModule and add variables
     LeptonJetMLStripModule leptonMod;
     leptonMod.initialize();
 
-    reader->AddVariable("deltaPt", &deltaPt);
+    //////////////////// OLD BDT ///////////////////////
+
+    // reader->AddVariable("deltaPt", &deltaPt);
+    // reader->AddVariable("deltaR", &deltaR);
+    // reader->AddVariable("eta", &eta);
+    // reader->AddVariable("maxIsolation", &maxIsolation);
+    // reader->AddVariable("nParticles", &nParticles);
+    // reader->AddVariable("sumPt", &sumPt);
+
+    // // Book the BDT method
+    // TString methodName = "BDT method";
+    // TString weightFile = "dataset/weights/TMVAClassification_BDT.weights.xml";
+    // reader->BookMVA(methodName, weightFile);
+
+    // signalTree->SetBranchAddress("deltaPt", &deltaPt);
+    // signalTree->SetBranchAddress("deltaR", &deltaR);
+    // signalTree->SetBranchAddress("eta", &eta);
+    // signalTree->SetBranchAddress("maxIsolation", &maxIsolation);
+    // signalTree->SetBranchAddress("nParticles", &nParticles);
+    // signalTree->SetBranchAddress("sumPt", &sumPt);
+
+    // // Loop over background events
+    // backgroundTree->SetBranchAddress("deltaPt", &deltaPt);
+    // backgroundTree->SetBranchAddress("deltaR", &deltaR);
+    // backgroundTree->SetBranchAddress("eta", &eta);
+    // backgroundTree->SetBranchAddress("maxIsolation", &maxIsolation);
+    // backgroundTree->SetBranchAddress("nParticles", &nParticles);
+    // backgroundTree->SetBranchAddress("sumPt", &sumPt);
+
+    //////////////////// NEW BDT ////////////////////////
+
     reader->AddVariable("deltaR", &deltaR);
     reader->AddVariable("eta", &eta);
-    reader->AddVariable("maxIsolation", &maxIsolation);
+    reader->AddVariable("leadingPt", &leadingPt);
     reader->AddVariable("nParticles", &nParticles);
-    reader->AddVariable("sumPt", &sumPt);
 
     // Book the BDT method
     TString methodName = "BDT method";
     TString weightFile = "dataset/weights/TMVAClassification_BDT.weights.xml";
     reader->BookMVA(methodName, weightFile);
 
-    signalTree->SetBranchAddress("deltaPt", &deltaPt);
+    signalTree->SetBranchAddress("leadingPt", &leadingPt);
     signalTree->SetBranchAddress("deltaR", &deltaR);
     signalTree->SetBranchAddress("eta", &eta);
-    signalTree->SetBranchAddress("maxIsolation", &maxIsolation);
     signalTree->SetBranchAddress("nParticles", &nParticles);
-    signalTree->SetBranchAddress("sumPt", &sumPt);
 
     // Loop over background events
-    backgroundTree->SetBranchAddress("deltaPt", &deltaPt);
+    backgroundTree->SetBranchAddress("leadingPt", &leadingPt);
     backgroundTree->SetBranchAddress("deltaR", &deltaR);
     backgroundTree->SetBranchAddress("eta", &eta);
-    backgroundTree->SetBranchAddress("maxIsolation", &maxIsolation);
     backgroundTree->SetBranchAddress("nParticles", &nParticles);
-    backgroundTree->SetBranchAddress("sumPt", &sumPt);
+
+    ///////////////////// END BDT ///////////////////////////////
 
     // Evaluate the BDT response for the signal events
     double nSignal = signalTree->GetEntries();
