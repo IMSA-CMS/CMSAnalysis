@@ -33,9 +33,10 @@
 
 #include "CMSAnalysis/Analysis/interface/DarkPhotonCompleteAnalysis.hh"
 
+
 template <typename AnalysisType>
 void makePlots(std::string signal, std::shared_ptr<AnalysisType> analysis, std::vector<std::shared_ptr<Channel>> channels, 
-std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std::vector<TString> units, std::string channelName)
+std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std::vector<TString> units, std::vector<std::string> channelNames)
 {
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation/Data)");
 	plotFormatter->setUpperMasslimit(2000);
@@ -57,6 +58,20 @@ std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std:
 
 	if(graphSwitch == 5) {
 		for(std::shared_ptr<Channel> channel : channels) { 
+			
+			bool valid = false;
+			for (std::string channelName : channelNames)
+			{
+				if (channelName == channel->getName())
+				{
+					valid = true;
+				}
+			}
+			if (valid == false)
+			{
+				continue;
+			}
+
 			for(std::string processName : channel->getNames()) {
 				//std::cout << processName << std::endl;
 				//Change this line to make the described name your signal process name.
@@ -71,25 +86,30 @@ std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std:
 					channel->labelProcess("background", processName);
 				}
 			}
+
+			std::cout << "Background size: " << channel->getNamesWithLabel("background").size() << std::endl;
+
 			std::string channelName = channel->getName();
 			//toAdd.push_back(channelName);
 			int unitCounter = 0;
 			for(std::string dataType : graphableTypes) {
 				for (std::string rowName : rowNames) {
 					
-					//std::cout << dataType << " " << rowName << std::endl;
+					//std::cout << "HERERERERERERERERERE" << std::endl;
+					std::string newRowName = Utility::substitute(rowName, " ", "-");
 
 					entry = "";
 					//TString xAxisName = "OSDL " + units[unitCounter];
 					TString xAxisName = units[unitCounter];
 					TString yAxisName = "Events";
-					toAdd.push_back(dataType);
 					toAdd.push_back(rowName);
+					toAdd.push_back(dataType);
+					//toAdd.push_back(rowName);
 					dataName = Utility::removeSpaces(dataType);
-					fileName = "jumboPlotStorage/" + Utility::removeSpaces(signal) + "/" + Utility::removeSpaces(rowName) + dataName + "DataMC.png";
+					fileName = "jumboPlotStorage/" + Utility::removeSpaces(signal) + "/" + Utility::removeSpaces(newRowName) + dataName + "DataMC.png";
 					//fileName = channelName + dataName + "DataMC.png";
 					std::string fullDataType = dataType + " " + rowName;
-					TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, false, channelName);
+					TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, false, false, channel->getName());
 					//TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisName, yAxisName, true, channelName);
 					canvas->SaveAs(fileName.c_str());
 					plotFormatter->deleteHists();
@@ -123,28 +143,33 @@ std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std:
 
 void JumboPlot()
 {
-	auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
-	std::vector<std::shared_ptr<Channel>> channels = DarkPhotonAnalysis->getChannels();
+	//auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
+	//std::vector<std::shared_ptr<Channel>> channels = DarkPhotonAnalysis->getChannels();
 
-	std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Signs"};
-    std::vector<std::string> graphableTypes = {"Eta", "Lepton Jet Delta R", "Lepton Jet Mass", "Phi", "Pt"};
-	std::vector<TString> units = {"ETA", "DELTA R", "GEV", "RAD", "GEV/C"};
+	//std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Signs"};
+    //std::vector<std::string> graphableTypes = {"Eta", "Lepton Jet Delta R", "Lepton Jet Mass", "Phi", "Pt"};
+	//std::vector<TString> units = {"ETA", "DELTA R", "GEV", "RAD", "GEV/C"};
 
-	std::string channelName = "0.3";
 
-	makePlots("Dark Photon Signal", DarkPhotonAnalysis, channels, rowNames, graphableTypes, units, channelName);
+	//std::string channelName = "0.3";
+
+	//makePlots("Dark Photon Signal", DarkPhotonAnalysis, channels, rowNames, graphableTypes, units, channelName);
+
+	//std::vector<std::string> channelNames = {"0.3"};
 
 	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
 	std::vector<std::shared_ptr<Channel>> higgsChannels = higgsAnalysis->getChannels();
 
-	//rowNames = {"eeeu__hists", "u u__hists", "uuu__hists", "uue__hists", "euuu__hists"};
-	rowNames = {"u u"};
-    graphableTypes = {"Dxy", "Dz", "Eta", "Isolation", "Phi", "Pt"};
-	units = {"", "", "ETA", "", "RAD", "GEV/C"};
+	//rowNames = {"u u"};
+	//rowNames = {"ee", "e e", "eu", "e u", "uu", "u u"};
+	std::vector<std::string> rowNames = {"u u", "uu", "uuu", "uuuu"};
+    std::vector<std::string> graphableTypes = {"Dxy", "Dz", "Isolation"};
+	std::vector<TString> units = {"dxy cm", "dz cm", "isolation"};
 
-	channelName = "u u";
+	//channelNames = {"ee", "e e", "eu", "e u", "uu", "u u"};
+	std::vector<std::string> channelNames = {"ee", "eu", "e u", "uu", "u u"};
 
-	makePlots("Higgs Signal", higgsAnalysis, higgsChannels, rowNames, graphableTypes, units, channelName);
+	makePlots("Higgs Signal", higgsAnalysis, higgsChannels, rowNames, graphableTypes, units, channelNames);
 }
 
 void Temp() { //JumboPlot()

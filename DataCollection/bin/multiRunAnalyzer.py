@@ -7,15 +7,18 @@ analysis = 0
 
 def loopRun(*fileList):
 
-	path = "Higgs/" if analysis == 0 else "DarkPhoton_LepRecoInputs/" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 else "Muon/" if analysis == 2 else ""
+	if len(sys.argv) <= 3:
+		path = "Higgs/" if analysis == 0 else "DarkPhoton_MLStrip_CompleteCuts_ValidationConfig3_Output_numFiles5/" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 or analysis == 6 or analysis == 7 else "Muon/" if analysis == 2 else ""
+	else:
+		path = sys.argv[3]
+
 	os.makedirs(os.environ['CMSSW_BASE'] + "/src/CMSAnalysis/Output/" + path, exist_ok=True)
 
-	analysisBackground = "HiggsBackground" if analysis == 0 else "LeptonJetReconstruction" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 else "Muon" if analysis == 2 else ""
+	analysisBackground = "HiggsBackground" if analysis == 0 else "LeptonJetReconstruction" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 or analysis == 6 or analysis == 7 else "Muon" if analysis == 2 else ""
 	#analysisBackground = "MLVariables"
 
 	# get rid of numFiles for a full run-through
-	numFiles = "numFiles=1"
-
+	numFiles = "numFiles=5"
 	for file in fileList:
 		# Filling in the parameters of runAnalyzer
 		analysisSignal = "HiggsSignal" if analysis == 0 else "MuonSignal" if analysis == 2 else ""
@@ -62,6 +65,12 @@ if __name__ == '__main__':
 		elif analysisName == "HiggsData":
 			print("Running HiggsData Analyses")
 			analysis = 5
+		elif analysisName == "DPData":
+			print("Running DPData Analysis")
+			analysis = 6
+		elif analysisName == "PlainQCD":
+			print("Running PlainQCD Analysis")
+			analysis = 7
 		else:
 			print("Argument did not match any analysis, defaulting to Higgs")
 			analysis = 0
@@ -74,6 +83,7 @@ if __name__ == '__main__':
 	zz = ("ZZ/ZZ_Decay_2e2mu_Run_2.txt", "ZZ/ZZ_Decay_2e2tau_Run_2.txt", "ZZ/ZZ_Decay_2mu2tau_Run_2.txt", "ZZ/ZZ_Decay_4e_Run_2.txt", "ZZ/ZZ_Decay_4L_Run_2.txt", "ZZ/ZZ_Decay_4mu_Run_2.txt", "ZZ/ZZ_Decay_4tau_Run_2.txt")
 	
 	dy = ("Drell-Yan/Drell-Yan_MassCut_10-50_Run_2.txt", "Drell-Yan/Drell-Yan_MassCut_50-inf_Run_2.txt")
+	#dy = ("Drell-Yan/Drell-Yan_Format_NanoAOD_MassCut_10-50_Period_2018_Run_2.txt", "Drell-Yan/Drell-Yan_Format_NanoAOD_MassCut_50-inf_Period_2018_Run_2.txt")
 
 	multiBoson = ("MultiBoson/MultiBoson_Bosons_WW_Decay_2L_Run_2.txt", "MultiBoson/MultiBoson_Bosons_WWW_Decay_NA_Run_2.txt", "MultiBoson/MultiBoson_Bosons_WWZJets_Decay_4L_Run_2.txt",
 	"MultiBoson/MultiBoson_Bosons_WZ_Decay_3L_Run_2.txt", "MultiBoson/MultiBoson_Bosons_WZZ_Decay_NA_Run_2.txt", "MultiBoson/MultiBoson_Bosons_ZZZ_Decay_NA_Run_2.txt")
@@ -96,8 +106,8 @@ if __name__ == '__main__':
 		"Data/Data_Trigger_SingleMuon_Year_2017D.txt",
 		"Data/Data_Trigger_SingleMuon_Year_2017E.txt",
 		"Data/Data_Trigger_SingleMuon_Year_2017F.txt",
-		"Data/Data_Trigger_SingleMuon_Year_2017G.txt",
-		"Data/Data_Trigger_SingleMuon_Year_2017H.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2017G.txt",
+		# "Data/Data_Trigger_SingleMuon_Year_2017H.txt",
 		"Data/Data_Trigger_SingleMuon_Year_2018A.txt",
 		"Data/Data_Trigger_SingleMuon_Year_2018B.txt",
 		"Data/Data_Trigger_SingleMuon_Year_2018C.txt",
@@ -105,25 +115,63 @@ if __name__ == '__main__':
 		#"Data/Data_Trigger_SingleMuon_Year_2022A.txt",
 		#"Data/Data_Trigger_SingleMuon_Year_2022B.txt",
 		#"Data/Data_Trigger_SingleMuon_Year_2022C.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2016B.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2016C.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2016D.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2016E.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2016F.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2016G.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2016H.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2017B.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2017C.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2017D.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2017E.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2017F.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2018A.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2018B.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2018C.txt",
-		"Data/Data_Trigger_SingleElectron_Year_2018D.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2016B.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2016C.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2016D.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2016E.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2016F.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2016G.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2016H.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2017B.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2017C.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2017D.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2017E.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2017F.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2018A.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2018B.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2018C.txt",
+		# "Data/Data_Trigger_SingleElectron_Year_2018D.txt",
 		)
 	
-	qcd = ("QCD/QCD_HTCut_100-200_Run_2_Year_2018.txt", "QCD/QCD_HTCut_200-300_Run_2_Year_2018.txt", "QCD/QCD_HTCut_300-500_Run_2_Year_2018.txt", "QCD/QCD_HTCut_500-700_Run_2_Year_2018.txt", "QCD/QCD_HTCut_700-1000_Run_2_Year_2018.txt", "QCD/QCD_HTCut_1000-1500_Run_2_Year_2018.txt", "QCD/QCD_HTCut_1500-2000_Run_2_Year_2018.txt", "QCD/QCD_HTCut_2000-inf_Run_2_Year_2018.txt")
+	dpData = (
+		"Data/Data_Trigger_SingleMuon_Year_2018A.txt",
+	)
+	
+	qcd = (
+		"QCD/QCD_HTCut_100-200_Run_2_Year_2018.txt", 
+		"QCD/QCD_HTCut_200-300_Run_2_Year_2018.txt", 
+		"QCD/QCD_HTCut_300-500_Run_2_Year_2018.txt", 
+		"QCD/QCD_HTCut_500-700_Run_2_Year_2018.txt", 
+		"QCD/QCD_HTCut_700-1000_Run_2_Year_2018.txt", 
+		"QCD/QCD_HTCut_1000-1500_Run_2_Year_2018.txt", 
+		"QCD/QCD_HTCut_1500-2000_Run_2_Year_2018.txt", 
+		"QCD/QCD_HTCut_2000-inf_Run_2_Year_2018.txt"
+	)
+
+	plainQCD = (
+		"plainQCD/plainQCD_HTCut_PSWeights_100-200_Run_2_Year_2017.txt",
+		"plainQCD/plainQCD_HTCut_PSWeights_1000-1500_Run_2_Year_2017.txt",
+		"plainQCD/plainQCD_HTCut_PSWeights_1500-2000_Run_2_Year_2017.txt",
+		"plainQCD/plainQCD_HTCut_PSWeights_200-300_Run_2_Year_2017.txt",
+		"plainQCD/plainQCD_HTCut_PSWeights_2000-Inf_Run_2_Year_2017.txt",
+		"plainQCD/plainQCD_HTCut_PSWeights_300-500_Run_2_Year_2017.txt",
+		"plainQCD/plainQCD_HTCut_PSWeights_50-100_Run_2_Year_2017.txt",
+		"plainQCD/plainQCD_HTCut_PSWeights_500-700_Run_2_Year_2017.txt",
+		"plainQCD/plainQCD_HTCut_PSWeights_700-1000_Run_2_Year_2017.txt",
+	)
+
+	bQCD = (
+		"BQCD/PlainQCD_HTCut_100-200_Run_2_Year_2017.txt",
+		"BQCD/PlainQCD_HTCut_1000-1500_Run_2_Year_2017.txt",
+		"BQCD/PlainQCD_HTCut_1500-2000_Run_2_Year_2017.txt",
+		"BQCD/PlainQCD_HTCut_200-300_Run_2_Year_2017.txt",
+		"BQCD/PlainQCD_HTCut_2000-Inf_Run_2_Year_2017.txt",
+		"BQCD/PlainQCD_HTCut_300-500_Run_2_Year_2017.txt",
+		"BQCD/PlainQCD_HTCut_50-100_Run_2_Year_2017.txt",
+		"BQCD/PlainQCD_HTCut_500-700_Run_2_Year_2017.txt",
+		"BQCD/PlainQCD_HTCut_700-1000_Run_2_Year_2017.txt",
+	)
+
 	darkPhotonSignal = ("darkPhotonBaselineRun2.txt", )
 
 	darkPhotonNanoAOD = (
@@ -147,12 +195,20 @@ if __name__ == '__main__':
 		"DarkPhoton/DarkPhoton_Decay_ZPrime_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
 	)
 
-	background = ttBar + zz + dy + multiBoson + qcd # total 26 files
+	#background = ttBar + zz + dy + multiBoson + qcd # total 26 files
+
+	###########this one ######### background = qcd
 	#background = qcd
+	background = ttBar + zz + dy + multiBoson + qcd
+
+	#background = ttBar + zz + multiBoson + qcd # total 24 files - multiMuPtAnalysis coniguration
+	#background = ttBar + zz + multiBoson + bQCD
+	#background = dy # just dy configuration
+	#background = bQCD
 
 	# List of jobs to run on from those above
 	# jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
-	jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal] if analysis == 1 else [background] if analysis == 3 else [darkPhotonNanoAOD] if analysis == 4 else [higgsData]
+	jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal] if analysis == 1 else [background] if analysis == 3 else [darkPhotonNanoAOD] if analysis == 4 else [dpData] if analysis == 6 else [plainQCD] if analysis == 7 else [higgsData]
 	
 	if os.path.exists("nohup.out") and (len(sys.argv) <= 2 or sys.argv[2] != "keep"):
 		os.remove("nohup.out")

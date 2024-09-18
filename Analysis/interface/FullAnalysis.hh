@@ -26,8 +26,8 @@ class FullAnalysis
          * @param channelName Name of the Channel class to get the process from
          * @return Returns a list of histograms ordered by mass from lowest to highest
         */
-        std::vector<TH1*> getHistograms(const std::string& histType, const std::string& processName, const std::string& channel, bool scaleToExpected = false);
-        TH1* getHist(std::string histType, std::string processName, bool scaleToExpected = false, std::string channelName = "") const;
+        std::vector<TH1*> getHistograms(const HistVariable& histType, const std::string& processName, const std::string& channel, bool scaleToExpected = false);
+        TH1* getHist(HistVariable histType, std::string processName, bool scaleToExpected = false, std::string channelName = "") const;
         // virtual bool checkChannelName(std::string channelName, double massTarget) const = 0;
         //Process makers for easy use when loading channels
         static SingleProcess makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, double luminosity, std::vector<std::shared_ptr<Correction>> corrections = {});

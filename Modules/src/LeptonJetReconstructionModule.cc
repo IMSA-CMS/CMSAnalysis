@@ -3,6 +3,9 @@
 #include "CMSAnalysis/Filters/interface/Selector.hh"
 #include "CMSAnalysis/Histograms/interface/MLStripHist.hh"
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <stdexcept>
 
 LeptonJetReconstructionModule::LeptonJetReconstructionModule(double deltaRCut) : DeltaRCut(deltaRCut) {}
 
@@ -18,6 +21,8 @@ bool LeptonJetReconstructionModule::process()  // reco::deltaR(v1, v2)
         "Input Delta R Values", 100, 0, 0.5, [this]() { return this->getDeltaRValues(); });
     auto deltaPtHist = std::make_shared<MLStripHist>(
         "Input Delta Pt Values", 100, 0, 1000, [this]() { return this->getDeltaPtValues(); });
+    auto leadingPtHist = std::make_shared<MLStripHist>(
+        "Input Leading Pt Values", 100, 0, 1000, [this]() { return this->getLeadingPtValues(); });
     auto sumPtHist =
         std::make_shared<MLStripHist>("Input Sum Pt Values", 100, 0, 1100, [this]() { return this->getSumPtValues(); });
     auto nParticlesHist = std::make_shared<MLStripHist>(
@@ -29,6 +34,7 @@ bool LeptonJetReconstructionModule::process()  // reco::deltaR(v1, v2)
 
     particleHistograms.insert({"deltaR", inputDeltaRHist});
     particleHistograms.insert({"deltaPt", deltaPtHist});
+    particleHistograms.insert({"leadingPt", leadingPtHist});
     particleHistograms.insert({"sumPt", sumPtHist});
     particleHistograms.insert({"nParticles", nParticlesHist});
     particleHistograms.insert({"eta", etaHist});
@@ -36,6 +42,7 @@ bool LeptonJetReconstructionModule::process()  // reco::deltaR(v1, v2)
 
     histMod->addHistogram(inputDeltaRHist);
     histMod->addHistogram(deltaPtHist);
+    histMod->addHistogram(leadingPtHist);
     histMod->addHistogram(sumPtHist);
     histMod->addHistogram(nParticlesHist);
     histMod->addHistogram(etaHist);
@@ -81,6 +88,7 @@ const std::vector<LeptonJet> LeptonJetReconstructionModule::findLeptonJets(Parti
       }
     }
     // std::cout << "numParticles: " << jet.getNumParticles() << "\n";
+
     if (jet.getNumParticles() > 1) {
       // auto inputJets = getInput()->getJets(EventInput::RecoLevel::Reco);
       // bool close = false;
@@ -102,12 +110,43 @@ const std::vector<LeptonJet> LeptonJetReconstructionModule::findLeptonJets(Parti
     } else {
       inputDeltaRValues.clear();
       deltaPtValues.clear();
+      leadingPtValues.clear();
       sumPtValues.clear();
       nParticlesValues.clear();
       etaValues.clear();
       maxIsolationValues.clear();
     }
   }
+
+  
+  // double leptonJetDeltaRCut = readLeptonJetDeltaRCutFromFile("/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Filters/src/leptonJetDeltaRCut.txt");
+  // //double leptonJetDeltaRCut = 0;
+
+  // double highestDeltaR = 0;
+
+  // for (auto jet : leptonJetList)
+  // {
+  //   auto jetParticles = jet.getParticles();
+
+  //   for (Particle particle : jetParticles) {
+  //     auto initFourVector = particle.getFourVector();
+  //     for (Particle part : jetParticles) {
+  //       if (part != particle) {
+  //         auto nextFourVector = part.getFourVector();
+  //         double deltaR = reco::deltaR(initFourVector, nextFourVector);
+  //         if (deltaR > highestDeltaR)
+  //         {
+  //           highestDeltaR = deltaR;
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+
+  // if (highestDeltaR <= leptonJetDeltaRCut)
+  // {
+  //   leptonJetList.clear();
+  // }
 
   return leptonJetList;
 }
@@ -125,10 +164,15 @@ void LeptonJetReconstructionModule::assignVariables(LeptonJet leptonJet) {
         deltaR = p.getDeltaR(q);
       }
     }
-    if (p.getPt() > leadingPt) {
-      runnerUpPt = leadingPt;
-      leadingPt = p.getPt();
+
+    double pt = p.getPt();
+    if (pt > leadingPt) {
+        runnerUpPt = leadingPt;  // Previous leadingPt is now runner-up
+        leadingPt = pt;  // Update leadingPt to the new higher value
+    } else if (pt > runnerUpPt) {
+        runnerUpPt = pt;  // Update runnerUpPt if current pt is less than leadingPt but greater than runnerUpPt
     }
+
     sumPt += p.getPt();
 
     if (p.getInfo("Isolation") > tempMaxIso) {
@@ -138,6 +182,7 @@ void LeptonJetReconstructionModule::assignVariables(LeptonJet leptonJet) {
 
   inputDeltaRValues = {deltaR};
   deltaPtValues = {leadingPt - runnerUpPt};
+  leadingPtValues = {leadingPt};
   sumPtValues = {sumPt};
   nParticlesValues = {static_cast<double>(leptonJet.getNumParticles())};
   etaValues = {leptonJet.getEta()};

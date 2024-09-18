@@ -1,5 +1,4 @@
 #include "CMSAnalysis/Histograms/interface/SameSignInvariantMassHist.hh"
-
 #include "CMSAnalysis/Filters/interface/Selector.hh"
 
 

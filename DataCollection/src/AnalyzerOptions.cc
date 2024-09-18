@@ -24,9 +24,10 @@
 #include "CMSAnalysis/Plans/interface/HiggsDataStripPlan.hh"
 #include "CMSAnalysis/Plans/interface/HiggsInvariantMassPlan.hh"
 #include "CMSAnalysis/Plans/interface/ChargeFlipPlan.hh"
+#include "CMSAnalysis/Plans/interface/PdfWeightingPlan.hh"
 #include "CMSAnalysis/Plans/interface/MuonPlan.hh"
 #include "CMSAnalysis/Plans/interface/MuonSignalPlan.hh"
-#include "CMSAnalysis/Utility/interface/Utility.hh"
+#include "CMSAnalysis/Plans/interface/CounterPlan.hh"
 
 AnalyzerOptions::AnalyzerOptions()
 {
@@ -46,8 +47,10 @@ AnalyzerOptions::AnalyzerOptions()
   analysisPlans["HiggsInvariantMass"] = new HiggsInvariantMassPlan();
   analysisPlans["HiggsSignal"] = new HiggsSignalPlan();
   analysisPlans["ChargeFlip"] = new ChargeFlipPlan();
+  analysisPlans["PdfWeighting"] = new PdfWeightingPlan();
   analysisPlans["Muon"] = new MuonPlan();
   analysisPlans["MuonSignal"] = new MuonSignalPlan();
+  analysisPlans["Counter"] = new CounterPlan();
 }
 
 std::string AnalyzerOptions::pickfileInterface()
