@@ -1,6 +1,6 @@
 H++toLL
-Mass:	500
+Mass:	900
 Run:	2
 Lepton:	All
-Period:	2016	2016APV	2017	2018
+Period:	2016APV	2016	2017	2018
 Format:	NanoAOD
