@@ -20,6 +20,11 @@
 #include "CMSAnalysis/Modules/interface/CollectionHist.hh"
 #include "CMSAnalysis/Histograms/interface/HistogramPrototype1DGeneral.hh"
 
+static std::chrono::duration<double> time_1 = std::chrono::duration<double>::zero();
+static std::chrono::duration<double> time_2 = std::chrono::duration<double>::zero();
+static std::chrono::duration<double> time_3 = std::chrono::duration<double>::zero();
+
+
 EventModule::EventModule():
     event(nullptr), localInput(&event)
 {
@@ -45,11 +50,16 @@ void EventModule::finalize()
     for (int i = 0; i < int(cuts.size()); i++) {
         std::cout << "Dependent efficiency of " << typeid(*(cuts[i])).name() << ": " << cuts[i]->getDependentEfficiency() << "\n";
         std::cout << "Independent efficiency of " << typeid(*(cuts[i])).name() << ": " << cuts[i]->getIndependentEfficiency() << "\n";
+        // std::cout << "total duration of first part: " << time_1.count() << std::endl;
+        // std::cout << "total duration of second part: " << time_2.count() << std::endl;
+        // std::cout << "total duration of third part: " << time_3.count() << std::endl;
     }
 }
 
 bool EventModule::process ()
 { 
+    //auto start_1 = std::chrono::steady_clock::now();
+  
     clearHistograms(); //all histograms are cleared and we only fill the ones we are using for this event
     event.clear();
     for (auto selector : selectors)
@@ -58,6 +68,11 @@ bool EventModule::process ()
     }
 
     event.setMET(getInput()->getMET());
+    // auto end_1 = std::chrono::steady_clock::now();
+    // time_1 += end_1 - start_1;
+
+
+    // auto start_2 = std::chrono::steady_clock::now();
     bool passesCuts = true;
 
     //std::cout<<"\nthe cut size is: " <<cuts.size() << "\n";
@@ -74,6 +89,10 @@ bool EventModule::process ()
     {
         return false;
     }
+
+    // auto end_2 = std::chrono::steady_clock::now();
+    // time_2 += end_2 - start_2;
+    //auto start_3 = std::chrono::steady_clock::now();
 
     addBasicHistograms(ParticleType::electron(), event.getElectrons());
     addBasicHistograms(ParticleType::muon(), event.getMuons());
@@ -109,6 +128,9 @@ bool EventModule::process ()
     } catch (const std::runtime_error& e) {
         std::cerr << "Exception caught: " << e.what() << std::endl;
     }
+
+    // auto end_3 = std::chrono::steady_clock::now();
+    // time_3 += end_3 - start_3;
     return true;
 }
 
