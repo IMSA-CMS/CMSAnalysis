@@ -144,7 +144,7 @@ void Process::addProcess(SingleProcess process)
 		processes.push_back(process);
 	} 
 	else{ 
-		std::cout << "done!" << "\n";
+		//std::cout << "done!" << "\n";
 	}
 }
 
