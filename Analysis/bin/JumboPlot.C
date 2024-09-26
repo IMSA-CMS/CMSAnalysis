@@ -93,6 +93,7 @@ std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std:
 			//toAdd.push_back(channelName);
 			int unitCounter = 0;
 			for(std::string dataType : graphableTypes) {
+				/*
 				for (std::string rowName : rowNames) {
 					
 					std::cout << "HERERERERERERERERERE" << std::endl;
@@ -105,10 +106,13 @@ std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std:
 					toAdd.push_back(dataType);
 					//toAdd.push_back(rowName);
 					dataName = Utility::removeSpaces(dataType);
-					fileName = "jumboPlotStorage/" + Utility::removeSpaces(signal) + "/" + Utility::removeSpaces(rowName) + dataName + "DataMC.png";
+					//fileName = "jumboPlotStorage/" + Utility::removeSpaces(signal) + "/" + Utility::removeSpaces(rowName) + dataName + "DataMC.png";
+					fileName = "jumboPlotStorage/" + Utility::removeSpaces(signal) + "/" + rowName + dataName + "DataMC.png";
+					std::cout << "1" << std::endl;
 					//fileName = channelName + dataName + "DataMC.png";
 					std::string fullDataType = dataType + " " + rowName;
 					TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, false, channel->getName());
+					std::cout << "2" << std::endl;
 					//TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisName, yAxisName, true, channelName);
 					canvas->SaveAs(fileName.c_str());
 					plotFormatter->deleteHists();
@@ -120,7 +124,35 @@ std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std:
 					toAdd.push_back(entry);
 					tableInput.push_back(toAdd);
 					toAdd.clear();
+					std::cout << "3" << std::endl;
 				}
+				*/
+
+				entry = "";
+				//TString xAxisName = "OSDL " + units[unitCounter];
+				TString xAxisName = units[unitCounter];
+				TString yAxisName = "Events";
+				toAdd.push_back(channel->getName());
+				toAdd.push_back(dataType);
+				dataName = Utility::removeSpaces(dataType);
+				fileName = "jumboPlotStorage/" + Utility::removeSpaces(signal) + "/" + channel->getName() + dataName + "DataMC.png";
+				std::cout << "1" << std::endl;
+				//fileName = channelName + dataName + "DataMC.png";
+				std::string fullDataType = dataType + " " + channel->getName();
+				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, false, channel->getName());
+				std::cout << "2" << std::endl;
+				//TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisName, yAxisName, true, channelName);
+				canvas->SaveAs(fileName.c_str());
+				plotFormatter->deleteHists();
+				canvas->Close();
+				delete canvas;
+			
+				entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
+
+				toAdd.push_back(entry);
+				tableInput.push_back(toAdd);
+				toAdd.clear();
+				std::cout << "3" << std::endl;
 				unitCounter++;
 			}
 		}
@@ -157,7 +189,7 @@ void JumboPlot()
 	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
 	std::vector<std::shared_ptr<Channel>> higgsChannels = higgsAnalysis->getChannels();
 
-	//rowNames = {"u u"};
+	//rowNames = {"ee", "u u"};
 	//rowNames = {"ee", "e e", "eu", "e u", "uu", "u u"};
 	rowNames = {"ee", "eu", "e u", "uu", "u u"};
     graphableTypes = {"Dxy", "Dz", "Eta", "Isolation", "Phi", "Pt"};
@@ -165,6 +197,7 @@ void JumboPlot()
 
 	//channelNames = {"ee", "e e", "eu", "e u", "uu", "u u"};
 	channelNames = {"ee", "eu", "e u", "uu", "u u"};
+	//channelNames = {"ee", "u u"};
 
 	makePlots("Higgs Signal", higgsAnalysis, higgsChannels, rowNames, graphableTypes, units, channelNames);
 }

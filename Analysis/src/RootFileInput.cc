@@ -45,7 +45,7 @@ TH1* RootFileInput::getHist(std::string histType) const
 			name = histVar.getHistName();
 	    }
 	}
-	//std::cout << std::endl << name << std::endl;
+	std::cout << std::endl << "Hist name: " << name << std::endl;
 	TH1* hist;
 	uint pos = name.find("/");
 	auto file = getFile(fileSource);
@@ -80,26 +80,27 @@ TH1* RootFileInput::getHist(std::string histType) const
 	{ 
 		throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + name + "]");
 	}
-	if(dynamic_cast<TH2 *>(hist) != 0) {
+	if(dynamic_cast<TH2 *>(hist) != 0)
+	{
 		TH2* hist2D = dynamic_cast<TH2 *>(hist);
 		TH1 *newhist = hist2D->ProjectionX("_px", 0, -1, "E");
 		return newhist;
 	}	
-	if (hist->GetEntries() < 2.0)
-	{
-		delete hist;
-		delete file;
-		return emptyHist;
-	}
-	else 
-	{
+	// if (hist->GetEntries() < 2.0)
+	// {
+	// 	delete hist;
+	// 	delete file;
+	// 	return emptyHist;
+	// }
+	// else 
+	// {
 		TH1* response = new TH1F("Hist Clone", hist->GetTitle(), hist->GetXaxis()->GetNbins(), hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
 		response->Add(hist);
 
 		delete hist;
 		delete file;
 		return response;
-	}
+	// }
 }
 
 TH1* RootFileInput::get2DHist(std::string histType) const
