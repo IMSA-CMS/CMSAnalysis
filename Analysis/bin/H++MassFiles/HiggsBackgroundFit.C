@@ -37,7 +37,6 @@ std::vector<std::string> histogramTypes =
 
 void HiggsBackgroundFit()
 {
-	std::cerr << "Hello World";
 	const double min = 0;
 	const double max = 2000;
 
@@ -48,14 +47,9 @@ void HiggsBackgroundFit()
 	std::vector<std::string> backgrounds = {"t#bar{t}, WW, WZ, ZZ Background", "Drell-Yan Background", "QCD Background", "ZZ Background"};
 
 	Fitter fitter(fitHistsName, fitParameterValueFile, parameterFits, parameterFunctions);
-	std::cerr << "fitter alright!" << std::endl;
     std::shared_ptr<HiggsCompleteAnalysis> analysis = std::make_shared<HiggsCompleteAnalysis>();
     std::cout << "Loaded histogram\n";
     std::vector<std::string> paramNames = {"alpha_{low}","alpha_{high}","n_{low}", "n_{high}", "mean", "sigma", "norm"};
-
-	// for(auto process: analysis->getChannel("eeee")->getProcesses()){
-	// 	std::cerr << process->getName() << std::endl;
-	// }
 
 	for (const auto& histType : histogramTypes) 
 	{
@@ -80,16 +74,9 @@ void HiggsBackgroundFit()
 					continue;
 				}
 				auto process = targetChannel->findProcess(backgrounds[i]);
-				std::cerr << __FILE__ << ": " << __LINE__ << " " << backgrounds[i] << '\n';
-				std::cerr << process->getName() << '\n';
 				auto histVar = HistVariable(histType + " " + channel, histType + "__hists/" + channel + histType);
-				std::cerr << histVar.getName() << '\n';
 
-				// problem rn is that process has no singleprocesses
-				// singleprocess.checkValidity is excluding all of them because they don't include each of the listed histograms
-				// commented out the check part for now, ask about how to address this
 				TH1* selectedHist = process->getHist(histVar, true);
-				std::cerr << selectedHist->GetEntries() << '\n';
 				if(selectedHist->GetEntries() < 1) continue;
 				std::string keyName = backgrounds[i] + '_' + channel + '_' + histType;
 
