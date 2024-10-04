@@ -29,15 +29,12 @@
 
 void higgsCompleteAnalysisTest()
 {
-	std::cerr << "here reached";
 	auto analysis = std::make_shared<HiggsCompleteAnalysis>();
-	std::cerr << "here reached";
 	std::vector<int> masses = {500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
 	TCanvas* canvas = new TCanvas("c1");
 
 	auto channelTest = analysis->getChannel("eeee");
 	auto higgsProcess = channelTest->findProcess("Higgs signal" + std::to_string(500));
-	std::cerr << "here reached";
 	TH1* signalHist = higgsProcess->getHist("Same Sign Inv Mass");
 	signalHist->DrawCopy();
 	signalHist->SaveAs(Utility::GetBasePath() + "/Output/Simple/Test.root");
