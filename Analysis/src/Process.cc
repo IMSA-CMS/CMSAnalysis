@@ -29,10 +29,11 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 				std::cout << "Error: " << error.what() << std::endl;
 				continue;
 			}
-			// if (!hist || hist->IsZombie()) 
-			// {
-			// 	throw std::runtime_error("Histogram not found in process: " + this->name + "\nIn singleProcess number: " + singleProcessNumber);
-			// }
+			if (!hist || hist->IsZombie()) 
+			{
+				std::cerr << ("Histogram not found in process: " + this->name + " In singleProcess number: " + singleProcessNumber + "\n");
+				continue;
+			}
 			//std::cout << "numBins: " << hist->GetNbinsX() << "\n";
 			if (hist->GetNbinsX() > maxBinNum)
 			{
@@ -50,7 +51,7 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 		{
 			toAdd = singleProcess.getHist(histType, scaleToExpected);
 			//Add only if the hisogram exists
-			if (toAdd != nullptr) {
+			if (toAdd) {
 				toMerge->Add(toAdd);
 			}
 		}
@@ -140,10 +141,10 @@ double Process::getYield(HistVariable dataType) const
 
 void Process::addProcess(SingleProcess process)
 {
-	if(process.checkValidity())
-	{
-		processes.push_back(process);
-	} 
+	// if(process.checkValidity())
+	// {
+	// }
+	processes.push_back(process);
 }
 
 void Process::addSystematic(std::shared_ptr<Systematic> systematic)
