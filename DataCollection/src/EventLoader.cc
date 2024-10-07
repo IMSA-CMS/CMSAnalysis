@@ -103,17 +103,18 @@ std::vector<std::shared_ptr<FileParams>> EventLoader::fetchRootFiles(const std::
   return rootFiles;
 }
 
-void EventLoader::run(int outputEvery, int nFiles, int maxEvents)
+void EventLoader::run(int outputEvery, int nFiles, int maxEvents, int skipFiles)
 {
-  processRootFiles(outputEvery, nFiles, maxEvents);
+  processRootFiles(outputEvery, nFiles, maxEvents, skipFiles);
 }
 
-void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents)
+void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents, int skipFiles)
 {
   // display how many rrot files
   // each iteration in for loop, processing file... # of events and name of file
 
   int fileCounter = 0;
+  int skipFileCounter = 0;
   int eventCounter = 0;
   bool stopNow = false;
 
@@ -131,6 +132,14 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents)
 
       std::cout << "Name of file: " << fileName << "\n";
 
+      if (skipFileCounter < skipFiles)
+      {
+  
+        std::cout << "Skipping File \n";
+        ++skipFileCounter;
+        continue;
+      }
+      
       TFile *tFile = TFile::Open(fileName.c_str(), "READ");
       // pass empty files
       if (!tFile)
@@ -175,8 +184,8 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents)
       {
         break;
       }
-    tFile->Close();
-    delete tFile;
+      tFile->Close();
+      delete tFile;
     }
   }
   std::cout << "number of Root files processed: " << fileCounter << "\n";
