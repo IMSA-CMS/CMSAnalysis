@@ -61,12 +61,16 @@ std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std:
 	if(graphSwitch == 5) {
 		for(std::shared_ptr<Channel> channel : channels) { 
 			
+			//std::cout << "Channel Match: " << channel->getName() << std::endl;
 			bool valid = false;
 			for (std::string channelName : channelNames)
 			{
+				//std::cout << "Channel Name Iterated: " << channelName << std::endl;
 				if (channelName == channel->getName())
 				{
 					valid = true;
+					//std::cout << "Channel Name Chosen: " << channel->getName() << std::endl;
+					break;
 				}
 			}
 			if (valid == false)
@@ -74,22 +78,9 @@ std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std:
 				continue;
 			}
 
-			for(std::string processName : channel->getNames()) {
-				//std::cout << processName << std::endl;
-				//Change this line to make the described name your signal process name.
-				if(processName == signal) {
-					channel->labelProcess("signal", processName);
-				}
-				// "Monte Carlo Data"
-				else if(processName == "Data") { //This line is only used for complete plots
-					channel->labelProcess("data", processName);
-				}
-				else {
-					channel->labelProcess("background", processName);
-				}
-			}
+			
 
-			std::cout << "Background size: " << channel->getNamesWithLabel("background").size() << std::endl;
+			//std::cout << "Background size: " << channel->getNamesWithLabel("background").size() << std::endl;
 
 			std::string channelName = channel->getName();
 			//toAdd.push_back(channelName);
@@ -116,9 +107,36 @@ std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std:
 			
 				entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
 
+<<<<<<< HEAD
 				toAdd.push_back(entry);
 				tableInput.push_back(toAdd);
 				toAdd.clear();
+=======
+					entry = "";
+					//TString xAxisName = "OSDL " + units[unitCounter];
+					TString xAxisName = units[unitCounter];
+					TString yAxisName = "Events";
+					toAdd.push_back(rowName);
+					toAdd.push_back(dataType);
+					//toAdd.push_back(rowName);
+					dataName = Utility::removeSpaces(dataType);
+					fileName = "jumboPlotStorage/" + Utility::removeSpaces(signal) + "/" + Utility::removeSpaces(newRowName) + dataName + "DataMC.png";
+					//fileName = channelName + dataName + "DataMC.png";
+					std::string fullDataType = dataType + " " + rowName;
+					TCanvas *canvas = plotFormatter->completePlot(analysis, HistVariable(fullDataType, ""), xAxisName, yAxisName, false, false, channel->getName());
+					//TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisName, yAxisName, true, channelName);
+					canvas->SaveAs(fileName.c_str());
+					plotFormatter->deleteHists();
+					canvas->Close();
+					delete canvas;
+				
+					entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
+
+					toAdd.push_back(entry);
+					tableInput.push_back(toAdd);
+					toAdd.clear();
+				}
+>>>>>>> bef83ee991d724e260a02565a7aeb5b2c4aba2e7
 				unitCounter++;
 			}
 		}

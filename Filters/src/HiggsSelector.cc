@@ -32,11 +32,11 @@ void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
         {
             //std::cout << "In Muon Selection" << std::endl;
             auto lepton = Lepton(particle);
-            if (lepton.isLoose()  
+            if (lepton.isTight()  
                 && particle.getPt() > 5
-                && particle.getInfo("Isolation") < 0.05
-                && lepton.getDXY() < 0.025
-                && lepton.getDZ() < 0.05
+                // && particle.getInfo("Isolation") < 0.05
+                // && lepton.getDXY() < 0.025
+                // && lepton.getDZ() < 0.05
             )
             {
                 leptons.push_back(particle);

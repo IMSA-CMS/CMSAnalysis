@@ -64,10 +64,10 @@ bool SingleProcess::checkValidity()
     std::vector<HistVariable> histVariables = input->getHistVariables();
     for(HistVariable histVar : histVariables) {
         if(input->getHist(histVar) == 0) {
-            //std::cout << crossSectionName << " failed on " << histVar.getName() << std::endl;
+            //std::cout << " Validity Check failed on " << histVar.getName() << std::endl;
             validProcess = false;
         }
     }
-    //std::cout << (validProcess ? "true" : "false");
+    // std::cout << (validProcess ? "true" : "false");
     return validProcess;
 }

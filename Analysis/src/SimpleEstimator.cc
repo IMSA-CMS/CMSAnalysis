@@ -51,9 +51,16 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, HistVaria
     std::cout << "SimpleEstimator 3.2" << std::endl; 
     //std::cout << "numBins: " << numBins << "\n";
     int lowerLimit = firstBin * (static_cast<double>(numBins) / xAxisRange);
+<<<<<<< HEAD
     double efficiency = (hist->Integral(lowerLimit, numBins)) / totaleventsran;
     std::cout << "SimpleEstimator 3.3" << std::endl;
+=======
+    double efficiency = (hist->Integral()) / totaleventsran;
+>>>>>>> bef83ee991d724e260a02565a7aeb5b2c4aba2e7
     double signalest = crosssection * 1000 * luminosity * efficiency;
+    //std::cout << "Passed Events: " << hist->GetEntries() << " " << hist->Integral() <<"\n";
+    //std::cout << "Total Events: " << totaleventsran << "\n";
+    //std::cout << "Efficiency of " << process->getName() << " is " << efficiency << std::endl;
 // */
 /*
      std::cout << "postMax " << hist->GetMaximum() << std::endl;

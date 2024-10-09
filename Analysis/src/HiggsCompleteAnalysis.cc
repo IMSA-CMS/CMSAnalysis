@@ -46,12 +46,13 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     //const std::string signalFilePath = "/uscms/home/ichen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Analysis/bin/H++MassFiles/";
     auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
     //auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Analysis/bin/crossSections.txt");
-    const std::string filePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/"; 
-    const std::string signalFilePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
-    // Vincents: /uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Outputcd 
-    double luminosity = 0.02;
+    const std::string filePath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/"; 
+    const std::string signalFilePath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
+    // Vincents: /uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output 
+    double luminosity = 1.507;
 
     std::vector<HistVariable> histVariablesBackground;
+    std::vector<HistVariable> histVariablesData;
 
     std::vector<std::string> rowNames = {"ee", "eu", "e u", "uu", "u u"};
     //std::vector<std::string> rowNames = {"u u"};
@@ -60,9 +61,9 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
 
     for (std::string rowName : rowNames)
     {
-        for (std::string connecter : connecters)
-        {
-            for (std::string columnName : columnNames)
+        for (std::string connecter : connecters){
+
+            for(std::string columnName : columnNames)
             {
                 histVariablesBackground.push_back(
                     HistVariable(columnName + " " + rowName,
@@ -71,13 +72,30 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
             }
         }
     }
+    for (std::string rowName : rowNames)
+    {
+        for (std::string connecter : connecters)
+        {
+            for (std::string columnName : columnNames)
+            {
+                histVariablesData.push_back(
+                    HistVariable(columnName + " " + rowName,
+                    rowName + "_Pass__hists/" + rowName + "_Pass" + connecter + columnName));
+                //    "High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest mu- Pt"));
+            }
+        }
+    }
+
+
 
     TH1::SetDefaultSumw2();
     for (std::string recoDecay : recoDecays){
         std::vector<std::shared_ptr<Process>> processes;
-       // auto higgsSignal = std::make_shared<Process>("Higgs Signal", 5);
+        //auto higgsSignal = std::make_shared<Process>("Higgs Signal", 5);
+        auto higgsGroupSignal = std::make_shared<Process>("Group "+ recoDecay, 5);
         for (const auto& genSimDecay : genSimDecays)
         {
+            
             for(double massTarget : massTargets) 
             {
                 //auto higgsSignal = std::make_shared<Process>("Higgs Signal " + std::to_string((int) massTarget), 5);
@@ -91,8 +109,11 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
                 auto higgsSignal = std::make_shared<Process>("Higgs signal" + std::to_string((int)massTarget), 1);
                 higgsSignal->addProcess(higgsProcess);
                 processes.push_back(higgsSignal);
+                higgsGroupSignal->addProcess(higgsProcess);
             }
+            
         }
+        processes.push_back(higgsGroupSignal);
         
         //std::vector<HistVariable> histVariablesBackground;
         //histVariablesBackground.push_back(HistVariable::InvariantMass(recoDecay + "__hists/" + recoDecay + "_Opposite Sign Invariant Mass"));
@@ -103,18 +124,9 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
         auto zzBackground = std::make_shared<Process>("ZZ Background", 3);
         zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_4L_Run_2.root", "zzto4l", reader, luminosity));
 
-        /*
-        zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_2e2mu_Run_2.root", "zzto2e2mu", reader, luminosity));
-        zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_2e2tau_Run_2.root", "zzto2e2tau", reader, luminosity));
-        zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_2mu2tau_Run_2.root", "zzto2mu2tau", reader, luminosity));
-        zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_4e_Run_2.root", "zzto4e", reader, luminosity));
-        zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_4mu_Run_2.root", "zzto4mu", reader, luminosity));
-        zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_4tau_Run_2.root", "zzto4tau", reader, luminosity));
-        */
-
         //cross sections should be all lowercase
         //auto ttBarandMultiBosonandZZBackground = std::make_shared<Process>("t#bar{t}, WW, WZ, ZZ Background", 4);
-        auto ttBarandMultiBosonBackground = std::make_shared<Process>("t#bar{t}, WW, WZ", 4);
+        auto ttBarandMultiBosonBackground = std::make_shared<Process>("t#bar{t}, Multiboson Background", 4);
         ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTbar_Boson_NA_Decay_LL_Run_2.root", "ttbar_lep", reader, luminosity));
         ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTbar_Boson_W_Decay_L_Run_2.root", "ttw", reader, luminosity));
         ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTbar_Boson_Z_Decay_LL_Run_2.root", "ttz", reader, luminosity));
@@ -146,34 +158,33 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
 
         auto higgsData = std::make_shared<Process>("Data", 1);
         // 150022816 events in Data_Trigger_SingleMuon_Year_2016B.root before TriggerCut change
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016B.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016C.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016D.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));            
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016E.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016F.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016G.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016H.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2017B.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2017C.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2017D.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2017E.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2017F.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2017G.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2017H.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018A.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018B.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018C.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018D.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016B.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016C.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016D.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));            
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016E.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016F.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016G.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016H.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2017B.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2017C.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2017D.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2017E.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2017F.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2017G.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2017H.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018A.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018B.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018C.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018D.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
         //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2022A.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
         //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2022B.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
         //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2022C.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "testlumi.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016B.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        //higgsData->addProcess(makeBasicProcess(histVariablesData, filePath, "testHiggs.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        //higgsData->addProcess(makeBasicProcess(histVariablesData, filePath, "testHiggsM.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "testlumi.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
         // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016C.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
         // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016D.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016E.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
         // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016F.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016G.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
         // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016H.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
         // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017B.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
         // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017C.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
@@ -187,12 +198,25 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
         processes.push_back(qcdBackground);
         processes.push_back(zzBackground);
         auto leptonProcesses = std::make_shared<Channel>(recoDecay, processes);
-        leptonProcesses->labelProcess("background", ttBarandMultiBosonBackground);
-        leptonProcesses->labelProcess("background", dyBackground);
-        leptonProcesses->labelProcess("background", qcdBackground);
-        leptonProcesses->labelProcess("background", zzBackground);
-        leptonProcesses->labelProcess("data", higgsData);
-        leptonProcesses->labelProcess("signal", "Higgs signal900");
+
+        for(std::string processName : leptonProcesses->getNames()) {
+				//std::cout << processName << std::endl;
+				//Change this line to make the described name your signal process name.
+				if(processName.substr(0, 5) == "Group" || processName.substr(0, 5) == "Higgs") {
+					leptonProcesses->labelProcess("signal", processName);
+                    //std::cout << "Labeled Signal: " << processName << std::endl;
+
+				}
+				// "Monte Carlo Data"
+				else if(processName == "Data") { //This line is only used for complete plots
+					leptonProcesses->labelProcess("data", processName);
+                    //std::cout << "Labeled Data: " << processName << std::endl;
+				}
+				else {
+					leptonProcesses->labelProcess("background", processName);
+                    //std::cout << "Labeled Background: " << processName << std::endl;
+				}
+		}
         //leptonBackgrounds->cleanProcesses();
         getChannelsProtected().push_back(leptonProcesses);
     }
