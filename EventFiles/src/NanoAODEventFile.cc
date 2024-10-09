@@ -75,7 +75,6 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
     {
     //initializing variables from header file
     std::vector<std::shared_ptr<TreeVariableBase>> treeVariables = {
-		std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("elec_size", "nElectron"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_eta", "Electron_eta"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_phi", "Electron_phi"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_mass", "Electron_mass"),
@@ -97,13 +96,13 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_reliso", "Muon_miniPFRelIso_all"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_dxy", "Muon_dxy"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_dz", "Muon_dz"),
-		std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("photon_size", "nPhoton"),
+
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("photon_eta", "Photon_eta"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("photon_phi", "Photon_phi"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("photon_pt", "Photon_pt"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("met_phi", "MET_phi"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("met_pt", "MET_pt"),
-		std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("jet_size", "nJet"),
+		
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_eta", "Jet_eta"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_phi", "Jet_phi"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_mass", "Jet_mass"),
@@ -116,7 +115,9 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
         std::make_shared<TreeVariable<TTreeReaderArray<UChar_t>>>("muon_mvaid", "Muon_mvaId"),
 		std::make_shared<TreeVariable<TTreeReaderValue<ULong64_t>>>("event_number", "event"),
         std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_bTag", "Jet_btagCSVV2"),
-		std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("gen_size", "nGenPart"),
+        std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("jet_size", "nJet"),
+
+        std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("gen_size", "nGenPart"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_pid", "GenPart_pdgId"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_status", "GenPart_status"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_eta", "GenPart_eta"),
@@ -133,7 +134,35 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
         std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("run", "run")
     };
 
+    // std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("elec_size", "nElectron"),
+    // std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("muon_size", "nMuon"),
+    // std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("photon_size", "nPhoton"),
+    // std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("jet_size", "nJet"),
+    // std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("gen_size", "nGenPart"),
+   
     tree = getFile()->Get<TTree>("Events");
+
+    TBranch *branch_1 = tree->FindBranch("BeamSpot");
+    TBranch *branch_2 = tree->FindBranch("GenProton");
+    TBranch *branch_3 = tree->FindBranch("Rho");
+
+    if(branch_1 && branch_2 && branch_3) //version 12
+    {
+        int versionNum=12;
+        treeVariables.push_back(std::make_shared<TreeVariable<TTreeReaderValue<Int_t>>>("elec_size", "nElectron"));
+        treeVariables.push_back(std::make_shared<TreeVariable<TTreeReaderValue<Int_t>>>("muon_size", "nMuon"));
+        treeVariables.push_back(std::make_shared<TreeVariable<TTreeReaderValue<Int_t>>>("photon_size", "nPhoton"));
+        std::cout<<"This is version 12\n";
+    }
+    else //version 9
+    {
+        int versionNum=9;
+        treeVariables.push_back(std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("elec_size", "nElectron"));
+        treeVariables.push_back(std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("muon_size", "nMuon"));
+        treeVariables.push_back(std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("photon_size", "nPhoton"));
+        std::cout<<"This is version 9\n";
+
+    }
 
     for(auto& var : treeVariables)
     {

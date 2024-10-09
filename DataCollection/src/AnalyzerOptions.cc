@@ -116,10 +116,11 @@ std::vector<std::pair<std::string, std::string>> AnalyzerOptions::getProcessAndI
 
   // Ask for each IDType separately
   std::vector<IDType> idtypes = findProcessIDTypes(processName.second);
-  std::cout << "Process " << processName.second << " has " << idtypes.size() << " IDTypes.\n\n";
+  //std::cout << "Process " << processName.second << " has " << idtypes.size() << " IDTypes.\n\n";
 
   for (auto &idtype : idtypes)
   {
+    //std::cout<<"id: " << idtype.getName() << "\n";
     std::pair<std::string, std::string> newCategory = promptInput(idtype.getName(), idtype.getCategories());
     pickfileInfo.push_back(newCategory);
   }
@@ -144,6 +145,7 @@ bool AnalyzerOptions::checkFilename(std::string name)
 {
   if (name.substr(name.length() - 4, 4) != ".txt")
   {
+    //std::cout<<"File names\n";
     std::cout << "Please enter a file name with .txt\n\n";
     return false;
   }
@@ -266,7 +268,11 @@ bool AnalyzerOptions::checkInput(std::string input, std::vector<std::string> lis
 std::vector<IDType> AnalyzerOptions::findProcessIDTypes(std::string process)
 {
   std::vector<IDType> idtypes;
-  std::ifstream processes("textfiles/processes.txt");
+  std::ifstream processes(Utility::getFullPath("processes.txt"));
+  if(!processes)
+  {
+    throw std::runtime_error("process file not found");
+  }
   std::string line;
   bool foundProcess = false;
   std::vector<std::string> IDCategories;
@@ -274,6 +280,7 @@ std::vector<IDType> AnalyzerOptions::findProcessIDTypes(std::string process)
   // Reading processes.txt line by line
   while (getline(processes, line))
   {
+    //std::cout<<"line: " << line << "\n";
     if (line.empty())
     {
       // Go to the next line if this one is empty
@@ -302,6 +309,7 @@ std::vector<IDType> AnalyzerOptions::findProcessIDTypes(std::string process)
       // Separate the line by tabs and add each chunk to the categories vector
       while (getline(typeStream, category, '\t'))
       {
+        //std::cout<< "Category" << category << "\n";
         if (category.empty())
         {
           continue;
