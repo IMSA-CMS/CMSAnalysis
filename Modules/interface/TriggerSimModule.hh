@@ -97,9 +97,10 @@ private:
         "HLT_Mu37_TkMu27"
         } },
     { EnumTriggers::singleElectronTriggers, {
-        //"HLT_Ele27_WPTight_Gsf"
+        "HLT_Ele27_WPTight_Gsf"
         //"HLT_TripleMu_12_10_5"
         //"HLT_TripleMu_10_5_5_DZ"
+        //"HLT_Ele32_WPTight_Gsf"
          } },
 
     { EnumTriggers::doubleElectronTriggers, {

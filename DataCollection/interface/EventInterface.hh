@@ -16,6 +16,7 @@ class EventInterface
         virtual double getMET() const = 0;
         virtual std::vector<double> getPDFWeights() const = 0;
         virtual unsigned long long getEventIDNum() const = 0; 
+        virtual long getRunNum() const = 0;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const = 0;
         virtual std::vector<std::string> getTriggerNames(std::string subProcess) const = 0;
         virtual int getNumPileUpInteractions() const = 0;

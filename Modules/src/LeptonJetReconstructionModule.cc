@@ -58,22 +58,6 @@ bool LeptonJetReconstructionModule::process()  // reco::deltaR(v1, v2)
   return true;
 }
 
-double readLeptonJetDeltaRCutFromFile(const std::string& filename) {
-    std::ifstream file(filename);
-    if (!file.is_open()) {
-        throw std::runtime_error("Failed to open file: " + filename);
-    }
-
-    double LeptonJetDeltaRCut;
-    file >> LeptonJetDeltaRCut;
-
-    if (file.fail()) {
-        throw std::runtime_error("Error reading the delta R cut from file: " + filename);
-    }
-
-    return LeptonJetDeltaRCut;
-}
-
 const std::vector<LeptonJet> LeptonJetReconstructionModule::findLeptonJets(ParticleCollection<Lepton> recoCandidates) {
   auto recoLeptons = recoCandidates.getParticles();
   std::vector<LeptonJet> leptonJetList;
@@ -97,15 +81,14 @@ const std::vector<LeptonJet> LeptonJetReconstructionModule::findLeptonJets(Parti
       // std::cout << "delta r: " << deltaR << " delta r cut: " << DeltaRCut << "\n";
       // std::cout << "The value of Eta is "<< abs(recoLeptons[i].getEta()) <<std::endl;
 
-      double leptonJetDeltaRCut = readLeptonJetDeltaRCutFromFile("/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Filters/src/leptonJetDeltaRCut.txt");
-
-      if (deltaR < DeltaRCut && deltaR > leptonJetDeltaRCut && recoLeptons[i].getPt() >= 5 && abs(recoLeptons[i].getEta()) <= 3) {
+      if (deltaR < DeltaRCut && recoLeptons[i].getPt() >= 5 && abs(recoLeptons[i].getEta()) <= 3) {
         jet.addParticle(recoLeptons[i]);
         recoLeptons.erase(recoLeptons.begin() + i);
         --i;
       }
     }
     // std::cout << "numParticles: " << jet.getNumParticles() << "\n";
+
     if (jet.getNumParticles() > 1) {
       // auto inputJets = getInput()->getJets(EventInput::RecoLevel::Reco);
       // bool close = false;
@@ -134,6 +117,36 @@ const std::vector<LeptonJet> LeptonJetReconstructionModule::findLeptonJets(Parti
       maxIsolationValues.clear();
     }
   }
+
+  
+  // double leptonJetDeltaRCut = readLeptonJetDeltaRCutFromFile("/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Filters/src/leptonJetDeltaRCut.txt");
+  // //double leptonJetDeltaRCut = 0;
+
+  // double highestDeltaR = 0;
+
+  // for (auto jet : leptonJetList)
+  // {
+  //   auto jetParticles = jet.getParticles();
+
+  //   for (Particle particle : jetParticles) {
+  //     auto initFourVector = particle.getFourVector();
+  //     for (Particle part : jetParticles) {
+  //       if (part != particle) {
+  //         auto nextFourVector = part.getFourVector();
+  //         double deltaR = reco::deltaR(initFourVector, nextFourVector);
+  //         if (deltaR > highestDeltaR)
+  //         {
+  //           highestDeltaR = deltaR;
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+
+  // if (highestDeltaR <= leptonJetDeltaRCut)
+  // {
+  //   leptonJetList.clear();
+  // }
 
   return leptonJetList;
 }
