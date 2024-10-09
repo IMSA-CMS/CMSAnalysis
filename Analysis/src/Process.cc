@@ -9,14 +9,15 @@
 #include <algorithm>
 #include "TList.h"
 
-TH1* Process::getHist(std::string histType, bool scaleToExpected) const
+TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 {
 	int maxBinNum = 0;
 	double maxBarWidth = 0.0;
 	int singleProcessNumber = 0;
 	TH1* newHist;
 	TH1* hist; 
-	if(processes.size() > 0) {
+	if(processes.size() > 0) 
+	{
 		for (const auto& singleProcess : processes)
 		{
 			singleProcessNumber++;
@@ -29,10 +30,11 @@ TH1* Process::getHist(std::string histType, bool scaleToExpected) const
 				std::cout << "Error: " << error.what() << std::endl;
 				continue;
 			}
-			// if (!hist || hist->IsZombie()) 
-			// {
-			// 	throw std::runtime_error("Histogram not found in process: " + this->name + "\nIn singleProcess number: " + singleProcessNumber);
-			// }
+			if (!hist || hist->IsZombie()) 
+			{
+				return nullptr;
+				//throw std::runtime_error("Histogram not found in process: " + this->name + "\nIn singleProcess number: " + singleProcessNumber);
+			}
 			//std::cout << "numBins: " << hist->GetNbinsX() << "\n";
 			if (hist->GetNbinsX() > maxBinNum)
 			{
@@ -50,7 +52,9 @@ TH1* Process::getHist(std::string histType, bool scaleToExpected) const
 		{
 			toAdd = singleProcess.getHist(histType, scaleToExpected);
 			//Add only if the hisogram exists
-			if (toAdd != nullptr) {
+			if (toAdd)
+			{
+			if (toAdd) {
 				toMerge->Add(toAdd);
 			}
 		}
@@ -58,16 +62,19 @@ TH1* Process::getHist(std::string histType, bool scaleToExpected) const
 		newHist->SetLineColor(color);
 		newHist->SetFillColor(color);
 	}
-	else{
+	}
+	else
+	{
 		newHist = new TH1D(name.c_str(), name.c_str(), 1, 0.0, 0.0);
+		std::cout << "Made Empty Hist" << std::endl;
 	}
 	//If you want yield to print while running SuperPlot uncomment the print statement (only prints the yield for the first MassTarget in the process)
 	//std::cout << "Total yield for mass target " << processes.at(0).getMassTarget() << " is " << getYield("processes.at(0).getMassTarget()") << std::endl;
-	
+	//std::cout << "Process Databin of " << newHist->GetName() << " is: " << newHist->GetEntries() << std::endl;
 	return newHist;
 }
 
-TH2* Process::get2DHist(std::string histType) const
+TH2* Process::get2DHist(HistVariable histType) const
 {
 	int maxBinNum = 0;
 	int yMaxBinNum = 0;
@@ -112,7 +119,7 @@ TH2* Process::get2DHist(std::string histType) const
 	return hist;
 }
 
-TH1* Process::getSingleProcessHist(const std::string& histType, const std::string& singleProcessName, bool scaleToExpected) const
+TH1* Process::getSingleProcessHist(const HistVariable& histType, const std::string& singleProcessName, bool scaleToExpected) const
 {
 	return getSingleProcess(singleProcessName).getHist(histType, scaleToExpected);
 }
@@ -128,7 +135,7 @@ const SingleProcess& Process::getSingleProcess(const std::string& singleProcessN
 	throw std::invalid_argument("There is no SingleProcess with such a name within this Process object");
 }
 
-double Process::getYield(std::string dataType) const
+double Process::getYield(HistVariable dataType) const
 {
 	double totalYield = 0;
 	for(const auto& singleProcess : processes)
@@ -140,12 +147,11 @@ double Process::getYield(std::string dataType) const
 
 void Process::addProcess(SingleProcess process)
 {
-	if(process.checkValidity() == true) {
+	if(process.checkValidity())
+	{
 		processes.push_back(process);
 	} 
-	else{ 
-		std::cout << "done!" << "\n";
-	}
+	//processes.push_back(process);
 }
 
 void Process::addSystematic(std::shared_ptr<Systematic> systematic)
