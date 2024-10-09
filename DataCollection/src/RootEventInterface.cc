@@ -21,6 +21,10 @@ unsigned long long RootEventInterface::getEventIDNum() const
 {
     return eventFile->getEventIDNum(); 
 }
+long RootEventInterface::getRunNum() const
+{
+    return eventFile->getRunNum(); 
+}
 std::vector<bool> RootEventInterface::getTriggerResults(std::string subProcess) const
 {
     return eventFile->getTriggerResults(subProcess);

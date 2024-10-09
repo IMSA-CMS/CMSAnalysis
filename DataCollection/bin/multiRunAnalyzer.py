@@ -13,8 +13,17 @@ def run_batch(batch, analysis):
 
 analysis = 0
 def loopRun(*fileList):
-	path = "Higgs/" if analysis == 0 else "DarkPhoton/" if analysis == 1 else "Muon/" if analysis == 2 else ""
-	analysisBackground = "HiggsBackground" if analysis == 0 else "LeptonJetReconstruction" if analysis == 1 else "Muon" if analysis == 2 else ""
+
+	if len(sys.argv) <= 3:
+		path = "Higgs/" if analysis == 0 else "DarkPhoton_MLStrip_CompleteCuts_ValidationConfig3_Output_numFiles3/" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 or analysis == 6 or analysis == 7 else "Muon/" if analysis == 2 else ""
+	else:
+		path = sys.argv[3]
+
+	os.makedirs(os.environ['CMSSW_BASE'] + "/src/CMSAnalysis/Output/" + path, exist_ok=True)
+
+	analysisBackground = "HiggsBackground" if analysis == 0 else "LeptonJetReconstruction" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 or analysis == 6 or analysis == 7 else "Muon" if analysis == 2 else ""
+	#analysisBackground = "MLVariables"
+
 	# get rid of numFiles for a full run-through
 	numFiles = "numFiles=1"
 	for file in fileList:
@@ -116,6 +125,38 @@ if __name__ == '__main__':
 	qcd = ("QCD/QCD_HTCut_100-200_Run_2_Year_2018.txt", "QCD/QCD_HTCut_200-300_Run_2_Year_2018.txt", "QCD/QCD_HTCut_300-500_Run_2_Year_2018.txt", "QCD/QCD_HTCut_500-700_Run_2_Year_2018.txt", "QCD/QCD_HTCut_700-1000_Run_2_Year_2018.txt", "QCD/QCD_HTCut_1000-1500_Run_2_Year_2018.txt", "QCD/QCD_HTCut_1500-2000_Run_2_Year_2018.txt", "QCD/QCD_HTCut_2000-Inf_Run_2_Year_2018.txt")
 	darkPhotonSignal = ("darkPhotonBaselineRun2.txt", )
 
+	darkPhotonNanoAOD = (
+		"DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_1_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
+		"DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_2_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
+		"DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
+		"DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_125_Period_2018_Run_2.txt",
+		"DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_300_Period_2018_Run_2.txt",
+		"DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_1_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
+		"DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_3_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
+		"DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_4_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
+		"DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_6_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
+		"DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_9_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
+		"DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_1_2_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
+		"DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_1_5_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
+		"DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_2_5_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
+		"DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_4_0_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
+		"DarkPhoton/DarkPhoton_Decay_Higgs4DP_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
+		"DarkPhoton/DarkPhoton_Decay_HiggsDPZ_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
+		"DarkPhoton/DarkPhoton_Decay_SUSY_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
+		"DarkPhoton/DarkPhoton_Decay_ZPrime_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
+	)
+
+	#background = ttBar + zz + dy + multiBoson + qcd # total 26 files
+
+	###########this one ######### background = qcd
+	#background = qcd
+	background = ttBar + zz + dy50 + multiBoson + qcd
+
+	#background = ttBar + zz + multiBoson + qcd # total 24 files - multiMuPtAnalysis coniguration
+	#background = ttBar + zz + multiBoson + bQCD
+	#background = dy # just dy configuration
+	#background = bQCD
+
 	# List of jobs to run on from those above
 	# jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 	
@@ -128,11 +169,26 @@ if __name__ == '__main__':
 
 	batch_size = 3
 	for i in range(0, len(jobsList), batch_size):
+		print("In")
 		# Create a batch from the list
 		batch = jobsList[i:i + batch_size]
 		flat_batch = [file for job in batch for file in job]
-    	# Call run_jobs.py with the batch
-		run_batch(flat_batch, analysis)
+
+		# Specify the path to your Python script (batch_run.py)
+		script_path = "batch_run.py"
+    
+    	# Specify the output file where stdout and stderr will be logged
+		output_file = "nohup.out"
+    
+    	# Open the output file to log stdout and stderr
+		with open(output_file, "w") as f:
+       	# Run the command with 'nohup' effect and redirect output to the file
+			print("1")
+			process = subprocess.Popen(["python", script_path], stdout=f, stderr=subprocess.STDOUT, preexec_fn=os.setpgrp)
+			process.wait()
+    	
+		# Call run_jobs.py with the batch
+		#run_batch(flat_batch, analysis)
 
 
 	# list of processes

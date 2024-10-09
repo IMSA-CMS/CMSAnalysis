@@ -9,7 +9,7 @@
 #include <algorithm>
 #include "TList.h"
 
-TH1* Process::getHist(std::string histType, bool scaleToExpected) const
+TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 {
 	int maxBinNum = 0;
 	double maxBarWidth = 0.0;
@@ -29,10 +29,11 @@ TH1* Process::getHist(std::string histType, bool scaleToExpected) const
 				std::cout << "Error: " << error.what() << std::endl;
 				continue;
 			}
-			// if (!hist || hist->IsZombie()) 
-			// {
-			// 	throw std::runtime_error("Histogram not found in process: " + this->name + "\nIn singleProcess number: " + singleProcessNumber);
-			// }
+			if (!hist || hist->IsZombie()) 
+			{
+				return nullptr;
+				//throw std::runtime_error("Histogram not found in process: " + this->name + "\nIn singleProcess number: " + singleProcessNumber);
+			}
 			//std::cout << "numBins: " << hist->GetNbinsX() << "\n";
 			if (hist->GetNbinsX() > maxBinNum)
 			{
@@ -67,7 +68,7 @@ TH1* Process::getHist(std::string histType, bool scaleToExpected) const
 	return newHist;
 }
 
-TH2* Process::get2DHist(std::string histType) const
+TH2* Process::get2DHist(HistVariable histType) const
 {
 	int maxBinNum = 0;
 	int yMaxBinNum = 0;
@@ -112,7 +113,7 @@ TH2* Process::get2DHist(std::string histType) const
 	return hist;
 }
 
-TH1* Process::getSingleProcessHist(const std::string& histType, const std::string& singleProcessName, bool scaleToExpected) const
+TH1* Process::getSingleProcessHist(const HistVariable& histType, const std::string& singleProcessName, bool scaleToExpected) const
 {
 	return getSingleProcess(singleProcessName).getHist(histType, scaleToExpected);
 }
@@ -128,7 +129,7 @@ const SingleProcess& Process::getSingleProcess(const std::string& singleProcessN
 	throw std::invalid_argument("There is no SingleProcess with such a name within this Process object");
 }
 
-double Process::getYield(std::string dataType) const
+double Process::getYield(HistVariable dataType) const
 {
 	double totalYield = 0;
 	for(const auto& singleProcess : processes)
@@ -140,12 +141,10 @@ double Process::getYield(std::string dataType) const
 
 void Process::addProcess(SingleProcess process)
 {
-	if(process.checkValidity() == true) {
+	if(process.checkValidity())
+	{
 		processes.push_back(process);
 	} 
-	else{ 
-		//std::cout << "done!" << "\n";
-	}
 }
 
 void Process::addSystematic(std::shared_ptr<Systematic> systematic)

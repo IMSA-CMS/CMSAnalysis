@@ -24,12 +24,15 @@ def loopRun(*fileList, analysis):
 		
 		# calls runAnalyzer
 		print("Creating " + outputString)
-		Popen(["nohup", "runAnalyzer", inputString, outputString, analysisName, numFiles]) 
+		#process = subprocess.Popen(["nohup", "runAnalyzer", inputString, outputString, analysisName, numFiles]) 
+		process = subprocess.Popen(["runAnalyzer", inputString, outputString, analysisName, numFiles]) 
+		#process.wait()
+
 		#Popen(["runAnalyzer", inputString, outputString, analysisName, numFiles]) 
 
 if __name__ == '__main__':
     # Collect job files from command-line arguments
-
+	print("2")
 	analysis = int(sys.argv[1])  # Convert the first argument to an integer
     jobsList = sys.argv[2:]  # Remaining arguments are job files
 
