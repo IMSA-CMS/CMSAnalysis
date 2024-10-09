@@ -30,10 +30,11 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 				std::cout << "Error: " << error.what() << std::endl;
 				continue;
 			}
-			// if (!hist || hist->IsZombie()) 
-			// {
-			// 	throw std::runtime_error("Histogram not found in process: " + this->name + "\nIn singleProcess number: " + singleProcessNumber);
-			// }
+			if (!hist || hist->IsZombie()) 
+			{
+				std::cerr << ("Histogram not found in process: " + this->name + " In singleProcess number: " + singleProcessNumber + "\n");
+				continue;
+			}
 			//std::cout << "numBins: " << hist->GetNbinsX() << "\n";
 			if (hist->GetNbinsX() > maxBinNum)
 			{
@@ -51,8 +52,12 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 		{
 			toAdd = singleProcess.getHist(histType, scaleToExpected);
 			//Add only if the hisogram exists
+<<<<<<< HEAD
 			if (toAdd)
 			{
+=======
+			if (toAdd) {
+>>>>>>> 7bce77611402e050f913aaa9db6d289a150a2dd7
 				toMerge->Add(toAdd);
 			}
 		}

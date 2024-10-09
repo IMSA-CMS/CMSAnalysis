@@ -17,9 +17,11 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, HistVaria
         std::cout << "Error: " << error.what();
         return 0;
     }   
-    //if (!hist) {
-    //    throw std::runtime_error("Hist not found");
-    //}
+    if (!hist)
+    {
+       std::cerr << "Hist " << dataType.getName() << " not found!\n";
+       return 0.0;
+    }
 
     int totalEventsInt = process->getTotalEvents();
     double totaleventsran = totalEventsInt;

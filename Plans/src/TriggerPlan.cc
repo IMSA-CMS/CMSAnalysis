@@ -49,9 +49,9 @@ void TriggerPlan::initialize()
   // simTrigSingleMuon->enableAllTriggers();
   // simTrigPhoton->enableAllTriggers();
   // USE these lines as template add my own lines
-  //triggerMod->addTrigger(simTrigSingleElectron);
+  triggerMod->addTrigger(simTrigSingleElectron);
   triggerMod->addTrigger(simTrigSingleMuon);
-  triggerMod->addTrigger(simTrigDoubleMuon);
+  //triggerMod->addTrigger(simTrigDoubleMuon);
   // triggerMod->addTrigger(simTrigDoubleElectron);
   // triggerMod->addTrigger(simTrigMuonElectron);
   // triggerMod->addTrigger(simTrigDoubleMuon);

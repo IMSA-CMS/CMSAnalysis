@@ -27,7 +27,7 @@
 void SuperPlot(const std::string inputAnalysisPath, const std::string plotName = "Input Leading Pt Values Low Mass and Same Sign", const std::string outFile = "MultiSuperPlots/superplot_RecoConfig1_Inputs_LeadingPt_LMSS.root")
 {
 	//std::vector<double> massTargets {900};
-	auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>(inputAnalysisPath); // BDT Output Analysis (LeptonJetMLOutput)
+	auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>(inputAnalysisPath, "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections_config1.txt"); // BDT Output Analysis (LeptonJetMLOutput)
 	//auto DarkPhotonAnalysis = std::make_shared<DarkPhotonInputAnalysis>(inputAnalysisPath); // Variable Isolation Plots
 	// auto NanoAnalysis = std::make_shared<DarkPhotonNanoAnalysis>(15, 17);
 	//auto NoCutAnalysis = std::make_shared<DarkPhotonNoCutAnalysis>(inputAnalysisPath); // When control region filter disabled

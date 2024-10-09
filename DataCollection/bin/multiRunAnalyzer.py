@@ -8,7 +8,7 @@ analysis = 0
 def loopRun(*fileList):
 
 	if len(sys.argv) <= 3:
-		path = "Higgs/" if analysis == 0 else "DarkPhoton_MLStrip_CompleteCuts_ValidationConfig3_Output_numFiles5/" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 or analysis == 6 or analysis == 7 else "Muon/" if analysis == 2 else ""
+		path = "Higgs/" if analysis == 0 else "DarkPhoton_MLStrip_CompleteCuts_ValidationConfig3_Output_numFiles3/" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 or analysis == 6 or analysis == 7 else "Muon/" if analysis == 2 else ""
 	else:
 		path = sys.argv[3]
 

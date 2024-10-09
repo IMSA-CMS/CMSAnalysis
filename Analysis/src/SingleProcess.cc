@@ -18,6 +18,9 @@
 TH1* SingleProcess::getHist(HistVariable histType, bool scaleToExpected) const
 {
     TH1* hist = input->getHist(histType);
+    if(!hist){
+        return nullptr;
+    }
     if(scaleToExpected) {
         double yield = getExpectedYield(histType);
         double events = hist->Integral();
@@ -62,6 +65,6 @@ bool SingleProcess::checkValidity()
             validProcess = false;
         }
     }
-    //std::cout << (validProcess ? "true" : "false");
+    // std::cout << (validProcess ? "true" : "false");
     return validProcess;
 }
