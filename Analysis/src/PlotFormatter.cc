@@ -333,21 +333,30 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     std::vector<std::string> signalNames = processes->getNamesWithLabel("signal");
     std::vector<std::string> dataNames = processes->getNamesWithLabel("data");
     data = analysis->getHist(histvariable, dataNames.at(0), false, channelName);
+
+    //std::cout << "Data has: " << data->GetEntries() << std::endl;
+
     //data = signal = new TH1F("h1", "empty", 1, 0.0, 0.0);
     if (includeSignal == true)
     {
-        signal = analysis->getHist(histvariable, signalNames.at(0), true, channelName);
+        for(std::string name : signalNames) 
+        {
+            signal = analysis->getHist(histvariable, name, true, channelName);
+            std::cout << "number of signal bins is: " << signal->GetNbinsX();
+            //Figure out how to handle the group process thingx
+        }
+        
     }
     else
     {
         signal = new TH1F("h1", "empty", 1, 0.0, 0.0);
+        
     }
 
     double maxCombinedY = signal->GetMaximum();
 
     std::vector<TH1*> backgroundHists;
-    std::cout << "number of data bins is: " << data->GetNbinsX();
-    //std::cout << "number of signal bins is: " << signal->GetNbinsX();
+    //std::cout << "number of data bins in "<< channelName << ": " << data->GetNbinsX() << std::endl;
     for(std::string name : backgroundNames) {
         backgroundHists.push_back(analysis->getHist(histvariable, name, true, channelName));
         maxCombinedY += analysis->getHist(histvariable, name, true, channelName)->GetMaximum();
@@ -388,12 +397,14 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     //Draws the histogram with more events first (bigger axis)
     TH1* hist = DrawFirst(background, signal, data, topPad, upperMasslimit, firstBin, first);
 
+
     ChangeAxisTitles(hist, xAxisTitle, yAxisTitle);
     
     //Draws the legend
     auto legend = GetLegend(background, processes, data);
     legend->Draw();
     topPad->Update();
+
     writeText(width, height, top, bottom, left, right);
 
     //Draws the other histogram   
@@ -405,6 +416,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     canvas->cd();
     bottomPad->Draw();
     bottomPad->cd();
+
 
     
     double x[data->GetNbinsX() + 1];
@@ -518,9 +530,11 @@ void PlotFormatter::DrawOtherHistograms(THStack*& background, TH1*& signal, TH1*
 
 TH1* PlotFormatter::DrawFirst(THStack*& background, TH1*& signal, TH1*& data, TPad*& topPad, float upperMasslimit, int firstBin, int first)
 {
-    int xAxisMin = std::pow(1, -5);
-    if(first == 0) {
-        for(const auto&& obj2 : *background->GetHists()) {
+    int xAxisMin = 1; //If less than 1 log scaling breaks 
+    if (first == 0) 
+    {
+        for(const auto&& obj2 : *background->GetHists()) 
+        {
             TH1* backgroundHist = dynamic_cast<TH1*>(obj2);
             backgroundHist->SetLineColor(kBlack);
             backgroundHist->SetLineWidth(2);
@@ -530,7 +544,8 @@ TH1* PlotFormatter::DrawFirst(THStack*& background, TH1*& signal, TH1*& data, TP
         background->Draw("HIST");
         stackVector.push_back(background);  
     }
-    else if(first == 1) {
+    else if (first == 1) 
+    {
         //signal->SetLineColor(kBlack);
         signal->SetLineColor(6);
 	    signal->SetFillColor(0);
@@ -567,15 +582,29 @@ TH1* PlotFormatter::DrawFirst(THStack*& background, TH1*& signal, TH1*& data, TP
 int PlotFormatter::GetOrder(TH1* data, TH1* signal, THStack* background)
 {
     int first;
-    if(signal->GetMaximum() > background->GetMaximum() && signal->GetMaximum() > data->GetMaximum()) {
-        first = 1;
+    double dataMax =  data->GetMaximum();
+    double signalMax = signal->GetMaximum();
+    double backgroundMax = background->GetMaximum();
+
+    if(data->GetEntries() == 0)
+    {
+        dataMax=0;
+        std::cout << "No Data Entries" << std::endl;
     }
-    else if(data->GetMaximum() > background->GetMaximum() && data->GetMaximum() > signal->GetMaximum()) {
-        first = 2;
+
+    if(signalMax > backgroundMax && signalMax > dataMax)
+    {
+        first=1;
     }
-    else {
-        first = 0;
+    else if(dataMax > backgroundMax && dataMax > signalMax)
+    {
+        first=2;
     }
+    else
+    {
+        first=0;
+    }
+    
     return first;
 }
 
@@ -587,8 +616,16 @@ void PlotFormatter::IntegralScaling(double& upperMasslimit, bool& scaleTodata, s
         int lowerBackgroundIntegralLimit = firstBin*(static_cast<double>(numberBinsBackground)/upperMasslimit);
         backgroundIntegral += backgroundHist->Integral(lowerBackgroundIntegralLimit, numberBinsBackground);
     }
+  
     float scaleFactor = dataIntegral/backgroundIntegral;
-    if (scaleTodata == true)
+
+    if(dataIntegral == 0)
+    {
+        scaleFactor=1;
+        std::cout << "No Data Integral" << std::endl;
+    } 
+
+    if (scaleTodata)
     {
         for (auto backgroundHist : backgroundHists)
         {
