@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /store/mc/RunIISummer20UL17NanoAODv9/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v2/2500000/FC99EFAF-C32C-DD4C-8F8A-1440B7901875.root
 /store/mc/RunIISummer20UL17NanoAODv9/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v2/2510000/BDB12AB9-9C6D-C94A-ABA4-CA830F83CE77.root
 /store/mc/RunIISummer20UL17NanoAODv9/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v2/2510000/B33FAB7C-9244-D246-AD72-8C62121C3171.root
@@ -29,3 +30,10 @@
 /store/mc/RunIISummer20UL17NanoAODv9/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v2/250000/FDC06419-7E43-E842-A0D3-48A0F94E9805.root
 /store/mc/RunIISummer20UL17NanoAODv9/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v2/2430000/47E77053-E20A-5B44-B974-38317C36DFF8.root
 /store/mc/RunIISummer20UL17NanoAODv9/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8/NANOAODSIM/106X_mc2017_realistic_v9_ext1-v2/2430000/EDFB6640-74F0-3246-9917-232656DD577D.root
+=======
+MultiBoson
+Bosons:	ZZZ
+Decay:	NA
+Run:	2
+Year:	2016	2016APV	2017	2018
+>>>>>>> bef83ee991d724e260a02565a7aeb5b2c4aba2e7

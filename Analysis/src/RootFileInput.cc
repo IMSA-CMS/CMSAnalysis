@@ -19,7 +19,9 @@ RootFileInput::RootFileInput(std::string fileName, std::vector<HistVariable> iHi
 TFile* RootFileInput::getFile(std::string fileSource) const
 {
 	auto file = TFile::Open(fileSource.c_str(), "read");
-	
+
+	//std::cout << "Reading file: " << fileSource << std::endl;
+
 	if(!file)
 	{
 		throw std::runtime_error("Cannot open file " + fileSource + "!");
@@ -84,7 +86,7 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 			std::cout << "2" << std::endl;
 			//We need the nullptr in when adding histograms to know to
 			//skip the histogram and not break histogram addition
-			// std::cout << "No histogram named " + name + " found\n";
+			//std::cout << "No histogram named " + name + " found in directory\n";
 			delete dir;
 			delete hist;
 			delete file;
@@ -95,7 +97,9 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 	{
 		std::cout << "Here" << std::endl;
 		hist = dynamic_cast<TH1*>(file->Get(name.c_str()));
+		
 	}
+
 	if (!hist || hist->IsZombie())
 	{ 
 		throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getHistName() + "]");

@@ -30,6 +30,7 @@
 #include "CMSAnalysis/Histograms/interface/METHist.hh"
 #include "CMSAnalysis/Filters/interface/BJetFilter.hh"
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
+#include "CMSAnalysis/Filters/interface/RunFilter.hh"
 #include "CMSAnalysis/Filters/interface/ZVetoCut.hh"
 #include "CMSAnalysis/Filters/interface/FourLeptonCut.hh"
 #include "CMSAnalysis/Modules/interface/JSONScaleFactor.hh"
@@ -103,6 +104,21 @@ void HiggsBackgroundPlan::initialize()
     eventHistMod->addHistogram(sameSignInvMassHist);
     eventHistMod->addHistogram(positiveNegativeInvMassHist);
 
+    // auto runFilter = make_shared<RunFilter>();
+    // runFilter->addRunNumber(302337);
+    // runFilter->addRunNumber(302392);
+    // runFilter->addRunNumber(302573);
+    // runFilter->addRunNumber(302634);
+    // runFilter->addRunNumber(302635);
+    // runFilter->addRunNumber(302131);
+    // runFilter->addRunNumber(302163);
+    // runFilter->addRunNumber(302225);
+    // runFilter->addRunNumber(302494);
+    // runFilter->addRunNumber(302131);
+    // runFilter->addRunNumber(302596);
+    // runFilter->addRunNumber(302597);
+    // auto runFilterMod = make_shared<FilterModule>(runFilter);
+
 
     modules.addProductionModule(metMod);
     //Changed because EventModule inherits from ProductionModule now
@@ -110,7 +126,7 @@ void HiggsBackgroundPlan::initialize()
     modules.addFilterModule(recoDecayFilterMod);
     modules.addAnalysisModule(eventHistMod);    
     modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
-
+    //modules.addFilterModule(runFilterMod); 
     auto hPlusPlusEfficiency = make_shared<HPlusPlusEfficiency>();
     hPlusPlusEfficiency->setInput(eventMod->getEventInput());
     modules.addAnalysisModule(hPlusPlusEfficiency);
