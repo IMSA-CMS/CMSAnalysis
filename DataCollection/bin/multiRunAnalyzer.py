@@ -18,7 +18,7 @@ def loopRun(*fileList):
 	#analysisBackground = "MLVariables"
 
 	# get rid of numFiles for a full run-through
-	numFiles = "numFiles=5"
+	numFiles = "numFiles=1"
 	for file in fileList:
 		# Filling in the parameters of runAnalyzer
 		analysisSignal = "HiggsSignal" if analysis == 0 else "MuonSignal" if analysis == 2 else ""
@@ -115,22 +115,22 @@ if __name__ == '__main__':
 		#"Data/Data_Trigger_SingleMuon_Year_2022A.txt",
 		#"Data/Data_Trigger_SingleMuon_Year_2022B.txt",
 		#"Data/Data_Trigger_SingleMuon_Year_2022C.txt",
-		# "Data/Data_Trigger_SingleElectron_Year_2016B.txt",
-		# "Data/Data_Trigger_SingleElectron_Year_2016C.txt",
-		# "Data/Data_Trigger_SingleElectron_Year_2016D.txt",
-		# "Data/Data_Trigger_SingleElectron_Year_2016E.txt",
-		# "Data/Data_Trigger_SingleElectron_Year_2016F.txt",
-		# "Data/Data_Trigger_SingleElectron_Year_2016G.txt",
-		# "Data/Data_Trigger_SingleElectron_Year_2016H.txt",
-		# "Data/Data_Trigger_SingleElectron_Year_2017B.txt",
-		# "Data/Data_Trigger_SingleElectron_Year_2017C.txt",
-		# "Data/Data_Trigger_SingleElectron_Year_2017D.txt",
-		# "Data/Data_Trigger_SingleElectron_Year_2017E.txt",
-		# "Data/Data_Trigger_SingleElectron_Year_2017F.txt",
-		# "Data/Data_Trigger_SingleElectron_Year_2018A.txt",
-		# "Data/Data_Trigger_SingleElectron_Year_2018B.txt",
-		# "Data/Data_Trigger_SingleElectron_Year_2018C.txt",
-		# "Data/Data_Trigger_SingleElectron_Year_2018D.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2016B.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2016C.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2016D.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2016E.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2016F.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2016G.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2016H.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2017B.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2017C.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2017D.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2017E.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2017F.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2018A.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2018B.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2018C.txt",
+		"Data/Data_Trigger_SingleElectron_Year_2018D.txt",
 		)
 	
 	dpData = (
@@ -199,7 +199,7 @@ if __name__ == '__main__':
 
 	###########this one ######### background = qcd
 	#background = qcd
-	background = ttBar + zz + dy + multiBoson + qcd
+	background = dy + qcd
 
 	#background = ttBar + zz + multiBoson + qcd # total 24 files - multiMuPtAnalysis coniguration
 	#background = ttBar + zz + multiBoson + bQCD
@@ -208,8 +208,9 @@ if __name__ == '__main__':
 
 	# List of jobs to run on from those above
 	# jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
-	jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal] if analysis == 1 else [background] if analysis == 3 else [darkPhotonNanoAOD] if analysis == 4 else [dpData] if analysis == 6 else [plainQCD] if analysis == 7 else [higgsData]
-	
+	#jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal] if analysis == 1 else [background] if analysis == 3 else [darkPhotonNanoAOD] if analysis == 4 else [dpData] if analysis == 6 else [plainQCD] if analysis == 7 else [higgsData]
+	jobsList = [dy]
+
 	if os.path.exists("nohup.out") and (len(sys.argv) <= 2 or sys.argv[2] != "keep"):
 		os.remove("nohup.out")
 
