@@ -19,7 +19,9 @@ RootFileInput::RootFileInput(std::string fileName, std::vector<HistVariable> iHi
 TFile* RootFileInput::getFile(std::string fileSource) const
 {
 	auto file = TFile::Open(fileSource.c_str(), "read");
-	
+
+	//std::cout << "Reading file: " << fileSource << std::endl;
+
 	if(!file)
 	{
 		throw std::runtime_error("Cannot open file " + fileSource + "!");
@@ -36,7 +38,7 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 	TH1::AddDirectory(kFALSE);
 
 	std::string name = "";
-	//std::cout << "histype: " << histType << std::endl;
+	//std::cout << "Histogram Type: " << histType << std::endl;
 	for(HistVariable histVar : histVariables) 
 	{
 		//std::cout << histVar.getName() << std::endl;
@@ -49,7 +51,7 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 	TH1* hist;
 	uint pos = name.find("/");
 	auto file = getFile(fileSource);
-	TH1* emptyHist = new TH1F("h1", "empty", 1, 0.0, 0.0);
+	// TH1* emptyHist = new TH1F("h1", "empty", 1, 0.0, 0.0);
 	if (pos != std::string::npos)
 	{
 		std::string folder = name.substr(0,pos);
@@ -59,13 +61,14 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 		{
 			dir->cd();
 			hist = dynamic_cast<TH1*>(dir->Get(histName.c_str()));
+			//std::cout << "Databins in Hist " << histName << " : " << hist->GetNbinsX() << std::endl;
 			delete dir;
 		}
 		else
 		{
 			//We need the nullptr in when adding histograms to know to
 			//skip the histogram and not break histogram addition
-			// std::cout << "No histogram named " + name + " found\n";
+			//std::cout << "No histogram named " + name + " found in directory\n";
 			delete dir;
 			delete hist;
 			delete file;
@@ -75,31 +78,34 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 	else
 	{
 		hist = dynamic_cast<TH1*>(file->Get(name.c_str()));
+		
 	}
+
 	if (!hist || hist->IsZombie())
 	{ 
-		throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getHistName() + "]");
+		//std::cout << "No Histogram " + name + " found\n";
+		delete hist;
+		delete file;
+		return nullptr; 
+		//throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getHistName() + "]");
 	}
-	if(dynamic_cast<TH2 *>(hist) != 0) {
+
+	if (dynamic_cast<TH2 *>(hist) != 0) {
 		TH2* hist2D = dynamic_cast<TH2 *>(hist);
 		TH1 *newhist = hist2D->ProjectionX("_px", 0, -1, "E");
 		return newhist;
 	}	
-	if (hist->GetEntries() < 2.0)
-	{
-		delete hist;
-		delete file;
-		return emptyHist;
-	}
-	else 
-	{
-		TH1* response = new TH1F("Hist Clone", hist->GetTitle(), hist->GetXaxis()->GetNbins(), hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
-		response->Add(hist);
 
-		delete hist;
-		delete file;
-		return response;
-	}
+	
+	TH1* response = new TH1F("Hist Clone", hist->GetTitle(), hist->GetXaxis()->GetNbins(), hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
+	response->Add(hist);
+
+
+	delete hist;
+	delete file;
+	//std::cout << "Databins in Hist " << name << " : " << response->GetNbinsX() << std::endl;
+	return response;
+	
 }
 
 TH1* RootFileInput::get2DHist(HistVariable histType) const
