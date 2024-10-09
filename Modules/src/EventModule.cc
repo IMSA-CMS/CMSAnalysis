@@ -109,6 +109,9 @@ bool EventModule::process ()
     } catch (const std::runtime_error& e) {
         std::cerr << "Exception caught: " << e.what() << std::endl;
     }
+    //   std::cout << "EventModule event input: " << getInput() <<std::endl;
+    //   int dummy;
+    //   std::cin >> dummy;
     return true;
 }
 
