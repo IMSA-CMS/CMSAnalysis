@@ -17,9 +17,11 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, HistVaria
         std::cout << "Error: " << error.what();
         return 0;
     }   
-    //if (!hist) {
-    //    throw std::runtime_error("Hist not found");
-    //}
+    if (!hist)
+    {
+       std::cerr << "Hist " << dataType.getName() << " not found!\n";
+       return 0.0;
+    }
 
     int totalEventsInt = process->getTotalEvents();
     double totaleventsran = totalEventsInt;
@@ -45,8 +47,11 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, HistVaria
     int numBins = hist->GetNbinsX();  
     //std::cout << "numBins: " << numBins << "\n";
     int lowerLimit = firstBin * (static_cast<double>(numBins) / xAxisRange);
-    double efficiency = (hist->Integral(lowerLimit, numBins)) / totaleventsran;
+    double efficiency = (hist->Integral()) / totaleventsran;
     double signalest = crosssection * 1000 * luminosity * efficiency;
+    //std::cout << "Passed Events: " << hist->GetEntries() << " " << hist->Integral() <<"\n";
+    //std::cout << "Total Events: " << totaleventsran << "\n";
+    //std::cout << "Efficiency of " << process->getName() << " is " << efficiency << std::endl;
 // */
 /*
      std::cout << "postMax " << hist->GetMaximum() << std::endl;
