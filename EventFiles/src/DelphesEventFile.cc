@@ -163,6 +163,10 @@ unsigned long long DelphesEventFile::getEventIDNum() const
 {
     throw std::runtime_error("DelphesEventFile has no implementation of getEventIDNum"); 
 }
+long DelphesEventFile::getRunNum() const
+{
+    throw std::runtime_error("DelphesEventFile has no implementation of getRunNum"); 
+}
 
 bool DelphesEventFile::isDone() const
 {

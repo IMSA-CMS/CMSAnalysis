@@ -43,6 +43,7 @@ class CmsswEventInterface : public EventInterface
         double getMET() const override;
         std::vector<double> getPDFWeights() const override;
         unsigned long long getEventIDNum() const override; 
+        long getRunNum() const override; 
         std::vector<bool> getTriggerResults(std::string subProcess) const override;
         std::vector<std::string> getTriggerNames(std::string subProcess) const override;
         int getNumPileUpInteractions() const override;
