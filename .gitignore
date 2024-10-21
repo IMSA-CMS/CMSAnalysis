@@ -46,3 +46,7 @@
 
 #Nohup files
 nohup.out
+
+#CRAB stuff
+CRAB/crab_projects
+CRAB/__pycache__

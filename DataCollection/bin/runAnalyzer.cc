@@ -102,6 +102,10 @@ int main(int argc, char **argv)
   analyzer.addModules(modules);
    EventLoader eventLoader(EventLoader::fetchRootFiles(inputFile), &analyzer);
     analyzer.initialize(Utility::getBasePath()+"Output/", outputFile);
+    
+    // uncomment this line and comment the one above to run CRAB
+    // analyzer.initialize("/srv", outputFile);
+    
     eventLoader.run(outputEvery, numFiles, maxEvents);
     analyzer.writeOutputFile();
 

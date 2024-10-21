@@ -53,11 +53,11 @@ void HiggsBackgroundPlan::initialize()
     //auto quarkoniaCut = make_shared<QuarkoniaCut>();
     // auto scaleFactor = make_shared<JSONScaleFactor>("ScaleFactors_Muon_highPt_RECO_2018_schemaV2.txt");
     auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
-    auto scaleFactor = make_shared<MultiYearScaleFactor>();
-    scaleFactor->addScaleFactor("2018", JSONScaleFactor("ScaleFactors_Muon_highPt_RECO_2018_schemaV2.json"));
-    scaleFactor->addScaleFactor("2017", JSONScaleFactor("ScaleFactors_Muon_highPt_RECO_2017_schemaV2.json"));
-    scaleFactor->addScaleFactor("2016", JSONScaleFactor("ScaleFactors_Muon_highPt_RECO_2016_schemaV2.json"));
-    scaleFactor->addScaleFactor("2016APV", JSONScaleFactor("ScaleFactors_Muon_highPt_RECO_2016_preVFP_schemaV2.json"));
+    // auto scaleFactor = make_shared<MultiYearScaleFactor>();
+    // scaleFactor->addScaleFactor("2018", JSONScaleFactor("ScaleFactors_Muon_highPt_RECO_2018_schemaV2.json"));
+    // scaleFactor->addScaleFactor("2017", JSONScaleFactor("ScaleFactors_Muon_highPt_RECO_2017_schemaV2.json"));
+    // scaleFactor->addScaleFactor("2016", JSONScaleFactor("ScaleFactors_Muon_highPt_RECO_2016_schemaV2.json"));
+    // scaleFactor->addScaleFactor("2016APV", JSONScaleFactor("ScaleFactors_Muon_highPt_RECO_2016_preVFP_schemaV2.json"));
 
 
     eventMod->addSelector(hppSelector);
