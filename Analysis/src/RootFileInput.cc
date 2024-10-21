@@ -38,52 +38,52 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 	TH1::AddDirectory(kFALSE);
 
 	std::string name = "";
-	std::cout << "histype: " << histType.getName() << std::endl;
+//	std::cout << "histype: " << histType.getName() << std::endl;
 	for(HistVariable histVar : histVariables) 
 	{
-		std::cout << histVar.getName() << std::endl;
+	//	std::cout << histVar.getName() << std::endl;
 	    if(histVar.getName() == histType.getName()) 
 		{
 			name = histVar.getHistName();
-			std::cout << "found" << std::endl;
+	//		std::cout << "found" << std::endl;
 	    }
 	}
 	//std::cout << std::endl << "Hist name: " << name << std::endl;
 	TH1* hist;
 	uint pos = name.find("/");
 	auto file = getFile(fileSource);
-	std::cout << "Filesource: " << fileSource << std::endl;
+//	std::cout << "Filesource: " << fileSource << std::endl;
 	TH1* emptyHist = new TH1F("h1", "empty", 1, 0.0, 0.0);
-	std::cout << "POS: " << pos << std::endl;
-	std::cout << "NPOS: " << std::string::npos << std::endl;
+//	std::cout << "POS: " << pos << std::endl;
+	// std::cout << "NPOS: " << std::string::npos << std::endl;
 	if (pos != std::string::npos)
 	{
-		std::cout << "entered if statement" << std::endl;
+		// std::cout << "entered if statement" << std::endl;
 		std::string folder = name.substr(0,pos);
-		std::cout << "folder: " << folder << std::endl;
+		// std::cout << "folder: " << folder << std::endl;
 		std::string histName = name.substr(pos+1);
-		std::cout << "histName: " << histName << std::endl;
+		// std::cout << "histName: " << histName << std::endl;
 		TDirectory* dir = (TDirectory*)file->GetDirectory(folder.c_str());
 		if (dir)
 		{
-			std::cout << "1" << std::endl;
-			std::cout << "Directory Name: " << dir->GetName() << std::endl;
+			// std::cout << "1" << std::endl;
+			// std::cout << "Directory Name: " << dir->GetName() << std::endl;
 			dir->cd();
 			hist = dynamic_cast<TH1*>(dir->Get(histName.c_str()));
 			if (!hist)
 			{
-				std::cout << "Bad Hist" << std::endl;	
+				// std::cout << "Bad Hist" << std::endl;	
 				delete file;
-				std::cout << "Bad Hist 2" << std::endl;	
+				// std::cout << "Bad Hist 2" << std::endl;	
 				//delete dir;
-				std::cout << "Bad Hist 4" << std::endl;	
+				// std::cout << "Bad Hist 4" << std::endl;	
 				return nullptr;
 			}
 			delete dir;
 		}
 		else
 		{
-			std::cout << "2" << std::endl;
+			// std::cout << "2" << std::endl;
 			//We need the nullptr in when adding histograms to know to
 			//skip the histogram and not break histogram addition
 			//std::cout << "No histogram named " + name + " found in directory\n";
@@ -95,7 +95,7 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 	}
 	else
 	{
-		std::cout << "Here" << std::endl;
+		// std::cout << "Here" << std::endl;
 		hist = dynamic_cast<TH1*>(file->Get(name.c_str()));
 		
 	}
