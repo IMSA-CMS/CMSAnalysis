@@ -53,14 +53,14 @@ bool NanoAODEventFile::checkTrigger(std::string triggerName, std::string subProc
        // return false;
        if(!tree->GetBranch(triggerName.c_str()))
        {
-        std::cout << triggerName << " doesn't exist\n";
+        //std::cout << triggerName << " doesn't exist\n";
         return false;
        }
         auto currentEntry = treeReader.GetCurrentEntry();
         treeReader.Restart();
         TTreeReaderValue<Bool_t> intermediate(treeReader, triggerName.c_str());
         trigger = triggers.emplace(triggerName, intermediate).first;
-        std::cout << triggerName <<"\n";
+        //std::cout << triggerName <<"\n";
         treeReader.SetTree(tree);
         treeReader.SetEntry(currentEntry-1);
         treeReader.Next();
@@ -84,10 +84,10 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_reliso", "Electron_miniPFRelIso_all"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dxy", "Electron_dxy"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dz", "Electron_dz"),
-        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEscaleDown", "Electron_dEscaleDown"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEscaleUp", "Electron_dEscaleUp"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEsigmaDown", "Electron_dEsigmaDown"),
-        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEsigmaUp", "Electron_dEsigmaUp"),
+        //std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEscaleDown", "Electron_dEscaleDown"),
+		//std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEscaleUp", "Electron_dEscaleUp"),
+		//std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEsigmaDown", "Electron_dEsigmaDown"),
+        //std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEsigmaUp", "Electron_dEsigmaUp"),
 		std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("muon_size", "nMuon"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_eta", "Muon_eta"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_phi", "Muon_phi"),
@@ -141,6 +141,10 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
             // std::cout << "Adding " << var->getBranchName() << std::endl;
             variables.emplace(var->getName(), var->makeReader(treeReader));
         }
+        else
+        {
+            std::cout << "Branch " << var->getBranchName() << " not found" << std::endl;
+        }
     }
     treeReader.SetTree(tree);
     setEventCount(1);
@@ -151,7 +155,7 @@ void NanoAODEventFile::nextEvent()
 { 
     treeReader.Next(); 
     setEventCount(getEventCount() + 1);
-
+    
     if(variables.find("gen_size") != variables.end() && getVariable<UInt_t>("gen_size") > 0)
     {
         genSimParticles.clear(); 
@@ -269,10 +273,10 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         particle.addInfo("Electron_map", getArrayElement<Int_t>("Electron_bitmap", i)); 
         particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
         particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
-        particle.addInfo("eScaleDown", getArrayElement<Float_t>("elec_dEscaleDown", i));
-        particle.addInfo("eScaleUp", getArrayElement<Float_t>("elec_dEscaleUp", i));
-        particle.addInfo("eSigmaDown", getArrayElement<Float_t>("elec_dEsigmaDown", i));
-        particle.addInfo("eSigmaUp", getArrayElement<Float_t>("elec_dEsigmaUp", i));
+        //particle.addInfo("eScaleDown", getArrayElement<Float_t>("elec_dEscaleDown", i));
+        //particle.addInfo("eScaleUp", getArrayElement<Float_t>("elec_dEscaleUp", i));
+        //particle.addInfo("eSigmaDown", getArrayElement<Float_t>("elec_dEsigmaDown", i));
+        //particle.addInfo("eSigmaUp", getArrayElement<Float_t>("elec_dEsigmaUp", i));
 
 
 
@@ -323,13 +327,19 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
             0, 0, 0, ParticleType::photon(), fit);
         recoParticles.addParticle(particle);
     }
-    
-    
-    //std::cout<<"Positive counter: " << positiveCounter << "\n";
-    //std::cout<<"Negative counter: " << negativeCounter << "\n";
-
+// //    for (auto& particle : recoParticles)
+// //    {
+//         particle.addInfo("numPDFs", getVariable<UInt_t>("num_pdfs"));
+//         for (UInt_t i = 0; i < getVariable<UInt_t>("num_pdfs"); i++)
+//         {
+//             auto weight = getArrayElement<Float_t>("pdf_weight", i);
+//             particle.addInfo("pweight" + std::to_string(i), weight);
+//         }
+//     }    
     return recoParticles;
 }
+
+
 
 ParticleCollection<Particle> NanoAODEventFile::getRecoJets() const
 {

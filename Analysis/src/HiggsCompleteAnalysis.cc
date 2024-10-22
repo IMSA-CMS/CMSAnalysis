@@ -34,26 +34,26 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     //const std::vector<std::string> genSimDecays{};
     //const std::vector<std::string> recoDecays{};
 
-    const std::vector<std::string> recoDecays{"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u", "none"};
-    //const std::vector<std::string> recoDecays{"u u"};
+    //const std::vector<std::string> recoDecays{"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u", "none"};
+    const std::vector<std::string> recoDecays{"u u", "uu", "uuu", "uuuu"};
 
     //Change this file to your folder to use your own cross sections
     //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
     //auto reader = std::make_shared<CrossSectionReader>("/uscms/home/ichen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
     //const std::string filePath = "/uscms/home/vrao/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/"; 
     //const std::string signalFilePath = "/uscms/home/ichen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Analysis/bin/H++MassFiles/";
-    auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+    auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
     //auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Analysis/bin/crossSections.txt");
-    const std::string filePath = "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Muon/"; 
-    const std::string signalFilePath = "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Muon/";
-    // Vincents: /uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output
+    const std::string filePath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Muon/"; 
+    const std::string signalFilePath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Muon/";
+    // Vincents: /uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Outputcd 
     double luminosity = 139;
 
     std::vector<HistVariable> histVariablesBackground;
 
-    std::vector<std::string> rowNames = {"u u"};
+    std::vector<std::string> rowNames = {"u u", "uu", "uuu", "uuuu"};
     std::vector<std::string> connecters = {"_1st Highest mu- "};
-    std::vector<std::string> columnNames = {"Dxy", "Dz", "Eta", "Isolation", "Phi", "Pt"};
+    std::vector<std::string> columnNames = {"Dxy", "Dz", "Isolation"};
 
     for (std::string rowName : rowNames)
     {
@@ -129,17 +129,17 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
         dyBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Drell-Yan_MassCut_10-50_Run_2.root", "dy10to50", reader, luminosity));
         dyBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Drell-Yan_MassCut_50-inf_Run_2.root", "dy50toinf", reader, luminosity));
         
-        /*
+        
         auto qcdBackground = std::make_shared<Process>("QCD Background", 8);
-        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_100-200_Run_2_Year_2018.root", "QCD_100-200", reader, luminosity));
-        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_200-300_Run_2_Year_2018.root", "QCD_200-300", reader, luminosity));
-        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_300-500_Run_2_Year_2018.root", "QCD_300-500", reader, luminosity));
-        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_500-700_Run_2_Year_2018.root", "QCD_500-700", reader, luminosity));
-        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_700-1000_Run_2_Year_2018.root", "QCD_700-1000", reader, luminosity));
-        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_1000-1500_Run_2_Year_2018.root", "QCD_1000-1500", reader, luminosity));
-        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_1500-2000_Run_2_Year_2018.root", "QCD_1500-2000", reader, luminosity));
-        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_2000-Inf_Run_2_Year_2018.root", "QCD_2000-inf", reader, luminosity));
-        */
+        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "plainQCD_HTCut_PSWeights_100-200_Run_2_Year_2018.root", "QCD_100-200", reader, luminosity));
+        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "plainQCD_HTCut_PSWeights_200-300_Run_2_Year_2018.root", "QCD_200-300", reader, luminosity));
+        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "plainQCD_HTCut_PSWeights_300-500_Run_2_Year_2018.root", "QCD_300-500", reader, luminosity));
+        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "plainQCD_HTCut_PSWeights_500-700_Run_2_Year_2018.root", "QCD_500-700", reader, luminosity));
+        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "plainQCD_HTCut_PSWeights_700-1000_Run_2_Year_2018.root", "QCD_700-1000", reader, luminosity));
+        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "plainQCD_HTCut_PSWeights_1000-1500_Run_2_Year_2018.root", "QCD_1000-1500", reader, luminosity));
+        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "plainQCD_HTCut_PSWeights_1500-2000_Run_2_Year_2018.root", "QCD_1500-2000", reader, luminosity));
+        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "plainQCD_HTCut_PSWeights_2000-Inf_Run_2_Year_2018.root", "QCD_2000-inf", reader, luminosity));
+       
 
         auto higgsData = std::make_shared<Process>("Data", 1);
         // 150022816 events in Data_Trigger_SingleMuon_Year_2016B.root before TriggerCut change
@@ -180,7 +180,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
         processes.push_back(ttBarandMultiBosonBackground);
         processes.push_back(dyBackground);
         processes.push_back(higgsData);
-        //processes.push_back(qcdBackground);
+        processes.push_back(qcdBackground);
         processes.push_back(zzBackground);
         auto leptonProcesses = std::make_shared<Channel>(recoDecay, processes);
         //leptonBackgrounds->cleanProcesses();

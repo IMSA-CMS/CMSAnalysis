@@ -15,7 +15,8 @@
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 
 
-Event::Event()
+Event::Event(const EventInput* iinput):
+input(iinput)
 {
 }
 
