@@ -47,7 +47,7 @@ double CrossSectionReader::getCrossSection(std::string key) const
 	auto iterator = weights.find(key);
 	if (iterator == weights.end())
 	{
-		throw std::runtime_error("Key " + key + " not found!\n");
+		throw std::runtime_error("Key " + key + " not found in CrossSectionReader.cc!\n");
 	}
 	
 	else
