@@ -15,7 +15,21 @@ bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) c
 
     if (numLeptons == 4 || numLeptons == 2)
     {
-        return true;
+        for(auto particle : particles)
+        {
+            if (particle.getType() == ParticleType::electron() && particle.getPt() >= 40)
+            {
+                return true;
+            }
+            else if (particle.getType() == ParticleType::muon() && particle.getPt() >= 30)
+            {
+                return true;
+            }
+        }
+        return false; 
+        //return true;
+        //Higgs1000Run2 e-40 (1160/1404) or u-30 (1771/1795), eeuu (2860/3106)
+        //Dy50
     }
 
     // Finds the third lepton pt

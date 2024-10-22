@@ -26,7 +26,7 @@ class SimpleImplementation : public ParticleImplementation
         virtual const ParticleType& getType() const  override{ return particleType; }
         virtual Particle::SelectionFit getSelectionFit() const override{ return selectionFit;}
         inline virtual double getDXY() const override { return deltaXY; }
-        inline virtual double getDZ() const override { return deltaXY; }
+        inline virtual double getDZ() const override { return deltaZ; }
         virtual bool isNotNull() const override {return true;}
         virtual bool isFinalState() const override {return true;}
         virtual bool operator== (const ParticleImplementation& other) const override;

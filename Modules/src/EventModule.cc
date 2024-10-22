@@ -21,7 +21,7 @@
 #include "CMSAnalysis/Histograms/interface/HistogramPrototype1DGeneral.hh"
 
 EventModule::EventModule():
-    localInput(&event)
+    event(nullptr), localInput(&event)
 {
     histMod->setInput(&localInput);
 }
@@ -30,6 +30,10 @@ void EventModule::addSelector(std::shared_ptr<Selector> selector)
 {
     selectors.push_back(selector);
 
+}
+void EventModule::addScaleFactor(std::shared_ptr<ScaleFactor> scaleFactor)
+{
+    scaleFactors.push_back(scaleFactor);
 }
 void EventModule::addCut(std::shared_ptr<Cut> cut)
 {
@@ -108,6 +112,12 @@ bool EventModule::process ()
     return true;
 }
 
+void EventModule::setInput(const EventInput* input)
+{
+    Module::setInput(input);
+    event.setInput(input);
+}
+
 std::function<std::vector<double>(const EventInput*)> EventModule::findNthParticleFunction(int n, 
             const ParticleType& particleType, EventInput::RecoLevel typeGenSim, double (Particle::* valueFunction)() const) const
 {
@@ -138,6 +148,10 @@ void EventModule::addBasicHistograms(const ParticleType& particleType, const Par
             {
                 params.setName(histName);
                 auto histogram = std::make_shared<SingleParticleHist>(params);
+                for (auto scaleFactor: scaleFactors)
+                {
+                    histogram->addScaleFactor(scaleFactor);
+                }
                 particleHistograms.insert({histName,histogram});
                 histMod->addHistogram(histogram);
 
@@ -159,6 +173,10 @@ void EventModule::addCountHistograms(const ParticleType& particleType, const std
         {
             params.setName(histName);
             auto hist = std::make_shared<CollectionHist>(params);
+            for (auto scaleFactor: scaleFactors)
+            {
+                hist->addScaleFactor(scaleFactor);
+            }
             collectionHistograms.insert({histName, hist});
             histMod->addHistogram(hist);
         } 
