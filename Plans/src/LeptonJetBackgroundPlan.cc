@@ -49,7 +49,7 @@ void LeptonJetBackgroundPlan::initialize()
     modules.addProductionModule(metMod);
 
     modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
-    modules.addAnalysisModule(eventDump);
+    //modules.addAnalysisModule(eventDump);
     /*
     auto leptonSelector = std::make_shared<SnowmassLeptonSelector>(5);
     modules.getEventInput()->setLeptonSelector(leptonSelector);

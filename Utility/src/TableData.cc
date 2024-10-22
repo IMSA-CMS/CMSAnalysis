@@ -5,19 +5,11 @@
 #include <iostream>
 
 
-TableData::TableData(std::vector<std::vector<std::string>> outputs)
+TableData::TableData(std::vector<std::vector<std::string>> outputs, std::vector<std::string> columnNames, std::vector<std::string> rowNames)
 {
-    for(std::vector<std::string> output : outputs) {
-        if(std::find(rows.begin(), rows.end(), output.at(1)) == rows.end()) {
-            addRow(output.at(1));
-        }
-        if(std::find(columns.begin(), columns.end(), output.at(0)) == columns.end()) {
-            addColumn(output.at(0));
-        }
-    }
-    for(std::vector<std::string> output : outputs) {
-        addEntry(output);
-    }
+    entries = outputs;
+    columns = columnNames;
+    rows = rowNames;
 }
 
 
@@ -49,5 +41,6 @@ void TableData::addEntry(std::vector<std::string> entry)
 //Overriding (first addEntry calls this one)
 void TableData::addEntry(int rowIndex, int colIndex, std::string entry) 
 {
-    entries.at(rowIndex).at(colIndex) += entry;
+    entries.at(rowIndex).at(colIndex) = entry;
+    
 }

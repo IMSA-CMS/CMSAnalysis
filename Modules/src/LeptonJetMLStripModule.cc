@@ -12,8 +12,10 @@ LeptonJetMLStripModule::LeptonJetMLStripModule()
 
 void LeptonJetMLStripModule::addVariables()
 {
-    addVariable("leadingPt", SpecialVariableModule::VariableType::Float);
+	addVariable("deltaR", SpecialVariableModule::VariableType::Float);
     addVariable("nParticles", SpecialVariableModule::VariableType::Float);
+	addVariable("eta", SpecialVariableModule::VariableType::Float);
+    // addVariable("leadingPt", SpecialVariableModule::VariableType::Float);
 	
 	//addVariable("phi", SpecialVariableModule::VariableType::Float);
 	// reader.AddVariable("mass", &mass);
@@ -21,8 +23,6 @@ void LeptonJetMLStripModule::addVariables()
 	//addVariable("sumPt", SpecialVariableModule::VariableType::Float);
 	//addVariable("numMuons", SpecialVariableModule::VariableType::Integer);
 	//addVariable("deltaPt", SpecialVariableModule::VariableType::Float);
-	addVariable("deltaR", SpecialVariableModule::VariableType::Float);
-	addVariable("eta", SpecialVariableModule::VariableType::Float);
 	//addVariable("maxDXY", SpecialVariableModule::VariableType::Float);
 	//addVariable("maxDZ", SpecialVariableModule::VariableType::Float);
 	//addVariable("maxIsolation", SpecialVariableModule::VariableType::Float);

@@ -9,8 +9,21 @@
 #include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
 #include "DataFormats/Math/interface/deltaR.h"
 
+float muonCounter = 0.00;
+float looseMuons = 0.00;
+float tightMuons = 0.00;
+float mediumMuons = 0.00;
+
+float electronCounter = 0.00;
+float looseElectrons = 0.00;
+float mediumElectrons = 0.00;
+float tightElectrons = 0.00;
+
+float numOfParticles = 0.00;
+
 LeptonJetSelector::LeptonJetSelector(double ideltaRCut) : deltaRCut(ideltaRCut)
-{ }
+{
+}
 
 void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) const
 {
@@ -24,17 +37,47 @@ void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) c
   // Reco stuff
     ParticleCollection<Muon> selected;
     auto particles = input->getLeptons(EventInput::RecoLevel::Reco).getParticles();
-    
+
     for (const auto& particle : particles)
     {
+      numOfParticles++;
       if (particle.getType() == ParticleType::muon() && particle.getPt() > 5) 
       {
+        muonCounter++;
         auto lepton = Lepton(particle);
         if(lepton.isLoose())
         {
           selected.addParticle(particle);
+          looseMuons++;
+        }
+        if(lepton.isTight())
+        {
+          tightMuons++;
+        }
+        if(lepton.isMedium())
+        {
+          mediumMuons++;
         }
       }
+
+      if (particle.getType() == ParticleType::electron() && particle.getPt() > 5) 
+      {
+        electronCounter++;
+        auto lepton = Lepton(particle);
+        if(lepton.isLoose())
+        {
+          looseElectrons++;
+        }
+        if(lepton.isTight())
+        {
+          tightElectrons++;
+        }
+        if(lepton.isMedium())
+        {
+          mediumElectrons++;
+        }
+      }
+
     }
 
     for (auto lepton : selected.getParticles())
@@ -49,6 +92,17 @@ void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) c
     {
       event.addSpecialObject("leptonJet", jet);
     }
+      // std::cout<<"number of particles: " << numOfParticles << "\n";
+
+      // std::cout<<"muon efficiency: " << (muonCounter/numOfParticles)<<"\n";
+      // std::cout<<"loose muon efficiency: " << (looseMuons/numOfParticles)<<"\n";
+      // std::cout<<"Medium Muon efficiency: " << mediumMuons/numOfParticles << "\n";
+      // std::cout<<"Tight Muon efficiency: " << tightMuons/numOfParticles << "\n\n";
+
+      // std::cout<<"Electron efficiency: " << (electronCounter/numOfParticles)<<"\n";
+      // std::cout<<"loose electron efficiency: " << (looseElectrons/numOfParticles)<<"\n";
+      // std::cout<<"Medium electron efficiency: " << mediumElectrons/numOfParticles << "\n";
+      // std::cout<<"Tight electron efficiency: " << tightElectrons/numOfParticles << "\n\n";
 }
 
 std::vector<LeptonJet> LeptonJetSelector::findLeptonJets(ParticleCollection<Lepton> recoCandidates) const
