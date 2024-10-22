@@ -6,7 +6,7 @@ import datetime;
 
 config = config()
 
-config.General.requestName = 'root_output_test_4'
+config.General.requestName = 'root_output_test'
 config.General.workArea = 'crab_projects'
 config.General.transferOutputs = True
 
@@ -27,4 +27,4 @@ config.Data.publication = False
 config.Data.outputDatasetTag = 'CRAB3_tutorial_Aug2021_MC_analysis'
 
 # Should be replaced w/ T3_US_FNALLPC if you have access, this is just public site for testing
-config.Site.storageSite = "T2_US_Nebraska"
+config.Site.storageSite = "T3_US_FNALLPC"
