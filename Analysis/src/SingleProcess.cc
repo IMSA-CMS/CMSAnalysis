@@ -17,7 +17,7 @@
 
 TH1* SingleProcess::getHist(HistVariable histType, bool scaleToExpected) const
 {
-    std::cout << "SingleProcess 1" << std::endl;
+    // std::cout << "SingleProcess 1" << std::endl;
     TH1* hist = input->getHist(histType);
     if (!hist) {
        return nullptr;
@@ -30,11 +30,11 @@ TH1* SingleProcess::getHist(HistVariable histType, bool scaleToExpected) const
             //std::cout << "Scale: " << (yield/events) << "\n";
         }
     }
-    std::cout << "SingleProcess 2" << std::endl;
+    // std::cout << "SingleProcess 2" << std::endl;
     for(auto correction : corrections) {
         hist = correction->correctHist(hist);
     }
-    std::cout << "SingleProcess 3" << std::endl;
+    // std::cout << "SingleProcess 3" << std::endl;
     return hist;
 }
 

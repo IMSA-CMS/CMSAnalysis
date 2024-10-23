@@ -54,14 +54,12 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 			//Add only if the hisogram exists
 			if (toAdd)
 			{
-			if (toAdd) {
 				toMerge->Add(toAdd);
 			}
 		}
 		newHist->Merge(toMerge);
 		newHist->SetLineColor(color);
 		newHist->SetFillColor(color);
-	}
 	}
 	else
 	{
