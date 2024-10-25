@@ -37,6 +37,7 @@
 #include "CMSAnalysis/Modules/interface/MultiYearScaleFactor.hh"
 #include "CMSAnalysis/Modules/interface/ElectronScaleFactor.hh"
 #include "CMSAnalysis/Modules/interface/MuonScaleFactor.hh"
+#include "CMSAnalysis/Modules/interface/DummyScaleFactor.hh"
 
 using std::make_shared;
 
@@ -55,15 +56,33 @@ void HiggsBackgroundPlan::initialize()
     //auto quarkoniaCut = make_shared<QuarkoniaCut>();
     auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
     auto scaleFactor = make_shared<MultiYearScaleFactor>();
+    auto iDISOScaleFactor = make_shared<MultiYearScaleFactor>();
+    auto triggerScaleFactor = make_shared<MultiYearScaleFactor>();
 
     scaleFactor->addMuonScaleFactor("2018", make_shared<MuonScaleFactor>("ScaleFactors_Muon_highPt_RECO_2018_schemaV2.json"));
     scaleFactor->addMuonScaleFactor("2017", make_shared<MuonScaleFactor>("ScaleFactors_Muon_highPt_RECO_2017_schemaV2.json"));
     scaleFactor->addMuonScaleFactor("2016", make_shared<MuonScaleFactor>("ScaleFactors_Muon_highPt_RECO_2016_schemaV2.json"));
     scaleFactor->addMuonScaleFactor("2016APV", make_shared<MuonScaleFactor>("ScaleFactors_Muon_highPt_RECO_2016_preVFP_schemaV2.json"));
+    triggerScaleFactor->addMuonScaleFactor("2016APV", make_shared<MuonScaleFactor>("ScaleFactors_Muon_highPt_HLT_2016_preVFP_schemaV2.json"));
+    triggerScaleFactor->addMuonScaleFactor("2016", make_shared<MuonScaleFactor>("ScaleFactors_Muon_highPt_HLT_2016_schemaV2.json"));
+    triggerScaleFactor->addMuonScaleFactor("2018", make_shared<MuonScaleFactor>("ScaleFactors_Muon_highPt_HLT_2018_schemaV2.json"));
+    triggerScaleFactor->addMuonScaleFactor("2017", make_shared<MuonScaleFactor>("ScaleFactors_Muon_highPt_HLT_2017_schemaV2.json"));
+    iDISOScaleFactor->addMuonScaleFactor("2016APV", make_shared<MuonScaleFactor>("ScaleFactors_Muon_highPt_IDISO_2016_preVFP_schemaV2.json"));
+    iDISOScaleFactor->addMuonScaleFactor("2016", make_shared<MuonScaleFactor>("ScaleFactors_Muon_highPt_IDISO_2016_schemaV2.json"));
+    iDISOScaleFactor->addMuonScaleFactor("2018", make_shared<MuonScaleFactor>("ScaleFactors_Muon_highPt_IDISO_2018_schemaV2.json"));
+    iDISOScaleFactor->addMuonScaleFactor("2017", make_shared<MuonScaleFactor>("ScaleFactors_Muon_highPt_IDISO_2017_schemaV2.json"));
     scaleFactor->addElectronScaleFactor("2018", make_shared<ElectronScaleFactor>("2018electron.json"));
     scaleFactor->addElectronScaleFactor("2017", make_shared<ElectronScaleFactor>("2017electron.json"));
     scaleFactor->addElectronScaleFactor("2016", make_shared<ElectronScaleFactor>("2016electron.json"));
     scaleFactor->addElectronScaleFactor("2016APV", make_shared<ElectronScaleFactor>("2016APVelectron.json"));
+    triggerScaleFactor->addElectronScaleFactor("2016APV", make_shared<DummyScaleFactor>());
+    triggerScaleFactor->addElectronScaleFactor("2016", make_shared<DummyScaleFactor>());
+    triggerScaleFactor->addElectronScaleFactor("2017", make_shared<DummyScaleFactor>());
+    triggerScaleFactor->addElectronScaleFactor("2018", make_shared<DummyScaleFactor>());
+    iDISOScaleFactor->addElectronScaleFactor("2016APV", make_shared<DummyScaleFactor>());
+    iDISOScaleFactor->addElectronScaleFactor("2016", make_shared<DummyScaleFactor>());
+    iDISOScaleFactor->addElectronScaleFactor("2017", make_shared<DummyScaleFactor>());
+    iDISOScaleFactor->addElectronScaleFactor("2018", make_shared<DummyScaleFactor>());
 
 
     eventMod->addSelector(hppSelector);
@@ -72,8 +91,9 @@ void HiggsBackgroundPlan::initialize()
     eventMod->addCut(higgsCut);
     eventMod->addCut(zVetoCut);
     //eventMod->addCut(quarkoniaCut);
-    //eventMod->addScaleFactor(scaleFactor);
-
+    eventMod->addScaleFactor(scaleFactor);
+    eventMod->addScaleFactor(iDISOScaleFactor);
+    eventMod->addScaleFactor(triggerScaleFactor);
 
     auto matchMod = make_shared<MatchingModule>();
     auto triggerMod = make_shared<TriggerModule>();
