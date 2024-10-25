@@ -1,23 +1,21 @@
 from subprocess import Popen
-from multiprocessing import Process 
+from multiprocessing import Process
 import sys
 import os
 import subprocess
+import argparse
 
-def run_batch(batch, analysis):
-    # Construct the command to invoke run_jobs.py with a batch of jobs
-    cmd = ["python3", "batch_run.py", str(analysis)] + batch
-    print(f"Running batch: {batch}")
-    # Start the batch in a new process using subprocess
-    subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+# def run_batch(batch, analysis):
+#     # Construct the command to invoke run_jobs.py with a batch of jobs
+#     cmd = ["python3", "batch_run.py", str(analysis)] + batch
+#     print(f"Running batch: {batch}")
+#     # Start the batch in a new process using subprocess
+#     subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-analysis = 0
-def loopRun(*fileList):
+def loopRun(*fileList, crab, path):
 
-	if len(sys.argv) <= 3:
+	if not path:
 		path = "Higgs/" if analysis == 0 else "DarkPhoton_MLStrip_CompleteCuts_ValidationConfig3_Output_numFiles3/" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 or analysis == 6 or analysis == 7 else "Muon/" if analysis == 2 else ""
-	else:
-		path = sys.argv[3]
 
 	os.makedirs(os.environ['CMSSW_BASE'] + "/src/CMSAnalysis/Output/" + path, exist_ok=True)
 
@@ -44,12 +42,19 @@ def loopRun(*fileList):
 		
 		# calls runAnalyzer
 		print("Creating " + outputString)
-		#Popen(["nohup", "runAnalyzer", inputString, outputString, analysisName, numFiles]) 
 		Popen(["runAnalyzer", inputString, outputString, analysisName, numFiles]) 
 	
 	#runAnalyzer input="Data/Data_Trigger_SingleMuon_Year_2016B.txt" output="Data_Trigger_SingleMuon_Year_2016B.root" analysis="HiggsBackground"
 if __name__ == '__main__':
-	if len(sys.argv) <= 1:
+	parser = argparse.ArgumentParser()
+	parser.add_argument("--crab", help="Turn on CRAB Processing Mode", action='store_true')
+	parser.add_argument("--analysis", help="Determines which analysis to use (Higgs, DarkPhoton, etc.)")
+	parser.add_argument("--keep", help="If true, appends to the current nohup.out file instead of clearing", action='store_true')
+	parser.add_argument("--path", help="Custom Output Path (like Higgs/)")
+	
+	args = parser.parse_args()
+
+	if not args.analysis:
 		print("No analysis specified, defaulting to Higgs")
 		analysis = 0
 	else:
@@ -164,43 +169,43 @@ if __name__ == '__main__':
 	#jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData, qcd]
 	jobsList = [qcd]
 	
-	if os.path.exists("nohup.out") and (len(sys.argv) <= 2 or sys.argv[2] != "keep"):
+	if os.path.exists("nohup.out") and not args.keep:
 		os.remove("nohup.out")
 
-	batch_size = 3
-	for i in range(0, len(jobsList), batch_size):
-		print("In")
-		# Create a batch from the list
-		batch = jobsList[i:i + batch_size]
-		flat_batch = [file for job in batch for file in job]
+	# batch_size = 3
+	# for i in range(0, len(jobsList), batch_size):
+	# 	print("In")
+	# 	# Create a batch from the list
+	# 	batch = jobsList[i:i + batch_size]
+	# 	flat_batch = [file for job in batch for file in job]
 
-		# Specify the path to your Python script (batch_run.py)
-		script_path = "batch_run.py"
+	# 	# Specify the path to your Python script (batch_run.py)
+	# 	script_path = "batch_run.py"
     
-    	# Specify the output file where stdout and stderr will be logged
-		output_file = "nohup.out"
+  #   	# Specify the output file where stdout and stderr will be logged
+	# 	output_file = "nohup.out"
     
-    	# Open the output file to log stdout and stderr
-		with open(output_file, "w") as f:
-       	# Run the command with 'nohup' effect and redirect output to the file
-			print("1")
-			process = subprocess.Popen(["python", script_path], stdout=f, stderr=subprocess.STDOUT, preexec_fn=os.setpgrp)
-			process.wait()
+  #   	# Open the output file to log stdout and stderr
+	# 	with open(output_file, "w") as f:
+  #      	# Run the command with 'nohup' effect and redirect output to the file
+	# 		print("1")
+	# 		process = subprocess.Popen(["python", script_path], stdout=f, stderr=subprocess.STDOUT, preexec_fn=os.setpgrp)
+	# 		process.wait()
     	
-		# Call run_jobs.py with the batch
-		#run_batch(flat_batch, analysis)
+	# 	# Call run_jobs.py with the batch
+	# 	#run_batch(flat_batch, analysis)
 
 
 	# list of processes
-	#processes = []
-	#for job in jobsList:
-		#newProcess = Process(target=loopRun, args=(job))
-		#processes.append(newProcess)
+	processes = []
+	for job in jobsList:
+		newProcess = Process(target=loopRun, args=(job, args.crab, args.path))
+		processes.append(newProcess)
 
 	# start jobs
-	#for process in processes:
-		#process.start()
+	for process in processes:
+		process.start()
 
 	# Join jobs
-	#for process in processes:
-	#	process.join()
+	for process in processes:
+		process.join()
