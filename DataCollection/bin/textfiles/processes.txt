@@ -20,10 +20,12 @@ TTbar
 Boson:	WJets	Z	NA
 Decay	L	LL
 Run:	HLLHC	2
+Year:	2016	2016APV	2017	2018
 
 ZZ
 Decay:	2e2mu	2e2tau	2mu2tau	4e	4mu	4tau	4L
 Run: 	HLLHC	2
+Year:	2016	2016APV	2017	2018
 
 DarkPhotonSUSY
 Mass:	0_1	0_2	0_3	0_4	0_5	0_7	0_9	1_2	1_5	2_0	2_5
@@ -49,4 +51,5 @@ MultiBoson
 Bosons:	WW	WZ	WWW	WZZ	ZZZ	WWZJets
 Decay:	2L	3L	4L	NA
 Run:	2
+Year:	2016	2016APV	2017	2018
 
