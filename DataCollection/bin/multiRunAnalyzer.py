@@ -12,7 +12,7 @@ import argparse
 #     # Start the batch in a new process using subprocess
 #     subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-def loopRun(*fileList, crab, path):
+def loopRun(crab, path, fileCount, *fileList):
 
 	if not path:
 		path = "Higgs/" if analysis == 0 else "DarkPhoton_MLStrip_CompleteCuts_ValidationConfig3_Output_numFiles3/" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 or analysis == 6 or analysis == 7 else "Muon/" if analysis == 2 else ""
@@ -23,8 +23,8 @@ def loopRun(*fileList, crab, path):
 	#analysisBackground = "MLVariables"
 
 	# get rid of numFiles for a full run-through
-	numFiles = "numFiles=1"
-	for file in fileList:
+	numFiles = "numFiles=" + fileCount if fileCount != None else None
+	for file in fileList[0]:
 		# Filling in the parameters of runAnalyzer
 		analysisSignal = "HiggsSignal" if analysis == 0 else "MuonSignal" if analysis == 2 else ""
 		nameLocation = file.rfind("/") + 1
@@ -42,7 +42,16 @@ def loopRun(*fileList, crab, path):
 		
 		# calls runAnalyzer
 		print("Creating " + outputString)
-		Popen(["runAnalyzer", inputString, outputString, analysisName, numFiles]) 
+		if crab:
+			crab_directory = os.environ['CMSSW_BASE'] + "/src/CMSAnalysis/CRAB/"
+			prefix = "--"
+			print(file)
+			generate = Popen(["python3", "crab_config_generator.py", prefix + inputString, f'--output={name}.root', prefix + analysisName, f'--folder={path[0:-1]}' if nameLocation != 0 else "", "--" + numFiles if numFiles != None else ""], cwd=crab_directory)
+			generate.wait()
+			submit = Popen(['crab', 'submit', '-c', 'crab_config.py'], cwd=crab_directory)
+			submit.wait()
+		else:
+			Popen(["runAnalyzer", inputString, outputString, analysisName, numFiles])
 	
 	#runAnalyzer input="Data/Data_Trigger_SingleMuon_Year_2016B.txt" output="Data_Trigger_SingleMuon_Year_2016B.root" analysis="HiggsBackground"
 if __name__ == '__main__':
@@ -50,15 +59,17 @@ if __name__ == '__main__':
 	parser.add_argument("--crab", help="Turn on CRAB Processing Mode", action='store_true')
 	parser.add_argument("--analysis", help="Determines which analysis to use (Higgs, DarkPhoton, etc.)")
 	parser.add_argument("--keep", help="If true, appends to the current nohup.out file instead of clearing", action='store_true')
-	parser.add_argument("--path", help="Custom Output Path (like Higgs/)")
+	parser.add_argument("--path", help="Custom Output Path like Higgs (no backslash)")
+	parser.add_argument("--numFiles", help="Number of files to run over")
 	
 	args = parser.parse_args()
+	print(args)
 
 	if not args.analysis:
 		print("No analysis specified, defaulting to Higgs")
 		analysis = 0
 	else:
-		analysisName = sys.argv[1]
+		analysisName = args.analysis
 		if analysisName == "Higgs":
 			print("Running Higgs Analyses")
 			analysis = 0
@@ -199,7 +210,7 @@ if __name__ == '__main__':
 	# list of processes
 	processes = []
 	for job in jobsList:
-		newProcess = Process(target=loopRun, args=(job, args.crab, args.path))
+		newProcess = Process(target=loopRun, args=(args.crab, args.path, args.numFiles, job))
 		processes.append(newProcess)
 
 	# start jobs
