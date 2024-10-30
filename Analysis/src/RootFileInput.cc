@@ -98,7 +98,7 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 	}
 	else
 	{
-		std::cout << "Here" << std::endl;
+		// std::cout << "Here" << std::endl;
 		hist = dynamic_cast<TH1*>(file->Get(name.c_str()));
 		
 	}

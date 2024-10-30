@@ -42,8 +42,7 @@ void Table()
 {
     //Channel Configurations
     std::vector<std::string> particles = {"e", "u"}; // Chosen branch ratio particles
-    std::vector<std::string> channels = Utility::channelMaker(particles, 4, true); 
-
+    std::vector<std::string> channels =  {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u", "none"};
     //make sure these match with massTargets in HiggsCompleteAnaylsis
     std::vector<double> massTargets { 500, 600, 700, 800, 900, 1100, 1200, 1300, 1400};
 
@@ -86,35 +85,25 @@ void Table()
         std::vector<double> yields = channelPtr->getYields(histVariable); //error happens around here
         std::vector<std::string> names = channelPtr->getNames();
 
-        //Remove All names and yields that are not associated with this channel (Leaves background decay and signal mass yields)
-        for (int nameIndex = names.size() - 1  ; nameIndex >= 0;--nameIndex ) {
-            std::string name = names[nameIndex];
-            if (find(backgroundTypes.begin(), backgroundTypes.end(), name) == backgroundTypes.end() && name.find(channel) == string::npos ) {
-                names.erase(names.begin()+ nameIndex);
-                yields.erase(yields.begin()+ nameIndex);
-            }
+ 
+
+        for (std::string name : names) {
+            std::cout << name << std::endl;
         }
         
-        //Converts yields to strings and stores in row for final table
-        std::vector<std::string> dataRow;
-        for (double yield : yields) dataRow.push_back(roundDoubleString(yield, 4));
+        // //Converts yields to strings and stores in row for final table
+        // std::vector<std::string> dataRow;
+        // for (double yield : yields) dataRow.push_back(roundDoubleString(yield, 4));
 
-        //Adds yields to final decay yield data grid
-        finalTableData.push_back(dataRow);
+        // //Adds yields to final decay yield data grid
+        // finalTableData.push_back(dataRow);
 
-        //Saves truncated names to be used as columnNames in data table.
-        columnNames = names;
+        // //Saves truncated names to be used as columnNames in data table.
+        // columnNames = names;
     }
     
     
-    // Renames column to get rid of channel specificity (i.e removes uuuu, eeee, eueu)
-    for (int nameIndex = 0; nameIndex < columnNames.size(); ++nameIndex) {
-        std::string name = columnNames[nameIndex];
-        if (name.find("Higgs signal") != string::npos) {
-           int pos = name.find("_");
-            columnNames[nameIndex] = "Higgs Signal: " + name.substr(pos+5) + " GeV";
-        }
-    }
+
 
    
 
@@ -123,10 +112,10 @@ void Table()
 
     
 
-    auto tableInput = std::make_shared<TableData>(finalTableData, columnNames, channelNames);
-    //Change the type of table you want here
-    auto table = std::make_shared<TextTable>();
-    table->makeTable(tableInput, std::cout);
-    std::cout << "\n" << std::endl;
+    // auto tableInput = std::make_shared<TableData>(finalTableData, columnNames, channelNames);
+    // //Change the type of table you want here
+    // auto table = std::make_shared<TextTable>();
+    // table->makeTable(tableInput, std::cout);
+    // std::cout << "\n" << std::endl;
  
 }
