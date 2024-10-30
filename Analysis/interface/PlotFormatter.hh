@@ -119,8 +119,6 @@ class PlotFormatter
         double upperMasslimit;
         int numBins;
         int firstBin;
-
-
 };
 
 #endif

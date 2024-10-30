@@ -9,7 +9,7 @@ std::string RunFilter::getFilterString(const EventInput* inputMod) const
   long runNum = inputMod->getRunNum();
   if (std::find(runNumbers.begin(), runNumbers.end(), runNum) != runNumbers.end())
   {
-    return "Pass_Run";
+    return "Pass";
   }
   else
   {

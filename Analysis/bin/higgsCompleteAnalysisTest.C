@@ -23,6 +23,7 @@
 #include "CMSAnalysis/Analysis/interface/FitFunction.hh"
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
+#include "CMSAnalysis/Utility/Utility.hh"
 
 #define _USE_MATH_DEFINES
 
@@ -33,9 +34,10 @@ void higgsCompleteAnalysisTest()
 	TCanvas* canvas = new TCanvas("c1");
 
 	auto channelTest = analysis->getChannel("eeee");
-	auto higgsProcess = channelTest->findProcess("Higgs Signal " + std::to_string(1300));
+	auto higgsProcess = channelTest->findProcess("Higgs signal" + std::to_string(500));
 	TH1* signalHist = higgsProcess->getHist("Same Sign Inv Mass");
 	signalHist->DrawCopy();
+	signalHist->SaveAs(Utility::GetBasePath() + "/Output/Simple/Test.root");
 	// std::cout << "Done loading HCA\n";
 	// for (int mass : masses) 
 	// {

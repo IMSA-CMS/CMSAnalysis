@@ -27,9 +27,7 @@ void fitHistogram(TH1* scaleHist, TH1* fitHist, double xMin, double xMax, double
     }
 
     RooRealVar xAxis("xAxis", "xAxis", xMin, xMax);
-    RooRealVar scalar("scalar", "scalar", 1, 0, maxScalar);
-
-    //RooRealVar constant("constant", "constant", 1, 1, 1);
+    RooRealVar scalar("scalar", "scalar", 0, 1000, maxScalar);
 
     RooPlot* frame = xAxis.frame();
 
@@ -38,12 +36,19 @@ void fitHistogram(TH1* scaleHist, TH1* fitHist, double xMin, double xMax, double
 
     RooHistPdf curve("curve", "curve", xAxis, xAxis, *scaleData, 0);
     RooExtendPdf scaledCurve("scaledCurve", "scaledCurve", curve, scalar);
-    //RooExtendPdf scaledCurve("scaledCurve", "scaledCurve", curve, constant);
 
     fitData.plotOn(frame);
     scaledCurve.fitTo(fitData);
+
+    scalar.setVal(90000);
+
     scaledCurve.plotOn(frame);
     curve.plotOn(frame);
+
+    std::cout << "/////////////////////////////////////////\nScalar Value:" << std::endl;
+    scalar.printValue(std::cout);
+    std::cout << "\n/////////////////////////////////////////" << std::endl;
+
     frame->Draw();
 }
 
@@ -101,7 +106,6 @@ void BackgroundScale() {
     {
         fitHist->Add(fixedHist, -1);
     }
-
     
     std::cout << "number of bins is: " << dynamicBG->GetNbinsX();
     std::cout << "number of bins is: " << fitHist->GetNbinsX();
