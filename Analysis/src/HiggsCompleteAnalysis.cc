@@ -35,9 +35,9 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     //const std::vector<std::string> genSimDecays{};
     //const std::vector<std::string> recoDecays{};
 
-    //const std::vector<std::string> recoDecays{"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u", "none"};
+    const std::vector<std::string> recoDecays{"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u", "none"};
     //const std::vector<std::string> recoDecays{"u u", "uu", "uuu", "uuuu"};
-    const std::vector<std::string> recoDecays{"ee", "eu", "e u", "uu", "u u"};
+    //const std::vector<std::string> recoDecays{"ee", "eu", "e u", "uu", "u u"};
     //const std::vector<std::string> recoDecays{"u u"};
 
     //Change this file to your folder to use your own cross sections
@@ -107,8 +107,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     for (std::string recoDecay : recoDecays){
         std::vector<std::shared_ptr<Process>> processes;
         //auto higgsSignal = std::make_shared<Process>("Higgs Signal", 5);
-        
-        auto higgsGroupSignal = std::make_shared<Process>("Group "+ recoDecay, 5);
+        auto higgsGroupSignal = std::make_shared<Process>("Higgs Group "+ recoDecay, 5);
         for (const auto& genSimDecay : genSimDecays)
         {
             for(double massTarget : massTargets) 
@@ -120,7 +119,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
                 //histVariablesSignal.push_back(HistVariable::sameSignMass(decayName + "__hists/" + decayName + "_Reco Same Sign Invariant Mass"));
                 histVariablesSignal.push_back(HistVariable("Same Sign Mass")); 
                 auto higgsProcess = makeBasicProcess(histVariablesSignal, signalFilePath, "Higgs" + std::to_string((int) massTarget) + ".root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity);
-                auto higgsSignal = std::make_shared<Process>("Higgs signal" + std::to_string((int)massTarget), 1);
+                auto higgsSignal = std::make_shared<Process>("Higgs signal " + genSimDecay + " " + std::to_string((int)massTarget), 1);
                 higgsSignal->addProcess(higgsProcess);
                 processes.push_back(higgsSignal);
                 higgsGroupSignal->addProcess(higgsProcess);
