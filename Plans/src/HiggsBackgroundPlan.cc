@@ -23,6 +23,9 @@
 #include "CMSAnalysis/Filters/interface/NLeptonsFilter.hh"
 #include "CMSAnalysis/Histograms/interface/NLeptonsHist.hh"
 #include "CMSAnalysis/Histograms/interface/SameSignInvariantMassHist.hh"
+
+#include "CMSAnalysis/Histograms/interface/Histograms.hh"
+
 #include "CMSAnalysis/Modules/interface/TriggerModule.hh"
 #include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
 #include "CMSAnalysis/Filters/interface/TriggerCut.hh"
@@ -92,17 +95,25 @@ void HiggsBackgroundPlan::initialize()
 
     auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::GenSim, "GenSim Same Sign Invariant Mass", 1000, 0, 2000, false, false);
     auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::Reco, "Reco Same Sign Invariant Mass", 1000, 0, 2000);
+
+    auto oppositeSignInvMassHist = make_shared<OppositeSignInvariantMassHist>(EventInput::RecoLevel::GenSim, "GenSim Opposite Sign Invariant Mass", 1000, 0, 2000);
+    auto recoOppositeSignInvMassHist = make_shared<OppositeSignInvariantMassHist>(EventInput::RecoLevel::Reco, "Reco Opposite Sign Invariant Mass", 1000, 0, 2000);
+
     auto positiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);
- 
+    auto highestLeptonPt = make_shared<PtHist>(EventInput::RecoLevel::Reco, "Highest Lepton Pt", 100, 0, 1000);
+    
     auto eventHistMod = eventMod->getHistogramModule();
 
-    auto MetHist = make_shared<METHist>(metMod, "MET", 500, 0, 2000);
+    auto metHist = make_shared<METHist>(metMod, "MET", 500, 0, 2000);
 
 
-    eventHistMod->addHistogram(MetHist);
+    eventHistMod->addHistogram(metHist);
     eventHistMod->addHistogram(recoSameSignInvMassHist);
     eventHistMod->addHistogram(sameSignInvMassHist);
     eventHistMod->addHistogram(positiveNegativeInvMassHist);
+    eventHistMod->addHistogram(oppositeSignInvMassHist);
+    eventHistMod->addHistogram(recoOppositeSignInvMassHist);
+    eventHistMod->addHistogram(highestLeptonPt);
 
     // auto runFilter = make_shared<RunFilter>();
     // runFilter->addRunNumber(302337);

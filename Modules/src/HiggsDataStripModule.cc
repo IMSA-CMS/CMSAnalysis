@@ -55,7 +55,7 @@ bool HiggsDataStripModule::process()
 	particles.addParticle(twoLeptons.second);
 	if (twoLeptons.first.isNotNull() && twoLeptons.second.isNotNull())
 	{
-		if (particles.calculateSameSignInvariantMass(false, true) > cutoff)
+		if (particles.calculateSameSignInvariantMass(true) > cutoff)
 		{
 			if(particles.getLeptonTypeCount(ParticleType::muon()) == 2)
 			{
@@ -66,7 +66,7 @@ bool HiggsDataStripModule::process()
 			phi2 = twoLeptons.second.getPhi();
 			eta2 = twoLeptons.second.getEta();
 			deltaR = twoLeptons.second.getDeltaR(twoLeptons.first);
-			mass = particles.calculateSameSignInvariantMass(false, true);
+			mass = particles.calculateSameSignInvariantMass(true);
 			tree->Fill();
 			}
 		}
