@@ -107,8 +107,14 @@ int main(int argc, char **argv)
   analyzer.addModules(modules);
   
   EventLoader eventLoader(EventLoader::fetchRootFiles(inputFile), &analyzer);
-  if(isCrab) analyzer.initialize("/srv", outputFile);
-  else analyzer.initialize(Utility::getBasePath()+"Output/", outputFile);
+  if(isCrab) 
+  {
+    analyzer.initialize("/srv", outputFile);
+  }
+  else
+  {
+    analyzer.initialize(Utility::getBasePath()+"Output/", outputFile);
+  }
   
   eventLoader.run(outputEvery, numFiles, maxEvents);
   analyzer.writeOutputFile();
