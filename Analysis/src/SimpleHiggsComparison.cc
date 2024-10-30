@@ -27,12 +27,12 @@ SimpleHiggsComparison::SimpleHiggsComparison() {
             //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
             const std::string filePath = "/uscms/home/vrao/analysis/CMSSW_12_4_3/src/CMSAnalysis/DataCollection/bin/";
 	        //Add your hists here
-            histVariables.push_back(HistVariable::invariantMass(recoDecay + "__hists/" + recoDecay + "_Reco Invariant Mass Background"));
-            histVariables.push_back(HistVariable::sameSignMass(recoDecay + "__hists/" + recoDecay + "_Reco Same Sign Invariant Mass"));
-	        histVariables.push_back(HistVariable::genSimSameSignMass(recoDecay + "__hists/" + recoDecay + "_GenSim Same Sign Invariant Mass"));
-            histVariables.push_back(HistVariable::pt(recoDecay + "__hists/" + recoDecay + "_Reco Leading lepton pT"));
-	        histVariables.push_back(HistVariable::genSimPt(recoDecay + "__hists/" + recoDecay + "_GenSim Leading lepton pT"));
-            histVariables.push_back(HistVariable::mET(recoDecay + "__hists/" + recoDecay + "_MET"));
+            //histVariables.push_back(HistVariable::invariantMass(recoDecay + "__hists/" + recoDecay + "_Reco Invariant Mass Background"));
+            //histVariables.push_back(HistVariable::sameSignMass(recoDecay + "__hists/" + recoDecay + "_Reco Same Sign Invariant Mass"));
+	        //histVariables.push_back(HistVariable::genSimSameSignMass(recoDecay + "__hists/" + recoDecay + "_GenSim Same Sign Invariant Mass"));
+            //histVariables.push_back(HistVariable::pt(recoDecay + "__hists/" + recoDecay + "_Reco Leading lepton pT"));
+	        //histVariables.push_back(HistVariable::genSimPt(recoDecay + "__hists/" + recoDecay + "_GenSim Leading lepton pT"));
+            //histVariables.push_back(HistVariable::mET(recoDecay + "__hists/" + recoDecay + "_MET"));
 	    
         auto newHiggs = std::make_shared<SimpleProcess>("Run 2", filePath, 1);
 	    newHiggs->addFile("Higgs" + std::to_string((int) massTarget) + ".root", histVariables);

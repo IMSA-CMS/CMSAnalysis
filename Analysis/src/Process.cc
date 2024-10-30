@@ -30,7 +30,18 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 				std::cout << "Error: " << error.what() << std::endl;
 				continue;
 			}
+			if (!hist)
+			{
+				continue;
+			}
+			/*
 			if (!hist || hist->IsZombie()) 
+			{
+				return nullptr;
+				//throw std::runtime_error("Histogram not found in process: " + this->name + "\nIn singleProcess number: " + singleProcessNumber);
+			}
+			*/
+			if (hist->IsZombie()) 
 			{
 				return nullptr;
 				//throw std::runtime_error("Histogram not found in process: " + this->name + "\nIn singleProcess number: " + singleProcessNumber);
@@ -52,12 +63,8 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 		{
 			toAdd = singleProcess.getHist(histType, scaleToExpected);
 			//Add only if the hisogram exists
-<<<<<<< HEAD
 			if (toAdd)
 			{
-=======
-			if (toAdd) {
->>>>>>> 7bce77611402e050f913aaa9db6d289a150a2dd7
 				toMerge->Add(toAdd);
 			}
 		}
@@ -68,6 +75,11 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 	else{
 		newHist = new TH1D(name.c_str(), name.c_str(), 1, 0.0, 0.0);
 		std::cout << "Made Empty Hist" << std::endl;
+	}
+
+	if (!newHist)
+	{
+		return nullptr;
 	}
 	//If you want yield to print while running SuperPlot uncomment the print statement (only prints the yield for the first MassTarget in the process)
 	//std::cout << "Total yield for mass target " << processes.at(0).getMassTarget() << " is " << getYield("processes.at(0).getMassTarget()") << std::endl;
@@ -148,11 +160,13 @@ double Process::getYield(HistVariable dataType) const
 
 void Process::addProcess(SingleProcess process)
 {
+	/*
 	if(process.checkValidity())
 	{
 		processes.push_back(process);
 	} 
-	//processes.push_back(process);
+	*/
+	processes.push_back(process);
 }
 
 void Process::addSystematic(std::shared_ptr<Systematic> systematic)

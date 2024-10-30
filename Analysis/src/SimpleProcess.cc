@@ -61,7 +61,7 @@ TH1* SimpleProcess::getHistFromFile(std::string file, std::vector<HistVariable> 
     std::string name = "";
     for(HistVariable histVar : histVariables) {
 	if(histVar.getName() == histType) {
-	    name = histVar.getHistName();
+	    name = histVar.getName();
 	}
     }
     hist = dynamic_cast<TH1*>(openedFile->Get(name.c_str()));

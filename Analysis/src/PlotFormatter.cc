@@ -329,6 +329,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     
     std::vector<std::shared_ptr<Channel>> channels = analysis->getChannels();
     processes = channels.at(0);
+    
     /*
     for (auto channel : channels)
     {
@@ -340,6 +341,11 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     }
     */
     std::vector<std::string> backgroundNames = processes->getNamesWithLabel("background");
+    std::cout << "Background Names Size: " << backgroundNames.size() << std::endl;
+    for (int i = 0; i < (int)backgroundNames.size(); i++)
+    {
+        std::cout << backgroundNames[i] << std::endl;
+    }
     std::vector<std::string> signalNames = processes->getNamesWithLabel("signal");
     std::vector<std::string> dataNames = processes->getNamesWithLabel("data");
     data = analysis->getHist(histvariable, dataNames.at(0), false, channelName);
@@ -360,32 +366,31 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     else
     {
         signal = new TH1F("h1", "empty", 1, 0.0, 0.0);
-        
     }
 
     double maxCombinedY = signal->GetMaximum();
 
     std::vector<TH1*> backgroundHists;
-    std::cout << "Beginning" << std::endl;
-    std::cout << "number of bins is: " << data->GetNbinsX();
-    std::cout << "number of bins is: " << signal->GetNbinsX();
+    //std::cout << "Beginning" << std::endl;
+    //std::cout << "number of bins is: " << data->GetNbinsX();
+    //std::cout << "number of bins is: " << signal->GetNbinsX();
     for(std::string name : backgroundNames) {
-        std::cout << name << std::endl;
-        std::cout << channelName << std::endl;
-        std::cout << histvariable.getName() << std::endl;
+        //std::cout << name << std::endl;
+        //std::cout << channelName << std::endl;
+        //std::cout << histvariable.getName() << std::endl;
         if (analysis->getHist(histvariable, name, true, channelName) == nullptr)
         {
             continue;
         }
         backgroundHists.push_back(analysis->getHist(histvariable, name, true, channelName));
-        std::cout << "Middle" << std::endl;
+        //std::cout << "Middle" << std::endl;
         if (analysis->getHist(histvariable, name, true, channelName) != nullptr)
         {
             maxCombinedY += analysis->getHist(histvariable, name, true, channelName)->GetMaximum();
         }
     }
     std::cout << backgroundHists.size() << "\n";
-    std::cout << "End" << std::endl;
+    //std::cout << "End" << std::endl;
 
     //int firstBin = 50;
     int numberBinsData = data->GetNbinsX();
@@ -402,33 +407,33 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     data->SetMaximum(maxCombinedY);
     signal->SetMaximum(maxCombinedY);
     background->SetMaximum(maxCombinedY);
-    std::cout << "MAXCOMBINEDY: " << maxCombinedY << std::endl;
+    //std::cout << "MAXCOMBINEDY: " << maxCombinedY << std::endl;
     
     FormatSignalData(background, signal, data, backgroundHists, numBins);
 
-    std::cout << "1" << std::endl;
+    //std::cout << "1" << std::endl;
 
     //Defines order to draw in so graph isn't cut off
     int first = GetOrder(data, signal, background);
 
-    std::cout << "1.1" << std::endl;
+    //std::cout << "1.1" << std::endl;
 
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
-    std::cout << "1.2" << std::endl;
+    //std::cout << "1.2" << std::endl;
     TPad* topPad = new TPad("pad1", "", 0, 0.25, 1, 1);
     TPad* bottomPad = new TPad("pad2", "", 0, 0, 1, 0.25);
     topPad->SetLogy();
     gStyle->SetOptStat(0);
     topPad->Draw();
     topPad->cd();
-    std::cout << "1.3" << std::endl;
+    //std::cout << "1.3" << std::endl;
 
     TList *histList = background->GetHists();
     TIter next(histList);  
     TH1 *hist;  
     bool emptyHist = true;
     while ((hist = (TH1*)next())) {
-    std::cout << hist->GetName() << " entries " << hist->GetEntries() << std::endl;  // Print info about each histogram
+    //std::cout << hist->GetName() << " entries " << hist->GetEntries() << std::endl;  // Print info about each histogram
     if (hist->GetEntries() != 0) { emptyHist = false; }
     }
     if (emptyHist == true) { return canvas; }
@@ -438,12 +443,12 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     //TH1* hist = DrawFirst(background, signal, data, topPad, upperMasslimit, firstBin, first);
     hist = DrawFirst(background, signal, data, topPad, upperMasslimit, firstBin, first);
 
-    std::cout << "1.4" << std::endl;
+   // std::cout << "1.4" << std::endl;
 
 
     ChangeAxisTitles(hist, xAxisTitle, yAxisTitle);
 
-    std::cout << "2" << std::endl;
+    //std::cout << "2" << std::endl;
     
     //Draws the legend
     auto legend = GetLegend(background, processes, data);
@@ -469,7 +474,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     double xerror2[data->GetNbinsX() + 1];
     double yerror2[data->GetNbinsX() + 1];
 
-    std::cout << "3" << std::endl;
+   // std::cout << "3" << std::endl;
 
     GetBottomPadValues(data, background, x, y, xerror2, yerror2);
 
@@ -484,7 +489,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     axis->SetLimits(hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
 
     //graph->SetMaximum(10);
-    std::cout << "4" << std::endl;
+    //std::cout << "4" << std::endl;
 
     graph->Draw("AP SAME");
     errorgraph2->GetXaxis()->SetLimits(hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
