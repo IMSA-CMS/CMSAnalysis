@@ -17,7 +17,11 @@
 
 TH1* SingleProcess::getHist(HistVariable histType, bool scaleToExpected) const
 {
+    // std::cout << "SingleProcess 1" << std::endl;
     TH1* hist = input->getHist(histType);
+    if (!hist) {
+       return nullptr;
+    }
     if(scaleToExpected) {
         double yield = getExpectedYield(histType);
         double events = hist->Integral();
@@ -26,9 +30,11 @@ TH1* SingleProcess::getHist(HistVariable histType, bool scaleToExpected) const
             //std::cout << "Scale: " << (yield/events) << "\n";
         }
     }
+    // std::cout << "SingleProcess 2" << std::endl;
     for(auto correction : corrections) {
         hist = correction->correctHist(hist);
     }
+    // std::cout << "SingleProcess 3" << std::endl;
     return hist;
 }
 
@@ -58,10 +64,10 @@ bool SingleProcess::checkValidity()
     std::vector<HistVariable> histVariables = input->getHistVariables();
     for(HistVariable histVar : histVariables) {
         if(input->getHist(histVar) == 0) {
-            //std::cout << crossSectionName << " failed on " << histVar.getName() << std::endl;
+            //std::cout << " Validity Check failed on " << histVar.getName() << std::endl;
             validProcess = false;
         }
     }
-    //std::cout << (validProcess ? "true" : "false");
+    // std::cout << (validProcess ? "true" : "false");
     return validProcess;
 }
