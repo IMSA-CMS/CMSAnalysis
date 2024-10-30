@@ -1,5 +1,5 @@
-#ifndef RATESYSTEMATIC_HH
-#define RATESYSTEMATIC_HH
+#ifndef MULTISYSTEMATIC_HH
+#define MULTISYSTEMATIC_HH
 
 #include "CMSAnalysis/Analysis/interface/Process.hh"
 #include "CMSAnalysis/Analysis/interface/Channel.hh"
@@ -19,27 +19,15 @@
 
 
 
-class RateSystematic : public Systematic
+class MultiSystematic : public Systematic
 {
     public:
-        enum class Distribution
-        {
-            LogNormal
-        };
-        enum class Limits
-        {
-            Percentages,
-            Factors,
-            Absolute
-        };
-        RateSystematic(std::string name, double rate, Distribution distribution = Distribution::LogNormal);
+        MultiSystematic(std::string name);
         virtual std::string getString() const override;
         virtual std::pair<TH1*, TH1*> adjustHistogram(TH1* original) const override;
+        void addSystematic(std::shared_ptr<Systematic> systematic);
     private:
-        double factor;
-        Distribution distribution;
-
-
+       std::vector<std::shared_ptr<Systematic>> systematics; 
 };
 
 #endif
