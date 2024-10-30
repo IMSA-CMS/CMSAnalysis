@@ -148,8 +148,13 @@ void Process::addProcess(SingleProcess process)
 
 void Process::addSystematic(std::shared_ptr<Systematic> systematic)
 {
+	systematics.addSystematic(systematic);
+}
 
-
+std::pair<TH1*, TH1*> Process::getSystematicHist(HistVariable histType, bool scaleToExpected)
+{
+	auto hist = getHist(histType, scaleToExpected);
+	return systematics.adjustHistogram(hist);
 }
 
 int Process::getNEvents() 
