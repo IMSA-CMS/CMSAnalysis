@@ -61,7 +61,7 @@ TH1 *FullAnalysis::getHist(HistVariable histType, std::string processName, bool 
             {
                 throw std::runtime_error("Histogram not found in channel: " + channel->getName());
             }
-            std::cout << "Number of Entries In " << name <<" is: " << channelHist->GetEntries() << std::endl;
+            std::cout << "Full Analysis Number of Entries In " << name <<" is: " << channelHist->GetEntries() << std::endl;
             // if (channelHist->GetNbinsX() > maxBinNum)
             // {
             //     maxBinNum = channelHist->GetNbinsX();

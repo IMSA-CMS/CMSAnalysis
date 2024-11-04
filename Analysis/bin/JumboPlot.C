@@ -118,7 +118,7 @@ std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std:
 		}
 	}
 
-	auto tableData = std::make_shared<TableData>(tableInput);
+	auto tableData = std::make_shared<TableData>(tableInput, graphableTypes, rowNames);
 	auto table = std::make_shared<HTMLTable>();
 	std::ofstream htmlFile;
 	htmlFile.open(Utility::removeSpaces(signal) + ".html");
@@ -154,8 +154,8 @@ void JumboPlot()
 	//rowNames = {"u u"};
 	//rowNames = {"ee", "e e", "eu", "e u", "uu", "u u"};
 	std::vector<std::string> rowNames = {"u u", "uu", "eu", "e u", "ee", "e e"};
-    std::vector<std::string> graphableTypes = {"Dxy", "Dz", "Isolation"};
-	std::vector<TString> units = {"dxy cm", "dz cm", "isolation"};
+    std::vector<std::string> graphableTypes = {"Pt", "Eta"};
+	std::vector<TString> units = {"pt", "eta"};
 
 	//channelNames = {"ee", "e e", "eu", "e u", "uu", "u u"};
 	//std::vector<std::string> channelNames = {"ee", "eu", "e u", "uu", "u u"};
@@ -172,7 +172,7 @@ void Temp() { //JumboPlot()
 	//auto higgsSuperImpAnalysis = std::make_shared<HiggsCutsAnalysis>();
 	//auto simpleAnalysis = std::make_shared<SimpleHiggsComparison>();
 	//auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
-	auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
+	auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>("/eos/uscms/store/user/jpalamad/rootBackups/MLBadRange", "/uscms/home/maxchen/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
 	//Extra text is the second parameter
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation/Data)");
 	plotFormatter->setUpperMasslimit(2000);
@@ -273,14 +273,14 @@ void Temp() { //JumboPlot()
 			}
 		}
 
-		auto tableData = std::make_shared<TableData>(tableInput);
+		//auto tableData = std::make_shared<TableData>(tableInput);
 		auto table = std::make_shared<HTMLTable>();
 		std::ofstream htmlFile;
 		htmlFile.open(Utility::removeSpaces(signal) + ".html");
 		htmlFile << "<!DOCTYPE html>" << std::endl;
 		htmlFile << "<html>" << std::endl;
 		htmlFile << "<body>" << std::endl;
-		table->makeTable(tableData, htmlFile);
+		//table->makeTable(tableData, htmlFile);
 		htmlFile << "</body>" << std::endl;
 		htmlFile << "</html>" << std::endl;
 		htmlFile.close();
