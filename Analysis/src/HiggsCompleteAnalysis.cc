@@ -43,19 +43,19 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     //const std::string filePath = "/uscms/home/vrao/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/"; 
     //const std::string signalFilePath = "/uscms/home/ichen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Analysis/bin/H++MassFiles/";
     // auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
-    auto reader = std::make_shared<CrossSectionReader>("/afs/cern.ch/user/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+    auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
     //auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Analysis/bin/crossSections.txt");
     const std::string filePath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/"; 
     const std::string signalFilePath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     // Vincents: /uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output 
-    double luminosity = 1.507;
+    double luminosity = 1.361;
 
     std::vector<HistVariable> histVariablesBackground;
     std::vector<HistVariable> histVariablesData;
 
-    std::vector<std::string> rowNames = {"u u", "uu", "ee", "e e", "eu", "e u"};
-    std::vector<std::string> connecters = {"_1st Highest mu- "};
-    std::vector<std::string> columnNames = {"Dxy", "Dz", "Isolation"};
+    std::vector<std::string> rowNames = {"u u", "uu", "eu", "e u", "ee", "e e"};
+    std::vector<std::string> connecters = {"_1st Highest mu- ", "_1st Highest e- "}; // 
+    std::vector<std::string> columnNames = {"Pt", "Eta"};
     for (std::string rowName : rowNames)
     {
         for (std::string connecter : connecters){
@@ -186,7 +186,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
         //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2022A.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
         //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2022B.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
         //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2022C.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        higgsData->addProcess(makeBasicProcess(histVariablesData, filePath, "testHiggs.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        higgsData->addProcess(makeBasicProcess(histVariablesData, filePath, "testhiggs10.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
         higgsData->addProcess(makeBasicProcess(histVariablesData, filePath, "testHiggsM.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
         // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "testlumi.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
         // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016C.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
