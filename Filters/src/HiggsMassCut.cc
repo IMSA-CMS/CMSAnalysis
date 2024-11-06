@@ -6,7 +6,7 @@ bool HiggsMassCut::checkEventInternal(const Event& event, const EventInput* inpu
 {
     const auto particles = event.getParticles();
 
-    if (particles.calculateSameSignInvariantMass(false, false) >= 1000)
+    if (particles.calculateSameSignInvariantMass(false) >= 1000)
     {
         return true;
     }

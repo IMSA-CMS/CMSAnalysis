@@ -24,13 +24,13 @@ void HiggsCombineStripModule::calculateVariables(ParticleCollection<Particle> pa
     NegPair.addParticle(HighMassNegParticles.second);
 
     if(HighMassPosParticles.first.isNotNull() && HighMassPosParticles.second.isNotNull()){
-        if(PosPair.calculateSameSignInvariantMass(false, true) > cuttoff){
-            addValue("massPos", PosPair.calculateSameSignInvariantMass(false,true));
+        if(PosPair.calculateSameSignInvariantMass(true) > cuttoff){
+            addValue("massPos", PosPair.calculateSameSignInvariantMass(true));
         }
     }
     if(HighMassNegParticles.first.isNotNull() && HighMassNegParticles.second.isNotNull()){
-        if(NegPair.calculateSameSignInvariantMass(false, true) > cuttoff){
-            addValue("massNeg", NegPair.calculateSameSignInvariantMass(false,true));
+        if(NegPair.calculateSameSignInvariantMass(true) > cuttoff){
+            addValue("massNeg", NegPair.calculateSameSignInvariantMass(true));
         }
     }
 }
