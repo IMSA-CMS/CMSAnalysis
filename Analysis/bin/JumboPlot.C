@@ -36,7 +36,8 @@
 
 template <typename AnalysisType>
 void makePlots(std::string signal, std::shared_ptr<AnalysisType> analysis, std::vector<std::shared_ptr<Channel>> channels, 
-std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std::vector<TString> units, std::vector<std::string> channelNames)
+std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std::vector<TString> units, std::vector<std::string> channelNames,
+std::vector<std::string> connecters)
 {
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation/Data)");
 	plotFormatter->setUpperMasslimit(2000);
@@ -59,17 +60,13 @@ std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std:
 	std::string entry = "";
 
 	if(graphSwitch == 5) {
-		for(std::shared_ptr<Channel> channel : channels) { 
-			
-			//std::cout << "Channel Match: " << channel->getName() << std::endl;
+		for(std::shared_ptr<Channel> channel : channels) { 			
 			bool valid = false;
 			for (std::string channelName : channelNames)
 			{
-				//std::cout << "Channel Name Iterated: " << channelName << std::endl;
 				if (channelName == channel->getName())
 				{
 					valid = true;
-					//std::cout << "Channel Name Chosen: " << channel->getName() << std::endl;
 					break;
 				}
 			}
@@ -77,54 +74,24 @@ std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std:
 			{
 				continue;
 			}
-
 			
-
-			//std::cout << "Background size: " << channel->getNamesWithLabel("background").size() << std::endl;
-
 			std::string channelName = channel->getName();
-			//toAdd.push_back(channelName);
-			int unitCounter = 0;
-			for(std::string dataType : graphableTypes) {
-				entry = "";
-				TString xAxisName = units[unitCounter];
-				TString yAxisName = "Events";
-				//toAdd.push_back(channel->getName());
-				columnTitles.push_back(channel->getName());
-				//toAdd.push_back(dataType);
-				rowTitles.push_back(dataType);
-				dataName = Utility::removeSpaces(dataType);
-				fileName = "jumboPlotStorage/" + Utility::removeSpaces(signal) + "/" + channel->getName() + dataName + "DataMC.png";
-				std::cout << "1" << std::endl;
-				HistVariable fullDataType = HistVariable(dataType + " " + channel->getName(), "");
-				std::cout << "Entering Plotformatter" << std::endl;
-				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, false, channel->getName());
-				//TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisName, yAxisName, true, channelName);
-				canvas->SaveAs(fileName.c_str());
-				plotFormatter->deleteHists();
-				canvas->Close();
-				delete canvas;
-			
-				entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
 
-<<<<<<< HEAD
-				toAdd.push_back(entry);
-				tableInput.push_back(toAdd);
-				toAdd.clear();
-=======
+			for (std::string connecter: connecters)
+			{
+				int unitCounter = 0;
+				for(std::string dataType : graphableTypes) 
+				{
 					entry = "";
-					//TString xAxisName = "OSDL " + units[unitCounter];
 					TString xAxisName = units[unitCounter];
 					TString yAxisName = "Events";
-					toAdd.push_back(rowName);
-					toAdd.push_back(dataType);
-					//toAdd.push_back(rowName);
+					columnTitles.push_back(channel->getName());
+					rowTitles.push_back(connecter + " " + dataType);
 					dataName = Utility::removeSpaces(dataType);
-					fileName = "jumboPlotStorage/" + Utility::removeSpaces(signal) + "/" + Utility::removeSpaces(newRowName) + dataName + "DataMC.png";
-					//fileName = channelName + dataName + "DataMC.png";
-					std::string fullDataType = dataType + " " + rowName;
-					TCanvas *canvas = plotFormatter->completePlot(analysis, HistVariable(fullDataType, ""), xAxisName, yAxisName, false, false, channel->getName());
-					//TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisName, yAxisName, true, channelName);
+					fileName = "jumboPlotStorage/" + Utility::removeSpaces(signal) + "/" + channel->getName() + connecter + dataName + "DataMC.png";
+					//HistVariable fullDataType = HistVariable(dataType + " " + connecter + " " + channel->getName(), "");
+					HistVariable fullDataType = HistVariable(connecter + dataType);
+					TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, false, channel->getName());
 					canvas->SaveAs(fileName.c_str());
 					plotFormatter->deleteHists();
 					canvas->Close();
@@ -135,13 +102,14 @@ std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std:
 					toAdd.push_back(entry);
 					tableInput.push_back(toAdd);
 					toAdd.clear();
+					unitCounter++;
+					
 				}
->>>>>>> bef83ee991d724e260a02565a7aeb5b2c4aba2e7
-				unitCounter++;
 			}
+			
 		}
 	}
-
+	
 	auto tableData = std::make_shared<TableData>(tableInput, columnTitles, rowTitles);
 	auto table = std::make_shared<HTMLTable>();
 	std::ofstream htmlFile;
@@ -154,6 +122,7 @@ std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std:
 	htmlFile << "</html>" << std::endl;
 	htmlFile.close();
 	tableInput.clear();
+	
 }
 
 void JumboPlot()
@@ -173,15 +142,14 @@ void JumboPlot()
 	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
 	std::vector<std::shared_ptr<Channel>> higgsChannels = higgsAnalysis->getChannels();
 
-	//rowNames = {"ee", "u u"};
 	//rowNames = {"ee", "e e", "eu", "e u", "uu", "u u"};
 	rowNames = {"ee", "eu", "e u", "uu", "u u"};
     graphableTypes = {"Dxy", "Dz", "Eta", "Isolation", "Phi", "Pt"};
+	std::vector<std::string> connecters = {"_1st Highest mu- ", "_1st Highest e- "};
 	units = {"Dxy [cm]", "Dz [cm]", "#eta", "Isolation", "#phi", "p_T [GeV/c]"};
 
 	//channelNames = {"ee", "e e", "eu", "e u", "uu", "u u"};
 	channelNames = {"ee", "eu", "e u", "uu", "u u"};
-	//channelNames = {"ee", "u u"};
 
-	makePlots("Higgs Signal", higgsAnalysis, higgsChannels, rowNames, graphableTypes, units, channelNames);
+	makePlots("Higgs Signal", higgsAnalysis, higgsChannels, rowNames, graphableTypes, units, channelNames, connecters);
 }

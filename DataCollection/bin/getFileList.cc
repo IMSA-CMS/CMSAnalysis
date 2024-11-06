@@ -10,7 +10,7 @@ int main(int argc, char **argv)
     {
         for (auto name : fil->getFileList()) 
         {
-            std::cout << name << std::endl;
+            std::cout << "name: " << name << std::endl;
         }
     }
 
