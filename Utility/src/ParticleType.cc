@@ -222,7 +222,7 @@ CollectionHistParams ParticleType::getNumberHist()
 
 CollectionHistParams ParticleType::getSameSignInvariantMassHist()
 {
-    return CollectionHistParams("Same Sign Invariant Mass", 150, 0, 2000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateSameSignInvariantMass(false, true)};});
+    return CollectionHistParams("Same Sign Invariant Mass", 150, 0, 2000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateSameSignInvariantMass(true)};});
 }
 
 CollectionHistParams ParticleType::getOppositeSignInvariantMassHist()
