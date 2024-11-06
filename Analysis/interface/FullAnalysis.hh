@@ -7,7 +7,7 @@
 #include "CrossSectionReader.hh"
 #include "SimpleEstimator.hh"
 #include "SingleProcess.hh"
-#include "HistVariable.hh"
+#include "MultiSystematic.hh"
 #include "Correction.hh"
 #include "TH1.h"
 

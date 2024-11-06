@@ -12,6 +12,7 @@
 #include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "CMSAnalysis/Analysis/interface/Correction.hh"
 #include "CMSAnalysis/Analysis/interface/ConstantCorrection.hh"
+#include "CMSAnalysis/Analysis/interface/RateSystematic.hh"
 #include <memory>	
 #include <iostream>
 #include <vector>
@@ -124,6 +125,8 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
         auto zzBackground = std::make_shared<Process>("ZZ Background", 3);
         zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_4L_Run_2.root", "zzto4l", reader, luminosity));
 
+        auto testSystematic = std::make_shared<RateSystematic>("Test", 0.05);
+        zzBackground->addSystematic(testSystematic);
         //cross sections should be all lowercase
         //auto ttBarandMultiBosonandZZBackground = std::make_shared<Process>("t#bar{t}, WW, WZ, ZZ Background", 4);
         auto ttBarandMultiBosonBackground = std::make_shared<Process>("t#bar{t}, Multiboson Background", 4);
