@@ -310,7 +310,8 @@ TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, Hist
     return canvas;
 }
 
-TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle, bool scaleTodata, bool includeSignal, std::string channelName)
+TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle, 
+bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
 {
     std::shared_ptr<Channel> processes = 0;
 
@@ -348,18 +349,22 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     }
     std::vector<std::string> signalNames = processes->getNamesWithLabel("signal");
     std::vector<std::string> dataNames = processes->getNamesWithLabel("data");
-    data = analysis->getHist(histvariable, dataNames.at(0), false, channelName);
 
-    //std::cout << "Data has: " << data->GetEntries() << std::endl;
+    if (includeData == true)
+    {
+        data = analysis->getHist(histvariable, dataNames.at(0), false, channelName);
+    }
+    else
+    {
+        data = new TH1F("h1", "empty", 1, 0.0, 0.0);
+    }
 
-    //data = signal = new TH1F("h1", "empty", 1, 0.0, 0.0);
     if (includeSignal == true)
     {
         for(std::string name : signalNames) 
         {
             signal = analysis->getHist(histvariable, name, true, channelName);
             std::cout << "number of signal bins is: " << signal->GetNbinsX();
-            //Figure out how to handle the group process thingx
         }
         
     }

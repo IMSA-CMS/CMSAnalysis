@@ -57,9 +57,12 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     std::vector<HistVariable> histVariablesBackground;
     std::vector<HistVariable> histVariablesData;
 
-    std::vector<std::string> rowNames = {"ee", "eu", "e u", "uu", "u u"};
-    std::vector<std::string> connecters = {"_1st Highest mu- ", "_1st Highest e- "}; 
-    std::vector<std::string> columnNames = {"Dxy", "Dz", "Eta", "Isolation", "Phi", "Pt"};
+    //std::vector<std::string> rowNames = {"ee", "eu", "e u", "uu", "u u"};
+    std::vector<std::string> rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "eu", "e u", "uu", "u u"};
+    std::vector<std::string> connecters = {"_1st Highest mu- ", "_1st Highest e- ", "_e- ", "_mu- "}; 
+    std::vector<std::string> columnNames = {"Eta", "Phi", "Pt", "Same Sign Invariant Mass", "Opposite Sign Invariant Mass"};
+
+    //std::vector<std::string> nonConnecters = {"Same Sign Invariant Mass", "Opposite Sign Invariant Mass", }
 
     /*
     for (std::string rowName : rowNames)
@@ -129,8 +132,10 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
         processes.push_back(higgsGroupSignal);
         
 
-        connecters = {"_1st Highest mu- ", "_1st Highest e- "}; 
-        columnNames = {"Dxy", "Dz", "Eta", "Isolation", "Phi", "Pt"};
+        //connecters = {"_1st Highest mu- ", "_1st Highest e- "}; 
+        //columnNames = {"Eta", "Phi", "Pt"};
+        connecters = {"_1st Highest mu- ", "_1st Highest e- ", "_e- ", "_mu- "}; 
+        columnNames = {"Eta", "Phi", "Pt", "Same Sign Invariant Mass", "Opposite Sign Invariant Mass"};
 
         std::map<std::string, std::string> histVariableToFileMapping;
         for (auto histVar : histVariablesBackground)
