@@ -12,13 +12,13 @@
 #include <iostream>
 #include <vector>
 
-// Global variables to be used in the chi-squared function
+// Global variables to be used in the log-likelihood function
 TH1* globalData;
 TH1* globalDynamicBG;
 TH1* globalFixedBG;
 
-// Chi-squared calculation function for grid scan
-double calculateChiSquared(double scaleDynamic, double scaleFixed) {
+// Poisson log-likelihood calculation function for grid scan
+double calculatePoissonLogLikelihood(double scaleDynamic, double scaleFixed) {
     TH1* scaledDynamicBG = (TH1*)globalDynamicBG->Clone();
     scaledDynamicBG->Scale(scaleDynamic);
 
@@ -28,13 +28,12 @@ double calculateChiSquared(double scaleDynamic, double scaleFixed) {
     TH1* totalBG = (TH1*)scaledDynamicBG->Clone();
     totalBG->Add(scaledFixedBG);
 
-    double chiSquared = 0.0;
+    double logLikelihood = 0.0;
     for (int i = 1; i <= globalData->GetNbinsX(); ++i) {
         double observed = globalData->GetBinContent(i);
         double expected = totalBG->GetBinContent(i);
-        double error = globalData->GetBinError(i); // Get error for observed data bin
-        if (error > 0) {
-            chiSquared += (observed - expected) * (observed - expected) / (error * error);
+        if (expected > 0) {
+            logLikelihood -= observed * TMath::Log(expected) - expected;
         }
     }
 
@@ -42,12 +41,10 @@ double calculateChiSquared(double scaleDynamic, double scaleFixed) {
     delete scaledFixedBG;
     delete totalBG;
 
-    return chiSquared;
+    return logLikelihood;
 }
 
-
 void fitAndDisplayHistograms(const char* plotName, const char* outputName) {
-    //const std::string plotName = "Pt Low Mass and Same Sign";
     const std::string dynamicBGName = "QCD Background";
     const std::string channelName = "0.3";
     const std::string inputAnalysisPath = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts_Output/";
@@ -123,14 +120,14 @@ void fitAndDisplayHistograms(const char* plotName, const char* outputName) {
     // Variables to store best-fit results
     double bestScaleDynamic = 0.01;
     double bestScaleFixed = 0.01;
-    double minChiSquared = 1e9;
+    double minLogLikelihood = 1e9;
 
     // Perform grid scan
     for (double scaleDynamic = minScaleDynamic; scaleDynamic <= maxScaleDynamic; scaleDynamic += stepSizeDynamic) {
         for (double scaleFixed = minScaleFixed; scaleFixed <= maxScaleFixed; scaleFixed += stepSizeFixed) {
-            double chiSquared = calculateChiSquared(scaleDynamic, scaleFixed);
-            if (chiSquared < minChiSquared) {
-                minChiSquared = chiSquared;
+            double logLikelihood = calculatePoissonLogLikelihood(scaleDynamic, scaleFixed);
+            if (logLikelihood < minLogLikelihood) {
+                minLogLikelihood = logLikelihood;
                 bestScaleDynamic = scaleDynamic;
                 bestScaleFixed = scaleFixed;
             }
@@ -140,7 +137,7 @@ void fitAndDisplayHistograms(const char* plotName, const char* outputName) {
     std::cout << "Best fit scale factors: " << std::endl;
     std::cout << "Dynamic Background Scale: " << bestScaleDynamic << std::endl;
     std::cout << "Fixed Background Scale: " << bestScaleFixed << std::endl;
-    std::cout << "Chi-sqared: " << minChiSquared << std::endl;
+    std::cout << "Log-Likelihood: " << minLogLikelihood << std::endl;
 
     std::cout << "-------------------------" << std::endl;
     std::cout << "Dynamic events: " << bestScaleDynamic * globalDynamicBG->GetEntries() << std::endl;
@@ -171,10 +168,9 @@ void fitAndDisplayHistograms(const char* plotName, const char* outputName) {
     bestFitLegend->AddEntry(bestFitDynamicBG, "Dynamic Background (Best Fit)", "f");
     bestFitLegend->Draw();
 
-    //canvas2->SaveAs("BestFitStackedHistogram.png");
     canvas2->SaveAs(outputName);
 }
 
-void BackgroundScaleSimultaneous(const char* plotName, const char* outputName) {
+void BackgroundScalePoisson(const char* plotName, const char* outputName) {
     fitAndDisplayHistograms(plotName, outputName);
 }

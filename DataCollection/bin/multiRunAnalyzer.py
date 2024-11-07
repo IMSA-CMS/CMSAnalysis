@@ -90,8 +90,9 @@ if __name__ == '__main__':
 	
 	ttBar = ("TTbar/TTbar_Boson_NA_Decay_LL_Run_2.txt", "TTbar/TTbar_Boson_W_Decay_L_Run_2.txt", "TTbar/TTbar_Boson_Z_Decay_LL_Run_2.txt")
 
-	zz = ("ZZ/ZZ_Decay_2e2mu_Run_2.txt", "ZZ/ZZ_Decay_2e2tau_Run_2.txt", "ZZ/ZZ_Decay_2mu2tau_Run_2.txt", "ZZ/ZZ_Decay_4e_Run_2.txt", "ZZ/ZZ_Decay_4L_Run_2.txt", "ZZ/ZZ_Decay_4mu_Run_2.txt", "ZZ/ZZ_Decay_4tau_Run_2.txt")
-	
+	#zz = ("ZZ/ZZ_Decay_2e2mu_Run_2.txt", "ZZ/ZZ_Decay_2e2tau_Run_2.txt", "ZZ/ZZ_Decay_2mu2tau_Run_2.txt", "ZZ/ZZ_Decay_4e_Run_2.txt", "ZZ/ZZ_Decay_4L_Run_2.txt", "ZZ/ZZ_Decay_4mu_Run_2.txt", "ZZ/ZZ_Decay_4tau_Run_2.txt")
+	zz = ("ZZ/ZZ_Decay_4L_Run_2.txt")
+
 	dy = ("Drell-Yan/Drell-Yan_MassCut_10-50_Run_2.txt", "Drell-Yan/Drell-Yan_MassCut_50-inf_Run_2.txt")
 	dy50 = ("Drell-Yan/Drell-Yan_MassCut_50-inf_Run_2.txt")
 
@@ -169,7 +170,7 @@ if __name__ == '__main__':
 
 	###########this one ######### background = qcd
 	#background = qcd
-	background = ttBar + zz + dy + multiBoson + qcd
+	#background = ttBar + zz + dy + multiBoson + qcd
 
 	#background = ttBar + zz + multiBoson + qcd # total 24 files - multiMuPtAnalysis coniguration
 	#background = ttBar + zz + multiBoson + bQCD
