@@ -12,7 +12,7 @@ import argparse
 #     # Start the batch in a new process using subprocess
 #     subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-def loopRun(crab, path, fileCount, *fileList):
+def loopRun(crab, path, fileCount, fileList):
 
 	if not path:
 		path = "Higgs/" if analysis == 0 else "DarkPhoton_MLStrip_CompleteCuts_ValidationConfig3_Output_numFiles3/" if analysis == 1 or analysis == 3 or analysis == 4 or analysis == 5 or analysis == 6 or analysis == 7 else "Muon/" if analysis == 2 else ""
@@ -27,7 +27,7 @@ def loopRun(crab, path, fileCount, *fileList):
 	numFiles = "numFiles=" + fileCount if fileCount != None else None
 	for file in fileList:
 		# Filling in the parameters of runAnalyzer
-		print("File: " + file)
+		print("File: ", file)
 		analysisSignal = "HiggsSignal" if analysis == 0 else "MuonSignal" if analysis == 2 else ""
 		nameLocation = file.rfind("/") + 1
 		nameEnd = len(file) - 4
@@ -180,8 +180,8 @@ if __name__ == '__main__':
 	# jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 	
 	#jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
-	#jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, higgsData, qcd]
-	jobsList = [dy50]
+	jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, higgsData, qcd]
+	#jobsList = [dy50]
 	
 	if os.path.exists("nohup.out") and not args.keep:
 		os.remove("nohup.out")
