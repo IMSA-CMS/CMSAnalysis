@@ -68,7 +68,7 @@ std::vector<std::shared_ptr<FileParams>> EventLoader::fetchRootFiles(const std::
     std::string line;
     getline(textFile, line);
     
-    std::cout << "First line of file: " << line << "\n";
+    // std::cout << "First line of file: " << line << "\n";
     //need to add funcionality to skip commented lines
     if (line.substr(0, 1) == "/")
     {
