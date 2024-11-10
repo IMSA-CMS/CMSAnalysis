@@ -12,6 +12,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <map>
 #include <cmath>
 #include "TH1.h"
 #include "TList.h"
@@ -35,13 +36,23 @@ std::vector<TH1 *> FullAnalysis::getHistograms(const HistVariable &histType, con
 }
 
 // Use this as long as you don't need to use scaleToExpected or don't have fit histograms.
-SingleProcess FullAnalysis::makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, double luminosity, std::vector<std::shared_ptr<Correction>> corrections)
+SingleProcess FullAnalysis::makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, double luminosity, std::map<std::string, std::string> histVariableToFileMapping, std::vector<std::shared_ptr<Correction>> corrections)
 {
-    auto inputFile = std::make_shared<RootFileInput>(filePathway + fileName, histVariables);
+    auto inputFile = std::make_shared<RootFileInput>(filePathway + fileName, histVariables, histVariableToFileMapping);
     //std::cout << "inputFile works";
     auto histEstimator = std::make_shared<SimpleEstimator>();
     //std::cout << "histEstimator works";
     return SingleProcess(crossSectionName, inputFile, crossReader, histEstimator, luminosity, corrections);
+}
+
+SingleProcess FullAnalysis::makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, double luminosity)
+{
+    std::map<std::string, std::string> histVariableToFileMapping;
+    auto inputFile = std::make_shared<RootFileInput>(filePathway + fileName, histVariables, histVariableToFileMapping);
+    //std::cout << "inputFile works";
+    auto histEstimator = std::make_shared<SimpleEstimator>();
+    //std::cout << "histEstimator works";
+    return SingleProcess(crossSectionName, inputFile, crossReader, histEstimator, luminosity, {});
 }
 
 TH1 *FullAnalysis::getHist(HistVariable histType, std::string processName, bool scaleToExpected, std::string channelName) const
@@ -59,9 +70,10 @@ TH1 *FullAnalysis::getHist(HistVariable histType, std::string processName, bool 
             TH1 *channelHist = channel->findProcess(processName)->getHist(histType, scaleToExpected);
             if (!channelHist)
             {
-                throw std::runtime_error("Histogram not found in channel: " + channel->getName());
+                return nullptr;
+                //throw std::runtime_error("Histogram not found in channel: " + channel->getName());
             }
-            std::cout << "Full Analysis Number of Entries In " << name <<" is: " << channelHist->GetEntries() << std::endl;
+
             // if (channelHist->GetNbinsX() > maxBinNum)
             // {
             //     maxBinNum = channelHist->GetNbinsX();
