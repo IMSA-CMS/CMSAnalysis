@@ -237,6 +237,12 @@ THStack* Channel::getStack(HistVariable histType, std::string label, bool scaleT
 			superPlot->Add(hist);
 		}
 	}
+
+	if (superPlot->GetHists() == nullptr) {
+    	delete superPlot;  
+    	return nullptr;
+	}
+
 	return superPlot;
 }
 

@@ -55,16 +55,15 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis(const std::string filePat
             for (std::string columnName : columnNames)
             {
                 histVariablesBackground.push_back(
-                    HistVariable(columnName + " " + rowName,
-                    rowName + "__hists/" + rowName + connecter + columnName));
-                    //"High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest mu- Pt"));
+                    //HistVariable(columnName + " " + rowName, rowName + "__hists/" + rowName + connecter + columnName));
+                    HistVariable(columnName + " " + rowName));
             }
 
             for (std::string LJVar : LJVars)
             {
                 histVariablesBackground.push_back(
-                    HistVariable(LJVar + " " + rowName,
-                    rowName + "__hists/" + rowName + "_" + LJVar));
+                    //HistVariable(LJVar + " " + rowName, rowName + "__hists/" + rowName + "_" + LJVar));
+                    HistVariable(LJVar + " " + rowName));
             }
         }
     }
@@ -78,9 +77,8 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis(const std::string filePat
                     for (std::string columnName : columnNames)
                     {
                         histVariablesBackgroundM.push_back(
-                            HistVariable(columnName + " " + rowName,
-                            rowName + "__hists/" + rowName + connecter + columnName));
-                            //"High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest mu- Pt"));
+                            //HistVariable(columnName + " " + rowName, rowName + "__hists/" + rowName + connecter + columnName));
+                            HistVariable(columnName + " " + rowName));
                     }
                 }
             }

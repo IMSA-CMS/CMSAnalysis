@@ -128,9 +128,9 @@ bool EventModule::process ()
     } catch (const std::runtime_error& e) {
         std::cerr << "Exception caught: " << e.what() << std::endl;
     }
-
-    // auto end_3 = std::chrono::steady_clock::now();
-    // time_3 += end_3 - start_3;
+    //   std::cout << "EventModule event input: " << getInput() <<std::endl;
+    //   int dummy;
+    //   std::cin >> dummy;
     return true;
 }
 

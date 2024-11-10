@@ -51,8 +51,8 @@ DarkPhotonInputAnalysis::DarkPhotonInputAnalysis(const std::string filePath) {
         for (std::string LJVar : LJVars)
         {
             histVariablesBackground.push_back(
-                HistVariable(LJVar + " " + rowName,
-                rowName + "__hists/" + rowName + "_" + LJVar));
+                //HistVariable(LJVar + " " + rowName, rowName + "__hists/" + rowName + "_" + LJVar));
+                HistVariable(LJVar + " " + rowName));
         }
     }
 

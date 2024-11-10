@@ -8,12 +8,12 @@ config.General.transferLogs = False
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'dummyPSet.py'
 config.JobType.scriptExe = 'crabScript.sh'
-config.JobType.scriptArgs = ['input=textfiles/SingleMassSnowmass/DY/DYPick50.txt', 'output=dy50.root', 'analysis=HiggsDataStrip']
-config.JobType.outputFiles = ['crabOutput.txt']
+config.JobType.scriptArgs = ['input=textfiles/Run2PickFiles/DY50-inf.txt', 'output=dy50.root', 'analysis=HiggsBackground']
+config.JobType.outputFiles = ['crabOutput.txt', 'dy50.root']
 
 config.Data.publication = False
 config.Data.outputDatasetTag =  config.General.requestName
-config.Data.userInputFiles = ['textfiles/SingleMassSnowmass/DY/DYPick50.txt']
+config.Data.userInputFiles = ['textfiles/Run2PickFiles/DY50-inf.txt']
 config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 1
 
