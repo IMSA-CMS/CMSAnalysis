@@ -104,7 +104,8 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, bool 
 				dataName = Utility::removeSpaces(dataType);
 				fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
 				HistVariable fullDataType = HistVariable(connecter + dataType);
-				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, false, includeData, channel->getName());
+				bool includeSignal = false;
+				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, includeSignal, includeData, channel->getName());
 				canvas->SaveAs(fileName.c_str());
 				plotFormatter->deleteHists();
 				canvas->Close();
@@ -147,7 +148,8 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, bool 
 				dataName = Utility::removeSpaces(dataType);
 				fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
 				HistVariable fullDataType = HistVariable(connecter + dataType);
-				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, false, includeData, channel->getName());
+				bool includeSignal = false;
+				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, includeSignal, includeData, channel->getName());
 				canvas->SaveAs(fileName.c_str());
 				plotFormatter->deleteHists();
 				canvas->Close();
@@ -193,7 +195,7 @@ void JumboPlot()
 	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
 	std::vector<std::shared_ptr<Channel>> higgsChannels = higgsAnalysis->getChannels();
 
-	rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "eu", "e u", "uu", "u u"};
+	rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
 	graphableTypes = {"Eta", "Phi", "Pt"};
 	std::vector<std::string> connecters = {"_1st Highest mu- ", "_1st Highest e- "}; 
 	units = {"#eta", "#phi", "p_T [GeV/c]", };
