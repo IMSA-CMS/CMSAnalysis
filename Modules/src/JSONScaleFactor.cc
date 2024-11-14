@@ -6,6 +6,7 @@
 #include <map>
 #include "CMSAnalysis/Modules/interface/JSONScaleFactor.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "EventFilter/Utilities/interface/json.h"
 #include "CMSAnalysis/Utility/interface/Utility.hh"

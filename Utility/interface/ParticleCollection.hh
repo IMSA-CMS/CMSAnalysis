@@ -44,9 +44,9 @@ public:
   bool isBB() const;
   bool isBE() const;
   double calculateAllLeptonInvariantMass() const;
-  double calculateSameSignInvariantMass(bool usingPhi, bool sameType) const;
-  std::vector<double> calculateSameSignInvariantMasses(bool usingPhi, bool sameType) const;
-  double calculateOppositeSignInvariantMass(bool sameType) const;
+  double calculateSameSignInvariantMass( bool sameType = false) const;
+  std::vector<double> calculateSameSignInvariantMasses(bool sameType) const;
+  double calculateOppositeSignInvariantMass(bool sameType = false) const;
   double calculateRecoveredInvariantMass(int nLeptons, int motherPDGID) const;
   T getLeadingPtLepton() const;
   int getLeptonTypeCount(const ParticleType &leptonType) const;
@@ -280,23 +280,23 @@ inline double ParticleCollection<T>::calculateAllLeptonInvariantMass() const
 }
 
 template <typename T>
-inline double ParticleCollection<T>::calculateSameSignInvariantMass(bool usingPhi, bool sameType) const
+inline double ParticleCollection<T>::calculateSameSignInvariantMass( bool sameType) const
 {
  // std::cout << "Particle Collection SameSignIM Vector Size:" << particles.size();
   T iPointer = Particle::nullParticle();
   T jPointer = Particle::nullParticle();
   std::pair<T, T> particlePair = {iPointer, jPointer};
   //std::cout << "Line B0";
-  if (usingPhi)
-  {
-    //std::cout << "Line B1";
-    particlePair = chooseParticlesByPhi(false); // we want same sign particles with best phi angle
-  }
-  else
-  {
+  // if (usingPhi)
+  // {
+  //   //std::cout << "Line B1";
+  //   particlePair = chooseParticlesByPhi(false); // we want same sign particles with best phi angle
+  // }
+  //else
+  //{
     //std::cout << "Line B2";
     particlePair = chooseParticles(false, sameType); // we want same sign particles with highest invariant mass
-  }
+  //}
   //std::cout << "Line B3";
   if (particlePair.first.isNotNull() && particlePair.second.isNotNull())
   {
@@ -309,13 +309,13 @@ inline double ParticleCollection<T>::calculateSameSignInvariantMass(bool usingPh
 }
 
 template <typename T>
-inline std::vector<double> ParticleCollection<T>::calculateSameSignInvariantMasses(bool usingPhi, bool sameType) const
+inline std::vector<double> ParticleCollection<T>::calculateSameSignInvariantMasses(bool sameType) const
 {
   std::vector<double> sameSignInvariantMasses;
 
   if (getPosParticles().getNumParticles() >= 2)
   {
-    double inv = getPosParticles().calculateSameSignInvariantMass(usingPhi, sameType);
+    double inv = getPosParticles().calculateSameSignInvariantMass(sameType);
     // std::cout << inv << '\t';
     sameSignInvariantMasses.push_back(inv);
     // sameSignInvariantMasses.push_back(getPosParticles().calculateSameSignInvariantMass(usingPhi));
@@ -328,7 +328,7 @@ inline std::vector<double> ParticleCollection<T>::calculateSameSignInvariantMass
 
   if (getNegParticles().getNumParticles() >= 2)
   {
-    double inv = getNegParticles().calculateSameSignInvariantMass(usingPhi, sameType);
+    double inv = getNegParticles().calculateSameSignInvariantMass(sameType);
     // std::cout << inv << '\n';
     sameSignInvariantMasses.push_back(inv);
     // sameSignInvariantMasses.push_back(getNegParticles().calculateSameSignInvariantMass(usingPhi));
