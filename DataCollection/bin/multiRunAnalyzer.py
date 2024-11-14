@@ -53,7 +53,7 @@ def loopRun(crab, path, fileCount, fileList):
 			submit = Popen(['crab', 'submit', '-c', 'crab_config.py'], cwd=crab_directory)
 			submit.wait()
 		else:
-			Popen(["runAnalyzer", inputString, outputString, analysisName, numFiles])
+			Popen(["nohup", "runAnalyzer", inputString, outputString, analysisName, numFiles])
 	
 	#runAnalyzer input="Data/Data_Trigger_SingleMuon_Year_2016B.txt" output="Data_Trigger_SingleMuon_Year_2016B.root" analysis="HiggsBackground"
 if __name__ == '__main__':

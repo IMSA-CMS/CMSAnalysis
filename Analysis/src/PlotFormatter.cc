@@ -348,6 +348,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
         std::cout << backgroundNames[i] << std::endl;
     }
     std::vector<std::string> signalNames = processes->getNamesWithLabel("signal");
+
     std::vector<std::string> dataNames = processes->getNamesWithLabel("data");
 
     if (includeData == true)
@@ -361,18 +362,26 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
 
     if (includeSignal == true)
     {
+        
         for(std::string name : signalNames) 
         {
+            std::cout << histvariable.getName() << std::endl;
+            std::cout << channelName << std::endl;
+            std::cout << name << std::endl;
             signal = analysis->getHist(histvariable, name, true, channelName);
             std::cout << "number of signal bins is: " << signal->GetNbinsX();
+            std::cout << name << std::endl;
+            std::cout << histvariable.getName() << std::endl;
         }
         
+        //signal = analysis->getHist(histvariable, "Higgs Group 1000", true, channelName);
+        //std::cout << "number of signal bins is: " << signal->GetNbinsX();
     }
     else
     {
         signal = new TH1F("h1", "empty", 1, 0.0, 0.0);
     }
-
+    std::cout << "HERE" << std::endl;
     double maxCombinedY = signal->GetMaximum();
 
     std::vector<TH1*> backgroundHists;
