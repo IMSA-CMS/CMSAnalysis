@@ -68,20 +68,20 @@ size_t FitFunctionCollection::size() const
 	return functions.size();
 }
 
-FitFunction& FitFunctionCollection::operator[](const std::string& index)
+FitFunction& FitFunctionCollection::operator[](const std::string& key)
 {
-	return functions[index];
+	return functions[key];
 }
 
-FitFunction& FitFunctionCollection::get(const std::string& index)
+FitFunction& FitFunctionCollection::get(const std::string& key)
 {
 	try 
 	{ 
-		return functions.at(index);
+		return functions.at(key);
 	} 
 	catch (std::out_of_range e)
 	{
-		std::cout << "FitFunctionCollection Error: No FitFunction with string index of " << index << '\n';
+		std::cout << "FitFunctionCollection Error: No FitFunction with string key of " << key << '\n';
 		throw e;
 	}
 }
@@ -139,4 +139,9 @@ bool FitFunctionCollection::checkFunctionsSimilar()
 	{
 		return false;
 	}
+}
+
+std::unordered_map<std::string, FitFunction>& FitFunctionCollection::getFunctions()
+{
+	return functions;
 }
