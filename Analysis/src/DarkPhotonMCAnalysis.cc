@@ -1,5 +1,5 @@
 
-#include "CMSAnalysis/Analysis/interface/DarkPhotonCompleteAnalysis.hh"
+#include "CMSAnalysis/Analysis/interface/DarkPhotonMCAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/FullAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/Channel.hh"
 #include "CMSAnalysis/Analysis/interface/SingleProcess.hh"
@@ -21,7 +21,7 @@
 #include "TH1.h"
 #include "TList.h"
  
-DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis(const std::string filePath, const std::string crossSectionPath = "/uscms/home/jpalamad/analysis/clean/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt") {
+DarkPhotonMCAnalysis::DarkPhotonMCAnalysis(const std::string filePath, const std::string crossSectionPath = "/uscms/home/jpalamad/analysis/clean/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt") {
 
     //Change this file to your folder to use your own cross sections
     //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
@@ -35,7 +35,6 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis(const std::string filePat
 
     //const std::string filePath = "/uscms/home/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton/"; 
     const std::string filePathM = "/uscms/home/mkubon/analysis/clean/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/"; 
-    
     double luminosity = 20;
 
     TH1::SetDefaultSumw2();
@@ -44,7 +43,7 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis(const std::string filePat
     //for (std::string recoDecay : recoDecays){
       //  for(double massTarget : massTargets) {
 
-    std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Sign"};
+    std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Sign", "Low Mass and Different Sign"};
     std::vector<std::string> connecters = {"_1st Highest Lepton Jet "};
     std::vector<std::string> columnNames = {"Eta", "Lepton Jet Delta R", "Lepton Jet Mass", "Phi", "Pt"};
     std::vector<std::string> LJVars = {"LeptonJetMLOutput", "mu- Opposite Sign Invariant Mass"};
@@ -162,14 +161,11 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis(const std::string filePat
             // auto correction = std::make_shared<ConstantCorrection>(2);
             //corrections.push_back(correction);
 
-            auto DarkPhotonData = std::make_shared<Process>("Data", 1);
-            //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "SingleMuonRun2017B-UL2017_MiniAODv2-v1.root", "higgs4l" + massTarget, reader, luminosity));
-            //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "SingleElectronRun2017B-UL2017_MiniAODv2-v1.root", "higgs4l" + massTarget, reader, luminosity));
-            
-            auto mbp = makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018A.root", "LeptonJet" + massTarget, reader, luminosity, histVariableToFileMapping, corrections);
-            DarkPhotonData->addProcess(mbp);
+            //auto DarkPhotonData = std::make_shared<Process>("Data", 1);
+            //auto mbp = makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018A.root", "LeptonJet" + massTarget, reader, luminosity);
+            //DarkPhotonData->addProcess(mbp);
 
-            std::vector<std::shared_ptr<Process>> backgroundProcesses = {ttbarBackground, zzBackground, dyBackground, qcdBackground, DarkPhotonSignal, DarkPhotonData};
+            std::vector<std::shared_ptr<Process>> backgroundProcesses = {ttbarBackground, zzBackground, dyBackground, qcdBackground, DarkPhotonSignal};
             
             auto leptonBackgrounds = std::make_shared<Channel>(massTarget, backgroundProcesses);
             //leptonBackgrounds->cleanProcesses();

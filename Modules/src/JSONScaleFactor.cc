@@ -6,6 +6,7 @@
 #include <map>
 #include "CMSAnalysis/Modules/interface/JSONScaleFactor.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "EventFilter/Utilities/interface/json.h"
 #include "TH1.h"
@@ -15,7 +16,7 @@
 
 // Function to preprocess the JSON content
 std::string preprocessJSON(const std::string &filename) {
-    std::ifstream file(filename);
+    std::ifstream file(Utility::getBasePath() + filename);
     if (!file.is_open()) {
         std::cerr << "Unable to open file: " << filename << std::endl;
         return "";
