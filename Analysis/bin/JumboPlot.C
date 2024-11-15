@@ -75,7 +75,7 @@ std::vector<std::string> connecters)
 				continue;
 			}
 			
-			std::string channelName = channel->getName();
+			
 
 			for (std::string connecter: connecters)
 			{
@@ -91,7 +91,7 @@ std::vector<std::string> connecters)
 					fileName = "jumboPlotStorage/" + Utility::removeSpaces(signal) + "/" + channel->getName() + connecter + dataName + "DataMC.png";
 					//HistVariable fullDataType = HistVariable(dataType + " " + connecter + " " + channel->getName(), "");
 					HistVariable fullDataType = HistVariable(connecter + dataType);
-					TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, false, channel->getName());
+					TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, false, false, channel->getName());
 					canvas->SaveAs(fileName.c_str());
 					plotFormatter->deleteHists();
 					canvas->Close();
@@ -130,12 +130,12 @@ void JumboPlot()
 	//auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
 	//std::vector<std::shared_ptr<Channel>> channels = DarkPhotonAnalysis->getChannels();
 
-	std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Signs"};
-    std::vector<std::string> graphableTypes = {"Eta", "Lepton Jet Delta R", "Lepton Jet Mass", "Phi", "Pt"};
-	std::vector<TString> units = {"ETA", "DELTA R", "GEV", "RAD", "GEV/C"};
+	// std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Signs"};
+    // std::vector<std::string> graphableTypes = {"Eta", "Lepton Jet Delta R", "Lepton Jet Mass", "Phi", "Pt"};
+	// std::vector<TString> units = {"ETA", "DELTA R", "GEV", "RAD", "GEV/C"};
 
 
-	std::vector<std::string> channelNames = {"0.3"};
+	// std::vector<std::string> channelNames = {"0.3"};
 
 	//makePlots("Dark Photon Signal", DarkPhotonAnalysis, channels, rowNames, graphableTypes, units, channelNames);
 
@@ -150,7 +150,8 @@ void JumboPlot()
 
 
 	//channelNames = {"ee", "e e", "eu", "e u", "uu", "u u"};
-	channelNames = {"ee", "eu", "e u", "uu", "u u"};
+	std::vector<std::string> channelNames = {"e e","ee", "eu", "e u", "uu", "u u"};
+	std::vector<std::string> connecters = {"_1st Highest mu- ", "_1st Highest e- "}; 
 
 	makePlots("Higgs Signal", higgsAnalysis, higgsChannels, rowNames, graphableTypes, units, channelNames, connecters);
 }
