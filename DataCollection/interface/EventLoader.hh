@@ -30,7 +30,7 @@ class EventLoader
         void nextFile(std::shared_ptr<EventFile> newFile) {file=newFile;}
 
         //Calls process Root files
-        void run(int outputEvery, int nFiles, int maxEvents);
+        void run(int outputEvery, int nFiles, int skipFiles, int maxEvents);
 
         int getNumOfEvents() const {return numOfEvents;}
 
@@ -44,7 +44,7 @@ class EventLoader
         void analyze(const RootEventInterface);
         void endJob();
         
-        void processRootFiles(int outputEvery, int nFiles, int maxEvents);
+        void processRootFiles(int outputEvery, int nFiles, int skipFiles, int maxEvents);
 
         std::vector<std::shared_ptr<FileParams>> rootFiles;
         Analyzer *modules; 
