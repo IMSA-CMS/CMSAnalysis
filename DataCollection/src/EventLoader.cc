@@ -103,17 +103,18 @@ std::vector<std::shared_ptr<FileParams>> EventLoader::fetchRootFiles(const std::
   return rootFiles;
 }
 
-void EventLoader::run(int outputEvery, int nFiles, int maxEvents)
+void EventLoader::run(int outputEvery, int nFiles, int skipFiles, int maxEvents)
 {
-  processRootFiles(outputEvery, nFiles, maxEvents);
+  processRootFiles(outputEvery, nFiles, skipFiles, maxEvents);
 }
 
-void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents)
+void EventLoader::processRootFiles(int outputEvery, int nFiles, int skipFiles, int maxEvents)
 {
   // display how many rrot files
   // each iteration in for loop, processing file... # of events and name of file
 
   int fileCounter = 0;
+  int skipCounter = 0;
   int eventCounter = 0;
   bool stopNow = false;
 
@@ -125,6 +126,11 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents)
 
     for (auto &fileName : fileList)
     {
+      
+      if (skipFiles > 0 && skipCounter < skipFiles){
+        ++skipCounter;
+        continue;
+      }
       // Adds prefix necessary to read remote files
       // const std::string eossrc = "root://cmsxrootd.fnal.gov//";
       // fileName = eossrc + fileName;
