@@ -37,7 +37,7 @@ std::vector<std::string> histogramTypes =
 
 void HiggsBackgroundFit()
 {
-	const double min = 0;
+	const double min = 80;
 	const double max = 2000;
 
 	std::string fitHistsName = "H++BackgroundFits.root";
@@ -47,8 +47,8 @@ void HiggsBackgroundFit()
 	remove(fitParameterValueFile.c_str());
 	remove(parameterFunctions.c_str());
 	
-	// std::vector<std::string> backgrounds = {"t#bar{t}, WW, WZ, ZZ Background", "Drell-Yan Background", "QCD Background", "ZZ Background"};
-	std::vector<std::string> backgrounds = {"Background"};
+	std::vector<std::string> backgrounds = {"t#bar{t}, WW, WZ, ZZ Background", "Drell-Yan Background", "QCD Background", "ZZ Background"};
+	// std::vector<std::string> backgrounds = {"Background"};
 
 	Fitter fitter(fitHistsName, fitParameterValueFile, parameterFits, parameterFunctions);
     std::shared_ptr<HiggsCompleteAnalysis> analysis = std::make_shared<HiggsCompleteAnalysis>();
