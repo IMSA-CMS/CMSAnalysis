@@ -45,6 +45,9 @@ int main(int argc, char **argv)
 
   parser.addOption("input", optutl::CommandLineParser::kString, "Input", "");
   parser.addOption("numFiles", optutl::CommandLineParser::kInteger, "Number of Files", -1); // Change last input to -1 later
+  
+  // this might be part of module options, but I can't find it anywhere
+  parser.addOption("skipFiles", optutl::CommandLineParser::kInteger, "Files to Skip", -1); 
 
   parser.addOption("analysis", optutl::CommandLineParser::kString, "Type of Analysis", "");
   parser.addOption("moduleOptions", optutl::CommandLineParser::kString, "Module Specific Options", "");
@@ -59,6 +62,7 @@ int main(int argc, char **argv)
 
   std::string outputFile = parser.stringValue("output");
   int numFiles = parser.integerValue("numFiles");
+  int skipFiles = parser.integerValue("skipFiles");
   std::string analysisType = parser.stringValue("analysis");
 
   std::string moduleOptionsFile = parser.stringValue("moduleOptions");
@@ -116,7 +120,7 @@ int main(int argc, char **argv)
     analyzer.initialize(Utility::getBasePath()+"Output/", outputFile);
   }
   
-  eventLoader.run(outputEvery, numFiles, maxEvents);
+  eventLoader.run(outputEvery, numFiles, skipFiles, maxEvents);
   analyzer.writeOutputFile();
 
   

@@ -156,7 +156,7 @@ std::vector<std::shared_ptr<FileParams>> ProcessDictionary::readFile(std::string
 
 Process& ProcessDictionary::findProcess(std::string newProcess) // fill in these functions
 {
-  std::cout << newProcess << std::endl;
+  // std::cout << newProcess << std::endl;
   for (auto& process : processes)
   {
     if (process.getName() == newProcess)
