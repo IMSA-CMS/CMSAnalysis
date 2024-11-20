@@ -107,7 +107,15 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_phi", "Jet_phi"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_mass", "Jet_mass"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_pt", "Jet_pt"),
+
+
 		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("elec_idpass", "Electron_cutBased"),
+
+    	std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("mvaElecWP80", "Electron_mvaFall17V2Iso_WP80"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("mvaElecWP90", "Electron_mvaFall17V2Iso_WP90"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("mvaElecWPL", "Electron_mvaFall17V2Iso_WPL"),
+
+
         std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("elec_cutBasedHEEP", "Electron_cutBased_HEEP"),
 
         std::make_shared<TreeVariable<TTreeReaderArray<UChar_t>>>("muon_mvaid", "Muon_mvaId"),
@@ -277,6 +285,25 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
             negativeCounter++;
             //std::cout<<"\nNegative counter: " << negativeCounter << "\n";
         }
+
+    // Particle::SelectionFit fit;
+    //    if (getArrayElement<Bool_t>("mvaElecWP80", i)) 
+    //     {
+    //         fit = Particle::SelectionFit::Tight;
+    //     } else if (getArrayElement<Bool_t>("mvaElecWP90", i)) 
+    //     {
+    //         fit = Particle::SelectionFit::Medium;
+    //     } else if (getArrayElement<Bool_t>("mvaElecWPL", i)) 
+    //     {
+    //         fit = Particle::SelectionFit::Loose;
+    //     } else {
+    //         continue;
+    //     }
+
+
+        // std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("mvaElecWP80", "MVA Iso ID V2 WP80 Electron_mvaFall17V2Iso_WP80"),
+		// std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("mvaElecWP90", "Electron_mvaFall17V2Iso_WP90"),
+		// std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("mvaElecWPL", "Electron_mvaFall17V2Iso_WPL"),
 
         Particle::SelectionFit fit;
         if (getArrayElement<Int_t>("elec_idpass", i) == 4) 
