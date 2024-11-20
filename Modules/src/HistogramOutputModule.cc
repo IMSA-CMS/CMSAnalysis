@@ -4,6 +4,7 @@
 #include "CMSAnalysis/Modules/interface/PtResolutionModule.hh"
 #include "CMSAnalysis/Modules/interface/Module.hh"
 #include "CMSAnalysis/Modules/interface/AnalysisModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 
 #include <iostream>
 #include <stdexcept>
@@ -133,6 +134,7 @@ void HistogramOutputModule::fillHistogram(const std::string &name,
   {
     for (double currentNum : values) {
       //std::cout << "currentNum: " << currentNum << "\n"; 
+      //std::cout << "Weight: " << weight << "\n";
       hist->Fill(currentNum, weight);
     }
   }
@@ -175,6 +177,8 @@ bool HistogramOutputModule::process() {
       // {
       //   std::cout << hist->getFilteredName() << " has " << value << "\n";
       // }
+      //std::cout << "Module particle size: " << getInput()->getParticles(EventInput::RecoLevel::Reco).getNumParticles() << "\n";
+        //std::cout << "HistOutputModule event input: " << getInput() <<std::endl;
       fillHistogram(hist->getFilteredName(), hist->value(), hist->eventWeight());
     }
   }

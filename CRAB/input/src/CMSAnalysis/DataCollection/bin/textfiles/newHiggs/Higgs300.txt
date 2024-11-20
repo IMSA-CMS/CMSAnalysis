@@ -1,0 +1,6 @@
+H++toLL
+Mass:	300
+Run:	2
+Lepton:	All
+Period:	2018
+Format:	NanoAOD

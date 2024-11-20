@@ -38,7 +38,7 @@ float bottom = 0.12*height;
 float left = 0.12*width;
 float right = 0.04*width;
 
-TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes, std::string histvariable, TString xAxisTitle, TString yAxisTitle)
+TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle)
 {
     THStack* background = processes->getStack(histvariable, "background", true);
 	THStack* signal = processes->getStack(histvariable, "signal", true);
@@ -74,7 +74,7 @@ TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes
     return canvas;
 }
 
-TCanvas* PlotFormatter::superImposedHist(std::shared_ptr<Channel> processes, std::string histvariable, TString xAxisTitle, TString yAxisTitle) {
+TCanvas* PlotFormatter::superImposedHist(std::shared_ptr<Channel> processes, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle) {
     std::vector<TH1*> hists;
     for(std::shared_ptr<Process> process : processes->getProcesses()) {
         hists.push_back(process->getHist(histvariable, false));
@@ -240,7 +240,7 @@ TCanvas* PlotFormatter::noScaleSimpleSuperImposedHist(std::vector<TH1*> hists, s
     return canvas;
 }
 
-TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, std::string histvariable, bool scaleToExpected, TString xAxisTitle, TString yAxisTitle) 
+TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, HistVariable histvariable, bool scaleToExpected, TString xAxisTitle, TString yAxisTitle) 
 {
     TH1* hist = process->getHist(histvariable, scaleToExpected);
     return simple1DHist(hist, xAxisTitle, yAxisTitle);
@@ -266,7 +266,7 @@ TCanvas* PlotFormatter::simple1DHist(TH1* hist, TString xAxisTitle, TString yAxi
     return canvas;
 }
 
-TCanvas* PlotFormatter::simple2DHist(std::shared_ptr<Process> process, std::string histvariable, TString xAxisTitle, TString yAxisTitle) {
+TCanvas* PlotFormatter::simple2DHist(std::shared_ptr<Process> process, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle) {
     TH2* hist = process->get2DHist(histvariable);
 
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
@@ -285,7 +285,7 @@ TCanvas* PlotFormatter::simple2DHist(std::shared_ptr<Process> process, std::stri
     return canvas;
 }
 
-TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, std::string histvariable, TString xAxisTitle, TString yAxisTitle) {
+TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle) {
     THStack* hists = processes->getStack(histvariable, "", true);
 
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
@@ -310,7 +310,7 @@ TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, std:
     return canvas;
 }
 
-TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std::string histvariable, TString xAxisTitle, TString yAxisTitle, bool scaleTodata, bool includeSignal, std::string channelName)
+TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle, bool scaleTodata, bool includeSignal, std::string channelName)
 {
     std::shared_ptr<Channel> processes = 0;
 
@@ -329,14 +329,42 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     
     std::vector<std::shared_ptr<Channel>> channels = analysis->getChannels();
     processes = channels.at(0);
+    
+    /*
+    for (auto channel : channels)
+    {
+        std::cout << channel->getName() << std::endl;
+        for (auto process : channel->getNames())
+        {
+            std::cout << "Process: " << process << std::endl;
+        }
+    }
+    */
     std::vector<std::string> backgroundNames = processes->getNamesWithLabel("background");
+    std::cout << "Background Names Size: " << backgroundNames.size() << std::endl;
+    for (int i = 0; i < (int)backgroundNames.size(); i++)
+    {
+        std::cout << backgroundNames[i] << std::endl;
+    }
     std::vector<std::string> signalNames = processes->getNamesWithLabel("signal");
     std::vector<std::string> dataNames = processes->getNamesWithLabel("data");
-    data = analysis->getHist(histvariable, dataNames.at(0), false, channelName);
+    std::cout << "Data Names Size: " << dataNames.size() << std::endl;
+
+    HistVariable dataHist = HistVariable("_Pass"+histvariable.getName());
+    data = analysis->getHist(dataHist, dataNames.at(0), false, channelName);
+
+    std::cout << "Data has: " << data->GetEntries() << std::endl;
+
     //data = signal = new TH1F("h1", "empty", 1, 0.0, 0.0);
     if (includeSignal == true)
     {
-        signal = analysis->getHist(histvariable, signalNames.at(0), true, channelName);
+        for(std::string name : signalNames) 
+        {
+            signal = analysis->getHist(histvariable, name, true, channelName);
+            std::cout << "number of signal bins is: " << signal->GetNbinsX();
+            //Figure out how to handle the group process thingx
+        }
+        
     }
     else
     {
@@ -346,13 +374,26 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     double maxCombinedY = signal->GetMaximum();
 
     std::vector<TH1*> backgroundHists;
-    std::cout << "number of bins is: " << data->GetNbinsX();
-    std::cout << "number of bins is: " << signal->GetNbinsX();
+    //std::cout << "Beginning" << std::endl;
+    //std::cout << "number of bins is: " << data->GetNbinsX();
+    //std::cout << "number of bins is: " << signal->GetNbinsX();
     for(std::string name : backgroundNames) {
+        //std::cout << name << std::endl;
+        //std::cout << channelName << std::endl;
+        //std::cout << histvariable.getName() << std::endl;
+        if (analysis->getHist(histvariable, name, true, channelName) == nullptr)
+        {
+            continue;
+        }
         backgroundHists.push_back(analysis->getHist(histvariable, name, true, channelName));
-        maxCombinedY += analysis->getHist(histvariable, name, true, channelName)->GetMaximum();
+        //std::cout << "Middle" << std::endl;
+        if (analysis->getHist(histvariable, name, true, channelName) != nullptr)
+        {
+            maxCombinedY += analysis->getHist(histvariable, name, true, channelName)->GetMaximum();
+        }
     }
     std::cout << backgroundHists.size() << "\n";
+    //std::cout << "End" << std::endl;
 
     //int firstBin = 50;
     int numberBinsData = data->GetNbinsX();
@@ -360,39 +401,63 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     float dataIntegral = data->Integral(lowerDataIntegralLimit, numberBinsData);
     float backgroundIntegral = 0;
 
-    IntegralScaling(upperMasslimit, scaleTodata, backgroundHists, firstBin, numberBinsData, 
-    lowerDataIntegralLimit, dataIntegral, backgroundIntegral);
-
+    IntegralScaling(upperMasslimit, scaleTodata, backgroundHists, firstBin, numberBinsData,
+        lowerDataIntegralLimit, dataIntegral, backgroundIntegral);
+    
     background = new THStack("background", "background");
 
     maxCombinedY *= 10;
     data->SetMaximum(maxCombinedY);
     signal->SetMaximum(maxCombinedY);
     background->SetMaximum(maxCombinedY);
-    std::cout << "MAXCOMBINEDY: " << maxCombinedY << std::endl;
-
+    //std::cout << "MAXCOMBINEDY: " << maxCombinedY << std::endl;
+    
     FormatSignalData(background, signal, data, backgroundHists, numBins);
+
+    //std::cout << "1" << std::endl;
 
     //Defines order to draw in so graph isn't cut off
     int first = GetOrder(data, signal, background);
 
+    //std::cout << "1.1" << std::endl;
+
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
+    //std::cout << "1.2" << std::endl;
     TPad* topPad = new TPad("pad1", "", 0, 0.25, 1, 1);
     TPad* bottomPad = new TPad("pad2", "", 0, 0, 1, 0.25);
     topPad->SetLogy();
     gStyle->SetOptStat(0);
     topPad->Draw();
     topPad->cd();
+    //std::cout << "1.3" << std::endl;
+
+    TList *histList = background->GetHists();
+    TIter next(histList);  
+    TH1 *hist;  
+    bool emptyHist = true;
+    while ((hist = (TH1*)next())) {
+    //std::cout << hist->GetName() << " entries " << hist->GetEntries() << std::endl;  // Print info about each histogram
+    if (hist->GetEntries() != 0) { emptyHist = false; }
+    }
+    if (emptyHist == true) { return canvas; }
+
 
     //Draws the histogram with more events first (bigger axis)
-    TH1* hist = DrawFirst(background, signal, data, topPad, upperMasslimit, firstBin, first);
+    //TH1* hist = DrawFirst(background, signal, data, topPad, upperMasslimit, firstBin, first);
+    hist = DrawFirst(background, signal, data, topPad, upperMasslimit, firstBin, first);
+
+   // std::cout << "1.4" << std::endl;
+
 
     ChangeAxisTitles(hist, xAxisTitle, yAxisTitle);
+
+    //std::cout << "2" << std::endl;
     
     //Draws the legend
     auto legend = GetLegend(background, processes, data);
     legend->Draw();
     topPad->Update();
+
     writeText(width, height, top, bottom, left, right);
 
     //Draws the other histogram   
@@ -404,11 +469,15 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     canvas->cd();
     bottomPad->Draw();
     bottomPad->cd();
+
+
     
     double x[data->GetNbinsX() + 1];
     double y[data->GetNbinsX() + 1];
     double xerror2[data->GetNbinsX() + 1];
     double yerror2[data->GetNbinsX() + 1];
+
+   // std::cout << "3" << std::endl;
 
     GetBottomPadValues(data, background, x, y, xerror2, yerror2);
 
@@ -423,6 +492,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
     axis->SetLimits(hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
 
     //graph->SetMaximum(10);
+    //std::cout << "4" << std::endl;
 
     graph->Draw("AP SAME");
     errorgraph2->GetXaxis()->SetLimits(hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
@@ -438,10 +508,25 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, std
 
 void PlotFormatter::FormatSignalData(THStack*& background, TH1*& signal, TH1*& data, std::vector<TH1*>& backgroundHists, int numBins)
 {
+    std::cout << "Background Hist Names Start" << std::endl;
     for(TH1* backgroundHist : backgroundHists) {
         backgroundHist->Rebin(numBins);
         background->Add(backgroundHist);
+        std::cout << backgroundHist->GetName() << std::endl;
     }
+    std::cout << "Background Hist Names End" << std::endl;
+
+    std::cout << "TList Start" << std::endl;
+    TList *histList = background->GetHists();
+    TIter next(histList);  
+    TH1 *hist;  
+    bool emptyHist = false;
+    while ((hist = (TH1*)next())) {
+    std::cout << hist->GetName() << " entries " << hist->GetEntries() << std::endl;  // Print info about each histogram
+    if (hist->GetEntries() == 0) { continue; }
+    }
+    std::cout << "TList End" << std::endl;
+
     signal->Scale(std::pow(10, 6));
     signal->Rebin(numBins);
     data->Rebin(numBins);   
@@ -516,7 +601,12 @@ void PlotFormatter::DrawOtherHistograms(THStack*& background, TH1*& signal, TH1*
 
 TH1* PlotFormatter::DrawFirst(THStack*& background, TH1*& signal, TH1*& data, TPad*& topPad, float upperMasslimit, int firstBin, int first)
 {
+    TH1* hist;
+    std::cout << "1.31" << std::endl;
+    hist = background->GetHistogram();
     int xAxisMin = std::pow(1, -5);
+    std::cout << background->GetName() << std::endl;
+    std::cout << background->GetNhists() << std::endl;
     if(first == 0) {
         for(const auto&& obj2 : *background->GetHists()) {
             TH1* backgroundHist = dynamic_cast<TH1*>(obj2);
@@ -528,7 +618,8 @@ TH1* PlotFormatter::DrawFirst(THStack*& background, TH1*& signal, TH1*& data, TP
         background->Draw("HIST");
         stackVector.push_back(background);  
     }
-    else if(first == 1) {
+    else if (first == 1) 
+    {
         //signal->SetLineColor(kBlack);
         signal->SetLineColor(6);
 	    signal->SetFillColor(0);
@@ -545,9 +636,12 @@ TH1* PlotFormatter::DrawFirst(THStack*& background, TH1*& signal, TH1*& data, TP
         histVector.push_back(data);
         //data->GetXaxis()->SetLimits(firstBin, upperMasslimit);
     }
+    std::cout << "1.32" << std::endl;
 
-    TH1* hist;
-    
+    //TH1* hist;
+    hist = background->GetHistogram();
+
+    std::cout << first << std::endl;
     if(first == 0) {
         //std::cout << "check 1" << "\n";
         hist = background->GetHistogram();
@@ -558,6 +652,7 @@ TH1* PlotFormatter::DrawFirst(THStack*& background, TH1*& signal, TH1*& data, TP
     else {
         hist = data;
     }
+    std::cout << "1.33" << std::endl;
     topPad->Update();
     return hist;
 }
@@ -565,15 +660,29 @@ TH1* PlotFormatter::DrawFirst(THStack*& background, TH1*& signal, TH1*& data, TP
 int PlotFormatter::GetOrder(TH1* data, TH1* signal, THStack* background)
 {
     int first;
-    if(signal->GetMaximum() > background->GetMaximum() && signal->GetMaximum() > data->GetMaximum()) {
-        first = 1;
+    double dataMax =  data->GetMaximum();
+    double signalMax = signal->GetMaximum();
+    double backgroundMax = background->GetMaximum();
+
+    if(data->GetEntries() == 0)
+    {
+        dataMax=0;
+        std::cout << "No Data Entries" << std::endl;
     }
-    else if(data->GetMaximum() > background->GetMaximum() && data->GetMaximum() > signal->GetMaximum()) {
-        first = 2;
+
+    if(signalMax > backgroundMax && signalMax > dataMax)
+    {
+        first=1;
     }
-    else {
-        first = 0;
+    else if(dataMax > backgroundMax && dataMax > signalMax)
+    {
+        first=2;
     }
+    else
+    {
+        first=0;
+    }
+    
     return first;
 }
 
@@ -585,8 +694,16 @@ void PlotFormatter::IntegralScaling(double& upperMasslimit, bool& scaleTodata, s
         int lowerBackgroundIntegralLimit = firstBin*(static_cast<double>(numberBinsBackground)/upperMasslimit);
         backgroundIntegral += backgroundHist->Integral(lowerBackgroundIntegralLimit, numberBinsBackground);
     }
+  
     float scaleFactor = dataIntegral/backgroundIntegral;
-    if (scaleTodata == true)
+
+    if(dataIntegral == 0)
+    {
+        scaleFactor=1;
+        std::cout << "No Data Integral" << std::endl;
+    } 
+
+    if (scaleTodata)
     {
         for (auto backgroundHist : backgroundHists)
         {
@@ -801,7 +918,7 @@ TLegend* PlotFormatter::GetSimpleLegend(std::vector<TH1*> hists, std::vector<TSt
     return legend;
 }
 
-TLegend* PlotFormatter::GetSuperImposedLegend(std::shared_ptr<Channel> processes, std::string histvariable)
+TLegend* PlotFormatter::GetSuperImposedLegend(std::shared_ptr<Channel> processes, HistVariable histvariable)
 {
     auto legend = new TLegend(0.8-(right/width), 0.85-(top/height), 1-(right/width), 1-(top/height));
     legend->SetTextSize(0.02);

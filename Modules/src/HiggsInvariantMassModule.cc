@@ -39,7 +39,7 @@ bool HiggsInvariantMassModule::process()
         return true;
     }
 
-    muonInvariantMass = highPtMuons.calculateSameSignInvariantMasses(false, true);
+    muonInvariantMass = highPtMuons.calculateSameSignInvariantMasses(true);
 
     
     file->cd();

@@ -61,8 +61,8 @@ DarkPhotonNoCutAnalysis::DarkPhotonNoCutAnalysis(const std::string filePath) {
     for (std::string LJVar : LJVars)
     {
         histVariablesBackground.push_back(
-            HistVariable(LJVar,
-            "_hists/" + LJVar));
+            //HistVariable(LJVar, "_hists/" + LJVar));
+            HistVariable(LJVar));
     }
 
     //histVariablesBackground.push_back(HistVariable("Pt High Mass and Same Sign","High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest mu- Pt"));

@@ -122,7 +122,6 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
 		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_looseid", "Muon_looseId"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_mediumid", "Muon_mediumId"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_tightid", "Muon_tightId"),
-
 		std::make_shared<TreeVariable<TTreeReaderValue<ULong64_t>>>("event_number", "event"),
         std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_bTag", "Jet_btagCSVV2"),
         std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("jet_size", "nJet"),
@@ -353,13 +352,6 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         //std::cout<<charge;
         Particle::SelectionFit fit;
 
-         for (UInt_t i = 0; i < getVariable<UInt_t>("muon_size"); i++)
-        {
-        int charge = getArrayElement<Int_t>("muon_charge", i);
-//std::cout<<charge;
-        Particle::SelectionFit fit;
-       // std::cout << static_cast<int>(getArrayElement<UChar_t>("muon_mvaid", i)) << "\n" ;
-
         if (getArrayElement<UChar_t>("muon_mvaid", i) >= 3) 
         {
             fit = Particle::SelectionFit::Tight;
@@ -408,7 +400,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
 //             auto weight = getArrayElement<Float_t>("pdf_weight", i);
 //             particle.addInfo("pweight" + std::to_string(i), weight);
 //         }
-     }    
+//        }    
     return recoParticles;
 }
 

@@ -68,7 +68,7 @@ std::vector<std::shared_ptr<FileParams>> EventLoader::fetchRootFiles(const std::
     std::string line;
     getline(textFile, line);
     
-    std::cout << "First line of file: " << line << "\n";
+    // std::cout << "First line of file: " << line << "\n";
     //need to add funcionality to skip commented lines
     if (line.substr(0, 1) == "/")
     {
@@ -126,6 +126,11 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents, i
 
     for (auto &fileName : fileList)
     {
+      
+      if (skipFiles > 0 && skipFileCounter < skipFiles){
+        ++skipFileCounter;
+        continue;
+      }
       // Adds prefix necessary to read remote files
       // const std::string eossrc = "root://cmsxrootd.fnal.gov//";
       // fileName = eossrc + fileName;
