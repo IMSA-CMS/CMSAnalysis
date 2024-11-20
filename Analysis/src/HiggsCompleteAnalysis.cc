@@ -57,49 +57,48 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     std::vector<HistVariable> histVariablesBackground;
     std::vector<HistVariable> histVariablesData;
 
-    std::vector<std::string> rowNames = {"ee", "eu", "e u", "uu", "u u"};
-    std::vector<std::string> connecters = {"_1st Highest mu- ", "_1st Highest e- "}; 
-    std::vector<std::string> columnNames = {"Dxy", "Dz", "Eta", "Isolation", "Phi", "Pt"};
+    std::vector<std::string> rowNames = {"u u", "uu", "eu", "e u", "ee", "e e"};
+    std::vector<std::string> backgroundConnecters = {"_1st Highest mu- ", "_1st Highest e- "}; 
+    std::vector<std::string> dataConnecters = {"_Pass_1st Highest mu- ", "_Pass_1st Highest e- "}; 
+    std::vector<std::string> columnNames = {"Pt", "Eta"};
 
-    /*
     for (std::string rowName : rowNames)
     {
-        for (std::string connecter : connecters){
+        for (std::string connecter : backgroundConnecters){
 
             for(std::string columnName : columnNames)
             {
                 //histVariablesBackground.push_back(
                     //HistVariable(columnName + " " + connecter + " " + rowName,
                     //rowName + "__hists/" + rowName + connecter + columnName));
-                histVariablesBackground.push_back(columnName);
+                histVariablesBackground.push_back(HistVariable(connecter + columnName));
+                
+                //std::cout << columnName << std::endl;
             }
         }
     }
-    */
 
-    for (std::string connecter : connecters){
+    // for (std::string connecter : backgroundConnecters){
 
-        for(std::string columnName : columnNames)
-        {
-            //histVariablesBackground.push_back(HistVariable(connecter + columnName, ""));
-            histVariablesBackground.push_back(HistVariable(connecter + columnName));
-        }
-    }
+    //     for(std::string columnName : columnNames)
+    //     {
+    //         //histVariablesBackground.push_back(HistVariable(connecter + columnName, ""));
+    //         histVariablesBackground.push_back(HistVariable(connecter + columnName));
+    //     }
+    // }
 
-    /*
+    
     for (std::string rowName : rowNames)
     {
-        for (std::string connecter : connecters)
+        for (std::string connecter : dataConnecters)
         {
             for (std::string columnName : columnNames)
             {
-                histVariablesData.push_back(
-                    HistVariable(columnName + " " + rowName,
-                    rowName + "_Pass__hists/" + rowName + "_Pass" + connecter + columnName));
+                histVariablesData.push_back(HistVariable(connecter + columnName));
             }
         }
     }
-    */
+    
 
 
 
@@ -146,19 +145,21 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
         processes.push_back(higgsGroupSignal);
         
 
-        connecters = {"_1st Highest mu- ", "_1st Highest e- "}; 
-        columnNames = {"Dxy", "Dz", "Eta", "Isolation", "Phi", "Pt"};
+        //connecters = {"_1st Highest mu- ", "_1st Highest e- "}; 
+        //columnNames = {"Dxy", "Dz", "Eta", "Isolation", "Phi", "Pt"};
 
         std::map<std::string, std::string> histVariableToFileMapping;
         for (auto histVar : histVariablesBackground)
         {
-            for (auto connecter : connecters)
+            for (auto connecter : backgroundConnecters)
             {
                 for (auto colName : columnNames)
                 {
                     if ((connecter + colName) == (histVar.getName()))
                     {
+                        std::cout << "Background Mapping: " << histVar.getName() << std::endl;
                         histVariableToFileMapping[histVar.getName()] = recoDecay + "__hists/" + recoDecay + connecter + colName;
+
                     }
                 }
             }
@@ -166,6 +167,23 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
         histVariablesBackground.push_back(HistVariable("Same Sign Invariant Mass"));
         histVariableToFileMapping["Same Sign Invariant Mass"] = recoDecay + "__hists/" + recoDecay + "_Reco Same Sign Invariant Mass";
         //std::cout << "histmap:" << histVariableToFileMapping.at("Same Sign Invariant Mass") << '\n';
+        for (auto histVar : histVariablesData)
+        {
+            for (auto connecter : dataConnecters)
+            {
+                for (auto colName : columnNames)
+                {
+                    if ((connecter + colName) == (histVar.getName()))
+                    {
+                        std::cout << "Data Mapping: " << histVar.getName() << std::endl;
+                        histVariableToFileMapping[histVar.getName()] = recoDecay + "_Pass__hists/" + recoDecay +connecter + colName;
+                        std::cout << recoDecay + "_Pass__hists/" + recoDecay +connecter + colName << std::endl;
+
+                    }
+                }
+            }
+        }
+
 
         auto zzBackground = std::make_shared<Process>("ZZ Background", 3);
         zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_4L_Run_2.root", "zzto4l", reader, luminosity, histVariableToFileMapping));
@@ -221,18 +239,18 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2022A.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
         //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2022B.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
         //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2022C.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        //higgsData->addProcess(makeBasicProcess(histVariablesData, filePath, "testHiggs.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        //higgsData->addProcess(makeBasicProcess(histVariablesData, filePath, "testHiggsM.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "testlumi.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016C.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016D.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016F.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016H.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017B.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017C.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017D.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017E.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017F.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
+        higgsData->addProcess(makeBasicProcess(histVariablesData, filePath, "testHiggs20.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
+        higgsData->addProcess(makeBasicProcess(histVariablesData, filePath, "testHiggsM20.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "testlumi.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016C.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016D.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016F.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016H.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017B.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017C.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017D.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017E.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017F.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity));
 
         processes.push_back(ttBarandMultiBosonBackground);
         processes.push_back(dyBackground);

@@ -63,6 +63,7 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 		{
 			toAdd = singleProcess.getHist(histType, scaleToExpected);
 			//Add only if the hisogram exists
+
 			if (toAdd)
 			{
 				toMerge->Add(toAdd);
@@ -161,12 +162,10 @@ double Process::getYield(HistVariable dataType) const
 
 void Process::addProcess(SingleProcess process)
 {
-	/*
-	if(process.checkValidity())
-	{
-		processes.push_back(process);
-	} 
-	*/
+	// if(process.checkValidity())
+	// {
+	// 	processes.push_back(process);
+	// } 
 	processes.push_back(process);
 }
 
