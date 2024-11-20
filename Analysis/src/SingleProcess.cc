@@ -18,6 +18,7 @@
 TH1* SingleProcess::getHist(HistVariable histType, bool scaleToExpected) const
 {
     //std::cout << "SingleProcess 1" << std::endl;
+    //std::cout << getName() << std::endl;
     TH1* hist = input->getHist(histType);
     if (!hist) {
        return nullptr;
