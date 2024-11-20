@@ -83,7 +83,7 @@ void SuperPlot()
 	//This is for making single hist graphs. Just change the process name to the one you want. Not all processes or qualities allow 2D hists.
 	//std::shared_ptr<Process> process = leptonBackgrounds->findProcess("Data");
  
-	std::string plotName = "Whatever";
+	std::string plotName = "_1st Highest mu- Pt";
 	//Write axis titles here
 	TString xAxisTitle = plotName;
 	TString yAxisTitle = "Events";
@@ -116,9 +116,9 @@ void SuperPlot()
 	//#TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "LeptonJetMLOutput High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
 	//#TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "LeptonJetMLOutput High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
 	//#TCanvas *canvas = plotFormatter->completePlot(InputAnalysis, plotName, xAxisTitle, yAxisTitle, true, false, "0.3");
-	auto nameVar = HistVariable(plotName, "SuperPlot");
+	auto nameVar = HistVariable(plotName);
 	auto ana = std::make_shared<HiggsCompleteAnalysis>();
-	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, true, false, "eeee");
+	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, true, false, "uu");
 
 	//TCanvas *canvas = plotFormatter->simpleAnalysisHist(backgroundHists, );
 
