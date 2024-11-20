@@ -76,7 +76,7 @@ void fitAndDisplayHistograms(const char* plotName, const char* outputName) {
     std::vector<std::string> dataNames = channel->getNamesWithLabel("data");
 
     // Retrieve histograms
-    HistVariable histvariable(plotName, "BackgroundScale");
+    HistVariable histvariable(plotName);
     globalData = analysis->getHist(histvariable, dataNames.at(0), false, channelName);
     globalDynamicBG = analysis->getHist(histvariable, dynamicBGName, false, channelName);
 

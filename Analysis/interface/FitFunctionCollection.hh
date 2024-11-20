@@ -9,8 +9,6 @@ class FitFunctionCollection
 public:
 	static FitFunctionCollection loadFunctions(const std::string& fileName);
 
-	std::unordered_map<std::string, FitFunction> functions;
-
 	FitFunctionCollection();
 	FitFunctionCollection(std::vector<FitFunction>& functions);
 	FitFunctionCollection(size_t size);
@@ -19,12 +17,16 @@ public:
 	void insert(const std::string& key, FitFunction& function);
 	void insert(FitFunction& function);
 	size_t size() const;
-	FitFunction& get(const std::string& index);
+	FitFunction& get(const std::string& key);
 	void saveFunctions(const std::string& fileName, bool append = false);
 
-	FitFunction& operator[](const std::string& index);
+	FitFunction& operator[](const std::string& key);
 	// FitFunction& operator[](int index);
 	bool checkFunctionsSimilar();
+	std::unordered_map<std::string, FitFunction>& getFunctions();
+
+private:
+	std::unordered_map<std::string, FitFunction> functions;
 };
 
 #endif

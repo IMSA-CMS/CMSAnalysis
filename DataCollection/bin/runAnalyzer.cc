@@ -45,6 +45,8 @@ int main(int argc, char **argv)
 
   parser.addOption("input", optutl::CommandLineParser::kString, "Input", "");
   parser.addOption("numFiles", optutl::CommandLineParser::kInteger, "Number of Files", -1); // Change last input to -1 later
+  parser.addOption("skipFiles", optutl::CommandLineParser::kInteger, "Number of Files to Skip Before Starting: ", 0);
+
 
   parser.addOption("analysis", optutl::CommandLineParser::kString, "Type of Analysis", "");
   parser.addOption("moduleOptions", optutl::CommandLineParser::kString, "Module Specific Options", "");
@@ -59,6 +61,7 @@ int main(int argc, char **argv)
 
   std::string outputFile = parser.stringValue("output");
   int numFiles = parser.integerValue("numFiles");
+  int skipFiles = parser.integerValue("skipFiles");
   std::string analysisType = parser.stringValue("analysis");
 
   std::string moduleOptionsFile = parser.stringValue("moduleOptions");
@@ -114,10 +117,8 @@ int main(int argc, char **argv)
   else
   {
     analyzer.initialize(Utility::getBasePath()+"Output/", outputFile);
-  }
-  
-  eventLoader.run(outputEvery, numFiles, maxEvents);
-  analyzer.writeOutputFile();
+    eventLoader.run(outputEvery, numFiles, maxEvents, skipFiles);
+    analyzer.writeOutputFile();
 
   
   std::cout << "Processing complete!" << std::endl;
@@ -129,4 +130,6 @@ int main(int argc, char **argv)
 
   std::cout << "Processing time: "<<processingTime.count()<<"s"<<std::endl;
   return 0;
+  }
+
 }
