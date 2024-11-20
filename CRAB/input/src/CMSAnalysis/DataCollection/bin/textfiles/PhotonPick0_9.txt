@@ -1,0 +1,3 @@
+DarkPhotonSUSY
+Mass:	0_9
+Format:	Delphes

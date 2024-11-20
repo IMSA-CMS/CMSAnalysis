@@ -11,15 +11,19 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <map>
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 
-RootFileInput::RootFileInput(std::string fileName, std::vector<HistVariable> iHistVariables) : histVariables(iHistVariables), fileSource(fileName)
+RootFileInput::RootFileInput(std::string fileName, std::vector<HistVariable> iHistVariables, 
+std::map<std::string, std::string> HistVariableToFileMapping) : histVariables(iHistVariables), fileSource(fileName), HistVariableToFileMapping(HistVariableToFileMapping)
 {} 
 	
 TFile* RootFileInput::getFile(std::string fileSource) const
 {
 	auto file = TFile::Open(fileSource.c_str(), "read");
-	
+
+	//std::cout << "Reading file: " << fileSource << std::endl;
+
 	if(!file)
 	{
 		throw std::runtime_error("Cannot open file " + fileSource + "!");
@@ -31,21 +35,40 @@ TFile* RootFileInput::getFile(std::string fileSource) const
 }
 
 
-TH1* RootFileInput::getHist(std::string histType) const
+TH1* RootFileInput::getHist(HistVariable histType) const
 {
 	TH1::AddDirectory(kFALSE);
-
+	/*
 	std::string name = "";
-	//std::cout << "histype: " << histType << std::endl;
+	//std::cout << "histype: " << histType.getName() << std::endl;
 	for(HistVariable histVar : histVariables) 
 	{
 		//std::cout << histVar.getName() << std::endl;
-	    if(histVar.getName() == histType) 
+	    if(histVar.getName() == histType.getName()) 
 		{
 			name = histVar.getHistName();
 	    }
 	}
-	//std::cout << std::endl << name << std::endl;
+	*/
+	//std::cout << "histype: " << histType.getName() << std::endl;
+	
+	for (const auto& [key, value] : HistVariableToFileMapping) {
+        //std::cout << "HistVariable: " << key
+                  //<< ", File Name: " << value << std::endl;
+		if (histType.getName() == key)
+		{
+			//std::cout << "HITTTTT" << std::endl;
+		}
+
+	}
+
+	std::string name;
+	if (HistVariableToFileMapping.find(histType.getName()) != HistVariableToFileMapping.end()) {
+		name = HistVariableToFileMapping.at(histType.getName());
+	} else {
+		throw std::runtime_error("HistVariable name [" + histType.getName() + "] not found in mapping [" + fileSource + "]!");
+	}
+
 	TH1* hist;
 	uint pos = name.find("/");
 	auto file = getFile(fileSource);
@@ -59,13 +82,19 @@ TH1* RootFileInput::getHist(std::string histType) const
 		{
 			dir->cd();
 			hist = dynamic_cast<TH1*>(dir->Get(histName.c_str()));
+			if (!hist)
+			{
+
+				delete file;
+				return nullptr;
+			}
 			delete dir;
 		}
 		else
 		{
 			//We need the nullptr in when adding histograms to know to
 			//skip the histogram and not break histogram addition
-			// std::cout << "No histogram named " + name + " found\n";
+			//std::cout << "No histogram named " + name + " found in directory\n";
 			delete dir;
 			delete hist;
 			delete file;
@@ -74,40 +103,54 @@ TH1* RootFileInput::getHist(std::string histType) const
 	}
 	else
 	{
+		// std::cout << "Here" << std::endl;
 		hist = dynamic_cast<TH1*>(file->Get(name.c_str()));
+		
 	}
+
 	if (!hist || hist->IsZombie())
 	{ 
-		throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType + "]");
+		throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]");
+
+		if (hist->IsZombie())
+		{
+			throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]. Hist is a Zombie.");
+		}
+		else
+		{
+			throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]");
+		}
 	}
-	if(dynamic_cast<TH2 *>(hist) != 0) {
+	if(dynamic_cast<TH2 *>(hist) != 0)
+	{
 		TH2* hist2D = dynamic_cast<TH2 *>(hist);
 		TH1 *newhist = hist2D->ProjectionX("_px", 0, -1, "E");
 		return newhist;
 	}	
-	if (hist->GetEntries() < 2.0)
-	{
-		delete hist;
-		delete file;
-		return emptyHist;
-	}
-	else 
-	{
+	// if (hist->GetEntries() < 2.0)
+	// {
+	// 	delete hist;
+	// 	delete file;
+	// 	return emptyHist;
+	// }
+	// else 
+	// {
 		TH1* response = new TH1F("Hist Clone", hist->GetTitle(), hist->GetXaxis()->GetNbins(), hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
 		response->Add(hist);
 
 		delete hist;
 		delete file;
 		return response;
-	}
+	// }
 }
 
-TH1* RootFileInput::get2DHist(std::string histType) const
+
+TH1* RootFileInput::get2DHist(HistVariable histType) const
 {
 	std::string name = "";
 	for(HistVariable histVar : histVariables) {
-	    if(histVar.getName() == histType) {
-			name = histVar.getHistName();
+	    if(histVar.getName() == histType.getName()) {
+			name = histVar.getName();
 	    }
 	}
 	auto file = getFile(fileSource);

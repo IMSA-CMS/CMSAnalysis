@@ -7,7 +7,7 @@
 class TableData
 {
     public:
-        TableData(std::vector<std::vector<std::string>> outputs);
+        TableData(std::vector<std::vector<std::string>> outputs, std::vector<std::string> columnNames, std::vector<std::string> rowNames);
         const std::vector<std::string>& getColumns() const {return columns;}
         const std::vector<std::string>& getRows() const {return rows;}
         const std::vector<std::vector<std::string>>& getEntries() const {return entries;}

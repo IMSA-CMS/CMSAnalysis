@@ -40,6 +40,29 @@ std::vector<CollectionHistParams> ParticleType::getCollectionHists() const
     return collectionHists;
 }
 
+bool ParticleType::isQuark() const
+{
+   int absID = std::abs(pdgId);
+   return absID<10; 
+}
+
+bool ParticleType::isMeson() const
+{
+    int absID = std::abs(pdgId);
+    return absID<1000 && absID>100;
+}
+
+bool ParticleType::isBaryon() const
+{
+    int absID = std::abs(pdgId);
+    return 1000<absID && 10000>absID;
+}
+
+bool ParticleType::isHadron() const
+{
+    return isMeson() || isBaryon();
+}
+
 const ParticleType& ParticleType::registerType(std::string typeName, int typepdgId, double typeCharge, std::vector<HistParams> typeParticleHists, std::vector<CollectionHistParams> typeCollectionHistParamss)
 {
     //particleTypes are not automatically stored, rather they are created the first time the function is called and then subsequently refrenced
@@ -199,7 +222,7 @@ CollectionHistParams ParticleType::getNumberHist()
 
 CollectionHistParams ParticleType::getSameSignInvariantMassHist()
 {
-    return CollectionHistParams("Same Sign Invariant Mass", 150, 0, 2000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateSameSignInvariantMass(false, true)};});
+    return CollectionHistParams("Same Sign Invariant Mass", 150, 0, 2000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateSameSignInvariantMass(true)};});
 }
 
 CollectionHistParams ParticleType::getOppositeSignInvariantMassHist()

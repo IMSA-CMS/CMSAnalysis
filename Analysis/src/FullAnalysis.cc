@@ -12,6 +12,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <map>
 #include <cmath>
 #include "TH1.h"
 #include "TList.h"
@@ -28,23 +29,33 @@ std::shared_ptr<Channel> FullAnalysis::getChannel(std::string name)
     throw std::runtime_error("Channel of name " + name + " not found.");
 }
 
-std::vector<TH1 *> FullAnalysis::getHistograms(const std::string &histType, const std::string &processName, const std::string &channel, bool scaleToExpected)
+std::vector<TH1 *> FullAnalysis::getHistograms(const HistVariable &histType, const std::string &processName, const std::string &channel, bool scaleToExpected)
 {
     auto targetChannel = getChannel(channel);
     return targetChannel->getHists(histType, processName, scaleToExpected);
 }
 
 // Use this as long as you don't need to use scaleToExpected or don't have fit histograms.
-SingleProcess FullAnalysis::makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, double luminosity, std::vector<std::shared_ptr<Correction>> corrections)
+SingleProcess FullAnalysis::makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, double luminosity, std::map<std::string, std::string> histVariableToFileMapping, std::vector<std::shared_ptr<Correction>> corrections)
 {
-    auto inputFile = std::make_shared<RootFileInput>(filePathway + fileName, histVariables);
-    std::cout << "inputFile works";
+    auto inputFile = std::make_shared<RootFileInput>(filePathway + fileName, histVariables, histVariableToFileMapping);
+    //std::cout << "inputFile works";
     auto histEstimator = std::make_shared<SimpleEstimator>();
-    std::cout << "histEstimator works";
+    //std::cout << "histEstimator works";
     return SingleProcess(crossSectionName, inputFile, crossReader, histEstimator, luminosity, corrections);
 }
 
-TH1 *FullAnalysis::getHist(std::string histType, std::string processName, bool scaleToExpected, std::string channelName) const
+SingleProcess FullAnalysis::makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, double luminosity)
+{
+    std::map<std::string, std::string> histVariableToFileMapping;
+    auto inputFile = std::make_shared<RootFileInput>(filePathway + fileName, histVariables, histVariableToFileMapping);
+    //std::cout << "inputFile works";
+    auto histEstimator = std::make_shared<SimpleEstimator>();
+    //std::cout << "histEstimator works";
+    return SingleProcess(crossSectionName, inputFile, crossReader, histEstimator, luminosity, {});
+}
+
+TH1 *FullAnalysis::getHist(HistVariable histType, std::string processName, bool scaleToExpected, std::string channelName) const
 {
     // int maxBinNum = 0;
     // double maxBarWidth = 0.0;
@@ -57,10 +68,12 @@ TH1 *FullAnalysis::getHist(std::string histType, std::string processName, bool s
             // channelNumber++;
             // std::vector<TH1*> channelHists = channel->getHists(histType, "signal", false);
             TH1 *channelHist = channel->findProcess(processName)->getHist(histType, scaleToExpected);
-            if (channelHist == 0)
+            if (!channelHist)
             {
-                throw std::runtime_error("Histogram not found in channel: " + channel->getName());
+                return nullptr;
+                //throw std::runtime_error("Histogram not found in channel: " + channel->getName());
             }
+
             // if (channelHist->GetNbinsX() > maxBinNum)
             // {
             //     maxBinNum = channelHist->GetNbinsX();

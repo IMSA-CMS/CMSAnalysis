@@ -69,7 +69,7 @@ void Fitter::loadFunctions(const FitFunctionCollection& fitFunctions)
 
 void Fitter::fitFunctions()
 {
-	for (auto& funcPair : functions.functions)
+	for (auto& funcPair : functions.getFunctions())
 	{
 		FitFunction& func = funcPair.second;
 		// std::cout << "1\n";
@@ -202,7 +202,7 @@ TCanvas* Fitter::fitPowerLaw(TH1* histogram, FitFunction& fitFunction)
 	{
 		chi2 = result->Chi2();
 		fitFunction.getFunction()->SetParameters(result->Parameter(0), result->Parameter(1), result->Parameter(2));
-		result = histogram->Fit(fitFunction.getFunction(), "SL", "", 150, 1500);
+		result = histogram->Fit(fitFunction.getFunction(), "SL", "", fitFunction.getMin(), fitFunction.getMax());
 	}
 
 	gStyle->SetOptFit(1111);
@@ -214,7 +214,7 @@ std::vector<ParameterizationData> Fitter::getParameterData(std::unordered_map<st
 {
 	if (functions.checkFunctionsSimilar())
 	{
-		int params = functions.functions.begin()->second.getFunction()->GetNpar();
+		int params = functions.getFunctions().begin()->second.getFunction()->GetNpar();
 		auto data = std::vector<ParameterizationData>(params);
 
 		for (int i = 0; i < params; ++i) {
@@ -224,12 +224,12 @@ std::vector<ParameterizationData> Fitter::getParameterData(std::unordered_map<st
 				std::vector<double>(functions.size()),
 				std::vector<double>(functions.size()),
 				i,
-				functions.functions.begin()->second.getFunction()->GetParName(i)
+				functions.getFunctions().begin()->second.getFunction()->GetParName(i)
 			};
 		}
 
 		int i = 0;
-		for (auto& pair : functions.functions)
+		for (auto& pair : functions.getFunctions())
 		{
 			for (int j = 0; j < params; ++j) 
 			{
