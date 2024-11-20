@@ -75,7 +75,7 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 	else
 	{
 		newHist = new TH1D(name.c_str(), name.c_str(), 1, 0.0, 0.0);
-		std::cout << "Made Empty Hist" << std::endl;
+		//std::cout << "Made Empty Hist" << std::endl;
 	}
 
 	if (!newHist)
