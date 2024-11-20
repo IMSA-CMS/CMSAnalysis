@@ -46,12 +46,12 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     //auto reader = std::make_shared<CrossSectionReader>("/uscms/home/ichen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
     //const std::string filePath = "/uscms/home/vrao/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/"; 
     //const std::string signalFilePath = "/uscms/home/ichen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Analysis/bin/H++MassFiles/";
-    auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+    auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
     //auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Analysis/bin/crossSections.txt");
-    //const std::string filePath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/"; 
+    //const std::string filePath = "/uscms/homes//s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/"; 
     //const std::string signalFilePath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
-    const std::string filePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/"; 
-    const std::string signalFilePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
+    const std::string filePath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/"; 
+    const std::string signalFilePath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     // Vincents: /uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output 
     double luminosity = 1.507;
 
