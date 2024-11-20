@@ -134,6 +134,7 @@ void HistogramOutputModule::fillHistogram(const std::string &name,
   {
     for (double currentNum : values) {
       //std::cout << "currentNum: " << currentNum << "\n"; 
+      //std::cout << "Weight: " << weight << "\n";
       hist->Fill(currentNum, weight);
     }
   }

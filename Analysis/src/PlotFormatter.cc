@@ -350,9 +350,12 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     }
     std::vector<std::string> signalNames = processes->getNamesWithLabel("signal");
     std::vector<std::string> dataNames = processes->getNamesWithLabel("data");
-    data = analysis->getHist(histvariable, dataNames.at(0), false, channelName);
+    std::cout << "Data Names Size: " << dataNames.size() << std::endl;
 
-    //std::cout << "Data has: " << data->GetEntries() << std::endl;
+    HistVariable dataHist = HistVariable("_Pass"+histvariable.getName());
+    data = analysis->getHist(dataHist, dataNames.at(0), false, channelName);
+
+    std::cout << "Data has: " << data->GetEntries() << std::endl;
 
     //data = signal = new TH1F("h1", "empty", 1, 0.0, 0.0);
     if (includeSignal == true)

@@ -50,19 +50,24 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 	    }
 	}
 	*/
-	std::cout << "histype: " << histType.getName() << std::endl;
+	//std::cout << "histype: " << histType.getName() << std::endl;
 	
 	for (const auto& [key, value] : HistVariableToFileMapping) {
-        std::cout << "HistVariable: " << key
-                  << ", File Name: " << value << std::endl;
+        //std::cout << "HistVariable: " << key
+                  //<< ", File Name: " << value << std::endl;
 		if (histType.getName() == key)
 		{
-			std::cout << "HITTTTT" << std::endl;
+			//std::cout << "HITTTTT" << std::endl;
 		}
 
 	}
 
-	std::string name = HistVariableToFileMapping.at(histType.getName());
+	std::string name;
+	if (HistVariableToFileMapping.find(histType.getName()) != HistVariableToFileMapping.end()) {
+		name = HistVariableToFileMapping.at(histType.getName());
+	} else {
+		throw std::runtime_error("HistVariable name [" + histType.getName() + "] not found in mapping [" + fileSource + "]!");
+	}
 
 	TH1* hist;
 	uint pos = name.find("/");
