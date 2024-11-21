@@ -183,22 +183,22 @@ void JumboPlot()
 	//auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
 	//std::vector<std::shared_ptr<Channel>> channels = DarkPhotonAnalysis->getChannels();
 
-	std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Signs"};
-    std::vector<std::string> graphableTypes = {"Eta", "Lepton Jet Delta R", "Lepton Jet Mass", "Phi", "Pt"};
-	std::vector<TString> units = {"ETA", "DELTA R", "GEV", "RAD", "GEV/C"};
+	// std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Signs"};
+    // std::vector<std::string> graphableTypes = {"Eta", "Lepton Jet Delta R", "Lepton Jet Mass", "Phi", "Pt"};
+	// std::vector<TString> units = {"ETA", "DELTA R", "GEV", "RAD", "GEV/C"};
 
 
-	std::vector<std::string> channelNames = {"0.3"};
+	// std::vector<std::string> channelNames = {"0.3"};
 
 	//makePlots("Dark Photon Signal", DarkPhotonAnalysis, channels, rowNames, graphableTypes, units, channelNames);
 
 	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
 	std::vector<std::shared_ptr<Channel>> higgsChannels = higgsAnalysis->getChannels();
 
-	rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
-	graphableTypes = {"Eta", "Phi", "Pt"};
+	std::vector<std::string> rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
+	std::vector<std::string> graphableTypes = {"Eta", "Phi", "Pt"};
 	std::vector<std::string> connecters = {"_1st Highest mu- ", "_1st Highest e- "}; 
-	units = {"#eta", "#phi", "p_T [GeV/c]", };
+	std::vector<TString> units = {"#eta", "#phi", "p_T [GeV/c]", };
 
 	std::vector<std::string> graphableTypes2 = {"Same Sign Invariant Mass", "Opposite Sign Invariant Mass"};
 	std::vector<std::string> connecters2 = {"_e- ", "_mu- "};

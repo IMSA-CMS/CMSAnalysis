@@ -29,7 +29,7 @@ double MultiYearScaleFactor::getScaleFactor(const EventInput* input) const //add
 		return 1.0;
 	}
 
-	auto year = input->getFileParams()->getParameters().find("Period");
+	auto year = input->getFileParams()->getParameters().find("Year");
 	if (year == input->getFileParams()->getParameters().end())
 	{
 		throw std::runtime_error ("Year not found in file parameters");
