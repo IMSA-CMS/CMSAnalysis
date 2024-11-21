@@ -202,7 +202,7 @@ TCanvas* Fitter::fitPowerLaw(TH1* histogram, FitFunction& fitFunction)
 	{
 		chi2 = result->Chi2();
 		fitFunction.getFunction()->SetParameters(result->Parameter(0), result->Parameter(1), result->Parameter(2));
-		result = histogram->Fit(fitFunction.getFunction(), "SL", "", 80, 1500);
+		result = histogram->Fit(fitFunction.getFunction(), "SL", "", fitFunction.getMin(), fitFunction.getMax());
 	}
 
 	gStyle->SetOptFit(1111);
