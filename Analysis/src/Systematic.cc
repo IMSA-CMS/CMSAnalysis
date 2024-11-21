@@ -15,10 +15,8 @@
 #include <fstream>
 #include "CMSAnalysis/Utility/interface/Utility.hh"
 
-Systematic::Systematic(std::string iName, double iValue):
-name(iName),
-value(iValue)
+Systematic::Systematic(std::string iName):
+name(iName)
 {
-
-
+	// finds the total changes for the over and underestimates of the graph
 }

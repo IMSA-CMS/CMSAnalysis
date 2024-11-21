@@ -12,6 +12,7 @@
 #include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "CMSAnalysis/Analysis/interface/Correction.hh"
 #include "CMSAnalysis/Analysis/interface/ConstantCorrection.hh"
+#include "CMSAnalysis/Analysis/interface/RateSystematic.hh"
 #include <memory>	
 #include <iostream>
 #include <vector>
@@ -47,7 +48,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     const std::string signalFilePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     //const std::string filePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/"; 
     //const std::string signalFilePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
-    double luminosity = 1.507;
+    double luminosity = 139;
 
     std::vector<HistVariable> histVariablesBackground;
     std::vector<HistVariable> histVariablesData;
@@ -85,11 +86,28 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
             {
                 //auto higgsSignal = std::make_shared<Process>("Higgs Signal " + std::to_string((int) massTarget), 5);
                 
-                std::vector<HistVariable> histVariablesSignal;
                 std::string decayName = recoDecay + "_" + genSimDecay;
+                 std::map<std::string, std::string> histVariableToFileMapping;
+                for (auto histVar : histVariablesBackground)
+                {
+                    for (auto connecter : connecters)
+                    {
+                        for (auto colName : columnNames)
+                        {
+                            if ((connecter + colName) == (histVar.getName()))
+                            {
+                                histVariableToFileMapping[histVar.getName()] = decayName + "__hists/" + decayName + connecter + colName;
+                            }
+                        }
+                    }
+                }
+                histVariableToFileMapping["Same Sign Invariant Mass"] = decayName + "__hists/" + decayName + "_Reco Same Sign Invariant Mass";
+
+                std::vector<HistVariable> histVariablesSignal;
+
                 //histVariablesSignal.push_back(HistVariable::sameSignMass(decayName + "__hists/" + decayName + "_Reco Same Sign Invariant Mass"));
-                histVariablesSignal.push_back(HistVariable("Same Sign Mass")); 
-                auto higgsProcess = makeBasicProcess(histVariablesSignal, signalFilePath, "Higgs" + std::to_string((int) massTarget) + ".root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity);
+                histVariablesSignal.push_back(HistVariable("Same Sign Invariant Mass")); 
+                auto higgsProcess = makeBasicProcess(histVariablesSignal, signalFilePath, "Higgs" + std::to_string((int) massTarget) + ".root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity,  histVariableToFileMapping);
                 auto higgsSignal = std::make_shared<Process>("Higgs signal " + genSimDecay + " " + std::to_string((int)massTarget), 1);
                 higgsSignal->addProcess(higgsProcess);
                 processes.push_back(higgsSignal);
@@ -135,6 +153,9 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
                 }
             }
         }
+        histVariablesBackground.push_back(HistVariable("Same Sign Invariant Mass"));
+        histVariableToFileMapping["Same Sign Invariant Mass"] = recoDecay + "__hists/" + recoDecay + "_Reco Same Sign Invariant Mass";
+        //std::cout << "histmap:" << histVariableToFileMapping.at("Same Sign Invariant Mass") << '\n';
         for (auto histVar : histVariablesData)
         {
             for (auto connecter : dataConnecters)
@@ -156,6 +177,8 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
         auto zzBackground = std::make_shared<Process>("ZZ Background", 3);
         zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_4L_Run_2.root", "zzto4l", reader, luminosity, histVariableToFileMapping));
 
+        auto testSystematic = std::make_shared<RateSystematic>("Test", 0.05);
+        zzBackground->addSystematic(testSystematic);
         //cross sections should be all lowercase
         auto ttBarandMultiBosonBackground = std::make_shared<Process>("t#bar{t}, Multiboson Background", 4);
         ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTbar_Boson_NA_Decay_LL_Run_2.root", "ttbar_lep", reader, luminosity, histVariableToFileMapping));
