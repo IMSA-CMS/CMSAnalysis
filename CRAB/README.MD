@@ -11,4 +11,4 @@ Any new input files will need to be added here as well in order to run CRAB jobs
 
 This is an example command to copy over all .txt files into this input directory:
 > This will look weird when viewed as markdown cuz the \*'s get converted into italics
-rsync -am --include='*.txt' --include='*/' --exclude='*' DataCollection/bin/textfiles CRAB/input/src/CMSAnalysis/DataCollection/bin/textfiles
+rsync -am --include='*.txt' --include='*/' --exclude='*' DataCollection/bin/textfiles CRAB/input/src/CMSAnalysis/DataCollection/bin

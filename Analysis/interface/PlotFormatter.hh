@@ -8,6 +8,7 @@
 #include <memory>
 #include "HistVariable.hh"
 #include "FullAnalysis.hh"
+#include "MultiSystematic.hh"
 #include "Process.hh"
 #include <vector>
 #include "TH1.h"

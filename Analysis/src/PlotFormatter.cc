@@ -2,6 +2,7 @@
 #include "CMSAnalysis/Analysis/interface/Channel.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include "CMSAnalysis/Analysis/interface/Process.hh"
+#include "CMSAnalysis/Analysis/interface/MultiSystematic.hh"
 #include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "TGraph.h"
 #include "TH1.h"
@@ -330,7 +331,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     
     std::vector<std::shared_ptr<Channel>> channels = analysis->getChannels();
     processes = channels.at(0);
-    
+
     /*
     for (auto channel : channels)
     {
@@ -341,6 +342,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
         }
     }
     */
+   
     std::vector<std::string> backgroundNames = processes->getNamesWithLabel("background");
     std::cout << "Background Names Size: " << backgroundNames.size() << std::endl;
     for (int i = 0; i < (int)backgroundNames.size(); i++)
@@ -388,20 +390,24 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     //std::cout << "Beginning" << std::endl;
     //std::cout << "number of bins is: " << data->GetNbinsX();
     //std::cout << "number of bins is: " << signal->GetNbinsX();
-    for(std::string name : backgroundNames) {
+    for(std::string name : backgroundNames)
+    {
         //std::cout << name << std::endl;
         //std::cout << channelName << std::endl;
         //std::cout << histvariable.getName() << std::endl;
-        if (analysis->getHist(histvariable, name, true, channelName) == nullptr)
+        
+        //auto hist = analysis->getHist(histvariable, name, true, channelName);
+        auto process = analysis->getChannel(channelName)->findProcess(name);
+        auto hist = process->getSystematicHist(histvariable, true).second;
+
+        // TEST
+        if (!hist)
         {
             continue;
         }
-        backgroundHists.push_back(analysis->getHist(histvariable, name, true, channelName));
+        backgroundHists.push_back(hist);
         //std::cout << "Middle" << std::endl;
-        if (analysis->getHist(histvariable, name, true, channelName) != nullptr)
-        {
-            maxCombinedY += analysis->getHist(histvariable, name, true, channelName)->GetMaximum();
-        }
+        maxCombinedY += hist->GetMaximum();
     }
     std::cout << backgroundHists.size() << "\n";
     //std::cout << "End" << std::endl;
