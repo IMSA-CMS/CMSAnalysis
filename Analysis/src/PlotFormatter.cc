@@ -358,7 +358,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     std::cout << "Data has: " << data->GetEntries() << std::endl;
 
     //data = signal = new TH1F("h1", "empty", 1, 0.0, 0.0);
-    if (includeSignal == true)
+    if (includeSignal)
     {
         for(std::string name : signalNames) 
         {
@@ -385,9 +385,9 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
         //std::cout << channelName << std::endl;
         //std::cout << histvariable.getName() << std::endl;
         
-        //auto hist = analysis->getHist(histvariable, name, true, channelName);
-        auto process = analysis->getChannel(channelName)->findProcess(name);
-        auto hist = process->getSystematicHist(histvariable, true).second;
+        auto hist = analysis->getHist(histvariable, name, true, channelName);
+        //auto process = analysis->getChannel(channelName)->findProcess(name);
+        //auto hist = process->getSystematicHist(histvariable, true).second;
 
         // TEST
         if (!hist)
@@ -441,11 +441,18 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     TIter next(histList);  
     TH1 *hist;  
     bool emptyHist = true;
-    while ((hist = (TH1*)next())) {
+    while ((hist = (TH1*)next())) 
+    {
     //std::cout << hist->GetName() << " entries " << hist->GetEntries() << std::endl;  // Print info about each histogram
-    if (hist->GetEntries() != 0) { emptyHist = false; }
+        if (hist->GetEntries()) 
+        {
+            emptyHist = false; 
+        }
     }
-    if (emptyHist == true) { return canvas; }
+    if (emptyHist) 
+    { 
+        return canvas; 
+    }
 
 
     //Draws the histogram with more events first (bigger axis)
