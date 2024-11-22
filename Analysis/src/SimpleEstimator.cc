@@ -42,17 +42,13 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, HistVaria
     // mass range
     // needs to match the "upperMasslimit" value in "PlotFormatter" if using integral scaling
     double xAxisRange = 2000;
-    // std::cout << "SimpleEstimator 3.1" << std::endl;
-    if (hist == nullptr)
-    {
-        std::cout << "NULLPTR" << std::endl;
-    }
+    //std::cout << "SimpleEstimator 3.1" << std::endl;
     int numBins = hist->GetNbinsX(); 
-    // std::cout << "SimpleEstimator 3.2" << std::endl; 
+    //std::cout << "SimpleEstimator 3.2" << std::endl; 
     //std::cout << "numBins: " << numBins << "\n";
     int lowerLimit = firstBin * (static_cast<double>(numBins) / xAxisRange);
     double efficiency = (hist->Integral(lowerLimit, numBins)) / totaleventsran;
-    // std::cout << "SimpleEstimator 3.3" << std::endl;
+    //std::cout << "SimpleEstimator 3.3" << std::endl;
     double signalest = crosssection * 1000 * luminosity * efficiency;
     // std::cout << "Passed Events: " << hist->GetEntries() << " " << hist->Integral() <<"\n";
     // std::cout << "Total Events: " << totaleventsran << "\n";
