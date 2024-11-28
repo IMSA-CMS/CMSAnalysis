@@ -29,7 +29,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     double tempMass = 1400;
 
     //Actual masses for the Higgs signal
-    std::vector<double> massTargets { 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400};
+    std::vector<double> massTargets { 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
     const std::vector<std::string> genSimDecays{"eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet", "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt"};
     
     //const std::vector<std::string> genSimDecays{};
@@ -43,11 +43,12 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     //Change this file to your folder to use your own cross sections
     //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
     //auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
-    auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Analysis/bin/crossSections.txt");
-    const std::string filePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/"; 
-    const std::string signalFilePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
+    auto reader = std::make_shared<CrossSectionReader>("/afs/cern.ch/user/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Analysis/bin/crossSections.txt");
+    const std::string filePath = "/afs/cern.ch/user/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/"; 
+    const std::string signalFilePath = "/afs/cern.ch/user/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     //const std::string filePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/"; 
     //const std::string signalFilePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
+
     double luminosity = 139;
 
     std::vector<HistVariable> histVariablesBackground;
@@ -56,7 +57,8 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     std::vector<std::string> rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
     std::vector<std::string> backgroundConnecters = {"_1st Highest mu- ", "_1st Highest e- ", "_e- ", "_mu- "}; 
     std::vector<std::string> dataConnecters = {"_Pass_1st Highest mu- ", "_Pass_1st Highest e- "}; 
-    std::vector<std::string> columnNames = {"Eta", "Phi", "Pt", "Same Sign Invariant Mass", "Opposite Sign Invariant Mass"};
+    std::vector<std::string> columnNames = {"Eta", "Phi", "Pt", "_Reco Same Sign Invariant Mass"};
+    std::vector<std::string> connecters = {""};
 
     for (std::string connecter : backgroundConnecters){
 
@@ -78,7 +80,6 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     for (std::string recoDecay : recoDecays){
         std::vector<std::shared_ptr<Process>> processes;
         //auto higgsSignal = std::make_shared<Process>("Higgs Signal", 5);
-        /*
         auto higgsGroupSignal = std::make_shared<Process>("Higgs Group "+ recoDecay, 5);
         for (const auto& genSimDecay : genSimDecays)
         {
@@ -87,7 +88,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
                 //auto higgsSignal = std::make_shared<Process>("Higgs Signal " + std::to_string((int) massTarget), 5);
                 
                 std::string decayName = recoDecay + "_" + genSimDecay;
-                 std::map<std::string, std::string> histVariableToFileMapping;
+                std::map<std::string, std::string> histVariableToFileMapping;
                 for (auto histVar : histVariablesBackground)
                 {
                     for (auto connecter : connecters)
@@ -115,27 +116,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
             }  
         }
         processes.push_back(higgsGroupSignal);
-        */
-
-        for(double massTarget : massTargets) 
-        {
-            auto higgsGroupSignal = std::make_shared<Process>("Higgs Group " + std::to_string((int)massTarget), 5);
-            for (const auto& genSimDecay : genSimDecays)
-            {                
-                std::vector<HistVariable> histVariablesSignal;
-                std::string decayName = recoDecay + "_" + genSimDecay;
-                histVariablesSignal.push_back(HistVariable(decayName)); 
-                auto higgsProcess = makeBasicProcess(histVariablesSignal, signalFilePath, "Higgs" + std::to_string((int) massTarget) + ".root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity);
-                auto higgsSignal = std::make_shared<Process>("Higgs signal " + genSimDecay + " " + std::to_string((int)massTarget), 1);
-                higgsSignal->addProcess(higgsProcess);
-                processes.push_back(higgsSignal);
-                higgsGroupSignal->addProcess(higgsProcess);
-            }  
-            processes.push_back(higgsGroupSignal);
-        }
         
-        //connecters = {"_1st Highest mu- ", "_1st Highest e- ", "_e- ", "_mu- "}; 
-        //columnNames = {"Eta", "Phi", "Pt", "Same Sign Invariant Mass", "Opposite Sign Invariant Mass"};
 
         std::map<std::string, std::string> histVariableToFileMapping;
 
