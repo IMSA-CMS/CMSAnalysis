@@ -68,39 +68,45 @@ def loopRun(crab, path, fileCount, fileList):
             inputString = "input=" + file
 
         # calls runAnalyzer
-        print("Creating " + outputString)
         if crab:
+            print("starting crab")
             crab_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/CRAB/"
             print(file)
             files = subprocess.Popen(["getFileList", file], stdout=subprocess.PIPE)
-            files.wait()
+            print('a')
+            print('b')
             countLines = int(subprocess.check_output(["wc", "-l"], stdin=files.stdout))
-
-            maxNumFiles = 20  # basically just guessing this number, adjust as needed
+            print(countLines)
+            print('c')
+            maxNumFiles = 1  # basically just guessing this number, adjust as needed
+            totalFiles = min(int(fileCount), countLines) if fileCount != None else countLines
             for i in range(
                 0,
-                min(int(fileCount), countLines) if fileCount != None else countLines,
+                totalFiles,
                 maxNumFiles,
             ):
+                output = f"{name}_{int(i / maxNumFiles)}.root"
+                print("Creating " + output)
                 generate = Popen(
                     [
                         "python3",
                         "crab_config_generator.py",
                         f"--{inputString}",
-                        f"--output={name}_{int(i / maxNumFiles)}.root",
+                        f"--output={output}",
                         f"--{analysisName}",
-                        f"--folder={path[0:-1]}" if nameLocation != 0 else "",
-                        f"--numFiles={min(maxNumFiles, int(fileCount) - i)}",
+                        f"--folder={path[0:-1]}",
+                        f"--numFiles={min(maxNumFiles, totalFiles - i)}",
                         f"--skipFiles={i}",
                     ],
                     cwd=crab_directory,
                 )
                 generate.wait()
-                # submit = Popen(
-                #     ["crab", "submit", "-c", "crab_config.py"], cwd=crab_directory
-                # )
-                # submit.wait()
+                submit = Popen(
+                    ["crab", "submit", "-c", "crab_config.py"], cwd=crab_directory
+                )
+                submit.wait()
         else:
+            print("Creating " + outputString)
             Popen(
                 [
                     "nohup",
@@ -249,7 +255,7 @@ if __name__ == "__main__":
     # jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 
     # jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
-    jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, data, qcd]
+    jobsList = [zz]
     # jobsList = [data]
 
     if os.path.exists("nohup.out") and not args.keep:
