@@ -78,7 +78,7 @@ def loopRun(crab, path, fileCount, fileList):
             countLines = int(subprocess.check_output(["wc", "-l"], stdin=files.stdout))
             print(countLines)
             print('c')
-            maxNumFiles = 1  # basically just guessing this number, adjust as needed
+            maxNumFiles = 20  # basically just guessing this number, adjust as needed
             totalFiles = min(int(fileCount), countLines) if fileCount != None else countLines
             for i in range(
                 0,
