@@ -35,6 +35,7 @@ std::vector<std::string> histogramTypes =
 	"_Reco Same Sign Invariant Mass"
 };
 
+// run in batch mode for faster processing: root -b HiggsBackgroundFit.C+
 void HiggsBackgroundFit()
 {
 	const double min = 80;
@@ -78,7 +79,7 @@ void HiggsBackgroundFit()
 					continue;
 				}
 				auto process = targetChannel->findProcess(backgrounds[i]);
-				auto histVar = HistVariable("Reco Same Sign Invariant Mass");
+				auto histVar = HistVariable("Same Sign Invariant Mass");
 
 				TH1* selectedHist = process->getHist(histVar, true);
 				if(selectedHist->GetEntries() < 1) continue;
@@ -95,7 +96,7 @@ void HiggsBackgroundFit()
 				// std::string wait;
 				// std::cin >> wait;
 			}
-			fitter.histograms = histogramMap;
+			fitter.setHistograms(histogramMap);
 			fitter.loadFunctions(currentFunctions);
 			fitter.fitFunctions();
 			for (std::string keyName : keyNames) 
