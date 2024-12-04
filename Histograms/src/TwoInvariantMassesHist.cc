@@ -6,7 +6,11 @@ TwoInvariantMassesHist::TwoInvariantMassesHist(const std::string &iname, int iNB
 
 std::vector<std::pair<double, double>> TwoInvariantMassesHist::value2D() const
 {
-  auto invMasses = getInput()->getLeptons(EventInput::RecoLevel::Reco).calculateSameSignInvariantMasses(true);
+  auto invMasses = getInput()->getLeptons(EventInput::RecoLevel::Reco);
+  //->getCharge()
+  //->getType()
+  std::string filterString = getFilterString()
+  
 
   if (invMasses.size() != 2)
   {
