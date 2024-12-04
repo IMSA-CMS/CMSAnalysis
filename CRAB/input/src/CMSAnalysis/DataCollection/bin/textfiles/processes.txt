@@ -17,13 +17,15 @@ Run:	HLLHC	2
 Year:	2016	2016APV	2017	2018
 
 TTbar
-Boson:	WJets	Z	NA
-Decay	L	LL
+Boson:	W	Z	NA
+Decay:	L	LL
 Run:	HLLHC	2
+Year:	2016	2016APV	2017	2018
 
 ZZ
 Decay:	2e2mu	2e2tau	2mu2tau	4e	4mu	4tau	4L
 Run: 	HLLHC	2
+Year:	2016	2016APV	2017	2018
 
 DarkPhotonSUSY
 Mass:	0_1	0_2	0_3	0_4	0_5	0_7	0_9	1_2	1_5	2_0	2_5
@@ -46,7 +48,8 @@ Trigger:	DoubleMuon	SingleMuon	SingleElectron
 Year:	2016B	2016C	2016D	2016E	2016F	2016G	2016H	2017B	2017C	2017D	2017E	2017F	2018A	2018B	2018C	2018D	2022A	2022B	2022C
 
 MultiBoson
-Bosons:	WW	WZ	WWW	WZZ	ZZZ	WWZJets
+Bosons:	WW	WZ	WWW	WZZ	ZZZ	WWZ
 Decay:	2L	3L	4L	NA
 Run:	2
+Year:	2016	2016APV	2017	2018
 

@@ -1,4 +1,5 @@
 TTbar
 Boson:	Z
+Decay: 	LL
 Run:	2
 Year:	2016	2016APV	2017	2018

@@ -1,2 +1,2 @@
-cmsenv
-runAnalyzer crab=1 input=ZZ/ZZ_Decay_4L_Run_2.txt output=ZZ_Decay_4L_Run_2_1.root numFiles=6 skipFiles=20 analysis=HiggsBackground 
+CMSSW_BASE="/srv"
+runAnalyzer crab=1 input=Run2PickFiles/ZZ.txt output=ZZ_2.root numFiles=1 skipFiles=2 analysis=HiggsBackground 

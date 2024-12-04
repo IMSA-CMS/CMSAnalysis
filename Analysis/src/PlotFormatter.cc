@@ -2,6 +2,7 @@
 #include "CMSAnalysis/Analysis/interface/Channel.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include "CMSAnalysis/Analysis/interface/Process.hh"
+#include "CMSAnalysis/Analysis/interface/MultiSystematic.hh"
 #include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "TGraph.h"
 #include "TH1.h"
@@ -310,7 +311,8 @@ TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, Hist
     return canvas;
 }
 
-TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle, bool scaleTodata, bool includeSignal, std::string channelName)
+TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle, 
+bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
 {
     std::shared_ptr<Channel> processes = 0;
 
@@ -329,7 +331,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     
     std::vector<std::shared_ptr<Channel>> channels = analysis->getChannels();
     processes = channels.at(0);
-    
+
     /*
     for (auto channel : channels)
     {
@@ -340,6 +342,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
         }
     }
     */
+   
     std::vector<std::string> backgroundNames = processes->getNamesWithLabel("background");
     std::cout << "Background Names Size: " << backgroundNames.size() << std::endl;
     for (int i = 0; i < (int)backgroundNames.size(); i++)
@@ -347,50 +350,64 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
         std::cout << backgroundNames[i] << std::endl;
     }
     std::vector<std::string> signalNames = processes->getNamesWithLabel("signal");
+
     std::vector<std::string> dataNames = processes->getNamesWithLabel("data");
-    std::cout << "Data Names Size: " << dataNames.size() << std::endl;
 
-    HistVariable dataHist = HistVariable("_Pass"+histvariable.getName());
-    data = analysis->getHist(dataHist, dataNames.at(0), false, channelName);
+    if (includeData == true)
+    {
+        data = analysis->getHist(histvariable, dataNames.at(0), false, channelName);
+    }
+    else
+    {
+        data = new TH1F("h1", "empty", 1, 0.0, 0.0);
+    }
 
-    std::cout << "Data has: " << data->GetEntries() << std::endl;
-
-    //data = signal = new TH1F("h1", "empty", 1, 0.0, 0.0);
     if (includeSignal == true)
     {
+        
         for(std::string name : signalNames) 
         {
+            std::cout << histvariable.getName() << std::endl;
+            std::cout << channelName << std::endl;
+            std::cout << name << std::endl;
             signal = analysis->getHist(histvariable, name, true, channelName);
             std::cout << "number of signal bins is: " << signal->GetNbinsX();
-            //Figure out how to handle the group process thingx
+            std::cout << name << std::endl;
+            std::cout << histvariable.getName() << std::endl;
         }
         
+        //signal = analysis->getHist(histvariable, "Higgs Group 1000", true, channelName);
+        //std::cout << "number of signal bins is: " << signal->GetNbinsX();
     }
     else
     {
         signal = new TH1F("h1", "empty", 1, 0.0, 0.0);
     }
-
+    std::cout << "HERE" << std::endl;
     double maxCombinedY = signal->GetMaximum();
 
     std::vector<TH1*> backgroundHists;
     //std::cout << "Beginning" << std::endl;
     //std::cout << "number of bins is: " << data->GetNbinsX();
     //std::cout << "number of bins is: " << signal->GetNbinsX();
-    for(std::string name : backgroundNames) {
+    for(std::string name : backgroundNames)
+    {
         //std::cout << name << std::endl;
         //std::cout << channelName << std::endl;
         //std::cout << histvariable.getName() << std::endl;
-        if (analysis->getHist(histvariable, name, true, channelName) == nullptr)
+        
+        //auto hist = analysis->getHist(histvariable, name, true, channelName);
+        auto process = analysis->getChannel(channelName)->findProcess(name);
+        auto hist = process->getSystematicHist(histvariable, true).second;
+
+        // TEST
+        if (!hist)
         {
             continue;
         }
-        backgroundHists.push_back(analysis->getHist(histvariable, name, true, channelName));
+        backgroundHists.push_back(hist);
         //std::cout << "Middle" << std::endl;
-        if (analysis->getHist(histvariable, name, true, channelName) != nullptr)
-        {
-            maxCombinedY += analysis->getHist(histvariable, name, true, channelName)->GetMaximum();
-        }
+        maxCombinedY += hist->GetMaximum();
     }
     std::cout << backgroundHists.size() << "\n";
     //std::cout << "End" << std::endl;
