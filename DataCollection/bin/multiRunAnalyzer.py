@@ -6,8 +6,8 @@ import subprocess
 import argparse
 
 
-def loopRun(crab, path, fileCount, *fileList):
-
+def loopRun(crab, path, fileCount, fileList):
+    fileList = [f"Run2PickFiles/{file}" for file in fileList]
     if not path:
         path = (
             "Higgs/"
@@ -49,6 +49,7 @@ def loopRun(crab, path, fileCount, *fileList):
     numFiles = "numFiles=" + fileCount if fileCount != None else ""
     for file in fileList:
         # Filling in the parameters of runAnalyzer
+
         print("File: " + file)
         analysisSignal = (
             "HiggsSignal" if analysis == 0 else "MuonSignal" if analysis == 2 else ""
@@ -67,39 +68,45 @@ def loopRun(crab, path, fileCount, *fileList):
             inputString = "input=" + file
 
         # calls runAnalyzer
-        print("Creating " + outputString)
         if crab:
+            print("starting crab")
             crab_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/CRAB/"
             print(file)
             files = subprocess.Popen(["getFileList", file], stdout=subprocess.PIPE)
-            files.wait()
+            print('a')
+            print('b')
             countLines = int(subprocess.check_output(["wc", "-l"], stdin=files.stdout))
-
+            print(countLines)
+            print('c')
             maxNumFiles = 20  # basically just guessing this number, adjust as needed
+            totalFiles = min(int(fileCount), countLines) if fileCount != None else countLines
             for i in range(
                 0,
-                min(int(fileCount), countLines) if fileCount != None else countLines,
+                totalFiles,
                 maxNumFiles,
             ):
+                output = f"{name}_{int(i / maxNumFiles)}.root"
+                print("Creating " + output)
                 generate = Popen(
                     [
                         "python3",
                         "crab_config_generator.py",
                         f"--{inputString}",
-                        f"--output={name}_{int(i / maxNumFiles)}.root",
+                        f"--output={output}",
                         f"--{analysisName}",
-                        f"--folder={path[0:-1]}" if nameLocation != 0 else "",
-                        f"--numFiles={min(maxNumFiles, int(fileCount) - i)}",
+                        f"--folder={path[0:-1]}",
+                        f"--numFiles={min(maxNumFiles, totalFiles - i)}",
                         f"--skipFiles={i}",
                     ],
                     cwd=crab_directory,
                 )
                 generate.wait()
-                # submit = Popen(
-                #     ["crab", "submit", "-c", "crab_config.py"], cwd=crab_directory
-                # )
-                # submit.wait()
+                submit = Popen(
+                    ["crab", "submit", "-c", "crab_config.py"], cwd=crab_directory
+                )
+                submit.wait()
         else:
+            print("Creating " + outputString)
             Popen(
                 [
                     "nohup",
@@ -153,27 +160,25 @@ if __name__ == "__main__":
     # If a job only has one pickfile in it, make sure to add a comma at the end so that python thinks it is a tuple
 
     ttBar = (
-        "TTbar/TTbar_Boson_NA_Decay_LL_Run_2.txt",
-        "TTbar/TTbar_Boson_W_Decay_L_Run_2.txt",
-        "TTbar/TTbar_Boson_Z_Decay_LL_Run_2.txt",
+        "TTbar.txt",
+        "TTW.txt",
+        "TTZ.txt",
     )
 
-    # zz = ("ZZ/ZZ_Decay_2e2mu_Run_2.txt", "ZZ/ZZ_Decay_2e2tau_Run_2.txt", "ZZ/ZZ_Decay_2mu2tau_Run_2.txt", "ZZ/ZZ_Decay_4e_Run_2.txt", "ZZ/ZZ_Decay_4L_Run_2.txt", "ZZ/ZZ_Decay_4mu_Run_2.txt", "ZZ/ZZ_Decay_4tau_Run_2.txt")
-    zz = "ZZ/ZZ_Decay_4L_Run_2.txt"
+    zz = ("ZZ.txt",)
 
     dy = (
-        "Drell-Yan/Drell-Yan_MassCut_10-50_Run_2.txt",
-        "Drell-Yan/Drell-Yan_MassCut_50-inf_Run_2.txt",
+        "DY10-50.txt",
+        "DY50-inf.txt",
     )
-    dy50 = "Drell-Yan/Drell-Yan_MassCut_50-inf_Run_2.txt"
 
     multiBoson = (
-        "MultiBoson/MultiBoson_Bosons_WW_Decay_2L_Run_2.txt",
-        "MultiBoson/MultiBoson_Bosons_WWW_Decay_NA_Run_2.txt",
-        "MultiBoson/MultiBoson_Bosons_WWZJets_Decay_4L_Run_2.txt",
-        "MultiBoson/MultiBoson_Bosons_WZ_Decay_3L_Run_2.txt",
-        "MultiBoson/MultiBoson_Bosons_WZZ_Decay_NA_Run_2.txt",
-        "MultiBoson/MultiBoson_Bosons_ZZZ_Decay_NA_Run_2.txt",
+        "WW.txt",
+        "WWW.txt",
+        "WWZ.txt",
+        "WZ.txt",
+        "WZZ.txt",
+        "ZZZ.txt",
     )
 
     higgsSignal = (
@@ -182,65 +187,35 @@ if __name__ == "__main__":
         "Higgs700.txt",
         "Higgs800.txt",
         "Higgs900.txt",
-        "Higgs1000Run2.txt",
-        "Higgs1000Run3.txt",
+        "Higgs1000.txt",
         "Higgs1100.txt",
         "Higgs1200.txt",
         "Higgs1300.txt",
         "Higgs1400.txt",
         "Higgs1500.txt",
-    )
+	)
 
-    # higgsData = ("Data/SingleMuonRun2017B-UL2017_MiniAODv2-v1.txt", "Data/SingleElectronRun2017B-UL2017_MiniAODv2-v1.txt")
-    higgsData = (
-        "Data/Data_Trigger_SingleMuon_Year_2016B.txt",
-        "Data/Data_Trigger_SingleMuon_Year_2016C.txt",
-        "Data/Data_Trigger_SingleMuon_Year_2016D.txt",
-        "Data/Data_Trigger_SingleMuon_Year_2016E.txt",
-        "Data/Data_Trigger_SingleMuon_Year_2016F.txt",
-        "Data/Data_Trigger_SingleMuon_Year_2016G.txt",
-        "Data/Data_Trigger_SingleMuon_Year_2016H.txt",
-        "Data/Data_Trigger_SingleMuon_Year_2017B.txt",
-        "Data/Data_Trigger_SingleMuon_Year_2017C.txt",
-        "Data/Data_Trigger_SingleMuon_Year_2017D.txt",
-        "Data/Data_Trigger_SingleMuon_Year_2017E.txt",
-        "Data/Data_Trigger_SingleMuon_Year_2017F.txt",
-        # "Data/Data_Trigger_SingleMuon_Year_2017G.txt",
-        # "Data/Data_Trigger_SingleMuon_Year_2017H.txt",
-        "Data/Data_Trigger_SingleMuon_Year_2018A.txt",
-        "Data/Data_Trigger_SingleMuon_Year_2018B.txt",
-        "Data/Data_Trigger_SingleMuon_Year_2018C.txt",
-        "Data/Data_Trigger_SingleMuon_Year_2018D.txt",
-        # "Data/Data_Trigger_SingleMuon_Year_2022A.txt",
-        # "Data/Data_Trigger_SingleMuon_Year_2022B.txt",
-        # "Data/Data_Trigger_SingleMuon_Year_2022C.txt",
-        "Data/Data_Trigger_SingleElectron_Year_2016B.txt",
-        "Data/Data_Trigger_SingleElectron_Year_2016C.txt",
-        "Data/Data_Trigger_SingleElectron_Year_2016D.txt",
-        "Data/Data_Trigger_SingleElectron_Year_2016E.txt",
-        "Data/Data_Trigger_SingleElectron_Year_2016F.txt",
-        "Data/Data_Trigger_SingleElectron_Year_2016G.txt",
-        "Data/Data_Trigger_SingleElectron_Year_2016H.txt",
-        "Data/Data_Trigger_SingleElectron_Year_2017B.txt",
-        "Data/Data_Trigger_SingleElectron_Year_2017C.txt",
-        "Data/Data_Trigger_SingleElectron_Year_2017D.txt",
-        "Data/Data_Trigger_SingleElectron_Year_2017E.txt",
-        "Data/Data_Trigger_SingleElectron_Year_2017F.txt",
-        "Data/Data_Trigger_SingleElectron_Year_2018A.txt",
-        "Data/Data_Trigger_SingleElectron_Year_2018B.txt",
-        "Data/Data_Trigger_SingleElectron_Year_2018C.txt",
-        "Data/Data_Trigger_SingleElectron_Year_2018D.txt",
+    data = (
+        "Electron2016.txt",
+		"Electron2016APV.txt",
+		"Electron2017.txt",
+		"Electron2018.txt",
+		"Muon2016.txt",
+		"Muon2016APV.txt",
+		"Muon2017.txt",
+		"Muon2018.txt",
     )
 
     qcd = (
-        "QCD/QCD_HTCut_100-200_Run_2_Year_2018.txt",
-        "QCD/QCD_HTCut_200-300_Run_2_Year_2018.txt",
-        "QCD/QCD_HTCut_300-500_Run_2_Year_2018.txt",
-        "QCD/QCD_HTCut_500-700_Run_2_Year_2018.txt",
-        "QCD/QCD_HTCut_700-1000_Run_2_Year_2018.txt",
-        "QCD/QCD_HTCut_1000-1500_Run_2_Year_2018.txt",
-        "QCD/QCD_HTCut_1500-2000_Run_2_Year_2018.txt",
-        "QCD/QCD_HTCut_2000-Inf_Run_2_Year_2018.txt",
+		"QCD50-100.txt",
+        "QCD100-200.txt",
+        "QCD200-300.txt",
+        "QCD300-500.txt",
+        "QCD500-700.txt",
+        "QCD700-1000.txt",
+        "QCD1000-1500.txt",
+        "QCD1500-2000.txt",
+        "QCD2000-inf.txt",
     )
     darkPhotonSignal = ("darkPhotonBaselineRun2.txt",)
 
@@ -280,8 +255,8 @@ if __name__ == "__main__":
     # jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 
     # jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
-    # jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, higgsData, qcd]
     jobsList = [zz]
+    # jobsList = [data]
 
     if os.path.exists("nohup.out") and not args.keep:
         os.remove("nohup.out")

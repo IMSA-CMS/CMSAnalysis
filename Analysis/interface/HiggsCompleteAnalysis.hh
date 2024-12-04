@@ -2,6 +2,7 @@
 #define HIGGSCOMPLETEANALYSIS_HH
 
 #include "FullAnalysis.hh"
+#include "RateSystematic.hh"
 #include "Channel.hh"
 #include <memory>
 #include <vector>

@@ -17,7 +17,8 @@ if __name__ == "__main__":
     if os.path.exists("runAnalyzer.sh"):
         os.remove("runAnalyzer.sh")
     script_file = open("runAnalyzer.sh", "w")
-    script_file.write("cmsenv\nrunAnalyzer crab=1 ")
+    script_file.write('CMSSW_BASE=\"/srv\"\n') # change version number when updating
+    script_file.write("runAnalyzer crab=1 ")
     if args.input:
         script_file.write("input=" + args.input + " ")
     if args.output:
@@ -52,31 +53,8 @@ config.Data.unitsPerJob = 1
 config.Data.totalUnits = 1
 config.Data.publication = False
 {f"config.Data.outputDatasetTag = '{args.folder}'" if args.folder else ""}
-config.Site.storageSite = 'T3_US_FNALLPC'
+config.Site.storageSite = 'T3_CH_CERNBOX'
 """
+# replace storageSite with T3_US_FNALLPC if not on lxplus
     )
     config_file.close()
-
-
-# config.General.requestName = 'root_output_test'
-# config.General.workArea = 'crab_projects'
-# config.General.transferOutputs = True
-
-# # config.JobType.pluginName = 'Analysis'
-# config.JobType.psetName = 'PSet.py'
-
-# # empty xml file to not run cmsRun
-# config.JobType.inputFiles = ['FrameworkJobReport.xml', 'input/']
-# config.JobType.scriptExe = 'runAnalyzer.sh'
-# config.JobType.outputFiles = ['simpleoutput.txt', 'test.root']
-
-# config.Data.inputDataset = '/Tau/Run2016H-UL2016_MiniAODv2_NanoAODv9-v1/NANOAOD'
-# config.Data.inputDBS = 'global'
-# config.Data.splitting = 'FileBased'
-# config.Data.unitsPerJob = 1
-# config.Data.totalUnits = 1
-# config.Data.publication = False
-# config.Data.outputDatasetTag = 'CRAB3_tutorial_Aug2021_MC_analysis'
-
-# # Should be replaced w/ T3_US_FNALLPC if you have access, this is just public site for testing
-# config.Site.storageSite = "T3_US_FNALLPC"
