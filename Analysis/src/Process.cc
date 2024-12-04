@@ -141,13 +141,15 @@ TH1* Process::getSingleProcessHist(const HistVariable& histType, const std::stri
 
 const SingleProcess& Process::getSingleProcess(const std::string& singleProcessName) const
 {
+
 	for (const auto& singleProcess : processes)
 	{
+	
 		if (singleProcess.getName() == singleProcessName)
 			return singleProcess;
 	}
 
-	throw std::invalid_argument("There is no SingleProcess with such a name within this Process object");
+	throw std::invalid_argument("There is no SingleProcess named " + singleProcessName + " within this Process object");
 }
 
 double Process::getYield(HistVariable dataType) const

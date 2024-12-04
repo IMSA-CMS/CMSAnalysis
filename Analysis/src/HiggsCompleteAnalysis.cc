@@ -117,7 +117,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
                  std::map<std::string, std::string> histVariableToFileMapping;
                 for (auto histVar : histVariablesBackground)
                 {
-                    for (auto connecter : connecters)
+                    for (auto connecter : backgroundConnecters)
                     {
                         for (auto colName : columnNames)
                         {
@@ -157,7 +157,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
                 {
                     if ((connecter + colName) == (histVar.getName()))
                     {
-                        std::cout << "Background Mapping: " << histVar.getName() << std::endl;
+                        // std::cout << "Background Mapping: " << histVar.getName() << std::endl;
                         histVariableToFileMapping[histVar.getName()] = recoDecay + "__hists/" + recoDecay + connecter + colName;
 
                     }
@@ -175,9 +175,9 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
                 {
                     if ((connecter + colName) == (histVar.getName()))
                     {
-                        std::cout << "Data Mapping: " << histVar.getName() << std::endl;
+                        // std::cout << "Data Mapping: " << histVar.getName() << std::endl;
                         histVariableToFileMapping[histVar.getName()] = recoDecay + "_Pass__hists/" + recoDecay +connecter + colName;
-                        std::cout << recoDecay + "_Pass__hists/" + recoDecay +connecter + colName << std::endl;
+                        // std::cout << recoDecay + "_Pass__hists/" + recoDecay +connecter + colName << std::endl;
 
                     }
                 }
