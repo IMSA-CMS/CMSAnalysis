@@ -21,15 +21,6 @@ struct ParameterizationData
 class Fitter
 {
 public:
-	// TFile* histogramFile;
-	TFile* fitOutputFile;
-	std::string fitParameterFile;
-
-	TFile* parameterRootFile;
-	std::string parameterizationFunctionFile;
-
-	std::unordered_map<std::string, TH1*> histograms;
-	FitFunctionCollection functions;
 	
 	Fitter();
 	Fitter(const std::string& functionFile, const std::string& fitParameterFile);
@@ -50,6 +41,12 @@ public:
 
 	void fitFunctions();
 	void parameterizeFunctions(std::unordered_map<std::string, double>& xData, const std::vector<std::string>& paramNames);
+
+	const std::unordered_map<std::string, TH1*>& getHistograms() const { return histograms; }
+	void setHistograms(const std::unordered_map<std::string, TH1*>& newHistograms) { histograms = newHistograms; }
+
+	const FitFunctionCollection& getFunctions() const { return functions; }
+	void setFunctions(const FitFunctionCollection& newFunctions) { functions = newFunctions; }
 private:
 	TCanvas* fitExpressionFormula(TH1* histogram, FitFunction& fitFunction);
 	TCanvas* fitDSCB(TH1* histogram, FitFunction& fitFunction);
@@ -67,6 +64,19 @@ private:
 	//Gets guess inverse power law function y = a(x-b)^-c + d using three points, only guarantees the powerlaw through p0 and p1, not p2
 	static TF1* seedInversePowerLaw(double x_0, double y_0, double x_1, double y_1, double x_2, double y_2);
 	static std::vector<TF1*> trialFitFunctions;
+
+	
+	TFile* fitRootFile;
+	std::string fitTextFile;
+
+	TFile* parameterRootFile;
+	std::string parameterTextFile;
+
+	std::unordered_map<std::string, TH1*> histograms;
+	FitFunctionCollection functions;
+
+	std::map<std::string, TDirectory*> fitDirectories;
+	std::map<std::string, TDirectory*> parameterDirectories;
 };
 
 #endif

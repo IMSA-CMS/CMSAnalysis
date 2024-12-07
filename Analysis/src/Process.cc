@@ -76,7 +76,7 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 	else
 	{
 		newHist = new TH1D(name.c_str(), name.c_str(), 1, 0.0, 0.0);
-		std::cout << "Made Empty Hist in Process" << std::endl;
+		//std::cout << "Made Empty Hist" << std::endl;
 	}
 
 	if (!newHist)
@@ -171,8 +171,13 @@ void Process::addProcess(SingleProcess process)
 
 void Process::addSystematic(std::shared_ptr<Systematic> systematic)
 {
+	systematics.addSystematic(systematic);
+}
 
-
+std::pair<TH1*, TH1*> Process::getSystematicHist(HistVariable histType, bool scaleToExpected)
+{
+	auto hist = getHist(histType, scaleToExpected);
+	return systematics.adjustHistogram(hist);
 }
 
 int Process::getNEvents() 
