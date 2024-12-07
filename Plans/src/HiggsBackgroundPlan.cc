@@ -50,7 +50,7 @@ void HiggsBackgroundPlan::initialize()
     auto higgsSelector = make_shared<HiggsSelector>();
     auto higgsCut = make_shared<HiggsCut>();
     //auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
-    auto eventDump = make_shared<GenSimEventDumpModule>();
+    auto eventDump = make_shared<GenSimEventDumpModule>(5);
     auto zVetoCut = make_shared<ZVetoCut>();
     //auto quarkoniaCut = make_shared<QuarkoniaCut>();
     auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
@@ -58,7 +58,7 @@ void HiggsBackgroundPlan::initialize()
     eventMod->addSelector(higgsSelector);
     eventMod->addCut(triggerCut);
     eventMod->addCut(higgsCut);
-    eventMod->addCut(zVetoCut);
+    //eventMod->addCut(zVetoCut);
     //eventMod->addCut(quarkoniaCut);
     CommonOperations::addHiggsScaleFactors(eventMod);
 
@@ -126,7 +126,7 @@ void HiggsBackgroundPlan::initialize()
     modules.addFilterModule(recoDecayFilterMod);
     modules.addAnalysisModule(eventHistMod);    
     modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
-    modules.addFilterModule(runFilterMod); 
+    //modules.addFilterModule(runFilterMod); 
     modules.addAnalysisModule(eventDump);
     auto hPlusPlusEfficiency = make_shared<HPlusPlusEfficiency>();
     hPlusPlusEfficiency->setInput(eventMod->getEventInput());

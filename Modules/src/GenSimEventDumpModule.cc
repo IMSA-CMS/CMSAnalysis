@@ -20,6 +20,8 @@ GenSimEventDumpModule::GenSimEventDumpModule(int inumOfEvents):
 
 bool GenSimEventDumpModule::process()
 {
+  
+
   std::ofstream my_file;
   if (clearlatch) 
   {
