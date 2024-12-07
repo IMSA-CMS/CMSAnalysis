@@ -60,8 +60,9 @@ void RecoGenSimComparisonModule::finalize()
         std::cout << "Total events: " << eventCounter << "\n";
         std::cout << "Total electrons: " << electronCounter << "\n";
         std::cout << "Events with a photon/electron pair: " << numOfDesiredEvents << "\n";
-        std::cout << "Fake photon electrons ratio: " << elecFakePhotonCounter/(double)electronCounter << "\n";
+        std::cout << "Fake photon ratio: " << numOfDesiredEvents/(double)eventCounter << "\n";
         std::cout << "Photon + electron events with high invariant mass: " << fakePhotonCounter/(double)eventCounter << "\n";
+        std::cout << "Unmatched Events Ratio: " << noMatchCounter/(double)eventCounter << "\n";
     }
     if (comparisonType == "mother") 
     {
@@ -498,13 +499,28 @@ void RecoGenSimComparisonModule::fakePhotonComparison(const ParticleCollection<P
         std::ostream& output)
 {
     int recoEventElement = 1;
+    int genEventElement = 1;
+    bool wrongCharge = false;
+    bool fakePhoton = false;
+    bool mismeasuredPt = false;
+    bool accurate = false;
+    bool noMatch = true;
+    ParticleType recoPartType = ParticleType::photon();
+    ParticleType wrongChargeType = ParticleType::photon();
+    ParticleType fakePhotonType = ParticleType::photon();
+    ParticleType mismeasuredPtType = ParticleType::photon();
+    ParticleType noMatchType = ParticleType::photon();
+    ParticleCollection<Particle> notWrongCharge;
+    ParticleCollection<Particle> notFakePhoton;
+    ParticleCollection<Particle> notMismeasuredPt;
+    ParticleCollection<Particle> notNoMatch;
+   
     
-    bool highInvMass = false;
-    auto recoType = ParticleType::photon();
     for(auto &recoPart : recoParts)
     {
         // Standard info
         if (eventOutput) {
+            auto recoType = recoPart.getType();
             output << "++++++++++++++++ Reco Element ++++++++++++++++\n";
             output << std::setw(8) << recoEventElement << "| " << std::setw(9) << recoPart.getName() << "| ";
             // // Particle properties
@@ -524,24 +540,117 @@ void RecoGenSimComparisonModule::fakePhotonComparison(const ParticleCollection<P
                 << std::setw(13) << recoPart.getMass() << std::endl;
             }
             output << std::left << "-------------- GenSim Matches --------------\n";
-        }
-        recoType = recoPart.getType();
-        recoEventElement++;
-        bool ePlusGamma = false;
-        bool ePlusGammaEvent = false;
-        for (auto &recoPart2 : recoParts)
-        {
-            ePlusGamma = (recoPart.getType() == ParticleType::electron() && recoPart2.getType() == ParticleType::photon() ) || (recoPart2.getType() == ParticleType::electron() && recoPart.getType() == ParticleType::photon());
-            highInvMass = (recoPart.getFourVector() + recoPart2.getFourVector()).M() >  500;
-            if (!ePlusGammaEvent) {
-                ePlusGammaEvent = ePlusGamma;
+            for(auto &genPart : genParts){
+                //match using deltaR (distance in phi-eta plane)
+                double deltaR = std::sqrt( std::pow(recoPart.getPhi() - genPart.getPhi(), 2) + std::pow(recoPart.getEta() - genPart.getEta(), 2) );
+                if (deltaR < 0.1)
+                {
+                    
+                    // matchCounter++;
+                    noMatch = false;
+                    if(!((recoPart.getPt() - genPart.getPt())/genPart.getPt() < 0.1))
+                    {
+                        mismeasuredPt = true;
+                    }
+                    else
+                    {
+                        mismeasuredPt = false;
+                    }
+                    if (genPart.getCharge() != recoPart.getCharge())
+                    {
+                        wrongCharge = true;
+                    }
+                    else
+                    {
+                        wrongCharge = false;
+                    }
+
+                    if (recoPart.getType()==genPart.getType() && !(mismeasuredPt || wrongCharge))
+                    {
+                        accurate = true;
+                   
+                       
+                    }
+                    else
+                    {
+                        accurate = false;
+                    }
+
+                    if ( (genPart.getType() == ParticleType::photon() && recoType == ParticleType::electron())
+                          && !mismeasuredPt
+                       )
+                    {
+                        fakePhoton = true;
+                        std::cout << "fake photon detected\n";
+                     
+                    }
+                    else
+                    {
+                        fakePhoton = false;
+                    }
+                   
+
+                    if(fakePhoton || accurate){
+                        output << std::setw(8) << genEventElement << "| " << std::setw(9) << genPart.getName() << "| ";
+                        // Particle properties
+                        output << std::setw(13) << genPart.getCharge() << "| " 
+                            << std::setw(13) << genPart.getPt() << "| " 
+                            << std::setw(13) << genPart.getEta() << "| " 
+                            << std::setw(13) << genPart.getPhi() << "| ";
+                        try{
+                        output << std::setw(10) << genPart.getEnergy() << "| " 
+                            << std::setw(10) << genPart.getMass() << std::endl;
+                        }
+                        catch(const std::exception& e){
+                        output << std::setw(10) << "N/A" << "| " 
+                            << std::setw(10) << genPart.getMass() << std::endl;
+                        }
+                        break;
+                    }
+                }
+                
+                genEventElement++;
             }
-            if (ePlusGamma && highInvMass)
-            {
+            if(fakePhoton){
+                numOfDesiredEvents++;
+            }
+            if(fakePhoton && recoPart.getFourVector().M() > 500){
                 fakePhotonCounter++;
             }
+            if (recoType==ParticleType::electron()) 
+            {
+                electronCounter++;
+                elecWrongChargeCounter += wrongCharge;
+                elecFakePhotonCounter += fakePhoton;
+                elecNoMatchCounter += noMatch;
+                elecMismeasuredPtCounter += mismeasuredPt;
+                elecAccurateCounter += accurate;
+            } 
+            if(noMatch){
+                noMatchCounter++;
+            }
+             
         }
-        numOfDesiredEvents+=ePlusGammaEvent;
+        noMatch=true;
+        fakePhoton=false;
+         
+        //recoType = recoPart.getType();
+        recoEventElement++;
+        //bool ePlusGamma = false;
+        //bool ePlusGammaEvent = false;
+        // for (auto &recoPart2 : recoParts)
+        // {
+        //     ePlusGamma = (recoPart.getType() == ParticleType::electron() && recoPart2.getType() == ParticleType::photon() ) || (recoPart2.getType() == ParticleType::electron() && recoPart.getType() == ParticleType::photon());
+        //     highInvMass = (recoPart.getFourVector() + recoPart2.getFourVector()).M() >  500;
+        //     if (!ePlusGammaEvent) {
+        //         ePlusGammaEvent = ePlusGamma;
+        //     }
+        //     if (ePlusGamma && highInvMass)
+        //     {
+        //         fakePhotonCounter++;
+        //     }
+        // }
+        // numOfDesiredEvents+=ePlusGammaEvent;
     }
 }
 void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Particle>& recoParts, 
