@@ -42,6 +42,8 @@ SingleProcess FullAnalysis::makeBasicProcess(std::vector<HistVariable> histVaria
     //std::cout << "inputFile works";
     auto histEstimator = std::make_shared<SimpleEstimator>();
     //std::cout << "histEstimator works";
+
+    //return {graphHigh, graphLow};
     return SingleProcess(crossSectionName, inputFile, crossReader, histEstimator, luminosity, corrections);
 }
 

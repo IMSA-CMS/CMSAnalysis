@@ -21,7 +21,7 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, HistVaria
     if (!hist) {
        return 0;
     }
-    // std::cout << "SimpleEstimator 2" << std::endl;
+    //std::cout << "SimpleEstimator 2" << std::endl;
     int totalEventsInt = process->getTotalEvents();
     double totaleventsran = totalEventsInt;
     //Finds crosssection (from spreadsheet)
@@ -32,7 +32,7 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, HistVaria
     double efficiency = hist->GetEntries() / totaleventsran;
     double signalest = crosssection * 1000 * luminosity * efficiency;
 */
-    // std::cout << "SimpleEstimator 3" << std::endl;
+    //std::cout << "SimpleEstimator 3" << std::endl;
  
 //commented out integral code
 // /*
@@ -42,33 +42,29 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, HistVaria
     // mass range
     // needs to match the "upperMasslimit" value in "PlotFormatter" if using integral scaling
     double xAxisRange = 2000;
-    // std::cout << "SimpleEstimator 3.1" << std::endl;
-    if (hist == nullptr)
-    {
-        std::cout << "NULLPTR" << std::endl;
-    }
+    //std::cout << "SimpleEstimator 3.1" << std::endl;
     int numBins = hist->GetNbinsX(); 
-    // std::cout << "SimpleEstimator 3.2" << std::endl; 
+    //std::cout << "SimpleEstimator 3.2" << std::endl; 
     //std::cout << "numBins: " << numBins << "\n";
     int lowerLimit = firstBin * (static_cast<double>(numBins) / xAxisRange);
     double efficiency = (hist->Integral(lowerLimit, numBins)) / totaleventsran;
-    // std::cout << "SimpleEstimator 3.3" << std::endl;
+    //std::cout << "SimpleEstimator 3.3" << std::endl;
     double signalest = crosssection * 1000 * luminosity * efficiency;
-    //std::cout << "Passed Events: " << hist->GetEntries() << " " << hist->Integral() <<"\n";
-    //std::cout << "Total Events: " << totaleventsran << "\n";
-    //std::cout << "Efficiency of " << process->getName() << " is " << efficiency << std::endl;
+    // std::cout << "Passed Events: " << hist->GetEntries() << " " << hist->Integral() <<"\n";
+    // std::cout << "Total Events: " << totaleventsran << "\n";
+    // std::cout << "Efficiency of " << process->getName() << " is " << efficiency << std::endl;
 // */
-/*
-     std::cout << "postMax " << hist->GetMaximum() << std::endl;
-     std::cout << "MaxContent " << hist->GetBinContent(hist->GetMaximumBin()) << std::endl;
-     std::cout << "process " << process->getName() << std::endl; 
-     std::cout << "totaleventsran " << totaleventsran << std::endl;
-     std::cout << "totalentries " << hist->GetEntries() << std::endl;
-     std::cout << "efficiency " << efficiency << std::endl;
-     std::cout << "luminosity " << luminosity << std::endl;
-     std::cout << "cross section " << crosssection << std::endl;
-     std::cout << "postIntegral " << hist->Integral(lowerLimit, numBins) << std::endl;
-     std::cout << "yield for " << process->getName() << " is " << signalest << std::endl;
-*/
+
+    //  std::cout << "postMax " << hist->GetMaximum() << std::endl;
+    //  std::cout << "MaxContent " << hist->GetBinContent(hist->GetMaximumBin()) << std::endl;
+    //  std::cout << "process " << process->getName() << std::endl; 
+    //  std::cout << "totaleventsran " << totaleventsran << std::endl;
+    //  std::cout << "totalentries " << hist->GetEntries() << std::endl;
+    //  std::cout << "efficiency " << efficiency << std::endl;
+    //  std::cout << "luminosity " << luminosity << std::endl;
+    //  std::cout << "cross section " << crosssection << std::endl;
+    //  std::cout << "postIntegral " << hist->Integral(lowerLimit, numBins) << std::endl;
+    //  std::cout << "yield for " << process->getName() << " is " << signalest << std::endl;
+
     return signalest;
 }
