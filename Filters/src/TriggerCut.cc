@@ -35,7 +35,7 @@ bool TriggerCut::checkEventInternal(const Event& event, const EventInput* input)
 				return true;
 			}
 		}
-		std::cout << "rejected" << std::endl;
+		//std::cout << "rejected" << std::endl;
 		return false;
 	}
 	auto dataset = iterator->second;
@@ -58,13 +58,13 @@ bool TriggerCut::checkEventInternal(const Event& event, const EventInput* input)
 			{
 				if (input->checkTrigger(trigger)) 
 				{
-					std::cout << "rejected" << std::endl;
+					//std::cout << "rejected" << std::endl;
 					return false;
 				}
 			}
 			else
 			{
-				std::cout << "rejected" << std::endl;
+				//std::cout << "rejected" << std::endl;
 				return false; 
 			}
 		}
