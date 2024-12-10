@@ -37,6 +37,7 @@
 #include "CMSAnalysis/Filters/interface/ZVetoCut.hh"
 #include "CMSAnalysis/Filters/interface/FourLeptonCut.hh"
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
+#include "CMSAnalysis/Modules/interface/ScaleFactorAnalysis.hh"
 
 using std::make_shared;
 
@@ -61,7 +62,7 @@ void HiggsBackgroundPlan::initialize()
     eventMod->addCut(higgsCut);
     eventMod->addCut(zVetoCut);
     //eventMod->addCut(quarkoniaCut);
-    CommonOperations::addHiggsScaleFactors(eventMod);
+    //CommonOperations::addHiggsScaleFactors(eventMod);
 
     auto matchMod = make_shared<MatchingModule>();
     auto triggerMod = make_shared<TriggerModule>();
