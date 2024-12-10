@@ -18,10 +18,13 @@ void HTMLTable::makeTable(std::shared_ptr<TableData> data, std::ostream& outputS
     outputStream << "<table style=\"width:100%\">" << std::endl;
     table = table + makeHeaderRow(cols);
     int count = 0;
+    //std::cout << "1" << std::endl;
     while(static_cast<std::vector<int>::size_type>(count) < rows.size()) {
         table = table + makeRow(rows.at(count), entries.at(count));
+        std::cout << entries.at(count)[0] << std::endl;
         count++;
     }
+    //std::cout << "2" << std::endl;
     outputStream << table;
     outputStream << "</table>" << std::endl;
     

@@ -42,7 +42,7 @@ void FitFunctionCollection::saveFunctions(const std::string& fileName, bool appe
 	file << functions.size() << '\n';
 	for (auto& funcPair : functions)
 	{
-		file << funcPair.second;
+		file << funcPair.second << "\n";
 	}
 	file.close();
 }

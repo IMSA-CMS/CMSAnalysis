@@ -55,7 +55,6 @@ void HiggsBackgroundPlan::initialize()
     auto zVetoCut = make_shared<ZVetoCut>();
     //auto quarkoniaCut = make_shared<QuarkoniaCut>();
     auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
-    
     eventMod->addSelector(hppSelector);
     eventMod->addSelector(higgsSelector);
     eventMod->addCut(triggerCut);
@@ -107,20 +106,19 @@ void HiggsBackgroundPlan::initialize()
     eventHistMod->addHistogram(recoOppositeSignInvMassHist);
     eventHistMod->addHistogram(highestLeptonPt);
 
-    // auto runFilter = make_shared<RunFilter>();
-    // runFilter->addRunNumber(302337);
-    // runFilter->addRunNumber(302392);
-    // runFilter->addRunNumber(302573);
-    // runFilter->addRunNumber(302634);
-    // runFilter->addRunNumber(302635);
-    // runFilter->addRunNumber(302131);
-    // runFilter->addRunNumber(302163);
-    // runFilter->addRunNumber(302225);
-    // runFilter->addRunNumber(302494);
-    // runFilter->addRunNumber(302131);
-    // runFilter->addRunNumber(302596);
-    // runFilter->addRunNumber(302597);
-    // auto runFilterMod = make_shared<FilterModule>(runFilter);
+    auto runFilter = make_shared<RunFilter>();
+    runFilter->addRunNumber(302337);
+    runFilter->addRunNumber(302392);
+    runFilter->addRunNumber(302573);
+    runFilter->addRunNumber(302634);
+    runFilter->addRunNumber(302635);
+    runFilter->addRunNumber(302131);
+    runFilter->addRunNumber(302163);
+    runFilter->addRunNumber(302225);
+    runFilter->addRunNumber(302494);
+    runFilter->addRunNumber(302596);
+    runFilter->addRunNumber(302597);
+    auto runFilterMod = make_shared<FilterModule>(runFilter);
 
 
     modules.addProductionModule(metMod);
@@ -130,6 +128,7 @@ void HiggsBackgroundPlan::initialize()
     modules.addAnalysisModule(eventHistMod);    
     modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
     //modules.addFilterModule(runFilterMod); 
+    modules.addAnalysisModule(eventDump);
     auto hPlusPlusEfficiency = make_shared<HPlusPlusEfficiency>();
     hPlusPlusEfficiency->setInput(eventMod->getEventInput());
     modules.addAnalysisModule(hPlusPlusEfficiency);
