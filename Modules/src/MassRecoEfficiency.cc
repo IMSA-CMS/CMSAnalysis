@@ -14,11 +14,11 @@ MassRecoEfficiency::MassRecoEfficiency(double iHiggsMass, double iLowerWidth, do
 bool MassRecoEfficiency::process()
 {
   auto reco = getInput()->getLeptons(EventInput::RecoLevel::Reco);
-  double invMass = reco.calculateSameSignInvariantMass(false, true);
+  double invMass = reco.calculateSameSignInvariantMass(true);
   int size = reco.getNumParticles();
   int nMuons = reco.getLeptonTypeCount(ParticleType::muon());
 
-  auto invMasses = reco.calculateSameSignInvariantMasses(false, true);
+  auto invMasses = reco.calculateSameSignInvariantMasses(true);
 
   double min = HiggsMass - lowerWidth;
   double max = HiggsMass + upperWidth;

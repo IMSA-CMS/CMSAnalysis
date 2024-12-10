@@ -1,0 +1,6 @@
+H++toLL
+Mass:	1400
+Run:	2
+Lepton:	All
+Year:	2016APV	2016	2017	2018
+Format:	NanoAOD

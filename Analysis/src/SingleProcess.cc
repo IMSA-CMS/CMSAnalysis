@@ -15,9 +15,14 @@
 #include "CMSAnalysis/Analysis/interface/Correction.hh"
 #include <unordered_map>
 
-TH1* SingleProcess::getHist(std::string histType, bool scaleToExpected) const
+TH1* SingleProcess::getHist(HistVariable histType, bool scaleToExpected) const
 {
+    //std::cout << "SingleProcess 1" << std::endl;
+    //std::cout << getName() << std::endl;
     TH1* hist = input->getHist(histType);
+    if (!hist) {
+       return nullptr;
+    }
     if(scaleToExpected) {
         double yield = getExpectedYield(histType);
         double events = hist->Integral();
@@ -26,13 +31,15 @@ TH1* SingleProcess::getHist(std::string histType, bool scaleToExpected) const
             //std::cout << "Scale: " << (yield/events) << "\n";
         }
     }
+    //std::cout << "SingleProcess 2" << std::endl;
     for(auto correction : corrections) {
         hist = correction->correctHist(hist);
     }
+    //std::cout << "SingleProcess 3" << std::endl;
     return hist;
 }
 
-TH1* SingleProcess::get2DHist(std::string histType) const
+TH1* SingleProcess::get2DHist(HistVariable histType) const
 {
     return input->get2DHist(histType);
 }
@@ -42,7 +49,7 @@ int SingleProcess::getTotalEvents() const
     return input->getTotalEvents();
 }
 
-double SingleProcess::getExpectedYield(std::string dataType) const
+double SingleProcess::getExpectedYield(HistVariable dataType) const
 {
     std::vector<HistVariable> histVariables = input->getHistVariables();
     //for(HistVariable histVar : histVariables) {
@@ -57,11 +64,11 @@ bool SingleProcess::checkValidity()
     bool validProcess = true;
     std::vector<HistVariable> histVariables = input->getHistVariables();
     for(HistVariable histVar : histVariables) {
-        if(input->getHist(histVar.getName()) == 0) {
-            //std::cout << crossSectionName << " failed on " << histVar.getName() << std::endl;
+        if(input->getHist(histVar) == 0) {
+            //std::cout << " Validity Check failed on " << histVar.getName() << std::endl;
             validProcess = false;
         }
     }
-    std::cout << (validProcess ? "true" : "false");
+    // std::cout << (validProcess ? "true" : "false");
     return validProcess;
 }

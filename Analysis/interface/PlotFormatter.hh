@@ -8,6 +8,7 @@
 #include <memory>
 #include "HistVariable.hh"
 #include "FullAnalysis.hh"
+#include "MultiSystematic.hh"
 #include "Process.hh"
 #include <vector>
 #include "TH1.h"
@@ -20,11 +21,11 @@ class PlotFormatter
     public:
         PlotFormatter(bool iDrawLogo, TString iExtraText) : drawLogo(iDrawLogo), extraText(iExtraText) {}
         //Superimposed stacks
-        TCanvas* superImposedStackHist(std::shared_ptr<Channel> processes, std::string histvariable, 
+        TCanvas* superImposedStackHist(std::shared_ptr<Channel> processes, HistVariable histvariable, 
             TString xAxisTitle, TString yAxisTitle);
 
         //Superimposed hist (second function is for the simple SuperImpose.C script)
-        TCanvas* superImposedHist(std::shared_ptr<Channel> processes, std::string histvariable, 
+        TCanvas* superImposedHist(std::shared_ptr<Channel> processes, HistVariable histvariable, 
             TString xAxisTitle, TString yAxisTitle);
 
         TCanvas* simpleSuperImposedHist(std::vector<TH1*> hists, std::vector<int> colors, std::vector<TString> names, 
@@ -37,22 +38,22 @@ class PlotFormatter
             TString xAxisTitle, TString yAxisTitle);
 
         //Single 1D hist
-        TCanvas* simple1DHist(std::shared_ptr<Process> process, std::string histvariable, bool scaleToExpected, 
+        TCanvas* simple1DHist(std::shared_ptr<Process> process, HistVariable histvariable, bool scaleToExpected, 
             TString xAxisTitle, TString yAxisTitle);
 
         TCanvas* simple1DHist(TH1* process, TString xAxisTitle, TString yAxisTitle);
 
         //Single 2D hist
-        TCanvas* simple2DHist(std::shared_ptr<Process> process, std::string histvariable, 
+        TCanvas* simple2DHist(std::shared_ptr<Process> process, HistVariable histvariable, 
             TString xAxisTitle, TString yAxisTitle);
 
         //Single stacked histogram
-        TCanvas* simpleStackHist(std::shared_ptr<Channel> processes, std::string histvariable, 
+        TCanvas* simpleStackHist(std::shared_ptr<Channel> processes, HistVariable histvariable, 
             TString xAxisTitle, TString yAxisTitle);
             
         //Complete Signal/Background plot
-        TCanvas* completePlot(std::shared_ptr<FullAnalysis> analysis, std::string histvariable,
-            TString xAxisTitle, TString yAxisTitle, bool scaleTodata, bool includeSignal, std::string channelName = "");
+        TCanvas* completePlot(std::shared_ptr<FullAnalysis> analysis, HistVariable histvariable,
+            TString xAxisTitle, TString yAxisTitle, bool scaleTodata, bool includeSignal, bool includeData, std::string channelName = "");
 
         //Deletes all hist pointers made with the PlotFormatter
         void deleteHists();
@@ -99,7 +100,7 @@ class PlotFormatter
 
         TLegend* GetSimpleLegend(std::vector<TH1*> hists, std::vector<TString> names);
 
-        TLegend* GetSuperImposedLegend(std::shared_ptr<Channel> processes, std::string histvariable);
+        TLegend* GetSuperImposedLegend(std::shared_ptr<Channel> processes, HistVariable histvariable);
 
         TLegend* GetStackedLegend(std::shared_ptr<Channel> processes, THStack* hists);
 
@@ -119,8 +120,6 @@ class PlotFormatter
         double upperMasslimit;
         int numBins;
         int firstBin;
-
-
 };
 
 #endif

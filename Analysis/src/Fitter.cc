@@ -14,35 +14,35 @@ std::vector<TF1*> Fitter::trialFitFunctions = {
 
 Fitter::Fitter() {}
 
-Fitter::Fitter(const std::string& functionFile,  const std::string& fitParameterFile) 
-	: fitOutputFile(TFile::Open(functionFile.c_str(), "RECREATE")),
-	fitParameterFile(fitParameterFile) {}
+Fitter::Fitter(const std::string& functionFile,  const std::string& fitTextFile)
+	: fitRootFile(TFile::Open(functionFile.c_str(), "RECREATE")),
+	fitTextFile(fitTextFile) {}
 
-Fitter::Fitter(const std::string& functionFile, const std::string& fitParameterFile, const std::string& parameterRootFile, const std::string& parameterizationFuncFile)
-	: fitOutputFile(TFile::Open(functionFile.c_str(), "RECREATE")), 
-	fitParameterFile(fitParameterFile),
+Fitter::Fitter(const std::string& functionFile, const std::string& fitTextFile, const std::string& parameterRootFile, const std::string& parameterizationFuncFile)
+	: fitRootFile(TFile::Open(functionFile.c_str(), "RECREATE")),
+	fitTextFile(fitTextFile),
 	parameterRootFile(TFile::Open(parameterRootFile.c_str(), "RECREATE")),
-	parameterizationFunctionFile(parameterizationFuncFile) {}
+	parameterTextFile(parameterizationFuncFile) {}
 
 Fitter::~Fitter() 
 {
-	if (fitOutputFile->IsOpen())
-		fitOutputFile->Close();
+	if (fitRootFile->IsOpen())
+		fitRootFile->Close();
 	if (parameterRootFile->IsOpen())
 		parameterRootFile->Close();
 }
 
 void Fitter::setFunctionRootOutput(const std::string& name)
 {
-	if (fitOutputFile->IsOpen())
-		fitOutputFile->Close();
+	if (fitRootFile->IsOpen())
+		fitRootFile->Close();
 
-	fitOutputFile = TFile::Open(name.c_str(), "RECREATE");
+	fitRootFile = TFile::Open(name.c_str(), "RECREATE");
 }
 
 void Fitter::setFunctionOutput(const std::string& name)
 {
-	fitParameterFile = name;
+	fitTextFile = name;
 }
 
 void Fitter::setParameterizationRootOutput(const std::string& name)
@@ -54,7 +54,7 @@ void Fitter::setParameterizationRootOutput(const std::string& name)
 
 void Fitter::setParameterizationOutput(const std::string& name)
 {
-	parameterizationFunctionFile = name;
+	parameterTextFile = name;
 }
 
 void Fitter::loadFunctions(const FitFunctionCollection& fitFunctions)
@@ -69,14 +69,11 @@ void Fitter::loadFunctions(const FitFunctionCollection& fitFunctions)
 
 void Fitter::fitFunctions()
 {
-	for (auto& funcPair : functions.functions)
+	for (auto& funcPair : functions.getFunctions())
 	{
 		FitFunction& func = funcPair.second;
-		// std::cout << "1\n";
 		TH1* histogram = histograms[funcPair.first];
-		// std::cout << "2\n";
 		TCanvas* canvas;
-		// std::cout << func << '\n';
 
 		switch (func.getFunctionType())
 		{
@@ -92,14 +89,21 @@ void Fitter::fitFunctions()
 			default:
 				throw std::invalid_argument("Not a valid FunctionType enum value");
 		}
-		// std::cout << "3\n";
-		fitOutputFile->WriteObject(canvas, func.getName().c_str());
-		// std::cout << "4\n";
+		size_t pos = func.getName().find('/');
+		if(pos != std::string::npos)
+		{
+			std::string dir = func.getName().substr(0, pos);
+			std::string name = func.getName().substr(pos + 1);
+			auto pos = fitDirectories.find(dir);
+			if(pos == fitDirectories.end()){
+				fitDirectories[dir] = fitRootFile->mkdir(dir.c_str());
+			}
+			fitDirectories[dir]->WriteObject(canvas, name.c_str());
+		}
+		else fitRootFile->WriteObject(canvas, func.getName().c_str());
 		canvas->Close();
 	}
-	// std::cout << "5\n";
-	functions.saveFunctions(fitParameterFile, true);
-	// std::cout << "6\n";
+	functions.saveFunctions(fitTextFile, true);
 }
 
 // TH1* Fitter::readHistogram(const std::string& name)
@@ -200,9 +204,10 @@ TCanvas* Fitter::fitPowerLaw(TH1* histogram, FitFunction& fitFunction)
 	double chi2 = __DBL_MAX__;
 	while (result->Chi2() < chi2)
 	{
+		std::cerr << "hit 2\n";
 		chi2 = result->Chi2();
 		fitFunction.getFunction()->SetParameters(result->Parameter(0), result->Parameter(1), result->Parameter(2));
-		result = histogram->Fit(fitFunction.getFunction(), "SL", "", 150, 1500);
+		result = histogram->Fit(fitFunction.getFunction(), "SL", "", fitFunction.getMin(), fitFunction.getMax());
 	}
 
 	gStyle->SetOptFit(1111);
@@ -214,7 +219,7 @@ std::vector<ParameterizationData> Fitter::getParameterData(std::unordered_map<st
 {
 	if (functions.checkFunctionsSimilar())
 	{
-		int params = functions.functions.begin()->second.getFunction()->GetNpar();
+		int params = functions.getFunctions().begin()->second.getFunction()->GetNpar();
 		auto data = std::vector<ParameterizationData>(params);
 
 		for (int i = 0; i < params; ++i) {
@@ -224,12 +229,12 @@ std::vector<ParameterizationData> Fitter::getParameterData(std::unordered_map<st
 				std::vector<double>(functions.size()),
 				std::vector<double>(functions.size()),
 				i,
-				functions.functions.begin()->second.getFunction()->GetParName(i)
+				functions.getFunctions().begin()->second.getFunction()->GetParName(i)
 			};
 		}
 
 		int i = 0;
-		for (auto& pair : functions.functions)
+		for (auto& pair : functions.getFunctions())
 		{
 			for (int j = 0; j < params; ++j) 
 			{
@@ -259,6 +264,7 @@ FitFunction Fitter::parameterizeFunction(ParameterizationData& parameterData)
 	TFitResultPtr result = functionFittingLoop(graph, func);
 	
 	func->SetRange(0, 2000);
+	func->SetName(parameterData.name.c_str());
 	graph->SetTitle(parameterData.name.c_str());
 	graph->SetMarkerStyle(15);
 	graph->Draw("AP");
@@ -268,7 +274,20 @@ FitFunction Fitter::parameterizeFunction(ParameterizationData& parameterData)
 	FitFunction function(func, FitFunction::FunctionType::EXPRESSION_FORMULA);
 
 	gStyle->SetOptFit(1111);
-	parameterRootFile->WriteObject(canvas, parameterData.name.c_str());
+
+	size_t pos = function.getName().find('/');
+	if(pos != std::string::npos)
+	{
+		std::string dir = function.getName().substr(0, pos);
+		std::string name = function.getName().substr(pos + 1);
+		auto pos = parameterDirectories.find(dir);
+		if(pos == parameterDirectories.end()){
+			parameterDirectories[dir] = parameterRootFile->mkdir(dir.c_str());
+		}
+		parameterDirectories[dir]->WriteObject(canvas, name.c_str());
+	}
+	else parameterRootFile->WriteObject(canvas, parameterData.name.c_str());
+	
 	canvas->Close();
 
 	return function;
@@ -277,22 +296,22 @@ FitFunction Fitter::parameterizeFunction(ParameterizationData& parameterData)
 void Fitter::parameterizeFunctions(std::unordered_map<std::string, double>& xData, const std::vector<std::string>& paramNames)
 {
 	std::vector<ParameterizationData> totalParameterData = getParameterData(xData);
-	FitFunctionCollection functions;
+	FitFunctionCollection paramFunctions;
 
 	// FitFunction funcOne = parameterizeFunction(totalParameterData[1], parameterRootFile);
-	// functions.insert(funcOne);
+	// paramFunctions.insert(funcOne);
 	// FitFunction funcTwo = parameterizeFunction(totalParameterData[0], parameterRootFile);
-	// functions.insert(funcTwo);
+	// paramFunctions.insert(funcTwo);
 
 	for (size_t i = 0; i < totalParameterData.size(); ++i)
 	{
 		totalParameterData[i].name = paramNames[i];
-		std::cout << "Parameterizing parameter " << i << '\n';
+		std::cout << "Parameterizing parameter " << paramNames[i] << '\n';
 		FitFunction func = parameterizeFunction(totalParameterData[i]);
-		functions.insert(func);
+		paramFunctions.insert(func);
 	}
 
-	functions.saveFunctions(parameterizationFunctionFile, true);
+	paramFunctions.saveFunctions(parameterTextFile, true);
 }
 
 TF1* Fitter::seedInversePowerLaw(double x_0, double y_0, double x_1, double y_1, double x_2, double y_2)
@@ -321,33 +340,44 @@ TFitResultPtr Fitter::functionFittingLoop(TGraph* graph, TF1* function)
 {
 	TGraph* graphClone = (TGraph*) graph->Clone();
 
-	TF1* bestFunction = (TF1*) trialFitFunctions[0]->Clone();
-	TFitResultPtr bestResults = graphClone->Fit(bestFunction, "S");
-	double bestChi2 = bestResults->Chi2();
-	// bool isValid = bestResults->IsValid();
+	TF1* functionClone = (TF1*) trialFitFunctions[0]->Clone();
+	TFitResultPtr result = graphClone->Fit(functionClone, "S");
 
-	for (size_t i = 1; i < trialFitFunctions.size(); ++i)
+
+	// copied this over from power law fit, seems to make some norm fits look better
+	double chi2 = __DBL_MAX__;
+	while (chi2 - result->Chi2() > 0.000001) // arbitrary number
 	{
-		// if (isValid)
-		// 	break;
-
-		TF1* trialFunction = (TF1*) trialFitFunctions[i]->Clone();
-		TFitResultPtr result = fitSingleFunction(graphClone, trialFunction, 3);
-		if (result->Chi2() < bestChi2) 
-		{
-			bestChi2 = result->Chi2();
-			// isValid = result->IsValid();
-			bestResults = result;
-			bestFunction = trialFunction;
-		}
+		chi2 = result->Chi2();
+		functionClone->SetParameters(result->Parameter(0), result->Parameter(1), result->Parameter(2), result->Parameter(3));
+		result = graphClone->Fit(functionClone, "S");
 	}
 
-	graph->Fit(bestFunction, "S");
+
+	// bool isValid = bestResults->IsValid();
+
+	// for (size_t i = 1; i < trialFitFunctions.size(); ++i)
+	// {
+	// 	// if (isValid)
+	// 	// 	break;
+
+	// 	TF1* trialFunction = (TF1*) trialFitFunctions[i]->Clone();
+	// 	TFitResultPtr result = fitSingleFunction(graphClone, trialFunction, 3);
+		// if (result->Chi2() < bestChi2)
+		// {
+		// 	bestChi2 = result->Chi2();
+		// 	// isValid = result->IsValid();
+		// 	bestResults = result;
+		// 	bestFunction = trialFunction;
+		// }
+	// }
+
+	graph->Fit(functionClone, "S");
 	std::cout << "Preparing to copy function\n";
-	bestFunction->Copy(*function);
+	functionClone->Copy(*function);
 	std::cout << "Finished copying function\n";
 
-	return bestResults;
+	return result;
 }
 
 TFitResultPtr Fitter::fitSingleFunction(TGraph* graph, TF1* function, size_t iterations)

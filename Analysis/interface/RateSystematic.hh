@@ -17,22 +17,24 @@
 #include <vector>
 #include <fstream>
 
-enum class Distribution
-{
-    LogNormal
-};
-enum class Limits
-{
-    Percentages,
-    Factors,
-    Absolute
-};
+
 
 class RateSystematic : public Systematic
 {
     public:
-        std::string getString() const;
-
+        enum class Distribution
+        {
+            LogNormal
+        };
+        enum class Limits
+        {
+            Percentages,
+            Factors,
+            Absolute
+        };
+        RateSystematic(std::string name, double rate, Distribution distribution = Distribution::LogNormal);
+        virtual std::string getString() const override;
+        virtual std::pair<TH1*, TH1*> adjustHistogram(TH1* original) const override;
     private:
         double factor;
         Distribution distribution;

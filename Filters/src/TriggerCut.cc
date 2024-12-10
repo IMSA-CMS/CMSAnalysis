@@ -82,7 +82,7 @@ bool TriggerCut::checkEventInternal(const Event& event, const EventInput* input)
 		}
 	}
 	
-	std::cout << "rejected" << std::endl;
+	//std::cout << "rejected" << std::endl;
 	return false;
 }
 
