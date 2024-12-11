@@ -189,6 +189,10 @@ if __name__ == "__main__":
         "Higgs1500.txt",
 	)
 
+    oneFile = (
+        "Muon2017.txt",
+    )
+
     data = (
         "Electron2016.txt",
 		"Electron2016APV.txt",
@@ -249,8 +253,8 @@ if __name__ == "__main__":
     # jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 
     # jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
-    jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, data, qcd]
-    # jobsList = [data]
+    #jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, data, qcd]
+    jobsList = [oneFile]
 
     if os.path.exists("nohup.out") and not args.keep:
         os.remove("nohup.out")
