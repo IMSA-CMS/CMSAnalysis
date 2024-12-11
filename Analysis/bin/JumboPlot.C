@@ -75,7 +75,7 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, bool 
 
 	std::vector<std::string> columnTitles;
 	std::string entry = "";
-
+	bool includeSignal = true;
 	for (std::string connecter: connecters)
 	{
 		int unitCounter = 0;
@@ -104,7 +104,7 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, bool 
 				dataName = Utility::removeSpaces(dataType);
 				fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
 				HistVariable fullDataType = HistVariable(connecter + dataType);
-				bool includeSignal = false;
+				//bool includeSignal = false;
 				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, includeSignal, includeData, channel->getName());
 				canvas->SaveAs(fileName.c_str());
 				plotFormatter->deleteHists();
@@ -148,7 +148,7 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, bool 
 				dataName = Utility::removeSpaces(dataType);
 				fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
 				HistVariable fullDataType = HistVariable(connecter + dataType);
-				bool includeSignal = false;
+				//bool includeSignal = false;
 				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, includeSignal, includeData, channel->getName());
 				canvas->SaveAs(fileName.c_str());
 				plotFormatter->deleteHists();
