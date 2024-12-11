@@ -57,3 +57,6 @@ CRAB/gen
 CRAB/__pycache__
 CRAB/crab_config.py
 CRAB/runAnalyzer.sh
+
+# macOS
+._*
