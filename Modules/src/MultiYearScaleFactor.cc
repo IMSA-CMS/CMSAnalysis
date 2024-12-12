@@ -26,10 +26,11 @@ double MultiYearScaleFactor::getScaleFactor(const EventInput* input) const //add
 	
 	if (input->getFileParams()->getProcess() == "Data")
 	{
+		std::cout << "Process is Data, returning scale factor 1.0" << std::endl;
 		return 1.0;
 	}
 
-	auto year = input->getFileParams()->getParameters().find("Period");
+	auto year = input->getFileParams()->getParameters().find("Year");
 	if (year == input->getFileParams()->getParameters().end())
 	{
 		throw std::runtime_error ("Year not found in file parameters");
@@ -47,6 +48,5 @@ double MultiYearScaleFactor::getScaleFactor(const EventInput* input) const //add
 		throw std::runtime_error ("Scale factors for year not found");
 	}
 	return electronsf->second->getScaleFactor(input) * muonsf->second->getScaleFactor(input);
-
 }
 

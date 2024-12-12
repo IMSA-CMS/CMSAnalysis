@@ -6,17 +6,21 @@
 #include <map>
 #include "CMSAnalysis/Modules/interface/JSONScaleFactor.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "EventFilter/Utilities/interface/json.h"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "TH1.h"
 #include "TH2.h"
 #include "TCanvas.h"
 #include "TFile.h"
 
 // Function to preprocess the JSON content
-std::string preprocessJSON(const std::string &filename) {
-    std::ifstream file(filename);
-    if (!file.is_open()) {
+std::string preprocessJSON(const std::string &filename) 
+{
+    std::ifstream file(Utility::getFullPath(filename));
+    if (!file.is_open()) 
+    {
         std::cerr << "Unable to open file: " << filename << std::endl;
         return "";
     }
@@ -32,9 +36,8 @@ std::string preprocessJSON(const std::string &filename) {
     return jsonContent;
 }
 
-JSONScaleFactor::JSONScaleFactor(std::string filename) 
+JSONScaleFactor::JSONScaleFactor(std::string filename, SystematicType systematicType) : systematicType(systematicType) 
 {
-    
 
 }
 
@@ -110,8 +113,9 @@ double JSONScaleFactor::getScaleFactor(const EventInput* input) const
 // }
 void JSONScaleFactor::printScaleFactors() const
 {
-    std::cout << ":p" << std::endl;
+    
 }
+
 void JSONScaleFactor::addScaleFactor(double eta, double pt, double scaleFactor)
 {
     scaleFactors[eta][pt] = scaleFactor;

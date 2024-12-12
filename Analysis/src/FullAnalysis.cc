@@ -53,6 +53,8 @@ SingleProcess FullAnalysis::makeBasicProcess(std::vector<HistVariable> histVaria
     //std::cout << "inputFile works";
     auto histEstimator = std::make_shared<SimpleEstimator>();
     //std::cout << "histEstimator works";
+
+    //return {graphHigh, graphLow};
     return SingleProcess(crossSectionName, inputFile, crossReader, histEstimator, luminosity, corrections);
 }
 
@@ -86,6 +88,7 @@ TH1 *FullAnalysis::getHist(HistVariable histType, std::string processName, bool 
                 return nullptr;
                 //throw std::runtime_error("Histogram not found in channel: " + channel->getName());
             }
+
             // if (channelHist->GetNbinsX() > maxBinNum)
             // {
             //     maxBinNum = channelHist->GetNbinsX();
