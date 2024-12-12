@@ -78,28 +78,38 @@ void Table()
         channelNames.push_back(channel);
         
         //gets sameSignMass hist data
-        HistVariable histVariable = HistVariable::sameSignMass(channel + "__hists/" + channel + "_1st Highest mu- Dxy");
+        HistVariable histVariable("Same Sign Invariant Mass");
         std::shared_ptr<Channel> channelPtr = higgsAnalysis->getChannel(channel);
    
         //Gets names of decays in channel and their corresponding yields by index (i.e yields[i] corresponds with names[i])
         std::vector<double> yields = channelPtr->getYields(histVariable); //error happens around here
         std::vector<std::string> names = channelPtr->getNames();
 
- 
 
-        for (std::string name : names) {
-            std::cout << name << std::endl;
+        for (int stringIndex = names.size() - 1; stringIndex >= 0; --stringIndex) {
+            std::string name = names[stringIndex];
+            if (name.find("Higgs signal") != string::npos) {
+                names.erase(names.begin() + stringIndex);
+                yields.erase(yields.begin() + stringIndex);
+            }
         }
         
-        // //Converts yields to strings and stores in row for final table
-        // std::vector<std::string> dataRow;
-        // for (double yield : yields) dataRow.push_back(roundDoubleString(yield, 4));
+         for (int stringIndex = 0; stringIndex < names.size() - 1; ++stringIndex) {
+            std::cout << "yield name: " << names[stringIndex] << std::endl;
+            std::cout << "yield: " << yields[stringIndex] << std::endl;
 
-        // //Adds yields to final decay yield data grid
-        // finalTableData.push_back(dataRow);
+        }
 
-        // //Saves truncated names to be used as columnNames in data table.
-        // columnNames = names;
+
+        //Converts yields to strings and stores in row for final table
+        std::vector<std::string> dataRow;
+        for (double yield : yields) dataRow.push_back(roundDoubleString(yield, 4));
+
+        //Adds yields to final decay yield data grid
+        finalTableData.push_back(dataRow);
+
+        //Saves truncated names to be used as columnNames in data table.
+        columnNames = names;
     }
     
     
@@ -112,10 +122,10 @@ void Table()
 
     
 
-    // auto tableInput = std::make_shared<TableData>(finalTableData, columnNames, channelNames);
-    // //Change the type of table you want here
-    // auto table = std::make_shared<TextTable>();
-    // table->makeTable(tableInput, std::cout);
-    // std::cout << "\n" << std::endl;
+    auto tableInput = std::make_shared<TableData>(finalTableData, columnNames, channelNames);
+    //Change the type of table you want here
+    auto table = std::make_shared<TextTable>();
+    table->makeTable(tableInput, std::cout);
+    std::cout << "\n" << std::endl;
  
 }
