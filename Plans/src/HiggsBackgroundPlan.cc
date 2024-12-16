@@ -37,6 +37,7 @@
 #include "CMSAnalysis/Filters/interface/ZVetoCut.hh"
 #include "CMSAnalysis/Filters/interface/FourLeptonCut.hh"
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
+#include "CMSAnalysis/Modules/interface/ScaleFactorAnalysis.hh"
 
 using std::make_shared;
 

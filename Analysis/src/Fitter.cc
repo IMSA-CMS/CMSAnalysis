@@ -193,7 +193,7 @@ TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction)
 }
 TCanvas* Fitter::fitPowerLaw(TH1* histogram, FitFunction& fitFunction)
 {
-	double initalParams[3] = {std::pow(10, 17), -400, -7};
+	double initalParams[3] = {1e17, -400, -7};
 	fitFunction.getFunction()->SetParameters(initalParams);
 
 	TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);

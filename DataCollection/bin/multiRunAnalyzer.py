@@ -59,8 +59,8 @@ def loopRun(crab, path, fileCount, fileList):
         name = file[nameLocation:nameEnd]
         outputString = "output=" + path + name + ".root"
         inputString = "input=" + file
-
-        if file[0:5] == "Higgs":
+        offset = len("Run2PickFiles/")
+        if file[0+offset:5+offset] == "Higgs":
             analysisName = "analysis=" + analysisSignal
             inputString = "input=" + file
         else:
@@ -69,15 +69,12 @@ def loopRun(crab, path, fileCount, fileList):
 
         # calls runAnalyzer
         if crab:
+            # figure out concurrent system for this (i.e. writing to different files)
             print("starting crab")
             crab_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/CRAB/"
             print(file)
             files = subprocess.Popen(["getFileList", file], stdout=subprocess.PIPE)
-            print('a')
-            print('b')
             countLines = int(subprocess.check_output(["wc", "-l"], stdin=files.stdout))
-            print(countLines)
-            print('c')
             maxNumFiles = 20  # basically just guessing this number, adjust as needed
             totalFiles = min(int(fileCount), countLines) if fileCount != None else countLines
             for i in range(
@@ -94,7 +91,7 @@ def loopRun(crab, path, fileCount, fileList):
                         f"--{inputString}",
                         f"--output={output}",
                         f"--{analysisName}",
-                        f"--folder={path[0:-1]}",
+                        f"--folder={path + file[14:-4]}",
                         f"--numFiles={min(maxNumFiles, totalFiles - i)}",
                         f"--skipFiles={i}",
                     ],
@@ -102,7 +99,7 @@ def loopRun(crab, path, fileCount, fileList):
                 )
                 generate.wait()
                 submit = Popen(
-                    ["crab", "submit", "-c", "crab_config.py"], cwd=crab_directory
+                    ["crab", "submit", "-c", f"gen/{file[14:-4]}_crab_config.py"], cwd=crab_directory
                 )
                 submit.wait()
         else:
@@ -255,34 +252,17 @@ if __name__ == "__main__":
     # jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 
     # jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
-    jobsList = [zz]
-    # jobsList = [data]
+    jobsList = [dy]
+    if args.crab:
+        temp = []
+        for job in jobsList:
+            for file in job:
+                temp.append((file,)) # add as a tuple
+
+        jobsList = temp
 
     if os.path.exists("nohup.out") and not args.keep:
         os.remove("nohup.out")
-
-    # batch_size = 3
-    # for i in range(0, len(jobsList), batch_size):
-    # 	print("In")
-    # 	# Create a batch from the list
-    # 	batch = jobsList[i:i + batch_size]
-    # 	flat_batch = [file for job in batch for file in job]
-
-    # 	# Specify the path to your Python script (batch_run.py)
-    # 	script_path = "batch_run.py"
-
-    #   	# Specify the output file where stdout and stderr will be logged
-    # 	output_file = "nohup.out"
-
-    #   	# Open the output file to log stdout and stderr
-    # 	with open(output_file, "w") as f:
-    #      	# Run the command with 'nohup' effect and redirect output to the file
-    # 		print("1")
-    # 		process = subprocess.Popen(["python", script_path], stdout=f, stderr=subprocess.STDOUT, preexec_fn=os.setpgrp)
-    # 		process.wait()
-
-    # 	# Call run_jobs.py with the batch
-    # 	#run_batch(flat_batch, analysis)
 
     # list of processes
     processes = []
