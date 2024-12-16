@@ -59,8 +59,8 @@ def loopRun(crab, path, fileCount, fileList):
         name = file[nameLocation:nameEnd]
         outputString = "output=" + path + name + ".root"
         inputString = "input=" + file
-
-        if file[0:5] == "Higgs":
+        offset = len("Run2PickFiles/")
+        if file[0+offset:5+offset] == "Higgs":
             analysisName = "analysis=" + analysisSignal
             inputString = "input=" + file
         else:
@@ -79,7 +79,7 @@ def loopRun(crab, path, fileCount, fileList):
             totalFiles = min(int(fileCount), countLines) if fileCount != None else countLines
             for i in range(
                 0,
-                20,
+                totalFiles,
                 maxNumFiles,
             ):
                 output = f"{name}_{int(i / maxNumFiles)}.root"
@@ -193,11 +193,11 @@ if __name__ == "__main__":
 	)
 
     data = (
-        # "Electron2016.txt",
-		# "Electron2016APV.txt",
+        "Electron2016.txt",
+		"Electron2016APV.txt",
 		"Electron2017.txt",
 		"Electron2018.txt",
-		# "Muon2016.txt",
+		"Muon2016.txt",
 		"Muon2016APV.txt",
 		"Muon2017.txt",
 		"Muon2018.txt",
@@ -252,7 +252,7 @@ if __name__ == "__main__":
     # jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 
     # jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
-    jobsList = [data]
+    jobsList = [dy]
     if args.crab:
         temp = []
         for job in jobsList:
