@@ -103,18 +103,18 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis(const std::string filePat
 			//histVariablesBackground.push_back(HistVariable("Eta High Mass and Different Signs", "High Mass and Different Signs__hists/High Mass and Different Signs_1st Highest mu- Eta")); 
 
             std::vector<HistVariable> histVariablesBackground = {
-                HistVariable::genSimSameSignMass(),
-                HistVariable::sameSignMass(),
-                HistVariable::invariantMass(),
-                HistVariable::genSimPt(),
-                HistVariable::pt(),
-                HistVariable::eta(),
-                HistVariable::phi(),
-                HistVariable::mET(),
-                HistVariable::firstPt(),
-                HistVariable::secondPt(),
-                HistVariable::thirdPt(),
-                HistVariable::fourthPt()
+                HistVariable::genSimSameSignMass,
+                HistVariable::sameSignMass,
+                HistVariable::invariantMass,
+                HistVariable::genSimPt,
+                HistVariable::pt,
+                HistVariable::eta,
+                HistVariable::phi,
+                HistVariable::mET,
+                HistVariable::firstPt,
+                HistVariable::secondPt,
+                HistVariable::thirdPt,
+                HistVariable::fourthPt,
             };
 
             //cross sections should be all lowercase
