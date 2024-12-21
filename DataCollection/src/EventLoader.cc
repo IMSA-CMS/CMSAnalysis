@@ -112,7 +112,6 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents, i
 {
   // display how many rrot files
   // each iteration in for loop, processing file... # of events and name of file
-
   int fileCounter = 0;
   int skipFileCounter = 0;
   int eventCounter = 0;
@@ -121,9 +120,9 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents, i
   // loop through all of the files
   for (auto &params : rootFiles)
   {
+    if (stopNow) break;
     // Get a list of Root files for each filpar object
     auto fileList = params->getFileList();
-
     for (auto &fileName : fileList)
     {
       
@@ -136,15 +135,6 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents, i
       // fileName = eossrc + fileName;
 
       std::cout << "Name of file: " << fileName << "\n";
-
-      if (skipFileCounter < skipFiles)
-      {
-  
-        std::cout << "Skipping File \n";
-        ++skipFileCounter;
-        continue;
-      }
-      
       TFile *tFile = TFile::Open(fileName.c_str(), "READ");
       // pass empty files
       if (!tFile)
