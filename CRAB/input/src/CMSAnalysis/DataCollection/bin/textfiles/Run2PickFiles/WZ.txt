@@ -1,5 +1,5 @@
 MultiBoson
-Bosons:	WW
+Bosons:	WZ
 Decay:	3L
 Run:	2
 Year:	2016	2016APV	2017	2018
