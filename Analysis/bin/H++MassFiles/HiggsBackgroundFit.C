@@ -38,23 +38,23 @@ std::vector<std::string> histogramTypes =
 // run in batch mode for faster processing: root -b HiggsBackgroundFit.C+
 void HiggsBackgroundFit()
 {
-	const double min = 80;
+	const double min = 250;
 	const double max = 2000;
 
-	std::string fitHistsName = "H++BackgroundFits.root";
-	std::string fitParameterValueFile = "H++BackgroundFunctions.txt";
+	std::string fitHistsName = "H++BackgroundFitsFitterTest.root";
+	std::string fitParameterValueFile = "H++BackgroundFunctionsFitterTest.txt";
+
+	// these don't do anything
 	std::string parameterFits = "H++BackgroundParameterFits.root";
 	std::string parameterFunctions = "H++BackgroundParameterFunctions.txt";
 	remove(fitParameterValueFile.c_str());
 	remove(parameterFunctions.c_str());
 	
-	std::vector<std::string> backgrounds = {"t#bar{t}, WW, WZ, ZZ Background", "Drell-Yan Background", "QCD Background", "ZZ Background"};
-	// std::vector<std::string> backgrounds = {"Background"};
+	std::vector<std::string> backgrounds = {"t#bar{t}, Multiboson Background", "Drell-Yan Background", "QCD Background", "ZZ Background", "Background"};
 
 	Fitter fitter(fitHistsName, fitParameterValueFile, parameterFits, parameterFunctions);
     std::shared_ptr<HiggsCompleteAnalysis> analysis = std::make_shared<HiggsCompleteAnalysis>();
     std::cout << "Loaded histogram\n";
-    std::vector<std::string> paramNames = {"alpha_{low}","alpha_{high}","n_{low}", "n_{high}", "mean", "sigma", "norm"};
 
 	for (const auto& histType : histogramTypes) 
 	{
@@ -63,11 +63,7 @@ void HiggsBackgroundFit()
 			std::unordered_map<std::string, double> massValues;
 			std::unordered_map<std::string, TH1*> histogramMap;
 			FitFunctionCollection currentFunctions;
-			std::vector<std::string> actualParams;
 			auto targetChannel = analysis->getChannel(channel);
-			for (size_t i = 0; i < paramNames.size(); ++i) {
-				actualParams.push_back(channel + '_' + paramNames[i]);
-			}
 			std::vector<std::string> keyNames;
 			for (size_t i = 0; i < backgrounds.size(); ++i) 
 			{
@@ -83,18 +79,12 @@ void HiggsBackgroundFit()
 
 				TH1* selectedHist = process->getHist(histVar, true);
 				if(selectedHist->GetEntries() < 1) continue;
-				std::string keyName = backgrounds[i] + '_' + channel + '_' + histType;
+				std::string keyName = channel + '/' + backgrounds[i] + histType;
 				keyNames.push_back(keyName);
 
 				FitFunction func = FitFunction::createFunctionOfType(FitFunction::POWER_LAW, keyName, "", min, max);
 				currentFunctions.insert(func);
 				histogramMap.insert({keyName, selectedHist});
-				// massValues.insert({keyName, backgrounds[i]});
-
-				// file->Close();
-				// selectedHist->Draw();
-				// std::string wait;
-				// std::cin >> wait;
 			}
 			fitter.setHistograms(histogramMap);
 			fitter.loadFunctions(currentFunctions);
@@ -104,7 +94,6 @@ void HiggsBackgroundFit()
 				std::cout << "Key: " << keyName << std::endl;
 				std::cout << currentFunctions.get(keyName) << std::endl;
 			}
-			// fitter.parameterizeFunctions(massValues, actualParams);
 		}
 	}
 

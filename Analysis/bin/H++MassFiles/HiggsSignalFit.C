@@ -51,7 +51,7 @@ void HiggsSignalFit()
 	std::string fitParameterValueFile = "H++SignalFunctions.txt";
 	std::string parameterFits = "H++SignalParameterFits.root";
 	std::string parameterFunctions = "H++SignalParameterFunctions.txt";
-	std::vector<int> masses = {500, 600, 700, 800, 900, 1100, 1200, 1300, 1400, 1500};
+	std::vector<int> masses = {500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
 
 	Fitter fitter(fitHistsName, fitParameterValueFile, parameterFits, parameterFunctions);
 
@@ -74,6 +74,8 @@ void HiggsSignalFit()
 
 			for (size_t i = 0; i < masses.size(); ++i) 
 			{
+				std::cerr << "mass: " << masses[i] << std::endl;
+				// update this to use all gensim decays, not just the same as reco
 				auto process = targetChannel->findProcess("Higgs signal " + channel + " " + std::to_string(masses[i]));
 				TH1* selectedHist = process->getHist(HistVariable("Same Sign Invariant Mass"), true);
 				std::string keyName = channel + "/" + std::to_string(masses[i]) + '_' + histType;
