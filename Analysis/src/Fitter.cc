@@ -7,7 +7,7 @@
 #include <TGraphErrors.h>
 	
 std::vector<TF1*> Fitter::trialFitFunctions = {
-	new TF1("Power Law", "[0]*(x-[1])^[2]+[3]"),
+	new TF1("Power Law", "[0]*(x-[1])^[2]"),
 	new TF1("Exponential", "[0]*expo(x-[1]) + [2]"),
 	new TF1("Linear", "[0]*x + [1]")
 };
@@ -204,7 +204,6 @@ TCanvas* Fitter::fitPowerLaw(TH1* histogram, FitFunction& fitFunction)
 	double chi2 = __DBL_MAX__;
 	while (result->Chi2() < chi2)
 	{
-		std::cerr << "hit 2\n";
 		chi2 = result->Chi2();
 		fitFunction.getFunction()->SetParameters(result->Parameter(0), result->Parameter(1), result->Parameter(2));
 		result = histogram->Fit(fitFunction.getFunction(), "SL", "", fitFunction.getMin(), fitFunction.getMax());
@@ -349,7 +348,7 @@ TFitResultPtr Fitter::functionFittingLoop(TGraph* graph, TF1* function)
 	while (chi2 - result->Chi2() > 0.000001) // arbitrary number
 	{
 		chi2 = result->Chi2();
-		functionClone->SetParameters(result->Parameter(0), result->Parameter(1), result->Parameter(2), result->Parameter(3));
+		functionClone->SetParameters(result->Parameter(0), result->Parameter(1), result->Parameter(2));
 		result = graphClone->Fit(functionClone, "S");
 	}
 
