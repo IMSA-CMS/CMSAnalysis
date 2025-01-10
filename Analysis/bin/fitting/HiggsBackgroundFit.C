@@ -41,8 +41,8 @@ void HiggsBackgroundFit()
 	const double min = 250;
 	const double max = 2000;
 
-	std::string fitHistsName = "H++BackgroundFitsFitterTest.root";
-	std::string fitParameterValueFile = "H++BackgroundFunctionsFitterTest.txt";
+	std::string fitHistsName = "H++Backgrounds.root";
+	std::string fitParameterValueFile = "H++BackgroundFunctions.txt";
 
 	// these don't do anything
 	std::string parameterFits = "H++BackgroundParameterFits.root";
@@ -50,7 +50,7 @@ void HiggsBackgroundFit()
 	remove(fitParameterValueFile.c_str());
 	remove(parameterFunctions.c_str());
 	
-	std::vector<std::string> backgrounds = {"t#bar{t}, Multiboson Background", "Drell-Yan Background", "QCD Background", "ZZ Background", "Background"};
+	std::vector<std::string> backgrounds = {"t#bar{t}, Multiboson Background", "Drell-Yan Background", "QCD Background", "ZZ Background", "All Background"};
 
 	Fitter fitter(fitHistsName, fitParameterValueFile, parameterFits, parameterFunctions);
     std::shared_ptr<HiggsCompleteAnalysis> analysis = std::make_shared<HiggsCompleteAnalysis>();
