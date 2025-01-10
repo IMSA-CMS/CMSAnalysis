@@ -80,12 +80,14 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     for (std::string recoDecay : recoDecays){
         std::vector<std::shared_ptr<Process>> processes;
         //auto higgsSignal = std::make_shared<Process>("Higgs Signal", 5);
-        auto higgsGroupSignal = std::make_shared<Process>("Higgs Group "+ recoDecay, 5);
-        for (const auto& genSimDecay : genSimDecays)
+        
+        // not really sure why we need this process at all
+        // auto higgsGroupSignal = std::make_shared<Process>("Higgs Group " + recoDecay, 5);
+        for(double massTarget : massTargets)
         {
-            for(double massTarget : massTargets) 
+            auto higgsMassGroup = std::make_shared<Process>("Higgs Signal " + std::to_string((int) massTarget), 1);
+            for (const auto& genSimDecay : genSimDecays)
             {
-                //auto higgsSignal = std::make_shared<Process>("Higgs Signal " + std::to_string((int) massTarget), 5);
                 
                 std::string decayName = recoDecay + "_" + genSimDecay;
                 std::map<std::string, std::string> histVariableToFileMapping;
@@ -112,10 +114,10 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
                 auto higgsSignal = std::make_shared<Process>("Higgs signal " + genSimDecay + " " + std::to_string((int)massTarget), 1);
                 higgsSignal->addProcess(higgsProcess);
                 processes.push_back(higgsSignal);
-                higgsGroupSignal->addProcess(higgsProcess);
+                higgsMassGroup->addProcess(higgsProcess);
             }
+            processes.push_back(higgsMassGroup);
         }
-        processes.push_back(higgsGroupSignal);
         
 
         std::map<std::string, std::string> histVariableToFileMapping;
@@ -128,7 +130,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
                 {
                     if ((connecter + colName) == (histVar.getName()))
                     {
-                        std::cout << "Background Mapping: " << histVar.getName() << std::endl;
+                        // std::cout << "Background Mapping: " << histVar.getName() << std::endl;
                         histVariableToFileMapping[histVar.getName()] = recoDecay + "__hists/" + recoDecay + connecter + colName;
                     }
                 }
@@ -145,9 +147,9 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
                 {
                     if ((connecter + colName) == (histVar.getName()))
                     {
-                        std::cout << "Data Mapping: " << histVar.getName() << std::endl;
+                        // std::cout << "Data Mapping: " << histVar.getName() << std::endl;
                         histVariableToFileMapping[histVar.getName()] = recoDecay + "_Pass__hists/" + recoDecay +connecter + colName;
-                        std::cout << recoDecay + "_Pass__hists/" + recoDecay +connecter + colName << std::endl;
+                        // std::cout << recoDecay + "_Pass__hists/" + recoDecay +connecter + colName << std::endl;
 
                     }
                 }
@@ -265,23 +267,17 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
         higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2017.root", "Muon2017", reader, luminosity, histVariableToFileMapping));
         higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2018.root", "Muon2018", reader, luminosity, histVariableToFileMapping));
         
-        auto allBackground = std::make_shared<Process>("Background", 3);
+        auto allBackground = std::make_shared<Process>("All Background", 3);
         for(auto background: {dyBackground, zzBackground, ttBarandMultiBosonBackground, qcdBackground})
             for(auto subprocess: background->getProcesses()) allBackground->addProcess(subprocess);
 
-        auto allMC = std::make_shared<Process>("allMC", 3);
-        for(auto process: {allBackground, higgsGroupSignal})
-            for(auto subprocess: process->getProcesses()) {
-                std::cerr << subprocess.getName() << std::endl;
-                allMC->addProcess(subprocess);
-            }
+        
         processes.push_back(ttBarandMultiBosonBackground);
         processes.push_back(dyBackground);
         processes.push_back(higgsData);
         processes.push_back(qcdBackground);
         processes.push_back(zzBackground);
         processes.push_back(allBackground);
-        processes.push_back(allMC);
         auto leptonProcesses = std::make_shared<Channel>(recoDecay, processes);
 
         for(std::string processName : leptonProcesses->getNames()) {
