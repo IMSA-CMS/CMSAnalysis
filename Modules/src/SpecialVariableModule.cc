@@ -17,15 +17,13 @@ void SpecialVariableModule::addVariablesToReader(TMVA::Reader *reader) const
 	{
 		tempRef = (&(pair.second));
 		reader->AddVariable((pair.first).c_str(), const_cast<Int_t*>(tempRef));
-		//std::cout << "temporary int reference" << *tempRef;
 	}
 	
 	
 	for (auto& pair : floats)
 	{
 		tempRef1 = (&(pair.second));
-		reader->AddVariable((pair.first).c_str(), const_cast<Float_t*>(tempRef1)); // reinterpret_cast<Float_t*>
-		//std::cout << "temporary float reference" << *tempRef1;
+		reader->AddVariable((pair.first).c_str(), const_cast<Float_t*>(tempRef1)); 
 	}
 }
 
@@ -68,10 +66,10 @@ void SpecialVariableModule::initialize()
 {
 	//std::cout << "Initializing ";
 	addVariables();
-	for (auto val : floats)
-	{
-		std::cout << "Entry key " << val.first << '\n';
-	}
+	// for (auto val : floats)
+	// {
+	// 	std::cout << "Entry key " << val.first << '\n';
+	// }
 }
 
 bool SpecialVariableModule::process()
