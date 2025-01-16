@@ -125,8 +125,8 @@ void HiggsBackgroundPlan::initialize()
     // //Changed because EventModule inherits from ProductionModule now
     modules.addProductionModule(eventMod);
      modules.addFilterModule(recoDecayFilterMod);
-    // modules.addAnalysisModule(eventHistMod);    
-    // modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
+    modules.addAnalysisModule(eventHistMod);    
+    modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
     //modules.addFilterModule(runFilterMod); 
     //modules.addAnalysisModule(eventDump);
     auto hPlusPlusEfficiency = make_shared<HPlusPlusEfficiency>();

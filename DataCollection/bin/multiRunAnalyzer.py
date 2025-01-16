@@ -49,7 +49,6 @@ def loopRun(crab, path, fileCount, fileList):
     numFiles = "numFiles=" + fileCount if fileCount != None else ""
     for file in fileList:
         # Filling in the parameters of runAnalyzer
-
         print("File: " + file)
         analysisSignal = (
             "HiggsSignal" if analysis == 0 else "MuonSignal" if analysis == 2 else ""
@@ -69,13 +68,16 @@ def loopRun(crab, path, fileCount, fileList):
 
         # calls runAnalyzer
         if crab:
-            # figure out concurrent system for this (i.e. writing to different files)
             print("starting crab")
             crab_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/CRAB/"
             print(file)
             files = subprocess.Popen(["getFileList", file], stdout=subprocess.PIPE)
             countLines = int(subprocess.check_output(["wc", "-l"], stdin=files.stdout))
-            maxNumFiles = 20  # basically just guessing this number, adjust as needed
+
+            # 20 works for most jobs, TTbar and DY50-inf should use 5
+            # theoretically could all the way down to 1,
+            # but it might take longer to submit than just nohup
+            maxNumFiles = 20
             totalFiles = min(int(fileCount), countLines) if fileCount != None else countLines
             for i in range(
                 0,
@@ -157,7 +159,7 @@ if __name__ == "__main__":
     # If a job only has one pickfile in it, make sure to add a comma at the end so that python thinks it is a tuple
 
     ttBar = (
-        "TTbar.txt",
+        "TTbar.txt", # use job count ~5
         "TTW.txt",
         "TTZ.txt",
     )
@@ -166,7 +168,7 @@ if __name__ == "__main__":
 
     dy = (
         "DY10-50.txt",
-        "DY50-inf.txt",
+        "DY50-inf.txt", # files 60-80 exceed 24hr wall clock time, use ~5 job count size
     )
 
     multiBoson = (
@@ -252,7 +254,9 @@ if __name__ == "__main__":
     # jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 
     # jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
-    jobsList = [dy]
+    jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, data, qcd]
+    
+    # could further improve this by adding every sub-job as a separate entry
     if args.crab:
         temp = []
         for job in jobsList:

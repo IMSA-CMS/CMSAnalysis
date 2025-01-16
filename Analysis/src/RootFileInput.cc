@@ -61,7 +61,7 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 	TH1* hist;
 	uint pos = name.find("/");
 	auto file = getFile(fileSource);
-	TH1* emptyHist = new TH1F("h1", "empty", 1, 0.0, 0.0);
+	// TH1* emptyHist = new TH1F("h1", "empty", 1, 0.0, 0.0);
 	if (pos != std::string::npos)
 	{
 
