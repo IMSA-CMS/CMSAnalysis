@@ -396,9 +396,9 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
         //std::cout << channelName << std::endl;
         //std::cout << histvariable.getName() << std::endl;
         
-        //auto hist = analysis->getHist(histvariable, name, true, channelName);
-        auto process = analysis->getChannel(channelName)->findProcess(name);
-        auto hist = process->getSystematicHist(histvariable, true).second;
+        auto hist = analysis->getHist(histvariable, name, true, channelName);
+        //auto process = analysis->getChannel(channelName)->findProcess(name);
+        //auto hist = process->getSystematicHist(histvariable, true).second;
 
         // TEST
         if (!hist)
