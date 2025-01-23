@@ -65,13 +65,13 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, bool 
 		}
 	}
 
-	for (std::string connecter: connecters2)
-	{
-		for(std::string dataType : graphableTypes2) 
-		{
-			rowTitles.push_back(connecter + " " + dataType);
-		}
-	}
+	// for (std::string connecter: connecters2)
+	// {
+	// 	for(std::string dataType : graphableTypes2) 
+	// 	{
+	// 		rowTitles.push_back(connecter + " " + dataType);
+	// 	}
+	// }
 
 	std::vector<std::string> columnTitles;
 	std::string entry = "";
@@ -102,10 +102,10 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, bool 
 				TString xAxisName = units[unitCounter];
 				TString yAxisName = "Events";
 				dataName = Utility::removeSpaces(dataType);
-				fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
+				fileName = "jumboPlotStorage/" + Utility::removeSpaces("NoZVetoLumi") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
 				HistVariable fullDataType = HistVariable(connecter + dataType);
 				bool includeSignal = false;
-				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, includeSignal, includeData, channel->getName());
+				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, false, includeSignal, includeData, channel->getName());
 				canvas->SaveAs(fileName.c_str());
 				plotFormatter->deleteHists();
 				canvas->Close();
@@ -120,49 +120,49 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, bool 
 		}
 	}
 	
-	for (std::string connecter: connecters2)
-	{
-		int unitCounter = 0;
-		for(std::string dataType : graphableTypes2) 
-		{
-			for(std::shared_ptr<Channel> channel : channels) 
-			{ 	
-				bool valid = false;
-				for (std::string channelName : channelNames)
-				{
-					if (channelName == channel->getName())
-					{
-						valid = true;
-						break;
-					}
-				}
+	// for (std::string connecter: connecters2)
+	// {
+	// 	int unitCounter = 0;
+	// 	for(std::string dataType : graphableTypes2) 
+	// 	{
+	// 		for(std::shared_ptr<Channel> channel : channels) 
+	// 		{ 	
+	// 			bool valid = false;
+	// 			for (std::string channelName : channelNames)
+	// 			{
+	// 				if (channelName == channel->getName())
+	// 				{
+	// 					valid = true;
+	// 					break;
+	// 				}
+	// 			}
 
-				if (valid == false)
-				{
-					continue;
-				}
+	// 			if (valid == false)
+	// 			{
+	// 				continue;
+	// 			}
 				
-				entry = "";
-				TString xAxisName = units2[unitCounter];
-				TString yAxisName = "Events";
-				dataName = Utility::removeSpaces(dataType);
-				fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
-				HistVariable fullDataType = HistVariable(connecter + dataType);
-				bool includeSignal = false;
-				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, includeSignal, includeData, channel->getName());
-				canvas->SaveAs(fileName.c_str());
-				plotFormatter->deleteHists();
-				canvas->Close();
-				delete canvas;
+	// 			entry = "";
+	// 			TString xAxisName = units2[unitCounter];
+	// 			TString yAxisName = "Events";
+	// 			dataName = Utility::removeSpaces(dataType);
+	// 			fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
+	// 			HistVariable fullDataType = HistVariable(connecter + dataType);
+	// 			bool includeSignal = false;
+	// 			TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, includeSignal, includeData, channel->getName());
+	// 			canvas->SaveAs(fileName.c_str());
+	// 			plotFormatter->deleteHists();
+	// 			canvas->Close();
+	// 			delete canvas;
 			
-				entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
-				toAdd.push_back(entry);
-			}
-			unitCounter++;
-			tableInput.push_back(toAdd);
-			toAdd.clear();
-		}
-	}
+	// 			entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
+	// 			toAdd.push_back(entry);
+	// 		}
+	// 		unitCounter++;
+	// 		tableInput.push_back(toAdd);
+	// 		toAdd.clear();
+	// 	}
+	// }
 	
 	auto tableData = std::make_shared<TableData>(tableInput, channelNames, rowTitles);
 	auto table = std::make_shared<HTMLTable>();
@@ -195,10 +195,11 @@ void JumboPlot()
 	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
 	std::vector<std::shared_ptr<Channel>> higgsChannels = higgsAnalysis->getChannels();
 
-	std::vector<std::string> rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
-	std::vector<std::string> graphableTypes = {"Eta", "Phi", "Pt"};
+	//std::vector<std::string> rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
+	std::vector<std::string> rowNames = {"ee", "e e", "eu", "e u", "uu", "u u"};
+	std::vector<std::string> graphableTypes = {"Eta", "Pt"};
 	std::vector<std::string> connecters = {"_1st Highest mu- ", "_1st Highest e- "}; 
-	std::vector<TString> units = {"#eta", "#phi", "p_T [GeV/c]", };
+	std::vector<TString> units = {"#eta", "GeV",};
 
 	std::vector<std::string> graphableTypes2 = {"Same Sign Invariant Mass", "Opposite Sign Invariant Mass"};
 	std::vector<std::string> connecters2 = {"_e- ", "_mu- "};
@@ -209,7 +210,7 @@ void JumboPlot()
 	std::vector<std::string> channelNames3 = {"eee", "eeu", "eue", "euu", "uue", "uuu"};
 	std::vector<std::string> channelNames2 = {"ee", "e e", "eu", "e u", "uu", "u u"};
 
-	makePlots("Higgs Signal 4Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, units, units2, channelNames4, connecters, connecters2, false);
-	makePlots("Higgs Signal 3Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, units, units2, channelNames3, connecters, connecters2, false);
+	//makePlots("Higgs Signal 4Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, units, units2, channelNames4, connecters, connecters2, false);
+	//makePlots("Higgs Signal 3Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, units, units2, channelNames3, connecters, connecters2, false);
 	makePlots("Higgs Signal 2Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, units, units2, channelNames2, connecters, connecters2, true);
 }

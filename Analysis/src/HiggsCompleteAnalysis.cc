@@ -43,21 +43,23 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
     //Change this file to your folder to use your own cross sections
     //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
     //auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
-    auto reader = std::make_shared<CrossSectionReader>("/afs/cern.ch/user/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Analysis/bin/crossSections.txt");
-    const std::string filePath = "/afs/cern.ch/user/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/"; 
-    const std::string signalFilePath = "/afs/cern.ch/user/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
+    auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+    const std::string filePath = "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/"; 
+    const std::string signalFilePath = "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     //const std::string filePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/"; 
     //const std::string signalFilePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
 
-    double luminosity = 139;
+    // Luminosity: 1.39
+    double luminosity = 137;
 
     std::vector<HistVariable> histVariablesBackground;
     std::vector<HistVariable> histVariablesData;
 
-    std::vector<std::string> rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
-    std::vector<std::string> backgroundConnecters = {"_1st Highest mu- ", "_1st Highest e- ", "_e- ", "_mu- "}; 
+    //std::vector<std::string> rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
+    std::vector<std::string> rowNames = {"ee", "eu", "uu", "e u", "u u", "e e"};
+    std::vector<std::string> backgroundConnecters = {"_1st Highest mu- ", "_1st Highest e- "}; 
     std::vector<std::string> dataConnecters = {"_Pass_1st Highest mu- ", "_Pass_1st Highest e- "}; 
-    std::vector<std::string> columnNames = {"Eta", "Phi", "Pt", "_Reco Same Sign Invariant Mass"};
+    std::vector<std::string> columnNames = {"Eta", "Pt"};
     std::vector<std::string> connecters = {""};
 
     for (std::string connecter : backgroundConnecters){
@@ -68,7 +70,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
         }
     }
 
-    for (std::string connecter : dataConnecters)
+    for (std::string connecter : backgroundConnecters)
         {
             for (std::string columnName : columnNames)
             {
@@ -119,6 +121,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
         
 
         std::map<std::string, std::string> histVariableToFileMapping;
+        std::map<std::string, std::string> datahistVariableToFileMapping;
 
         for (auto histVar : histVariablesBackground)
         {
@@ -139,15 +142,15 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
         //std::cout << "histmap:" << histVariableToFileMapping.at("Same Sign Invariant Mass") << '\n';
         for (auto histVar : histVariablesData)
         {
-            for (auto connecter : dataConnecters)
+            for (auto connecter : backgroundConnecters)
             {
                 for (auto colName : columnNames)
                 {
                     if ((connecter + colName) == (histVar.getName()))
                     {
                         std::cout << "Data Mapping: " << histVar.getName() << std::endl;
-                        histVariableToFileMapping[histVar.getName()] = recoDecay + "_Pass__hists/" + recoDecay +connecter + colName;
-                        std::cout << recoDecay + "_Pass__hists/" + recoDecay +connecter + colName << std::endl;
+                        datahistVariableToFileMapping[histVar.getName()] = recoDecay + "_Pass__hists/" + recoDecay +"_Pass"+connecter + colName;
+                        std::cout << recoDecay + "_Pass__hists/" + recoDecay +"_Pass"+connecter + colName << std::endl;
 
                     }
                 }
@@ -227,6 +230,9 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
         auto zzBackground = std::make_shared<Process>("ZZ Background", 3);
         zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ.root", "zzto4l", reader, luminosity, histVariableToFileMapping));
 
+        auto wJetsBackground = std::make_shared<Process>("WJets Background", 6);
+        wJetsBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WJetsZ.root", "WJets", reader, luminosity, histVariableToFileMapping));
+
         //cross sections should be all lowercase
         auto ttBarandMultiBosonBackground = std::make_shared<Process>("t#bar{t}, Multiboson Background", 4);
         ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTbar.root", "ttbar_lep", reader, luminosity, histVariableToFileMapping));
@@ -257,20 +263,23 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() {
 
         auto higgsData = std::make_shared<Process>("Data", 1);
         // 150022816 events in Data_Trigger_SingleMuon_Year_2016B.root before TriggerCut change
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Electron2016.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Electron2016APV.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Electron2017.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Electron2018.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2016.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2016APV.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
-        //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2017.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
-        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2018.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Electron2016.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Electron2016APV.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Electron2017.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Electron2018.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2016.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2016APV.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
+        // //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2017.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2018.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, histVariableToFileMapping));
+        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "testHiggs20.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, datahistVariableToFileMapping));
+        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "testHiggsM20.root", "higgs4l" + std::to_string((int) tempMass), reader, luminosity, datahistVariableToFileMapping));
         
         processes.push_back(ttBarandMultiBosonBackground);
         processes.push_back(dyBackground);
         processes.push_back(higgsData);
         processes.push_back(qcdBackground);
         processes.push_back(zzBackground);
+        processes.push_back(wJetsBackground);
         auto leptonProcesses = std::make_shared<Channel>(recoDecay, processes);
 
         for(std::string processName : leptonProcesses->getNames()) {

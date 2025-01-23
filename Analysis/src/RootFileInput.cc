@@ -86,7 +86,7 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 			
 			//We need the nullptr in when adding histograms to know to
 			//skip the histogram and not break histogram addition
-			std::cout << "No directory named " + folder + " found in file\n";
+			std::cout << "No directory named " << folder << " found in file " << fileSource <<"\n";
 			delete dir;
 			delete hist;
 			delete file;
