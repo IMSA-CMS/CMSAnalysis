@@ -33,9 +33,11 @@ class FullAnalysis
         //Process makers for easy use when loading channels
         SingleProcess makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, 
         std::shared_ptr<CrossSectionReader> crossReader, double luminosity, std::map<std::string, std::string> histVariableToFileMapping, std::vector<std::shared_ptr<Correction>> corrections = {});
+        SingleProcess makeBasicProcess(const std::vector<HistVariable>& histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, 
+        std::shared_ptr<CrossSectionReader> crossReader, double luminosity, std::vector<std::shared_ptr<Correction>> corrections = {});
         
-        SingleProcess makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, 
-        std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, double luminosity); //std::vector<std::shared_ptr<Correction>> corrections = {}
+        // SingleProcess makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, 
+        // std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, double luminosity); //std::vector<std::shared_ptr<Correction>> corrections = {}
     
     protected:
         std::vector<std::shared_ptr<Channel>>& getChannelsProtected() {return channels;}

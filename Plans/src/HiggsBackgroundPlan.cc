@@ -37,6 +37,7 @@
 #include "CMSAnalysis/Filters/interface/ZVetoCut.hh"
 #include "CMSAnalysis/Filters/interface/FourLeptonCut.hh"
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
+#include "CMSAnalysis/Modules/interface/ScaleFactorAnalysis.hh"
 
 using std::make_shared;
 
@@ -120,10 +121,10 @@ void HiggsBackgroundPlan::initialize()
     auto runFilterMod = make_shared<FilterModule>(runFilter);
 
 
-    modules.addProductionModule(metMod);
-    //Changed because EventModule inherits from ProductionModule now
+    // modules.addProductionModule(metMod);
+    // //Changed because EventModule inherits from ProductionModule now
     modules.addProductionModule(eventMod);
-    modules.addFilterModule(recoDecayFilterMod);
+     modules.addFilterModule(recoDecayFilterMod);
     modules.addAnalysisModule(eventHistMod);    
     modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
     //modules.addFilterModule(runFilterMod); 
