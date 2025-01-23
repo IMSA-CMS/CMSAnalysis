@@ -7,7 +7,7 @@
 #include <TGraphErrors.h>
 	
 std::vector<TF1*> Fitter::trialFitFunctions = {
-	new TF1("Power Law", "[0]*(x-[1])^[2]+[3]"),
+	new TF1("Power Law", "[0]*(x-[1])^[2]"),
 	new TF1("Exponential", "[0]*expo(x-[1]) + [2]"),
 	new TF1("Linear", "[0]*x + [1]")
 };
@@ -116,13 +116,13 @@ TCanvas* Fitter::fitExpressionFormula(TH1* histogram, FitFunction& fitFunction)
 	TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
 	c1->SetLogy();
 
-	TFitResultPtr result = histogram->Fit(fitFunction.getFunction(), "SL", "", fitFunction.getMin(), fitFunction.getMax());
+	TFitResultPtr result = histogram->Fit(fitFunction.getFunction(), "SLQ", "", fitFunction.getMin(), fitFunction.getMax());
 
 	gStyle->SetOptFit(1111);
 
 	return c1;
 }
-TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction)
+TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction) // ask about how fitting works here
 {
 	//TCanvas *c2 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
 	TF1* f1 = fitFunction.getFunction();
@@ -130,7 +130,7 @@ TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction)
 	// histogram->Draw();
 	// std::string wait;
 	// std::cin >> wait;
-	TFitResultPtr gausResult = histogram->Fit("gaus", "SQ", "", 250,2000);
+	TFitResultPtr gausResult = histogram->Fit("gaus", "SQ", "", fitFunction.getMin(), fitFunction.getMax());
 	// std::cout << "2:2\n";
 	auto params = gausResult->Parameters();
 	// std::cout << "2:3\n";
@@ -170,7 +170,7 @@ TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction)
 	TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
 	// std::cout << "2:7\n";
 	
-	TFitResultPtr results = histogram->Fit(f1, "SEB");
+	histogram->Fit(f1, "SEBQ"); // why SEB?
 	f1->SetParError(6, norm / (sqrt(histogram->GetEntries())));
 	// std::cout << "2:8\n";
 
@@ -193,21 +193,22 @@ TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction)
 }
 TCanvas* Fitter::fitPowerLaw(TH1* histogram, FitFunction& fitFunction)
 {
-	double initalParams[3] = {std::pow(10, 17), -400, -7};
+	double initalParams[3] = {1e17, -400, -7};
 	fitFunction.getFunction()->SetParameters(initalParams);
 
 	TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
 	c1->SetLogy();
 
-	TFitResultPtr result = histogram->Fit(fitFunction.getFunction(), "SL", "", fitFunction.getMin(), fitFunction.getMax());
+	// setting this as L (log likelihood) fit
+	// Root says better when histogram represents counts
+	TFitResultPtr result = histogram->Fit(fitFunction.getFunction(), "LQ", "", fitFunction.getMin(), fitFunction.getMax());
 
 	double chi2 = __DBL_MAX__;
 	while (result->Chi2() < chi2)
 	{
-		std::cerr << "hit 2\n";
 		chi2 = result->Chi2();
 		fitFunction.getFunction()->SetParameters(result->Parameter(0), result->Parameter(1), result->Parameter(2));
-		result = histogram->Fit(fitFunction.getFunction(), "SL", "", fitFunction.getMin(), fitFunction.getMax());
+		result = histogram->Fit(fitFunction.getFunction(), "SLQ", "", fitFunction.getMin(), fitFunction.getMax());
 	}
 
 	gStyle->SetOptFit(1111);
@@ -271,7 +272,7 @@ FitFunction Fitter::parameterizeFunction(ParameterizationData& parameterData)
 
 	// auto initialResults = fitSingleFunction(graph, powerLaw);
 
-	FitFunction function(func, FitFunction::FunctionType::EXPRESSION_FORMULA);
+	FitFunction function(func, FitFunction::FunctionType::POWER_LAW);
 
 	gStyle->SetOptFit(1111);
 
@@ -336,12 +337,13 @@ TF1* Fitter::seedInversePowerLaw(double x_0, double y_0, double x_1, double y_1,
 	return powerLaw;
 }
 
+// this is only for parameterization, not events counts, don't use L for fit
 TFitResultPtr Fitter::functionFittingLoop(TGraph* graph, TF1* function)
 {
 	TGraph* graphClone = (TGraph*) graph->Clone();
 
 	TF1* functionClone = (TF1*) trialFitFunctions[0]->Clone();
-	TFitResultPtr result = graphClone->Fit(functionClone, "S");
+	TFitResultPtr result = graphClone->Fit(functionClone, "SQ");
 
 
 	// copied this over from power law fit, seems to make some norm fits look better
@@ -349,8 +351,8 @@ TFitResultPtr Fitter::functionFittingLoop(TGraph* graph, TF1* function)
 	while (chi2 - result->Chi2() > 0.000001) // arbitrary number
 	{
 		chi2 = result->Chi2();
-		functionClone->SetParameters(result->Parameter(0), result->Parameter(1), result->Parameter(2), result->Parameter(3));
-		result = graphClone->Fit(functionClone, "S");
+		functionClone->SetParameters(result->Parameter(0), result->Parameter(1), result->Parameter(2));
+		result = graphClone->Fit(functionClone, "SQ");
 	}
 
 
@@ -372,7 +374,7 @@ TFitResultPtr Fitter::functionFittingLoop(TGraph* graph, TF1* function)
 		// }
 	// }
 
-	graph->Fit(functionClone, "S");
+	graph->Fit(functionClone, "SQ");
 	std::cout << "Preparing to copy function\n";
 	functionClone->Copy(*function);
 	std::cout << "Finished copying function\n";
@@ -380,6 +382,8 @@ TFitResultPtr Fitter::functionFittingLoop(TGraph* graph, TF1* function)
 	return result;
 }
 
+
+// not sure if this is used at all
 TFitResultPtr Fitter::fitSingleFunction(TGraph* graph, TF1* function, size_t iterations)
 {
 	TGraph* graphClone = (TGraph*) graph->Clone();

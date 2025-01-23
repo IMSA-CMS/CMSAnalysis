@@ -47,11 +47,14 @@ void HiggsSignalFit()
 	const double min = 0;
 	const double max = 2000;
 
-	std::string fitHistsName = "H++SignalFits.root";
-	std::string fitParameterValueFile = "H++SignalFunctions.txt";
-	std::string parameterFits = "H++SignalParameterFits.root";
-	std::string parameterFunctions = "H++SignalParameterFunctions.txt";
-	std::vector<int> masses = {500, 600, 700, 800, 900, 1100, 1200, 1300, 1400, 1500};
+	std::string fitHistsName = "H++SignalFits2.root";
+	std::string fitParameterValueFile = "H++SignalFunctions2.txt";
+	std::string parameterFits = "H++SignalParameterFits2.root";
+	std::string parameterFunctions = "H++SignalParameterFunctions2.txt";
+	
+	remove(fitParameterValueFile.c_str());
+	remove(parameterFunctions.c_str());
+	std::vector<int> masses = {500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
 
 	Fitter fitter(fitHistsName, fitParameterValueFile, parameterFits, parameterFunctions);
 
@@ -74,7 +77,9 @@ void HiggsSignalFit()
 
 			for (size_t i = 0; i < masses.size(); ++i) 
 			{
-				auto process = targetChannel->findProcess("Higgs signal " + channel + " " + std::to_string(masses[i]));
+				std::cerr << "mass: " << masses[i] << std::endl;
+				// update this to use all gensim decays, not just the same as reco
+				auto process = targetChannel->findProcess("Higgs Signal " + std::to_string(masses[i]));
 				TH1* selectedHist = process->getHist(HistVariable("Same Sign Invariant Mass"), true);
 				std::string keyName = channel + "/" + std::to_string(masses[i]) + '_' + histType;
 

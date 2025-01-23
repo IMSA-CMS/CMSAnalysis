@@ -53,6 +53,10 @@ nohup.out
 
 #CRAB stuff
 CRAB/crab_projects
+CRAB/gen
 CRAB/__pycache__
 CRAB/crab_config.py
 CRAB/runAnalyzer.sh
+
+# macOS
+._*

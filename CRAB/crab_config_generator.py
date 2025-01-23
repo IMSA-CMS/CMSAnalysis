@@ -12,11 +12,15 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    if os.path.exists("crab_config.py"):
-        os.remove("crab_config.py")
-    if os.path.exists("runAnalyzer.sh"):
-        os.remove("runAnalyzer.sh")
-    script_file = open("runAnalyzer.sh", "w")
+    prefix = "gen/" + args.input[14:-4] + '_'
+    config_name = prefix + "crab_config.py"
+    script_name = prefix + "runAnalyzer.sh"
+
+    if os.path.exists(config_name):
+        os.remove(config_name)
+    if os.path.exists(script_name):
+        os.remove(script_name)
+    script_file = open(script_name, "w")
     script_file.write('CMSSW_BASE=\"/srv\"\n') # change version number when updating
     script_file.write("runAnalyzer crab=1 ")
     if args.input:
@@ -32,7 +36,7 @@ if __name__ == "__main__":
     script_file.write("\n")
     script_file.close()
 
-    config_file = open("crab_config.py", "w")
+    config_file = open(config_name, "w")
     config_file.write("")
     config_file.write(
         f"""import CRABClient
@@ -44,7 +48,7 @@ config.General.workArea = '{"crab_projects" + ("/" + args.folder if args.folder 
 config.General.transferOutputs = True
 config.JobType.psetName = 'PSet.py'
 config.JobType.inputFiles = ['FrameworkJobReport.xml', 'input/']
-config.JobType.scriptExe = 'runAnalyzer.sh'
+config.JobType.scriptExe = '{prefix}runAnalyzer.sh'
 config.JobType.outputFiles = ['{args.output}']
 config.Data.inputDataset = '/Tau/Run2016H-UL2016_MiniAODv2_NanoAODv9-v1/NANOAOD'
 config.Data.inputDBS = 'global'
@@ -52,9 +56,9 @@ config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 1
 config.Data.totalUnits = 1
 config.Data.publication = False
-{f"config.Data.outputDatasetTag = '{args.folder}'" if args.folder else ""}
-config.Site.storageSite = 'T3_CH_CERNBOX'
+{f"config.Data.outLFNDirBase = '/store/user/{os.environ['USER']}/{args.folder}'" if args.folder else ""}
+config.Site.storageSite = 'T3_US_FNALLPC'
 """
-# replace storageSite with T3_US_FNALLPC if not on lxplus
+# replace storageSite with T3_CH_CERNBOX if on lxplus
     )
     config_file.close()
