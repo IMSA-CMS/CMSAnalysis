@@ -86,7 +86,7 @@ TCanvas* PlotFormatter::superImposedHist(std::shared_ptr<Channel> processes, His
     int firstIndex = 0;
     double maximum = 0;
     int count = 0;
-    Bin(hists, first, firstIndex, maximum, count);
+    Bin(hists, first, firstIndex, maximum, count, true);
     GetOrder(hists, first, firstIndex, maximum);
 
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
@@ -127,7 +127,7 @@ TCanvas* PlotFormatter::simpleAnalysisHist(std::vector<TH1*> hists, std::vector<
     double maximum = 0;
     int count = 0;
 
-    Bin(hists, first, firstIndex, maximum, count);
+    Bin(hists, first, firstIndex, maximum, count, false);
 
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
 
@@ -163,7 +163,7 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     double maximum = 0;
     int count = 0;
 
-    Bin(hists, first, firstIndex, maximum, count);
+    Bin(hists, first, firstIndex, maximum, count, true);
 
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
     gStyle->SetOptStat(0);
@@ -193,52 +193,53 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     return canvas;
 }
 
-TCanvas* PlotFormatter::noScaleSimpleSuperImposedHist(std::vector<TH1*> hists, std::vector<int> colors, std::vector<TString> names, TString xAxisTitle, TString yAxisTitle) {
-    //Defines order to draw so graph isn't cut off
-    TH1* first = hists.at(0);
-    int firstIndex = 0;
-    double maximum = 0;
-    int count = 0;
+    TCanvas* PlotFormatter::noScaleSimpleSuperImposedHist(std::vector<TH1*> hists, std::vector<int> colors, std::vector<TString> names, TString xAxisTitle, TString yAxisTitle) 
+    {
+        //Defines order to draw so graph isn't cut off
+        TH1* first = hists.at(0);
+        int firstIndex = 0;
+        double maximum = 0;
+        int count = 0;
 
-    Bin(hists, first, firstIndex, maximum, count);
-    count=0;
+        Bin(hists, first, firstIndex, maximum, count, false);
+        count=0;
 
-    int lowValue = maximum;
-    for(TH1* hist : hists) {
-        if(hist->GetMinimum() < lowValue) {
-            lowValue = hist->GetMinimum();
+        int lowValue = maximum;
+        for(TH1* hist : hists) {
+            if(hist->GetMinimum() < lowValue) {
+                lowValue = hist->GetMinimum();
+            }
+            hist->SetLineColor(colors.at(count));
+            count++;
         }
-        hist->SetLineColor(colors.at(count));
-        count++;
-    }
 
-    TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
+        TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
 
-    gStyle->SetOptStat(0);
+        gStyle->SetOptStat(0);
 
-    //Draws the histogram with more events first (bigger axis);
-    first->SetMinimum(lowValue);
-    //first->SetMinimum(-8);
-    first->Draw("HIST");
-    histVector.push_back(first);
+        //Draws the histogram with more events first (bigger axis);
+        first->SetMinimum(lowValue);
+        //first->SetMinimum(-8);
+        first->Draw("HIST");
+        histVector.push_back(first);
 
-    //Change axis and graph titles here
-    first->GetXaxis()->SetTitle(xAxisTitle);
-    first->GetYaxis()->SetTitle(yAxisTitle);
+        //Change axis and graph titles here
+        first->GetXaxis()->SetTitle(xAxisTitle);
+        first->GetYaxis()->SetTitle(yAxisTitle);
 
-    //Draws the legend
-    auto legend = GetSimpleLegend(hists, names);
-    legend->SetTextSize(0.015);
-    legend->SetMargin(0.1);
-    legend->Draw();
- 
-    writeText(width, height, top, bottom, left, right);
-   
-    //Draws the other histogram    
-    DrawOtherHistograms(hists, firstIndex);
+        //Draws the legend
+        auto legend = GetSimpleLegend(hists, names);
+        legend->SetTextSize(0.015);
+        legend->SetMargin(0.1);
+        legend->Draw();
+    
+        writeText(width, height, top, bottom, left, right);
+    
+        //Draws the other histogram    
+        DrawOtherHistograms(hists, firstIndex);
 
-    canvas->Update();
-    return canvas;
+        canvas->Update();
+        return canvas;
 }
 
 TCanvas* PlotFormatter::simple1DHist(std::shared_ptr<Process> process, HistVariable histvariable, bool scaleToExpected, TString xAxisTitle, TString yAxisTitle) 
@@ -1009,7 +1010,7 @@ void PlotFormatter::GetOrder(std::vector<TH1*>& hists, TH1*& first, int& firstIn
     }
 }
 
-void PlotFormatter::Bin(std::vector<TH1*>& hists, TH1*& first, int& firstIndex, double& maximum, int& count)
+void PlotFormatter::Bin(std::vector<TH1*>& hists, TH1*& first, int& firstIndex, double& maximum, int& count, bool scaleToExpected)
 {
     std::vector<int> bins;
     for(TH1* hist : hists) {
@@ -1033,10 +1034,16 @@ void PlotFormatter::Bin(std::vector<TH1*>& hists, TH1*& first, int& firstIndex, 
         hist->Rebin((int) (maxBinWidth / hist->GetXaxis()->GetBinWidth(0)));
     }
 
-    for(TH1* hist : hists) {
-	    if(hist->Integral() != 0 && !isnan(hist->Integral())) {
+    for(TH1* hist : hists) 
+    {
+        if(scaleToExpected) 
+        {
+           if(hist->Integral() != 0 && !isnan(hist->Integral())) 
+           {
 	        hist->Scale(1/hist->Integral());
 		    hist->SetFillColor(kWhite);
+           }
+	    
 	    }
         if(hist->GetMaximum() > maximum) {
             maximum = hist->GetMaximum();
