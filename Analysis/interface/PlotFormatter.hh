@@ -108,7 +108,7 @@ class PlotFormatter
 
         void GetImposedOrder(THStack*& background, THStack*& signal, THStack*& first, THStack*& second);
 
-        void Bin(std::vector<TH1*>& hists, TH1*& first, int& firstIndex, double& maximum, int& count);
+        void Bin(std::vector<TH1*>& hists, TH1*& first, int& firstIndex, double& maximum, int& count, bool scaleToExpected);
 
         void GetOrder(std::vector<TH1*>& hists, TH1*& first, int& firstIndex, double& maximum);
 
