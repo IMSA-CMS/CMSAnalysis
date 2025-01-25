@@ -129,7 +129,7 @@ if __name__ == "__main__":
         help="If true, appends to the current nohup.out file instead of clearing",
         action="store_true",
     )
-    parser.add_argument("--path", help="Custom Output Path like Higgs (no backslash)")
+    parser.add_argument("--path", help="Custom Output Path like Higgs/")
     parser.add_argument("--numFiles", help="Number of files to run over")
 
     args = parser.parse_args()
@@ -237,7 +237,7 @@ if __name__ == "__main__":
         "DarkPhoton/DarkPhoton_Decay_ZPrime_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
     )
 
-    # background = ttBar + zz + dy + multiBoson + qcd # total 26 files
+    background = ttBar + zz + dy + multiBoson + qcd # total 26 files
 
     ###########this one ######### background = qcd
     # background = qcd
@@ -252,6 +252,7 @@ if __name__ == "__main__":
     # jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 
     # jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
+
     jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, data, qcd]
     
     # could further improve this by adding every sub-job as a separate entry

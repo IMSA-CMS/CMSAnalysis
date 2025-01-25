@@ -20,73 +20,60 @@ double calculateInvariantMass(Particle particle1, Particle particle2) {
 
 std::vector<std::pair<double, double>> TwoInvariantMassesHist::value2D() const
 {
-  auto invMasses = getInput()->getLeptons(EventInput::RecoLevel::Reco).calculateSameSignInvariantMasses(true);
+  auto Leptons = getInput()->getLeptons(EventInput::RecoLevel::Reco);
 
-  if (invMasses.size() != 2)
-  {
-    return {};
-    // std::runtime_error("Incorrect number of invariant masses calculated!");
+  if (Leptons.size() != 4) return {};
+
+  //Collection Initialize
+  ParticleCollection positiveLeptons;
+  ParticleCollection negativeLeptons;
+
+  //Sorts Lepton Pairs
+  for (auto lepton : Leptons) {
+    if (lepton.getCharge() == 1) positiveLeptons.addParticle(lepton);
+    if (lepton.getCharge() ==-1) negativeLeptons.addParticle(lepton);
   }
 
-  return {{invMasses[0], invMasses[1]}};
-};
+  if (positiveLeptons.size() != 2 || negativeLeptons.size() != 2) return {};
 
+  //Calculate Same Sign Invariant Masses
+  double positivePairInvariantMass = calculateInvariantMass(positiveLeptons[0],positiveLeptons[1]);
+  double negativePairInvariantMass = calculateInvariantMass(negativeLeptons[0],negativeLeptons[1]);
 
-// {
-//   auto Leptons = getInput()->getLeptons(EventInput::RecoLevel::Reco);
-
-//   if (Leptons.size() != 4) return {};
-
-//   //Collection Initialize
-//   ParticleCollection positiveLeptons;
-//   ParticleCollection negativeLeptons;
-
-//   //Sorts Lepton Pairs
-//   for (auto lepton : Leptons) {
-//     if (lepton.getCharge() == 1) positiveLeptons.addParticle(lepton);
-//     if (lepton.getCharge() ==-1) negativeLeptons.addParticle(lepton);
-//   }
-
-//   if (positiveLeptons.size() != 2 || negativeLeptons.size() != 2) return {};
-
-//   //Calculate Same Sign Invariant Masses
-//   double positivePairInvariantMass = calculateInvariantMass(positiveLeptons[0],positiveLeptons[1]);
-//   double negativePairInvariantMass = calculateInvariantMass(negativeLeptons[0],negativeLeptons[1]);
-
-//   //Pair Combos
-//   /* 
-//   eeee + -
-//   eeeu 
-//   eeuu
-//   eueu + -
-//   euuu
-//   uuuu + -
-//   */
+  //Pair Combos
+  /* 
+  eeee + -
+  eeeu 
+  eeuu
+  eueu + -
+  euuu
+  uuuu + -
+  */
 
   
-//   int posElectronCount = 0;
-//   int negElectronCount = 0;
+  int posElectronCount = 0;
+  int negElectronCount = 0;
 
 
-//   //this can probably be better optomized but i dont feel like dealing with it right now (kale 12/11/24)
-//   if (positiveLeptons[0].getType() == ParticleType::electron()) ++posElectronCount;
-//   if (positiveLeptons[1].getType() == ParticleType::electron()) ++posElectronCount;
-//   if (negativeLeptons[0].getType() == ParticleType::electron()) ++negElectronCount;
-//   if (negativeLeptons[1].getType() == ParticleType::electron()) ++negElectronCount;
+  //this can probably be better optomized but i dont feel like dealing with it right now (kale 12/11/24)
+  if (positiveLeptons[0].getType() == ParticleType::electron()) ++posElectronCount;
+  if (positiveLeptons[1].getType() == ParticleType::electron()) ++posElectronCount;
+  if (negativeLeptons[0].getType() == ParticleType::electron()) ++negElectronCount;
+  if (negativeLeptons[1].getType() == ParticleType::electron()) ++negElectronCount;
 
-//   //Check if opposite sign particle pairs are the same leptons
-//   if (posElectronCount == negElectronCount)
-//     return {{positivePairInvariantMass,negativePairInvariantMass}};
+  //Check if opposite sign particle pairs are the same leptons
+  if (posElectronCount == negElectronCount)
+    return {{positivePairInvariantMass,negativePairInvariantMass}};
   
-//   //Check which pair has more electrons if not equal
-//   if (posElectronCount > negElectronCount) {
-//     return {{positivePairInvariantMass,negativePairInvariantMass}};
-//   } 
-//   else 
-//   {
-//     return {{negativePairInvariantMass,positivePairInvariantMass}};
-//   }
+  //Check which pair has more electrons if not equal
+  if (posElectronCount > negElectronCount) {
+    return {{positivePairInvariantMass,negativePairInvariantMass}};
+  } 
+  else 
+  {
+    return {{negativePairInvariantMass,positivePairInvariantMass}};
+  }
  
     
  
-// }
+}
