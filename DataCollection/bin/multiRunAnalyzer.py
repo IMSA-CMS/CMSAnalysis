@@ -71,14 +71,12 @@ def loopRun(crab, path, fileCount, fileList):
             print("starting crab")
             crab_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/CRAB/"
             print(file)
-            files = subprocess.Popen(["getFileList", file], stdout=subprocess.PIPE)
-            countLines = int(subprocess.check_output(["wc", "-l"], stdin=files.stdout))
-
+            totalFiles = int(subprocess.check_output(["getFileList", file, "count"]))
             # 20 works for most jobs, TTbar and DY50-inf should use 5
             # theoretically could all the way down to 1,
             # but it might take longer to submit than just nohup
             maxNumFiles = 20
-            totalFiles = min(int(fileCount), countLines) if fileCount != None else countLines
+            totalFiles = min(int(fileCount), totalFiles) if fileCount != None else totalFiles
             for i in range(
                 0,
                 totalFiles,
