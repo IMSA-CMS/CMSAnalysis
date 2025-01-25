@@ -29,6 +29,7 @@ EventDumpModule::EventDumpModule(bool iGenSim, bool iReco, int inumOfEvents):
 //update this to remove event parameter
 bool EventDumpModule::process()
 {
+  
   if(counter < numOfEvents || numOfEvents == -1)
   {
     //if (getFilter() == "Low Mass and Different Signs_") 

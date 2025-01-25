@@ -8,6 +8,7 @@
 
 #include "CMSAnalysis/Modules/interface/FilterStringModule.hh"
 #include "CMSAnalysis/Modules/interface/FilterModule.hh"
+#include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
 #include "CMSAnalysis/Modules/interface/GenSimEventDumpModule.hh"
 #include "CMSAnalysis/Filters/interface/HiggsCut.hh"
 #include "CMSAnalysis/Filters/interface/RepeatedEventCuts.hh"
@@ -45,7 +46,7 @@ void MuonPlan::initialize()
     auto eventMod = make_shared<EventModule>();
     auto muonSelector = make_shared<MuonSelector>();
     //auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
-    auto eventDump = make_shared<GenSimEventDumpModule>();
+    auto eventDump = make_shared<EventDumpModule>(true, true, 5);
 
     auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
 
@@ -77,6 +78,7 @@ void MuonPlan::initialize()
     modules.addProductionModule(eventMod);
     modules.addFilterModule(recoDecayFilterMod);
     //modules.addFilterModule(runFilterMod);
+    modules.addAnalysisModule(eventDump);
     modules.addAnalysisModule(eventHistMod);  
     
       
