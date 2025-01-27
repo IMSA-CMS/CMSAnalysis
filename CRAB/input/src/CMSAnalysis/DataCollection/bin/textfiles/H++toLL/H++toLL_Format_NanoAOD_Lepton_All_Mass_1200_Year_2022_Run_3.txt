@@ -1,5 +1,0 @@
-/store/mc/Run3Summer22NanoAODv11/HplusPlusHminusMinusHTo2L_M-1200_TuneCP5_13p6TeV_pythia8/NANOAODSIM/126X_mcRun3_2022_realistic_v2-v2/30000/debecef6-eb51-44ec-83e4-86f72dbdc9d8.root
-/store/mc/Run3Summer22NanoAODv11/HplusPlusHminusMinusHTo2L_M-1200_TuneCP5_13p6TeV_pythia8/NANOAODSIM/126X_mcRun3_2022_realistic_v2-v2/30000/72f6bc70-eb8b-4b86-8a63-24c0ecab9a28.root
-/store/mc/Run3Summer22NanoAODv11/HplusPlusHminusMinusHTo2L_M-1200_TuneCP5_13p6TeV_pythia8/NANOAODSIM/126X_mcRun3_2022_realistic_v2-v2/30000/0b048704-b02f-436f-89a9-8c4a90b0833c.root
-/store/mc/Run3Summer22NanoAODv11/HplusPlusHminusMinusHTo2L_M-1200_TuneCP5_13p6TeV_pythia8/NANOAODSIM/126X_mcRun3_2022_realistic_v2-v2/30000/3d0adad6-5faf-40f4-99e0-50028cb26ffe.root
-/store/mc/Run3Summer22NanoAODv11/HplusPlusHminusMinusHTo2L_M-1200_TuneCP5_13p6TeV_pythia8/NANOAODSIM/126X_mcRun3_2022_realistic_v2-v2/30000/3095e199-1d3b-4c8a-b844-fc290247bf8c.root
