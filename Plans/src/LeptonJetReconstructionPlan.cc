@@ -60,6 +60,7 @@
 #include "CMSAnalysis/Filters/interface/DarkPhotonControlRegionFilter.hh"
 #include "CMSAnalysis/Modules/interface/RecoGenSimComparisonModule.hh"
 #include "CMSAnalysis/Filters/interface/BJetCut.hh"
+#include "CMSAnalysis/Plans/interface/CommonOperations.hh"
 
 // Use 700-1000 2018, DY50
 
@@ -82,6 +83,8 @@ void LeptonJetReconstructionPlan::initialize()
 
   eventMod->addCut(triggerCut);
   eventMod->addCut(highestMuonPtCut);
+
+  CommonOperations::addHiggsScaleFactors(eventMod);
 
   auto matchMod = std::make_shared<MatchingModule>();
   auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
