@@ -61,7 +61,7 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 	TH1* hist;
 	uint pos = name.find("/");
 	auto file = getFile(fileSource);
-	TH1* emptyHist = new TH1F("h1", "empty", 1, 0.0, 0.0);
+	// TH1* emptyHist = new TH1F("h1", "empty", 1, 0.0, 0.0);
 	if (pos != std::string::npos)
 	{
 
@@ -86,7 +86,9 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 			
 			//We need the nullptr in when adding histograms to know to
 			//skip the histogram and not break histogram addition
-			std::cout << "No directory named " + folder + " found in file\n";
+			std::cout << "No directory named " << folder << " found in file " << fileSource <<"\n";
+			// std::cout << "No directory named " + folder + " found in file: "<< fileSource <<"\n";
+
 			delete dir;
 			delete hist;
 			delete file;

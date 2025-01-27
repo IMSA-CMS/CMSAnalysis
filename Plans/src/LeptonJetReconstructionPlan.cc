@@ -223,7 +223,7 @@ void LeptonJetReconstructionPlan::initialize()
   modules.addProductionModule(lepRecoMod);
   // modules.addProductionModule(genPartMod);
   modules.addProductionModule(lepMatchMod);
-  //modules.addProductionModule(leptonJetMLStripMod);
+  modules.addProductionModule(leptonJetMLStripMod);
   modules.addProductionModule(mlMod);
 
 

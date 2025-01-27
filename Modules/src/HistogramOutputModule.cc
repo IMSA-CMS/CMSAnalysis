@@ -13,6 +13,17 @@
 #include "TH1.h"
 #include "TH2.h"
 
+
+
+void HistogramOutputModule::addScaleFactor(std::shared_ptr<ScaleFactor> scaleFactor)
+  {
+      scaleFactors.push_back(scaleFactor);
+      for (auto hist : histograms)
+      {
+          hist->addScaleFactor(scaleFactor);
+      }
+  }
+
 void HistogramOutputModule::finalizeFilterString() {
   // Check if any baseObjects have not been copied to objects yet,
   // and fill them into the main map if not
