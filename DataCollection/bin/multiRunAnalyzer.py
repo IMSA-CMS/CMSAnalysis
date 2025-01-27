@@ -153,6 +153,24 @@ if __name__ == "__main__":
             print("Argument did not match any analysis, defaulting to Higgs")
             analysis = 0
 
+    root_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/"
+    if args.crab:
+        copyInput = Popen(
+            [
+                "rsync",
+                "-am",
+                "--include='*.txt'",
+                "--include='*.json'",
+                "--include='*/'",
+                "--exclude='*'",
+                "--mkpath",
+                "DataCollection/bin/textfiles",
+                "CRAB/input/src/CMSAnalysis/DataCollection/bin",
+            ],
+            cwd=root_directory,
+        )
+        copyInput.wait()
+    
     # jobs grouped by process
     # If a job only has one pickfile in it, make sure to add a comma at the end so that python thinks it is a tuple
 
@@ -214,6 +232,11 @@ if __name__ == "__main__":
         "QCD1500-2000.txt",
         "QCD2000-inf.txt",
     )
+
+    wjets = (
+        "WJets.txt", # ~2000 files, use higher numFiles
+    )
+
     darkPhotonSignal = ("darkPhotonBaselineRun2.txt",)
 
     darkPhotonNanoAOD = (
@@ -253,8 +276,7 @@ if __name__ == "__main__":
 
     # jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 
-    jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, data, qcd]
-    
+    jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, data, qcd, wjets]    
     # could further improve this by adding every sub-job as a separate entry
     if args.crab:
         temp = []
