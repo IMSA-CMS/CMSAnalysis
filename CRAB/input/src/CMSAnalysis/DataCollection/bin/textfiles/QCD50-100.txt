@@ -1,3 +1,0 @@
-QCD
-HTCut:	50-100
-Run:	HLLHC
