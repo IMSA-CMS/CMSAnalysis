@@ -21,8 +21,8 @@ void RunSuperimpose() {
         std::cout << "Starting RunSuperimpose..." << std::endl;
 
         auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary Data");
-        const std::string filePath = "/afs/cern.ch/user/c/ceddingt/CMSSW_14_0_1/src/CMSAnalysis/Output/";
-        std::vector<std::string> files = {"testscalefactors.root", "testnoscalefactors.root"};
+        const std::string filePath = "/uscms/home/ceddingt/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/";
+        std::vector<std::string> files = {"scalefactors.root", "noscalefactors.root"};
         std::vector<std::string> hists = {
             "eeuu__hists/eeuu_Reco Same Sign Invariant Mass",
             "eeuu__hists/eeuu_Reco Same Sign Invariant Mass"
@@ -69,18 +69,18 @@ void RunSuperimpose() {
             histVector[i]->Rebin(10);
         }
 
-        double average[count] = {0};
+        std::vector<double> average(count, 0);
         for (int i = 0; i < count; i++) {
             std::cout << "Processing histogram " << i << " for ratio calculation..." << std::endl;
             for (int j = 1; j <= histVector[i]->GetNbinsX(); j++) {
                 double histValue = histVector[i]->GetBinContent(j);
                 double baseValue = histVector[1]->GetBinContent(j); // Assuming the 2nd file is the base
-
+                double ratio = (baseValue - histValue) / baseValue;
                 if (baseValue == 0) {
                     histVector[i]->SetBinContent(j, 0);
                     average[i] += 0;
                 } else {
-                    double ratio = (histValue - baseValue) / baseValue;
+
                     histVector[i]->SetBinContent(j, ratio);
                     average[i] += ratio;
                 }

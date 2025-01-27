@@ -49,7 +49,6 @@ def loopRun(crab, path, fileCount, fileList):
     numFiles = "numFiles=" + fileCount if fileCount != None else ""
     for file in fileList:
         # Filling in the parameters of runAnalyzer
-
         print("File: " + file)
         analysisSignal = (
             "HiggsSignal" if analysis == 0 else "MuonSignal" if analysis == 2 else ""
@@ -59,8 +58,8 @@ def loopRun(crab, path, fileCount, fileList):
         name = file[nameLocation:nameEnd]
         outputString = "output=" + path + name + ".root"
         inputString = "input=" + file
-
-        if file[0:5] == "Higgs":
+        offset = len("Run2PickFiles/")
+        if file[0+offset:5+offset] == "Higgs":
             analysisName = "analysis=" + analysisSignal
             inputString = "input=" + file
         else:
@@ -69,17 +68,18 @@ def loopRun(crab, path, fileCount, fileList):
 
         # calls runAnalyzer
         if crab:
-            # figure out concurrent system for this (i.e. writing to different files)
             print("starting crab")
             crab_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/CRAB/"
             print(file)
-            files = subprocess.Popen(["getFileList", file], stdout=subprocess.PIPE)
-            countLines = int(subprocess.check_output(["wc", "-l"], stdin=files.stdout))
-            maxNumFiles = 20  # basically just guessing this number, adjust as needed
-            totalFiles = min(int(fileCount), countLines) if fileCount != None else countLines
+            totalFiles = int(subprocess.check_output(["getFileList", file, "count"]))
+            # 20 works for most jobs, TTbar and DY50-inf should use 5
+            # theoretically could all the way down to 1,
+            # but it might take longer to submit than just nohup
+            maxNumFiles = 20
+            totalFiles = min(int(fileCount), totalFiles) if fileCount != None else totalFiles
             for i in range(
                 0,
-                20,
+                totalFiles,
                 maxNumFiles,
             ):
                 output = f"{name}_{int(i / maxNumFiles)}.root"
@@ -129,7 +129,7 @@ if __name__ == "__main__":
         help="If true, appends to the current nohup.out file instead of clearing",
         action="store_true",
     )
-    parser.add_argument("--path", help="Custom Output Path like Higgs (no backslash)")
+    parser.add_argument("--path", help="Custom Output Path like Higgs/")
     parser.add_argument("--numFiles", help="Number of files to run over")
 
     args = parser.parse_args()
@@ -157,7 +157,7 @@ if __name__ == "__main__":
     # If a job only has one pickfile in it, make sure to add a comma at the end so that python thinks it is a tuple
 
     ttBar = (
-        "TTbar.txt",
+        "TTbar.txt", # use job count ~5
         "TTW.txt",
         "TTZ.txt",
     )
@@ -166,7 +166,7 @@ if __name__ == "__main__":
 
     dy = (
         "DY10-50.txt",
-        "DY50-inf.txt",
+        "DY50-inf.txt", # files 60-80 exceed 24hr wall clock time, use ~5 job count size
     )
 
     multiBoson = (
@@ -195,11 +195,11 @@ if __name__ == "__main__":
     # NOTE: Muon only for Data - DP processing
 
     data = (
-        # "Electron2016.txt",
-		# "Electron2016APV.txt",
+        "Electron2016.txt",
+		"Electron2016APV.txt",
 		"Electron2017.txt",
 		"Electron2018.txt",
-		# "Muon2016.txt",
+		"Muon2016.txt",
 		"Muon2016APV.txt",
 		"Muon2017.txt",
 		"Muon2018.txt",
@@ -239,7 +239,7 @@ if __name__ == "__main__":
         "DarkPhoton/DarkPhoton_Decay_ZPrime_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
     )
 
-    # background = ttBar + zz + dy + multiBoson + qcd # total 26 files
+    background = ttBar + zz + dy + multiBoson + qcd # total 26 files
 
     ###########this one ######### background = qcd
     # background = qcd
@@ -254,7 +254,10 @@ if __name__ == "__main__":
     # jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 
     # jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
-    jobsList = [data]
+
+    jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, data, qcd]
+    
+    # could further improve this by adding every sub-job as a separate entry
     if args.crab:
         temp = []
         for job in jobsList:
