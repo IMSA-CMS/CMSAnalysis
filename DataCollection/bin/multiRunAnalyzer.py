@@ -5,7 +5,6 @@ import os
 import subprocess
 import argparse
 
-
 def loopRun(crab, path, fileCount, fileList):
     fileList = [f"Run2PickFiles/{file}" for file in fileList]
     if not path:
@@ -114,7 +113,6 @@ def loopRun(crab, path, fileCount, fileList):
                     numFiles,
                 ]
             )
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
