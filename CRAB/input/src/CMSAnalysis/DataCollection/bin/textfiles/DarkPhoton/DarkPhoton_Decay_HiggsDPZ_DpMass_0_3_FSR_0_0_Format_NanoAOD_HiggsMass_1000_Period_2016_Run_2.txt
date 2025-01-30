@@ -1,1 +1,0 @@
-/store/mc/RunIISummer20UL16NanoAODv9/HToZandDarkPhoton_HMass-1000_DPMass-0p3_TuneCP5_13TeV-pythia8/NANOAODSIM/106X_mcRun2_asymptotic_v17-v1/2540000/7B0D465D-7F71-204F-91E0-511AF5BAE442.root
