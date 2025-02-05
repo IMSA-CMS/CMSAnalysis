@@ -61,6 +61,7 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 		TList* toMerge = new TList;
 		for (const auto& singleProcess : processes)	
 		{
+			//std::cout << "Process: " << singleProcess.getName() << std::endl;
 			toAdd = singleProcess.getHist(histType, scaleToExpected);
 			//Add only if the hisogram exists
 
@@ -68,6 +69,8 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 			{
 				toMerge->Add(toAdd);
 			}
+
+			//std::cout << toAdd->GetName() << " has " << toAdd->GetNbinsX() << std::endl;
 		}
 		newHist->Merge(toMerge);
 		newHist->SetLineColor(color);
@@ -141,13 +144,15 @@ TH1* Process::getSingleProcessHist(const HistVariable& histType, const std::stri
 
 const SingleProcess& Process::getSingleProcess(const std::string& singleProcessName) const
 {
+
 	for (const auto& singleProcess : processes)
 	{
+	
 		if (singleProcess.getName() == singleProcessName)
 			return singleProcess;
 	}
 
-	throw std::invalid_argument("There is no SingleProcess with such a name within this Process object");
+	throw std::invalid_argument("There is no SingleProcess named " + singleProcessName + " within this Process object");
 }
 
 double Process::getYield(HistVariable dataType) const

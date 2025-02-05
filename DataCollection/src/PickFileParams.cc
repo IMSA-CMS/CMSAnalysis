@@ -19,7 +19,6 @@ std::string PickFileParams::getFileName() const
     std::string fileName = stream.str();
     fileName = Utility::substitute(fileName, " ", "_");
     fileName = Utility::getFullPath(fileName);
-    // std::cout << "Name of file list: " << fileName << '\n';
     return fileName;
 }
 

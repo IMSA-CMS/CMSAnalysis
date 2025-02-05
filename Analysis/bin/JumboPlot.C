@@ -122,7 +122,7 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, std::
 				TString xAxisName = units[unitCounter];
 				TString yAxisName = "Events";
 				dataName = Utility::removeSpaces(dataType);
-				fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
+				fileName = "jumboPlotStorage/" + Utility::removeSpaces("WJetLumi") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
 				HistVariable fullDataType = HistVariable(connecter + dataType);
 				//bool includeSignal = false;
 				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, includeSignal, includeData, channel->getName());
@@ -140,27 +140,27 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, std::
 		}
 	}
 	
-	for (std::string connecter: connecters2)
-	{
-		int unitCounter = 0;
-		for(std::string dataType : graphableTypes2) 
-		{
-			for(std::shared_ptr<Channel> channel : channels) 
-			{ 	
-				bool valid = false;
-				for (std::string channelName : channelNames)
-				{
-					if (channelName == channel->getName())
+	 for (std::string connecter: connecters2)
+	 {
+	 	int unitCounter = 0;
+	 	for(std::string dataType : graphableTypes2) 
+	 	{
+	 		for(std::shared_ptr<Channel> channel : channels) 
+	 		{ 	
+	 			bool valid = false;
+	 			for (std::string channelName : channelNames)
+	 			{
+	 				if (channelName == channel->getName())
 					{
 						valid = true;
 						break;
-					}
-				}
+	 				}
+	 			}
 
 				if (valid == false)
 				{
 					continue;
-				}
+	 			}
 				
 				entry = "";
 				TString xAxisName = units2[unitCounter];
@@ -175,14 +175,14 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, std::
 				canvas->Close();
 				delete canvas;
 			
-				entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
-				toAdd.push_back(entry);
-			}
-			unitCounter++;
-			tableInput.push_back(toAdd);
-			toAdd.clear();
+	 			entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
+	 			toAdd.push_back(entry);
+	 		}
+	 		unitCounter++;
+	 		tableInput.push_back(toAdd);
+	 		toAdd.clear();
+		 	}
 		}
-	}
 	
 	
 	for (int i = 0; i < 2; i++)
@@ -276,8 +276,9 @@ void JumboPlot()
 	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
 	std::vector<std::shared_ptr<Channel>> higgsChannels = higgsAnalysis->getChannels();
 
-	std::vector<std::string> rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
-	std::vector<std::string> graphableTypes = {"Eta", "Phi", "Pt"};
+	//std::vector<std::string> rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
+	std::vector<std::string> rowNames = {"ee", "e e", "eu", "e u", "uu", "u u"};
+	std::vector<std::string> graphableTypes = {"Eta", "Pt"};
 	std::vector<std::string> connecters = {"_1st Highest mu- ", "_1st Highest e- "}; 
 	std::vector<TString> units = {"#eta", "#phi", "p_T [GeV/c]"};
 

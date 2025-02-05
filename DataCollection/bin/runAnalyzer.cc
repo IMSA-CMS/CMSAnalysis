@@ -110,15 +110,11 @@ int main(int argc, char **argv)
   analyzer.addModules(modules);
   
   EventLoader eventLoader(EventLoader::fetchRootFiles(inputFile), &analyzer);
-  if(isCrab) 
-  {
-    analyzer.initialize("/srv", outputFile);
-  }
-  else
-  {
-    analyzer.initialize(Utility::getBasePath()+"Output/", outputFile);
-    eventLoader.run(outputEvery, numFiles, maxEvents, skipFiles);
-    analyzer.writeOutputFile();
+  if(isCrab) analyzer.initialize("/srv", outputFile);
+  else analyzer.initialize(Utility::getBasePath()+"Output/", outputFile);
+  
+  eventLoader.run(outputEvery, numFiles, maxEvents, skipFiles);
+  analyzer.writeOutputFile();
 
   
   std::cout << "Processing complete!" << std::endl;
@@ -130,6 +126,5 @@ int main(int argc, char **argv)
 
   std::cout << "Processing time: "<<processingTime.count()<<"s"<<std::endl;
   return 0;
-  }
 
 }

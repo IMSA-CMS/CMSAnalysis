@@ -1,3 +1,0 @@
-Data
-Trigger:	DoubleMuon
-Year:	2017a

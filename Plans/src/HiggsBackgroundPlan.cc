@@ -37,6 +37,7 @@
 #include "CMSAnalysis/Filters/interface/ZVetoCut.hh"
 #include "CMSAnalysis/Filters/interface/FourLeptonCut.hh"
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
+#include "CMSAnalysis/Modules/interface/ScaleFactorAnalysis.hh"
 
 using std::make_shared;
 
@@ -50,7 +51,7 @@ void HiggsBackgroundPlan::initialize()
     auto higgsSelector = make_shared<HiggsSelector>();
     auto higgsCut = make_shared<HiggsCut>();
     //auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
-    auto eventDump = make_shared<GenSimEventDumpModule>();
+    auto eventDump = make_shared<GenSimEventDumpModule>(5);
     auto zVetoCut = make_shared<ZVetoCut>();
     //auto quarkoniaCut = make_shared<QuarkoniaCut>();
     auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
@@ -120,14 +121,14 @@ void HiggsBackgroundPlan::initialize()
     auto runFilterMod = make_shared<FilterModule>(runFilter);
 
 
-    modules.addProductionModule(metMod);
-    //Changed because EventModule inherits from ProductionModule now
+    // modules.addProductionModule(metMod);
+    // //Changed because EventModule inherits from ProductionModule now
     modules.addProductionModule(eventMod);
-    modules.addFilterModule(recoDecayFilterMod);
+     modules.addFilterModule(recoDecayFilterMod);
     modules.addAnalysisModule(eventHistMod);    
     modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
     //modules.addFilterModule(runFilterMod); 
-    modules.addAnalysisModule(eventDump);
+    //modules.addAnalysisModule(eventDump);
     auto hPlusPlusEfficiency = make_shared<HPlusPlusEfficiency>();
     hPlusPlusEfficiency->setInput(eventMod->getEventInput());
     modules.addAnalysisModule(hPlusPlusEfficiency);

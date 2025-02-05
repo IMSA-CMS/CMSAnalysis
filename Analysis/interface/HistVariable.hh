@@ -1,66 +1,41 @@
 #ifndef HISTVARIABLE_HH
 #define HISTVARIABLE_HH
 
+#include "CMSAnalysis/Analysis/interface/FilePathMapper.hh"
+
 #include <string>
+#include <unordered_map>
+#include <stdexcept>
 
 class HistVariable 
 {
-    public:
-	/*
-	static HistVariable genSimSameSignMass(std::string histName) {return HistVariable("GenSim Same Sign Inv Mass", histName);}
-	static HistVariable sameSignMass(std::string histName) {return HistVariable("Same Sign Inv Mass", histName);}
-	static HistVariable invariantMass(std::string histName) {return HistVariable("Invariant Mass", histName);}
-	static HistVariable genSimPt(std::string histName) {return HistVariable("GenSim pT", histName);}
-	static HistVariable pt(std::string histName) {return HistVariable("pT", histName);}
-	static HistVariable eta(std::string histName) {return HistVariable("Eta", histName);}
-	static HistVariable phi(std::string histName) {return HistVariable("Phi", histName);}
-	static HistVariable mET(std::string histName) {return HistVariable("MET", histName);}
-	static HistVariable firstPt(std::string histName) {return HistVariable("firstPt", histName);}
-	static HistVariable secondPt(std::string histName) {return HistVariable("secondPt", histName);}
-	static HistVariable thirdPt(std::string histName) {return HistVariable("thirdPt", histName);}
-	static HistVariable fourthPt(std::string histName) {return HistVariable("fourthPt", histName);}
-	*/
-	std::string getName() {return name;}
-	//std::string getHistName() {return graphName;}
-    //HistVariable(std::string iName, std::string placeholder) : name(iName) , graphName(placeholder) {}
-	HistVariable(std::string iName) : name(iName) {}
+public:
+    // Static objects for predefined variables
+    static HistVariable genSimSameSignMass;
+    static HistVariable sameSignMass;
+    static HistVariable invariantMass;
+    static HistVariable genSimPt;
+    static HistVariable pt;
+    static HistVariable eta;
+    static HistVariable phi;
+    static HistVariable mET;
+    static HistVariable firstPt;
+    static HistVariable secondPt;
+    static HistVariable thirdPt;
+    static HistVariable fourthPt;
 
-    private:
-	std::string name;
-	//std::string graphName;
+    // Getters
+    std::string getName() const { return name; }
+    std::string getGraphName(const FilePathMapper& mapper) const 
+    {
+        return mapper.getFilePath(name);
+    }
+
+    // Constructor
+    HistVariable(std::string iName) : name(std::move(iName)) {}
+
+private:
+    std::string name;
 };
 
 #endif
-
-/*
-#ifndef HISTVARIABLE_HH
-#define HISTVARIABLE_HH
-
-#include <string>
-
-class HistVariable 
-{
-    public:
-	static HistVariable genSimSameSignMass(std::string histName) {return HistVariable("GenSim Same Sign Inv Mass", histName);}
-	static HistVariable sameSignMass(std::string histName) {return HistVariable("Same Sign Inv Mass", histName);}
-	static HistVariable invariantMass(std::string histName) {return HistVariable("Invariant Mass", histName);}
-	static HistVariable genSimPt(std::string histName) {return HistVariable("GenSim pT", histName);}
-	static HistVariable pt(std::string histName) {return HistVariable("pT", histName);}
-	static HistVariable eta(std::string histName) {return HistVariable("Eta", histName);}
-	static HistVariable phi(std::string histName) {return HistVariable("Phi", histName);}
-	static HistVariable mET(std::string histName) {return HistVariable("MET", histName);}
-	static HistVariable firstPt(std::string histName) {return HistVariable("firstPt", histName);}
-	static HistVariable secondPt(std::string histName) {return HistVariable("secondPt", histName);}
-	static HistVariable thirdPt(std::string histName) {return HistVariable("thirdPt", histName);}
-	static HistVariable fourthPt(std::string histName) {return HistVariable("fourthPt", histName);}
-	std::string getName() {return name;}
-	std::string getHistName() {return graphName;}
-    HistVariable(std::string iName, std::string iGraphName) : name(iName), graphName(iGraphName) {}
-
-    private:
-	std::string name;
-	std::string graphName;
-};
-
-#endif
-*/
