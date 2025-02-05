@@ -1,7 +1,0 @@
-DarkPhoton
-DpMass:	0_3
-HiggsMass:	1000
-FSR:	0_0
-Decay:	HiggsDPZ
-Format:	MiniAOD
-Run:	2
