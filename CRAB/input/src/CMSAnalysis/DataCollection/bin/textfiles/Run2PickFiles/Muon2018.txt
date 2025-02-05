@@ -1,3 +1,0 @@
-Data
-Trigger:	SingleMuon
-Year:	2018A	2018B	2018C	2018D

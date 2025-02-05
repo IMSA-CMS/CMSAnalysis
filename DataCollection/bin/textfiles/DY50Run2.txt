@@ -1,5 +1,5 @@
 Drell-Yan
 MassCut:	50-inf
 Run:	2
-Period:	2018
+Year:	2017
 Format:	NanoAOD

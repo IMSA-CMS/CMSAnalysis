@@ -5,7 +5,6 @@ import os
 import subprocess
 import argparse
 
-
 def loopRun(crab, path, fileCount, fileList):
     fileList = [f"Run2PickFiles/{file}" for file in fileList]
     if not path:
@@ -49,7 +48,6 @@ def loopRun(crab, path, fileCount, fileList):
     numFiles = "numFiles=" + fileCount if fileCount != None else ""
     for file in fileList:
         # Filling in the parameters of runAnalyzer
-
         print("File: " + file)
         analysisSignal = (
             "HiggsSignal" if analysis == 0 else "MuonSignal" if analysis == 2 else ""
@@ -59,8 +57,8 @@ def loopRun(crab, path, fileCount, fileList):
         name = file[nameLocation:nameEnd]
         outputString = "output=" + path + name + ".root"
         inputString = "input=" + file
-
-        if file[0:5] == "Higgs":
+        offset = len("Run2PickFiles/")
+        if file[0+offset:5+offset] == "Higgs":
             analysisName = "analysis=" + analysisSignal
             inputString = "input=" + file
         else:
@@ -68,39 +66,43 @@ def loopRun(crab, path, fileCount, fileList):
             inputString = "input=" + file
 
         # calls runAnalyzer
-        print("Creating " + outputString)
         if crab:
+            print("starting crab")
             crab_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/CRAB/"
             print(file)
-            files = subprocess.Popen(["getFileList", file], stdout=subprocess.PIPE)
-            files.wait()
-            countLines = int(subprocess.check_output(["wc", "-l"], stdin=files.stdout))
-
-            maxNumFiles = 20  # basically just guessing this number, adjust as needed
+            totalFiles = int(subprocess.check_output(["getFileList", file, "count"]))
+            # 20 works for most jobs, TTbar and DY50-inf should use 5
+            # theoretically could all the way down to 1,
+            # but it might take longer to submit than just nohup
+            maxNumFiles = 20
+            totalFiles = min(int(fileCount), totalFiles) if fileCount != None else totalFiles
             for i in range(
                 0,
-                min(int(fileCount), countLines) if fileCount != None else countLines,
+                totalFiles,
                 maxNumFiles,
             ):
+                output = f"{name}_{int(i / maxNumFiles)}.root"
+                print("Creating " + output)
                 generate = Popen(
                     [
                         "python3",
                         "crab_config_generator.py",
                         f"--{inputString}",
-                        f"--output={name}_{int(i / maxNumFiles)}.root",
+                        f"--output={output}",
                         f"--{analysisName}",
-                        f"--folder={path[0:-1]}" if nameLocation != 0 else "",
-                        f"--numFiles={min(maxNumFiles, int(fileCount) - i)}",
+                        f"--folder={path + file[14:-4]}",
+                        f"--numFiles={min(maxNumFiles, totalFiles - i)}",
                         f"--skipFiles={i}",
                     ],
                     cwd=crab_directory,
                 )
                 generate.wait()
-                # submit = Popen(
-                #     ["crab", "submit", "-c", "crab_config.py"], cwd=crab_directory
-                # )
-                # submit.wait()
+                submit = Popen(
+                    ["crab", "submit", "-c", f"gen/{file[14:-4]}_crab_config.py"], cwd=crab_directory
+                )
+                submit.wait()
         else:
+            print("Creating " + outputString)
             Popen(
                 [
                     "nohup",
@@ -111,7 +113,6 @@ def loopRun(crab, path, fileCount, fileList):
                     numFiles,
                 ]
             )
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -126,7 +127,7 @@ if __name__ == "__main__":
         help="If true, appends to the current nohup.out file instead of clearing",
         action="store_true",
     )
-    parser.add_argument("--path", help="Custom Output Path like Higgs (no backslash)")
+    parser.add_argument("--path", help="Custom Output Path like Higgs/")
     parser.add_argument("--numFiles", help="Number of files to run over")
 
     args = parser.parse_args()
@@ -150,11 +151,29 @@ if __name__ == "__main__":
             print("Argument did not match any analysis, defaulting to Higgs")
             analysis = 0
 
+    root_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/"
+    if args.crab:
+        copyInput = Popen(
+            [
+                "rsync",
+                "-am",
+                "--include='*.txt'",
+                "--include='*.json'",
+                "--include='*/'",
+                "--exclude='*'",
+                "--mkpath",
+                "DataCollection/bin/textfiles",
+                "CRAB/input/src/CMSAnalysis/DataCollection/bin",
+            ],
+            cwd=root_directory,
+        )
+        copyInput.wait()
+    
     # jobs grouped by process
     # If a job only has one pickfile in it, make sure to add a comma at the end so that python thinks it is a tuple
 
     ttBar = (
-        "TTbar.txt",
+        "TTbar.txt", # use job count ~5
         "TTW.txt",
         "TTZ.txt",
     )
@@ -163,7 +182,7 @@ if __name__ == "__main__":
 
     dy = (
         "DY10-50.txt",
-        "DY50-inf.txt",
+        "DY50-inf.txt", # files 60-80 exceed 24hr wall clock time, use ~5 job count size
     )
 
     multiBoson = (
@@ -189,10 +208,7 @@ if __name__ == "__main__":
         "Higgs1500.txt",
 	)
 
-    oneFile = (
-        "Muon2017.txt",
-    )
-
+    # NOTE: Muon only for Data - DP processing
     data = (
         "Electron2016.txt",
 		"Electron2016APV.txt",
@@ -215,6 +231,11 @@ if __name__ == "__main__":
         "QCD1500-2000.txt",
         "QCD2000-inf.txt",
     )
+
+    wjets = (
+        "WJets.txt", # ~2000 files, use higher numFiles
+    )
+
     darkPhotonSignal = ("darkPhotonBaselineRun2.txt",)
 
     darkPhotonNanoAOD = (
@@ -238,7 +259,7 @@ if __name__ == "__main__":
         "DarkPhoton/DarkPhoton_Decay_ZPrime_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
     )
 
-    # background = ttBar + zz + dy + multiBoson + qcd # total 26 files
+    background = ttBar + zz + dy + multiBoson + qcd # total 26 files
 
     ###########this one ######### background = qcd
     # background = qcd
@@ -253,34 +274,19 @@ if __name__ == "__main__":
     # jobsList = [ttBar, zz, dy50, multiBoson, higgsSignal, higgsData] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 
     # jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
-    #jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, data, qcd]
-    jobsList = [oneFile]
+
+    jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, data, qcd, wjets]    
+    # could further improve this by adding every sub-job as a separate entry
+    if args.crab:
+        temp = []
+        for job in jobsList:
+            for file in job:
+                temp.append((file,)) # add as a tuple
+
+        jobsList = temp
 
     if os.path.exists("nohup.out") and not args.keep:
         os.remove("nohup.out")
-
-    # batch_size = 3
-    # for i in range(0, len(jobsList), batch_size):
-    # 	print("In")
-    # 	# Create a batch from the list
-    # 	batch = jobsList[i:i + batch_size]
-    # 	flat_batch = [file for job in batch for file in job]
-
-    # 	# Specify the path to your Python script (batch_run.py)
-    # 	script_path = "batch_run.py"
-
-    #   	# Specify the output file where stdout and stderr will be logged
-    # 	output_file = "nohup.out"
-
-    #   	# Open the output file to log stdout and stderr
-    # 	with open(output_file, "w") as f:
-    #      	# Run the command with 'nohup' effect and redirect output to the file
-    # 		print("1")
-    # 		process = subprocess.Popen(["python", script_path], stdout=f, stderr=subprocess.STDOUT, preexec_fn=os.setpgrp)
-    # 		process.wait()
-
-    # 	# Call run_jobs.py with the batch
-    # 	#run_batch(flat_batch, analysis)
 
     # list of processes
     processes = []

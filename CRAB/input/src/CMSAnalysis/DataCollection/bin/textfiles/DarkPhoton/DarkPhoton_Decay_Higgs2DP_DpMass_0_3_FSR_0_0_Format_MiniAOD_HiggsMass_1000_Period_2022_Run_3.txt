@@ -1,6 +1,0 @@
-/store/mc/Run3Summer22MiniAODv3/HTo2DarkPhoton_HMass-1000_DPMass-0p3_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_v12-v2/2560000/47444066-7e68-4c96-b39b-89afcd2d029d.root
-/store/mc/Run3Summer22MiniAODv3/HTo2DarkPhoton_HMass-1000_DPMass-0p3_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_v12-v2/2560000/a3b5878b-60ca-43be-85cd-9746d3cfe3f9.root
-/store/mc/Run3Summer22MiniAODv3/HTo2DarkPhoton_HMass-1000_DPMass-0p3_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_v12-v2/2560000/22bcfb83-6f61-43c6-84b4-55882421430b.root
-/store/mc/Run3Summer22MiniAODv3/HTo2DarkPhoton_HMass-1000_DPMass-0p3_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_v12-v2/2560000/6649e461-b761-47ae-a9d4-3e51d3d3def1.root
-/store/mc/Run3Summer22MiniAODv3/HTo2DarkPhoton_HMass-1000_DPMass-0p3_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_v12-v2/2560000/806404f0-518d-4410-b678-6f38ef5c819a.root
-/store/mc/Run3Summer22MiniAODv3/HTo2DarkPhoton_HMass-1000_DPMass-0p3_TuneCP5_13p6TeV-pythia8/MINIAODSIM/124X_mcRun3_2022_realistic_v12-v2/2560000/f1df6b63-69c3-4976-9d3a-36806cc79020.root

@@ -6,6 +6,8 @@
 
 #include "CMSAnalysis/Modules/interface/AnalysisModule.hh"
 #include "CMSAnalysis/Modules/interface/Module.hh"
+#include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
+
 #include "TH1.h"
 #include "TH2.h"
 
@@ -24,9 +26,8 @@ public:
   virtual bool process() override;    // Fills the histograms
   void addHistogram(std::shared_ptr<HistogramPrototype> hist); // Adds a HistogramPrototype* to histogram (the vector)
   virtual void setInput(const EventInput* iInput) override;
-  
+  void addScaleFactor(std::shared_ptr<ScaleFactor> scaleFactor);
   virtual std::string getName() override {return "HistogramOutputModule";}
-
 protected:
   // This adds an object to the collection to be written.
   // All objects that use this method are duplicated for different filter categories
@@ -62,11 +63,12 @@ protected:
 
 private:
   std::string getObjectName(const std::string &str) const;
-
   // This is a map of objects as they are seen by the user, by name
   std::map<std::string, TObject*> baseObjects;
+  std::vector<std::shared_ptr<ScaleFactor>> scaleFactors;
 
-  std::vector<std::shared_ptr<HistogramPrototype>> histograms;
+  std::vector<std::shared_ptr<HistogramPrototype>> histograms; //!!!!!!!!!!loop over and add scale factors
+  
 
   float total = 0;
 };
