@@ -47,6 +47,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
     const std::string filePath = "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     const std::string signalFilePath = "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
+    const std::string myPath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     // const std::string filePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     // const std::string signalFilePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
 
@@ -232,7 +233,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ.root", "zzto4l", reader, luminosity, histVariableToFileMapping));
 
         auto wJetsBackground = std::make_shared<Process>("WJets Background", 6);
-        wJetsBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WJetsZ.root", "WJets", reader, luminosity, histVariableToFileMapping));
+        wJetsBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WJets.root", "WJets", reader, luminosity, histVariableToFileMapping));
 
         // cross sections should be all lowercase
         auto ttBarandMultiBosonBackground = std::make_shared<Process>("t#bar{t}, Multiboson Background", 4);
@@ -259,7 +260,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD700-1000.root", "QCD_700-1000", reader, luminosity, histVariableToFileMapping));
         qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD1000-1500.root", "QCD_1000-1500", reader, luminosity, histVariableToFileMapping));
         qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD1500-2000.root", "QCD_1500-2000", reader, luminosity, histVariableToFileMapping));
-        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD2000-inf.root", "QCD_2000-inf", reader, luminosity, histVariableToFileMapping));
+        // qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD2000-inf.root", "QCD_2000-inf", reader, luminosity, histVariableToFileMapping));
 
         auto higgsData = std::make_shared<Process>("Data", 1);
         // 150022816 events in Data_Trigger_SingleMuon_Year_2016B.root before TriggerCut change
@@ -271,8 +272,8 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2016APV.root", "Muon2016APV", reader, luminosity, histVariableToFileMapping));
         higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2017.root", "Muon2017", reader, luminosity, histVariableToFileMapping));
         higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2018.root", "Muon2018", reader, luminosity, histVariableToFileMapping));
-        //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "testHiggs20.root", "higgs4l" + std::to_string((int)tempMass), reader, luminosity, datahistVariableToFileMapping));
-        //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "testHiggsM20.root", "higgs4l" + std::to_string((int)tempMass), reader, luminosity, datahistVariableToFileMapping));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, jetPath, "testHiggs20.root", "higgs4l" + std::to_string((int)tempMass), reader, luminosity, datahistVariableToFileMapping));
+        // higgsData->addProcess(makeBasicProcess(histVariablesBackground, jetPath, "testHiggsM20.root", "higgs4l" + std::to_string((int)tempMass), reader, luminosity, datahistVariableToFileMapping));
 
         auto allBackground = std::make_shared<Process>("All Background", 3);
         for (auto background : {dyBackground, zzBackground, ttBarandMultiBosonBackground, qcdBackground})
