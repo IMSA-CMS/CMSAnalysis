@@ -31,7 +31,7 @@ class EventModule : public ProductionModule
         void addCut(std::shared_ptr<Cut> cut);
         void addScaleFactor(std::shared_ptr<ScaleFactor> scaleFactors);
         virtual void setInput(const EventInput* input) override;
-        
+        void initialize() override;
         // Will print the amount of events which passed each cut.
         void finalize() override;
 

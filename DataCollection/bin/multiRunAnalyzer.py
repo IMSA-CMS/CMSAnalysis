@@ -5,7 +5,6 @@ import os
 import subprocess
 import argparse
 
-
 def loopRun(crab, path, fileCount, fileList):
     fileList = [f"Run2PickFiles/{file}" for file in fileList]
     if not path:
@@ -71,14 +70,12 @@ def loopRun(crab, path, fileCount, fileList):
             print("starting crab")
             crab_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/CRAB/"
             print(file)
-            files = subprocess.Popen(["getFileList", file], stdout=subprocess.PIPE)
-            countLines = int(subprocess.check_output(["wc", "-l"], stdin=files.stdout))
-
+            totalFiles = int(subprocess.check_output(["getFileList", file, "count"]))
             # 20 works for most jobs, TTbar and DY50-inf should use 5
             # theoretically could all the way down to 1,
             # but it might take longer to submit than just nohup
             maxNumFiles = 20
-            totalFiles = min(int(fileCount), countLines) if fileCount != None else countLines
+            totalFiles = min(int(fileCount), totalFiles) if fileCount != None else totalFiles
             for i in range(
                 0,
                 totalFiles,
@@ -117,7 +114,6 @@ def loopRun(crab, path, fileCount, fileList):
                 ]
             )
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -155,6 +151,24 @@ if __name__ == "__main__":
             print("Argument did not match any analysis, defaulting to Higgs")
             analysis = 0
 
+    root_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/"
+    if args.crab:
+        copyInput = Popen(
+            [
+                "rsync",
+                "-am",
+                "--include='*.txt'",
+                "--include='*.json'",
+                "--include='*/'",
+                "--exclude='*'",
+                "--mkpath",
+                "DataCollection/bin/textfiles",
+                "CRAB/input/src/CMSAnalysis/DataCollection/bin",
+            ],
+            cwd=root_directory,
+        )
+        copyInput.wait()
+    
     # jobs grouped by process
     # If a job only has one pickfile in it, make sure to add a comma at the end so that python thinks it is a tuple
 
@@ -194,6 +208,8 @@ if __name__ == "__main__":
         "Higgs1500.txt",
 	)
 
+    # NOTE: Muon only for Data - DP processing
+
     data = (
         "Electron2016.txt",
 		"Electron2016APV.txt",
@@ -216,6 +232,11 @@ if __name__ == "__main__":
         "QCD1500-2000.txt",
         "QCD2000-inf.txt",
     )
+
+    wjets = (
+        "WJets.txt", # ~2000 files, use higher numFiles
+    )
+
     darkPhotonSignal = ("darkPhotonBaselineRun2.txt",)
 
     darkPhotonNanoAOD = (
@@ -255,8 +276,7 @@ if __name__ == "__main__":
 
     # jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 
-    jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, data, qcd]
-    
+    jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, data, qcd, wjets]    
     # could further improve this by adding every sub-job as a separate entry
     if args.crab:
         temp = []
