@@ -55,8 +55,7 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, HistVaria
     // std::cout << "Efficiency of " << process->getName() << " is " << efficiency << std::endl;
 // 
 
-    if (process->getName() == "wzto3lnu")
-    {
+
      std::cout << "postMax " << hist->GetMaximum() << std::endl;
      std::cout << "MaxContent " << hist->GetBinContent(hist->GetMaximumBin()) << std::endl;
      std::cout << "process " << process->getName() << std::endl; 
@@ -67,6 +66,6 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, HistVaria
      std::cout << "cross section " << crosssection << std::endl;
      std::cout << "postIntegral " << hist->Integral(lowerLimit, numBins) << std::endl;
      std::cout << "yield for " << process->getName() << " is " << signalest << std::endl;
-    }
+    
     return signalest;
 }
