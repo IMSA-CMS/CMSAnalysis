@@ -102,7 +102,7 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, bool 
 				TString xAxisName = units[unitCounter];
 				TString yAxisName = "Events";
 				dataName = Utility::removeSpaces(dataType);
-				fileName = "jumboPlotStorage/" + Utility::removeSpaces("NoZVetoLumi") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
+				fileName = "jumboPlotStorage/" + Utility::removeSpaces("WJetLumi") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
 				HistVariable fullDataType = HistVariable(connecter + dataType);
 				bool includeSignal = false;
 				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, false, includeSignal, includeData, channel->getName());
