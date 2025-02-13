@@ -34,9 +34,7 @@ TH1* SingleProcess::getHist(HistVariable histType, bool scaleToExpected) const
         }
     }
     //std::cout << "SingleProcess 2" << std::endl;
-    for(auto correction : corrections) {
-        hist = correction->correctHist(hist);
-    }
+
     //std::cout << "SingleProcess 3" << std::endl;
     return hist;
 }

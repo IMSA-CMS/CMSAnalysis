@@ -95,7 +95,7 @@ void HiggsBackgroundPlan::initialize()
     
     auto eventHistMod = eventMod->getHistogramModule();
 
-    auto metHist = make_shared<METHist>(metMod, "MET", 500, 0, 2000);
+    auto metHist = make_shared<METHist>( "MET", 500, 0, 2000);
 
 
     eventHistMod->addHistogram(metHist);
