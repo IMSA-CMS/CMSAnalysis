@@ -122,10 +122,6 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents)
 
     for (auto &fileName : fileList)
     {
-      // Adds prefix necessary to read remote files
-      const std::string eossrc = "root://cmsxrootd.fnal.gov//";
-      fileName = eossrc + fileName;
-
       std::cout << "Name of file: " << fileName << "\n";
 
       TFile *tFile = TFile::Open(fileName.c_str(), "READ");
