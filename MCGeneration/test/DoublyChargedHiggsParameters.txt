@@ -28,19 +28,17 @@ LeftRightSymmmetry:coupHmumu = 0.1
 LeftRightSymmmetry:coupHtaue = 0.1
 LeftRightSymmmetry:coupHtaumu = 0.1
 LeftRightSymmmetry:coupHtautau = 0.1
-# PDF:pSet=LHAPDF6:NNPDF23_nnlo_as_0119
-# PDF:pSet=LHAPDF6:NNPDF31_nnlo_as_0118 # original
-# PDF:pSet=12
-# PDF:pSet=9
-# PDF:pSet=6
-PDF:pSet=4
+
+#How to change PDF
+ PDF:pSet=LHAPDF6:NNPDF23_nnlo_as_0119
+
 
 # W Fusion decay
 #Vacuum Expectation in GeV default is 5
 LeftRightSymmmetry:vL = 0 
 
 # Higgs Values
-9900041:m0 = 500
+9900041:m0 = 1000
 #9900042:m0 = 500
 
 9900041:oneChannel = 1 0.33333 100 -11 -11
@@ -51,6 +49,3 @@ LeftRightSymmmetry:vL = 0
 #9900042:oneChannel = 1 0.33333 100 -11 -11
 #9900042:addChannel = 1 0.33333 100 -11 -13
 #9900042:addChannel = 1 0.33333 100 -13 -13
-
-#How to change PDF
-PDF:pSet=23
