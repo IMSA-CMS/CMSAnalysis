@@ -5,10 +5,13 @@
 #include "CMSAnalysis/Modules/interface/MuonScaleFactor.hh"
 #include "CMSAnalysis/Modules/interface/DummyScaleFactor.hh"
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
+#include "CMSAnalysis/Modules/interface/RootScaleFactor.hh"
+
 using std::make_shared;
 
 void CommonOperations::addHiggsScaleFactors(std::shared_ptr<EventModule> eventMod)
 {
+    auto pileUpScaleFactor = make_shared<RootScaleFactor>("","");
 	auto scaleFactor = make_shared<MultiYearScaleFactor>();
     auto iDISOScaleFactor = make_shared<MultiYearScaleFactor>();
     auto triggerScaleFactor = make_shared<MultiYearScaleFactor>();
@@ -69,4 +72,5 @@ void CommonOperations::addHiggsScaleFactors(std::shared_ptr<EventModule> eventMo
     //std::cout << "Added IDISO scale factor" << std::endl;
     eventMod->addScaleFactor(triggerScaleFactor);
     //std::cout << "Added trigger scale factor" << std::endl;
+    eventMod->addScaleFactor(pileUpScaleFactor);
 }
