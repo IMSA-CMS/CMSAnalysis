@@ -11,10 +11,10 @@
 class HistogramPrototype2DProjection : public HistogramPrototype1D
 {
   public:
-    HistogramPrototype2DProjection(const std::string& iname, std::shared_ptr<HistogramPrototype2D> i2DHist, bool iXProjection, int iNBins = -1, double iminimum = -1, double imaximum = -1);
-    // int getNBins() override;
-    // double getMinimum() override;
-    // double getMaximum() override;
+    HistogramPrototype2DProjection(const std::string& iname, std::shared_ptr<HistogramPrototype2D> i2DHist, bool iXProjection,
+       int iNBins = -1, double iminimum = -1, double imaximum = -1);
+    virtual void setInput(const EventInput* iInput) override;
+
     std::vector<double> value() const override;
 
   private:
