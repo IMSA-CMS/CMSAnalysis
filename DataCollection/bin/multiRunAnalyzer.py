@@ -5,7 +5,6 @@ import os
 import subprocess
 import argparse
 
-
 def loopRun(crab, path, fileCount, fileList):
     fileList = [f"Run2PickFiles/{file}" for file in fileList]
     if not path:
@@ -115,7 +114,6 @@ def loopRun(crab, path, fileCount, fileList):
                 ]
             )
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -211,7 +209,6 @@ if __name__ == "__main__":
 	)
 
     # NOTE: Muon only for Data - DP processing
-
     data = (
         "Electron2016.txt",
 		"Electron2016APV.txt",
@@ -239,27 +236,26 @@ if __name__ == "__main__":
         "WJets.txt", # ~2000 files, use higher numFiles
     )
 
-    darkPhotonSignal = ("darkPhotonBaselineRun2.txt",)
-
+    darkPhotonSignal = ("Run2PickFiles/darkPhotonBaselineRun2.txt")
+    
     darkPhotonNanoAOD = (
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_1_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_2_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_125_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_300_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_1_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_3_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_4_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_6_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_9_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_1_2_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_1_5_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_2_5_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_4_0_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs4DP_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_HiggsDPZ_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_SUSY_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_ZPrime_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
+        "Run2PickFiles/darkPhotonDecay_Higgs4DP.txt",
+        "Run2PickFiles/darkPhotonDecay_HiggsDPZ.txt",
+        "Run2PickFiles/darkPhotonDecay_SUSY.txt",
+        "Run2PickFiles/darkPhotonDecay_ZPrime.txt",
+        "Run2PickFiles/darkPhoton_DpMass0_1.txt",
+        "Run2PickFiles/darkPhoton_DpMass0_2.txt",
+        "Run2PickFiles/darkPhoton_DpMass0_4.txt",
+        "Run2PickFiles/darkPhoton_DpMass0_6.txt",
+        "Run2PickFiles/darkPhoton_DpMass0_9.txt",
+        "Run2PickFiles/darkPhoton_DpMass1_2.txt",
+        "Run2PickFiles/darkPhoton_DpMass1_5.txt",
+        "Run2PickFiles/darkPhoton_DpMass2_5.txt",
+        "Run2PickFiles/darkPhoton_DpMass4_0.txt",
+        "Run2PickFiles/darkPhotonHiggs125.txt",
+        "Run2PickFiles/darkPhotonHiggs300.txt",
+        "Run2PickFiles/darkPhotonRun2FSR_0_1.txt",
+        "Run2PickFiles/darkPhotonRun2FSR_0_3.txt",
     )
 
     background = ttBar + zz + dy + multiBoson + qcd # total 26 files

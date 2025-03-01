@@ -61,6 +61,7 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 		TList* toMerge = new TList;
 		for (const auto& singleProcess : processes)	
 		{
+			//std::cout << "Process: " << singleProcess.getName() << std::endl;
 			toAdd = singleProcess.getHist(histType, scaleToExpected);
 			//Add only if the hisogram exists
 
@@ -68,6 +69,8 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 			{
 				toMerge->Add(toAdd);
 			}
+
+			//std::cout << toAdd->GetName() << " has " << toAdd->GetNbinsX() << std::endl;
 		}
 		newHist->Merge(toMerge);
 		newHist->SetLineColor(color);
