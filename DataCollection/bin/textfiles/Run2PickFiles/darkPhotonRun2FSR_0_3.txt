@@ -1,7 +1,7 @@
 DarkPhoton
 DpMass:	0_3
-HiggsMass:	125
-FSR:	0_0
+HiggsMass:	1000
+FSR:	0_3
 Decay:	Higgs2DP
 Format:	NanoAOD
 Run:	2

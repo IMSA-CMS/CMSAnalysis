@@ -408,8 +408,9 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
         {
             continue;
         }
+        //std::cout << hist->GetName() << " has "<< hist->GetNbinsX() << std::endl;
         backgroundHists.push_back(hist);
-        //std::cout << "Middle" << std::endl;
+        
         maxCombinedY += hist->GetMaximum();
     }
     std::cout << backgroundHists.size() << "\n";
@@ -466,7 +467,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     //TH1* hist = DrawFirst(background, signal, data, topPad, upperMasslimit, firstBin, first);
     hist = DrawFirst(background, signal, data, topPad, upperMasslimit, firstBin, first);
 
-   // std::cout << "1.4" << std::endl;
+    //std::cout << "1.4" << std::endl;
 
 
     ChangeAxisTitles(hist, xAxisTitle, yAxisTitle);
@@ -497,7 +498,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     double xerror2[data->GetNbinsX() + 1];
     double yerror2[data->GetNbinsX() + 1];
 
-   // std::cout << "3" << std::endl;
+    //std::cout << "3" << std::endl;
 
     GetBottomPadValues(data, background, x, y, xerror2, yerror2);
 
@@ -622,7 +623,7 @@ void PlotFormatter::DrawOtherHistograms(THStack*& background, TH1*& signal, TH1*
 TH1* PlotFormatter::DrawFirst(THStack*& background, TH1*& signal, TH1*& data, TPad*& topPad, float upperMasslimit, int firstBin, int first)
 {
     TH1* hist;
-    std::cout << "1.31" << std::endl;
+    //std::cout << "1.31" << std::endl;
     hist = background->GetHistogram();
     int xAxisMin = std::pow(1, -5);
     std::cout << background->GetName() << std::endl;
@@ -656,7 +657,7 @@ TH1* PlotFormatter::DrawFirst(THStack*& background, TH1*& signal, TH1*& data, TP
         histVector.push_back(data);
         //data->GetXaxis()->SetLimits(firstBin, upperMasslimit);
     }
-    std::cout << "1.32" << std::endl;
+    //std::cout << "1.32" << std::endl;
 
     //TH1* hist;
     hist = background->GetHistogram();
@@ -672,7 +673,7 @@ TH1* PlotFormatter::DrawFirst(THStack*& background, TH1*& signal, TH1*& data, TP
     else {
         hist = data;
     }
-    std::cout << "1.33" << std::endl;
+    //std::cout << "1.33" << std::endl;
     topPad->Update();
     return hist;
 }

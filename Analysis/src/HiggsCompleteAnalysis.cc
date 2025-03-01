@@ -47,6 +47,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
     const std::string filePath = "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     const std::string signalFilePath = "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
+    const std::string myPath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     // const std::string filePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     // const std::string signalFilePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
 
@@ -160,97 +161,64 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
             }
         }
 
-        //     auto zzBackground = std::make_shared<Process>("ZZ Background", 3);
-        //     zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_4L_Run_2.root", "zzto4l", reader, luminosity, histVariableToFileMapping));
-
-        //     auto testSystematic = std::make_shared<RateSystematic>("Test", 0.05);
-        //     zzBackground->addSystematic(testSystematic);
-        //     //cross sections should be all lowercase
-        //     auto ttBarandMultiBosonBackground = std::make_shared<Process>("t#bar{t}, Multiboson Background", 4);
-        //     ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTbar_Boson_NA_Decay_LL_Run_2.root", "ttbar_lep", reader, luminosity, histVariableToFileMapping));
-        //     ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTbar_Boson_W_Decay_L_Run_2.root", "ttw", reader, luminosity, histVariableToFileMapping));
-        //     ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTbar_Boson_Z_Decay_LL_Run_2.root", "ttz", reader, luminosity, histVariableToFileMapping));
-        //     ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "MultiBoson_Bosons_ZZZ_Decay_NA_Run_2.root", "zzz", reader, luminosity, histVariableToFileMapping));
-
-        //     ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "MultiBoson_Bosons_WW_Decay_2L_Run_2.root", "wwto2l2nu", reader, luminosity, histVariableToFileMapping));
-        //     ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "MultiBoson_Bosons_WWW_Decay_NA_Run_2.root", "www", reader, luminosity, histVariableToFileMapping));
-        //     ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "MultiBoson_Bosons_WWZJets_Decay_4L_Run_2.root", "wwz", reader, luminosity, histVariableToFileMapping));
-        //     ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "MultiBoson_Bosons_WZ_Decay_3L_Run_2.root", "wzto3lnu", reader, luminosity, histVariableToFileMapping));
-        //     ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "MultiBoson_Bosons_WZZ_Decay_NA_Run_2.root", "wzz", reader, luminosity, histVariableToFileMapping));
-
-        //     auto dyBackground = std::make_shared<Process>("Drell-Yan Background", 2);
-        //     dyBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Drell-Yan_MassCut_10-50_Run_2.root", "dy10to50", reader, luminosity, histVariableToFileMapping));
-        //     dyBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Drell-Yan_MassCut_50-inf_Run_2.root", "dy50toinf", reader, luminosity, histVariableToFileMapping));
-
-        //     auto qcdBackground = std::make_shared<Process>("QCD Background", 8);
-        //     qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_100-200_Run_2_Year_2018.root", "QCD_100-200", reader, luminosity, histVariableToFileMapping));
-        //     qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_200-300_Run_2_Year_2018.root", "QCD_200-300", reader, luminosity, histVariableToFileMapping));
-        //     qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_300-500_Run_2_Year_2018.root", "QCD_300-500", reader, luminosity, histVariableToFileMapping));
-        //     qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_500-700_Run_2_Year_2018.root", "QCD_500-700", reader, luminosity, histVariableToFileMapping));
-        //     qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_700-1000_Run_2_Year_2018.root", "QCD_700-1000", reader, luminosity, histVariableToFileMapping));
-        //     qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_1000-1500_Run_2_Year_2018.root", "QCD_1000-1500", reader, luminosity, histVariableToFileMapping));
-        //     qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_1500-2000_Run_2_Year_2018.root", "QCD_1500-2000", reader, luminosity, histVariableToFileMapping));
-        //     //qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_2000-inf_Run_2_Year_2018.root", "QCD_2000-inf", reader, luminosity));
-
-        //     auto higgsData = std::make_shared<Process>("Data", 1);
-        //     // 150022816 events in Data_Trigger_SingleMuon_Year_2016B.root before TriggerCut change
-        //     higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016B.root", "higgs4l", reader, luminosity, histVariableToFileMapping));
-        //     higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016C.root", "higgs4l", reader, luminosity, histVariableToFileMapping));
-        //     higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016D.root", "higgs4l", reader, luminosity, histVariableToFileMapping));
-        //     higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016E.root", "higgs4l", reader, luminosity, histVariableToFileMapping));
-        //     higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016F.root", "higgs4l", reader, luminosity, histVariableToFileMapping));
-        //     higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016G.root", "higgs4l", reader, luminosity, histVariableToFileMapping));
-        //     higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2016H.root", "higgs4l", reader, luminosity, histVariableToFileMapping));
-        //     higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2017B.root", "higgs4l", reader, luminosity, histVariableToFileMapping));
-        //     higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2017C.root", "higgs4l", reader, luminosity, histVariableToFileMapping));
-        //     higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2017D.root", "higgs4l", reader, luminosity, histVariableToFileMapping));
-        //     higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2017E.root", "higgs4l", reader, luminosity, histVariableToFileMapping));
-        //     higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2017F.root", "higgs4l", reader, luminosity, histVariableToFileMapping));
-        //     //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2017G.root", "higgs4l", reader, luminosity));
-        //     //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2017H.root", "higgs4l", reader, luminosity));
-        //     higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018A.root", "higgs4l", reader, luminosity, histVariableToFileMapping));
-        //     higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018B.root", "higgs4l", reader, luminosity, histVariableToFileMapping));
-        //     higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018C.root", "higgs4l", reader, luminosity, histVariableToFileMapping));
-        //     higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2018D.root", "higgs4l", reader, luminosity, histVariableToFileMapping));
-        //    // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2022A.root", "higgs4l", reader, luminosity));
-        //     //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2022B.root", "higgs4l", reader, luminosity));
-        //     //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleMuon_Year_2022C.root", "higgs4l", reader, luminosity));
-        //     higgsData->addProcess(makeBasicProcess(histVariablesData, filePath, "testHiggs20.root", "higgs4l", reader, luminosity, histVariableToFileMapping));
-        //     higgsData->addProcess(makeBasicProcess(histVariablesData, filePath, "testHiggsM20.root", "higgs4l", reader, luminosity, histVariableToFileMapping));
-        //     // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "testlumi.root", "higgs4l", reader, luminosity));
-        //     // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016C.root", "higgs4l", reader, luminosity));
-        //     // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016D.root", "higgs4l", reader, luminosity));
-        //     // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016F.root", "higgs4l", reader, luminosity));
-        //     // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2016H.root", "higgs4l", reader, luminosity));
-        //     // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017B.root", "higgs4l", reader, luminosity));
-        //     // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017C.root", "higgs4l", reader, luminosity));
-        //     // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017D.root", "higgs4l", reader, luminosity));
-        //     // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017E.root", "higgs4l", reader, luminosity));
-        //     // higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Data_Trigger_SingleElectron_Year_2017F.root", "higgs4l", reader, luminosity));
-
         auto zzBackground = std::make_shared<Process>("ZZ Background", 3);
         zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ.root", "zzto4l", reader, luminosity, histVariableToFileMapping));
 
+        auto zzBackgroundNoVeto = std::make_shared<Process>("ZZ Background No Veto", 3);
+        zzBackgroundNoVeto->addProcess(makeBasicProcess(histVariablesBackground, "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/NoZVeto/", "ZZ.root", "zzto4l", reader, luminosity, histVariableToFileMapping));
+
+
         auto wJetsBackground = std::make_shared<Process>("WJets Background", 6);
-        wJetsBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WJetsZ.root", "WJets", reader, luminosity, histVariableToFileMapping));
+        wJetsBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WJets.root", "WJets", reader, luminosity, histVariableToFileMapping));
 
         // cross sections should be all lowercase
-        auto ttBarandMultiBosonBackground = std::make_shared<Process>("t#bar{t}, Multiboson Background", 4);
-        ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTbar.root", "ttbar_lep", reader, luminosity, histVariableToFileMapping));
-        ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTW.root", "ttw", reader, luminosity, histVariableToFileMapping));
-        ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTZ.root", "ttz", reader, luminosity, histVariableToFileMapping));
+        // auto ttBarandMultiBosonBackground = std::make_shared<Process>("t#bar{t}, Multiboson Background", 4);
+        // ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTbar.root", "ttbar_lep", reader, luminosity, histVariableToFileMapping));
+        // ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTW.root", "ttw", reader, luminosity, histVariableToFileMapping));
+        // ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTZ.root", "ttz", reader, luminosity, histVariableToFileMapping));
 
-        ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZZ.root", "zzz", reader, luminosity, histVariableToFileMapping));
-        ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WW.root", "wwto2l2nu", reader, luminosity, histVariableToFileMapping));
-        ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WWW.root", "www", reader, luminosity, histVariableToFileMapping));
-        ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WWZ.root", "wwz", reader, luminosity, histVariableToFileMapping));
-        ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WZ.root", "wzto3lnu", reader, luminosity, histVariableToFileMapping));
-        ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WZZ.root", "wzz", reader, luminosity, histVariableToFileMapping));
+        // ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZZ.root", "zzz", reader, luminosity, histVariableToFileMapping));
+        // ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WW.root", "wwto2l2nu", reader, luminosity, histVariableToFileMapping));
+        // ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WWW.root", "www", reader, luminosity, histVariableToFileMapping));
+        // ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WWZ.root", "wwz", reader, luminosity, histVariableToFileMapping));
+        // ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WZ.root", "wzto3lnu", reader, luminosity, histVariableToFileMapping));
+        // ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WZZ.root", "wzz", reader, luminosity, histVariableToFileMapping));
+
+        auto ttbarProcess = std::make_shared<Process>("TTbar Background", 4);
+        ttbarProcess->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTbar.root", "ttbar_lep", reader, luminosity, histVariableToFileMapping));
+
+        auto ttwProcess = std::make_shared<Process>("TTW Background", 4);
+        ttwProcess->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTW.root", "ttw", reader, luminosity, histVariableToFileMapping));
+
+        auto ttzProcess = std::make_shared<Process>("TTZ Background", 4);
+        ttzProcess->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTZ.root", "ttz", reader, luminosity, histVariableToFileMapping));
+
+        auto zzzProcess = std::make_shared<Process>("ZZZ Background", 4);
+        zzzProcess->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZZ.root", "zzz", reader, luminosity, histVariableToFileMapping));
+
+        auto wwProcess = std::make_shared<Process>("WW Background", 4);
+        wwProcess->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WW.root", "wwto2l2nu", reader, luminosity, histVariableToFileMapping));
+
+        auto wwwProcess = std::make_shared<Process>("WWW Background", 4);
+        wwwProcess->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WWW.root", "www", reader, luminosity, histVariableToFileMapping));
+
+        auto wwzProcess = std::make_shared<Process>("WWZ Background", 4);
+        wwzProcess->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WWZ.root", "wwz", reader, luminosity, histVariableToFileMapping));
+
+        auto wzProcess = std::make_shared<Process>("WZ Background", 4);
+        wzProcess->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WZ.root", "wzto3lnu", reader, luminosity, histVariableToFileMapping));
+
+        auto wzzProcess = std::make_shared<Process>("WZZ Background", 4);
+        wzzProcess->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WZZ.root", "wzz", reader, luminosity, histVariableToFileMapping));
 
         auto dyBackground = std::make_shared<Process>("Drell-Yan Background", 2);
         dyBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "DY10-50.root", "dy10to50", reader, luminosity, histVariableToFileMapping));
-        dyBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "DY50-inf.root", "dy50toinf", reader, luminosity, histVariableToFileMapping));
+        dyBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "DY50-inf.root", "dy50toInf", reader, luminosity, histVariableToFileMapping));
 
+        auto dyBackgroundNoVeto = std::make_shared<Process>("Drell-Yan Background No Veto", 2);
+        dyBackgroundNoVeto->addProcess(makeBasicProcess(histVariablesBackground, "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/NoZVeto/", "DY10-50.root", "dy10to50", reader, luminosity, histVariableToFileMapping));
+        dyBackgroundNoVeto->addProcess(makeBasicProcess(histVariablesBackground, "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/NoZVeto/", "DY50-inf.root", "dy50toInf", reader, luminosity, histVariableToFileMapping));
+        
         auto qcdBackground = std::make_shared<Process>("QCD Background", 8);
         qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD100-200.root", "QCD_100-200", reader, luminosity, histVariableToFileMapping));
         qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD200-300.root", "QCD_200-300", reader, luminosity, histVariableToFileMapping));
@@ -259,7 +227,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD700-1000.root", "QCD_700-1000", reader, luminosity, histVariableToFileMapping));
         qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD1000-1500.root", "QCD_1000-1500", reader, luminosity, histVariableToFileMapping));
         qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD1500-2000.root", "QCD_1500-2000", reader, luminosity, histVariableToFileMapping));
-        qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD2000-inf.root", "QCD_2000-inf", reader, luminosity, histVariableToFileMapping));
+        // qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD2000-inf.root", "QCD_2000-inf", reader, luminosity, histVariableToFileMapping));
 
         auto higgsData = std::make_shared<Process>("Data", 1);
         // 150022816 events in Data_Trigger_SingleMuon_Year_2016B.root before TriggerCut change
@@ -271,24 +239,34 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2016APV.root", "Muon2016APV", reader, luminosity, histVariableToFileMapping));
         higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2017.root", "Muon2017", reader, luminosity, histVariableToFileMapping));
         higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2018.root", "Muon2018", reader, luminosity, histVariableToFileMapping));
-        //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "testHiggs20.root", "higgs4l" + std::to_string((int)tempMass), reader, luminosity, datahistVariableToFileMapping));
-        //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "testHiggsM20.root", "higgs4l" + std::to_string((int)tempMass), reader, luminosity, datahistVariableToFileMapping));
 
-        auto allBackground = std::make_shared<Process>("All Background", 3);
-        for (auto background : {dyBackground, zzBackground, ttBarandMultiBosonBackground, qcdBackground})
-            for (auto subprocess : background->getProcesses())
-                allBackground->addProcess(subprocess);
-
-
-
-        processes.push_back(ttBarandMultiBosonBackground);
+        
+        // processes.push_back(ttBarBackground1);
+        // processes.push_back(ttBarBackground2);
+        // processes.push_back(ttBarBackground3);
         processes.push_back(dyBackground);
+        processes.push_back(dyBackgroundNoVeto);
         processes.push_back(higgsData);
         processes.push_back(qcdBackground);
         processes.push_back(zzBackground);
-        processes.push_back(wJetsBackground);
+        processes.push_back(zzBackgroundNoVeto);
+        // processes.push_back(ttBarandMultiBosonBackground);
+        processes.push_back(ttbarProcess);
+        processes.push_back(ttwProcess);
+        processes.push_back(ttzProcess);
+        processes.push_back(zzzProcess);
+        processes.push_back(wwProcess);
+        processes.push_back(wwwProcess);
+        processes.push_back(wwzProcess);
+        processes.push_back(wzProcess);
+        processes.push_back(wzzProcess);
+        // processes.push_back(allBackground);processes.push_back(zzzProcess);
+        // processes.push_back(wwProcess);
+        // processes.push_back(wwwProcess);
+        // processes.push_back(wwzProcess);
+        // processes.push_back(wzProcess);
+        // processes.push_back(wzzProcess);
 
-        // processes.push_back(allBackground);
         auto leptonProcesses = std::make_shared<Channel>(recoDecay, processes);
 
         for (std::string processName : leptonProcesses->getNames())
