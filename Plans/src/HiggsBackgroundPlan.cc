@@ -91,7 +91,7 @@ void HiggsBackgroundPlan::initialize()
     auto oppositeSignInvMassHist = make_shared<OppositeSignInvariantMassHist>(EventInput::RecoLevel::GenSim, "GenSim Opposite Sign Invariant Mass", 2000, 0, 2000);
     auto recoOppositeSignInvMassHist = make_shared<OppositeSignInvariantMassHist>(EventInput::RecoLevel::Reco, "Reco Opposite Sign Invariant Mass", 2000, 0, 2000);
 
-    auto positiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Reco Invariant Mass Background", 1, 1, 0, 0, 2000, 2000);
+    auto positiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);
     auto xProjection = make_shared<HistogramPrototype2DProjection>("Reco Invariant Mass Background X Projection", positiveNegativeInvMassHist, true, 2000);
     auto yProjection = make_shared<HistogramPrototype2DProjection>("Reco Invariant Mass Background Y Projection", positiveNegativeInvMassHist, false, 2000);
     

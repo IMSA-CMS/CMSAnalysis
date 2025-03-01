@@ -25,7 +25,7 @@ public:
 		name(iname) //#GAVIN CHANGED
 	{}
 
-	void setInput(const EventInput* iInput);
+	virtual void setInput(const EventInput* iInput);
 
 	virtual ~HistogramPrototype() {} // Empty virtual destructor
 	
