@@ -98,14 +98,14 @@ def loopRun(crab, path, fileCount, fileList):
                 )
                 generate.wait()
                 submit = Popen(
-                    ["crab", "submit", "-c", f"gen/{file[14:-4]}_crab_config.py"], cwd=crab_directory
+                    ["crab", "submit", "-c", f"gen/{output[:-5]}_crab_config.py"], cwd=crab_directory
                 )
-                submit.wait()
         else:
             print("Creating " + outputString)
-            Popen(
+            print("runAnalyzer " + inputString + " " + outputString + " " + analysisName + " " + numFiles)
+            generate = Popen(
                 [
-                    "nohup",
+                    # "nohup",
                     "runAnalyzer",
                     inputString,
                     outputString,
@@ -113,9 +113,11 @@ def loopRun(crab, path, fileCount, fileList):
                     numFiles,
                 ]
             )
+            generate.wait()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    # may need to implement auto deletion of the project directories, the input sandbox can overflow disk quota if not careful
     parser.add_argument(
         "--crab", help="Turn on CRAB Processing Mode", action="store_true"
     )
@@ -153,6 +155,9 @@ if __name__ == "__main__":
 
     root_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/"
     if args.crab:
+        os.makedirs(
+            os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/CRAB/gen/", exist_ok=True
+        )
         copyInput = Popen(
             [
                 "rsync",
@@ -173,7 +178,7 @@ if __name__ == "__main__":
     # If a job only has one pickfile in it, make sure to add a comma at the end so that python thinks it is a tuple
 
     ttBar = (
-        "TTbar.txt", # use job count ~5
+        # "TTbar.txt", # use job count ~5
         "TTW.txt",
         "TTZ.txt",
     )
@@ -182,7 +187,7 @@ if __name__ == "__main__":
 
     dy = (
         "DY10-50.txt",
-        "DY50-inf.txt", # files 60-80 exceed 24hr wall clock time, use ~5 job count size
+        # "DY50-inf.txt", # files 60-80 exceed 24hr wall clock time, use ~5 job count size
     )
 
     multiBoson = (
@@ -193,7 +198,8 @@ if __name__ == "__main__":
         "WZZ.txt",
         "ZZZ.txt",
     )
-
+    # TODO: fix 50660 error, CRAB submissions returning too much RAM usage error
+    # running locally is pretty fast anyway, might just not use CRAB for this at all if issue persists
     higgsSignal = (
         "Higgs500.txt",
         "Higgs600.txt",
@@ -274,7 +280,7 @@ if __name__ == "__main__":
 
     # jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 
-    jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, data, qcd, wjets]    
+    jobsList = [ttBar, zz, dy, multiBoson, data, qcd]
     # could further improve this by adding every sub-job as a separate entry
     if args.crab:
         temp = []

@@ -85,11 +85,11 @@ void HiggsBackgroundPlan::initialize()
 
     auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
 
-    auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::GenSim, "GenSim Same Sign Invariant Mass", 2000, 0, 2000, false, false);
-    auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::Reco, "Reco Same Sign Invariant Mass", 2000, 0, 2000);
+    auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::GenSim, "GenSim Same Sign Invariant Mass", 1000, 0, 2000, false, false);
+    auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::Reco, "Reco Same Sign Invariant Mass", 1000, 0, 2000);
 
-    auto oppositeSignInvMassHist = make_shared<OppositeSignInvariantMassHist>(EventInput::RecoLevel::GenSim, "GenSim Opposite Sign Invariant Mass", 2000, 0, 2000);
-    auto recoOppositeSignInvMassHist = make_shared<OppositeSignInvariantMassHist>(EventInput::RecoLevel::Reco, "Reco Opposite Sign Invariant Mass", 2000, 0, 2000);
+    auto oppositeSignInvMassHist = make_shared<OppositeSignInvariantMassHist>(EventInput::RecoLevel::GenSim, "GenSim Opposite Sign Invariant Mass", 1000, 0, 2000);
+    auto recoOppositeSignInvMassHist = make_shared<OppositeSignInvariantMassHist>(EventInput::RecoLevel::Reco, "Reco Opposite Sign Invariant Mass", 1000, 0, 2000);
 
     auto positiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);
     auto xProjection = make_shared<HistogramPrototype2DProjection>("Reco Invariant Mass Background X Projection", positiveNegativeInvMassHist, true, 2000);
