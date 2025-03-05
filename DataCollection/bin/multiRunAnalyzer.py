@@ -38,7 +38,9 @@ def loopRun(crab, path, fileCount, fileList):
             or analysis == 5
             or analysis == 6
             or analysis == 7
-            else "Muon" if analysis == 2 else ""
+            else "Muon" if analysis == 2 
+            else "MLVariables" if analysis == 8
+            else ""
         )
     )
     # analysisBackground = "MLVariables"
@@ -74,7 +76,7 @@ def loopRun(crab, path, fileCount, fileList):
             # 20 works for most jobs, TTbar and DY50-inf should use 5
             # theoretically could all the way down to 1,
             # but it might take longer to submit than just nohup
-            maxNumFiles = 20
+            maxNumFiles = 2
             totalFiles = min(int(fileCount), totalFiles) if fileCount != None else totalFiles
             for i in range(
                 0,
@@ -147,8 +149,11 @@ if __name__ == "__main__":
         elif analysisName == "Muon":
             print("Running Muon Analyses")
             analysis = 2
+        elif analysisName == "MLStrip":
+            print("Running Strip Analysis")
+            analysis = 8
         else:
-            print("Argument did not match any analysis, defaulting to Higgs")
+            print("CLI argument did not match any analysis, defaulting to Higgs")
             analysis = 0
 
     root_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/"
@@ -236,26 +241,26 @@ if __name__ == "__main__":
         "WJets.txt", # ~2000 files, use higher numFiles
     )
 
-    darkPhotonSignal = ("Run2PickFiles/darkPhotonBaselineRun2.txt")
+    darkPhotonSignal = ("darkPhotonBaselineRun2.txt")
     
     darkPhotonNanoAOD = (
-        "Run2PickFiles/darkPhotonDecay_Higgs4DP.txt",
-        "Run2PickFiles/darkPhotonDecay_HiggsDPZ.txt",
-        "Run2PickFiles/darkPhotonDecay_SUSY.txt",
-        "Run2PickFiles/darkPhotonDecay_ZPrime.txt",
-        "Run2PickFiles/darkPhoton_DpMass0_1.txt",
-        "Run2PickFiles/darkPhoton_DpMass0_2.txt",
-        "Run2PickFiles/darkPhoton_DpMass0_4.txt",
-        "Run2PickFiles/darkPhoton_DpMass0_6.txt",
-        "Run2PickFiles/darkPhoton_DpMass0_9.txt",
-        "Run2PickFiles/darkPhoton_DpMass1_2.txt",
-        "Run2PickFiles/darkPhoton_DpMass1_5.txt",
-        "Run2PickFiles/darkPhoton_DpMass2_5.txt",
-        "Run2PickFiles/darkPhoton_DpMass4_0.txt",
-        "Run2PickFiles/darkPhotonHiggs125.txt",
-        "Run2PickFiles/darkPhotonHiggs300.txt",
-        "Run2PickFiles/darkPhotonRun2FSR_0_1.txt",
-        "Run2PickFiles/darkPhotonRun2FSR_0_3.txt",
+        "darkPhotonDecay_Higgs4DP.txt",
+        "darkPhotonDecay_HiggsDPZ.txt",
+        "darkPhotonDecay_SUSY.txt",
+        "darkPhotonDecay_ZPrime.txt",
+        "darkPhoton_DpMass0_1.txt",
+        "darkPhoton_DpMass0_2.txt",
+        "darkPhoton_DpMass0_4.txt",
+        "darkPhoton_DpMass0_6.txt",
+        "darkPhoton_DpMass0_9.txt",
+        "darkPhoton_DpMass1_2.txt",
+        "darkPhoton_DpMass1_5.txt",
+        "darkPhoton_DpMass2_5.txt",
+        "darkPhoton_DpMass4_0.txt",
+        "darkPhotonHiggs125.txt",
+        "darkPhotonHiggs300.txt",
+        "darkPhotonRun2FSR_0_1.txt",
+        "darkPhotonRun2FSR_0_3.txt",
     )
 
     background = ttBar + zz + dy + multiBoson + qcd # total 26 files
