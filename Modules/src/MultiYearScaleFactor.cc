@@ -26,7 +26,7 @@ double MultiYearScaleFactor::getScaleFactor(const EventInput* input) const //add
 	
 	if (input->getFileParams()->getProcess() == "Data")
 	{
-		std::cout << "Process is Data, returning scale factor 1.0" << std::endl;
+		//std::cout << "Process is Data, returning scale factor 1.0" << std::endl;
 		return 1.0;
 	}
 

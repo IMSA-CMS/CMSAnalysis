@@ -12,9 +12,20 @@ LeptonJetMLStripModule::LeptonJetMLStripModule()
 
 void LeptonJetMLStripModule::addVariables()
 {
+	// // GOOD VARIABLES:
+	// addVariable("deltaR", SpecialVariableModule::VariableType::Float);
+    // addVariable("nParticles", SpecialVariableModule::VariableType::Float);
+	// addVariable("eta", SpecialVariableModule::VariableType::Float);
+
+	// OLD VARIABLES:
+
+	addVariable("deltaPt", SpecialVariableModule::VariableType::Float);
 	addVariable("deltaR", SpecialVariableModule::VariableType::Float);
-    addVariable("nParticles", SpecialVariableModule::VariableType::Float);
 	addVariable("eta", SpecialVariableModule::VariableType::Float);
+	addVariable("maxIsolation", SpecialVariableModule::VariableType::Float);
+    addVariable("nParticles", SpecialVariableModule::VariableType::Float);
+    addVariable("sumPt", SpecialVariableModule::VariableType::Float);
+
     // addVariable("leadingPt", SpecialVariableModule::VariableType::Float);
 	
 	//addVariable("phi", SpecialVariableModule::VariableType::Float);

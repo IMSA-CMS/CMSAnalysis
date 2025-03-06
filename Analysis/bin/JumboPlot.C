@@ -276,6 +276,10 @@ void JumboPlot()
 	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
 	std::vector<std::shared_ptr<Channel>> higgsChannels = higgsAnalysis->getChannels();
 
+	const std::string output_cuts_files1_10 = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/LeptonJetReconstruction_v4/"
+	auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>(output_cuts_files1_10);
+	std::vector<std::shared_ptr<Channel>> dpChannels = higgsAnalysis->getChannels();
+
 	//std::vector<std::string> rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
 	std::vector<std::string> rowNames = {"ee", "e e", "eu", "e u", "uu", "u u"};
 	std::vector<std::string> graphableTypes = {"Eta", "Pt"};
