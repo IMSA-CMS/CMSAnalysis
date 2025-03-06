@@ -5,7 +5,7 @@ import os
 import subprocess
 import argparse
 
-def loopRun(crab, path, fileCount, fileList):
+def loopRun(crab, path, fileCount, skipFiles, fileList, outputFile):
     fileList = [f"Run2PickFiles/{file}" for file in fileList]
     if not path:
         path = (
@@ -47,7 +47,11 @@ def loopRun(crab, path, fileCount, fileList):
 
     print("File list: ", fileList)
     # get rid of numFiles for a full run-through
-    numFiles = "numFiles=" + fileCount if fileCount != None else ""
+    #numFiles = "numFiles=" + fileCount if fileCount != None else ""
+    numFiles = "numFiles=5"
+    
+    skipFiles = "skipFiles=" + skipFiles if skipFiles != None else ""
+    
     for file in fileList:
         # Filling in the parameters of runAnalyzer
         print("File: " + file)
@@ -67,59 +71,60 @@ def loopRun(crab, path, fileCount, fileList):
             analysisName = "analysis=" + analysisBackground
             inputString = "input=" + file
 
-        # calls runAnalyzer
-        if crab:
-            print("starting crab")
-            crab_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/CRAB/"
-            print(file)
-            totalFiles = int(subprocess.check_output(["getFileList", file, "count"]))
-            # 20 works for most jobs, TTbar and DY50-inf should use 5
-            # theoretically could all the way down to 1,
-            # but it might take longer to submit than just nohup
-            maxNumFiles = 2
-            totalFiles = min(int(fileCount), totalFiles) if fileCount != None else totalFiles
-            for i in range(
-                0,
-                totalFiles,
-                maxNumFiles,
-            ):
-                output = f"{name}_{int(i / maxNumFiles)}.root"
-                print("Creating " + output)
-                generate = Popen(
+        with open(outputFile, "a") as out:
+            # calls runAnalyzer
+            if crab:
+                print("starting crab")
+                crab_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/CRAB/"
+                print(file)
+                totalFiles = int(subprocess.check_output(["getFileList", file, "count"]))
+                # 20 works for most jobs, TTbar and DY50-inf should use 5
+                # theoretically could all the way down to 1,
+                # but it might take longer to submit than just nohup
+                maxNumFiles = 10
+                totalFiles = min(int(fileCount), totalFiles) if fileCount != None else totalFiles
+                for i in range(
+                    0,
+                    totalFiles,
+                    maxNumFiles,
+                ):
+                    output = f"{name}_{int(i / maxNumFiles)}.root"
+                    print("Creating " + output)
+                    generate = Popen(
+                        [
+                            "python3",
+                            "crab_config_generator.py",
+                            f"--{inputString}",
+                            f"--output={output}",
+                            f"--{analysisName}",
+                            f"--folder={path + file[14:-4]}",
+                            f"--numFiles={min(maxNumFiles, totalFiles - i)}",
+                            f"--skipFiles={i}",
+                        ],
+                        cwd=crab_directory, stdout=out, stderr=out
+                    )
+                    generate.wait()
+                    submit = Popen(
+                        ["crab", "submit", "-c", f"gen/{output[:-5]}_crab_config.py"], cwd=crab_directory, stdout=out, stderr=out
+                    )
+                    submit.wait()
+            else:
+                print("Creating " + outputString)
+                Popen(
                     [
-                        "python3",
-                        "crab_config_generator.py",
-                        f"--{inputString}",
-                        f"--output={output}",
-                        f"--{analysisName}",
-                        f"--folder={path + file[14:-4]}",
-                        f"--numFiles={min(maxNumFiles, totalFiles - i)}",
-                        f"--skipFiles={i}",
+                        "nohup",
+                        "runAnalyzer",
+                        inputString,
+                        outputString,
+                        analysisName,
+                        numFiles,
+                        skipFiles
                     ],
-                    cwd=crab_directory,
+                    stdout=out, stderr=out
                 )
-                generate.wait()
-                submit = Popen(
-                    ["crab", "submit", "-c", f"gen/{output[:-5]}_crab_config.py"], cwd=crab_directory
-                )
-        else:
-            print("Creating " + outputString)
-            print("runAnalyzer " + inputString + " " + outputString + " " + analysisName + " " + numFiles)
-            generate = Popen(
-                [
-                    # "nohup",
-                    "runAnalyzer",
-                    inputString,
-                    outputString,
-                    analysisName,
-                    numFiles,
-                ]
-            )
-            generate.wait()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    # may need to implement auto deletion of the project directories, the input sandbox can overflow disk quota if not careful
     parser.add_argument(
         "--crab", help="Turn on CRAB Processing Mode", action="store_true"
     )
@@ -128,11 +133,13 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--keep",
-        help="If true, appends to the current nohup.out file instead of clearing",
+        help="If true, appends to the current output file (default=nohup.out) instead of clearing",
         action="store_true",
     )
     parser.add_argument("--path", help="Custom Output Path like Higgs/")
     parser.add_argument("--numFiles", help="Number of files to run over")
+    parser.add_argument("--skipFiles", help="Number of files to skip over")
+    parser.add_argument("--outputFile", help="Specify an output log file", default="nohup.out")
 
     args = parser.parse_args()
     print(args)
@@ -160,9 +167,6 @@ if __name__ == "__main__":
 
     root_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/"
     if args.crab:
-        os.makedirs(
-            os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/CRAB/gen/", exist_ok=True
-        )
         copyInput = Popen(
             [
                 "rsync",
@@ -183,7 +187,7 @@ if __name__ == "__main__":
     # If a job only has one pickfile in it, make sure to add a comma at the end so that python thinks it is a tuple
 
     ttBar = (
-        # "TTbar.txt", # use job count ~5
+        "TTbar.txt", # use job count ~5
         "TTW.txt",
         "TTZ.txt",
     )
@@ -192,7 +196,7 @@ if __name__ == "__main__":
 
     dy = (
         "DY10-50.txt",
-        # "DY50-inf.txt", # files 60-80 exceed 24hr wall clock time, use ~5 job count size
+        "DY50-inf.txt", # files 60-80 exceed 24hr wall clock time, use ~5 job count size
     )
 
     multiBoson = (
@@ -203,8 +207,7 @@ if __name__ == "__main__":
         "WZZ.txt",
         "ZZZ.txt",
     )
-    # TODO: fix 50660 error, CRAB submissions returning too much RAM usage error
-    # running locally is pretty fast anyway, might just not use CRAB for this at all if issue persists
+
     higgsSignal = (
         "Higgs500.txt",
         "Higgs600.txt",
@@ -230,6 +233,13 @@ if __name__ == "__main__":
 		"Muon2017.txt",
 		"Muon2018.txt",
     )
+    
+    dataMu = (
+		"Muon2016.txt",
+		"Muon2016APV.txt",
+		"Muon2017.txt",
+		"Muon2018.txt",
+    )
 
     qcd = (
 		"QCD50-100.txt",
@@ -247,7 +257,7 @@ if __name__ == "__main__":
         "WJets.txt", # ~2000 files, use higher numFiles
     )
 
-    darkPhotonSignal = ("darkPhotonBaselineRun2.txt")
+    darkPhotonSignal = ("darkPhotonBaselineRun2.txt",)
     
     darkPhotonNanoAOD = (
         "darkPhotonDecay_Higgs4DP.txt",
@@ -268,6 +278,14 @@ if __name__ == "__main__":
         "darkPhotonRun2FSR_0_1.txt",
         "darkPhotonRun2FSR_0_3.txt",
     )
+    
+    lowStatistics = (
+		"QCD50-100.txt",
+        "WWW.txt",
+        "TTbar.txt",
+        "WWZ.txt",
+        "ZZZ.txt",
+    )
 
     background = ttBar + zz + dy + multiBoson + qcd # total 26 files
 
@@ -285,7 +303,10 @@ if __name__ == "__main__":
 
     # jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 
-    jobsList = [ttBar, zz, dy, multiBoson, data, qcd]
+    # COMMENTED FOR ML STRIP
+    #jobsList = [darkPhotonSignal, ttBar, zz, dy, multiBoson, higgsSignal, data, qcd, wjets]  
+    jobsList = [darkPhotonSignal, ttBar, zz, dy, multiBoson, dataMu, qcd]  
+    #jobsList = [darkPhotonSignal, multiBoson]  
     # could further improve this by adding every sub-job as a separate entry
     if args.crab:
         temp = []
@@ -295,14 +316,14 @@ if __name__ == "__main__":
 
         jobsList = temp
 
-    if os.path.exists("nohup.out") and not args.keep:
-        os.remove("nohup.out")
+    if os.path.exists(args.outputFile) and not args.keep:
+        os.remove(args.outputFile)
 
     # list of processes
     processes = []
     for job in jobsList:
         newProcess = Process(
-            target=loopRun, args=(args.crab, args.path, args.numFiles, job)
+            target=loopRun, args=(args.crab, args.path, args.numFiles, args.skipFiles, job, args.outputFile)
         )
         processes.append(newProcess)
 
