@@ -23,6 +23,6 @@ for dir in */; do
     hadd -f "$dir/$dir.root" @"$dir/files.txt"
     
     # Copy output
-    mkdir -p "$CMSSW_BASE/src/CMSAnalysis/$OUTPUT_DIR/MLStrip_numFiles20/"
-    cp "$dir/$dir.root" "$CMSSW_BASE/src/CMSAnalysis/$OUTPUT_DIR/MLStrip_numFiles20/"
+    mkdir -p "$CMSSW_BASE/src/CMSAnalysis/$OUTPUT_DIR"
+    cp "$dir/$dir.root" "$CMSSW_BASE/src/CMSAnalysis/$OUTPUT_DIR"
 done
