@@ -11,6 +11,12 @@ mkdir -p "$OUTPUT_DIR"
 
 for dir in */; do
     dir=${dir%/}  # Remove trailing slash
+
+    # Exclude Output directory
+    if [ "$dir" == "Output" ]; then
+        continue
+    fi
+
     echo "Combining $dir/"
     
     # Ensure directory structure exists
