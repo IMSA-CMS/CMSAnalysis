@@ -47,8 +47,7 @@ def loopRun(crab, path, fileCount, skipFiles, fileList, outputFile):
 
     print("File list: ", fileList)
     # get rid of numFiles for a full run-through
-    #numFiles = "numFiles=" + fileCount if fileCount != None else ""
-    numFiles = "numFiles=5"
+    numFiles = "numFiles=" + fileCount if fileCount != None else ""
     
     skipFiles = "skipFiles=" + skipFiles if skipFiles != None else ""
     
@@ -70,45 +69,45 @@ def loopRun(crab, path, fileCount, skipFiles, fileList, outputFile):
         else:
             analysisName = "analysis=" + analysisBackground
             inputString = "input=" + file
-
-        with open(outputFile, "a") as out:
-            # calls runAnalyzer
-            if crab:
-                print("starting crab")
-                crab_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/CRAB/"
-                print(file)
-                totalFiles = int(subprocess.check_output(["getFileList", file, "count"]))
-                # 20 works for most jobs, TTbar and DY50-inf should use 5
-                # theoretically could all the way down to 1,
-                # but it might take longer to submit than just nohup
-                maxNumFiles = 10
-                totalFiles = min(int(fileCount), totalFiles) if fileCount != None else totalFiles
-                for i in range(
-                    0,
-                    totalFiles,
-                    maxNumFiles,
-                ):
-                    output = f"{name}_{int(i / maxNumFiles)}.root"
-                    print("Creating " + output)
-                    generate = Popen(
-                        [
-                            "python3",
-                            "crab_config_generator.py",
-                            f"--{inputString}",
-                            f"--output={output}",
-                            f"--{analysisName}",
-                            f"--folder={path + file[14:-4]}",
-                            f"--numFiles={min(maxNumFiles, totalFiles - i)}",
-                            f"--skipFiles={i}",
-                        ],
-                        cwd=crab_directory, stdout=out, stderr=out
-                    )
-                    generate.wait()
-                    submit = Popen(
-                        ["crab", "submit", "-c", f"gen/{output[:-5]}_crab_config.py"], cwd=crab_directory, stdout=out, stderr=out
-                    )
-                    submit.wait()
-            else:
+            
+        # calls runAnalyzer
+        if crab:
+            print("starting crab")
+            crab_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/CRAB/"
+            print(file)
+            totalFiles = int(subprocess.check_output(["getFileList", file, "count"]))
+            # 20 works for most jobs, TTbar and DY50-inf should use 5
+            # theoretically could all the way down to 1,
+            # but it might take longer to submit than just nohup
+            maxNumFiles = 5
+            totalFiles = min(int(fileCount), totalFiles) if fileCount != None else totalFiles
+            for i in range(
+                0,
+                totalFiles,
+                maxNumFiles,
+            ):
+                output = f"{name}_{int(i / maxNumFiles)}.root"
+                print("Creating " + output)
+                generate = Popen(
+                    [
+                        "python3",
+                        "crab_config_generator.py",
+                        f"--{inputString}",
+                        f"--output={output}",
+                        f"--{analysisName}",
+                        f"--folder={path + file[14:-4]}",
+                        f"--numFiles={min(maxNumFiles, totalFiles - i)}",
+                        f"--skipFiles={i}",
+                    ],
+                    cwd=crab_directory
+                )
+                generate.wait()
+                submit = Popen(
+                    ["crab", "submit", "-c", f"gen/{output[:-5]}_crab_config.py"], cwd=crab_directory
+                )
+                submit.wait()
+        else:
+            with open(outputFile, "a") as out:
                 print("Creating " + outputString)
                 Popen(
                     [
@@ -305,7 +304,7 @@ if __name__ == "__main__":
 
     # COMMENTED FOR ML STRIP
     #jobsList = [darkPhotonSignal, ttBar, zz, dy, multiBoson, higgsSignal, data, qcd, wjets]  
-    jobsList = [darkPhotonSignal, ttBar, zz, dy, multiBoson, dataMu, qcd]  
+    jobsList = [dy, qcd]  
     #jobsList = [darkPhotonSignal, multiBoson]  
     # could further improve this by adding every sub-job as a separate entry
     if args.crab:

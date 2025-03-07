@@ -104,7 +104,7 @@ void LeptonJetReconstructionPlan::initialize()
   auto leptonJetMLStripMod = std::make_shared<LeptonJetMLStripModule>();
   leptonJetMLStripMod->setInput(eventMod->getEventInput());
   // auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "DataCollection/bin/dataset/weights/TMVAClassification_BDT.weights.xml", "BDT");
-  auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "/eos/uscms/store/user/jpalamad/rootBackups/CompleteMLWeightsBackup/TMVA_sgPropWeight_bfPropWeight_1_0_0_1/TMVAClassification_BDT.weights.xml", "BDT");
+  auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "TMVAClassification_BDT.weights.xml", "BDT");
 
   //Histograms
   //uncomented 
