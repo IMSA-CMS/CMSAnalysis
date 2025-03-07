@@ -241,7 +241,6 @@ if __name__ == "__main__":
     )
 
     qcd = (
-		"QCD50-100.txt",
         "QCD100-200.txt",
         "QCD200-300.txt",
         "QCD300-500.txt",
@@ -259,10 +258,10 @@ if __name__ == "__main__":
     darkPhotonSignal = ("darkPhotonBaselineRun2.txt",)
     
     darkPhotonNanoAOD = (
-        "darkPhotonDecay_Higgs4DP.txt",
-        "darkPhotonDecay_HiggsDPZ.txt",
-        "darkPhotonDecay_SUSY.txt",
-        "darkPhotonDecay_ZPrime.txt",
+        "darkPhotonDecay_Higgs4DP.txt", #
+        "darkPhotonDecay_HiggsDPZ.txt", #
+        "darkPhotonDecay_SUSY.txt", #
+        "darkPhotonDecay_ZPrime.txt", #
         "darkPhoton_DpMass0_1.txt",
         "darkPhoton_DpMass0_2.txt",
         "darkPhoton_DpMass0_4.txt",
@@ -304,7 +303,7 @@ if __name__ == "__main__":
 
     # COMMENTED FOR ML STRIP
     #jobsList = [darkPhotonSignal, ttBar, zz, dy, multiBoson, higgsSignal, data, qcd, wjets]  
-    jobsList = [dy, qcd]  
+    jobsList = [dy, qcd, darkPhotonSignal]  
     #jobsList = [darkPhotonSignal, multiBoson]  
     # could further improve this by adding every sub-job as a separate entry
     if args.crab:
