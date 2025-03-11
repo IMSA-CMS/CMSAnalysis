@@ -18,14 +18,15 @@ class Estimator;
 class SingleProcess
 {
     public:
-        SingleProcess(std::string iCrossSectionName, const std::shared_ptr<Input> iInput, const std::shared_ptr<CrossSectionReader> iCrossSectionReader, const std::shared_ptr<Estimator> iEstimator, const double iLuminosity, std::vector<std::shared_ptr<Correction>> iCorrections) : 
-        crossSectionName(iCrossSectionName), input(iInput), reader(iCrossSectionReader), estimator(iEstimator), luminosity(iLuminosity), corrections(iCorrections) {}
+        SingleProcess(std::string iCrossSectionName, const std::shared_ptr<Input> iInput, const std::shared_ptr<CrossSectionReader> iCrossSectionReader, 
+        const std::shared_ptr<Estimator> iEstimator, const double iLuminosity) : 
+        crossSectionName(iCrossSectionName), input(iInput), reader(iCrossSectionReader), estimator(iEstimator), luminosity(iLuminosity) {}
         std::string getName() const {return crossSectionName;}
-        TH1* getHist(std::string histType, bool scaleToExpected = false) const;
-        TH1* get2DHist(std::string histType) const;
+        TH1* getHist(HistVariable histType, bool scaleToExpected = false) const;
+        TH1* get2DHist(HistVariable histType) const;
         int getTotalEvents() const;
         double getCrossSection() const {return reader->getCrossSection(crossSectionName);}
-        double getExpectedYield(std::string dataType) const;
+        double getExpectedYield(HistVariable dataType) const;
         double getLuminosity() const {return luminosity;}
         double getMassTarget() const {return estimator->getMassTarget();}
         std::shared_ptr<Input> getInput() const {return input;}
@@ -39,7 +40,6 @@ class SingleProcess
         const std::shared_ptr<CrossSectionReader> reader;
         const std::shared_ptr<Estimator> estimator; 
         const double luminosity;
-        std::vector<std::shared_ptr<Correction>> corrections;
 };
 
 #endif

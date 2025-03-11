@@ -104,14 +104,21 @@ void PDFComparison()
 	//Delete everything except first two which are the 16percent and 82 percent and then the last one which is baseline
 	histVector.erase(histVector.begin()+2, histVector.end()-1);
 
+    int sum0, sum1, sum2;
+    sum0 = 0;
+    sum1 = 0;
+    sum2 = 0;
 	for (int i = 0; i <= histVector[2]->GetNbinsX(); i++)
     {
 		
-		//std::cout<<histVector[0]->GetBinContent(i)<<"\t"<<histVector[1]->GetBinContent(i)<<"\t"<<histVector[2]->GetBinContent(i)<<"\n";
-        std::cout<<histVector[2]->GetBinContent(i)<<",";
+		std::cout<<histVector[0]->GetBinContent(i)<<"\t"<<histVector[1]->GetBinContent(i)<<"\t"<<histVector[2]->GetBinContent(i)<<"\n";
+        sum0 += histVector[0]->GetBinContent(i);
+        sum1 += histVector[1]->GetBinContent(i);
+        sum2 += histVector[2]->GetBinContent(i);
+        //std::cout<<histVector[2]->GetBinContent(i)<<",";
         
     }
-
+    std::cout<<sum0<<"\t"<<sum1<<"\t"<<sum2<<"\n";
     std::vector<TH1*> histVectors;
     histVectors.push_back(histVector[0]);
 

@@ -16,131 +16,90 @@
 #include "TStyle.h"
 #include <fmt/core.h>
 
+void RunSuperimpose() {
+    try {
+        std::cout << "Starting RunSuperimpose..." << std::endl;
+
+        auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary Data");
+        const std::string filePath = "/uscms/home/ceddingt/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/";
+        std::vector<std::string> files = {"scalefactors.root", "noscalefactors.root"};
+        std::vector<std::string> hists = {
+            "eeuu__hists/eeuu_Reco Same Sign Invariant Mass",
+            "eeuu__hists/eeuu_Reco Same Sign Invariant Mass"
+        };
+        std::vector<TString> names = {"Scale Factor", "No Scale Factor"};
+        std::vector<int> colors = {1, 2, 3};
+        TString xTitle = "Invariant Mass (GeV)";
+        TString yTitle = "Event Ratio";
+
+        int count = 0;
+        TFile* openedFile = nullptr;
+        TH1* hist = nullptr;
+        std::vector<TH1*> histVector;
+        std::string fileName;
+
+        for (const std::string& file : files) {
+            fileName = filePath + file;
+            std::cout << "Opening file: " << fileName << std::endl;
+            openedFile = TFile::Open(fileName.c_str(), "read");
+            if (!openedFile) {
+                throw std::runtime_error("Cannot open file: " + fileName);
+            }
+
+            hist = dynamic_cast<TH1*>(openedFile->Get(hists.at(count).c_str()));
+            if (!hist) {
+                throw std::runtime_error("Histogram " + hists.at(count) + " not found in file: " + fileName);
+            }
+
+            if (dynamic_cast<TH2*>(hist)) {
+                std::cout << "Converting 2D histogram to 1D..." << std::endl;
+                TH2* hist2D = dynamic_cast<TH2*>(hist);
+                TH1* newhist = hist2D->ProjectionX("_px", 0, -1, "E");
+                histVector.push_back(newhist);
+            } else {
+                histVector.push_back(hist);
+            }
+
+            std::cout << "Histogram loaded successfully: " << hists.at(count) << std::endl;
+            count++;
+        }
+
+        for (int i = 0; i < count; i++) {
+            std::cout << "Rebinning histogram " << i << " with factor 10..." << std::endl;
+            histVector[i]->Rebin(10);
+        }
+
+        std::vector<double> average(count, 0);
+        for (int i = 0; i < count; i++) {
+            std::cout << "Processing histogram " << i << " for ratio calculation..." << std::endl;
+            for (int j = 1; j <= histVector[i]->GetNbinsX(); j++) {
+                double histValue = histVector[i]->GetBinContent(j);
+                double baseValue = histVector[1]->GetBinContent(j); // Assuming the 2nd file is the base
+                double ratio = (baseValue - histValue) / baseValue;
+                if (baseValue == 0) {
+                    histVector[i]->SetBinContent(j, 0);
+                    average[i] += 0;
+                } else {
+
+                    histVector[i]->SetBinContent(j, ratio);
+                    average[i] += ratio;
+                }
+
+                std::cout << fmt::format("Bin {}: histValue = {:.3f}, baseValue = {:.3f}, ratio = {:.3f}", j, histValue, baseValue, ratio) << std::endl;
+            }
+            std::cout << "Average ratio for histogram " << i << ": " << average[i] / histVector[i]->GetNbinsX() * 100 << "%" << std::endl;
+        }
+
+        TCanvas* canvas = plotFormatter->noScaleSimpleSuperImposedHist(histVector, colors, names, xTitle, yTitle);
+        std::cout << "Canvas created successfully." << std::endl;
+
+    } catch (const std::exception& ex) {
+        std::cerr << "Error occurred: " << ex.what() << std::endl;
+    }
+}
+
 void SuperimposeRatio() {
-    //Change extraText here
-    auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary Data");
-    //Change the filePath here. This should be the longest branch all input files have in common.
-    //const std::string filePath = "/uscms/home/jpalamad/analysis/CMSSW_12_4_3/src/CMSAnalysis/MCGeneration/test/";
-	const std::string filePath = "/eos/uscms/store/user/jpalamad/output";
-    //Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
-    //Write your graph names here (for the legend)
-    
-    std::vector<std::string> files = {};
-    std::vector<std::string> hists = {};
-    std::vector<TString> names = {};
-
-    //Colors go here
-    std::vector<int> colors = {};
-
-    const int base = 19;
-    const std::string baseName = "NNPDF3.1 QCD+LUXQED NLO";
-    const int run = 1;
-    const std::vector<std::string> pdfNames = {
-        "GRV 94L LO",
-        "CTEQ 5L LO",
-        "MRST LO",
-        "MRST LO",
-        "MSTW 2008 LO",
-        "MSTW 2008 NLO",
-        "CTEQ6L NLO",
-        "CTEQ6L1 LO",
-        "CTEQ66.00 NLO",
-        "CT09MC1 LO",
-        "CT09MCS NLO",
-        "NNPDF2.3 QCD+QED LO"
-    };
-
-	for (int i = (run - 1) * 3 + 1; i <= run * 3; i++)
-	{
-		files.push_back(fmt::format("/output_10000_pSet{}.root", i));
-		hists.push_back("Same Sign Invariant Mass");
-		names.push_back(pdfNames[i-1]);
-		colors.push_back(i + 3 - 3 * run);
-	}
-
-    files.push_back(fmt::format("/output_10000_pSet{}.root", base));
-    hists.push_back("Same Sign Invariant Mass");
-    names.push_back(baseName);
-    colors.push_back(4);
-
-    //Change x and y axis titles here
-    TString xTitle = "Mass(GeV)";
-    TString yTitle = "Events";
-
-    int count = 0;
-    TFile* openedFile;
-    TH1* hist;
-    std::vector<TH1*> histVector;
-    std::string fileName;
-    for(std::string file : files) {
-	    fileName = filePath + file; 
-        openedFile = TFile::Open(fileName.c_str(), "read");
-        if(!openedFile) {
-            throw std::runtime_error("Cannot open file!");
-            }
-        auto dir = openedFile->GetDirectory("_hists");
-        hist = dynamic_cast<TH1*>(dir->Get(hists.at(count).c_str()));
-        if (!hist)
-        {
-            throw std::runtime_error("Histogram " + hists.at(count) + " not found!");
-        }
-        if(dynamic_cast<TH2 *>(hist) != 0) {
-            TH2* hist2D = dynamic_cast<TH2 *>(hist);
-            TH1 *newhist = hist2D->ProjectionX("_px", 0, -1, "E");
-            histVector.push_back(newhist);
-        }
-        else {
-            histVector.push_back(hist);
-        }
-
-        count++;
-    }
- 
-	for (int i = 0; i < count; i++)
-	{
-		histVector[i]->Rebin(10);
-	}
-
-	// for (int i = 0; i < count; i++)
-	// {
-    //     histVector[i]->Add(histVector[count - 1], -1);
-	// 	   histVector[i]->Scale(100.0);
-
-    //     histVector[i]->Divide(histVector[count - 1]);
-
-	// 	//histVector[i]->Add(fa);
-
-	// 	TAxis* y = histVector[i]->GetYaxis();
-	// 	histVector[i]->ExtendAxis(-800, y);
-    // }
-
-    double average[count];
-
-    for (int i = 0; i < count; i++)
-    {
-        //histVector[i]->Add(histVector[base], -1);
-        //histVector[i]->Divide(histVector[base]);
-        for(int j = 0; j < (histVector[i]->GetNbinsX());j++)
-        {
-            double histValue = histVector[i]->GetBinContent(j);
-            double baseValue = histVector[3]->GetBinContent(j);
-            //std::cout<<baseValue<<"\n";
-            //std::cout<<histValue<<"\n";
-                
-            if(baseValue == 0)
-            {
-                histVector[i]->SetBinContent(j, 0);
-                average[i]+= 0;
-            }else
-            {
-                double ratio = (histValue-baseValue) / baseValue;
-                histVector[i]->SetBinContent(j, ratio);
-                average[i]+= ratio;
-            }
-        }
-
-        std::cout<<average[i]/histVector[i]->GetNbinsX() * 100<<"\n";
-    }
-
-    TCanvas *canvas = plotFormatter->noScaleSimpleSuperImposedHist(histVector, colors, names, xTitle, yTitle);
+    std::cout << "Starting SuperimposeRatio..." << std::endl;
+    RunSuperimpose();
+    std::cout << "SuperimposeRatio completed." << std::endl;
 }

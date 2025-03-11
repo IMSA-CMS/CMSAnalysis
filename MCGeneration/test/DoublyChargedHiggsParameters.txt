@@ -30,7 +30,7 @@ LeftRightSymmmetry:coupHtaumu = 0.1
 LeftRightSymmmetry:coupHtautau = 0.1
 
 #How to change PDF
- PDF:pSet=LHAPDF6:NNPDF23_nnlo_as_0119
+PDF:pSet=LHAPDF6:NNPDF23_nnlo_as_0119
 
 
 # W Fusion decay

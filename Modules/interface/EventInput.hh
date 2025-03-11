@@ -41,10 +41,12 @@ public:
     
     virtual double getMET() const = 0;
     virtual unsigned long long getEventIDNum() const = 0; 
+    virtual long getRunNum() const = 0;
 
     virtual const std::shared_ptr<FileParams> getFileParams() const = 0;
 
     virtual bool checkTrigger(std::string triggerName, std::string subProcess = "") const = 0;
+
 private:
 };
 

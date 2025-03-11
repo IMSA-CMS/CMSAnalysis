@@ -4,6 +4,7 @@
 #include "CMSAnalysis/Modules/interface/PtResolutionModule.hh"
 #include "CMSAnalysis/Modules/interface/Module.hh"
 #include "CMSAnalysis/Modules/interface/AnalysisModule.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 
 #include <iostream>
 #include <stdexcept>
@@ -12,14 +13,28 @@
 #include "TH1.h"
 #include "TH2.h"
 
+
+
+void HistogramOutputModule::addScaleFactor(std::shared_ptr<ScaleFactor> scaleFactor)
+  {
+      scaleFactors.push_back(scaleFactor);
+      for (auto hist : histograms)
+      {
+          hist->addScaleFactor(scaleFactor);
+      }
+  }
+
 void HistogramOutputModule::finalizeFilterString() {
   // Check if any baseObjects have not been copied to objects yet,
   // and fill them into the main map if not
-  // Then write all the objects to file
+  // Then write all the objects to file 
   for (auto &entry : baseObjects) {
-    if (entry.first.find(getFilter()) != std::string::npos || getFilter() == "")
+    if (entry.first.find(getFilter()) == 0 || getFilter() == "")
     {
+      
       entry.second->Write();
+ //     std::cout << "Going into: " << getFilter() << " and " << entry.first << "\n";
+      //std::cout << "Going into: " << getFilter() << " and " << entry.first << "\n";
     }
   }
 }
@@ -41,7 +56,7 @@ void HistogramOutputModule::setInput(const EventInput *iInput) {
 }
 
 void HistogramOutputModule::addObject(const std::string &name, TObject *obj) {
-  // std::cout << "adding object " << name << " " << obj->ClassName() << "\n";
+  //std::cout << "adding object " << name << " " << obj->ClassName() << "\n";
   if (baseObjects.find(name) == baseObjects.end()) {
     baseObjects.insert({name, obj});
   } else {
@@ -49,7 +64,8 @@ void HistogramOutputModule::addObject(const std::string &name, TObject *obj) {
     
   }
 
-  // std::cout << "Histogram added: " << name << '\n';
+//   std::cout << "Histogram added: " << name << '\n';
+   //std::cout << "Histogram added: " << name << '\n';
 }
 
 TObject* HistogramOutputModule::getObject(const std::string& name) 
@@ -129,6 +145,7 @@ void HistogramOutputModule::fillHistogram(const std::string &name,
   {
     for (double currentNum : values) {
       //std::cout << "currentNum: " << currentNum << "\n"; 
+      //std::cout << "Weight: " << weight << "\n";
       hist->Fill(currentNum, weight);
     }
   }
@@ -171,6 +188,8 @@ bool HistogramOutputModule::process() {
       // {
       //   std::cout << hist->getFilteredName() << " has " << value << "\n";
       // }
+      //std::cout << "Module particle size: " << getInput()->getParticles(EventInput::RecoLevel::Reco).getNumParticles() << "\n";
+        //std::cout << "HistOutputModule event input: " << getInput() <<std::endl;
       fillHistogram(hist->getFilteredName(), hist->value(), hist->eventWeight());
     }
   }
@@ -179,11 +198,11 @@ bool HistogramOutputModule::process() {
 
 void HistogramOutputModule::finalize()
 {
-  // std::cout << "Starting histogram finalization \n";
+  //std::cout << "Starting histogram finalization \n";
   // std::cout << "There are " << histograms.size() << " histograms in this event\n";
   for (auto hist : histograms) 
   {
-    // std::cout << "Histogram filtered name = " << hist->getFilteredName() << "\n";
+    //std::cout << "Histogram filtered name = " << hist->getFilteredName() << "\n";
     auto Thist = getHistogram(hist->getFilteredName());
 
     // for (int i = 1; i < Thist->GetEntries(); ++i)

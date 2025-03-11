@@ -74,7 +74,7 @@ class OppositeSignInvariantMassHist : public GenSimRecoPrototype
   std::vector<double> protectedValue(EventInput::RecoLevel level) const
   {
     auto particles = getInput()->getLeptons(level);
-    auto inv = particles.calculateOppositeSignInvariantMass(true);
+    auto inv = particles.calculateOppositeSignInvariantMass();
     return {inv};
   }
 };

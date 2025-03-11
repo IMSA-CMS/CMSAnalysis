@@ -33,3 +33,15 @@ std::string HistogramPrototype::getFilterString() const
 
   return filterStr;
 }
+
+double HistogramPrototype::eventWeight() const
+{
+  //std::cout << "Weight event input: " << getInput() <<std::endl;
+  double weight = 1.0;
+  for (auto scaleFactor : scaleFactors)
+  {
+    weight *= scaleFactor->getScaleFactor(getInput());
+    //std::cout << "Scale Factor: " << scaleFactor->getScaleFactor(getInput()) << std::endl;
+  }
+  return weight;
+}

@@ -76,7 +76,7 @@ std::vector<double> PhotonsHist::protectedValue(EventInput::RecoLevel typeGenSim
     for(auto currentParticle : photons)
     {
       photonPT.push_back(currentParticle.getPt());
-      std::cout << currentParticle.getPt();
+      std::cout << "CurrentParticle Pt: " << currentParticle.getPt();
     }
 
     return photonPT;

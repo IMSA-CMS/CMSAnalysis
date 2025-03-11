@@ -12,7 +12,7 @@
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 
-EventDumpModule::EventDumpModule( bool iGenSim, bool iReco, int inumOfEvents):
+EventDumpModule::EventDumpModule(bool iGenSim, bool iReco, int inumOfEvents):
   genSim(iGenSim),
   reco(iReco),
   numOfEvents(inumOfEvents)
@@ -29,9 +29,10 @@ EventDumpModule::EventDumpModule( bool iGenSim, bool iReco, int inumOfEvents):
 //update this to remove event parameter
 bool EventDumpModule::process()
 {
+  
   if(counter < numOfEvents || numOfEvents == -1)
   {
-    if (getFilter() == "Low Mass and Different Signs_") 
+    //if (getFilter() == "Low Mass and Different Signs_") 
     {
       std::ofstream my_file;
       if(genSim)
@@ -67,7 +68,7 @@ void EventDumpModule::printGenSimParticleCollection(const ParticleCollection<Gen
   my_file << "EVENT #" << (counter + 1) <<std::endl;
   my_file << "--------------------------------------------------------" << std::endl;
 
-  my_file << std::left << std::setw(8) << "element" << std::setw(11) << "| pdgId"
+  my_file << std::left << std::setw(11) << "element" << std::setw(15) << "| name" << std::setw(11) << "| pdgId"
    << std::setw(10) << "| status"
    << std::setw(motherColumnWidth) << "| mothers"
    << std::setw(daughterColumnWidth) << "| daughters"
@@ -79,7 +80,8 @@ void EventDumpModule::printGenSimParticleCollection(const ParticleCollection<Gen
   //Prints out all of the particles
   for(auto &part : particleGroup)
   {
-    my_file << std::setw(8) << eventElement << std::pair<GenSimParticle, std::vector<GenSimParticle>>{part, particleGroup} << std::endl;
+    std::string partName = part.getType().getName();
+    my_file << std::setw(11) << eventElement << "| " << std::setw(13) << partName << std::pair<GenSimParticle, std::vector<GenSimParticle>>{part, particleGroup} << std::endl;
     eventElement++;
   }
 }
@@ -91,10 +93,10 @@ void EventDumpModule::printRecoParticleCollection(const ParticleCollection<Parti
   my_file << "--------------------------------------------------------" << std::endl;
   my_file << "EVENT #" << (counter + 1) <<std::endl;
   my_file << "all lepton invariant mass: " << recoParts.calculateAllLeptonInvariantMass() 
-    << " | same sign invariant mass: " << recoParts.calculateSameSignInvariantMass(false, true) << "\n";
+    << " | same sign invariant mass: " << recoParts.calculateSameSignInvariantMass(true) << "\n";
   my_file << "--------------------------------------------------------" << std::endl;
 
-  my_file << std::left << std::setw(8) << "element" << std::setw(11) << "| type"
+  my_file << std::left << std::setw(8) << "element" << std::setw(11) << "| name" << std::setw(11) << "| type"
    << std::setw(15) << "| charge"
    << std::setw(15) << "| pT"
    << std::setw(15) << "| Eta"
@@ -105,7 +107,9 @@ void EventDumpModule::printRecoParticleCollection(const ParticleCollection<Parti
   //Prints out all of the particles
   for(auto &part : particleGroup)
   {
-    my_file << std::setw(8) << eventElement << part << std::endl;
+    //std::cout<<"Part: " << part.getType().getName() << "\n"; 
+    const auto& partName = part.getType().getName();
+    my_file << std::setw(8) << eventElement <<  "| " << std::setw(9) << partName<< part << std::endl;
     eventElement++;
   }
 }
@@ -194,7 +198,10 @@ std::string EventDumpModule::formatDaughterParticles(const GenSimParticle& part,
 
 std::string EventDumpModule::formatMotherParticle(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts)
 {
-  int index = getIndexOf(part.uniqueMother().finalDaughter(), genParts);
+  
+  //int index = getIndexOf(part.uniqueMother().finalDaughter(), genParts);
+  int index = getIndexOf(part.mother(), genParts)+1;
+  //std::cout<<"The index is: " << index << "\n";
   if (index == -1)
   {
     return "";
@@ -205,10 +212,28 @@ std::string EventDumpModule::formatMotherParticle(const GenSimParticle& part, co
 std::ostream& operator<<(std::ostream& str, const std::pair<GenSimParticle, std::vector<GenSimParticle>> genParticles)
 {
   GenSimParticle part = genParticles.first;
+  //std::cout<<"The particles name is: " << part.getType().getName() << "\n";
   std::vector<GenSimParticle> genParts = genParticles.second;
+  
   str << "| " << std::setw(9) << part.pdgId() << "| " << std::setw(8) << part.status() << "| ";
+
   //print mothers
-  str << std::setw(18) << "0" << "| ";
+  
+  //std::cout<<"The mother is: " << part.hasMother().getName() << "\n";
+    
+  if(part.hasMother())
+  { 
+    //str << std::setw(18) << part.mother().getType().getName() << "| "; //this was original
+    //str << std::setw(18) << EventDumpModule :: formatMotherParticle(part, genParts) << "| ";
+    str << std::setw(8) << EventDumpModule :: formatMotherParticle(part, genParts);
+    str <<std::setw(10) << part.mother().getType().getName() << "| ";
+  }
+  else
+  {
+    str << std::setw(18) << "" << "| ";
+  }
+    
+
     //str << std::setw(motherColumnWidth - 2) << formatMotherParticles(part, genParts) << "| ";
     // Print daughters
     //formatDaughterParticles(part, particleGroup) was replaced by function not working string
@@ -224,7 +249,7 @@ std::ostream& operator<<(std::ostream& str, const GenSimParticle part)
   str << "| " << std::setw(9) << part.pdgId() << "| " << std::setw(8) << part.status() << "| ";
   //print mothers
   str << std::setw(18) << "" << "| ";
-    //str << std::setw(motherColumnWidth - 2) << formatMotherParticles(part, genParts) << "| ";
+  // str << std::setw(motherColumnWidth - 2) << formatMotherParticles(part, genParts) << "| "; 
     // Print daughters
     //formatDaughterParticles(part, particleGroup) was replaced by function not working string
   str << std::setw(18) << "" << "| ";

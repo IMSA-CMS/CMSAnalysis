@@ -24,6 +24,11 @@ class ParticleType
     std::vector<HistParams> getParticleHists() const;
     std::vector<CollectionHistParams> getCollectionHists() const;
 
+    bool isQuark() const;
+    bool isMeson() const;
+    bool isBaryon() const;
+    bool isHadron() const;
+
     static const ParticleType& getPDGType(int pdgID);
 
     //Member function used to check type
@@ -71,6 +76,9 @@ class ParticleType
     static HistParams getPtHist();
     static HistParams getPhiHist();
     static HistParams getEtaHist();
+    static HistParams getDXYHist();
+    static HistParams getDZHist();
+    static HistParams getIsolationHist();
     static HistParams getDaughterDeltaRHist();
 
     static CollectionHistParams getNumberHist();

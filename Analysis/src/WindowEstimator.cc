@@ -9,6 +9,7 @@
 #include "TH2F.h"
 #include "TH2.h"
 #include <sstream>
+#include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include <fstream>
 #include <array>
 #include <iostream>
@@ -18,7 +19,7 @@
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 
 
-double WindowEstimator::getExpectedYield(const SingleProcess* process, std::string dataType, double luminosity) const
+double WindowEstimator::getExpectedYield(const SingleProcess* process, HistVariable dataType, double luminosity) const
 {
     //Takes the histogram wanted from the file, assigns it hist
     TH1 *hist = dynamic_cast<TH1 *>(process->getHist(dataType));
@@ -34,7 +35,6 @@ double WindowEstimator::getExpectedYield(const SingleProcess* process, std::stri
     //Sets massbounds (to get the fraction inside window)
     double masslowaccepted = lowBound;
     double masshighaccepted = highBound;
-
     //Opens hist to analyze (checks whether hist is 2D or not) and runs estimator
     //Any lines that are the same in the two sides have to be in both. Having two "if's" with lines shared in the middle doesn't compile.
     if(dynamic_cast<TH2 *>(process->get2DHist(dataType)) == 0) {

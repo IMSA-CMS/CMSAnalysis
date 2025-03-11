@@ -16,6 +16,7 @@ public:
   void printComboEfficiency(int passCombo, std::vector<int> trigIndices); //given a set of triggers, find the combined efficiency
   void printOverallEfficiency(); //print out a summary of most efficient combination, total events, total events passing one trigger, and overall efficiency
 
+  virtual std::string getName() override {return "TriggerModule";}
 private:
   int twoTriggerOverlap(int index1, int index2);
   int nTriggerOverlap(std::vector<int> indices);
