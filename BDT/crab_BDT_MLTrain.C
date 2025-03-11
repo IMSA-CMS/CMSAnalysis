@@ -100,7 +100,7 @@ bool parseTrainingArgs(const std::string &trainingArgs, TrainingParams &params) 
 
 // Example trainingArgs usage: "sgMethod=methodA bgMethod=methodB useDP=1 useNano=0 useDY=1 useQCD=0"
 
-bool returnState(TString &myMethodList, std::string trainPath, std::string outputPath, std::string trainingArgs) {
+bool returnState(TString &myMethodList, std::string trainPath, std::string outputPath, std::string outFile, std::string trainingArgs) {
   
   TrainingParams params;
 
@@ -343,7 +343,7 @@ bool returnState(TString &myMethodList, std::string trainPath, std::string outpu
   std::cout << "--- TMVAClassification       : Using input file: " << input->GetName() << std::endl;
 
   // Create a ROOT output file where TMVA will store ntuples, histograms, etc.
-  TString outfileName("TMVA.root");
+  TString outfileName(outFile + ".root");
   TFile *outputFile = TFile::Open(outfileName, "RECREATE");
 
   TString opt = "!V:!Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification";
@@ -591,7 +591,7 @@ bool returnState(TString &myMethodList, std::string trainPath, std::string outpu
   std::cout << "==> Wrote root file: " << outputFile->GetName() << std::endl;
   std::cout << "==> TMVAClassification is done!" << std::endl;
 
-  TFile *f = new TFile("TMVARerun.root", "recreate");
+  TFile *f = new TFile((outFile + "Rerun.root").c_str(), "recreate");
   factory->Write();
   f->Close();
 
@@ -638,9 +638,9 @@ bool returnState(TString &myMethodList, std::string trainPath, std::string outpu
 // @param useDY : whether or not to train on DY background files : 0, 1
 // @param useQCD : whether or not to train on QCD background files : 0, 1
 
-void MLTrain(std::string trainPath, std::string outputPath, std::string trainArgs)
+void crab_BDT_MLTrain(std::string trainPath, std::string outputPath, std::string outFile, std::string trainArgs)
 {
   // Select methods (don't look at this code - not of interest)
   TString methodList;
-  returnState(methodList, trainPath, outputPath, trainArgs);
+  returnState(methodList, trainPath, outputPath, outFile, trainArgs);
 }

@@ -51,10 +51,6 @@ int SingleProcess::getTotalEvents() const
 
 double SingleProcess::getExpectedYield(HistVariable dataType) const
 {
-    std::vector<HistVariable> histVariables = input->getHistVariables();
-    //for(HistVariable histVar : histVariables) {
-    //    std::cout << "histVars: " << histVar.getHistName() << std::endl;
-    //}
     double expectedYield = estimator->getExpectedYield(this, dataType, luminosity);
     return expectedYield;
 }

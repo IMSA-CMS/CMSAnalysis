@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    prefix = "gen/" + args.input[14:-4] + '_'
+    prefix = "gen/" + args.output[:-5] + '_'
     config_name = prefix + "crab_config.py"
     script_name = prefix + "runAnalyzer.sh"
 
