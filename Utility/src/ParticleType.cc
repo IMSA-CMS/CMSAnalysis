@@ -3,6 +3,8 @@
 #include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include "CMSAnalysis/Utility/interface/LeptonJet.hh"
+#include "CMSAnalysis/Utility/interface/Lepton.hh"
+
 
 #include <fstream>
 #include <string>
@@ -36,6 +38,29 @@ std::vector<CollectionHistParams> ParticleType::getCollectionHists() const
         newHists.push_back(std::make_shared<CollectionHistParams>(hist.clone())); 
     }*/
     return collectionHists;
+}
+
+bool ParticleType::isQuark() const
+{
+   int absID = std::abs(pdgId);
+   return absID<10; 
+}
+
+bool ParticleType::isMeson() const
+{
+    int absID = std::abs(pdgId);
+    return absID<1000 && absID>100;
+}
+
+bool ParticleType::isBaryon() const
+{
+    int absID = std::abs(pdgId);
+    return 1000<absID && 10000>absID;
+}
+
+bool ParticleType::isHadron() const
+{
+    return isMeson() || isBaryon();
 }
 
 const ParticleType& ParticleType::registerType(std::string typeName, int typepdgId, double typeCharge, std::vector<HistParams> typeParticleHists, std::vector<CollectionHistParams> typeCollectionHistParamss)
@@ -140,6 +165,9 @@ void ParticleType::particleTypeOverrides()
 
     typeList[13].collectionHists.push_back(getSameSignInvariantMassHist());
     typeList[13].collectionHists.push_back(getOppositeSignInvariantMassHist());
+    typeList[13].particleHists.push_back(getDXYHist());
+    typeList[13].particleHists.push_back(getDZHist());
+    typeList[13].particleHists.push_back(getIsolationHist());
 
     registerType("Meson",26,0,
     std::vector<HistParams>{getPtHist(),getPhiHist(),getEtaHist()},
@@ -164,6 +192,19 @@ HistParams ParticleType::getPtHist()
     return HistParams("Pt", 150, 0, 1000, [](Particle particle){return std::vector<double>{particle.getPt()};});
 }
 
+HistParams ParticleType::getDXYHist()
+{
+    return HistParams("Dxy", 150, 0, 0.1, [](Particle particle){return std::vector<double>{Lepton(particle).getDXY()};});
+}
+HistParams ParticleType::getDZHist()
+{
+    return HistParams("Dz", 150, 0, 0.1, [](Particle particle){return std::vector<double>{Lepton(particle).getDZ()};});
+}
+HistParams ParticleType::getIsolationHist()
+{
+    return HistParams("Isolation", 150, 0, 0.1, [](Particle particle){return std::vector<double>{particle.getInfo("Isolation")};});
+}
+
 HistParams ParticleType::getPhiHist()
 {
     return HistParams("Phi", 150, -4, 4, [](Particle particle){return std::vector<double>{particle.getPhi()};});
@@ -181,7 +222,7 @@ CollectionHistParams ParticleType::getNumberHist()
 
 CollectionHistParams ParticleType::getSameSignInvariantMassHist()
 {
-    return CollectionHistParams("Same Sign Invariant Mass", 150, 0, 2000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateSameSignInvariantMass(false, true)};});
+    return CollectionHistParams("Same Sign Invariant Mass", 150, 0, 2000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateSameSignInvariantMass(true)};});
 }
 
 CollectionHistParams ParticleType::getOppositeSignInvariantMassHist()

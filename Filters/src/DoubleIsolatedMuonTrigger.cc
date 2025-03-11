@@ -24,7 +24,7 @@ bool DoubleIsolatedMuonTrigger::checkTrigger(const EventInput* input)
   bool passedFirstCut = false;
   bool passedSecondCut = false;
 
-  for (const Lepton &particle : particles.getParticles())
+  for (const Lepton particle : particles.getParticles())
   {
     if (particle.getPt() >= pTCutoff && particle.isIsolated())
     {

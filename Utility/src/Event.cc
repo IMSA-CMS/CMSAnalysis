@@ -15,7 +15,8 @@
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 
 
-Event::Event()
+Event::Event(const EventInput* iinput):
+input(iinput)
 {
 }
 
@@ -72,7 +73,9 @@ void Event::addElectron(Electron electron)
 
 void Event::addMuon(Muon muon) 
 {
+    //std::cerr << "Adding muon in Event: " << muon.getInfo("Isolation") << std::endl;
     muons.addParticle(muon); 
+    //std::cerr << "Added muon in Event: " << muons.getParticles().back().getInfo("Isolation") << std::endl;
     muons.sort();
 }
 

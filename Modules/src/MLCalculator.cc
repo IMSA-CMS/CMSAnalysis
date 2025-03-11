@@ -1,17 +1,19 @@
 #include "CMSAnalysis/Modules/interface/MLCalculator.hh"
 #include "CMSAnalysis/Modules/interface/SpecialVariableModule.hh"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 
 MLCalculator::MLCalculator(std::shared_ptr<SpecialVariableModule> iSpecialVariable, std::string iFileName, std::string iMethod):
 specialVariable(iSpecialVariable),
-fileName(iFileName),
+fileName(Utility::getBasePath() + iFileName),
 method(iMethod)
 {
-    
+    addRequiredModule(specialVariable);
 }
 
 void MLCalculator::initialize()
 {
-    specialVariable->addVariablesToReader(&reader);
+    //std::cout << "testing intialize" << "\n\n\n\n\n\n\n\n";
+    specialVariable->addVariablesToReader(&reader); //probably something to do with reader parameter? its not initializer in constructor
     reader.BookMVA(method, fileName);
 } 
 

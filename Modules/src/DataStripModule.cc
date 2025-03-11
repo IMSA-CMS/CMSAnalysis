@@ -22,7 +22,7 @@ void DataStripModule::initialize()
         treeId->Branch("mass", &mass, "mass/F");
         treeId->Branch("deltaR", &deltaR, "deltaR/F");
 
-        std::cout << treeId->GetListOfBranches();
+        // std::cout << treeId->GetListOfBranches();
     }
 }
 
@@ -55,8 +55,8 @@ bool DataStripModule::process()
             phi = leptonJet.getPhi();
             eta = leptonJet.getEta();
             mass = leptonJet.getMass();
-            std::cout<<"The Mass is: " << mass << "\n";
-            std::cout<<"The deltaR is: " << deltaR << "\n";
+            //std::cout<<"The Mass is: " << mass << "\n";
+            //std::cout<<"The deltaR is: " << deltaR << "\n";
             deltaR = 0;
 
             for (Particle p : leptonJet.getParticles())

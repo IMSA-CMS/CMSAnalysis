@@ -11,7 +11,7 @@ std::string PickFileParams::getFileName() const
 {
     std::ostringstream stream;
     stream << getProcess() << "/" << getProcess();
-    for (auto parameter : getParameters()) 
+    for (auto parameter : getParameters())
     {
         stream << "_" << parameter.first << "_" << parameter.second;
     }
@@ -19,15 +19,16 @@ std::string PickFileParams::getFileName() const
     std::string fileName = stream.str();
     fileName = Utility::substitute(fileName, " ", "_");
     fileName = Utility::getFullPath(fileName);
-    std::cout << "Name of file list: " << fileName << '\n';
     return fileName;
 }
 
 std::vector<std::string> PickFileParams::getFileList() const
 {
+    const std::string eossrc = "root://cmsxrootd.fnal.gov//";
+
     std::string file = getFileName();
     std::vector<std::string> fileList;
-    const std::string eossrc = "root://cmsxrootd.fnal.gov//";
+    
     
     std::ifstream in(file);
     std::string str;
@@ -37,7 +38,7 @@ std::vector<std::string> PickFileParams::getFileList() const
         {
             fileList.push_back(eossrc + str);
         }
-    }   
+    }
     return fileList;
 
 }

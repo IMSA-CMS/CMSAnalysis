@@ -110,8 +110,8 @@ void LeptonJetEfficiency::doCounters()
                 if (pair.second == leptonJet)
                 {
                     incrementCounter("Fake pair match", 1);
-                    std::cout << "electron count " << electronCount << "\n";
-                    std::cout << "muon count " << muonCount << "\n\n";
+                    //std::cout << "electron count " << electronCount << "\n";
+                    //std::cout << "muon count " << muonCount << "\n\n";
                 }
             }
             incrementCounter("Number of fake jets", 1);

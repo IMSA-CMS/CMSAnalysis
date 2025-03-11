@@ -7,9 +7,10 @@
 #include "CrossSectionReader.hh"
 #include "SimpleEstimator.hh"
 #include "SingleProcess.hh"
-#include "HistVariable.hh"
+#include "MultiSystematic.hh"
 #include "Correction.hh"
 #include "TH1.h"
+#include <map>
 
 class FullAnalysis
 {
@@ -17,8 +18,8 @@ class FullAnalysis
         FullAnalysis() {TH1::SetDefaultSumw2();}
         virtual ~FullAnalysis() {}
         //To my knowledge, this has to be defined in derived classes to use that class' variables
-        virtual std::shared_ptr<Channel> getChannel(std::string name) = 0;
-        virtual std::vector<std::shared_ptr<Channel>> getChannels() = 0;
+        std::shared_ptr<Channel> getChannel(std::string name);
+        std::vector<std::shared_ptr<Channel>> getChannels() const {return channels;}
         /**
          * Get histograms method
          * @param histType The variable the histogram should show
@@ -26,12 +27,25 @@ class FullAnalysis
          * @param channelName Name of the Channel class to get the process from
          * @return Returns a list of histograms ordered by mass from lowest to highest
         */
-        virtual std::vector<TH1*> getHistograms(const std::string& histType, const std::string& processName, const std::string& channel, bool scaleToExpected = false) = 0;
-        virtual TH1* getDecayHist(std::string histType, std::string processName, double massTarget, bool scaleToExpected = false, std::string channelName = "") const = 0;
-
+        std::vector<TH1*> getHistograms(const HistVariable& histType, const std::string& processName, const std::string& channel, bool scaleToExpected = false);
+        TH1* getHist(HistVariable histType, std::string processName, bool scaleToExpected = false, std::string channelName = "") const;
+        // virtual bool checkChannelName(std::string channelName, double massTarget) const = 0;
         //Process makers for easy use when loading channels
-        static SingleProcess makeSingleProcess(std::vector<HistVariable> histVariables, std::vector<HistVariable> fitHistVariables, std::string filePathway, std::string fileName, std::string fitFileName, std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, int massTarget, double luminosity, std::vector<std::shared_ptr<Correction>> corrections = {});
-        static SingleProcess makeSignalProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, int massTarget, double luminosity, std::vector<std::shared_ptr<Correction>> corrections = {});
+        SingleProcess makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, 
+        std::shared_ptr<CrossSectionReader> crossReader, double luminosity, std::map<std::string, std::string> histVariableToFileMapping,
+        bool isData = false);
+        SingleProcess makeBasicProcess(const std::vector<HistVariable>& histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, 
+        std::shared_ptr<CrossSectionReader> crossReader, double luminosity, bool isData = false);
+        
+        // SingleProcess makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, 
+        // std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, double luminosity); //std::vector<std::shared_ptr<Correction>> corrections = {}
+    
+    protected:
+        std::vector<std::shared_ptr<Channel>>& getChannelsProtected() {return channels;}
+        
+    private:
+        std::vector<std::shared_ptr<Channel>> channels;
+
 };
 
 #endif

@@ -41,7 +41,7 @@ std::string DarkPhotonControlRegionFilter::getFilterString(const EventInput* inp
 
 	if (highMass) 
 	{
-		return "High Mass and Different Signs";
+		return "High Mass and Different Sign";
 	}
 
 	if (sameSign) 
@@ -59,7 +59,7 @@ std::string DarkPhotonControlRegionFilter::getFilterString(const EventInput* inp
 	// 	return "Low Mass and All Negative";
 	// }
 
-	return "Low Mass and Different Signs";
+	return "Low Mass and Different Sign";
 
 	// if (highMass && highDXYDZ) 
 	// {

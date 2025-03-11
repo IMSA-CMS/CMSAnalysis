@@ -114,6 +114,11 @@ unsigned long long CmsswEventInterface::getEventIDNum() const
     throw std::runtime_error("Not implemented yet");
 }
 
+long CmsswEventInterface::getRunNum() const
+{
+    throw std::runtime_error("Not implemented yet");
+}
+
 std::vector<bool> CmsswEventInterface::getTriggerResults(std::string subProcess) const
 {
     edm::Handle<std::vector<pat::TriggerEvent>> triggerResults;

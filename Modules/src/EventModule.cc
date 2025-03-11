@@ -20,8 +20,13 @@
 #include "CMSAnalysis/Modules/interface/CollectionHist.hh"
 #include "CMSAnalysis/Histograms/interface/HistogramPrototype1DGeneral.hh"
 
+static std::chrono::duration<double> time_1 = std::chrono::duration<double>::zero();
+static std::chrono::duration<double> time_2 = std::chrono::duration<double>::zero();
+static std::chrono::duration<double> time_3 = std::chrono::duration<double>::zero();
+
+
 EventModule::EventModule():
-    localInput(&event)
+    event(nullptr), localInput(&event)
 {
     histMod->setInput(&localInput);
 }
@@ -31,9 +36,21 @@ void EventModule::addSelector(std::shared_ptr<Selector> selector)
     selectors.push_back(selector);
 
 }
+void EventModule::addScaleFactor(std::shared_ptr<ScaleFactor> scaleFactor)
+{
+    scaleFactors.push_back(scaleFactor);
+}
 void EventModule::addCut(std::shared_ptr<Cut> cut)
 {
     cuts.push_back(cut);
+}
+
+void EventModule::initialize()
+{
+    for (auto scalefactor : scaleFactors)
+    {
+        histMod->addScaleFactor(scalefactor);
+    }
 }
 
 void EventModule::finalize()
@@ -41,24 +58,30 @@ void EventModule::finalize()
     for (int i = 0; i < int(cuts.size()); i++) {
         std::cout << "Dependent efficiency of " << typeid(*(cuts[i])).name() << ": " << cuts[i]->getDependentEfficiency() << "\n";
         std::cout << "Independent efficiency of " << typeid(*(cuts[i])).name() << ": " << cuts[i]->getIndependentEfficiency() << "\n";
+        // std::cout << "total duration of first part: " << time_1.count() << std::endl;
+        // std::cout << "total duration of second part: " << time_2.count() << std::endl;
+        // std::cout << "total duration of third part: " << time_3.count() << std::endl;
     }
 }
 
 bool EventModule::process ()
 { 
-    //std::cout<<"We have offically entered the method";
+    //auto start_1 = std::chrono::steady_clock::now();
+  
     clearHistograms(); //all histograms are cleared and we only fill the ones we are using for this event
     event.clear();
-
     for (auto selector : selectors)
     {
         selector->selectParticles(getInput(),event);
-        //std::cout << __FILE__ << " " << __LINE__ << std::endl;
     }
 
     event.setMET(getInput()->getMET());
+    // auto end_1 = std::chrono::steady_clock::now();
+    // time_1 += end_1 - start_1;
+
+
+    // auto start_2 = std::chrono::steady_clock::now();
     bool passesCuts = true;
-    //std::cout<<"right before for loop";
 
     //std::cout<<"\nthe cut size is: " <<cuts.size() << "\n";
     for (size_t i = 0; i < cuts.size(); i++) //The loop is not being entered because the cut size is 0 for our data set
@@ -69,11 +92,15 @@ bool EventModule::process ()
             break;
         }
     }
-    
+
     if (!passesCuts)
     {
         return false;
     }
+
+    // auto end_2 = std::chrono::steady_clock::now();
+    // time_2 += end_2 - start_2;
+    //auto start_3 = std::chrono::steady_clock::now();
 
     addBasicHistograms(ParticleType::electron(), event.getElectrons());
     addBasicHistograms(ParticleType::muon(), event.getMuons());
@@ -87,7 +114,6 @@ bool EventModule::process ()
     try{
         for (auto& [key,value] : event.getSpecials())
         {
-            // CODE IS NOT GETTING HERE FOR SOME REASON, DEBUG THIS
             auto specialPtr = std::make_shared<ParticleCollection<Particle>>(value);
             addBasicHistograms(value.getParticles()[0].getType(), value);
             addCountHistograms(value.getParticles()[0].getType(), specialPtr); 
@@ -97,37 +123,29 @@ bool EventModule::process ()
         std::cerr << "Exception caught: " << e.what() << std::endl;
     }
 
-    //std::cout << "end\n";
-
     auto electronCollection = std::make_shared<ParticleCollection<Particle>>(event.getElectrons());
-
     auto muonCollection = std::make_shared<ParticleCollection<Particle>>(event.getMuons());
-
     auto photonCollection = std::make_shared<ParticleCollection<Particle>>(event.getPhotons());
-    //std::cout << __FILE__ << " " << __LINE__ << std::endl;
-
     auto jetCollection = std::make_shared<ParticleCollection<Particle>>(event.getJets());
-    //std::cout << __FILE__ << " " << __LINE__ << std::endl;
 
     addCountHistograms(ParticleType::electron(), electronCollection);
-    //std::cout << __FILE__ << " " << __LINE__ << std::endl;
-    
     addCountHistograms(ParticleType::muon(), muonCollection);
-    //std::cout << __FILE__ << " " << __LINE__ << std::endl;
-
     addCountHistograms(ParticleType::photon(), photonCollection);
-    //std::cout << __FILE__ << " " << __LINE__ << std::endl;
 
     try{addCountHistograms(ParticleType::jet(), jetCollection);
-    //std::cout << __FILE__ << " " << __LINE__ << std::endl;
     } catch (const std::runtime_error& e) {
         std::cerr << "Exception caught: " << e.what() << std::endl;
     }
-
-    //std::cout <<"IT worked, maya and anwita did it!!";
-
-
+    //   std::cout << "EventModule event input: " << getInput() <<std::endl;
+    //   int dummy;
+    //   std::cin >> dummy;
     return true;
+}
+
+void EventModule::setInput(const EventInput* input)
+{
+    Module::setInput(input);
+    event.setInput(input);
 }
 
 std::function<std::vector<double>(const EventInput*)> EventModule::findNthParticleFunction(int n, 
@@ -160,6 +178,10 @@ void EventModule::addBasicHistograms(const ParticleType& particleType, const Par
             {
                 params.setName(histName);
                 auto histogram = std::make_shared<SingleParticleHist>(params);
+                for (auto scaleFactor: scaleFactors)
+                {
+                    histogram->addScaleFactor(scaleFactor);
+                }
                 particleHistograms.insert({histName,histogram});
                 histMod->addHistogram(histogram);
 
@@ -181,6 +203,10 @@ void EventModule::addCountHistograms(const ParticleType& particleType, const std
         {
             params.setName(histName);
             auto hist = std::make_shared<CollectionHist>(params);
+            for (auto scaleFactor: scaleFactors)
+            {
+                hist->addScaleFactor(scaleFactor);
+            }
             collectionHistograms.insert({histName, hist});
             histMod->addHistogram(hist);
         } 
@@ -208,7 +234,7 @@ std::string EventModule::getBasicHistogramTitle(int n, const ParticleType& parti
 {
     n++;
     std::string rank = "th Highest ";
-    if (n%10 == 1 && n%100 != 11) //I hate english words
+    if (n%10 == 1 && n%100 != 11) 
     {
         rank = "st Highest ";
     }

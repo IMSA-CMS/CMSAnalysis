@@ -13,9 +13,12 @@ class SingleProcess;
 class SimpleEstimator : public Estimator
 {		
 	public: 
-		SimpleEstimator() {}
+		SimpleEstimator(bool data = false) : isData(data) {}
 		double getMassTarget() const override  {return 0;}
-		double getExpectedYield(const SingleProcess* process, std::string dataType, double luminosity) const override;
+		double getExpectedYield(const SingleProcess* process, HistVariable dataType, double luminosity) const override;
+
+	private:
+		bool isData;
 };	
 
 

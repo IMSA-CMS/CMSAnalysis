@@ -1,30 +1,41 @@
 #ifndef HISTVARIABLE_HH
 #define HISTVARIABLE_HH
 
+#include "CMSAnalysis/Analysis/interface/FilePathMapper.hh"
+
 #include <string>
+#include <unordered_map>
+#include <stdexcept>
 
 class HistVariable 
 {
-    public:
-	static HistVariable GenSimSameSignMass(std::string histName) {return HistVariable("GenSim Same Sign Inv Mass", histName);}
-	static HistVariable SameSignMass(std::string histName) {return HistVariable("Same Sign Inv Mass", histName);}
-	static HistVariable InvariantMass(std::string histName) {return HistVariable("Invariant Mass", histName);}
-	static HistVariable GenSimPt(std::string histName) {return HistVariable("GenSim pT", histName);}
-	static HistVariable Pt(std::string histName) {return HistVariable("pT", histName);}
-	static HistVariable Eta(std::string histName) {return HistVariable("Eta", histName);}
-	static HistVariable Phi(std::string histName) {return HistVariable("Phi", histName);}
-	static HistVariable MET(std::string histName) {return HistVariable("MET", histName);}
-	static HistVariable firstPt(std::string histName) {return HistVariable("firstPt", histName);}
-	static HistVariable secondPt(std::string histName) {return HistVariable("secondPt", histName);}
-	static HistVariable thirdPt(std::string histName) {return HistVariable("thirdPt", histName);}
-	static HistVariable fourthPt(std::string histName) {return HistVariable("fourthPt", histName);}
-	std::string getName() {return name;}
-	std::string getHistName() {return graphName;}
-    
-    private:
-	HistVariable(std::string iName, std::string iGraphName) : name(iName), graphName(iGraphName) {}
-	std::string name;
-	std::string graphName;
+public:
+    // Static objects for predefined variables
+    static HistVariable genSimSameSignMass;
+    static HistVariable sameSignMass;
+    static HistVariable invariantMass;
+    static HistVariable genSimPt;
+    static HistVariable pt;
+    static HistVariable eta;
+    static HistVariable phi;
+    static HistVariable mET;
+    static HistVariable firstPt;
+    static HistVariable secondPt;
+    static HistVariable thirdPt;
+    static HistVariable fourthPt;
+
+    // Getters
+    std::string getName() const { return name; }
+    std::string getGraphName(const FilePathMapper& mapper) const 
+    {
+        return mapper.getFilePath(name);
+    }
+
+    // Constructor
+    HistVariable(std::string iName) : name(std::move(iName)) {}
+
+private:
+    std::string name;
 };
 
 #endif

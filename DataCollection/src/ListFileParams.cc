@@ -1,4 +1,5 @@
 #include "CMSAnalysis/DataCollection/interface/ListFileParams.hh"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 #include <fstream>
 
 ListFileParams::ListFileParams(std::string file):
@@ -9,10 +10,12 @@ filename(file)
 }
 std::vector<std::string> ListFileParams::getFileList() const
 {
-    std::ifstream textFile(filename);
+    const std::string eossrc = "root://cmsxrootd.fnal.gov//";
+
+    std::ifstream textFile(Utility::getFullPath(filename));
     std::string line;
     std::vector<std::string> rootFiles;
-    const std::string eossrc = "root://cmsxrootd.fnal.gov//";
+
     while (getline(textFile, line))
     {
         rootFiles.push_back(eossrc + line);

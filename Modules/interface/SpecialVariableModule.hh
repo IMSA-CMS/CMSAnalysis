@@ -5,6 +5,7 @@
 #include "Rtypes.h"
 #include "ProductionModule.hh"
 #include "EventInput.hh"
+#include "HistogramOutputModule.hh"
 
 class TTree;
 namespace TMVA
@@ -15,6 +16,7 @@ namespace TMVA
 
 class SpecialVariableModule : public ProductionModule
 {
+
 public:
 	enum VariableType {Integer, Float, IntegerArray, FloatArray};
 
@@ -30,7 +32,6 @@ public:
 	void addVariablesToReader(TMVA::Reader *reader) const;
 	void addVariablesToDataLoader(TMVA::DataLoader *dataloader) const;
 
-
 	virtual bool process() override;
 
 	virtual void calculateVariables(ParticleCollection<Particle> particle) = 0;
@@ -38,6 +39,7 @@ public:
 	mutable const int* tempRef;
 	mutable const float* tempRef1;
 
+	virtual std::string getName() override {return "SpecialVariableModule";}
 
 protected:
 	void addVariable(std::string name, VariableType type);

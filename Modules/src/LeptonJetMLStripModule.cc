@@ -1,5 +1,6 @@
 #include "CMSAnalysis/Modules/interface/LeptonJetMLStripModule.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
+#include "CMSAnalysis/Histograms/interface/MLStripHist.hh"
 
 
 
@@ -11,26 +12,33 @@ LeptonJetMLStripModule::LeptonJetMLStripModule()
 
 void LeptonJetMLStripModule::addVariables()
 {
-    //addVariable("leadingPt", SpecialVariableModule::VariableType::Float);
+	addVariable("deltaR", SpecialVariableModule::VariableType::Float);
     addVariable("nParticles", SpecialVariableModule::VariableType::Float);
+	addVariable("eta", SpecialVariableModule::VariableType::Float);
+    // addVariable("leadingPt", SpecialVariableModule::VariableType::Float);
 	
 	//addVariable("phi", SpecialVariableModule::VariableType::Float);
 	// reader.AddVariable("mass", &mass);
 	
-	addVariable("sumPt", SpecialVariableModule::VariableType::Float);
+	//addVariable("sumPt", SpecialVariableModule::VariableType::Float);
 	//addVariable("numMuons", SpecialVariableModule::VariableType::Integer);
-	addVariable("deltaPt", SpecialVariableModule::VariableType::Float);
-	addVariable("deltaR", SpecialVariableModule::VariableType::Float);
-	addVariable("eta", SpecialVariableModule::VariableType::Float);
+	//addVariable("deltaPt", SpecialVariableModule::VariableType::Float);
 	//addVariable("maxDXY", SpecialVariableModule::VariableType::Float);
 	//addVariable("maxDZ", SpecialVariableModule::VariableType::Float);
-	addVariable("maxIsolation", SpecialVariableModule::VariableType::Float);
+	//addVariable("maxIsolation", SpecialVariableModule::VariableType::Float);
 
 
 }
 
 void LeptonJetMLStripModule::calculateVariables(ParticleCollection<Particle> particles)
 {
+	// deltaRValues.clear();
+	// deltaPtValues.clear();
+	// sumPtValues.clear();
+	// maxDXYValues.clear();
+	// maxDZValues.clear();
+	// maxIsolationValues.clear();
+
 	for (auto particle : particles)
 	{
 		LeptonJet leptonJet(particle);//no need for loop
@@ -55,7 +63,7 @@ void LeptonJetMLStripModule::calculateVariables(ParticleCollection<Particle> par
         // mass = leptonJet.getMass();
        
 		double runnerUpPt = 0;
-		double numMuons = 0; //talk to dong about unadding after altering in 49, kind of weird that we don't have that
+		//double numMuons = 0; //talk to dong about unadding after altering in 49, kind of weird that we don't have that
 		//need to do this edit on 50;
         
 
@@ -70,11 +78,15 @@ void LeptonJetMLStripModule::calculateVariables(ParticleCollection<Particle> par
 					deltaR = p.getDeltaR(q);
                 }
             }
-            if (p.getPt() > leadingPt)
-            {
-                runnerUpPt = leadingPt;
-                leadingPt = p.getPt();
-            }
+
+			double pt = p.getPt();
+			if (pt > leadingPt) {
+				runnerUpPt = leadingPt;  // Previous leadingPt is now runner-up
+				leadingPt = pt;  // Update leadingPt to the new higher value
+			} else if (pt > runnerUpPt) {
+				runnerUpPt = pt;  // Update runnerUpPt if current pt is less than leadingPt but greater than runnerUpPt
+			}
+
             sumPt += p.getPt();
 
 
@@ -100,8 +112,10 @@ void LeptonJetMLStripModule::calculateVariables(ParticleCollection<Particle> par
             //    numMuons++;
             //}
         }
+
 		addValue("deltaR", deltaR);
 		addValue("deltaPt", leadingPt - runnerUpPt);
+		addValue("leadingPt", leadingPt);
 		//addValue("leadingPt", leadingPt);
 		addValue("sumPt", sumPt);
 		addValue("maxDXY", tempMaxDXY);
@@ -110,5 +124,6 @@ void LeptonJetMLStripModule::calculateVariables(ParticleCollection<Particle> par
 		//addValue("numMuons", numMuons);
 
 	}
-    //}
+
+	//std::cout << "DELTA R SIZE: " << deltaRValues.size() << std::endl;
 }

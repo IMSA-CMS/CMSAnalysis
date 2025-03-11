@@ -31,27 +31,22 @@
 #include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "CMSAnalysis/Analysis/interface/SimpleChannel.hh"
 
-void JumboPlot() {
-	//Change things in this section
+#include "CMSAnalysis/Analysis/interface/DarkPhotonCompleteAnalysis.hh"
 
-	//Put your analysises here. If you only have a simpleAnalysis or only superimposed histograms that's ok, just leave the others at default
-	//auto higgsStackAnalysis = std::make_shared<HiggsCutsAnalysis>();
-	//auto higgsSuperImpAnalysis = std::make_shared<HiggsCutsAnalysis>();
-	//auto simpleAnalysis = std::make_shared<SimpleHiggsComparison>();
-	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
-	//Extra text is the second parameter
+
+template <typename AnalysisType>
+void makePlots(std::string signal, std::shared_ptr<AnalysisType> analysis, std::vector<std::shared_ptr<Channel>> channels, 
+std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std::vector<std::string> graphableTypes2, std::vector<std::string> graphableTypes3, 
+std::vector<TString> units, std::vector<std::string> units2, std::vector<std::string> units3, std::vector<std::string> channelNames,
+std::vector<std::string> connecters, std::vector<std::string> connecters2, std::vector<std::string> connecters3, bool includeData)
+{
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation/Data)");
-	//std::vector<std::shared_ptr<Channel>> stackChannels = higgsStackAnalysis->getChannels();
-	//std::vector<std::shared_ptr<Channel>> superImpChannels = higgsSuperImpAnalysis->getChannels(); 
-	std::vector<std::shared_ptr<Channel>> higgsChannels = higgsAnalysis->getChannels();
-	//Controls what graph types to make. 1 is stacked only, 2 is superimposed only, 3 is both, 4 is for SimpleAnalysis only, and 5 is for higgsAnalysis.
+	plotFormatter->setUpperMasslimit(2000);
+	plotFormatter->setNumBins(5);
+	plotFormatter->setFirstBin(50);
+
 	int graphSwitch = 5;
-	//Put all variables you can graph here
-	//Choices are GenSim Same Sign Inv Mass, Same Sign Inv Mass, Invariant Mass, GenSim pT, pT, Eta, Phi, MET (caps matter)
-	std::vector<std::string> graphableTypes = {"Invariant Mass"};
-	//Change this to whatever process your signal is
-	std::string signalName = "Higgs Signal";
-	TString units = " [GEV]";
+
 	double massTarget = 1400;
 
 	//You don't have to change anything here, unless your y axis is something other than "Events"
@@ -61,152 +56,199 @@ void JumboPlot() {
 	int count = 0;
 	std::vector<std::vector<std::string>> tableInput;
 	std::vector<std::string> toAdd;
+	std::vector<std::string> rowTitles;
+	
+	for (std::string connecter: connecters)
+	{
+		for(std::string dataType : graphableTypes) 
+		{
+			rowTitles.push_back(connecter + " " + dataType);
+		}
+	}
+
+	for (std::string connecter: connecters2)
+	{
+		for(std::string dataType : graphableTypes2) 
+		{
+			rowTitles.push_back(connecter + " " + dataType);
+		}
+	}
+	
+	for (int i = 0; i < 2; i++)
+	{
+		for (std::string connecter: connecters3)
+		{
+			for(std::string dataType : graphableTypes3) 
+			{
+				if (i == 0)
+				{
+					rowTitles.push_back(connecter + " " + dataType + "X");
+				}
+				else
+				{
+					rowTitles.push_back(connecter + " " + dataType + "Y");
+				}			}
+		}
+	}
+	
+	
+	std::vector<std::string> columnTitles;
 	std::string entry = "";
-	if(graphSwitch == 5) {
-		for(std::shared_ptr<Channel> channel : higgsChannels) {
-			for(std::string processName : channel->getNames()) {
-				//Change this line to make the described name your signal process name.
-				if(processName == "Higgs Signal") {
-					channel->labelProcess("signal", processName);
+	bool includeSignal = true;
+	
+	for (std::string connecter: connecters)
+	{
+		int unitCounter = 0;
+		for(std::string dataType : graphableTypes) 
+		{
+			for(std::shared_ptr<Channel> channel : channels) 
+			{ 	
+				bool valid = false;
+				for (std::string channelName : channelNames)
+				{
+					if (channelName == channel->getName())
+					{
+						valid = true;
+						break;
+					}
 				}
-				// "Monte Carlo Data"
-				else if(processName == "Data") { //This line is only used for complete plots
-					channel->labelProcess("data", processName);
-				}
-				else {
-					channel->labelProcess("background", processName);
-				}
-			}
-			std::string channelName = channel->getName();
-			//toAdd.push_back(channelName);
-			for(std::string dataType : graphableTypes) {
-				entry = "";
-				TString xAxisName = "OSDL invariant mass" + units;
-				TString yAxisName = "Relative number of events";
-				
-				toAdd.push_back(dataType);
-				toAdd.push_back(channelName);
-				dataName = Utility::removeSpaces(dataType);
-			
-				fileName = "jumboPlotStorage/" + channelName + dataName + "DataMC.png";
-				TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisName, yAxisName, massTarget, true, channelName);
-				//TCanvas *canvas = plotFormatter->completePlot(higgsAnalysis, "Invariant Mass", xAxisName, yAxisName, massTarget, true);
-				canvas->SaveAs(fileName.c_str());
-				plotFormatter->deleteHists();
-				canvas->Close();
-				delete canvas;
-				
-				entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
-			
-			
-				toAdd.push_back(entry);
-				tableInput.push_back(toAdd);
-				toAdd.clear();
-			}
-		}
-	}
 
-/*
-	if(graphSwitch != 4) {
-		for(std::shared_ptr<Channel> channel : stackChannels) {
-			for(std::string processName : channel->getNames()) {
-				//Change this to your signal process name
-				if(processName != signalName) {
-					channel->labelProcess("background", processName);
+				if (valid == false)
+				{
+					continue;
 				}
-				else {
-					channel->labelProcess("signal", processName);
-				}
-			}
-
-			for(std::string processName : superImpChannels.at(count)->getNames()) {
-		    	//Change this to your signal process name
-				if(processName != signalName) {
-					superImpChannels.at(count)->labelProcess("background", processName);
-				}
-				else {
-					superImpChannels.at(count)->labelProcess("signal", processName);
-				}
-			}
-			std::string channelName = channel->getName();
-			//toAdd.push_back(channelName);
-			for(std::string dataType : graphableTypes) {
+				
 				entry = "";
-				TString xAxisName = dataType.c_str() + units;
+				TString xAxisName = units[unitCounter];
 				TString yAxisName = "Events";
-				TString superyAxisName = "Events (1/Integral)";
-				
-				toAdd.push_back(dataType);
-				toAdd.push_back(channelName);
 				dataName = Utility::removeSpaces(dataType);
-				if(graphSwitch == 1 || graphSwitch == 3) {
-					fileName = "jumboPlotStorage/" + channelName + dataName + "Stack.png";
-					canvas = plotFormatter->superImposedStackHist(channel, dataType, xAxisName, yAxisName);
-					canvas->SaveAs(fileName.c_str());
-					plotFormatter->deleteHists();
-					canvas->Close();
-					delete canvas;
-					if(graphSwitch == 1) {
-						entry += "<img src=\"" + fileName + "\" alt=\"stack hist\" width=\"100%\" height = \"80%\">";
-					}
-					else {
-						entry += "<img src=\"" + fileName + "\" alt=\"stack hist\" width=\"50%\" height = \"40%\">";
-					}
-				}
-
-				if(graphSwitch == 2 || graphSwitch == 3) {
-					fileName = "jumboPlotStorage/" + channelName + dataName + ".png";
-					canvas = plotFormatter->superImposedHist(superImpChannels.at(count), dataType, xAxisName, superyAxisName);
-					canvas->SaveAs(fileName.c_str());
-					plotFormatter->deleteHists();
-					canvas->Close();
-					delete canvas;
-					if(graphSwitch == 2) {
-						entry += "<img src=\"" + fileName + "\" alt=\"superImposed hist\" width=\"100%\" height = \"80%\">";
-					}
-					else {
-						entry += "<img src=\"" + fileName + "\" alt=\"superImposed hist\" width=\"50%\" height = \"40%\">";
-					}
-				}
-
-				toAdd.push_back(entry);
-				tableInput.push_back(toAdd);
-				toAdd.clear();
-			}
-			count++;
-		}
-	}
-	else {
-		for(std::shared_ptr<SimpleChannel> channel : simpleAnalysis->getChannels()) {
-			std::string channelName = channel->getName();
-			for(std::string dataType : graphableTypes) {
-				entry = "";
-				TString xAxisName = dataType.c_str() + units;
-				TString yAxisName = "Events (1/Integral)";
-			
-				toAdd.push_back(dataType);
-				toAdd.push_back(channelName);
-				
-				dataName = Utility::removeSpaces(dataType);
-
-				fileName = "jumboPlotStorage/" + channelName + dataName + ".png";
-				canvas = plotFormatter->simpleAnalysisHist(channel->getHists(dataType), channel->getNames(), xAxisName, yAxisName);
+				fileName = "jumboPlotStorage/" + Utility::removeSpaces("WJetLumi") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
+				HistVariable fullDataType = HistVariable(connecter + dataType);
+				//bool includeSignal = false;
+				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, includeSignal, includeData, channel->getName());
 				canvas->SaveAs(fileName.c_str());
 				plotFormatter->deleteHists();
 				canvas->Close();
 				delete canvas;
-				entry += "<img src=\"" + fileName + "\" alt=\"superImposed hist\" width=\"100%\" height = \"80%\">";
+			
+				entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
 				toAdd.push_back(entry);
+			}
+			unitCounter++;
+			tableInput.push_back(toAdd);
+			toAdd.clear();
+		}
+	}
+	
+	 for (std::string connecter: connecters2)
+	 {
+	 	int unitCounter = 0;
+	 	for(std::string dataType : graphableTypes2) 
+	 	{
+	 		for(std::shared_ptr<Channel> channel : channels) 
+	 		{ 	
+	 			bool valid = false;
+	 			for (std::string channelName : channelNames)
+	 			{
+	 				if (channelName == channel->getName())
+					{
+						valid = true;
+						break;
+	 				}
+	 			}
+
+				if (valid == false)
+				{
+					continue;
+	 			}
+				
+				entry = "";
+				TString xAxisName = units2[unitCounter];
+				TString yAxisName = "Events";
+				dataName = Utility::removeSpaces(dataType);
+				fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
+				HistVariable fullDataType = HistVariable(connecter + dataType);
+				//bool includeSignal = false;
+				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, includeSignal, includeData, channel->getName());
+				canvas->SaveAs(fileName.c_str());
+				plotFormatter->deleteHists();
+				canvas->Close();
+				delete canvas;
+			
+	 			entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
+	 			toAdd.push_back(entry);
+	 		}
+	 		unitCounter++;
+	 		tableInput.push_back(toAdd);
+	 		toAdd.clear();
+		 	}
+		}
+	
+	
+	for (int i = 0; i < 2; i++)
+	{
+		for (std::string connecter: connecters3)
+		{
+			int unitCounter = 0;
+			for(std::string dataType : graphableTypes3) 
+			{
+				for(std::shared_ptr<Channel> channel : channels) 
+				{ 	
+					bool valid = false;
+					for (std::string channelName : channelNames)
+					{
+						if (channelName == channel->getName())
+						{
+							valid = true;
+							break;
+						}
+					}
+
+					if (valid == false)
+					{
+						continue;
+					}
+					
+					entry = "";
+					TString xAxisName = units3[unitCounter];
+					TString yAxisName = "Events";
+					dataName = Utility::removeSpaces(dataType);
+					fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
+					HistVariable fullDataType = HistVariable(connecter + dataType);
+					if (i == 0)
+					{
+						fullDataType.is2DHistX = true;
+						fullDataType.is2DHistY = false;
+						fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "X" + "DataMC.png";
+					}
+					else
+					{
+						fullDataType.is2DHistY = true;						
+						fullDataType.is2DHistX = false;
+						fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "Y" + "DataMC.png";
+					}
+					//bool includeSignal = false;
+					TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, includeSignal, includeData, channel->getName());
+					canvas->SaveAs(fileName.c_str());
+					plotFormatter->deleteHists();
+					canvas->Close();
+					delete canvas;
+				
+					entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
+					toAdd.push_back(entry);
+				}
+				unitCounter++;
 				tableInput.push_back(toAdd);
 				toAdd.clear();
 			}
 		}
 	}
-	*/
-	auto tableData = std::make_shared<TableData>(tableInput);
+	
+	
+	auto tableData = std::make_shared<TableData>(tableInput, channelNames, rowTitles);
 	auto table = std::make_shared<HTMLTable>();
 	std::ofstream htmlFile;
-	htmlFile.open("index.html");
+	htmlFile.open(Utility::removeSpaces(signal) + ".html");
 	htmlFile << "<!DOCTYPE html>" << std::endl;
 	htmlFile << "<html>" << std::endl;
 	htmlFile << "<body>" << std::endl;
@@ -214,4 +256,46 @@ void JumboPlot() {
 	htmlFile << "</body>" << std::endl;
 	htmlFile << "</html>" << std::endl;
 	htmlFile.close();
+	tableInput.clear();
+}
+
+void JumboPlot()
+{
+	//auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
+	//std::vector<std::shared_ptr<Channel>> channels = DarkPhotonAnalysis->getChannels();
+
+	// std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Signs"};
+    // std::vector<std::string> graphableTypes = {"Eta", "Lepton Jet Delta R", "Lepton Jet Mass", "Phi", "Pt"};
+	// std::vector<TString> units = {"ETA", "DELTA R", "GEV", "RAD", "GEV/C"};
+
+
+	// std::vector<std::string> channelNames = {"0.3"};
+
+	//makePlots("Dark Photon Signal", DarkPhotonAnalysis, channels, rowNames, graphableTypes, units, channelNames);
+
+	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
+	std::vector<std::shared_ptr<Channel>> higgsChannels = higgsAnalysis->getChannels();
+
+	//std::vector<std::string> rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
+	std::vector<std::string> rowNames = {"ee", "e e", "eu", "e u", "uu", "u u"};
+	std::vector<std::string> graphableTypes = {"Eta", "Pt"};
+	std::vector<std::string> connecters = {"_1st Highest mu- ", "_1st Highest e- "}; 
+	std::vector<TString> units = {"#eta", "#phi", "p_T [GeV/c]"};
+
+	std::vector<std::string> graphableTypes2 = {"Same Sign Invariant Mass", "Opposite Sign Invariant Mass"};
+	std::vector<std::string> connecters2 = {"_e- ", "_mu- "};
+	std::vector<std::string> units2 = {" ", " "};
+
+	std::vector<std::string> graphableTypes3 = {"Reco Invariant Mass Background"};
+	std::vector<std::string> connecters3 = {"_"};
+	std::vector<std::string> units3 = {""};
+
+	//channelNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "eu", "e u", "uu", "u u"};
+	std::vector<std::string> channelNames4 = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu"};
+	std::vector<std::string> channelNames3 = {"eee", "eeu", "eue", "euu", "uue", "uuu"};
+	std::vector<std::string> channelNames2 = {"ee", "e e", "eu", "e u", "uu", "u u"};
+
+	makePlots("Higgs Signal 4Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames4, connecters, connecters2, connecters3, false);
+	makePlots("Higgs Signal 3Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames3, connecters, connecters2, connecters3, false);
+	makePlots("Higgs Signal 2Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames2, connecters, connecters2, connecters3, true);
 }

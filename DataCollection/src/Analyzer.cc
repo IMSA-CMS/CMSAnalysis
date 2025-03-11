@@ -48,11 +48,11 @@ void Analyzer::writeOutputFile()
   // Finalize the modules
   for (auto module : productionModules)
   {
-    module->finalize();
+    module->finalizeEvent();
   }
   for (auto module : filterModules)
   {
-    module->finalize();
+    module->finalizeEvent();
   }
 
   //Finalize separately for each filterString, to be safe
@@ -65,8 +65,8 @@ void Analyzer::writeOutputFile()
     // if (filterModules.size() != 0)
     if (true)
     {
-      std::cout << "Finalizing analysis module: " << module->getFilter() << "\n";
-      module->finalize();
+      std::cout << "Finalizing analysis module: " << module->getName() << "\n";
+      module->finalizeEvent();
       for (auto &str : filterNames) //writes analysis modules by filter string
       {
         //std::cout << "filterName: " << str << "\n";
@@ -82,15 +82,21 @@ void Analyzer::writeOutputFile()
       }
     } else {
       module->setFilterString("");
-      module->finalize();
+      module->finalizeEvent();
     }
   }
+
+  for (auto module : getAllModules())
+  {
+    std::cout << "Time taken by " << module->getName() << ": " << module->getElapsedTime() << " s\n";
+  }
+
 
   // Write total number of events
   auto eventsText = new TDisplayText(std::to_string(numOfEvents).c_str());
   eventsText->Write("NEvents");
   // Clean up
-  outputRootFile->Close();
+  //outputRootFile->Close();
   delete outputRootFile;
 }
 
@@ -120,12 +126,17 @@ std::vector<std::shared_ptr<Module>> Analyzer::getAllModules() const
   return modules;
 }
 
-void Analyzer::initialize(const std::string& outputFile)
+void Analyzer::initialize(const std::string& outputDirectory,const std::string& outputFile)// am I allowed to change this??
 {
+
+  std::string outputPath = outputDirectory + "/"+ outputFile;
+  
   // This keeps the histograms separate from the files they came from, avoiding errors
   TH1::AddDirectory(kFALSE);
   TH1::SetDefaultSumw2(kTRUE);
-  outputRootFile = new TFile(outputFile.c_str(), "RECREATE");
+
+
+  outputRootFile = new TFile(outputPath.c_str(), "RECREATE");//<<<<<<<<<<<<<<<
 
 
   // Checks if all dependencies are loaded properly
@@ -146,7 +157,7 @@ void Analyzer::initialize(const std::string& outputFile)
     {
       module->setInput(input);
     }
-    module->initialize();
+    module->initialize();//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<same initialize?
   }
 }
 

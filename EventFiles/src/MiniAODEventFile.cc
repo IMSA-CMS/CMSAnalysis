@@ -105,6 +105,11 @@ unsigned long long MiniAODEventFile::getEventIDNum() const
     throw std::runtime_error("MiniAODEventFile has no implementation of getEventIDNum");
 }
 
+long MiniAODEventFile::getRunNum() const
+{
+    throw std::runtime_error("MiniAODEventFile has no implementation of getRunNum");
+}
+
 std::vector<bool> MiniAODEventFile::getTriggerResults(std::string subProcess) const
 {
     edm::Handle<edm::TriggerResults> triggerResults;

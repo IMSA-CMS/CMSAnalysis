@@ -23,6 +23,8 @@ public:
   void printRecoParticleCollection(const ParticleCollection<Particle>& recoParts, std::ofstream& my_file) const;
   static std::string formatDaughterParticles(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts);
 
+  virtual std::string getName() override {return "EventDumpModule";}
+  static std::string formatMotherParticle(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts);
 private:
   // prints information to the screen
   //void printGenSimParticleCollection(const ParticleCollection<GenSimParticle>& genParts, std::ofstream& my_file) const;
@@ -30,7 +32,7 @@ private:
   static int getIndexOf(const Particle& part, const std::vector<Particle>& allParts);
   static int getIndexOf(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts);
   int getLatestIndexOfDaughters(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts) const;
-  static std::string formatMotherParticle(const GenSimParticle& part, const std::vector<GenSimParticle>& genParts);
+
 
   bool genSim;
   bool reco;

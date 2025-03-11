@@ -13,6 +13,7 @@
 #include "CMSAnalysis/Filters/interface/Cut.hh"
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/Modules/interface/LocalEventInput.hh"
+#include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
 
 
 // EventModule allows an Analyzer to select events and apply cuts.
@@ -28,7 +29,9 @@ class EventModule : public ProductionModule
 
         void addSelector(std::shared_ptr<Selector> selector);
         void addCut(std::shared_ptr<Cut> cut);
-        
+        void addScaleFactor(std::shared_ptr<ScaleFactor> scaleFactors);
+        virtual void setInput(const EventInput* input) override;
+        void initialize() override;
         // Will print the amount of events which passed each cut.
         void finalize() override;
 
@@ -38,6 +41,8 @@ class EventModule : public ProductionModule
 
         // Returns an input module that can be used to make these events the input to other modules
         const EventInput* getEventInput() const {return &localInput;}
+
+        virtual std::string getName() override {return "EventModule";}
 
     protected:
         bool process() override;
@@ -62,6 +67,7 @@ class EventModule : public ProductionModule
         void clearHistograms();
         std::vector<std::shared_ptr<Selector>> selectors;
         std::vector<std::shared_ptr<Cut>> cuts;
+        std::vector<std::shared_ptr<ScaleFactor>> scaleFactors;
         Event event;
 
         std::shared_ptr<HistogramOutputModule> histMod = std::make_shared<HistogramOutputModule>();
