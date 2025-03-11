@@ -21,14 +21,12 @@ if __name__ == "__main__":
     analysis_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis"
     bdt_directory = analysis_directory + "/BDT/"
     
+    # script_content: script to run on condor
+    
     script_content = (f"""
 # ##################### SETUP #####################
 
 ls
-
-# Extract directory
-tar -xzvf precompile.tar.gz
-cd CMSSW_14_0_4/src/CMSAnalysis/BDT
 
 echo "########################################"
 
@@ -51,10 +49,26 @@ ls
 # ##################### EXECUTION #####################
 
 source /cvmfs/cms.cern.ch/cmsset_default.sh
+
+cmsrel CMSSW_14_0_4
+
+# Extract input directories
+
+tar -xzvf uncompiled.tar.gz
+tar -xzvf condor_input.tar.gz
+
+cp -r condor_input CMSSW_14_0_4/src/CMSAnalysis/BDT
+cp -r CMSAnalysis CMSSW_14_0_4/src
+
+cd CMSSW_14_0_4/src/CMSAnalysis
+
 cmsenv
 
+# -j2 flag necessary to prevent exceeding memory quota (j4 > 2047, j8 maybe for 8192)
 scram b clean
-scram b -j
+scram b -j8
+
+cd BDT
 
 # echo "########################################"
 # printenv
@@ -63,15 +77,9 @@ echo "########################################"
 find $CMSSW_BASE/src/CMSAnalysis/Modules/interface -name "LeptonJetMLStripModule.hh"
 echo $ROOT_INCLUDE_PATH
 
-root \'crab_BDT_MLTrain.C(\"{args.input}\", \"{args.outputDir}\", \"{args.outputFile}\", \"{args.trainingArgs}\")\'
+root \'crab_BDT_MLTrain.C(\"condor_input/\", \"{args.outputDir}\", \"{args.outputFile}\", \"{args.trainingArgs}\")\'
 """
     )
-
-#     script_content = (f"""
-# source /cvmfs/cms.cern.ch/cmsset_default.sh
-# cmsenv
-# """
-#     )
     
     try:
         with open(script_filename, "w") as f:
@@ -85,23 +93,48 @@ root \'crab_BDT_MLTrain.C(\"{args.input}\", \"{args.outputDir}\", \"{args.output
     jdl_filename = "crab_bdt_request.jdl"
     open(jdl_filename, "w").write(f"""                                         
 universe = vanilla
+request_memory = 8192
+request_cpus = 4
 Executable = {script_filename}
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
 Output = condor_logs/bdt_$(Cluster)_$(Process).stdout
-Error = condor_logs/bdt_$(Cluster)_$(Process).stderr
 Log = condor_logs/bdt_$(Cluster)_$(Process).log
-transfer_input_files = precompile.tar.gz
+transfer_input_files = uncompiled.tar.gz,condor_input.tar.gz
 transfer_output_files = {args.outputFile}.root,{args.outputFile}Rerun.root,TMVAClassification_BDT.class.C,TMVAClassification_BDT.weights.xml
 Queue 1
 """)
+    
+    # Error = condor_logs/bdt_$(Cluster)_$(Process).stderr
     
     print("JDL file generated successfully")
     
     execute_filename = "execute_condor.sh"
     open(execute_filename, "w").write(f"""                                         
 #!/bin/bash
+
+# Update repo
+
+mkdir /eos/uscms/store/user/{os.environ["USER"]}/condor_utils/temp_repo
+git clone git@github.com:IMSA-CMS/CMSAnalysis.git /eos/uscms/store/user/{os.environ["USER"]}/condor_utils/temp_repo
+tar -czf uncompiled.tar.gz /eos/uscms/store/user/{os.environ["USER"]}/condor_utils/temp_repo/CMSAnalysis
+rm -rf /eos/uscms/store/user/{os.environ["USER"]}/condor_utils/temp_repo
+
+# Fetch input files
+
+cp -r {args.input} ./condor_input
+tar -czf condor_input.tar.gz ./condor_input
+rm -rf ./condor_input
+
 condor_submit $1
+
+# clean up request files
+
+rm uncompiled.tar.gz
+rm condor_input.tar.gz
+rm crab_bdt_request.jdl
+rm execute_condor.sh
+rm training_shell.sh
 """)
     
     submit = Popen(
