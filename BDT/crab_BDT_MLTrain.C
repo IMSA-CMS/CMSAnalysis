@@ -591,7 +591,7 @@ bool returnState(TString &myMethodList, std::string trainPath, std::string outpu
   std::cout << "==> Wrote root file: " << outputFile->GetName() << std::endl;
   std::cout << "==> TMVAClassification is done!" << std::endl;
 
-  TFile *f = new TFile(outFile + "Rerun.root", "recreate");
+  TFile *f = new TFile((outFile + "Rerun.root").c_str(), "recreate");
   factory->Write();
   f->Close();
 
@@ -638,7 +638,7 @@ bool returnState(TString &myMethodList, std::string trainPath, std::string outpu
 // @param useDY : whether or not to train on DY background files : 0, 1
 // @param useQCD : whether or not to train on QCD background files : 0, 1
 
-void MLTrain(std::string trainPath, std::string outputPath, std::string outFile, std::string trainArgs)
+void crab_BDT_MLTrain(std::string trainPath, std::string outputPath, std::string outFile, std::string trainArgs)
 {
   // Select methods (don't look at this code - not of interest)
   TString methodList;
