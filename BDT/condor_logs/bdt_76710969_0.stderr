@@ -1,7 +1,0 @@
-config/SCRAM/GMake/Makefile.rules:1527: *** Please first run \"scramv1 b ProjectRename\".  Stop.
-config/SCRAM/GMake/Makefile.rules:1527: *** Please first run \"scramv1 b ProjectRename\".  Stop.
-find: '/eos/uscms/store/user/jpalamad/condor_utils/CMSSW_14_0_4/src/CMSAnalysis/Modules/interface': No such file or directory
-In file included from input_line_8:1:
-/srv/CMSSW_14_0_4/src/CMSAnalysis/BDT/crab_BDT_MLTrain.C:22:10: fatal error: 'CMSAnalysis/Modules/interface/LeptonJetMLStripModule.hh' file not found
-#include "CMSAnalysis/Modules/interface/LeptonJetMLStripModule.hh"
-         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
