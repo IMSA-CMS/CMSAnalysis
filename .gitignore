@@ -57,6 +57,7 @@ CRAB/input
 
 # Condor stuff
 BDT/condor_logs
+BDT/*.tar.gz
 
 # macOS
 ._*
