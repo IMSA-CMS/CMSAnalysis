@@ -1,11 +1,12 @@
                                          
 universe = vanilla
-request_memory = 8192
+request_memory = 65536
 request_cpus = 4
 Executable = training_shell.sh
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
 Output = condor_logs/bdt_$(Cluster)_$(Process).stdout
+Error = condor_logs/bdt_$(Cluster)_$(Process).stderr
 Log = condor_logs/bdt_$(Cluster)_$(Process).log
 transfer_input_files = uncompiled.tar.gz,condor_input.tar.gz
 transfer_output_files = TMVA.root,TMVARerun.root,TMVAClassification_BDT.class.C,TMVAClassification_BDT.weights.xml
