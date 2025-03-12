@@ -36,9 +36,9 @@
 
 template <typename AnalysisType>
 void makePlots(std::string signal, std::shared_ptr<AnalysisType> analysis, std::vector<std::shared_ptr<Channel>> channels, 
-std::vector<std::string> rowNames, std::vector<std::string> graphableTypes, std::vector<std::string> graphableTypes2, std::vector<std::string> graphableTypes3, 
-std::vector<TString> units, std::vector<std::string> units2, std::vector<std::string> units3, std::vector<std::string> channelNames,
-std::vector<std::string> connecters, std::vector<std::string> connecters2, std::vector<std::string> connecters3, bool includeData)
+std::vector<std::string> rowNames, std::map<std::string, std::string> rowAbbrs, std::vector<std::string> graphableTypes, 
+std::vector<TString> units, std::vector<std::string> channelNames,
+bool includeData)
 {
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation/Data)");
 	plotFormatter->setUpperMasslimit(2000);
@@ -58,48 +58,22 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, std::
 	std::vector<std::string> toAdd;
 	std::vector<std::string> rowTitles;
 	
-	for (std::string connecter: connecters)
+	for (std::string dataType : graphableTypes)
 	{
-		for(std::string dataType : graphableTypes) 
+		for(std::string rowName: rowNames) 
 		{
-			rowTitles.push_back(connecter + " " + dataType);
+			rowTitles.push_back(dataType + " " + rowAbbrs[rowName]);
 		}
-	}
-
-	for (std::string connecter: connecters2)
-	{
-		for(std::string dataType : graphableTypes2) 
-		{
-			rowTitles.push_back(connecter + " " + dataType);
-		}
-	}
-	
-	for (int i = 0; i < 2; i++)
-	{
-		for (std::string connecter: connecters3)
-		{
-			for(std::string dataType : graphableTypes3) 
-			{
-				if (i == 0)
-				{
-					rowTitles.push_back(connecter + " " + dataType + "X");
-				}
-				else
-				{
-					rowTitles.push_back(connecter + " " + dataType + "Y");
-				}			}
-		}
-	}
-	
+	}	
 	
 	std::vector<std::string> columnTitles;
 	std::string entry = "";
 	bool includeSignal = true;
 	
-	for (std::string connecter: connecters)
+	for (std::string dataType : graphableTypes)
 	{
 		int unitCounter = 0;
-		for(std::string dataType : graphableTypes) 
+		for(std::string rowName: rowNames) 
 		{
 			for(std::shared_ptr<Channel> channel : channels) 
 			{ 	
@@ -122,11 +96,13 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, std::
 				TString xAxisName = units[unitCounter];
 				TString yAxisName = "Events";
 				dataName = Utility::removeSpaces(dataType);
-				fileName = "jumboPlotStorage/" + Utility::removeSpaces("WJetLumi") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
-				HistVariable fullDataType = HistVariable(connecter + dataType);
+				fileNamePNG = "jumboPlotStorage/" + channel->getName() + "_" + dataName + "_" + rowAbbrs[rowName] + "_" + "DataMC.png";
+				fileNameROOT = "jumboPlotStorage/" + channel->getName() + "_" + dataName + "_" + rowAbbrs[rowName] + "_" + "DataMC.root";
+				HistVariable fullDataType = HistVariable(dataType + " " + rowName);
 				//bool includeSignal = false;
 				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, includeSignal, includeData, channel->getName());
-				canvas->SaveAs(fileName.c_str());
+				canvas->SaveAs(fileNamePNG.c_str());
+				canvas->SaveAs(fileNameROOT.c_str());
 				plotFormatter->deleteHists();
 				canvas->Close();
 				delete canvas;
@@ -138,112 +114,7 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, std::
 			tableInput.push_back(toAdd);
 			toAdd.clear();
 		}
-	}
-	
-	 for (std::string connecter: connecters2)
-	 {
-	 	int unitCounter = 0;
-	 	for(std::string dataType : graphableTypes2) 
-	 	{
-	 		for(std::shared_ptr<Channel> channel : channels) 
-	 		{ 	
-	 			bool valid = false;
-	 			for (std::string channelName : channelNames)
-	 			{
-	 				if (channelName == channel->getName())
-					{
-						valid = true;
-						break;
-	 				}
-	 			}
-
-				if (valid == false)
-				{
-					continue;
-	 			}
-				
-				entry = "";
-				TString xAxisName = units2[unitCounter];
-				TString yAxisName = "Events";
-				dataName = Utility::removeSpaces(dataType);
-				fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
-				HistVariable fullDataType = HistVariable(connecter + dataType);
-				//bool includeSignal = false;
-				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, includeSignal, includeData, channel->getName());
-				canvas->SaveAs(fileName.c_str());
-				plotFormatter->deleteHists();
-				canvas->Close();
-				delete canvas;
-			
-	 			entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
-	 			toAdd.push_back(entry);
-	 		}
-	 		unitCounter++;
-	 		tableInput.push_back(toAdd);
-	 		toAdd.clear();
-		 	}
-		}
-	
-	
-	for (int i = 0; i < 2; i++)
-	{
-		for (std::string connecter: connecters3)
-		{
-			int unitCounter = 0;
-			for(std::string dataType : graphableTypes3) 
-			{
-				for(std::shared_ptr<Channel> channel : channels) 
-				{ 	
-					bool valid = false;
-					for (std::string channelName : channelNames)
-					{
-						if (channelName == channel->getName())
-						{
-							valid = true;
-							break;
-						}
-					}
-
-					if (valid == false)
-					{
-						continue;
-					}
-					
-					entry = "";
-					TString xAxisName = units3[unitCounter];
-					TString yAxisName = "Events";
-					dataName = Utility::removeSpaces(dataType);
-					fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
-					HistVariable fullDataType = HistVariable(connecter + dataType);
-					if (i == 0)
-					{
-						fullDataType.is2DHistX = true;
-						fullDataType.is2DHistY = false;
-						fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "X" + "DataMC.png";
-					}
-					else
-					{
-						fullDataType.is2DHistY = true;						
-						fullDataType.is2DHistX = false;
-						fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "Y" + "DataMC.png";
-					}
-					//bool includeSignal = false;
-					TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, true, includeSignal, includeData, channel->getName());
-					canvas->SaveAs(fileName.c_str());
-					plotFormatter->deleteHists();
-					canvas->Close();
-					delete canvas;
-				
-					entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
-					toAdd.push_back(entry);
-				}
-				unitCounter++;
-				tableInput.push_back(toAdd);
-				toAdd.clear();
-			}
-		}
-	}
-	
+	}	
 	
 	auto tableData = std::make_shared<TableData>(tableInput, channelNames, rowTitles);
 	auto table = std::make_shared<HTMLTable>();
@@ -259,7 +130,7 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, std::
 	tableInput.clear();
 }
 
-void JumboPlot()
+void DPJumboPlot()
 {
 	////////////////////////////////// HIGGS ANALYSIS //////////////////////////////////
 	
@@ -295,13 +166,17 @@ void JumboPlot()
 	auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>(output_cuts_files1_10, cross_section);
 	std::vector<std::shared_ptr<Channel>> channels = DarkPhotonAnalysis->getChannels();
 
-	std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Signs"};
+	std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Sign"};
+
+	std::map<std::string, std::string> rowAbbrs = {
+        {"High Mass and Same Sign", "HMSS"},
+        {"Low Mass and Same Sign", "LMSS"},
+        {"High Mass and Different Sign", "HMOS"}
+    };
+
     std::vector<std::string> graphableTypes = {"Eta", "Lepton Jet Delta R", "Lepton Jet Mass", "Phi", "Pt"};
 	std::vector<TString> units = {"ETA", "DELTA R", "GEV", "RAD", "GEV/C"};
 	std::vector<std::string> channelNames = {"0.3"};
 
-	std::vector<std::string> bsvtfutsps = {}; // bullshitvectortofillupthesestupidparameterslots
-	std::vector<std::string> connectors = {"_1st Highest Lepton Jet "};
-
-	makePlots("Dark Photon Signal", DarkPhotonAnalysis, channels, rowNames, graphableTypes, bsvtfutsps, bsvtfutsps, units, bsvtfutsps, bsvtfutsps, channelNames, connectors, bsvtfutsps, bsvtfutsps, true);
+	makePlots("Dark Photon Signal", DarkPhotonAnalysis, channels, rowNames, rowAbbrs, graphableTypes, units, channelNames, true);
 }
