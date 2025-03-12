@@ -21,7 +21,7 @@
 #include "TH1.h"
 #include "TList.h"
  
-DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis(const std::string filePath, const std::string crossSectionPath = "/uscms/home/jpalamad/analysis/clean/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt") {
+DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis(const std::string filePath, const std::string crossSectionPath = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt") {
 
     //Change this file to your folder to use your own cross sections
     //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
@@ -159,71 +159,5 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis(const std::string filePat
 
     std::cout << "############# End Map Hists #############" << std::endl;
 
-    //leptonBackgrounds->cleanProcesses();
     getChannelsProtected().push_back(leptonBackgrounds);
-
 }
-
-// bool DarkPhotonCompleteAnalysis::checkChannelName(std::string channelName, double massTarget){
-//     return channelName == massTarget;
-// }
-// TH1* DarkPhotonCompleteAnalysis::getHist(std::string histType, std::string processName, double massTarget, bool scaleToExpected, std::string channelName) const {
-//     int maxBinNum = 0;
-// 	double maxBarWidth = 0.0;
-// 	int channelNumber = 0; 
-//     std::string name = processName;
-// 	for (const auto& channel : channels)
-// 	{
-//         std::string channelName = channel->getName();
-//         if(channelName == massTarget) {
-//             channelNumber++;
-//             //std::vector<TH1*> channelHists = channel->getHists(histType, "signal", false);
-            
-//             TH1* channelHist = channel->findProcess(processName)->getHist(histType, scaleToExpected);
-//             std::cout << "number for channelHist GetNBinsX = " << channelHist->GetNbinsX() << "\n";
-//             if (!channelHist)
-//             {
-//                 throw std::runtime_error("Histogram not found in channel: " + channel->getName());
-//             }
-
-//             if(channelHist->GetEntries() > 0) {
-//                 if (channelHist == 0) {
-//                     throw std::runtime_error("Histogram not found in channel: " + channel->getName());
-//                 }
-//                 if (channelHist->GetNbinsX() > maxBinNum)
-//                 {
-//                     maxBinNum = channelHist->GetNbinsX();
-                   
-//                 }
-                
-//                 if ((channelHist->GetXaxis()->GetBinWidth(maxBinNum)) > maxBarWidth)
-//                 {
-//                     maxBarWidth = (channelHist->GetXaxis()->GetBinWidth(maxBinNum));
-                    
-//                 }
-//             }
-//             delete channelHist;
-//         }
-// 	}
-	
-//     TH1* hist = new TH1F(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * maxBarWidth);
-// 	TH1* toAdd = 0;
-// 	TList* toMerge = new TList();
-//     TH1::AddDirectory(kFALSE);
-// 	for (const auto& channel : channels)	
-// 	{
-//         std::string channelName = channel->getName();
-// 		if (!toAdd) {
-//             toAdd = channel->findProcess(processName)->getHist(histType, scaleToExpected);
-//             //toAdd = dynamic_cast<TH1*>(channel->findProcess(processName)->getHist(histType, scaleToExpected)->Clone((channelName + processName).c_str()));
-//         }
-//         if(toAdd->GetEntries() > 0) {
-//             toMerge->Add(toAdd);
-//         }
-// 	}
-//     TH1::AddDirectory(kTRUE);
-// 	hist->Merge(toMerge);
-// 	hist->SetLineColor(channels.at(0)->findProcess(processName)->getColor());
-// 	hist->SetFillColor(channels.at(0)->findProcess(processName)->getColor());
-// 	return hist;
-// }
