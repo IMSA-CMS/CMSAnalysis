@@ -424,6 +424,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoJets() const
 
 double NanoAODEventFile::getMET() const
 {
+    // std::cout << "met_pt TEST: " << static_cast<double>(getArrayElement<Float_t>("met_pt", 0)) << std::endl;
     return static_cast<double>(getArrayElement<Float_t>("met_pt", 0));
 }
 

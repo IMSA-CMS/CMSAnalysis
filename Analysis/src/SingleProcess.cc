@@ -34,9 +34,7 @@ TH1* SingleProcess::getHist(HistVariable histType, bool scaleToExpected) const
         }
     }
     //std::cout << "SingleProcess 2" << std::endl;
-    for(auto correction : corrections) {
-        hist = correction->correctHist(hist);
-    }
+
     //std::cout << "SingleProcess 3" << std::endl;
     return hist;
 }
@@ -53,10 +51,6 @@ int SingleProcess::getTotalEvents() const
 
 double SingleProcess::getExpectedYield(HistVariable dataType) const
 {
-    std::vector<HistVariable> histVariables = input->getHistVariables();
-    //for(HistVariable histVar : histVariables) {
-    //    std::cout << "histVars: " << histVar.getHistName() << std::endl;
-    //}
     double expectedYield = estimator->getExpectedYield(this, dataType, luminosity);
     return expectedYield;
 }
