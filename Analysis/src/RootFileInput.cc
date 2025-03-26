@@ -15,7 +15,10 @@
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 
 RootFileInput::RootFileInput(std::string fileName, std::vector<HistVariable> iHistVariables, 
-std::map<std::string, std::string> HistVariableToFileMapping) : histVariables(iHistVariables), fileSource(fileName), HistVariableToFileMapping(HistVariableToFileMapping)
+std::map<std::string, std::string> HistVariableToFileMapping) : 
+	histVariables(iHistVariables), 
+	fileSource(fileName), 
+	HistVariableToFileMapping(HistVariableToFileMapping)
 {} 
 	
 TFile* RootFileInput::getFile(std::string fileSource) const
