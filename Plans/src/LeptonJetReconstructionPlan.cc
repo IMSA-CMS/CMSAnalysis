@@ -82,7 +82,7 @@ void LeptonJetReconstructionPlan::initialize()
   auto highestMuonPtCut = make_shared<HighestMuonPtCut>();
 
   eventMod->addCut(triggerCut);
-  eventMod->addCut(highestMuonPtCut);
+  //eventMod->addCut(highestMuonPtCut);
 
   CommonOperations::addHiggsScaleFactors(eventMod);
 
@@ -103,7 +103,8 @@ void LeptonJetReconstructionPlan::initialize()
   //auto recoGenSimComparisonMod = std::make_shared<RecoGenSimComparisonModule>();
   auto leptonJetMLStripMod = std::make_shared<LeptonJetMLStripModule>();
   leptonJetMLStripMod->setInput(eventMod->getEventInput());
-  auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "DataCollection/bin/dataset/weights/TMVAClassification_BDT.weights.xml", "BDT");
+  // auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "DataCollection/bin/dataset/weights/TMVAClassification_BDT.weights.xml", "BDT");
+  auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "TMVAClassification_BDT.weights.xml", "BDT");
 
   //Histograms
   //uncomented 
