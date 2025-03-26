@@ -170,7 +170,7 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
     gStyle->SetOptStat(0);
 
     //Draws the histogram with more events first (bigger axis)
-    first->SetLineColor(colors.at(0));
+    first->SetLineColor(colors.at(firstIndex));
     first->Draw("HIST");
     histVector.push_back(first);
 
@@ -548,7 +548,7 @@ void PlotFormatter::FormatSignalData(THStack*& background, TH1*& signal, TH1*& d
     }
     std::cout << "TList End" << std::endl;
 
-    signal->Scale(std::pow(10, 6));
+    signal->Scale(1e6);
     signal->Rebin(numBins);
     data->Rebin(numBins);   
 
@@ -581,6 +581,8 @@ void PlotFormatter::DrawOtherHistograms(std::vector<TH1*>& hists, std::vector<in
         hist->SetLineWidth(2);
         hist->Draw("HIST SAME");
         histVector.push_back(hist);
+
+        std::cout << "First index: " << firstIndex << "Index " << i << " Hist name " << hist->GetName() << " color " << hist->GetLineColor() << std::endl;
     }
 }
 
