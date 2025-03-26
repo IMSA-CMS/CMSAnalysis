@@ -17,6 +17,17 @@ ParticleCollection<Particle> ElectronScaleFactor::getParticles(const EventInput*
 
 void ElectronScaleFactor::loadScaleFactors(Json::Value output)
 {
+    // Load nominal scale factors
+    loadScaleFactors(output, SystematicType::Nominal);
+    // Load up systematic scale factors
+    loadScaleFactors(output, SystematicType::Up);
+    // Load down systematic scale factors
+    loadScaleFactors(output, SystematicType::Down);
+}
+
+void ElectronScaleFactor::loadScaleFactors(Json::Value output, SystematicType systematicType)
+{
+    
     Json::Value allCorrections = output["corrections"];
     Json::Value allData = allCorrections[0u]["data"];
     
@@ -40,25 +51,46 @@ void ElectronScaleFactor::loadScaleFactors(Json::Value output)
         //std::cout << "No year content found" << std::endl;
 
         // Loop through ValType (e.g., "sf")
-        for (size_t j = 0; j < yearContent.size(); j++) 
+        for (size_t j = 0; j < yearContent.size(); j++)
         {
-            Json::Value valTypeEntry = yearContent[j];
-            Json::Value valTypeKey = valTypeEntry["key"];
+            switch (systematicType)
+            {
+                case SystematicType::Nominal:
+                    if (yearContent[j]["key"] != "sf")
+                    {
+                        continue;
+                    }
+                    break;
+                case SystematicType::Up:
+                    if (yearContent[j]["key"] != "sfup")
+                    {
+                        continue;
+                    }
+                    break;
+                case SystematicType::Down:
+                    if (yearContent[j]["key"] != "sfdown")
+                    {
+                        continue;
+                    }
+                    break;
+            }
+            
+            Json::Value valTypeEntry = yearContent[j]["value"];
 
             //std::cout << "No ValType key found" << std::endl;
-            //std::string valType = valTypeKey.asString();
-            //std::cout << "Processing ValType: " << valType << std::endl;
+            
 
-            Json::Value valTypeValue = valTypeEntry["value"];
-            Json::Value workingPointContent = valTypeValue["content"];
+            Json::Value workingPointContent = valTypeEntry["content"];
             //std::cout << "No working point content found" << std::endl;
 
             // Loop through WorkingPoints (e.g., "RecoBelow20" and "RecoAbove20")
-            for (size_t k = 0; k < workingPointContent.size(); k++) 
+            for (size_t k = 0; k < workingPointContent.size(); k++)
             {
+                if (workingPointContent[k]["key"] != "Loose")
+                {
+                    continue;
+                }
                 Json::Value wpEntry = workingPointContent[k];
-                Json::Value wpKey = wpEntry["key"];
-
                 //std::cout << "No WorkingPoint key found" << std::endl;
                 //std::string workingPoint = wpKey.asString();
                 //std::cout << "Processing WorkingPoint: " << workingPoint << std::endl;
@@ -109,13 +141,29 @@ void ElectronScaleFactor::loadScaleFactors(Json::Value output)
                             // Construct a key (optional) and add scale factor
                             //std::string key = year + "_" + valType + "_" + workingPoint + "_eta[" + std::to_string(etaMin) + "," + std::to_string(etaMax) + "]_pt[" + std::to_string(ptMin) + "," + std::to_string(ptMax) + "]";
                             //std::cout << "Processing key: " << key << std::endl;
-
-                            addScaleFactor(etaMin, ptMax, scaleFactor);
+                            switch (systematicType)
+                            {
+                                case SystematicType::Nominal:
+                                    addScaleFactor(etaMin, ptMax, ScaleFactorSet(scaleFactor, 0.0, 0.0));
+                                    std::cout << "Adding nominal scale factor for eta bin [" << etaMin << ", " << etaMax << "] and pt bin [" << ptMin << ", " << ptMax << "] with scale factor: " << scaleFactor << std::endl;
+                                    break;
+                                case SystematicType::Up:
+                                    getScaleFactorSet(etaMin, ptMax).systUp = scaleFactor;
+                                    std::cout << "Adding up systematic scale factor for eta bin [" << etaMin << ", " << etaMax << "] and pt bin [" << ptMin << ", " << ptMax << "] with scale factor: " << scaleFactor << std::endl;
+                                    std::cout << "Readback value of systUp: " << getScaleFactorSet(etaMin, ptMax).systUp << std::endl;
+                                    break;
+                                case SystematicType::Down:
+                                    getScaleFactorSet(etaMin, ptMax).systDown = scaleFactor;
+                                    std::cout << "Adding down systematic scale factor for eta bin [" << etaMin << ", " << etaMax << "] and pt bin [" << ptMin << ", " << ptMax << "] with scale factor: " << scaleFactor << std::endl;
+                                    break;
+                            }
+                            //addScaleFactor(etaMin, ptMax, ScaleFactorSet(scaleFactor, 0.0, 0.0));
                             index++; // Move to the next bin content
                         }
                     }
                 }
-            }
+            }        
         }
     }
 }
+
