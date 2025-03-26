@@ -67,7 +67,7 @@ private:
   std::map<std::string, TObject*> baseObjects;
   std::vector<std::shared_ptr<ScaleFactor>> scaleFactors;
 
-  std::vector<std::shared_ptr<HistogramPrototype>> histograms; //!!!!!!!!!!loop over and add scale factors
+  std::vector<std::shared_ptr<HistogramPrototype>> histograms; 
   
 
   float total = 0;

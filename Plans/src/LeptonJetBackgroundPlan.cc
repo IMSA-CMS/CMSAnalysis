@@ -35,7 +35,7 @@ void LeptonJetBackgroundPlan::initialize()
 
     auto recoPt = make_shared<PtHist>(EventInput::RecoLevel::Reco, "Leading lepton pT", 500, 0, 1000);
     auto recoInvMass = make_shared<InvariantMassHist>(EventInput::RecoLevel::Reco, "Opposite-sign dilepton mass", 1000, 0, 2000);
-    auto metHist = make_shared<METHist>(metMod, "MET", 500, 0, 1000);
+    auto metHist = make_shared<METHist>( "MET", 500, 0, 1000);
 
     // Add the histogram(s) created above to histMod
     histMod->addHistogram(recoPt);
