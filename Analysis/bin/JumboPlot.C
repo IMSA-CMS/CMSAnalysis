@@ -261,20 +261,32 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, std::
 
 void JumboPlot()
 {
-	//auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
-	//std::vector<std::shared_ptr<Channel>> channels = DarkPhotonAnalysis->getChannels();
-
-	// std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Signs"};
-    // std::vector<std::string> graphableTypes = {"Eta", "Lepton Jet Delta R", "Lepton Jet Mass", "Phi", "Pt"};
-	// std::vector<TString> units = {"ETA", "DELTA R", "GEV", "RAD", "GEV/C"};
-
-
-	// std::vector<std::string> channelNames = {"0.3"};
-
-	//makePlots("Dark Photon Signal", DarkPhotonAnalysis, channels, rowNames, graphableTypes, units, channelNames);
-
+	////////////////////////////////// HIGGS ANALYSIS //////////////////////////////////
+	
 	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
 	std::vector<std::shared_ptr<Channel>> higgsChannels = higgsAnalysis->getChannels();
+
+	// std::vector<std::string> rowNames = {"ee", "e e", "eu", "e u", "uu", "u u"};
+	// std::vector<std::string> graphableTypes = {"Eta", "Pt"};
+	// std::vector<std::string> connecters = {"_1st Highest mu- ", "_1st Highest e- "}; 
+	// std::vector<TString> units = {"#eta", "#phi", "p_T [GeV/c]"};
+
+	// std::vector<std::string> graphableTypes2 = {"Same Sign Invariant Mass", "Opposite Sign Invariant Mass"};
+	// std::vector<std::string> connecters2 = {"_e- ", "_mu- "};
+	// std::vector<std::string> units2 = {" ", " "};
+
+	// std::vector<std::string> graphableTypes3 = {"Reco Invariant Mass Background"};
+	// std::vector<std::string> connecters3 = {"_"};
+	// std::vector<std::string> units3 = {""};
+
+	// //channelNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "eu", "e u", "uu", "u u"};
+	std::vector<std::string> channelNames4 = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu"};
+	std::vector<std::string> channelNames3 = {"eee", "eeu", "eue", "euu", "uue", "uuu"};
+	std::vector<std::string> channelNames2 = {"ee", "e e", "eu", "e u", "uu", "u u"};
+
+	// makePlots("Higgs Signal 4Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames4, connecters, connecters2, connecters3, false);
+	// makePlots("Higgs Signal 3Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames3, connecters, connecters2, connecters3, false);
+	// makePlots("Higgs Signal 2Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames2, connecters, connecters2, connecters3, true);
 
 	//std::vector<std::string> rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
 	std::vector<std::string> rowNames = {"ee", "e e", "eu", "e u", "uu", "u u"};
@@ -289,13 +301,24 @@ void JumboPlot()
 	std::vector<std::string> graphableTypes3 = {"Reco Invariant Mass Background"};
 	std::vector<std::string> connecters3 = {"_"};
 	std::vector<std::string> units3 = {"Invariant Mass [GeV/c^2]"};
+	////////////////////////////////// DP ANALYSIS //////////////////////////////////
+	
+	// const std::string output_cuts_files1_10 = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/LeptonJetReconstruction_All/";
+	// const std::string cross_section = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt";
+	// auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>(output_cuts_files1_10, cross_section);
+	// std::vector<std::shared_ptr<Channel>> channels = DarkPhotonAnalysis->getChannels();
 
-	//channelNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "eu", "e u", "uu", "u u"};
-	std::vector<std::string> channelNames4 = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu"};
-	std::vector<std::string> channelNames3 = {"eee", "eeu", "eue", "euu", "uue", "uuu"};
-	std::vector<std::string> channelNames2 = {"ee", "e e", "eu", "e u", "uu", "u u"};
+	// std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Signs"};
+    // std::vector<std::string> graphableTypes = {"Eta", "Lepton Jet Delta R", "Lepton Jet Mass", "Phi", "Pt"};
+	// std::vector<TString> units = {"ETA", "DELTA R", "GEV", "RAD", "GEV/C"};
+	// std::vector<std::string> channelNames = {"0.3"};
+
+	// std::vector<std::string> bsvtfutsps = {}; // bullshitvectortofillupthesestupidparameterslots
+	// std::vector<std::string> connectors = {"_1st Highest Lepton Jet "};
 
 	makePlots("Higgs Signal 4Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames4, connecters, connecters2, connecters3, false, true);
-	//makePlots("Higgs Signal 3Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames3, connecters, connecters2, connecters3, false, true);
-	//makePlots("Higgs Signal 2Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames2, connecters, connecters2, connecters3, true, false);
+	makePlots("Higgs Signal 3Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames3, connecters, connecters2, connecters3, false, true);
+	makePlots("Higgs Signal 2Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames2, connecters, connecters2, connecters3, true, false);
+	
+	//makePlots("Dark Photon Signal", DarkPhotonAnalysis, channels, rowNames, graphableTypes, bsvtfutsps, bsvtfutsps, units, bsvtfutsps, bsvtfutsps, channelNames, connectors, bsvtfutsps, bsvtfutsps, true);
 }
