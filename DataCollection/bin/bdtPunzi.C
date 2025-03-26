@@ -21,7 +21,8 @@ void calculatePunzi() {
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary Data");
     //Change the filePath here. This should be the longest branch all input files have in common.
     //const std::string filePath = "/uscms/home/jpalamad/analysis/CMSSW_12_4_3/src/CMSAnalysis/MCGeneration/test/";
-	const std::string fileName = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/BDT_CompleteCuts.root";
+	//const std::string fileName = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/BDT_CompleteCuts.root";
+    const std::string fileName = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/BDT_NewMin_Output.root";
 
     //Change x and y axis titles here
     TString xTitle = "BDT Response";
