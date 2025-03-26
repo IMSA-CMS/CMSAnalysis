@@ -34,13 +34,21 @@ std::string HistogramPrototype::getFilterString() const
   return filterStr;
 }
 
-double HistogramPrototype::eventWeight() const
+double HistogramPrototype::eventWeight(ScaleFactor::SystematicType type, std::shared_ptr<ScaleFactor> scaleFactorToChange) const
+
 {
   //std::cout << "Weight event input: " << getInput() <<std::endl;
   double weight = 1.0;
   for (auto scaleFactor : scaleFactors)
   {
-    weight *= scaleFactor->getScaleFactor(getInput());
+    if (scaleFactor == scaleFactorToChange)
+    {
+      weight *= scaleFactor->getScaleFactor(getInput(), type);
+    }
+    else
+    {
+      weight *= scaleFactor->getScaleFactor(getInput());
+    }
     //std::cout << "Scale Factor: " << scaleFactor->getScaleFactor(getInput()) << std::endl;
   }
   return weight;
