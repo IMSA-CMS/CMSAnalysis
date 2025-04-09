@@ -123,7 +123,8 @@ TCanvas* Fitter::fitExpressionFormula(TH1* histogram, FitFunction& fitFunction)
 
 	return c1;
 }
-TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction) // ask about how fitting works here
+
+TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction)
 {
 	//TCanvas *c2 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
 	TF1* f1 = fitFunction.getFunction();
@@ -166,7 +167,7 @@ TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction) // ask about 
 	// 		f1->SetParLimits(6,3,20);
 	// 	}
 	// }
-	f1->SetRange(0, 2000);
+	f1->SetRange(fitFunction.getMin(), fitFunction.getMax());
 	f1->SetLineColor(kRed);
 	TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
 	// std::cout << "2:7\n";
@@ -194,7 +195,7 @@ TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction) // ask about 
 }
 TCanvas* Fitter::fitPowerLaw(TH1* histogram, FitFunction& fitFunction)
 {
-	double initalParams[3] = {1e17, -400, -7};
+	double initalParams[3] = {1e17, 0, -5};
 	fitFunction.getFunction()->SetParameters(initalParams);
 
 	TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
@@ -205,6 +206,8 @@ TCanvas* Fitter::fitPowerLaw(TH1* histogram, FitFunction& fitFunction)
 	// Root says better when histogram represents counts
 	TFitResultPtr result = histogram->Fit(fitFunction.getFunction(), "SLQRWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
 
+
+	// shouldn't even be doing this? we're minimizing log likelihood, not chi2
 	double chi2 = __DBL_MAX__;
 	while (chi2 - result->Chi2() > 0.000001)
 	{
