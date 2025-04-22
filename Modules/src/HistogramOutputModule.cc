@@ -201,7 +201,9 @@ bool HistogramOutputModule::process() {
       for (auto scaleFactor : hist->getScaleFactors())
       {
         fillHistogram(hist->getFilteredName() + "_" + scaleFactor->getName() + "_Up", hist->value(), hist->eventWeight(ScaleFactor::SystematicType::Up, scaleFactor)); 
+        //std::cout << "UP eventWeight: " << hist->eventWeight(ScaleFactor::SystematicType::Up, scaleFactor) << "\n";
         fillHistogram(hist->getFilteredName() + "_" + scaleFactor->getName() + "_Down", hist->value(), hist->eventWeight(ScaleFactor::SystematicType::Down, scaleFactor));
+        //std::cout << "DOWN eventWeight: " << hist->eventWeight(ScaleFactor::SystematicType::Down, scaleFactor) << "\n";
       }
     }
   }

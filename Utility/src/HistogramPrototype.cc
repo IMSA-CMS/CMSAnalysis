@@ -44,12 +44,17 @@ double HistogramPrototype::eventWeight(ScaleFactor::SystematicType type, std::sh
     if (scaleFactor == scaleFactorToChange)
     {
       weight *= scaleFactor->getScaleFactor(getInput(), type);
+      //std::cout << "Up: " << scaleFactor->getScaleFactor(getInput(), ScaleFactor::SystematicType::Up) << std::endl;
+      //std::cout << "Down: " << scaleFactor->getScaleFactor(getInput(), ScaleFactor::SystematicType::Down) << std::endl;
+
     }
     else
     {
       weight *= scaleFactor->getScaleFactor(getInput());
+      //std::cout << "Scale Factor: " << scaleFactor->getScaleFactor(getInput()) << std::endl;
     }
-    //std::cout << "Scale Factor: " << scaleFactor->getScaleFactor(getInput()) << std::endl;
+    //std::cout << "weight: " << weight << std::endl;
   }
   return weight;
+  
 }
