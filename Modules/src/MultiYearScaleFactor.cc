@@ -47,6 +47,6 @@ double MultiYearScaleFactor::getScaleFactor(const EventInput* input, SystematicT
 	{
 		throw std::runtime_error ("Scale factors for year not found");
 	}
-	return electronsf->second->getScaleFactor(input) * muonsf->second->getScaleFactor(input);
+	return electronsf->second->getScaleFactor(input, type) * muonsf->second->getScaleFactor(input, type);
 }
 
