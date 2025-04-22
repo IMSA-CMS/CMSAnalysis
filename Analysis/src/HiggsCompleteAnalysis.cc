@@ -185,14 +185,6 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTW.root", "ttw", reader, luminosity, histVariableToFileMapping));
         ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTZ.root", "ttz", reader, luminosity, histVariableToFileMapping));
 
-
-        // ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZZ.root", "zzz", reader, luminosity, histVariableToFileMapping));
-        // ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WW.root", "wwto2l2nu", reader, luminosity, histVariableToFileMapping));
-        // ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WWW.root", "www", reader, luminosity, histVariableToFileMapping));
-        // ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WWZ.root", "wwz", reader, luminosity, histVariableToFileMapping));
-        // ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WZ.root", "wzto3lnu", reader, luminosity, histVariableToFileMapping));
-        // ttBarandMultiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WZZ.root", "wzz", reader, luminosity, histVariableToFileMapping));
-
         auto ttbarProcess = std::make_shared<Process>("TTbar Background", ttbarColor);
         ttbarProcess->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTbar.root", "ttbar_lep", reader, luminosity, histVariableToFileMapping));
         
@@ -238,32 +230,17 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2018.root", "Muon2018", reader, luminosity, histVariableToFileMapping));
 
         
-        // processes.push_back(ttBarBackground1);
-        // processes.push_back(ttBarBackground2);
-        // processes.push_back(ttBarBackground3);
         processes.push_back(dyBackground);
         processes.push_back(dyBackgroundNoVeto);
         processes.push_back(higgsData);
         processes.push_back(qcdBackground);
         processes.push_back(zzBackground);
         processes.push_back(zzBackgroundNoVeto);
-        // processes.push_back(ttBarandMultiBosonBackground);
         processes.push_back(ttbarProcess);
-        // processes.push_back(ttwProcess);
         processes.push_back(ttzProcess);
-        // processes.push_back(zzzProcess);
-        // processes.push_back(wwProcess);
-        // processes.push_back(wwwProcess);
-        // processes.push_back(wwzProcess);
-        // processes.push_back(wzProcess);
-        // processes.push_back(wzzProcess)
+        
         processes.push_back(other);
-        // processes.push_back(allBackground);processes.push_back(zzzProcess);
-        // processes.push_back(wwProcess);
-        // processes.push_back(wwwProcess);
-        // processes.push_back(wwzProcess);
-        // processes.push_back(wzProcess);
-        // processes.push_back(wzzProcess);
+
 
         auto leptonProcesses = std::make_shared<Channel>(recoDecay, processes);
 
@@ -296,70 +273,3 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         getChannelsProtected().push_back(leptonProcesses);
     }
 }
-
-// bool HiggsCompleteAnalysis::checkChannelName(std::string channelName, double massTarget){
-//     channelName = channelName.substr((channelName.length() - 2) - int(log10((int) massTarget)) + 1, int(log10((int) massTarget)) + 1);
-//     return channelName == std::to_string((int) massTarget);
-// }
-
-// TH1* HiggsCompleteAnalysis::getHist(std::string histType, std::string processName, double massTarget, bool scaleToExpected, std::string channelName) const {
-//     int maxBinNum = 0;
-// 	double maxBarWidth = 0.0;
-// 	int channelNumber = 0;
-//     std::string name = processName;
-// 	for (const auto& channel : getChannels())
-// 	{
-//         std::string channelNameTemp = channel->getName();
-//         channelNameTemp = channelNameTemp.substr((channelNameTemp.length() - 2) - int(log10((int) massTarget)) + 1, int(log10((int) massTarget)) + 1);
-
-//         if(channelNameTemp == std::to_string((int) massTarget)) {
-//             channelNumber++;
-//             //std::vector<TH1*> channelHists = channel->getHists(histType, "signal", false);
-
-//             TH1* channelHist = channel->findProcess(processName)->getHist(histType, scaleToExpected);
-
-//             if (!channelHist)
-//             {
-//                 throw std::runtime_error("Histogram not found in channel: " + channel->getName());
-//             }
-
-//             if(channelHist->GetEntries() > 0) {
-//                 if (channelHist == 0) {
-//                     throw std::runtime_error("Histogram not found in channel: " + channel->getName());
-//                 }
-//                 if (channelHist->GetNbinsX() > maxBinNum)
-//                 {
-//                     maxBinNum = channelHist->GetNbinsX();
-//                 }
-//                 if ((channelHist->GetXaxis()->GetBinWidth(maxBinNum)) > maxBarWidth)
-//                 {
-//                     maxBarWidth = (channelHist->GetXaxis()->GetBinWidth(maxBinNum));
-//                 }
-//             }
-//             delete channelHist;
-//         }
-// 	}
-//     TH1* hist = new TH1F(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * maxBarWidth);
-// 	TH1* toAdd = 0;
-// 	TList* toMerge = new TList();
-//     TH1::AddDirectory(kFALSE);
-// 	for (const auto& channel : getChannels())
-// 	{
-//         //std::string channelName = channel->getName();
-//         //channelName = channelName.substr((channelName.length() - 2) - int(log10((int) massTarget)) + 1, int(log10((int) massTarget)) + 1);
-// 		//if(channelName == std::to_string((int) massTarget)) {
-//         if (channelName == channel->getName()){
-//             toAdd = channel->findProcess(processName)->getHist(histType, scaleToExpected);
-//         //}
-
-//         //add this error check back later! (toAdd->Reset("ICESM"))
-//         //if(toAdd->GetEntries() > 0) {
-//             toMerge->Add(toAdd);
-//         }
-// 	}
-//     TH1::AddDirectory(kTRUE);
-// 	hist->Merge(toMerge);
-// 	hist->SetLineColor(getChannels().at(0)->findProcess(processName)->getColor());
-// 	hist->SetFillColor(getChannels().at(0)->findProcess(processName)->getColor());
-// 	return hist;
-// }
