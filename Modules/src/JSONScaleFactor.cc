@@ -112,8 +112,10 @@ double JSONScaleFactor::getScaleFactor(const EventInput* input, SystematicType t
     if (type == SystematicType::Nominal) {
         return eventWeight.nominal;
     } else if (type == SystematicType::Up) {
+        //std::cout << "eventWeight Up: " << eventWeight.systUp << std::endl;
         return eventWeight.systUp;
     } else if (type == SystematicType::Down) {
+        //std::cout << "eventWeight Down: " << eventWeight.systDown << std::endl;
         return eventWeight.systDown;
     } else {
         throw std::runtime_error("Invalid systematic type");
