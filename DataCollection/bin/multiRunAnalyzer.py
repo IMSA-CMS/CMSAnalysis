@@ -5,6 +5,11 @@ import os
 import subprocess
 import argparse
 
+reprocessMap = {
+    "WWW": [2],
+}
+
+def loopRun(crab, path, fileCount, fileList):
 def loopRun(crab, path, fileCount, skipFiles, fileList, outputFile):
     fileList = [f"Run2PickFiles/{file}" for file in fileList]
     if not path:
@@ -72,7 +77,6 @@ def loopRun(crab, path, fileCount, skipFiles, fileList, outputFile):
             
         # calls runAnalyzer
         if crab:
-            print("starting crab")
             crab_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/CRAB/"
             print(file)
             totalFiles = int(subprocess.check_output(["getFileList", file, "count"]))
@@ -81,6 +85,13 @@ def loopRun(crab, path, fileCount, skipFiles, fileList, outputFile):
             # but it might take longer to submit than just nohup
             maxNumFiles = 5
             totalFiles = min(int(fileCount), totalFiles) if fileCount != None else totalFiles
+            
+            # uncomment this for selective reproccessing
+            # if name not in reprocessMap:
+            #     continue
+            # for j in reprocessMap[name]:
+            #     i = j * maxNumFiles
+
             for i in range(
                 0,
                 totalFiles,
@@ -105,7 +116,7 @@ def loopRun(crab, path, fileCount, skipFiles, fileList, outputFile):
                 submit = Popen(
                     ["crab", "submit", "-c", f"gen/{output[:-5]}_crab_config.py"], cwd=crab_directory
                 )
-                submit.wait()
+                # submit.wait()
         else:
             with open(outputFile, "a") as out:
                 print("Creating " + outputString)

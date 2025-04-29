@@ -24,14 +24,22 @@ void MuonScaleFactor::loadScaleFactors(Json::Value output)
         for (size_t k = 0; k < allptEdges.size(); k++) {
             double pt_max = allptEdges[k].asDouble();
             Json::Value allsfContent = allptContent[k]["content"];
-
+            double nominal, systUp, systDown;
             for (size_t j = 0; j < allsfContent.size(); j++) {
                 Json::Value key = allsfContent[j]["key"];
+                
                 if (key.asString() == "nominal") {
-                    double scaleFactor = allsfContent[j]["value"].asDouble();
-                    addScaleFactor(eta_min, pt_max, scaleFactor);
+                    nominal = allsfContent[j]["value"].asDouble();
+                
+                }
+                else if (key.asString() == "systup") {
+                    systUp = allsfContent[j]["value"].asDouble();
+                }
+                else if (key.asString() == "systdown") {
+                    systDown = allsfContent[j]["value"].asDouble();
                 }
             }
+            addScaleFactor(eta_min, pt_max, ScaleFactorSet(nominal, systUp, systDown));
         }
     }
 }
