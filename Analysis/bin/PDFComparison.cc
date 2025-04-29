@@ -23,7 +23,7 @@ void PDFComparison()
   	//First order is to read root files to obtain values
     std::string histType = "Same Sign Invariant Mass";
 	std::vector<std::string> hists = {"Same Sign Invariant Mass"};
-    std::vector<TString> names = {"-1#sigma", "+1#sigma", "Baseline"};
+    std::vector<TString> names = {"-1 sigma", "+1 sigma", "Baseline"};
 
     //Colors go here
     std::vector<int> colors = {4, 2, 3};
@@ -39,7 +39,7 @@ void PDFComparison()
     std::vector<TH1*> histVector;
     std::string fileName;
 	int amountRun = 100;
-    for(int i = 1; i < amountRun; i++) {
+    for(int i = 1; i <= amountRun; i++) {
         if(i < 10){
             fileName = filePath + "0" + i + ".root";
         } 
@@ -52,7 +52,7 @@ void PDFComparison()
         }
 	    
         //Need to generate baseline funtion
-        if(count == amountRun - 1){
+        if(i == amountRun){
             fileName = filePath + "baseline.root";
         }
         std::cout<<i<<"\n";
@@ -111,10 +111,32 @@ void PDFComparison()
 	for (int i = 0; i <= histVector[2]->GetNbinsX(); i++)
     {
 		
-		std::cout<<histVector[0]->GetBinContent(i)<<"\t"<<histVector[1]->GetBinContent(i)<<"\t"<<histVector[2]->GetBinContent(i)<<"\n";
+		std::cout<<histVector[0]->GetBinContent(i)<<", ";//<<"\t"<<histVector[1]->GetBinContent(i)<<"\t"<<histVector[2]->GetBinContent(i)<<"\n";
         sum0 += histVector[0]->GetBinContent(i);
         sum1 += histVector[1]->GetBinContent(i);
         sum2 += histVector[2]->GetBinContent(i);
+        //std::cout<<histVector[2]->GetBinContent(i)<<",";
+        
+    }
+    std::cout<<"\n";
+    for (int i = 0; i <= histVector[2]->GetNbinsX(); i++)
+    {
+		
+		std::cout<<histVector[1]->GetBinContent(i)<<", ";//<<"\t"<<histVector[1]->GetBinContent(i)<<"\t"<<histVector[2]->GetBinContent(i)<<"\n";
+        //sum0 += histVector[0]->GetBinContent(i);
+        //sum1 += histVector[1]->GetBinContent(i);
+        //sum2 += histVector[2]->GetBinContent(i);
+        //std::cout<<histVector[2]->GetBinContent(i)<<",";
+        
+    }
+    std::cout<<"\n";
+    for (int i = 0; i <= histVector[2]->GetNbinsX(); i++)
+    {
+		
+		std::cout<<histVector[2]->GetBinContent(i)<<", ";//<<"\t"<<histVector[1]->GetBinContent(i)<<"\t"<<histVector[2]->GetBinContent(i)<<"\n";
+        //sum0 += histVector[0]->GetBinContent(i);
+        //sum1 += histVector[1]->GetBinContent(i);
+        //sum2 += histVector[2]->GetBinContent(i);
         //std::cout<<histVector[2]->GetBinContent(i)<<",";
         
     }
