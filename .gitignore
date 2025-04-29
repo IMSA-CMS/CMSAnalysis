@@ -55,5 +55,9 @@ CRAB/crab_config.py
 CRAB/runAnalyzer.sh
 CRAB/input
 
+# Condor stuff
+BDT/condor_logs
+BDT/*.tar.gz
+
 # macOS
 ._*

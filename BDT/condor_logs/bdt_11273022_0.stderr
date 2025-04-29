@@ -1,2 +1,0 @@
-/srv/training_shell.sh: line 2: cmsrel: command not found
-which: no scram in (/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin)
