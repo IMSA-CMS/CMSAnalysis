@@ -1,10 +1,10 @@
-#include "CMSAnalysis/Modules/interface/RootScaleFactor.hh"
+#include "CMSAnalysis/Modules/interface/RootReader.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 
 #include "TH1.h"
 #include "TFile.h"
 
-RootScaleFactor::RootScaleFactor (std::string filename, std::string histname) 
+RootReader::RootReader (std::string filename, std::string histname) 
 {
 	auto file = TFile::Open(filename.c_str()); 
 	if (!file)
@@ -18,7 +18,7 @@ RootScaleFactor::RootScaleFactor (std::string filename, std::string histname)
 	}
 }
 
-double RootScaleFactor::getScaleFactor(const EventInput* input) const
+double RootReader::getScaleFactor(const EventInput* input) const
 {
 	auto pileUp = input->getNumPileUpInteractions();
 	

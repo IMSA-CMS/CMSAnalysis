@@ -1,5 +1,5 @@
-#ifndef MUONSCALEFACTOR_HH
-#define MUONSCALEFACTOR_HH
+#ifndef MUONJSONREADER_HH
+#define MUONJSONREADER_HH
 
 #include "CMSAnalysis/Modules/interface/JSONScaleFactor.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
@@ -12,10 +12,10 @@
 
 class EventInput;
 
-class MuonScaleFactor : public JSONScaleFactor 
+class MuonJSONReader : public JSONReader 
 {
 public:
-    MuonScaleFactor(std::string filename);
+    MuonJSONReader(std::string filename);
 protected:
     virtual void loadScaleFactors(Json::Value output) override;
     virtual ParticleCollection<Particle> getParticles(const EventInput* input) const override;

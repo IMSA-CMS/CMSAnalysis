@@ -1,21 +1,21 @@
-#include "CMSAnalysis/Modules/interface/ElectronScaleFactor.hh"
+#include "CMSAnalysis/Modules/interface/ElectronJSONReader.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include <iostream>
 
 
-ElectronScaleFactor::ElectronScaleFactor(std::string filename) : JSONScaleFactor(filename)
+ElectronJSONReader::ElectronJSONReader(std::string filename) : JSONReader(filename)
 {
 	loadScaleFactorsFromFile(filename);
 }
 
-ParticleCollection<Particle> ElectronScaleFactor::getParticles(const EventInput* input) const
+ParticleCollection<Particle> ElectronJSONReader::getParticles(const EventInput* input) const
 {
     return input->getParticles(EventInput::RecoLevel::Reco, ParticleType::electron());
 }
 
-void ElectronScaleFactor::loadScaleFactors(Json::Value output)
+void ElectronJSONReader::loadScaleFactors(Json::Value output)
 {
     // Load nominal scale factors
     loadScaleFactors(output, SystematicType::Nominal);
@@ -25,7 +25,7 @@ void ElectronScaleFactor::loadScaleFactors(Json::Value output)
     loadScaleFactors(output, SystematicType::Down);
 }
 
-void ElectronScaleFactor::loadScaleFactors(Json::Value output, SystematicType systematicType)
+void ElectronJSONReader::loadScaleFactors(Json::Value output, SystematicType systematicType)
 {
     
     Json::Value allCorrections = output["corrections"];

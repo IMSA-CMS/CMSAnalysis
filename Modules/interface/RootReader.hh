@@ -1,7 +1,7 @@
-#ifndef ROOTSCALEFACTOR_HH
-#define ROOTSCALEFACTOR_HH
+#ifndef ROOTREADER_HH
+#define ROOTREADER_HH
 
-#include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
+#include "CMSAnalysis/Modules/interface/ScaleFactorReader.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include <map>
 #include <string>
@@ -9,11 +9,11 @@
 class EventInput;
 class TH1;
 
-class RootScaleFactor : public ScaleFactor 
+class RootReader : public ScaleFactorReader 
 {
 public:
 
-    RootScaleFactor(std::string filename, std::string histname);
+    RootReader(std::string filename, std::string histname);
     virtual double getScaleFactor(const EventInput* input) const override;
     void printScaleFactors() const;  
 

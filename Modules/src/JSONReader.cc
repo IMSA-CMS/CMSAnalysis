@@ -4,7 +4,7 @@
 #include <string>
 #include <regex>
 #include <map>
-#include "CMSAnalysis/Modules/interface/JSONScaleFactor.hh"
+#include "CMSAnalysis/Modules/interface/JSONReader.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
@@ -36,7 +36,7 @@ std::string preprocessJSON(const std::string &filename)
     return jsonContent;
 }
 
-JSONScaleFactor::ScaleFactorSet& JSONScaleFactor::getScaleFactorSet(double eta, double pt)
+JSONReader::ScaleFactorSet& JSONReader::getScaleFactorSet(double eta, double pt)
 {
     // Find the appropriate eta bin
     auto etaIt = scaleFactors.lower_bound(eta);
@@ -55,7 +55,7 @@ JSONScaleFactor::ScaleFactorSet& JSONScaleFactor::getScaleFactorSet(double eta, 
     return scaleFactors[etaIt->first][ptIt->first];
 }
 
-void JSONScaleFactor::loadScaleFactorsFromFile(std::string filename) 
+void JSONReader::loadScaleFactorsFromFile(std::string filename) 
 {
 // Preprocess the JSON content
     std::string jsonContent = preprocessJSON(filename);
@@ -77,7 +77,7 @@ void JSONScaleFactor::loadScaleFactorsFromFile(std::string filename)
     printScaleFactors();
 }
 
-double JSONScaleFactor::getScaleFactor(const EventInput* input, SystematicType type) const 
+double JSONReader::getScaleFactor(const EventInput* input, SystematicType type) const 
 {
     ScaleFactorSet eventWeight (1.0, 1.0, 1.0);
     for (auto lepton : getParticles(input)) 
@@ -132,7 +132,7 @@ double JSONScaleFactor::getScaleFactor(const EventInput* input, SystematicType t
 //         }
 //     }
 // }
-void JSONScaleFactor::printScaleFactors() const
+void JSONReader::printScaleFactors() const
 {
     //print the electron scale factors
     std::cout << "Electron Scale Factors:" << std::endl;
@@ -151,7 +151,7 @@ void JSONScaleFactor::printScaleFactors() const
     }
 }
 
-void JSONScaleFactor::addScaleFactor(double eta, double pt, ScaleFactorSet scaleFactor) 
+void JSONReader::addScaleFactor(double eta, double pt, ScaleFactorSet scaleFactor) 
 {
     scaleFactors[eta][pt] = scaleFactor;
 }

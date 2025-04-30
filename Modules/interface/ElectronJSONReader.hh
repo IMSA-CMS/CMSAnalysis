@@ -1,16 +1,16 @@
-#ifndef ELECTRONSCALEFACTOR_HH
-#define ELECTRONSCALEFACTOR_HH
+#ifndef ELECTRONJSONREADER_HH
+#define ELECTRONJSONREADER_HH
 
-#include "CMSAnalysis/Modules/interface/JSONScaleFactor.hh"
+#include "CMSAnalysis/Modules/interface/JSONReader.hh"
 #include <map>
 #include <string>
 
 class EventInput;
 
-class ElectronScaleFactor : public JSONScaleFactor 
+class ElectronJSONReader : public JSONReader
 {
 public:
-    ElectronScaleFactor(std::string filename);
+    ElectronReader(std::string filename);
 
 protected:
     virtual void loadScaleFactors(Json::Value output) override;

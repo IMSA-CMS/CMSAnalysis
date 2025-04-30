@@ -1,7 +1,7 @@
-#ifndef JSONSCALEFACTOR_HH
-#define JSONSCALEFACTOR_HH
+#ifndef JSONREADER_HH
+#define JSONREADER_HH
 
-#include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
+#include "CMSAnalysis/Modules/interface/ScaleFactorReader.hh"
 #include "EventFilter/Utilities/interface/json.h"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include <map>
@@ -9,12 +9,12 @@
 
 class EventInput;
 
-class JSONScaleFactor : public ScaleFactor 
+class JSONReader : public ScaleFactorReader
 {
 public:
     virtual double getScaleFactor(const EventInput* input, SystematicType type = SystematicType::Nominal) const override;
     void printScaleFactors() const;  
-    JSONScaleFactor(std::string iname) : ScaleFactor(iname) {}
+    JSONReader(std::string iname) : ScaleFactor(iname) {}
     struct ScaleFactorSet
     {
         double nominal;

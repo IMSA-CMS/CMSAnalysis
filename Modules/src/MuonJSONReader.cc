@@ -1,14 +1,14 @@
-#include "CMSAnalysis/Modules/interface/MuonScaleFactor.hh"
+#include "CMSAnalysis/Modules/interface/MuonJSONReader.hh"
 
-MuonScaleFactor::MuonScaleFactor(std::string filename) : JSONScaleFactor(filename)
+MuonJSONReader::MuonJSONReader(std::string filename) : JSONReader(filename)
 {
 	loadScaleFactorsFromFile(filename);
 }
-ParticleCollection<Particle> MuonScaleFactor::getParticles(const EventInput* input) const
+ParticleCollection<Particle> MuonJSONReader::getParticles(const EventInput* input) const
 {
     return input->getParticles(EventInput::RecoLevel::Reco, ParticleType::muon());
 }
-void MuonScaleFactor::loadScaleFactors(Json::Value output)
+void MuonJSONReader::loadScaleFactors(Json::Value output)
 {
     Json::Value allCorrections = output["corrections"];
     Json::Value allData = allCorrections[0u]["data"];
