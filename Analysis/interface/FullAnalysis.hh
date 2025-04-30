@@ -33,7 +33,7 @@ class FullAnalysis
         //Process makers for easy use when loading channels
         SingleProcess makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, 
         std::shared_ptr<CrossSectionReader> crossReader, double luminosity, std::map<std::string, std::string> histVariableToFileMapping,
-        bool isData = false);
+        bool isData = false, double isBranchingRatioFixer = 1);
         SingleProcess makeBasicProcess(const std::vector<HistVariable>& histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, 
         std::shared_ptr<CrossSectionReader> crossReader, double luminosity, bool isData = false);
         
