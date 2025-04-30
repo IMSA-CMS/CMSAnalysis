@@ -13,12 +13,15 @@ class SingleProcess;
 class SimpleEstimator : public Estimator
 {		
 	public: 
-		SimpleEstimator(bool data = false) : isData(data) {}
+		SimpleEstimator(double scaleFactor = 1, bool data = false, double branchingRatioFixer = 1) : scaleFactor(scaleFactor), isData(data), isBranchingRatioFixer(branchingRatioFixer) {}
 		double getMassTarget() const override  {return 0;}
 		double getExpectedYield(const SingleProcess* process, HistVariable dataType, double luminosity) const override;
+		double getBranchingRatioFixer() const { return isBranchingRatioFixer; }
 
 	private:
+		double scaleFactor;
 		bool isData;
+		double isBranchingRatioFixer;
 };	
 
 
