@@ -193,3 +193,22 @@ int Process::getNEvents()
 	}
 	return total;
 }
+
+std::shared_ptr<Systematic> Process::calcSystematic(HistVariable histType, std::string systematicName)
+{
+	// TODO: Actually read these out after HistVariable is revamped
+	TH1* up, down;
+	//integral of up and down histograms
+	double upIntegral = up->Integral();
+	double downIntegral = down->Integral();	
+	TH1* nominal = getHist(histType);
+	double nominalIntegral = nominal->Integral();
+
+	double upYield = upIntegral / nominalIntegral;
+	double downYield = downIntegral / nominalIntegral;
+	
+	if (!nominal)
+	{
+		throw std::runtime_error("Nominal histogram not found in process: " + this->name);
+	}
+}
