@@ -28,7 +28,7 @@ std::string ShapeSystematic::getString() const
     return "";
 }
 
-std::pair<TH1*, TH1*> ShapeSystematic::adjustHistogram(TH1* original) const 
+std::pair<TH1*, TH1*> ShapeSystematic::getUncertainties(TH1* original) const 
 {
     auto graphHigh = dynamic_cast<TH1*>(high->Clone());
     auto graphLow = dynamic_cast<TH1*>(low->Clone());

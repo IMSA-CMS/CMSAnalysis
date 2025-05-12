@@ -7,8 +7,8 @@
 #include "CMSAnalysis/Analysis/interface/FitEstimator.hh"
 #include "CMSAnalysis/Analysis/interface/FullAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
-#include "CMSAnalysis/Analysis/interface/HiggsPlusPlusAnalysis.hh"
-#include "CMSAnalysis/Analysis/interface/HiggsComparisonAnalysis.hh"
+// #include "CMSAnalysis/Analysis/interface/HiggsPlusPlusAnalysis.hh"
+// #include "CMSAnalysis/Analysis/interface/HiggsComparisonAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/PlotFormatter.hh"
 #include "CMSAnalysis/Analysis/interface/DarkPhotonCompleteAnalysis.hh"
@@ -118,7 +118,7 @@ void SuperPlot()
 	//#TCanvas *canvas = plotFormatter->completePlot(InputAnalysis, plotName, xAxisTitle, yAxisTitle, true, false, "0.3");
 	auto nameVar = HistVariable(plotName);
 	auto ana = std::make_shared<HiggsCompleteAnalysis>();
-	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, true, false, "uu");
+	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, true, false, true, "uu");
 
 	//TCanvas *canvas = plotFormatter->simpleAnalysisHist(backgroundHists, );
 
