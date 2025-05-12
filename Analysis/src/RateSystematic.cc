@@ -27,17 +27,28 @@ std::string RateSystematic::getString() const
     return std::to_string(factor);
 }
 
-std::pair<TH1*, TH1*> RateSystematic::adjustHistogram(TH1* original) const 
+std::pair<TH1*, TH1*> RateSystematic::getUncertainties(TH1* original) const 
 {
+    std::cout << "Original graph: " << original->Integral() << std::endl;
     auto graphHigh = dynamic_cast<TH1*>(original->Clone());
     auto graphLow = dynamic_cast<TH1*>(original->Clone());
 
-    double scaleUp = 1 + factor;
-    graphHigh->Scale(scaleUp);
+    for (int i = 0; i < graphHigh->GetNbinsX(); i++)
+    {
 
-    double scaleDown = 1 - factor;
-    graphLow->Scale(scaleDown);
+        graphHigh->SetBinContent(i, factor);
+        graphLow->SetBinContent(i, factor);
+        
+    }
 
+    // double scaleUp = factor;
+    // graphHigh->Scale(scaleUp);
+    // // std::cout << "Scale up: " << graphHigh->Integral() << std::endl;
+    // std::cout << "High scale factor: " << scaleUp << std::endl;
+    // double scaleDown = factor;
+    // graphLow->Scale(scaleDown);
+    // // std::cout << "Scale down: " << graphLow->Integral() << std::endl;
+    // std::cout << "Low scale factor: " << scaleDown << std::endl;
     return {graphHigh, graphLow};
 }
  
