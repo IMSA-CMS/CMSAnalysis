@@ -16,6 +16,9 @@ protected:
     virtual void loadScaleFactors(Json::Value output) override;
     virtual ParticleCollection<Particle> getParticles(const EventInput* input) const override;
 
+private:
+    void loadScaleFactors(Json::Value output, SystematicType systematicType);
+
 };
 
 #endif // ELECTRONSCALEFACTOR_HH

@@ -33,6 +33,10 @@ public:
 
     // Constructor
     HistVariable(std::string iName) : name(std::move(iName)) {}
+    bool is2DHistX = false;
+    bool is2DHistY = false;
+    bool getis2dHistX() {return is2DHistX;}
+    bool getis2dHistY() {return is2DHistY;}
 
 private:
     std::string name;
