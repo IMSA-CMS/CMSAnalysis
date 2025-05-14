@@ -11,6 +11,7 @@ class HiggsCompleteAnalysis : public FullAnalysis
 {
 public:
     HiggsCompleteAnalysis();
+    double getBranchingRatio(const std::string& channel);
     // bool checkChannelName(std::string channelName, double massTarget);
 
     // TH1* getHist(std::string histType, std::string processName, double massTarget, bool scaleToExpected = false, std::string channelName = "") const override;

@@ -5,7 +5,12 @@ import os
 import subprocess
 import argparse
 
+reprocessMap = {
+    "WWW": [2],
+}
+
 def loopRun(crab, path, fileCount, fileList):
+def loopRun(crab, path, fileCount, skipFiles, fileList, outputFile):
     fileList = [f"Run2PickFiles/{file}" for file in fileList]
     if not path:
         path = (
@@ -38,7 +43,9 @@ def loopRun(crab, path, fileCount, fileList):
             or analysis == 5
             or analysis == 6
             or analysis == 7
-            else "Muon" if analysis == 2 else ""
+            else "Muon" if analysis == 2 
+            else "MLVariables" if analysis == 8
+            else ""
         )
     )
     # analysisBackground = "MLVariables"
@@ -46,6 +53,9 @@ def loopRun(crab, path, fileCount, fileList):
     print("File list: ", fileList)
     # get rid of numFiles for a full run-through
     numFiles = "numFiles=" + fileCount if fileCount != None else ""
+    
+    skipFiles = "skipFiles=" + skipFiles if skipFiles != None else ""
+    
     for file in fileList:
         # Filling in the parameters of runAnalyzer
         print("File: " + file)
@@ -64,18 +74,24 @@ def loopRun(crab, path, fileCount, fileList):
         else:
             analysisName = "analysis=" + analysisBackground
             inputString = "input=" + file
-
+            
         # calls runAnalyzer
         if crab:
-            print("starting crab")
             crab_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/CRAB/"
             print(file)
             totalFiles = int(subprocess.check_output(["getFileList", file, "count"]))
             # 20 works for most jobs, TTbar and DY50-inf should use 5
             # theoretically could all the way down to 1,
             # but it might take longer to submit than just nohup
-            maxNumFiles = 20
+            maxNumFiles = 5
             totalFiles = min(int(fileCount), totalFiles) if fileCount != None else totalFiles
+            
+            # uncomment this for selective reproccessing
+            # if name not in reprocessMap:
+            #     continue
+            # for j in reprocessMap[name]:
+            #     i = j * maxNumFiles
+
             for i in range(
                 0,
                 totalFiles,
@@ -94,25 +110,28 @@ def loopRun(crab, path, fileCount, fileList):
                         f"--numFiles={min(maxNumFiles, totalFiles - i)}",
                         f"--skipFiles={i}",
                     ],
-                    cwd=crab_directory,
+                    cwd=crab_directory
                 )
                 generate.wait()
                 submit = Popen(
-                    ["crab", "submit", "-c", f"gen/{file[14:-4]}_crab_config.py"], cwd=crab_directory
+                    ["crab", "submit", "-c", f"gen/{output[:-5]}_crab_config.py"], cwd=crab_directory
                 )
-                submit.wait()
+                # submit.wait()
         else:
-            print("Creating " + outputString)
-            Popen(
-                [
-                    "nohup",
-                    "runAnalyzer",
-                    inputString,
-                    outputString,
-                    analysisName,
-                    numFiles,
-                ]
-            )
+            with open(outputFile, "a") as out:
+                print("Creating " + outputString)
+                Popen(
+                    [
+                        "nohup",
+                        "runAnalyzer",
+                        inputString,
+                        outputString,
+                        analysisName,
+                        numFiles,
+                        skipFiles
+                    ],
+                    stdout=out, stderr=out
+                )
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -124,11 +143,13 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--keep",
-        help="If true, appends to the current nohup.out file instead of clearing",
+        help="If true, appends to the current output file (default=nohup.out) instead of clearing",
         action="store_true",
     )
     parser.add_argument("--path", help="Custom Output Path like Higgs/")
     parser.add_argument("--numFiles", help="Number of files to run over")
+    parser.add_argument("--skipFiles", help="Number of files to skip over")
+    parser.add_argument("--outputFile", help="Specify an output log file", default="nohup.out")
 
     args = parser.parse_args()
     print(args)
@@ -147,8 +168,11 @@ if __name__ == "__main__":
         elif analysisName == "Muon":
             print("Running Muon Analyses")
             analysis = 2
+        elif analysisName == "MLStrip":
+            print("Running Strip Analysis")
+            analysis = 8
         else:
-            print("Argument did not match any analysis, defaulting to Higgs")
+            print("CLI argument did not match any analysis, defaulting to Higgs")
             analysis = 0
 
     root_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/"
@@ -219,9 +243,15 @@ if __name__ == "__main__":
 		"Muon2017.txt",
 		"Muon2018.txt",
     )
+    
+    dataMu = (
+		"Muon2016.txt",
+		"Muon2016APV.txt",
+		"Muon2017.txt",
+		"Muon2018.txt",
+    )
 
     qcd = (
-		"QCD50-100.txt",
         "QCD100-200.txt",
         "QCD200-300.txt",
         "QCD300-500.txt",
@@ -237,26 +267,33 @@ if __name__ == "__main__":
     )
 
     darkPhotonSignal = ("darkPhotonBaselineRun2.txt",)
-
+    
     darkPhotonNanoAOD = (
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_1_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_2_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_125_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_300_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_1_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_3_FSR_0_3_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_4_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_6_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_0_9_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_1_2_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_1_5_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_2_5_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs2DP_DpMass_4_0_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_Higgs4DP_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_HiggsDPZ_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_SUSY_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
-        "DarkPhoton/DarkPhoton_Decay_ZPrime_DpMass_0_3_FSR_0_0_Format_NanoAOD_HiggsMass_1000_Period_2018_Run_2.txt",
+        "darkPhotonDecay_Higgs4DP.txt", #
+        "darkPhotonDecay_HiggsDPZ.txt", #
+        "darkPhotonDecay_SUSY.txt", #
+        "darkPhotonDecay_ZPrime.txt", #
+        "darkPhoton_DpMass0_1.txt",
+        "darkPhoton_DpMass0_2.txt",
+        "darkPhoton_DpMass0_4.txt",
+        "darkPhoton_DpMass0_6.txt",
+        "darkPhoton_DpMass0_9.txt",
+        "darkPhoton_DpMass1_2.txt",
+        "darkPhoton_DpMass1_5.txt",
+        "darkPhoton_DpMass2_5.txt",
+        "darkPhoton_DpMass4_0.txt",
+        "darkPhotonHiggs125.txt",
+        "darkPhotonHiggs300.txt",
+        "darkPhotonRun2FSR_0_1.txt",
+        "darkPhotonRun2FSR_0_3.txt",
+    )
+    
+    lowStatistics = (
+		"QCD50-100.txt",
+        "WWW.txt",
+        "TTbar.txt",
+        "WWZ.txt",
+        "ZZZ.txt",
     )
 
     background = ttBar + zz + dy + multiBoson + qcd # total 26 files
@@ -275,7 +312,10 @@ if __name__ == "__main__":
 
     # jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 
-    jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, data, qcd, wjets]    
+    # COMMENTED FOR ML STRIP
+    #jobsList = [darkPhotonSignal, ttBar, zz, dy, multiBoson, higgsSignal, data, qcd, wjets]  
+    jobsList = [dy, qcd, darkPhotonSignal]  
+    #jobsList = [darkPhotonSignal, multiBoson]  
     # could further improve this by adding every sub-job as a separate entry
     if args.crab:
         temp = []
@@ -285,14 +325,14 @@ if __name__ == "__main__":
 
         jobsList = temp
 
-    if os.path.exists("nohup.out") and not args.keep:
-        os.remove("nohup.out")
+    if os.path.exists(args.outputFile) and not args.keep:
+        os.remove(args.outputFile)
 
     # list of processes
     processes = []
     for job in jobsList:
         newProcess = Process(
-            target=loopRun, args=(args.crab, args.path, args.numFiles, job)
+            target=loopRun, args=(args.crab, args.path, args.numFiles, args.skipFiles, job, args.outputFile)
         )
         processes.append(newProcess)
 

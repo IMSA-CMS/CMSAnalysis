@@ -111,18 +111,20 @@ void Fitter::fitFunctions()
 // 	return dynamic_cast<TH1*>(histogramFile->FindObjectAny(name.c_str()));
 // }
 
+// not sure if this is used at all
 TCanvas* Fitter::fitExpressionFormula(TH1* histogram, FitFunction& fitFunction)
 {
 	TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
 	c1->SetLogy();
 
-	TFitResultPtr result = histogram->Fit(fitFunction.getFunction(), "SLQ", "", fitFunction.getMin(), fitFunction.getMax());
+	TFitResultPtr result = histogram->Fit(fitFunction.getFunction(), "SQR", "", fitFunction.getMin(), fitFunction.getMax());
 
 	gStyle->SetOptFit(1111);
 
 	return c1;
 }
-TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction) // ask about how fitting works here
+
+TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction)
 {
 	//TCanvas *c2 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
 	TF1* f1 = fitFunction.getFunction();
@@ -130,7 +132,7 @@ TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction) // ask about 
 	// histogram->Draw();
 	// std::string wait;
 	// std::cin >> wait;
-	TFitResultPtr gausResult = histogram->Fit("gaus", "SQ", "", fitFunction.getMin(), fitFunction.getMax());
+	TFitResultPtr gausResult = histogram->Fit("gaus", "SLQRWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
 	// std::cout << "2:2\n";
 	auto params = gausResult->Parameters();
 	// std::cout << "2:3\n";
@@ -165,12 +167,12 @@ TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction) // ask about 
 	// 		f1->SetParLimits(6,3,20);
 	// 	}
 	// }
-	f1->SetRange(0, 2000);
+	f1->SetRange(fitFunction.getMin(), fitFunction.getMax());
 	f1->SetLineColor(kRed);
 	TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
 	// std::cout << "2:7\n";
 	
-	histogram->Fit(f1, "SEBQ"); // why SEB?
+	histogram->Fit(f1, "SLQRBWIDTH");
 	f1->SetParError(6, norm / (sqrt(histogram->GetEntries())));
 	// std::cout << "2:8\n";
 
@@ -193,22 +195,26 @@ TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction) // ask about 
 }
 TCanvas* Fitter::fitPowerLaw(TH1* histogram, FitFunction& fitFunction)
 {
-	double initalParams[3] = {1e17, -400, -7};
+	double initalParams[3] = {1e17, 0, -5};
 	fitFunction.getFunction()->SetParameters(initalParams);
 
 	TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
 	c1->SetLogy();
 
 	// setting this as L (log likelihood) fit
+	// gives much worse fits for some graphs but seg faults without L sometimes?
 	// Root says better when histogram represents counts
-	TFitResultPtr result = histogram->Fit(fitFunction.getFunction(), "LQ", "", fitFunction.getMin(), fitFunction.getMax());
+	TFitResultPtr result = histogram->Fit(fitFunction.getFunction(), "SLQRWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
 
+
+	// shouldn't even be doing this? we're minimizing log likelihood, not chi2
 	double chi2 = __DBL_MAX__;
-	while (result->Chi2() < chi2)
+	while (chi2 - result->Chi2() > 0.000001)
 	{
+		std::cout << "Chi2: " << result->Chi2() << '\n';
 		chi2 = result->Chi2();
 		fitFunction.getFunction()->SetParameters(result->Parameter(0), result->Parameter(1), result->Parameter(2));
-		result = histogram->Fit(fitFunction.getFunction(), "SLQ", "", fitFunction.getMin(), fitFunction.getMax());
+		result = histogram->Fit(fitFunction.getFunction(), "SLQRWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
 	}
 
 	gStyle->SetOptFit(1111);
@@ -383,36 +389,35 @@ TFitResultPtr Fitter::functionFittingLoop(TGraph* graph, TF1* function)
 }
 
 
-// not sure if this is used at all
-TFitResultPtr Fitter::fitSingleFunction(TGraph* graph, TF1* function, size_t iterations)
-{
-	TGraph* graphClone = (TGraph*) graph->Clone();
-	TF1* initialFunction = (TF1*) function->Clone();
-	TFitResultPtr initialResults = graphClone->Fit(initialFunction, "S");
+// TFitResultPtr Fitter::fitSingleFunction(TGraph* graph, TF1* function, size_t iterations)
+// {
+// 	TGraph* graphClone = (TGraph*) graph->Clone();
+// 	TF1* initialFunction = (TF1*) function->Clone();
+// 	TFitResultPtr initialResults = graphClone->Fit(initialFunction, "S");
 
-	TFitResultPtr bestResults = initialResults;
-	TF1* bestFunction = initialFunction;
-	double bestChi2 = initialResults->Chi2();
-	bool fitSuccess = initialResults->IsValid();
+// 	TFitResultPtr bestResults = initialResults;
+// 	TF1* bestFunction = initialFunction;
+// 	double bestChi2 = initialResults->Chi2();
+// 	bool fitSuccess = initialResults->IsValid();
 
-	for (size_t i = 0; i < iterations; ++i) 
-	{	
-		if (fitSuccess)
-			break;
+// 	for (size_t i = 0; i < iterations; ++i)
+// 	{
+// 		if (fitSuccess)
+// 			break;
 		
-		TF1* trialFunction = (TF1*) function->Clone();
-		auto results = graphClone->Fit(trialFunction, "S");
+// 		TF1* trialFunction = (TF1*) function->Clone();
+// 		auto results = graphClone->Fit(trialFunction, "S");
 
-		if (results->Chi2() < bestChi2)
-		{
-			bestFunction = trialFunction;
-			bestChi2 = results->Chi2();
-			bestResults = results;
-		}
-	}
+// 		if (results->Chi2() < bestChi2)
+// 		{
+// 			bestFunction = trialFunction;
+// 			bestChi2 = results->Chi2();
+// 			bestResults = results;
+// 		}
+// 	}
 
-	bestFunction->Copy(*function);
-	TFitResultPtr finalResults = graph->Fit(function, "S");
+// 	bestFunction->Copy(*function);
+// 	TFitResultPtr finalResults = graph->Fit(function, "S");
 
-	return finalResults;
-}
+// 	return finalResults;
+// }
