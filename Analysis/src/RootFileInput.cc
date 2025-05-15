@@ -13,12 +13,13 @@
 #include <vector>
 #include <map>
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
+#include "CMSAnalysis/Analysis/interface/HistNameFinder.hh"
 
 RootFileInput::RootFileInput(std::string fileName, std::vector<HistVariable> iHistVariables, 
-std::map<std::string, std::string> HistVariableToFileMapping) : 
+std::shared_ptr<HistNameFinder> ihistVariableToFileMapping) : 
 	histVariables(iHistVariables), 
 	fileSource(fileName), 
-	HistVariableToFileMapping(HistVariableToFileMapping)
+	histVariableToFileMapping(ihistVariableToFileMapping)
 {} 
 	
 TFile* RootFileInput::getFile(std::string fileSource) const
@@ -41,26 +42,9 @@ TFile* RootFileInput::getFile(std::string fileSource) const
 TH1* RootFileInput::getHist(HistVariable histType) const
 {
 	TH1::AddDirectory(kFALSE);
-	//std::cout << "RootFileInput Hit 1 " << std::endl;
-	/*
-	std::string name = "";
-	std::cout << "histype: " << histType.getName() << std::endl;
-	for(HistVariable histVar : histVariables) 
-	{
-		//std::cout << histVar.getName() << std::endl;
-	    if(histVar.getName() == histType.getName()) 
-		{
-			name = histVar.getHistName();
-	    }
-	}
-	*/
 
-	std::string name;
-	if (HistVariableToFileMapping.find(histType.getName()) != HistVariableToFileMapping.end()) {
-		name = HistVariableToFileMapping.at(histType.getName());
-	} else {
-		throw std::runtime_error("HistVariable name [" + histType.getName() + "] not found in mapping [" + fileSource + "]!");
-	}
+	std::string name = histVariableToFileMapping->getHistName(histType, ScaleFactor::SystematicType::Nominal, "");
+
 
 	TH1* hist;
 	uint pos = name.find("/");
@@ -125,22 +109,7 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 			throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]");
 		}
 	}
-	/*
-	if(dynamic_cast<TH2 *>(hist) != 0)
-	{
-		TH2* hist2D = dynamic_cast<TH2 *>(hist);
-		TH1 *newhist = hist2D->ProjectionX("_px", 0, -1, "E");
-		return newhist;
-	}	
-	*/
-	// if (hist->GetEntries() < 2.0)
-	// {
-	// 	delete hist;
-	// 	delete file;
-	// 	return emptyHist;
-	// }
-	// else 
-	// {
+
 		TH1* response = new TH1F("Hist Clone", hist->GetTitle(), hist->GetXaxis()->GetNbins(), hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
 
 		if (histType.is2DHistX)
