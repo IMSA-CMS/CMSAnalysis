@@ -1,6 +1,7 @@
 #include "CMSAnalysis/Analysis/interface/Process.hh"
 #include "CMSAnalysis/Analysis/interface/SingleProcess.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
+#include "CMSAnalysis/Analysis/interface/RateSystematic.hh"
 #include "TH1F.h"
 #include "TH2F.h"
 #include <iostream>
@@ -197,7 +198,8 @@ int Process::getNEvents()
 std::shared_ptr<Systematic> Process::calcSystematic(HistVariable histType, std::string systematicName)
 {
 	// TODO: Actually read these out after HistVariable is revamped
-	TH1* up, down;
+	TH1* up; 
+	TH1* down;
 	//integral of up and down histograms
 	double upIntegral = up->Integral();
 	double downIntegral = down->Integral();	
@@ -211,4 +213,5 @@ std::shared_ptr<Systematic> Process::calcSystematic(HistVariable histType, std::
 	{
 		throw std::runtime_error("Nominal histogram not found in process: " + this->name);
 	}
+	return std::make_shared<RateSystematic>(systematicName, upYield);
 }

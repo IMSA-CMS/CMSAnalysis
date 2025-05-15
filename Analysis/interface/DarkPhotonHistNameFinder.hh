@@ -1,12 +1,12 @@
-#ifndef HIGGS_HIST_NAME_FINDER_HH
-#define HIGGS_HIST_NAME_FINDER_HH
+#ifndef DARKPHOTON_HIST_NAME_FINDER_HH
+#define DARKPHOTON_HIST_NAME_FINDER_HH
 
 #include "CMSAnalysis/Analysis/interface/HistNameFinder.hh"
 #include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
-class HiggsHistNameFinder : public HistNameFinder
+class DarkPhotonHistNameFinder : public HistNameFinder
 {
 	public:
-	HiggsHistNameFinder(std::string iChannel, bool iisData = false) : channel(std::move(iChannel)), isData(iisData) {}
+	DarkPhotonHistNameFinder(std::string iChannel, bool iisData = false) : channel(std::move(iChannel)), isData(iisData) {}
 	virtual std::string getHistName(HistVariable histVariable, ScaleFactor::SystematicType type, std::string systematicName) const override;
 
 	private:
@@ -15,4 +15,4 @@ class HiggsHistNameFinder : public HistNameFinder
 };
 
 
-#endif // HIGGS_HIST_NAME_FINDER_HH
+#endif // DARKPHOTON_HIST_NAME_FINDER_HH
