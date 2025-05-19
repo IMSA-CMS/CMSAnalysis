@@ -1,1 +1,0 @@
-/store/mc/RunIISummer20UL18NanoAODv9/HToZandDarkPhoton_HMass-1000_DPMass-0p3_TuneCP5_13TeV-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2560000/7C78C7F5-BD6B-9F42-8C0B-5AC185199564.root

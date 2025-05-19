@@ -18,3 +18,4 @@ config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 1
 
 config.Site.storageSite = 'T3_US_FNALLPC'
+#config.Site.storageSite = 'T2_US_Nebraska'
