@@ -60,6 +60,7 @@
 #include "CMSAnalysis/Filters/interface/DarkPhotonControlRegionFilter.hh"
 #include "CMSAnalysis/Modules/interface/RecoGenSimComparisonModule.hh"
 #include "CMSAnalysis/Filters/interface/BJetCut.hh"
+#include "CMSAnalysis/Plans/interface/CommonOperations.hh"
 
 // Use 700-1000 2018, DY50
 
@@ -81,11 +82,12 @@ void LeptonJetReconstructionPlan::initialize()
   auto highestMuonPtCut = make_shared<HighestMuonPtCut>();
 
   eventMod->addCut(triggerCut);
-  eventMod->addCut(highestMuonPtCut);
+  //eventMod->addCut(highestMuonPtCut);
+
+  CommonOperations::addHiggsScaleFactors(eventMod);
 
   auto matchMod = std::make_shared<MatchingModule>();
   auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
-  auto genPartMod = std::make_shared<GenSimParticleModule>(1000022);
   auto eventDumpMod = std::make_shared<EventDumpModule>(true,true);
   auto lepMatchMod = std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.1); // this
   
@@ -101,7 +103,8 @@ void LeptonJetReconstructionPlan::initialize()
   //auto recoGenSimComparisonMod = std::make_shared<RecoGenSimComparisonModule>();
   auto leptonJetMLStripMod = std::make_shared<LeptonJetMLStripModule>();
   leptonJetMLStripMod->setInput(eventMod->getEventInput());
-  auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "DataCollection/bin/dataset/weights/TMVAClassification_BDT.weights.xml", "BDT");
+  // auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "DataCollection/bin/dataset/weights/TMVAClassification_BDT.weights.xml", "BDT");
+  auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "TMVAClassification_BDT.weights.xml", "BDT");
 
   //Histograms
   //uncomented 
@@ -150,8 +153,8 @@ void LeptonJetReconstructionPlan::initialize()
   // histOutputMod->addHistogram(pTHist);
   // histOutputMod->addHistogram(matchedLeptonJetHist); 
   // histOutputMod->addHistogram(unmatchedLeptonJetHist);
-  histOutputMod->addHistogram(deltaXYHist);
-  histOutputMod->addHistogram(deltaZHist);
+  //histOutputMod->addHistogram(deltaXYHist);
+  //histOutputMod->addHistogram(deltaZHist);
   //histOutputMod->addHistogram(relIsoHist);
   histOutputMod->addHistogram(leptonJetMLHist);
 
@@ -221,7 +224,7 @@ void LeptonJetReconstructionPlan::initialize()
   modules.addProductionModule(lepRecoMod);
   // modules.addProductionModule(genPartMod);
   modules.addProductionModule(lepMatchMod);
-  //modules.addProductionModule(leptonJetMLStripMod);
+  modules.addProductionModule(leptonJetMLStripMod);
   modules.addProductionModule(mlMod);
 
 
@@ -242,7 +245,7 @@ void LeptonJetReconstructionPlan::initialize()
   //modules.addAnalysisModule(massRecoEfficiency1000);
   //modules.addAnalysisModule(massRecoEfficiency1300);
   //modules.addAnalysisModule(recoGenSimComparisonMod);
-  modules.addAnalysisModule(eventDumpMod);
+  //modules.addAnalysisModule(eventDumpMod);
   //modules.addAnalysisModule(recoEventDumpMod);
   /* auto selector = make_shared<SnowmassLeptonSelector>(5);
 

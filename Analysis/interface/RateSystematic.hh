@@ -32,11 +32,12 @@ class RateSystematic : public Systematic
             Factors,
             Absolute
         };
-        RateSystematic(std::string name, double rate, Distribution distribution = Distribution::LogNormal);
+        RateSystematic(std::string name, double upRate, double downRate, Distribution distribution = Distribution::LogNormal);
         virtual std::string getString() const override;
         virtual std::pair<TH1*, TH1*> getUncertainties(TH1* original) const override;
     private:
-        double factor;
+        double upFactor;
+        double downFactor;
         Distribution distribution;
 
 

@@ -1,6 +1,0 @@
-H++toLL
-Mass:	1000
-Run:	2
-Lepton:	All
-Year:	2016
-Format:	NanoAOD

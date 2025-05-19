@@ -76,7 +76,7 @@ class PlotFormatter
         //Writes text and draws logo based on the margins
         void writeText(int w, int h, float t, float b, float l, float r);
     
-        TLegend* GetLegend(THStack* background, std::shared_ptr<Channel> processes, TH1* data);
+        TLegend* GetLegend(THStack* background, std::shared_ptr<Channel> processes, TH1* data,  TH1* signal, bool includeSignal, bool includeData);
         
         void GraphFormat(TGraph*& graph, TGraphErrors*& errorgraph2, TString xAxisTitle, float xLabelSize, float xTitleSize, float yLableSize, float yTitleSize, float markerSize, float maximum, float minimum, float firstBin, float upperMasslimit);
         
@@ -108,7 +108,7 @@ class PlotFormatter
 
         void GetImposedOrder(THStack*& background, THStack*& signal, THStack*& first, THStack*& second);
 
-        void Bin(std::vector<TH1*>& hists, TH1*& first, int& firstIndex, double& maximum, int& count);
+        void Bin(std::vector<TH1*>& hists, TH1*& first, int& firstIndex, double& maximum, int& count, bool scaleToExpected);
 
         void GetOrder(std::vector<TH1*>& hists, TH1*& first, int& firstIndex, double& maximum);
 

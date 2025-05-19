@@ -1,1 +1,0 @@
-/store/mc/RunIISummer20UL16NanoAODv9/HTo2DarkPhotonAlphaFSR_HMass-1000_DPMass-0p3_FSR-0p3_TuneCP5_13TeV-pythia8/NANOAODSIM/106X_mcRun2_asymptotic_v17-v1/30000/EDB391DF-B3CE-F349-A06F-F66D63011EEB.root

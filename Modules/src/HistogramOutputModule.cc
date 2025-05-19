@@ -13,6 +13,17 @@
 #include "TH1.h"
 #include "TH2.h"
 
+
+
+void HistogramOutputModule::addScaleFactor(std::shared_ptr<ScaleFactor> scaleFactor)
+  {
+      scaleFactors.push_back(scaleFactor);
+      for (auto hist : histograms)
+      {
+          hist->addScaleFactor(scaleFactor);
+      }
+  }
+
 void HistogramOutputModule::finalizeFilterString() {
   // Check if any baseObjects have not been copied to objects yet,
   // and fill them into the main map if not
@@ -102,6 +113,13 @@ void HistogramOutputModule::makeHistogram(std::shared_ptr<HistogramPrototype> h,
                                           std::string name) {
                                             //std::cout << "second makeHistogram: " << name  + " // " + getObjectName(name) << "\n";
   addObject(getObjectName(name), h->makeHistogram(getObjectName(name), getObjectName(name)));
+                                            for(auto scaleFactor : h->getScaleFactors())
+                                            {
+                                              std::string newName = name + "_" + scaleFactor->getName() + "_Up";
+                                              addObject(getObjectName(newName), h->makeHistogram(getObjectName(newName), getObjectName(newName)));
+                                              std::string newName2 = name + "_" + scaleFactor->getName() + "_Down";
+                                              addObject(getObjectName(newName2), h->makeHistogram(getObjectName(newName2), getObjectName(newName2)));
+                                            }
 }
 
 void HistogramOutputModule::fillHistogram(const std::string &name,
@@ -180,6 +198,13 @@ bool HistogramOutputModule::process() {
       //std::cout << "Module particle size: " << getInput()->getParticles(EventInput::RecoLevel::Reco).getNumParticles() << "\n";
         //std::cout << "HistOutputModule event input: " << getInput() <<std::endl;
       fillHistogram(hist->getFilteredName(), hist->value(), hist->eventWeight());
+      for (auto scaleFactor : hist->getScaleFactors())
+      {
+        fillHistogram(hist->getFilteredName() + "_" + scaleFactor->getName() + "_Up", hist->value(), hist->eventWeight(ScaleFactor::SystematicType::Up, scaleFactor)); 
+        //std::cout << "UP eventWeight: " << hist->eventWeight(ScaleFactor::SystematicType::Up, scaleFactor) << "\n";
+        fillHistogram(hist->getFilteredName() + "_" + scaleFactor->getName() + "_Down", hist->value(), hist->eventWeight(ScaleFactor::SystematicType::Down, scaleFactor));
+        //std::cout << "DOWN eventWeight: " << hist->eventWeight(ScaleFactor::SystematicType::Down, scaleFactor) << "\n";
+      }
     }
   }
   return true;
