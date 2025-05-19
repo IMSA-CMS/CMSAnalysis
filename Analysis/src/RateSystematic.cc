@@ -15,40 +15,31 @@
 #include <fstream> //change include paths
 
 
-RateSystematic::RateSystematic(std::string name, double rate, Distribution idistribution) :
+RateSystematic::RateSystematic(std::string name, double upRate, double downRate, Distribution idistribution) :
     Systematic(name),
-    factor(rate),
+    upFactor(upRate),
+    downFactor(downRate),   
     distribution(idistribution)
 {}
 
 
 std::string RateSystematic::getString() const
 {
-    return std::to_string(factor);
+    return std::to_string(upFactor) + " " + std::to_string(downFactor);
 }
 
 std::pair<TH1*, TH1*> RateSystematic::getUncertainties(TH1* original) const 
 {
-    std::cout << "Original graph: " << original->Integral() << std::endl;
     auto graphHigh = dynamic_cast<TH1*>(original->Clone());
     auto graphLow = dynamic_cast<TH1*>(original->Clone());
 
     for (int i = 0; i < graphHigh->GetNbinsX(); i++)
     {
 
-        graphHigh->SetBinContent(i, factor);
-        graphLow->SetBinContent(i, factor);
+        graphHigh->SetBinContent(i, upFactor);
+        graphLow->SetBinContent(i, downFactor);
         
     }
-
-    // double scaleUp = factor;
-    // graphHigh->Scale(scaleUp);
-    // // std::cout << "Scale up: " << graphHigh->Integral() << std::endl;
-    // std::cout << "High scale factor: " << scaleUp << std::endl;
-    // double scaleDown = factor;
-    // graphLow->Scale(scaleDown);
-    // // std::cout << "Scale down: " << graphLow->Integral() << std::endl;
-    // std::cout << "Low scale factor: " << scaleDown << std::endl;
     return {graphHigh, graphLow};
 }
  

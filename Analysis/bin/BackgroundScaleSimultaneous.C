@@ -50,9 +50,10 @@ void fitAndDisplayHistograms(const char* plotName, const char* outputName) {
     //const std::string plotName = "Pt Low Mass and Same Sign";
     const std::string dynamicBGName = "QCD Background";
     const std::string channelName = "0.3";
-    const std::string inputAnalysisPath = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts_Output/";
+    // const std::string inputAnalysisPath = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts_Output/";
+    const std::string inputAnalysisPath = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/LeptonJetReconstruction_All/";
 
-    auto analysis = std::make_shared<DarkPhotonCompleteAnalysis>(inputAnalysisPath, "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections_config1.txt");
+    auto analysis = std::make_shared<DarkPhotonCompleteAnalysis>(inputAnalysisPath, "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
 
     // Get channels and background histograms
     std::vector<std::shared_ptr<Channel>> channels = analysis->getChannels();
@@ -60,9 +61,9 @@ void fitAndDisplayHistograms(const char* plotName, const char* outputName) {
 
     for (std::shared_ptr<Channel> channel : channels) {
         for (std::string processName : channel->getNames()) {
-            if (processName == "Dark Photon Signal") {
+            if (processName == "signal") {
                 channel->labelProcess("signal", processName);
-            } else if (processName == "Data") {
+            } else if (processName == "data") {
                 channel->labelProcess("data", processName);
             } else if (processName == dynamicBGName) {
                 channel->labelProcess("dynamicbg", processName);

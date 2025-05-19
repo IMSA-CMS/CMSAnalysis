@@ -1,1 +1,0 @@
-/store/mc/RunIISummer20UL16NanoAODv9/HPlusPlusHMinusMinusHTo2L_M-1000_TuneCP5_13TeV_pythia8/NANOAODSIM/106X_mcRun2_asymptotic_v17-v1/70000/B5BFB89D-FBB0-4748-A27E-E0D0A0A9E8F2.root

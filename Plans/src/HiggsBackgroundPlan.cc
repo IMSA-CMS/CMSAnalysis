@@ -30,6 +30,7 @@
 #include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
 #include "CMSAnalysis/Filters/interface/TriggerCut.hh"
 #include "CMSAnalysis/Histograms/interface/TwoInvariantMassesHist.hh"
+#include "CMSAnalysis/Histograms/interface/HistogramPrototype2DProjection.hh"
 #include "CMSAnalysis/Histograms/interface/METHist.hh"
 #include "CMSAnalysis/Filters/interface/BJetFilter.hh"
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
@@ -37,6 +38,7 @@
 #include "CMSAnalysis/Filters/interface/ZVetoCut.hh"
 #include "CMSAnalysis/Filters/interface/FourLeptonCut.hh"
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
+#include "CMSAnalysis/Modules/interface/ScaleFactorAnalysis.hh"
 
 using std::make_shared;
 
@@ -50,7 +52,7 @@ void HiggsBackgroundPlan::initialize()
     auto higgsSelector = make_shared<HiggsSelector>();
     auto higgsCut = make_shared<HiggsCut>();
     //auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
-    auto eventDump = make_shared<GenSimEventDumpModule>();
+    auto eventDump = make_shared<GenSimEventDumpModule>(5);
     auto zVetoCut = make_shared<ZVetoCut>();
     //auto quarkoniaCut = make_shared<QuarkoniaCut>();
     auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
@@ -90,11 +92,14 @@ void HiggsBackgroundPlan::initialize()
     auto recoOppositeSignInvMassHist = make_shared<OppositeSignInvariantMassHist>(EventInput::RecoLevel::Reco, "Reco Opposite Sign Invariant Mass", 1000, 0, 2000);
 
     auto positiveNegativeInvMassHist = make_shared<TwoInvariantMassesHist>("Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);
+    auto xProjection = make_shared<HistogramPrototype2DProjection>("Reco Invariant Mass Background X Projection", positiveNegativeInvMassHist, true, 2000);
+    auto yProjection = make_shared<HistogramPrototype2DProjection>("Reco Invariant Mass Background Y Projection", positiveNegativeInvMassHist, false, 2000);
+    
     auto highestLeptonPt = make_shared<PtHist>(EventInput::RecoLevel::Reco, "Highest Lepton Pt", 100, 0, 1000);
     
     auto eventHistMod = eventMod->getHistogramModule();
 
-    auto metHist = make_shared<METHist>(metMod, "MET", 500, 0, 2000);
+    auto metHist = make_shared<METHist>( "MET", 500, 0, 2000);
 
 
     eventHistMod->addHistogram(metHist);
@@ -104,6 +109,8 @@ void HiggsBackgroundPlan::initialize()
     eventHistMod->addHistogram(oppositeSignInvMassHist);
     eventHistMod->addHistogram(recoOppositeSignInvMassHist);
     eventHistMod->addHistogram(highestLeptonPt);
+    eventHistMod->addHistogram(xProjection);
+    eventHistMod->addHistogram(yProjection);
 
     auto runFilter = make_shared<RunFilter>();
     runFilter->addRunNumber(302337);
@@ -120,14 +127,14 @@ void HiggsBackgroundPlan::initialize()
     auto runFilterMod = make_shared<FilterModule>(runFilter);
 
 
-    modules.addProductionModule(metMod);
-    //Changed because EventModule inherits from ProductionModule now
+    // modules.addProductionModule(metMod);
+    // //Changed because EventModule inherits from ProductionModule now
     modules.addProductionModule(eventMod);
-    modules.addFilterModule(recoDecayFilterMod);
+     modules.addFilterModule(recoDecayFilterMod);
     modules.addAnalysisModule(eventHistMod);    
     modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
     //modules.addFilterModule(runFilterMod); 
-    modules.addAnalysisModule(eventDump);
+    //modules.addAnalysisModule(eventDump);
     auto hPlusPlusEfficiency = make_shared<HPlusPlusEfficiency>();
     hPlusPlusEfficiency->setInput(eventMod->getEventInput());
     modules.addAnalysisModule(hPlusPlusEfficiency);

@@ -20,12 +20,13 @@ void MultiYearScaleFactor::addElectronScaleFactor(std::string year, std::shared_
 
 
 
-double MultiYearScaleFactor::getScaleFactor(const EventInput* input) const //add cout statements to see if muons and electrons are getting different numbers
+double MultiYearScaleFactor::getScaleFactor(const EventInput* input, SystematicType type) const //add cout statements to see if muons and electrons are getting different numbers
 {
 	//std::cout << "Process: " << input->getFileParams()->getProcess() << std::endl;
 	
 	if (input->getFileParams()->getProcess() == "Data")
 	{
+		//std::cout << "Process is Data, returning scale factor 1.0" << std::endl;
 		return 1.0;
 	}
 
@@ -46,7 +47,6 @@ double MultiYearScaleFactor::getScaleFactor(const EventInput* input) const //add
 	{
 		throw std::runtime_error ("Scale factors for year not found");
 	}
-	return electronsf->second->getScaleFactor(input) * muonsf->second->getScaleFactor(input);
-
+	return electronsf->second->getScaleFactor(input, type) * muonsf->second->getScaleFactor(input, type);
 }
 

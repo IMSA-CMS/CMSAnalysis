@@ -1,4 +1,0 @@
-QCD
-HTCut:	1000-1500
-Run:	2
-Year:	2018

@@ -45,6 +45,14 @@ void EventModule::addCut(std::shared_ptr<Cut> cut)
     cuts.push_back(cut);
 }
 
+void EventModule::initialize()
+{
+    for (auto scalefactor : scaleFactors)
+    {
+        histMod->addScaleFactor(scalefactor);
+    }
+}
+
 void EventModule::finalize()
 {
     for (int i = 0; i < int(cuts.size()); i++) {

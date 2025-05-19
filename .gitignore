@@ -26,10 +26,6 @@
 !DataCollection/bin/textfiles/*.txt
 !DataCollection/bin/textfiles/*/*.txt
 
-# CRAB input textfiles
-!CRAB/input/src/CMSAnalysis/DataCollection/bin/textfiles/*.txt
-!CRAB/input/src/CMSAnalysis/DataCollection/bin/textfiles/*/*.txt
-
 #Remove temporary backups
 *backup.txt
 *backupshort.txt
@@ -53,6 +49,15 @@ nohup.out
 
 #CRAB stuff
 CRAB/crab_projects
+CRAB/gen
 CRAB/__pycache__
 CRAB/crab_config.py
 CRAB/runAnalyzer.sh
+CRAB/input
+
+# Condor stuff
+BDT/condor_logs
+BDT/*.tar.gz
+
+# macOS
+._*
