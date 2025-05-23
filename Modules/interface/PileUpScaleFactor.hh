@@ -6,4 +6,6 @@ class PileUpScaleFactor : public EventScaleFactor
 {
 
 	
-}
+};
+
+#endif

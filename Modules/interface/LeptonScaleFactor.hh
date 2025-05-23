@@ -5,4 +5,5 @@
 class LeptonScaleFactor : public ScaleFactor
 {
 
-}
+};
+#endif

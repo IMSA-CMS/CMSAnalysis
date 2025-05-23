@@ -10,24 +10,21 @@ ElectronJSONReader::ElectronJSONReader(std::string filename) : JSONReader(filena
 	loadScaleFactorsFromFile(filename);
 }
 
-ParticleCollection<Particle> ElectronJSONReader::getParticles(const EventInput* input) const
-{
-    return input->getParticles(EventInput::RecoLevel::Reco, ParticleType::electron());
-}
 
-void ElectronJSONReader::loadScaleFactors(Json::Value output)
+std::map<std::string, ScaleFactor::ScaleFactorSet> ElectronJSONReader::loadScaleFactors(Json::Value output)
 {
+    std::map<std::string, ScaleFactor::ScaleFactorSet> scaleFactorMap;
     // Load nominal scale factors
-    loadScaleFactors(output, SystematicType::Nominal);
+    loadScaleFactors(output, Systematic::SystematicType::Nominal, scaleFactorMap);
     // Load up systematic scale factors
-    loadScaleFactors(output, SystematicType::Up);
+    loadScaleFactors(output, Systematic::SystematicType::Up, scaleFactorMap);
     // Load down systematic scale factors
-    loadScaleFactors(output, SystematicType::Down);
+    loadScaleFactors(output, Systematic::SystematicType::Down, scaleFactorMap);
 }
 
-void ElectronJSONReader::loadScaleFactors(Json::Value output, SystematicType systematicType)
+void ElectronJSONReader::loadScaleFactors(Json::Value output, ScaleFactor::SystematicType systematicType, std::map<std::string, ScaleFactor::ScaleFactorSet>& scaleFactorMap)
 {
-    
+
     Json::Value allCorrections = output["corrections"];
     Json::Value allData = allCorrections[0u]["data"];
     
@@ -55,19 +52,19 @@ void ElectronJSONReader::loadScaleFactors(Json::Value output, SystematicType sys
         {
             switch (systematicType)
             {
-                case SystematicType::Nominal:
+                case Systematic::SystematicType::Nominal:
                     if (yearContent[j]["key"] != "sf")
                     {
                         continue;
                     }
                     break;
-                case SystematicType::Up:
+                case Systematic::SystematicType::Up:
                     if (yearContent[j]["key"] != "sfup")
                     {
                         continue;
                     }
                     break;
-                case SystematicType::Down:
+                case Systematic::SystematicType::Down:
                     if (yearContent[j]["key"] != "sfdown")
                     {
                         continue;
@@ -141,19 +138,28 @@ void ElectronJSONReader::loadScaleFactors(Json::Value output, SystematicType sys
                             // Construct a key (optional) and add scale factor
                             //std::string key = year + "_" + valType + "_" + workingPoint + "_eta[" + std::to_string(etaMin) + "," + std::to_string(etaMax) + "]_pt[" + std::to_string(ptMin) + "," + std::to_string(ptMax) + "]";
                             //std::cout << "Processing key: " << key << std::endl;
+                            std::string etaMinString = std::to_string(etaMin);
+                            std::string ptMaxString = std::to_string(ptMax);
                             switch (systematicType)
                             {
-                                case SystematicType::Nominal:
-                                    addScaleFactor(etaMin, ptMax, ScaleFactorSet(scaleFactor, 0.0, 0.0));
+                                case Systematic::SystematicType::Nominal:
+                                    
+
+                                    scaleFactorMap[etaMinString + "_" + ptMaxString] = ScaleFactorSet(scaleFactor, 0.0, 0.0);
                                     std::cout << "Adding nominal scale factor for eta bin [" << etaMin << ", " << etaMax << "] and pt bin [" << ptMin << ", " << ptMax << "] with scale factor: " << scaleFactor << std::endl;
                                     break;
-                                case SystematicType::Up:
-                                    getScaleFactorSet(etaMin, ptMax).systUp = scaleFactor;
+
+                                case Systematic::SystematicType::Up:
+                                    
+                                    scaleFactorMap[etaMinString + "_" + ptMaxString].systUp = scaleFactor;
+                                   // getScaleFactorSet(etaMin, ptMax).systUp = scaleFactor;
                                     std::cout << "Adding up systematic scale factor for eta bin [" << etaMin << ", " << etaMax << "] and pt bin [" << ptMin << ", " << ptMax << "] with scale factor: " << scaleFactor << std::endl;
                                     std::cout << "Readback value of systUp: " << getScaleFactorSet(etaMin, ptMax).systUp << std::endl;
                                     break;
-                                case SystematicType::Down:
-                                    getScaleFactorSet(etaMin, ptMax).systDown = scaleFactor;
+                                case Systematic::SystematicType::Down:
+
+                                    scaleFactorMap[etaMinString + "_" + ptMaxString].systDown = scaleFactor;    
+                                    // getScaleFactorSet(etaMin, ptMax).systDown = scaleFactor;
                                     std::cout << "Adding down systematic scale factor for eta bin [" << etaMin << ", " << etaMax << "] and pt bin [" << ptMin << ", " << ptMax << "] with scale factor: " << scaleFactor << std::endl;
                                     break;
                             }
@@ -162,8 +168,10 @@ void ElectronJSONReader::loadScaleFactors(Json::Value output, SystematicType sys
                         }
                     }
                 }
+                
             }        
         }
     }
+    return scaleFactorMap;
 }
 

@@ -4,12 +4,10 @@ MuonJSONReader::MuonJSONReader(std::string filename) : JSONReader(filename)
 {
 	loadScaleFactorsFromFile(filename);
 }
-ParticleCollection<Particle> MuonJSONReader::getParticles(const EventInput* input) const
+ std::map<std::string, ScaleFactor::ScaleFactorSet> MuonJSONReader::loadScaleFactors(Json::Value output)
 {
-    return input->getParticles(EventInput::RecoLevel::Reco, ParticleType::muon());
-}
-void MuonJSONReader::loadScaleFactors(Json::Value output)
-{
+    std::map<std::string, ScaleFactor::ScaleFactorSet> scaleFactorMap;
+
     Json::Value allCorrections = output["corrections"];
     Json::Value allData = allCorrections[0u]["data"];
     Json::Value allEdges = allData["edges"];
@@ -39,7 +37,13 @@ void MuonJSONReader::loadScaleFactors(Json::Value output)
                     systDown = allsfContent[j]["value"].asDouble();
                 }
             }
-            addScaleFactor(eta_min, pt_max, ScaleFactorSet(nominal, systUp, systDown));
+            std::string etaMinString = std::to_string(eta_min);
+            std::string ptMaxString = std::to_string(pt_max);
+            scaleFactorMap[etaMinString + "_" + ptMaxString] = (scaleFactor, systUp, systDown);
+            //std::cout << "Adding nominal scale factor for eta bin [" << eta_min << ", " << etaMax << "] and pt bin [" << ptMin << ", " << ptMax << "] with scale factor: " << scaleFactor << std::endl;
+
         }
     }
+
+    return scaleFactorMap;
 }

@@ -345,10 +345,10 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     */
    
     std::vector<std::string> backgroundNames = processes->getNamesWithLabel("background");
-    std::cout << "Background Names Size: " << backgroundNames.size() << std::endl;
+    //std::cout << "Background Names Size: " << backgroundNames.size() << std::endl;
     for (int i = 0; i < (int)backgroundNames.size(); i++)
     {
-        std::cout << backgroundNames[i] << std::endl;
+        //std::cout << backgroundNames[i] << std::endl;
     }
     std::vector<std::string> signalNames = processes->getNamesWithLabel("signal");
 
@@ -365,7 +365,6 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
 
     if (includeSignal == true)
     {
-        
         for(std::string name : signalNames) 
         {
             std::cout << histvariable.getName() << std::endl;
@@ -375,8 +374,8 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
             std::cout << "number of signal bins is: " << signal->GetNbinsX();
             std::cout << name << std::endl;
             std::cout << histvariable.getName() << std::endl;
+            std::cout << "SIGNAl MAX" << signal->GetMaximum() << std::endl;
         }
-        
         //signal = analysis->getHist(histvariable, "Higgs Group 1000", true, channelName);
         //std::cout << "number of signal bins is: " << signal->GetNbinsX();
     }
@@ -384,7 +383,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     {
         signal = new TH1F("h1", "empty", 1, 0.0, 0.0);
     }
-    std::cout << "HERE" << std::endl;
+    //std::cout << "HERE" << std::endl;
     double maxCombinedY = signal->GetMaximum();
 
     std::vector<TH1*> backgroundHists;
@@ -427,8 +426,8 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     
     background = new THStack("background", "background");
 
-    maxCombinedY *= 10;
-    data->SetMaximum(maxCombinedY);
+    maxCombinedY *= 100;
+    data->SetMaximum(maxCombinedY );
     signal->SetMaximum(maxCombinedY);
     background->SetMaximum(maxCombinedY);
     //std::cout << "MAXCOMBINEDY: " << maxCombinedY << std::endl;
@@ -438,7 +437,8 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     //std::cout << "1" << std::endl;
 
     //Defines order to draw in so graph isn't cut off
-    int first = GetOrder(data, signal, background);
+    int first = 0;
+    //GetOrder(data, signal, background);
 
     //std::cout << "1.1" << std::endl;
 
@@ -467,6 +467,8 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     //TH1* hist = DrawFirst(background, signal, data, topPad, upperMasslimit, firstBin, first);
     hist = DrawFirst(background, signal, data, topPad, upperMasslimit, firstBin, first);
 
+    hist->SetMinimum(1e-2);
+
     //std::cout << "1.4" << std::endl;
 
 
@@ -475,7 +477,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     //std::cout << "2" << std::endl;
     
     //Draws the legend
-    auto legend = GetLegend(background, processes, data);
+    auto legend = GetLegend(background, processes, data, signal, includeSignal, includeData);
     legend->Draw();
     topPad->Update();
 
@@ -491,8 +493,6 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     bottomPad->Draw();
     bottomPad->cd();
 
-
-    
     double x[data->GetNbinsX() + 1];
     double y[data->GetNbinsX() + 1];
     double xerror2[data->GetNbinsX() + 1];
@@ -529,26 +529,26 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
 
 void PlotFormatter::FormatSignalData(THStack*& background, TH1*& signal, TH1*& data, std::vector<TH1*>& backgroundHists, int numBins)
 {
-    std::cout << "Background Hist Names Start" << std::endl;
+    //std::cout << "Background Hist Names Start" << std::endl;
     for(TH1* backgroundHist : backgroundHists) {
         backgroundHist->Rebin(numBins);
         background->Add(backgroundHist);
-        std::cout << backgroundHist->GetName() << std::endl;
+        //std::cout << backgroundHist->GetName() << std::endl;
     }
-    std::cout << "Background Hist Names End" << std::endl;
+    //std::cout << "Background Hist Names End" << std::endl;
 
-    std::cout << "TList Start" << std::endl;
+    //std::cout << "TList Start" << std::endl;
     TList *histList = background->GetHists();
     TIter next(histList);  
     TH1 *hist;  
     bool emptyHist = false;
     while ((hist = (TH1*)next())) {
-    std::cout << hist->GetName() << " entries " << hist->GetEntries() << std::endl;  // Print info about each histogram
+    //std::cout << hist->GetName() << " entries " << hist->GetEntries() << std::endl;  // Print info about each histogram
     if (hist->GetEntries() == 0) { continue; }
     }
-    std::cout << "TList End" << std::endl;
+    //std::cout << "TList End" << std::endl;
 
-    signal->Scale(1e6);
+    //signal->Scale(std::pow(10, 6));
     signal->Rebin(numBins);
     data->Rebin(numBins);   
 
@@ -589,10 +589,14 @@ void PlotFormatter::DrawOtherHistograms(std::vector<TH1*>& hists, std::vector<in
 void PlotFormatter::DrawOtherHistograms(THStack*& background, TH1*& signal, TH1*& data, int first)
 {
     if(first == 0) {
-        //signal->Draw("HIST SAME");
+        signal->SetLineColor(6);
+	    signal->SetFillColor(0);
+        signal->SetLineWidth(3);
+        signal->Draw("HIST SAME");
         std::cout << "first = 0";
-        signal->SetLineColor(kBlack);
-        signal->SetLineWidth(2);
+        std::cout << "Hist content: " << signal->Integral() << '\n';
+        //signal->SetLineColor(kBlack);
+        //signal->SetLineWidth(2);
         histVector.push_back(signal);
         data->Draw("P SAME E1 X0");
         data->SetLineColor(kBlack);
@@ -611,7 +615,7 @@ void PlotFormatter::DrawOtherHistograms(THStack*& background, TH1*& signal, TH1*
     }
     else {
         std::cout << "first = 2";
-        //signal->Draw("HIST SAME");
+        signal->Draw("HIST SAME");
         signal->SetLineColor(kBlack);
         signal->SetLineWidth(2); 
         histVector.push_back(signal);
@@ -627,13 +631,13 @@ TH1* PlotFormatter::DrawFirst(THStack*& background, TH1*& signal, TH1*& data, TP
     TH1* hist;
     //std::cout << "1.31" << std::endl;
     hist = background->GetHistogram();
-    int xAxisMin = std::pow(1, -5);
+    double xAxisMin = 1e-5;
     std::cout << background->GetName() << std::endl;
     std::cout << background->GetNhists() << std::endl;
     if(first == 0) {
         for(const auto&& obj2 : *background->GetHists()) {
             TH1* backgroundHist = dynamic_cast<TH1*>(obj2);
-            backgroundHist->SetLineColor(kBlack);
+            //backgroundHist->SetLineColor(kBlack);
             backgroundHist->SetLineWidth(2);
            // backgroundHist->GetXaxis()->SetLimits(firstBin, upperMasslimit);
             backgroundHist->SetMinimum(xAxisMin);
@@ -648,7 +652,7 @@ TH1* PlotFormatter::DrawFirst(THStack*& background, TH1*& signal, TH1*& data, TP
 	    signal->SetFillColor(0);
         signal->SetLineWidth(2);
         signal->SetMinimum(xAxisMin);
-        //signal->Draw("HIST");
+        signal->Draw("HIST");
         signal->Draw("HIST");
         histVector.push_back(signal);
        // signal->GetXaxis()->SetLimits(firstBin, upperMasslimit);
@@ -820,8 +824,8 @@ TCanvas* PlotFormatter::makeFormat(int w, int h, float t, float b, float l, floa
 
 void PlotFormatter::writeText(int w, int h, float t, float b, float l, float r) {
     //Writes CMS logo and integrated luminosity
-    int align_ = 13;
-    TString lumiText = "13 TeV";
+    int align_ = 13; 
+    TString lumiText = "139 f^-1, 13 TeV";
     TLatex latex;
     latex.SetNDC();
     latex.SetTextAngle(0);
@@ -883,19 +887,25 @@ void PlotFormatter::deleteHists() {
     th2Vector.clear();
 }
 
-TLegend* PlotFormatter::GetLegend(THStack* background, std::shared_ptr<Channel> processes, TH1* data)
+TLegend* PlotFormatter::GetLegend(THStack* background, std::shared_ptr<Channel> processes, TH1* data, TH1* signal, bool includeSignal, bool includeData)
 {
     //Draws the legend
     auto legend = new TLegend(0.55 - (right/width), 0.75 - (top/height), 1 - (right/width), 1 - (top/height));
     legend->SetTextSize(0.04);
     std::string name;
     TString toAdd;
-    name = processes->getNamesWithLabel("data").at(0); 
-    toAdd = name;
-    legend->AddEntry(data, " " + toAdd, "L");
-    //name = processes->getNamesWithLabel("signal").at(0); 
-    //toAdd = name;
-    //legend->AddEntry(signal, " " + toAdd, "F");
+    if (includeData)
+    {
+        name = processes->getNamesWithLabel("data").at(0); 
+        toAdd = name;
+        legend->AddEntry(data, " " + toAdd, "L");
+    }
+    else
+    {
+        name = processes->getNamesWithLabel("signal").at(0); 
+        toAdd = name;
+        legend->AddEntry(signal, " Signal", "L");
+    }
     int count = 0;
     for(const auto&& obj2 : *background->GetHists()) {
         std::cout << "count";

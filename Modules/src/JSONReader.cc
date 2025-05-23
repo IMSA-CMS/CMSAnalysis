@@ -16,7 +16,7 @@
 #include "TFile.h"
 
 // Function to preprocess the JSON content
-std::string preprocessJSON(const std::string &filename) 
+std::string JSONReader::preprocessJSON(const std::string &filename) 
 {
     std::ifstream file(Utility::getFullPath(filename));
     if (!file.is_open()) 
@@ -36,31 +36,31 @@ std::string preprocessJSON(const std::string &filename)
     return jsonContent;
 }
 
-JSONReader::ScaleFactorSet& JSONReader::getScaleFactorSet(double eta, double pt)
-{
-    // Find the appropriate eta bin
-    auto etaIt = scaleFactors.lower_bound(eta);
-    if (etaIt == scaleFactors.end()) 
-    {
-        throw std::runtime_error("No scale factor found for eta: " + std::to_string(eta));
-    }
+// ScaleFactor::ScaleFactorSet& JSONReader::getScaleFactorSet(double eta, double pt)
+// {
+//     // Find the appropriate eta bin
+//     auto etaIt = scaleFactors.lower_bound(eta);
+//     if (etaIt == scaleFactors.end()) 
+//     {
+//         throw std::runtime_error("No scale factor found for eta: " + std::to_string(eta));
+//     }
 
-    // Find the appropriate pt bin within the selected eta bin
-    auto ptIt = etaIt->second.lower_bound(pt);
-    if (ptIt == etaIt->second.end()) 
-    {
-        throw std::runtime_error("No scale factor found for pt: " + std::to_string(pt));
-    }
+//     // Find the appropriate pt bin within the selected eta bin
+//     auto ptIt = etaIt->second.lower_bound(pt);
+//     if (ptIt == etaIt->second.end()) 
+//     {
+//         throw std::runtime_error("No scale factor found for pt: " + std::to_string(pt));
+//     }
 
-    return scaleFactors[etaIt->first][ptIt->first];
-}
+//     return scaleFactors[etaIt->first][ptIt->first];
+// }
 
-void JSONReader::loadScaleFactorsFromFile(std::string filename) 
+std::map<std::string, ScaleFactor::ScaleFactorSet> JSONReader::loadScaleFactorsFromFile(std::string filename) 
 {
 // Preprocess the JSON content
     std::string jsonContent = preprocessJSON(filename);
     if (jsonContent.empty()) {
-        return;
+        return {};
     }
 
     // Parse the preprocessed JSON content
@@ -70,54 +70,11 @@ void JSONReader::loadScaleFactorsFromFile(std::string filename)
     if (!reader.parse(jsonStream, output)) {
         std::cerr << "Failed to parse JSON from file: " << filename << std::endl;
         std::cerr << "Error: " << reader.getFormatedErrorMessages() << std::endl;
-        return;
+        return {};
     }
-
-    loadScaleFactors(output);
-    printScaleFactors();
-}
-
-double JSONReader::getScaleFactor(const EventInput* input, SystematicType type) const 
-{
-    ScaleFactorSet eventWeight (1.0, 1.0, 1.0);
-    for (auto lepton : getParticles(input)) 
-    {
-        double pt = lepton.getPt();
-        double eta = lepton.getEta();
-        
-        //std::cout << "pt: " << pt << ", eta: " << eta << std::endl;
-
-        bool found = false;
-        for (const auto& etaPair : scaleFactors) {
-            if (eta >= etaPair.first) {
-                //std::cout << "eta: " << eta << std::endl;
-                for (const auto& ptPair : etaPair.second) {
-                    if (pt >= ptPair.first) 
-                    {
-                        
-                            eventWeight *= ptPair.second;
-                    }
-                        found = true;
-                        break;
-                    
-                }
-            }
-            if (found) break;
-        }
-
-        
-    }
+    //printScaleFactors();
+    return loadScaleFactors(output);
     
-    //std::cout << "eventWeight: " << eventWeight << std::endl;
-    if (type == SystematicType::Nominal) {
-        return eventWeight.nominal;
-    } else if (type == SystematicType::Up) {
-        return eventWeight.systUp;
-    } else if (type == SystematicType::Down) {
-        return eventWeight.systDown;
-    } else {
-        throw std::runtime_error("Invalid systematic type");
-    }
 }
 
 // void JSONScaleFactor::printScaleFactors() const 
@@ -132,30 +89,24 @@ double JSONReader::getScaleFactor(const EventInput* input, SystematicType type) 
 //         }
 //     }
 // }
-void JSONReader::printScaleFactors() const
-{
-    //print the electron scale factors
-    std::cout << "Electron Scale Factors:" << std::endl;
-    for (const auto& etaPair : scaleFactors) 
-    {
-        double eta = etaPair.first;
-        for (const auto& ptPair : etaPair.second) 
-        {
-            double pt = ptPair.first;
-            ScaleFactorSet scaleFactor = ptPair.second;
-            std::cout << "eta: " << eta << ", pt: " << pt 
-                      << " -> scaleFactor: " << scaleFactor.nominal 
-                      << ", systUp: " << scaleFactor.systUp 
-                      << ", systDown: " << scaleFactor.systDown << std::endl;
-        }
-    }
-}
-
-void JSONReader::addScaleFactor(double eta, double pt, ScaleFactorSet scaleFactor) 
-{
-    scaleFactors[eta][pt] = scaleFactor;
-}
-
+// void JSONReader::printScaleFactors() const
+// {
+//     //print the electron scale factors
+//     std::cout << "Electron Scale Factors:" << std::endl;
+//     for (const auto& etaPair : scaleFactors) 
+//     {
+//         double eta = etaPair.first;
+//         for (const auto& ptPair : etaPair.second) 
+//         {
+//             double pt = ptPair.first;
+//             ScaleFactor::ScaleFactorSet scaleFactor = ptPair.second;
+//             std::cout << "eta: " << eta << ", pt: " << pt 
+//                       << " -> scaleFactor: " << scaleFactor.nominal 
+//                       << ", systUp: " << scaleFactor.systUp 
+//                       << ", systDown: " << scaleFactor.systDown << std::endl;
+//         }
+//     }
+// }
 
 
 

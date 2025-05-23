@@ -10,14 +10,13 @@ class EventInput;
 class ElectronJSONReader : public JSONReader
 {
 public:
-    ElectronReader(std::string filename);
+    ElectronJSONReader(std::string filename);
 
 protected:
-    virtual void loadScaleFactors(Json::Value output) override;
-    virtual ParticleCollection<Particle> getParticles(const EventInput* input) const override;
+    virtual std::map<std::string, ScaleFactor::ScaleFactorSet> loadScaleFactors(Json::Value output) override;
 
 private:
-    void loadScaleFactors(Json::Value output, SystematicType systematicType);
+void loadScaleFactors(Json::Value output, ScaleFactor::SystematicType systematicType, std::map<std::string, ScaleFactor::ScaleFactorSet>& scaleFactorMap);
 
 };
 

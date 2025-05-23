@@ -6,4 +6,6 @@ class EventScaleFactor : public ScaleFactor
 {
 
 
-}
+};
+
+#endif 
