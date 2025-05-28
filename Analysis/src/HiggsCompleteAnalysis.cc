@@ -59,7 +59,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     // const std::string signalFilePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
 
     // Luminosity: 1.39
-    double luminosity = 137.62;
+    double luminosity = 36.31;
 
     std::vector<HistVariable> histVariablesBackground;
     std::vector<HistVariable> histVariablesData;
@@ -221,11 +221,11 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         auto higgsData = std::make_shared<Process>("Data", higgsColor);
         // 150022816 events in Data_Trigger_SingleMuon_Year_2016B.root before TriggerCut change
         higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Electron2016.root", "Electron2016", reader, luminosity, histVariableToFileMapping));
-        //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Electron2016APV.root", "Electron2016APV", reader, luminosity, histVariableToFileMapping));
+        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Electron2016APV.root", "Electron2016APV", reader, luminosity, histVariableToFileMapping));
         //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Electron2017.root", "Electron2017", reader, luminosity, histVariableToFileMapping));
         //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Electron2018.root", "Electron2018", reader, luminosity, histVariableToFileMapping));
         higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2016.root", "Muon2016", reader, luminosity, histVariableToFileMapping));
-        //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2016APV.root", "Muon2016APV", reader, luminosity, histVariableToFileMapping));
+        higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2016APV.root", "Muon2016APV", reader, luminosity, histVariableToFileMapping));
         //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2017.root", "Muon2017", reader, luminosity, histVariableToFileMapping));
         //higgsData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2018.root", "Muon2018", reader, luminosity, histVariableToFileMapping));
 
@@ -241,6 +241,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         processes.push_back(ttzProcess);
         
         processes.push_back(other);
+        processes.push_back(wJetsBackground);
 
 
         auto leptonProcesses = std::make_shared<Channel>(recoDecay, processes);
