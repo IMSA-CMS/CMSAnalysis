@@ -7,14 +7,11 @@
 #include "CMSAnalysis/Analysis/interface/FitEstimator.hh"
 #include "CMSAnalysis/Analysis/interface/FullAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
-#include "CMSAnalysis/Analysis/interface/HiggsPlusPlusAnalysis.hh"
-#include "CMSAnalysis/Analysis/interface/HiggsComparisonAnalysis.hh"
+// #include "CMSAnalysis/Analysis/interface/HiggsPlusPlusAnalysis.hh"
+// #include "CMSAnalysis/Analysis/interface/HiggsComparisonAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/PlotFormatter.hh"
 #include "CMSAnalysis/Analysis/interface/DarkPhotonCompleteAnalysis.hh"
-#include "CMSAnalysis/Analysis/interface/DarkPhotonNanoAnalysis.hh"
-#include "CMSAnalysis/Analysis/interface/DarkPhotonInputAnalysis.hh"
-#include "CMSAnalysis/Analysis/interface/DarkPhotonNoCutAnalysis.hh"
 #include <fstream>
 #include "THStack.h"
 #include "TString.h"
@@ -24,8 +21,10 @@
 #include "TSystem.h"
 
 
-void SuperPlot(const std::string inputAnalysisPath, const std::string plotName = "Input Leading Pt Values Low Mass and Same Sign", const std::string outFile = "MultiSuperPlots/superplot_RecoConfig1_Inputs_LeadingPt_LMSS.root")
+void SuperPlot()
 {
+	std::string plotName = "Invariant Mass";
+	std::string outFile = "SuperPlot.png";
 	//std::vector<double> massTargets {900};
 
 	// auto DarkPhotonAnalysis = std::make_shared<DarkPhotonInputAnalysis>(inputAnalysisPath); // BDT Output Analysis (LeptonJetMLOutput)
@@ -119,7 +118,8 @@ void SuperPlot(const std::string inputAnalysisPath, const std::string plotName =
 	//#TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "LeptonJetMLOutput High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
 	//#TCanvas *canvas = plotFormatter->completePlot(InputAnalysis, plotName, xAxisTitle, yAxisTitle, true, false, "0.3");
 	auto nameVar = HistVariable(plotName);
-	TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, nameVar, xAxisTitle, yAxisTitle, true, true, false, "0.3");
+	auto ana = std::make_shared<HiggsCompleteAnalysis>();
+	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, true, false, true, "uu");
 
 	//TCanvas *canvas = plotFormatter->simpleAnalysisHist(backgroundHists, );
 

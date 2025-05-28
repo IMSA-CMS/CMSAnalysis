@@ -1,5 +1,5 @@
-#ifndef RATESYSTEMATIC_HH
-#define RATESYSTEMATIC_HH
+#ifndef SHAPESYSTEMATIC_HH
+#define SHAPESYSTEMATIC_HH
 
 #include "CMSAnalysis/Analysis/interface/Process.hh"
 #include "CMSAnalysis/Analysis/interface/Channel.hh"
@@ -19,28 +19,20 @@
 
 
 
-class RateSystematic : public Systematic
+class ShapeSystematic : public Systematic
 {
     public:
         enum class Distribution
         {
             LogNormal
         };
-        enum class Limits
-        {
-            Percentages,
-            Factors,
-            Absolute
-        };
-        RateSystematic(std::string name, double upRate, double downRate, Distribution distribution = Distribution::LogNormal);
+        ShapeSystematic(std::string name, TH1* high, TH1* low, Distribution distribution = Distribution::LogNormal);
         virtual std::string getString() const override;
         virtual std::pair<TH1*, TH1*> getUncertainties(TH1* original) const override;
     private:
-        double upFactor;
-        double downFactor;
+        TH1* high;
+        TH1* low;
         Distribution distribution;
-
-
 };
 
 #endif
