@@ -39,6 +39,7 @@
 #include "CMSAnalysis/Filters/interface/FourLeptonCut.hh"
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
 #include "CMSAnalysis/Modules/interface/ScaleFactorAnalysis.hh"
+#include "CMSAnalysis/Filters/interface/HiggsTriggerCut.hh"
 
 using std::make_shared;
 
@@ -55,7 +56,8 @@ void HiggsBackgroundPlan::initialize()
     auto eventDump = make_shared<GenSimEventDumpModule>(5);
     auto zVetoCut = make_shared<ZVetoCut>();
     //auto quarkoniaCut = make_shared<QuarkoniaCut>();
-    auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
+    //auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
+    auto triggerCut = make_shared<HiggsTriggerCut>();
     eventMod->addSelector(hppSelector);
     eventMod->addSelector(higgsSelector);
     eventMod->addCut(triggerCut);
