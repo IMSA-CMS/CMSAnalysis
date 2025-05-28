@@ -6,12 +6,9 @@
 #include "CMSAnalysis/Analysis/interface/FitEstimator.hh"
 #include "CMSAnalysis/Analysis/interface/FullAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
-#include "CMSAnalysis/Analysis/interface/HiggsPlusPlusAnalysis.hh"
-#include "CMSAnalysis/Analysis/interface/HiggsComparisonAnalysis.hh"
-#include "CMSAnalysis/Analysis/interface/HiggsGenComparisonAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
-#include "CMSAnalysis/Analysis/interface/HiggsCutsAnalysis.hh"
-#include "CMSAnalysis/Analysis/interface/DYComparisonAnalysis.hh"
+
+
 #include "CMSAnalysis/Analysis/interface/PlotFormatter.hh"
 #include "CMSAnalysis/Utility/interface/TableData.hh"
 #include "CMSAnalysis/Utility/interface/HTMLTable.hh"
@@ -266,11 +263,6 @@ void JumboPlot()
 	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
 	std::vector<std::shared_ptr<Channel>> higgsChannels = higgsAnalysis->getChannels();
 
-<<<<<<< HEAD
-	const std::string output_cuts_files1_10 = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/LeptonJetReconstruction_v4/";
-	//auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>(output_cuts_files1_10);
-	std::vector<std::shared_ptr<Channel>> dpChannels = higgsAnalysis->getChannels();
-=======
 	// std::vector<std::string> rowNames = {"ee", "e e", "eu", "e u", "uu", "u u"};
 	// std::vector<std::string> graphableTypes = {"Eta", "Pt"};
 	// std::vector<std::string> connecters = {"_1st Highest mu- ", "_1st Highest e- "}; 
@@ -292,7 +284,6 @@ void JumboPlot()
 	// makePlots("Higgs Signal 4Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames4, connecters, connecters2, connecters3, false);
 	// makePlots("Higgs Signal 3Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames3, connecters, connecters2, connecters3, false);
 	// makePlots("Higgs Signal 2Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames2, connecters, connecters2, connecters3, true);
->>>>>>> 146da0b3dff0c47ba74301fc1663abd8e0c62b66
 
 	//std::vector<std::string> rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
 	std::vector<std::string> rowNames = {"ee", "e e", "eu", "e u", "uu", "u u"};
@@ -322,8 +313,8 @@ void JumboPlot()
 	// std::vector<std::string> bsvtfutsps = {}; // bullshitvectortofillupthesestupidparameterslots
 	// std::vector<std::string> connectors = {"_1st Highest Lepton Jet "};
 
-	makePlots("Higgs Signal 4Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames4, connecters, connecters2, connecters3, false, true);
-	makePlots("Higgs Signal 3Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames3, connecters, connecters2, connecters3, false, true);
+	//makePlots("Higgs Signal 4Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames4, connecters, connecters2, connecters3, false, true);
+	//makePlots("Higgs Signal 3Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames3, connecters, connecters2, connecters3, false, true);
 	makePlots("Higgs Signal 2Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames2, connecters, connecters2, connecters3, true, false);
 	
 	//makePlots("Dark Photon Signal", DarkPhotonAnalysis, channels, rowNames, graphableTypes, bsvtfutsps, bsvtfutsps, units, bsvtfutsps, bsvtfutsps, channelNames, connectors, bsvtfutsps, bsvtfutsps, true);

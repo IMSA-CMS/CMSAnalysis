@@ -866,21 +866,29 @@ void PlotFormatter::writeText(int w, int h, float t, float b, float l, float r) 
     }
 }
 
-void PlotFormatter::deleteHists() {
-    for(auto hist : histVector) {
+void PlotFormatter::deleteHists() 
+{
+    for(auto hist : histVector) 
+    {
+        std::cout << "Deleting " << hist->GetName() <<std::endl;
         delete hist;
     }
-    for(auto stack : stackVector) {
-	TIter next(stack->GetHists());
-	TObject* object = 0;
-	while ((object = next())) {
-	    delete (TH1*)object;
-	}		
+    for(auto stack : stackVector) 
+    {
+	    TIter next(stack->GetHists());
+	    TObject* object = nullptr;
+	    while ((object = next())) 
+        {
+            std::cout << "Deleting " << ((TH1*)object)->GetName() <<std::endl;
+	        delete object;
+	    }		
         delete stack;
 
     }
-    for(auto hist2 : th2Vector) {
-	delete hist2;
+    for(auto hist2 : th2Vector) 
+    {
+        std::cout << "Deleting " << hist2->GetName() <<std::endl;
+	    delete hist2;
     }
     histVector.clear();
     stackVector.clear();
