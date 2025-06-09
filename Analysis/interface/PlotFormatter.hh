@@ -76,11 +76,11 @@ class PlotFormatter
         //Writes text and draws logo based on the margins
         void writeText(int w, int h, float t, float b, float l, float r);
     
-        TLegend* GetLegend(THStack* background, std::shared_ptr<Channel> processes, TH1* data);
+        TLegend* GetLegend(THStack* background, std::shared_ptr<Channel> processes, TH1* data,  TH1* signal, bool includeSignal, bool includeData);
         
         void GraphFormat(TGraph*& graph, TGraphErrors*& errorgraph2, TString xAxisTitle, float xLabelSize, float xTitleSize, float yLableSize, float yTitleSize, float markerSize, float maximum, float minimum, float firstBin, float upperMasslimit);
         
-        void GetBottomPadValues(TH1*& data, THStack*& background, double (&x)[], double (&y)[], double (&xerror2)[], double (&yerror2)[]);
+        void GetBottomPadValues(TH1*& data, THStack*& background, TH1* backgroundHist, std::vector<double>& x,  std::vector<double>& y,  std::vector<double>& xerror2,  std::vector<double>& yerror2 , std::vector<double>& centers);
 
         void IntegralScaling(double& upperMasslimit, bool& scaleTodata, std::vector<TH1*>& backgroundHists, int& firstBin, int& numberBinsData, int& lowerDataIntegralLimit, float& dataIntegral, float& backgroundIntegral);
     
@@ -112,6 +112,10 @@ class PlotFormatter
 
         void GetOrder(std::vector<TH1*>& hists, TH1*& first, int& firstIndex, double& maximum);
 
+        // void SetErrors(std::shared_ptr<Process> process, HistVariable histVariable, TH1* original);
+
+        TH1* CreateErrorHistogram(THStack* hists, std::vector<std::shared_ptr<Process>> processes);
+
         bool drawLogo;
         TString extraText;
         std::vector<TH1*> histVector;
@@ -120,6 +124,7 @@ class PlotFormatter
         double upperMasslimit;
         int numBins;
         int firstBin;
+
 };
 
 #endif

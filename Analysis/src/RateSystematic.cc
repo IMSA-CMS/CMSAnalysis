@@ -15,35 +15,31 @@
 #include <fstream> //change include paths
 
 
-RateSystematic::RateSystematic(std::string name, double rate, Distribution idistribution) :
+RateSystematic::RateSystematic(std::string name, double upRate, double downRate, Distribution idistribution) :
     Systematic(name),
-    factor(rate),
+    upFactor(upRate),
+    downFactor(downRate),   
     distribution(idistribution)
 {}
 
 
 std::string RateSystematic::getString() const
 {
-    return std::to_string(factor);
+    return std::to_string(upFactor) + " " + std::to_string(downFactor);
 }
 
-std::pair<TH1*, TH1*> RateSystematic::adjustHistogram(TH1* original) const 
+std::pair<TH1*, TH1*> RateSystematic::getUncertainties(TH1* original) const 
 {
-    double originalContent = original->GetBinContent(15);
-    std::cout<<"original content: " << originalContent << std::endl;
     auto graphHigh = dynamic_cast<TH1*>(original->Clone());
     auto graphLow = dynamic_cast<TH1*>(original->Clone());
 
-    double scaleUp = 1 + factor;
-    graphHigh->Scale(scaleUp);
-    double highContent = graphHigh->GetBinContent(15);
-    std::cout<<"high graph content: " << highContent << std::endl;
+    for (int i = 0; i < graphHigh->GetNbinsX(); i++)
+    {
 
-    double scaleDown = 1 - factor;
-    graphLow->Scale(scaleDown);
-    double lowContent = graphLow->GetBinContent(15);
-    std::cout<<"low graph content: " << lowContent << std::endl;
-
+        graphHigh->SetBinContent(i, upFactor);
+        graphLow->SetBinContent(i, downFactor);
+        
+    }
     return {graphHigh, graphLow};
 }
  
