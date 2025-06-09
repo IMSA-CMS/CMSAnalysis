@@ -49,7 +49,7 @@
                             "input": "ValType",
                             "content": [
                                 {
-                                    "key": "sf",
+                                    "key": "sf"scram b-,
                                     "value": {
                                         "nodetype": "category",
                                         "input": "WorkingPoint",
