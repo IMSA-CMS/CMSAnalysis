@@ -31,7 +31,6 @@
 #include "CMSAnalysis/Histograms/interface/METHist.hh"
 #include "CMSAnalysis/Filters/interface/BJetFilter.hh"
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
-#include "CMSAnalysis/Filters/interface/ZVetoCut.hh"
 #include "CMSAnalysis/Filters/interface/MuonSelector.hh"
 #include "CMSAnalysis/Filters/interface/RunFilter.hh"
 
