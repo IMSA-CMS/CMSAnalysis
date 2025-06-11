@@ -80,8 +80,12 @@ void LeptonJetReconstructionPlan::initialize()
   
   auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Mu37_TkMu27", "HLT_IsoMu24"});
   auto highestMuonPtCut = make_shared<HighestMuonPtCut>();
+  auto zVetoCut = make_shared<LeptonJetZVetoCut>();
 
   eventMod->addCut(triggerCut);
+
+  eventMod->addCut(zVetoCut);
+
   //eventMod->addCut(highestMuonPtCut);
 
   CommonOperations::addHiggsScaleFactors(eventMod);
