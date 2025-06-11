@@ -41,6 +41,7 @@ TFile* RootFileInput::getFile(std::string fileSource) const
 TH1* RootFileInput::getHist(HistVariable histType) const
 {
 	TH1::AddDirectory(kFALSE);
+	TH1::SetDefaultSumw2();
 	//std::cout << "RootFileInput Hit 1 " << std::endl;
 	/*
 	std::string name = "";

@@ -172,7 +172,7 @@ TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction)
 	TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
 	// std::cout << "2:7\n";
 	
-	histogram->Fit(f1, "SLQRBWIDTH");
+	histogram->Fit(f1, "SWLQRBWIDTH");
 	f1->SetParError(6, norm / (sqrt(histogram->GetEntries())));
 	// std::cout << "2:8\n";
 
