@@ -80,8 +80,12 @@ void LeptonJetReconstructionPlan::initialize()
   
   auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Mu37_TkMu27", "HLT_IsoMu24"});
   auto highestMuonPtCut = make_shared<HighestMuonPtCut>();
+  auto zVetoCut = make_shared<LeptonJetZVetoCut>();
 
   eventMod->addCut(triggerCut);
+
+  eventMod->addCut(zVetoCut);
+
   //eventMod->addCut(highestMuonPtCut);
 
   CommonOperations::addHiggsScaleFactors(eventMod);
@@ -245,7 +249,7 @@ void LeptonJetReconstructionPlan::initialize()
   //modules.addAnalysisModule(massRecoEfficiency1000);
   //modules.addAnalysisModule(massRecoEfficiency1300);
   //modules.addAnalysisModule(recoGenSimComparisonMod);
-  //modules.addAnalysisModule(eventDumpMod);
+  modules.addAnalysisModule(eventDumpMod);
   //modules.addAnalysisModule(recoEventDumpMod);
   /* auto selector = make_shared<SnowmassLeptonSelector>(5);
 
