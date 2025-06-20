@@ -15,6 +15,7 @@ std::vector<std::string> ListFileParams::getFileList() const
     std::ifstream textFile(Utility::getFullPath(filename));
     std::string line;
     std::vector<std::string> rootFiles;
+
     while (getline(textFile, line))
     {
         rootFiles.push_back(eossrc + line);

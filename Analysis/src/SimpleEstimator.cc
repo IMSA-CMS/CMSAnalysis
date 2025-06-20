@@ -54,23 +54,24 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, HistVaria
     int numBins = hist->GetNbinsX(); 
     int lowerLimit = firstBin * (static_cast<double>(numBins) / xAxisRange);
     double efficiency = (hist->Integral()) / totaleventsran;
-    double signalest = crosssection * 1000 * luminosity * efficiency;
+    double signalest = crosssection * 1000 * luminosity * efficiency * isBranchingRatioFixer;
     // std::cout << "Passed Events: " << hist->GetEntries() << " " << hist->Integral() <<"\n";
     // std::cout << "Total Events: " << totaleventsran << "\n";
     // std::cout << "Efficiency of " << process->getName() << " is " << efficiency << std::endl;
 // 
 
 
-    //  std::cout << "postMax " << hist->GetMaximum() << std::endl;
-    //  std::cout << "MaxContent " << hist->GetBinContent(hist->GetMaximumBin()) << std::endl;
-    //  std::cout << "process " << process->getName() << std::endl; 
-    //  std::cout << "totaleventsran " << totaleventsran << std::endl;
-    //  std::cout << "totalentries " << hist->GetEntries() << std::endl;
-    //  std::cout << "efficiency " << efficiency << std::endl;
-    //  std::cout << "luminosity " << luminosity << std::endl;
-    //  std::cout << "cross section " << crosssection << std::endl;
-    //  std::cout << "postIntegral " << hist->Integral(lowerLimit, numBins) << std::endl;
-    //  std::cout << "yield for " << process->getName() << " is " << signalest << std::endl;
+     std::cout << "postMax " << hist->GetMaximum() << std::endl;
+     std::cout << "MaxContent " << hist->GetBinContent(hist->GetMaximumBin()) << std::endl;
+     std::cout << "process " << process->getName() << std::endl; 
+     std::cout << "totaleventsran " << totaleventsran << std::endl;
+     std::cout << "totalentries " << hist->GetEntries() << std::endl;
+     std::cout << "efficiency " << efficiency << std::endl;
+     std::cout << "luminosity " << luminosity << std::endl;
+     std::cout << "cross section " << crosssection << std::endl;
+     std::cout << "postIntegral " << hist->Integral(lowerLimit, numBins) << std::endl;
+     std::cout << "yield for " << process->getName() << " is " << signalest << std::endl;
     
     return signalest;
 }
+
