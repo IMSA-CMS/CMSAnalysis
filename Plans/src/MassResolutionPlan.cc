@@ -1,17 +1,11 @@
 #include "CMSAnalysis/Plans/interface/MassResolutionPlan.hh"
 
-#include <iostream>
 #include <memory>
 
-#include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
 
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
-#include "CMSAnalysis/Filters/interface/MassFilter.hh"
 #include "CMSAnalysis/Filters/interface/BarrelStateFilter.hh"
 #include "CMSAnalysis/Filters/interface/MassBinFilter.hh"
-#include "CMSAnalysis/Modules/interface/ResolutionModule.hh"
-#include "CMSAnalysis/Modules/interface/MassResolutionModule.hh"
-#include "CMSAnalysis/Histograms/interface/Histograms.hh"
 
 using std::make_shared;
 
