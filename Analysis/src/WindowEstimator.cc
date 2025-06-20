@@ -12,11 +12,9 @@
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include <fstream>
 #include <array>
-#include <iostream>
 #include <string>
 #include <cstdlib>
 #include "CMSAnalysis/Analysis/interface/WindowEstimator.hh"
-#include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 
 
 double WindowEstimator::getExpectedYield(const SingleProcess* process, HistVariable dataType, double luminosity) const
