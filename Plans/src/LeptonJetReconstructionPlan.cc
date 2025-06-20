@@ -60,6 +60,7 @@
 #include "CMSAnalysis/Filters/interface/DarkPhotonControlRegionFilter.hh"
 #include "CMSAnalysis/Modules/interface/RecoGenSimComparisonModule.hh"
 #include "CMSAnalysis/Filters/interface/BJetCut.hh"
+#include "CMSAnalysis/Filters/interface/LeptonJetZVetoCut.hh"
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
 
 // Use 700-1000 2018, DY50

@@ -8,7 +8,7 @@
 
 #include "CMSAnalysis/Modules/interface/FilterStringModule.hh"
 #include "CMSAnalysis/Modules/interface/FilterModule.hh"
-#include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
+#include "CMSAnalysis/Modules/interface/GenSimEventDumpModule.hh"
 #include "CMSAnalysis/Filters/interface/HiggsCut.hh"
 #include "CMSAnalysis/Filters/interface/RepeatedEventCuts.hh"
 #include "CMSAnalysis/Filters/interface/HiggsSelector.hh"
