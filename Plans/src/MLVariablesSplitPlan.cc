@@ -1,15 +1,10 @@
 #include "CMSAnalysis/Plans/interface/HiggsBackgroundPlan.hh"
 
-#include <iostream>
 #include <memory>
 
-#include "TROOT.h"
-#include "TSystem.h"
 
-#include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetMatchingModule.hh"
-#include "CMSAnalysis/Modules/interface/LeptonJetDataStripModule.hh"
 #include "CMSAnalysis/Plans/interface/MLVariablesSplitPlan.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetMLStripModule.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetTreeMakerModule.hh"

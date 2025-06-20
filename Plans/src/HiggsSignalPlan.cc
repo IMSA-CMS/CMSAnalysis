@@ -1,9 +1,6 @@
 #include "CMSAnalysis/Plans/interface/HiggsSignalPlan.hh"
 #include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
-#include <iostream>
 #include <memory>
-#include "TROOT.h"
-#include "TSystem.h"
 
 
 

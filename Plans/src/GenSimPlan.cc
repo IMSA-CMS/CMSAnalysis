@@ -1,16 +1,11 @@
 #include "CMSAnalysis/Plans/interface/GenSimPlan.hh"
 
-#include <iostream>
 #include <memory>
-
-#include "TROOT.h"
-#include "TSystem.h"
 
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
 #include "CMSAnalysis/Modules/interface/METModule.hh"
 #include "CMSAnalysis/Histograms/interface/SameSignInvariantMassHist.hh"
-#include "CMSAnalysis/Histograms/interface/Histograms.hh"
 
 #include "CMSAnalysis/Histograms/interface/GenSimDeltaRHist.hh"
 #include "CMSAnalysis/Modules/interface/GenSimEventDumpModule.hh"

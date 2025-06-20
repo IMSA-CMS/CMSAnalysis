@@ -1,44 +1,34 @@
 #include "CMSAnalysis/Plans/interface/HiggsBackgroundPlan.hh"
 
-#include <iostream>
 #include <memory>
 
-#include "TROOT.h"
-#include "TSystem.h"
 
-#include "CMSAnalysis/Modules/interface/FilterStringModule.hh"
 #include "CMSAnalysis/Modules/interface/FilterModule.hh"
 #include "CMSAnalysis/Modules/interface/GenSimEventDumpModule.hh"
 #include "CMSAnalysis/Filters/interface/HiggsCut.hh"
-#include "CMSAnalysis/Filters/interface/RepeatedEventCuts.hh"
 #include "CMSAnalysis/Filters/interface/HiggsSelector.hh"
-#include "CMSAnalysis/Filters/interface/ElectronEnergyScaleUp.hh"
-#include "CMSAnalysis/Filters/interface/ElectronEnergyScaleDown.hh"
 #include "CMSAnalysis/Filters/interface/HPlusPlusGenSimSelector.hh"
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
 #include "CMSAnalysis/Histograms/interface/METHist.hh"
+#include "CMSAnalysis/Histograms/interface/Histograms.hh"
 #include "CMSAnalysis/Modules/interface/METModule.hh"
 #include "CMSAnalysis/Filters/interface/NLeptonsFilter.hh"
 #include "CMSAnalysis/Histograms/interface/NLeptonsHist.hh"
 #include "CMSAnalysis/Histograms/interface/SameSignInvariantMassHist.hh"
+#include "CMSAnalysis/Filters/interface/HiggsTriggerCut.hh"
 
-#include "CMSAnalysis/Histograms/interface/Histograms.hh"
 
 #include "CMSAnalysis/Modules/interface/TriggerModule.hh"
 #include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
-#include "CMSAnalysis/Filters/interface/TriggerCut.hh"
 #include "CMSAnalysis/Histograms/interface/TwoInvariantMassesHist.hh"
 #include "CMSAnalysis/Histograms/interface/HistogramPrototype2DProjection.hh"
 #include "CMSAnalysis/Filters/interface/BJetCut.hh"
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
 #include "CMSAnalysis/Filters/interface/RunFilter.hh"
 #include "CMSAnalysis/Filters/interface/HiggsZVetoCut.hh"
-#include "CMSAnalysis/Filters/interface/FourLeptonCut.hh"
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
-#include "CMSAnalysis/Modules/interface/ScaleFactorAnalysis.hh"
-#include "CMSAnalysis/Filters/interface/HiggsTriggerCut.hh"
 
 using std::make_shared;
 
