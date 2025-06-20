@@ -1,18 +1,9 @@
 #include "CMSAnalysis/Plans/interface/HiggsBackgroundPlan.hh"
 
-#include <iostream>
 #include <memory>
 
-#include "TROOT.h"
-#include "TSystem.h"
 
-#include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
-#include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
-#include "CMSAnalysis/Modules/interface/LeptonJetMatchingModule.hh"
-#include "CMSAnalysis/Modules/interface/HiggsDataStripModule.hh"
 #include "CMSAnalysis/Plans/interface/HiggsDataStripPlan.hh"
-#include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
-#include "CMSAnalysis/Modules/interface/MatchingModule.hh"
 #include "CMSAnalysis/Modules/interface/HiggsCombineStripModule.hh"
 #include "CMSAnalysis/Modules/interface/MultiChannelTreeMakerModule.hh"
 #include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
