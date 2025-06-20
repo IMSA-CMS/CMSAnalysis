@@ -56,9 +56,12 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 	*/
 
 	std::string name;
-	if (HistVariableToFileMapping.find(histType.getName()) != HistVariableToFileMapping.end()) {
+	if (HistVariableToFileMapping.find(histType.getName()) != HistVariableToFileMapping.end()) 
+	{
 		name = HistVariableToFileMapping.at(histType.getName());
-	} else {
+	} 
+	else
+	{
 		throw std::runtime_error("HistVariable name [" + histType.getName() + "] not found in mapping [" + fileSource + "]!");
 	}
 
