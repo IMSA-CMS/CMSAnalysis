@@ -1,11 +1,8 @@
 #include "CMSAnalysis/Plans/interface/HPlusPlusMassPlan.hh"
 
-#include <iostream>
 #include <memory>
 #include <functional>
 
-#include "TROOT.h"
-#include "TSystem.h"
 
 #include "CMSAnalysis/Filters/interface/DoubleMuonTrigger.hh"
 #include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
@@ -14,15 +11,10 @@
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
 #include "CMSAnalysis/Filters/interface/NLeptonsFilter.hh"
 #include "CMSAnalysis/Histograms/interface/NLeptonsHist.hh"
-#include "CMSAnalysis/Histograms/interface/RecoveredInvariantMassHist.hh"
-#include "CMSAnalysis/Histograms/interface/SameSignInvariantMassHist.hh"
 #include "CMSAnalysis/Filters/interface/SingleMuonTrigger.hh"
 #include "CMSAnalysis/Modules/interface/TriggerModule.hh"
 #include "CMSAnalysis/Filters/interface/TripleMuonTrigger.hh"
-#include "CMSAnalysis/Filters/interface/UnusualFinalStateFilter.hh"
 #include "CMSAnalysis/Modules/interface/METModule.hh"
-#include "CMSAnalysis/Histograms/interface/METHist.hh"
-#include "CMSAnalysis/Histograms/interface/Histograms.hh"
 #include "CMSAnalysis/Filters/interface/METTrigger.hh"
 #include "CMSAnalysis/Modules/interface/SignFlipModule.hh"
 #include "CMSAnalysis/Histograms/interface/HistogramPrototype1DGeneral.hh"

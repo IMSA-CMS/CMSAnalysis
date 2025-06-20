@@ -1,18 +1,11 @@
 #include "CMSAnalysis/Plans/interface/MassAcceptancePlan.hh"
 
-#include <iostream>
 #include <memory>
 
-#include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
 
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
-#include "CMSAnalysis/Filters/interface/MassFilter.hh"
-#include "CMSAnalysis/Filters/interface/BarrelStateFilter.hh"
 #include "CMSAnalysis/Modules/interface/SignFlipModule.hh"
-#include "CMSAnalysis/Filters/interface/MassBinFilter.hh"
-#include "CMSAnalysis/Modules/interface/ResolutionModule.hh"
 #include "CMSAnalysis/Histograms/interface/TotalEventsHist.hh"
-#include "CMSAnalysis/Histograms/interface/CIAcceptedEventsHist.hh"
 
 using std::make_shared;
 
