@@ -31,7 +31,6 @@
 #include "CMSAnalysis/Filters/interface/TriggerCut.hh"
 #include "CMSAnalysis/Histograms/interface/TwoInvariantMassesHist.hh"
 #include "CMSAnalysis/Histograms/interface/HistogramPrototype2DProjection.hh"
-#include "CMSAnalysis/Histograms/interface/METHist.hh"
 #include "CMSAnalysis/Filters/interface/BJetCut.hh"
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
 #include "CMSAnalysis/Filters/interface/RunFilter.hh"

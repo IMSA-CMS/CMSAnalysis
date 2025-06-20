@@ -28,7 +28,6 @@
 #include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
 #include "CMSAnalysis/Filters/interface/TriggerCut.hh"
 #include "CMSAnalysis/Histograms/interface/TwoInvariantMassesHist.hh"
-#include "CMSAnalysis/Histograms/interface/METHist.hh"
 #include "CMSAnalysis/Filters/interface/BJetFilter.hh"
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
 #include "CMSAnalysis/Filters/interface/MuonSelector.hh"
