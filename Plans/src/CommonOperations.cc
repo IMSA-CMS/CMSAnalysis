@@ -1,5 +1,4 @@
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
-#include "CMSAnalysis/Modules/interface/JSONScaleFactor.hh"
 #include "CMSAnalysis/Modules/interface/MultiYearScaleFactor.hh"
 #include "CMSAnalysis/Modules/interface/ElectronScaleFactor.hh"
 #include "CMSAnalysis/Modules/interface/MuonScaleFactor.hh"
