@@ -79,7 +79,7 @@ void LeptonJetReconstructionPlan::initialize()
   darkPhotonFilter->setInput(eventMod->getEventInput());
   
   auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Mu37_TkMu27", "HLT_IsoMu24"});
-  auto highestMuonPtCut = make_shared<HighestMuonPtCut>();
+  auto highestMuonPtCut = make_shared<HighestMuonPtCut>(40);
 
   eventMod->addCut(triggerCut);
   //eventMod->addCut(highestMuonPtCut);
@@ -103,7 +103,7 @@ void LeptonJetReconstructionPlan::initialize()
   //auto recoGenSimComparisonMod = std::make_shared<RecoGenSimComparisonModule>();
   auto leptonJetMLStripMod = std::make_shared<LeptonJetMLStripModule>();
   leptonJetMLStripMod->setInput(eventMod->getEventInput());
-  // auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "DataCollection/bin/dataset/weights/TMVAClassification_BDT.weights.xml", "BDT");
+  //auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "DataCollection/bin/dataset/weights/TMVAClassification_BDT.weights.xml", "BDT");
   auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "TMVAClassification_BDT.weights.xml", "BDT");
 
   //Histograms
