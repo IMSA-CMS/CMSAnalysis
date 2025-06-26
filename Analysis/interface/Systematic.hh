@@ -15,7 +15,10 @@ class Systematic
         virtual ~Systematic(){}
         std::string getName() const {return name;}
         virtual std::string getString() const = 0;
-        virtual std::pair<TH1*, TH1*> adjustHistogram(TH1* original) const = 0;
+
+        // should return deltax/x in each bin
+        // first histogram is the high uncertainty, second is the low uncertainty
+        virtual std::pair<TH1*, TH1*> getUncertainties(TH1* original) const = 0;
     private:
         const std::string name;
 };

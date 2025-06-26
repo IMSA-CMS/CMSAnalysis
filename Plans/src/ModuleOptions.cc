@@ -1,10 +1,6 @@
 #include "CMSAnalysis/Plans/interface/ModuleOptions.hh"
 #include <fstream>
-#include <iostream>
 
-#include <unordered_map>
-#include <vector>
-#include <string>
 
 ModuleOptions::ModuleOptions()
 {}

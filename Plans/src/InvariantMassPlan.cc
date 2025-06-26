@@ -1,12 +1,9 @@
 #include "CMSAnalysis/Plans/interface/InvariantMassPlan.hh"
 
-#include <iostream>
 #include <memory>
 
-#include "CMSAnalysis/Histograms/interface/Histograms.hh"
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/Histograms/interface/SameSignInvariantMassHist.hh"
-#include "CMSAnalysis/Filters/interface/SameSignInvariantMassFilter.hh"
 #include "CMSAnalysis/Modules/interface/RecoGenSimComparisonModule.hh"
 #include "CMSAnalysis/Histograms/interface/PhotonElectronInvariantMassHist.hh"
 
