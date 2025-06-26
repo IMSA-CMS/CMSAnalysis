@@ -28,7 +28,8 @@ std::vector<std::string> PickFileParams::getFileList() const
 
     std::string file = getFileName();
     std::vector<std::string> fileList;
-
+    
+    
     std::ifstream in(file);
     std::string str;
     while (std::getline(in, str))

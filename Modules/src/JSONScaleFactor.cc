@@ -9,7 +9,6 @@
 #include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "EventFilter/Utilities/interface/json.h"
-#include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "TH1.h"
 #include "TH2.h"
 #include "TCanvas.h"
