@@ -31,8 +31,8 @@ bool HighestMuonPtCut::checkEventInternal(const Event& event, const EventInput* 
 
     //double highestMuonPtCut = readHighestMuonPtCutFromFile("/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Filters/src/highestMuonPtCut.txt");
     // double secondHighestMuonPtCut = readHighestMuonPtCutFromFile("/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Filters/src/secondHighestMuonPtCut.txt");
-    double highestMuonPtCut = 50;
-    double secondHighestMuonPtCut = 10;
+    double highestMuonPtCut = 40;
+    double secondHighestMuonPtCut = 5;
 
     for (auto muon : muons) {
         double pt = muon.getPt();
