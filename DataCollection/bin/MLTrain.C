@@ -302,7 +302,7 @@ bool returnState(TString &myMethodList, std::string trainPath, std::string outpu
 
   // Note: This file path is for testing maximum value for numFiles parameter
   std::vector<std::string> dyFiles = {
-    trainPath + "testDrellYanBackground4_18.root"
+    trainPath + "DY50_infForBoostedDecisionTreeTraining.root"
   };
 
   // std::map<std::string, double> qcdCrossSections = {
@@ -339,7 +339,7 @@ bool returnState(TString &myMethodList, std::string trainPath, std::string outpu
 
   // Note: This file path is for testing maximum value for numFiles parameter
   std::map<std::string, double> dyCrossSections = {
-    {trainPath + "testDrellYanBackground4_18.root", 5735}
+    {trainPath + "DY50_infForBoostedDecisionTreeTraining.root", 5735}
   };
 
   std::vector<std::string> bgFiles = {};
@@ -375,7 +375,7 @@ bool returnState(TString &myMethodList, std::string trainPath, std::string outpu
   // Create a ROOT output file where TMVA will store ntuples, histograms, etc. - Daniel's Note: I changed the name of TMVA.root to TMVAOutput2.root
   //TString outfileName("TMVAOutput2.root");
 
-  TString outfileName("TMVAOutputFinal18.root"); // Use this output file for testing maximum value for numFiles parameter when processing background with runAnalyzer
+  TString outfileName("TMVAOutputFordarkPhotonHiggs125SignalTraining.root"); // Use this output file for testing maximum value for numFiles parameter when processing background with runAnalyzer
   TFile *outputFile = TFile::Open(outfileName, "RECREATE");
 
   TString opt = "!V:!Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification";
@@ -625,7 +625,7 @@ bool returnState(TString &myMethodList, std::string trainPath, std::string outpu
   std::cout << "==> TMVAClassification is done!" << std::endl;
 
   //TFile *f = new TFile("TMVARerunOutput.root", "recreate"); // Daniel's Note: I renamed TMVARerun.root to TMVARerunOutput.root
-  TFile *f = new TFile("TMVARerunOutputFinal18.root", "recreate"); // Use this when testing the maximum value for numFiles parameter for processing background with runAnalyzer
+  TFile *f = new TFile("TMVARerunOutputFordarkPhotonHiggs125SignalTraining.root", "recreate"); // Use this when testing the maximum value for numFiles parameter for processing background with runAnalyzer
   factory->Write();
   f->Close();
 

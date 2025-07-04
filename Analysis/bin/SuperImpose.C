@@ -86,17 +86,17 @@ void SuperImpose() {
 
 
   // darkPhotonHiggs super imposed graphs - Note that for some reason the root files are empty for these two files
-  // std::vector<std::string> files = {"darkPhotonHiggs125.root", "darkPhotonHiggs300.root"};
-  // std::vector<std::string> hists = {
-  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput",
-  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput"
-  // };
+  std::vector<std::string> files = {"darkPhotonHiggs125.root", "darkPhotonHiggs300.root"};
+  std::vector<std::string> hists = {
+      "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput",
+      "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput"
+  };
   
-  // std::vector<TString> names = {"darkPhotonHiggs125", "darkPhotonHiggs300"};
-  // std::vector<int> colors = {kBlack, kBlue};
+  std::vector<TString> names = {"darkPhotonHiggs125", "darkPhotonHiggs300"};
+  std::vector<int> colors = {kBlack, kBlue};
 
-  // TString xTitle = "BDT Output";
-  // TString yTitle = "Number of Events";
+  TString xTitle = "BDT Output";
+  TString yTitle = "Number of Events";
 
 
 
@@ -116,17 +116,17 @@ void SuperImpose() {
 
 
   // darkPhotonBaselineRun2 vs. DY50-inf super imposed graphs
-  std::vector<std::string> files = {"darkPhotonBaselineRun2LeptonJetReconstruction.root", "DY50_inf.root"};
-  std::vector<std::string> hists = {
-      "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput",
-      "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput"
-  };
+  // std::vector<std::string> files = {"darkPhotonBaselineRun2LeptonJetReconstruction.root", "DY50_inf.root"};
+  // std::vector<std::string> hists = {
+  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput",
+  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput"
+  // };
   
-  std::vector<TString> names = {"darkPhotonBaselineRun2", "DY50-inf"};
-  std::vector<int> colors = {kBlack, kBlue};
+  // std::vector<TString> names = {"darkPhotonBaselineRun2", "DY50-inf"};
+  // std::vector<int> colors = {kBlack, kBlue};
 
-  TString xTitle = "BDT Output";
-  TString yTitle = "Number of Events";
+  // TString xTitle = "BDT Output";
+  // TString yTitle = "Number of Events";
 
 
 
