@@ -38,7 +38,7 @@
 #include "CMSAnalysis/Filters/interface/BJetCut.hh"
 #include "CMSAnalysis/Filters/interface/LeptonJetZVetoCut.hh"
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
-
+#include "CMSAnalysis/Filters/interface/NLeptonJetsFilter.hh"
 // Use 700-1000 2018, DY50
 
 using std::make_shared;
@@ -53,7 +53,9 @@ void LeptonJetReconstructionPlan::initialize()
   //eventMod->addSelector(std::make_shared<LeptonJetAntiSelector>(.5, 0.0001, 0.0005));
 
   auto darkPhotonFilter = std::make_shared<FilterModule>(std::make_shared<DarkPhotonControlRegionFilter>(10));
+  auto nLeptonJetFilter = std::make_shared<FilterModule>(std::make_shared<NLeptonJetsFilter>());
   darkPhotonFilter->setInput(eventMod->getEventInput());
+  nLeptonJetFilter->setInput(eventMod->getEventInput());
   
   auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Mu37_TkMu27", "HLT_IsoMu24"});
   auto highestMuonPtCut = make_shared<HighestMuonPtCut>(40);
@@ -84,8 +86,11 @@ void LeptonJetReconstructionPlan::initialize()
   //auto recoGenSimComparisonMod = std::make_shared<RecoGenSimComparisonModule>();
   auto leptonJetMLStripMod = std::make_shared<LeptonJetMLStripModule>();
   leptonJetMLStripMod->setInput(eventMod->getEventInput());
+
+  // Change weights file for boosted decision tree here
   //auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "DataCollection/bin/dataset/weights/TMVAClassification_BDT.weights.xml", "BDT");
-  auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "TMVAClassification_BDT.weights.xml", "BDT");
+  auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "TMVAClassification_BDTMain.weights.xml", "BDT");
+  auto mlModForHiggs125Analysis = std::make_shared<MLCalculator>(leptonJetMLStripMod, "TMVAClassification_BDTFordarkPhotonHiggs125Analysis.weights.xml", "BDT");
 
   //Histograms
   //uncomented 
@@ -211,6 +216,7 @@ void LeptonJetReconstructionPlan::initialize()
 
   modules.addProductionModule(eventMod);
   modules.addFilterModule(darkPhotonFilter);
+  modules.addFilterModule(nLeptonJetFilter);
   
   modules.addAnalysisModule(lepRecoHistMod);
   
