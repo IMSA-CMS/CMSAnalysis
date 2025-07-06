@@ -215,7 +215,7 @@ bool returnState(TString &myMethodList, std::string trainPath, std::string outpu
   // };
 
   std::vector<std::string> dpBaselineFiles = {
-    trainPath + "darkPhotonBaselineRun2NumFiles18.root"
+    trainPath + "darkPhotonHiggs125ForBoostedDecisionTreeTraining.root"
   };
 
   std::map<std::string, double> nanoCrossSections = {
@@ -248,7 +248,7 @@ bool returnState(TString &myMethodList, std::string trainPath, std::string outpu
   // };
 
   std::map<std::string, double> dpCrossSections = {
-    {trainPath + "darkPhotonBaselineRun2NumFiles18.root", 1},
+    {trainPath + "darkPhotonHiggs125ForBoostedDecisionTreeTraining.root", 1},
   };
 
   std::vector<std::string> sgFiles = {};
