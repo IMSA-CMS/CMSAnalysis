@@ -117,7 +117,8 @@ void LeptonJetReconstructionPlan::initialize()
 
   auto lepJetRecoElec = std::make_shared<LeptonJetRecoHist>(lepMatchMod, true, lepRecoMod, "Number of Reconstructed Electrons",3,0,2);
   auto lepJetRecoMuon = std::make_shared<LeptonJetRecoHist>(lepMatchMod, false, lepRecoMod, "Number of Reconstructed Muons",3,0,2);
-  auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(EventInput::RecoLevel::Reco, "LeptonJetMLOutput", 100, -1, 1, mlMod, lepRecoMod);
+  auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(EventInput::RecoLevel::Reco, "LeptonJetMLOutputMain", 100, -1, 1, mlMod, lepRecoMod);
+  auto leptonJetMLHistForHiggs125Analysis = std::make_shared<LeptonJetMLHist>(EventInput::RecoLevel::Reco, "LeptonJetMLOutputForHiggs125Analysis", 100, -1, 1, mlModForHiggs125Analysis, lepRecoMod);
 
   // auto matchDeltaRHist = std::make_shared<MatchingDeltaRHist>(lepMatchMod, "Differences in Delta R for Matched Lepton Jets", 100, 0, 0.5);
   // auto matchPtHist = std::make_shared<MatchingPtHist>(lepMatchMod, "Differences in pT for Matched Lepton Jets", 100, -300, 300);
@@ -143,6 +144,7 @@ void LeptonJetReconstructionPlan::initialize()
   //histOutputMod->addHistogram(deltaZHist);
   //histOutputMod->addHistogram(relIsoHist);
   histOutputMod->addHistogram(leptonJetMLHist);
+  histOutputMod->addHistogram(leptonJetMLHistForHiggs125Analysis);
 
   //   histOutputMod->addHistogram(matchDeltaRHist);
   //   histOutputMod->addHistogram(matchPtHist);
@@ -212,6 +214,7 @@ void LeptonJetReconstructionPlan::initialize()
   modules.addProductionModule(lepMatchMod);
   modules.addProductionModule(leptonJetMLStripMod);
   modules.addProductionModule(mlMod);
+  modules.addProductionModule(mlModForHiggs125Analysis);
 
 
   modules.addProductionModule(eventMod);
