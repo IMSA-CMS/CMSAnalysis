@@ -61,6 +61,7 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 		TList* toMerge = new TList;
 		for (const auto& singleProcess : processes)	
 		{
+			//std::cout << "Process: " << singleProcess.getName() << std::endl;
 			toAdd = singleProcess.getHist(histType, scaleToExpected);
 			//Add only if the hisogram exists
 
@@ -68,6 +69,8 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 			{
 				toMerge->Add(toAdd);
 			}
+
+			//std::cout << toAdd->GetName() << " has " << toAdd->GetNbinsX() << std::endl;
 		}
 		newHist->Merge(toMerge);
 		newHist->SetLineColor(color);
@@ -179,7 +182,7 @@ void Process::addSystematic(std::shared_ptr<Systematic> systematic)
 std::pair<TH1*, TH1*> Process::getSystematicHist(HistVariable histType, bool scaleToExpected)
 {
 	auto hist = getHist(histType, scaleToExpected);
-	return systematics.adjustHistogram(hist);
+	return systematics.getUncertainties(hist);
 }
 
 int Process::getNEvents() 
@@ -189,4 +192,17 @@ int Process::getNEvents()
 		total += singleProcess.getTotalEvents();
 	}
 	return total;
+}
+
+std::pair<TH1*, TH1*> Process::combineSystematics(std::vector<std::shared_ptr<Process>> processes,
+	TH1* original)
+{
+	// get all multisystematics in a vector
+	std::vector<std::shared_ptr<MultiSystematic>> multiSystematics;
+	for (auto process : processes)
+	{
+		multiSystematics.push_back(std::make_shared<MultiSystematic>(process->systematics));
+		std::cout << "Size: " << multiSystematics.size() << std::endl;
+	}
+	return MultiSystematic::combineSystematics(multiSystematics, original);
 }

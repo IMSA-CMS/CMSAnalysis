@@ -6,13 +6,17 @@ if __name__ == "__main__":
     parser.add_argument("--input")
     parser.add_argument("--output")
     parser.add_argument("--analysis")
+    parser.add_argument("--user")
     parser.add_argument("--numFiles")
     parser.add_argument("--skipFiles")
     parser.add_argument("--folder")
 
     args = parser.parse_args()
 
-    prefix = "gen/" + args.input[14:-4] + '_'
+    if not os.path.isdir("gen"):
+        os.mkdir("gen")
+
+    prefix = "gen/" + args.output[:-5] + '_'
     config_name = prefix + "crab_config.py"
     script_name = prefix + "runAnalyzer.sh"
 
@@ -46,6 +50,8 @@ config = config()
 config.General.requestName = '{args.output[0:len(args.output) - 5]}'
 config.General.workArea = '{"crab_projects" + ("/" + args.folder if args.folder else "")}'
 config.General.transferOutputs = True
+config.General.instance = 'prod'
+config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'PSet.py'
 config.JobType.inputFiles = ['FrameworkJobReport.xml', 'input/']
 config.JobType.scriptExe = '{prefix}runAnalyzer.sh'
@@ -56,7 +62,7 @@ config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 1
 config.Data.totalUnits = 1
 config.Data.publication = False
-{f"config.Data.outLFNDirBase = '/store/user/{os.environ['USER']}/{args.folder}'" if args.folder else ""}
+{f"config.Data.outLFNDirBase = '/store/user/{args.user}/{args.folder}'" if args.folder else ""}
 config.Site.storageSite = 'T3_US_FNALLPC'
 """
 # replace storageSite with T3_CH_CERNBOX if on lxplus

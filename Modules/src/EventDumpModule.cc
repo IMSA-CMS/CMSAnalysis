@@ -32,7 +32,7 @@ bool EventDumpModule::process()
   
   if(counter < numOfEvents || numOfEvents == -1)
   {
-    if (getFilter() == "eeeu_") 
+    //if (getFilter() == "eeeu_") 
     {
       std::ofstream my_file;
       if(genSim)
@@ -45,8 +45,18 @@ bool EventDumpModule::process()
       }
       if(reco)
       {
-        auto recoParticles = getInput()->getParticles(EventInput::RecoLevel::Reco, ParticleType::none());
+        auto recoParticles = getInput()->getLeptons(EventInput::RecoLevel::Reco);
         my_file.open("RecoEventDump.txt", std::ios::app);
+        if (counter == 0)
+        {
+          my_file << std::left << std::setw(8) << "event" << std::setw(8) << "element" << std::setw(11) << "| name" << std::setw(11) << "| type"
+          << std::setw(15) << "| charge"
+          << std::setw(15) << "| pT"
+          << std::setw(15) << "| Eta"
+          << std::setw(15) << "| Phi"
+          << std::setw(15) << "| E"
+          << std::setw(5) << "| mass\n";
+        }
         printRecoParticleCollection(recoParticles, my_file);
         //std::cout << "\nAn event was printed";
         my_file.close();
@@ -90,26 +100,20 @@ void EventDumpModule::printRecoParticleCollection(const ParticleCollection<Parti
 {
   int eventElement = 1;
   const auto& particleGroup = recoParts.getParticles();
-  my_file << "--------------------------------------------------------" << std::endl;
-  my_file << "EVENT #" << (counter + 1) <<std::endl;
-  my_file << "all lepton invariant mass: " << recoParts.calculateAllLeptonInvariantMass() 
-    << " | same sign invariant mass: " << recoParts.calculateSameSignInvariantMass(true) << "\n";
-  my_file << "--------------------------------------------------------" << std::endl;
+ // my_file << "--------------------------------------------------------" << std::endl;
+ // my_file << "EVENT #" << (counter + 1) <<std::endl;
+  //my_file << "all lepton invariant mass: " << recoParts.calculateAllLeptonInvariantMass() 
+  //  << " | same sign invariant mass: " << recoParts.calculateSameSignInvariantMass(true) << "\n";
+ // my_file << "--------------------------------------------------------" << std::endl;
 
-  my_file << std::left << std::setw(8) << "element" << std::setw(11) << "| name" << std::setw(11) << "| type"
-   << std::setw(15) << "| charge"
-   << std::setw(15) << "| pT"
-   << std::setw(15) << "| Eta"
-   << std::setw(15) << "| Phi"
-   << std::setw(15) << "| E"
-   << std::setw(5) << "| mass\n";
+
 
   //Prints out all of the particles
   for(auto &part : particleGroup)
   {
     //std::cout<<"Part: " << part.getType().getName() << "\n"; 
     const auto& partName = part.getType().getName();
-    my_file << std::setw(8) << eventElement <<  "| " << std::setw(9) << partName<< part << std::endl;
+    my_file << std::setw(8) << (counter + 1) << std::setw(8) << eventElement <<  "| " << std::setw(9) << partName<< part << std::endl;
     eventElement++;
   }
 }

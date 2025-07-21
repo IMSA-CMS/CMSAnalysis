@@ -27,22 +27,27 @@
 
 std::vector<std::string> channelTypes =
 {
-	"eeee", "eeeu", "eueu", "eeuu", "euuu", "uuuu"
+	// "eeee", "eeeu", "eueu", "eeuu", "euuu", "uuuu"
+	"ee",
+	"eu",
+	"uu",
 };
 
 std::vector<std::string> histogramTypes = 
 {
-	"_Reco Same Sign Invariant Mass"
+	// "X Projection",
+	// "Y Projection",
+	// "Same Sign Invariant Mass",
 };
 
 // run in batch mode for faster processing: root -b HiggsBackgroundFit.C+
 void HiggsBackgroundFit()
 {
-	const double min = 250;
-	const double max = 2000;
+	// const double min = 200;
+	// const double max = 2000;
 
-	std::string fitHistsName = "H++Backgrounds.root";
-	std::string fitParameterValueFile = "H++BackgroundFunctions.txt";
+	std::string fitHistsName = "OtherBackgroundFits.root";
+	std::string fitParameterValueFile = "OtherBackgroundFunctions.txt";
 
 	// these don't do anything
 	std::string parameterFits = "H++BackgroundParameterFits.root";
@@ -50,7 +55,39 @@ void HiggsBackgroundFit()
 	remove(fitParameterValueFile.c_str());
 	remove(parameterFunctions.c_str());
 	
-	std::vector<std::string> backgrounds = {"t#bar{t}, Multiboson Background", "Drell-Yan Background", "QCD Background", "ZZ Background", "All Background"};
+	// std::vector<std::string> backgrounds = {
+	// 	// "t#bar{t} Background 1",
+	// 	// "t#bar{t} Background 2",
+	// 	// "t#bar{t} Background 3",
+	// 	"Drell-Yan Background",
+	// 	// "Drell-Yan Background No Veto",
+	// 	"QCD Background",
+	// 	"ZZ Background",
+	// 	// "ZZ Background No Veto",
+	// 	// "ZZZ",
+	// 	// "WW",
+	// 	// "WWW",
+	// 	// "WWZ",
+	// 	// "WZ",
+	// 	// "WZZ",
+	// 	"t#bar{t}, Multiboson Background",
+	// };
+
+	std::map<std::string, std::pair<int, int>> backgroundsToRange = {
+		{"Drell-Yan Background", {140, 500}},
+		{"QCD Background", {200, 2000}}, // no events anyway
+		{"ZZ Background", {100, 800}},
+		{"TTbar Background", {70, 2000}},
+		// {"TTW Background", {90, 2000}}, // almost no events on uuuu, figure out something
+		{"TTZ Background", {120, 2000}},
+		// {"ZZZ Background", {200, 2000}}, // not enough to fit
+		// {"WW Background", {200, 2000}}, // not enough to fit
+		// {"WWW Background", {200, 2000}}, // not enough to fit
+		// {"WWZ Background", {200, 2000}}, // not enough
+		// {"WZ Background", {200, 2000}}, // not enough
+		// {"WZZ Background", {200, 2000}}, // enough on some?
+		// {"Other Background", {200, 2000}},
+	};
 
 	Fitter fitter(fitHistsName, fitParameterValueFile, parameterFits, parameterFunctions);
     std::shared_ptr<HiggsCompleteAnalysis> analysis = std::make_shared<HiggsCompleteAnalysis>();
@@ -65,35 +102,32 @@ void HiggsBackgroundFit()
 			FitFunctionCollection currentFunctions;
 			auto targetChannel = analysis->getChannel(channel);
 			std::vector<std::string> keyNames;
-			for (size_t i = 0; i < backgrounds.size(); ++i) 
+			for (auto backgroundAndRange : backgroundsToRange)
 			{
+				auto background = backgroundAndRange.first;
+				auto range = backgroundAndRange.second;
 				try 
 				{
-					auto process = targetChannel->findProcess(backgrounds[i]);
+					auto process = targetChannel->findProcess(background);
 				} catch (std::runtime_error&) 
 				{
 					continue;
 				}
-				auto process = targetChannel->findProcess(backgrounds[i]);
-				auto histVar = HistVariable("Same Sign Invariant Mass");
+				auto process = targetChannel->findProcess(background);
+				auto histVar = HistVariable(histType);
 
 				TH1* selectedHist = process->getHist(histVar, true);
 				if(selectedHist->GetEntries() < 1) continue;
-				std::string keyName = channel + '/' + backgrounds[i] + histType;
+				std::string keyName = channel + '/' + background + " " + histType;
 				keyNames.push_back(keyName);
 
-				FitFunction func = FitFunction::createFunctionOfType(FitFunction::POWER_LAW, keyName, "", min, max);
+				FitFunction func = FitFunction::createFunctionOfType(FitFunction::POWER_LAW, keyName, "", range.first, range.second);
 				currentFunctions.insert(func);
 				histogramMap.insert({keyName, selectedHist});
 			}
 			fitter.setHistograms(histogramMap);
 			fitter.loadFunctions(currentFunctions);
 			fitter.fitFunctions();
-			for (std::string keyName : keyNames) 
-			{
-				std::cout << "Key: " << keyName << std::endl;
-				std::cout << currentFunctions.get(keyName) << std::endl;
-			}
 		}
 	}
 

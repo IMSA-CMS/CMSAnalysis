@@ -12,15 +12,12 @@
 #include <sstream>
 #include <fstream>
 #include <array>
-#include <iostream>
 #include <string>
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include <cstdlib>
 #include "TH2.h"
 #include "TH2F.h"
-#include "TFile.h"
 #include <memory>
-#include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 
 TH1* FitEstimator::getFitHist(HistVariable histType) const {
     return fitInput->getHist(histType);
