@@ -38,7 +38,7 @@
 #include "CMSAnalysis/Filters/interface/BJetCut.hh"
 #include "CMSAnalysis/Filters/interface/LeptonJetZVetoCut.hh"
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
-
+#include "CMSAnalysis/Filters/interface/NLeptonJetsFilter.hh"
 // Use 700-1000 2018, DY50
 
 using std::make_shared;
@@ -53,10 +53,12 @@ void LeptonJetReconstructionPlan::initialize()
   //eventMod->addSelector(std::make_shared<LeptonJetAntiSelector>(.5, 0.0001, 0.0005));
 
   auto darkPhotonFilter = std::make_shared<FilterModule>(std::make_shared<DarkPhotonControlRegionFilter>(10));
+  auto nLeptonJetFilter = std::make_shared<FilterModule>(std::make_shared<NLeptonJetsFilter>());
   darkPhotonFilter->setInput(eventMod->getEventInput());
+  nLeptonJetFilter->setInput(eventMod->getEventInput());
   
   auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Mu37_TkMu27", "HLT_IsoMu24"});
-  auto highestMuonPtCut = make_shared<HighestMuonPtCut>();
+  auto highestMuonPtCut = make_shared<HighestMuonPtCut>(40);
   auto zVetoCut = make_shared<LeptonJetZVetoCut>();
 
   eventMod->addCut(triggerCut);
@@ -84,8 +86,11 @@ void LeptonJetReconstructionPlan::initialize()
   //auto recoGenSimComparisonMod = std::make_shared<RecoGenSimComparisonModule>();
   auto leptonJetMLStripMod = std::make_shared<LeptonJetMLStripModule>();
   leptonJetMLStripMod->setInput(eventMod->getEventInput());
-  // auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "DataCollection/bin/dataset/weights/TMVAClassification_BDT.weights.xml", "BDT");
-  auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "TMVAClassification_BDT.weights.xml", "BDT");
+
+  // Change weights file for boosted decision tree here
+  //auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "DataCollection/bin/dataset/weights/TMVAClassification_BDT.weights.xml", "BDT");
+  auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "TMVAClassification_BDTMain.weights.xml", "BDT");
+  auto mlModForHiggs125Analysis = std::make_shared<MLCalculator>(leptonJetMLStripMod, "TMVAClassification_BDTFordarkPhotonHiggs125Analysis.weights.xml", "BDT");
 
   //Histograms
   //uncomented 
@@ -112,7 +117,8 @@ void LeptonJetReconstructionPlan::initialize()
 
   auto lepJetRecoElec = std::make_shared<LeptonJetRecoHist>(lepMatchMod, true, lepRecoMod, "Number of Reconstructed Electrons",3,0,2);
   auto lepJetRecoMuon = std::make_shared<LeptonJetRecoHist>(lepMatchMod, false, lepRecoMod, "Number of Reconstructed Muons",3,0,2);
-  auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(EventInput::RecoLevel::Reco, "LeptonJetMLOutput", 100, -1, 1, mlMod, lepRecoMod);
+  auto leptonJetMLHist = std::make_shared<LeptonJetMLHist>(EventInput::RecoLevel::Reco, "LeptonJetMLOutputMain", 100, -1, 1, mlMod, lepRecoMod);
+  auto leptonJetMLHistForHiggs125Analysis = std::make_shared<LeptonJetMLHist>(EventInput::RecoLevel::Reco, "LeptonJetMLOutputForHiggs125Analysis", 100, -1, 1, mlModForHiggs125Analysis, lepRecoMod);
 
   // auto matchDeltaRHist = std::make_shared<MatchingDeltaRHist>(lepMatchMod, "Differences in Delta R for Matched Lepton Jets", 100, 0, 0.5);
   // auto matchPtHist = std::make_shared<MatchingPtHist>(lepMatchMod, "Differences in pT for Matched Lepton Jets", 100, -300, 300);
@@ -138,6 +144,7 @@ void LeptonJetReconstructionPlan::initialize()
   //histOutputMod->addHistogram(deltaZHist);
   //histOutputMod->addHistogram(relIsoHist);
   histOutputMod->addHistogram(leptonJetMLHist);
+  histOutputMod->addHistogram(leptonJetMLHistForHiggs125Analysis);
 
   //   histOutputMod->addHistogram(matchDeltaRHist);
   //   histOutputMod->addHistogram(matchPtHist);
@@ -207,10 +214,12 @@ void LeptonJetReconstructionPlan::initialize()
   modules.addProductionModule(lepMatchMod);
   modules.addProductionModule(leptonJetMLStripMod);
   modules.addProductionModule(mlMod);
+  modules.addProductionModule(mlModForHiggs125Analysis);
 
 
   modules.addProductionModule(eventMod);
   modules.addFilterModule(darkPhotonFilter);
+  modules.addFilterModule(nLeptonJetFilter);
   
   modules.addAnalysisModule(lepRecoHistMod);
   
