@@ -21,6 +21,8 @@
 #include "TMVA/IMethod.h"
 #include "CMSAnalysis/Modules/interface/LeptonJetMLStripModule.hh"
 
+#include "TMVA/CrossValidation.h"
+// Daniel was here
 //caete mlstrpi, and use addto dataloader
 
 // To predict if a lepton jet is real, I am using a combination of CUDA-accelerated
@@ -208,8 +210,12 @@ bool returnState(TString &myMethodList, std::string trainPath, std::string outpu
   //   "BDTFiles/strippedSG_numFiles1.root"
   // };
 
+  // std::vector<std::string> dpBaselineFiles = {
+  //   trainPath + "darkPhotonBaselineRun2.root"
+  // };
+
   std::vector<std::string> dpBaselineFiles = {
-    trainPath + "darkPhotonBaselineRun2.root"
+    trainPath + "darkPhotonHiggs125ForBoostedDecisionTreeTraining.root"
   };
 
   std::map<std::string, double> nanoCrossSections = {
@@ -237,8 +243,12 @@ bool returnState(TString &myMethodList, std::string trainPath, std::string outpu
   //   {"BDTFiles/strippedSG_numFiles1.root", 1},
   // };
 
+  // std::map<std::string, double> dpCrossSections = {
+  //   {trainPath + "darkPhotonBaselineRun2.root", 1},
+  // };
+
   std::map<std::string, double> dpCrossSections = {
-    {trainPath + "darkPhotonBaselineRun2.root", 1},
+    {trainPath + "darkPhotonHiggs125ForBoostedDecisionTreeTraining.root", 1},
   };
 
   std::vector<std::string> sgFiles = {};
@@ -280,9 +290,19 @@ bool returnState(TString &myMethodList, std::string trainPath, std::string outpu
     trainPath + "QCD700-1000.root",
   };
 
+  // std::vector<std::string> dyFiles = {
+  //   trainPath + "DY10-50.root",
+  //   trainPath + "DY50-inf.root",
+  // };
+
+  // Note: I used DY50-inf.txt to generate darkPhotonDrellYanBackground.root
+  // std::vector<std::string> dyFiles = {
+  //   trainPath + "darkPhotonDrellYanBackground.root"
+  // };
+
+  // Note: This file path is for testing maximum value for numFiles parameter
   std::vector<std::string> dyFiles = {
-    trainPath + "DY10-50.root",
-    trainPath + "DY50-inf.root",
+    trainPath + "DY50_infForBoostedDecisionTreeTraining.root"
   };
 
   // std::map<std::string, double> qcdCrossSections = {
@@ -307,9 +327,19 @@ bool returnState(TString &myMethodList, std::string trainPath, std::string outpu
     {trainPath + "QCD2000-inf.root", 0.6957}
   };
 
+  // std::map<std::string, double> dyCrossSections = {
+  //   {trainPath + "DY10-50.root", 20460},
+  //   {trainPath + "DY50-inf.root", 5735}
+  // };
+
+  // Note: I used DY50-inf.txt to generate darkPhotonDrellYanBackground.root
+  // std::map<std::string, double> dyCrossSections = {
+  //   {trainPath + "darkPhotonDrellYanBackground.root", 5735}
+  // };
+
+  // Note: This file path is for testing maximum value for numFiles parameter
   std::map<std::string, double> dyCrossSections = {
-    {trainPath + "DY10-50.root", 20460},
-    {trainPath + "DY50-inf.root", 5735}
+    {trainPath + "DY50_infForBoostedDecisionTreeTraining.root", 5735}
   };
 
   std::vector<std::string> bgFiles = {};
@@ -342,11 +372,14 @@ bool returnState(TString &myMethodList, std::string trainPath, std::string outpu
   }
   std::cout << "--- TMVAClassification       : Using input file: " << input->GetName() << std::endl;
 
-  // Create a ROOT output file where TMVA will store ntuples, histograms, etc.
-  TString outfileName("TMVA.root");
+  // Create a ROOT output file where TMVA will store ntuples, histograms, etc. - Daniel's Note: I changed the name of TMVA.root to TMVAOutput2.root
+  //TString outfileName("TMVAOutput2.root");
+
+  TString outfileName("TMVAOutputFordarkPhotonHiggs125SignalTraining.root"); // Use this output file for testing maximum value for numFiles parameter when processing background with runAnalyzer
   TFile *outputFile = TFile::Open(outfileName, "RECREATE");
 
   TString opt = "!V:!Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification";
+  //TString opt = "VerboseLevel=Debug:!Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification"; // Use this for testing
 
   TMVA::Factory *factory =
       new TMVA::Factory("TMVAClassification",
@@ -591,7 +624,8 @@ bool returnState(TString &myMethodList, std::string trainPath, std::string outpu
   std::cout << "==> Wrote root file: " << outputFile->GetName() << std::endl;
   std::cout << "==> TMVAClassification is done!" << std::endl;
 
-  TFile *f = new TFile("TMVARerun.root", "recreate");
+  //TFile *f = new TFile("TMVARerunOutput.root", "recreate"); // Daniel's Note: I renamed TMVARerun.root to TMVARerunOutput.root
+  TFile *f = new TFile("TMVARerunOutputFordarkPhotonHiggs125SignalTraining.root", "recreate"); // Use this when testing the maximum value for numFiles parameter for processing background with runAnalyzer
   factory->Write();
   f->Close();
 
