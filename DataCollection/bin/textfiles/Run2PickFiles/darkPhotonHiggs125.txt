@@ -3,5 +3,6 @@ DpMass:	0_3
 HiggsMass:	125
 FSR:	0_0
 Decay:	Higgs2DP
-Format:	MiniAOD
+Format:	NanoAOD
 Run:	2
+Year:	2016	2016APV	2017	2018
