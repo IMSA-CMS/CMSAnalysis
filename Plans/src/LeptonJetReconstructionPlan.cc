@@ -1,56 +1,32 @@
 #include "CMSAnalysis/Plans/interface/LeptonJetReconstructionPlan.hh"
 
-#include <iostream>
 #include <memory>
-#include "TROOT.h"
-#include "TSystem.h"
 
-#include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
 
 #include "CMSAnalysis/Histograms/interface/DeltaRHist.hh"
-#include "CMSAnalysis/Filters/interface/DoubleMuonTrigger.hh"
 #include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
-#include "CMSAnalysis/Modules/interface/GenSimParticleModule.hh"
 #include "CMSAnalysis/Histograms/interface/GetNthHighestPtHist.hh"
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/Modules/interface/LeptonEfficiency.hh"
-#include "CMSAnalysis/Histograms/interface/LeptonJetDeltaRHist.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetEfficiency.hh"
-#include "CMSAnalysis/Utility/interface/LeptonJet.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetMatchingModule.hh"
 #include "CMSAnalysis/Histograms/interface/LeptonJetPtHist.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
-#include "CMSAnalysis/Modules/interface/MassRecoEfficiency.hh"
-#include "CMSAnalysis/Histograms/interface/MatchingDeltaRHist.hh"
-#include "CMSAnalysis/Histograms/interface/MatchingEtaHist.hh"
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
-#include "CMSAnalysis/Histograms/interface/MatchingPhiHist.hh"
 #include "CMSAnalysis/Histograms/interface/MatchedLeptonJetHist.hh"
-#include "CMSAnalysis/Histograms/interface/MatchingPtHist.hh"
 #include "CMSAnalysis/Histograms/interface/NLeptonJetHist.hh"
 #include "CMSAnalysis/Filters/interface/NLeptonsFilter.hh"
 #include "CMSAnalysis/Histograms/interface/NLeptonsHist.hh"
-#include "CMSAnalysis/Filters/interface/SingleMuonTrigger.hh"
-#include "CMSAnalysis/Histograms/interface/Histograms.hh"
-#include "CMSAnalysis/Modules/interface/TriggerModule.hh"
-#include "CMSAnalysis/Filters/interface/TripleMuonTrigger.hh"
-#include "CMSAnalysis/Filters/interface/SnowmassLeptonSelector.hh"
-#include "CMSAnalysis/Histograms/interface/RelIsoHist.hh"
-#include "CMSAnalysis/Modules/interface/LeptonJetMLCalculator.hh"
 #include "CMSAnalysis/Filters/interface/LeptonJetSelector.hh"
-#include "CMSAnalysis/Filters/interface/LeptonJetAntiSelector.hh"
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
 #include "CMSAnalysis/Histograms/interface/GenSimDeltaRHist.hh"
 #include "CMSAnalysis/Histograms/interface/LeptonJetRecoHist.hh"
 #include "CMSAnalysis/Filters/interface/TriggerCut.hh"
 #include "CMSAnalysis/Filters/interface/HighestMuonPtCut.hh"
-#include "CMSAnalysis/Filters/interface/HighestLeptonJetDeltaRCut.hh"
 #include "CMSAnalysis/Histograms/interface/GammaHist.hh"
 #include "CMSAnalysis/Histograms/interface/GammaDeltaRHist2D.hh"
 #include "CMSAnalysis/Histograms/interface/GenSimGammaHist.hh"
 //#include "CMSAnalysis/Filters/interface/NLeptonJetsFilter.hh"
-#include "CMSAnalysis/Histograms/interface/GenSimDeltaRPsedoFilteredHist.hh"
-#include "CMSAnalysis/Histograms/interface/MLStripHist.hh"
 #include "CMSAnalysis/Histograms/interface/GenSimGammaPsedoFilteredHist.hh"
 #include "CMSAnalysis/Histograms/interface/DarkPhotonMassHist.hh"
 #include "CMSAnalysis/Histograms/interface/GenSimDeltaRTwoJetsPsedoFilteredHist.hh"
@@ -60,6 +36,7 @@
 #include "CMSAnalysis/Filters/interface/DarkPhotonControlRegionFilter.hh"
 #include "CMSAnalysis/Modules/interface/RecoGenSimComparisonModule.hh"
 #include "CMSAnalysis/Filters/interface/BJetCut.hh"
+#include "CMSAnalysis/Filters/interface/LeptonJetZVetoCut.hh"
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
 
 // Use 700-1000 2018, DY50
@@ -80,9 +57,13 @@ void LeptonJetReconstructionPlan::initialize()
   
   auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Mu37_TkMu27", "HLT_IsoMu24"});
   auto highestMuonPtCut = make_shared<HighestMuonPtCut>();
+  auto zVetoCut = make_shared<LeptonJetZVetoCut>();
 
   eventMod->addCut(triggerCut);
-  eventMod->addCut(highestMuonPtCut);
+
+  eventMod->addCut(zVetoCut);
+
+  //eventMod->addCut(highestMuonPtCut);
 
   CommonOperations::addHiggsScaleFactors(eventMod);
 
@@ -103,7 +84,8 @@ void LeptonJetReconstructionPlan::initialize()
   //auto recoGenSimComparisonMod = std::make_shared<RecoGenSimComparisonModule>();
   auto leptonJetMLStripMod = std::make_shared<LeptonJetMLStripModule>();
   leptonJetMLStripMod->setInput(eventMod->getEventInput());
-  auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "DataCollection/bin/dataset/weights/TMVAClassification_BDT.weights.xml", "BDT");
+  // auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "DataCollection/bin/dataset/weights/TMVAClassification_BDT.weights.xml", "BDT");
+  auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "TMVAClassification_BDT.weights.xml", "BDT");
 
   //Histograms
   //uncomented 
@@ -244,7 +226,7 @@ void LeptonJetReconstructionPlan::initialize()
   //modules.addAnalysisModule(massRecoEfficiency1000);
   //modules.addAnalysisModule(massRecoEfficiency1300);
   //modules.addAnalysisModule(recoGenSimComparisonMod);
-  //modules.addAnalysisModule(eventDumpMod);
+  modules.addAnalysisModule(eventDumpMod);
   //modules.addAnalysisModule(recoEventDumpMod);
   /* auto selector = make_shared<SnowmassLeptonSelector>(5);
 

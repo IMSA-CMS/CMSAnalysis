@@ -17,8 +17,8 @@ class MultiYearScaleFactor : public ScaleFactor
 public:
 	void addMuonScaleFactor(std::string year, std::shared_ptr<MuonScaleFactor> scaleFactor);
 	void addElectronScaleFactor(std::string year, std::shared_ptr<ElectronScaleFactor> scaleFactor);
-
-    virtual double getScaleFactor(const EventInput* input) const override;
+    MultiYearScaleFactor(std::string name) : ScaleFactor(name) {}
+    virtual double getScaleFactor(const EventInput* input, SystematicType type = SystematicType::Nominal) const override;
 private:
     std::map<std::string, std::shared_ptr<MuonScaleFactor>> muonScaleFactors;
     std::map<std::string, std::shared_ptr<ElectronScaleFactor>> electronScaleFactors;
