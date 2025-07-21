@@ -38,7 +38,8 @@ std::vector<std::string> channelTypes =
 
 std::vector<std::string> histogramTypes = 
 {
-	"Same Sign Invariant Mass"
+	"X Projection",
+	"Y Projection",
 };
 
 // run in batch mode for faster processing: root -b HiggsSignalFit.C+
@@ -47,10 +48,10 @@ void HiggsSignalFit()
 	const double min = 0;
 	const double max = 2000;
 
-	std::string fitHistsName = "H++SignalFits2.root";
-	std::string fitParameterValueFile = "H++SignalFunctions2.txt";
-	std::string parameterFits = "H++SignalParameterFits2.root";
-	std::string parameterFunctions = "H++SignalParameterFunctions2.txt";
+	std::string fitHistsName = "H++SignalFits.root";
+	std::string fitParameterValueFile = "H++SignalFunctions.txt";
+	std::string parameterFits = "H++SignalParameterFits.root";
+	std::string parameterFunctions = "H++SignalParameterFunctions.txt";
 	
 	remove(fitParameterValueFile.c_str());
 	remove(parameterFunctions.c_str());
@@ -79,8 +80,8 @@ void HiggsSignalFit()
 			{
 				std::cerr << "mass: " << masses[i] << std::endl;
 				// update this to use all gensim decays, not just the same as reco
-				auto process = targetChannel->findProcess("Higgs Signal " + std::to_string(masses[i]));
-				TH1* selectedHist = process->getHist(HistVariable("Same Sign Invariant Mass"), true);
+				auto process = targetChannel->findProcess("Higgs signal " + channel + " " + std::to_string(masses[i]));
+				TH1* selectedHist = process->getHist(HistVariable(histType), true);
 				std::string keyName = channel + "/" + std::to_string(masses[i]) + '_' + histType;
 
 				FitFunction func = FitFunction::createFunctionOfType(FitFunction::DOUBLE_SIDED_CRYSTAL_BALL, keyName, "", min, max);

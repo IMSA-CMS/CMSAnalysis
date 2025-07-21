@@ -6,7 +6,6 @@
 #include "TStyle.h"
 #include "TH1.h"
 #include "TAxis.h"
-#include "TStyle.h"
 #include <iomanip>
 #include <iostream>
 #include <algorithm>
@@ -29,7 +28,7 @@ void MultiSystematic::addSystematic(std::shared_ptr<Systematic> systematic)
 	systematics.push_back(systematic);
 }
 
-std::pair<TH1*, TH1*> MultiSystematic::adjustHistogram(TH1* original) const 
+std::pair<TH1*, TH1*> MultiSystematic::getUncertainties(TH1* original) const 
 {
 	const double tolerance = 1e-8;
 	auto histHigh = new TH1F("High hist", "High hist", original->GetNbinsX(), original->GetXaxis()->GetXmin(), original->GetXaxis()->GetXmax());
@@ -38,7 +37,7 @@ std::pair<TH1*, TH1*> MultiSystematic::adjustHistogram(TH1* original) const
 	{
 		double deltayHigh = 0;
 		double deltayLow = 0;
-		std::pair<TH1*, TH1*> margins = system->adjustHistogram(original);
+		std::pair<TH1*, TH1*> margins = system->getUncertainties(original);
 		int binsHigh = margins.first->GetNbinsX();
 		int binsLow = margins.second->GetNbinsX();
 	
@@ -52,26 +51,24 @@ std::pair<TH1*, TH1*> MultiSystematic::adjustHistogram(TH1* original) const
     	// std::cout<<"multisystematic low graph content: " << lowContent << std::endl;
 
 
-		for(int bin = 0; bin <= binsHigh + 1; bin++)
+		for (int bin = 0; bin <= binsHigh + 1; bin++)
 		{
 			float y_value = original->GetBinContent(bin);
-			if(y_value > tolerance)
+			if (y_value > tolerance)
 			{
 				float adjusted_y_value = margins.first->GetBinContent(bin);
-				//std::cout<< " 1) y value: " << std::setprecision(10) << y_value << ", adjusted y value: " << std::setprecision(10) << adjusted_y_value << "\n";
 				float change = (adjusted_y_value - y_value)/y_value;
 				deltayHigh += change*change;
 				std::cout<<"delta high: " << deltayHigh << std::endl;
 			}
 		}
 
-		for(int bin = 0; bin <= binsLow + 1; bin++)
+		for (int bin = 0; bin <= binsLow + 1; bin++)
 		{
 			float y_value = original->GetBinContent(bin);
-			if(y_value > tolerance)
+			if (y_value > tolerance)
 			{
 				float adjusted_y_value = margins.second->GetBinContent(bin);
-				//std::cout<< "2) y value: " << std::setprecision(10) << y_value << ", adjusted y value: " << std::setprecision(10) << adjusted_y_value << "\n";
 				float change = (adjusted_y_value - y_value)/y_value;
 				deltayLow += change*change;
 				std::cout<<"delta low: " << deltayLow << std::endl;
@@ -83,5 +80,69 @@ std::pair<TH1*, TH1*> MultiSystematic::adjustHistogram(TH1* original) const
 		histLow->Fill(totalChangeLow);
 	}
 	return {histHigh, histLow};
+}
+
+// std::shared_ptr<MultiSystematic> MultiSystematic::addMultiSystematic(std::shared_ptr<MultiSystematic> newSystematic)
+// {
+// 	for (auto newSystem : newSystematic->systematics)
+// 	{	
+// 		// for (auto system : systematics)
+// 		// {
+// 		// 	if (system->getName() == newSystem->getName())
+// 		// 	{
+// 		// 		system->addSystematics();
+// 		// 	}
+// 		// }
+// 		systematics.push_back(newSystem);
+// 	}
+// 	return std::make_shared<MultiSystematic>(*this);
+// }
+
+std::pair<TH1*, TH1*> MultiSystematic::combineSystematics(std::vector<std::shared_ptr<MultiSystematic>> systematics, TH1* original)
+{
+	std::unordered_map<std::string, std::pair<TH1*, TH1*>> histMap;
+	for (auto system : systematics)
+	{
+		for (auto newSystem : system->systematics)
+		{
+			if (histMap.find(newSystem->getName()) == histMap.end())
+			{
+				histMap[newSystem->getName()] = newSystem->getUncertainties(original);
+			}
+			else
+			{
+				std::pair<TH1*, TH1*> hist = newSystem->getUncertainties(original);
+				histMap[newSystem->getName()].first->Add(hist.first);
+				histMap[newSystem->getName()].second->Add(hist.second);
+			}
+		}
+	}
+	
+	std::pair <TH1*, TH1*> histPair {new TH1F("High hist", "High hist", original->GetNbinsX(), 
+		original->GetXaxis()->GetXmin(), original->GetXaxis()->GetXmax()), 
+	new TH1F("Low hist", "Low hist", original->GetNbinsX(), original->GetXaxis()->GetXmin(),
+		original->GetXaxis()->GetXmax())};
+
+	for (auto hist : histMap)
+	{
+		// Add the square of each bin
+		for (int bin = 0; bin <= histPair.first->GetNbinsX() + 1; ++bin)
+		{
+			auto upContent = hist.second.first->GetBinContent(bin);
+			// std::cout << "up content: " << upContent << std::endl;
+			histPair.first->SetBinContent(bin, histPair.first->GetBinContent(bin) + upContent * upContent);
+			auto downContent = hist.second.second->GetBinContent(bin);
+			// std::cout << "down content: " << downContent << std::endl;
+			histPair.second->SetBinContent(bin, histPair.second->GetBinContent(bin) + downContent * downContent);
+		}
+	}
+
+	// Take the square root of each bin
+	for (int bin = 0; bin <= histPair.first->GetNbinsX() + 1; ++bin)
+	{
+		histPair.first->SetBinContent(bin, std::sqrt(histPair.first->GetBinContent(bin)));
+		histPair.second->SetBinContent(bin, std::sqrt(histPair.second->GetBinContent(bin)));
+	}
+	return histPair;
 }
  
