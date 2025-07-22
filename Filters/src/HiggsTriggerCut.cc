@@ -15,6 +15,7 @@ bool HiggsTriggerCut::checkEventInternal(const Event& event, const EventInput* i
 		if(iterator2 -> second == "2018")
 		{
 			triggers.push_back("HLT_Ele32_WPTight_Gsf");
+			triggers.push_back("HLT_Ele35_WPTight_Gsf");
 		}
 		else if(iterator2 -> second == "2017")
 		{

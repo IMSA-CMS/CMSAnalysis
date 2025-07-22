@@ -1,127 +1,61 @@
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
+#include "CMSAnalysis/Utility/interface/MatchingPair.hh"
 
-#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
-#include "DataFormats/RecoCandidate/interface/RecoCandidate.h"
-
+#include <cstddef>
 #include <limits>
+#include <utility>
 
-MatchingModule::MatchingModule(double deltaRCut) :
-  deltaRCutoff(deltaRCut)
+MatchingModule::MatchingModule(double deltaRCut) : deltaRCutoff(deltaRCut)
 {
 }
 
-bool MatchingModule::process() 
+bool MatchingModule::process()
 {
-	matchingBestPairs.clear();
-	std::vector<Particle> genSimParticles = getInput()->getParticles(EventInput::RecoLevel::GenSim).getParticles();
-	std::vector<Particle> recoCandidates=getInput()->getParticles(EventInput::RecoLevel::Reco).getParticles();
-	bool ret = match(genSimParticles, recoCandidates);
-	//std::cout<<"ret is: " + ret;
-
-	// for (auto& pair : matchingBestPairs.getPairs())
-	// {
-	// 	std::cout<<"Type: " <<pair.getGenParticle().getType().getName()<<"\n";
-	// 	std::cout<<"Charge: " <<pair.getGenParticle().getCharge()<<"\n";
-	// 	std::cout<<"pT: " <<pair.getGenParticle().getPt()<<"\n";
-	// 	std::cout<<"Type: " <<pair.getRecoParticle().getType().getName()<<"\n";
-	// 	std::cout<<"Charge: " <<pair.getRecoParticle().getCharge()<<"\n";
-	// 	std::cout<<"pT: " <<pair.getRecoParticle().getPt()<<"\n";
-	// 	}
-	return ret;
+    std::vector<Particle> genSimParticles = getInput()->getParticles(EventInput::RecoLevel::GenSim).getParticles();
+    std::vector<Particle> recoCandidates = getInput()->getParticles(EventInput::RecoLevel::Reco).getParticles();
+    return match(genSimParticles, recoCandidates);
 }
-  
-//loops through while there are still at least one gen and reco particle left that have not been matched and set to null
+
 bool MatchingModule::match(std::vector<Particle> genSimParticles, std::vector<Particle> recoCandidates)
 {
+    matchingBestPairs.clear();
 
-   matchingBestPairs.clear();
-   unmatched.clear();
-    while (!checkIsNull(genSimParticles) && !checkIsNull(recoCandidates))
+    while ((genSimParticles.size() > 0) && (recoCandidates.size() > 0))
     {
-      //start with a high value, only really needs to be higher than the cutoff delta R
-      double deltaRMin = std::numeric_limits<double>::max();
+        // (gen, reco)
+        std::pair<size_t, size_t> bestPair =
+            std::pair(std::numeric_limits<size_t>::max(), std::numeric_limits<size_t>::max());
 
-		Particle nullParticle(Particle::nullParticle());
-		MatchingPair pairDataList(nullParticle, nullParticle);
+        // Start with a high value, only really needs to be higher than the cutoff delta R
+        double bestDeltaR = std::numeric_limits<double>::max();
 
-		//counters to set the indices to if the particle is best match
-		int matchingGenCounter = 0;
-		int matchingRecoCounter = 0;
+        // Go through all possible particle combinations of gen and reco particles
+        for (size_t genIdx = 0; genIdx < genSimParticles.size(); genIdx++)
+        {
+            for (size_t recoIdx = 0; recoIdx < recoCandidates.size(); recoIdx++)
+            {
+                MatchingPair candidate(GenSimParticle(genSimParticles.at(genIdx)), recoCandidates.at(recoIdx));
+                auto deltaR = candidate.getDeltaR();
+                if (deltaR < bestDeltaR)
+                {
+                    bestPair = std::pair(genIdx, recoIdx);
+                    bestDeltaR = deltaR;
+                }
+            }
+        }
 
-		//keeps track of when the best particles are assigned 
-		int bestGenIndex = 0;
-		int bestRecoIndex = 0;
+        if (bestDeltaR > deltaRCutoff)
+        {
+            // Failed to match some particles
+            return false;
+        }
 
-		//goes through all possible particle combinations of gen and reco particles
-      	for(auto& genParticle : genSimParticles)
-		{
-			auto genSimParticle = GenSimParticle(genParticle);
-	  		//checks that the particle was not already matched and set to null
-	  		if (genParticle.isNotNull() && genSimParticle == genSimParticle.finalDaughter())
-	    	{
-              	matchingRecoCounter = 0;  // Reset the Reco Counter
-	      		for(auto& recoParticle : recoCandidates)
-				{
-		  			if (recoParticle.isNotNull())
-		    		{
-						// Casting is bad form, but we're just going to have to live with it.
-						// Rewriting the code is too much work
-						// Not checking the casts because they have to work
-						// MatchingPair pairCandidate(dynamic_cast<const reco::GenParticle*>(genParticle),
-						MatchingPair pairCandidate(genParticle, recoParticle);
-						//if this delta R is better than the previous best one, keeps track of the information by assigning values ot pariDataList
-						if (pairCandidate.getDeltaR() < deltaRMin)
-						{
-							pairDataList = pairCandidate;
-							bestGenIndex = matchingGenCounter;
-							bestRecoIndex = matchingRecoCounter;
-							deltaRMin = pairDataList.getDeltaR();
-						}
-		    		}
-		  			++matchingRecoCounter;
-				}
-	    	}
-	  		++matchingGenCounter;
-		}
+        matchingBestPairs.addMatchingPair(
+            MatchingPair(GenSimParticle(genSimParticles.at(bestPair.first)), recoCandidates.at(bestPair.second)));
 
-		//makes an additional delta R cut and fills matching best pairs, resets values for the next loop
-		//checks if the final (and best) delta R value for the matches passes the cut
-      	if(deltaRMin < deltaRCutoff)
-		{
-			//keeps track of that match by adding it to the vector that will be returned
-			if(pairDataList.getGenParticle().isNotNull() && pairDataList.getRecoParticle().isNotNull())
-			{
-				matchingBestPairs.addMatchingPair(pairDataList);
-			}
-			
- 		}
-		//added to check deltaR cutoff
-
-		//sets the best matches to null so they are not matched again
-		
-		genSimParticles.at(bestGenIndex) = nullParticle;
-		recoCandidates.at(bestRecoIndex) = nullParticle;
-
-		if (bestGenIndex == 0 && bestGenIndex == 0) //fixes error that causes matchmodule to get stuck on an event
-		{
-			break;
-		}
-		bestGenIndex = 0;
-		bestRecoIndex = 0;
+        genSimParticles.erase(genSimParticles.begin() + bestPair.first);
+        recoCandidates.erase(recoCandidates.begin() + bestPair.second);
     }
 
-	return true;
-}
-
-bool MatchingModule::checkIsNull(std::vector<Particle> matching) const
-{
-  	for (auto& particle : matching)
-  	{
-    	if(particle.isNotNull())
-    	{
-      		return false;
-    	}
-  	}	
-
-  	return true;
+    return true;
 }

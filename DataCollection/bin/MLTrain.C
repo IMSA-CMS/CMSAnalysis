@@ -21,6 +21,8 @@
 #include "TMVA/IMethod.h"
 #include "CMSAnalysis/Modules/interface/LeptonJetMLStripModule.hh"
 
+#include "TMVA/CrossValidation.h"
+// Daniel was here
 //caete mlstrpi, and use addto dataloader
 
 // To predict if a lepton jet is real, I am using a combination of CUDA-accelerated
@@ -39,7 +41,84 @@ qcd2000: 6.458
 //bg dy50run2
 //sg darkphotonbaselinerun2
 
-bool returnState(TString &myMethodList, std::string trainPath, const char* sgMethod, const char* bgMethod, int useDP, int useNano, int useDY, int useQCD) {
+// Structure to hold the parsed training parameters.
+struct TrainingParams {
+    std::string sgMethod;
+    std::string bgMethod;
+    int useDP;
+    int useNano;
+    int useDY;
+    int useQCD;
+};
+
+// Helper function that parses trainingArgs into a TrainingParams structure.
+bool parseTrainingArgs(const std::string &trainingArgs, TrainingParams &params) {
+    std::unordered_map<std::string, std::string> args;
+    std::istringstream iss(trainingArgs);
+    std::string token;
+
+    // Tokenize the input string using whitespace.
+    while (iss >> token) {
+        size_t pos = token.find('=');
+        if (pos != std::string::npos) {
+            std::string key = token.substr(0, pos);
+            std::string value = token.substr(pos + 1);
+            args[key] = value;
+        }
+    }
+
+    // Check that all required keys are present.
+    if (args.find("sgMethod") == args.end() ||
+        args.find("bgMethod") == args.end() ||
+        args.find("useDP") == args.end() ||
+        args.find("useNano") == args.end() ||
+        args.find("useDY") == args.end() ||
+        args.find("useQCD") == args.end())
+    {
+        std::cerr << "Missing one or more required training arguments." << std::endl;
+        return false;
+    }
+
+    // Assign and convert values to the TrainingParams structure.
+    params.sgMethod = args["sgMethod"];
+    params.bgMethod = args["bgMethod"];
+    try {
+        params.useDP   = std::stoi(args["useDP"]);
+        params.useNano = std::stoi(args["useNano"]);
+        params.useDY   = std::stoi(args["useDY"]);
+        params.useQCD  = std::stoi(args["useQCD"]);
+    }
+    catch (const std::invalid_argument& e) {
+        std::cerr << "Error converting one of the integer arguments: " << e.what() << std::endl;
+        return false;
+    }
+    catch (const std::out_of_range& e) {
+        std::cerr << "One of the integer arguments is out of range: " << e.what() << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+// Example trainingArgs usage: "sgMethod=methodA bgMethod=methodB useDP=1 useNano=0 useDY=1 useQCD=0"
+
+bool returnState(TString &myMethodList, std::string trainPath, std::string outputPath, std::string trainingArgs) {
+  
+  TrainingParams params;
+
+  // Call the parsing function.
+  if (!parseTrainingArgs(trainingArgs, params)) {
+      return false;
+  }
+
+  std::cout << "Parsed parameters:" << std::endl;
+  std::cout << "  sgMethod: " << params.sgMethod << std::endl;
+  std::cout << "  bgMethod: " << params.bgMethod << std::endl;
+  std::cout << "  useDP: "    << params.useDP    << std::endl;
+  std::cout << "  useNano: "  << params.useNano  << std::endl;
+  std::cout << "  useDY: "    << params.useDY    << std::endl;
+  std::cout << "  useQCD: "   << params.useQCD   << std::endl;
+
   TMVA::Tools::Instance();
 
   std::map<std::string, int> Use;
@@ -131,8 +210,12 @@ bool returnState(TString &myMethodList, std::string trainPath, const char* sgMet
   //   "BDTFiles/strippedSG_numFiles1.root"
   // };
 
+  // std::vector<std::string> dpBaselineFiles = {
+  //   trainPath + "darkPhotonBaselineRun2.root"
+  // };
+
   std::vector<std::string> dpBaselineFiles = {
-    trainPath + "darkPhotonBaselineRun2.root"
+    trainPath + "darkPhotonBaselineRun2NumFiles18.root"
   };
 
   std::map<std::string, double> nanoCrossSections = {
@@ -160,20 +243,24 @@ bool returnState(TString &myMethodList, std::string trainPath, const char* sgMet
   //   {"BDTFiles/strippedSG_numFiles1.root", 1},
   // };
 
+  // std::map<std::string, double> dpCrossSections = {
+  //   {trainPath + "darkPhotonBaselineRun2.root", 1},
+  // };
+
   std::map<std::string, double> dpCrossSections = {
-    {trainPath + "darkPhotonBaselineRun2.root", 1},
+    {trainPath + "darkPhotonBaselineRun2NumFiles18.root", 1},
   };
 
   std::vector<std::string> sgFiles = {};
   std::map<std::string, double> sgCrossSections = {};
 
-  if (useDP == 1)
+  if (params.useDP == 1)
   {
     sgFiles.insert(sgFiles.end(), dpBaselineFiles.begin(), dpBaselineFiles.end());
     sgCrossSections.insert(dpCrossSections.begin(), dpCrossSections.end());
   }
 
-  if (useNano == 1)
+  if (params.useNano == 1)
   {
     sgFiles.insert(sgFiles.end(), nanoFiles.begin(), nanoFiles.end());
     sgCrossSections.insert(nanoCrossSections.begin(), nanoCrossSections.end());
@@ -193,19 +280,29 @@ bool returnState(TString &myMethodList, std::string trainPath, const char* sgMet
   // };
 
   std::vector<std::string> qcdFiles = {
-    trainPath + "QCD_HTCut_1000-1500_Run_2_Year_2018.root",
-    trainPath + "QCD_HTCut_100-200_Run_2_Year_2018.root",
-    trainPath + "QCD_HTCut_1500-2000_Run_2_Year_2018.root",
-    trainPath + "QCD_HTCut_2000-inf_Run_2_Year_2018.root",
-    trainPath + "QCD_HTCut_200-300_Run_2_Year_2018.root",
-    trainPath + "QCD_HTCut_300-500_Run_2_Year_2018.root",
-    trainPath + "QCD_HTCut_500-700_Run_2_Year_2018.root",
-    trainPath + "QCD_HTCut_700-1000_Run_2_Year_2018.root",
+    trainPath + "QCD1000-1500.root",
+    trainPath + "QCD100-200.root",
+    trainPath + "QCD1500-2000.root",
+    trainPath + "QCD2000-inf.root",
+    trainPath + "QCD200-300.root",
+    trainPath + "QCD300-500.root",
+    trainPath + "QCD500-700.root",
+    trainPath + "QCD700-1000.root",
   };
 
+  // std::vector<std::string> dyFiles = {
+  //   trainPath + "DY10-50.root",
+  //   trainPath + "DY50-inf.root",
+  // };
+
+  // Note: I used DY50-inf.txt to generate darkPhotonDrellYanBackground.root
+  // std::vector<std::string> dyFiles = {
+  //   trainPath + "darkPhotonDrellYanBackground.root"
+  // };
+
+  // Note: This file path is for testing maximum value for numFiles parameter
   std::vector<std::string> dyFiles = {
-    "CutBDTFiles/strippedBG_DY10_numFiles1.root",
-    "CutBDTFiles/strippedBG_DY50_numFiles1.root",
+    trainPath + "testDrellYanBackground4_18.root"
   };
 
   // std::map<std::string, double> qcdCrossSections = {
@@ -220,31 +317,41 @@ bool returnState(TString &myMethodList, std::string trainPath, const char* sgMet
   // };
 
   std::map<std::string, double> qcdCrossSections = {
-    {trainPath + "QCD_HTCut_100-200_Run_2_Year_2018.root", 1122000},
-    {trainPath + "QCD_HTCut_200-300_Run_2_Year_2018.root", 79760},
-    {trainPath + "QCD_HTCut_300-500_Run_2_Year_2018.root", 16600},
-    {trainPath + "QCD_HTCut_500-700_Run_2_Year_2018.root", 1503},
-    {trainPath + "QCD_HTCut_700-1000_Run_2_Year_2018.root", 297.4},
-    {trainPath + "QCD_HTCut_1000-1500_Run_2_Year_2018.root", 48.08},
-    {trainPath + "QCD_HTCut_1500-2000_Run_2_Year_2018.root", 3.951},
-    {trainPath + "QCD_HTCut_2000-inf_Run_2_Year_2018.root", 0.6957}
+    {trainPath + "QCD100-200.root", 1122000},
+    {trainPath + "QCD200-300.root", 79760},
+    {trainPath + "QCD300-500.root", 16600},
+    {trainPath + "QCD500-700.root", 1503},
+    {trainPath + "QCD700-1000.root", 297.4},
+    {trainPath + "QCD1000-1500.root", 48.08},
+    {trainPath + "QCD1500-2000.root", 3.951},
+    {trainPath + "QCD2000-inf.root", 0.6957}
   };
 
+  // std::map<std::string, double> dyCrossSections = {
+  //   {trainPath + "DY10-50.root", 20460},
+  //   {trainPath + "DY50-inf.root", 5735}
+  // };
+
+  // Note: I used DY50-inf.txt to generate darkPhotonDrellYanBackground.root
+  // std::map<std::string, double> dyCrossSections = {
+  //   {trainPath + "darkPhotonDrellYanBackground.root", 5735}
+  // };
+
+  // Note: This file path is for testing maximum value for numFiles parameter
   std::map<std::string, double> dyCrossSections = {
-    {"BDTFiles/strippedBG_DY10_numFiles1.root", 20460},
-    {"BDTFiles/strippedBG_DY50_numFiles1.root", 5735}
+    {trainPath + "testDrellYanBackground4_18.root", 5735}
   };
 
   std::vector<std::string> bgFiles = {};
   std::map<std::string, double> bgCrossSections = {};
 
-  if (useQCD == 1)
+  if (params.useQCD == 1)
   {
     bgFiles.insert(bgFiles.end(), qcdFiles.begin(), qcdFiles.end());
     bgCrossSections.insert(qcdCrossSections.begin(), qcdCrossSections.end());
   }
 
-  if (useDY == 1)
+  if (params.useDY == 1)
   {
     bgFiles.insert(bgFiles.end(), dyFiles.begin(), dyFiles.end());
     bgCrossSections.insert(dyCrossSections.begin(), dyCrossSections.end());
@@ -265,11 +372,14 @@ bool returnState(TString &myMethodList, std::string trainPath, const char* sgMet
   }
   std::cout << "--- TMVAClassification       : Using input file: " << input->GetName() << std::endl;
 
-  // Create a ROOT output file where TMVA will store ntuples, histograms, etc.
-  TString outfileName("TMVA.root");
+  // Create a ROOT output file where TMVA will store ntuples, histograms, etc. - Daniel's Note: I changed the name of TMVA.root to TMVAOutput2.root
+  //TString outfileName("TMVAOutput2.root");
+
+  TString outfileName("TMVAOutputFinal18.root"); // Use this output file for testing maximum value for numFiles parameter when processing background with runAnalyzer
   TFile *outputFile = TFile::Open(outfileName, "RECREATE");
 
   TString opt = "!V:!Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification";
+  //TString opt = "VerboseLevel=Debug:!Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification"; // Use this for testing
 
   TMVA::Factory *factory =
       new TMVA::Factory("TMVAClassification",
@@ -301,7 +411,7 @@ bool returnState(TString &myMethodList, std::string trainPath, const char* sgMet
   ///////////////////////// CODE WILL COMPILE AND RUN (SO NO ERROR MESSAGE) //////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
-  if (strcmp(bgMethod, "PropWeight") == 0)
+  if (strcmp(params.sgMethod.c_str(), "PropWeight") == 0)
   {
       ////////////////////// Proportional Weight //////////////////////
       for (std::string file : bgFiles) {
@@ -310,7 +420,7 @@ bool returnState(TString &myMethodList, std::string trainPath, const char* sgMet
         dataloader->AddBackgroundTree(backgroundTree, bgCrossSections[file] / totalBgCrossSection);
       }
   }
-  else if (strcmp(bgMethod, "Uniform") == 0)
+  else if (strcmp(params.sgMethod.c_str(), "Uniform") == 0)
   {
       ////////////////////// Uniform Unweighted //////////////////////
       TChain *backgroundTree = new TChain("Signal");  // Signal of background files
@@ -394,7 +504,7 @@ bool returnState(TString &myMethodList, std::string trainPath, const char* sgMet
   /////////////////////////////////// START SG EVENT SELECTION ///////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////
 
-  if (strcmp(sgMethod, "PropWeight") == 0) 
+  if (strcmp(params.sgMethod.c_str(), "PropWeight") == 0) 
   {
     ////////////////////// Proportional Weight //////////////////////
 
@@ -404,7 +514,7 @@ bool returnState(TString &myMethodList, std::string trainPath, const char* sgMet
       dataloader->AddSignalTree(signalTree, sgCrossSections[file] / totalSgCrossSection);
     }
 
-  } else if (strcmp(sgMethod, "Uniform") == 0) {
+  } else if (strcmp(params.sgMethod.c_str(), "Uniform") == 0) {
 
     ////////////////////// Uniform Unweighted //////////////////////
 
@@ -514,7 +624,8 @@ bool returnState(TString &myMethodList, std::string trainPath, const char* sgMet
   std::cout << "==> Wrote root file: " << outputFile->GetName() << std::endl;
   std::cout << "==> TMVAClassification is done!" << std::endl;
 
-  TFile *f = new TFile("TMVARerun.root", "recreate");
+  //TFile *f = new TFile("TMVARerunOutput.root", "recreate"); // Daniel's Note: I renamed TMVARerun.root to TMVARerunOutput.root
+  TFile *f = new TFile("TMVARerunOutputFinal18.root", "recreate"); // Use this when testing the maximum value for numFiles parameter for processing background with runAnalyzer
   factory->Write();
   f->Close();
 
@@ -561,9 +672,9 @@ bool returnState(TString &myMethodList, std::string trainPath, const char* sgMet
 // @param useDY : whether or not to train on DY background files : 0, 1
 // @param useQCD : whether or not to train on QCD background files : 0, 1
 
-void MLTrain(std::string trainPath, const char* sgMethod, const char* bgMethod, int useDP, int useNano, int useDY, int useQCD)  // int argc, char** argv)
+void MLTrain(std::string trainPath, std::string outputPath, std::string trainArgs)
 {
   // Select methods (don't look at this code - not of interest)
   TString methodList;
-  returnState(methodList, trainPath, sgMethod, bgMethod, useDP, useNano, useDY, useQCD);
+  returnState(methodList, trainPath, outputPath, trainArgs);
 }

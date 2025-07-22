@@ -1,5 +1,4 @@
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
-#include "CMSAnalysis/Modules/interface/JSONScaleFactor.hh"
 #include "CMSAnalysis/Modules/interface/MultiYearScaleFactor.hh"
 #include "CMSAnalysis/Modules/interface/ElectronScaleFactor.hh"
 #include "CMSAnalysis/Modules/interface/MuonScaleFactor.hh"
@@ -9,9 +8,9 @@ using std::make_shared;
 
 void CommonOperations::addHiggsScaleFactors(std::shared_ptr<EventModule> eventMod)
 {
-	auto scaleFactor = make_shared<MultiYearScaleFactor>();
-    auto iDISOScaleFactor = make_shared<MultiYearScaleFactor>();
-    auto triggerScaleFactor = make_shared<MultiYearScaleFactor>();
+	auto scaleFactor = make_shared<MultiYearScaleFactor>(std::string("RecoHiggsScaleFactor"));
+    auto iDISOScaleFactor = make_shared<MultiYearScaleFactor>(std::string("HiggsIDISOScaleFactor"));
+    auto triggerScaleFactor = make_shared<MultiYearScaleFactor>(std::string("HiggsTriggerScaleFactor"));
     //std::cout << "Adding scale factors" << std::endl;
     
     scaleFactor->addMuonScaleFactor("2018", make_shared<MuonScaleFactor>("ScaleFactors/ScaleFactors_Muon_highPt_RECO_2018_schemaV2.json"));

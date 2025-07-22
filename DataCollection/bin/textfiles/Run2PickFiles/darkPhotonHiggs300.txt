@@ -3,5 +3,5 @@ DpMass:	0_3
 HiggsMass:	300
 FSR:	0_0
 Decay:	Higgs2DP
-Format:	MiniAOD
+Format:	NanoAOD
 Run:	2

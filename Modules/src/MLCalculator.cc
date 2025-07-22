@@ -2,9 +2,11 @@
 #include "CMSAnalysis/Modules/interface/SpecialVariableModule.hh"
 #include "CMSAnalysis/Utility/interface/Utility.hh"
 
+// If relative path from CMSSW Base is desired, use: Utility::getBasePath() + iFileName
+
 MLCalculator::MLCalculator(std::shared_ptr<SpecialVariableModule> iSpecialVariable, std::string iFileName, std::string iMethod):
 specialVariable(iSpecialVariable),
-fileName(Utility::getBasePath() + iFileName),
+fileName(Utility::getFullPath(iFileName)),
 method(iMethod)
 {
     addRequiredModule(specialVariable);
