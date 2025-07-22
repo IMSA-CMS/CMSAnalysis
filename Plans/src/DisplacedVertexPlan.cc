@@ -1,6 +1,5 @@
 #include "CMSAnalysis/Plans/interface/DisplacedVertexPlan.hh"
 
-#include <iostream>
 #include <memory>
 
 
