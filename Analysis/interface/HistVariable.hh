@@ -6,6 +6,7 @@
 #include <string>
 #include <unordered_map>
 #include <stdexcept>
+#include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
 
 class HistVariable 
 {
@@ -26,20 +27,24 @@ public:
 
     // Getters
     std::string getName() const { return name; }
-    std::string getGraphName(const FilePathMapper& mapper) const 
-    {
-        return mapper.getFilePath(name);
-    }
 
     // Constructor
     HistVariable(std::string iName) : name(std::move(iName)) {}
-    bool is2DHistX = false;
-    bool is2DHistY = false;
-    bool getis2dHistX() {return is2DHistX;}
-    bool getis2dHistY() {return is2DHistY;}
+
+    bool is2DHistX() {return is2DHistX_;}
+    bool is2DHistY() {return is2DHistY_;}
+
+    void setSystematic(ScaleFactor::SystematicType itype, std::string isystematicName) {type = itype; systematicName = isystematicName;}
+    ScaleFactor::SystematicType getSystematicType() const {return type;}
+    std::string getSystematicName() const {return systematicName;}
 
 private:
     std::string name;
+    bool is2DHistX_ = false;
+    bool is2DHistY_ = false;
+    ScaleFactor::SystematicType type = ScaleFactor::SystematicType::Nominal;
+    std::string systematicName;
+
 };
 
 #endif

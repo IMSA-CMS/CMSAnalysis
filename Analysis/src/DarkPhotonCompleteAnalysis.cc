@@ -13,6 +13,7 @@
 #include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "CMSAnalysis/Analysis/interface/Correction.hh"
 #include "CMSAnalysis/Analysis/interface/ConstantCorrection.hh"
+#include "CMSAnalysis/Analysis/interface/DarkPhotonHistNameFinder.hh"
 #include <memory>	
 #include <iostream>
 #include <vector>
@@ -21,14 +22,13 @@
 #include "TH1.h"
 #include "TList.h"
  
-DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis(const std::string filePath, const std::string crossSectionPath = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt") {
-
+DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
     //Change this file to your folder to use your own cross sections
     //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
-    //auto reader = std::make_shared<CrossSectionReader>("/uscms/home/maxchen/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
-    //const std::string filePath = "/uscms/home/maxchen/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/"; 
-	auto reader = std::make_shared<CrossSectionReader>(crossSectionPath);
-    //const std::string filePath = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts_Output_Full/"; 
+    auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+    //const std::string filePath = "/uscms/home/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton/"; 
+	//auto reader = std::make_shared<CrossSectionReader>(crossSectionPath);
+    const std::string filePath = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/LeptonJetReconstruction_All/"; 
     //const std::string filePath = "/eos/uscms/store/user/jpalamad/rootBackups/MLBadRange"; // Backup of some old files
 
     //const std::string filePath = "/uscms/home/mkubon/analysis/clean/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/"; 
@@ -44,7 +44,7 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis(const std::string filePat
     //for (std::string recoDecay : recoDecays){
       //  for(double massTarget : massTargets) {
 
-    std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Sign"};
+    std::vector<std::string> rowNames = {"High Mass and Same Sign_1jet", "Low Mass and Same Sign_1jet", "High Mass and Different Sign_1jet"};
     std::vector<std::string> connecters = {"_1st Highest Lepton Jet "};
     std::vector<std::string> columnNames = {"Eta", "Lepton Jet Delta R", "Lepton Jet Mass", "Phi", "Pt"};
     std::vector<std::string> LJVars = {"LeptonJetMLOutput", "mu- Opposite Sign Invariant Mass"};
@@ -53,29 +53,7 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis(const std::string filePat
 
     std::vector<HistVariable> histVariablesBackground;
 
-    std::map<std::string, std::string> histVariableToFileMapping;
-
-    for (std::string rowName : rowNames)
-    {
-        for (std::string connecter : connecters)
-        {
-            for (std::string columnName : columnNames)
-            {
-                histVariablesBackground.push_back(
-                    //HistVariable(columnName + " " + rowName, rowName + "__hists/" + rowName + connecter + columnName));
-                    HistVariable(columnName + " " + rowName));
-                histVariableToFileMapping.insert({columnName + " " + rowName, rowName + "__hists/" + rowName + connecter + columnName});
-            }
-
-            for (std::string LJVar : LJVars)
-            {
-                histVariablesBackground.push_back(
-                    //HistVariable(LJVar + " " + rowName, rowName + "__hists/" + rowName + "_" + LJVar));
-                    HistVariable(LJVar + " " + rowName));
-                histVariableToFileMapping.insert({LJVar + " " + rowName, rowName + "__hists/" + rowName + "_" + LJVar});
-            }
-        }
-    }
+    std::shared_ptr<HistNameFinder> histVariableToFileMapping = std::make_shared<DarkPhotonHistNameFinder>("", false);
 
     std::vector<std::shared_ptr<Process>> processes;
 
@@ -148,14 +126,6 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis(const std::string filePat
             leptonBackgrounds->labelProcess("background", processName);
         }
 	}
-
-    std::cout << "############# End Process Names #############" << std::endl;
-
-    std::cout << "############# Begin Map Hists #############" << std::endl;
-
-    for (const auto& pair : histVariableToFileMapping) {
-        std::cout << pair.first << std::endl;
-    }
 
     std::cout << "############# End Map Hists #############" << std::endl;
 
