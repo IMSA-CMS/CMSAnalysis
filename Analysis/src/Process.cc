@@ -9,6 +9,7 @@
 #include <string>
 #include <algorithm>
 #include "TList.h"
+#include "CMSAnalysis/Utility/interface/ScaleFactor.hh" 
 
 TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 {
@@ -183,7 +184,7 @@ void Process::addSystematic(std::shared_ptr<Systematic> systematic)
 std::pair<TH1*, TH1*> Process::getSystematicHist(HistVariable histType, bool scaleToExpected)
 {
 	auto hist = getHist(histType, scaleToExpected);
-	return systematics.adjustHistogram(hist);
+	return systematics.getUncertainties(hist);
 }
 
 int Process::getNEvents() 
@@ -195,23 +196,44 @@ int Process::getNEvents()
 	return total;
 }
 
+std::pair<TH1*, TH1*> Process::combineSystematics(std::vector<std::shared_ptr<Process>> processes,
+	TH1* original)
+{
+	// get all multisystematics in a vector
+	std::vector<std::shared_ptr<MultiSystematic>> multiSystematics;
+	for (auto process : processes)
+	{
+		multiSystematics.push_back(std::make_shared<MultiSystematic>(process->systematics));
+		std::cout << "Size: " << multiSystematics.size() << std::endl;
+	}
+	return MultiSystematic::combineSystematics(multiSystematics, original);
+}
 std::shared_ptr<Systematic> Process::calcSystematic(HistVariable histType, std::string systematicName)
 {
 	// TODO: Actually read these out after HistVariable is revamped
-	TH1* up; 
-	TH1* down;
+
+	histType.setSystematic(ScaleFactor::SystematicType::Up, systematicName);
+	TH1* up = getHist(histType);
+	 
+	histType.setSystematic(ScaleFactor::SystematicType::Down, systematicName);
+	TH1* down = getHist(histType);
+
+	histType.setSystematic(ScaleFactor::SystematicType::Nominal, "");
+	TH1* nominal = getHist(histType);
+
+	if (!nominal || !up || !down)
+	{
+		throw std::runtime_error("Nominal histogram not found in process: " + this->name);
+	}
+
 	//integral of up and down histograms
 	double upIntegral = up->Integral();
 	double downIntegral = down->Integral();	
-	TH1* nominal = getHist(histType);
 	double nominalIntegral = nominal->Integral();
 
 	double upYield = upIntegral / nominalIntegral;
 	double downYield = downIntegral / nominalIntegral;
 	
-	if (!nominal)
-	{
-		throw std::runtime_error("Nominal histogram not found in process: " + this->name);
-	}
-	return std::make_shared<RateSystematic>(systematicName, upYield);
+	
+	return std::make_shared<RateSystematic>(systematicName, upYield, downYield);
 }

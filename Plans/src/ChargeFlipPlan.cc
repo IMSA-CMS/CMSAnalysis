@@ -4,8 +4,6 @@
 #include "CMSAnalysis/Filters/interface/HiggsSelector.hh"
 #include "CMSAnalysis/Modules/interface/SignFlipModule.hh"
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
-#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
-#include "DataFormats/RecoCandidate/interface/RecoCandidate.h"
 
 using std::make_shared;
 

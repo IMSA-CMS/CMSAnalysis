@@ -100,10 +100,25 @@ void SuperImpose() {
 
   // Debug: Before performing Add on histograms
   std::cout << "Adding histograms: " << std::endl;
+<<<<<<< HEAD
+
+
+
+  histVector[0]->Add(histVector[1]);
+
+  // Use this if you have four histograms you want to superimpose
+  // histVector[0]->Add(histVector[2]);
+  // histVector[0]->Add(histVector[3]);
+
+  // Re-assign histograms after addition
+  histVector = {histVector[0], histVector[1]}; // Use this if you have two histograms
+  //histVector = {histVector[0], histVector[1], histVector[2], histVector[3]}; // Use this if you have four histograms
+=======
   histVector[0]->Add(histVector[1]);
 
   // Re-assign histograms after addition
   histVector = {histVector[0], histVector[1]};
+>>>>>>> 5a1593d6523aedaf29f66e776b6b5bd8460caacc
 
   // Debug: Inform about the superimposition step
   std::cout << "Superimposing histograms..." << std::endl;

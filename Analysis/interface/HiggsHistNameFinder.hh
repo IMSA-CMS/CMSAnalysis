@@ -7,7 +7,7 @@ class HiggsHistNameFinder : public HistNameFinder
 {
 	public:
 	HiggsHistNameFinder(std::string iChannel, bool iisData = false) : channel(std::move(iChannel)), isData(iisData) {}
-	virtual std::string getHistName(HistVariable histVariable, ScaleFactor::SystematicType type, std::string systematicName) const override;
+	virtual std::string getHistName(HistVariable histVariable) const override;
 
 	private:
 	std::string channel;

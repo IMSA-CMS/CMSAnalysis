@@ -23,6 +23,8 @@
 
 void SuperPlot()
 {
+	std::string plotName = "Invariant Mass";
+	std::string outFile = "SuperPlot.png";
 	//std::vector<double> massTargets {900};
 
 	// auto DarkPhotonAnalysis = std::make_shared<DarkPhotonInputAnalysis>(inputAnalysisPath); // BDT Output Analysis (LeptonJetMLOutput)

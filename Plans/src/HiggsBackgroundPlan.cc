@@ -1,44 +1,37 @@
 #include "CMSAnalysis/Plans/interface/HiggsBackgroundPlan.hh"
 
-#include <iostream>
 #include <memory>
 
-#include "TROOT.h"
-#include "TSystem.h"
 
-#include "CMSAnalysis/Modules/interface/FilterStringModule.hh"
 #include "CMSAnalysis/Modules/interface/FilterModule.hh"
 #include "CMSAnalysis/Modules/interface/GenSimEventDumpModule.hh"
 #include "CMSAnalysis/Filters/interface/HiggsCut.hh"
-#include "CMSAnalysis/Filters/interface/RepeatedEventCuts.hh"
 #include "CMSAnalysis/Filters/interface/HiggsSelector.hh"
-#include "CMSAnalysis/Filters/interface/ElectronEnergyScaleUp.hh"
-#include "CMSAnalysis/Filters/interface/ElectronEnergyScaleDown.hh"
 #include "CMSAnalysis/Filters/interface/HPlusPlusGenSimSelector.hh"
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
 #include "CMSAnalysis/Histograms/interface/METHist.hh"
+#include "CMSAnalysis/Histograms/interface/Histograms.hh"
 #include "CMSAnalysis/Modules/interface/METModule.hh"
 #include "CMSAnalysis/Filters/interface/NLeptonsFilter.hh"
 #include "CMSAnalysis/Histograms/interface/NLeptonsHist.hh"
 #include "CMSAnalysis/Histograms/interface/SameSignInvariantMassHist.hh"
 #include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
 #include "CMSAnalysis/Histograms/interface/Histograms.hh"
+#include "CMSAnalysis/Filters/interface/HiggsTriggerCut.hh"
+
 
 #include "CMSAnalysis/Modules/interface/TriggerModule.hh"
 #include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
-#include "CMSAnalysis/Filters/interface/TriggerCut.hh"
 #include "CMSAnalysis/Histograms/interface/TwoInvariantMassesHist.hh"
 #include "CMSAnalysis/Histograms/interface/HistogramPrototype2DProjection.hh"
 #include "CMSAnalysis/Histograms/interface/METHist.hh"
-#include "CMSAnalysis/Filters/interface/BJetFilter.hh"
+#include "CMSAnalysis/Filters/interface/BJetCut.hh"
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
 #include "CMSAnalysis/Filters/interface/RunFilter.hh"
-#include "CMSAnalysis/Filters/interface/ZVetoCut.hh"
-#include "CMSAnalysis/Filters/interface/FourLeptonCut.hh"
+#include "CMSAnalysis/Filters/interface/HiggsZVetoCut.hh"
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
-#include "CMSAnalysis/Modules/interface/ScaleFactorAnalysis.hh"
 
 using std::make_shared;
 
@@ -52,30 +45,34 @@ void HiggsBackgroundPlan::initialize()
     auto higgsSelector = make_shared<HiggsSelector>();
     auto higgsCut = make_shared<HiggsCut>();
     //auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
-    auto eventDump = make_shared<EventDumpModule>(true,true,5);
-    auto zVetoCut = make_shared<ZVetoCut>();
+    auto eventDump = make_shared<GenSimEventDumpModule>(5);
+    auto zVetoCut = make_shared<HiggsZVetoCut>();
+    auto bJetCut = make_shared<BJetCut>();
     //auto quarkoniaCut = make_shared<QuarkoniaCut>();
-    auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
+    //auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
+    auto triggerCut = make_shared<HiggsTriggerCut>();
     eventMod->addSelector(hppSelector);
     eventMod->addSelector(higgsSelector);
     eventMod->addCut(triggerCut);
     eventMod->addCut(higgsCut);
     eventMod->addCut(zVetoCut);
+    eventMod->addCut(bJetCut);
     //eventMod->addCut(quarkoniaCut);
     CommonOperations::addHiggsScaleFactors(eventMod);
 
     auto matchMod = make_shared<MatchingModule>();
     auto triggerMod = make_shared<TriggerModule>();
     auto metMod = make_shared<METModule>();
-    auto bJetFilter = make_shared<BJetFilter>();
+   // auto bJetFilter = make_shared<BJetFilter>();
+
     auto higgsFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::Reco);
 
     auto recoDecayFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::Reco);
     auto recoDecayFilterMod = make_shared<FilterModule>(recoDecayFilter);
     recoDecayFilterMod->setInput(eventMod->getEventInput());
     auto genSimDecayFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::GenSim);
-    auto filterStringModule = make_shared<FilterStringModule>();
-    modules.addAnalysisModule(filterStringModule);
+    // auto filterStringModule = make_shared<FilterStringModule>();
+    // modules.addAnalysisModule(filterStringModule);
     
  
  
@@ -130,7 +127,8 @@ void HiggsBackgroundPlan::initialize()
     // modules.addProductionModule(metMod);
     // //Changed because EventModule inherits from ProductionModule now
     modules.addProductionModule(eventMod);
-     modules.addFilterModule(recoDecayFilterMod);
+    modules.addFilterModule(recoDecayFilterMod);
+    //modules.addFilterModule(make_shared<FilterModule>(bJetFilter));
     modules.addAnalysisModule(eventHistMod);    
     modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
     //modules.addFilterModule(runFilterMod); 

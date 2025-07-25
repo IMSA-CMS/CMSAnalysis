@@ -9,7 +9,7 @@
 class HistNameFinder
 {
 public: //add systematic type
-    virtual std::string getHistName(HistVariable histVariable, ScaleFactor::SystematicType type, std::string systematicName) const = 0;
+    virtual std::string getHistName(HistVariable histVariable) const = 0;
     virtual ~HistNameFinder() = default;
 };
 
