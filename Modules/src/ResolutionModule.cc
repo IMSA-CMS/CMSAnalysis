@@ -69,8 +69,8 @@ void ResolutionModule::finalize()
       median += interval;
     }
 
-  addObject(binType + "ErrorMeanHist", errorMeanHist);
-  addObject(binType + "ErrorStdDevHist", errorStdDevHist);
+  addObject(binType + "ErrorMeanHist", "", errorMeanHist);
+  addObject(binType + "ErrorStdDevHist", "", errorStdDevHist);
 
   AnalysisModule::finalize();
 }
