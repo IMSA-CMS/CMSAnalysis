@@ -19,3 +19,8 @@ name(iName)
 {
 	// finds the total changes for the over and underestimates of the graph
 }
+
+static std::shared_ptr <Systematic> makeSystematicFromHist(TH1*original,TH1*up,TH1*down)
+{
+	return nullptr;
+}

@@ -6,6 +6,21 @@
 #include "CMSAnalysis/Filters/interface/HiggsSelector.hh"
 #include "CMSAnalysis/Filters/interface/HiggsTriggerCut.hh"
 #include "CMSAnalysis/Filters/interface/HiggsZVetoFilter.hh"
+
+#include <memory>
+
+
+#include "CMSAnalysis/Modules/interface/FilterModule.hh"
+#include "CMSAnalysis/Modules/interface/GenSimEventDumpModule.hh"
+#include "CMSAnalysis/Filters/interface/HiggsCut.hh"
+#include "CMSAnalysis/Filters/interface/HiggsSelector.hh"
+#include "CMSAnalysis/Filters/interface/HPlusPlusGenSimSelector.hh"
+#include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
+#include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
+#include "CMSAnalysis/Modules/interface/MatchingModule.hh"
+#include "CMSAnalysis/Histograms/interface/METHist.hh"
+#include "CMSAnalysis/Histograms/interface/Histograms.hh"
+#include "CMSAnalysis/Modules/interface/METModule.hh"
 #include "CMSAnalysis/Filters/interface/NLeptonsFilter.hh"
 #include "CMSAnalysis/Filters/interface/RunFilter.hh"
 #include "CMSAnalysis/Histograms/interface/HistogramPrototype2DProjection.hh"
@@ -68,7 +83,6 @@ void HiggsBackgroundPlan::initialize()
     auto genSimDecayFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::GenSim);
     // auto filterStringModule = make_shared<FilterStringModule>();
     // modules.addAnalysisModule(filterStringModule);
-
     auto nLeptonsFilter = make_shared<NLeptonsFilter>();
 
     auto histMod = make_shared<HistogramOutputModule>();
