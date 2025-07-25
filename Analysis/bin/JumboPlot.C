@@ -313,9 +313,9 @@ void JumboPlot()
 	// std::vector<std::string> bsvtfutsps = {}; // bullshitvectortofillupthesestupidparameterslots
 	// std::vector<std::string> connectors = {"_1st Highest Lepton Jet "};
 
-	//makePlots("Higgs Signal 4Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames4, connecters, connecters2, connecters3, false, true);
+	makePlots("Higgs Signal 4Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames4, connecters, connecters2, connecters3, false, true);
 	//makePlots("Higgs Signal 3Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames3, connecters, connecters2, connecters3, false, true);
-	makePlots("Higgs Signal 2Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames2, connecters, connecters2, connecters3, true, false);
+	//makePlots("Higgs Signal 2Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames2, connecters, connecters2, connecters3, true, false);
 	
 	//makePlots("Dark Photon Signal", DarkPhotonAnalysis, channels, rowNames, graphableTypes, bsvtfutsps, bsvtfutsps, units, bsvtfutsps, bsvtfutsps, channelNames, connectors, bsvtfutsps, bsvtfutsps, true);
 }
