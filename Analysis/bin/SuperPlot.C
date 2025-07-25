@@ -7,11 +7,11 @@
 #include "CMSAnalysis/Analysis/interface/FitEstimator.hh"
 #include "CMSAnalysis/Analysis/interface/FullAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
-// #include "CMSAnalysis/Analysis/interface/HiggsPlusPlusAnalysis.hh"
-// #include "CMSAnalysis/Analysis/interface/HiggsComparisonAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/PlotFormatter.hh"
 #include "CMSAnalysis/Analysis/interface/DarkPhotonCompleteAnalysis.hh"
+
+
 #include <fstream>
 #include "THStack.h"
 #include "TString.h"
@@ -86,7 +86,7 @@ void SuperPlot()
 	//std::shared_ptr<Process> process = leptonBackgrounds->findProcess("Data");
  
 	//Write axis titles here
-	TString xAxisTitle = plotName;
+	TString xAxisTitle = "Mass (GeV)";
 	TString yAxisTitle = "Events";
 
 	//Creates the graph
@@ -117,12 +117,21 @@ void SuperPlot()
 	//#TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "LeptonJetMLOutput High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
 	//#TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "LeptonJetMLOutput High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
 	//#TCanvas *canvas = plotFormatter->completePlot(InputAnalysis, plotName, xAxisTitle, yAxisTitle, true, false, "0.3");
+<<<<<<< HEAD
 	auto nameVar = HistVariable(plotName);
 	auto ana = std::make_shared<HiggsCompleteAnalysis>();
 	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, true, false, true, "uu");
+=======
+	auto nameVar = HistVariable("Mass (GeV)");
+	TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, nameVar, xAxisTitle, yAxisTitle, true, true, false, "0.3");
+>>>>>>> 5a1593d6523aedaf29f66e776b6b5bd8460caacc
 
 	//TCanvas *canvas = plotFormatter->simpleAnalysisHist(backgroundHists, );
 
 	//Uncomment to save a png picture in your bin folder
+<<<<<<< HEAD
 	canvas->SaveAs(outFile.c_str());
+=======
+	//canvas->SaveAs(outFile.c_str());
+>>>>>>> 5a1593d6523aedaf29f66e776b6b5bd8460caacc
 }

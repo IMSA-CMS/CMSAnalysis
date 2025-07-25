@@ -20,116 +20,20 @@ void SuperImpose() {
   auto plotFormatter = std::make_shared<PlotFormatter>(false, "Simulation Preliminary");
 
   // Change the filePath here. This should be the longest branch all input files have in common.
-  //const std::string filePath = "/uscms/home/ceddingt/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/";
-  const std::string filePath = "/uscms/home/dlimosne/analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/";
+  const std::string filePath = "/uscms/home/ceddingt/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/";
+
   // Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
   // Write your graph names here (for the legend)
-  // std::vector<std::string> files = {"scalefactors.root", "noscalefactors.root"};
-  // std::vector<std::string> hists = {
-  //     "eeuu__hists/eeuu_Reco Same Sign Invariant Mass",
-  //     "eeuu__hists/eeuu_Reco Same Sign Invariant Mass"
-  // };
-  // std::vector<TString> names = {"Scale Factor", "No Scale Factor"};
-  // std::vector<int> colors = {kBlack, 2, 6};
-
-  // TString xTitle = "Invariant Mass (GeV)";
-  // TString yTitle = "Event Ratio";
-
-  // darkphoton_DPMass0_2-9 super imposed graphs
-  // std::vector<std::string> files = {"darkPhoton_DpMass0_2.root", "darkPhoton_DpMass0_4.root", "darkPhoton_DpMass0_6.root", "darkPhoton_DpMass0_9.root"};
-  // std::vector<std::string> hists = {
-  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput",
-  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput",
-  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput",
-  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput"
-  // };
-  
-  // std::vector<TString> names = {"darkPhoton_DpMass0_2", "darkPhoton_DpMass0_4", "darkPhoton_DpMass0_6", "darkPhoton_DpMass0_9" };
-  // std::vector<int> colors = {kBlack, kBlue, kGreen, kRed};
-
-  // TString xTitle = "BDT Output";
-  // TString yTitle = "Number of Events";
-
-
-  // darkPhoton_DpMass(1_2 - 4_0) super imposed graphs
-  // std::vector<std::string> files = {"darkPhoton_DpMass1_2.root", "darkPhoton_DpMass1_5.root", "darkPhoton_DpMass2_5.root", "darkPhoton_DpMass4_0.root"};
-  // std::vector<std::string> hists = {
-  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput",
-  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput",
-  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput",
-  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput"
-  // };
-  
-  // std::vector<TString> names = {"darkPhoton_DpMass1_2", "darkPhoton_DpMass1_5", "darkPhoton_DpMass2_5", "darkPhoton_DpMass4_0" };
-  // std::vector<int> colors = {kBlack, kBlue, kGreen, kRed};
-
-  // TString xTitle = "BDT Output";
-  // TString yTitle = "Number of Events";
-
-
-
-  // darkPhotonDecay super imposed graphs
-  // std::vector<std::string> files = {"darkPhotonDecay_Higgs4DP.root", "darkPhotonDecay_HiggsDPZ.root", "darkPhotonDecay_SUSY.root", "darkPhotonDecay_ZPrime.root"};
-  // std::vector<std::string> hists = {
-  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput",
-  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput",
-  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput",
-  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput"
-  // };
-  
-  // std::vector<TString> names = {"darkPhotonDecay_Higgs4DP", "darkPhotonDecay_HiggsDPZ", "darkPhotonDecay_SUSY", "darkPhotonDecay_ZPrime" };
-  // std::vector<int> colors = {kBlack, kBlue, kGreen, kRed};
-
-  // TString xTitle = "BDT Output";
-  // TString yTitle = "Number of Events";
-
-
-
-  // darkPhotonHiggs super imposed graphs - Note that for some reason the root files are empty for these two files
-  // std::vector<std::string> files = {"darkPhotonHiggs125.root", "darkPhotonHiggs300.root"};
-  // std::vector<std::string> hists = {
-  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput",
-  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput"
-  // };
-  
-  // std::vector<TString> names = {"darkPhotonHiggs125", "darkPhotonHiggs300"};
-  // std::vector<int> colors = {kBlack, kBlue};
-
-  // TString xTitle = "BDT Output";
-  // TString yTitle = "Number of Events";
-
-
-
-  // darkPhotonRun2FSR super imposed graphs
-  // std::vector<std::string> files = {"darkPhotonRun2FSR_0_1.root", "darkPhotonRun2FSR_0_3.root"};
-  // std::vector<std::string> hists = {
-  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput",
-  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput"
-  // };
-  
-  // std::vector<TString> names = {"darkPhotonRun2FSR_0_1", "darkPhotonRun2FSR_0_3"};
-  // std::vector<int> colors = {kBlack, kBlue};
-
-  // TString xTitle = "BDT Output";
-  // TString yTitle = "Number of Events";
-
-
-
-  // darkPhotonBaselineRun2 vs. DY50-inf super imposed graphs
-  std::vector<std::string> files = {"darkPhotonBaselineRun2LeptonJetReconstruction.root", "DY50_inf.root"};
+  std::vector<std::string> files = {"scalefactors.root", "noscalefactors.root"};
   std::vector<std::string> hists = {
-      "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput",
-      "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput"
+      "eeuu__hists/eeuu_Reco Same Sign Invariant Mass",
+      "eeuu__hists/eeuu_Reco Same Sign Invariant Mass"
   };
-  
-  std::vector<TString> names = {"darkPhotonBaselineRun2", "DY50-inf"};
-  std::vector<int> colors = {kBlack, kBlue};
+  std::vector<TString> names = {"Scale Factor", "No Scale Factor"};
+  std::vector<int> colors = {kBlack, 2, 6};
 
-  TString xTitle = "BDT Output";
-  TString yTitle = "Number of Events";
-
-
-
+  TString xTitle = "Invariant Mass (GeV)";
+  TString yTitle = "Event Ratio";
 
   int count = 0;
   TFile* openedFile;
@@ -196,6 +100,7 @@ void SuperImpose() {
 
   // Debug: Before performing Add on histograms
   std::cout << "Adding histograms: " << std::endl;
+<<<<<<< HEAD
 
 
 
@@ -208,6 +113,12 @@ void SuperImpose() {
   // Re-assign histograms after addition
   histVector = {histVector[0], histVector[1]}; // Use this if you have two histograms
   //histVector = {histVector[0], histVector[1], histVector[2], histVector[3]}; // Use this if you have four histograms
+=======
+  histVector[0]->Add(histVector[1]);
+
+  // Re-assign histograms after addition
+  histVector = {histVector[0], histVector[1]};
+>>>>>>> 5a1593d6523aedaf29f66e776b6b5bd8460caacc
 
   // Debug: Inform about the superimposition step
   std::cout << "Superimposing histograms..." << std::endl;
