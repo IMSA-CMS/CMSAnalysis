@@ -25,10 +25,10 @@
 DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
     //Change this file to your folder to use your own cross sections
     //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
-    //auto reader = std::make_shared<CrossSectionReader>("/uscms/home/maxchen/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
-    //const std::string filePath = "/uscms/home/maxchen/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/"; 
-	auto reader = std::make_shared<CrossSectionReader>(crossSectionPath);
-    //const std::string filePath = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts_Output_Full/"; 
+    auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+    //const std::string filePath = "/uscms/home/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton/"; 
+	//auto reader = std::make_shared<CrossSectionReader>(crossSectionPath);
+    const std::string filePath = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/LeptonJetReconstruction_All/"; 
     //const std::string filePath = "/eos/uscms/store/user/jpalamad/rootBackups/MLBadRange"; // Backup of some old files
 
     //const std::string filePath = "/uscms/home/mkubon/analysis/clean/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/"; 
@@ -44,7 +44,7 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
     //for (std::string recoDecay : recoDecays){
       //  for(double massTarget : massTargets) {
 
-    std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Sign"};
+    std::vector<std::string> rowNames = {"High Mass and Same Sign_1jet", "Low Mass and Same Sign_1jet", "High Mass and Different Sign_1jet"};
     std::vector<std::string> connecters = {"_1st Highest Lepton Jet "};
     std::vector<std::string> columnNames = {"Eta", "Lepton Jet Delta R", "Lepton Jet Mass", "Phi", "Pt"};
     std::vector<std::string> LJVars = {"LeptonJetMLOutput", "mu- Opposite Sign Invariant Mass"};
@@ -127,6 +127,7 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
         }
 	}
 
+    std::cout << "############# End Map Hists #############" << std::endl;
 
     getChannelsProtected().push_back(leptonBackgrounds);
 }

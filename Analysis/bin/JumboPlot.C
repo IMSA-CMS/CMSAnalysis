@@ -6,12 +6,9 @@
 #include "CMSAnalysis/Analysis/interface/FitEstimator.hh"
 #include "CMSAnalysis/Analysis/interface/FullAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
-#include "CMSAnalysis/Analysis/interface/HiggsPlusPlusAnalysis.hh"
-#include "CMSAnalysis/Analysis/interface/HiggsComparisonAnalysis.hh"
-#include "CMSAnalysis/Analysis/interface/HiggsGenComparisonAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
-#include "CMSAnalysis/Analysis/interface/HiggsCutsAnalysis.hh"
-#include "CMSAnalysis/Analysis/interface/DYComparisonAnalysis.hh"
+
+
 #include "CMSAnalysis/Analysis/interface/PlotFormatter.hh"
 #include "CMSAnalysis/Utility/interface/TableData.hh"
 #include "CMSAnalysis/Utility/interface/HTMLTable.hh"

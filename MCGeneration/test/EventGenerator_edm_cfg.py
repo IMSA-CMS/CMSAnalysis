@@ -13,6 +13,11 @@ options.register ('dpMass',
                 VarParsing.VarParsing.multiplicity.singleton,
                   VarParsing.VarParsing.varType.float,
                   "mass of the dark photon")
+options.register ('pSet',
+                -1,
+                VarParsing.VarParsing.multiplicity.singleton,
+                  VarParsing.VarParsing.varType.float,
+                  "mass of the dark photon")              
 options.register ('output',
                   "0",
                   VarParsing.VarParsing.multiplicity.singleton,

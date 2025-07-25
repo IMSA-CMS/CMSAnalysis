@@ -5,7 +5,6 @@
 #include <iostream>
 #include "TH2.h"
 #include "TH2F.h"
-#include "TFile.h"
 #include "TSystem.h"
 #include <memory>
 #include <string>
@@ -43,7 +42,7 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 {
 	TH1::AddDirectory(kFALSE);
 
-	std::string name = histVariableToFileMapping->getHistName(histType, ScaleFactor::SystematicType::Nominal, "");
+	std::string name = histVariableToFileMapping->getHistName(histType);
 
 
 	TH1* hist;
@@ -109,15 +108,30 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 			throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]");
 		}
 	}
-
+	/*
+	if(dynamic_cast<TH2 *>(hist) != 0)
+	{
+		TH2* hist2D = dynamic_cast<TH2 *>(hist);
+		TH1 *newhist = hist2D->ProjectionX("_px", 0, -1, "E");
+		return newhist;
+	}	
+	*/
+	// if (hist->GetEntries() < 2.0)
+	// {
+	// 	delete hist;
+	// 	delete file;
+	// 	return emptyHist;
+	// }
+	// else 
+	// {
 		TH1* response = new TH1F("Hist Clone", hist->GetTitle(), hist->GetXaxis()->GetNbins(), hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
 
-		if (histType.is2DHistX)
+		if (histType.is2DHistX())
 		{
 			TH2* hist2D = dynamic_cast<TH2 *>(hist);
 			response = hist2D->ProjectionX("_px", 0, -1, "E");
 		}
-		else if (histType.is2DHistY)
+		else if (histType.is2DHistY())
 		{
 			TH2* hist2D = dynamic_cast<TH2 *>(hist);
 			response = hist2D->ProjectionY("_py", 0, -1, "E");

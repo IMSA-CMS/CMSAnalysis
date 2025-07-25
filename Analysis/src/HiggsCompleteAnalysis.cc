@@ -212,6 +212,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         processes.push_back(ttzProcess);
         
         processes.push_back(other);
+        processes.push_back(wJetsBackground);
 
 
         auto leptonProcesses = std::make_shared<Channel>(recoDecay, processes);

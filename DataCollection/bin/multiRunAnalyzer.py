@@ -9,7 +9,7 @@ reprocessMap = {
     "WWW": [2],
 }
 
-def loopRun(crab, path, fileCount, fileList):
+#def loopRun(crab, path, fileCount, fileList):
 def loopRun(crab, path, fileCount, skipFiles, fileList, outputFile):
     fileList = [f"Run2PickFiles/{file}" for file in fileList]
     if not path:
