@@ -13,6 +13,7 @@
 #include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "CMSAnalysis/Analysis/interface/Correction.hh"
 #include "CMSAnalysis/Analysis/interface/ConstantCorrection.hh"
+#include "CMSAnalysis/Analysis/interface/DarkPhotonHistNameFinder.hh"
 #include <memory>	
 #include <iostream>
 #include <vector>
@@ -53,29 +54,7 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis(const std::string filePat
 
     std::vector<HistVariable> histVariablesBackground;
 
-    std::map<std::string, std::string> histVariableToFileMapping;
-
-    for (std::string rowName : rowNames)
-    {
-        for (std::string connecter : connecters)
-        {
-            for (std::string columnName : columnNames)
-            {
-                histVariablesBackground.push_back(
-                    //HistVariable(columnName + " " + rowName, rowName + "__hists/" + rowName + connecter + columnName));
-                    HistVariable(columnName + " " + rowName));
-                histVariableToFileMapping.insert({columnName + " " + rowName, rowName + "__hists/" + rowName + connecter + columnName});
-            }
-
-            for (std::string LJVar : LJVars)
-            {
-                histVariablesBackground.push_back(
-                    //HistVariable(LJVar + " " + rowName, rowName + "__hists/" + rowName + "_" + LJVar));
-                    HistVariable(LJVar + " " + rowName));
-                histVariableToFileMapping.insert({LJVar + " " + rowName, rowName + "__hists/" + rowName + "_" + LJVar});
-            }
-        }
-    }
+    std::shared_ptr<HistNameFinder> histVariableToFileMapping = std::make_shared<DarkPhotonHistNameFinder>("", false);
 
     std::vector<std::shared_ptr<Process>> processes;
 
@@ -148,14 +127,6 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis(const std::string filePat
             leptonBackgrounds->labelProcess("background", processName);
         }
 	}
-
-    std::cout << "############# End Process Names #############" << std::endl;
-
-    std::cout << "############# Begin Map Hists #############" << std::endl;
-
-    for (const auto& pair : histVariableToFileMapping) {
-        std::cout << pair.first << std::endl;
-    }
 
     std::cout << "############# End Map Hists #############" << std::endl;
 

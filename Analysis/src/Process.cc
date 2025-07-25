@@ -1,6 +1,7 @@
 #include "CMSAnalysis/Analysis/interface/Process.hh"
 #include "CMSAnalysis/Analysis/interface/SingleProcess.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
+#include "CMSAnalysis/Analysis/interface/RateSystematic.hh"
 #include "TH1F.h"
 #include "TH2F.h"
 #include <iostream>
@@ -8,6 +9,7 @@
 #include <string>
 #include <algorithm>
 #include "TList.h"
+#include "CMSAnalysis/Utility/interface/ScaleFactor.hh" 
 
 TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 {
@@ -205,4 +207,33 @@ std::pair<TH1*, TH1*> Process::combineSystematics(std::vector<std::shared_ptr<Pr
 		std::cout << "Size: " << multiSystematics.size() << std::endl;
 	}
 	return MultiSystematic::combineSystematics(multiSystematics, original);
+}
+std::shared_ptr<Systematic> Process::calcSystematic(HistVariable histType, std::string systematicName)
+{
+	// TODO: Actually read these out after HistVariable is revamped
+
+	histType.setSystematic(ScaleFactor::SystematicType::Up, systematicName);
+	TH1* up = getHist(histType);
+	 
+	histType.setSystematic(ScaleFactor::SystematicType::Down, systematicName);
+	TH1* down = getHist(histType);
+
+	histType.setSystematic(ScaleFactor::SystematicType::Nominal, "");
+	TH1* nominal = getHist(histType);
+
+	if (!nominal || !up || !down)
+	{
+		throw std::runtime_error("Nominal histogram not found in process: " + this->name);
+	}
+
+	//integral of up and down histograms
+	double upIntegral = up->Integral();
+	double downIntegral = down->Integral();	
+	double nominalIntegral = nominal->Integral();
+
+	double upYield = upIntegral / nominalIntegral;
+	double downYield = downIntegral / nominalIntegral;
+	
+	
+	return std::make_shared<RateSystematic>(systematicName, upYield, downYield);
 }

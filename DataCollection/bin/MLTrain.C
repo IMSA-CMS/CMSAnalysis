@@ -302,7 +302,8 @@ bool returnState(TString &myMethodList, std::string trainPath, std::string outpu
 
   // Note: This file path is for testing maximum value for numFiles parameter
   std::vector<std::string> dyFiles = {
-    trainPath + "testDrellYanBackground4_18.root"
+    trainPath + "DY10-50.root",
+    trainPath + "DY50-inf.root",
   };
 
   // std::map<std::string, double> qcdCrossSections = {
@@ -339,7 +340,8 @@ bool returnState(TString &myMethodList, std::string trainPath, std::string outpu
 
   // Note: This file path is for testing maximum value for numFiles parameter
   std::map<std::string, double> dyCrossSections = {
-    {trainPath + "testDrellYanBackground4_18.root", 5735}
+    {trainPath + "DY10-50.root", 20460},
+    {trainPath + "DY50-inf.root", 5735}
   };
 
   std::vector<std::string> bgFiles = {};

@@ -613,23 +613,21 @@ void PlotFormatter::DrawOtherHistograms(THStack*& background, TH1*& signal, TH1*
         data->SetLineWidth(2);
         histVector.push_back(data);
     }
-    else if(first == 1) 
-    {
+    else if(first == 1) {
         std::cout << "first = 1";
         //background->SetLineColor(kBlack);
-        background->Draw("HIST SAME E5");
+        background->Draw("HIST SAME");
         stackVector.push_back(background);
         data->Draw("P SAME E1 X0");
         data->SetLineColor(kBlack);
         data->SetLineWidth(2);
         histVector.push_back(data);
     }
-    else 
-    {
+    else {
         std::cout << "first = 2";
         signal->Draw("HIST SAME");
         signal->SetLineColor(kBlack);
-        signal->SetLineWidth(2);
+        signal->SetLineWidth(2); 
         histVector.push_back(signal);
         background->Draw("HIST SAME");
         //std::cout<<"hist size" << background->Integral();
