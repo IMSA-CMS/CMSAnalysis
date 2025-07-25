@@ -7,11 +7,11 @@
 #include "CMSAnalysis/Analysis/interface/FitEstimator.hh"
 #include "CMSAnalysis/Analysis/interface/FullAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
-// #include "CMSAnalysis/Analysis/interface/HiggsPlusPlusAnalysis.hh"
-// #include "CMSAnalysis/Analysis/interface/HiggsComparisonAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/PlotFormatter.hh"
 #include "CMSAnalysis/Analysis/interface/DarkPhotonCompleteAnalysis.hh"
+
+
 #include <fstream>
 #include "THStack.h"
 #include "TString.h"
@@ -28,7 +28,7 @@ void SuperPlot()
 	//std::vector<double> massTargets {900};
 
 	// auto DarkPhotonAnalysis = std::make_shared<DarkPhotonInputAnalysis>(inputAnalysisPath); // BDT Output Analysis (LeptonJetMLOutput)
-	auto DarkPhotonAnalysis = std::make_shared<HiggsCompleteAnalysis>();
+	auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
 
 	//auto DarkPhotonAnalysis = std::make_shared<DarkPhotonInputAnalysis>(inputAnalysisPath); // Variable Isolation Plots
 	// auto NanoAnalysis = std::make_shared<DarkPhotonNanoAnalysis>(15, 17);
@@ -86,7 +86,7 @@ void SuperPlot()
 	//std::shared_ptr<Process> process = leptonBackgrounds->findProcess("Data");
  
 	//Write axis titles here
-	TString xAxisTitle = plotName;
+	TString xAxisTitle = "Mass (GeV)";
 	TString yAxisTitle = "Events";
 
 	//Creates the graph
@@ -124,5 +124,5 @@ void SuperPlot()
 	//TCanvas *canvas = plotFormatter->simpleAnalysisHist(backgroundHists, );
 
 	//Uncomment to save a png picture in your bin folder
-	canvas->SaveAs(outFile.c_str());
+	//canvas->SaveAs(outFile.c_str());
 }

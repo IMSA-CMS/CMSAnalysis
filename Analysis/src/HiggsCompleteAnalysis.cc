@@ -13,6 +13,7 @@
 #include "CMSAnalysis/Analysis/interface/Correction.hh"
 #include "CMSAnalysis/Analysis/interface/ConstantCorrection.hh"
 #include "CMSAnalysis/Analysis/interface/RateSystematic.hh"
+#include "CMSAnalysis/Analysis/interface/HiggsHistNameFinder.hh"
 #include <memory>
 #include <iostream>
 #include <vector>
@@ -115,23 +116,11 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
             {
 
                 std::string decayName = recoDecay + "_" + genSimDecay;
-                std::map<std::string, std::string> histVariableToFileMapping;
-                for (auto histVar : histVariablesBackground)
-                {
-                    for (auto connecter : backgroundConnecters)
-                    {
-                        for (auto colName : columnNames)
-                        {
-                            if ((connecter + colName) == (histVar.getName()))
-                            {
-                                histVariableToFileMapping[histVar.getName()] = decayName + "__hists/" + decayName + connecter + colName;
-                            }
-                        }
-                    }
-                }
-                histVariableToFileMapping["Same Sign Invariant Mass"] = decayName + "__hists/" + decayName + "_Reco Same Sign Invariant Mass";
-                histVariableToFileMapping["X Projection"] = decayName + "__hists/" + decayName + "_Reco Invariant Mass Background X Projection";
-                histVariableToFileMapping["Y Projection"] = decayName + "__hists/" + decayName + "_Reco Invariant Mass Background Y Projection";
+                auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(decayName);
+                
+                //histVariableToFileMapping["Same Sign Invariant Mass"] = decayName + "__hists/" + decayName + "_Reco Same Sign Invariant Mass";
+                //histVariableToFileMapping["X Projection"] = decayName + "__hists/" + decayName + "_Reco Invariant Mass Background X Projection";
+                //histVariableToFileMapping["Y Projection"] = decayName + "__hists/" + decayName + "_Reco Invariant Mass Background Y Projection";
                 std::vector<HistVariable> histVariablesSignal;
 
                 // histVariablesSignal.push_back(HistVariable::sameSignMass(decayName + "__hists/" + decayName + "_Reco Same Sign Invariant Mass"));
@@ -148,43 +137,9 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
             processes.push_back(higgsMassGroup);
         }
 
-        std::map<std::string, std::string> histVariableToFileMapping;
-        std::map<std::string, std::string> datahistVariableToFileMapping;
+        auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(recoDecay);
 
-        for (auto histVar : histVariablesBackground)
-        {
-            for (auto connecter : backgroundConnecters)
-            {
-                for (auto colName : columnNames)
-                {
-                    if ((connecter + colName) == (histVar.getName()))
-                    {
-                        // std::cout << "Background Mapping: " << histVar.getName() << std::endl;
-                        histVariableToFileMapping[histVar.getName()] = recoDecay + "__hists/" + recoDecay + connecter + colName;
-                    }
-                }
-            }
-        }
-        histVariablesBackground.push_back(HistVariable("Same Sign Invariant Mass"));
-        histVariableToFileMapping["Same Sign Invariant Mass"] = recoDecay + "__hists/" + recoDecay + "_Reco Same Sign Invariant Mass";
-        histVariableToFileMapping["X Projection"] = recoDecay + "__hists/" + recoDecay + "_Reco Invariant Mass Background X Projection";
-        histVariableToFileMapping["Y Projection"] = recoDecay + "__hists/" + recoDecay + "_Reco Invariant Mass Background Y Projection";
-        // std::cout << "histmap:" << histVariableToFileMapping.at("Same Sign Invariant Mass") << '\n';
-        for (auto histVar : histVariablesData)
-        {
-            for (auto connecter : backgroundConnecters)
-            {
-                for (auto colName : columnNames)
-                {
-                    if ((connecter + colName) == (histVar.getName()))
-                    {
-                        //std::cout << "Data Mapping: " << histVar.getName() << std::endl;
-                        datahistVariableToFileMapping[histVar.getName()] = recoDecay + "_Pass__hists/" + recoDecay + "_Pass" + connecter + colName;
-                        //std::cout << recoDecay + "_Pass__hists/" + recoDecay + "_Pass" + connecter + colName << std::endl;
-                    }
-                }
-            }
-        }
+        
 
         auto zzBackground = std::make_shared<Process>("ZZ Background", ZZBackgroundColor);
         zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ.root", "zzto4l", reader, luminosity, histVariableToFileMapping));
