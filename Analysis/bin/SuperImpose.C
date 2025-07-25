@@ -198,7 +198,6 @@ void SuperImpose() {
   std::cout << "Adding histograms: " << std::endl;
 
 
-
   histVector[0]->Add(histVector[1]);
 
   // Use this if you have four histograms you want to superimpose
@@ -208,6 +207,7 @@ void SuperImpose() {
   // Re-assign histograms after addition
   histVector = {histVector[0], histVector[1]}; // Use this if you have two histograms
   //histVector = {histVector[0], histVector[1], histVector[2], histVector[3]}; // Use this if you have four histograms
+
 
   // Debug: Inform about the superimposition step
   std::cout << "Superimposing histograms..." << std::endl;
