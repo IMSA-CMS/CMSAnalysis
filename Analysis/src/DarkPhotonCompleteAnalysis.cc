@@ -13,6 +13,7 @@
 #include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "CMSAnalysis/Analysis/interface/Correction.hh"
 #include "CMSAnalysis/Analysis/interface/ConstantCorrection.hh"
+#include "CMSAnalysis/Analysis/interface/DarkPhotonHistNameFinder.hh"
 #include <memory>	
 #include <iostream>
 #include <vector>
@@ -21,8 +22,7 @@
 #include "TH1.h"
 #include "TList.h"
  
-DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis(const std::string filePath, const std::string crossSectionPath = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt") {
-
+DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
     //Change this file to your folder to use your own cross sections
     //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
     //auto reader = std::make_shared<CrossSectionReader>("/uscms/home/maxchen/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
@@ -53,29 +53,7 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis(const std::string filePat
 
     std::vector<HistVariable> histVariablesBackground;
 
-    std::map<std::string, std::string> histVariableToFileMapping;
-
-    for (std::string rowName : rowNames)
-    {
-        for (std::string connecter : connecters)
-        {
-            for (std::string columnName : columnNames)
-            {
-                histVariablesBackground.push_back(
-                    //HistVariable(columnName + " " + rowName, rowName + "__hists/" + rowName + connecter + columnName));
-                    HistVariable(columnName + " " + rowName));
-                histVariableToFileMapping.insert({columnName + " " + rowName, rowName + "__hists/" + rowName + connecter + columnName});
-            }
-
-            for (std::string LJVar : LJVars)
-            {
-                histVariablesBackground.push_back(
-                    //HistVariable(LJVar + " " + rowName, rowName + "__hists/" + rowName + "_" + LJVar));
-                    HistVariable(LJVar + " " + rowName));
-                histVariableToFileMapping.insert({LJVar + " " + rowName, rowName + "__hists/" + rowName + "_" + LJVar});
-            }
-        }
-    }
+    std::shared_ptr<HistNameFinder> histVariableToFileMapping = std::make_shared<DarkPhotonHistNameFinder>("", false);
 
     std::vector<std::shared_ptr<Process>> processes;
 
@@ -149,15 +127,6 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis(const std::string filePat
         }
 	}
 
-    std::cout << "############# End Process Names #############" << std::endl;
-
-    std::cout << "############# Begin Map Hists #############" << std::endl;
-
-    for (const auto& pair : histVariableToFileMapping) {
-        std::cout << pair.first << std::endl;
-    }
-
-    std::cout << "############# End Map Hists #############" << std::endl;
 
     getChannelsProtected().push_back(leptonBackgrounds);
 }
