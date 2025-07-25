@@ -1,6 +1,7 @@
 #ifndef ANALYSISMODULE_HH
 #define ANALYSISMODULE_HH
 
+#include <TFile.h>
 #include <string>
 
 #include "CMSAnalysis/Modules/interface/Module.hh"
@@ -15,7 +16,7 @@ public:
   // This writes all relevant files.
   // It is called after finalize().
 
-  virtual void finalizeFilterString() {}
+  virtual void finalizeFilterString(TFile *outFile) {}
 
   // Sets the current filter string used to group resulting objects
   // This should just be used by Analyzer::run()!

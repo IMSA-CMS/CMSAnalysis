@@ -20,7 +20,7 @@ class EventInput;
 class HistogramOutputModule : public AnalysisModule
 {
 public:
-  virtual void finalizeFilterString() override;
+  virtual void finalizeFilterString(TFile *outFile) override;
   virtual void initialize() override {};     // Empty function
   virtual void finalize() override;
   virtual bool process() override;    // Fills the histograms
@@ -32,7 +32,7 @@ protected:
   // This adds an object to the collection to be written.
   // All objects that use this method are duplicated for different filter categories
   // If you add two objects of the same name, the second will replace the first.
-  void addObject(const std::string& name, TObject* obj);
+  void addObject(std::string name, std::string path, TObject* obj);
 
   // Gets objects from the collection.
   // These automatically get the version for the current filter category.
@@ -50,7 +50,6 @@ protected:
   // void makeHistogram(HistogramPrototype* h);
 
   // Creates a histogram from a HistogramPrototype* and adds it to the collection.
-  void makeHistogram(std::shared_ptr<HistogramPrototype> h);
   void makeHistogram(std::shared_ptr<HistogramPrototype> h, std::string name);
 
   // Convenient getter methods to access histograms
@@ -64,7 +63,7 @@ protected:
 private:
   std::string getObjectName(const std::string &str) const;
   // This is a map of objects as they are seen by the user, by name
-  std::map<std::string, TObject*> baseObjects;
+  std::map<std::string, std::tuple<std::string, TObject *>> baseObjects;
   std::vector<std::shared_ptr<ScaleFactor>> scaleFactors;
 
   std::vector<std::shared_ptr<HistogramPrototype>> histograms; 
