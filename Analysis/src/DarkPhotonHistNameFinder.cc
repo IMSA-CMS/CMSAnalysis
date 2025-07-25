@@ -1,22 +1,22 @@
 #include "CMSAnalysis/Analysis/interface/DarkPhotonHistNameFinder.hh"
 
-std::string DarkPhotonHistNameFinder::getHistName(HistVariable histVariable, ScaleFactor::SystematicType type, std::string systematicName) const
+std::string DarkPhotonHistNameFinder::getHistName(HistVariable histVariable) const
 {
-	std::string path = "__hists/";
-	// if (isData)
-	// {
-	// 	path += "_Pass";
-	// }
+	std::string path = channel + "__hists/" + channel;
+	if (isData)
+	{
+		path += "_Pass";
+	}
 	path += "_" + histVariable.getName();
 // Add systematic type
 	
-	if (type == ScaleFactor::SystematicType::Up)
+	if (histVariable.getSystematicType() == ScaleFactor::SystematicType::Up)
 	{
-		return path + "_" + systematicName + "_Up";
+		return path + "_" + histVariable.getSystematicName() + "_Up";
 	}
-	else if (type == ScaleFactor::SystematicType::Down)
+	else if (histVariable.getSystematicType() == ScaleFactor::SystematicType::Down)
 	{
-		return path + "_" + systematicName + "_Down";
+		return path + "_" + histVariable.getSystematicName() + "_Down";
 	}
 	else
 	{

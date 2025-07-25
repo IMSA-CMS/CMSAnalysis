@@ -40,7 +40,7 @@ class FullAnalysis
         
         // SingleProcess makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, 
         // std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, double luminosity); //std::vector<std::shared_ptr<Correction>> corrections = {}
-    
+
     protected:
         std::vector<std::shared_ptr<Channel>>& getChannelsProtected() {return channels;}
         
