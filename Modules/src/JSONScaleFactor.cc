@@ -64,8 +64,8 @@ void JSONScaleFactor::loadScaleFactorsFromFile(std::string filename)
 
     // Parse the preprocessed JSON content
     std::istringstream jsonStream(jsonContent);
-    Json::Value output;
-    Json::Reader reader;
+    jsoncollector::Json::Value output;
+    jsoncollector::Json::Reader reader;
     if (!reader.parse(jsonStream, output)) {
         std::cerr << "Failed to parse JSON from file: " << filename << std::endl;
         std::cerr << "Error: " << reader.getFormatedErrorMessages() << std::endl;
