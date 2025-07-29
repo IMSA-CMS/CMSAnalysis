@@ -96,7 +96,6 @@ bool EventModule::process ()
         if (!(cuts[i]->checkEvent(event, getInput(), passesCuts)))
         {
             passesCuts = false;
-            break;
         }
     }
 
