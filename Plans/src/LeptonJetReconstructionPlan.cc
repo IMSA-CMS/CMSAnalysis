@@ -51,8 +51,8 @@ void LeptonJetReconstructionPlan::initialize()
 
   auto eventMod = std::make_shared<EventModule>();
   auto eventHistMod = eventMod->getHistogramModule();
-  //eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5));
-  eventMod->addSelector(std::make_shared<FakePhotonSelector>(.5));
+  eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5));
+  //eventMod->addSelector(std::make_shared<FakePhotonSelector>(.5));
   //eventMod->addSelector(std::make_shared<LeptonJetAntiSelector>(.5, 0.0001, 0.0005));
 
   auto darkPhotonFilter = std::make_shared<FilterModule>(std::make_shared<DarkPhotonControlRegionFilter>(10));
