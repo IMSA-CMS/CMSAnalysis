@@ -13,11 +13,11 @@ public:
     ElectronScaleFactor(std::string filename);
 
 protected:
-    virtual void loadScaleFactors(Json::Value output) override;
+    virtual void loadScaleFactors(jsoncollector::Json::Value output) override;
     virtual ParticleCollection<Particle> getParticles(const EventInput* input) const override;
 
 private:
-    void loadScaleFactors(Json::Value output, SystematicType systematicType);
+    void loadScaleFactors(jsoncollector::Json::Value output, SystematicType systematicType);
 
 };
 
