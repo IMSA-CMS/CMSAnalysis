@@ -15,7 +15,7 @@ ParticleCollection<Particle> DummyScaleFactor::getParticles(const EventInput* in
     return {std::vector<Particle>()};
 }
 
-void DummyScaleFactor::loadScaleFactors(Json::Value output)
+void DummyScaleFactor::loadScaleFactors(jsoncollector::Json::Value output)
 {
     // Do nothing
 }

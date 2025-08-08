@@ -24,7 +24,7 @@ void UnmatchedParticleModule::initialize()
   makeHistogram("MatchedParticleEta", "MatchedParticleEta", histBins, etaMin, etaMax);
 
   auto EtaCSHist = new TH2F("EtaCSHist", "EtaCSHist", histBins, cosMin, cosMax, histBins, etaMin, etaMax);
-  addObject("EtaCSHist", EtaCSHist);
+  addObject("EtaCSHist", "", EtaCSHist);
 
 }
 

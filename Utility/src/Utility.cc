@@ -145,3 +145,16 @@ int Utility::gcf(std::vector<int> nums) {
 
   return toReturn;
 }
+
+void writeRootObj(TFile *outFile, const std::string &path, TObject *obj)
+{
+    if (!outFile->cd(path.c_str()))
+    {
+        outFile->mkdir(path.c_str(), "", true);
+        outFile->cd(path.c_str());
+    }
+
+    obj->Write();
+
+    outFile->cd();
+}
