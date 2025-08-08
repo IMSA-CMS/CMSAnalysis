@@ -30,7 +30,7 @@ public:
         }
     };
 protected:
-    virtual void loadScaleFactors(Json::Value output) = 0;
+    virtual void loadScaleFactors(jsoncollector::Json::Value output) = 0;
     void addScaleFactor(double eta, double pt, ScaleFactorSet scaleFactor);
     ScaleFactorSet& getScaleFactorSet(double eta, double pt);
     void loadScaleFactorsFromFile(std::string filename);

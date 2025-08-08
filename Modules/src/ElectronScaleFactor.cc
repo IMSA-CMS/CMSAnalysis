@@ -15,7 +15,7 @@ ParticleCollection<Particle> ElectronScaleFactor::getParticles(const EventInput*
     return input->getParticles(EventInput::RecoLevel::Reco, ParticleType::electron());
 }
 
-void ElectronScaleFactor::loadScaleFactors(Json::Value output)
+void ElectronScaleFactor::loadScaleFactors(jsoncollector::Json::Value output)
 {
     // Load nominal scale factors
     loadScaleFactors(output, SystematicType::Nominal);
@@ -25,29 +25,29 @@ void ElectronScaleFactor::loadScaleFactors(Json::Value output)
     loadScaleFactors(output, SystematicType::Down);
 }
 
-void ElectronScaleFactor::loadScaleFactors(Json::Value output, SystematicType systematicType)
+void ElectronScaleFactor::loadScaleFactors(jsoncollector::Json::Value output, SystematicType systematicType)
 {
-    
-    Json::Value allCorrections = output["corrections"];
-    Json::Value allData = allCorrections[0u]["data"];
-    
-    Json::Value allEdges = allData["edges"];
+
+    jsoncollector::Json::Value allCorrections = output["corrections"];
+    jsoncollector::Json::Value allData = allCorrections[0u]["data"];
+
+    jsoncollector::Json::Value allEdges = allData["edges"];
     //std::cout << "No data found" << std::endl;
-    Json::Value content = allData["content"];
+    jsoncollector::Json::Value content = allData["content"];
     //std::cout << "No content found" << std::endl;
 
     // Loop through the years
     for (size_t i = 0; i < content.size(); i++) 
     {
-        Json::Value yearEntry = content[i];
-        Json::Value yearKey = yearEntry["key"];
+        jsoncollector::Json::Value yearEntry = content[i];
+        jsoncollector::Json::Value yearKey = yearEntry["key"];
 
         //std::cout << "No year key found" << std::endl;
         //std::string year = yearKey.asString();
         //std::cout << "Processing year: " << year << std::endl;
 
-        Json::Value yearValue = yearEntry["value"];
-        Json::Value yearContent = yearValue["content"];
+        jsoncollector::Json::Value yearValue = yearEntry["value"];
+        jsoncollector::Json::Value yearContent = yearValue["content"];
         //std::cout << "No year content found" << std::endl;
 
         // Loop through ValType (e.g., "sf")
@@ -75,12 +75,12 @@ void ElectronScaleFactor::loadScaleFactors(Json::Value output, SystematicType sy
                     break;
             }
             
-            Json::Value valTypeEntry = yearContent[j]["value"];
+            jsoncollector::Json::Value valTypeEntry = yearContent[j]["value"];
 
             //std::cout << "No ValType key found" << std::endl;
             
 
-            Json::Value workingPointContent = valTypeEntry["content"];
+            jsoncollector::Json::Value workingPointContent = valTypeEntry["content"];
             //std::cout << "No working point content found" << std::endl;
 
             // Loop through WorkingPoints (e.g., "RecoBelow20" and "RecoAbove20")
@@ -90,12 +90,12 @@ void ElectronScaleFactor::loadScaleFactors(Json::Value output, SystematicType sy
                 {
                     continue;
                 }
-                Json::Value wpEntry = workingPointContent[k];
+                jsoncollector::Json::Value wpEntry = workingPointContent[k];
                 //std::cout << "No WorkingPoint key found" << std::endl;
                 //std::string workingPoint = wpKey.asString();
                 //std::cout << "Processing WorkingPoint: " << workingPoint << std::endl;
 
-                Json::Value wpValue = wpEntry["value"];
+                jsoncollector::Json::Value wpValue = wpEntry["value"];
                 
                 // Check that 'edges' exists and is an array
                 if (!wpValue.isMember("edges") || !wpValue["edges"].isArray())
@@ -104,11 +104,11 @@ void ElectronScaleFactor::loadScaleFactors(Json::Value output, SystematicType sy
                     continue;
                 }
                 
-                Json::Value edges = wpValue["edges"];
+                jsoncollector::Json::Value edges = wpValue["edges"];
 
                 // Get eta and pt bin edges
-                Json::Value etaEdges = edges[0u]; // First array in edges for eta
-                Json::Value ptEdges = edges[1];  // Second array in edges for pt
+                jsoncollector::Json::Value etaEdges = edges[0u]; // First array in edges for eta
+                jsoncollector::Json::Value ptEdges = edges[1];  // Second array in edges for pt
                 
                 //std::cout << "Processing binning edges" << std::endl;
 
@@ -119,7 +119,7 @@ void ElectronScaleFactor::loadScaleFactors(Json::Value output, SystematicType sy
                     continue;
                 }
 
-                Json::Value binningContent = wpValue["content"];
+                jsoncollector::Json::Value binningContent = wpValue["content"];
 
                 // Loop through the bins and process content
                 size_t index = 0;

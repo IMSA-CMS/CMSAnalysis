@@ -13,7 +13,7 @@ bool FilterStringModule::process()
   return true;
 }
 
-void FilterStringModule::finalizeFilterString()
+void FilterStringModule::finalizeFilterString(TFile *_outFile)
 {
   writeText(std::to_string(getCounter(getFilter())),getFilter());
 }
