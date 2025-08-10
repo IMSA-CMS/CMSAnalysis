@@ -56,8 +56,8 @@ void ResolutionModule::finalize()
 
   for (int i = minCut; i < maxCut; i += interval)
     {
-      auto errorMean = getErrorValues(getHistogram(binType + "ResolutionHistBin" + std::to_string(i)), "mean");
-      auto errorStdDev = getErrorValues(getHistogram(binType + "ResolutionHistBin" + std::to_string(i)), "standard deviation");
+      auto errorMean = getErrorValues(getHistogram("", binType + "ResolutionHistBin" + std::to_string(i)), "mean");
+      auto errorStdDev = getErrorValues(getHistogram("", binType + "ResolutionHistBin" + std::to_string(i)), "standard deviation");
 
       errorMeanHist->SetPoint(index, median, errorMean.first);
       errorMeanHist->SetPointError(index, xError, errorMean.second);

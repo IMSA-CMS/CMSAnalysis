@@ -33,10 +33,10 @@ void AFBModule::finalize()
   for (int i = 1; i <= histBins; ++i)
     {
       auto genSimAFB = getAFB("GenSim", i);
-      getHistogram("GenSimAFB")->SetBinContent(i, genSimAFB);
+      getHistogram("", "GenSimAFB")->SetBinContent(i, genSimAFB);
 
       auto recoAFB = getAFB("Reco", i);
-      getHistogram("RecoAFB")->SetBinContent(i, recoAFB);      
+      getHistogram("", "RecoAFB")->SetBinContent(i, recoAFB);      
     }
 
   AnalysisModule::finalize();
@@ -62,7 +62,7 @@ void AFBModule::fillFB(std::string level, double collinsSoper, double invariantM
 {
   if (collinsSoper > 0)
     {
-      fillHistogram(level + "Forward", {invariantMass});
+      fillHistogram("", level + "Forward", {invariantMass});
     }
   else if (collinsSoper == -2)
     {
@@ -70,14 +70,14 @@ void AFBModule::fillFB(std::string level, double collinsSoper, double invariantM
     }
   else
     {
-      fillHistogram(level + "Backward", {invariantMass});
+      fillHistogram("", level + "Backward", {invariantMass});
     }
 }
 
 double AFBModule::getAFB(std::string level, int binNumber)
 {
-  auto forward = getHistogram(level + "Forward")->GetBinContent(binNumber);
-  auto backward = getHistogram(level + "Backward")->GetBinContent(binNumber);
+  auto forward = getHistogram("", level + "Forward")->GetBinContent(binNumber);
+  auto backward = getHistogram("", level + "Backward")->GetBinContent(binNumber);
 
   if (!(forward + backward == 0))
     {
