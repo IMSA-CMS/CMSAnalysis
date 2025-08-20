@@ -1,0 +1,5 @@
+<tool name="libibumad" version="39.1-4a990e0b086a62c5b883b2412a5a3b68">
+  <info url="https://github.com/linux-rdma/rdma-core/blob/master/README.md"/>
+  <use name="rdma-core"/>
+  <lib name="ibumad"/>
+</tool>

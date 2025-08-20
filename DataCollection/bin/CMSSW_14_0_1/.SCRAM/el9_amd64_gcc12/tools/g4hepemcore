@@ -1,0 +1,21 @@
+{
+  "G4HEPEMCORE_BASE": "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/g4hepem/20230309-834b7e2c32ab6725254c5a3215cd968c",
+  "LIB": [
+    "g4HepEmData",
+    "g4HepEmInit",
+    "g4HepEmRun",
+    "g4HepEm"
+  ],
+  "LIBDIR": [
+    "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/g4hepem/20230309-834b7e2c32ab6725254c5a3215cd968c/lib64"
+  ],
+  "TOOLNAME": "g4hepemcore",
+  "TOOLVERSION": "20230309-834b7e2c32ab6725254c5a3215cd968c",
+  "USE": [
+    "g4hepem_interface"
+  ],
+  "VARIABLES": [
+    "G4HEPEMCORE_BASE",
+    "LIBDIR"
+  ]
+}

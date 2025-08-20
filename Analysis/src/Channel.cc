@@ -258,7 +258,12 @@ std::vector<TH1*> Channel::getHists(HistVariable histType, std::string label, bo
 	}
 	else
 	{
-		for (const auto& process : map.find(label)->second)
+		auto it = map.find(label);
+		if (it == map.end())
+		{
+		throw std::runtime_error("No processes with the label " + label);
+		}
+		for (const auto& process : it->second)
 		{
 			TH1* hist = process->getHist(histType, scaleToExpected);
 			if(label == "signal") {
@@ -274,4 +279,25 @@ std::vector<TH1*> Channel::getHists(HistVariable histType, std::string label, bo
 		}
 	}
 	return hists;
+}
+
+TH1* Channel::combineHists(const std::vector<TH1*>& hists)
+{
+	if (hists.empty())
+	{
+		return nullptr;
+	}
+	
+	TH1* combinedHist = (TH1*)hists[0]->Clone("combinedHist");
+	combinedHist->Reset();
+	
+	for (const auto& hist : hists) 
+	{
+		if (hist) 
+		{
+			combinedHist->Add(hist);
+		}
+	}
+	
+	return combinedHist;
 }

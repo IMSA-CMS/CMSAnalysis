@@ -36,18 +36,19 @@ double HiggsCompleteAnalysis::getBranchingRatio(const std::string& channel)
 }
 
 HiggsCompleteAnalysis::HiggsCompleteAnalysis()
-{
-    // This is a mass we put into background because the
-    // makeBasicProcess method requires it. It doesn't actually
-    // make sense so in the future fix this
-    //  double tempMass = 1400;
+{   
 
     const int higgsColor = kOrange+10;
-    const int ttbarColor = kBlue;
+    const int ttbarColor = kBlue-6;
     const int drellYanBackColor = kPink+10;
     const int QCDBackColor = kCyan+3;
     const int ZZBackgroundColor = kGreen+10;
     const int WJetsBackgroundColor = kViolet;
+
+    // This is a mass we put into background because the
+    // makeBasicProcess method requires it. It doesn't actually
+    // make sense so in the future fix this
+    //  double tempMass = 1400;
 
     // Actual masses for the Higgs signal
     std::vector<double> massTargets{500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
@@ -72,7 +73,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     // const std::string signalFilePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
 
     // Luminosity: 1.39
-    double luminosity = 139;
+    double luminosity = 137.62;
 
     std::vector<HistVariable> histVariablesBackground;
     std::vector<HistVariable> histVariablesData;
@@ -110,7 +111,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         // auto higgsGroupSignal = std::make_shared<Process>("Higgs Group " + recoDecay, 5);
         for (double massTarget : massTargets)
         {
-            auto higgsMassGroup = std::make_shared<Process>("Higgs Signal " + std::to_string((int)massTarget), 1);
+            auto higgsMassGroup = std::make_shared<Process>("Higgs Signal " + std::to_string((int)massTarget), higgsColor);
             for (const auto &genSimDecay : genSimDecays)
             {
 
@@ -216,13 +217,32 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         other->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WZ.root", "wzto3lnu", reader, luminosity, histVariableToFileMapping));
         other->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WZZ.root", "wzz", reader, luminosity, histVariableToFileMapping));
 
-        auto dyBackground = std::make_shared<Process>("Drell-Yan Background", drellYanBackColor);
+        auto zzzProcess = std::make_shared<Process>("ZZZ Background", 4);
+        zzzProcess->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZZ.root", "zzz", reader, luminosity, histVariableToFileMapping));
+
+        auto wwProcess = std::make_shared<Process>("WW Background", 4);
+        wwProcess->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WW.root", "wwto2l2nu", reader, luminosity, histVariableToFileMapping));
+
+        auto wwwProcess = std::make_shared<Process>("WWW Background", 4);
+        wwwProcess->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WWW.root", "www", reader, luminosity, histVariableToFileMapping));
+
+        auto wwzProcess = std::make_shared<Process>("WWZ Background", 4);
+        wwzProcess->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WWZ.root", "wwz", reader, luminosity, histVariableToFileMapping));
+
+        auto wzProcess = std::make_shared<Process>("WZ Background", 4);
+        wzProcess->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WZ.root", "wzto3lnu", reader, luminosity, histVariableToFileMapping));
+
+        auto wzzProcess = std::make_shared<Process>("WZZ Background", 4);
+        wzzProcess->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WZZ.root", "wzz", reader, luminosity, histVariableToFileMapping));
+
+        auto dyBackground = std::make_shared<Process>("Drell-Yan Background",  drellYanBackColor);
         dyBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "DY10-50.root", "dy10to50", reader, luminosity, histVariableToFileMapping));
         dyBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "DY50-inf.root", "dy50toInf", reader, luminosity, histVariableToFileMapping));
 
-        //auto dyBackgroundNoVeto = std::make_shared<Process>("Drell-Yan Background No Veto", 2);
-        //dyBackgroundNoVeto->addProcess(makeBasicProcess(histVariablesBackground, "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/NoZVeto/", "DY10-50.root", "dy10to50", reader, luminosity, histVariableToFileMapping));
-        //dyBackgroundNoVeto->addProcess(makeBasicProcess(histVariablesBackground, "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/NoZVeto/", "DY50-inf.root", "dy50toInf", reader, luminosity, histVariableToFileMapping));
+
+        auto dyBackgroundNoVeto = std::make_shared<Process>("Drell-Yan Background No Veto", 2);
+        dyBackgroundNoVeto->addProcess(makeBasicProcess(histVariablesBackground, "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/NoZVeto/", "DY10-50.root", "dy10to50", reader, luminosity, histVariableToFileMapping));
+        dyBackgroundNoVeto->addProcess(makeBasicProcess(histVariablesBackground, "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/NoZVeto/", "DY50-inf.root", "dy50toInf", reader, luminosity, histVariableToFileMapping));
         
         auto qcdBackground = std::make_shared<Process>("QCD Background", QCDBackColor);
         qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD100-200.root", "QCD_100-200", reader, luminosity, histVariableToFileMapping));

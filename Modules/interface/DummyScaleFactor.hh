@@ -1,13 +1,13 @@
 #ifndef DUMMYSCALEFACTOR_HH
 #define DUMMYSCALEFACTOR_HH
 
-#include "CMSAnalysis/Modules/interface/ElectronScaleFactor.hh"
+#include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
 #include <map>
 #include <string>
 
 class EventInput;
 
-class DummyScaleFactor : public ElectronScaleFactor 
+class DummyScaleFactor : public ScaleFactor
 {
 public:
     DummyScaleFactor();
