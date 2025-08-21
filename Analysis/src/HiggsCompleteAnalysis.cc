@@ -1,27 +1,18 @@
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
-#include "CMSAnalysis/Analysis/interface/FullAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/Channel.hh"
-#include "CMSAnalysis/Analysis/interface/SingleProcess.hh"
+#include "CMSAnalysis/Analysis/interface/CrossSectionReader.hh"
 #include "CMSAnalysis/Analysis/interface/Estimator.hh"
 #include "CMSAnalysis/Analysis/interface/FitEstimator.hh"
-#include "CMSAnalysis/Analysis/interface/WindowEstimator.hh"
-#include "CMSAnalysis/Analysis/interface/RootFileInput.hh"
-#include "CMSAnalysis/Analysis/interface/CrossSectionReader.hh"
-#include "CMSAnalysis/Analysis/interface/Process.hh"
-#include "CMSAnalysis/Analysis/interface/HistVariable.hh"
-#include "CMSAnalysis/Utility/interface/Utility.hh"
-#include "CMSAnalysis/Analysis/interface/Correction.hh"
-#include "CMSAnalysis/Analysis/interface/ConstantCorrection.hh"
-#include "CMSAnalysis/Analysis/interface/RateSystematic.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsHistNameFinder.hh"
-#include <memory>
-#include <iostream>
-#include <vector>
-#include <string>
-#include <map>
-#include <cmath>
+#include "CMSAnalysis/Analysis/interface/HistVariable.hh"
+#include "CMSAnalysis/Analysis/interface/Process.hh"
+#include "CMSAnalysis/Analysis/interface/SingleProcess.hh"
+#include "CMSAnalysis/Analysis/interface/WindowEstimator.hh"
 #include "TH1.h"
-#include "TList.h"
+#include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
 
 double HiggsCompleteAnalysis::getBranchingRatio(const std::string& channel) 
 {
@@ -80,24 +71,22 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
 
     std::vector<std::string> rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
     ///std::vector<std::string> rowNames = {"ee", "eu", "uu", "e u", "u u", "e e"};
-    std::vector<std::string> backgroundConnecters = {"_1st Highest mu- ", "_1st Highest e- ", "_e- ", "_mu- ", "_"};
     std::vector<std::string> dataConnecters = {"_Pass_1st Highest mu- ", "_Pass_1st Highest e- "};
-    std::vector<std::string> columnNames = {"Eta", "Pt", "Phi", "Same Sign Invariant Mass", "Opposite Sign Invariant Mass", "Reco Invariant Mass Background"};
     std::vector<std::string> connecters = {""};
 
-    for (std::string connecter : backgroundConnecters)
+    for (Selector selector : selectors)
     {
-        for (std::string columnName : columnNames)
+        for (VariableType var : variableTypes)
         {
-            histVariablesBackground.push_back(HistVariable(connecter + columnName));
+            histVariablesBackground.push_back(HistVariable(selector, var));
         }
     }
 
-    for (std::string connecter : backgroundConnecters)
+    for (Selector selector : selectors)
     {
-        for (std::string columnName : columnNames)
+        for (VariableType var : variableTypes)
         {
-            histVariablesData.push_back(HistVariable(connecter + columnName));
+            histVariablesData.push_back(HistVariable(selector, var));
         }
     }
 
@@ -124,7 +113,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
                 std::vector<HistVariable> histVariablesSignal;
 
                 // histVariablesSignal.push_back(HistVariable::sameSignMass(decayName + "__hists/" + decayName + "_Reco Same Sign Invariant Mass"));
-                histVariablesSignal.push_back(HistVariable("Same Sign Invariant Mass"));
+                histVariablesSignal.push_back(HistVariable(Selector::None, VariableType::SameSignInvariantMass));
                 double branchingRatioFixer = getBranchingRatio(genSimDecay);
                 std::cout << "GENSIMDECAY: " << genSimDecay << std::endl;
                 std::cout << "BRANCHINGRATIOFIXER " << branchingRatioFixer << std::endl;
