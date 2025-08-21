@@ -1,16 +1,65 @@
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
+#include <cassert>
+#include <string>
 
-// Static variable definitions
-//pT, then some parameter -> switch for gensim/reco (EventInput.hh)
-HistVariable HistVariable::genSimSameSignMass("GenSim Same Sign Inv Mass");
-HistVariable HistVariable::sameSignMass("Same Sign Inv Mass");
-HistVariable HistVariable::invariantMass("Invariant Mass");
-HistVariable HistVariable::genSimPt("GenSim pT");
-HistVariable HistVariable::pt("pT");
-HistVariable HistVariable::eta("Eta");
-HistVariable HistVariable::phi("Phi");
-HistVariable HistVariable::mET("MET");
-HistVariable HistVariable::firstPt("firstPt");
-HistVariable HistVariable::secondPt("secondPt");
-HistVariable HistVariable::thirdPt("thirdPt");
-HistVariable HistVariable::fourthPt("fourthPt");
+HistVariable::HistVariable(Selector selector, VariableType var, bool is2DHistX, bool is2DHistY)
+    : selector(selector), variableType(var), is2DHistX_(is2DHistX), is2DHistY_(is2DHistY)
+{
+    assert(!(is2DHistX_ && is2DHistY_));
+}
+
+std::string HistVariable::getName() const
+{
+    std::string name = "";
+
+    switch (selector)
+    {
+    case Selector::FirstHighestMu:
+        name += "1st Highest mu- ";
+        break;
+    case Selector::FirstHighestE:
+        name += "1st Highest e- ";
+        break;
+    case Selector::E:
+        name += "e- ";
+        break;
+    case Selector::Mu:
+        name += "mu- ";
+        break;
+    case Selector::None:
+        break;
+    }
+
+    switch (variableType)
+    {
+    case VariableType::Eta:
+        name += "Eta";
+        break;
+    case VariableType::Pt:
+        name += "Pt";
+        break;
+    case VariableType::Phi:
+        name += "Phi";
+        break;
+    case VariableType::SameSignInvariantMass:
+        name += "Same Sign Invariant Mass";
+        break;
+    case VariableType::OppositeSignInvariantMass:
+        name += "Opposite Sign Invariant Mass";
+        break;
+    case VariableType::RecoInvariantMassBackground:
+        name += "Reco Invariant Mass Background";
+        break;
+    }
+
+    if (is2DHistX_)
+    {
+        name += " X Projection";
+    }
+    else if (is2DHistY_)
+    {
+        name += " Y Projection";
+    }
+
+    return name;
+}

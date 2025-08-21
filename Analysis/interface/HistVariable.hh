@@ -2,49 +2,73 @@
 #define HISTVARIABLE_HH
 
 #include "CMSAnalysis/Analysis/interface/FilePathMapper.hh"
-
-#include <string>
-#include <unordered_map>
-#include <stdexcept>
 #include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
+#include <array>
+#include <string>
 
-class HistVariable 
+enum class Selector
 {
-public:
-    // Static objects for predefined variables
-    static HistVariable genSimSameSignMass;
-    static HistVariable sameSignMass;
-    static HistVariable invariantMass;
-    static HistVariable genSimPt;
-    static HistVariable pt;
-    static HistVariable eta;
-    static HistVariable phi;
-    static HistVariable mET;
-    static HistVariable firstPt;
-    static HistVariable secondPt;
-    static HistVariable thirdPt;
-    static HistVariable fourthPt;
+    FirstHighestE,
+    FirstHighestMu,
+    E,
+    Mu,
+    None
+};
 
-    // Getters
-    std::string getName() const { return name; }
+enum class VariableType
+{
+    Eta,
+    Pt,
+    Phi,
+    SameSignInvariantMass,
+    OppositeSignInvariantMass,
+    RecoInvariantMassBackground,
+};
 
-    // Constructor
-    HistVariable(std::string iName) : name(std::move(iName)) {}
+constexpr std::array<Selector, 5> selectors{
+    {Selector::FirstHighestE, Selector::FirstHighestMu, Selector::E, Selector::Mu, Selector::None}};
 
-    bool is2DHistX() {return is2DHistX_;}
-    bool is2DHistY() {return is2DHistY_;}
+constexpr std::array<VariableType, 6> variableTypes{
+    {VariableType::Eta, VariableType::Pt, VariableType::Phi, VariableType::SameSignInvariantMass,
+     VariableType::OppositeSignInvariantMass, VariableType::RecoInvariantMassBackground}};
 
-    void setSystematic(ScaleFactor::SystematicType itype, std::string isystematicName) {type = itype; systematicName = isystematicName;}
-    ScaleFactor::SystematicType getSystematicType() const {return type;}
-    std::string getSystematicName() const {return systematicName;}
+class HistVariable
+{
+  public:
+    HistVariable(Selector selector, VariableType var, bool is2DHistX = false, bool is2DHistY = false);
 
-private:
-    std::string name;
+    std::string getName() const;
+
+    bool is2DHistX()
+    {
+        return is2DHistX_;
+    }
+    bool is2DHistY()
+    {
+        return is2DHistY_;
+    }
+
+    void setSystematic(ScaleFactor::SystematicType itype, std::string isystematicName)
+    {
+        type = itype;
+        systematicName = isystematicName;
+    }
+    ScaleFactor::SystematicType getSystematicType() const
+    {
+        return type;
+    }
+    std::string getSystematicName() const
+    {
+        return systematicName;
+    }
+
+  private:
+    Selector selector;
+    VariableType variableType;
     bool is2DHistX_ = false;
     bool is2DHistY_ = false;
     ScaleFactor::SystematicType type = ScaleFactor::SystematicType::Nominal;
     std::string systematicName;
-
 };
 
 #endif
