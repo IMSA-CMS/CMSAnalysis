@@ -25,8 +25,11 @@ static std::string defaultUnit(VariableType var)
 
 HistVariable::HistVariable(Selector selector, VariableType var, std::string unit, 
 	bool is2DHistX, bool is2DHistY)
-    : selector(selector), variableType(var), unit(unit.empty() ? defaultUnit(var) : unit),
-	is2DHistX_(is2DHistX), is2DHistY_(is2DHistY)
+    : selector(selector),
+    variableType(var),
+    is2DHistX_(is2DHistX), 
+    is2DHistY_(is2DHistY), 
+    unit(unit.empty() ? defaultUnit(var) : unit)
 {
     assert(!(is2DHistX_ && is2DHistY_));
 }
