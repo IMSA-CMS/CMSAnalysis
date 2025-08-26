@@ -2,8 +2,31 @@
 #include <cassert>
 #include <string>
 
-HistVariable::HistVariable(Selector selector, VariableType var, bool is2DHistX, bool is2DHistY)
-    : selector(selector), variableType(var), is2DHistX_(is2DHistX), is2DHistY_(is2DHistY)
+static std::string defaultUnit(VariableType var)
+{
+    switch (var)
+    {
+    case VariableType::Pt:
+        return "GeV";
+    case VariableType::Eta:
+        return "";
+    case VariableType::Phi:
+        return "rad";
+    case VariableType::SameSignInvariantMass:
+		return "GeV";
+    case VariableType::OppositeSignInvariantMass:
+		return "GeV";
+    case VariableType::RecoInvariantMassBackground:
+        return "GeV";
+    default:
+        return "";
+    }
+}
+
+HistVariable::HistVariable(Selector selector, VariableType var, std::string unit, 
+	bool is2DHistX, bool is2DHistY)
+    : selector(selector), variableType(var), unit(unit.empty() ? defaultUnit(var) : unit),
+	is2DHistX_(is2DHistX), is2DHistY_(is2DHistY)
 {
     assert(!(is2DHistX_ && is2DHistY_));
 }
@@ -60,6 +83,11 @@ std::string HistVariable::getName() const
     {
         name += " Y Projection";
     }
+
+	if (!unit.empty())
+	{
+	    name += " [" + unit + "]";
+	}
 
     return name;
 }
