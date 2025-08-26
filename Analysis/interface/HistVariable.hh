@@ -35,7 +35,8 @@ constexpr std::array<VariableType, 6> variableTypes{
 class HistVariable
 {
   public:
-    HistVariable(Selector selector, VariableType var, bool is2DHistX = false, bool is2DHistY = false);
+    HistVariable(Selector selector, VariableType var, std::string unit = "", 
+        bool is2DHistX = false, bool is2DHistY = false);
 
     std::string getName() const;
 
@@ -46,6 +47,10 @@ class HistVariable
     bool is2DHistY()
     {
         return is2DHistY_;
+    }
+    std::string getUnit() const
+    {
+        return unit;
     }
 
     void setSystematic(ScaleFactor::SystematicType itype, std::string isystematicName)
@@ -69,6 +74,7 @@ class HistVariable
     bool is2DHistY_ = false;
     ScaleFactor::SystematicType type = ScaleFactor::SystematicType::Nominal;
     std::string systematicName;
+    std::string unit;
 };
 
 #endif
