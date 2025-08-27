@@ -1,6 +1,6 @@
 #ifndef SCALEFACTOR_HH
 #define SCALEFACTOR_HH
-
+#include <vector>
 #include <memory>
 #include <string>
 #include <map>
@@ -56,14 +56,15 @@ public:
     virtual double getScaleFactor(const EventInput* input, SystematicType type = SystematicType::Nominal) const;
     std::string getName() const { return name; }
 
-// protected:
-    // virtual std::string getKey(const EventInput* input) const = 0;
+ protected:
+     virtual std::vector<std::string> getKey(const EventInput* input) const = 0;
 
 private:
     std::string name;
     std::shared_ptr<ScaleFactorReader> reader;
     // The scale factors are stored in a map with the key being the year and the value
     std::map<std::string, ScaleFactorSet> scaleFactors;
+
 
      
 };

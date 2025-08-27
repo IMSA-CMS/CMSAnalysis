@@ -15,7 +15,7 @@ class ScaleFactorReader
 public:
 	virtual ~ScaleFactorReader() = default;
 	virtual std::map<std::string, ScaleFactor::ScaleFactorSet> readData() = 0;
-	virtual std::string getKey(const EventInput* input) const = 0;
+	// virtual std::string getKey(const EventInput* input) const = 0;
 
 };
 

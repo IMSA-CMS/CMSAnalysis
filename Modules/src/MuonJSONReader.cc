@@ -47,3 +47,31 @@ MuonJSONReader::MuonJSONReader(std::string filename) : JSONReader(filename)
 
     return scaleFactorMap;
 }
+
+std::string getKey(Lepton lepton)
+{
+    // Go through scaleFactorMap
+    // Find highest eta key less than your eta and lowest pT key more than your pT in the keys.
+
+    // review this code
+    std::string bestKey = "";
+    double bestEta = -1;
+    double bestPt = std::numeric_limits<double>::max();
+
+    for (const auto& entry : scaleFactorMap) {
+        std::string key = entry.first;
+        size_t underscorePos = key.find("_");
+        double eta = std::stod(key.substr(0, underscorePos));
+        double pt = std::stod(key.substr(underscorePos + 1));
+
+        if (eta < lepton.eta && pt > lepton.pt) {
+            if (eta > bestEta || (eta == bestEta && pt < bestPt)) {
+                bestKey = key;
+                bestEta = eta;
+                bestPt = pt;
+            }
+        }
+    }
+
+    return bestKey;
+}

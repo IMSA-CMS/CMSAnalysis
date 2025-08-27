@@ -1,0 +1,94 @@
+TOP_LEVEL_VARIABLES+=ROCM_HOST
+ROCM_EXTRA_EXT:=$(ROCMSRC_FILES_SUFFIXES) $(DEVICE_CC_EXT)
+EXTRA_FILE_EXT+=$(ROCM_EXTRA_EXT)
+FILE_EXT_CC_MAP+=$(ROCM_EXTRA_EXT)
+SET_PRODUCT_VARIABLES += ROCM_DLINK_LIB
+AdjustRocmHostFlags=$(foreach x,$2,$(filter-out $(call GetVariable,REM_ROCM_HOST_$x) $(call GetVariable,ROCM_HOST_$x) $(call AdjustFlags,$1,rocm,REM_ROCM_HOST_$x) $(call GetToolFlag,rocm,REM_ROCM_HOST_$x) $(call GetToolFlag,,ROCM_HOST_$x),$(call AdjustFlags,$1,,$x,llvm)) $(call GetVariable,ROCM_HOST_$x) $(call GetToolFlag,rocm,ROCM_HOST_$x))
+DLINK_LIBDIR:=$(foreach d,$(strip $(LOCALTOP) $(RELEASETOP) $(FULL_RELEASE_FOR_A_PATCH)),$(if $(strip $(wildcard $(d)/$(SCRAMSTORENAME_STATIC))),-L$(d)/$(SCRAMSTORENAME_STATIC),))
+define rocm_dlink_deps
+$(addprefix $(WORKINGDIR)/cache/rocm_dlink/,$(foreach u,$($(1)_LOC_USE),$($u)))
+endef
+
+define GenerateReleaseRocmDlink
+ifneq ($(strip $(1)),)
+ifeq ($(strip $(wildcard $(PUB_DIRCACHE_MKDIR)/rocm_dlink_$(2)_release.mk)),)
+ifneq ($(strip $(wildcard $(1)/$(PUB_DIRCACHE_MKDIR)/dlink/scram.mk)),)
+$$(shell $(CMD_cat) $(1)/$(PUB_DIRCACHE_MKDIR)/dlink/*.mk > $(PUB_DIRCACHE_MKDIR)/rocm_dlink_$(2)_release.mk)
+else
+$$(shell $(CMD_touch) $(PUB_DIRCACHE_MKDIR)/rocm_dlink_$(2)_release.mk)
+endif
+endif
+-include $(PUB_DIRCACHE_MKDIR)/rocm_dlink_$(2)_release.mk
+endif
+endef
+
+$(eval $(call GenerateReleaseRocmDlink,$(FULL_RELEASE_FOR_A_PATCH),full))
+$(eval $(call GenerateReleaseRocmDlink,$(RELEASETOP),base))
+
+define compile_rocm_common
+  $(call run_compile_command,$2,$4,$5,$(HIPCC) -c $(call AdjustRocmHostFlags,$1,CPPFLAGS CXXFLAGS) $3 $(CXXSHAREDOBJECTFLAGS) $(if $(6),,$(CXX_MMD) $(CXX_MF) $(basename $@).d))
+endef
+define compile_rocm
+  $(call compile_rocm_common,$1,$2,$(call AdjustFlags,$1,,ROCM_FLAGS))
+endef
+define RocmCompileRule
+$($(1)_objdir)/%.$(2).$(OBJEXT): $($(1)_srcdir)/%.$(2) $$($(1)_objdir)/precompile
+	$$(call compile_rocm,$(1),$(3))
+endef
+
+define generate_rocm_device_objs
+  @$(startlog_$(1)) [ -d $(@D) ] ||  $(CMD_mkdir) -p $(@D) &&\
+  $(CMD_echo) ">> ROCM Device Code Obj $@ " &&\
+  $(VERB_ECHO) $(SCRAM_PREFIX_COMPILER_COMMAND) "$(CMD_objcopy) -j '__CLANG_OFFLOAD_BUNDLE*' $^ $@" &&\
+              ($(SCRAM_PREFIX_COMPILER_COMMAND) $(CMD_objcopy)  -j '__CLANG_OFFLOAD_BUNDLE*' $^ $@) $(endlog_$(1))
+endef
+
+define generate_rocm_a
+  @$(startlog_$(1)) [ -d $(@D) ] ||  $(CMD_mkdir) -p $(@D) && $(CMD_rm) -f $(SCRAMSTORENAME_STATIC)/$(@F) &&\
+  $(CMD_echo) ">> ROCM Device Code library $@ " &&\
+  $(VERB_ECHO) $(SCRAM_PREFIX_COMPILER_COMMAND) "$(CMD_ar) crs $@ $^" &&\
+              ($(SCRAM_PREFIX_COMPILER_COMMAND)  $(CMD_ar) crs $@ $^) $(endlog_$(1))
+endef
+
+#safename, plugin_type
+define SetRocmRules
+$(1)_EX_ROCM_DLINK_LIB := $(1)_rocm
+$(1)_libdeps+=$(WORKINGDIR)/cache/rocm_dlink/$(1)
+$(WORKINGDIR)/cache/rocm_dlink/$(1): $($(1)_objdir)/lib$(1)_rocm.$(AREXT) $$($(1)_rocm_dlink_deps)
+	@[ -d $$(@D) ] || $(CMD_mkdir) -p $$(@D) && $(CMD_touch) $$@
+$($(1)_objdir)/lib$(1)_rocm.$(AREXT): $(addsuffix .rocm_o,$($(1)_rocmobjs))
+	$$(call generate_rocm_a,$1) && $$(call copy_build_product,$(SCRAMSTORENAME_STATIC))
+$($(1)_objdir)/%.rocm_o: $($(1)_objdir)/%
+	$$(call generate_rocm_device_objs,$1)
+all_$(1)+=$(PUB_DIRCACHE_MKDIR)/rocm_dlink/$(1).mk
+$(PUB_DIRCACHE_MKDIR)/rocm_dlink/$(1).mk: $(PUB_DIRCACHE_MKDIR)/rocm_dlink/scram.mk
+	@[ -d $$(@D) ] || $(CMD_mkdir) -p $$(@D) &&\
+	$(CMD_echo) "$(1)_EX_ROCM_DLINK_LIB:=$(1)_rocm" > $$@
+endef
+
+#safename, plugin_type
+define AddRocmRules
+$(1)_rocmfiles       := $(filter $(foreach e,$(ROCM_EXTRA_EXT),%.$e),$($(1)_files))
+$(1)_rocm_dlink_deps := $$(call rocm_dlink_deps,$1)
+ifeq ($(strip $($(1)_rocm)),1)
+$(1)_DISABLE_LTO     := 1
+$(1)_DISABLE_PGO     := 1
+$(1)_linker          := $(HIPCC)
+$(1)_rocm            := 1
+$(foreach ext,$(filter $(ROCM_EXTRA_EXT),$($(1)_files_exts)),$$(eval $$(call RocmCompileRule,$(1),$(ext),$(1))))
+ifeq ($(strip $(SYNTAX_ONLY)),)
+$(1)_rocmobjs     := $$(addprefix $($(1)_objdir)/, $$(addsuffix .$(OBJEXT),$$($(1)_rocmfiles)))
+$(1)_PRE_INIT_FUNC+=$$$$(eval $$$$(call SetRocmRules,$1,$2))
+endif
+$(1)_LOC_USE      += $(ROCM_TYPE_COMPILER)
+else
+$(WORKINGDIR)/cache/rocm_dlink/$(1): $$($(1)_rocm_dlink_deps)
+	@[ -d $$(@D) ] || $(CMD_mkdir) -p $$(@D) && $(CMD_touch) $$@
+endif
+all_$(1)+=$(WORKINGDIR)/cache/rocm_dlink/$(1)
+endef
+
+$(PUB_DIRCACHE_MKDIR)/rocm_dlink/scram.mk:
+	@[ -d $(@D) ] || $(CMD_mkdir) -p $(@D) && $(CMD_touch) $@
+$(WORKINGDIR)/cache/rocm_dlink/%:
+	@[ -d $(@D) ] || $(CMD_mkdir) -p $(@D) && $(CMD_touch) $@

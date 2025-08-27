@@ -1,0 +1,13 @@
+{
+  "LIB": [
+    "Gui"
+  ],
+  "TOOLNAME": "rootinteractive",
+  "TOOLVERSION": "6.30.03-1152e0dd06a307703399035629918f21",
+  "USE": [
+    "libjpeg-turbo",
+    "libpng",
+    "rootgpad",
+    "rootrint"
+  ]
+}

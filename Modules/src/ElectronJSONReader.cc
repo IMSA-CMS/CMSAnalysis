@@ -19,6 +19,8 @@ std::map<std::string, ScaleFactor::ScaleFactorSet> ElectronJSONReader::loadScale
     loadScaleFactors(output, ScaleFactor::SystematicType::Up, scaleFactorMap);
     // Load down systematic scale factors
     loadScaleFactors(output, ScaleFactor::SystematicType::Down, scaleFactorMap);
+
+    return scaleFactorMap;
 }
 
 void ElectronJSONReader::loadScaleFactors(Json::Value output, ScaleFactor::SystematicType systematicType, std::map<std::string, ScaleFactor::ScaleFactorSet>& scaleFactorMap)

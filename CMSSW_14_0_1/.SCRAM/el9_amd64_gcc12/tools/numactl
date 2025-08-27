@@ -1,0 +1,27 @@
+{
+  "INCLUDE": [
+    "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/numactl/2.0.14-b52604abfe0049e6a7aca40a3d26c569/include"
+  ],
+  "LIB": [
+    "numa"
+  ],
+  "LIBDIR": [
+    "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/numactl/2.0.14-b52604abfe0049e6a7aca40a3d26c569/lib"
+  ],
+  "NUMACTL_BASE": "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/numactl/2.0.14-b52604abfe0049e6a7aca40a3d26c569",
+  "RUNTIME": {
+    "PATH:MANPATH": [
+      "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/numactl/2.0.14-b52604abfe0049e6a7aca40a3d26c569/share/man"
+    ],
+    "PATH:PATH": [
+      "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/numactl/2.0.14-b52604abfe0049e6a7aca40a3d26c569/bin"
+    ]
+  },
+  "TOOLNAME": "numactl",
+  "TOOLVERSION": "2.0.14-b52604abfe0049e6a7aca40a3d26c569",
+  "VARIABLES": [
+    "NUMACTL_BASE",
+    "INCLUDE",
+    "LIBDIR"
+  ]
+}

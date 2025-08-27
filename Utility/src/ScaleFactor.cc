@@ -19,12 +19,16 @@ double ScaleFactor::getScaleFactor(const EventInput* input, SystematicType type 
  	{
 	 return 1.0; // No scale factor for data
  	}
-	auto key = reader->getKey(input);
-	auto entry = scaleFactors.find(key);
-	if (entry == scaleFactors.end())
+	auto keys = getKey(input);
+	double scaleFactor = 1; 
+	for (auto key : keys)
 	{
-		throw std::runtime_error("Scale factor not found!");
+		auto entry = scaleFactors.find(key);
+		if (entry == scaleFactors.end())
+		{
+			throw std::runtime_error("Scale factor not found!");
+		}
+		scaleFactor *= entry->second.getSystematic(type);
 	}
-			return entry->second.getSystematic(type);
-
+	return scaleFactor;
 }

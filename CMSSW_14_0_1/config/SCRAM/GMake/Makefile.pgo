@@ -1,0 +1,29 @@
+CMS_PGO_GENERATE:=0
+CMS_PGO_USE:=0
+ifeq ($(strip $(filter generate-pgo use-pgo disable-pgo clean,$(MAKECMDGOALS))),)
+  ifneq ($(strip $(wildcard $(SCRAM_ADMIN_DIR)/generate-pgo)),)
+    self_EX_FLAGS_ENABLE_PGO:=1
+    CMS_PGO_GENERATE:=1
+    PGO_FLAG_NAMES:=PGO PGO_GENERATE
+    $(info Profile-guided optimization enabled)
+    $(info PGO profiles during build stage will be generated under $(LOCALTOP)/$(SCRAM_INTwork)/PGO)
+    ifeq ($(strip $(CMSSW_PGO_DIRECTORY)),)
+      $(info WARNING: CMSSW_PGO_DIRECTORY environment is not set. Make sure to set it before running the application to generate PGO profiles)
+    else
+      $(info        PGO profiles at runtime will be generated under $(CMSSW_PGO_DIRECTORY))
+    endif
+    export CMSSW_PGO_DIRECTORY:=$(LOCALTOP)/$(SCRAM_INTwork)/PGO
+  endif
+  ifneq ($(strip $(wildcard $(SCRAM_ADMIN_DIR)/use-pgo)),)
+    self_EX_FLAGS_ENABLE_PGO:=1
+    CMS_PGO_USE:=1
+    PGO_FLAG_NAMES:=PGO PGO_USE
+    $(info Profile-guided optimization enabled)
+    ifeq ($(strip $(CMSSW_PGO_DIRECTORY)),)
+      $(info ERROR: Environment variable CMSSW_PGO_DIRECTORY not set. It should be set to point to directory from where SCRAM can use PGO profiles.)
+      $(error Inconsistent environment)
+    else
+      $(info Using PGO profiles from $(CMSSW_PGO_DIRECTORY))
+    endif
+  endif
+endif
