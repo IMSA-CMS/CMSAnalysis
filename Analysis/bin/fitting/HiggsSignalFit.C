@@ -14,8 +14,8 @@
 std::vector<std::string> channelTypes = {"eeee", "eeeu", "eueu", "eeuu", "euuu", "uuuu"};
 
 std::vector<HistVariable> histogramTypes = {
-    HistVariable(Selector::None, VariableType::RecoInvariantMassBackground, true, false),
-    HistVariable(Selector::None, VariableType::RecoInvariantMassBackground, false, true),
+    HistVariable(Selector::None, VariableType::RecoInvariantMassBackground, "", true, false),
+    HistVariable(Selector::None, VariableType::RecoInvariantMassBackground, "", false, true),
 };
 
 // run in batch mode for faster processing: root -b HiggsSignalFit.C+

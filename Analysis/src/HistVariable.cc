@@ -89,7 +89,7 @@ std::string HistVariable::getName() const
 
 	if (!unit.empty())
 	{
-	    name += " [" + unit + "]";
+	//    name += " [" + unit + "]";
 	}
 
     return name;
