@@ -16,7 +16,6 @@ class Input
 		virtual TH1* get2DHist(HistVariable histType) const = 0;
 		virtual ~Input() {}
 		virtual int getTotalEvents() const = 0;
-		virtual std::vector<HistVariable> getHistVariables() const = 0;
 };
 
 #endif
