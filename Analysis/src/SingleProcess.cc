@@ -54,17 +54,3 @@ double SingleProcess::getExpectedYield(HistVariable dataType) const
     double expectedYield = estimator->getExpectedYield(this, dataType, luminosity);
     return expectedYield;
 }
-
-bool SingleProcess::checkValidity() 
-{
-    bool validProcess = true;
-    std::vector<HistVariable> histVariables = input->getHistVariables();
-    for(HistVariable histVar : histVariables) {
-        if(input->getHist(histVar) == 0) {
-            //std::cout << " Validity Check failed on " << histVar.getName() << std::endl;
-            validProcess = false;
-        }
-    }
-    // std::cout << (validProcess ? "true" : "false");
-    return validProcess;
-}
