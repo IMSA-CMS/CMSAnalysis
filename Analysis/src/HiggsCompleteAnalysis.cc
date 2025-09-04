@@ -15,12 +15,10 @@
 #include <string>
 #include <vector>
 
-double HiggsCompleteAnalysis::getBranchingRatio(const std::string& channel) 
+double HiggsCompleteAnalysis::getBranchingRatio(const std::string &channel)
 {
-    std::unordered_map<std::string, double> originalRatios = {
-        {"ee", 3.0/2}, {"eu", 3.0/4}, {"uu", 3.0/2},
-        {"et", 3.0/4}, {"ut", 3.0/4}, {"tt", 3.0/2}
-    };
+    std::unordered_map<std::string, double> originalRatios = {{"ee", 3.0 / 2}, {"eu", 3.0 / 4}, {"uu", 3.0 / 2},
+                                                              {"et", 3.0 / 4}, {"ut", 3.0 / 4}, {"tt", 3.0 / 2}};
 
     std::string firstPair = channel.substr(0, 2);
     std::string secondPair = channel.substr(2, 2);
@@ -35,32 +33,29 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     // make sense so in the future fix this
     //  double tempMass = 1400;
 
-    const int higgsColor = kOrange+10;
+    const int higgsColor = kOrange + 10;
     const int ttbarColor = kBlue;
-    const int drellYanBackColor = kPink+10;
-    const int QCDBackColor = kCyan+3;
-    const int ZZBackgroundColor = kGreen+10;
+    const int drellYanBackColor = kPink + 10;
+    const int QCDBackColor = kCyan + 3;
+    const int ZZBackgroundColor = kGreen + 10;
     const int WJetsBackgroundColor = kViolet;
 
     // Actual masses for the Higgs signal
     std::vector<double> massTargets{500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
-    const std::vector<std::string> genSimDecays{"eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet", "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt"};
-
-    // const std::vector<std::string> genSimDecays{};
-    // const std::vector<std::string> recoDecays{};
-
-    const std::vector<std::string> recoDecays{"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u", "none"};
     // const std::vector<std::string> recoDecays{"u u", "uu", "uuu", "uuuu"};
     // const std::vector<std::string> recoDecays{"ee", "eu", "e u", "uu", "u u"};
     // const std::vector<std::string> recoDecays{"u u"};
 
     // Change this file to your folder to use your own cross sections
-    // filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
-    // auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
-    auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+    // filePath is shared between most files. The rest of the filePath to a given file is still given when making
+    // singleProcesses. auto reader =
+    // std::make_shared<CrossSectionReader>("/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+    auto reader = std::make_shared<CrossSectionReader>(
+        "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
     const std::string filePath = "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/HiggsProjection/";
-    const std::string signalFilePath = "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/HiggsProjection/";
-    const std::string myPath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
+    const std::string signalFilePath =
+        "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/HiggsProjection/";
+    // const std::string myPath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     // const std::string filePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     // const std::string signalFilePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
 
@@ -101,20 +96,21 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
 
 
     TH1::SetDefaultSumw2();
-    for (std::string recoDecay : recoDecays)
+    for (const std::string &recoDecay : recoDecays)
     {
-        std::vector<std::shared_ptr<Process>> processes;
-        // auto higgsSignal = std::make_shared<Process>("Higgs Signal", 5);
-
-        // not really sure why we need this process at all
-        // auto higgsGroupSignal = std::make_shared<Process>("Higgs Group " + recoDecay, 5);
-        for (double massTarget : massTargets)
+        for (const auto &genSimDecay : genSimDecays)
         {
-            auto higgsMassGroup = std::make_shared<Process>("Higgs Signal " + std::to_string((int)massTarget), 1);
-            for (const auto &genSimDecay : genSimDecays)
-            {
+            std::string decayName = recoDecay + "_" + genSimDecay;
 
-                std::string decayName = recoDecay + "_" + genSimDecay;
+            std::vector<std::shared_ptr<Process>> processes;
+            // auto higgsSignal = std::make_shared<Process>("Higgs Signal", 5);
+
+            // not really sure why we need this process at all
+            // auto higgsGroupSignal = std::make_shared<Process>("Higgs Group " + recoDecay, 5);
+            for (double massTarget : massTargets)
+            {
+                auto higgsMassGroup = std::make_shared<Process>("Higgs Signal " + std::to_string((int)massTarget), 1);
+
                 auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(decayName);
                 
                 //histVariableToFileMapping["Same Sign Invariant Mass"] = decayName + "__hists/" + decayName + "_Reco Same Sign Invariant Mass";
@@ -132,9 +128,11 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
                 higgsSignal->addProcess(higgsProcess);
                 processes.push_back(higgsSignal);
                 higgsMassGroup->addProcess(higgsProcess);
+
+                processes.push_back(higgsMassGroup);
             }
-            processes.push_back(higgsMassGroup);
-        }
+
+
 
         auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(recoDecay);
 
@@ -244,4 +242,5 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         // leptonBackgrounds->cleanProcesses();
         getChannelsProtected().push_back(leptonProcesses);
     }
+}
 }

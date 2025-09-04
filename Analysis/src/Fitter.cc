@@ -214,7 +214,7 @@ TCanvas* Fitter::fitPowerLaw(TH1* histogram, FitFunction& fitFunction)
 		std::cout << "Chi2: " << result->Chi2() << '\n';
 		chi2 = result->Chi2();
 		fitFunction.getFunction()->SetParameters(result->Parameter(0), result->Parameter(1), result->Parameter(2));
-		result = histogram->Fit(fitFunction.getFunction(), "SLQRWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
+		result = histogram->Fit(fitFunction.getFunction(), "SWLQRWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
 	}
 
 	gStyle->SetOptFit(1111);
