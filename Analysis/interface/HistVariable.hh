@@ -3,40 +3,38 @@
 
 #include "CMSAnalysis/Analysis/interface/FilePathMapper.hh"
 #include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
+#include "CMSAnalysis/Utility/interface/Particle.hh"
+#include "CMSAnalysis/Utility/interface/ParticleType.hh"
 #include <array>
 #include <string>
 
-enum class Selector
-{
-    FirstHighestE,
-    FirstHighestMu,
-    E,
-    Mu,
-    None
-};
 
-enum class VariableType
-{
-    Eta,
-    Pt,
-    Phi,
-    SameSignInvariantMass,
-    OppositeSignInvariantMass,
-    RecoInvariantMassBackground,
-};
 
-constexpr std::array<Selector, 5> selectors{
-    {Selector::FirstHighestE, Selector::FirstHighestMu, Selector::E, Selector::Mu, Selector::None}};
+// constexpr std::array<Selector, 5> selectors{
+//     {Selector::FirstHighestE, Selector::FirstHighestMu, Selector::E, Selector::Mu, Selector::None}};
 
-constexpr std::array<VariableType, 6> variableTypes{
-    {VariableType::Eta, VariableType::Pt, VariableType::Phi, VariableType::SameSignInvariantMass,
-     VariableType::OppositeSignInvariantMass, VariableType::RecoInvariantMassBackground}};
+// constexpr std::array<VariableType, 6> variableTypes{
+//     {VariableType::Eta, VariableType::Pt, VariableType::Phi, VariableType::SameSignInvariantMass,
+//      VariableType::OppositeSignInvariantMass, VariableType::RecoInvariantMassBackground}};
 
 class HistVariable
 {
   public:
-    HistVariable(Selector selector, VariableType var, std::string unit = "", 
+    enum class VariableType
+    {
+        Eta,
+        Pt,
+        Phi,
+        SameSignInvariantMass,
+        OppositeSignInvariantMass,
+        InvariantMass
+    };
+
+    HistVariable(ParticleType type, int order, VariableType var, std::string unit = "", 
         bool is2DHistX = false, bool is2DHistY = false);
+
+    // HistVariable(VariableType var, std::string unit = "", 
+    //     bool is2DHistX = false, bool is2DHistY = false);
 
     std::string getName() const;
 
@@ -68,13 +66,14 @@ class HistVariable
     }
 
   private:
-    Selector selector;
+    ParticleType particleType;
+    int order_;
     VariableType variableType;
+    std::string unit;
     bool is2DHistX_ = false;
     bool is2DHistY_ = false;
     ScaleFactor::SystematicType type = ScaleFactor::SystematicType::Nominal;
     std::string systematicName;
-    std::string unit;
 };
 
 #endif

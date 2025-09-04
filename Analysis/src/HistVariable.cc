@@ -2,31 +2,35 @@
 #include <cassert>
 #include <string>
 
-static std::string defaultUnit(VariableType var)
+static std::string defaultUnit(HistVariable::VariableType var)
 {
     switch (var)
     {
-    case VariableType::Pt:
+    case HistVariable::VariableType::Pt:
         return "GeV";
-    case VariableType::Eta:
+    case HistVariable::VariableType::Eta:
         return "";
-    case VariableType::Phi:
-        return "rad";
-    case VariableType::SameSignInvariantMass:
+    case HistVariable::VariableType::Phi:
+        return "";
+    case HistVariable::VariableType::SameSignInvariantMass:
 		return "GeV";
-    case VariableType::OppositeSignInvariantMass:
+    case HistVariable::VariableType::OppositeSignInvariantMass:
 		return "GeV";
-    case VariableType::RecoInvariantMassBackground:
+    case HistVariable::VariableType::InvariantMass:
         return "GeV";
     default:
         return "";
     }
 }
 
-HistVariable::HistVariable(Selector selector, VariableType var, std::string unit, 
+HistVariable::HistVariable(ParticleType type, int order, VariableType var, std::string unit, 
 	bool is2DHistX, bool is2DHistY)
-    : selector(selector), variableType(var), unit(unit.empty() ? defaultUnit(var) : unit),
-	is2DHistX_(is2DHistX), is2DHistY_(is2DHistY)
+    : particleType(type),
+      order_(order),
+      variableType(var),
+      unit(unit.empty() ? defaultUnit(var) : unit),
+      is2DHistX_(is2DHistX),
+      is2DHistY_(is2DHistY)
 {
     assert(!(is2DHistX_ && is2DHistY_));
 }
@@ -35,42 +39,54 @@ std::string HistVariable::getName() const
 {
     std::string name = "";
 
-    switch (selector)
+    switch (order_)
     {
-    case Selector::FirstHighestMu:
-        name += "1st Highest mu- ";
+    case 1:
+        name += "1st ";
         break;
-    case Selector::FirstHighestE:
-        name += "1st Highest e- ";
+    case 2:
+        name += "2nd ";
         break;
-    case Selector::E:
-        name += "e- ";
+    case 3:
+        name += "3rd ";
         break;
-    case Selector::Mu:
-        name += "mu- ";
-        break;
-    case Selector::None:
+    default:
+        name += std::to_string(order_) + "th ";
         break;
     }
 
+    if (particleType == ParticleType::electron())      
+    {
+        name += "e- ";
+    }
+    else if (particleType == ParticleType::muon()) 
+    {
+        name += "mu- ";
+    }    
+    else if (particleType == ParticleType::tau()) 
+    {
+        name += "tau- ";
+    }
+
+
     switch (variableType)
     {
-    case VariableType::Eta:
+    case HistVariable::VariableType::Eta:
         name += "Eta";
         break;
-    case VariableType::Pt:
+    case HistVariable::VariableType::Pt:
         name += "Pt";
         break;
-    case VariableType::Phi:
+    case HistVariable::VariableType::Phi:
         name += "Phi";
         break;
-    case VariableType::SameSignInvariantMass:
+    case HistVariable::VariableType::SameSignInvariantMass:
         name += "Same Sign Invariant Mass";
         break;
-    case VariableType::OppositeSignInvariantMass:
+    case HistVariable::VariableType::OppositeSignInvariantMass:
         name += "Opposite Sign Invariant Mass";
         break;
-    case VariableType::RecoInvariantMassBackground:
+    case HistVariable::VariableType::InvariantMass:
         name += "Reco Invariant Mass Background";
         break;
     }
@@ -86,7 +102,7 @@ std::string HistVariable::getName() const
 
 	if (!unit.empty())
 	{
-	    name += " [" + unit + "]";
+	   // name += " [" + unit + "]";
 	}
 
     return name;
