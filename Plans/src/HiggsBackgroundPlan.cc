@@ -124,7 +124,7 @@ void HiggsBackgroundPlan::initialize()
     modules.addFilterModule(zVetoFilterMod);
     modules.addFilterModule(recoDecayFilterMod);
     //modules.addFilterModule(make_shared<FilterModule>(bJetFilter));
-    modules.addAnalysisModule(leptonEfficiency);
+    //modules.addAnalysisModule(leptonEfficiency);
     modules.addAnalysisModule(eventHistMod);
     modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
     //modules.addFilterModule(runFilterMod); 

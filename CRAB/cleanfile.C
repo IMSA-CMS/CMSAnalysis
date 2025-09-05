@@ -29,18 +29,20 @@ bool isVersionedStringKey(TFile* file, const std::string& baseName) {
 // Recursively process objects and folders
 void processDirectory(TDirectory* inDir, TDirectory* outDir) {
     std::map<std::string, std::vector<double>> valueMap;
-
+    std::cout << "Processing directory: " << inDir->GetPath() << std::endl;
     TIter nextKey(inDir->GetListOfKeys());
     TKey* key;
 
     // First pass: collect versioned TObjString values
     while ((key = (TKey*)nextKey())) {
+        //std::cout << "Found key: " << key->GetName() << std::endl;
         std::string keyName = key->GetName();
         TObject* obj = key->ReadObj();
         if (!obj) continue;
 
         // Recurse into folders
         if (obj->InheritsFrom("TDirectory")) {
+            std::cout << "Entering subdirectory: " << keyName << std::endl;
             TDirectory* subIn = (TDirectory*)obj;
             outDir->cd();
             TDirectory* subOut = outDir->mkdir(subIn->GetName());
@@ -53,6 +55,7 @@ void processDirectory(TDirectory* inDir, TDirectory* outDir) {
         // Collect versioned TObjString values
         TObjString* strObj = dynamic_cast<TObjString*>(obj);
         if (strObj) {
+            std::cout << "Processing TObjString: " << keyName << std::endl;
             std::string valStr = strObj->GetString().Data();
             try {
                 double val = std::stod(valStr);
@@ -109,6 +112,7 @@ void processDirectory(TDirectory* inDir, TDirectory* outDir) {
 
 // Main entry point
 void cleanfile(const char* inputFileName = "input.root", const char* outputFileName = "output.root") {
+    std::cout << "Cleaning file: " << inputFileName << " -> " << outputFileName << std::endl;
     TFile* inFile = TFile::Open(inputFileName, "READ");
     if (!inFile || inFile->IsZombie()) {
         std::cerr << "Error: Cannot open input file " << inputFileName << std::endl;
@@ -116,6 +120,7 @@ void cleanfile(const char* inputFileName = "input.root", const char* outputFileN
     }
 
     TFile* outFile = TFile::Open(outputFileName, "RECREATE");
+    std::cout << "Creating output file: " << outputFileName << std::endl;
     if (!outFile || outFile->IsZombie()) {
         std::cerr << "Error: Cannot create output file " << outputFileName << std::endl;
         inFile->Close();

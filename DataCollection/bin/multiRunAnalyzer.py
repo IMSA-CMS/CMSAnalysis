@@ -4,6 +4,7 @@ import sys
 import os
 import subprocess
 import argparse
+import shutil
 
 reprocessMap = {
     "WWW": [2],
@@ -77,6 +78,7 @@ def loopRun(crab, path, fileCount, skipFiles, fileList, outputFile):
         # calls runAnalyzer
         if crab:
             crab_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/CRAB/"
+            shutil.rmtree(crab_directory + "crab_projects", ignore_errors=True)
             print(file)
             totalFiles = int(subprocess.check_output(["getFileList", file, "count"]))
             # 20 works for most jobs, TTbar and DY50-inf should use 5
@@ -317,7 +319,8 @@ if __name__ == "__main__":
     # jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 
     # COMMENTED FOR ML STRIP
-    jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, data, qcd, wjets]  
+    #jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, data, qcd, wjets]
+    jobsList = [wjets]  
     #jobsList = [dy, qcd, darkPhotonSignal]  
     #jobsList = [darkPhotonSignal, multiBoson]  
     # could further improve this by adding every sub-job as a separate entry
