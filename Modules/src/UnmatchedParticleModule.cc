@@ -24,7 +24,7 @@ void UnmatchedParticleModule::initialize()
   makeHistogram("MatchedParticleEta", "MatchedParticleEta", histBins, etaMin, etaMax);
 
   auto EtaCSHist = new TH2F("EtaCSHist", "EtaCSHist", histBins, cosMin, cosMax, histBins, etaMin, etaMax);
-  addObject("EtaCSHist", EtaCSHist);
+  addObject("EtaCSHist", "", EtaCSHist);
 
 }
 
@@ -47,7 +47,7 @@ bool UnmatchedParticleModule::process()
 	  auto collinsSoper = genParticles.getCollinsSoper();
 	  auto eta = genParticle.getEta();
 
-	  auto EtaCSHist = dynamic_cast<TH2*>(getObject("EtaCSHist"));
+	  auto EtaCSHist = dynamic_cast<TH2*>(getObject("", "EtaCSHist"));
 	  EtaCSHist->Fill(collinsSoper, eta);
 
 	  for (auto& matchingParticle : matchingParticlesVector)
@@ -61,11 +61,11 @@ bool UnmatchedParticleModule::process()
 	  
 	  if (!isMatched)
 	    {
-	      fillHistogram("UnmatchedParticleEta", {genParticle.getEta()});
+	      fillHistogram("", "UnmatchedParticleEta", {genParticle.getEta()});
 	    }
 	  else
 	    {
-	      fillHistogram("MatchedParticleEta", {genParticle.getEta()});
+	      fillHistogram("", "MatchedParticleEta", {genParticle.getEta()});
 	    }
 	}
     }
