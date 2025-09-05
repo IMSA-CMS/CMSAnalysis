@@ -10,7 +10,7 @@ public:
   FilterStringModule();
 
   bool process() override;
-  void finalizeFilterString() override;
+  void writeObjects(TFile *outFile) override;
   void finalize() override{};
 
   virtual std::string getName() override {return "FilterStringModule";}

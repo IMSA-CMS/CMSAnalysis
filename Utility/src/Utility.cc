@@ -145,3 +145,25 @@ int Utility::gcf(std::vector<int> nums) {
 
   return toReturn;
 }
+
+void writeRootObj(TFile *outFile, const std::string &path, TObject *obj)
+{
+    if (!outFile->cd(path.c_str()))
+    {
+        if (outFile->mkdir(path.c_str(), "", true) == nullptr)
+        {
+            throw std::runtime_error("Failed to create directory " + path);
+        }
+        if (outFile->cd(path.c_str()) != kTRUE)
+        {
+            throw std::runtime_error("Failed to change directory to " + path);
+        }
+    }
+
+    if (obj->Write() == 0)
+    {
+        throw std::runtime_error("Failed to write object " + std::string(obj->GetName()) + " to " + path);
+    };
+
+    outFile->cd();
+}
