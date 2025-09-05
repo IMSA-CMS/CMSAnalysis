@@ -39,6 +39,8 @@
 #include "CMSAnalysis/Filters/interface/LeptonJetZVetoCut.hh"
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
 #include "CMSAnalysis/Filters/interface/NLeptonJetsFilter.hh"
+#include "CMSAnalysis/Filters/interface/FakePhotonSelector.hh"
+
 // Use 700-1000 2018, DY50
 
 using std::make_shared;
@@ -50,6 +52,7 @@ void LeptonJetReconstructionPlan::initialize()
   auto eventMod = std::make_shared<EventModule>();
   auto eventHistMod = eventMod->getHistogramModule();
   eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5));
+  //eventMod->addSelector(std::make_shared<FakePhotonSelector>(.5));
   //eventMod->addSelector(std::make_shared<LeptonJetAntiSelector>(.5, 0.0001, 0.0005));
 
   auto darkPhotonFilter = std::make_shared<FilterModule>(std::make_shared<DarkPhotonControlRegionFilter>(10));
@@ -217,7 +220,7 @@ void LeptonJetReconstructionPlan::initialize()
   modules.addProductionModule(mlModForHiggs125Analysis);
 
 
-  modules.addProductionModule(eventMod);
+  //modules.addProductionModule(eventMod);
   modules.addFilterModule(darkPhotonFilter);
   modules.addFilterModule(nLeptonJetFilter);
   

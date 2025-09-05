@@ -1,103 +1,68 @@
 #include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
-
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include <unordered_set>
-#include <chrono>
-
+#include "CMSAnalysis/DataCollection/interface/EventLoader.hh"
+#include "CMSAnalysis/Modules/interface/AnalyzerEventInput.hh"
+#include "CMSAnalysis/Modules/interface/Module.hh"
+#include "CMSAnalysis/Plans/interface/ModuleCollection.hh"
+#include "CMSAnalysis/Utility/interface/TDisplayText.h"
 #include "TFile.h"
 #include "TH1.h"
+#include <RtypesCore.h>
+#include <iostream>
+#include <string>
 
-#include "CMSAnalysis/Plans/interface/ModuleCollection.hh"
-
-//trying to get rid of these
-//#include "CMSAnalysis/Modules/interface/AnalysisModule.hh"
-//#include "CMSAnalysis/Modules/interface/FilterModule.hh"
-//#include "CMSAnalysis/Modules/interface/ProductionModule.hh"
-
-
-#include "CMSAnalysis/DataCollection/interface/EventLoader.hh"
-#include "FWCore/Framework/interface/Event.h"
-#include "DataFormats/FWLite/interface/Event.h"
-#include "CMSAnalysis/Modules/interface/Module.hh"
-#include "CMSAnalysis/Utility/interface/TDisplayText.h"
-#include "CMSAnalysis/DataCollection/interface/ProcessDictionary.hh"
-#include "CMSAnalysis/Modules/interface/AnalyzerEventInput.hh"
-
-Analyzer::Analyzer() : 
-eventInterface(nullptr),
-input(new AnalyzerEventInput(&eventInterface))
+Analyzer::Analyzer() : eventInterface(nullptr), input(new AnalyzerEventInput(&eventInterface))
 {
 }
 
 Analyzer::Analyzer(const Analyzer &analyzer)
 {
-  input = analyzer.input;
+    input = analyzer.input;
 }
 
 Analyzer::~Analyzer()
 {
-  delete input;
+    delete input;
 }
 
 void Analyzer::writeOutputFile()
 {
-  // Create the output file
-  outputRootFile->cd();
-  // Finalize the modules
-  for (auto module : productionModules)
-  {
-    module->finalizeEvent();
-  }
-  for (auto module : filterModules)
-  {
-    module->finalizeEvent();
-  }
+    std::map<std::string, TDirectory *> filterDirectories;
 
-  //Finalize separately for each filterString, to be safe
-  //std::cout << "There are " << analysisModules.size() << " analysis modules\n";
-  for (auto module : analysisModules)
-  {
-    // Write the output
-    module->doneProcessing();
-    std::cout << "FilterModules size : " << filterModules.size() << "\n";
-    // if (filterModules.size() != 0)
-    if (true)
+    // Create the output file
+    outputRootFile->cd();
+    // Finalize the modules
+    for (auto module : productionModules)
     {
-      std::cout << "Finalizing analysis module: " << module->getName() << "\n";
-      module->finalizeEvent();
-      for (auto &str : filterNames) //writes analysis modules by filter string
-      {
-        //std::cout << "filterName: " << str << "\n";
-        auto it = filterDirectories.find(str);
-        if (it == filterDirectories.end())
-        {
-          filterDirectories.insert({str,outputRootFile->mkdir((str + "_hists").c_str())});
-        }
-        filterDirectories[str]->cd();
-        module->setFilterString(str);
-        module->finalizeFilterString();
-        outputRootFile->cd();
-      }
-    } else {
-      module->setFilterString("");
-      module->finalizeEvent();
+        module->finalizeEvent();
     }
-  }
+    for (auto module : filterModules)
+    {
+        module->finalizeEvent();
+    }
 
-  for (auto module : getAllModules())
-  {
-    std::cout << "Time taken by " << module->getName() << ": " << module->getElapsedTime() << " s\n";
-  }
+    //Finalize separately for each filterString, to be safe
+    //std::cout << "There are " << analysisModules.size() << " analysis modules\n";
+    for (auto module : analysisModules)
+    {
+        // Write the output
+        module->doneProcessing();
+        std::cout << "FilterModules size : " << filterModules.size() << "\n";
+        std::cout << "Finalizing analysis module: " << module->getName() << "\n";
+        module->finalizeEvent();
+        module->writeObjects(outputRootFile);
+    }
 
+    for (auto module : getAllModules())
+    {
+        std::cout << "Time taken by " << module->getName() << ": " << module->getElapsedTime() << " s\n";
+    }
 
-  // Write total number of events
-  auto eventsText = new TDisplayText(std::to_string(numOfEvents).c_str());
-  eventsText->Write("NEvents");
-  // Clean up
-  //outputRootFile->Close();
-  delete outputRootFile;
+    // Write total number of events
+    auto eventsText = new TDisplayText(std::to_string(numOfEvents).c_str());
+    eventsText->Write("NEvents");
+    // Clean up
+    //outputRootFile->Close();
+    delete outputRootFile;
 }
 
 //gets modules from module collection
@@ -110,133 +75,127 @@ void Analyzer::addModules(ModuleCollection modules)
 
 std::vector<std::shared_ptr<Module>> Analyzer::getAllModules() const
 {
-  std::vector<std::shared_ptr<Module>> modules;
-  for (auto mod : productionModules)
-  {
-    modules.push_back(mod);
-  }
-  for (auto mod : filterModules)
-  {
-    modules.push_back(mod);
-  }
-  for (auto mod : analysisModules)
-  {
-    modules.push_back(mod);
-  }
-  return modules;
+    std::vector<std::shared_ptr<Module>> modules;
+    for (auto mod : productionModules)
+    {
+        modules.push_back(mod);
+    }
+    for (auto mod : filterModules)
+    {
+        modules.push_back(mod);
+    }
+    for (auto mod : analysisModules)
+    {
+        modules.push_back(mod);
+    }
+    return modules;
 }
 
-void Analyzer::initialize(const std::string& outputDirectory,const std::string& outputFile)// am I allowed to change this??
+void Analyzer::initialize(const std::string &outputDirectory,
+                          const std::string &outputFile) // am I allowed to change this??
 {
 
-  std::string outputPath = outputDirectory + "/"+ outputFile;
-  
-  // This keeps the histograms separate from the files they came from, avoiding errors
-  TH1::AddDirectory(kFALSE);
-  TH1::SetDefaultSumw2(kTRUE);
+    std::string outputPath = outputDirectory + "/" + outputFile;
 
+    // This keeps the histograms separate from the files they came from, avoiding errors
+    TH1::AddDirectory(kFALSE);
+    TH1::SetDefaultSumw2(kTRUE);
 
-  outputRootFile = new TFile(outputPath.c_str(), "RECREATE");//<<<<<<<<<<<<<<<
+    outputRootFile = new TFile(outputPath.c_str(), "RECREATE"); //<<<<<<<<<<<<<<<
 
-
-  // Checks if all dependencies are loaded properly
-  for (auto module : getAllModules())
-  {
-    if (!checkModuleDependencies(module))
+    // Checks if all dependencies are loaded properly
+    for (auto module : getAllModules())
     {
-      std::cout << typeid(*module).name() << "'s dependencies have not been loaded properly!\n";
+        if (!checkModuleDependencies(module))
+        {
+            std::cout << typeid(*module).name() << "'s dependencies have not been loaded properly!\n";
+        }
     }
-  }
 
-  std::cout << "Finished checking module dependencies\n";
+    std::cout << "Finished checking module dependencies\n";
 
-  // Initialize all modules
-  for (auto module : getAllModules())
-  {
-    if (!module->getInput())
+    // Initialize all modules
+    for (auto module : getAllModules())
     {
-      module->setInput(input);
+        if (!module->getInput())
+        {
+            module->setInput(input);
+        }
+        module->initialize(); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<same initialize?
     }
-    module->initialize();//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<same initialize?
-  }
 }
 
 void Analyzer::processOneEvent(const EventInterface *eInterface)
 {
-      eventInterface = eInterface;
-      numOfEvents++;
+    eventInterface = eInterface;
+    numOfEvents++;
 
-      bool continueProcessing = true;
-      std::string filterString;
-      // Processes event through production modules
-      for (auto module : productionModules)
-      {
+    bool continueProcessing = true;
+    auto filterStrings = std::vector<std::string>();
+    // Processes event through production modules
+    for (auto module : productionModules)
+    {
         if (!module->processEvent())
         {
-          continueProcessing = false;
-          break;
+            continueProcessing = false;
+            break;
         }
-      }
+    }
 
-      // Processes event through filter modules
-      for (auto module : filterModules)
-      {
+    // Processes event through filter modules
+    for (auto module : filterModules)
+    {
         if (!module->processEvent())
         {
-          continueProcessing = false;
-          break;
+            continueProcessing = false;
+            break;
         }
         else
         {
-          filterString += module->getFilterString();
+            filterStrings.push_back(module->getFilterString());
         }
-        filterString += "_";
-      }
+    }
 
-      // Processes event through analysis modules
-      if (continueProcessing)
-      {
-
-        filterNames.insert(filterString);
-
+    // Processes event through analysis modules
+    if (continueProcessing)
+    {
         for (auto module : analysisModules)
         {
-          module->setFilterString(filterString);
-          if (!module->processEvent())
-          {
-            continueProcessing = false;
-            break;
-          }
+            module->setFilterStrings(filterStrings);
+            if (!module->processEvent())
+            {
+                continueProcessing = false;
+                break;
+            }
         }
-      }
-
+    }
 }
 
 void Analyzer::addProductionModule(std::shared_ptr<ProductionModule> module)
 {
-  productionModules.push_back(module);
+    productionModules.push_back(module);
 }
 
 void Analyzer::addFilterModule(std::shared_ptr<FilterModule> module)
 {
-  filterModules.push_back(module);
+    filterModules.push_back(module);
 }
 void Analyzer::addAnalysisModule(std::shared_ptr<AnalysisModule> module)
 {
-  analysisModules.push_back(module);
+    analysisModules.push_back(module);
 }
 
 bool Analyzer::checkModuleDependencies(std::shared_ptr<Module> module)
 {
-  auto modules = getAllModules();
-  auto dependencies = module->getDependencies();
-  for (auto modulePtr : dependencies)
-  {
-    if (std::find(modules.begin(), modules.end(), modulePtr) == modules.end())
+    auto modules = getAllModules();
+    auto dependencies = module->getDependencies();
+    for (auto modulePtr : dependencies)
     {
-      return false;
-    } 
-  }
+        if (std::find(modules.begin(), modules.end(), modulePtr) == modules.end())
+        {
+            return false;
+        }
+    }
 
-  return true;
+    return true;
 }

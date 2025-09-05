@@ -44,14 +44,14 @@ std::map<std::string, std::string> histogramMap =
 
 // maybe should be different ranges for different channels?
 std::map<std::string, std::pair<int, int>> backgroundsToRange = {
-	{"Drell-Yan Background", {0, 2000}}
+	{"Drell-Yan Background", {50, 2000}}
 };
 
 // run in batch mode for faster processing: root -b HiggsBackgroundFit.C+
 void FitFunctionMapping()
 {
 	std::string fitParameterValueFile = Utility::getBasePath() + "Analysis/bin/fitting/H++BackgroundFunctions2.txt";
-	std::string fitOutputFile = Utility::getBasePath() + "Analysis/bin/fitting/Drell-YanMappedFits2.root";
+	std::string fitOutputFile = Utility::getBasePath() + "Analysis/bin/fitting/Drell-YanMappedFits.root";
 	auto fitRootFile = TFile::Open(fitOutputFile.c_str(), "RECREATE");
     std::shared_ptr<HiggsCompleteAnalysis> analysis = std::make_shared<HiggsCompleteAnalysis>();
     std::cout << "Loaded histogram\n";

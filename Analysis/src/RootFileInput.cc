@@ -12,12 +12,12 @@
 #include <vector>
 #include <map>
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
+#include "CMSAnalysis/Analysis/interface/HistNameFinder.hh"
 
-RootFileInput::RootFileInput(std::string fileName, std::vector<HistVariable> iHistVariables, 
-std::map<std::string, std::string> HistVariableToFileMapping) : 
-	histVariables(iHistVariables), 
+RootFileInput::RootFileInput(std::string fileName, 
+std::shared_ptr<HistNameFinder> ihistVariableToFileMapping) : 
 	fileSource(fileName), 
-	HistVariableToFileMapping(HistVariableToFileMapping)
+	histVariableToFileMapping(ihistVariableToFileMapping)
 {} 
 	
 TFile* RootFileInput::getFile(std::string fileSource) const
@@ -40,29 +40,9 @@ TFile* RootFileInput::getFile(std::string fileSource) const
 TH1* RootFileInput::getHist(HistVariable histType) const
 {
 	TH1::AddDirectory(kFALSE);
-	//std::cout << "RootFileInput Hit 1 " << std::endl;
-	/*
-	std::string name = "";
-	std::cout << "histype: " << histType.getName() << std::endl;
-	for(HistVariable histVar : histVariables) 
-	{
-		//std::cout << histVar.getName() << std::endl;
-	    if(histVar.getName() == histType.getName()) 
-		{
-			name = histVar.getHistName();
-	    }
-	}
-	*/
 
-	std::string name;
-	if (HistVariableToFileMapping.find(histType.getName()) != HistVariableToFileMapping.end()) 
-	{
-		name = HistVariableToFileMapping.at(histType.getName());
-	} 
-	else
-	{
-		throw std::runtime_error("HistVariable name [" + histType.getName() + "] not found in mapping [" + fileSource + "]!");
-	}
+	std::string name = histVariableToFileMapping->getHistName(histType);
+
 
 	TH1* hist;
 	uint pos = name.find("/");
@@ -145,17 +125,25 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 	// {
 		TH1* response = new TH1F("Hist Clone", hist->GetTitle(), hist->GetXaxis()->GetNbins(), hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
 
-		if (histType.is2DHistX)
-		{
-			TH2* hist2D = dynamic_cast<TH2 *>(hist);
-			response = hist2D->ProjectionX("_px", 0, -1, "E");
-		}
-		else if (histType.is2DHistY)
-		{
-			TH2* hist2D = dynamic_cast<TH2 *>(hist);
-			response = hist2D->ProjectionY("_py", 0, -1, "E");
-		}
-		else
+		// if (histType.is2DHistX())
+		// {
+		// 	TH2* hist2D = dynamic_cast<TH2 *>(hist);
+		// 	if (hist2D == nullptr)
+		// 	{
+		// 		throw std::runtime_error("Cast error");
+		// 	}
+		// 	response = hist2D->ProjectionX("_px", 0, -1, "E");
+		// }
+		// else if (histType.is2DHistY())
+		// {
+		// 	TH2* hist2D = dynamic_cast<TH2 *>(hist);
+		// 	if (hist2D == nullptr)
+		// 	{
+		// 		throw std::runtime_error("Cast error");
+		// 	}
+		// 	response = hist2D->ProjectionY("_py", 0, -1, "E");
+		// }
+		// else
 		{
 			response->Add(hist);
 		}
@@ -170,12 +158,8 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 
 TH1* RootFileInput::get2DHist(HistVariable histType) const
 {
-	std::string name = "";
-	for(HistVariable histVar : histVariables) {
-	    if(histVar.getName() == histType.getName()) {
-			name = histVar.getName();
-	    }
-	}
+	std::string name = histVariableToFileMapping->getHistName(histType);
+
 	auto file = getFile(fileSource);
 	TH1* hist = (TH2F *)file->Get(name.c_str());
 	if (!hist)

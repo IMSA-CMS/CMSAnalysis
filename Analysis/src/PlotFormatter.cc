@@ -1084,7 +1084,7 @@ void PlotFormatter::Bin(std::vector<TH1*>& hists, TH1*& first, int& firstIndex, 
     {
         if(scaleToExpected) 
         {
-           if(hist->Integral() != 0 && !isnan(hist->Integral())) 
+           if(hist->Integral() != 0 && !std::isnan(hist->Integral())) 
            {
 	        hist->Scale(1/hist->Integral());
 		    hist->SetFillColor(kWhite);
