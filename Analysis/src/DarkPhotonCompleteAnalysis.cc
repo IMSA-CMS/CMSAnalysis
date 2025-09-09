@@ -59,45 +59,45 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
 
     //cross sections should be all lowercase
     auto ttbarBackground = std::make_shared<Process>("TTBar Background", 2);
-    ttbarBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTbar.root", "ttbar_lep", reader, luminosity, histVariableToFileMapping));
-    ttbarBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTW.root", "TTW", reader, luminosity, histVariableToFileMapping));
-    ttbarBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "TTZ.root", "TTZ", reader, luminosity, histVariableToFileMapping));
+    ttbarBackground->addProcess(makeBasicProcess(filePath, "TTbar.root", "ttbar_lep", reader, luminosity, histVariableToFileMapping));
+    ttbarBackground->addProcess(makeBasicProcess(filePath, "TTW.root", "TTW", reader, luminosity, histVariableToFileMapping));
+    ttbarBackground->addProcess(makeBasicProcess(filePath, "TTZ.root", "TTZ", reader, luminosity, histVariableToFileMapping));
     
     auto zzBackground = std::make_shared<Process>("ZZ Background", 4);
-    //zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ_Decay_4L_Run_2.root", "ZZTo4L", reader, luminosity));
-    zzBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZ.root", "ZZTo2e2mu", reader, luminosity, histVariableToFileMapping));
+    //zzBackground->addProcess(makeBasicProcess(filePath, "ZZ_Decay_4L_Run_2.root", "ZZTo4L", reader, luminosity));
+    zzBackground->addProcess(makeBasicProcess(filePath, "ZZ.root", "ZZTo2e2mu", reader, luminosity, histVariableToFileMapping));
 
     auto dyBackground = std::make_shared<Process>("DY Background", 3);
-    dyBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "DY10-50.root", "dy10to50", reader, luminosity, histVariableToFileMapping));
-    dyBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "DY50-inf.root", "dy50toInf", reader, luminosity, histVariableToFileMapping));
+    dyBackground->addProcess(makeBasicProcess(filePath, "DY10-50.root", "dy10to50", reader, luminosity, histVariableToFileMapping));
+    dyBackground->addProcess(makeBasicProcess(filePath, "DY50-inf.root", "dy50toInf", reader, luminosity, histVariableToFileMapping));
     
     auto qcdBackground = std::make_shared<Process>("QCD Background", 8);
-    qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD100-200.root", "QCD_100-200", reader, luminosity, histVariableToFileMapping));
-    qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD200-300.root", "QCD_200-300", reader, luminosity, histVariableToFileMapping));
-    qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD300-500.root", "QCD_300-500", reader, luminosity, histVariableToFileMapping));
-    qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD500-700.root", "QCD_500-700", reader, luminosity, histVariableToFileMapping));
-    qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD700-1000.root", "QCD_700-1000", reader, luminosity, histVariableToFileMapping));
-    qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD1000-1500.root", "QCD_1000-1500", reader, luminosity, histVariableToFileMapping));
-    qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD1500-2000.root", "QCD_1500-2000", reader, luminosity, histVariableToFileMapping));
-    qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD2000-inf.root", "QCD_2000-inf", reader, luminosity, histVariableToFileMapping));
-    //#qcdBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "QCD_HTCut_2000-Inf_Run_2_Year_2018.root", "QCD_2000-Inf", reader, luminosity));
+    qcdBackground->addProcess(makeBasicProcess(filePath, "QCD100-200.root", "QCD_100-200", reader, luminosity, histVariableToFileMapping));
+    qcdBackground->addProcess(makeBasicProcess(filePath, "QCD200-300.root", "QCD_200-300", reader, luminosity, histVariableToFileMapping));
+    qcdBackground->addProcess(makeBasicProcess(filePath, "QCD300-500.root", "QCD_300-500", reader, luminosity, histVariableToFileMapping));
+    qcdBackground->addProcess(makeBasicProcess(filePath, "QCD500-700.root", "QCD_500-700", reader, luminosity, histVariableToFileMapping));
+    qcdBackground->addProcess(makeBasicProcess(filePath, "QCD700-1000.root", "QCD_700-1000", reader, luminosity, histVariableToFileMapping));
+    qcdBackground->addProcess(makeBasicProcess(filePath, "QCD1000-1500.root", "QCD_1000-1500", reader, luminosity, histVariableToFileMapping));
+    qcdBackground->addProcess(makeBasicProcess(filePath, "QCD1500-2000.root", "QCD_1500-2000", reader, luminosity, histVariableToFileMapping));
+    qcdBackground->addProcess(makeBasicProcess(filePath, "QCD2000-inf.root", "QCD_2000-inf", reader, luminosity, histVariableToFileMapping));
+    //#qcdBackground->addProcess(makeBasicProcess(filePath, "QCD_HTCut_2000-Inf_Run_2_Year_2018.root", "QCD_2000-Inf", reader, luminosity));
 
     auto multiBosonBackground = std::make_shared<Process>("MultiBoson Background", 6);
-    multiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WW.root", "WWTo2L2Nu", reader, luminosity, histVariableToFileMapping));
-    multiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WWW.root", "WWW", reader, luminosity, histVariableToFileMapping));
-    multiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WWZ.root", "WWZ", reader, luminosity, histVariableToFileMapping));
-    multiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WZ.root", "WZTo3LNu", reader, luminosity, histVariableToFileMapping));
-    multiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "WZZ.root", "WWZ", reader, luminosity, histVariableToFileMapping));
-    multiBosonBackground->addProcess(makeBasicProcess(histVariablesBackground, filePath, "ZZZ.root", "ZZZ", reader, luminosity, histVariableToFileMapping));
+    multiBosonBackground->addProcess(makeBasicProcess(filePath, "WW.root", "WWTo2L2Nu", reader, luminosity, histVariableToFileMapping));
+    multiBosonBackground->addProcess(makeBasicProcess(filePath, "WWW.root", "WWW", reader, luminosity, histVariableToFileMapping));
+    multiBosonBackground->addProcess(makeBasicProcess(filePath, "WWZ.root", "WWZ", reader, luminosity, histVariableToFileMapping));
+    multiBosonBackground->addProcess(makeBasicProcess(filePath, "WZ.root", "WZTo3LNu", reader, luminosity, histVariableToFileMapping));
+    multiBosonBackground->addProcess(makeBasicProcess(filePath, "WZZ.root", "WWZ", reader, luminosity, histVariableToFileMapping));
+    multiBosonBackground->addProcess(makeBasicProcess(filePath, "ZZZ.root", "ZZZ", reader, luminosity, histVariableToFileMapping));
     
     auto darkPhotonSignal = std::make_shared<Process>("Dark Photon Signal", 5);
-    darkPhotonSignal->addProcess(makeBasicProcess(histVariablesBackground, filePath, "darkPhotonBaselineRun2.root", "DarkPhoton", reader, luminosity, histVariableToFileMapping));
+    darkPhotonSignal->addProcess(makeBasicProcess(filePath, "darkPhotonBaselineRun2.root", "DarkPhoton", reader, luminosity, histVariableToFileMapping));
 
     auto darkPhotonData = std::make_shared<Process>("Data", 1);
-    darkPhotonData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2016.root", "Muon2016", reader, luminosity, histVariableToFileMapping));
-    darkPhotonData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2016APV.root", "Muon2016APV", reader, luminosity, histVariableToFileMapping));
-    darkPhotonData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2017.root", "Muon2017", reader, luminosity, histVariableToFileMapping));
-    darkPhotonData->addProcess(makeBasicProcess(histVariablesBackground, filePath, "Muon2018.root", "Muon2018", reader, luminosity, histVariableToFileMapping));
+    darkPhotonData->addProcess(makeBasicProcess(filePath, "Muon2016.root", "Muon2016", reader, luminosity, histVariableToFileMapping));
+    darkPhotonData->addProcess(makeBasicProcess(filePath, "Muon2016APV.root", "Muon2016APV", reader, luminosity, histVariableToFileMapping));
+    darkPhotonData->addProcess(makeBasicProcess(filePath, "Muon2017.root", "Muon2017", reader, luminosity, histVariableToFileMapping));
+    darkPhotonData->addProcess(makeBasicProcess(filePath, "Muon2018.root", "Muon2018", reader, luminosity, histVariableToFileMapping));
 
     processes.push_back(ttbarBackground);
     processes.push_back(zzBackground);

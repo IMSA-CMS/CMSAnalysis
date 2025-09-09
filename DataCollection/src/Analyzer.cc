@@ -49,7 +49,7 @@ void Analyzer::writeOutputFile()
         std::cout << "FilterModules size : " << filterModules.size() << "\n";
         std::cout << "Finalizing analysis module: " << module->getName() << "\n";
         module->finalizeEvent();
-        module->finalizeFilterString(outputRootFile);
+        module->writeObjects(outputRootFile);
     }
 
     for (auto module : getAllModules())
@@ -131,7 +131,7 @@ void Analyzer::processOneEvent(const EventInterface *eInterface)
     numOfEvents++;
 
     bool continueProcessing = true;
-    std::string filterString;
+    auto filterStrings = std::vector<std::string>();
     // Processes event through production modules
     for (auto module : productionModules)
     {
@@ -152,9 +152,8 @@ void Analyzer::processOneEvent(const EventInterface *eInterface)
         }
         else
         {
-            filterString += module->getFilterString();
+            filterStrings.push_back(module->getFilterString());
         }
-        filterString += "_";
     }
 
     // Processes event through analysis modules
@@ -162,7 +161,7 @@ void Analyzer::processOneEvent(const EventInterface *eInterface)
     {
         for (auto module : analysisModules)
         {
-            module->setFilterString(filterString);
+            module->setFilterStrings(filterStrings);
             if (!module->processEvent())
             {
                 continueProcessing = false;
