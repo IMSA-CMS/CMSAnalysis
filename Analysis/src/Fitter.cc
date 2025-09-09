@@ -204,7 +204,7 @@ TCanvas* Fitter::fitPowerLaw(TH1* histogram, FitFunction& fitFunction)
 	// setting this as L (log likelihood) fit
 	// gives much worse fits for some graphs but seg faults without L sometimes?
 	// Root says better when histogram represents counts
-	TFitResultPtr result = histogram->Fit(fitFunction.getFunction(), "SLQRWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
+	TFitResultPtr result = histogram->Fit(fitFunction.getFunction(), "SLQR", "", fitFunction.getMin(), fitFunction.getMax());
 
 
 	// shouldn't even be doing this? we're minimizing log likelihood, not chi2
@@ -214,7 +214,7 @@ TCanvas* Fitter::fitPowerLaw(TH1* histogram, FitFunction& fitFunction)
 		std::cout << "Chi2: " << result->Chi2() << '\n';
 		chi2 = result->Chi2();
 		fitFunction.getFunction()->SetParameters(result->Parameter(0), result->Parameter(1), result->Parameter(2));
-		result = histogram->Fit(fitFunction.getFunction(), "SLQRWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
+		result = histogram->Fit(fitFunction.getFunction(), "SWLQRWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
 	}
 
 	gStyle->SetOptFit(1111);

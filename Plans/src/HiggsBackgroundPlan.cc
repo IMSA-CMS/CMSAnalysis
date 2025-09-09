@@ -28,6 +28,13 @@
 #include "CMSAnalysis/Histograms/interface/METHist.hh"
 #include "CMSAnalysis/Histograms/interface/NLeptonsHist.hh"
 #include "CMSAnalysis/Histograms/interface/SameSignInvariantMassHist.hh"
+#include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
+#include "CMSAnalysis/Histograms/interface/Histograms.hh"
+#include "CMSAnalysis/Filters/interface/HiggsTriggerCut.hh"
+
+
+#include "CMSAnalysis/Modules/interface/TriggerModule.hh"
+#include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
 #include "CMSAnalysis/Histograms/interface/TwoInvariantMassesHist.hh"
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
 #include "CMSAnalysis/Modules/interface/FilterModule.hh"
@@ -124,20 +131,6 @@ void HiggsBackgroundPlan::initialize()
     eventHistMod->addHistogram(xProjection);
     eventHistMod->addHistogram(yProjection);
 
-    auto runFilter = make_shared<RunFilter>();
-    runFilter->addRunNumber(302337);
-    runFilter->addRunNumber(302392);
-    runFilter->addRunNumber(302573);
-    runFilter->addRunNumber(302634);
-    runFilter->addRunNumber(302635);
-    runFilter->addRunNumber(302131);
-    runFilter->addRunNumber(302163);
-    runFilter->addRunNumber(302225);
-    runFilter->addRunNumber(302494);
-    runFilter->addRunNumber(302596);
-    runFilter->addRunNumber(302597);
-    auto runFilterMod = make_shared<FilterModule>(runFilter);
-
     // modules.addProductionModule(metMod);
     // //Changed because EventModule inherits from ProductionModule now
     modules.addProductionModule(eventMod);
@@ -145,11 +138,11 @@ void HiggsBackgroundPlan::initialize()
     modules.addFilterModule(zVetoFilterMod);
     modules.addFilterModule(recoDecayFilterMod);
     //modules.addFilterModule(make_shared<FilterModule>(bJetFilter));
-    modules.addAnalysisModule(leptonEfficiency);
+    //modules.addAnalysisModule(leptonEfficiency);
     modules.addAnalysisModule(eventHistMod);
     modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
-    //modules.addFilterModule(runFilterMod);
-    modules.addAnalysisModule(eventDump);
+    //modules.addFilterModule(runFilterMod); 
+    //modules.addAnalysisModule(eventDump);
     auto hPlusPlusEfficiency = make_shared<HPlusPlusEfficiency>();
     hPlusPlusEfficiency->setInput(eventMod->getEventInput());
     modules.addAnalysisModule(hPlusPlusEfficiency);
