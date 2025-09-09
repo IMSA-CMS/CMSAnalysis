@@ -24,6 +24,8 @@ FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string& fi
 		throw std::runtime_error("File not loaded successfully");
 	}
 }
+
+
 void FitFunctionCollection::saveFunctions(const std::string& fileName, bool append)
 {
 	std::fstream file;
@@ -39,13 +41,88 @@ void FitFunctionCollection::saveFunctions(const std::string& fileName, bool appe
 		throw std::invalid_argument(fileName + " file is already open");
 	}
 
-	file << functions.size() << '\n';
+
+	std::map<std::string, std::vector<FitFunction>> channel_parameters;
+	std::vector<std::string> channelNames;
+
+	// file << functions.size() << '\n';
+
 	for (auto& funcPair : functions)
 	{
-		file << funcPair.second << "\n";
+		std::string channel = funcPair.second.getChannelName();
+		auto channelExists = std::find(channelNames.begin(), channelNames.end(), channel);
+		if (channelExists == channelNames.end())
+		{
+			std::cout << channel << " does not exist in file";
+			channelNames.push_back(channel);
+			channel_parameters[channel] = {funcPair.second};
+		}
+		else
+		{
+			std::cout << channel << " exists in file";
+			channel_parameters[channel].push_back(funcPair.second);
+		}
+
+		//file << funcPair.second << "\n";
 	}
+
+	for (std::string channel : channelNames)
+	{
+		file << "Channel name: " << channel << '\n' << '\n';
+		std::vector<FitFunction> functionParameters = channel_parameters.at(channel);
+		file << "Calculated Parameters" << "		";
+		
+		// Get labels for parameters like p0, p1, etc. from first function in functionParameters
+		auto firstFunction = channel_parameters.at(channel)[0].getFunction();
+		for (int i = 0; i < firstFunction->GetNpar(); ++i)
+		{
+			file << firstFunction->GetParName(i) << "		";
+		}
+		for (int i = 0; i < firstFunction->GetNpar(); ++i)
+		{
+			file << firstFunction->GetParName(i) << "_error" << "		";
+		}
+
+
+		// List out the functions with their values for each parameter
+		for (auto& parameter : functionParameters)
+		{
+			file << parameter;
+		}
+
+		file << '\n' << '\n' << '\n';
+
+
+	}
+
 	file.close();
 }
+
+
+
+
+// void FitFunctionCollection::saveFunctions(const std::string& fileName, bool append)
+// {
+// 	std::fstream file;
+// 	if (!file.is_open()) 
+// 	{
+// 		if (append) 
+// 			file = std::fstream(fileName, std::ios_base::app);
+// 		else
+// 			file = std::fstream(fileName, std::ios_base::out);
+// 	} 
+// 	else 
+// 	{
+// 		throw std::invalid_argument(fileName + " file is already open");
+// 	}
+
+// 	file << functions.size() << '\n';
+// 	for (auto& funcPair : functions)
+// 	{
+// 		file << funcPair.second << "\n";
+// 	}
+// 	file.close();
+// }
 
 FitFunctionCollection::FitFunctionCollection() {}
 
