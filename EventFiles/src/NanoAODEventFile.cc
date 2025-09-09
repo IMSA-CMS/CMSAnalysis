@@ -154,7 +154,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
 
     if (branch_1 && branch_2 && branch_3) // version 12
     {
-        int versionNum = 12;
+        // int versionNum = 12;
         treeVariables.push_back(std::make_shared<TreeVariable<TTreeReaderValue<Int_t>>>("elec_size", "nElectron"));
         treeVariables.push_back(std::make_shared<TreeVariable<TTreeReaderValue<Int_t>>>("muon_size", "nMuon"));
         treeVariables.push_back(std::make_shared<TreeVariable<TTreeReaderValue<Int_t>>>("photon_size", "nPhoton"));
@@ -162,7 +162,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
     }
     else // version 9
     {
-        int versionNum = 9;
+        // int versionNum = 9;
         treeVariables.push_back(std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("elec_size", "nElectron"));
         treeVariables.push_back(std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("muon_size", "nMuon"));
         treeVariables.push_back(std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("photon_size", "nPhoton"));
