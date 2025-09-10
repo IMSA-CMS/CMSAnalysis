@@ -11,7 +11,8 @@ public:
 	{
 		EXPRESSION_FORMULA,
 		DOUBLE_SIDED_CRYSTAL_BALL,
-		POWER_LAW
+		POWER_LAW,
+        DOUBLE_GAUSSIAN,
 	};
 
 	// static const std::vector<std::string> functionList;
@@ -19,6 +20,7 @@ public:
 
 	static double powerLaw(double *x, double *par);
 	static double DSCB(double* x, double* par);
+	static double doubleGaussian(double* x, double* par);
 
 	// static std::vector<FitFunction> loadFunctions(const std::string& fileName);
 	// static void saveFunctions(std::vector<FitFunction>& functions, const std::string& fileName);
