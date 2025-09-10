@@ -15,6 +15,14 @@
 #include <string>
 #include <vector>
 
+std::vector<std::string> HiggsCompleteAnalysis::genSimDecays{"eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu",
+                                            "euet", "euuu", "euut", "eutt", "etet", "etuu", "etut",
+                                            "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt"};
+
+std::vector<std::string> HiggsCompleteAnalysis::recoDecays{"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu",
+                                          "uue",  "uuu",  "ee",   "e e",  "eu",   "e u",  "uu",  "u u", "none"};
+
+
 double HiggsCompleteAnalysis::getBranchingRatio(const std::string &channel)
 {
     std::unordered_map<std::string, double> originalRatios = {{"ee", 3.0 / 2}, {"eu", 3.0 / 4}, {"uu", 3.0 / 2},
@@ -52,6 +60,9 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     // std::make_shared<CrossSectionReader>("/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
     auto reader = std::make_shared<CrossSectionReader>(
         "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+        //  const std::string filePath = "/uscms/home/bhenning/Analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/HiggsFinal/";
+    // const std::string signalFilePath = "/uscms/home/bhenning/Analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/HiggsFinal/";
+
     const std::string filePath = "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/HiggsProjection/";
     const std::string signalFilePath =
         "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/HiggsProjection/";
@@ -124,7 +135,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
                 std::cout << "GENSIMDECAY: " << genSimDecay << std::endl;
                 std::cout << "BRANCHINGRATIOFIXER " << branchingRatioFixer << std::endl;
                 auto higgsProcess = makeBasicProcess(signalFilePath, "Higgs" + std::to_string((int)massTarget) + ".root", "higgs4l" + std::to_string((int)massTarget), reader, luminosity, histVariableToFileMapping, false, branchingRatioFixer);
-                auto higgsSignal = std::make_shared<Process>("Higgs signal " + genSimDecay + " " + std::to_string((int)massTarget), 1);
+                auto higgsSignal = std::make_shared<Process>("Higgs signal " + decayName + " " + std::to_string((int)massTarget), 1);
                 higgsSignal->addProcess(higgsProcess);
                 processes.push_back(higgsSignal);
                 higgsMassGroup->addProcess(higgsProcess);
@@ -134,7 +145,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
 
 
 
-        auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(recoDecay);
+        auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(decayName);
 
         
 
@@ -212,7 +223,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         processes.push_back(wJetsBackground);
 
 
-        auto leptonProcesses = std::make_shared<Channel>(recoDecay, processes);
+        auto leptonProcesses = std::make_shared<Channel>(decayName, processes);
 
         for (std::string processName : leptonProcesses->getNames())
         {

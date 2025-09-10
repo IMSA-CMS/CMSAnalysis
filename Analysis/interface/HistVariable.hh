@@ -33,19 +33,11 @@ class HistVariable
     HistVariable(ParticleType type, int order, VariableType var, std::string unit = "", 
         bool is2DHistX = false, bool is2DHistY = false);
 
-    // HistVariable(VariableType var, std::string unit = "", 
-    //     bool is2DHistX = false, bool is2DHistY = false);
+    HistVariable(VariableType var, std::string unit = "", 
+        bool is2DHistX = false, bool is2DHistY = false);
 
     std::string getName() const;
 
-    bool is2DHistX()
-    {
-        return is2DHistX_;
-    }
-    bool is2DHistY()
-    {
-        return is2DHistY_;
-    }
     std::string getUnit() const
     {
         return unit;

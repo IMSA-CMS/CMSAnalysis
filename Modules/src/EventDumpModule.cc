@@ -32,7 +32,7 @@ bool EventDumpModule::process()
   
   if(counter < numOfEvents || numOfEvents == -1)
   {
-    if (getFilter() == "eeeu_") 
+    //if (getFilter() == "eeeu_") 
     {
       std::ofstream my_file;
       if(genSim)

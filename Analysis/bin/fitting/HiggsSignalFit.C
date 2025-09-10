@@ -12,8 +12,8 @@
 #define _USE_MATH_DEFINES
 
 std::vector<HistVariable> histogramTypes = {
-    HistVariable(Selector::None, VariableType::RecoInvariantMassBackground, "", true, false),
-    HistVariable(Selector::None, VariableType::RecoInvariantMassBackground, "", false, true),
+    HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
+    HistVariable(HistVariable::VariableType::InvariantMass, "", false, true),
 };
 
 const int minData = 100;
@@ -42,9 +42,9 @@ void HiggsSignalFit()
 
     for (const auto &histType : histogramTypes)
     {
-        for (const auto &recoDecay : recoDecays)
+        for (const auto &recoDecay : HiggsCompleteAnalysis::recoDecays)
         {
-            for (const auto &genSimDecay : genSimDecays)
+            for (const auto &genSimDecay : HiggsCompleteAnalysis::genSimDecays)
             {
                 auto channel = recoDecay + "_" + genSimDecay;
                 std::unordered_map<std::string, double> massValues;
@@ -60,7 +60,6 @@ void HiggsSignalFit()
                 for (auto mass : masses)
                 {
                     std::cerr << "mass: " << mass << std::endl;
-                    // update this to use all gensim decays, not just the same as reco
                     auto process = targetChannel->findProcess("Higgs signal " + channel + " " + std::to_string(mass));
                     TH1 *selectedHist = process->getHist(histType, true);
 
@@ -71,8 +70,16 @@ void HiggsSignalFit()
 
                     std::string keyName = channel + "/" + std::to_string(mass) + '_' + histType.getName();
 
-                    FitFunction func = FitFunction::createFunctionOfType(FitFunction::DOUBLE_SIDED_CRYSTAL_BALL,
-                                                                         keyName, "", min, max);
+                    FitFunction func;
+                    if (genSimDecay.find('t') != std::string::npos)
+                    {
+                        func = FitFunction::createFunctionOfType(FitFunction::DOUBLE_GAUSSIAN, keyName, "", min, max);
+                    }
+                    else
+                    {
+                        func = FitFunction::createFunctionOfType(FitFunction::DOUBLE_SIDED_CRYSTAL_BALL, keyName, "",
+                                                                 min, max);
+                    }
                     currentFunctions.insert(func);
                     histogramMap.insert({keyName, selectedHist});
                     massValues.insert({keyName, mass});

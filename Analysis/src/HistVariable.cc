@@ -35,37 +35,36 @@ HistVariable::HistVariable(ParticleType type, int order, VariableType var, std::
     assert(!(is2DHistX_ && is2DHistY_));
 }
 
+HistVariable::HistVariable(VariableType var, std::string unit, bool is2DHistX, bool is2DHistY) : 
+    HistVariable(ParticleType::none(), 0, var, unit, is2DHistX, is2DHistY)
+{}
+
 std::string HistVariable::getName() const
 {
     std::string name = "";
 
-    switch (order_)
+    if (order_ > 0)
     {
-    case 1:
-        name += "1st ";
-        break;
-    case 2:
-        name += "2nd ";
-        break;
-    case 3:
-        name += "3rd ";
-        break;
-    default:
-        name += std::to_string(order_) + "th ";
-        break;
+        switch (order_)
+        {
+        case 1:
+            name += "1st ";
+            break;
+        case 2:
+            name += "2nd ";
+            break;
+        case 3:
+            name += "3rd ";
+            break;
+        default:
+            name += std::to_string(order_) + "th ";
+            break;
+        }
     }
 
-    if (particleType == ParticleType::electron())      
+    if (particleType != ParticleType::none())
     {
-        name += "e- ";
-    }
-    else if (particleType == ParticleType::muon()) 
-    {
-        name += "mu- ";
-    }    
-    else if (particleType == ParticleType::tau()) 
-    {
-        name += "tau- ";
+        name += particleType.getName() + ' ';
     }
 
 
@@ -99,11 +98,6 @@ std::string HistVariable::getName() const
     {
         name += " Y Projection";
     }
-
-	if (!unit.empty())
-	{
-	   // name += " [" + unit + "]";
-	}
 
     return name;
 }
