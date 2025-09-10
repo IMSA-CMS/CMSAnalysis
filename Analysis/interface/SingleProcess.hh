@@ -31,7 +31,6 @@ class SingleProcess
         double getMassTarget() const {return estimator->getMassTarget();}
         std::shared_ptr<Input> getInput() const {return input;}
         //Makes sure that the process contains all of the hists that will be needed
-        bool checkValidity();
 
     private:
         const std::string nickname;
