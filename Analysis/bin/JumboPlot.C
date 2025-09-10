@@ -120,7 +120,13 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, std::
 				TString yAxisName = "Events";
 				dataName = Utility::removeSpaces(dataType);
 				fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
-				HistVariable fullDataType = HistVariable(connecter + dataType);
+				
+				int order = HistVariable::stringToOrder(connecter);
+				ParticleType part = HistVariable::stringToParticle(connecter);
+				HistVariable::VariableType varType = HistVariable::stringToVariableType(dataType);
+
+				HistVariable fullDataType(part, order, varType);
+
 				//bool includeSignal = false;
 				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, false, includeSignal, includeData, channel->getName());
 				canvas->SaveAs(fileName.c_str());
@@ -164,7 +170,11 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, std::
 				TString yAxisName = "Events";
 				dataName = Utility::removeSpaces(dataType);
 				fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
-				HistVariable fullDataType = HistVariable(connecter + dataType);
+				int order = HistVariable::stringToOrder(connecter);
+				ParticleType part = HistVariable::stringToParticle(connecter);
+				HistVariable::VariableType varType = HistVariable::stringToVariableType(dataType);
+
+				HistVariable fullDataType(part, order, varType);
 				//bool includeSignal = false;
 				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, false, includeSignal, includeData, channel->getName());
 				canvas->SaveAs(fileName.c_str());
@@ -211,17 +221,17 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, std::
 					TString yAxisName = "Events";
 					dataName = Utility::removeSpaces(dataType);
 					fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
-					HistVariable fullDataType = HistVariable(connecter + dataType);
+					int order = HistVariable::stringToOrder(connecter);
+					ParticleType part = HistVariable::stringToParticle(connecter);
+					HistVariable::VariableType varType = HistVariable::stringToVariableType(dataType);
+
+					HistVariable fullDataType(part, order, varType, "", (i == 0), (i == 1));
 					if (i == 0)
 					{
-						fullDataType.is2DHistX = true;
-						fullDataType.is2DHistY = false;
 						fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "X" + "DataMC.png";
 					}
 					else
 					{
-						fullDataType.is2DHistY = true;						
-						fullDataType.is2DHistX = false;
 						fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "Y" + "DataMC.png";
 					}
 					//bool includeSignal = false;

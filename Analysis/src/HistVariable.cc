@@ -107,3 +107,33 @@ std::string HistVariable::getName() const
 
     return name;
 }
+
+HistVariable::VariableType HistVariable::stringToVariableType(const std::string& varStr)
+{
+    if (varStr == "Eta") return VariableType::Eta;
+    if (varStr == "Phi") return VariableType::Phi;
+    if (varStr == "Pt") return VariableType::Pt;
+    if (varStr == "Same Sign Invariant Mass") return VariableType::SameSignInvariantMass;
+    if (varStr == "Opposite Sign Invariant Mass") return VariableType::OppositeSignInvariantMass;
+    if (varStr == "Reco Invariant Mass Background") return VariableType::InvariantMass;
+
+    throw std::invalid_argument("Unknown variable type: " + varStr);
+}
+
+int HistVariable::stringToOrder(const std::string& connecter)
+{
+    if (connecter.find("1st") != std::string::npos) return 1;
+    if (connecter.find("2nd") != std::string::npos) return 2;
+    if (connecter.find("3rd") != std::string::npos) return 3;
+
+    throw std::invalid_argument("Unknown order in connecter string: " + connecter);
+}
+
+ParticleType HistVariable::stringToParticle(const std::string& connecter)
+{
+    if (connecter.find("mu-") != std::string::npos) return ParticleType::muon();
+    if (connecter.find("e-")  != std::string::npos) return ParticleType::electron();
+    if (connecter.find("tau-")!= std::string::npos) return ParticleType::tau();
+
+    throw std::invalid_argument("Unknown particle type in connecter string: " + connecter);
+}
