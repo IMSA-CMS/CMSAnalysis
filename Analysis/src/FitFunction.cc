@@ -170,6 +170,9 @@ FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const s
 		case FunctionType::POWER_LAW:
 			func = new TF1(name.data(), powerLaw, min, max, 3);
 			break;
+		case FunctionType::DOUBLE_GAUSSIAN:
+			func = new TF1(name.data(), doubleGaussian, min, max, 6);
+			break;
 		default:
 			throw std::invalid_argument("Not a valid FunctionType enum value");
 	};

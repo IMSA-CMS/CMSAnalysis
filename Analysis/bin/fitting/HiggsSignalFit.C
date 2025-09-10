@@ -44,15 +44,14 @@ void HiggsSignalFit()
     {
         for (const auto &recoDecay : HiggsCompleteAnalysis::recoDecays)
         {
-            auto targetChannel = analysis->getChannel(recoDecay);
-            //for (const auto &genSimDecay : HiggsCompleteAnalysis::genSimDecays)
+            for (const auto &genSimDecay : HiggsCompleteAnalysis::genSimDecays)
             {
-                auto channel = recoDecay + "_" + recoDecay;
+                auto channel = recoDecay + "_" + genSimDecay;
                 std::unordered_map<std::string, double> massValues;
                 std::unordered_map<std::string, TH1 *> histogramMap;
                 FitFunctionCollection currentFunctions;
                 std::vector<std::string> actualParams;
-
+                auto targetChannel = analysis->getChannel(channel);
                 for (const auto &name : paramNames)
                 {
                     actualParams.push_back(channel + '/' + name);
@@ -61,8 +60,7 @@ void HiggsSignalFit()
                 for (auto mass : masses)
                 {
                     std::cerr << "mass: " << mass << std::endl;
-                    // update this to use all gensim decays, not just the same as reco
-                    auto process = targetChannel->findProcess("Higgs signal " + recoDecay + " " + std::to_string(mass));
+                    auto process = targetChannel->findProcess("Higgs signal " + channel + " " + std::to_string(mass));
                     TH1 *selectedHist = process->getHist(histType, true);
 
                     if (!selectedHist || selectedHist->GetEntries() < minData)
