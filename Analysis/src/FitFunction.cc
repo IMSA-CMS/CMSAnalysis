@@ -1,4 +1,5 @@
 #include "CMSAnalysis/Analysis/interface/FitFunction.hh"
+#include <TMath.h>
 #include <fstream>
 
 double FitFunction::powerLaw(double *x, double *par)
@@ -48,6 +49,11 @@ double FitFunction::DSCB(double *x, double *par)
 	// //std::cout<<"Global norm: " << globalNorm << "\n";
 	// }
 	return N * functionNormalization * result;	
+}
+
+double FitFunction::doubleGaussian(double *x, double *par)
+{
+    return par[0] * TMath::Gaus(*x, par[1], par[2]) + par[3] * TMath::Gaus(*x, par[4], par[5]);
 }
 
 FitFunction::FitFunction() {}
