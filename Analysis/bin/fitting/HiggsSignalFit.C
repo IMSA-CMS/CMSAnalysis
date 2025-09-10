@@ -71,8 +71,16 @@ void HiggsSignalFit()
 
                     std::string keyName = channel + "/" + std::to_string(mass) + '_' + histType.getName();
 
-                    FitFunction func = FitFunction::createFunctionOfType(FitFunction::DOUBLE_SIDED_CRYSTAL_BALL,
-                                                                         keyName, "", min, max);
+                    FitFunction func;
+                    if (genSimDecay.find('t') != std::string::npos)
+                    {
+                        func = FitFunction::createFunctionOfType(FitFunction::DOUBLE_GAUSSIAN, keyName, "", min, max);
+                    }
+                    else
+                    {
+                        func = FitFunction::createFunctionOfType(FitFunction::DOUBLE_SIDED_CRYSTAL_BALL, keyName, "",
+                                                                 min, max);
+                    }
                     currentFunctions.insert(func);
                     histogramMap.insert({keyName, selectedHist});
                     massValues.insert({keyName, mass});
