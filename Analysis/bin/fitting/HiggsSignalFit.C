@@ -12,8 +12,8 @@
 #define _USE_MATH_DEFINES
 
 std::vector<HistVariable> histogramTypes = {
-    HistVariable(Selector::None, VariableType::RecoInvariantMassBackground, "", true, false),
-    HistVariable(Selector::None, VariableType::RecoInvariantMassBackground, "", false, true),
+    HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
+    HistVariable(HistVariable::VariableType::InvariantMass, "", false, true),
 };
 
 const int minData = 100;
@@ -42,16 +42,17 @@ void HiggsSignalFit()
 
     for (const auto &histType : histogramTypes)
     {
-        for (const auto &recoDecay : recoDecays)
+        for (const auto &recoDecay : HiggsCompleteAnalysis::recoDecays)
         {
-            for (const auto &genSimDecay : genSimDecays)
+            auto targetChannel = analysis->getChannel(recoDecay);
+            //for (const auto &genSimDecay : HiggsCompleteAnalysis::genSimDecays)
             {
-                auto channel = recoDecay + "_" + genSimDecay;
+                auto channel = recoDecay + "_" + recoDecay;
                 std::unordered_map<std::string, double> massValues;
                 std::unordered_map<std::string, TH1 *> histogramMap;
                 FitFunctionCollection currentFunctions;
                 std::vector<std::string> actualParams;
-                auto targetChannel = analysis->getChannel(channel);
+
                 for (const auto &name : paramNames)
                 {
                     actualParams.push_back(channel + '/' + name);
@@ -61,7 +62,7 @@ void HiggsSignalFit()
                 {
                     std::cerr << "mass: " << mass << std::endl;
                     // update this to use all gensim decays, not just the same as reco
-                    auto process = targetChannel->findProcess("Higgs signal " + channel + " " + std::to_string(mass));
+                    auto process = targetChannel->findProcess("Higgs signal " + recoDecay + " " + std::to_string(mass));
                     TH1 *selectedHist = process->getHist(histType, true);
 
                     if (!selectedHist || selectedHist->GetEntries() < minData)

@@ -36,6 +36,9 @@ public:
 	std::string getName();
 	double getMin();
 	double getMax();
+	static std::vector<std::string> split(const std::string& str, char delimiter);
+	std::string getChannelName();
+	std::string getParameterName();
 private:
 	TF1* function;
 	FunctionType functionType;
