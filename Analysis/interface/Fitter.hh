@@ -51,6 +51,7 @@ private:
 	TCanvas* fitExpressionFormula(TH1* histogram, FitFunction& fitFunction);
 	TCanvas* fitDSCB(TH1* histogram, FitFunction& fitFunction);
 	TCanvas* fitPowerLaw(TH1* histogram, FitFunction& fitFunction);
+	TCanvas* fitDoubleGaussian(TH1* histogram, FitFunction& fitFunction);
 	
 	//Insert blank TF1* function ptr which will have the fitted function written to
 	static TFitResultPtr functionFittingLoop(TGraph* graph, TF1* function);
