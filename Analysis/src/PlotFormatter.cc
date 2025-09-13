@@ -100,11 +100,10 @@ TCanvas* PlotFormatter::superImposedHist(std::shared_ptr<Channel> processes, His
     first->GetYaxis()->SetTitle(yAxisTitle);
     
     std::vector<std::string> names;
-    count = 0;
-    for (TH1* hist : hists)
+
+    for (auto process : processes->getProcesses())
     {
-        names.push_back(processes->getProcesses().at(count)->getName());
-        count++;
+        names.push_back(process->getName());
     }
     auto legend = GetSimpleLegend(hists, names);
     legend->Draw();
@@ -551,10 +550,13 @@ void PlotFormatter::FormatSignalData(THStack*& background, TH1*& signal, TH1*& d
     TList *histList = background->GetHists();
     TIter next(histList);  
     TH1 *hist;  
-    bool emptyHist = false;
-    while ((hist = (TH1*)next())) {
+    while ((hist = (TH1*)next()))
+    {
     //std::cout << hist->GetName() << " entries " << hist->GetEntries() << std::endl;  // Print info about each histogram
-    if (hist->GetEntries() == 0) { continue; }
+        if (hist->GetEntries() == 0)
+        {
+            continue;
+        }
     }
     //std::cout << "TList End" << std::endl;
 
@@ -763,7 +765,6 @@ void PlotFormatter::GetBottomPadValues(TH1*& data, THStack*& background, TH1* ba
     std::vector<double>& yerror2, std::vector<double>& centers)
 {
     TH1* histLoop;
-    double value;
 
     for(int i = 0; i <= data->GetNbinsX(); i++) 
     {
