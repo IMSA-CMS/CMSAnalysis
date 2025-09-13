@@ -38,14 +38,6 @@ class HistVariable
 
     std::string getName() const;
 
-    bool is2DHistX()
-    {
-        return is2DHistX_;
-    }
-    bool is2DHistY()
-    {
-        return is2DHistY_;
-    }
     std::string getUnit() const
     {
         return unit;
