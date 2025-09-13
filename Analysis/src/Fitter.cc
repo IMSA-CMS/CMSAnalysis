@@ -317,7 +317,7 @@ void Fitter::parameterizeFunctions(std::unordered_map<std::string, double>& xDat
 		FitFunction func = parameterizeFunction(totalParameterData[i]);
 		paramFunctions.insert(func);
 	}
-
+	std::cout << "Has finished parametrizing all parameters";
 	paramFunctions.saveFunctions(parameterTextFile, true);
 }
 

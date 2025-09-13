@@ -29,6 +29,9 @@ void HiggsSignalFit()
     std::string parameterFits = "H++SignalParameterFits.root";
     std::string parameterFunctions = "H++SignalParameterFunctions.txt";
 
+
+    std::vector<std::string> recoDecays = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu"};
+
     remove(fitParameterValueFile.c_str());
     remove(parameterFunctions.c_str());
     std::vector<int> masses = {500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
@@ -42,8 +45,9 @@ void HiggsSignalFit()
 
     for (const auto &histType : histogramTypes)
     {
-        for (const auto &recoDecay : HiggsCompleteAnalysis::recoDecays)
+        for (const auto &recoDecay : recoDecays)
         {
+            std::cout << "recoDecay: " << recoDecay << '\n';
             auto targetChannel = analysis->getChannel(recoDecay);
             //for (const auto &genSimDecay : HiggsCompleteAnalysis::genSimDecays)
             {
