@@ -14,7 +14,7 @@ class RootFileInput : public Input
 {
 	public:
 		// RootFileInput(std::string fileName, std::vector<HistVariable> iHistVariables);
-		RootFileInput(std::string fileName, std::vector<HistVariable> iHistVariables, 
+		RootFileInput(std::string fileName, 
 		std::shared_ptr<HistNameFinder> histVariableToFileMapping);
 		TFile* getFile(std::string fileName) const;
 		//Gets hists, if 2D projects it down to 1D
@@ -24,11 +24,9 @@ class RootFileInput : public Input
 		//Gets histogram using its name from within the file, as opposed to its HistVariable type
 		TH1* getHistFromName(std::string histName) const;
 		int getTotalEvents() const override;
-		std::vector<HistVariable> getHistVariables() const override {return histVariables;}
 		std::shared_ptr<HistNameFinder> getHistVariableToFileMapping() const {return histVariableToFileMapping; }
 
 	private:
-		std::vector<HistVariable> histVariables;
 		std::string fileSource;
 		std::shared_ptr<HistNameFinder> histVariableToFileMapping;
 
