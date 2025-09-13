@@ -73,6 +73,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     ///std::vector<std::string> rowNames = {"ee", "eu", "uu", "e u", "u u", "e e"};
     std::vector<std::string> dataConnecters = {"_Pass_1st Highest mu- ", "_Pass_1st Highest e- "};
     std::vector<std::string> connecters = {""};
+    std::vector<std::string> systematics = {"RecoHiggsScaleFactor, HiggsIDISOScaleFactor, HiggsTriggerScaleFactor"};
 
     for (Selector selector : selectors)
     {
@@ -203,7 +204,15 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         processes.push_back(other);
         processes.push_back(wJetsBackground);
 
-
+        for(std::shared_ptr<Process> process : processes)
+        {
+            for(std::string systematic : systematics)
+            {
+                auto sys = process->calcSystematic(HistVariable(HistVariable::VariableType::SameSignInvariantMass), systematic);
+                process->addSystematic(sys);
+            }
+        }        
+        
         auto leptonProcesses = std::make_shared<Channel>(recoDecay, processes);
 
         for (std::string processName : leptonProcesses->getNames())
