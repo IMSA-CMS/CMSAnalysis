@@ -137,7 +137,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
                 std::cout << "GENSIMDECAY: " << genSimDecay << std::endl;
                 std::cout << "BRANCHINGRATIOFIXER " << branchingRatioFixer << std::endl;
                 auto higgsProcess = makeBasicProcess(signalFilePath, "Higgs" + std::to_string((int)massTarget) + ".root", "higgs4l" + std::to_string((int)massTarget), reader, luminosity, histVariableToFileMapping, false, branchingRatioFixer);
-                auto higgsSignal = std::make_shared<Process>("Higgs signal " + genSimDecay + " " + std::to_string((int)massTarget), 1);
+                auto higgsSignal = std::make_shared<Process>("Higgs signal " + decayName + " " + std::to_string((int)massTarget), 1);
                 higgsSignal->addProcess(higgsProcess);
                 processes.push_back(higgsSignal);
                 higgsMassGroup->addProcess(higgsProcess);
@@ -147,7 +147,9 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
 
 
         }
-        auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(recoDecay);
+        //auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(recoDecay);
+
+        auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(decayName);
 
         
 
@@ -225,7 +227,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         processes.push_back(wJetsBackground);
 
 
-        auto leptonProcesses = std::make_shared<Channel>(recoDecay, processes);
+        auto leptonProcesses = std::make_shared<Channel>(decayName, processes);
 
         for (std::string processName : leptonProcesses->getNames())
         {

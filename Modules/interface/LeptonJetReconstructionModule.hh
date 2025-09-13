@@ -45,8 +45,6 @@ private:
 
   std::unordered_map<std::string,std::shared_ptr<MLStripHist>> particleHistograms;
 
-  void findDeltaRValues();
-  void findPtValues();
   void assignVariables(LeptonJet jet);
 
   int count = 0;
