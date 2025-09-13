@@ -29,6 +29,7 @@ FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string &fi
 void FitFunctionCollection::saveFunctions(const std::string& fileName, bool append)
 {
     std::fstream file;
+    //std::cout << "fstream object created";
     if (!file.is_open())
     {
         if (append)
@@ -40,7 +41,7 @@ void FitFunctionCollection::saveFunctions(const std::string& fileName, bool appe
     {
         throw std::invalid_argument(fileName + " file is already open");
     }
-
+    //std::cout << "if-block passed";
 
 	std::map<std::string, std::vector<FitFunction>> channel_parameters;
 	std::vector<std::string> channelNames;
@@ -53,23 +54,25 @@ void FitFunctionCollection::saveFunctions(const std::string& fileName, bool appe
 		auto channelExists = std::find(channelNames.begin(), channelNames.end(), channel);
 		if (channelExists == channelNames.end())
 		{
-			std::cout << channel << " does not exist in file";
+			std::cout << channel << " does not exist in file \n";
 			channelNames.push_back(channel);
 			channel_parameters[channel] = {funcPair.second};
 		}
 		else
 		{
-			std::cout << channel << " exists in file";
+			std::cout << channel << " exists in file \n";
 			channel_parameters[channel].push_back(funcPair.second);
 		}
 
 		//file << funcPair.second << "\n";
 	}
 
+    std::cout << "Writing to file... \n";
 	for (std::string channel : channelNames)
 	{
 		file << "Channel name: " << channel << '\n' << '\n';
 		std::vector<FitFunction> functionParameters = channel_parameters.at(channel);
+        std::cout << "Function parameters retrieved \n";
 		file << "Calculated Parameters" << "		";
 		
 		// Get labels for parameters like p0, p1, etc. from first function in functionParameters
@@ -83,6 +86,7 @@ void FitFunctionCollection::saveFunctions(const std::string& fileName, bool appe
 			file << firstFunction->GetParName(i) << "_error" << "		";
 		}
 
+        file << '\n';
 
 		// List out the functions with their values for each parameter
 		for (auto& parameter : functionParameters)

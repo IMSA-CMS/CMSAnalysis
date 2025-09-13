@@ -109,17 +109,19 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     TH1::SetDefaultSumw2();
     for (const std::string &recoDecay : recoDecays)
     {
-        for (const auto &genSimDecay : genSimDecays)
+        std::vector<std::shared_ptr<Process>> processes;
+        for (double massTarget : massTargets)
         {
-            std::string decayName = recoDecay + "_" + genSimDecay;
+            //std::string decayName = recoDecay + "_" + genSimDecay;
 
-            std::vector<std::shared_ptr<Process>> processes;
+
             // auto higgsSignal = std::make_shared<Process>("Higgs Signal", 5);
 
             // not really sure why we need this process at all
             // auto higgsGroupSignal = std::make_shared<Process>("Higgs Group " + recoDecay, 5);
-            for (double massTarget : massTargets)
+            for (const auto &genSimDecay : genSimDecays)
             {
+                std::string decayName = recoDecay + "_" + genSimDecay;
                 auto higgsMassGroup = std::make_shared<Process>("Higgs Signal " + std::to_string((int)massTarget), 1);
 
                 auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(decayName);
@@ -144,7 +146,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
             }
 
 
-
+        }
         auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(recoDecay);
 
         
@@ -254,4 +256,4 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         getChannelsProtected().push_back(leptonProcesses);
     }
 }
-}
+
