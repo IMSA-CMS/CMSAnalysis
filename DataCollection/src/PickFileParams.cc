@@ -19,7 +19,6 @@ std::string PickFileParams::getFileName() const
     std::string fileName = stream.str();
     fileName = Utility::substitute(fileName, " ", "_");
     fileName = Utility::getFullPath(fileName);
-    std::cout << "Name of file list: " << fileName << '\n';
     return fileName;
 }
 
@@ -29,7 +28,8 @@ std::vector<std::string> PickFileParams::getFileList() const
 
     std::string file = getFileName();
     std::vector<std::string> fileList;
-
+    
+    
     std::ifstream in(file);
     std::string str;
     while (std::getline(in, str))

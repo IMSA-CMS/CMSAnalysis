@@ -1,5 +1,5 @@
 Drell-Yan
 MassCut:	50-inf
 Run:	3
-Period:	2022EE
+Year:	2022EE
 Format:	NanoAOD

@@ -56,7 +56,8 @@ void BackgroundScale() {
     const std::string plotName = "Lepton Jet Mass Low Mass and Same Sign";
     const std::string dynamicBGName = "QCD Background"; // process name for dynamic bg
     const std::string channelName = "0.3";
-    const std::string inputAnalysisPath = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts_Output/";
+    // const std::string inputAnalysisPath = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts_Output/";
+    const std::string inputAnalysisPath = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/LeptonJetReconstruction_All/";
 
     auto analysis = std::make_shared<DarkPhotonCompleteAnalysis>(inputAnalysisPath, "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections_config1.txt"); // BDT Output Analysis (LeptonJetMLOutput)
 	//auto analysis = std::make_shared<DarkPhotonInputAnalysis>(inputAnalysisPath); // Variable Isolation Plots
@@ -87,7 +88,7 @@ void BackgroundScale() {
     
     std::shared_ptr<Channel> processes = 0;
 
-	auto histvariable = HistVariable(plotName, "BackgroundScale");
+	auto histvariable = HistVariable(plotName);
 
     processes = channels.at(0);
     std::vector<std::string> backgroundNames = processes->getNamesWithLabel("fixedbg");

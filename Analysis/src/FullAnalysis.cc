@@ -35,27 +35,29 @@ std::vector<TH1 *> FullAnalysis::getHistograms(const HistVariable &histType, con
     return targetChannel->getHists(histType, processName, scaleToExpected);
 }
 
-SingleProcess FullAnalysis::makeBasicProcess(const std::vector<HistVariable>& histVariables, std::string filePathway, std::string fileName,
-std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, double luminosity, std::vector<std::shared_ptr<Correction>> corrections)
-{
-    // `RootFileInput` no longer needs a separate mapping; we assume it accesses each variable's file path directly from `HistVariable`
-    auto inputFile = std::make_shared<RootFileInput>(filePathway + fileName, histVariables);
-    auto histEstimator = std::make_shared<SimpleEstimator>();
-    return SingleProcess(crossSectionName, inputFile, crossReader, histEstimator, luminosity, corrections);
-}
+// SingleProcess FullAnalysis::makeBasicProcess(const std::vector<HistVariable>& histVariables, std::string filePathway, std::string fileName,
+// std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, double luminosity, bool isData)
+// {
+//     // `RootFileInput` no longer needs a separate mapping; we assume it accesses each variable's file path directly from `HistVariable`
+//     auto inputFile = std::make_shared<RootFileInput>(filePathway + fileName, histVariables);
+//     auto histEstimator = std::make_shared<SimpleEstimator>(isData);
+//     return SingleProcess(crossSectionName, inputFile, crossReader, histEstimator, luminosity);
+// }
 
 /////////////////// LEGACY SUPPORT TO MAKE SURE STUFF COMPILES. WILL BE REMOVED SOON. ///////////////////
 
 // Use this as long as you don't need to use scaleToExpected or don't have fit histograms.
-SingleProcess FullAnalysis::makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, double luminosity, std::map<std::string, std::string> histVariableToFileMapping, std::vector<std::shared_ptr<Correction>> corrections)
+SingleProcess FullAnalysis::makeBasicProcess(std::string filePathway, std::string fileName, std::string crossSectionName,
+std::shared_ptr<CrossSectionReader> crossReader, double luminosity, std::shared_ptr<HistNameFinder> histVariableToFileMapping, bool isData, double isBranchingRatioFixer)
 {
-    auto inputFile = std::make_shared<RootFileInput>(filePathway + fileName, histVariables, histVariableToFileMapping);
+    auto inputFile = std::make_shared<RootFileInput>(filePathway + fileName, histVariableToFileMapping);
     //std::cout << "inputFile works";
-    auto histEstimator = std::make_shared<SimpleEstimator>();
+    auto histEstimator = std::make_shared<SimpleEstimator>(1.0, isData, isBranchingRatioFixer);
     //std::cout << "histEstimator works";
+    std::cout << "FULLANALYSIS Branching Ratio: " << histEstimator->getBranchingRatioFixer() << std::endl;
 
     //return {graphHigh, graphLow};
-    return SingleProcess(crossSectionName, inputFile, crossReader, histEstimator, luminosity, corrections);
+    return SingleProcess(crossSectionName, inputFile, crossReader, histEstimator, luminosity);
 }
 
 // SingleProcess FullAnalysis::makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string fileName, std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, double luminosity)

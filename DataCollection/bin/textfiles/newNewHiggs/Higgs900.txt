@@ -2,5 +2,5 @@ H++toLL
 Mass:	900
 Run:	2
 Lepton:	All
-Period:	2018
+Year:	2018
 Format:	NanoAOD

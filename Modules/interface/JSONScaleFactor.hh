@@ -12,26 +12,36 @@ class EventInput;
 class JSONScaleFactor : public ScaleFactor 
 {
 public:
-    enum class SystematicType 
-    {
-        Nominal,
-        Up,
-        Down
-    };
-
-    JSONScaleFactor(std::string filename, SystematicType systematicType = SystematicType::Nominal);
-    virtual double getScaleFactor(const EventInput* input) const override;
+    virtual double getScaleFactor(const EventInput* input, SystematicType type = SystematicType::Nominal) const override;
     void printScaleFactors() const;  
-
+    JSONScaleFactor(std::string iname) : ScaleFactor(iname) {}
+    struct ScaleFactorSet
+    {
+        double nominal;
+        double systUp;
+        double systDown;
+        ScaleFactorSet(double nominal = 1.0, double systUp = 1.0, double systDown = 1.0) : nominal(nominal), systUp(systUp), systDown(systDown) {}
+        ScaleFactorSet& operator*= (const ScaleFactorSet& rhs)
+        {
+            nominal *= rhs.nominal;
+            systUp *= rhs.systUp;
+            systDown *= rhs.systDown;
+            return *this;
+        }
+    };
 protected:
-    virtual void loadScaleFactors(Json::Value output) = 0;
-    void addScaleFactor(double eta, double pt, double scaleFactors);
+    virtual void loadScaleFactors(jsoncollector::Json::Value output) = 0;
+    void addScaleFactor(double eta, double pt, ScaleFactorSet scaleFactor);
+    ScaleFactorSet& getScaleFactorSet(double eta, double pt);
     void loadScaleFactorsFromFile(std::string filename);
     virtual ParticleCollection<Particle> getParticles(const EventInput* input) const = 0;
-    SystematicType getSystematicType() const { return systematicType; }
+   
 private:
-    std::map<double, std::map<double, double>> scaleFactors;
+    std::map<double, std::map<double, ScaleFactorSet>> scaleFactors;
     SystematicType systematicType;
+
+    
 };
 
 #endif // JSONSCALEFACTOR_HH
+//add name to constructor and Systematic Type to getScaleFactor
