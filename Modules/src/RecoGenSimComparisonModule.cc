@@ -446,6 +446,12 @@ void RecoGenSimComparisonModule::sameSignDeltaRComparison(const ParticleCollecti
 {
     int recoEventElement = 1;
 
+    ParticleType recoType;
+    int wrongCharge;
+    int fakePhoton;
+    int noMatch;
+    int mismeasuredPt;
+    int accurate;
     
 
     for (auto& recoPart : recoParts)
