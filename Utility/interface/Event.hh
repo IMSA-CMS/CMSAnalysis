@@ -6,6 +6,7 @@
 #include "CMSAnalysis/Utility/interface/Lepton.hh"
 #include "CMSAnalysis/Utility/interface/Electron.hh"
 #include "CMSAnalysis/Utility/interface/Muon.hh"
+#include "CMSAnalysis/Utility/interface/Tau.hh"
 #include "CMSAnalysis/Utility/interface/Photon.hh"
 #include "CMSAnalysis/Utility/interface/Jet.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
@@ -19,6 +20,7 @@ class Event
         Event(const EventInput* input);
         const ParticleCollection<Electron>& getElectrons() const {return electrons;};
         const ParticleCollection<Muon>& getMuons() const {return muons;};
+        const ParticleCollection<Tau>& getTaus() const {return taus;};
         const ParticleCollection<Photon>& getPhotons() const {return photons;};
         const ParticleCollection<Jet>& getJets() const {return jets;};
         const double& getMET() const {return MET;};
@@ -31,6 +33,7 @@ class Event
 
         void addElectron(Electron electron);
         void addMuon(Muon muon);
+        void addTau(Tau tau);
         void addPhoton(Photon photon);
         void addJet(Jet jet);
         void addGenSimParticle(GenSimParticle particle);
@@ -48,6 +51,7 @@ class Event
         //make particlecollections
         ParticleCollection<Electron> electrons;
         ParticleCollection<Muon> muons;
+        ParticleCollection<Tau> taus;
         ParticleCollection<Photon> photons;
         ParticleCollection<Jet> jets;
         ParticleCollection<GenSimParticle> genSimParticles;

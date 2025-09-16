@@ -89,13 +89,23 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
         //std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEsigmaUp", "Electron_dEsigmaUp"),
 		std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("muon_size", "nMuon"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_eta", "Muon_eta"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_phi", "Muon_phi"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_phi", "Muon_phi"), 
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_mass", "Muon_mass"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("muon_charge", "Muon_charge"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_pt", "Muon_pt"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_reliso", "Muon_miniPFRelIso_all"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_dxy", "Muon_dxy"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_dz", "Muon_dz"),
+        // do tau stuff here
+        std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("tau_size", "nTau"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("tau_eta", "Tau_eta"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("tau_phi", "Tau_phi"), //define short name next to long name
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("tau_mass", "Tau_mass"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("tau_charge", "Tau_charge"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("tau_pt", "Tau_pt"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("tau_dxy", "Tau_dxy"),
+		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("tau_dz", "Tau_dz"),
+        std::make_shared<TreeVariable<TTreeReaderArray<UChar_t>>>("tau_mvaid", "Tau_idDeepTau2017v2p1VSjet"),
 
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("photon_eta", "Photon_eta"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("photon_phi", "Photon_phi"),
@@ -365,8 +375,6 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
             continue;
         }
 
-
-
         //  if (fit == Particle::SelectionFit::Loose) continue;
 
         // std::cout << "Loading muon from NanoAOD\n";
@@ -381,6 +389,35 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
         particle.addInfo("dz", getArrayElement<Float_t>("muon_dz", i));
         recoParticles.addParticle(particle);
     }
+
+    //tau stuff 
+    for (UInt_t i = 0; i < getVariable<UInt_t>("tau_size"); i++)
+    {
+        int charge = getArrayElement<Int_t>("tau_charge", i);
+        //std::cout<<charge;
+        Particle::SelectionFit fit;
+
+
+        if (getArrayElement<UChar_t>("tau_mvaid", i) >= 32)
+        {
+            fit = Particle::SelectionFit::Tight;
+        } else if (getArrayElement<UChar_t>("tau_mvaid", i) == 16)
+        {
+            fit = Particle::SelectionFit::Medium;
+        } else if (getArrayElement<UChar_t>("tau_mvaid", i) == 8)
+        {
+            fit = Particle::SelectionFit::Loose;
+        } else {
+            continue;
+        }
+        auto particle = Particle(
+        reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("tau_pt", i),
+        getArrayElement<Float_t>("tau_eta", i), getArrayElement<Float_t>("tau_phi", i), getArrayElement<Float_t>("tau_mass", i))),
+        getArrayElement<Float_t>("tau_dxy", i), getArrayElement<Float_t>("tau_dz", i), charge, ParticleType::tau(), fit);
+       
+        recoParticles.addParticle(particle);
+    }
+
     for (UInt_t i = 0; i < getVariable<UInt_t>("photon_size"); i++)
     {
         Particle::SelectionFit fit = Particle::SelectionFit::None;

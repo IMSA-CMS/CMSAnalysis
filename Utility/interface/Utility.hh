@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <string>
+#include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
+#include "CMSAnalysis/Utility/interface/Particle.hh"
 
 namespace Utility
 {
@@ -20,6 +22,8 @@ namespace Utility
   // Given the name of a file that should be in bin/textfiles, gives the full path so it can be easily located
   std::string getFullPath(std::string fileName);
   std::string getBasePath();
+  std::string identifyChannel(ParticleCollection<Particle> particles);
+
 }
 
 inline bool Utility::comparator(std::string a, std::string b) {return a<b;}
@@ -57,4 +61,8 @@ inline std::vector<std::vector<T>> Utility::getAllCombinations(int nCombo, std::
 }
 
 
-#endif
+#endif 
+
+
+
+
