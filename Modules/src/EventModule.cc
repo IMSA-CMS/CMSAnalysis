@@ -250,10 +250,6 @@ bool EventModule::checkHist(std::string histName) const
     return inMap;
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 0fe2b3975c1b35b5efc796545c5b95b1bc7ecf67
 std::string EventModule::getBasicHistogramTitle(int n, std::string particleType, std::string valueName) const
 {
     n++;
@@ -273,10 +269,6 @@ std::string EventModule::getBasicHistogramTitle(int n, std::string particleType,
     return std::to_string(n) + rank + particleType + " " + valueName;
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 0fe2b3975c1b35b5efc796545c5b95b1bc7ecf67
 std::string EventModule::getCountHistogramTitle(std::string particleType, std::string valueName) const
 {
     return particleType + " " + valueName;

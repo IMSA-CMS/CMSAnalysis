@@ -2,10 +2,6 @@
 #include "CMSAnalysis/Filters/interface/FakePhotonSelector.hh"
 #include <vector>
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 0fe2b3975c1b35b5efc796545c5b95b1bc7ecf67
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "CMSAnalysis/Utility/interface/Lepton.hh"
