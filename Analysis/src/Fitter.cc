@@ -306,15 +306,6 @@ FitFunction Fitter::parameterizeFunction(ParameterizationData &parameterData)
     auto graph = new TGraphErrors(parameterData.x.size(), parameterData.x.data(), parameterData.y.data(),
                                   parameterData.zero.data(), parameterData.error.data());
 
-	for (size_t i = 0; i < totalParameterData.size(); ++i)
-	{
-		totalParameterData[i].name = paramNames[i];
-		std::cout << "Parameterizing parameter " << paramNames[i] << '\n';
-		FitFunction func = parameterizeFunction(totalParameterData[i]);
-		paramFunctions.insert(func);
-	}
-	std::cout << "Has finished parametrizing all parameters";
-	paramFunctions.saveFunctions(parameterTextFile, true);
     TF1 *func = new TF1();
     TFitResultPtr result = functionFittingLoop(graph, func);
 
