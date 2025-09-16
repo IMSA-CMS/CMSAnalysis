@@ -148,11 +148,9 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
 
 
         }
-        //auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(recoDecay);
+        auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(recoDecay);
 
-        auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(decayName);
 
-        
 
         auto zzBackground = std::make_shared<Process>("ZZ Background", ZZBackgroundColor);
         zzBackground->addProcess(makeBasicProcess(filePath, "ZZ.root", "zzto4l", reader, luminosity, histVariableToFileMapping));
@@ -237,8 +235,6 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         }        
         
         auto leptonProcesses = std::make_shared<Channel>(recoDecay, processes);
-
-        auto leptonProcesses = std::make_shared<Channel>(decayName, processes);
 
         for (std::string processName : leptonProcesses->getNames())
         {
