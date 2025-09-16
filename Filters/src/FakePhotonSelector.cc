@@ -2,6 +2,10 @@
 #include "CMSAnalysis/Filters/interface/FakePhotonSelector.hh"
 #include <vector>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0fe2b3975c1b35b5efc796545c5b95b1bc7ecf67
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "CMSAnalysis/Utility/interface/Lepton.hh"
@@ -32,13 +36,16 @@ void FakePhotonSelector::selectParticles(const EventInput* input, Event& event) 
   float electronCounter = 0, looseElectrons = 0, mediumElectrons = 0, tightElectrons = 0;
   float numOfParticles = 0;
 
+
   std::vector<Particle> electrons;
+
 
   for (const auto& particle : particles)
   {
     numOfParticles++;
 
-    if (particle.getType() == ParticleType::muon() && particle.getPt() > 5) 
+
+    if (particle.getType() == ParticleType::muon() && particle.getPt() > 5)
     {
       muonCounter++;
       Lepton lepton(particle);
@@ -47,7 +54,8 @@ void FakePhotonSelector::selectParticles(const EventInput* input, Event& event) 
       if (lepton.isMedium()) mediumMuons++;
     }
 
-    if (particle.getType() == ParticleType::electron() && particle.getPt() > 5) 
+
+    if (particle.getType() == ParticleType::electron() && particle.getPt() > 5)
     {
       electronCounter++;
       Lepton lepton(particle);

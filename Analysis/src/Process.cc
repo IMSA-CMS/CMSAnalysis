@@ -1,6 +1,7 @@
 #include "CMSAnalysis/Analysis/interface/Process.hh"
 #include "CMSAnalysis/Analysis/interface/SingleProcess.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
+#include "CMSAnalysis/Analysis/interface/RateSystematic.hh"
 #include "TH1F.h"
 #include "TH2F.h"
 #include <iostream>
@@ -8,6 +9,7 @@
 #include <string>
 #include <algorithm>
 #include "TList.h"
+#include "CMSAnalysis/Utility/interface/ScaleFactor.hh" 
 
 TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 {
@@ -61,6 +63,7 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 		TList* toMerge = new TList;
 		for (const auto& singleProcess : processes)	
 		{
+			//std::cout << "Process: " << singleProcess.getName() << std::endl;
 			toAdd = singleProcess.getHist(histType, scaleToExpected);
 			//Add only if the hisogram exists
 
@@ -68,6 +71,8 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 			{
 				toMerge->Add(toAdd);
 			}
+
+			//std::cout << toAdd->GetName() << " has " << toAdd->GetNbinsX() << std::endl;
 		}
 		newHist->Merge(toMerge);
 		newHist->SetLineColor(color);
@@ -141,13 +146,15 @@ TH1* Process::getSingleProcessHist(const HistVariable& histType, const std::stri
 
 const SingleProcess& Process::getSingleProcess(const std::string& singleProcessName) const
 {
+
 	for (const auto& singleProcess : processes)
 	{
+	
 		if (singleProcess.getName() == singleProcessName)
 			return singleProcess;
 	}
 
-	throw std::invalid_argument("There is no SingleProcess with such a name within this Process object");
+	throw std::invalid_argument("There is no SingleProcess named " + singleProcessName + " within this Process object");
 }
 
 double Process::getYield(HistVariable dataType) const
@@ -177,7 +184,7 @@ void Process::addSystematic(std::shared_ptr<Systematic> systematic)
 std::pair<TH1*, TH1*> Process::getSystematicHist(HistVariable histType, bool scaleToExpected)
 {
 	auto hist = getHist(histType, scaleToExpected);
-	return systematics.adjustHistogram(hist);
+	return systematics.getUncertainties(hist);
 }
 
 int Process::getNEvents() 
@@ -187,4 +194,46 @@ int Process::getNEvents()
 		total += singleProcess.getTotalEvents();
 	}
 	return total;
+}
+
+std::pair<TH1*, TH1*> Process::combineSystematics(std::vector<std::shared_ptr<Process>> processes,
+	TH1* original)
+{
+	// get all multisystematics in a vector
+	std::vector<std::shared_ptr<MultiSystematic>> multiSystematics;
+	for (auto process : processes)
+	{
+		multiSystematics.push_back(std::make_shared<MultiSystematic>(process->systematics));
+		std::cout << "Size: " << multiSystematics.size() << std::endl;
+	}
+	return MultiSystematic::combineSystematics(multiSystematics, original);
+}
+std::shared_ptr<Systematic> Process::calcSystematic(HistVariable histType, std::string systematicName)
+{
+	
+
+	histType.setSystematic(ScaleFactor::SystematicType::Up, systematicName);
+	TH1* up = getHist(histType);
+	 
+	histType.setSystematic(ScaleFactor::SystematicType::Down, systematicName);
+	TH1* down = getHist(histType);
+
+	histType.setSystematic(ScaleFactor::SystematicType::Nominal, "");
+	TH1* nominal = getHist(histType);
+
+	if (!nominal || !up || !down)
+	{
+		throw std::runtime_error("Nominal histogram not found in process: " + this->name);
+	}
+
+	//integral of up and down histograms
+	double upIntegral = up->Integral();
+	double downIntegral = down->Integral();	
+	double nominalIntegral = nominal->Integral();
+
+	double upYield = upIntegral / nominalIntegral;
+	double downYield = downIntegral / nominalIntegral;
+	
+	
+	return std::make_shared<RateSystematic>(systematicName, upYield, downYield);
 }

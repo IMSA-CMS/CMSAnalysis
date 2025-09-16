@@ -1,19 +1,11 @@
 #include "CMSAnalysis/Plans/interface/TriggerPlan.hh"
 
-#include <iostream>
 #include <memory>
 
-#include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
-#include "CMSAnalysis/Filters/interface/Trigger.hh"
 #include "CMSAnalysis/Modules/interface/TriggerSimModule.hh"
 #include "CMSAnalysis/Modules/interface/SimTrigger.hh"
 #include "CMSAnalysis/Modules/interface/TriggerModule.hh"
-#include "CMSAnalysis/Filters/interface/RecoTrigger.hh"
 #include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
-#include "CMSAnalysis/Filters/interface/SingleMuonTrigger.hh"
-#include "CMSAnalysis/Filters/interface/SingleElectronTrigger.hh"
-#include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
-#include "CMSAnalysis/Modules/interface/FilterModule.hh"
 
 using std::make_shared;
 

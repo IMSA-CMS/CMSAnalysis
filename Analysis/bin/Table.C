@@ -73,6 +73,7 @@ void Table()
     // Loop through all channels and store yields into finalTableData in order of associated decay names
     for (std::string channel : channels) 
     {
+       
         //skips none channel
         if (channel == "none") continue;
         channelNames.push_back(channel);
@@ -82,9 +83,12 @@ void Table()
         std::shared_ptr<Channel> channelPtr = higgsAnalysis->getChannel(channel);
    
         //Gets names of decays in channel and their corresponding yields by index (i.e yields[i] corresponds with names[i])
-        std::vector<double> yields = channelPtr->getYields(histVariable); //error happens around here
+       std::vector<double> yields = channelPtr->getYields(histVariable); 
         std::vector<std::string> names = channelPtr->getNames();
 
+        // WWZ Boson Extraction
+        auto channelProcesses = channelPtr->getProcesses();
+        
 
         for (int stringIndex = names.size() - 1; stringIndex >= 0; --stringIndex) {
             std::string name = names[stringIndex];
@@ -94,14 +98,18 @@ void Table()
             }
         }
         
-         for (int stringIndex = 0; stringIndex < names.size() - 1; ++stringIndex) {
-            std::cout << "yield name: " << names[stringIndex] << std::endl;
-            std::cout << "yield: " << yields[stringIndex] << std::endl;
-
+        for (auto process : channelProcesses)
+         {
+            if (process->getName() != "t#bar{t}, Multiboson Background") continue;
+            auto singleProcess =  process->getSingleProcess("wzto3lnu");
+            double yield = singleProcess.getExpectedYield(histVariable);
+            
+            yields.push_back(yield);
         }
+   
 
 
-        //Converts yields to strings and stores in row for final table
+        // Converts yields to strings and stores in row for final table
         std::vector<std::string> dataRow;
         for (double yield : yields) dataRow.push_back(roundDoubleString(yield, 4));
 
@@ -110,6 +118,8 @@ void Table()
 
         //Saves truncated names to be used as columnNames in data table.
         columnNames = names;
+        columnNames.push_back("wz");
+       
     }
     
     

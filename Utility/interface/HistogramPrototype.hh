@@ -25,12 +25,12 @@ public:
 		name(iname) //#GAVIN CHANGED
 	{}
 
-	void setInput(const EventInput* iInput);
+	virtual void setInput(const EventInput* iInput);
 
 	virtual ~HistogramPrototype() {} // Empty virtual destructor
 	
 	virtual std::vector<double> value() const = 0;
-	double eventWeight() const;
+	double eventWeight(ScaleFactor::SystematicType type = ScaleFactor::SystematicType::Nominal, std::shared_ptr<ScaleFactor> scaleFactor = nullptr) const;
 
     std::string getName() const {return name;}
 
@@ -46,6 +46,7 @@ public:
 	virtual TH1* makeHistogram() const = 0;
     virtual TH1* makeHistogram(std::string name, std::string title) const = 0; // Makes the histogram with a modified name & title
 
+	std::vector<std::shared_ptr<ScaleFactor>> getScaleFactors() const {return scaleFactors;}
 
 protected:
 	const EventInput* getInput() const {return input;}

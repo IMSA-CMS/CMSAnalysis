@@ -1,213 +1,195 @@
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
-#include "CMSAnalysis/Utility/interface/HistogramPrototype.hh"
-#include "CMSAnalysis/Utility/interface/FileParams.hh"
-#include "CMSAnalysis/Modules/interface/PtResolutionModule.hh"
-#include "CMSAnalysis/Modules/interface/Module.hh"
-#include "CMSAnalysis/Modules/interface/AnalysisModule.hh"
+#include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
-
-#include <iostream>
-#include <stdexcept>
-#include <chrono>
-
+#include "CMSAnalysis/Modules/interface/Module.hh"
+#include "CMSAnalysis/Utility/interface/HistogramPrototype.hh"
 #include "TH1.h"
 #include "TH2.h"
+#include <boost/algorithm/string/join.hpp>
+#include <stdexcept>
+#include <tuple>
 
-void HistogramOutputModule::finalizeFilterString() {
-  // Check if any baseObjects have not been copied to objects yet,
-  // and fill them into the main map if not
-  // Then write all the objects to file 
-  for (auto &entry : baseObjects) {
-    if (entry.first.find(getFilter()) == 0 || getFilter() == "")
+void HistogramOutputModule::addScaleFactor(std::shared_ptr<ScaleFactor> scaleFactor)
+{
+    scaleFactors.push_back(scaleFactor);
+    for (const auto &hist : histograms)
     {
-      
-      entry.second->Write();
- //     std::cout << "Going into: " << getFilter() << " and " << entry.first << "\n";
-      //std::cout << "Going into: " << getFilter() << " and " << entry.first << "\n";
+        hist->addScaleFactor(scaleFactor);
     }
-  }
+}
+
+void HistogramOutputModule::writeObjects(TFile *outFile)
+{
+    for (const auto &entry : objects)
+    {
+        std::cout << "Writing object: " << std::get<1>(entry.first) << " to path: " << std::get<0>(entry.first) << "\n";
+        writeRootObj(outFile, "hists/" + std::get<0>(entry.first), entry.second);
+    }
 }
 
 void HistogramOutputModule::addHistogram(std::shared_ptr<HistogramPrototype> hist)
 {
-  hist->setInput(getInput());
-  histograms.push_back(hist);
+    hist->setInput(getInput());
+    histograms.push_back(hist);
 }
 
-void HistogramOutputModule::setInput(const EventInput *iInput) {
-  if (!getInput())
-  {
-    Module::setInput(iInput);
-    for (auto hist : histograms) {
-      hist->setInput(iInput);
-    }
-  }
-}
-
-void HistogramOutputModule::addObject(const std::string &name, TObject *obj) {
-  //std::cout << "adding object " << name << " " << obj->ClassName() << "\n";
-  if (baseObjects.find(name) == baseObjects.end()) {
-    baseObjects.insert({name, obj});
-  } else {
-    baseObjects[name] = obj; 
-    
-  }
-
-//   std::cout << "Histogram added: " << name << '\n';
-   //std::cout << "Histogram added: " << name << '\n';
-}
-
-TObject* HistogramOutputModule::getObject(const std::string& name) 
+void HistogramOutputModule::setInput(const EventInput *iInput)
 {
-  auto it = baseObjects.find(getObjectName(name));
-  if (it != baseObjects.end())
-  {
-    return baseObjects[getObjectName(name)];
-  } else 
-  {
-    return nullptr;
-  }
+    if (!getInput())
+    {
+        Module::setInput(iInput);
+        for (auto hist : histograms)
+        {
+            hist->setInput(iInput);
+        }
+    }
 }
 
-const TObject* HistogramOutputModule::getObject(const std::string& name) const 
+void HistogramOutputModule::addObject(std::string path, std::string name, TObject *obj)
 {
-  auto it = baseObjects.find(getObjectName(name));
-  if (it != baseObjects.end())
-  {
-    return (baseObjects.find(getObjectName(name)))->second;
-  } else 
-  {
-    return nullptr;
-  }
-}
-
-void HistogramOutputModule::makeHistogram(const std::string &name,
-                                          const std::string &title, int nbins,
-                                          double min, double max) {
-  throw std::runtime_error("Don't use this function!");
-
-  auto newHist = new TH1F(name.c_str(), title.c_str(), nbins, min, max);
-  addObject(name, newHist);
-}
-
-void HistogramOutputModule::makeHistogram(
-    std::shared_ptr<HistogramPrototype> h) {
-  //std::cout << "first makeHistogram \n";
-  //addObject(getObjectName(h->getFilteredName()), h->makeHistogram());
-  //just calls the other makeHistogram()
-  makeHistogram(h, h->getFilteredName());
-}
-
-void HistogramOutputModule::makeHistogram(std::shared_ptr<HistogramPrototype> h,
-                                          std::string name) {
-                                            //std::cout << "second makeHistogram: " << name  + " // " + getObjectName(name) << "\n";
-  addObject(getObjectName(name), h->makeHistogram(getObjectName(name), getObjectName(name)));
-}
-
-void HistogramOutputModule::fillHistogram(const std::string &name,
-                                          std::vector<double> values,
-                                          double weight) {
-  auto hist = getHistogram(name);
-  if (!hist)
-    throw std::runtime_error(
-        "Argument to getHistogram was not of TH1 type!  Name: " + name + "&! \n");
-        // " and Root type: " + getObject(name)->ClassName());
-
-  if (auto hist2D = dynamic_cast<TH2 *>(hist)) // If the hist is 2D hist
-  {
-    if (values.size() % 2 == 1) // If the size of values is odd
+    if (objects.find(std::tuple(path, name)) == objects.end())
     {
-      throw std::runtime_error(
-          "Number of values in values vector is not even!");
+        objects.insert({std::tuple(path, name), obj});
     }
-
-    for (int x = 0; x < static_cast<int>(values.size()); x += 2) {
-      // Since x and y values are just inputed into the values vector as {x, y,
-      // x, y, x, y, ...} The for loop loops through every other element in
-      // values (i.e. every x value) The y value is then the element immediately
-      // after the x element
-      hist2D->Fill(values[x], values[x + 1], weight);
-    }
-  }
-
-  else // If the hist is 1D hist
-  {
-    for (double currentNum : values) {
-      //std::cout << "currentNum: " << currentNum << "\n"; 
-      //std::cout << "Weight: " << weight << "\n";
-      hist->Fill(currentNum, weight);
-    }
-  }
-}
-
-std::string HistogramOutputModule::getObjectName(const std::string &str) const {
-  std::string newName = getFilter() + str;
-  //std::cout << "get object name: " << newName << "\n";
-  return newName;
-}
-
-bool HistogramOutputModule::process() {
-  //std::cout << "HistOutMod running \n";
-  for (auto hist : histograms) {
-    bool draw = hist->shouldDraw(); // call the shouldDraw function so we can
-                                    // call process on the FilterModules
-    // 2/2/2023 investigating shouldDraw problem, this comment is just a placeholder
-
-    if(draw)
+    else
     {
-      // If the histogram without mass bin doesn't exist, make it
-      if (baseObjects.find(getObjectName(hist->getFilteredName())) == baseObjects.end()) {
-        makeHistogram(hist, hist->getFilteredName());
-      }
-
-      // Fill the histogram if the filter string isn't empty
-      /*
-      if (hist->getName() !=
-          hist->getFilteredName()) // If the filter string is empty, then the name
-                                  // and the filtered name should be the same
-                                  //|| hist->getFilteredName() != getObjectName(hist->getFilteredName())
-      {
-        makeHistogram(hist, hist->getFilteredName());
-      }
-      */
-
-      // Fill the histogram if shouldDraw(event) (draw) returns true
-      //if (draw) {
-      // for (double value : hist->value())
-      // {
-      //   std::cout << hist->getFilteredName() << " has " << value << "\n";
-      // }
-      //std::cout << "Module particle size: " << getInput()->getParticles(EventInput::RecoLevel::Reco).getNumParticles() << "\n";
-        //std::cout << "HistOutputModule event input: " << getInput() <<std::endl;
-      fillHistogram(hist->getFilteredName(), hist->value(), hist->eventWeight());
+        objects.at(std::tuple(path, name)) = obj;
     }
-  }
-  return true;
+}
+
+TObject *HistogramOutputModule::getObject(const std::string &path, const std::string &name)
+{
+    auto it = objects.find(std::tuple(path, name));
+    if (it != objects.end())
+    {
+        return it->second;
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
+const TObject *HistogramOutputModule::getObject(const std::string &path, const std::string &name) const
+{
+    auto it = objects.find(std::tuple(path, name));
+    if (it != objects.end())
+    {
+        return it->second;
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
+void HistogramOutputModule::makeHistogram(std::shared_ptr<HistogramPrototype> h)
+{
+    auto name = h->getName();
+    addObject(getFilterPath(), name, h->makeHistogram(name, name));
+    for (const auto &scaleFactor : h->getScaleFactors())
+    {
+        addObject(scaleFactor->getName() + "_Up/" + getFilterPath(), name, h->makeHistogram(name, name));
+        addObject(scaleFactor->getName() + "_Down/" + getFilterPath(), name, h->makeHistogram(name, name));
+    }
+}
+
+void HistogramOutputModule::fillHistogram(const std::string &path, const std::string &name, std::vector<double> values,
+                                          double weight)
+{
+    auto hist = getHistogram(path, name);
+    if (!hist)
+        throw std::runtime_error("Argument to getHistogram was not of TH1 type!  Name: " + name + "&! \n");
+    // " and Root type: " + getObject(name)->ClassName());
+
+    if (auto hist2D = dynamic_cast<TH2 *>(hist)) // If the hist is 2D hist
+    {
+        if (values.size() % 2 == 1) // If the size of values is odd
+        {
+            throw std::runtime_error("Number of values in values vector is not even!");
+        }
+
+        for (int x = 0; x < static_cast<int>(values.size()); x += 2)
+        {
+            // Since x and y values are just inputed into the values vector as {x, y,
+            // x, y, x, y, ...} The for loop loops through every other element in
+            // values (i.e. every x value) The y value is then the element immediately
+            // after the x element
+            hist2D->Fill(values[x], values[x + 1], weight);
+        }
+    }
+
+    else // If the hist is 1D hist
+    {
+        for (double currentNum : values)
+        {
+            // std::cout << "currentNum: " << currentNum << "\n";
+            // std::cout << "Weight: " << weight << "\n";
+            hist->Fill(currentNum, weight);
+        }
+    }
+}
+
+bool HistogramOutputModule::process()
+{
+    // std::cout << "HistOutMod running \n";
+    for (const auto &hist : histograms)
+    {
+        bool draw = hist->shouldDraw(); // call the shouldDraw function so we can
+                                        // call process on the FilterModules
+        // 2/2/2023 investigating shouldDraw problem, this comment is just a placeholder
+
+        if (!draw)
+        {
+            continue;
+        }
+
+        // If the histogram doesn't exist, make it
+        if (getObject(getFilterPath(), hist->getName()) == nullptr)
+        {
+            makeHistogram(hist);
+        }
+
+        // Fill the histogram if shouldDraw(event) (draw) returns true
+        // if (draw) {
+        // for (double value : hist->value())
+        // {
+        //   std::cout << hist->getFilteredName() << " has " << value << "\n";
+        // }
+        // std::cout << "Module particle size: " <<
+        // getInput()->getParticles(EventInput::RecoLevel::Reco).getNumParticles() << "\n"; std::cout <<
+        // "HistOutputModule event input: " << getInput() <<std::endl;
+        fillHistogram(getFilterPath(), hist->getName(), hist->value(), hist->eventWeight());
+        for (const auto &scaleFactor : hist->getScaleFactors())
+        {
+            fillHistogram(scaleFactor->getName() + "_Up/" + getFilterPath(), hist->getName(), hist->value(),
+                          hist->eventWeight(ScaleFactor::SystematicType::Up, scaleFactor));
+            // std::cout << "UP eventWeight: " << hist->eventWeight(ScaleFactor::SystematicType::Up, scaleFactor) <<
+            // "\n";
+            fillHistogram(scaleFactor->getName() + "_Down/" + getFilterPath(), hist->getName(), hist->value(),
+                          hist->eventWeight(ScaleFactor::SystematicType::Down, scaleFactor));
+            // std::cout << "DOWN eventWeight: " << hist->eventWeight(ScaleFactor::SystematicType::Down,
+            // scaleFactor) << "\n";
+        }
+    }
+    return true;
 }
 
 void HistogramOutputModule::finalize()
 {
-  //std::cout << "Starting histogram finalization \n";
-  // std::cout << "There are " << histograms.size() << " histograms in this event\n";
-  for (auto hist : histograms) 
-  {
-    //std::cout << "Histogram filtered name = " << hist->getFilteredName() << "\n";
-    auto Thist = getHistogram(hist->getFilteredName());
-
-    // for (int i = 1; i < Thist->GetEntries(); ++i)
-    // {
-    //   std::cout << "Bin " << Thist->GetBinWidth(i) * i << "has " << Thist->GetBinContent(i) << " entries\n";
-    // }
-    
-    if (Thist && Thist->GetEntries() == 0)
+    // std::cout << "Starting histogram finalization \n";
+    // std::cout << "There are " << histograms.size() << " histograms in this event\n";
+    for (const auto &hist : histograms)
     {
-      auto it = baseObjects.find(getObjectName(hist->getFilteredName()));
-      if (it != baseObjects.end())
-      {
-        // std::cout << "Deleting " << hist->getFilteredName() << " histogram\n";
-        baseObjects.erase(it);
-        //should probably remove hist from histograms tho not sure how to do that - George 2/23/23
-      }
+        auto tHist = getHistogram(getFilterPath(), hist->getName());
+        if (tHist != nullptr && tHist->GetEntries() == 0)
+        {
+            objects.erase(objects.find(std::tuple(getFilterPath(), hist->getName())));
+        }
     }
-  }
+}
+
+std::string HistogramOutputModule::getFilterPath()
+{
+    return boost::algorithm::join(getFilters(), "/");
 }

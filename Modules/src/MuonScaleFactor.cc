@@ -8,30 +8,38 @@ ParticleCollection<Particle> MuonScaleFactor::getParticles(const EventInput* inp
 {
     return input->getParticles(EventInput::RecoLevel::Reco, ParticleType::muon());
 }
-void MuonScaleFactor::loadScaleFactors(Json::Value output)
+void MuonScaleFactor::loadScaleFactors(jsoncollector::Json::Value output)
 {
-    Json::Value allCorrections = output["corrections"];
-    Json::Value allData = allCorrections[0u]["data"];
-    Json::Value allEdges = allData["edges"];
-    Json::Value allContent = allData["content"];
+    auto allCorrections = output["corrections"];
+    auto allData = allCorrections[0u]["data"];
+    auto allEdges = allData["edges"];
+    auto allContent = allData["content"];
 
     for (size_t i = 0; i < allEdges.size(); i++) {
         double eta_min = allEdges[i].asDouble();
 
-        Json::Value allptEdges = allContent[i]["edges"];
-        Json::Value allptContent = allContent[i]["content"];
+        auto allptEdges = allContent[i]["edges"];
+        auto allptContent = allContent[i]["content"];
 
         for (size_t k = 0; k < allptEdges.size(); k++) {
             double pt_max = allptEdges[k].asDouble();
-            Json::Value allsfContent = allptContent[k]["content"];
-
+            auto allsfContent = allptContent[k]["content"];
+            double nominal, systUp, systDown;
             for (size_t j = 0; j < allsfContent.size(); j++) {
-                Json::Value key = allsfContent[j]["key"];
+                auto key = allsfContent[j]["key"];
+                
                 if (key.asString() == "nominal") {
-                    double scaleFactor = allsfContent[j]["value"].asDouble();
-                    addScaleFactor(eta_min, pt_max, scaleFactor);
+                    nominal = allsfContent[j]["value"].asDouble();
+                
+                }
+                else if (key.asString() == "systup") {
+                    systUp = allsfContent[j]["value"].asDouble();
+                }
+                else if (key.asString() == "systdown") {
+                    systDown = allsfContent[j]["value"].asDouble();
                 }
             }
+            addScaleFactor(eta_min, pt_max, ScaleFactorSet(nominal, systUp, systDown));
         }
     }
 }

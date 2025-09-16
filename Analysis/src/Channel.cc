@@ -5,7 +5,6 @@
 #include "TStyle.h"
 #include "TH1.h"
 #include "TAxis.h"
-#include "TStyle.h"
 #include <iomanip>
 #include <iostream>
 #include <algorithm>
@@ -40,7 +39,7 @@ const std::shared_ptr<Process> Channel::findProcess(std::string processName) con
 			return process;
 		}
 	}
-	throw std::runtime_error("No process found with the inputted name.");
+	throw std::runtime_error("No process found with the inputted name " + processName);
 }
 
 std::vector<std::string> Channel::getNamesWithLabel(std::string label)

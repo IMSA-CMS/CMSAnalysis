@@ -1,19 +1,14 @@
-//Messed up in new system merge
-// #ifndef NLEPTONJETSFILTER_HH
-// #define NLEPTONJETSFILTER_HH
+#ifndef NLEPTONJETSFILTER_HH
+#define NLEPTONJETSFILTER_HH
 
-// #include <memory>
-// #include "CMSAnalysis/Modules/interface/FilterModule.hh"
-// #include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
+#include "CMSAnalysis/Utility/interface/Filter.hh"
 
-// class NLeptonJetsFilter : public FilterModule
-// {
-// public:
-//   NLeptonJetsFilter(std::shared_ptr<LeptonJetReconstructionModule> leptonJets);
 
-// protected:
-//   virtual std::string makeFilterString() override;
-//   std::shared_ptr<LeptonJetReconstructionModule> leptonJets;
-// };
+class NLeptonJetsFilter : public Filter
+{
 
-// #endif
+public:
+  virtual std::string getFilterString(const EventInput* input) const override;
+};
+
+#endif
