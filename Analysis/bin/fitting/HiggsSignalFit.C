@@ -57,7 +57,7 @@ void HiggsSignalFit()
                 std::unordered_map<std::string, TH1 *> histogramMap;
                 FitFunctionCollection currentFunctions;
                 std::vector<std::string> actualParams;
-                auto targetChannel = analysis->getChannel(channel);
+                //auto targetChannel = analysis->getChannel(channel);
                 for (const auto &name : paramNames)
                 {
                     actualParams.push_back(channel + '/' + name);
@@ -66,7 +66,7 @@ void HiggsSignalFit()
                 for (auto mass : masses)
                 {
                     std::cerr << "mass: " << mass << std::endl;
-                    auto process = targetChannel->findProcess("Higgs signal " + channel + " " + std::to_string(mass));
+                    auto process = targetChannel->findProcess("Higgs signal " + genSimDecay + " " + std::to_string(mass));
                     TH1 *selectedHist = process->getHist(histType, true);
 
                     if (!selectedHist || selectedHist->GetEntries() < minData)
