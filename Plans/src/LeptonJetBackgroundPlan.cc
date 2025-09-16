@@ -1,18 +1,13 @@
 #include "CMSAnalysis/Plans/interface/LeptonJetBackgroundPlan.hh"
 
-#include <iostream>
 #include <memory>
 
-#include "TROOT.h"
-#include "TSystem.h"
 
-#include "CMSAnalysis/DataCollection/interface/Analyzer.hh"
 #include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
 #include "CMSAnalysis/Modules/interface/METModule.hh"
 #include "CMSAnalysis/Histograms/interface/NLeptonJetHist.hh"
-#include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/Histograms/interface/Histograms.hh"
-#include "CMSAnalysis/Filters/interface/SnowmassLeptonSelector.hh"
+#include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/Histograms/interface/METHist.hh"
 #include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
 
@@ -35,7 +30,7 @@ void LeptonJetBackgroundPlan::initialize()
 
     auto recoPt = make_shared<PtHist>(EventInput::RecoLevel::Reco, "Leading lepton pT", 500, 0, 1000);
     auto recoInvMass = make_shared<InvariantMassHist>(EventInput::RecoLevel::Reco, "Opposite-sign dilepton mass", 1000, 0, 2000);
-    auto metHist = make_shared<METHist>(metMod, "MET", 500, 0, 1000);
+    auto metHist = make_shared<METHist>( "MET", 500, 0, 1000);
 
     // Add the histogram(s) created above to histMod
     histMod->addHistogram(recoPt);

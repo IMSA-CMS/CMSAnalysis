@@ -17,7 +17,6 @@ void LostElectronSelector::selectParticles(const EventInput* input, Event& event
 {
   if (!input) return;
 
-
   // GenSim particles
   auto particlesGenSim = input->getParticles(EventInput::RecoLevel::GenSim).getParticles();
   for (const auto& particle : particlesGenSim)
@@ -62,7 +61,6 @@ void LostElectronSelector::selectParticles(const EventInput* input, Event& event
   }
 //look for unique mother (dark photon makes it real electron) match to recoelectrons, one match makes other lost
 
-
 for (const auto& particleGenSim : particlesGenSim)
 {
   GenSimParticle genSimPart(particleGenSim);
@@ -72,7 +70,6 @@ for (const auto& particleGenSim : particlesGenSim)
     double particleGenSimPt = particleGenSim.getPt();
     double particleGenSimEta = particleGenSim.getEta();
     double particleGenSimPhi = particleGenSim.getPhi();
-
 
       //can the same particle match with itself?
       for (const auto& genSimElectron : genSimElectrons)
@@ -92,15 +89,13 @@ for (const auto& particleGenSim : particlesGenSim)
             double electronPt = electron.getPt();
             double electronEta = electron.getEta();
             double electronPhi = electron.getPhi();
-            if (std::abs(electronPt - particleGenSimPt) <= 5 && std::abs(electronEta - particleGenSimEta) <= 0.1 && std::abs(electronPhi - particleGenSimPhi) <= 0.1)
+            if (std::abs(electronPt - particleGenSimPt) <= 45 && std::abs(electronEta - particleGenSimEta) <= 10 && std::abs(electronPhi - particleGenSimPhi) <= 10)
             {
               particleHasRecoMatch = true;
             }
 
 
-
-
-            else if (std::abs(electronPt - genSimElectronePt) <= 5 && std::abs(electronEta - genSimElectronEta) <= 0.1 && std::abs(electronPhi - genSimElectronPhi) <= 0.1)
+            else if (std::abs(electronPt - genSimElectronePt) <= 45 && std::abs(electronEta - genSimElectronEta) <= 10 && std::abs(electronPhi - genSimElectronPhi) <= 10)
             {
               electronHasRecoMatch = true;
             }

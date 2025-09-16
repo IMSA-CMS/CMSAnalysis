@@ -9,7 +9,6 @@
 #include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "EventFilter/Utilities/interface/json.h"
-#include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "TH1.h"
 #include "TH2.h"
 #include "TCanvas.h"
@@ -36,9 +35,23 @@ std::string preprocessJSON(const std::string &filename)
     return jsonContent;
 }
 
-JSONScaleFactor::JSONScaleFactor(std::string filename, SystematicType systematicType) : systematicType(systematicType) 
+JSONScaleFactor::ScaleFactorSet& JSONScaleFactor::getScaleFactorSet(double eta, double pt)
 {
+    // Find the appropriate eta bin
+    auto etaIt = scaleFactors.lower_bound(eta);
+    if (etaIt == scaleFactors.end()) 
+    {
+        throw std::runtime_error("No scale factor found for eta: " + std::to_string(eta));
+    }
 
+    // Find the appropriate pt bin within the selected eta bin
+    auto ptIt = etaIt->second.lower_bound(pt);
+    if (ptIt == etaIt->second.end()) 
+    {
+        throw std::runtime_error("No scale factor found for pt: " + std::to_string(pt));
+    }
+
+    return scaleFactors[etaIt->first][ptIt->first];
 }
 
 void JSONScaleFactor::loadScaleFactorsFromFile(std::string filename) 
@@ -51,8 +64,8 @@ void JSONScaleFactor::loadScaleFactorsFromFile(std::string filename)
 
     // Parse the preprocessed JSON content
     std::istringstream jsonStream(jsonContent);
-    Json::Value output;
-    Json::Reader reader;
+    jsoncollector::Json::Value output;
+    jsoncollector::Json::Reader reader;
     if (!reader.parse(jsonStream, output)) {
         std::cerr << "Failed to parse JSON from file: " << filename << std::endl;
         std::cerr << "Error: " << reader.getFormatedErrorMessages() << std::endl;
@@ -63,9 +76,9 @@ void JSONScaleFactor::loadScaleFactorsFromFile(std::string filename)
     printScaleFactors();
 }
 
-double JSONScaleFactor::getScaleFactor(const EventInput* input) const 
+double JSONScaleFactor::getScaleFactor(const EventInput* input, SystematicType type) const 
 {
-    double eventWeight = 1.0;
+    ScaleFactorSet eventWeight (1.0, 1.0, 1.0);
     for (auto lepton : getParticles(input)) 
     {
         double pt = lepton.getPt();
@@ -78,25 +91,34 @@ double JSONScaleFactor::getScaleFactor(const EventInput* input) const
             if (eta >= etaPair.first) {
                 //std::cout << "eta: " << eta << std::endl;
                 for (const auto& ptPair : etaPair.second) {
-                    if (pt >= ptPair.first) {
-                        //std::cout << "pt: " << pt << std::endl;
-                        eventWeight *= ptPair.second;
+                    if (pt >= ptPair.first) 
+                    {
+                        
+                            eventWeight *= ptPair.second;
+                    }
                         found = true;
                         break;
-                    }
+                    
                 }
             }
             if (found) break;
         }
 
-        if (!found) {
-            eventWeight *= 1.0;
-        }
+        
     }
     
     //std::cout << "eventWeight: " << eventWeight << std::endl;
-
-    return eventWeight;
+    if (type == SystematicType::Nominal) {
+        return eventWeight.nominal;
+    } else if (type == SystematicType::Up) {
+        //std::cout << "eventWeight Up: " << eventWeight.systUp << std::endl;
+        return eventWeight.systUp;
+    } else if (type == SystematicType::Down) {
+        //std::cout << "eventWeight Down: " << eventWeight.systDown << std::endl;
+        return eventWeight.systDown;
+    } else {
+        throw std::runtime_error("Invalid systematic type");
+    }
 }
 
 // void JSONScaleFactor::printScaleFactors() const 
@@ -113,13 +135,28 @@ double JSONScaleFactor::getScaleFactor(const EventInput* input) const
 // }
 void JSONScaleFactor::printScaleFactors() const
 {
-    
+    //print the electron scale factors
+    std::cout << "Electron Scale Factors:" << std::endl;
+    for (const auto& etaPair : scaleFactors) 
+    {
+        double eta = etaPair.first;
+        for (const auto& ptPair : etaPair.second) 
+        {
+            double pt = ptPair.first;
+            ScaleFactorSet scaleFactor = ptPair.second;
+            std::cout << "eta: " << eta << ", pt: " << pt 
+                      << " -> scaleFactor: " << scaleFactor.nominal 
+                      << ", systUp: " << scaleFactor.systUp 
+                      << ", systDown: " << scaleFactor.systDown << std::endl;
+        }
+    }
 }
 
-void JSONScaleFactor::addScaleFactor(double eta, double pt, double scaleFactor)
+void JSONScaleFactor::addScaleFactor(double eta, double pt, ScaleFactorSet scaleFactor) 
 {
     scaleFactors[eta][pt] = scaleFactor;
 }
+
 
 
 

@@ -1,3 +1,0 @@
-Data
-Trigger:	SingleMuon
-Year:	2016G	2016H

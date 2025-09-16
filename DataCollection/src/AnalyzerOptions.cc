@@ -27,7 +27,6 @@
 #include "CMSAnalysis/Plans/interface/PdfWeightingPlan.hh"
 #include "CMSAnalysis/Plans/interface/MuonPlan.hh"
 #include "CMSAnalysis/Plans/interface/MuonSignalPlan.hh"
-#include "CMSAnalysis/Plans/interface/CounterPlan.hh"
 
 AnalyzerOptions::AnalyzerOptions()
 {
@@ -50,7 +49,6 @@ AnalyzerOptions::AnalyzerOptions()
   analysisPlans["PdfWeighting"] = new PdfWeightingPlan();
   analysisPlans["Muon"] = new MuonPlan();
   analysisPlans["MuonSignal"] = new MuonSignalPlan();
-  analysisPlans["Counter"] = new CounterPlan();
 }
 
 std::string AnalyzerOptions::pickfileInterface()

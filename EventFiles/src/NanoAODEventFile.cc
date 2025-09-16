@@ -1,17 +1,9 @@
 #include "CMSAnalysis/EventFiles/interface/NanoAODEventFile.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
-#include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "CMSAnalysis/Utility/interface/GenSimSimpleImplementation.hh"
-#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
-#include "DataFormats/PatCandidates/interface/Electron.h"
-#include "DataFormats/PatCandidates/interface/Muon.h"
-#include "DataFormats/PatCandidates/interface/Photon.h"
-#include "DataFormats/PatCandidates/interface/Jet.h"
-#include "DataFormats/PatCandidates/interface/MET.h"
+#include "CMSAnalysis/Utility/interface/Particle.hh"
 #include <iostream>
-#include <fstream>
 #include <string>
-#include "CMSAnalysis/Utility/interface/Utility.hh"
 
 int NanoAODEventFile::positiveCounter = 0;
 int NanoAODEventFile::negativeCounter = 0;
@@ -21,7 +13,7 @@ std::vector<bool> NanoAODEventFile::getTriggerResults(std::string subProcess) co
     // determines whether it passes the trigger"s criteria or not
     std::vector<bool> v_results = {};
 
-    for(auto& trigger : triggers)
+    for (auto &trigger : triggers)
     {
         // std::cout << "Is this for loop working" << "\n";
         v_results.push_back(*(trigger.second));
@@ -34,7 +26,7 @@ std::vector<std::string> NanoAODEventFile::getTriggerNames(std::string subProces
 {
     std::vector<std::string> v_names = {};
 
-    for(auto& trigger : triggers)
+    for (auto &trigger : triggers)
     {
         v_names.push_back(trigger.first);
     }
@@ -45,35 +37,34 @@ std::vector<std::string> NanoAODEventFile::getTriggerNames(std::string subProces
 bool NanoAODEventFile::checkTrigger(std::string triggerName, std::string subProcess) const
 {
     // add cout statement to check, it in fact does pass through this code
-    //std::cout << "Does this Trigger work?" << "\n";
-    //std::cout << triggerName << "\n";
+    // std::cout << "Does this Trigger work?" << "\n";
+    // std::cout << triggerName << "\n";
     auto trigger = triggers.find(triggerName);
-    if (trigger == triggers.end()) 
+    if (trigger == triggers.end())
     {
-       // return false;
-       if(!tree->GetBranch(triggerName.c_str()))
-       {
-        //std::cout << triggerName << " doesn't exist\n";
-        return false;
-       }
+        // return false;
+        if (!tree->GetBranch(triggerName.c_str()))
+        {
+            // std::cout << triggerName << " doesn't exist\n";
+            return false;
+        }
         auto currentEntry = treeReader.GetCurrentEntry();
         treeReader.Restart();
         TTreeReaderValue<Bool_t> intermediate(treeReader, triggerName.c_str());
         trigger = triggers.emplace(triggerName, intermediate).first;
-        //std::cout << triggerName <<"\n";
+        // std::cout << triggerName <<"\n";
         treeReader.SetTree(tree);
-        treeReader.SetEntry(currentEntry-1);
+        treeReader.SetEntry(currentEntry - 1);
         treeReader.Next();
-        // call Restart() which calls next but goes back to first entry, then we go to SetEntry again then treeReader.Next again, do this after setTree
+        // call Restart() which calls next but goes back to first entry, then we go
+        // to SetEntry again then treeReader.Next again, do this after setTree
     }
     return *(trigger->second);
-     
 }
 
-NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> iparams) : 
-    EventFile(ifile, iparams)
-    {
-    //initializing variables from header file
+NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> iparams) : EventFile(ifile, iparams)
+{
+    // initializing variables from header file
     std::vector<std::shared_ptr<TreeVariableBase>> treeVariables = {
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_eta", "Electron_eta"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_phi", "Electron_phi"),
@@ -106,87 +97,88 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("tau_dxy", "Tau_dxy"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("tau_dz", "Tau_dz"),
         std::make_shared<TreeVariable<TTreeReaderArray<UChar_t>>>("tau_mvaid", "Tau_idDeepTau2017v2p1VSjet"),
+        
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("photon_eta", "Photon_eta"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("photon_phi", "Photon_phi"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("photon_pt", "Photon_pt"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("met_phi", "MET_phi"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("met_pt", "MET_pt"),
 
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("photon_eta", "Photon_eta"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("photon_phi", "Photon_phi"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("photon_pt", "Photon_pt"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("met_phi", "MET_phi"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("met_pt", "MET_pt"),
-		
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_eta", "Jet_eta"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_phi", "Jet_phi"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_mass", "Jet_mass"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_pt", "Jet_pt"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_eta", "Jet_eta"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_phi", "Jet_phi"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_mass", "Jet_mass"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_pt", "Jet_pt"),
 
+        std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("elec_idpass", "Electron_cutBased"),
 
-		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("elec_idpass", "Electron_cutBased"),
-
-    	std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("mvaElecWP80", "Electron_mvaFall17V2Iso_WP80"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("mvaElecWP90", "Electron_mvaFall17V2Iso_WP90"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("mvaElecWPL", "Electron_mvaFall17V2Iso_WPL"),
-
+        std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("mvaElecWP80", "Electron_mvaFall17V2Iso_WP80"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("mvaElecWP90", "Electron_mvaFall17V2Iso_WP90"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("mvaElecWPL", "Electron_mvaFall17V2Iso_WPL"),
 
         std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("elec_cutBasedHEEP", "Electron_cutBased_HEEP"),
 
         std::make_shared<TreeVariable<TTreeReaderArray<UChar_t>>>("muon_mvaid", "Muon_mvaId"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_looseid", "Muon_looseId"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_mediumid", "Muon_mediumId"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_tightid", "Muon_tightId"),
-		std::make_shared<TreeVariable<TTreeReaderValue<ULong64_t>>>("event_number", "event"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_looseid", "Muon_looseId"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_mediumid", "Muon_mediumId"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Bool_t>>>("muon_tightid", "Muon_tightId"),
+        std::make_shared<TreeVariable<TTreeReaderValue<ULong64_t>>>("event_number", "event"),
         std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("jet_bTag", "Jet_btagCSVV2"),
         std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("jet_size", "nJet"),
 
         std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("gen_size", "nGenPart"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_pid", "GenPart_pdgId"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_status", "GenPart_status"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_eta", "GenPart_eta"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_phi", "GenPart_phi"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_mass", "GenPart_mass"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pt", "GenPart_pt"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_m1", "GenPart_genPartIdxMother"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_pid", "GenPart_pdgId"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_status", "GenPart_status"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_eta", "GenPart_eta"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_phi", "GenPart_phi"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_mass", "GenPart_mass"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pt", "GenPart_pt"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_m1", "GenPart_genPartIdxMother"),
         std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("pdf_weight", "LHEPdfWeight"),
         std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("num_pdfs", "nLHEPdfWeight"),
-		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pileup", "Pileup_nTrueInt"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pileup", "Pileup_nTrueInt"),
         std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("HEEP_bitmap", "Electron_vidNestedWPBitmapHEEP"),
         std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("Electron_bitmap", "Electron_vidNestedWPBitmap"),
         std::make_shared<TreeVariable<TTreeReaderValue<ULong64_t>>>("event", "event"),
-        std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("run", "run")
-    };
+        std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("run", "run")};
 
-    // std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("elec_size", "nElectron"),
-    // std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("muon_size", "nMuon"),
-    // std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("photon_size", "nPhoton"),
-    // std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("jet_size", "nJet"),
-    // std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("gen_size", "nGenPart"),
-   
+    // std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("elec_size",
+    // "nElectron"),
+    // std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("muon_size",
+    // "nMuon"),
+    // std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("photon_size",
+    // "nPhoton"),
+    // std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("jet_size",
+    // "nJet"),
+    // std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("gen_size",
+    // "nGenPart"),
+
     tree = getFile()->Get<TTree>("Events");
 
     TBranch *branch_1 = tree->FindBranch("BeamSpot");
     TBranch *branch_2 = tree->FindBranch("GenProton");
     TBranch *branch_3 = tree->FindBranch("Rho");
 
-    if(branch_1 && branch_2 && branch_3) //version 12
+    if (branch_1 && branch_2 && branch_3) // version 12
     {
-        int versionNum=12;
+        // int versionNum = 12;
         treeVariables.push_back(std::make_shared<TreeVariable<TTreeReaderValue<Int_t>>>("elec_size", "nElectron"));
         treeVariables.push_back(std::make_shared<TreeVariable<TTreeReaderValue<Int_t>>>("muon_size", "nMuon"));
         treeVariables.push_back(std::make_shared<TreeVariable<TTreeReaderValue<Int_t>>>("photon_size", "nPhoton"));
-        std::cout<<"This is version 12\n";
+        std::cout << "This is version 12\n";
     }
-    else //version 9
+    else // version 9
     {
-        int versionNum=9;
+        // int versionNum = 9;
         treeVariables.push_back(std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("elec_size", "nElectron"));
         treeVariables.push_back(std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("muon_size", "nMuon"));
         treeVariables.push_back(std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("photon_size", "nPhoton"));
-        std::cout<<"This is version 9\n";
-
+        std::cout << "This is version 9\n";
     }
 
-    for(auto& var : treeVariables)
+    for (auto &var : treeVariables)
     {
         // std::cout << "Checking " << var->getBranchName() << std::endl;
-        if(tree->GetBranch(var->getBranchName().c_str()))
+        if (tree->GetBranch(var->getBranchName().c_str()))
         {
             // std::cout << "Adding " << var->getBranchName() << std::endl;
             variables.emplace(var->getName(), var->makeReader(treeReader));
@@ -198,88 +190,88 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
     }
     treeReader.SetTree(tree);
     setEventCount(1);
-    treeReader.Next(); 
+    treeReader.Next();
 }
 
 void NanoAODEventFile::nextEvent()
-{ 
-    treeReader.Next(); 
+{
+    treeReader.Next();
     setEventCount(getEventCount() + 1);
-    
-    if(variables.find("gen_size") != variables.end() && getVariable<UInt_t>("gen_size") > 0)
-    {
-        genSimParticles.clear(); 
-        genSimParticles.reserve(getVariable<UInt_t>("gen_size") );
 
-        //construct daughters from mothers
+    if (variables.find("gen_size") != variables.end() && getVariable<UInt_t>("gen_size") > 0)
+    {
+        genSimParticles.clear();
+        genSimParticles.reserve(getVariable<UInt_t>("gen_size"));
+
+        // construct daughters from mothers
         int mothersIndex;
-        std::vector<std::vector<Int_t>> daughtersVectors((int)getVariable<UInt_t>("gen_size"), std::vector<int>(0)); //Vector of Vectors, the first index represents the mother, the second vector has the aughter indexes        
+        std::vector<std::vector<Int_t>> daughtersVectors(
+            (int)getVariable<UInt_t>("gen_size"),
+            std::vector<int>(0)); // Vector of Vectors, the first index represents the mother, the second vector has the
+                                  // aughter indexes
         for (unsigned j = 0; j < getVariable<UInt_t>("gen_size"); j++)
         {
-            mothersIndex = getArrayElement<Int_t>("gen_m1", j); //Starts at particle 0, then gets its mother
+            mothersIndex = getArrayElement<Int_t>("gen_m1", j); // Starts at particle 0, then gets its mother
             if (mothersIndex < (int)getVariable<UInt_t>("gen_size") && mothersIndex > -1)
             {
-                daughtersVectors[mothersIndex].push_back(j); //at daughtersVectors[mothersIndex], adds the current particle, making the current particle the daughter
-                //daughersVectors[i] is a vector of the daughters of particle i
+                daughtersVectors[mothersIndex].push_back(j); // at daughtersVectors[mothersIndex], adds the current
+                                                             // particle, making the current particle the daughter
+                // daughersVectors[i] is a vector of the daughters of particle i
             }
         }
 
-        for (unsigned i = 0; i < getVariable<UInt_t>("gen_size") ; i++) //Loops through every particle
+        for (unsigned i = 0; i < getVariable<UInt_t>("gen_size"); i++) // Loops through every particle
         {
-            std::vector<const GenSimParticle*> daughterCollectionVector{};
-            for (auto index : daughtersVectors[i]) //for every particle, go throught its daughters and add add its index in genSimp ro daughter collection vector
+            std::vector<const GenSimParticle *> daughterCollectionVector{};
+            for (auto index : daughtersVectors[i]) // for every particle, go throught its daughters
+                                                   // and add add its index in genSimp ro daughter
+                                                   // collection vector
             {
-                //std::cout<< "index: " << index << "\n";
-                //std::cout<< "size: " <<daughtersVectors[i].size() << "\n";
+                // std::cout<< "index: " << index << "\n";
+                // std::cout<< "size: " <<daughtersVectors[i].size() << "\n";
 
-                daughterCollectionVector.push_back(&genSimParticles[index]); //probably something wrong here
-             
-               //gensim is cleared every time, so its always empty, so the daughter thing is pointing at garbage?, probably not
+                daughterCollectionVector.push_back(&genSimParticles[index]); // probably something wrong here
 
-                //std::cout<< "gensimindex: " << &genSimParticles[index] << "\n";
-                //std::cout<< "daughter collection index" << daughterCollectionVector[0] << "\n";                 //index and vector addresses are the same
+                // gensim is cleared every time, so its always empty, so the daughter
+                // thing is pointing at garbage?, probably not
+
+                // std::cout<< "gensimindex: " << &genSimParticles[index] << "\n";
+                // std::cout<< "daughter collection index" <<
+                // daughterCollectionVector[0] << "\n";                 //index and
+                // vector addresses are the same
             }
             GenSimParticle *mother = nullptr;
-            if(getArrayElement<Int_t>("gen_m1", i) != -1){
+            if (getArrayElement<Int_t>("gen_m1", i) != -1)
+            {
                 mother = &genSimParticles[getArrayElement<Int_t>("gen_m1", i)];
-                //std::cout<<"Mother: "<<mother;
-                
+                // std::cout<<"Mother: "<<mother;
             }
-            genSimParticles.push_back(GenSimParticle(reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(
-                getArrayElement<Float_t>("gen_pt", i),
-                getArrayElement<Float_t>("gen_eta", i), 
-                getArrayElement<Float_t>("gen_phi", i), 
-                getArrayElement<Float_t>("gen_mass", i))), 
-                getArrayElement<Int_t>("gen_pid", i),
-                mother,
-                daughterCollectionVector, 
-                getArrayElement<Int_t>("gen_status", i)));
-            
-            
-            if(daughterCollectionVector.size() > 0) {
-                //std::cout<< "GenSimParticle " << &genSimParticles[daughtersVectors[i][0]] << "\n";
-                //std::cout<< "Daughter zero: " << daughterCollectionVector[0] << "\n";
-                if(&genSimParticles[daughtersVectors[i][0]] != daughterCollectionVector[0]) {
-                    //std::cout << "ERROR!" << "\n";
+            genSimParticles.push_back(
+                GenSimParticle(reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(
+                                   getArrayElement<Float_t>("gen_pt", i), getArrayElement<Float_t>("gen_eta", i),
+                                   getArrayElement<Float_t>("gen_phi", i), getArrayElement<Float_t>("gen_mass", i))),
+                               getArrayElement<Int_t>("gen_pid", i), mother, daughterCollectionVector,
+                               getArrayElement<Int_t>("gen_status", i)));
+
+            if (daughterCollectionVector.size() > 0)
+            {
+                // std::cout<< "GenSimParticle " <<
+                // &genSimParticles[daughtersVectors[i][0]] << "\n"; std::cout<<
+                // "Daughter zero: " << daughterCollectionVector[0] << "\n";
+                if (&genSimParticles[daughtersVectors[i][0]] != daughterCollectionVector[0])
+                {
+                    // std::cout << "ERROR!" << "\n";
                 }
 
-                //std::cout<< "Daughter: " << daughterCollectionVector[0]->getName(); //segfaulted
+                // std::cout<< "Daughter: " << daughterCollectionVector[0]->getName();
+                // //segfaulted
             }
-
         }
     }
 
-    //std::cout << "Run: " << getVariable<UInt_t>("run") << std::endl;
-}
+    // Load reco particles
 
-ParticleCollection<GenSimParticle> NanoAODEventFile::getGenSimParticles() const
-{
-    return genSimParticles;
-}
-
-ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
-{
-    ParticleCollection<Particle> recoParticles;
+    recoParticles.clear();
     for (UInt_t i = 0; i < getVariable<UInt_t>("elec_size"); i++)
     {
         int charge = getArrayElement<Int_t>("elec_charge", i);
@@ -438,29 +430,40 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
 //             particle.addInfo("pweight" + std::to_string(i), weight);
 //         }
 //        }    
-    return recoParticles;
+
 }
 
+ParticleCollection<GenSimParticle> NanoAODEventFile::getGenSimParticles() const
+{
+    return genSimParticles;
+}
 
+ParticleCollection<Particle> NanoAODEventFile::getRecoParticles() const
+{
+    return recoParticles;
+}
 
 ParticleCollection<Particle> NanoAODEventFile::getRecoJets() const
 {
     ParticleCollection<Particle> recoParticles;
-    for(UInt_t i = 0; i < getVariable<UInt_t>("jet_size"); i++) 
+    for (UInt_t i = 0; i < getVariable<UInt_t>("jet_size"); i++)
     {
-        Particle particle(reco::Candidate::LorentzVector(getArrayElement<Float_t>("jet_pt", i), getArrayElement<Float_t>("jet_eta", i), getArrayElement<Float_t>("jet_phi", i), getArrayElement<Float_t>("jet_mass", i)), 
-        //getArrayElement<Float_t>("jet_dxy", i), getArrayElement<Float_t>("jet_dz", i), 0, 
-        0, 0, 0,
-        ParticleType::jet());
+        Particle particle(reco::Candidate::LorentzVector(
+                              getArrayElement<Float_t>("jet_pt", i), getArrayElement<Float_t>("jet_eta", i),
+                              getArrayElement<Float_t>("jet_phi", i), getArrayElement<Float_t>("jet_mass", i)),
+                          // getArrayElement<Float_t>("jet_dxy", i),
+                          // getArrayElement<Float_t>("jet_dz", i), 0,
+                          0, 0, 0, ParticleType::jet());
         particle.addInfo("bJet", getArrayElement<Float_t>("jet_bTag", i));
         recoParticles.addParticle(particle);
-             
     }
     return recoParticles;
 }
 
 double NanoAODEventFile::getMET() const
 {
+    // std::cout << "met_pt TEST: " <<
+    // static_cast<double>(getArrayElement<Float_t>("met_pt", 0)) << std::endl;
     return static_cast<double>(getArrayElement<Float_t>("met_pt", 0));
 }
 
@@ -488,7 +491,7 @@ std::vector<double> NanoAODEventFile::getPDFWeights() const
     std::vector<double> pdfWeights;
     for (UInt_t i = 0; i < getVariable<UInt_t>("num_pdfs"); ++i)
     {
-        pdfWeights.push_back((double) getArrayElement<Float_t>("pdf_weight", i));
+        pdfWeights.push_back((double)getArrayElement<Float_t>("pdf_weight", i));
     }
 
     return pdfWeights;

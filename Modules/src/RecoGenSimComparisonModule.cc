@@ -494,6 +494,19 @@ void RecoGenSimComparisonModule::sameSignDeltaRComparison(const ParticleCollecti
                     }
                 }
             }
+            if (recoType==ParticleType::electron()) 
+            {
+                electronCounter++;
+                elecWrongChargeCounter += wrongCharge;
+                elecFakePhotonCounter += fakePhoton;
+                elecNoMatchCounter += noMatch;
+                elecMismeasuredPtCounter += mismeasuredPt;
+                elecAccurateCounter += accurate;
+            } 
+            if(noMatch){
+                noMatchCounter++;
+            }
+             
         }
         // determines if the photon is fake
         bool isFakePhoton = matchesElectron && !matchesPhoton;

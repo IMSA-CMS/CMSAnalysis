@@ -31,6 +31,10 @@ class Process
         //std::vector<std::vector<std::string>> getData() const;
         void addSystematic(std::shared_ptr<Systematic> systematic);
         std::pair<TH1*, TH1*> getSystematicHist(HistVariable histType, bool scaleToExpected = false);
+
+        static std::pair<TH1*, TH1*> combineSystematics(std::vector<std::shared_ptr<Process>> processes, TH1* original);
+
+        std::shared_ptr<Systematic> calcSystematic(HistVariable histType, std::string systematicName);
     private:
         const std::string name;
         const int color;
