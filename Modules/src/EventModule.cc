@@ -94,10 +94,11 @@ bool EventModule::process ()
     // time_2 += end_2 - start_2;
     //auto start_3 = std::chrono::steady_clock::now();
 
-    addBasicHistograms(ParticleType::electron(), event.getElectrons());
-    addBasicHistograms(ParticleType::muon(), event.getMuons());
-    addBasicHistograms(ParticleType::photon(), event.getPhotons());
-    addBasicHistograms(ParticleType::jet(), event.getJets());
+    addBasicHistograms(ParticleType::electron(), event.getElectrons(), ParticleType::electron().getName());
+    addBasicHistograms(ParticleType::muon(), event.getMuons(), ParticleType::muon().getName());
+    addBasicHistograms(ParticleType::tau(), event.getTaus(), ParticleType::tau().getName());
+    addBasicHistograms(ParticleType::photon(), event.getPhotons(), ParticleType::photon().getName());
+    addBasicHistograms(ParticleType::jet(), event.getJets(),  ParticleType::jet().getName());
 
     //std::cout <<"The number of special events is: " << event.getSpecials().empty();
 
@@ -107,8 +108,8 @@ bool EventModule::process ()
         for (auto& [key,value] : event.getSpecials())
         {
             auto specialPtr = std::make_shared<ParticleCollection<Particle>>(value);
-            addBasicHistograms(value.getParticles()[0].getType(), value);
-            addCountHistograms(value.getParticles()[0].getType(), specialPtr); 
+            addBasicHistograms(value.getParticles()[0].getType(), value, key);
+            addCountHistograms(value.getParticles()[0].getType(), specialPtr, key); 
 
         }
     }catch (const std::runtime_error& e) {
@@ -117,14 +118,16 @@ bool EventModule::process ()
 
     auto electronCollection = std::make_shared<ParticleCollection<Particle>>(event.getElectrons());
     auto muonCollection = std::make_shared<ParticleCollection<Particle>>(event.getMuons());
+    auto tauCollection = std::make_shared<ParticleCollection<Particle>>(event.getTaus());
     auto photonCollection = std::make_shared<ParticleCollection<Particle>>(event.getPhotons());
     auto jetCollection = std::make_shared<ParticleCollection<Particle>>(event.getJets());
 
-    addCountHistograms(ParticleType::electron(), electronCollection);
-    addCountHistograms(ParticleType::muon(), muonCollection);
-    addCountHistograms(ParticleType::photon(), photonCollection);
-
-    try{addCountHistograms(ParticleType::jet(), jetCollection);
+    addCountHistograms(ParticleType::electron(), electronCollection, ParticleType::electron().getName());
+    addCountHistograms(ParticleType::muon(), muonCollection, ParticleType::muon().getName());
+    addCountHistograms(ParticleType::tau(), tauCollection, ParticleType::tau().getName());
+    addCountHistograms(ParticleType::photon(), photonCollection, ParticleType::photon().getName());
+    try{
+        addCountHistograms(ParticleType::jet(), jetCollection, ParticleType::jet().getName());
     } catch (const std::runtime_error& e) {
         std::cerr << "Exception caught: " << e.what() << std::endl;
     }
@@ -156,7 +159,7 @@ std::function<std::vector<double>(const EventInput*)> EventModule::findNthPartic
 }
 
 
-void EventModule::addBasicHistograms(const ParticleType& particleType, const ParticleCollection<Particle>& particles)
+void EventModule::addBasicHistograms(const ParticleType& particleType, const ParticleCollection<Particle>& particles, std::string name)
 {
     std::vector<Particle> parts = particles.getParticles();
     int count = 0;
@@ -165,7 +168,7 @@ void EventModule::addBasicHistograms(const ParticleType& particleType, const Par
 
         for (auto params : particleType.getParticleHists())
         {
-            auto histName = getBasicHistogramTitle(count,particleType,params.getName());
+            auto histName = getBasicHistogramTitle(count, name, params.getName());
             if (!checkHist(histName))
             {
                 params.setName(histName);
@@ -186,11 +189,11 @@ void EventModule::addBasicHistograms(const ParticleType& particleType, const Par
 }
 
 //CollectionHistparams ^^^
-void EventModule::addCountHistograms(const ParticleType& particleType, const std::shared_ptr<ParticleCollection<Particle>> particles)
+void EventModule::addCountHistograms(const ParticleType& particleType, const std::shared_ptr<ParticleCollection<Particle>> particles, std::string name)
 {
     for (auto params : particleType.getCollectionHists())
     {
-        auto histName = getCountHistogramTitle(particleType, params.getName());
+        auto histName = getCountHistogramTitle(name, params.getName());
         if (!checkHist(histName))
         {
             params.setName(histName);
@@ -222,7 +225,7 @@ bool EventModule::checkHist(std::string histName) const
     return inMap;
 }
 
-std::string EventModule::getBasicHistogramTitle(int n, const ParticleType& particleType, std::string valueName) const
+std::string EventModule::getBasicHistogramTitle(int n, std::string particleType, std::string valueName) const
 {
     n++;
     std::string rank = "th Highest ";
@@ -238,12 +241,12 @@ std::string EventModule::getBasicHistogramTitle(int n, const ParticleType& parti
     {
         rank = "rd Highest ";
     }
-    return std::to_string(n) + rank + particleType.getName() + " " + valueName;
+    return std::to_string(n) + rank + particleType + " " + valueName;
 }
 
-std::string EventModule::getCountHistogramTitle(const ParticleType& particleType, std::string valueName) const
+std::string EventModule::getCountHistogramTitle(std::string particleType, std::string valueName) const
 {
-    return particleType.getName() + " " + valueName;
+    return particleType + " " + valueName;
 }
 
 void EventModule::clearHistograms()

@@ -60,6 +60,7 @@
 #include "CMSAnalysis/Filters/interface/DarkPhotonControlRegionFilter.hh"
 #include "CMSAnalysis/Modules/interface/RecoGenSimComparisonModule.hh"
 #include "CMSAnalysis/Filters/interface/BJetCut.hh"
+#include "CMSAnalysis/Filters/interface/FakePhotonSelector.hh"
 
 // Use 700-1000 2018, DY50
 
@@ -71,7 +72,8 @@ void LeptonJetReconstructionPlan::initialize()
 
   auto eventMod = std::make_shared<EventModule>();
   auto eventHistMod = eventMod->getHistogramModule();
-  eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5));
+  // eventMod->addSelector(std::make_shared<LeptonJetSelector>(.5));
+  eventMod->addSelector(std::make_shared<FakePhotonSelector>(.5)); //adds selector in (makes it use the code)
   //eventMod->addSelector(std::make_shared<LeptonJetAntiSelector>(.5, 0.0001, 0.0005));
 
   auto darkPhotonFilter = std::make_shared<FilterModule>(std::make_shared<DarkPhotonControlRegionFilter>(10));
@@ -81,11 +83,11 @@ void LeptonJetReconstructionPlan::initialize()
   auto highestMuonPtCut = make_shared<HighestMuonPtCut>();
 
   eventMod->addCut(triggerCut);
-  eventMod->addCut(highestMuonPtCut);
+  //eventMod->addCut(highestMuonPtCut);
 
   auto matchMod = std::make_shared<MatchingModule>();
   auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
-  auto eventDumpMod = std::make_shared<EventDumpModule>(true,true);
+  auto eventDumpMod = std::make_shared<EventDumpModule>(true,true, 5);
   auto lepMatchMod = std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.1); // this
   
   // auto highestLeptonJetDeltaRCut = std::make_shared<HighestLeptonJetDeltaRCut>(lepRecoMod);
@@ -97,7 +99,7 @@ void LeptonJetReconstructionPlan::initialize()
   
   auto lepRecoHistMod = lepRecoMod->getHistogramModule();
 
-  //auto recoGenSimComparisonMod = std::make_shared<RecoGenSimComparisonModule>();
+  auto recoGenSimComparisonMod = std::make_shared<RecoGenSimComparisonModule>("fakePhoton", true);
   auto leptonJetMLStripMod = std::make_shared<LeptonJetMLStripModule>();
   leptonJetMLStripMod->setInput(eventMod->getEventInput());
   auto mlMod = std::make_shared<MLCalculator>(leptonJetMLStripMod, "DataCollection/bin/dataset/weights/TMVAClassification_BDT.weights.xml", "BDT");
@@ -240,8 +242,8 @@ void LeptonJetReconstructionPlan::initialize()
   //modules.addAnalysisModule(massRecoEfficiency800);
   //modules.addAnalysisModule(massRecoEfficiency1000);
   //modules.addAnalysisModule(massRecoEfficiency1300);
-  //modules.addAnalysisModule(recoGenSimComparisonMod);
-  //modules.addAnalysisModule(eventDumpMod);
+  modules.addAnalysisModule(recoGenSimComparisonMod);
+  modules.addAnalysisModule(eventDumpMod);
   //modules.addAnalysisModule(recoEventDumpMod);
   /* auto selector = make_shared<SnowmassLeptonSelector>(5);
 

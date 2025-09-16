@@ -26,23 +26,7 @@ void SuperImpose() {
   // Run on eta, pT, mass, delta R
 
     // Plot of dXY, dZ without cuts for just background on a 2D plot
-    
-    // std::vector<std::string> files = {"test1000.root", "HiggsDPZ.root", "ZPrime.root", "SUSY.root", "Higgs4DP.root"};
-    // std::vector<std::string> hists = {"Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values"};
-    // std::vector<TString> names = {"Higgs to 2 Dark Photon", "Higgs to Z and Dark Photon", "Z Prime", "SUSY", "Higgs to 4 Dark Photon"};
-    std::vector<std::string> files = {"controlled.root", "controlled.root", "controlled.root", "controlled.root"};
-    std::vector<std::string> hists = {"Low Mass and Different Signs__hists/Low Mass and Different Signs_1st Highest Lepton Jet Phi",  
-    "Low Mass and Same Sign__hists/Low Mass and Same Sign_1st Highest Lepton Jet Phi",  
-    "High Mass and Different Signs__hists/High Mass and Different Signs_1st Highest Lepton Jet Phi",  
-    "High Mass and Same Sign__hists/High Mass and Same Sign_1st Highest Lepton Jet Phi"};
-    std::vector<TString> names = {"Different Signs", "Same Sign"};
-    //Colors go here
-    std::vector<int> colors = {1, 2, 3, 4, 6, 7};
-    //Change x and y axis titles here
-    //TString xTitle = "Gamma";
-    TString xTitle = "Lepton Jet Invariant Mass (GeV)";
-    TString yTitle = "Events";
-  // Plot of dXY, dZ without cuts for just background on a 2D plot
+  
 
   // std::vector<std::string> files = {"test1000.root", "HiggsDPZ.root", "ZPrime.root", "SUSY.root", "Higgs4DP.root"};
   // std::vector<std::string> hists = {"Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values", "Gamma Values"};

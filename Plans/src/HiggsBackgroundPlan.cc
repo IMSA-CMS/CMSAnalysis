@@ -128,7 +128,7 @@ void HiggsBackgroundPlan::initialize()
     modules.addAnalysisModule(eventHistMod);    
     modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
     //modules.addFilterModule(runFilterMod); 
-    modules.addAnalysisModule(eventDump);
+    //modules.addAnalysisModule(eventDump);
     auto hPlusPlusEfficiency = make_shared<HPlusPlusEfficiency>();
     hPlusPlusEfficiency->setInput(eventMod->getEventInput());
     modules.addAnalysisModule(hPlusPlusEfficiency);

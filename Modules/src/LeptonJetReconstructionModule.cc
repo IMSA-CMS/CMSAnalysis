@@ -48,7 +48,7 @@ bool LeptonJetReconstructionModule::process()  // reco::deltaR(v1, v2)
     histMod->addHistogram(etaHist);
     histMod->addHistogram(maxIsolationHist);
   }
-
+  //const auto &recoCandidates = getInput()->getParticles(EventInput::RecoLevel::Reco, ParticleType::electron());
   const auto &recoCandidates = getInput()->getParticles(EventInput::RecoLevel::Reco, ParticleType::muon());
   leptonJets = findLeptonJets(recoCandidates);
   findDeltaRValues();
@@ -58,14 +58,19 @@ bool LeptonJetReconstructionModule::process()  // reco::deltaR(v1, v2)
   return true;
 }
 
-const std::vector<LeptonJet> LeptonJetReconstructionModule::findLeptonJets(ParticleCollection<Lepton> recoCandidates) {
+const std::vector<LeptonJet> LeptonJetReconstructionModule::findLeptonJets(ParticleCollection<Lepton> recoCandidates) 
+{
   auto recoLeptons = recoCandidates.getParticles();
   std::vector<LeptonJet> leptonJetList;
-  while (recoLeptons.size() != 0) {
+  while (recoLeptons.size() != 0) 
+  {
     Lepton highestPtLepton = findHighestPtLepton(recoLeptons);
-    if (highestPtLepton.getPt() <= 5) {
+    if (highestPtLepton.getPt() <= 5)
+    {
       break;
-    } else if (abs(highestPtLepton.getEta()) > 3) {
+    } 
+    else if (abs(highestPtLepton.getEta()) > 3) 
+    {
       recoLeptons.erase(std::find(recoLeptons.begin(), recoLeptons.end(), highestPtLepton));
       continue;
     }
@@ -75,13 +80,15 @@ const std::vector<LeptonJet> LeptonJetReconstructionModule::findLeptonJets(Parti
     auto highestPtLeptonFourVector = highestPtLepton.getFourVector();
     recoLeptons.erase(std::find(recoLeptons.begin(), recoLeptons.end(), highestPtLepton));
 
-    for (unsigned i = 0; i < recoLeptons.size(); ++i) {
+    for (unsigned i = 0; i < recoLeptons.size(); ++i)
+    {
       auto fourVector = recoLeptons[i].getFourVector();
       double deltaR = reco::deltaR(highestPtLeptonFourVector, fourVector);
       // std::cout << "delta r: " << deltaR << " delta r cut: " << DeltaRCut << "\n";
       // std::cout << "The value of Eta is "<< abs(recoLeptons[i].getEta()) <<std::endl;
 
-      if (deltaR < DeltaRCut && recoLeptons[i].getPt() >= 5 && abs(recoLeptons[i].getEta()) <= 3) {
+      if (deltaR < DeltaRCut && recoLeptons[i].getPt() >= 5 && abs(recoLeptons[i].getEta()) <= 3) 
+      {
         jet.addParticle(recoLeptons[i]);
         recoLeptons.erase(recoLeptons.begin() + i);
         --i;
@@ -89,7 +96,8 @@ const std::vector<LeptonJet> LeptonJetReconstructionModule::findLeptonJets(Parti
     }
     // std::cout << "numParticles: " << jet.getNumParticles() << "\n";
 
-    if (jet.getNumParticles() > 1) {
+    if (jet.getNumParticles() > 1) 
+    {
       // auto inputJets = getInput()->getJets(EventInput::RecoLevel::Reco);
       // bool close = false;
       // for (auto iJet : inputJets) {
@@ -107,7 +115,9 @@ const std::vector<LeptonJet> LeptonJetReconstructionModule::findLeptonJets(Parti
 
       leptonJetList.push_back(jet);
       //}
-    } else {
+    } 
+    else 
+    {
       inputDeltaRValues.clear();
       deltaPtValues.clear();
       leadingPtValues.clear();

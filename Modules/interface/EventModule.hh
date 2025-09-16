@@ -53,14 +53,14 @@ class EventModule : public ProductionModule
 
         // adds all Nth Highest Phi/Eta/Invariant Mass histograms for specified particleType up to the ith particle 
         // of that particle type
-        void addBasicHistograms(const ParticleType& particleType, const ParticleCollection<Particle>& particles);
+        void addBasicHistograms(const ParticleType& particleType, const ParticleCollection<Particle>& particles, std::string name);
 
         // adds histograms which count the ammount of a certain type of particle
-        void addCountHistograms(const ParticleType& particleType, const std::shared_ptr<ParticleCollection<Particle>> particles);
+        void addCountHistograms(const ParticleType& particleType, const std::shared_ptr<ParticleCollection<Particle>> particles, std::string name);
 
         // returns "[n]th Highest [particle type] [value name]" e.g. 4th Highest Muon Eta
-        std::string getBasicHistogramTitle(int n, const ParticleType& particleType, std::string valueName) const;
-        std::string getCountHistogramTitle(const ParticleType& particleType, std::string valueName) const;
+        std::string getBasicHistogramTitle(int n, std::string particleType, std::string valueName) const;
+        std::string getCountHistogramTitle(std::string particleType, std::string valueName) const;
         bool checkHist(std::string histName) const;
 
     private:
