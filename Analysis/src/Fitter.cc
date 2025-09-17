@@ -73,6 +73,10 @@ void Fitter::fitFunctions()
 	{
 		FitFunction& func = funcPair.second;
 		TH1* histogram = histograms[funcPair.first];
+		if (!histogram)
+		{
+			throw std::runtime_error("fitter::fitFunctions attempted histogram that does not exist: " + funcPair.first);
+		}
 		TCanvas* canvas;
 
 		switch (func.getFunctionType())
@@ -117,7 +121,7 @@ TCanvas* Fitter::fitExpressionFormula(TH1* histogram, FitFunction& fitFunction)
 	TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
 	c1->SetLogy();
 
-	TFitResultPtr result = histogram->Fit(fitFunction.getFunction(), "SQR", "", fitFunction.getMin(), fitFunction.getMax());
+	TFitResultPtr result = histogram->Fit(fitFunction.getFunction(), "SQRWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
 
 	gStyle->SetOptFit(1111);
 
@@ -132,7 +136,11 @@ TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction)
 	// histogram->Draw();
 	// std::string wait;
 	// std::cin >> wait;
-	TFitResultPtr gausResult = histogram->Fit("gaus", "SLQRWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
+	std::cout << "Test\n" << std::endl;
+	std::cout << "NEntries: " << histogram->GetEntries() << std::endl;
+	std::cout<< "starting\n";
+	TFitResultPtr gausResult = histogram->Fit("gaus", "SWLQR", "", fitFunction.getMin(), fitFunction.getMax());
+	std::cout<<"finished\n";
 	// std::cout << "2:2\n";
 	auto params = gausResult->Parameters();
 	// std::cout << "2:3\n";
@@ -140,7 +148,7 @@ TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction)
 	// TF1* f1 = new TF1 ("f1", DoubleSidedCrystalballFunction, 0, 2000, 6);
 	f1->SetNpx(1000);
 	// alpha low, alpha high, n low, n high, mean, sigma, norm
-	double norm = histogram->Integral("width");
+	double norm = histogram->Integral(); //("width");
 	// std::cout << "2:4\n";
 
 	f1->SetParameters(2.82606, 2.5, 1.08, 1.136, params[1], params[2], norm);
@@ -171,8 +179,9 @@ TCanvas* Fitter::fitDSCB(TH1* histogram, FitFunction& fitFunction)
 	f1->SetLineColor(kRed);
 	TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
 	// std::cout << "2:7\n";
-	
+	std::cout << "staring\n";
 	histogram->Fit(f1, "SWLQRBWIDTH");
+	std::cout << "finished\n";
 	f1->SetParError(6, norm / (sqrt(histogram->GetEntries())));
 	// std::cout << "2:8\n";
 
@@ -204,7 +213,7 @@ TCanvas* Fitter::fitPowerLaw(TH1* histogram, FitFunction& fitFunction)
 	// setting this as L (log likelihood) fit
 	// gives much worse fits for some graphs but seg faults without L sometimes?
 	// Root says better when histogram represents counts
-	TFitResultPtr result = histogram->Fit(fitFunction.getFunction(), "SLQR", "", fitFunction.getMin(), fitFunction.getMax());
+	TFitResultPtr result = histogram->Fit(fitFunction.getFunction(), "SWLQR", "", fitFunction.getMin(), fitFunction.getMax());
 
 
 	// shouldn't even be doing this? we're minimizing log likelihood, not chi2
@@ -214,7 +223,7 @@ TCanvas* Fitter::fitPowerLaw(TH1* histogram, FitFunction& fitFunction)
 		std::cout << "Chi2: " << result->Chi2() << '\n';
 		chi2 = result->Chi2();
 		fitFunction.getFunction()->SetParameters(result->Parameter(0), result->Parameter(1), result->Parameter(2));
-		result = histogram->Fit(fitFunction.getFunction(), "SLQRWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
+		result = histogram->Fit(fitFunction.getFunction(), "SWLQR", "", fitFunction.getMin(), fitFunction.getMax());
 	}
 
 	gStyle->SetOptFit(1111);
@@ -291,6 +300,8 @@ FitFunction Fitter::parameterizeFunction(ParameterizationData& parameterData)
 		if(pos == parameterDirectories.end()){
 			parameterDirectories[dir] = parameterRootFile->mkdir(dir.c_str());
 		}
+		std::cout<< "writing object " << name << "\n";
+
 		parameterDirectories[dir]->WriteObject(canvas, name.c_str());
 	}
 	else parameterRootFile->WriteObject(canvas, parameterData.name.c_str());
