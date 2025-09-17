@@ -29,7 +29,7 @@ public:
         GenSim
     };
 
-    virtual ParticleCollection<Lepton> getLeptons(RecoLevel level) const = 0;
+    virtual ParticleCollection<Lepton> getLeptons(RecoLevel level) const;
     virtual ParticleCollection<Particle> getParticles(RecoLevel level, const ParticleType& particleType = ParticleType::none()) const = 0;
     virtual ParticleCollection<Particle> getJets(RecoLevel level) const = 0;
     virtual ParticleCollection<Particle> getSpecial(std::string key) const = 0;

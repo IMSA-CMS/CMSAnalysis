@@ -18,6 +18,6 @@ void MassResolutionModule::fillError(const MatchingPairCollection& bestPairs)
       double recoMass = bestPairs.getRecoParticles().getInvariantMass();
 
       std::string massBin = pickBin(genSimMass);
-      fillHistogram("massResolutionHistBin" + massBin, {(recoMass - genSimMass) / genSimMass});
+      fillHistogram("", "massResolutionHistBin" + massBin, {(recoMass - genSimMass) / genSimMass});
     }
 }
