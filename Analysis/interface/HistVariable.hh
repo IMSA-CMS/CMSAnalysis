@@ -2,49 +2,70 @@
 #define HISTVARIABLE_HH
 
 #include "CMSAnalysis/Analysis/interface/FilePathMapper.hh"
-
-#include <string>
-#include <unordered_map>
-#include <stdexcept>
 #include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
+#include "CMSAnalysis/Utility/interface/Particle.hh"
+#include "CMSAnalysis/Utility/interface/ParticleType.hh"
+#include <array>
+#include <string>
 
-class HistVariable 
+
+
+// constexpr std::array<Selector, 5> selectors{
+//     {Selector::FirstHighestE, Selector::FirstHighestMu, Selector::E, Selector::Mu, Selector::None}};
+
+// constexpr std::array<VariableType, 6> variableTypes{
+//     {VariableType::Eta, VariableType::Pt, VariableType::Phi, VariableType::SameSignInvariantMass,
+//      VariableType::OppositeSignInvariantMass, VariableType::RecoInvariantMassBackground}};
+
+class HistVariable
 {
-public:
-    // Static objects for predefined variables
-    static HistVariable genSimSameSignMass;
-    static HistVariable sameSignMass;
-    static HistVariable invariantMass;
-    static HistVariable genSimPt;
-    static HistVariable pt;
-    static HistVariable eta;
-    static HistVariable phi;
-    static HistVariable mET;
-    static HistVariable firstPt;
-    static HistVariable secondPt;
-    static HistVariable thirdPt;
-    static HistVariable fourthPt;
+  public:
+    enum class VariableType
+    {
+        Eta,
+        Pt,
+        Phi,
+        SameSignInvariantMass,
+        OppositeSignInvariantMass,
+        InvariantMass
+    };
 
-    // Getters
-    std::string getName() const { return name; }
+    HistVariable(ParticleType type, int order, VariableType var, std::string unit = "", 
+        bool is2DHistX = false, bool is2DHistY = false);
 
-    // Constructor
-    HistVariable(std::string iName) : name(std::move(iName)) {}
+    HistVariable(VariableType var, std::string unit = "", 
+        bool is2DHistX = false, bool is2DHistY = false);
 
-    bool is2DHistX() {return is2DHistX_;}
-    bool is2DHistY() {return is2DHistY_;}
+    std::string getName() const;
 
-    void setSystematic(ScaleFactor::SystematicType itype, std::string isystematicName) {type = itype; systematicName = isystematicName;}
-    ScaleFactor::SystematicType getSystematicType() const {return type;}
-    std::string getSystematicName() const {return systematicName;}
+    std::string getUnit() const
+    {
+        return unit;
+    }
 
-private:
-    std::string name;
+    void setSystematic(ScaleFactor::SystematicType itype, std::string isystematicName)
+    {
+        type = itype;
+        systematicName = isystematicName;
+    }
+    ScaleFactor::SystematicType getSystematicType() const
+    {
+        return type;
+    }
+    std::string getSystematicName() const
+    {
+        return systematicName;
+    }
+
+  private:
+    ParticleType particleType;
+    int order_;
+    VariableType variableType;
+    std::string unit;
     bool is2DHistX_ = false;
     bool is2DHistY_ = false;
     ScaleFactor::SystematicType type = ScaleFactor::SystematicType::Nominal;
     std::string systematicName;
-
 };
 
 #endif

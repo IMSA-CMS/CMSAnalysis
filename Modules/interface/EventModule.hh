@@ -67,10 +67,8 @@ class EventModule : public ProductionModule
         // of that particle type
         void addBasicHistograms(const ParticleType& particleType, const ParticleCollection<Particle>& particles, std::string name);
 
-
         // adds histograms which count the ammount of a certain type of particle
         void addCountHistograms(const ParticleType& particleType, const std::shared_ptr<ParticleCollection<Particle>> particles, std::string name);
-
 
         // returns "[n]th Highest [particle type] [value name]" e.g. 4th Highest Muon Eta
         std::string getBasicHistogramTitle(int n, std::string particleType, std::string valueName) const;

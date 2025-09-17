@@ -2,7 +2,6 @@
 #include "CMSAnalysis/Filters/interface/FakePhotonSelector.hh"
 #include <vector>
 
-
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "CMSAnalysis/Utility/interface/Lepton.hh"
@@ -11,13 +10,11 @@
 #include "CMSAnalysis/Modules/interface/LeptonJetReconstructionModule.hh"
 #include "DataFormats/Math/interface/deltaR.h"
 
-
 FakePhotonSelector::FakePhotonSelector(double ideltaRCut) : deltaRCut(ideltaRCut) {}
 // FakePhotonSelector class/constructor initializes object with deltaRcut threshold value
 void FakePhotonSelector::selectParticles(const EventInput* input, Event& event) const
 {
   if (!input) return;
-
 
   // GenSim particles
   auto particlesGenSim = input->getParticles(EventInput::RecoLevel::GenSim).getParticles();
@@ -27,11 +24,9 @@ void FakePhotonSelector::selectParticles(const EventInput* input, Event& event) 
     event.addGenSimParticle(particle);
   }
 
-
   // Reco particles
   ParticleCollection<Lepton> selected;
   auto particles = input->getParticles(EventInput::RecoLevel::Reco).getParticles();
-
 
   float muonCounter = 0, looseMuons = 0, tightMuons = 0, mediumMuons = 0;
   float electronCounter = 0, looseElectrons = 0, mediumElectrons = 0, tightElectrons = 0;
@@ -61,7 +56,7 @@ void FakePhotonSelector::selectParticles(const EventInput* input, Event& event) 
       electronCounter++;
       Lepton lepton(particle);
       electrons.push_back(particle);
-      if (lepton.isLoose())
+      if (lepton.isLoose()) 
       {
         selected.addParticle(particle);
         looseElectrons++;
@@ -71,7 +66,6 @@ void FakePhotonSelector::selectParticles(const EventInput* input, Event& event) 
     }
   }
 
-
   // Photon selection with deltaR matching
   for (const auto& particle : particles)
   {
@@ -79,7 +73,6 @@ void FakePhotonSelector::selectParticles(const EventInput* input, Event& event) 
     {
       double photonPt = particle.getPt();
       bool isFakePhoton = false;
-
 
       for (const auto& electron : electrons)
       {
@@ -92,7 +85,6 @@ void FakePhotonSelector::selectParticles(const EventInput* input, Event& event) 
         }
       }
 
-
       if (isFakePhoton)
       {
         event.addSpecialObject("FakePhoton", particle);
@@ -100,12 +92,10 @@ void FakePhotonSelector::selectParticles(const EventInput* input, Event& event) 
     }
   }
 
-
   for (const auto& lepton : selected.getParticles())
   {
     event.addElectron(lepton);
   }
-
 
   auto leptonJets = findLeptonJets(selected);
   for (const auto& jet : leptonJets)
@@ -114,12 +104,10 @@ void FakePhotonSelector::selectParticles(const EventInput* input, Event& event) 
   }
 }
 
-
 std::vector<LeptonJet> FakePhotonSelector::findLeptonJets(ParticleCollection<Lepton> recoCandidates) const
 {
   auto recoLeptons = recoCandidates.getParticles();
   std::vector<LeptonJet> leptonJetList;
-
 
   while (!recoLeptons.empty())
   {
@@ -130,10 +118,8 @@ std::vector<LeptonJet> FakePhotonSelector::findLeptonJets(ParticleCollection<Lep
       continue;
     }
 
-
     LeptonJet jet = createLeptonJet(highestPtLepton);
     recoLeptons.erase(std::remove(recoLeptons.begin(), recoLeptons.end(), highestPtLepton), recoLeptons.end());
-
 
     for (size_t i = 0; i < recoLeptons.size(); ++i)
     {
@@ -145,7 +131,6 @@ std::vector<LeptonJet> FakePhotonSelector::findLeptonJets(ParticleCollection<Lep
       }
     }
 
-
     if (jet.getNumParticles() > 1)
     {
       leptonJetList.push_back(jet);
@@ -154,7 +139,6 @@ std::vector<LeptonJet> FakePhotonSelector::findLeptonJets(ParticleCollection<Lep
   return leptonJetList;
 }
 
-
 LeptonJet FakePhotonSelector::createLeptonJet(Lepton highestPtLepton) const
 {
   LeptonJet leptonJet;
@@ -162,12 +146,10 @@ LeptonJet FakePhotonSelector::createLeptonJet(Lepton highestPtLepton) const
   return leptonJet;
 }
 
-
 Particle FakePhotonSelector::findHighestPtLepton(std::vector<Lepton> leptons) const
 {
   if (leptons.empty()) throw std::runtime_error("No leptons available");
 
-
-  return *std::max_element(leptons.begin(), leptons.end(),
+  return *std::max_element(leptons.begin(), leptons.end(), 
     [](const Lepton& a, const Lepton& b) { return a.getPt() < b.getPt(); });
 }

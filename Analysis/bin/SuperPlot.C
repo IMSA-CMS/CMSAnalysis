@@ -117,7 +117,7 @@ void SuperPlot()
 	//#TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "LeptonJetMLOutput High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
 	//#TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "LeptonJetMLOutput High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
 	//#TCanvas *canvas = plotFormatter->completePlot(InputAnalysis, plotName, xAxisTitle, yAxisTitle, true, false, "0.3");
-	auto nameVar = HistVariable(plotName);
+	auto nameVar = HistVariable(HistVariable::Selector::None, HistVariable::VariableType::SameSignInvariantMass);
 	auto ana = std::make_shared<HiggsCompleteAnalysis>();
 	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, true, false, true, "uu");
 
