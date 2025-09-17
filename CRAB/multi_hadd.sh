@@ -9,7 +9,7 @@ fi
 OUTPUT_DIR="Output/$1"
 mkdir -p "$OUTPUT_DIR"
 
-for dir in */; do
+for dir in higgsSignalHiggs*/; do
     dir=${dir%/}  # Remove trailing slash
 
     # Exclude Output directory
@@ -30,5 +30,5 @@ for dir in */; do
     
     # Copy output
     mkdir -p "$CMSSW_BASE/src/CMSAnalysis/$OUTPUT_DIR"
-    cp "$dir/$dir.root" "$CMSSW_BASE/src/CMSAnalysis/$OUTPUT_DIR"
+    root -l -b -q "$CMSSW_BASE/src/CMSAnalysis/CRAB/cleanfile.C+( \"$dir/$dir.root\", \"$CMSSW_BASE/src/CMSAnalysis/$OUTPUT_DIR/$dir.root\" )"
 done

@@ -4,12 +4,12 @@ import sys
 import os
 import subprocess
 import argparse
+import shutil
 
 reprocessMap = {
     "WWW": [2],
 }
 
-#def loopRun(crab, path, fileCount, fileList):
 def loopRun(crab, path, fileCount, skipFiles, fileList, outputFile):
     fileList = [f"Run2PickFiles/{file}" for file in fileList]
     if not path:
@@ -78,6 +78,7 @@ def loopRun(crab, path, fileCount, skipFiles, fileList, outputFile):
         # calls runAnalyzer
         if crab:
             crab_directory = os.environ["CMSSW_BASE"] + "/src/CMSAnalysis/CRAB/"
+            shutil.rmtree(crab_directory + "crab_projects", ignore_errors=True)
             print(file)
             totalFiles = int(subprocess.check_output(["getFileList", file, "count"]))
             # 20 works for most jobs, TTbar and DY50-inf should use 5
@@ -106,6 +107,7 @@ def loopRun(crab, path, fileCount, skipFiles, fileList, outputFile):
                         f"--{inputString}",
                         f"--output={output}",
                         f"--{analysisName}",
+                        f"--user={cernUsername}",
                         f"--folder={path + file[14:-4]}",
                         f"--numFiles={min(maxNumFiles, totalFiles - i)}",
                         f"--skipFiles={i}",
@@ -147,13 +149,17 @@ if __name__ == "__main__":
         action="store_true",
     )
     parser.add_argument("--path", help="Custom Output Path like Higgs/")
+    parser.add_argument("--user", help="CERN Username")
     parser.add_argument("--numFiles", help="Number of files to run over")
     parser.add_argument("--skipFiles", help="Number of files to skip over")
     parser.add_argument("--outputFile", help="Specify an output log file", default="nohup.out")
 
     args = parser.parse_args()
     print(args)
-
+    if not args.user:
+        print("Error: please enter a username")
+    else:
+        cernUsername=args.user
     if not args.analysis:
         print("No analysis specified, defaulting to Higgs")
         analysis = 0
@@ -313,8 +319,9 @@ if __name__ == "__main__":
     # jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 
     # COMMENTED FOR ML STRIP
-    #jobsList = [darkPhotonSignal, ttBar, zz, dy, multiBoson, higgsSignal, data, qcd, wjets]  
-    jobsList = [dy, qcd, darkPhotonSignal]  
+    #jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, data, qcd, wjets]
+    jobsList = [wjets]  
+    #jobsList = [dy, qcd, darkPhotonSignal]  
     #jobsList = [darkPhotonSignal, multiBoson]  
     # could further improve this by adding every sub-job as a separate entry
     if args.crab:

@@ -11,7 +11,8 @@ public:
 	{
 		EXPRESSION_FORMULA,
 		DOUBLE_SIDED_CRYSTAL_BALL,
-		POWER_LAW
+		POWER_LAW,
+        DOUBLE_GAUSSIAN,
 	};
 
 	// static const std::vector<std::string> functionList;
@@ -19,6 +20,7 @@ public:
 
 	static double powerLaw(double *x, double *par);
 	static double DSCB(double* x, double* par);
+	static double doubleGaussian(double* x, double* par);
 
 	// static std::vector<FitFunction> loadFunctions(const std::string& fileName);
 	// static void saveFunctions(std::vector<FitFunction>& functions, const std::string& fileName);
@@ -34,6 +36,9 @@ public:
 	std::string getName();
 	double getMin();
 	double getMax();
+	static std::vector<std::string> split(const std::string& str, char delimiter);
+	std::string getChannelName();
+	std::string getParameterName();
 private:
 	TF1* function;
 	FunctionType functionType;

@@ -3,29 +3,28 @@
 
 #include <TFile.h>
 #include <string>
-#include <vector>
+#include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
+#include "CMSAnalysis/Utility/interface/Particle.hh"
 
 namespace Utility
 {
-    template <typename T>
-    void getAllCombinations(int offset,
-                            int nCombo,
-                            std::vector<T> &combination,
-                            std::vector<T> &indices,
-                            std::vector<std::vector<T>> &totalCombinations);
-    template <typename T>
-    std::vector<std::vector<T>> getAllCombinations(int nCombo, std::vector<T> &indices);
-    std::string substitute(std::string original, std::string target, std::string subs);
-    std::string removeSpaces(std::string input);
-    //Intended to be used to make names for higgs channels. Input the single letter symbol of your particle,
-    //the length of the name (how many particles in your sample), and if you want to eliminate channels that mean the same thing if you have same sign pairs or opposite sign pairs
-    std::vector<std::string> channelMaker(std::vector<std::string> particles, int length, bool sameSign);
-    bool comparator(std::string a, std::string b);
-    int gcf(std::vector<int> nums);
-    // Given the name of a file that should be in bin/textfiles, gives the full path so it can be easily located
-    std::string getFullPath(std::string fileName);
-    std::string getBasePath();
-} // namespace Utility
+  template <typename T>
+  void getAllCombinations(int offset, int nCombo, std::vector<T>& combination, std::vector<T>& indices, std::vector<std::vector<T>>& totalCombinations);
+  template <typename T>
+  std::vector<std::vector<T>> getAllCombinations(int nCombo, std::vector<T>& indices);
+  std::string substitute(std::string original, std::string target, std::string subs);
+  std::string removeSpaces(std::string input); 
+  //Intended to be used to make names for higgs channels. Input the single letter symbol of your particle, 
+  //the length of the name (how many particles in your sample), and if you want to eliminate channels that mean the same thing if you have same sign pairs or opposite sign pairs
+  std::vector<std::string> channelMaker(std::vector<std::string> particles, int length, bool sameSign);
+  bool comparator(std::string a, std::string b);
+  int gcf(std::vector<int> nums);
+  // Given the name of a file that should be in bin/textfiles, gives the full path so it can be easily located
+  std::string getFullPath(std::string fileName);
+  std::string getBasePath();
+  std::string identifyChannel(ParticleCollection<Particle> particles);
+
+}
 
 inline bool Utility::comparator(std::string a, std::string b)
 {
@@ -70,4 +69,8 @@ inline std::vector<std::vector<T>> Utility::getAllCombinations(int nCombo, std::
 
 void writeRootObj(TFile *outFile, const std::string &path, TObject *obj);
 
-#endif
+#endif 
+
+
+
+
