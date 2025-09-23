@@ -23,7 +23,7 @@
 int main(int argc, char **argv)
 {
   auto start = std::chrono::steady_clock::now();
-
+ std::cout << "Starting runAnalyzer" << std::endl;
   std::string particleDatabase(Utility::getFullPath("ParticleData.txt"));
   if (ParticleType::loadParticleDatabase(particleDatabase))
   {
@@ -46,10 +46,11 @@ int main(int argc, char **argv)
   parser.addOption("input", optutl::CommandLineParser::kString, "Input", "");
   parser.addOption("numFiles", optutl::CommandLineParser::kInteger, "Number of Files", -1); // Change last input to -1 later
   parser.addOption("skipFiles", optutl::CommandLineParser::kInteger, "Number of Files to Skip Before Starting: ", 0);
-
+  std::cout << "done1";
 
   parser.addOption("analysis", optutl::CommandLineParser::kString, "Type of Analysis", "");
   parser.addOption("moduleOptions", optutl::CommandLineParser::kString, "Module Specific Options", "");
+  std::cout << "done2";
 
   // should be a better way to do this? this requires crab=1, should just be able to type crab as an argument
   parser.addOption("crab", optutl::CommandLineParser::kInteger, "Running on Crab?", 0);
@@ -63,8 +64,10 @@ int main(int argc, char **argv)
   int numFiles = parser.integerValue("numFiles");
   int skipFiles = parser.integerValue("skipFiles");
   std::string analysisType = parser.stringValue("analysis");
+  std::cout << "done3";
 
   std::string moduleOptionsFile = parser.stringValue("moduleOptions");
+  std::cout << "done4";
 
   AnalyzerOptions options;
   if (inputFile.empty())
