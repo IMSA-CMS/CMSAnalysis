@@ -29,8 +29,13 @@ void HistogramOutputModule::writeObjects(TFile *outFile)
 
 void HistogramOutputModule::addHistogram(std::shared_ptr<HistogramPrototype> hist)
 {
+    for (const auto &scaleFactor : scaleFactors)
+    {
+        hist->addScaleFactor(scaleFactor);
+    }
     hist->setInput(getInput());
     histograms.push_back(hist);
+    
 }
 
 void HistogramOutputModule::setInput(const EventInput *iInput)
