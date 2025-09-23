@@ -186,7 +186,7 @@ std::string Utility::identifyChannel(ParticleCollection<Particle> particles)
     }
   }
 
-std::cout << "Ntaus: " << nTaus << "  pos: " << positiveLeptons << "  neg: " << negativeLeptons << '\n';
+//std::cout << "Ntaus: " << nTaus << "  pos: " << positiveLeptons << "  neg: " << negativeLeptons << "                 " << '\n' ;
 
 // Fill 'c' in where there is a space
 // up to the number of taus --> make a while loop that runs out of Taus, for each one add a c
@@ -250,6 +250,12 @@ std::cout << "Ntaus: " << nTaus << "  pos: " << positiveLeptons << "  neg: " << 
     negativeLeptons += 'x';
   }
 
+  if (positiveLeptons.size() > 2)
+    positiveLeptons = positiveLeptons.substr(0, 2);
+
+  if (negativeLeptons.size() > 2)
+    negativeLeptons = negativeLeptons.substr(0, 2);
+
   // sorts by flavor
   std::sort(positiveLeptons.begin(), positiveLeptons.end());
   std::sort(negativeLeptons.begin(), negativeLeptons.end());
@@ -275,26 +281,36 @@ std::cout << "Ntaus: " << nTaus << "  pos: " << positiveLeptons << "  neg: " << 
   signature = substitute(signature, "c", "t");
   signature = substitute(signature, "x", "_");
 
-  // std::cout << "Signature: " << signature << " (length = " << signature.length() << ")" 
-  // << " Positives: " << positiveLeptons << " Negatives: " << negativeLeptons << std::endl;
-
-  return signature; //have something that looks at signature.length. if signature.length is greater than 4, print it out.
-  
+  //std::cout << "Signature: " << signature << " (length = " << signature.length() << ")" 
+  //<< " Positives: " << positiveLeptons << " Negatives: " << negativeLeptons << std::endl;
+  // if (signature.size() > 4)
+  //   {
+  //     std::cout << "Positives: " << positiveLeptons << " Negatives: " << negativeLeptons << " Signature: " << signature << std::endl;
+  //   }
+     //have something that looks at signature.length. if signature.length is greater than 4, print it out.
+    return signature;
 }
 
 
 void writeRootObj(TFile *outFile, const std::string &path, TObject *obj)
 {
-    if (!outFile->cd(path.c_str()))
+  if (outFile->Get(path.c_str()))
     {
-        if (outFile->mkdir(path.c_str(), "", true) == nullptr)
-        {
-            throw std::runtime_error("Failed to create directory " + path);
-        }
         if (outFile->cd(path.c_str()) != kTRUE)
         {
             throw std::runtime_error("Failed to change directory to " + path);
         }
+    }
+    else
+    {
+      if (outFile->mkdir(path.c_str(), "", true) == nullptr)
+        {
+            throw std::runtime_error("Failed to create directory " + path);
+        }
+      if (outFile->cd(path.c_str()) != kTRUE)
+        {
+            throw std::runtime_error("Failed to change directory to " + path);
+        }     
     }
 
     if (obj->Write() == 0)
