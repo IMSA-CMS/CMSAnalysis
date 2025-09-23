@@ -14,22 +14,6 @@ LocalEventInput::LocalEventInput(const Event* event1)
     event = event1;
 } 
 
-ParticleCollection<Lepton> LocalEventInput::getLeptons(RecoLevel level) const
-{ 
-    ParticleCollection<Lepton> leptons;
-    auto electrons = getParticles(level, ParticleType::electron()).getParticles();
-    auto muons = getParticles(level, ParticleType::muon()).getParticles();
-    for (const auto &p : electrons)
-    {
-        leptons.addParticle(p);
-    }
-    for (const auto &p : muons)
-    {
-        leptons.addParticle(p);
-    }
-    return leptons;
-}
-
 ParticleCollection<Particle> LocalEventInput::getParticles(RecoLevel level, const ParticleType& particleType) const
 {
     ParticleCollection<Particle> particleList;

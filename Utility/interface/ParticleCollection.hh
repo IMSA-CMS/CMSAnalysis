@@ -3,13 +3,16 @@
 
 #include <utility>
 #include <functional>
+#include <numeric>
 
 #include <vector>
 #include "TLorentzVector.h"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
-#include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
 #include "CMSAnalysis/Utility/interface/ParticleType.hh"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
+#include "CMSAnalysis/Utility/interface/GetAllCombinations.hh"
+
 
 namespace reco
 {
@@ -63,6 +66,12 @@ public:
   // 1->2  0->1
   std::pair<T, T> chooseParticles(bool oppositeSigns, bool sameType) const; // picks particles given if they are opposite signs or not, sameType = false does not exclude same-type particles
   std::pair<T, T> chooseParticles(bool sameType) const;// picks particles with greatest invariant mass
+    // get all combinations of indices of the particles
+    std::vector<std::vector<int>> getAllCombinations(int nCombo) const;
+
+    //identify channel signature string (like "euut_")
+    std::string identifyChannel() const;
+  
 
 private:
   std::vector<T> particles;
@@ -358,55 +367,111 @@ inline double ParticleCollection<T>::calculateOppositeSignInvariantMass(bool sam
 template <typename T>
 inline double ParticleCollection<T>::calculateRecoveredInvariantMass(int nLeptons, int motherPDGID) const
 {
-  double maxInvariantMass = 0;
+    double maxInvariantMass = 0;
 
-  if (nLeptons < 0)
-  {
-    throw std::out_of_range("Use a valid number of leptons"); // Use valid nLeptons number
-  }
-
-  else if (nLeptons > getNumParticles())
-  {
-    std::cout << "Not enough leptons; running on " << getNumParticles() << " leptons.\n";
-    return calculateRecoveredInvariantMass(getNumParticles(), motherPDGID);
-  }
-
-  auto allLeptons = getParticles();       // Vector of Particles
-  int allLeptonsSize = getNumParticles(); // Size of above vector
-
-  // Create a vector of ints that are the indices of allLeptons
-  std::vector<int> indices;
-  for (int i = 0; i < allLeptonsSize; i++)
-  {
-    indices.push_back(i);
-  }
-
-  std::vector<int> combination;
-  std::vector<std::vector<int>> totalCombinations;
-
-  Utility::getAllCombinations(0, nLeptons, combination, indices, totalCombinations);
-
-  for (auto leptonIndices : totalCombinations)
-  {
-    // Create a new ParticleCollection and add back the leptons
-    ParticleCollection<T> leptons;
-    std::vector<Particle> part;
-    for (auto index : leptonIndices)
+    if (nLeptons < 0)
     {
-      leptons.addParticle(allLeptons[index]);
-      part.push_back(allLeptons[index]);
+        throw std::out_of_range("Use a valid number of leptons"); // Use valid nLeptons number
+    }
+    else if (nLeptons > getNumParticles())
+    {
+        std::cout << "Not enough leptons; running on " << getNumParticles() << " leptons.\n";
+        return calculateRecoveredInvariantMass(getNumParticles(), motherPDGID);
     }
 
-    bool daughterOfHPlusPlus = GenSimParticle::sharedMother(motherPDGID, part).isNotNull(); // If all of the particles map their mother to the specified mother particle, this is true
+    auto allLeptons = getParticles();       // Vector of Particles
+    int allLeptonsSize = getNumParticles(); // Size of above vector
 
-    if ((leptons.calculateAllLeptonInvariantMass() > maxInvariantMass) && (daughterOfHPlusPlus))
+    // Get all combinations of nLeptons indices at once (single call):
+    std::vector<std::vector<int>> totalCombinations = getAllCombinations(nLeptons);
+
+    for (const auto& leptonIndices : totalCombinations)
     {
-      maxInvariantMass = leptons.calculateAllLeptonInvariantMass();
-    }
-  }
+        ParticleCollection<T> leptons;
+        std::vector<Particle> part;
+        for (auto index : leptonIndices)
+        {
+            leptons.addParticle(allLeptons[index]);
+            part.push_back(allLeptons[index]);
+        }
 
-  return maxInvariantMass;
+        bool daughterOfHPlusPlus = GenSimParticle::sharedMother(motherPDGID, part).isNotNull();
+
+        double currentMass = leptons.calculateAllLeptonInvariantMass();
+        if (currentMass > maxInvariantMass && daughterOfHPlusPlus)
+        {
+            maxInvariantMass = currentMass;
+        }
+    }
+
+    return maxInvariantMass;
 }
+
+// Get all index combinations for selecting N particles
+template <typename T>
+inline std::vector<std::vector<int>> ParticleCollection<T>::getAllCombinations(int nCombo) const
+{
+    std::vector<int> indices(particles.size());
+    std::iota(indices.begin(), indices.end(), 0);  // fill with 0, 1, 2, ..., n-1
+
+    std::vector<std::vector<int>> totalCombinations;
+    std::vector<int> combination;
+
+    std::function<void(int, int)> generateCombos = [&](int start, int depth)
+    {
+        if (depth == nCombo)
+        {
+            totalCombinations.push_back(combination);
+            return;
+        }
+
+        for (size_t i = start; i <= indices.size() - (nCombo - depth); ++i)
+        {
+            combination.push_back(indices[i]);
+            generateCombos(i + 1, depth + 1);
+            combination.pop_back();
+        }
+    };
+
+    generateCombos(0, 0);
+    return totalCombinations;
+}
+
+
+// Identify the channel signature string
+template <typename T>
+inline std::string ParticleCollection<T>::identifyChannel() const
+{
+  std::vector<std::string> plusLeptons, minusLeptons;
+
+  for (const auto& particle : particles)
+  {
+    int pdgID = particle.getID();
+    std::string leptonType;
+
+    if (particle.getType() == ParticleType::electron()) leptonType = "e";
+    else if (particle.getType() == ParticleType::muon()) leptonType = "u";
+    else if (particle.getType() == ParticleType::tau()) leptonType = "t";
+    else continue;
+
+    leptonType += (pdgID > 0) ? "+" : "-";
+    if (pdgID > 0) plusLeptons.push_back(leptonType);
+    else minusLeptons.push_back(leptonType);
+  }
+
+  std::sort(plusLeptons.begin(), plusLeptons.end());
+  std::sort(minusLeptons.begin(), minusLeptons.end());
+
+  std::string signature;
+  for (const auto& lep : plusLeptons) signature += lep[0];
+  for (const auto& lep : minusLeptons) signature += lep[0];
+
+  while (signature.size() < 4) signature += '_';
+  signature += "_";
+
+  return signature;
+}
+
 template <typename T>
 inline T ParticleCollection<T>::getLeadingPtLepton() const
 {
@@ -610,3 +675,146 @@ inline double ParticleCollection<T>::calculateLeadingTransverseMomentum(T partic
   }
 }
 #endif
+// #ifndef PARTICLECOLLECTION_HH
+// #define PARTICLECOLLECTION_HH
+
+// #include <vector>
+// #include <numeric>  // for std::iota
+// #include <algorithm>
+// #include <iostream>
+// #include <stdexcept>
+// #include "CMSAnalysis/Utility/interface/Particle.hh"
+// #include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
+// #include "CMSAnalysis/Utility/interface/ParticleType.hh"
+// #include "CMSAnalysis/Utility/interface/Utility.hh"
+
+// template <typename T = Particle>
+// class ParticleCollection
+// {
+// public:
+//   ParticleCollection() {}
+//   template <typename U>
+//   ParticleCollection(const ParticleCollection<U>& pc1);
+//   ParticleCollection(std::vector<T> collectionVector);
+
+//   int size() const { return particles.size(); }
+//   int getNumParticles() const { return particles.size(); }
+//   void addParticle(T particle) { particles.push_back(particle); }
+//   const std::vector<T>& getParticles() const { return particles; }
+
+//   // New: Get all index combinations
+//   std::vector<std::vector<int>> getAllCombinations(int nCombo) const;
+
+//   // New: Identify channel signature
+//   std::string identifyChannel() const;
+
+//   double calculateRecoveredInvariantMass(int nLeptons, int motherPDGID) const;
+//   void sort();
+
+// private:
+//   std::vector<T> particles;
+// };
+
+// template <typename T>
+// inline double ParticleCollection<T>::calculateRecoveredInvariantMass(int nLeptons, int motherPDGID) const
+// {
+//   double maxInvariantMass = 0;
+
+//   if (nLeptons < 0)
+//     throw std::out_of_range("Use a valid number of leptons");
+//   else if (nLeptons > getNumParticles())
+//   {
+//     std::cout << "Not enough leptons; running on " << getNumParticles() << " leptons.\n";
+//     return calculateRecoveredInvariantMass(getNumParticles(), motherPDGID);
+//   }
+
+//   auto allLeptons = getParticles();
+//   int allLeptonsSize = getNumParticles();
+
+//   std::vector<int> indices;
+//   for (int i = 0; i < allLeptonsSize; ++i)
+//     indices.push_back(i);
+
+//   std::vector<int> combination;
+//   std::vector<std::vector<int>> totalCombinations;
+
+//   ::Utility::getAllCombinations(0, nLeptons, combination, indices, totalCombinations);
+
+//   for (const auto& leptonIndices : totalCombinations)
+//   {
+//     ParticleCollection<T> leptons;
+//     std::vector<Particle> part;
+//     for (auto index : leptonIndices)
+//     {
+//       leptons.addParticle(allLeptons[index]);
+//       part.push_back(allLeptons[index]);
+//     }
+
+//     bool daughterOfHPlusPlus = GenSimParticle::sharedMother(motherPDGID, part).isNotNull();
+
+//     double currentMass = leptons.calculateAllLeptonInvariantMass();
+//     if (currentMass > maxInvariantMass && daughterOfHPlusPlus)
+//       maxInvariantMass = currentMass;
+//   }
+
+//   return maxInvariantMass;
+// }
+
+// template <typename T>
+// inline std::vector<std::vector<int>> ParticleCollection<T>::getAllCombinations(int nCombo) const
+// {
+//   std::vector<int> indices(particles.size());
+//   std::iota(indices.begin(), indices.end(), 0);
+
+//   std::vector<int> combination;
+//   std::vector<std::vector<int>> totalCombinations;
+
+//   ::Utility::getAllCombinations(0, nCombo, combination, indices, totalCombinations);
+
+//   return totalCombinations;
+// }
+
+// template <typename T>
+// inline std::string ParticleCollection<T>::identifyChannel() const
+// {
+//   std::vector<std::string> plusLeptons, minusLeptons;
+
+//   for (const auto& particle : particles)
+//   {
+//     int pdgID = particle.getID();
+//     std::string leptonType;
+
+//     if (particle.getType() == ParticleType::electron()) leptonType = "e";
+//     else if (particle.getType() == ParticleType::muon()) leptonType = "u";
+//     else if (particle.getType() == ParticleType::tau()) leptonType = "t";
+//     else continue;
+
+//     leptonType += (pdgID > 0) ? "+" : "-";
+//     if (pdgID > 0) plusLeptons.push_back(leptonType);
+//     else minusLeptons.push_back(leptonType);
+//   }
+
+//   std::sort(plusLeptons.begin(), plusLeptons.end());
+//   std::sort(minusLeptons.begin(), minusLeptons.end());
+
+//   std::string signature;
+//   for (const auto& lep : plusLeptons) signature += lep[0];
+//   for (const auto& lep : minusLeptons) signature += lep[0];
+
+//   while (signature.size() < 4) signature += '_';
+//   signature += "_";
+
+//   return signature;
+// }
+// template <typename T>
+// inline void ParticleCollection<T>::sort()
+// {
+//   std::sort(particles.begin(), particles.end(),
+//     [](const T& a, const T& b)
+//     {
+//       return a.getPt() > b.getPt();  // Sort descending by pT
+//     });
+// }
+
+
+// #endif // PARTICLECOLLECTION_HH

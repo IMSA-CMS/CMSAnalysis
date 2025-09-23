@@ -25,7 +25,7 @@ LeptonJetSelector::LeptonJetSelector(double ideltaRCut) : deltaRCut(ideltaRCut)
 {
 }
 
-void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) const
+void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) const 
 {
   // GenSim stuff
   auto particlesGenSim = input->getParticles(EventInput::RecoLevel::GenSim).getParticles();
@@ -36,7 +36,8 @@ void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) c
 
   // Reco stuff
     ParticleCollection<Muon> selected;
-    auto particles = input->getLeptons(EventInput::RecoLevel::Reco).getParticles();
+    //auto particles = input->getLeptons(EventInput::RecoLevel::Reco).getParticles();
+    auto particles = input->getParticles(EventInput::RecoLevel::Reco).getParticles();
 
     for (const auto& particle : particles)
     {
@@ -47,7 +48,7 @@ void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) c
         auto lepton = Lepton(particle);
         if(lepton.isLoose())
         {
-          selected.addParticle(particle);
+          //selected.addParticle(particle);
           looseMuons++;
         }
         if(lepton.isTight())
@@ -66,6 +67,7 @@ void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) c
         auto lepton = Lepton(particle);
         if(lepton.isLoose())
         {
+          selected.addParticle(particle);
           looseElectrons++;
         }
         if(lepton.isTight())
@@ -75,14 +77,46 @@ void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) c
         if(lepton.isMedium())
         {
           mediumElectrons++;
-        }
+        }    
       }
 
+      // Trying adding photons as well
+      if (particle.getType() == ParticleType::photon() && particle.getPt() > 5)  // put work in this if statement 
+      {
+        // for (const Particle& particle: particles) 
+        // // outer loop - particle is part of the particles container
+        // {
+        //   if (particle.getType() == ParticleType::photon()) 
+        //   // if the particle type is photon, it's photonPt is stored
+        //   {
+            double photonPt = particle.getPt();
+            bool withinElectronPtRange = false; 
+            // boolean flag tracks when Pt is within the acceptable range
+              for (const Particle& otherParticle : particles)
+              {
+                if (otherParticle.getType() == ParticleType::electron())
+                {
+                  double electronPt = otherParticle.getPt();
+
+                  if (std::abs(photonPt - electronPt) <= 45.0)
+                  {
+                    withinElectronPtRange = true;
+                  }
+
+                  if (withinElectronPtRange)
+                  {
+                    selected.addParticle(particle);
+                  }
+                }
+              }
+         // }
+       // }
     }
 
     for (auto lepton : selected.getParticles())
     {
-      event.addMuon(lepton);
+      //event.addMuon(lepton);
+      event.addElectron(lepton);
     }
 
     //auto recoLeptons = event.getMuons();
@@ -105,61 +139,62 @@ void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) c
       // std::cout<<"Tight electron efficiency: " << tightElectrons/numOfParticles << "\n\n";
 }
 
-std::vector<LeptonJet> LeptonJetSelector::findLeptonJets(ParticleCollection<Lepton> recoCandidates) const
-{
-  auto recoLeptons = recoCandidates.getParticles();
-  std::vector<LeptonJet> leptonJetList;
-  while (recoLeptons.size() != 0)
-  {
-    Lepton highestPtLepton = findHighestPtLepton(recoLeptons);
-    if (highestPtLepton.getPt() <= 5)
-    {
-      break;
-    }
-    else if (abs(highestPtLepton.getEta()) > 3)
-    {
-      recoLeptons.erase(std::find(recoLeptons.begin(), recoLeptons.end(), highestPtLepton));
-      continue;
-    }
-    LeptonJet jet = createLeptonJet(highestPtLepton);
-    std::vector<Particle> initialLeptons = jet.getParticles();
-
-    auto highestPtLeptonFourVector = highestPtLepton.getFourVector();
-    recoLeptons.erase(std::find(recoLeptons.begin(), recoLeptons.end(), highestPtLepton));
-
-    for (unsigned i = 0; i < recoLeptons.size(); ++i)
-    {
-      auto fourVector = recoLeptons[i].getFourVector();
-      double deltaR = reco::deltaR(highestPtLeptonFourVector, fourVector);
-      // std::cout << "delta r: " << deltaR << " delta r cut: " << DeltaRCut << "\n";
-      // std::cout << "The value of Eta is "<< abs(recoLeptons[i].getEta()) <<std::endl;
-      if (deltaR < deltaRCut)
-      {
-        jet.addParticle(recoLeptons[i]);
-        recoLeptons.erase(recoLeptons.begin() + i);
-        --i;
-      }
-
-    }
-    // std::cout << "numParticles: " << jet.getNumParticles() << "\n";
-    if (jet.getNumParticles() > 1)
-    {
-      // auto inputJets = getInput()->getJets(EventInput::RecoLevel::Reco);
-      // bool close = false;
-      // for (auto iJet : inputJets) {
-      //   if (iJet.getDeltaR(jet) < .5) {
-      //     close = true;
-      //     break;
-      //   }
-      // }
-      // if (!close) {
-      // std::cout << "adding jet\n";
-      leptonJetList.push_back(jet);
-      //}
-    }
-  }
-  return leptonJetList;
 }
+std::vector<LeptonJet> LeptonJetSelector::findLeptonJets(ParticleCollection<Lepton> recoCandidates) const
+  {
+    auto recoLeptons = recoCandidates.getParticles();
+    std::vector<LeptonJet> leptonJetList;
+    while (recoLeptons.size() != 0)
+    {
+      Lepton highestPtLepton = findHighestPtLepton(recoLeptons);
+      if (highestPtLepton.getPt() <= 5)
+      {
+        break;
+      }
+      else if (abs(highestPtLepton.getEta()) > 3)
+      {
+        recoLeptons.erase(std::find(recoLeptons.begin(), recoLeptons.end(), highestPtLepton));
+        continue;
+      }
+      LeptonJet jet = createLeptonJet(highestPtLepton);
+      std::vector<Particle> initialLeptons = jet.getParticles();
+
+      auto highestPtLeptonFourVector = highestPtLepton.getFourVector();
+      recoLeptons.erase(std::find(recoLeptons.begin(), recoLeptons.end(), highestPtLepton));
+
+      for (unsigned i = 0; i < recoLeptons.size(); ++i)
+      {
+        auto fourVector = recoLeptons[i].getFourVector();
+        double deltaR = reco::deltaR(highestPtLeptonFourVector, fourVector);
+        // std::cout << "delta r: " << deltaR << " delta r cut: " << DeltaRCut << "\n";
+        // std::cout << "The value of Eta is "<< abs(recoLeptons[i].getEta()) <<std::endl;
+        if (deltaR < deltaRCut)
+        {
+          jet.addParticle(recoLeptons[i]);
+          recoLeptons.erase(recoLeptons.begin() + i);
+          --i;
+        }
+
+      }
+      // std::cout << "numParticles: " << jet.getNumParticles() << "\n";
+      if (jet.getNumParticles() > 1)
+      {
+        // auto inputJets = getInput()->getJets(EventInput::RecoLevel::Reco);
+        // bool close = false;
+        // for (auto iJet : inputJets) {
+        //   if (iJet.getDeltaR(jet) < .5) {
+        //     close = true;
+        //     break;
+        //   }
+        // }
+        // if (!close) {
+        // std::cout << "adding jet\n";
+        leptonJetList.push_back(jet);
+        //}
+      }
+    }
+    return leptonJetList;
+  }
 
 LeptonJet LeptonJetSelector::createLeptonJet(Lepton highestPtLepton) const
 {

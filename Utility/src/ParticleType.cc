@@ -210,11 +210,6 @@ HistParams ParticleType::getPhiHist()
     return HistParams("Phi", 150, -4, 4, [](Particle particle){return std::vector<double>{particle.getPhi()};});
 }
 
-HistParams ParticleType::getEtaHist()
-{
-    return HistParams("Eta", 150, -3, 3, [](Particle particle){return std::vector<double>{particle.getEta()};});
-}
-
 CollectionHistParams ParticleType::getNumberHist()
 {
     return CollectionHistParams("Number", 11, -0.5, 10.5, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->getNumParticles()};});
@@ -228,6 +223,11 @@ CollectionHistParams ParticleType::getSameSignInvariantMassHist()
 CollectionHistParams ParticleType::getOppositeSignInvariantMassHist()
 {
     return CollectionHistParams("Opposite Sign Invariant Mass", 150, 0, 1000, [](std::shared_ptr<ParticleCollection<Particle>> collection){return std::vector<double>{collection->calculateOppositeSignInvariantMass(true)};});
+}
+
+HistParams ParticleType::getEtaHist()
+{
+    return HistParams("Eta", 150, -3, 3, [](Particle particle){return std::vector<double>{particle.getEta()};});
 }
 
 HistParams ParticleType::getDaughterDeltaRHist()
