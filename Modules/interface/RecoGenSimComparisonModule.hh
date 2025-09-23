@@ -29,7 +29,7 @@ class RecoGenSimComparisonModule : public AnalysisModule
     void printEventHeader(std::ostream& output_stream = std::cout);
     void printRecoPart(const Particle& recoPart, const int recoEventElement, std::ostream& output);
     void perParticleComparison(const ParticleCollection<Particle>& recoParticles, const ParticleCollection<Particle>& genParticles, std::ostream& output_stream = std::cout);
-    void sameSignInvariantMassComparison(const ParticleCollection<Particle>& recoParticles, const ParticleCollection<Particle>& genParticles, std::ostream& output_stream = std::cout);
+    void sameSignDeltaRComparison(const ParticleCollection<Particle>& recoParts,  const ParticleCollection<Particle>& genParts, std::ostream& output);
     void fakePhotonComparison(const ParticleCollection<Particle>& recoParticles, const ParticleCollection<Particle>& genParticles, std::ostream& output_stream = std::cout);
     void mothersComparison(const ParticleCollection<Particle>& recoParticles, const ParticleCollection<Particle>& genParticles, std::ostream& output_stream = std::cout);
     std::string comparisonType;
@@ -42,6 +42,19 @@ class RecoGenSimComparisonModule : public AnalysisModule
     int recoCounter = 0;
     int electronCounter = 0;
     int muonCounter = 0;
+
+    //below are the counters for the transverse momentum of fake photons and real electrons 
+    int electronCounter_lt50 = 0;       
+    int electronCounter_50to100 = 0;    
+    int electronCounter_100to200 = 0;   
+    int electronCounter_200to300 = 0;   
+    int electronCounter_gt300 = 0; 
+
+    int fakePhotonCounter_lt50 = 0;
+    int fakePhotonCounter_50to100 = 0;
+    int fakePhotonCounter_100to200 = 0;
+    int fakePhotonCounter_200to300 = 0;
+    int fakePhotonCounter_gt300 = 0; 
     // int highEtaMatchCounter = 0;
     // Essential event counters - only counts if the effect is a cause of the outlier mass
     // An event can add to more than one counter at a time

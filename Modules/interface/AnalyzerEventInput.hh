@@ -20,7 +20,7 @@ class AnalyzerEventInput : public EventInput
     public:
         AnalyzerEventInput(const EventInterface** eventInterface);
 
-        virtual ParticleCollection<Lepton> getLeptons(RecoLevel level) const override;
+       
         virtual ParticleCollection<Particle> getParticles(RecoLevel level, const ParticleType& particleType = ParticleType::none()) const override;
         virtual ParticleCollection<Particle> getJets(RecoLevel level) const override;
         virtual ParticleCollection<Particle> getSpecial(std::string key) const override {throw std::runtime_error("getSpecial not implemented in EventLoaderEventInput");}
