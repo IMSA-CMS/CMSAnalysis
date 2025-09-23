@@ -19,6 +19,7 @@ class MultiChannelTreeMakerModule : public TreeMakerModule{
 
         virtual std::string getName() override {return "MultiChannelTreeMakerModule";}
 
+
     protected:
         void fillTree() override;
         virtual std::vector<ParticleCollection<Particle>> getParticles() const override;
