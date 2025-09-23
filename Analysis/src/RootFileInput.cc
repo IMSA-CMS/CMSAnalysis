@@ -123,6 +123,12 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 	// }
 	// else 
 	// {
+	if (hist->GetXaxis()->GetNbins() <= 0)
+	{
+		delete hist;
+		delete file;
+		return nullptr;
+	}
 		TH1* response = new TH1F("Hist Clone", hist->GetTitle(), hist->GetXaxis()->GetNbins(), hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
 
 		// if (histType.is2DHistX())

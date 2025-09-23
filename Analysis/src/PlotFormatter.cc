@@ -39,6 +39,7 @@ float right = 0.04*width;
 
 TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle)
 {
+    
     THStack* background = processes->getStack(histvariable, "background", true);
 	THStack* signal = processes->getStack(histvariable, "signal", true);
 
@@ -342,15 +343,18 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     */
    
     std::vector<std::string> backgroundNames = processes->getNamesWithLabel("background");
-    //std::cout << "Background Names Size: " << backgroundNames.size() << std::endl;
+    /*
+    std::cout << "Background Names Size: " << backgroundNames.size() << std::endl;
+
     for (int i = 0; i < (int)backgroundNames.size(); i++)
     {
-        //std::cout << backgroundNames[i] << std::endl;
+        std::cout << backgroundNames[i] << std::endl;
     }
+    */
     std::vector<std::string> signalNames = processes->getNamesWithLabel("signal");
-
+    
     std::vector<std::string> dataNames = processes->getNamesWithLabel("data");
-
+    
     if (includeData == true)
     {
         data = analysis->getHist(histvariable, dataNames.at(0), false, channelName);
