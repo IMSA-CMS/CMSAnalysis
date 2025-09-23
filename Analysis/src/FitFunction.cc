@@ -1,4 +1,5 @@
 #include "CMSAnalysis/Analysis/interface/FitFunction.hh"
+#include <TMath.h>
 #include "TF1.h"
 #include <fstream>
 #include <sstream>
@@ -50,6 +51,11 @@ double FitFunction::DSCB(double *x, double *par)
 	// //std::cout<<"Global norm: " << globalNorm << "\n";
 	// }
 	return N * functionNormalization * result;	
+}
+
+double FitFunction::doubleGaussian(double *x, double *par)
+{
+    return par[0] * TMath::Gaus(*x, par[1], par[2]) + par[3] * TMath::Gaus(*x, par[4], par[5]);
 }
 
 FitFunction::FitFunction() {}
@@ -164,6 +170,9 @@ FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const s
 		case FunctionType::POWER_LAW:
 			func = new TF1(name.data(), powerLaw, min, max, 3);
 			break;
+		case FunctionType::DOUBLE_GAUSSIAN:
+			func = new TF1(name.data(), doubleGaussian, min, max, 6);
+			break;
 		default:
 			throw std::invalid_argument("Not a valid FunctionType enum value");
 	};
@@ -176,7 +185,7 @@ std::ostream& operator<<(std::ostream& stream, FitFunction& function)
 	TF1* func = function.getFunction();
 	std::vector<std::string> channel_parameter = FitFunction::split(func->GetName(), '/');
 
-	stream << channel_parameter[0] << "		";
+	stream << channel_parameter[1] << "		";
 
 	for (int i = 0; i < func->GetNpar(); ++i)
 	{
