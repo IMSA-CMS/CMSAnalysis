@@ -74,7 +74,7 @@ void LeptonJetReconstructionPlan::initialize()
 
   auto matchMod = std::make_shared<MatchingModule>();
   auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
-  auto eventDumpMod = std::make_shared<EventDumpModule>(true,true);
+  auto eventDumpMod = std::make_shared<EventDumpModule>(true,true, 5);
   auto lepMatchMod = std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.1); // this
   
   // auto highestLeptonJetDeltaRCut = std::make_shared<HighestLeptonJetDeltaRCut>(lepRecoMod);
@@ -86,7 +86,7 @@ void LeptonJetReconstructionPlan::initialize()
   
   auto lepRecoHistMod = lepRecoMod->getHistogramModule();
 
-  //auto recoGenSimComparisonMod = std::make_shared<RecoGenSimComparisonModule>();
+  auto recoGenSimComparisonMod = std::make_shared<RecoGenSimComparisonModule>("fakePhoton", true);
   auto leptonJetMLStripMod = std::make_shared<LeptonJetMLStripModule>();
   leptonJetMLStripMod->setInput(eventMod->getEventInput());
 

@@ -20,7 +20,7 @@ class LocalEventInput : public EventInput
     public:
         LocalEventInput(const Event* event1);
 
-        virtual ParticleCollection<Lepton> getLeptons(RecoLevel level) const override;
+        
         virtual ParticleCollection<Particle> getParticles(RecoLevel level, const ParticleType& particleType = ParticleType::none()) const override;
         virtual ParticleCollection<Particle> getJets(RecoLevel level) const override;
         virtual ParticleCollection<Particle> getSpecial(std::string key) const override;

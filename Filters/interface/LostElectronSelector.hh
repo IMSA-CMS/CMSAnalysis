@@ -10,7 +10,9 @@
 #include "CMSAnalysis/Utility/interface/Lepton.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 
+
 //To implement a selector, add it to an EventModule in a DataCollectionPlan, then add the histograms to that EventModule's EventHistogramModule
+
 
 class LostElectronSelector : public Selector
 {
