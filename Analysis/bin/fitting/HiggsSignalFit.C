@@ -16,7 +16,7 @@ std::vector<HistVariable> histogramTypes = {
     HistVariable(HistVariable::VariableType::InvariantMass, "", false, true),
 };
 
-const int minData = 100;
+const int minData = 400;
 
 // run in batch mode for faster processing: root -b HiggsSignalFit.C+
 void HiggsSignalFit()
@@ -28,6 +28,8 @@ void HiggsSignalFit()
     std::string fitParameterValueFile = "H++SignalFunctions.txt";
     std::string parameterFits = "H++SignalParameterFits.root";
     std::string parameterFunctions = "H++SignalParameterFunctions.txt";
+
+    std::vector<std::string> recoDecays = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu"};
 
     remove(fitParameterValueFile.c_str());
     remove(parameterFunctions.c_str());
@@ -42,27 +44,52 @@ void HiggsSignalFit()
 
     for (const auto &histType : histogramTypes)
     {
-        for (const auto &recoDecay : HiggsCompleteAnalysis::recoDecays)
+        for (const auto &recoDecay : recoDecays)
         {
+            std::cout << "recoDecay: " << recoDecay << '\n';
             auto targetChannel = analysis->getChannel(recoDecay);
-            //for (const auto &genSimDecay : HiggsCompleteAnalysis::genSimDecays)
+            for (const auto &genSimDecay : HiggsCompleteAnalysis::genSimDecays)
             {
-                auto channel = recoDecay + "_" + recoDecay;
+                auto channel = recoDecay + "_" + genSimDecay;
+                std::cout << "Fitting " << channel << "\n";
                 std::unordered_map<std::string, double> massValues;
                 std::unordered_map<std::string, TH1 *> histogramMap;
                 FitFunctionCollection currentFunctions;
                 std::vector<std::string> actualParams;
-
                 for (const auto &name : paramNames)
                 {
                     actualParams.push_back(channel + '/' + name);
                 }
 
+                double skew_sum = 0;
+                auto n = 0;
+
                 for (auto mass : masses)
                 {
-                    std::cerr << "mass: " << mass << std::endl;
-                    // update this to use all gensim decays, not just the same as reco
-                    auto process = targetChannel->findProcess("Higgs signal " + recoDecay + " " + std::to_string(mass));
+                    auto process =
+                        targetChannel->findProcess("Higgs signal " + genSimDecay + " " + std::to_string(mass));
+                    TH1 *selectedHist = process->getHist(histType, true);
+
+                    if (!selectedHist || selectedHist->GetEntries() < minData)
+                    {
+                        continue;
+                    }
+
+                    skew_sum += selectedHist->GetSkewness();
+                    n += 1;
+                }
+
+                if (n == 0)
+                {
+                    continue;
+                }
+
+                double skew_avg = skew_sum / n;
+
+                for (auto mass : masses)
+                {
+                    auto process =
+                        targetChannel->findProcess("Higgs signal " + genSimDecay + " " + std::to_string(mass));
                     TH1 *selectedHist = process->getHist(histType, true);
 
                     if (!selectedHist || selectedHist->GetEntries() < minData)
@@ -72,20 +99,19 @@ void HiggsSignalFit()
 
                     std::string keyName = channel + "/" + std::to_string(mass) + '_' + histType.getName();
 
-                    FitFunction func = FitFunction::createFunctionOfType(FitFunction::DOUBLE_SIDED_CRYSTAL_BALL,
-                                                                         keyName, "", min, max);
+                    FitFunction func;
+                    if (-1.5 < skew_avg)
+                    {
+                        func = FitFunction::createFunctionOfType(FitFunction::DOUBLE_GAUSSIAN, keyName, "", min, max);
+                    }
+                    else
+                    {
+                        func = FitFunction::createFunctionOfType(FitFunction::DOUBLE_SIDED_CRYSTAL_BALL, keyName, "",
+                                                                 min, max);
+                    }
                     currentFunctions.insert(func);
                     histogramMap.insert({keyName, selectedHist});
                     massValues.insert({keyName, mass});
-
-                    // file->Close();
-                    // selectedHist->Draw();
-                    // std::string wait;
-                    // std::cin >> wait;
-                }
-                if (histogramMap.empty())
-                {
-                    continue;
                 }
                 fitter.setHistograms(histogramMap);
                 fitter.loadFunctions(currentFunctions);

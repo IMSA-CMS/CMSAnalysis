@@ -34,6 +34,10 @@ ParticleCollection<Particle> Event::getParticles(EventInput::RecoLevel level) co
         {
             particleList.addParticle(Particle(p));
         }
+        for (const auto& p: taus.getParticles())
+        {
+            particleList.addParticle(Particle(p));
+        }
         for (const auto& p: photons.getParticles())
         {
             particleList.addParticle(Particle(p));
@@ -78,7 +82,11 @@ void Event::addMuon(Muon muon)
     //std::cerr << "Added muon in Event: " << muons.getParticles().back().getInfo("Isolation") << std::endl;
     muons.sort();
 }
-
+void Event::addTau(Tau tau) 
+{
+    taus.addParticle(tau); 
+    taus.sort();
+}
 void Event::addPhoton(Photon photon) 
 {
     photons.addParticle(photon); 
@@ -119,7 +127,7 @@ ParticleCollection<Particle> Event::getSpecial(std::string key) const
 
 bool Event::containsParticles() const
 {
-    if (electrons.getParticles().size()==0 && muons.getParticles().size()==0 && photons.getParticles().size()==0 && jets.getParticles().size()==0 && specialObjects.size()==0)
+    if (electrons.getParticles().size()==0 && muons.getParticles().size()==0 && taus.getParticles().size()==0 && photons.getParticles().size()==0 && jets.getParticles().size()==0 && specialObjects.size()==0)
     {
         return false;
     }
@@ -130,6 +138,7 @@ void Event::clear()
 {
     electrons = ParticleCollection<Electron>();
     muons = ParticleCollection<Muon>();
+    taus = ParticleCollection<Tau>();
     photons = ParticleCollection<Photon>();
     jets = ParticleCollection<Jet>();
     genSimParticles = ParticleCollection<GenSimParticle>();

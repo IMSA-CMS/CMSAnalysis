@@ -93,11 +93,10 @@ class ParticleType
     //Lets you manually change the particle types in the method definition
     static void particleTypeOverrides();
     //Should probably be changed to void and replaced with getPDGType()
-    static const ParticleType& registerType(std::string typeName, int typepdgId, double charge, std::vector<HistParams> typeParticleHists, std::vector<CollectionHistParams> typeCollectionHistParams);//, std::vector<CollectionHistParams> CollectionHistParams);
+    static const ParticleType& registerType(std::string typeName, int typepdgId, double charge, std::vector<HistParams> typeParticleHists, 
+        std::vector<CollectionHistParams> typeCollectionHistParams);
 
     static std::unordered_map<int, ParticleType> typeList;
-
-    //Adds type object to list if it does not exist and then refrence it
 };
 
 #endif
