@@ -18,6 +18,7 @@
 #include "CMSAnalysis/Filters/interface/HiggsCut.hh"
 #include "CMSAnalysis/Filters/interface/HiggsMassCut.hh"
 #include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
+#include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
 
 
 using std::make_shared;
@@ -32,6 +33,7 @@ void GenSimPlan::initialize()
     auto dpSelector = make_shared<DarkPhotonGenSimSelector>();
     auto hppSelector = make_shared<HiggsSelector>();
     auto hppGenSimSelector = make_shared<HPlusPlusGenSimSelector>();
+    auto higgsFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::GenSim);
     auto metMod = make_shared<METModule>();
     auto recoGenMatch = make_shared<RecoGenSimComparisonModule>();
 
@@ -59,6 +61,7 @@ void GenSimPlan::initialize()
 
     modules.addProductionModule(metMod);
     modules.addProductionModule(eventMod);
+    modules.addFilterModule(make_shared<FilterModule>(higgsFilter));
     modules.addAnalysisModule(eventHistMod);
 
 	modules.addAnalysisModule(hPlusPlusEfficiency);

@@ -48,6 +48,7 @@ void EventModule::addSelector(std::shared_ptr<Selector> selector)
 void EventModule::addScaleFactor(std::shared_ptr<ScaleFactor> scaleFactor)
 {
     scaleFactors.push_back(scaleFactor);
+    histMod ->addScaleFactor(scaleFactor);
 }
 void EventModule::addCut(std::shared_ptr<Cut> cut)
 {
@@ -194,10 +195,10 @@ void EventModule::addBasicHistograms(const ParticleType& particleType, const Par
             {
                 params.setName(histName);
                 auto histogram = std::make_shared<SingleParticleHist>(params);
-                for (auto scaleFactor: scaleFactors)
-                {
-                    histogram->addScaleFactor(scaleFactor);
-                }
+                // for (auto scaleFactor: scaleFactors)
+                // {
+                //     histogram->addScaleFactor(scaleFactor);
+                // }
                 particleHistograms.insert({histName,histogram});
                 histMod->addHistogram(histogram);
 
@@ -222,10 +223,10 @@ void EventModule::addCountHistograms(const ParticleType& particleType, const std
         {
             params.setName(histName);
             auto hist = std::make_shared<CollectionHist>(params);
-            for (auto scaleFactor: scaleFactors)
-            {
-                hist->addScaleFactor(scaleFactor);
-            }
+            // for (auto scaleFactor: scaleFactors)
+            // {
+            //     hist->addScaleFactor(scaleFactor);
+            // }
             collectionHistograms.insert({histName, hist});
             histMod->addHistogram(hist);
         }
