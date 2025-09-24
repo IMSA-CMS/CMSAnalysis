@@ -18,6 +18,7 @@ public:
     MuonJSONReader(std::string filename);
 protected:
     virtual std::map<std::string, ScaleFactor::ScaleFactorSet>  loadScaleFactors(Json::Value output) override;
+    // virtual std::string getKey(Lepton lepton) override;
 
 
 };

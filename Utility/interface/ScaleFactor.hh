@@ -58,6 +58,10 @@ public:
 
  protected:
      virtual std::vector<std::string> getKey(const EventInput* input) const = 0;
+     //std::map<std::string, ScaleFactorSet> & getScaleFactorMap() { return scaleFactors; }
+     const std::map<std::string, ScaleFactorSet> & getScaleFactorMap() const { return scaleFactors; }
+
+
 
 private:
     std::string name;

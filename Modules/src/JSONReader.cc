@@ -15,6 +15,12 @@
 #include "TCanvas.h"
 #include "TFile.h"
 
+std::map<std::string, ScaleFactor::ScaleFactorSet> JSONReader::readData()
+{
+    return loadScaleFactorsFromFile(filename);
+}
+
+
 // Function to preprocess the JSON content
 std::string JSONReader::preprocessJSON(const std::string &filename) 
 {

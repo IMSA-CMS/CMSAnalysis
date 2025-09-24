@@ -2,7 +2,7 @@
 
 MuonJSONReader::MuonJSONReader(std::string filename) : JSONReader(filename)
 {
-	loadScaleFactorsFromFile(filename);
+
 }
  std::map<std::string, ScaleFactor::ScaleFactorSet> MuonJSONReader::loadScaleFactors(Json::Value output)
 {
@@ -39,7 +39,7 @@ MuonJSONReader::MuonJSONReader(std::string filename) : JSONReader(filename)
             }
             std::string etaMinString = std::to_string(eta_min);
             std::string ptMaxString = std::to_string(pt_max);
-            scaleFactorMap[etaMinString + "_" + ptMaxString] = (scaleFactor, systUp, systDown);
+            scaleFactorMap[etaMinString + "_" + ptMaxString] = ScaleFactor::ScaleFactorSet(nominal, systUp, systDown);
             //std::cout << "Adding nominal scale factor for eta bin [" << eta_min << ", " << etaMax << "] and pt bin [" << ptMin << ", " << ptMax << "] with scale factor: " << scaleFactor << std::endl;
 
         }
@@ -48,30 +48,30 @@ MuonJSONReader::MuonJSONReader(std::string filename) : JSONReader(filename)
     return scaleFactorMap;
 }
 
-std::string getKey(Lepton lepton)
-{
-    // Go through scaleFactorMap
-    // Find highest eta key less than your eta and lowest pT key more than your pT in the keys.
+// std::string MuonJSONReader::getKey(Lepton lepton)
+// {
+//     // Go through scaleFactorMap
+//     // Find highest eta key less than your eta and lowest pT key more than your pT in the keys.
 
-    // review this code
-    std::string bestKey = "";
-    double bestEta = -1;
-    double bestPt = std::numeric_limits<double>::max();
+//     // review this code
+//     std::string bestKey = "";
+//     double bestEta = -1;
+//     double bestPt = -1;
 
-    for (const auto& entry : scaleFactorMap) {
-        std::string key = entry.first;
-        size_t underscorePos = key.find("_");
-        double eta = std::stod(key.substr(0, underscorePos));
-        double pt = std::stod(key.substr(underscorePos + 1));
+//     for (const auto& entry : scaleFactorMap) {
+//         std::string key = entry.first;
+//         size_t underscorePos = key.find("_");
+//         double eta = std::stod(key.substr(0, underscorePos));
+//         double pt = std::stod(key.substr(underscorePos + 1));
 
-        if (eta < lepton.eta && pt > lepton.pt) {
-            if (eta > bestEta || (eta == bestEta && pt < bestPt)) {
-                bestKey = key;
-                bestEta = eta;
-                bestPt = pt;
-            }
-        }
-    }
+//         if (eta < lepton.getEta() && pt > lepton.getPt()) {
+//             if (eta > bestEta || (eta == bestEta && pt < bestPt)) {
+//                 bestKey = key;
+//                 bestEta = eta;
+//                 bestPt = pt;
+//             }
+//         }
+//     }
 
-    return bestKey;
-}
+//     return bestKey;
+// }

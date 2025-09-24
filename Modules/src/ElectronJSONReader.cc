@@ -4,9 +4,8 @@
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include <iostream>
 
-ElectronJSONReader::ElectronJSONReader(std::string filename)
+ElectronJSONReader::ElectronJSONReader(std::string filename) : JSONReader(filename)
 {
-	loadScaleFactorsFromFile(filename);
 }
 
 
@@ -53,19 +52,19 @@ void ElectronJSONReader::loadScaleFactors(Json::Value output, ScaleFactor::Syste
         {
             switch (systematicType)
             {
-                case Systematic::SystematicType::Nominal:
+                case ScaleFactor::SystematicType::Nominal:
                     if (yearContent[j]["key"] != "sf")
                     {
                         continue;
                     }
                     break;
-                case Systematic::SystematicType::Up:
+                case ScaleFactor::SystematicType::Up:
                     if (yearContent[j]["key"] != "sfup")
                     {
                         continue;
                     }
                     break;
-                case Systematic::SystematicType::Down:
+                case ScaleFactor::SystematicType::Down:
                     if (yearContent[j]["key"] != "sfdown")
                     {
                         continue;
@@ -143,25 +142,25 @@ void ElectronJSONReader::loadScaleFactors(Json::Value output, ScaleFactor::Syste
                             std::string ptMaxString = std::to_string(ptMax);
                             switch (systematicType)
                             {
-                                case Systematic::SystematicType::Nominal:
+                                case ScaleFactor::SystematicType::Nominal:
                                     
 
-                                    scaleFactorMap[etaMinString + "_" + ptMaxString] = ScaleFactorSet(scaleFactor, 0.0, 0.0);
-                                    std::cout << "Adding nominal scale factor for eta bin [" << etaMin << ", " << etaMax << "] and pt bin [" << ptMin << ", " << ptMax << "] with scale factor: " << scaleFactor << std::endl;
+                                    scaleFactorMap[etaMinString + "_" + ptMaxString] = ScaleFactor::ScaleFactorSet(scaleFactor, 0.0, 0.0);
+                                    //std::cout << "Adding nominal scale factor for eta bin [" << etaMin << ", " << etaMax << "] and pt bin [" << ptMin << ", " << ptMax << "] with scale factor: " << scaleFactor << std::endl;
                                     break;
 
-                                case Systematic::SystematicType::Up:
+                                case ScaleFactor::SystematicType::Up:
                                     
                                     scaleFactorMap[etaMinString + "_" + ptMaxString].systUp = scaleFactor;
                                    // getScaleFactorSet(etaMin, ptMax).systUp = scaleFactor;
-                                    std::cout << "Adding up systematic scale factor for eta bin [" << etaMin << ", " << etaMax << "] and pt bin [" << ptMin << ", " << ptMax << "] with scale factor: " << scaleFactor << std::endl;
-                                    std::cout << "Readback value of systUp: " << getScaleFactorSet(etaMin, ptMax).systUp << std::endl;
+                                    //std::cout << "Adding up systematic scale factor for eta bin [" << etaMin << ", " << etaMax << "] and pt bin [" << ptMin << ", " << ptMax << "] with scale factor: " << scaleFactor << std::endl;
+                                    //std::cout << "Readback value of systUp: " << getScaleFactorSet(etaMin, ptMax).systUp << std::endl;
                                     break;
-                                case Systematic::SystematicType::Down:
+                                case ScaleFactor::SystematicType::Down:
 
                                     scaleFactorMap[etaMinString + "_" + ptMaxString].systDown = scaleFactor;    
                                     // getScaleFactorSet(etaMin, ptMax).systDown = scaleFactor;
-                                    std::cout << "Adding down systematic scale factor for eta bin [" << etaMin << ", " << etaMax << "] and pt bin [" << ptMin << ", " << ptMax << "] with scale factor: " << scaleFactor << std::endl;
+                                    //std::cout << "Adding down systematic scale factor for eta bin [" << etaMin << ", " << etaMax << "] and pt bin [" << ptMin << ", " << ptMax << "] with scale factor: " << scaleFactor << std::endl;
                                     break;
                             }
                             //addScaleFactor(etaMin, ptMax, ScaleFactorSet(scaleFactor, 0.0, 0.0));
@@ -173,6 +172,6 @@ void ElectronJSONReader::loadScaleFactors(Json::Value output, ScaleFactor::Syste
             }        
         }
     }
-    return scaleFactorMap;
+    //return scaleFactorMap;
 }
 

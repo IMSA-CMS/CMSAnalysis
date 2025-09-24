@@ -26,7 +26,7 @@ double ScaleFactor::getScaleFactor(const EventInput* input, SystematicType type 
 		auto entry = scaleFactors.find(key);
 		if (entry == scaleFactors.end())
 		{
-			throw std::runtime_error("Scale factor not found!");
+			throw std::runtime_error("Scale factor " + key + " not found!");
 		}
 		scaleFactor *= entry->second.getSystematic(type);
 	}

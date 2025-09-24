@@ -12,7 +12,9 @@ class EventInput;
 class JSONReader : public ScaleFactorReader
 {
 public:
-  
+    JSONReader(std::string ifilename) : filename(ifilename) {}
+  	virtual std::map<std::string, ScaleFactor::ScaleFactorSet> readData() override;
+
  
 protected:
     virtual std::map<std::string, ScaleFactor::ScaleFactorSet> loadScaleFactors(Json::Value output) = 0;
@@ -20,6 +22,7 @@ protected:
 
 private:
     std::string preprocessJSON(const std::string &filename); 
+    std::string filename;
 };
 
 #endif // JSONSCALEFACTOR_HH

@@ -66,7 +66,7 @@ void HiggsBackgroundPlan::initialize()
     eventMod->addCut(zVetoCut);
     eventMod->addCut(bJetCut);
     //eventMod->addCut(quarkoniaCut);
-    CommonOperations::addHiggsScaleFactors(eventMod);
+    //CommonOperations::addHiggsScaleFactors(eventMod);
 
     auto matchMod = make_shared<MatchingModule>();
     auto triggerMod = make_shared<TriggerModule>();

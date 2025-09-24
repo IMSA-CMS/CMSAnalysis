@@ -1,12 +1,14 @@
 #ifndef LEPTONSCALEFACTOR_HH
 #define LEPTONSCALEFACTOR_HH
 #include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
+#include "CMSAnalysis/Utility/interface/Lepton.hh"
+#include "CMSAnalysis/Utility/interface/ParticleType.hh"
 
 class LeptonScaleFactor : public ScaleFactor
 {
 
 	public:
-	LeptonScaleFactor(std::shared_ptr<LeptonScaleFactor> reader, ParticleType particleType);
+	LeptonScaleFactor(std::string name, std::shared_ptr<ScaleFactorReader> reader, ParticleType particleType);
 	// virtual double getScaleFactor(const EventInput* input, SystematicType type = SystematicType::Nominal) const override;
 	
 	protected:
