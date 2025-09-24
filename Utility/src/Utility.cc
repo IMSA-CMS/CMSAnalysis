@@ -6,6 +6,7 @@
 #include <iostream>
 #include <numeric>
 
+
 std::string Utility::substitute(std::string original, std::string target, std::string subs)
 {
   size_t start_pos = 0;
@@ -127,7 +128,7 @@ std::vector<std::string> Utility::channelMaker(std::vector<std::string> particle
       }
       if(keepChannel) {
         channels.push_back(channel);
-      }
+       }
     }
   }
   channels.push_back("none");
@@ -146,18 +147,170 @@ int Utility::gcf(std::vector<int> nums) {
   return toReturn;
 }
 
+std::string Utility::identifyChannel(ParticleCollection<Particle> particles)
+{
+  std::vector<std::pair<char, char>> leptons;
+  std::string positiveLeptons;
+  std::string negativeLeptons;
+  int nTaus = 0;
+
+  for (const auto& particle : particles)
+  {
+    char flavor;
+
+    if (particle.getType() == ParticleType::electron())
+    {
+      flavor = 'a';
+    }
+    else if (particle.getType() == ParticleType::muon())
+    {
+      flavor = 'b';
+    }
+    else if (particle.getType() == ParticleType::tau()) //taus don't undergo the charge sorting process
+    {
+      ++nTaus; 
+      continue;
+    }
+    else
+    {
+      continue;
+    }
+   
+    if (particle.getCharge() > 0)
+    {
+      positiveLeptons += flavor;
+    }
+    else
+    {
+      negativeLeptons += flavor;
+    }
+  }
+
+//std::cout << "Ntaus: " << nTaus << "  pos: " << positiveLeptons << "  neg: " << negativeLeptons << "                 " << '\n' ;
+
+// Fill 'c' in where there is a space
+// up to the number of taus --> make a while loop that runs out of Taus, for each one add a c
+// add it to the string that has the fewest leptons (.length stuff)
+// if they are the same length, add it to the one that has more electrons, and if it's same, add to one with more muons
+//make sure there's automatic underscores for Taus
+// we're looking at just positive or just negative pairs - you have to add a c no matter what (turns into tau)
+  
+  while (nTaus > 0) //this while loop is responsible for sorting taus into the category with less leptons
+  {
+    // decide where to put the tau
+    if (positiveLeptons.size() < negativeLeptons.size())
+    {
+      positiveLeptons += 'c';
+    }
+    else if (negativeLeptons.size() < positiveLeptons.size())
+    {
+      negativeLeptons += 'c';
+    }
+    else
+    {
+      // tie in length, break with electron count
+      int posElectrons = std::count(positiveLeptons.begin(), positiveLeptons.end(), 'a');
+      int negElectrons = std::count(negativeLeptons.begin(), negativeLeptons.end(), 'a');
+
+      if (posElectrons > negElectrons)
+      {
+        positiveLeptons += 'c';
+      }
+      else if (negElectrons > posElectrons)
+      {
+        negativeLeptons += 'c';
+      }
+      else
+      {
+        // tie again, break with muon count
+        int posMuons = std::count(positiveLeptons.begin(), positiveLeptons.end(), 'b');
+        int negMuons = std::count(negativeLeptons.begin(), negativeLeptons.end(), 'b');
+
+        if (posMuons > negMuons) // assigns 
+        {
+          positiveLeptons += 'c';
+        }
+        else
+        {
+          negativeLeptons += 'c';
+        }
+      }
+    }
+
+    --nTaus;
+  }
+
+  // pad with 'x' up to 2 leptons each
+  while (positiveLeptons.size() < 2)
+  {
+    positiveLeptons += 'x'; //makes sure there are two leptons each --> if not, pads with x which becomes underscore
+  }
+  while (negativeLeptons.size() < 2) 
+  {
+    negativeLeptons += 'x';
+  }
+
+  if (positiveLeptons.size() > 2)
+    positiveLeptons = positiveLeptons.substr(0, 2);
+
+  if (negativeLeptons.size() > 2)
+    negativeLeptons = negativeLeptons.substr(0, 2);
+
+  // sorts by flavor
+  std::sort(positiveLeptons.begin(), positiveLeptons.end());
+  std::sort(negativeLeptons.begin(), negativeLeptons.end());
+
+  std::string first, second;
+
+  if (positiveLeptons < negativeLeptons)
+  {
+    first = positiveLeptons;
+    second = negativeLeptons;
+  }
+  else
+  {
+    first = negativeLeptons;
+    second = positiveLeptons;
+  }
+
+  // builds signature with substitutions
+  std::string signature = first + second;
+ 
+  signature = substitute(signature, "a", "e");
+  signature = substitute(signature, "b", "u");
+  signature = substitute(signature, "c", "t");
+  signature = substitute(signature, "x", "_");
+
+  //std::cout << "Signature: " << signature << " (length = " << signature.length() << ")" 
+  //<< " Positives: " << positiveLeptons << " Negatives: " << negativeLeptons << std::endl;
+  // if (signature.size() > 4)
+  //   {
+  //     std::cout << "Positives: " << positiveLeptons << " Negatives: " << negativeLeptons << " Signature: " << signature << std::endl;
+  //   }
+     //have something that looks at signature.length. if signature.length is greater than 4, print it out.
+    return signature;
+}
+
+
 void writeRootObj(TFile *outFile, const std::string &path, TObject *obj)
 {
-    if (!outFile->cd(path.c_str()))
+  if (outFile->Get(path.c_str()))
     {
-        if (outFile->mkdir(path.c_str(), "", true) == nullptr)
-        {
-            throw std::runtime_error("Failed to create directory " + path);
-        }
         if (outFile->cd(path.c_str()) != kTRUE)
         {
             throw std::runtime_error("Failed to change directory to " + path);
         }
+    }
+    else
+    {
+      if (outFile->mkdir(path.c_str(), "", true) == nullptr)
+        {
+            throw std::runtime_error("Failed to create directory " + path);
+        }
+      if (outFile->cd(path.c_str()) != kTRUE)
+        {
+            throw std::runtime_error("Failed to change directory to " + path);
+        }     
     }
 
     if (obj->Write() == 0)

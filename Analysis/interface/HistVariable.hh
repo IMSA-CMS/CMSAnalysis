@@ -38,6 +38,21 @@ class HistVariable
 
     std::string getName() const;
 
+    ParticleType getParticleType() const
+    {
+        return particleType;
+    }
+   
+    int getOrder() const
+    {
+        return order_;
+    }
+
+    VariableType getVariableType() const
+    {
+        return variableType;
+    }
+
     std::string getUnit() const
     {
         return unit;

@@ -1,11 +1,13 @@
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
-#include "CMSAnalysis/Analysis/interface/FitFunction.hh"
+#include <Fit/FitResult.h>
 #include <TCanvas.h>
 #include <TFitResult.h>
+#include <TFitResultPtr.h>
 #include <TGraphErrors.h>
 #include <TH1.h>
 #include <TPaveStats.h>
 #include <TStyle.h>
+#include <cmath>
 
 std::vector<TF1 *> Fitter::trialFitFunctions = {new TF1("Power Law", "[0]*(x-[1])^[2]"),
                                                 new TF1("Exponential", "[0]*expo(x-[1]) + [2]"),
@@ -76,6 +78,10 @@ void Fitter::fitFunctions()
     {
         FitFunction &func = funcPair.second;
         TH1 *histogram = histograms[funcPair.first];
+        if (!histogram)
+        {
+            throw std::runtime_error("fitter::fitFunctions attempted histogram that does not exist: " + funcPair.first);
+        }
         TCanvas *canvas;
 
         switch (func.getFunctionType())
@@ -126,7 +132,7 @@ TCanvas *Fitter::fitExpressionFormula(TH1 *histogram, FitFunction &fitFunction)
     c1->SetLogy();
 
     TFitResultPtr result =
-        histogram->Fit(fitFunction.getFunction(), "SWLQRBWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
+        histogram->Fit(fitFunction.getFunction(), "SQRWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
 
     gStyle->SetOptFit(1111);
 
@@ -141,7 +147,11 @@ TCanvas *Fitter::fitDSCB(TH1 *histogram, FitFunction &fitFunction)
     // histogram->Draw();
     // std::string wait;
     // std::cin >> wait;
-    TFitResultPtr gausResult = histogram->Fit("gaus", "SWLQRWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
+    std::cout << "Test\n" << std::endl;
+    std::cout << "NEntries: " << histogram->GetEntries() << std::endl;
+    std::cout << "starting\n";
+    TFitResultPtr gausResult = histogram->Fit("gaus", "SWLQR", "", fitFunction.getMin(), fitFunction.getMax());
+    std::cout << "finished\n";
     // std::cout << "2:2\n";
     auto params = gausResult->Parameters();
     // std::cout << "2:3\n";
@@ -149,7 +159,7 @@ TCanvas *Fitter::fitDSCB(TH1 *histogram, FitFunction &fitFunction)
     // TF1* f1 = new TF1 ("f1", DoubleSidedCrystalballFunction, 0, 2000, 6);
     f1->SetNpx(1000);
     // alpha low, alpha high, n low, n high, mean, sigma, norm
-    double norm = histogram->Integral("width");
+    double norm = histogram->Integral(); //("width");
     // std::cout << "2:4\n";
 
     f1->SetParameters(2.82606, 2.5, 1.08, 1.136, params[1], params[2], norm);
@@ -160,7 +170,7 @@ TCanvas *Fitter::fitDSCB(TH1 *histogram, FitFunction &fitFunction)
     f1->SetParLimits(1, 0, 10);
     f1->SetParLimits(2, 1, 10);
     f1->SetParLimits(3, 1, 10);
-    f1->SetParLimits(4, 400, 1600);
+    f1->SetParLimits(4, fitFunction.getMin(), fitFunction.getMax());
     f1->FixParameter(6, norm);
 
     // if(name.substr(8,8) == "eee_eeee" || name.substr(9,8) == "eee_eeee"){
@@ -180,8 +190,9 @@ TCanvas *Fitter::fitDSCB(TH1 *histogram, FitFunction &fitFunction)
     f1->SetLineColor(kRed);
     TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(), fitFunction.getName().c_str(), 0, 0, 1500, 500);
     // std::cout << "2:7\n";
-
+    std::cout << "staring\n";
     histogram->Fit(f1, "SWLQRBWIDTH");
+    std::cout << "finished\n";
     f1->SetParError(6, norm / (sqrt(histogram->GetEntries())));
     // std::cout << "2:8\n";
 
@@ -214,7 +225,7 @@ TCanvas *Fitter::fitPowerLaw(TH1 *histogram, FitFunction &fitFunction)
     // gives much worse fits for some graphs but seg faults without L sometimes?
     // Root says better when histogram represents counts
     TFitResultPtr result =
-        histogram->Fit(fitFunction.getFunction(), "SWLQRWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
+        histogram->Fit(fitFunction.getFunction(), "SWLQR", "", fitFunction.getMin(), fitFunction.getMax());
 
     // shouldn't even be doing this? we're minimizing log likelihood, not chi2
     double chi2 = __DBL_MAX__;
@@ -223,8 +234,7 @@ TCanvas *Fitter::fitPowerLaw(TH1 *histogram, FitFunction &fitFunction)
         std::cout << "Chi2: " << result->Chi2() << '\n';
         chi2 = result->Chi2();
         fitFunction.getFunction()->SetParameters(result->Parameter(0), result->Parameter(1), result->Parameter(2));
-        result =
-            histogram->Fit(fitFunction.getFunction(), "SWLQRWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
+        result = histogram->Fit(fitFunction.getFunction(), "SWLQR", "", fitFunction.getMin(), fitFunction.getMax());
     }
 
     gStyle->SetOptFit(1111);
@@ -236,25 +246,102 @@ TCanvas *Fitter::fitDoubleGaussian(TH1 *histogram, FitFunction &fitFunction)
 {
     TF1 *f1 = fitFunction.getFunction();
 
-    TFitResultPtr singleGaus = histogram->Fit("gaus", "SWLQRWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
-    auto params = singleGaus->Parameters();
-    auto gausMul = params.at(0);
-    auto gausMean = params.at(1);
-    auto gausSigma = params.at(2);
+    auto mean = histogram->GetMean();
+    auto std = histogram->GetStdDev();
 
-    f1->SetParameters(gausMul, gausMean - gausSigma, gausSigma / 2, gausMul, gausMean + gausSigma, gausSigma / 2);
+    TFitResultPtr LowGaus = histogram->Fit("gaus", "SWLQWIDTH", "", fitFunction.getMin(), mean);
+    TFitResultPtr HighGaus = histogram->Fit("gaus", "SWLQWIDTH", "", mean, fitFunction.getMax());
+
+    double LowGausMul;
+    double LowGausMean;
+    double LowGausSigma;
+    if ((int)LowGaus == 0)
+    {
+        LowGausMul = LowGaus->Parameters().at(0);
+        LowGausMean = LowGaus->Parameters().at(1);
+        LowGausSigma = LowGaus->Parameters().at(2);
+    }
+    else
+    {
+        LowGausMul = NAN;
+        LowGausMean = mean - std;
+        LowGausSigma = std;
+    }
+
+    double HighGausMul;
+    double HighGausMean;
+    double HighGausSigma;
+    if ((int)HighGaus == 0)
+    {
+        HighGausMul = HighGaus->Parameters().at(0);
+        HighGausMean = HighGaus->Parameters().at(1);
+        HighGausSigma = HighGaus->Parameters().at(2);
+    }
+    else
+    {
+        HighGausMul = NAN;
+        HighGausMean = mean + std;
+        HighGausSigma = std;
+    }
+
+    f1->SetParameters(LowGausMul, LowGausMean, LowGausSigma, HighGausMul, HighGausMean, HighGausSigma);
 
     f1->SetNpx(1000);
 
     TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(), fitFunction.getName().c_str(), 0, 0, 1500, 500);
 
-    auto res = histogram->Fit(f1, "SWLQRBWIDTH");
+    TFitResultPtr res;
 
-    double chi2 = __DBL_MAX__;
-    while (chi2 - res->Chi2() > 0.000001)
+    for (int n = 0; n < 10; n++)
     {
-        chi2 = res->Chi2();
-        res = histogram->Fit(fitFunction.getFunction(), "SWLQRWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
+        if (f1->GetParameter(4) < f1->GetParameter(1))
+        {
+            auto h1 = f1->GetParameter(0);
+            auto h2 = f1->GetParameter(1);
+            auto h3 = f1->GetParameter(2);
+            f1->SetParameter(0, f1->GetParameter(3));
+            f1->SetParameter(1, f1->GetParameter(4));
+            f1->SetParameter(2, f1->GetParameter(5));
+            f1->SetParameter(3, h1);
+            f1->SetParameter(4, h2);
+            f1->SetParameter(5, h3);
+        }
+
+        if (100 * f1->GetParameter(3) < f1->GetParameter(0))
+        {
+            auto mean = f1->GetParameter(1);
+            auto std = f1->GetParameter(2);
+            f1->SetParameter(0, f1->GetParameter(0) / 2);
+            f1->SetParameter(1, mean - std);
+            f1->SetParameter(3, f1->GetParameter(0) / 2);
+            f1->SetParameter(4, mean + std);
+            f1->SetParameter(5, std);
+        }
+        else if (100 * f1->GetParameter(0) < f1->GetParameter(3))
+        {
+            auto mean = f1->GetParameter(4);
+            auto std = f1->GetParameter(5);
+            f1->SetParameter(0, f1->GetParameter(3) / 2);
+            f1->SetParameter(1, mean - std);
+            f1->SetParameter(2, std);
+            f1->SetParameter(3, f1->GetParameter(3) / 2);
+            f1->SetParameter(4, mean + std);
+            f1->SetParameter(5, std);
+        }
+
+        f1->SetParLimits(0, 0.0, 0.1);
+        f1->SetParLimits(1, mean - 2 * std, mean + std);
+        f1->SetParLimits(2, 0.0, 2 * std);
+        f1->SetParLimits(3, 0.0, 0.1);
+        f1->SetParLimits(4, mean - std, mean + 2 * std);
+        f1->SetParLimits(5, 0.0, 2 * std);
+
+        res = histogram->Fit(f1, "SWLQWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
+    }
+
+    if ((int)res != 0)
+    {
+        std::cout << "Fit Failed\n";
     }
 
     gStyle->SetOptFit(1111);
@@ -331,6 +418,8 @@ FitFunction Fitter::parameterizeFunction(ParameterizationData &parameterData)
         {
             parameterDirectories[dir] = parameterRootFile->mkdir(dir.c_str());
         }
+        std::cout << "writing object " << name << "\n";
+
         parameterDirectories[dir]->WriteObject(canvas, name.c_str());
     }
     else
@@ -354,9 +443,9 @@ void Fitter::parameterizeFunctions(std::unordered_map<std::string, double> &xDat
 
     for (size_t i = 0; i < totalParameterData.size(); ++i)
     {
-        totalParameterData.at(i).name = paramNames.at(i);
-        std::cout << "Parameterizing parameter " << paramNames.at(i) << '\n';
-        FitFunction func = parameterizeFunction(totalParameterData.at(i));
+        totalParameterData[i].name = paramNames[i];
+        std::cout << "Parameterizing parameter " << paramNames[i] << '\n';
+        FitFunction func = parameterizeFunction(totalParameterData[i]);
         paramFunctions.insert(func);
     }
 

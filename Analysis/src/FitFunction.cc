@@ -185,7 +185,7 @@ std::ostream& operator<<(std::ostream& stream, FitFunction& function)
 	TF1* func = function.getFunction();
 	std::vector<std::string> channel_parameter = FitFunction::split(func->GetName(), '/');
 
-	stream << channel_parameter[0] << "		";
+	stream << channel_parameter[1] << "		";
 
 	for (int i = 0; i < func->GetNpar(); ++i)
 	{

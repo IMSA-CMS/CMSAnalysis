@@ -9,7 +9,7 @@ fi
 OUTPUT_DIR="Output/$1"
 mkdir -p "$OUTPUT_DIR"
 
-for dir in higgsSignalHiggs*/; do
+for dir in */; do
     dir=${dir%/}  # Remove trailing slash
 
     # Exclude Output directory

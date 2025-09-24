@@ -7,15 +7,41 @@ double HiggsCut::muonThreeChannelCut = 250;
 
 bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) const
 {
+   
     const auto particles = event.getParticles(EventInput::RecoLevel::Reco);
 
-    int numLeptons = particles.getLeptonTypeCount(ParticleType::electron()) + particles.getLeptonTypeCount(ParticleType::muon());
+    int numLeptons = particles.getLeptonTypeCount(ParticleType::electron()) +
+                     particles.getLeptonTypeCount(ParticleType::muon()) +
+                     particles.getLeptonTypeCount(ParticleType::tau());
+     //std::cout << "numLeptons = " << numLeptons << std::endl;
+    //automatically rejects too little or too many
+    if (numLeptons < 2 || numLeptons > 4)
+    {
+        return false;
+    }
+//count taus, if taus =0, then you need the total charge is 0, if number of taus is 1, still need the sum of the charges to not be 3 or -3. If there's more than one tau then it's all good. 
     double leptonPt = 0; 
     ParticleType leptonType;
 
-    if (numLeptons == 4 || numLeptons == 2)
+    // tau logic for 4 lepton events
+    if (numLeptons == 4)
     {
-        for(auto particle : particles)
+        int numTaus = particles.getLeptonTypeCount(ParticleType::tau());
+        int totalCharge = 0; //makes sure that the total charge is zero if taus are zero
+        for (const auto& particle : particles)
+        {
+            totalCharge += particle.getCharge();
+        }
+
+        if (numTaus == 0 && totalCharge != 0) return false;
+        if (numTaus == 1 && (totalCharge == 3 || totalCharge == -3)) return false;
+        // valid 4-lepton events continue to pt checks
+    }
+
+    // pT thresholds (2 and 4 lepton channels)
+    if (numLeptons == 2 || numLeptons == 4)
+    {
+        for (auto particle : particles)
         {
             if (particle.getType() == ParticleType::electron() && particle.getPt() >= 40)
             {
@@ -27,13 +53,10 @@ bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) c
             }
         }
         return false; 
-        //return true;
-        //Higgs1000Run2 e-40 (1160/1404) or u-30 (1771/1795), eeuu (2860/3106)
-        //Dy50
     }
 
-    // Finds the third lepton pt
-    if(numLeptons == 3) 
+    // 3 lepton channel pT thresholds 
+    if (numLeptons == 3) 
     {
         if (particles.getNumPosParticles() == 2)
         {
@@ -70,21 +93,7 @@ bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) c
         }
 
         return false;
-        // return false;
-    } 
-    else
-    {
-        auto electrons = event.getElectrons();
-        auto muons = event.getMuons();
-        if (electrons.size() == 2 
-        && muons.size() == 2
-        && electrons[0].getCharge() == electrons[1].getCharge()
-        && muons[0].getCharge() == muons[1].getCharge()
-        && electrons[0].getCharge() != muons[0].getCharge()
-        ) 
-        {
-            return true;
-        }
-        return false;
     }
+    return false;
 }
+

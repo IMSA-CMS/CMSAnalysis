@@ -9,6 +9,8 @@
 #include "DataFormats/Math/interface/deltaR.h"
 
 
+
+
 LostElectronSelector::LostElectronSelector(double ideltaRCut) : deltaRCut(ideltaRCut) {}
 // LostElectronSelector class/constructor initializes object with deltaRcut threshold value
 void LostElectronSelector::selectParticles(const EventInput* input, Event& event) const
@@ -21,18 +23,23 @@ void LostElectronSelector::selectParticles(const EventInput* input, Event& event
   // adds generated particles to the event object
   {
     GenSimParticle genSimPart(particle);    
-    event.addGenSimParticle(particle); 
+    event.addGenSimParticle(particle);
   }
+
+
 
 
   // Reco particles
   ParticleCollection<Lepton> selected;
   auto particles = input->getParticles(EventInput::RecoLevel::Reco).getParticles();
 
+
   std::vector<Particle> electrons;
+
 
   for (const auto& particle : particles)
   {
+
 
     if (particle.getType() == ParticleType::electron() && particle.getPt() > 5)
     {
@@ -40,9 +47,11 @@ void LostElectronSelector::selectParticles(const EventInput* input, Event& event
     }
   }
 
+
   std::vector<GenSimParticle> genSimElectrons;
 
-  for (const auto& particleGenSim : particlesGenSim) 
+
+  for (const auto& particleGenSim : particlesGenSim)
   {
     if (particleGenSim.getType() == ParticleType::electron() && particleGenSim.getPt() > 5)
     {
@@ -66,11 +75,13 @@ for (const auto& particleGenSim : particlesGenSim)
       for (const auto& genSimElectron : genSimElectrons)
       {
         bool electronHasRecoMatch = false;
-        if (/*GenSimParticle::sharedMother(4900022, genSimPart, genSimElectron).pdgId() == 4900022*/true)
+        if (GenSimParticle::sharedMother(4900022, genSimPart, genSimElectron).pdgId() == 4900022)
         {
           double genSimElectronePt = genSimElectron.getPt();
           double genSimElectronEta = genSimElectron.getEta();
           double genSimElectronPhi = genSimElectron.getPhi();
+
+
 
 
           for (const auto& electron : electrons)
@@ -90,12 +101,16 @@ for (const auto& particleGenSim : particlesGenSim)
             }
 
 
+
+
             if (electronHasRecoMatch == true && particleHasRecoMatch == true)
             {
               break;
             }
           }
         }
+
+
 
 
         if (electronHasRecoMatch == false && particleHasRecoMatch == true)
@@ -105,6 +120,8 @@ for (const auto& particleGenSim : particlesGenSim)
         }
 
 
+
+
         else if (electronHasRecoMatch == true && particleHasRecoMatch == false)
         {
           event.addSpecialObject("LostElectron", particleGenSim);
@@ -112,7 +129,6 @@ for (const auto& particleGenSim : particlesGenSim)
         }
       }
     }
-
 
   }
 }
