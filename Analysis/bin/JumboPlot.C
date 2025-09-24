@@ -112,6 +112,7 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, std::
 
 				if (valid == false)
 				{
+					std::cout << channel->getName() << endl;
 					continue;
 				}
 				
@@ -125,17 +126,29 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, std::
 				ParticleType part = HistVariable::stringToParticle(connecter);
 				HistVariable::VariableType varType = HistVariable::stringToVariableType(dataType);
 
+				std::cout << "Order " << order << " part " << part.getName() << '\n';
 				HistVariable fullDataType(part, order, varType);
 
 				//bool includeSignal = false;
-				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, false, includeSignal, includeData, channel->getName());
-				canvas->SaveAs(fileName.c_str());
-				plotFormatter->deleteHists();
-				canvas->Close();
-				delete canvas;
-			
-				entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
+				std::string histPrefix = channel->getName() + "__hists/";
+				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName,false, includeSignal, includeData, channel->getName());
+
+				if (canvas)
+				{
+					canvas->SaveAs(fileName.c_str());
+					plotFormatter->deleteHists();
+					canvas->Close();
+					delete canvas;
+
+					entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
+				}
+				else
+				{
+					entry += "<p>No histogram available</p>";
+				}
+
 				toAdd.push_back(entry);
+
 			}
 			unitCounter++;
 			tableInput.push_back(toAdd);
@@ -170,20 +183,30 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, std::
 				TString yAxisName = "Events";
 				dataName = Utility::removeSpaces(dataType);
 				fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
-				int order = HistVariable::stringToOrder(connecter);
 				ParticleType part = HistVariable::stringToParticle(connecter);
 				HistVariable::VariableType varType = HistVariable::stringToVariableType(dataType);
 
-				HistVariable fullDataType(part, order, varType);
+				HistVariable fullDataType(part, 0, varType);
 				//bool includeSignal = false;
-				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, false, includeSignal, includeData, channel->getName());
-				canvas->SaveAs(fileName.c_str());
-				plotFormatter->deleteHists();
-				canvas->Close();
-				delete canvas;
-			
-	 			entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
-	 			toAdd.push_back(entry);
+				std::string histPrefix = channel->getName() + "__hists/";
+				TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName,false, includeSignal, includeData, channel->getName());
+
+				if (canvas)
+				{
+					canvas->SaveAs(fileName.c_str());
+					plotFormatter->deleteHists();
+					canvas->Close();
+					delete canvas;
+
+					entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
+				}
+				else
+				{
+					entry += "<p>No histogram available</p>";
+				}
+
+				toAdd.push_back(entry);
+
 	 		}
 	 		unitCounter++;
 	 		tableInput.push_back(toAdd);
@@ -235,14 +258,25 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, std::
 						fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "Y" + "DataMC.png";
 					}
 					//bool includeSignal = false;
-					TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, false, includeSignal, includeData, channel->getName());
-					canvas->SaveAs(fileName.c_str());
-					plotFormatter->deleteHists();
-					canvas->Close();
-					delete canvas;
-				
-					entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
+					std::string histPrefix = channel->getName() + "__hists/";
+					TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName,false, includeSignal, includeData, channel->getName());
+
+					if (canvas)
+					{
+						canvas->SaveAs(fileName.c_str());
+						plotFormatter->deleteHists();
+						canvas->Close();
+						delete canvas;
+
+						entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
+					}
+					else
+					{
+						entry += "<p>No histogram available</p>";
+					}
+
 					toAdd.push_back(entry);
+
 				}
 				unitCounter++;
 				tableInput.push_back(toAdd);
@@ -268,6 +302,8 @@ std::vector<std::string> connecters, std::vector<std::string> connecters2, std::
 
 void JumboPlot()
 {
+	ParticleType::loadParticleDatabase("../../Utility/interface/ParticleData.txt");
+
 	////////////////////////////////// HIGGS ANALYSIS //////////////////////////////////
 	
 	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
@@ -277,7 +313,6 @@ void JumboPlot()
 	// std::vector<std::string> graphableTypes = {"Eta", "Pt"};
 	// std::vector<std::string> connecters = {"_1st Highest mu- ", "_1st Highest e- "}; 
 	// std::vector<TString> units = {"#eta", "#phi", "p_T [GeV/c]"};
-
 	// std::vector<std::string> graphableTypes2 = {"Same Sign Invariant Mass", "Opposite Sign Invariant Mass"};
 	// std::vector<std::string> connecters2 = {"_e- ", "_mu- "};
 	// std::vector<std::string> units2 = {" ", " "};
@@ -306,7 +341,7 @@ void JumboPlot()
 	std::vector<std::string> units2 = {"Invariant Mass [GeV/c^2]", "Invariant Mass [GeV/c^2]"};
 
 	std::vector<std::string> graphableTypes3 = {"Reco Invariant Mass Background"};
-	std::vector<std::string> connecters3 = {"_"};
+	std::vector<std::string> connecters3 = {""};
 	std::vector<std::string> units3 = {"Invariant Mass [GeV/c^2]"};
 	////////////////////////////////// DP ANALYSIS //////////////////////////////////
 	
