@@ -1,0 +1,6 @@
+<tool name="py3-dask" version="2023.4.0-ef2d1f792adbf3350dfef21f7f846d81">
+  <client>
+    <environment name="PY3_DASK_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/py3-dask/2023.4.0-ef2d1f792adbf3350dfef21f7f846d81"/>
+  </client>
+  <runtime name="PATH" value="$PY3_DASK_BASE/bin" type="path"/>
+</tool>

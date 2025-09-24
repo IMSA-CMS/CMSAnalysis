@@ -1,0 +1,5 @@
+<tool name="root_cxxdefaults" version="system">
+  <runtime name="ROOT_GCC_TOOLCHAIN" value="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/gcc/12.3.1-40d504be6370b5a30e3947a6e575ca28" type="path"/>
+  <runtime name="ROOT_INCLUDE_PATH" value="/usr/local/include" type="path" handler="warn"/>
+  <runtime name="ROOT_INCLUDE_PATH" value="/usr/include"       type="path" handler="warn"/>
+</tool>

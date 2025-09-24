@@ -23,17 +23,19 @@
 #include "TList.h"
  
 DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
+
     //Change this file to your folder to use your own cross sections
     //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
-    auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
-    //const std::string filePath = "/uscms/home/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton/"; 
-	//auto reader = std::make_shared<CrossSectionReader>(crossSectionPath);
-    const std::string filePath = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/LeptonJetReconstruction_All/"; 
+    //auto reader = std::make_shared<CrossSectionReader>("/uscms/home/maxchen/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+    //const std::string filePath = "/uscms/home/maxchen/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/"; 
+	const std::string crossSectionPath = "/uscms/home/snrai/shivDirectory/CMSSW_14_0_1/src/CMSAnalysis/DataCollection/bin/crossSections.txt";
+    auto reader = std::make_shared<CrossSectionReader>(crossSectionPath);
+    //const std::string filePath = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts_Output_Full/"; 
     //const std::string filePath = "/eos/uscms/store/user/jpalamad/rootBackups/MLBadRange"; // Backup of some old files
 
     //const std::string filePath = "/uscms/home/mkubon/analysis/clean/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/"; 
 
-    //const std::string filePath = "/uscms/home/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton/"; 
+    const std::string filePath = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/LeptonJetReconstruction_All/"; 
     const std::string filePathM = "/uscms/home/mkubon/analysis/clean/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/"; 
     
     double luminosity = 137;

@@ -1,0 +1,125 @@
+#!/bin/bash
+
+[ -e ${LOCALTOP}/.SCRAM/${SCRAM_ARCH}/multi-targets ] || exit 0
+[ "${SCRAM_RUNTIME_TYPE}" != "BUILD" ] || exit 0
+[ $(uname -m) = "x86_64" ] || exit 0
+PGO_ENABLED=false
+[ -e ${LOCALTOP}/.SCRAM/${SCRAM_ARCH}/use-pgo -o -e ${LOCALTOP}/.SCRAM/${SCRAM_ARCH}/generate-pgo ] && PGO_ENABLED=true
+$PGO_ENABLED && echo "RUNTIME:variable:CMSSW_CPU_TYPE=default"
+if [ "${SCRAM}" = "" ] ; then SCRAM=scram ; fi
+if [ "${USER_SCRAM_TARGET}" != "" ] ; then
+  SCRAM_TARGET=${USER_SCRAM_TARGET}
+  echo "RUNTIME:variable:SCRAM_TARGET=${SCRAM_TARGET}"
+elif  [ "${SCRAM_TARGET}" = "" ] ; then
+  SCRAM_TARGET="$(${SCRAM} tool info self | grep '^SCRAM_TARGET=' | sed 's|.*=||')"
+fi
+#No need to overirde LD_LIBRARY_PATH if SCRAM_TARGET is not set or set to "default"
+if [ "${SCRAM_TARGET}" = "" ] || [ "${SCRAM_TARGET}" = "default" ] ; then exit 0 ; fi
+BUILD_ARCHS="$(${SCRAM} tool info self | grep '^SCRAM_TARGETS+=' | sed 's|.*=||')"
+[ "${BUILD_ARCHS}" = "" ] && exit 0
+
+PSABI_ARCH_PREFIX="x86-64-v"
+SCRAM_NON_PSABI_ARCHS=$(echo ${BUILD_ARCHS} | tr ' ' '\n' | grep -v "${PSABI_ARCH_PREFIX}")
+SCRAM_PSABI_ARCHS=$(echo     ${BUILD_ARCHS} | tr ' ' '\n' | grep    "${PSABI_ARCH_PREFIX}")
+
+#Micro-archs compatibility: https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html
+NATIVE_ARCH=""
+if [ "${SCRAM_NON_PSABI_ARCHS}" != "" ] ; then
+  nocona=""
+  core2="nocona ${nocona}"
+  nehalem="core2 ${core2}"
+  westmere="nehalem ${nehalem}"
+  bonnell="core2 ${core2}"
+  silvermont="westmere bonnell ${westmere} ${bonnell}"
+  sandybridge="westmere ${westmere}"
+  ivybridge="sandybridge ${sandybridge}"
+  haswell="bonnell ivybridge ${bonnell} ${ivybridge}"
+  skylake="silvermont haswell ${silvermont} ${haswell}"
+  skylake_avx512="skylake ${skylake}"
+  cascadelake="skylake-avx512 ${skylake_avx512}"
+  cannonlake="skylake ${skylake}"
+  icelake_client="cascadelake cannonlake ${cascadelake} ${cannonlake}"
+  icelake_server="icelake-client ${icelake_client}"
+  tigerlake="icelake-server ${icelake_server}"
+  goldmont="silvermont ${silvermont}"
+  cooperlake="cascadelake ${cascadelake}"
+  sapphirerapids="cooperlake ${cooperlake}"
+  broadwell="silvermont haswell ${silvermont} ${haswell}"
+  goldmont_plus="goldmont ${goldmont}"
+  knl="silvermont haswell ${silvermont} ${haswell}"
+  knm="knl ${knl}"
+  alderlake="skylake ${skylake}"
+  tremont="goldmont-plus ${goldmont_plus}"
+
+  LD_ENV=$(${SCRAM} tool info gcc-cxxcompiler | grep '^LD_LIBRARY_PATH='):${LD_LIBRARY_PATH}
+  PATH_ENV=$(${SCRAM} tool info gcc-cxxcompiler | grep '^PATH='):${PATH}
+  eval "export $LD_ENV; export $PATH_ENV"
+  NATIVE_ARCH=$(gcc -march=native -Q --help=target | grep -- '^ *-march=' | sed 's|.*=\s*||')
+  [ "${NATIVE_ARCH}" = "" ] || NATIVE_ARCHS="$(eval echo \$$(echo ${NATIVE_ARCH} | tr - _ ))"
+fi
+
+#psABI micro architectures support
+PSABI_ARCHS=""
+if [ "${SCRAM_PSABI_ARCHS}" != "" ] ; then
+  PSABI_ARCHS=$(ld.so --help | grep -E " ${PSABI_ARCH_PREFIX}[0-9]+ " | grep -i supported | sed 's|^ *||;s| .*||' | tr '\n' ' ')
+fi
+
+#Use default target if can not find native arch or supported psABI micro-archs
+[ "${NATIVE_ARCH}${PSABI_ARCHS}" = "" ] && exit 0
+
+SEL_TARGETS=""
+if [ "${SCRAM_TARGET}" = "auto" ] ; then
+  [ "${PSABI_ARCHS}" = "" ] || SEL_TARGETS="${PSABI_ARCHS}"
+  #Prefer native arch over any other micro-arch
+  [ "${NATIVE_ARCH}" = "" ] || SEL_TARGETS="${NATIVE_ARCH} ${SEL_TARGETS} ${NATIVE_ARCHS}"
+else
+  if [ $(echo ${SCRAM_TARGET} | grep "${PSABI_ARCH_PREFIX}[1-9]" | wc -l) -gt 0 ] ; then
+    if [ "${PSABI_ARCHS}" != "" ] ; then
+      psABI_NUM=$(echo ${SCRAM_TARGET} | sed "s|${PSABI_ARCH_PREFIX}||")
+      while [ $psABI_NUM -gt 1 ] ; do
+        SEL_TARGETS="${SEL_TARGETS} ${PSABI_ARCH_PREFIX}${psABI_NUM}"
+        let psABI_NUM=${psABI_NUM}-1
+      done
+    fi
+  elif [ "${NATIVE_ARCH}" != "" ] ; then
+    SEL_TARGETS="${NATIVE_ARCH} ${NATIVE_ARCHS}"
+  fi
+fi
+
+MATCHED_TARGET=""
+for t in ${SEL_TARGETS}; do
+  if [ $(echo " ${BUILD_ARCHS} " | grep " ${t} " | wc -l) -eq 1 ] ; then
+    if [ "${SCRAM_TARGET}" != "auto" ] ; then
+      if [ "${SCRAM_TARGET}" != "${t}" ] ; then
+        echo "WARNING: Target ${SCRAM_TARGET} requested but best match found is ${t} from the available supported targets '${BUILD_ARCHS}'." 1>&2
+      fi
+    fi
+    MATCHED_TARGET=$t
+    break
+  fi
+done
+if [ "${MATCHED_TARGET}" = "" ] ; then
+  if [ "${SCRAM_TARGET}" = "auto" ] ; then
+    echo "WARNING: System micro-arch(s) native:'${NATIVE_ARCH}', psABI:'${PSABI_ARCHS}' do not match any of the cmssw supported micro-archs '${BUILD_ARCHS}'. Using default target." 1>&2
+  else
+    echo "WARNING: Requested arch '${SCRAM_TARGET}' does not match any of the cmssw targets '${BUILD_ARCHS}'. Using default target." 1>&2
+  fi
+  exit 0
+fi
+
+echo "IMPORTANT: Setting CMSSW environment to use '${MATCHED_TARGET}' target." 1>&2
+TOOLS="self"
+if [ -f ${LOCALTOP}/config/toolbox/${SCRAM_ARCH}/tools/selected/cmssw.xml ] ; then TOOLS="${TOOLS} cmssw" ; fi
+for tool in  $TOOLS ; do
+  for d in $(${SCRAM} tool tag $tool LIBDIR) ; do
+    v=""
+    case $d in
+      ${LOCALTOP}/* ) v=$d ;;
+      * ) if [ -d $d/scram_${MATCHED_TARGET} ] ; then v=$d ; fi ;;
+    esac
+    if [ $v ] ; then
+      echo "RUNTIME:path:replace:LD_LIBRARY_PATH=$d=$d/scram_${MATCHED_TARGET}:$d"
+    fi
+  done
+done
+$PGO_ENABLED && echo "RUNTIME:variable:CMSSW_CPU_TYPE=scram_${MATCHED_TARGET}"

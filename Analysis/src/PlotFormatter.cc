@@ -457,6 +457,8 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
 
     hist->SetMinimum(1e-2);
 
+    hist->SetMinimum(1e-2);
+
     //std::cout << "1.4" << std::endl;
 
 

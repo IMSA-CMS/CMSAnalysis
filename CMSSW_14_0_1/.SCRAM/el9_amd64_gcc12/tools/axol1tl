@@ -1,0 +1,12 @@
+{
+  "AXOL1TL_BASE": "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/AXOL1TL/3.0.0-fefba67977842a56a1f2de10345a2134",
+  "LIBDIR": [
+    "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/AXOL1TL/3.0.0-fefba67977842a56a1f2de10345a2134/lib64"
+  ],
+  "TOOLNAME": "axol1tl",
+  "TOOLVERSION": "3.0.0-fefba67977842a56a1f2de10345a2134",
+  "VARIABLES": [
+    "AXOL1TL_BASE",
+    "LIBDIR"
+  ]
+}

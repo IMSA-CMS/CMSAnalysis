@@ -1,0 +1,8 @@
+<tool name="pythia6_headers" version="426-c430ea6f2967f65248af15c71e6c653e">
+  <client>
+    <environment name="PYTHIA6_HEADERS_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/pythia6/426-c430ea6f2967f65248af15c71e6c653e"/>
+    <environment name="INCLUDE" default="$PYTHIA6_HEADERS_BASE/include"/>
+  </client>
+  <runtime name="ROOT_INCLUDE_PATH" value="$INCLUDE" type="path"/>
+  <use name="root_cxxdefaults"/>
+</tool>

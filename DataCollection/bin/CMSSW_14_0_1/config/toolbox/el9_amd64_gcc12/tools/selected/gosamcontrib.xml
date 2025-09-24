@@ -1,0 +1,10 @@
+<tool name="gosamcontrib" version="2.0-20150803-9e0755b7295f958b571160de86d4a95b">
+  <client>
+    <environment name="GOSAMCONTRIB_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/gosamcontrib/2.0-20150803-9e0755b7295f958b571160de86d4a95b"/>
+    <environment name="LIBDIR" default="$GOSAMCONTRIB_BASE/lib"/>
+    <environment name="INCLUDE" default="$GOSAMCONTRIB_BASE/include"/>
+  </client>
+  <runtime name="GOSAMCONTRIB_PATH" value="$GOSAMCONTRIB_BASE" type="path"/>
+  <runtime name="ROOT_PATH" value="$GOSAMCONTRIB_BASE" type="path"/>
+  <runtime name="ROOT_INCLUDE_PATH" value="$INCLUDE" type="path"/>
+</tool>

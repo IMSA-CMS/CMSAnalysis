@@ -1,0 +1,11 @@
+<tool name="cppunit" version="1.15.x-9c5e10ac1b9ff043c0e3d26ccceb0058">
+  <lib name="cppunit"/>
+  <client>
+    <environment name="CPPUNIT_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/cppunit/1.15.x-9c5e10ac1b9ff043c0e3d26ccceb0058"/>
+    <environment name="LIBDIR" default="$CPPUNIT_BASE/lib"/>
+    <environment name="INCLUDE" default="$CPPUNIT_BASE/include"/>
+  </client>
+  <runtime name="ROOT_INCLUDE_PATH" value="$INCLUDE" type="path"/>
+  <use name="root_cxxdefaults"/>
+  <use name="sockets"/>
+</tool>

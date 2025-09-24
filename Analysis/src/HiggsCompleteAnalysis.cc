@@ -35,11 +35,7 @@ double HiggsCompleteAnalysis::getBranchingRatio(const std::string &channel)
 }
 
 HiggsCompleteAnalysis::HiggsCompleteAnalysis()
-{
-    // This is a mass we put into background because the
-    // makeBasicProcess method requires it. It doesn't actually
-    // make sense so in the future fix this
-    //  double tempMass = 1400;
+{   
 
     const int higgsColor = kOrange + 10;
     const int ttbarColor = kBlue;
@@ -47,6 +43,11 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     const int QCDBackColor = kCyan + 3;
     const int ZZBackgroundColor = kGreen + 10;
     const int WJetsBackgroundColor = kViolet;
+
+    // This is a mass we put into background because the
+    // makeBasicProcess method requires it. It doesn't actually
+    // make sense so in the future fix this
+    //  double tempMass = 1400;
 
     // Actual masses for the Higgs signal
     std::vector<double> massTargets{500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
@@ -71,7 +72,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     // const std::string signalFilePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
 
     // Luminosity: 1.39
-    double luminosity = 139;
+    double luminosity = 137.62;
 
     std::vector<HistVariable> histVariablesBackground;
     std::vector<HistVariable> histVariablesData;

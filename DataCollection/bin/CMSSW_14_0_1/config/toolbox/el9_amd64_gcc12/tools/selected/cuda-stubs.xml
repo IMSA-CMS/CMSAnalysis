@@ -1,0 +1,10 @@
+<tool name="cuda-stubs" version="12.2.1-b88a5c4a83fd9d39ee49a273aca82177">
+  <info url="https://docs.nvidia.com/cuda/index.html"/>
+  <lib name="cuda"/>
+  <client>
+    <environment name="CUDA_STUBS_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/cuda/12.2.1-b88a5c4a83fd9d39ee49a273aca82177"/>
+    <environment name="LIBDIR"          default="$CUDA_STUBS_BASE/lib64/stubs"/>
+    <environment name="INCLUDE"         default="$CUDA_STUBS_BASE/include"/>
+  </client>
+  <flags SKIP_TOOL_SYMLINKS="1"/>
+</tool>
