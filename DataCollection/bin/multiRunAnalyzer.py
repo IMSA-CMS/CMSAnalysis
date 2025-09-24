@@ -125,21 +125,18 @@ def loopRun(crab, path, fileCount, skipFiles, fileList, outputFile):
             with open(outputFile, "a") as out:
                 print("Creating " + outputString)
                 Popen(
-                    args=
                     [
+                        "nohup",
+                        "runAnalyzer",
                         inputString,
                         outputString,
                         analysisName,
                         numFiles,
                         skipFiles
                     ],
-                    stdout=out, stderr=out, env=os.environ.copy(), executable="runAnalyzer"
+                    stdout=out, stderr=out
                 )
-                print(inputString)
-                print(outputString)
-                print(analysisName)
-                print(numFiles)
-                print(skipFiles)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
