@@ -72,7 +72,6 @@ class HistVariable
         return systematicName;
     }
 
-
   private:
     ParticleType particleType;
     int order_;
