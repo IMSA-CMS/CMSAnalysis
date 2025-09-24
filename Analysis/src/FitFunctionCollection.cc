@@ -2,6 +2,11 @@
 #include <fstream>
 #include <string>
 
+void addToChannelModifierMap(std::string newKey, 
+    std::string newValue, 
+    std::map<std::string,std::string>* map, 
+    std::vector<std::string>* keysInMap);
+
 FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string &fileName)
 {
     std::fstream file(fileName, std::ios_base::in);
@@ -30,6 +35,18 @@ void FitFunctionCollection::saveFunctions(const std::string& fileName, bool appe
 {
     std::fstream file;
     //std::cout << "fstream object created";
+
+    // Loads in possible modifiers for the channel names (Ex: to differentiate between X and Y)
+    // Key: Modifier in parameters or some other place
+    // Value: What you want to add to the name of the channelName
+    std::map<std::string, std::string> channelNameModifiers = {};
+    std::vector<std::string> keysInChannelNameModifiers = {};
+
+    // Here is a template for adding new Keys to channelNameModifers:
+    // addToStringVectorMap("newKey", "newValue", &channelNameModifiers, &keysInChannelNameModifiers);
+    addToChannelModifierMap("mll1", "_X", &channelNameModifiers, &keysInChannelNameModifiers);
+    addToChannelModifierMap("mll2", "_Y", &channelNameModifiers, &keysInChannelNameModifiers);
+
     if (!file.is_open())
     {
         if (append)
@@ -70,13 +87,33 @@ void FitFunctionCollection::saveFunctions(const std::string& fileName, bool appe
     std::cout << "Writing to file... \n";
 	for (std::string channel : channelNames)
 	{
-		file << "Channel name: " << channel << '\n' << '\n';
+        // Get labels for any channel name modifiers, parameters like p0, p1, etc. from first function in functionParameters
+		auto firstFunction = channel_parameters.at(channel)[0].getFunction();
+        std::string channelNameModifier = ""; 
+        for (auto modifier : keysInChannelNameModifiers)
+        {
+            if (std::string(firstFunction->GetName()).find(modifier) != std::string::npos)
+            {
+                channelNameModifier = modifier;
+            }
+        }
+
+        file << "Channel name: " << channel + channelNameModifier << '\n' << '\n';
 		std::vector<FitFunction> functionParameters = channel_parameters.at(channel);
-        std::cout << "Function parameters retrieved \n";
+        if (functionParameters.size() != 0)
+        {
+            std::cout << "Function parameters retrieved \n";
+
+        }
+        else
+        {
+            std::cout << "Warning: no function parameters retrieved \n";
+        }
+        //std::cout << "Function parameters retrieved \n";
 		file << "Calculated Parameters" << "		";
 		
-		// Get labels for parameters like p0, p1, etc. from first function in functionParameters
-		auto firstFunction = channel_parameters.at(channel)[0].getFunction();
+		// // Get labels for parameters like p0, p1, etc. from first function in functionParameters
+		// auto firstFunction = channel_parameters.at(channel)[0].getFunction();
 		for (int i = 0; i < firstFunction->GetNpar(); ++i)
 		{
 			file << firstFunction->GetParName(i) << "		";
@@ -102,7 +139,25 @@ void FitFunctionCollection::saveFunctions(const std::string& fileName, bool appe
 	file.close();
 }
 
+// ONLY use this to add new key/value pairs to channelNameModifiers in saveFunctions 
+// and keep track of keys 
+void addToChannelModifierMap(std::string newKey, 
+    std::string newValue, 
+    std::map<std::string,std::string>* map, 
+    std::vector<std::string>* keysInMap)
+{
+    (*map)[newKey] = newValue;
+    if (std::find(keysInMap->begin(), keysInMap->end(), newKey) == keysInMap->end())
+    {
+        keysInMap->push_back(newKey);
+    }
 
+}
+
+// void removeFromStringVectorMap()
+// {
+    
+// }
 
 
 // void FitFunctionCollection::saveFunctions(const std::string& fileName, bool append)
