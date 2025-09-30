@@ -1,6 +1,0 @@
-<tool name="py3-correctionlib" version="2.2.2-120738cfaaf3f7c1056fe67d97e25dac">
-  <client>
-    <environment name="PY3_CORRECTIONLIB_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/py3-correctionlib/2.2.2-120738cfaaf3f7c1056fe67d97e25dac"/>
-  </client>
-  <runtime name="PATH" value="$PY3_CORRECTIONLIB_BASE/bin" type="path"/>
-</tool>
