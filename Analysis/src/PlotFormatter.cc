@@ -314,7 +314,6 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
 bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
 {
     std::shared_ptr<Channel> processes = 0;
-    std::cout << "begin\n";
     TH1* data;
     TH1* signal;
     THStack* background;
@@ -436,13 +435,10 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     
     FormatSignalData(background, signal, data, backgroundHists, numBins);
 
-    std::cout << "1" << std::endl;
 
     //Defines order to draw in so graph isn't cut off
     int first = 0;
     //GetOrder(data, signal, background);
-
-    std::cout << "1.1" << std::endl;
 
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
     //std::cout << "1.2" << std::endl;
@@ -461,12 +457,8 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
 
     hist->SetMinimum(1e-2);
 
-    std::cout << "1.4" << std::endl;
-
 
     ChangeAxisTitles(hist, xAxisTitle, yAxisTitle);
-
-    std::cout << "2" << std::endl;
     
     //Draws the legend
     auto legend = GetLegend(background, processes, data, signal, includeSignal, includeData);
@@ -1064,24 +1056,29 @@ void PlotFormatter::GetOrder(std::vector<TH1*>& hists, TH1*& first, int& firstIn
 void PlotFormatter::Bin(std::vector<TH1*>& hists, TH1*& first, int& firstIndex, double& maximum, int& count, bool scaleToExpected)
 {
     std::vector<int> bins;
-    for(TH1* hist : hists) {
+    for(TH1* hist : hists) 
+    {
         bins.push_back(hist->GetNbinsX());
     }
 
     int commonFactor = Utility::gcf(bins);
 
-    for(TH1* hist : hists) {
+    for(TH1* hist : hists) 
+    {
         hist->Rebin(hist->GetNbinsX() / commonFactor);
     }
 
     double maxBinWidth = hists.at(0)->GetXaxis()->GetBinWidth(0);
 
-    for(TH1* hist : hists) {
-        if(hist->GetXaxis()->GetBinWidth(0) > maxBinWidth) {
+    for(TH1* hist : hists)
+    {
+        if(hist->GetXaxis()->GetBinWidth(0) > maxBinWidth) 
+        {
             maxBinWidth = hist->GetXaxis()->GetBinWidth(0);
         }
     }
-    for(TH1* hist : hists) {
+    for(TH1* hist : hists)
+    {
         hist->Rebin((int) (maxBinWidth / hist->GetXaxis()->GetBinWidth(0)));
     }
 
@@ -1096,7 +1093,8 @@ void PlotFormatter::Bin(std::vector<TH1*>& hists, TH1*& first, int& firstIndex, 
            }
 	    
 	    }
-        if(hist->GetMaximum() > maximum) {
+        if(hist->GetMaximum() > maximum) 
+        {
             maximum = hist->GetMaximum();
             first = hist;
             firstIndex = find(hists.begin(), hists.end(), hist) - hists.begin();
