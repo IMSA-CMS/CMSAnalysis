@@ -1,0 +1,10 @@
+<tool name="HepMC" version="2.06.10-84d62bf8401502062c47cad693db65fe">
+  <lib name="HepMCfio"/>
+  <lib name="HepMC"/>
+  <client>
+    <environment name="HEPMC_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/hepmc/2.06.10-84d62bf8401502062c47cad693db65fe"/>
+    <environment name="LIBDIR" default="$HEPMC_BASE/lib"/>
+  </client>
+  <use name="hepmc_headers"/>
+  <runtime name="CMSSW_FWLITE_INCLUDE_PATH" value="$HEPMC_BASE/include" type="path"/>
+</tool>

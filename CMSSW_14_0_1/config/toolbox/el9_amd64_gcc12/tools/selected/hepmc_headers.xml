@@ -1,0 +1,8 @@
+<tool name="hepmc_headers" version="2.06.10-84d62bf8401502062c47cad693db65fe">
+  <client>
+    <environment name="HEPMC_HEADERS_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/hepmc/2.06.10-84d62bf8401502062c47cad693db65fe"/>
+    <environment name="INCLUDE" default="$HEPMC_HEADERS_BASE/include"/>
+  </client>
+  <runtime name="ROOT_INCLUDE_PATH"  value="$INCLUDE" type="path"/>
+  <use name="root_cxxdefaults"/>
+</tool>

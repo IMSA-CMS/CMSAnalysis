@@ -1,0 +1,6 @@
+<tool name="l1metml" version="1.0.0-657311aaabea828db0f8795fe46f7c93">
+  <client>
+    <environment name="L1METML_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/L1METML/1.0.0-657311aaabea828db0f8795fe46f7c93"/>
+    <environment name="LIBDIR"       default="$L1METML_BASE/lib64"/>
+  </client>
+</tool>
