@@ -1,0 +1,11 @@
+<tool name="meschach" version="1.2.pCMS1-79435924678a8cc522f783c34e3865d7">
+  <info url="http://www.meschach.com"/>
+  <lib name="meschach"/>
+  <client>
+    <environment name="MESCHACH_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/meschach/1.2.pCMS1-79435924678a8cc522f783c34e3865d7"/>
+    <environment name="LIBDIR" default="$MESCHACH_BASE/lib"/>
+    <environment name="INCLUDE" default="$MESCHACH_BASE/include"/>
+  </client>
+  <runtime name="ROOT_INCLUDE_PATH" value="$INCLUDE" type="path"/>
+  <use name="root_cxxdefaults"/>
+</tool>

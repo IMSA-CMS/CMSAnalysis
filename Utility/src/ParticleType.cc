@@ -4,7 +4,7 @@
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include "CMSAnalysis/Utility/interface/LeptonJet.hh"
 #include "CMSAnalysis/Utility/interface/Lepton.hh"
-
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 
 #include <fstream>
 #include <string>
@@ -152,6 +152,10 @@ bool ParticleType::loadParticleDatabase(const std::string& fileName)
 const ParticleType& ParticleType::getPDGType(int pdgID)
 {
     int absolutePdgID = std::abs(pdgID);
+    // Automatically load particle database if typeList is empty
+    if (typeList.empty()) 
+        ParticleType::loadParticleDatabase(Utility::getFullPath("ParticleData.txt"));
+
     if (typeList.find(absolutePdgID) != typeList.end())
         return typeList[absolutePdgID];
     else

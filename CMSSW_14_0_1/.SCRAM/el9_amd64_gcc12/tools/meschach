@@ -1,0 +1,27 @@
+{
+  "INCLUDE": [
+    "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/meschach/1.2.pCMS1-79435924678a8cc522f783c34e3865d7/include"
+  ],
+  "LIB": [
+    "meschach"
+  ],
+  "LIBDIR": [
+    "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/meschach/1.2.pCMS1-79435924678a8cc522f783c34e3865d7/lib"
+  ],
+  "MESCHACH_BASE": "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/meschach/1.2.pCMS1-79435924678a8cc522f783c34e3865d7",
+  "RUNTIME": {
+    "PATH:ROOT_INCLUDE_PATH": [
+      "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/meschach/1.2.pCMS1-79435924678a8cc522f783c34e3865d7/include"
+    ]
+  },
+  "TOOLNAME": "meschach",
+  "TOOLVERSION": "1.2.pCMS1-79435924678a8cc522f783c34e3865d7",
+  "USE": [
+    "root_cxxdefaults"
+  ],
+  "VARIABLES": [
+    "MESCHACH_BASE",
+    "LIBDIR",
+    "INCLUDE"
+  ]
+}

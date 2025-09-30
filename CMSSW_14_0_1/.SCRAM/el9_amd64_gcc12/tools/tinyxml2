@@ -1,0 +1,24 @@
+{
+  "INCLUDE": [
+    "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/tinyxml2/6.2.0-d17873b4d6a42a43226cf689f82ec1ef/include"
+  ],
+  "LIB": [
+    "tinyxml2"
+  ],
+  "LIBDIR": [
+    "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/tinyxml2/6.2.0-d17873b4d6a42a43226cf689f82ec1ef/lib64"
+  ],
+  "RUNTIME": {
+    "PATH:ROOT_INCLUDE_PATH": [
+      "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/tinyxml2/6.2.0-d17873b4d6a42a43226cf689f82ec1ef/include"
+    ]
+  },
+  "TINYXML2_BASE": "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/tinyxml2/6.2.0-d17873b4d6a42a43226cf689f82ec1ef",
+  "TOOLNAME": "tinyxml2",
+  "TOOLVERSION": "6.2.0-d17873b4d6a42a43226cf689f82ec1ef",
+  "VARIABLES": [
+    "TINYXML2_BASE",
+    "LIBDIR",
+    "INCLUDE"
+  ]
+}

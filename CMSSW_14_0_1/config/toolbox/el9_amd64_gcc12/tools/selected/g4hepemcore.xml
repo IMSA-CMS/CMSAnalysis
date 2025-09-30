@@ -1,0 +1,11 @@
+<tool name="g4hepemcore" version="20230309-834b7e2c32ab6725254c5a3215cd968c">
+  <lib name="g4HepEmData"/>
+  <lib name="g4HepEmInit"/>
+  <lib name="g4HepEmRun"/>
+  <lib name="g4HepEm"/>
+  <client>
+    <environment name="G4HEPEMCORE_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/g4hepem/20230309-834b7e2c32ab6725254c5a3215cd968c"/>
+    <environment name="LIBDIR" default="$G4HEPEMCORE_BASE/lib64"/>
+  </client>
+  <use name="g4hepem_interface"/>
+</tool>

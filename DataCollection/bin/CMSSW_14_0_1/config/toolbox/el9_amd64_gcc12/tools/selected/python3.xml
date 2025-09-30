@@ -1,0 +1,11 @@
+<tool name="python3" version="3.9.14-8e02587b42992e07ed46b00eca9dfc3a">
+  <lib name="python3.9"/>
+  <client>
+    <environment name="PYTHON3_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/python3/3.9.14-8e02587b42992e07ed46b00eca9dfc3a"/>
+    <environment name="LIBDIR" default="$PYTHON3_BASE/lib"/>
+    <environment name="INCLUDE" default="$PYTHON3_BASE/include/python3.9"/>
+    <environment name="PYTHON3_COMPILE" default="$PYTHON3_BASE/lib/python3.9/compileall.py"/>
+  </client>
+  <runtime name="PATH" value="$PYTHON3_BASE/bin" type="path"/>
+  <use name="sockets"/>
+</tool>

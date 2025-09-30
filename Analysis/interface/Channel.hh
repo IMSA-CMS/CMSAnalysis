@@ -44,6 +44,8 @@ class Channel
 
 		std::vector<std::shared_ptr<Process>> getProcesses() {return processes;}
 
+		static TH1* combineHists(const std::vector<TH1*>& hists);
+
 
 	private: 
 		std::string name;

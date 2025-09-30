@@ -1,0 +1,2 @@
+#Ignore site based GSL hook for releases with GSL fix https://github.com/cms-sw/cmsdist/pull/8958
+runtime/99-gsl-config.sh

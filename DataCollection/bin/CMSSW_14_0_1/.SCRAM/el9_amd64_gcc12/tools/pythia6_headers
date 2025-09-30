@@ -1,0 +1,20 @@
+{
+  "INCLUDE": [
+    "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/pythia6/426-c430ea6f2967f65248af15c71e6c653e/include"
+  ],
+  "PYTHIA6_HEADERS_BASE": "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/pythia6/426-c430ea6f2967f65248af15c71e6c653e",
+  "RUNTIME": {
+    "PATH:ROOT_INCLUDE_PATH": [
+      "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/pythia6/426-c430ea6f2967f65248af15c71e6c653e/include"
+    ]
+  },
+  "TOOLNAME": "pythia6_headers",
+  "TOOLVERSION": "426-c430ea6f2967f65248af15c71e6c653e",
+  "USE": [
+    "root_cxxdefaults"
+  ],
+  "VARIABLES": [
+    "PYTHIA6_HEADERS_BASE",
+    "INCLUDE"
+  ]
+}

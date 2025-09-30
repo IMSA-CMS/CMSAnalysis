@@ -38,6 +38,21 @@ class HistVariable
 
     std::string getName() const;
 
+    ParticleType getParticleType() const
+    {
+        return particleType;
+    }
+   
+    int getOrder() const
+    {
+        return order_;
+    }
+
+    VariableType getVariableType() const
+    {
+        return variableType;
+    }
+
     std::string getUnit() const
     {
         return unit;
@@ -56,6 +71,10 @@ class HistVariable
     {
         return systematicName;
     }
+
+    static VariableType stringToVariableType(const std::string& varStr);
+    static int stringToOrder(const std::string& connecter);
+    static ParticleType stringToParticle(const std::string& connecter);
 
   private:
     ParticleType particleType;

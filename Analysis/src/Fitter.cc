@@ -170,7 +170,7 @@ TCanvas *Fitter::fitDSCB(TH1 *histogram, FitFunction &fitFunction)
     f1->SetParLimits(1, 0, 10);
     f1->SetParLimits(2, 1, 10);
     f1->SetParLimits(3, 1, 10);
-    f1->SetParLimits(4, 400, 1600);
+    f1->SetParLimits(4, fitFunction.getMin(), fitFunction.getMax());
     f1->FixParameter(6, norm);
 
     // if(name.substr(8,8) == "eee_eeee" || name.substr(9,8) == "eee_eeee"){

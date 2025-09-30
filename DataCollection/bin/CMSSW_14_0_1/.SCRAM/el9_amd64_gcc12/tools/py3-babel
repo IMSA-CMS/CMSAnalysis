@@ -1,0 +1,13 @@
+{
+  "PY3_BABEL_BASE": "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/py3-babel/2.12.1-12f9cf33a2eeb1d3cf45f99d00a7ae24",
+  "RUNTIME": {
+    "PATH:PATH": [
+      "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/py3-babel/2.12.1-12f9cf33a2eeb1d3cf45f99d00a7ae24/bin"
+    ]
+  },
+  "TOOLNAME": "py3-babel",
+  "TOOLVERSION": "2.12.1-12f9cf33a2eeb1d3cf45f99d00a7ae24",
+  "VARIABLES": [
+    "PY3_BABEL_BASE"
+  ]
+}

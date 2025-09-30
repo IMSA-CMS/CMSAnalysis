@@ -109,17 +109,17 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 
 	if (!hist || hist->IsZombie())
 	{ 
-		std::cout << "RootFileInput Zombie Hit 1 " << std::endl;
+		//std::cout << "RootFileInput Zombie Hit 1 " << std::endl;
 		throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]");
 
 		if (hist->IsZombie())
 		{
-			std::cout << "RootFileInput Zombie Hit 2 " << std::endl;
+			//std::cout << "RootFileInput Zombie Hit 2 " << std::endl;
 			throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]. Hist is a Zombie.");
 		}
 		else
 		{
-			std::cout << "RootFileInput Zombie Else Hit 2 " << std::endl;
+			//std::cout << "RootFileInput Zombie Else Hit 2 " << std::endl;
 			throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]");
 		}
 	}
