@@ -245,7 +245,7 @@ std::vector<HistVariable> variables, bool includeData, bool includeSignal)
 void JumboPlot()
 {
 	////////////////////////////////// HIGGS ANALYSIS //////////////////////////////////
-	
+	std::string particleDatabase(Utility::getFullPath("ParticleData.txt"));
 	auto higgsAnalysis = std::make_shared<HiggsCompleteAnalysis>();
 	std::vector<std::shared_ptr<Channel>> higgsChannels = higgsAnalysis->getChannels();
 
