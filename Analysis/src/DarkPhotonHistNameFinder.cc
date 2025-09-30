@@ -2,7 +2,7 @@
 
 std::string DarkPhotonHistNameFinder::getHistName(HistVariable histVariable) const
 {
-	std::string path = channel + "__hists/" + channel;
+	std::string path = "hists/" + channel + "/" + subChannel;
 	if (isData)
 	{
 		path += "_Pass";

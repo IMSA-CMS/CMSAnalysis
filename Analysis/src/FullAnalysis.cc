@@ -54,7 +54,7 @@ std::shared_ptr<CrossSectionReader> crossReader, double luminosity, std::shared_
     //std::cout << "inputFile works";
     auto histEstimator = std::make_shared<SimpleEstimator>(1.0, isData, isBranchingRatioFixer);
     //std::cout << "histEstimator works";
-    std::cout << "FULLANALYSIS Branching Ratio: " << histEstimator->getBranchingRatioFixer() << std::endl;
+    //std::cout << "FULLANALYSIS Branching Ratio: " << histEstimator->getBranchingRatioFixer() << std::endl;
 
     //return {graphHigh, graphLow};
     return SingleProcess(crossSectionName, inputFile, crossReader, histEstimator, luminosity);
@@ -80,7 +80,7 @@ TH1 *FullAnalysis::getHist(HistVariable histType, std::string processName, bool 
     std::string name = processName;
     for (const auto &channel : channels)
     {
-        if (channel->getName() == channelName)
+        if (channel->getName() == channelName) //print out channel name and get name to see where error is
         {
             // channelNumber++;
             // std::vector<TH1*> channelHists = channel->getHists(histType, "signal", false);
