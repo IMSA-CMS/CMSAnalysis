@@ -94,6 +94,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     HistVariable::VariableType::InvariantMass
     };
 
+
     for (ParticleType pType : particleTypes)
     {
         for (int order : orders)
@@ -136,8 +137,8 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
                 // histVariablesSignal.push_back(HistVariable::sameSignMass(decayName + "__hists/" + decayName + "_Reco Same Sign Invariant Mass"));
                 //histVariablesSignal.push_back(HistVariable(Selector::None, HistVariable::VariableType::SameSignInvariantMass));
                 double branchingRatioFixer = getBranchingRatio(genSimDecay);
-                std::cout << "GENSIMDECAY: " << genSimDecay << std::endl;
-                std::cout << "BRANCHINGRATIOFIXER " << branchingRatioFixer << std::endl;
+                //std::cout << "GENSIMDECAY: " << genSimDecay << std::endl;
+                //std::cout << "BRANCHINGRATIOFIXER " << branchingRatioFixer << std::endl;
                 auto higgsProcess = makeBasicProcess(signalFilePath, "Higgs" + std::to_string((int)massTarget) + ".root", "higgs4l" + std::to_string((int)massTarget), reader, luminosity, histVariableToFileMapping, false, branchingRatioFixer);
                 auto higgsSignal = std::make_shared<Process>("Higgs signal " + genSimDecay + " " + std::to_string((int)massTarget), 1);
                 higgsSignal->addProcess(higgsProcess);
@@ -147,8 +148,9 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
                 processes.push_back(higgsMassGroup);
             }
 
-
         }
+
+
         auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(recoDecay);
 
 
@@ -212,7 +214,6 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         higgsData->addProcess(makeBasicProcess(filePath, "Muon2017.root", "Muon2017", reader, luminosity, histVariableToFileMapping, true));
         higgsData->addProcess(makeBasicProcess(filePath, "Muon2018.root", "Muon2018", reader, luminosity, histVariableToFileMapping, true));
 
-        
         processes.push_back(dyBackground);
         //processes.push_back(dyBackgroundNoVeto);
         processes.push_back(higgsData);
@@ -226,15 +227,17 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         processes.push_back(other);
         processes.push_back(wJetsBackground);
 
-        for(std::shared_ptr<Process> process : processes)
-        {
-            for(std::string systematic : systematics)
-            {
-                auto sys = process->calcSystematic(HistVariable(HistVariable::VariableType::SameSignInvariantMass), systematic);
-                process->addSystematic(sys);
-            }
-        }        
+        // for(std::shared_ptr<Process> process : processes)
+        // {
+        //     for(std::string systematic : systematics)
+        //     {
+        //         auto sys = process->calcSystematic(HistVariable(HistVariable::VariableType::SameSignInvariantMass), systematic);
+        //         process->addSystematic(sys);
+        //     }
+        // }        
         
+        std::cout << "systematics have been added and calculated\n";
+
         auto leptonProcesses = std::make_shared<Channel>(recoDecay, processes);
 
         for (std::string processName : leptonProcesses->getNames())

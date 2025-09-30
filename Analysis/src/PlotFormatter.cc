@@ -314,7 +314,7 @@ TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
 bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
 {
     std::shared_ptr<Channel> processes = 0;
-
+    std::cout << "begin\n";
     TH1* data;
     TH1* signal;
     THStack* background;
@@ -380,14 +380,13 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
             std::cout << histvariable.getName() << std::endl;
             std::cout << "SIGNAl MAX" << signal->GetMaximum() << std::endl;
         }
-        //signal = analysis->getHist(histvariable, "Higgs Group 1000", true, channelName);
-        //std::cout << "number of signal bins is: " << signal->GetNbinsX();
+        signal = analysis->getHist(histvariable, "Higgs Group 1000", true, channelName);
+        std::cout << "number of signal bins is: " << signal->GetNbinsX();
     }
     else
     {
         signal = new TH1F("h1", "empty", 1, 0.0, 0.0);
     }
-    //std::cout << "HERE" << std::endl;
     double maxCombinedY = signal->GetMaximum();
 
     std::vector<TH1*> backgroundHists;
@@ -395,27 +394,28 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     std::vector<std::shared_ptr<Process>> backgroundProcesses;
     for(std::string name : backgroundNames)
     {
-        //std::cout << name << std::endl;
-        //std::cout << channelName << std::endl;
-        //std::cout << histvariable.getName() << std::endl;
+        std::cout << name << std::endl;
+        std::cout << channelName << std::endl;
+        std::cout << histvariable.getName() << std::endl;
         
-        auto hist = analysis->getHist(histvariable, name, true, channelName);
+        auto hist = analysis->getHist(histvariable, name, true, channelName); // error message: Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
         
+
         backgroundProcesses.push_back(analysis->getChannel(channelName)->findProcess(name));
-        //auto hist = process->getSystematicHist(histvariable, true).second;
+        // auto hist = process->getSystematicHist(histvariable, true).second;
 
         // TEST
         if (!hist)
         {
             continue;
         }
-        //std::cout << hist->GetName() << " has "<< hist->GetNbinsX() << std::endl;
+        std::cout << hist->GetName() << " has "<< hist->GetNbinsX() << std::endl;
         backgroundHists.push_back(hist);
         
         maxCombinedY += hist->GetMaximum();
     }
     std::cout << backgroundHists.size() << "\n";
-    //std::cout << "End" << std::endl;
+    std::cout << "End" << std::endl;
 
     //int firstBin = 50;
     int numberBinsData = data->GetNbinsX();
@@ -432,17 +432,17 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     data->SetMaximum(maxCombinedY );
     signal->SetMaximum(maxCombinedY);
     background->SetMaximum(maxCombinedY);
-    //std::cout << "MAXCOMBINEDY: " << maxCombinedY << std::endl;
+    std::cout << "MAXCOMBINEDY: " << maxCombinedY << std::endl;
     
     FormatSignalData(background, signal, data, backgroundHists, numBins);
 
-    //std::cout << "1" << std::endl;
+    std::cout << "1" << std::endl;
 
     //Defines order to draw in so graph isn't cut off
     int first = 0;
     //GetOrder(data, signal, background);
 
-    //std::cout << "1.1" << std::endl;
+    std::cout << "1.1" << std::endl;
 
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
     //std::cout << "1.2" << std::endl;
@@ -452,7 +452,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     gStyle->SetOptStat(0);
     topPad->Draw();
     topPad->cd();
-    //std::cout << "1.3" << std::endl;
+    std::cout << "1.3" << std::endl;
 
 
     //Draws the histogram with more events first (bigger axis)
@@ -461,12 +461,12 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
 
     hist->SetMinimum(1e-2);
 
-    //std::cout << "1.4" << std::endl;
+    std::cout << "1.4" << std::endl;
 
 
     ChangeAxisTitles(hist, xAxisTitle, yAxisTitle);
 
-    //std::cout << "2" << std::endl;
+    std::cout << "2" << std::endl;
     
     //Draws the legend
     auto legend = GetLegend(background, processes, data, signal, includeSignal, includeData);
@@ -501,7 +501,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     std::vector<double> xerror2(data->GetNbinsX() + 1);
     std::vector<double> yerror2(data->GetNbinsX() + 1);
 
-   // std::cout << "3" << std::endl;
+   std::cout << "3" << std::endl;
     std::vector<double> centers;
     GetBottomPadValues(data, background, backgroundHist, x, y, xerror2, yerror2, centers);
     auto graph = new TGraph(data->GetNbinsX() + 1, x.data(), y.data());
@@ -518,7 +518,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     axis->SetLimits(hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
 
     //graph->SetMaximum(10);
-    //std::cout << "4" << std::endl;
+    std::cout << "4" << std::endl;
 
     graph->Draw("AP SAME");
     errorgraph2->GetXaxis()->SetLimits(hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());

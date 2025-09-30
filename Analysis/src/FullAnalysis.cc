@@ -54,7 +54,7 @@ std::shared_ptr<CrossSectionReader> crossReader, double luminosity, std::shared_
     //std::cout << "inputFile works";
     auto histEstimator = std::make_shared<SimpleEstimator>(1.0, isData, isBranchingRatioFixer);
     //std::cout << "histEstimator works";
-    std::cout << "FULLANALYSIS Branching Ratio: " << histEstimator->getBranchingRatioFixer() << std::endl;
+    // std::cout << "FULLANALYSIS Branching Ratio: " << histEstimator->getBranchingRatioFixer() << std::endl;
 
     //return {graphHigh, graphLow};
     return SingleProcess(crossSectionName, inputFile, crossReader, histEstimator, luminosity);

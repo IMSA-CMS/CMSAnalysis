@@ -22,8 +22,9 @@ std::shared_ptr<HistNameFinder> ihistVariableToFileMapping) :
 	
 TFile* RootFileInput::getFile(std::string fileSource) const
 {
-	auto file = TFile::Open(fileSource.c_str(), "read");
-
+	std::cout << "beginning of getFile()\n";
+	auto file = TFile::Open(fileSource.c_str(), "read");  //error message during some runthroughs - Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
+	std::cerr << "opened filesource\n";
 	//std::cout << "Reading file: " << fileSource << std::endl;
 
 	if(!file)
@@ -39,31 +40,38 @@ TFile* RootFileInput::getFile(std::string fileSource) const
 
 TH1* RootFileInput::getHist(HistVariable histType) const
 {
+	std::cout << "start of the getHist() function!\n";
 	TH1::AddDirectory(kFALSE);
-
+	std::cout << "first guess 1\n";
 	std::string name = histVariableToFileMapping->getHistName(histType);
-
+	std::cout << "first guess 1.1\n";
 
 	TH1* hist;
 	uint pos = name.find("/");
 	auto file = getFile(fileSource);
+	std::cerr << "first guess 1.2\n";
 	//std::cout << "RootFileInput Hit 2 " << std::endl;
 	// TH1* emptyHist = new TH1F("h1", "empty", 1, 0.0, 0.0);
 	if (pos != std::string::npos)
 	{
-
+		std::cerr << "first guess 1.3\n";
 		std::string folder = name.substr(0,pos);
 		std::string histName = name.substr(pos+1);
+		std::cerr << "first guess 1.31\n";
 		TDirectory* dir = (TDirectory*)file->GetDirectory(folder.c_str());
+		std::cerr << "first guess 1.32\n";
 		if (dir)
 		{
-		
+			std::cerr << "first guess 1.4\n";
 			dir->cd();
+			std::cerr << "first guess 1.41\n";
 			hist = dynamic_cast<TH1*>(dir->Get(histName.c_str()));
+			std::cerr << "first guess 1.42\n";
 			//std::cout << "RootFileInput Hit 3 " << std::endl;
 			if (!hist)
 			{
-				
+				std::cerr << "first guess 1.421\n";
+				std::cout << "No Histogram named " << histName << " found in file " << fileSource << "\n";
 				delete file;
 				return nullptr;
 			}
@@ -76,20 +84,28 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 			//skip the histogram and not break histogram addition
 			std::cout << "No directory named " << folder << " found in file " << fileSource <<"\n";
 			// std::cout << "No directory named " + folder + " found in file: "<< fileSource <<"\n";
-
+			std::cerr << "guess 1.5 \n";
 			delete dir;
 			delete hist;
+			std::cerr << "guess 1.51 \n";
 			delete file;
+			std::cerr << "guess 1.52 \n";
 			return nullptr;
 		}
 	}
 	else
-	{
+	{	
 	    //std::cout << "RootFileInput ELSE Hit 1 " << std::endl;
 		//std::cout << "Here" << std::endl;
 		hist = dynamic_cast<TH1*>(file->Get(name.c_str()));
 		
 	}
+
+
+
+	//nothing after this point runs
+	std::cerr << "guess 2.0\n";
+
 
 	if (!hist || hist->IsZombie())
 	{ 
@@ -107,6 +123,7 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 			throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]");
 		}
 	}
+
 	/*
 	if(dynamic_cast<TH2 *>(hist) != 0)
 	{
@@ -129,7 +146,9 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 		delete file;
 		return nullptr;
 	}
-		TH1* response = new TH1F("Hist Clone", hist->GetTitle(), hist->GetXaxis()->GetNbins(), hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
+
+
+	TH1* response = new TH1F("Hist Clone", hist->GetTitle(), hist->GetXaxis()->GetNbins(), hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
 
 		// if (histType.is2DHistX())
 		// {
@@ -159,6 +178,7 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 		delete file;
 		return response;
 	// }
+
 }
 
 
