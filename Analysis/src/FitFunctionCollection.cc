@@ -89,16 +89,16 @@ void FitFunctionCollection::saveFunctions(const std::string& fileName, bool appe
 	{
         // Get labels for any channel name modifiers, parameters like p0, p1, etc. from first function in functionParameters
 		auto firstFunction = channel_parameters.at(channel)[0].getFunction();
-        std::string channelNameModifier = ""; 
+        std::string x_YNameModifier = ""; 
         for (auto modifier : keysInChannelNameModifiers)
         {
             if (std::string(firstFunction->GetName()).find(modifier) != std::string::npos)
             {
-                channelNameModifier = modifier;
+                x_YNameModifier = modifier;
             }
         }
 
-        file << "Channel name: " << channel + channelNameModifier << '\n' << '\n';
+        file << "Channel name: " << channel + channelNameModifiers[x_YNameModifier] << '\n' << '\n';
 		std::vector<FitFunction> functionParameters = channel_parameters.at(channel);
         if (functionParameters.size() != 0)
         {
