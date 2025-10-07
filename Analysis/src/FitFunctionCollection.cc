@@ -111,7 +111,7 @@ void FitFunctionCollection::saveFunctions(const std::string& fileName, bool appe
             }
         }
 
-        file << "Channel name: " << channel + channelNameModifiers[x_YNameModifier] << '\n' << '\n';
+        file << "Channel: " << channel + channelNameModifiers[x_YNameModifier] << '\n' << '\n';
 		std::vector<FitFunction> functionParameters = channel_parameters.at(channel);
         if (functionParameters.size() != 0)
         {
