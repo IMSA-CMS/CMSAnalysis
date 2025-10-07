@@ -11,9 +11,8 @@ class HiggsCompleteAnalysis : public FullAnalysis
     double getBranchingRatio(const std::string &channel);
 
     static std::vector<std::string> genSimDecays;
-
     static std::vector<std::string> recoDecays;
-
+    static const std::vector<int> massTargets;
 
     // bool checkChannelName(std::string channelName, double massTarget);
 

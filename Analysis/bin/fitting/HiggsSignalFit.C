@@ -11,7 +11,7 @@
 #include <vector>
 #define _USE_MATH_DEFINES
 
-std::vector<HistVariable> histogramTypes = {
+const std::vector<HistVariable> histogramTypes = {
     HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
     HistVariable(HistVariable::VariableType::InvariantMass, "", false, true),
 };
@@ -33,20 +33,16 @@ void HiggsSignalFit()
 
     remove(fitParameterValueFile.c_str());
     remove(parameterFunctions.c_str());
-    std::vector<int> masses = {500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
 
     Fitter fitter(fitHistsName, fitParameterValueFile, parameterFits, parameterFunctions);
 
     std::shared_ptr<HiggsCompleteAnalysis> analysis = std::make_shared<HiggsCompleteAnalysis>();
-    std::cout << "Loaded histogram\n";
-    std::vector<std::string> paramNames = {"alpha_{low}", "alpha_{high}", "n_{low}", "n_{high}",
-                                           "mean",        "sigma",        "norm"};
+    std::cout << "Loaded histograms\n";
 
     for (const auto &histType : histogramTypes)
     {
         for (const auto &recoDecay : recoDecays)
         {
-            std::cout << "recoDecay: " << recoDecay << '\n';
             auto targetChannel = analysis->getChannel(recoDecay);
             for (const auto &genSimDecay : HiggsCompleteAnalysis::genSimDecays)
             {
@@ -54,17 +50,12 @@ void HiggsSignalFit()
                 std::unordered_map<std::string, double> massValues;
                 std::unordered_map<std::string, TH1 *> histogramMap;
                 FitFunctionCollection currentFunctions;
-                std::vector<std::string> actualParams;
-                for (const auto &name : paramNames)
-                {
-                    actualParams.push_back(channel + '/' + name);
-                }
 
                 double skewSum = 0;
                 double maxBinPctSum = 0;
                 auto n = 0;
 
-                for (auto mass : masses)
+                for (auto mass : HiggsCompleteAnalysis::massTargets)
                 {
                     auto process =
                         targetChannel->findProcess("Higgs signal " + genSimDecay + " " + std::to_string(mass));
@@ -90,9 +81,7 @@ void HiggsSignalFit()
                 double skewAvg = skewSum / n;
                 double maxBinPctAvg = maxBinPctSum / n;
 
-                std::cout << "skewAvg: " << skewAvg << "\tmaxBinPctAvg: " << maxBinPctAvg << "\n";
-
-                for (auto mass : masses)
+                for (auto mass : HiggsCompleteAnalysis::massTargets)
                 {
                     auto process =
                         targetChannel->findProcess("Higgs signal " + genSimDecay + " " + std::to_string(mass));
@@ -106,8 +95,6 @@ void HiggsSignalFit()
                     std::string keyName = channel + "/" + std::to_string(mass) + '_' + histType.getName();
 
                     FitFunction func;
-                    func = FitFunction::createFunctionOfType(FitFunction::DOUBLE_SIDED_CRYSTAL_BALL, keyName, "", min,
-                                                             max);
                     if (-1.5 < skewAvg && 60 * maxBinPctAvg - skewAvg > 0.9)
                     {
                         func = FitFunction::createFunctionOfType(FitFunction::DOUBLE_GAUSSIAN, keyName, "", min, max);
@@ -124,7 +111,7 @@ void HiggsSignalFit()
                 fitter.setHistograms(histogramMap);
                 fitter.loadFunctions(currentFunctions);
                 fitter.fitFunctions();
-                fitter.parameterizeFunctions(massValues, actualParams);
+                fitter.parameterizeFunctions(massValues, channel);
             }
         }
     }

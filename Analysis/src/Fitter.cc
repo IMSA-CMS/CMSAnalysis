@@ -7,11 +7,8 @@
 #include <TH1.h>
 #include <TPaveStats.h>
 #include <TStyle.h>
+#include <array>
 #include <cmath>
-
-std::vector<TF1 *> Fitter::trialFitFunctions = {new TF1("Power Law", "[0]*(x-[1])^[2]"),
-                                                new TF1("Exponential", "[0]*expo(x-[1]) + [2]"),
-                                                new TF1("Linear", "[0]*x + [1]")};
 
 Fitter::Fitter()
 {
@@ -32,15 +29,21 @@ Fitter::Fitter(const std::string &functionFile, const std::string &fitTextFile, 
 Fitter::~Fitter()
 {
     if (fitRootFile->IsOpen())
+    {
         fitRootFile->Close();
+    }
     if (parameterRootFile->IsOpen())
+    {
         parameterRootFile->Close();
+    }
 }
 
 void Fitter::setFunctionRootOutput(const std::string &name)
 {
     if (fitRootFile->IsOpen())
+    {
         fitRootFile->Close();
+    }
 
     fitRootFile = TFile::Open(name.c_str(), "RECREATE");
 }
@@ -53,7 +56,9 @@ void Fitter::setFunctionOutput(const std::string &name)
 void Fitter::setParameterizationRootOutput(const std::string &name)
 {
     if (parameterRootFile->IsOpen())
+    {
         parameterRootFile->Close();
+    }
     parameterRootFile = TFile::Open(name.c_str(), "RECREATE");
 }
 
@@ -82,8 +87,8 @@ void Fitter::fitFunctions()
         {
             throw std::runtime_error("fitter::fitFunctions attempted histogram that does not exist: " + funcPair.first);
         }
-        TCanvas *canvas;
 
+        TCanvas *canvas;
         switch (func.getFunctionType())
         {
         case FitFunction::FunctionType::EXPRESSION_FORMULA:
@@ -114,7 +119,9 @@ void Fitter::fitFunctions()
             fitDirectories[dir]->WriteObject(canvas, name.c_str());
         }
         else
+        {
             fitRootFile->WriteObject(canvas, func.getName().c_str());
+        }
         canvas->Close();
     }
     functions.saveFunctions(fitTextFile, true);
@@ -147,11 +154,11 @@ TCanvas *Fitter::fitDSCB(TH1 *histogram, FitFunction &fitFunction)
     // histogram->Draw();
     // std::string wait;
     // std::cin >> wait;
-    std::cout << "Test\n" << std::endl;
-    std::cout << "NEntries: " << histogram->GetEntries() << std::endl;
-    std::cout << "starting\n";
+    // std::cout << "Test\n" << std::endl;
+    // std::cout << "NEntries: " << histogram->GetEntries() << std::endl;
+    // std::cout << "starting\n";
     TFitResultPtr gausResult = histogram->Fit("gaus", "SWLQR", "", fitFunction.getMin(), fitFunction.getMax());
-    std::cout << "finished\n";
+    // std::cout << "finished\n";
     // std::cout << "2:2\n";
     auto params = gausResult->Parameters();
     // std::cout << "2:3\n";
@@ -190,9 +197,9 @@ TCanvas *Fitter::fitDSCB(TH1 *histogram, FitFunction &fitFunction)
     f1->SetLineColor(kRed);
     TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(), fitFunction.getName().c_str(), 0, 0, 1500, 500);
     // std::cout << "2:7\n";
-    std::cout << "staring\n";
+    // std::cout << "staring\n";
     histogram->Fit(f1, "SWLQRBWIDTH");
-    std::cout << "finished\n";
+    // std::cout << "finished\n";
     f1->SetParError(6, norm / (sqrt(histogram->GetEntries())));
     // std::cout << "2:8\n";
 
@@ -215,8 +222,8 @@ TCanvas *Fitter::fitDSCB(TH1 *histogram, FitFunction &fitFunction)
 }
 TCanvas *Fitter::fitPowerLaw(TH1 *histogram, FitFunction &fitFunction)
 {
-    double initalParams[3] = {1e17, 0, -5};
-    fitFunction.getFunction()->SetParameters(initalParams);
+    std::array<double, 3> initalParams = {{1e17, 0, -5}};
+    fitFunction.getFunction()->SetParameters(initalParams.data());
 
     TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(), fitFunction.getName().c_str(), 0, 0, 1500, 500);
     c1->SetLogy();
@@ -285,6 +292,7 @@ TCanvas *Fitter::fitDoubleGaussian(TH1 *histogram, FitFunction &fitFunction)
     }
 
     f1->SetParameters(LowGausMul, LowGausMean, LowGausSigma, HighGausMul, HighGausMean, HighGausSigma);
+    f1->SetParNames("mul_{1}", "\\mu_{1}", "\\sigma_{1}", "mul_{2}", "\\mu_{2}", "\\sigma_{2}");
 
     f1->SetNpx(1000);
 
@@ -339,62 +347,58 @@ TCanvas *Fitter::fitDoubleGaussian(TH1 *histogram, FitFunction &fitFunction)
         res = histogram->Fit(f1, "SWLQWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
     }
 
-    if ((int)res != 0)
-    {
-        std::cout << "Fit Failed\n";
-    }
-
     gStyle->SetOptFit(1111);
     return c1;
 }
 
 std::vector<ParameterizationData> Fitter::getParameterData(std::unordered_map<std::string, double> &xData)
 {
-    if (functions.checkFunctionsSimilar())
-    {
-        int params = functions.getFunctions().begin()->second.getFunction()->GetNpar();
-        auto data = std::vector<ParameterizationData>(params);
-
-        for (int i = 0; i < params; ++i)
-        {
-            data[i] = ParameterizationData{std::vector<double>(functions.size()),
-                                           std::vector<double>(functions.size()),
-                                           std::vector<double>(functions.size()),
-                                           std::vector<double>(functions.size()),
-                                           i,
-                                           functions.getFunctions().begin()->second.getFunction()->GetParName(i)};
-        }
-
-        int i = 0;
-        for (auto &pair : functions.getFunctions())
-        {
-            for (int j = 0; j < params; ++j)
-            {
-                data[j].x[i] = xData[pair.first];
-                data[j].y[i] = pair.second.getFunction()->GetParameter(j);
-                data[j].error[i] = pair.second.getFunction()->GetParError(j);
-                data[j].zero[i] = 0;
-            }
-            ++i;
-        }
-        return data;
-    }
-    else
+    if (!functions.checkFunctionsSimilar())
     {
         throw std::invalid_argument("FitFunctionCollection is not comprised on similar functions");
     }
+
+    int params = functions.getFunctions().begin()->second.getFunction()->GetNpar();
+    auto data = std::vector<ParameterizationData>(params);
+
+    for (int i = 0; i < params; ++i)
+    {
+        data[i] = ParameterizationData{std::vector<double>(functions.size()),
+                                       std::vector<double>(functions.size()),
+                                       std::vector<double>(functions.size()),
+                                       std::vector<double>(functions.size()),
+                                       i,
+                                       functions.getFunctions().begin()->second.getFunction()->GetParName(i)};
+    }
+
+    int i = 0;
+    for (auto &pair : functions.getFunctions())
+    {
+        for (int j = 0; j < params; ++j)
+        {
+            data[j].x[i] = xData[pair.first];
+            data[j].y[i] = pair.second.getFunction()->GetParameter(j);
+            data[j].error[i] = pair.second.getFunction()->GetParError(j);
+            data[j].zero[i] = 0;
+        }
+        ++i;
+    }
+    return data;
 }
 
 FitFunction Fitter::parameterizeFunction(ParameterizationData &parameterData)
 {
-    // size_t fitLoops = 5;
+    auto *canvas = new TCanvas(parameterData.name.c_str(), parameterData.name.c_str(), 0, 0, 2000, 500);
+    auto *graph = new TGraphErrors(parameterData.x.size(), parameterData.x.data(), parameterData.y.data(),
+                                   parameterData.zero.data(), parameterData.error.data());
 
-    TCanvas *canvas = new TCanvas(parameterData.name.c_str(), parameterData.name.c_str(), 0, 0, 2000, 500);
-    auto graph = new TGraphErrors(parameterData.x.size(), parameterData.x.data(), parameterData.y.data(),
-                                  parameterData.zero.data(), parameterData.error.data());
-
-    TF1 *func = new TF1();
-    TFitResultPtr result = functionFittingLoop(graph, func);
+    auto *func = new TF1("Power Law", FitFunction::powerLaw, 0, 2000, 3);
+    func->SetParameter(1, 0);
+    func->SetParLimits(1, -10000, 0);
+    for (int n = 0; n < 10; n++)
+    {
+        graph->Fit(func, "SQ");
+    }
 
     func->SetRange(0, 2000);
     func->SetName(parameterData.name.c_str());
@@ -402,9 +406,7 @@ FitFunction Fitter::parameterizeFunction(ParameterizationData &parameterData)
     graph->SetMarkerStyle(15);
     graph->Draw("AP");
 
-    // auto initialResults = fitSingleFunction(graph, powerLaw);
-
-    FitFunction function(func, FitFunction::FunctionType::POWER_LAW);
+    auto function = FitFunction(func, FitFunction::FunctionType::POWER_LAW);
 
     gStyle->SetOptFit(1111);
 
@@ -423,29 +425,25 @@ FitFunction Fitter::parameterizeFunction(ParameterizationData &parameterData)
         parameterDirectories[dir]->WriteObject(canvas, name.c_str());
     }
     else
+    {
         parameterRootFile->WriteObject(canvas, parameterData.name.c_str());
+    }
 
     canvas->Close();
 
     return function;
 }
 
-void Fitter::parameterizeFunctions(std::unordered_map<std::string, double> &xData,
-                                   const std::vector<std::string> &paramNames)
+void Fitter::parameterizeFunctions(std::unordered_map<std::string, double> &xData, const std::string &channel)
 {
     std::vector<ParameterizationData> totalParameterData = getParameterData(xData);
     FitFunctionCollection paramFunctions;
 
-    // FitFunction funcOne = parameterizeFunction(totalParameterData[1], parameterRootFile);
-    // paramFunctions.insert(funcOne);
-    // FitFunction funcTwo = parameterizeFunction(totalParameterData[0], parameterRootFile);
-    // paramFunctions.insert(funcTwo);
-
-    for (size_t i = 0; i < totalParameterData.size(); ++i)
+    for (auto param : totalParameterData)
     {
-        totalParameterData[i].name = paramNames[i];
-        std::cout << "Parameterizing parameter " << paramNames[i] << '\n';
-        FitFunction func = parameterizeFunction(totalParameterData[i]);
+        param.name = channel + "/" + param.name;
+        std::cout << "Parameterizing " << param.name << '\n';
+        FitFunction func = parameterizeFunction(param);
         paramFunctions.insert(func);
     }
 
@@ -473,79 +471,3 @@ TF1 *Fitter::seedInversePowerLaw(double x_0, double y_0, double x_1, double y_1,
 
     return powerLaw;
 }
-
-// this is only for parameterization, not events counts, don't use L for fit
-TFitResultPtr Fitter::functionFittingLoop(TGraph *graph, TF1 *function)
-{
-    TGraph *graphClone = (TGraph *)graph->Clone();
-
-    TF1 *functionClone = (TF1 *)trialFitFunctions[0]->Clone();
-    TFitResultPtr result = graphClone->Fit(functionClone, "SQ");
-
-    // copied this over from power law fit, seems to make some norm fits look better
-    double chi2 = __DBL_MAX__;
-    while (chi2 - result->Chi2() > 0.000001) // arbitrary number
-    {
-        chi2 = result->Chi2();
-        functionClone->SetParameters(result->Parameter(0), result->Parameter(1), result->Parameter(2));
-        result = graphClone->Fit(functionClone, "SQ");
-    }
-
-    // bool isValid = bestResults->IsValid();
-
-    // for (size_t i = 1; i < trialFitFunctions.size(); ++i)
-    // {
-    // 	// if (isValid)
-    // 	// 	break;
-
-    // 	TF1* trialFunction = (TF1*) trialFitFunctions[i]->Clone();
-    // 	TFitResultPtr result = fitSingleFunction(graphClone, trialFunction, 3);
-    // if (result->Chi2() < bestChi2)
-    // {
-    // 	bestChi2 = result->Chi2();
-    // 	// isValid = result->IsValid();
-    // 	bestResults = result;
-    // 	bestFunction = trialFunction;
-    // }
-    // }
-
-    graph->Fit(functionClone, "SQ");
-    std::cout << "Preparing to copy function\n";
-    functionClone->Copy(*function);
-    std::cout << "Finished copying function\n";
-
-    return result;
-}
-
-// TFitResultPtr Fitter::fitSingleFunction(TGraph* graph, TF1* function, size_t iterations)
-// {
-// 	TGraph* graphClone = (TGraph*) graph->Clone();
-// 	TF1* initialFunction = (TF1*) function->Clone();
-// 	TFitResultPtr initialResults = graphClone->Fit(initialFunction, "S");
-
-// 	TFitResultPtr bestResults = initialResults;
-// 	TF1* bestFunction = initialFunction;
-// 	double bestChi2 = initialResults->Chi2();
-// 	bool fitSuccess = initialResults->IsValid();
-
-// 	for (size_t i = 0; i < iterations; ++i)
-// 	{
-// 		if (fitSuccess)
-// 			break;
-
-// 		TF1* trialFunction = (TF1*) function->Clone();
-// 		auto results = graphClone->Fit(trialFunction, "S");
-
-// 		if (results->Chi2() < bestChi2)
-// 		{
-// 			bestFunction = trialFunction;
-// 			bestChi2 = results->Chi2();
-// 			bestResults = results;
-// 		}
-// 	}
-
-// 	bestFunction->Copy(*function);
-// 	TFitResultPtr finalResults = graph->Fit(function, "S");
-
-// 	return finalResults;
-// }
