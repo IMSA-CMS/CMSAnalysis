@@ -13,7 +13,7 @@ bool HiggsCut::checkEventInternal(const Event& event, const EventInput* input) c
     int numLeptons = particles.getLeptonTypeCount(ParticleType::electron()) +
                      particles.getLeptonTypeCount(ParticleType::muon()) +
                      particles.getLeptonTypeCount(ParticleType::tau());
-     std::cout << "numLeptons = " << numLeptons << std::endl;
+     //std::cout << "numLeptons = " << numLeptons << std::endl;
     //automatically rejects too little or too many
     if (numLeptons < 2 || numLeptons > 4)
     {

@@ -22,8 +22,7 @@ std::shared_ptr<HistNameFinder> ihistVariableToFileMapping) :
 	
 TFile* RootFileInput::getFile(std::string fileSource) const
 {
-	auto file = TFile::Open(fileSource.c_str(), "read");
-
+	auto file = TFile::Open(fileSource.c_str(), "read");  //error message during some runthroughs - Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
 	//std::cout << "Reading file: " << fileSource << std::endl;
 
 	if(!file)
@@ -40,12 +39,10 @@ TFile* RootFileInput::getFile(std::string fileSource) const
 TH1* RootFileInput::getHist(HistVariable histType) const
 {
 	TH1::AddDirectory(kFALSE);
-
 	std::string name = histVariableToFileMapping->getHistName(histType);
 
-
 	TH1* hist;
-	uint pos = name.find("/");
+	std::size_t pos = name.find("/");
 	auto file = getFile(fileSource);
 	std::string histName = name;
 	TDirectory* dir = file;
@@ -60,14 +57,13 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 		{
 			std::cout << "No directory named " << folder << " found in file " << fileSource <<"\n";
 			// std::cout << "No directory named " + folder + " found in file: "<< fileSource <<"\n";
-
 			delete dir;
 			delete hist;
 			delete file;
 			return nullptr;
 		}
 		dir->cd();
-		pos = name.find("/");
+		pos = histName.find("/");
 	}
 
 	hist = dynamic_cast<TH1*>(dir->Get(histName.c_str()));
@@ -117,7 +113,15 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 	// }
 	// else 
 	// {
-		TH1* response = new TH1F("Hist Clone", hist->GetTitle(), hist->GetXaxis()->GetNbins(), hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
+	if (hist->GetXaxis()->GetNbins() <= 0)
+	{
+		delete hist;
+		delete file;
+		return nullptr;
+	}
+
+
+	TH1* response = new TH1F("Hist Clone", hist->GetTitle(), hist->GetXaxis()->GetNbins(), hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
 
 		// if (histType.is2DHistX())
 		// {

@@ -1,0 +1,13 @@
+<tool name="roofitcore" version="6.30.03-1152e0dd06a307703399035629918f21">
+  <info url="http://root.cern.ch/root/"/>
+  <lib name="RooFitCore"/>
+  <client>
+    <environment name="ROOFIT_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/lcg/root/6.30.03-1152e0dd06a307703399035629918f21"/>
+  </client>
+  <runtime name="ROOFITSYS" value="$ROOFIT_BASE/"/>
+  <use name="rootcore"/>
+  <use name="roothistmatrix"/>
+  <use name="rootgpad"/>
+  <use name="rootminuit"/>
+  <use name="root_cxxdefaults"/>
+</tool>

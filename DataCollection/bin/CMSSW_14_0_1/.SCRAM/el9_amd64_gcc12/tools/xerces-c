@@ -1,0 +1,27 @@
+{
+  "INCLUDE": [
+    "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/xerces-c/3.1.3-c7b88eaa36d0408120f3c29826a04bf6/include"
+  ],
+  "LIB": [
+    "xerces-c"
+  ],
+  "LIBDIR": [
+    "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/xerces-c/3.1.3-c7b88eaa36d0408120f3c29826a04bf6/lib"
+  ],
+  "RUNTIME": {
+    "PATH:ROOT_INCLUDE_PATH": [
+      "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/xerces-c/3.1.3-c7b88eaa36d0408120f3c29826a04bf6/include"
+    ]
+  },
+  "TOOLNAME": "xerces-c",
+  "TOOLVERSION": "3.1.3-c7b88eaa36d0408120f3c29826a04bf6",
+  "USE": [
+    "root_cxxdefaults"
+  ],
+  "VARIABLES": [
+    "XERCES_C_BASE",
+    "INCLUDE",
+    "LIBDIR"
+  ],
+  "XERCES_C_BASE": "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/xerces-c/3.1.3-c7b88eaa36d0408120f3c29826a04bf6"
+}

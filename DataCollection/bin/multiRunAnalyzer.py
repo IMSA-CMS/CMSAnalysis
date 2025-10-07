@@ -12,12 +12,14 @@ reprocessMap = {
 
 def loopRun(crab, path, fileCount, skipFiles, fileList, outputFile):
     fileList = [f"Run2PickFiles/{file}" for file in fileList]
+    if (path.endswith("/")):
+        path += "/"
     if not path:
         path = (
             "Higgs/"
             if analysis == 0
             else (
-                "DarkPhoton_MLStrip_CompleteCuts_ValidationConfig3_Output_numFiles3/"
+                "DarkPhoton/"
                 if analysis == 1
                 or analysis == 3
                 or analysis == 4
@@ -84,7 +86,7 @@ def loopRun(crab, path, fileCount, skipFiles, fileList, outputFile):
             # 20 works for most jobs, TTbar and DY50-inf should use 5
             # theoretically could all the way down to 1,
             # but it might take longer to submit than just nohup
-            maxNumFiles = 5
+            maxNumFiles = 20
             totalFiles = min(int(fileCount), totalFiles) if fileCount != None else totalFiles
             
             # uncomment this for selective reproccessing
@@ -271,10 +273,8 @@ if __name__ == "__main__":
     wjets = (
         "WJets.txt", # ~2000 files, use higher numFiles
     )
-
-    darkPhotonSignal = ("darkPhotonBaselineRun2.txt",)
     
-    darkPhotonNanoAOD = (
+    darkPhotonSignal = (
         "darkPhotonDecay_Higgs4DP.txt", #
         "darkPhotonDecay_HiggsDPZ.txt", #
         "darkPhotonDecay_SUSY.txt", #
@@ -292,6 +292,7 @@ if __name__ == "__main__":
         "darkPhotonHiggs300.txt",
         "darkPhotonRun2FSR_0_1.txt",
         "darkPhotonRun2FSR_0_3.txt",
+        "darkPhotonBaselineRun2.txt"
     )
     
     lowStatistics = (
@@ -302,7 +303,7 @@ if __name__ == "__main__":
         "ZZZ.txt",
     )
 
-    background = ttBar + zz + dy + multiBoson + qcd # total 26 files
+    background = ttBar + zz + dy + multiBoson + qcd + wjets # total 26 files
 
     ###########this one ######### background = qcd
     # background = qcd
@@ -319,8 +320,12 @@ if __name__ == "__main__":
     # jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 
     # COMMENTED FOR ML STRIP
-    #jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, data, qcd, wjets]
-    jobsList = [wjets]  
+    if analysisName == "Higgs":
+        jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, data, qcd, wjets]
+    else:
+        jobsList = [ttBar, zz, dy, multiBoson, darkPhotonSignal, dataMu, qcd, wjets]
+
+    #jobsList = [wjets]  
     #jobsList = [dy, qcd, darkPhotonSignal]  
     #jobsList = [darkPhotonSignal, multiBoson]  
     # could further improve this by adding every sub-job as a separate entry

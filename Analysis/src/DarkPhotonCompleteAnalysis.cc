@@ -24,21 +24,20 @@
 #include "TList.h"
  
 DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
+
     //Change this file to your folder to use your own cross sections
     //filePath is shared between most files. The rest of the filePath to a given file is still given when making singleProcesses.
-    auto reader = std::make_shared<CrossSectionReader>("/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
-    //const std::string filePath = "/uscms/home/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton/";
-    //auto reader = std::make_shared<CrossSectionReader>(crossSectionPath);
-    const std::string filePath = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/LeptonJetReconstruction_All/";
+    //auto reader = std::make_shared<CrossSectionReader>("/uscms/home/maxchen/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+    //const std::string filePath = "/uscms/home/maxchen/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/"; 
+	const std::string crossSectionPath = "/uscms/home/snrai/shivDirectory/CMSSW_14_0_1/src/CMSAnalysis/DataCollection/bin/crossSections.txt";
+    auto reader = std::make_shared<CrossSectionReader>(crossSectionPath);
+    //const std::string filePath = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts_Output_Full/"; 
     //const std::string filePath = "/eos/uscms/store/user/jpalamad/rootBackups/MLBadRange"; // Backup of some old files
 
 
-    //const std::string filePath = "/uscms/home/mkubon/analysis/clean/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/";
-
-
-    //const std::string filePath = "/uscms/home/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton/";
-    const std::string filePathM = "/uscms/home/mkubon/analysis/clean/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/";
-   
+    const std::string filePath = "/uscms/home/bhenning/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Output/DarkPhoton/"; 
+    const std::string filePathM = "/uscms/home/mkubon/analysis/clean/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/"; 
+    
     double luminosity = 137;
 
 
@@ -50,7 +49,7 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
 
 
     std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Sign", "Low Mass and Different Sign"};
-    std::vector<std::string> nJets = {"1jet", "multiJet"};
+    std::vector<std::string> nJets = {"1Jet", "multiJet"};
 
 
     for (auto chan : rowNames)
@@ -124,13 +123,7 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
             processes.push_back(darkPhotonSignal);
             processes.push_back(darkPhotonData);
 
-
             auto leptonBackgrounds = std::make_shared<Channel>(channelName, processes);
-
-
-           
-            std::cout << "############# Begin Process Names #############" << std::endl;
-
 
             for(std::string processName : leptonBackgrounds->getNames()) {
                 std::cout << processName << std::endl;
@@ -147,10 +140,6 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
                     leptonBackgrounds->labelProcess("background", processName);
                 }
             }
-
-
-            std::cout << "############# End Map Hists #############" << std::endl;
-
 
             getChannelsProtected().push_back(leptonBackgrounds);
         }

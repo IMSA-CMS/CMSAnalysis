@@ -2,12 +2,12 @@
 
 std::string DarkPhotonHistNameFinder::getHistName(HistVariable histVariable) const
 {
-	std::string path = "hists/" + channel + "/" + subChannel;
+	std::string path = "hists/" + channel + "/" + subChannel + "/";
 	if (isData)
 	{
 		path += "_Pass";
 	}
-	path += "_" + histVariable.getName();
+	path += histVariable.getName();
 // Add systematic type
 	
 	if (histVariable.getSystematicType() == ScaleFactor::SystematicType::Up)
