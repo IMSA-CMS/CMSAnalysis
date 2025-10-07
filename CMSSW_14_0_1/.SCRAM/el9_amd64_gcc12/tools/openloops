@@ -1,0 +1,17 @@
+{
+  "LIBDIR": [
+    "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/openloops/2.1.2-c112a656946b393e75842499e3d3ac29/lib"
+  ],
+  "OPENLOOPS_BASE": "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/openloops/2.1.2-c112a656946b393e75842499e3d3ac29",
+  "RUNTIME": {
+    "PATH:CMS_OPENLOOPS_PREFIX": [
+      "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/openloops/2.1.2-c112a656946b393e75842499e3d3ac29"
+    ]
+  },
+  "TOOLNAME": "openloops",
+  "TOOLVERSION": "2.1.2-c112a656946b393e75842499e3d3ac29",
+  "VARIABLES": [
+    "OPENLOOPS_BASE",
+    "LIBDIR"
+  ]
+}

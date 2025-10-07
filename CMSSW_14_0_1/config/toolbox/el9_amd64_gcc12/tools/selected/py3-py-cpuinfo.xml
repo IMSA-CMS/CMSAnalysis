@@ -1,0 +1,6 @@
+<tool name="py3-py-cpuinfo" version="9.0.0-3e23ee4b067dbd8dfb0bda171805b456">
+  <client>
+    <environment name="PY3_PY_CPUINFO_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/py3-py-cpuinfo/9.0.0-3e23ee4b067dbd8dfb0bda171805b456"/>
+  </client>
+  <runtime name="PATH" value="$PY3_PY_CPUINFO_BASE/bin" type="path"/>
+</tool>

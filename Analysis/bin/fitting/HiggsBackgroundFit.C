@@ -45,8 +45,8 @@ void HiggsBackgroundFit()
     // const double min = 200;
     // const double max = 2000;
 
-    std::string fitHistsName = "OtherBackgroundFits.root";
-    std::string fitParameterValueFile = "OtherBackgroundFunctions.txt";
+	std::string fitHistsName = "H++BackgroundFits.root";
+	std::string fitParameterValueFile = "H++BackgroundFunctions.txt";
 
     // these don't do anything
     std::string parameterFits = "H++BackgroundParameterFits.root";

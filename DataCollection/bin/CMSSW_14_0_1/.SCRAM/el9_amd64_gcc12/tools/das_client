@@ -1,0 +1,13 @@
+{
+  "DAS_CLIENT_BASE": "/cvmfs/cms.cern.ch/el9_amd64_gcc12/cms/das_client/v03.01.00-8d38eddb2e585064de909d5910176531",
+  "RUNTIME": {
+    "PATH:PATH": [
+      "/cvmfs/cms.cern.ch/el9_amd64_gcc12/cms/das_client/v03.01.00-8d38eddb2e585064de909d5910176531/bin"
+    ]
+  },
+  "TOOLNAME": "das_client",
+  "TOOLVERSION": "v03.01.00-8d38eddb2e585064de909d5910176531",
+  "VARIABLES": [
+    "DAS_CLIENT_BASE"
+  ]
+}

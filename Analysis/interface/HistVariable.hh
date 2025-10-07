@@ -27,7 +27,9 @@ class HistVariable
         Phi,
         SameSignInvariantMass,
         OppositeSignInvariantMass,
-        InvariantMass
+        InvariantMass,
+        BDT1,
+        BDT2
     };
 
     HistVariable(ParticleType type, int order, VariableType var, std::string unit = "", 

@@ -1,0 +1,7 @@
+<tool name="py3-dxr" version="1.0.x-a01778ae811f69da101b53f938d75d1d">
+  <client>
+    <environment name="PY3_DXR_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/py3-dxr/1.0.x-a01778ae811f69da101b53f938d75d1d"/>
+    <environment name="LIBDIR" default="$PY3_DXR_BASE/lib"/>
+  </client>
+  <runtime name="PATH" value="$PY3_DXR_BASE/bin" type="path"/>
+</tool>

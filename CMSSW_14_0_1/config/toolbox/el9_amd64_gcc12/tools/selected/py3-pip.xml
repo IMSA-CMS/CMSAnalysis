@@ -1,0 +1,6 @@
+<tool name="py3-pip" version="23.1.1-709c0dd6c2294fcc6b497a3d9cd86734">
+  <client>
+    <environment name="PY3_PIP_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/py3-pip/23.1.1-709c0dd6c2294fcc6b497a3d9cd86734"/>
+  </client>
+  <runtime name="PATH" value="$PY3_PIP_BASE/bin" type="path"/>
+</tool>

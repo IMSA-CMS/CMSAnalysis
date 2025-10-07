@@ -20,6 +20,10 @@ static std::string defaultUnit(HistVariable::VariableType var)
         return "GeV";
     default:
         return "";
+    case HistVariable::VariableType::BDT1:
+        return "";
+    case HistVariable::VariableType::BDT2:
+        return "";
     }
 }
 
@@ -60,6 +64,7 @@ std::string HistVariable::getName() const
             name += std::to_string(order_) + "th ";
             break;
         }
+        name += "Highest ";
     }
 
     if (particleType != ParticleType::none())
@@ -87,6 +92,12 @@ std::string HistVariable::getName() const
         break;
     case HistVariable::VariableType::InvariantMass:
         name += "Reco Invariant Mass Background";
+        break;
+    case HistVariable::VariableType::BDT1:
+        name += "BDT1 Output";
+        break;
+    case HistVariable::VariableType::BDT2:
+        name += "BDT2 Output";
         break;
     }
 

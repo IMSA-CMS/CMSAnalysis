@@ -1,0 +1,59 @@
+{
+  "CXX": "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/llvm/17.0.3-7b22d2b4b09374b3f1a39da16a0af7b9/bin/clang++",
+  "FLAGS": {
+    "CXXFLAGS": [
+      "-Wno-c99-extensions",
+      "-Wno-c++11-narrowing",
+      "-D__STRICT_ANSI__",
+      "-Wno-unused-private-field",
+      "-Wno-unknown-pragmas",
+      "-Wno-unused-command-line-argument",
+      "-Wno-unknown-warning-option",
+      "-ftemplate-depth=512",
+      "-Wno-error=potentially-evaluated-expression",
+      "-Wno-tautological-type-limit-compare",
+      "-fsized-deallocation",
+      "--gcc-toolchain=/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/gcc/12.3.1-40d504be6370b5a30e3947a6e575ca28"
+    ],
+    "REM_CXXFLAGS": [
+      "-Wno-non-template-friend",
+      "-Werror=format-contains-nul",
+      "-Werror=maybe-uninitialized",
+      "-Werror=unused-but-set-variable",
+      "-Werror=return-local-addr",
+      "-fipa-pta",
+      "-frounding-math",
+      "-mrecip",
+      "-fno-crossjumping",
+      "-fno-aggressive-loop-optimizations",
+      "-funroll-all-loops"
+    ],
+    "REM_LTO_FLAGS": [
+      "-fipa-icf",
+      "-flto-odr-type-merging",
+      "-fno-fat-lto-objects"
+    ],
+    "REM_PGO_FLAGS": [
+      "-fprofile%"
+    ]
+  },
+  "LLVM_CXXCOMPILER_BASE": "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/llvm/17.0.3-7b22d2b4b09374b3f1a39da16a0af7b9",
+  "RUNTIME": {
+    "PATH:LD_LIBRARY_PATH": [
+      "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/llvm/17.0.3-7b22d2b4b09374b3f1a39da16a0af7b9/lib64"
+    ],
+    "PATH:PATH": [
+      "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/llvm/17.0.3-7b22d2b4b09374b3f1a39da16a0af7b9/bin"
+    ]
+  },
+  "SCRAM_COMPILER": 1,
+  "TOOLNAME": "llvm-cxxcompiler",
+  "TOOLVERSION": "17.0.3-7b22d2b4b09374b3f1a39da16a0af7b9",
+  "USE": [
+    "gcc-cxxcompiler"
+  ],
+  "VARIABLES": [
+    "LLVM_CXXCOMPILER_BASE",
+    "CXX"
+  ]
+}
