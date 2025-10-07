@@ -63,7 +63,7 @@ FitFunction::FitFunction() {}
 FitFunction::FitFunction(TF1* func, FunctionType funcType)
 	: function(func), functionType(funcType) {}
 
-TF1* FitFunction::getFunction()
+TF1* FitFunction::getFunction() const
 {
 	return function;
 }

@@ -379,7 +379,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
             // std::cout << histvariable.getName() << std::endl;
             // std::cout << "SIGNAl MAX" << signal->GetMaximum() << std::endl;
         }
-        signal = analysis->getHist(histvariable, "Higgs Group 1000", true, channelName);
+        signal = analysis->getHist(histvariable, "Higgs Signal 1000", true, channelName);
         std::cout << "number of signal bins is: " << signal->GetNbinsX();
     }
     else
