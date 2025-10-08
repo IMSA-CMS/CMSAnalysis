@@ -6,11 +6,13 @@
 class DarkPhotonHistNameFinder : public HistNameFinder
 {
 	public:
-	DarkPhotonHistNameFinder(std::string iChannel, bool iisData = false) : channel(std::move(iChannel)), isData(iisData) {}
+	DarkPhotonHistNameFinder(std::string iChannel, std::string iSubchannel, bool iisData = false) 
+	: channel(std::move(iChannel)), subChannel(std::move(iSubchannel)), isData(iisData) {}
 	virtual std::string getHistName(HistVariable histVariable) const override;
 
 	private:
 	std::string channel;
+	std::string subChannel;
 	bool isData;
 };
 

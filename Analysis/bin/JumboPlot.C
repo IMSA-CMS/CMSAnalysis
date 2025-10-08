@@ -169,22 +169,39 @@ void JumboPlot()
 		HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
 		HistVariable(HistVariable::VariableType::InvariantMass, "", false, true),
 	};
+
+	auto darkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
 		std::vector<HistVariable> darkphotonVariables = {
 		HistVariable(ParticleType::muon(), 1, HistVariable::VariableType::Eta),
 		HistVariable(ParticleType::muon(), 1, HistVariable::VariableType::Pt),
 		HistVariable(ParticleType::muon(), 1, HistVariable::VariableType::Phi),
-		HistVariable(ParticleType::LeptonJet(), 1, HistVariable::VariableType::Pt),
-		HistVariable(ParticleType::LeptonJet(), 1, HistVariable::VariableType::Eta),
+		HistVariable(ParticleType::leptonJet(), 1, HistVariable::VariableType::Pt),
+		HistVariable(ParticleType::leptonJet(), 1, HistVariable::VariableType::Eta),
 		};
 
-		std::vector<std::string> darkPhotonControlChannels = {
-			"High Mass and Same Sign_1jet",
-			"Low Mass and Same Sign_1jet",
-			"High Mass and Different Sign_1jet",
-			"High Mass and Same Sign_multiJet",
-			"Low Mass and Same Sign_multiJet",
-			"High Mass and Different Sign_multiJet"
-		};
+		std::vector<std::shared_ptr<Channel>> darkPhotonChannels = darkPhotonAnalysis->getChannels();
+		std::vector<std::shared_ptr<Channel>> controlChannels;
+		std::vector<std::shared_ptr<Channel>> signalChannels;
+		for (auto channel : darkPhotonChannels)
+		{
+			if (channel->getName().find("Low Mass and Different Sign") == std::string::npos)
+			{
+				controlChannels.push_back(channel);
+			}
+			else
+			{
+				signalChannels.push_back(channel);
+			}
+		}
+		// std::vector<std::string> darkPhotonControlChannels = {
+		// 	"High Mass and Same Sign/1jet",
+		// 	"Low Mass and Same Sign/1jet",
+		// 	"High Mass and Different Sign/1jet",
+		// 	"High Mass and Same Sign/multiJet",
+		// 	"Low Mass and Same Sign/multiJet",
+		// 	"High Mass and Different Sign/multiJet"
+		// };
+	
 	////////////////////////////////// DP ANALYSIS //////////////////////////////////
 	
 	// std::vector<std::string> connectors = {"_1st Highest Lepton Jet "};
@@ -193,5 +210,6 @@ void JumboPlot()
 	//makePlots("Higgs Signal 3Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames3, connecters, connecters2, connecters3, false, true);
 	//makePlots("Higgs Signal 2Channel", higgsAnalysis, channelTwoLeptons, variables ,true, false);
 	
-	makePlots("Dark Photon Signal", DarkPhotonAnalysis, fdfdchannels, darkphotonVariables, false, false);
+	makePlots("Dark Photon Signal", darkPhotonAnalysis, controlChannels, darkphotonVariables, false, false);
 }
+//std::string signal, std::shared_ptr<FullAnalysis> analysis, std::vector<std::shared_ptr<Channel>> channels, std::vector<HistVariable> variables, bool includeData, bool includeSignal
