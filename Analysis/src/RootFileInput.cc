@@ -42,33 +42,19 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 	std::string name = histVariableToFileMapping->getHistName(histType);
 
 	TH1* hist;
-	uint pos = name.find("/");
+	std::size_t pos = name.find("/");
 	auto file = getFile(fileSource);
+	std::string histName = name;
+	TDirectory* dir = file;
 	//std::cout << "RootFileInput Hit 2 " << std::endl;
 	// TH1* emptyHist = new TH1F("h1", "empty", 1, 0.0, 0.0);
-	if (pos != std::string::npos)
+	while (pos != std::string::npos)
 	{
-		std::string folder = name.substr(0,pos);
-		std::string histName = name.substr(pos+1);
-		TDirectory* dir = (TDirectory*)file->GetDirectory(folder.c_str());
-		if (dir)
+		std::string folder = histName.substr(0,pos);
+		histName = histName.substr(pos+1);
+		dir = (TDirectory*)dir->GetDirectory(folder.c_str());
+		if (!dir) 
 		{
-			dir->cd();
-			hist = dynamic_cast<TH1*>(dir->Get(histName.c_str()));
-			//std::cout << "RootFileInput Hit 3 " << std::endl;
-			if (!hist)
-			{
-				std::cout << "No Histogram named " << histName << " found in file " << fileSource << "\n";
-				delete file;
-				return nullptr;
-			}
-			delete dir;
-		}
-		else
-		{
-			
-			//We need the nullptr in when adding histograms to know to
-			//skip the histogram and not break histogram addition
 			std::cout << "No directory named " << folder << " found in file " << fileSource <<"\n";
 			// std::cout << "No directory named " + folder + " found in file: "<< fileSource <<"\n";
 			delete dir;
@@ -76,37 +62,41 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 			delete file;
 			return nullptr;
 		}
+		dir->cd();
+		pos = histName.find("/");
 	}
-	else
-	{	
-	    //std::cout << "RootFileInput ELSE Hit 1 " << std::endl;
-		//std::cout << "Here" << std::endl;
-		hist = dynamic_cast<TH1*>(file->Get(name.c_str()));
+
+	hist = dynamic_cast<TH1*>(dir->Get(histName.c_str()));
+	//std::cout << "RootFileInput Hit 3 " << std::endl;
+	if (!hist)
+	{
 		
+		delete file;
+		return nullptr;
 	}
-
-
-
-	//nothing after this point runs
-
-
-	if (!hist || hist->IsZombie())
-	{ 
-		//std::cout << "RootFileInput Zombie Hit 1 " << std::endl;
-		throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]");
-
-		if (hist->IsZombie())
-		{
-			//std::cout << "RootFileInput Zombie Hit 2 " << std::endl;
-			throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]. Hist is a Zombie.");
-		}
-		else
-		{
-			//std::cout << "RootFileInput Zombie Else Hit 2 " << std::endl;
-			throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]");
-		}
+	if (dir != file)
+	{
+		delete dir;
 	}
+		
+	
 
+	// if (!hist || hist->IsZombie())
+	// { 
+	// 	std::cout << "RootFileInput Zombie Hit 1 " << std::endl;
+	// 	throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]");
+
+	// 	if (hist->IsZombie())
+	// 	{
+	// 		std::cout << "RootFileInput Zombie Hit 2 " << std::endl;
+	// 		throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]. Hist is a Zombie.");
+	// 	}
+	// 	else
+	// 	{
+	// 		std::cout << "RootFileInput Zombie Else Hit 2 " << std::endl;
+	// 		throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]");
+	// 	}
+	// }
 	/*
 	if(dynamic_cast<TH2 *>(hist) != 0)
 	{
@@ -161,7 +151,6 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 		delete file;
 		return response;
 	// }
-
 }
 
 

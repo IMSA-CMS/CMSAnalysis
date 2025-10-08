@@ -80,7 +80,7 @@ TH1 *FullAnalysis::getHist(HistVariable histType, std::string processName, bool 
     std::string name = processName;
     for (const auto &channel : channels)
     {
-        if (channel->getName() == channelName)
+        if (channel->getName() == channelName) //print out channel name and get name to see where error is
         {
             // channelNumber++;
             // std::vector<TH1*> channelHists = channel->getHists(histType, "signal", false);
