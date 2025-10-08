@@ -114,10 +114,10 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
     auto leptonBackgrounds = std::make_shared<Channel>(name, processes);
 
     
-    std::cout << "############# Begin Process Names #############" << std::endl;
+    //std::cout << "############# Begin Process Names #############" << std::endl;
 
 	for(std::string processName : leptonBackgrounds->getNames()) {
-		std::cout << processName << std::endl;
+		// std::cout << processName << std::endl;
 
         if(processName == "Dark Photon Signal") {
             leptonBackgrounds->labelProcess("signal", processName);
@@ -131,7 +131,7 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
         }
 	}
 
-    std::cout << "############# End Map Hists #############" << std::endl;
+    // std::cout << "############# End Map Hists #############" << std::endl;
 
     getChannelsProtected().push_back(leptonBackgrounds);
 }

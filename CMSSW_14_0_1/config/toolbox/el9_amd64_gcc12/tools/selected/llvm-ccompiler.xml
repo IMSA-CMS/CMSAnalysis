@@ -1,8 +1,0 @@
-  <tool name="llvm-ccompiler" version="17.0.3-7b22d2b4b09374b3f1a39da16a0af7b9" type="compiler">
-    <use name="gcc-ccompiler"/>
-    <client>
-      <environment name="LLVM_CCOMPILER_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/llvm/17.0.3-7b22d2b4b09374b3f1a39da16a0af7b9"/>
-      <environment name="CC" value="$LLVM_CCOMPILER_BASE/bin/clang"/>
-    </client>
-    <flags CFLAGS="--gcc-toolchain=/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/gcc/12.3.1-40d504be6370b5a30e3947a6e575ca28"/>
-  </tool>

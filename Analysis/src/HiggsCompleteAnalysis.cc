@@ -22,6 +22,8 @@ std::vector<std::string> HiggsCompleteAnalysis::genSimDecays{"eeee", "eeeu", "ee
 std::vector<std::string> HiggsCompleteAnalysis::recoDecays{"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu",
                                           "uue",  "uuu",  "ee",   "e e",  "eu",   "e u",  "uu",  "u u", "none"};
 
+// Actual masses for the Higgs signal
+const std::vector<int> HiggsCompleteAnalysis::massTargets{500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
 
 double HiggsCompleteAnalysis::getBranchingRatio(const std::string &channel)
 {
@@ -49,8 +51,6 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     // make sense so in the future fix this
     //  double tempMass = 1400;
 
-    // Actual masses for the Higgs signal
-    std::vector<double> massTargets{500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
     // const std::vector<std::string> recoDecays{"u u", "uu", "uuu", "uuuu"};
     // const std::vector<std::string> recoDecays{"ee", "eu", "e u", "uu", "u u"};
     // const std::vector<std::string> recoDecays{"u u"};
@@ -95,6 +95,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     HistVariable::VariableType::InvariantMass
     };
 
+
     for (ParticleType pType : particleTypes)
     {
         for (int order : orders)
@@ -137,8 +138,8 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
                 // histVariablesSignal.push_back(HistVariable::sameSignMass(decayName + "__hists/" + decayName + "_Reco Same Sign Invariant Mass"));
                 //histVariablesSignal.push_back(HistVariable(Selector::None, HistVariable::VariableType::SameSignInvariantMass));
                 double branchingRatioFixer = getBranchingRatio(genSimDecay);
-                // std::cout << "GENSIMDECAY: " << genSimDecay << std::endl;
-                // std::cout << "BRANCHINGRATIOFIXER " << branchingRatioFixer << std::endl;
+                //std::cout << "GENSIMDECAY: " << genSimDecay << std::endl;
+                //std::cout << "BRANCHINGRATIOFIXER " << branchingRatioFixer << std::endl;
                 auto higgsProcess = makeBasicProcess(signalFilePath, "Higgs" + std::to_string((int)massTarget) + ".root", "higgs4l" + std::to_string((int)massTarget), reader, luminosity, histVariableToFileMapping, false, branchingRatioFixer);
                 auto higgsSignal = std::make_shared<Process>("Higgs signal " + genSimDecay + " " + std::to_string((int)massTarget), 1);
                 higgsSignal->addProcess(higgsProcess);
@@ -212,7 +213,6 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         higgsData->addProcess(makeBasicProcess(filePath, "Muon2017.root", "Muon2017", reader, luminosity, histVariableToFileMapping, true));
         higgsData->addProcess(makeBasicProcess(filePath, "Muon2018.root", "Muon2018", reader, luminosity, histVariableToFileMapping, true));
 
-        
         processes.push_back(dyBackground);
         //processes.push_back(dyBackgroundNoVeto);
         processes.push_back(higgsData);
@@ -235,6 +235,8 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         //     }
         // }        
         
+        std::cout << "systematics have been added and calculated\n";
+
         auto leptonProcesses = std::make_shared<Channel>(recoDecay, processes);
 
         for (std::string processName : leptonProcesses->getNames())

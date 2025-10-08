@@ -55,39 +55,6 @@ std::vector<HistVariable> variables, bool includeData, bool includeSignal)
 	{
 		rowTitles.push_back(var.getName());
 	}
-
-	// for (std::string connecter: connecters)
-	// {
-	// 	for(ParticleType dataType : variables) 
-	// 	{
-	// 		rowTitles.push_back(connecter + " " + dataType);
-	// 	}
-	// }
-
-	// for (std::string connecter: connecters2)
-	// {
-	// 	for(std::string dataType : graphableTypes2) 
-	// 	{
-	// 		rowTitles.push_back(connecter + " " + dataType);
-	// 	}
-	// }
-	
-	// for (int i = 0; i < 2; i++)
-	// {
-	// 	for (std::string connecter: connecters3)
-	// 	{
-	// 		for(std::string dataType : graphableTypes3) 
-	// 		{
-	// 			if (i == 0)
-	// 			{
-	// 				rowTitles.push_back(connecter + " " + dataType + "X");
-	// 			}
-	// 			else
-	// 			{
-	// 				rowTitles.push_back(connecter + " " + dataType + "Y");
-	// 			}			}
-	// 	}
-	// }
 	
 	
 	std::vector<std::string> columnTitles;
@@ -131,49 +98,7 @@ std::vector<HistVariable> variables, bool includeData, bool includeSignal)
 		
 	}
 	
-	//  for (std::string connecter: connecters2)
-	//  {
-	//  	int unitCounter = 0;
-	//  	for(std::string dataType : graphableTypes2) 
-	//  	{
-	//  		for(std::shared_ptr<Channel> channel : channels) 
-	//  		{ 	
-	//  			bool valid = false;
-	//  			for (std::string channelName : channelNames)
-	//  			{
-	//  				if (channelName == channel->getName())
-	// 				{
-	// 					valid = true;
-	// 					break;
-	//  				}
-	//  			}
 
-	// 			if (valid == false)
-	// 			{
-	// 				continue;
-	//  			}
-				
-	// 			entry = "";
-	// 			TString xAxisName = units2[unitCounter];
-	// 			TString yAxisName = "Events";
-	// 			dataName = Utility::removeSpaces(dataType);
-	// 			fileName = "jumboPlotStorage/" + Utility::removeSpaces("Higgs Signal") + "/" + channel->getName() + connecter + dataName + "DataMC.png";
-	// 			HistVariable fullDataType = HistVariable(connecter + dataType);
-	// 			//bool includeSignal = false;
-	// 			TCanvas *canvas = plotFormatter->completePlot(analysis, fullDataType, xAxisName, yAxisName, false, includeSignal, includeData, channel->getName());
-	// 			canvas->SaveAs(fileName.c_str());
-	// 			plotFormatter->deleteHists();
-	// 			canvas->Close();
-	// 			delete canvas;
-			
-	//  			entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
-	//  			toAdd.push_back(entry);
-	//  		}
-	//  		unitCounter++;
-	//  		tableInput.push_back(toAdd);
-	//  		toAdd.clear();
-	// 	 	}
-	// 	}
 	
 	auto tableData = std::make_shared<TableData>(tableInput, columnTitles, rowTitles);
 	auto table = std::make_shared<HTMLTable>();
@@ -241,10 +166,25 @@ void JumboPlot()
 		HistVariable(ParticleType::muon(), 0, HistVariable::VariableType::SameSignInvariantMass),
 		HistVariable(ParticleType::electron(), 0, HistVariable::VariableType::OppositeSignInvariantMass),
 		HistVariable(ParticleType::muon(), 0, HistVariable::VariableType::OppositeSignInvariantMass),
-		HistVariable(ParticleType::LeptonJet(), 1, HistVariable::VariableType::Pt),
 		HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
 		HistVariable(HistVariable::VariableType::InvariantMass, "", false, true),
 	};
+		std::vector<HistVariable> darkphotonVariables = {
+		HistVariable(ParticleType::muon(), 1, HistVariable::VariableType::Eta),
+		HistVariable(ParticleType::muon(), 1, HistVariable::VariableType::Pt),
+		HistVariable(ParticleType::muon(), 1, HistVariable::VariableType::Phi),
+		HistVariable(ParticleType::LeptonJet(), 1, HistVariable::VariableType::Pt),
+		HistVariable(ParticleType::LeptonJet(), 1, HistVariable::VariableType::Eta),
+		};
+
+		std::vector<std::string> darkPhotonControlChannels = {
+			"High Mass and Same Sign_1jet",
+			"Low Mass and Same Sign_1jet",
+			"High Mass and Different Sign_1jet",
+			"High Mass and Same Sign_multiJet",
+			"Low Mass and Same Sign_multiJet",
+			"High Mass and Different Sign_multiJet"
+		};
 	////////////////////////////////// DP ANALYSIS //////////////////////////////////
 	
 	// std::vector<std::string> connectors = {"_1st Highest Lepton Jet "};
@@ -253,5 +193,5 @@ void JumboPlot()
 	//makePlots("Higgs Signal 3Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames3, connecters, connecters2, connecters3, false, true);
 	//makePlots("Higgs Signal 2Channel", higgsAnalysis, channelTwoLeptons, variables ,true, false);
 	
-	makePlots("Dark Photon Signal", DarkPhotonAnalysis, channels, variables, false, false);
+	makePlots("Dark Photon Signal", DarkPhotonAnalysis, fdfdchannels, darkphotonVariables, false, false);
 }
