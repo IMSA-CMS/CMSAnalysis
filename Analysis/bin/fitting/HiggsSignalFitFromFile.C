@@ -80,6 +80,7 @@ void HiggsSignalFitFromFile()
 				std::cerr << "mass: " << masses[i] << std::endl;
 				// update this to use all gensim decays, not just the same as reco
 				TH1* selectedHist = combineHists(std::vector<std::string>{"HppM" + std::to_string(masses[i])}, channel, histType);
+				selectedHist -> Scale(1/selectedHist -> Integral());
 				std::string keyName = channel + "/" + std::to_string(masses[i]) + '_' + histType;
 				min = masses[i] - 200;
 				max = masses[i] + 200;

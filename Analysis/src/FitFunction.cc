@@ -180,28 +180,28 @@ FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const s
 	return FitFunction(func, functionType);
 }
 
-std::ostream& operator<<(std::ostream& stream, FitFunction& function)
-{
-	TF1* func = function.getFunction();
-	std::vector<std::string> channel_parameter = FitFunction::split(func->GetName(), '/');
+// std::ostream& operator<<(std::ostream& stream, FitFunction& function)
+// {
+// 	TF1* func = function.getFunction();
+// 	std::vector<std::string> channel_parameter = FitFunction::split(func->GetName(), '/');
 
-	stream << channel_parameter[1] << "		";
+// 	stream << channel_parameter[1] << "		";
 
-	for (int i = 0; i < func->GetNpar(); ++i)
-	{
-		stream << func->GetParameter(i) << "		";
-	}
+// 	for (int i = 0; i < func->GetNpar(); ++i)
+// 	{
+// 		stream << func->GetParameter(i) << "		";
+// 	}
 
-	for (int i = 0; i < func->GetNpar(); ++i)
-	{
-		stream << func->GetParError(i) << "		";
-		// stream << 1 << ' ';
-	}
+// 	for (int i = 0; i < func->GetNpar(); ++i)
+// 	{
+// 		stream << func->GetParError(i) << "		";
+// 		// stream << 1 << ' ';
+// 	}
 
-	stream << '\n';
-	// std::cout << "Got parameters\n";
-	return stream;
-}
+// 	stream << '\n';
+// 	// std::cout << "Got parameters\n";
+// 	return stream;
+// }
 
 
 std::string FitFunction::getChannelName()
@@ -238,76 +238,64 @@ std::vector<std::string> FitFunction::split(const std::string& str, char delimit
 
 
 // OLD CODE
-// std::ostream& operator<<(std::ostream& stream, FitFunction& function)
-// {
-// 	TF1* func = function.getFunction();
-// 	// std::cout << "Got functions\n";
-// 	stream << "Name: " << func->GetName() << '\n';
-// 	stream << "FunctionTypeEnum: " << function.getFunctionType() << '\n';
-// 	stream << "ExpressionFormula: ";
-// 	if (function.getFunctionType() == FitFunction::FunctionType::EXPRESSION_FORMULA)
-// 		stream << func->GetExpFormula() << '\n';
-// 	else
-// 		stream << "None\n";
+std::ostream& operator<<(std::ostream& stream, FitFunction& function)
+{
+	TF1* func = function.getFunction();
+	// std::cout << "Got functions\n";
+	stream << "Name: " << func->GetName() << '\n';
+	stream << "FunctionTypeEnum: " << function.getFunctionType() << '\n';
+	stream << "ExpressionFormula: ";
+	if (function.getFunctionType() == FitFunction::FunctionType::EXPRESSION_FORMULA)
+		stream << func->GetExpFormula() << '\n';
+	else
+		stream << "None\n";
 
-// 	// std::cout << "Got expFormula\n";
-// 	// auto formulaName = FitFunction::getFormulaName(func->GetName());
-// 	// auto it = std::find(FitFunction::functionList.begin(), FitFunction::functionList.end(), formulaName);
-// 	// if (it != FitFunction::functionList.end())
-// 	// {
-// 	// 	stream << "Name: " << func->GetName() << '\n';
-// 	// 	stream << "Function: " << formulaName << '\n';
-// 	// }
-// 	// else
-// 	// {
-// 	// 	stream << "Name: " << func->GetName() << '\n';
-// 	// 	stream << "Function: " << func->GetExpFormula() << '\n';
-// 	// }
-// 	double min = 0;
-// 	double max = 0;
-// 	func->GetRange(min, max);
-// 	stream << "Range: " << min << ' ' << max << '\n';
-// 	stream << "NumOfParameters: " << func->GetNpar() << '\n';
+	// std::cout << "Got expFormula\n";
+	// auto formulaName = FitFunction::getFormulaName(func->GetName());
+	// auto it = std::find(FitFunction::functionList.begin(), FitFunction::functionList.end(), formulaName);
+	// if (it != FitFunction::functionList.end())
+	// {
+	// 	stream << "Name: " << func->GetName() << '\n';
+	// 	stream << "Function: " << formulaName << '\n';
+	// }
+	// else
+	// {
+	// 	stream << "Name: " << func->GetName() << '\n';
+	// 	stream << "Function: " << func->GetExpFormula() << '\n';
+	// }
+	double min = 0;
+	double max = 0;
+	func->GetRange(min, max);
+	stream << "Range: " << min << ' ' << max << '\n';
+	stream << "NumOfParameters: " << func->GetNpar() << '\n';
 
-// 	stream << "ParaNames: ";
-// 	for (int i = 0; i < func->GetNpar(); ++i)
-// 	{
-// 		stream << func->GetParName(i) << ' ';
-// 		// stream << 1 << ' ';
-// 	}
+	stream << "ParaNames: ";
+	for (int i = 0; i < func->GetNpar(); ++i)
+	{
+		stream << func->GetParName(i) << ' ';
+		// stream << 1 << ' ';
+	}
 
-// 	stream << '\n' << "Parameters: ";
-// 	for (int i = 0; i < func->GetNpar(); ++i)
-// 	{
-// 		stream << func->GetParameter(i) << ' ';
-// 		// stream << 1 << ' ';
-// 	}
+	stream << '\n' << "Parameters: ";
+	for (int i = 0; i < func->GetNpar(); ++i)
+	{
+		stream << func->GetParameter(i) << ' ';
+		// stream << 1 << ' ';
+	}
 
-// 	stream << '\n' << "ParamErrors: ";
+	stream << '\n' << "ParamErrors: ";
 
-// 	for (int i = 0; i < func->GetNpar(); ++i)
-// 	{
-// 		stream << func->GetParError(i) << ' ';
-// 		// stream << 1 << ' ';
-// 	}
+	for (int i = 0; i < func->GetNpar(); ++i)
+	{
+		stream << func->GetParError(i) << ' ';
+		// stream << 1 << ' ';
+	}
 
-// 	stream << '\n';
-// 	// std::cout << "Got parameters\n";
-// 	return stream;
-// }
+	stream << '\n';
+	// std::cout << "Got parameters\n";
+	return stream;
+}
 
-// // Helper function for splitting strings
-// std::vector<std::string> split(const std::string& str, char delimiter) {
-//     std::vector<std::string> tokens;
-//     std::stringstream ss(str);
-//     std::string token;
-    
-//     while (std::getline(ss, token, delimiter)) {
-//         tokens.push_back(token);
-//     }
-    
-//     return tokens;
-// }
 
 // std::ostream& operator<<(std::ostream& stream, TF1* func)
 // {

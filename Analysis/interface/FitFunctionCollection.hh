@@ -1,7 +1,7 @@
 #ifndef FIT_FUNCTION_COLLECTION_HH
 #define FIT_FUNCTION_COLLECTION_HH
 
-#include <unordered_map>
+#include <unordered_map> 
 #include "CMSAnalysis/Analysis/interface/FitFunction.hh"
 
 class FitFunctionCollection
@@ -11,7 +11,7 @@ public:
 
 	FitFunctionCollection();
 	FitFunctionCollection(std::vector<FitFunction>& functions);
-	FitFunctionCollection(size_t size);
+	//FitFunctionCollection(size_t size);
 
 	FitFunctionCollection parameterizeFunctions(FitFunction::FunctionType funcType);
 	void insert(const std::string& key, FitFunction& function);
@@ -27,6 +27,8 @@ public:
 
 private:
 	std::unordered_map<std::string, FitFunction> functions;
+	std::string name;
+
 };
 
 #endif
