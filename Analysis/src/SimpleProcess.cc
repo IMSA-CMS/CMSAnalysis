@@ -12,6 +12,7 @@ void SimpleProcess::addFile(std::string fileName, std::vector<HistVariable> hist
     if(checkValidity(fileName, histVariables)) {
 	files.push_back(fileName);
 	histVariableVec.push_back(histVariables);
+	std::cout << "Added file: " << fileName << std::endl;
     }
 }
 
@@ -23,30 +24,41 @@ TH1* SimpleProcess::getHist(std::string histType) {
 	{
 		if (getHistFromFile(file, histVariableVec.at(count), histType) == 0) {
 			throw std::runtime_error("Histogram not found in file: " + file);
+			std::cout << "Histogram not found in file: " + file << std::endl;
 		}
 		if (getHistFromFile(file, histVariableVec.at(count), histType)->GetNbinsX() > maxBinNum)
+		std::cout << "Max Bin Num: " << maxBinNum << std::endl;
 		{
 			maxBinNum = getHistFromFile(file, histVariableVec.at(count), histType)->GetNbinsX();
+			std::cout << "New Max Bin Num: " << maxBinNum << std::endl;
 		}
 		if ((getHistFromFile(file, histVariableVec.at(count), histType)->GetXaxis()->GetBinWidth(maxBinNum)) > maxBarWidth)
+		std::cout << "Max Bar Width: " << maxBarWidth << std::endl;
 		{
 			maxBarWidth = (getHistFromFile(file, histVariableVec.at(count), histType)->GetXaxis()->GetBinWidth(maxBinNum));
+			std::cout << "New Max Bar Width: " << maxBarWidth << std::endl;
 		}
 		count++;
+		std::cout << "Count: " << count << std::endl;
 	}
 	TH1* hist = new TH1F(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * maxBarWidth);
+	std::cout << "Created new hist with " << maxBinNum << " bins." << std::endl;
 	TH1* toAdd;
+	std::cout << "Merging hists from files..." << std::endl;
 	TList* toMerge = new TList;
+	std::cout << "Files to merge: " << files.size() << std::endl;
 	count = 0;
 	for (std::string file : files)	
 	{
 		toAdd = getHistFromFile(file, histVariableVec.at(count), histType);
 		toMerge->Add(toAdd);
 		count++;
+		std::cout << "Added hist from file: " << file << std::endl;
 	}
 	hist->Merge(toMerge);
 	hist->SetLineColor(color);
 	hist->SetFillColor(color);
+	std::cout << "Finished merging hists." << std::endl;
 	return hist;    
 }
 
@@ -62,6 +74,7 @@ TH1* SimpleProcess::getHistFromFile(std::string file, std::vector<HistVariable> 
     for(HistVariable histVar : histVariables) {
 	if(histVar.getName() == histType) {
 	    name = histVar.getName();
+		std::cout << "Found hist variable: " << name << std::endl;
 	}
     }
     hist = dynamic_cast<TH1*>(openedFile->Get(name.c_str()));
@@ -76,8 +89,10 @@ TH1* SimpleProcess::getHistFromFile(std::string file, std::vector<HistVariable> 
 bool SimpleProcess::checkValidity(std::string file, std::vector<HistVariable> histVariables) {
     bool validFile = true;
     TH1* hist;
+	std::cout << "Checking validity of file: " << file << std::endl;
     for (auto histVar : histVariables) {
         hist = getHistFromFile(file, histVariables, histVar.getName());
+		std::cout << "Checking histogram: " << histVar.getName() << std::endl;
         if(hist == 0) {
             validFile = false;
         }

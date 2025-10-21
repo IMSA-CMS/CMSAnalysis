@@ -123,28 +123,10 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 
 	TH1* response = new TH1F("Hist Clone", hist->GetTitle(), hist->GetXaxis()->GetNbins(), hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
 
-		// if (histType.is2DHistX())
-		// {
-		// 	TH2* hist2D = dynamic_cast<TH2 *>(hist);
-		// 	if (hist2D == nullptr)
-		// 	{
-		// 		throw std::runtime_error("Cast error");
-		// 	}
-		// 	response = hist2D->ProjectionX("_px", 0, -1, "E");
-		// }
-		// else if (histType.is2DHistY())
-		// {
-		// 	TH2* hist2D = dynamic_cast<TH2 *>(hist);
-		// 	if (hist2D == nullptr)
-		// 	{
-		// 		throw std::runtime_error("Cast error");
-		// 	}
-		// 	response = hist2D->ProjectionY("_py", 0, -1, "E");
-		// }
-		// else
 		{
 			response->Add(hist);
 		}
+		std::cout << "Hist max: " << response->GetMaximum() << std::endl;
 		//std::cout << "Hist Clone Entries: " << response->GetEntries() << std::endl;
 
 		delete hist;

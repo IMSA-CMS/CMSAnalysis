@@ -386,7 +386,9 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     {
         signal = new TH1F("h1", "empty", 1, 0.0, 0.0);
     }
+    std::cout << "Signal has: " << signal->GetEntries() << std::endl;
     double maxCombinedY = signal->GetMaximum();
+    std::cout << "Signal Max: " << maxCombinedY << std::endl;
 
     std::vector<TH1*> backgroundHists;
    
@@ -398,7 +400,6 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
         std::cout << histvariable.getName() << std::endl;
         
         auto hist = analysis->getHist(histvariable, name, true, channelName); // error message: Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
-        
 
         backgroundProcesses.push_back(analysis->getChannel(channelName)->findProcess(name));
         // auto hist = process->getSystematicHist(histvariable, true).second;
@@ -410,8 +411,20 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
         }
         std::cout << hist->GetName() << " has "<< hist->GetNbinsX() << std::endl;
         backgroundHists.push_back(hist);
-        
-        maxCombinedY += hist->GetMaximum();
+        double max = 0;
+        for (int i = 1; i <= hist->GetNbinsX(); i++)
+        {
+            std::cout << "Bin " << i << " has " << hist->GetBinContent(i) << " events." << std::endl;
+            if (hist->GetBinContent(i) > max)
+            {
+                max = hist->GetBinContent(i);
+            }
+        }
+
+
+        std::cout << "Background Hist Max: " << max << std::endl;
+        maxCombinedY += max;
+        std::cout << "Max Combined Y: " << maxCombinedY << std::endl;
     }
     //std::cout << backgroundHists.size() << "\n";
     //std::cout << "End" << std::endl;
@@ -428,9 +441,9 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     background = new THStack("background", "background");
 
     maxCombinedY *= 100;
-    data->SetMaximum(maxCombinedY );
-    signal->SetMaximum(maxCombinedY);
-    background->SetMaximum(maxCombinedY);
+    // data->SetMaximum(maxCombinedY );
+    // signal->SetMaximum(maxCombinedY);
+    //background->SetMaximum(maxCombinedY);
     std::cout << "MAXCOMBINEDY: " << maxCombinedY << std::endl;
     
     FormatSignalData(background, signal, data, backgroundHists, numBins);
@@ -449,7 +462,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     topPad->Draw();
     topPad->cd();
     std::cout << "1.3" << std::endl;
-
+    //error after this 
 
     //Draws the histogram with more events first (bigger axis)
     //TH1* hist = DrawFirst(background, signal, data, topPad, upperMasslimit, firstBin, first);
@@ -583,12 +596,11 @@ void PlotFormatter::DrawOtherHistograms(std::vector<TH1*>& hists, std::vector<in
 {
     for (size_t i = 0; i < hists.size(); ++i) {
         if (static_cast<int>(i) == firstIndex) continue; // Skip the first histogram, already drawn
-
         TH1* hist = hists[i];
         hist->SetLineColor(colors[i]);
         hist->SetLineWidth(2);
         hist->Draw("HIST SAME");
-        histVector.push_back(hist);
+        histVector.push_back(hist); 
 
        // std::cout << "First index: " << firstIndex << "Index " << i << " Hist name " << hist->GetName() << " color " << hist->GetLineColor() << std::endl;
     }
