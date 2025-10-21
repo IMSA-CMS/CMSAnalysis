@@ -35,7 +35,7 @@ void SuperPlot()
 	//Change extra text here (keep drawLogo to false for now)
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation)");
 	plotFormatter->setUpperMasslimit(.5);
-	plotFormatter->setNumBins(1);
+	plotFormatter->setRebinFactor(5);
 	plotFormatter->setFirstBin(-1);
 	//Change the string for the channel you want, if using one channel. Otherwise use the loop.
 	
