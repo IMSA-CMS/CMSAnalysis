@@ -1,11 +1,17 @@
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
 #include <fstream>
 #include <string>
+#include <sstream>
+#include <algorithm>
 
 void addToChannelModifierMap(std::string newKey, 
     std::string newValue, 
     std::map<std::string,std::string>* map, 
     std::vector<std::string>* keysInMap);
+
+std::vector<FitFunction> alphabetizeParameters(std::vector<FitFunction> fitFunctions);
+std::vector<std::string> split(const std::string& str, char delimiter);
+std::string replaceSubstring(std::string stringToModify, const std::string from, const std::string to);
 
 FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string &fileName)
 {
@@ -67,7 +73,8 @@ void FitFunctionCollection::saveFunctions(const std::string& fileName, bool appe
 
 	for (auto& funcPair : functions)
 	{
-		std::string channel = funcPair.second.getChannelName();
+        std::string unmodifiedChannelName = funcPair.second.getChannelName();
+		std::string channel = replaceSubstring(unmodifiedChannelName, "m", "u"); // Replace "m" with "u" for muons
 		auto channelExists = std::find(channelNames.begin(), channelNames.end(), channel);
 		if (channelExists == channelNames.end())
 		{
@@ -84,6 +91,12 @@ void FitFunctionCollection::saveFunctions(const std::string& fileName, bool appe
 		//file << funcPair.second << "\n";
 	}
 
+    // Alphabetize parameters for each channel
+    for (auto channel : channelNames)
+    {
+        channel_parameters[channel] = alphabetizeParameters(channel_parameters[channel]);
+    }
+
     std::cout << "Writing to file... \n";
 	for (std::string channel : channelNames)
 	{
@@ -98,7 +111,7 @@ void FitFunctionCollection::saveFunctions(const std::string& fileName, bool appe
             }
         }
 
-        file << "Channel name: " << channel + channelNameModifiers[x_YNameModifier] << '\n' << '\n';
+        file << "Channel: " << channel + channelNameModifiers[x_YNameModifier] << '\n' << '\n';
 		std::vector<FitFunction> functionParameters = channel_parameters.at(channel);
         if (functionParameters.size() != 0)
         {
@@ -138,6 +151,70 @@ void FitFunctionCollection::saveFunctions(const std::string& fileName, bool appe
 
 	file.close();
 }
+
+// Replaces all occurrences of 'from' with 'to' in the input string
+std::string replaceSubstring(std::string stringToModify, const std::string from, const std::string to) 
+{
+    std::string str = stringToModify;
+
+    // Avoid infinite loop
+    if (from.empty()) 
+    {
+        return from;
+    }
+
+    size_t start_pos = 0;
+    while ((start_pos = str.find(from, start_pos)) != std::string::npos) 
+    {
+        str.replace(start_pos, from.length(), to);
+        start_pos += to.length(); // Advance position to avoid replacing newly inserted 'to'
+    }
+
+    return str;
+}
+
+std::vector<FitFunction> alphabetizeParameters(std::vector<FitFunction> fitFunctions)
+{
+    std::vector<std::string> parameterNames;
+    std::vector<FitFunction> alphabetizedFunctions;
+    
+    // Find and alphabetize the names of fit functions
+    for (auto function : fitFunctions)
+    {
+        parameterNames.push_back(function.getParameterName());
+    }
+    std::sort(parameterNames.begin(), parameterNames.end());
+
+
+    // Reorder the fitFunctions based on the order of parameterNames
+    for (auto parameterName : parameterNames)
+    {
+        for (auto function : fitFunctions)
+        {
+            
+            if (function.getParameterName() == parameterName)
+            {
+                alphabetizedFunctions.push_back(function);
+            }
+        }
+    }
+
+    return alphabetizedFunctions;
+}
+
+// Helper function for splitting strings
+std::vector<std::string> split(const std::string& str, char delimiter) {
+    std::vector<std::string> tokens;
+    std::stringstream ss(str);
+    std::string token;
+    
+    while (std::getline(ss, token, delimiter)) {
+        tokens.push_back(token);
+    }
+    
+    return tokens;
+}
+
 
 // ONLY use this to add new key/value pairs to channelNameModifiers in saveFunctions 
 // and keep track of keys 

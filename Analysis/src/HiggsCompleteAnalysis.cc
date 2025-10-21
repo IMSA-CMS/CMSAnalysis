@@ -22,6 +22,8 @@ std::vector<std::string> HiggsCompleteAnalysis::genSimDecays{"eeee", "eeeu", "ee
 std::vector<std::string> HiggsCompleteAnalysis::recoDecays{"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu",
                                           "uue",  "uuu",  "ee",   "e e",  "eu",   "e u",  "uu",  "u u", "none"};
 
+// Actual masses for the Higgs signal
+const std::vector<int> HiggsCompleteAnalysis::massTargets{500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
 
 double HiggsCompleteAnalysis::getBranchingRatio(const std::string &channel)
 {
@@ -49,8 +51,6 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     // make sense so in the future fix this
     //  double tempMass = 1400;
 
-    // Actual masses for the Higgs signal
-    std::vector<double> massTargets{500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
     // const std::vector<std::string> recoDecays{"u u", "uu", "uuu", "uuuu"};
     // const std::vector<std::string> recoDecays{"ee", "eu", "e u", "uu", "u u"};
     // const std::vector<std::string> recoDecays{"u u"};
