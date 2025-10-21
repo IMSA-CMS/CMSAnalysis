@@ -60,11 +60,11 @@ class PlotFormatter
 
         void setUpperMasslimit(double limit) { upperMasslimit = limit;}
 
-        double getUpperMasslimit() const { return upperMasslimit;}   
+        double getUpperMasslimit() const { return upperMasslimit;}  
 
-        void setNumBins(int bins) { numBins = bins;}
+        void setRebinFactor(int bins) { rebinFactor = bins;}
 
-        int getNumBins() const { return numBins;} 
+        int getRebinFactor() const { return rebinFactor;} 
 
         void setFirstBin(int bin) { firstBin = bin;}
 
@@ -82,19 +82,19 @@ class PlotFormatter
         
         void GetBottomPadValues(TH1*& data, THStack*& background, TH1* backgroundHist, std::vector<double>& x,  std::vector<double>& y,  std::vector<double>& xerror2,  std::vector<double>& yerror2 , std::vector<double>& centers);
 
-        void IntegralScaling(double& upperMasslimit, bool& scaleTodata, std::vector<TH1*>& backgroundHists, int& firstBin, int& numberBinsData, int& lowerDataIntegralLimit, float& dataIntegral, float& backgroundIntegral);
+        void IntegralScaling(double& upperMasslimit, bool& scaleTodata, std::vector<TH1*>& backgroundHists, int& firstBin, float& dataIntegral, float& backgroundIntegral);
     
         int GetOrder(TH1* data, TH1* signal, THStack* background);
 
-        TH1* DrawFirst(THStack*& background, TH1*& signal, TH1*& data, TPad*& topPad, float upperMasslimit, int firstBin, int first);
+        TH1* DrawFirst(THStack*& background, TH1*& signal, TH1*& data, TPad*& topPad, float upperMasslimit, int firstBin);
 
-        void DrawOtherHistograms(THStack*& background, TH1*& signal, TH1*& data, int first);
+        void DrawOtherHistograms(THStack*& background, TH1*& signal, TH1*& data);
 
         void DrawOtherHistograms(std::vector<TH1*>& hists, std::vector<int>& colors, int firstIndex);
 
         void ChangeAxisTitles(TH1*& hist, TString xAxisTitle, TString yAxisTitle);
 
-        void FormatSignalData(THStack*& background, TH1*& signal, TH1*& data, std::vector<TH1*>& backgroundHists, int numBins);
+        void FormatSignalData(THStack*& background, TH1*& signal, TH1*& data, std::vector<TH1*>& backgroundHists, int rebinFactor);
     
         TLegend* GetSimpleLegend(std::vector<TH1*> hists, std::vector<std::string> names);
 
@@ -122,7 +122,7 @@ class PlotFormatter
         std::vector<TH2*> th2Vector;
         std::vector<THStack*> stackVector;
         double upperMasslimit;
-        int numBins;
+        int rebinFactor;
         int firstBin;
 
 };
