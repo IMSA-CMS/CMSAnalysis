@@ -234,8 +234,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         //         process->addSystematic(sys);
         //     }
         // }        
-        
-        std::cout << "systematics have been added and calculated\n";
+    
 
         auto leptonProcesses = std::make_shared<Channel>(recoDecay, processes);
 
