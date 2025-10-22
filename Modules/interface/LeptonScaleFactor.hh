@@ -17,7 +17,7 @@ class LeptonScaleFactor : public ScaleFactor
 
 	private:
 		ParticleType particleType;
-
+		std::map<double, std::set<double>> bins;
 
 
 };

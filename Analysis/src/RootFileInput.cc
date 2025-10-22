@@ -178,21 +178,30 @@ int RootFileInput::getTotalEvents() const
 	auto file = getFile(fileSource);
 	bool end = false; 
 	int index = 1;
-	int events = 0;
-	while(!end){
-		std::string s = "NEvents;" + std::to_string(index);
-    	const char* fName = s.c_str();
-		TDisplayText *totalevents = file->Get<TDisplayText>(fName);
-		if(totalevents)
-		{
-			events+=std::stoi(totalevents->GetString().Data());
-			index+=2;
-		}
-		else{
-			end = true;
-		}
-
+	auto *totalevents = file->Get<TObjString>("NEvents");
+	if (!totalevents)
+	{
+		throw std::runtime_error("Total events not found in file: " + fileSource);
 	}
+	int events = std::stoi(totalevents->GetString().Data());
 	delete file;
 	return events;
+	// while (!end)
+	// {
+	// 	std::string s = "NEvents;" + std::to_string(index);
+    // 	const char* fName = s.c_str();
+	// 	TDisplayText *totalevents = file->Get<TDisplayText>(fName);
+	// 	if(totalevents)
+	// 	{
+	// 		events+=std::stoi(totalevents->GetString().Data());
+	// 		index+=2;
+	// 	}
+	// 	else
+	// 	{
+	// 		end = true;
+	// 	}
+
+	// }
+	
+	//return events;
 }	

@@ -42,7 +42,7 @@ MuonJSONReader::MuonJSONReader(std::string filename) : JSONReader(filename)
             std::string etaMinString = std::to_string(eta_min);
             std::string ptMaxString = std::to_string(pt_max);
             scaleFactorMap[etaMinString + "_" + ptMaxString] = ScaleFactor::ScaleFactorSet(nominal, systUp, systDown);
-            //std::cout << "Adding nominal scale factor for eta bin [" << eta_min << ", " << etaMax << "] and pt bin [" << ptMin << ", " << ptMax << "] with scale factor: " << scaleFactor << std::endl;
+            //std::cout << "Adding nominal scale factor for eta bin [" << eta_min << "] and pt bin [" << pt_max << "] with scale factor: " << nominal << std::endl;
 
         }
     }
