@@ -362,6 +362,8 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
 
     //std::cout << "Data has: " << data->GetEntries() << std::endl;
 
+
+
     //data = signal = new TH1F("h1", "empty", 1, 0.0, 0.0);
     double maxCombinedY = 0;
     if (includeSignal)
@@ -377,12 +379,12 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
             // std::cout << histvariable.getName() << std::endl;
             // std::cout << "SIGNAl MAX" << signal->GetMaximum() << std::endl;
         }
-        signal = analysis->getHist(histvariable, "Higgs Signal 1000", true, channelName);
-        std::cout << "number of signal bins is: " << signal->GetNbinsX();
+        // signal = analysis->getHist(histvariable, signalName, true, channelName);
+        //std::cout << "number of signal bins is: " << signal->GetNbinsX();
         maxCombinedY = signal->GetMaximum();
-        std::cout << "Signal has: " << signal->GetEntries() << std::endl;
-        //double maxCombinedY = signal->GetMaximum();
-        std::cout << "Signal Max: " << maxCombinedY << std::endl;
+        //std::cout << "Signal has: " << signal->GetEntries() << std::endl;
+        double maxCombinedY = signal->GetMaximum();
+        //std::cout << "Signal Max: " << maxCombinedY << std::endl;
     } 
 
 
@@ -405,7 +407,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
         {
             continue;
         }
-        std::cout << hist->GetName() << " has "<< hist->GetNbinsX() << std::endl;
+        //std::cout << hist->GetName() << " has "<< hist->GetNbinsX() << std::endl;
         backgroundHists.push_back(hist);
         double max = 0;
         for (int i = 1; i <= hist->GetNbinsX(); i++)
@@ -418,9 +420,9 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
         }
 
 
-        std::cout << "Background Hist Max: " << max << std::endl;
+        //std::cout << "Background Hist Max: " << max << std::endl;
         maxCombinedY += max;
-        std::cout << "Max Combined Y: " << maxCombinedY << std::endl;
+        //std::cout << "Max Combined Y: " << maxCombinedY << std::endl;
     }
     //std::cout << backgroundHists.size() << "\n";
     //std::cout << "End" << std::endl;
