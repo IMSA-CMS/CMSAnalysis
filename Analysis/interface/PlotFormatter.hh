@@ -86,10 +86,6 @@ class PlotFormatter
     
         int GetOrder(TH1* data, TH1* signal, THStack* background);
 
-        TH1* DrawFirst(THStack*& background, TH1*& signal, TH1*& data, TPad*& topPad, float upperMasslimit, int firstBin);
-
-        void DrawOtherHistograms(THStack*& background, TH1*& signal, TH1*& data);
-
         void DrawOtherHistograms(std::vector<TH1*>& hists, std::vector<int>& colors, int firstIndex);
 
         void ChangeAxisTitles(TH1*& hist, TString xAxisTitle, TString yAxisTitle);

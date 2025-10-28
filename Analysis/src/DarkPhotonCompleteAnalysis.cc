@@ -126,7 +126,7 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
             auto leptonBackgrounds = std::make_shared<Channel>(channelName, processes);
 
             for(std::string processName : leptonBackgrounds->getNames()) {
-                std::cout << processName << std::endl;
+                // std::cout << processName << std::endl;
 
 
                 if(processName == "Dark Photon Signal") {
