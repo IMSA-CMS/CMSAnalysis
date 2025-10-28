@@ -29,7 +29,7 @@ public:
 
 	FitFunction();
 	FitFunction(TF1* func, FunctionType funcType);
-	TF1* getFunction();
+	TF1* getFunction() const;
 	void setFunction(TF1* function, FunctionType funcType);
 	FunctionType getFunctionType();
 	void setFunctionType(FunctionType funcType);

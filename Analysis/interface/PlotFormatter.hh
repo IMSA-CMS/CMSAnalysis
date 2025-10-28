@@ -53,7 +53,8 @@ class PlotFormatter
             
         //Complete Signal/Background plot
         TCanvas* completePlot(std::shared_ptr<FullAnalysis> analysis, HistVariable histvariable,
-            TString xAxisTitle, TString yAxisTitle, bool scaleTodata, bool includeSignal, bool includeData, std::string channelName = "");
+            TString xAxisTitle, TString yAxisTitle, bool scaleTodata, bool includeSignal, 
+            bool includeData, std::string channelName = "");
 
         //Deletes all hist pointers made with the PlotFormatter
         void deleteHists();

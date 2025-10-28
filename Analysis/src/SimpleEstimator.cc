@@ -24,7 +24,8 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, HistVaria
         std::cout << "Error: " << error.what();
         return 0;
     }   
-    if (!hist) {
+    if (!hist)
+    {
        return 0;
     }
     if (isData)
