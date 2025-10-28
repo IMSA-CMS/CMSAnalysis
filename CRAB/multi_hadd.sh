@@ -30,5 +30,7 @@ for dir in */; do
     
     # Copy output
     mkdir -p "$CMSSW_BASE/src/CMSAnalysis/$OUTPUT_DIR"
+
+    #Clean the Files
     root -l -b -q "$CMSSW_BASE/src/CMSAnalysis/CRAB/cleanfile.C+( \"$dir/$dir.root\", \"$CMSSW_BASE/src/CMSAnalysis/$OUTPUT_DIR/$dir.root\" )"
 done
