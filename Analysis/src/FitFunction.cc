@@ -1,111 +1,106 @@
 #include "CMSAnalysis/Analysis/interface/FitFunction.hh"
-#include <TMath.h>
 #include "TF1.h"
-#include <fstream>
-#include <sstream>
+#include <TMath.h>
+#include <boost/algorithm/string/split.hpp>
 #include <iostream>
+#include <sstream>
 #include <string>
+#include <utility>
 #include <vector>
-#include <algorithm>
 
 double FitFunction::powerLaw(double *x, double *par)
 {
-	return par[0] * pow(x[0] - par[1], par[2]);
+    return par[0] * pow(x[0] - par[1], par[2]);
 }
 
 double FitFunction::DSCB(double *x, double *par)
 {
-	double alpha_l = par[0]; 
-	double alpha_h = par[1]; 
-	double n_l     = par[2]; 
-	double n_h     = par[3]; 
-	double mean	= par[4]; 
-	double sigma	= par[5];
-	double N	= par[6];
-	float t = (x[0]-mean)/sigma;
-	double result;
-	double fact1TLessMinosAlphaL = alpha_l/n_l;
-	double fact2TLessMinosAlphaL = (n_l/alpha_l) - alpha_l -t;
-	double fact1THihgerAlphaH = alpha_h/n_h;
-	double fact2THigherAlphaH = (n_h/alpha_h) - alpha_h +t;
+    const double alpha_l = par[0];
+    const double alpha_h = par[1];
+    const double n_l = par[2];
+    const double n_h = par[3];
+    const double mean = par[4];
+    const double sigma = par[5];
+    const double N = par[6];
+    const float t = (x[0] - mean) / sigma;
+    double result;
+    const double fact1TLessMinosAlphaL = alpha_l / n_l;
+    const double fact2TLessMinosAlphaL = (n_l / alpha_l) - alpha_l - t;
+    const double fact1THihgerAlphaH = alpha_h / n_h;
+    const double fact2THigherAlphaH = (n_h / alpha_h) - alpha_h + t;
 
-	double root2 = std::pow(2,0.5);
-	if (-alpha_l <= t && alpha_h >= t)
-	{
-		result = exp(-0.5*t*t);
-	}
-	else if (t < -alpha_l)
-	{
-		result = exp(-0.5*alpha_l*alpha_l)*pow(fact1TLessMinosAlphaL*fact2TLessMinosAlphaL, -n_l);
-	}
-	else //if (t > alpha_h)
-	{
-		result = exp(-0.5*alpha_h*alpha_h)*pow(fact1THihgerAlphaH*fact2THigherAlphaH, -n_h);
-	}
-	
-	double lowTailNorm = (n_l/std::abs(alpha_l)) * 1/(n_l - 1) * std::exp(-0.5 * alpha_l * alpha_l);
-	double highTailNorm = (n_h/std::abs(alpha_h)) * 1/(n_h - 1) * std::exp(-0.5 * alpha_h * alpha_h);
-	double gaussianNormA = erf(std::abs(alpha_l/root2)) + erf(std::abs(alpha_h/root2));  
-	double gaussianNormB = std::pow(M_PI/2, 0.5) * gaussianNormA;
-	double functionNormalization = std::pow(sigma * (gaussianNormB + lowTailNorm + highTailNorm ), -1);
+    double root2 = std::pow(2, 0.5);
+    if (-alpha_l <= t && alpha_h >= t)
+    {
+        result = exp(-0.5 * t * t);
+    }
+    else if (t < -alpha_l)
+    {
+        result = exp(-0.5 * alpha_l * alpha_l) * pow(fact1TLessMinosAlphaL * fact2TLessMinosAlphaL, -n_l);
+    }
+    else // if (t > alpha_h)
+    {
+        result = exp(-0.5 * alpha_h * alpha_h) * pow(fact1THihgerAlphaH * fact2THigherAlphaH, -n_h);
+    }
 
+    const double lowTailNorm = (n_l / std::abs(alpha_l)) * 1 / (n_l - 1) * std::exp(-0.5 * alpha_l * alpha_l);
+    const double highTailNorm = (n_h / std::abs(alpha_h)) * 1 / (n_h - 1) * std::exp(-0.5 * alpha_h * alpha_h);
+    const double gaussianNormA = erf(std::abs(alpha_l / root2)) + erf(std::abs(alpha_h / root2));
+    const double gaussianNormB = std::pow(M_PI / 2, 0.5) * gaussianNormA;
+    const double functionNormalization = std::pow(sigma * (gaussianNormB + lowTailNorm + highTailNorm), -1);
 
-	// globalCounter++;
-	// if(globalCounter%1000 == 0){
-	// //std::cout<<"Global norm: " << globalNorm << "\n";
-	// }
-	return N * functionNormalization * result;	
+    // globalCounter++;
+    // if(globalCounter%1000 == 0){
+    // //std::cout<<"Global norm: " << globalNorm << "\n";
+    // }
+    return N * functionNormalization * result;
 }
 
 double FitFunction::doubleGaussian(double *x, double *par)
 {
-    return par[0] * TMath::Gaus(*x, par[1], par[2]) + par[3] * TMath::Gaus(*x, par[4], par[5]);
+    return par[0] * TMath::Gaus(*x, par[1], par[2]) + par[3] * TMath::Gaus(x[0], par[4], par[5]);
 }
 
-FitFunction::FitFunction() {}
-
-FitFunction::FitFunction(TF1* func, FunctionType funcType)
-	: function(func), functionType(funcType) {}
-
-TF1* FitFunction::getFunction() const
+FitFunction::FitFunction(const TF1 &func, FunctionType funcType, std::string channelName)
+    : function(func), channelName(std::move(channelName)), functionType(funcType)
 {
-	return function;
 }
 
-void FitFunction::setFunction(TF1* func, FunctionType funcType)
+TF1 *FitFunction::getFunction()
 {
-	function = func;
-	functionType = funcType;
+    return &function;
 }
 
-void FitFunction::setFunctionType(FunctionType funcType)
+void FitFunction::setFunction(const TF1 &func, FunctionType funcType)
 {
-	functionType = funcType;
+    function = func;
+    functionType = funcType;
 }
 
 FitFunction::FunctionType FitFunction::getFunctionType()
 {
-	return functionType;
+    return functionType;
 }
 
 std::string FitFunction::getName()
 {
-	return function->GetName();
+    return function.GetName();
 }
 
 double FitFunction::getMin()
 {
-	double min, max;
-	function->GetRange(min, max);
-	return min;
+    double min;
+    double max;
+    function.GetRange(min, max);
+    return min;
 }
 double FitFunction::getMax()
 {
-	double min, max;
-	function->GetRange(min, max);
-	return max;
+    double min;
+    double max;
+    function.GetRange(min, max);
+    return max;
 }
-
 
 // std::string FitFunction::getFormulaName(const std::string& name)
 // {
@@ -156,32 +151,36 @@ double FitFunction::getMax()
 // 	}
 // }
 
-FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const std::string& name, const std::string& expFormula, double min, double max)
+FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const std::string &name,
+                                              const std::string &expFormula, double min, double max,
+                                              std::string channelName)
 {
-	TF1* func;
-	// std::cout << "ExpressionFormula enum: " << FunctionType::EXPRESSION_FORMULA << '\n';
-	// std::cout << "Function Type: " << functionType << '\n';
-	// std::cout << "Got to create function\n";
-	switch (functionType)
-	{	
-		case FunctionType::EXPRESSION_FORMULA:
-			func = new TF1(name.data(), expFormula.data(), min, max);
-			break;
-		case FunctionType::DOUBLE_SIDED_CRYSTAL_BALL:
-			// std::cout << "Crystal ball\n";
-			func = new TF1(name.data(), DSCB, min, max, 7);
-			break;
-		case FunctionType::POWER_LAW:
-			func = new TF1(name.data(), powerLaw, min, max, 3);
-			break;
-		case FunctionType::DOUBLE_GAUSSIAN:
-			func = new TF1(name.data(), doubleGaussian, min, max, 6);
-			break;
-		default:
-			throw std::invalid_argument("Not a valid FunctionType enum value");
-	};
+    TF1 func;
+    // std::cout << "ExpressionFormula enum: " << FunctionType::EXPRESSION_FORMULA << '\n';
+    // std::cout << "Function Type: " << functionType << '\n';
+    // std::cout << "Got to create function\n";
+    switch (functionType)
+    {
+    case FunctionType::EXPRESSION_FORMULA:
+        func = TF1(name.data(), expFormula.data(), min, max, TF1::EAddToList::kNo);
+        break;
+    case FunctionType::DOUBLE_SIDED_CRYSTAL_BALL:
+        // std::cout << "Crystal ball\n";
+        func = TF1(name.data(), DSCB, min, max, 7, 1, TF1::EAddToList::kNo);
+        func.SetParNames("#alpha_{low}", "#alpha_{high}", "n_{low}", "n_{high}", "#mu", "#sigma", "norm");
+        break;
+    case FunctionType::POWER_LAW:
+        func = TF1(name.data(), powerLaw, min, max, 3, 1, TF1::EAddToList::kNo);
+        break;
+    case FunctionType::DOUBLE_GAUSSIAN:
+        func = TF1(name.data(), doubleGaussian, min, max, 6, 1, TF1::EAddToList::kNo);
+        func.SetParNames("mul_{1}", "#mu_{1}", "#sigma_{1}", "mul_{2}", "#mu_{2}", "#sigma_{2}");
+        break;
+    default:
+        throw std::invalid_argument("Not a valid FunctionType enum value");
+    };
 
-	return FitFunction(func, functionType);
+    return FitFunction(func, functionType, std::move(channelName));
 }
 
 // std::ostream& operator<<(std::ostream& stream, FitFunction& function)
@@ -207,95 +206,90 @@ FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const s
 // 	return stream;
 // }
 
-
 std::string FitFunction::getChannelName()
 {
-	std::vector<std::string> channel_parameters = split(getName(), '/');
-	return channel_parameters[0];
+    return channelName;
 }
 
 std::string FitFunction::getParameterName()
 {
-	std::vector<std::string> channel_parameters = split(getName(), '/');
-	return channel_parameters[1];
+    std::vector<std::string> channel_parameters = split(getName(), '/');
+    return channel_parameters[1];
 }
 
-
 // Helper function for splitting strings
-std::vector<std::string> FitFunction::split(const std::string& str, char delimiter) {
+std::vector<std::string> FitFunction::split(const std::string &str, char delimiter)
+{
     std::vector<std::string> tokens;
     std::stringstream ss(str);
     std::string token;
-    
-    while (std::getline(ss, token, delimiter)) {
+
+    while (std::getline(ss, token, delimiter))
+    {
         tokens.push_back(token);
     }
-    
+
     return tokens;
 }
 
-
-
-
-//OLD CODE
-std::ostream& operator<<(std::ostream& stream, FitFunction& function)
+// OLD CODE
+std::ostream &operator<<(std::ostream &stream, FitFunction &function)
 {
-	TF1* func = function.getFunction();
-	// std::cout << "Got functions\n";
-	stream << "Name: " << func->GetName() << '\n';
-	stream << "FunctionTypeEnum: " << function.getFunctionType() << '\n';
-	stream << "ExpressionFormula: ";
-	if (function.getFunctionType() == FitFunction::FunctionType::EXPRESSION_FORMULA)
-		stream << func->GetExpFormula() << '\n';
-	else
-		stream << "None\n";
+    TF1 *func = function.getFunction();
+    // std::cout << "Got functions\n";
+    stream << "Name: " << func->GetName() << '\n';
+    stream << "FunctionTypeEnum: " << static_cast<int>(function.getFunctionType()) << '\n';
+    stream << "ExpressionFormula: ";
+    if (function.getFunctionType() == FitFunction::FunctionType::EXPRESSION_FORMULA)
+        stream << func->GetExpFormula() << '\n';
+    else
+        stream << "None\n";
 
-	// std::cout << "Got expFormula\n";
-	// auto formulaName = FitFunction::getFormulaName(func->GetName());
-	// auto it = std::find(FitFunction::functionList.begin(), FitFunction::functionList.end(), formulaName);
-	// if (it != FitFunction::functionList.end())
-	// {
-	// 	stream << "Name: " << func->GetName() << '\n';
-	// 	stream << "Function: " << formulaName << '\n';
-	// }
-	// else
-	// {
-	// 	stream << "Name: " << func->GetName() << '\n';
-	// 	stream << "Function: " << func->GetExpFormula() << '\n';
-	// }
-	double min = 0;
-	double max = 0;
-	func->GetRange(min, max);
-	stream << "Range: " << min << ' ' << max << '\n';
-	stream << "NumOfParameters: " << func->GetNpar() << '\n';
+    // std::cout << "Got expFormula\n";
+    // auto formulaName = FitFunction::getFormulaName(func->GetName());
+    // auto it = std::find(FitFunction::functionList.begin(), FitFunction::functionList.end(), formulaName);
+    // if (it != FitFunction::functionList.end())
+    // {
+    // 	stream << "Name: " << func->GetName() << '\n';
+    // 	stream << "Function: " << formulaName << '\n';
+    // }
+    // else
+    // {
+    // 	stream << "Name: " << func->GetName() << '\n';
+    // 	stream << "Function: " << func->GetExpFormula() << '\n';
+    // }
+    double min = 0;
+    double max = 0;
+    func->GetRange(min, max);
+    stream << "Range: " << min << ' ' << max << '\n';
+    stream << "NumOfParameters: " << func->GetNpar() << '\n';
 
-	stream << "ParaNames: ";
-	for (int i = 0; i < func->GetNpar(); ++i)
-	{
-		stream << func->GetParName(i) << ' ';
-		// stream << 1 << ' ';
-	}
+    stream << "ParaNames: ";
+    for (int i = 0; i < func->GetNpar(); ++i)
+    {
+        stream << func->GetParName(i) << ' ';
+        // stream << 1 << ' ';
+    }
 
-	stream << '\n' << "Parameters: ";
-	for (int i = 0; i < func->GetNpar(); ++i)
-	{
-		stream << func->GetParameter(i) << ' ';
-		// stream << 1 << ' ';
-	}
+    stream << '\n' << "Parameters: ";
+    for (int i = 0; i < func->GetNpar(); ++i)
+    {
+        stream << func->GetParameter(i) << ' ';
+        // stream << 1 << ' ';
+    }
 
-	stream << '\n' << "ParamErrors: ";
+    stream << '\n' << "ParamErrors: ";
 
-	for (int i = 0; i < func->GetNpar(); ++i)
-	{
-		stream << func->GetParError(i) << ' ';
-		// stream << 1 << ' ';
-	}
+    for (int i = 0; i < func->GetNpar(); ++i)
+    {
+        stream << func->GetParError(i) << ' ';
+        // stream << 1 << ' ';
+    }
 
-	stream << '\n';
-	// std::cout << "Got parameters\n";
-	return stream;
+    stream << '\n';
+    // std::cout << "Got parameters\n";
+    return stream;
 }
-
 
 // std::ostream& operator<<(std::ostream& stream, TF1* func)
 // {
@@ -489,7 +483,7 @@ std::istream& operator>>(std::istream& stream, FitFunction& func)
     }
 
     // --- Create FitFunction object ---
-    FitFunction function = FitFunction::createFunctionOfType(funcType, name, expFormula, min, max);
+    FitFunction function = FitFunction::createFunctionOfType(funcType, name, expFormula, min, max, "");
 
     // --- Set parameters ---
     for (int i = 0; i < params; ++i)

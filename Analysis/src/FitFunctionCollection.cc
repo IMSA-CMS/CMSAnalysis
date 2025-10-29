@@ -1,4 +1,5 @@
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
+#include <TF1.h>
 #include <fstream>
 #include <string>
 //run HiggsSignalFit make sure it works with adjustments
@@ -18,7 +19,7 @@ FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string &fi
         while (file)
         {
             std::cout << "Reading function #" << "..." << std::endl;
-            FitFunction func;
+            FitFunction func(TF1(), FitFunction::FunctionType::EXPRESSION_FORMULA, "");
             file >> func;
             if (!file)
             {
@@ -122,7 +123,8 @@ size_t FitFunctionCollection::size() const
 
 FitFunction &FitFunctionCollection::operator[](const std::string &key)
 {
-    return functions[key];
+
+    return get(key);
 }
 
 FitFunction &FitFunctionCollection::get(const std::string &key)
@@ -131,7 +133,7 @@ FitFunction &FitFunctionCollection::get(const std::string &key)
     {
         return functions.at(key);
     }
-    catch (std::out_of_range& e)
+    catch (std::out_of_range &e)
     {
         std::cout << "FitFunctionCollection Error: No FitFunction with string key of " << key << '\n';
         throw e;
