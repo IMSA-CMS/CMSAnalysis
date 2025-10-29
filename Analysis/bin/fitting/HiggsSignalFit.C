@@ -68,7 +68,7 @@ void HiggsSignalFit()
 
                     skewSum += selectedHist->GetSkewness();
                     maxBinPctSum += selectedHist->GetMaximum() / selectedHist->Integral();
-                    n += 1;
+                    ++n;
                 }
 
                 if (n < 2)
