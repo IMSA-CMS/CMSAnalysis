@@ -229,7 +229,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         // {
         //     for(std::string systematic : systematics)
         //     {
-        //         auto sys = process->calcSystematic(HistVariable(HistVariable::VariableType::SameSignInvariantMass), systematic);
+        //         auto sys = process->calcSystematic(HistVariable(HistVariable::VariableType::SameSignInvariantMass), systematic, true);
         //         process->addSystematic(sys);
         //     }
         // }        

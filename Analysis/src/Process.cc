@@ -10,6 +10,7 @@
 #include <algorithm>
 #include "TList.h"
 #include "CMSAnalysis/Utility/interface/ScaleFactor.hh" 
+#include "CMSAnalysis/Analysis/interface/ShapeSystematic.hh"
 
 TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 {
@@ -204,36 +205,72 @@ std::pair<TH1*, TH1*> Process::combineSystematics(std::vector<std::shared_ptr<Pr
 	for (auto process : processes)
 	{
 		multiSystematics.push_back(std::make_shared<MultiSystematic>(process->systematics));
-		std::cout << "Size: " << multiSystematics.size() << std::endl;
+		//std::cout << "Size: " << multiSystematics.size() << std::endl;
 	}
 	return MultiSystematic::combineSystematics(multiSystematics, original);
 }
-std::shared_ptr<Systematic> Process::calcSystematic(HistVariable histType, std::string systematicName)
+
+
+ std::shared_ptr<Systematic> Process::calcSystematic(HistVariable histType, std::string systematicName, bool isShape)
 {
-	
+    if (isShape)
+        return calcShapeSystematic(histType, systematicName);
+    else
+        return calcRateSystematic(histType, systematicName);
+}
 
-	histType.setSystematic(ScaleFactor::SystematicType::Up, systematicName);
-	TH1* up = getHist(histType);
-	 
-	histType.setSystematic(ScaleFactor::SystematicType::Down, systematicName);
-	TH1* down = getHist(histType);
+ std::shared_ptr<Systematic> Process::calcRateSystematic(HistVariable histType, std::string systematicName)
+{
+    HistVariable histUp = histType;
+    HistVariable histDown = histType;
+    
+    histUp.setSystematic(ScaleFactor::SystematicType::Up, systematicName);
+    TH1* up = getHist(histUp, true);
 
-	histType.setSystematic(ScaleFactor::SystematicType::Nominal, "");
-	TH1* nominal = getHist(histType);
+    histDown.setSystematic(ScaleFactor::SystematicType::Down, systematicName);
+    TH1* down = getHist(histDown, true);
 
-	if (!nominal || !up || !down)
-	{
-		throw std::runtime_error("Nominal histogram not found in process: " + this->name);
-	}
 
-	//integral of up and down histograms
-	double upIntegral = up->Integral();
-	double downIntegral = down->Integral();	
-	double nominalIntegral = nominal->Integral();
+	if (!up || !down)
+    {
+        std::cerr << "Could not create rate systematic histograms for " << systematicName << " in process " << name << std::endl;
+        return nullptr;
+    }
 
-	double upYield = upIntegral / nominalIntegral;
-	double downYield = downIntegral / nominalIntegral;
-	
-	
-	return std::make_shared<RateSystematic>(systematicName, upYield, downYield);
+	//return std::pair {up,down};
+
+    histType.setSystematic(ScaleFactor::SystematicType::Nominal, "");
+    TH1* nominal = getHist(histType, true);
+
+    if (!nominal || !up || !down || nominal->Integral() == 0)
+    {
+        std::cerr << "Missing histograms or zero integral in process: " << name << std::endl;
+        return nullptr;
+    }
+
+    double upYield = up->Integral() / nominal->Integral();
+    double downYield = down->Integral() / nominal->Integral();
+
+    return std::make_shared<RateSystematic>(systematicName, upYield, downYield);
+}
+
+ std::shared_ptr<Systematic> Process::calcShapeSystematic(HistVariable histType, std::string systematicName)
+{
+    
+	HistVariable histUp = histType;
+    HistVariable histDown = histType;
+    
+    histUp.setSystematic(ScaleFactor::SystematicType::Up, systematicName);
+    TH1* up = getHist(histUp, true);
+
+    histDown.setSystematic(ScaleFactor::SystematicType::Down, systematicName);
+    TH1* down = getHist(histDown, true);
+
+    if (!up || !down)
+    {
+        std::cerr << "Could not create shape systematic histograms for " << systematicName << " in process " << name << std::endl;
+        return nullptr;
+    }
+
+    return std::make_shared<ShapeSystematic>(systematicName, up, down);
 }

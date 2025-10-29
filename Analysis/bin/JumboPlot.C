@@ -298,12 +298,19 @@ void JumboPlot()
 		HistVariable(ParticleType::muon(), 1, HistVariable::VariableType::Pt),
 		HistVariable(ParticleType::electron(), 1, HistVariable::VariableType::Phi),
 		HistVariable(ParticleType::muon(), 1, HistVariable::VariableType::Phi),
-		HistVariable(ParticleType::electron(), 0, HistVariable::VariableType::SameSignInvariantMass), // finish changing these
+		HistVariable(ParticleType::electron(), 0, HistVariable::VariableType::SameSignInvariantMass),
 		HistVariable(ParticleType::muon(), 0, HistVariable::VariableType::SameSignInvariantMass),
 		HistVariable(ParticleType::electron(), 0, HistVariable::VariableType::OppositeSignInvariantMass),
 		HistVariable(ParticleType::muon(), 0, HistVariable::VariableType::OppositeSignInvariantMass),
 		HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
 		HistVariable(HistVariable::VariableType::InvariantMass, "", false, true),
+
+		HistVariable(HistVariable::VariableType::RecoOppositeSignInvariantMass),
+		HistVariable(HistVariable::VariableType::RecoOppositeSignInvariantMass),
+		HistVariable(HistVariable::VariableType::RecoSameSignInvariantMass),
+		HistVariable(HistVariable::VariableType::RecoSameSignInvariantMass),
+
+		HistVariable(HistVariable::VariableType::MET),
 	};
 	////////////////////////////////// DP ANALYSIS //////////////////////////////////
 	
@@ -323,6 +330,8 @@ void JumboPlot()
 	//makePlots("Higgs Signal 4Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames4, connecters, connecters2, connecters3, false, true);
 	//makePlots("Higgs Signal 3Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames3, connecters, connecters2, connecters3, false, true);
 	makePlots("Higgs Signal 2Channel", higgsAnalysis, channelTwoLeptons, variables ,true, false);
+	makePlots("Higgs Signal 3Channel", higgsAnalysis, channelThreeLeptons, variables , false, true);
+	makePlots("Higgs Signal 4Channel", higgsAnalysis, channelFourLeptons, variables , false, true);
 	
 	//makePlots("Dark Photon Signal", DarkPhotonAnalysis, channels, variables, true);
 }
