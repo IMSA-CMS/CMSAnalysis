@@ -123,7 +123,7 @@ void SuperPlot()
 	HistVariable nameVar(ParticleType::muon(), 1, HistVariable::VariableType::Eta);
 	// //auto ana = std::make_shared<HiggsCompleteAnalysis>();
 	auto ana = std::make_shared<DarkPhotonCompleteAnalysis>();
-	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, true, false, true, "Low Mass and Same Sign/1Jet");
+	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, false, true, "Low Mass and Same Sign/1Jet");
 
 	//TCanvas *canvas = plotFormatter->simpleAnalysisHist(backgroundHists, );
 
