@@ -27,7 +27,8 @@ TH1* SingleProcess::getHist(HistVariable histType, bool scaleToExpected) const
     if(scaleToExpected) {
         double yield = getExpectedYield(histType);
         double events = hist->Integral();
-        if(events > 0) {
+        if(events > 0) 
+        {
             hist->Scale(yield/events);
             //std::cout << "Yield: " << yield << " Events: " << events << "\n";
             //std::cout << getName() << " Scale: " << (yield/events) << "\n";

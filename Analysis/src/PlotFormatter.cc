@@ -326,7 +326,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
 
     //int firstBin = 0;
     
-    //int rebinFactor = 5;
+    int rebinFactor = 5;
     
     std::vector<std::shared_ptr<Channel>> channels = analysis->getChannels();
     processes = channels.at(0);
@@ -357,10 +357,15 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     
     if (includeData)
     {
+        std::cout << "Data getHist begin! \n\n\n";
         data = analysis->getHist(histvariable, dataNames.at(0), false, channelName);
+        std::cout << "Data has: " << data->GetEntries() << std::endl;
+        std::cout << "Data getHist end! \n\n\n";
     }
 
     //std::cout << "Data has: " << data->GetEntries() << std::endl;
+
+
 
     //data = signal = new TH1F("h1", "empty", 1, 0.0, 0.0);
     double maxCombinedY = 0;
@@ -377,22 +382,25 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
             // std::cout << histvariable.getName() << std::endl;
             // std::cout << "SIGNAl MAX" << signal->GetMaximum() << std::endl;
         }
-        signal = analysis->getHist(histvariable, "Higgs Signal 1000", true, channelName);
-        std::cout << "number of signal bins is: " << signal->GetNbinsX();
+        // signal = analysis->getHist(histvariable, signalName, true, channelName);
+        //std::cout << "number of signal bins is: " << signal->GetNbinsX();
         maxCombinedY = signal->GetMaximum();
-    }
+        //std::cout << "Signal has: " << signal->GetEntries() << std::endl;
+        double maxCombinedY = signal->GetMaximum();
+        //std::cout << "Signal Max: " << maxCombinedY << std::endl;
+    } 
+
 
     std::vector<TH1*> backgroundHists;
    
     std::vector<std::shared_ptr<Process>> backgroundProcesses;
     for(std::string name : backgroundNames)
     {
-        std::cout << name << std::endl;
-        std::cout << channelName << std::endl;
-        std::cout << histvariable.getName() << std::endl;
+        // std::cout << name << std::endl;
+        // std::cout << channelName << std::endl;
+        // std::cout << histvariable.getName() << std::endl;
         
         auto hist = analysis->getHist(histvariable, name, true, channelName); // error message: Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
-        
 
         backgroundProcesses.push_back(analysis->getChannel(channelName)->findProcess(name));
         // auto hist = process->getSystematicHist(histvariable, true).second;
@@ -402,10 +410,22 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
         {
             continue;
         }
-        std::cout << hist->GetName() << " has "<< hist->GetNbinsX() << std::endl;
+        //std::cout << hist->GetName() << " has "<< hist->GetNbinsX() << std::endl;
         backgroundHists.push_back(hist);
-        
-        maxCombinedY += hist->GetMaximum();
+        double max = 0;
+        for (int i = 1; i <= hist->GetNbinsX(); i++)
+        {
+            std::cout << "Bin " << i << " has " << hist->GetBinContent(i) << " events." << std::endl;
+            if (hist->GetBinContent(i) > max)
+            {
+                max = hist->GetBinContent(i);
+            }
+        }
+
+
+        //std::cout << "Background Hist Max: " << max << std::endl;
+        maxCombinedY += max;
+        //std::cout << "Max Combined Y: " << maxCombinedY << std::endl;
     }
     //std::cout << backgroundHists.size() << "\n";
     //std::cout << "End" << std::endl;
@@ -435,6 +455,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     background->SetMaximum(maxCombinedY);
     //std::cout << "MAXCOMBINEDY: " << maxCombinedY << std::endl;
     
+
     FormatSignalData(background, signal, data, backgroundHists, rebinFactor);
 
 
@@ -450,12 +471,48 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     gStyle->SetOptStat(0);
     topPad->Draw();
     topPad->cd();
-
+    std::cout << "1.3" << std::endl;
+    //error after this 
 
     //Draws the histogram with more events first (bigger axis)
-    //TH1* hist = DrawFirst(background, signal, data, topPad, upperMasslimit, firstBin, first);
-    TH1* hist = DrawFirst(background, signal, data, topPad, upperMasslimit, firstBin);
-    DrawOtherHistograms(background, signal, data); 
+    TH1* hist = background->GetHistogram();
+    double xAxisMin = 1e-5;
+    for(const auto&& obj2 : *background->GetHists()) 
+    {
+        TH1* backgroundHist = dynamic_cast<TH1*>(obj2);
+        //backgroundHist->SetLineColor(kBlack);
+        backgroundHist->SetLineWidth(2);
+        // backgroundHist->GetXaxis()->SetLimits(firstBin, upperMasslimit);
+        backgroundHist->SetMinimum(xAxisMin);
+    }
+    background->Draw("HIST");
+    stackVector.push_back(background);  
+    
+    hist = background->GetHistogram();
+    topPad->Update();
+
+    
+    // Draws the remaining histograms
+    if (signal)
+    {
+        signal->SetLineColor(6);
+	    signal->SetFillColor(0);
+        signal->SetLineWidth(3);
+        signal->Draw("HIST SAME");
+       // std::cout << "first = 0";
+        //std::cout << "Hist content: " << signal->Integral() << '\n';
+        //signal->SetLineColor(kBlack);
+        //signal->SetLineWidth(2);
+    }
+    if (data)
+    {
+        histVector.push_back(signal);
+        data->Draw("P SAME E1 X0");
+        data->SetLineColor(kBlack);
+        data->SetLineWidth(2);
+        histVector.push_back(data);
+    }
+
     hist->SetMinimum(1e-2);
 
 
@@ -552,7 +609,7 @@ void PlotFormatter::FormatSignalData(THStack*& background, TH1*& signal, TH1*& d
     while ((hist = (TH1*)next()))
     {
     //std::cout << hist->GetName() << " entries " << hist->GetEntries() << std::endl;  // Print info about each histogram
-        std::cerr << "TList 4" << std::endl;
+        //std::cerr << "TList 4" << std::endl;
         if (hist->GetEntries() == 0)
         {
             continue;
@@ -594,144 +651,14 @@ void PlotFormatter::DrawOtherHistograms(std::vector<TH1*>& hists, std::vector<in
 {
     for (size_t i = 0; i < hists.size(); ++i) {
         if (static_cast<int>(i) == firstIndex) continue; // Skip the first histogram, already drawn
-
         TH1* hist = hists[i];
         hist->SetLineColor(colors[i]);
         hist->SetLineWidth(2);
         hist->Draw("HIST SAME");
-        histVector.push_back(hist);
+        histVector.push_back(hist); 
 
        // std::cout << "First index: " << firstIndex << "Index " << i << " Hist name " << hist->GetName() << " color " << hist->GetLineColor() << std::endl;
     }
-}
-
-void PlotFormatter::DrawOtherHistograms(THStack*& background, TH1*& signal, TH1*& data)
-{
-    // if(first == 0) {
-
-    // double xAxisMin = 1e-5;
-
-    // for(const auto&& obj2 : *background->GetHists()) 
-    // {
-    //     TH1* backgroundHist = dynamic_cast<TH1*>(obj2);
-    //     //backgroundHist->SetLineColor(kBlack);
-    //     backgroundHist->SetLineWidth(2);
-    //     // backgroundHist->GetXaxis()->SetLimits(firstBin, upperMasslimit);
-    //     backgroundHist->SetMinimum(xAxisMin);
-    // }
-    // background->Draw("HIST");
-    // stackVector.push_back(background);  
-    // topPad->update();
-
-    if (signal)
-    {
-        signal->SetLineColor(6);
-	    signal->SetFillColor(0);
-        signal->SetLineWidth(3);
-        signal->Draw("HIST SAME");
-       // std::cout << "first = 0";
-        //std::cout << "Hist content: " << signal->Integral() << '\n';
-        //signal->SetLineColor(kBlack);
-        //signal->SetLineWidth(2);
-    }
-    if (data)
-    {
-        histVector.push_back(signal);
-        data->Draw("P SAME E1 X0");
-        data->SetLineColor(kBlack);
-        data->SetLineWidth(2);
-        histVector.push_back(data);
-    }
-    // else if(first == 1) 
-    // {
-    //     //std::cout << "first = 1";
-    //     //background->SetLineColor(kBlack);
-    //     background->Draw("HIST SAME E5");
-    //     stackVector.push_back(background);
-    //     data->Draw("P SAME E1 X0");
-    //     data->SetLineColor(kBlack);
-    //     data->SetLineWidth(2);
-    //     histVector.push_back(data);
-    // }
-    // else 
-    // {
-    //     //std::cout << "first = 2";
-    //     signal->Draw("HIST SAME");
-    //     signal->SetLineColor(kBlack);
-    //     signal->SetLineWidth(2);
-    //     histVector.push_back(signal);
-    //     background->Draw("HIST SAME");
-    //     //std::cout<<"hist size" << background->Integral();
-    //     //background->SetLineColor(kBlack);
-    //     stackVector.push_back(background);
-    //     for (int i = 0; i < data->GetNbinsX(); i++)
-    //     {
-    //         data->SetBinError(i, 0);
-    //     }
-    //     data->Draw("P SAME E1 X0");
-    // }
-
-}
-
-TH1* PlotFormatter::DrawFirst(THStack*& background, TH1*& signal, TH1*& data, TPad*& topPad, float upperMasslimit, int firstBin)
-{
-    TH1* hist;
-    //std::cout << "1.31" << std::endl;
-    hist = background->GetHistogram();
-    double xAxisMin = 1e-5;
-    // std::cout << background->GetName() << std::endl;
-    // std::cout << background->GetNhists() << std::endl;
-    // if(first == 0)
-    // {
-        for(const auto&& obj2 : *background->GetHists()) 
-        {
-            TH1* backgroundHist = dynamic_cast<TH1*>(obj2);
-            //backgroundHist->SetLineColor(kBlack);
-            backgroundHist->SetLineWidth(2);
-           // backgroundHist->GetXaxis()->SetLimits(firstBin, upperMasslimit);
-            backgroundHist->SetMinimum(xAxisMin);
-        }
-        background->Draw("HIST");
-        stackVector.push_back(background);  
-    // }
-    // else if (first == 1) 
-    // {
-    //     //signal->SetLineColor(kBlack);
-    //     signal->SetLineColor(6);
-	//     signal->SetFillColor(0);
-    //     signal->SetLineWidth(2);
-    //     signal->SetMinimum(xAxisMin);
-    //     signal->Draw("HIST");
-    //     signal->Draw("HIST");
-    //     histVector.push_back(signal);
-    //    // signal->GetXaxis()->SetLimits(firstBin, upperMasslimit);
-    // }
-    // else 
-    // {
-    //     data->Draw("P E1 X0");
-    //     data->SetMinimum(xAxisMin);
-    //     histVector.push_back(data);
-    //     //data->GetXaxis()->SetLimits(firstBin, upperMasslimit);
-    // }
-    //std::cout << "1.32" << std::endl;
-
-    //TH1* hist;
-    hist = background->GetHistogram();
-
-    //std::cout << first << std::endl;
-    // if(first == 0) {
-        //std::cout << "check 1" << "\n";
-        //  hist = background->GetHistogram();
-    // }
-    // else if (first == 1){
-    //     hist = signal;
-    // }
-    // else {
-    //     hist = data;
-    // }
-    //std::cout << "1.33" << std::endl;
-    topPad->Update();
-    return hist;
 }
 
 int PlotFormatter::GetOrder(TH1* data, TH1* signal, THStack* background)

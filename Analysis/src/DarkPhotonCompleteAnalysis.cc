@@ -47,6 +47,26 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
     //for (std::string recoDecay : recoDecays){
       //  for(double massTarget : massTargets) {
 
+    std::vector<std::pair<std::string, std::string>> darkPhotonFiles = {
+        {"Dark Photon Baseline", "darkPhotonBaselineRun2.root"}, 
+        {"Dark Photon Higgs4DP", "darkPhotonDecay_Higgs4DP.root"},
+        {"Dark Photon HiggsDPZ", "darkPhotonDecay_HiggsDPZ.root"},
+        {"Dark Photon SUSY", "darkPhotonDecay_SUSY.root"},
+        {"Dark Photon ZPrime", "darkPhotonDecay_ZPrime.root"},
+        {"Dark Photon Higgs125", "darkPhotonHiggs125.root"},
+        {"Dark Photon Higgs300", "darkPhotonHiggs300.root"},
+        {"Dark Photon 2FSR_0_1", "darkPhotonRun2FSR_0_1.root"},
+        {"Dark Photon 2FSR_0_3", "darkPhotonRun2FSR_0_3.root"},
+        {"Dark Photon DpMass_0_1", "darkPhoton_DpMass0_1.root"},
+        {"Dark Photon DpMass_0_2", "darkPhoton_DpMass0_2.root"},
+        {"Dark Photon DpMass_0_4", "darkPhoton_DpMass0_4.root"},
+        {"Dark Photon DpMass_0_6", "darkPhoton_DpMass0_6.root"},
+        {"Dark Photon DpMass_0_9", "darkPhoton_DpMass0_9.root"},
+        {"Dark Photon DpMass_1_2", "darkPhoton_DpMass1_2.root"},
+        {"Dark Photon DpMass_1_5", "darkPhoton_DpMass1_5.root"},
+        {"Dark Photon DpMass_2_5", "darkPhoton_DpMass2_5.root"},
+        {"Dark Photon DpMass_4_0", "darkPhoton_DpMass4_0.root"}
+    };
 
     std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Sign", "Low Mass and Different Sign"};
     std::vector<std::string> nJets = {"1Jet", "multiJet"};
@@ -104,8 +124,14 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
             multiBosonBackground->addProcess(makeBasicProcess(filePath, "WZZ.root", "WWZ", reader, luminosity, histVariableToFileMapping));
             multiBosonBackground->addProcess(makeBasicProcess(filePath, "ZZZ.root", "ZZZ", reader, luminosity, histVariableToFileMapping));
            
-            auto darkPhotonSignal = std::make_shared<Process>("Dark Photon Signal", 5);
-            darkPhotonSignal->addProcess(makeBasicProcess(filePath, "darkPhotonBaselineRun2.root", "DarkPhoton", reader, luminosity, histVariableToFileMapping));
+
+            for (const auto& [crossSectionName, fileName] : darkPhotonFiles) 
+            {
+                auto darkPhotonProcess = std::make_shared<Process>(crossSectionName, 5);
+                darkPhotonProcess->addProcess(makeBasicProcess(filePath, fileName, "DarkPhoton", reader, luminosity, histVariableToFileMapping));
+                processes.push_back(darkPhotonProcess);
+            }
+           
 
 
             auto darkPhotonData = std::make_shared<Process>("Data", 1);
@@ -120,23 +146,28 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
             processes.push_back(dyBackground);
             processes.push_back(qcdBackground);
             processes.push_back(multiBosonBackground);
-            processes.push_back(darkPhotonSignal);
+            //processes.push_back(darkPhotonSignal);
             processes.push_back(darkPhotonData);
 
             auto leptonBackgrounds = std::make_shared<Channel>(channelName, processes);
 
             for(std::string processName : leptonBackgrounds->getNames()) {
-                std::cout << processName << std::endl;
+                // std::cout << processName << std::endl;
 
 
-                if(processName == "Dark Photon Signal") {
-                    leptonBackgrounds->labelProcess("signal", processName);
+                if(processName.find("Dark Photon") != std::string::npos) 
+                {
+                    if (processName == "Dark Photon Baseline")
+                    {
+                        leptonBackgrounds->labelProcess("signal", processName);
+                    }
                 }
-                // "Monte Carlo Data"
-                else if(processName == "Data") { //This line is only used for complete plots
+                else if(processName == "Data")
+                { //This line is only used for complete plots
                     leptonBackgrounds->labelProcess("data", processName);
                 }
-                else {
+                else
+                {
                     leptonBackgrounds->labelProcess("background", processName);
                 }
             }
