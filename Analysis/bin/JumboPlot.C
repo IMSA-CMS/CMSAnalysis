@@ -309,8 +309,8 @@ void JumboPlot()
 	
 	// const std::string output_cuts_files1_10 = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/LeptonJetReconstruction_All/";
 	// const std::string cross_section = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt";
-	// auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>(output_cuts_files1_10, cross_section);
-	// std::vector<std::shared_ptr<Channel>> channels = DarkPhotonAnalysis->getChannels();
+	 auto darkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>(output_cuts_files1_10, cross_section);
+	 std::vector<std::shared_ptr<Channel>> channels = DarkPhotonAnalysis->getChannels();
 
 	// std::vector<std::string> rowNames = {"High Mass and Same Sign", "Low Mass and Same Sign", "High Mass and Different Signs"};
     // std::vector<std::string> graphableTypes = {"Eta", "Lepton Jet Delta R", "Lepton Jet Mass", "Phi", "Pt"};
@@ -320,9 +320,9 @@ void JumboPlot()
 	// std::vector<std::string> bsvtfutsps = {}; // bullshitvectortofillupthesestupidparameterslots
 	// std::vector<std::string> connectors = {"_1st Highest Lepton Jet "};
 
-	//makePlots("Higgs Signal 4Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames4, connecters, connecters2, connecters3, false, true);
-	//makePlots("Higgs Signal 3Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames3, connecters, connecters2, connecters3, false, true);
+	makePlots("Higgs Signal 4Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames4, connecters, connecters2, connecters3, false, true);
+	makePlots("Higgs Signal 3Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames3, connecters, connecters2, connecters3, false, true);
 	makePlots("Higgs Signal 2Channel", higgsAnalysis, channelTwoLeptons, variables ,true, false);
 	
-	//makePlots("Dark Photon Signal", DarkPhotonAnalysis, channels, variables, true);
+	makePlots("Dark Photon Signal", darkPhotonAnalysis, channels, variables, true);
 }

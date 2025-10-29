@@ -110,6 +110,8 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
 
 
     TH1::SetDefaultSumw2();
+    for (bool zSelection : {true, false})
+    {
     for (const std::string &recoDecay : recoDecays)
     {
         std::vector<std::shared_ptr<Process>> processes;
@@ -128,7 +130,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
                 std::string decayName = recoDecay + "_" + genSimDecay;
                 auto higgsMassGroup = std::make_shared<Process>("Higgs Signal " + std::to_string((int)massTarget), 1);
 
-                auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(decayName);
+                auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(decayName, true, zSelection);
                 
                 //histVariableToFileMapping["Same Sign Invariant Mass"] = decayName + "__hists/" + decayName + "_Reco Same Sign Invariant Mass";
                 //histVariableToFileMapping["X Projection"] = decayName + "__hists/" + decayName + "_Reco Invariant Mass Background X Projection";
@@ -151,7 +153,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         }
 
 
-        auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(recoDecay);
+        auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(recoDecay, true, zSelection);
 
 
         auto zzBackground = std::make_shared<Process>("ZZ Background", ZZBackgroundColor);
@@ -236,35 +238,39 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         // }        
     
 
-        auto leptonProcesses = std::make_shared<Channel>(recoDecay, processes);
+            std::string modeLabel = zSelection ? "_ZPeak" : "";
 
-        for (std::string processName : leptonProcesses->getNames())
-        {
-            // std::cout << processName << std::endl;
-            // Change this line to make the described name your signal process name.
-            if (processName == "Higgs Signal 1000")
+            auto leptonProcesses = std::make_shared<Channel>(recoDecay + modeLabel, processes);
+
+            for (std::string processName : leptonProcesses->getNames())
             {
-                leptonProcesses->labelProcess("signal", processName);
+                // std::cout << processName << std::endl;
+                // Change this line to make the described name your signal process name.
+                if (processName == "Higgs Signal 1000")
+                {
+                    leptonProcesses->labelProcess("signal", processName);
+                }
+                else if (processName.substr(0, 5) == "Group" || processName.substr(0, 5) == "Higgs")
+                {
+                    //leptonProcesses->labelProcess("signal", processName);
+                    // std::cout << "Labeled Signal: " << processName << std::endl;
+                }
+                // "Monte Carlo Data"
+                else if (processName == "Data")
+                { // This line is only used for complete plots
+                    leptonProcesses->labelProcess("data", processName);
+                    // std::cout << "Labeled Data: " << processName << std::endl;
+                }
+                else
+                {
+                    leptonProcesses->labelProcess("background", processName);
+                    // std::cout << "Labeled Background: " << processName << std::endl;
+                }
             }
-            else if (processName.substr(0, 5) == "Group" || processName.substr(0, 5) == "Higgs")
-            {
-                //leptonProcesses->labelProcess("signal", processName);
-                // std::cout << "Labeled Signal: " << processName << std::endl;
-            }
-            // "Monte Carlo Data"
-            else if (processName == "Data")
-            { // This line is only used for complete plots
-                leptonProcesses->labelProcess("data", processName);
-                // std::cout << "Labeled Data: " << processName << std::endl;
-            }
-            else
-            {
-                leptonProcesses->labelProcess("background", processName);
-                // std::cout << "Labeled Background: " << processName << std::endl;
-            }
+            // leptonBackgrounds->cleanProcesses();
+            leptonProcesses->setHistogramName("leptonHist_" + modeLabel);
+            std::cout << "created histogram: " << "leptonHist_" + modeLabel << std::endl;
+            getChannelsProtected().push_back(leptonProcesses);
         }
-        // leptonBackgrounds->cleanProcesses();
-        getChannelsProtected().push_back(leptonProcesses);
-    }
 }
 
