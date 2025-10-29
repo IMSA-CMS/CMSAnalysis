@@ -1,189 +1,106 @@
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
+#include <TF1.h>
 #include <fstream>
 #include <string>
+//run HiggsSignalFit make sure it works with adjustments
 
-void addToChannelModifierMap(std::string newKey, 
-    std::string newValue, 
-    std::map<std::string,std::string>* map, 
-    std::vector<std::string>* keysInMap);
 
 FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string &fileName)
 {
-    std::fstream file(fileName, std::ios_base::in);
-    if (file.is_open())
+    std::ifstream file(fileName);
+    
+    if (file)
     {
-        size_t size;
-        file >> size;
-        FitFunctionCollection functions(size);
-        for (size_t i = 0; i < size; ++i)
+        //size_t size;
+        //file >> size;
+        //std::cout << "First number read (expected size): " << size << std::endl;
+        FitFunctionCollection functions;
+        //for (size_t i = 0; i < size; ++i)
+        while (file)
         {
-            FitFunction func;
+            std::cout << "Reading function #" << "..." << std::endl;
+            FitFunction func(TF1(), FitFunction::FunctionType::EXPRESSION_FORMULA, "");
             file >> func;
+            if (!file)
+            {
+                break;
+            }
             functions.insert(func);
         }
-        file.close();
         return functions;
     }
     else
     {
         throw std::runtime_error("File not loaded successfully");
     }
-}
-
-
-void FitFunctionCollection::saveFunctions(const std::string& fileName, bool append)
-{
-    std::fstream file;
-    //std::cout << "fstream object created";
-
-    // Loads in possible modifiers for the channel names (Ex: to differentiate between X and Y)
-    // Key: Modifier in parameters or some other place
-    // Value: What you want to add to the name of the channelName
-    std::map<std::string, std::string> channelNameModifiers = {};
-    std::vector<std::string> keysInChannelNameModifiers = {};
-
-    // Here is a template for adding new Keys to channelNameModifers:
-    // addToStringVectorMap("newKey", "newValue", &channelNameModifiers, &keysInChannelNameModifiers);
-    addToChannelModifierMap("mll1", "_X", &channelNameModifiers, &keysInChannelNameModifiers);
-    addToChannelModifierMap("mll2", "_Y", &channelNameModifiers, &keysInChannelNameModifiers);
-
-    if (!file.is_open())
-    {
-        if (append)
-            file = std::fstream(fileName, std::ios_base::app);
-        else
-            file = std::fstream(fileName, std::ios_base::out);
-    }
-    else
-    {
-        throw std::invalid_argument(fileName + " file is already open");
-    }
-    //std::cout << "if-block passed";
-
-	std::map<std::string, std::vector<FitFunction>> channel_parameters;
-	std::vector<std::string> channelNames;
-
-	// file << functions.size() << '\n';
-
-	for (auto& funcPair : functions)
-	{
-		std::string channel = funcPair.second.getChannelName();
-		auto channelExists = std::find(channelNames.begin(), channelNames.end(), channel);
-		if (channelExists == channelNames.end())
-		{
-			std::cout << channel << " does not exist in file \n";
-			channelNames.push_back(channel);
-			channel_parameters[channel] = {funcPair.second};
-		}
-		else
-		{
-			std::cout << channel << " exists in file \n";
-			channel_parameters[channel].push_back(funcPair.second);
-		}
-
-		//file << funcPair.second << "\n";
-	}
-
-    std::cout << "Writing to file... \n";
-	for (std::string channel : channelNames)
-	{
-        // Get labels for any channel name modifiers, parameters like p0, p1, etc. from first function in functionParameters
-		auto firstFunction = channel_parameters.at(channel)[0].getFunction();
-        std::string channelNameModifier = ""; 
-        for (auto modifier : keysInChannelNameModifiers)
-        {
-            if (std::string(firstFunction->GetName()).find(modifier) != std::string::npos)
-            {
-                channelNameModifier = modifier;
-            }
-        }
-
-        file << "Channel name: " << channel + channelNameModifier << '\n' << '\n';
-		std::vector<FitFunction> functionParameters = channel_parameters.at(channel);
-        if (functionParameters.size() != 0)
-        {
-            std::cout << "Function parameters retrieved \n";
-
-        }
-        else
-        {
-            std::cout << "Warning: no function parameters retrieved \n";
-        }
-        //std::cout << "Function parameters retrieved \n";
-		file << "Calculated Parameters" << "		";
-		
-		// // Get labels for parameters like p0, p1, etc. from first function in functionParameters
-		// auto firstFunction = channel_parameters.at(channel)[0].getFunction();
-		for (int i = 0; i < firstFunction->GetNpar(); ++i)
-		{
-			file << firstFunction->GetParName(i) << "		";
-		}
-		for (int i = 0; i < firstFunction->GetNpar(); ++i)
-		{
-			file << firstFunction->GetParName(i) << "_error" << "		";
-		}
-
-        file << '\n';
-
-		// List out the functions with their values for each parameter
-		for (auto& parameter : functionParameters)
-		{
-			file << parameter;
-		}
-
-		file << '\n' << '\n' << '\n';
-
-
-	}
-
-	file.close();
-}
-
-// ONLY use this to add new key/value pairs to channelNameModifiers in saveFunctions 
-// and keep track of keys 
-void addToChannelModifierMap(std::string newKey, 
-    std::string newValue, 
-    std::map<std::string,std::string>* map, 
-    std::vector<std::string>* keysInMap)
-{
-    (*map)[newKey] = newValue;
-    if (std::find(keysInMap->begin(), keysInMap->end(), newKey) == keysInMap->end())
-    {
-        keysInMap->push_back(newKey);
-    }
 
 }
-
-// void removeFromStringVectorMap()
+// FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string &fileName)
 // {
-    
+//     std::fstream file(fileName, std::ios_base::in);
+//     if (!file)
+//     {
+//         throw std::runtime_error("File not loaded successfully: " + fileName);
+//     }
+
+//     std::cout << "Opening file: " << fileName << std::endl;
+
+//     size_t size;
+//     file >> size;
+//     std::cout << "Declared number of functions (from file): " << size << std::endl;
+
+//     FitFunctionCollection functions;
+
+//     for (size_t i = 0; i < size; ++i)
+//     {
+//         std::cout << "Reading function #" << (i + 1) << std::endl;
+
+//         FitFunction func;
+//         if (!(file >> func))
+//         {
+//             std::cerr << "Failed to read FitFunction #" << (i + 1)
+//                       << " at file position " << file.tellg() << ".\n";
+//             break; // keep original behavior
+//         }
+
+//         auto tf1 = func.getFunction();
+//         if (!tf1)
+//         {
+//             std::cerr << "TF1 is null for function #" << (i + 1) << ". Skipping.\n";
+//             continue;
+//         }
+
+//         std::string name = tf1->GetName();
+//         std::cout << "Inserting function: " << name << std::endl;
+
+//         functions.insert(func);
+//     }
+
+//     std::cout << "Finished reading functions.\n";
+//     std::cout << "Declared size: " << size
+//               << ", Actually inserted: " << functions.size() << "\n";
+
+//     return functions;
 // }
 
+void FitFunctionCollection::saveFunctions(const std::string &fileName, bool append)
+{
+    std::ofstream file(fileName, std::ios::app);
+    if (!file)
+    {
+        throw std::invalid_argument("File " + fileName + " not found!");
+    }
 
-// void FitFunctionCollection::saveFunctions(const std::string& fileName, bool append)
-// {
-// 	std::fstream file;
-// 	if (!file.is_open()) 
-// 	{
-// 		if (append) 
-// 			file = std::fstream(fileName, std::ios_base::app);
-// 		else
-// 			file = std::fstream(fileName, std::ios_base::out);
-// 	} 
-// 	else 
-// 	{
-// 		throw std::invalid_argument(fileName + " file is already open");
-// 	}
+    //file << functions.size() << '\n';
+    for (auto &funcPair : functions)
+    {
+        file << funcPair.second << "\n";
+    }
+}
 
-// 	file << functions.size() << '\n';
-// 	for (auto& funcPair : functions)
-// 	{
-// 		file << funcPair.second << "\n";
-// 	}
-// 	file.close();
-// }
-
-FitFunctionCollection::FitFunctionCollection() {}
+FitFunctionCollection::FitFunctionCollection()
+{
+}
 
 FitFunctionCollection::FitFunctionCollection(std::vector<FitFunction> &functions)
 {
@@ -194,10 +111,10 @@ FitFunctionCollection::FitFunctionCollection(std::vector<FitFunction> &functions
     }
 }
 
-FitFunctionCollection::FitFunctionCollection(size_t size)
-{
-    functions.reserve(size);
-}
+// FitFunctionCollection::FitFunctionCollection(size_t size)
+// {
+//     functions.reserve(size);
+// }
 
 size_t FitFunctionCollection::size() const
 {
@@ -206,7 +123,8 @@ size_t FitFunctionCollection::size() const
 
 FitFunction &FitFunctionCollection::operator[](const std::string &key)
 {
-    return functions[key];
+
+    return get(key);
 }
 
 FitFunction &FitFunctionCollection::get(const std::string &key)
@@ -215,7 +133,7 @@ FitFunction &FitFunctionCollection::get(const std::string &key)
     {
         return functions.at(key);
     }
-    catch (std::out_of_range& e)
+    catch (std::out_of_range &e)
     {
         std::cout << "FitFunctionCollection Error: No FitFunction with string key of " << key << '\n';
         throw e;

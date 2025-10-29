@@ -15,13 +15,20 @@
 #include <string>
 #include <vector>
 
-std::vector<std::string> HiggsCompleteAnalysis::genSimDecays{"eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu",
-                                            "euet", "euuu", "euut", "eutt", "etet", "etuu", "etut",
-                                            "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt"};
+const std::vector<std::string> HiggsCompleteAnalysis::genSimDecays{
+    "eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt",
+    "etet", "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt"};
 
-std::vector<std::string> HiggsCompleteAnalysis::recoDecays{"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu",
-                                          "uue",  "uuu",  "ee",   "e e",  "eu",   "e u",  "uu",  "u u", "none"};
+const std::vector<std::string> HiggsCompleteAnalysis::recoDecays{
+    "eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet",
+    "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt", "eee",  "eeu",  "eue",
+    "euu",  "uue",  "uuu",  "ee",   "e e",  "eu",   "e u",  "uu",   "u u",  "none"};
 
+const std::vector<std::string> HiggsCompleteAnalysis::systematics = {"RecoHiggsScaleFactor", "HiggsIDISOScaleFactor",
+                                                                     "HiggsTriggerScaleFactor"};
+
+// Actual masses for the Higgs signal
+const std::vector<int> HiggsCompleteAnalysis::massTargets{500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
 
 double HiggsCompleteAnalysis::getBranchingRatio(const std::string &channel)
 {
@@ -35,11 +42,7 @@ double HiggsCompleteAnalysis::getBranchingRatio(const std::string &channel)
 }
 
 HiggsCompleteAnalysis::HiggsCompleteAnalysis()
-{
-    // This is a mass we put into background because the
-    // makeBasicProcess method requires it. It doesn't actually
-    // make sense so in the future fix this
-    //  double tempMass = 1400;
+{   
 
     const int higgsColor = kOrange + 10;
     const int ttbarColor = kBlue;
@@ -48,8 +51,11 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     const int ZZBackgroundColor = kGreen + 10;
     const int WJetsBackgroundColor = kViolet;
 
-    // Actual masses for the Higgs signal
-    std::vector<double> massTargets{500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
+    // This is a mass we put into background because the
+    // makeBasicProcess method requires it. It doesn't actually
+    // make sense so in the future fix this
+    //  double tempMass = 1400;
+
     // const std::vector<std::string> recoDecays{"u u", "uu", "uuu", "uuuu"};
     // const std::vector<std::string> recoDecays{"ee", "eu", "e u", "uu", "u u"};
     // const std::vector<std::string> recoDecays{"u u"};
@@ -60,27 +66,27 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     // std::make_shared<CrossSectionReader>("/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
     auto reader = std::make_shared<CrossSectionReader>(
         "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
-        //  const std::string filePath = "/uscms/home/bhenning/Analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/HiggsFinal/";
-    // const std::string signalFilePath = "/uscms/home/bhenning/Analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/HiggsFinal/";
+    //  const std::string filePath = "/uscms/home/bhenning/Analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/HiggsFinal/";
+    // const std::string signalFilePath =
+    // "/uscms/home/bhenning/Analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/HiggsFinal/";
 
     const std::string filePath = "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/HiggsProjection/";
-    const std::string signalFilePath =
-        "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/HiggsProjection/";
+    const std::string signalFilePath = "/uscms/home/bhenning/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Output/HiggsNewOutput/";
     // const std::string myPath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     // const std::string filePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     // const std::string signalFilePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
 
     // Luminosity: 1.39
-    double luminosity = 139;
+    double luminosity = 137.62;
 
     std::vector<HistVariable> histVariablesBackground;
     std::vector<HistVariable> histVariablesData;
 
-    std::vector<std::string> rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
-    ///std::vector<std::string> rowNames = {"ee", "eu", "uu", "e u", "u u", "e e"};
-    std::vector<std::string> dataConnecters = {"_Pass_1st Highest mu- ", "_Pass_1st Highest e- "};
-    std::vector<std::string> connecters = {""};
-    std::vector<std::string> systematics = {"RecoHiggsScaleFactor", "HiggsIDISOScaleFactor", "HiggsTriggerScaleFactor"};
+    // std::vector<std::string> rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu",
+    // "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
+    // ///std::vector<std::string> rowNames = {"ee", "eu", "uu", "e u", "u u", "e e"};
+    // std::vector<std::string> dataConnecters = {"_Pass_1st Highest mu- ", "_Pass_1st Highest e- "};
+    // std::vector<std::string> connecters = {""};
 
     std::vector<ParticleType> particleTypes = {ParticleType::electron(), ParticleType::muon(), ParticleType::tau()};
     std::vector<int> orders = {1, 2, 3, 4}; //whatever max order
@@ -93,6 +99,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     HistVariable::VariableType::OppositeSignInvariantMass,
     HistVariable::VariableType::InvariantMass
     };
+
 
     for (ParticleType pType : particleTypes)
     {
@@ -136,8 +143,8 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
                 // histVariablesSignal.push_back(HistVariable::sameSignMass(decayName + "__hists/" + decayName + "_Reco Same Sign Invariant Mass"));
                 //histVariablesSignal.push_back(HistVariable(Selector::None, HistVariable::VariableType::SameSignInvariantMass));
                 double branchingRatioFixer = getBranchingRatio(genSimDecay);
-                // std::cout << "GENSIMDECAY: " << genSimDecay << std::endl;
-                // std::cout << "BRANCHINGRATIOFIXER " << branchingRatioFixer << std::endl;
+                //std::cout << "GENSIMDECAY: " << genSimDecay << std::endl;
+                //std::cout << "BRANCHINGRATIOFIXER " << branchingRatioFixer << std::endl;
                 auto higgsProcess = makeBasicProcess(signalFilePath, "Higgs" + std::to_string((int)massTarget) + ".root", "higgs4l" + std::to_string((int)massTarget), reader, luminosity, histVariableToFileMapping, false, branchingRatioFixer);
                 auto higgsSignal = std::make_shared<Process>("Higgs signal " + genSimDecay + " " + std::to_string((int)massTarget), 1);
                 higgsSignal->addProcess(higgsProcess);
@@ -211,7 +218,6 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         higgsData->addProcess(makeBasicProcess(filePath, "Muon2017.root", "Muon2017", reader, luminosity, histVariableToFileMapping, true));
         higgsData->addProcess(makeBasicProcess(filePath, "Muon2018.root", "Muon2018", reader, luminosity, histVariableToFileMapping, true));
 
-        
         processes.push_back(dyBackground);
         //processes.push_back(dyBackgroundNoVeto);
         processes.push_back(higgsData);
@@ -233,7 +239,8 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         //         process->addSystematic(sys);
         //     }
         // }        
-        
+    
+
         auto leptonProcesses = std::make_shared<Channel>(recoDecay, processes);
 
         for (std::string processName : leptonProcesses->getNames())
@@ -242,7 +249,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
             // Change this line to make the described name your signal process name.
             if (processName == "Higgs Signal 1000")
             {
-                leptonProcesses->labelProcess("signal", processName);
+                leptonProcesses->labelProcess(Channel::Label::Signal, processName);
             }
             else if (processName.substr(0, 5) == "Group" || processName.substr(0, 5) == "Higgs")
             {
@@ -252,12 +259,12 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
             // "Monte Carlo Data"
             else if (processName == "Data")
             { // This line is only used for complete plots
-                leptonProcesses->labelProcess("data", processName);
+                leptonProcesses->labelProcess(Channel::Label::Data, processName);
                 // std::cout << "Labeled Data: " << processName << std::endl;
             }
             else
             {
-                leptonProcesses->labelProcess("background", processName);
+                leptonProcesses->labelProcess(Channel::Label::Background, processName);
                 // std::cout << "Labeled Background: " << processName << std::endl;
             }
         }

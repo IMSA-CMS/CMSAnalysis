@@ -22,8 +22,7 @@ std::shared_ptr<HistNameFinder> ihistVariableToFileMapping) :
 	
 TFile* RootFileInput::getFile(std::string fileSource) const
 {
-	auto file = TFile::Open(fileSource.c_str(), "read");
-
+	auto file = TFile::Open(fileSource.c_str(), "read");  //error message during some runthroughs - Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
 	//std::cout << "Reading file: " << fileSource << std::endl;
 
 	if(!file)
@@ -40,73 +39,64 @@ TFile* RootFileInput::getFile(std::string fileSource) const
 TH1* RootFileInput::getHist(HistVariable histType) const
 {
 	TH1::AddDirectory(kFALSE);
-
 	std::string name = histVariableToFileMapping->getHistName(histType);
 
-
 	TH1* hist;
-	uint pos = name.find("/");
+	std::size_t pos = name.find("/");
 	auto file = getFile(fileSource);
+	std::string histName = name;
+	TDirectory* dir = file;
 	//std::cout << "RootFileInput Hit 2 " << std::endl;
 	// TH1* emptyHist = new TH1F("h1", "empty", 1, 0.0, 0.0);
-	if (pos != std::string::npos)
+	while (pos != std::string::npos)
 	{
-
-		std::string folder = name.substr(0,pos);
-		std::string histName = name.substr(pos+1);
-		TDirectory* dir = (TDirectory*)file->GetDirectory(folder.c_str());
-		if (dir)
+		std::string folder = histName.substr(0,pos);
+		histName = histName.substr(pos+1);
+		dir = (TDirectory*)dir->GetDirectory(folder.c_str());
+		if (!dir) 
 		{
-		
-			dir->cd();
-			hist = dynamic_cast<TH1*>(dir->Get(histName.c_str()));
-			//std::cout << "RootFileInput Hit 3 " << std::endl;
-			if (!hist)
-			{
-				std::cout << "No histogram named " << name << " found in file " << fileSource <<"\n";
-				delete file;
-				return nullptr;
-			}
-			delete dir;
-		}
-		else
-		{
-			
-			//We need the nullptr in when adding histograms to know to
-			//skip the histogram and not break histogram addition
 			std::cout << "No directory named " << folder << " found in file " << fileSource <<"\n";
 			// std::cout << "No directory named " + folder + " found in file: "<< fileSource <<"\n";
-
 			delete dir;
 			delete hist;
 			delete file;
 			return nullptr;
 		}
+		dir->cd();
+		pos = histName.find("/");
 	}
-	else
+
+	hist = dynamic_cast<TH1*>(dir->Get(histName.c_str()));
+	//std::cout << "RootFileInput Hit 3 " << std::endl;
+	if (!hist)
 	{
-	    //std::cout << "RootFileInput ELSE Hit 1 " << std::endl;
-		//std::cout << "Here" << std::endl;
-		hist = dynamic_cast<TH1*>(file->Get(name.c_str()));
 		
+		delete file;
+		return nullptr;
 	}
-
-	if (!hist || hist->IsZombie())
-	{ 
-		//std::cout << "RootFileInput Zombie Hit 1 " << std::endl;
-		throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]");
-
-		if (hist->IsZombie())
-		{
-			//std::cout << "RootFileInput Zombie Hit 2 " << std::endl;
-			throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]. Hist is a Zombie.");
-		}
-		else
-		{
-			//std::cout << "RootFileInput Zombie Else Hit 2 " << std::endl;
-			throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]");
-		}
+	if (dir != file)
+	{
+		delete dir;
 	}
+		
+	
+
+	// if (!hist || hist->IsZombie())
+	// { 
+	// 	std::cout << "RootFileInput Zombie Hit 1 " << std::endl;
+	// 	throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]");
+
+	// 	if (hist->IsZombie())
+	// 	{
+	// 		std::cout << "RootFileInput Zombie Hit 2 " << std::endl;
+	// 		throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]. Hist is a Zombie.");
+	// 	}
+	// 	else
+	// 	{
+	// 		std::cout << "RootFileInput Zombie Else Hit 2 " << std::endl;
+	// 		throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]");
+	// 	}
+	// }
 	/*
 	if(dynamic_cast<TH2 *>(hist) != 0)
 	{
@@ -123,30 +113,20 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 	// }
 	// else 
 	// {
-		TH1* response = new TH1F("Hist Clone", hist->GetTitle(), hist->GetXaxis()->GetNbins(), hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
+	if (hist->GetXaxis()->GetNbins() <= 0)
+	{
+		delete hist;
+		delete file;
+		return nullptr;
+	}
 
-		// if (histType.is2DHistX())
-		// {
-		// 	TH2* hist2D = dynamic_cast<TH2 *>(hist);
-		// 	if (hist2D == nullptr)
-		// 	{
-		// 		throw std::runtime_error("Cast error");
-		// 	}
-		// 	response = hist2D->ProjectionX("_px", 0, -1, "E");
-		// }
-		// else if (histType.is2DHistY())
-		// {
-		// 	TH2* hist2D = dynamic_cast<TH2 *>(hist);
-		// 	if (hist2D == nullptr)
-		// 	{
-		// 		throw std::runtime_error("Cast error");
-		// 	}
-		// 	response = hist2D->ProjectionY("_py", 0, -1, "E");
-		// }
-		// else
+
+	TH1* response = new TH1F("Hist Clone", hist->GetTitle(), hist->GetXaxis()->GetNbins(), hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
+
 		{
 			response->Add(hist);
 		}
+		std::cout << "Hist max: " << response->GetMaximum() << std::endl;
 		//std::cout << "Hist Clone Entries: " << response->GetEntries() << std::endl;
 
 		delete hist;
@@ -198,21 +178,30 @@ int RootFileInput::getTotalEvents() const
 	auto file = getFile(fileSource);
 	bool end = false; 
 	int index = 1;
-	int events = 0;
-	while(!end){
-		std::string s = "NEvents;" + std::to_string(index);
-    	const char* fName = s.c_str();
-		TDisplayText *totalevents = file->Get<TDisplayText>(fName);
-		if(totalevents)
-		{
-			events+=std::stoi(totalevents->GetString().Data());
-			index+=2;
-		}
-		else{
-			end = true;
-		}
-
+	auto *totalevents = file->Get<TObjString>("NEvents");
+	if (!totalevents)
+	{
+		throw std::runtime_error("Total events not found in file: " + fileSource);
 	}
+	int events = std::stoi(totalevents->GetString().Data());
 	delete file;
 	return events;
+	// while (!end)
+	// {
+	// 	std::string s = "NEvents;" + std::to_string(index);
+    // 	const char* fName = s.c_str();
+	// 	TDisplayText *totalevents = file->Get<TDisplayText>(fName);
+	// 	if(totalevents)
+	// 	{
+	// 		events+=std::stoi(totalevents->GetString().Data());
+	// 		index+=2;
+	// 	}
+	// 	else
+	// 	{
+	// 		end = true;
+	// 	}
+
+	// }
+	
+	//return events;
 }	

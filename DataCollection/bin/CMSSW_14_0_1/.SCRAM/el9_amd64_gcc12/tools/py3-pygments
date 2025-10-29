@@ -1,0 +1,13 @@
+{
+  "PY3_PYGMENTS_BASE": "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/py3-Pygments/2.15.1-dde488aca5b9cb25d96afd5327a7bc01",
+  "RUNTIME": {
+    "PATH:PATH": [
+      "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/py3-Pygments/2.15.1-dde488aca5b9cb25d96afd5327a7bc01/bin"
+    ]
+  },
+  "TOOLNAME": "py3-pygments",
+  "TOOLVERSION": "2.15.1-dde488aca5b9cb25d96afd5327a7bc01",
+  "VARIABLES": [
+    "PY3_PYGMENTS_BASE"
+  ]
+}

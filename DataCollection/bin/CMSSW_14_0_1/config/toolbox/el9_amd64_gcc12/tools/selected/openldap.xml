@@ -1,0 +1,7 @@
+<tool name="openldap" version="2.4.45-85dc038139329c975a0c0beeca95338b">
+  <client>
+    <environment name="OPENLDAP_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/openldap/2.4.45-85dc038139329c975a0c0beeca95338b"/>
+    <environment name="LIBDIR" default="$OPENLDAP_BASE/lib"/>
+  </client>
+  <use name="db6"/>
+</tool>

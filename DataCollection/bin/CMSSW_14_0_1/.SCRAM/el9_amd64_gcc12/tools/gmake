@@ -1,0 +1,13 @@
+{
+  "MAKE_BASE": "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/gmake/4.3-24ac97ee64086a54e50727abb3edab0c",
+  "RUNTIME": {
+    "PATH:PATH": [
+      "/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/gmake/4.3-24ac97ee64086a54e50727abb3edab0c/bin"
+    ]
+  },
+  "TOOLNAME": "gmake",
+  "TOOLVERSION": "4.3-24ac97ee64086a54e50727abb3edab0c",
+  "VARIABLES": [
+    "MAKE_BASE"
+  ]
+}

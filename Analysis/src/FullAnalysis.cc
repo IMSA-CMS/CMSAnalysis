@@ -29,10 +29,10 @@ std::shared_ptr<Channel> FullAnalysis::getChannel(std::string name)
     throw std::runtime_error("Channel of name " + name + " not found.");
 }
 
-std::vector<TH1 *> FullAnalysis::getHistograms(const HistVariable &histType, const std::string &processName, const std::string &channel, bool scaleToExpected)
+std::vector<TH1 *> FullAnalysis::getHistograms(const HistVariable &histType, Channel::Label label, const std::string &channel, bool scaleToExpected)
 {
     auto targetChannel = getChannel(channel);
-    return targetChannel->getHists(histType, processName, scaleToExpected);
+    return targetChannel->getHists(histType, label, scaleToExpected);
 }
 
 // SingleProcess FullAnalysis::makeBasicProcess(const std::vector<HistVariable>& histVariables, std::string filePathway, std::string fileName,
@@ -80,7 +80,7 @@ TH1 *FullAnalysis::getHist(HistVariable histType, std::string processName, bool 
     std::string name = processName;
     for (const auto &channel : channels)
     {
-        if (channel->getName() == channelName)
+        if (channel->getName() == channelName) //print out channel name and get name to see where error is
         {
             // channelNumber++;
             // std::vector<TH1*> channelHists = channel->getHists(histType, "signal", false);

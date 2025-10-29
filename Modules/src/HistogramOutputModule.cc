@@ -22,7 +22,7 @@ void HistogramOutputModule::writeObjects(TFile *outFile)
 {
     for (const auto &entry : objects)
     {
-        std::cout << "Writing object: " << std::get<1>(entry.first) << " to path: " << std::get<0>(entry.first) << "\n";
+        //std::cout << "Writing object: " << std::get<1>(entry.first) << " to path: " << std::get<0>(entry.first) << "\n";
         writeRootObj(outFile, "hists/" + std::get<0>(entry.first), entry.second);
     }
 }
