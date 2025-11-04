@@ -5,5 +5,6 @@
 #scp HiggsSignal.html chenm@lxplus.cern.ch:/eos/user/c/chenm/www
 #scp HiggsSignal4Channel.html chenm@lxplus.cern.ch:/eos/user/c/chenm/www
 #scp HiggsSignal3Channel.html chenm@lxplus.cern.ch:/eos/user/c/chenm/www
-scp HiggsSignal2Channel.html chenm@lxplus.cern.ch:/eos/user/c/chenm/www
-#scp jumboPlotStorage/HiggsSignal/*.png chenm@lxplus.cern.ch:/eos/user/c/chenm/www/jumboPlotStorage/HiggsSignal
+#scp HiggsSignal2Channel.html chenm@lxplus.cern.ch:/eos/user/c/chenm/www
+scp index.html jplotnic@lxplus.cern.ch:/eos/user/j/jplotnic/www
+scp jumboPlotStorage/HiggsSignal/*.png jplotnic@lxplus.cern.ch:/eos/user/j/jplotnic/www/jumboPlotStorage
