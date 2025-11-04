@@ -152,23 +152,23 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
             auto leptonBackgrounds = std::make_shared<Channel>(channelName, processes);
 
             for(std::string processName : leptonBackgrounds->getNames()) {
-                std::cout << processName << std::endl;
+                // std::cout << processName << std::endl;
 
 
                 if(processName.find("Dark Photon") != std::string::npos) 
                 {
                     if (processName == "Dark Photon Baseline")
                     {
-                        leptonBackgrounds->labelProcess("signal", processName);
+                        leptonBackgrounds->labelProcess(Channel::Label::Signal, processName);
                     }
                 }
                 else if(processName == "Data")
                 { //This line is only used for complete plots
-                    leptonBackgrounds->labelProcess("data", processName);
+                    leptonBackgrounds->labelProcess(Channel::Label::Data, processName);
                 }
                 else
                 {
-                    leptonBackgrounds->labelProcess("background", processName);
+                    leptonBackgrounds->labelProcess(Channel::Label::Background, processName);
                 }
             }
 

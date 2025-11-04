@@ -204,7 +204,7 @@ std::pair<TH1*, TH1*> Process::combineSystematics(std::vector<std::shared_ptr<Pr
 	for (auto process : processes)
 	{
 		multiSystematics.push_back(std::make_shared<MultiSystematic>(process->systematics));
-		std::cout << "Size: " << multiSystematics.size() << std::endl;
+		//std::cout << "Size: " << multiSystematics.size() << std::endl;
 	}
 	return MultiSystematic::combineSystematics(multiSystematics, original);
 }

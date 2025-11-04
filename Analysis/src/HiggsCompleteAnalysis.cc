@@ -15,12 +15,17 @@
 #include <string>
 #include <vector>
 
-std::vector<std::string> HiggsCompleteAnalysis::genSimDecays{"eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu",
-                                            "euet", "euuu", "euut", "eutt", "etet", "etuu", "etut",
-                                            "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt"};
+const std::vector<std::string> HiggsCompleteAnalysis::genSimDecays{
+    "eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt",
+    "etet", "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt"};
 
-std::vector<std::string> HiggsCompleteAnalysis::recoDecays{"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu",
-                                          "uue",  "uuu",  "ee",   "e e",  "eu",   "e u",  "uu",  "u u", "none"};
+const std::vector<std::string> HiggsCompleteAnalysis::recoDecays{
+    "eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet",
+    "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt", "eee",  "eeu",  "eue",
+    "euu",  "uue",  "uuu",  "ee",   "e e",  "eu",   "e u",  "uu",   "u u",  "none"};
+
+const std::vector<std::string> HiggsCompleteAnalysis::systematics = {"RecoHiggsScaleFactor", "HiggsIDISOScaleFactor",
+                                                                     "HiggsTriggerScaleFactor"};
 
 // Actual masses for the Higgs signal
 const std::vector<int> HiggsCompleteAnalysis::massTargets{500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
@@ -61,12 +66,12 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     // std::make_shared<CrossSectionReader>("/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
     auto reader = std::make_shared<CrossSectionReader>(
         "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
-        //  const std::string filePath = "/uscms/home/bhenning/Analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/HiggsFinal/";
-    // const std::string signalFilePath = "/uscms/home/bhenning/Analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/HiggsFinal/";
+    //  const std::string filePath = "/uscms/home/bhenning/Analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/HiggsFinal/";
+    // const std::string signalFilePath =
+    // "/uscms/home/bhenning/Analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/HiggsFinal/";
 
     const std::string filePath = "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/HiggsProjection/";
-    const std::string signalFilePath =
-        "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/HiggsProjection/";
+    const std::string signalFilePath = "/uscms/home/bhenning/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Output/HiggsNewOutput/";
     // const std::string myPath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     // const std::string filePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     // const std::string signalFilePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
@@ -77,11 +82,11 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     std::vector<HistVariable> histVariablesBackground;
     std::vector<HistVariable> histVariablesData;
 
-    std::vector<std::string> rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
-    ///std::vector<std::string> rowNames = {"ee", "eu", "uu", "e u", "u u", "e e"};
-    std::vector<std::string> dataConnecters = {"_Pass_1st Highest mu- ", "_Pass_1st Highest e- "};
-    std::vector<std::string> connecters = {""};
-    std::vector<std::string> systematics = {"RecoHiggsScaleFactor", "HiggsIDISOScaleFactor", "HiggsTriggerScaleFactor"};
+    // std::vector<std::string> rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu",
+    // "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
+    // ///std::vector<std::string> rowNames = {"ee", "eu", "uu", "e u", "u u", "e e"};
+    // std::vector<std::string> dataConnecters = {"_Pass_1st Highest mu- ", "_Pass_1st Highest e- "};
+    // std::vector<std::string> connecters = {""};
 
     std::vector<ParticleType> particleTypes = {ParticleType::electron(), ParticleType::muon(), ParticleType::tau()};
     std::vector<int> orders = {1, 2, 3, 4}; //whatever max order
@@ -243,34 +248,29 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
             auto leptonProcesses = std::make_shared<Channel>(recoDecay + modeLabel, processes);
 
             for (std::string processName : leptonProcesses->getNames())
+            if (processName == "Higgs Signal 1000")
             {
-                // std::cout << processName << std::endl;
-                // Change this line to make the described name your signal process name.
-                if (processName == "Higgs Signal 1000")
-                {
-                    leptonProcesses->labelProcess("signal", processName);
-                }
-                else if (processName.substr(0, 5) == "Group" || processName.substr(0, 5) == "Higgs")
-                {
-                    //leptonProcesses->labelProcess("signal", processName);
-                    // std::cout << "Labeled Signal: " << processName << std::endl;
-                }
-                // "Monte Carlo Data"
-                else if (processName == "Data")
-                { // This line is only used for complete plots
-                    leptonProcesses->labelProcess("data", processName);
-                    // std::cout << "Labeled Data: " << processName << std::endl;
-                }
-                else
-                {
-                    leptonProcesses->labelProcess("background", processName);
-                    // std::cout << "Labeled Background: " << processName << std::endl;
-                }
+                leptonProcesses->labelProcess(Channel::Label::Signal, processName);
+            }
+            else if (processName.substr(0, 5) == "Group" || processName.substr(0, 5) == "Higgs")
+            {
+                //leptonProcesses->labelProcess("signal", processName);
+                // std::cout << "Labeled Signal: " << processName << std::endl;
+            }
+            // "Monte Carlo Data"
+            else if (processName == "Data")
+            { // This line is only used for complete plots
+                leptonProcesses->labelProcess(Channel::Label::Data, processName);
+                // std::cout << "Labeled Data: " << processName << std::endl;
+            }
+            else
+            {
+                leptonProcesses->labelProcess(Channel::Label::Background, processName);
+                // std::cout << "Labeled Background: " << processName << std::endl;
             }
             // leptonBackgrounds->cleanProcesses();
-            leptonProcesses->setHistogramName("leptonHist_" + modeLabel);
-            std::cout << "created histogram: " << "leptonHist_" + modeLabel << std::endl;
             getChannelsProtected().push_back(leptonProcesses);
         }
+    }
 }
 
