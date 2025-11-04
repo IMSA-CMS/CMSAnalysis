@@ -58,7 +58,7 @@ double FitFunction::DSCB(double *x, double *par)
 
 double FitFunction::doubleGaussian(double *x, double *par)
 {
-    return par[0] * TMath::Gaus(*x, par[1], par[2]) + par[3] * TMath::Gaus(x[0], par[4], par[5]);
+    return par[0] * TMath::Gaus(x[0], par[1], par[2]) + par[3] * TMath::Gaus(x[0], par[4], par[5]);
 }
 
 FitFunction::FitFunction(const TF1 &func, FunctionType funcType, std::string channelName)
@@ -161,18 +161,17 @@ FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const s
     // std::cout << "Got to create function\n";
     switch (functionType)
     {
-    case FunctionType::EXPRESSION_FORMULA:
+    case FunctionType::ExpressionFormula:
         func = TF1(name.data(), expFormula.data(), min, max, TF1::EAddToList::kNo);
         break;
-    case FunctionType::DOUBLE_SIDED_CRYSTAL_BALL:
-        // std::cout << "Crystal ball\n";
+    case FunctionType::DoubleSidedCrystalBall:
         func = TF1(name.data(), DSCB, min, max, 7, 1, TF1::EAddToList::kNo);
         func.SetParNames("#alpha_{low}", "#alpha_{high}", "n_{low}", "n_{high}", "#mu", "#sigma", "norm");
         break;
-    case FunctionType::POWER_LAW:
+    case FunctionType::PowerLaw:
         func = TF1(name.data(), powerLaw, min, max, 3, 1, TF1::EAddToList::kNo);
         break;
-    case FunctionType::DOUBLE_GAUSSIAN:
+    case FunctionType::DoubleGaussian:
         func = TF1(name.data(), doubleGaussian, min, max, 6, 1, TF1::EAddToList::kNo);
         func.SetParNames("mul_{1}", "#mu_{1}", "#sigma_{1}", "mul_{2}", "#mu_{2}", "#sigma_{2}");
         break;
@@ -240,10 +239,14 @@ std::ostream &operator<<(std::ostream &stream, FitFunction &function)
     stream << "Name: " << func->GetName() << '\n';
     stream << "FunctionTypeEnum: " << static_cast<int>(function.getFunctionType()) << '\n';
     stream << "ExpressionFormula: ";
-    if (function.getFunctionType() == FitFunction::FunctionType::EXPRESSION_FORMULA)
+    if (function.getFunctionType() == FitFunction::FunctionType::ExpressionFormula)
+    {
         stream << func->GetExpFormula() << '\n';
+    }
     else
+    {
         stream << "None\n";
+    }
 
     // std::cout << "Got expFormula\n";
     // auto formulaName = FitFunction::getFormulaName(func->GetName());
@@ -344,7 +347,6 @@ std::ostream &operator<<(std::ostream &stream, FitFunction &function)
 // 	funcType = (FitFunction::FunctionType) tempFuncType;
 // 	stream >> ignore >> expFormula;
 
-
 // 	stream >> ignore >> min >> max;
 // 	stream >> ignore >> params;
 
@@ -357,7 +359,6 @@ std::ostream &operator<<(std::ostream &stream, FitFunction &function)
 // 	{
 // 		stream >> paramNames[i];
 // 	}
-
 
 // 	stream >> ignore;
 // 	for (int i = 0; i < params; ++i)
@@ -386,8 +387,7 @@ std::ostream &operator<<(std::ostream &stream, FitFunction &function)
 // 	return stream;
 // }
 
-
-std::istream& operator>>(std::istream& stream, FitFunction& func)
+std::istream &operator>>(std::istream &stream, FitFunction &func)
 {
     std::string line;
     std::string name;
@@ -398,52 +398,78 @@ std::istream& operator>>(std::istream& stream, FitFunction& func)
     int tempFuncType = 0;
 
     // --- Helper lambda to trim spaces ---
-    auto trim = [](std::string& s) {
+    auto trim = [](std::string &s) {
         s.erase(0, s.find_first_not_of(" \t"));
         s.erase(s.find_last_not_of(" \t") + 1);
     };
 
     // --- Helper to safely get next non-empty line ---
-    auto getLine = [&](std::istream& in, std::string& out) -> bool {
-        while (std::getline(in, out)) {
+    auto getLine = [&](std::istream &in, std::string &out) -> bool {
+        while (std::getline(in, out))
+        {
             trim(out);
-            if (!out.empty()) return true;
+            if (!out.empty())
+            {
+                return true;
+            }
         }
         return false;
     };
 
     // --- Read "Name:" line ---
-    if (!getLine(stream, line)) return stream;
-    if (line.rfind("Name:", 0) == 0)
+    if (!getLine(stream, line))
+    {
+        return stream;
+    }
+    if (line.starts_with("Name:"))
+    {
         name = line.substr(5);
+    }
     trim(name);
     std::cout << "Reading function: " << name << '\n';
 
     // --- Read "FunctionTypeEnum:" line ---
-    if (!getLine(stream, line)) return stream;
-    if (line.rfind("FunctionTypeEnum:", 0) == 0)
+    if (!getLine(stream, line))
+    {
+        return stream;
+    }
+    if (line.starts_with("FunctionTypeEnum:"))
+    {
         tempFuncType = std::stoi(line.substr(17));
+    }
     funcType = static_cast<FitFunction::FunctionType>(tempFuncType);
 
     // --- Read "ExpressionFormula:" line ---
-    if (!getLine(stream, line)) return stream;
-    if (line.rfind("ExpressionFormula:", 0) == 0)
+    if (!getLine(stream, line))
+    {
+        return stream;
+    }
+    if (line.starts_with("ExpressionFormula:"))
+    {
         expFormula = line.substr(18);
+    }
     trim(expFormula);
 
     // --- Read "Range:" line ---
-    if (!getLine(stream, line)) return stream;
-    if (line.rfind("Range:", 0) == 0)
+    if (!getLine(stream, line))
+    {
+        return stream;
+    }
+    if (line.starts_with("Range:"))
     {
         std::istringstream rangeStream(line.substr(6));
         rangeStream >> min >> max;
     }
 
     // --- Read "NumOfParameters:" line ---
-    if (!getLine(stream, line)) return stream;
-    if (line.rfind("NumOfParameters:", 0) == 0)
+    if (!getLine(stream, line))
+    {
+        return stream;
+    }
+    if (line.starts_with("NumOfParameters:"))
+    {
         params = std::stoi(line.substr(16));
-
+    }
     if (params <= 0 || params > 1000)
     {
         std::cerr << "Error: invalid NumOfParameters = " << params << " for " << name << '\n';
@@ -456,30 +482,45 @@ std::istream& operator>>(std::istream& stream, FitFunction& func)
     std::vector<double> paramErrors(params);
 
     // --- Read "ParaNames:" line ---
-    if (!getLine(stream, line)) return stream;
-    if (line.rfind("ParaNames:", 0) == 0)
+    if (!getLine(stream, line))
+    {
+        return stream;
+    }
+    if (line.starts_with("ParaNames:"))
     {
         std::istringstream ss(line.substr(10));
         for (int i = 0; i < params && ss; ++i)
+        {
             ss >> paramNames[i];
+        }
     }
 
     // --- Read "Parameters:" line ---
-    if (!getLine(stream, line)) return stream;
-    if (line.rfind("Parameters:", 0) == 0)
+    if (!getLine(stream, line))
+    {
+        return stream;
+    }
+    if (line.starts_with("Parameters:"))
     {
         std::istringstream ss(line.substr(11));
         for (int i = 0; i < params && ss; ++i)
+        {
             ss >> paramValues[i];
+        }
     }
 
     // --- Read "ParamErrors:" line ---
-    if (!getLine(stream, line)) return stream;
-    if (line.rfind("ParamErrors:", 0) == 0)
+    if (!getLine(stream, line))
+    {
+        return stream;
+    }
+    if (line.starts_with("ParamErrors:"))
     {
         std::istringstream ss(line.substr(12));
         for (int i = 0; i < params && ss; ++i)
+        {
             ss >> paramErrors[i];
+        }
     }
 
     // --- Create FitFunction object ---
@@ -498,5 +539,3 @@ std::istream& operator>>(std::istream& stream, FitFunction& func)
 
     return stream;
 }
-
-

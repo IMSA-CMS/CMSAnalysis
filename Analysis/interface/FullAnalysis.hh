@@ -11,6 +11,7 @@
 #include <map>
 #include <memory>
 #include <span>
+#include <string>
 #include <vector>
 
 class HistNameFinder;
@@ -49,7 +50,10 @@ class FullAnalysis
                                    std::shared_ptr<HistNameFinder> histVariableToFileMapping, bool isData = false,
                                    double isBranchingRatioFixer = 1);
 
-    // virtual std::span<const std::string> getSystematics() const;
+    virtual std::vector<std::string> getSystematics() const
+    {
+        return {};
+    };
 
     // SingleProcess makeBasicProcess(std::vector<HistVariable> histVariables, std::string filePathway, std::string
     // fileName, std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader, double luminosity);

@@ -19,7 +19,7 @@ FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string &fi
         while (file)
         {
             std::cout << "Reading function #" << "..." << std::endl;
-            FitFunction func(TF1(), FitFunction::FunctionType::EXPRESSION_FORMULA, "");
+            FitFunction func(TF1(), FitFunction::FunctionType::ExpressionFormula, "");
             file >> func;
             if (!file)
             {
