@@ -100,7 +100,7 @@ void HiggsSignalFitFromFile()
 				std::string filename = processedPath + "Higgs" + std::to_string(masses[i]) + ".root";
 				TFile* processedFile = TFile::Open(filename.c_str());
 				std::string channelAdjusted = Utility::substitute(channel, "m", "u");
-				auto number = processedFile -> Get<TObjString>("GenSim " + channelAdjusted);
+				auto number = processedFile -> Get<TObjString>(("GenSim " + channelAdjusted).c_str());
 				int totalGeneratedEvents = std::stoi(number -> GetString().Data());
 				double efficiency = static_cast<double>(eventsInHist) / totalGeneratedEvents;
 				double expectedEvents = crossSection * luminosity * efficiency;
@@ -109,7 +109,7 @@ void HiggsSignalFitFromFile()
 				min = masses[i] - 200;
 				max = masses[i] + 200;
 
-				FitFunction func = FitFunction::createFunctionOfType(FitFunction::FunctionType::DOUBLE_SIDED_CRYSTAL_BALL, keyName, "", min, max);
+				FitFunction func = FitFunction::createFunctionOfType(FitFunction::FunctionType::DoubleSidedCrystalBall, keyName, "", min, max, keyName);
 				currentFunctions.insert(func);
 				histogramMap.insert({keyName, selectedHist});
 				massValues.insert({keyName, masses[i]});

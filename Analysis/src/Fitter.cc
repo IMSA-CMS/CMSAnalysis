@@ -378,7 +378,7 @@ FitFunction Fitter::parameterizeFunction(ParameterizationData &parameterData, co
     auto graph = TGraphErrors(parameterData.x.size(), parameterData.x.data(), parameterData.y.data(), nullptr,
                               parameterData.error.data());
 
-    auto function = FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, "", "", 0, 2000, channel);
+    auto function = FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, fullName, "", 0, 2000, channel);
 
     auto *func = function.getFunction();
     func->SetParameters(boost::algorithm::reduce(parameterData.y) / parameterData.y.size(), 0, 0);

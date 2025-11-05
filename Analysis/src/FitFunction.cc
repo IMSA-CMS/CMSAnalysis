@@ -159,6 +159,8 @@ FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const s
     // std::cout << "ExpressionFormula enum: " << FunctionType::EXPRESSION_FORMULA << '\n';
     // std::cout << "Function Type: " << functionType << '\n';
     // std::cout << "Got to create function\n";
+    std::cout << "Name: " << name << ", Formula: " << expFormula << ", Min: " << min << ", Max: " << max
+              << ", Channel: " << channelName << '\n';
     switch (functionType)
     {
     case FunctionType::ExpressionFormula:
