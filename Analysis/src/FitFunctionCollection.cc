@@ -2,6 +2,10 @@
 #include <fstream>
 #include <string>
 
+
+
+std::vector<FitFunction> alphabetizeParameters(std::vector<FitFunction> fitFunctions);
+
 FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string &fileName)
 {
     std::fstream file(fileName, std::ios_base::in);
@@ -45,6 +49,100 @@ void FitFunctionCollection::saveFunctions(const std::string &fileName, bool appe
     }
     file.close();
 }
+
+std::map<std::string, std::vector<FitFunction>> FitFunctionCollection::getFunctionsSortedByChannel(std::string fileName)
+{
+    std::map<std::string, std::vector<FitFunction>> sortedFunctions = {};
+    std::vector<std::string> channelNames = {};
+
+    std::map<std::string, std::string> channelNameModifiers = {};
+    channelNameModifiers["mll1"] = "_X";
+    channelNameModifiers["mll2"] = "_Y";
+
+
+    std::vector<std::string> existingChannelNameModifiers = {};
+    for (auto [modifier, replacement] : channelNameModifiers)
+    {
+        existingChannelNameModifiers.push_back(modifier);
+    }
+
+
+    FitFunctionCollection functionCollection;
+    try {
+        functionCollection = FitFunctionCollection::loadFunctions(fileName);
+        std::cout << "Successfully read " << fileName << "\n";
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Failed to load functions: " << e.what() << std::endl;
+        throw;
+    }
+
+
+    // Sorts functions by channel
+    std::unordered_map<std::string, FitFunction> parameterFunctions = functionCollection.getFunctions();
+    for (auto [functionName, function] : parameterFunctions)
+    {
+        std::string channel = function.getChannelName();
+
+        // Check whether channel name needs to be modified for internal processes
+        for (auto modifier : existingChannelNameModifiers)
+        {
+            if (function.getParameterName().find(modifier) != std::string::npos)
+            {
+                channel += modifier;
+            }
+        }
+
+        sortedFunctions[channel].push_back(function);
+
+        // Record channels
+        // if (std::find(channelNames.begin(), channelNames.end(), channel) == channelNames.end())
+        // {
+        //     channelNames.push_back(channel);
+        // }
+    }
+
+    // Alphabetize functions for each channel
+    // for (std::string channelName : channelNames)
+    // {
+    //     std::vector<FitFunction> alphabetizedFunctions = alphabetizeParameters(sortedFunctions[channelName]);
+    //     sortedFunctions[channelName] = alphabetizedFunctions;
+    // }
+
+    return sortedFunctions;
+}
+
+std::vector<FitFunction> alphabetizeParameters(std::vector<FitFunction> fitFunctions)
+{
+    std::vector<std::string> parameterNames;
+    std::vector<FitFunction> alphabetizedFunctions;
+    
+    // Find and alphabetize the names of fit functions
+    for (auto function : fitFunctions)
+    {
+        parameterNames.push_back(function.getParameterName());
+    }
+    std::sort(parameterNames.begin(), parameterNames.end());
+
+
+    // Reorder the fitFunctions based on the order of parameterNames
+    for (auto parameterName : parameterNames)
+    {
+        for (auto function : fitFunctions)
+        {
+            
+            if (function.getParameterName() == parameterName)
+            {
+                alphabetizedFunctions.push_back(function);
+            }
+        }
+    }
+
+    return alphabetizedFunctions;
+}
+
+
+
 
 FitFunctionCollection::FitFunctionCollection()
 {
