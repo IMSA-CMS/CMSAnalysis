@@ -36,9 +36,7 @@ std::vector<HistVariable> variables, bool includeData, bool includeSignal)
 {
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation/Data)");
 	plotFormatter->setUpperMasslimit(2000);
-	plotFormatter->setNumBins(5);
 	plotFormatter->setFirstBin(50);
-
 	int graphSwitch = 5;
 
 	double massTarget = 1400;
@@ -264,19 +262,22 @@ void JumboPlot()
 	std::vector<std::shared_ptr<Channel>> channelFourLeptons;
 	for (auto channel : higgsChannels)
 	{
+		std::string name = channel->getName();
+		int count = std::count(name.begin(), name.end(),'_');
+
 		if (channel->getName() == "none")
 		{
 			continue;
 		}
-		if (channel->getName().length() == 4)
+		if (count == 0)
 		{
 			channelFourLeptons.push_back(channel);
 		}
-		else if (channel->getName().find(" ") != std::string::npos || channel->getName().length() == 2)
+		else if (count == 2)
 		{
 			channelTwoLeptons.push_back(channel);
 		}
-		else
+		else if (count == 1)
 		{
 			channelThreeLeptons.push_back(channel);
 		}
@@ -327,11 +328,24 @@ void JumboPlot()
 	// std::vector<std::string> bsvtfutsps = {}; // bullshitvectortofillupthesestupidparameterslots
 	// std::vector<std::string> connectors = {"_1st Highest Lepton Jet "};
 
+
+	if (channelTwoLeptons.empty()) 
+	{
+		std::cout << "No two-lepton channels found" << std::endl;
+		return;
+	}
+
+	std::cout << "Found " << channelTwoLeptons.size() << " two-lepton channels:" << std::endl;
+	for (auto ch : channelTwoLeptons) 
+	{
+		std::cout << ch->getName() << std::endl;
+	}
+
 	//makePlots("Higgs Signal 4Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames4, connecters, connecters2, connecters3, false, true);
 	//makePlots("Higgs Signal 3Channel", higgsAnalysis, higgsChannels, rowNames, graphableTypes, graphableTypes2, graphableTypes3, units, units2, units3, channelNames3, connecters, connecters2, connecters3, false, true);
 	makePlots("Higgs Signal 2Channel", higgsAnalysis, channelTwoLeptons, variables ,true, false);
-	makePlots("Higgs Signal 3Channel", higgsAnalysis, channelThreeLeptons, variables , false, true);
-	makePlots("Higgs Signal 4Channel", higgsAnalysis, channelFourLeptons, variables , false, true);
+	// makePlots("Higgs Signal 3Channel", higgsAnalysis, channelThreeLeptons, variables , false, true);
+	// makePlots("Higgs Signal 4Channel", higgsAnalysis, channelFourLeptons, variables , false, true);
 	
 	//makePlots("Dark Photon Signal", DarkPhotonAnalysis, channels, variables, true);
 }

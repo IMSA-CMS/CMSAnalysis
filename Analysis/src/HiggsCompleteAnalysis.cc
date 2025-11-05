@@ -21,8 +21,8 @@ const std::vector<std::string> HiggsCompleteAnalysis::genSimDecays{
 
 const std::vector<std::string> HiggsCompleteAnalysis::recoDecays{
     "eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet",
-    "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt", "eee",  "eeu",  "eue",
-    "euu",  "uue",  "uuu",  "ee",   "e e",  "eu",   "e u",  "uu",   "u u",  "none"};
+    "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt", "eee_",  "eeu_",  "eue_",
+    "euu_",  "uue_",  "uuu_",  "ee__",   "e_e_",  "eu__",   "e_u_",  "uu__",   "u_u_",  "none"};
 
 const std::vector<std::string> HiggsCompleteAnalysis::systematics = {"RecoHiggsScaleFactor", "HiggsIDISOScaleFactor",
                                                                      "HiggsTriggerScaleFactor"};
@@ -70,7 +70,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     // const std::string signalFilePath =
     // "/uscms/home/bhenning/Analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/HiggsFinal/";
 
-    const std::string filePath = "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/HiggsProjection/";
+    const std::string filePath = "/uscms/home/bhenning/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Output/HiggsNewOutput/";
     const std::string signalFilePath = "/uscms/home/bhenning/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Output/HiggsNewOutput/";
     // const std::string myPath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     // const std::string filePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
