@@ -89,6 +89,15 @@ std::string HistVariable::getName() const
     case HistVariable::VariableType::InvariantMass:
         name += "Reco Invariant Mass Background";
         break;
+    case HistVariable::VariableType::RecoOppositeSignInvariantMass:
+        name += "Reco Opposite Sign Invariant Mass";
+        break;
+    case HistVariable::VariableType::RecoSameSignInvariantMass:
+        name += "Reco Same Sign Invariant Mass";
+        break;
+    case HistVariable::VariableType::MET:
+        name += "MET";
+        break;
     }
 
     if (is2DHistX_)
@@ -113,6 +122,10 @@ HistVariable::VariableType HistVariable::stringToVariableType(const std::string&
     {
         return VariableType::Phi;
     }
+    if (varStr == "MET")
+    {
+        return VariableType::MET;
+    }
     if (varStr == "Pt") 
     {
         return VariableType::Pt;
@@ -128,6 +141,14 @@ HistVariable::VariableType HistVariable::stringToVariableType(const std::string&
     if (varStr == "Reco Invariant Mass Background") 
     {
         return VariableType::InvariantMass;
+    }
+    if (varStr == "Reco Opposite Sign Invariant Mass") 
+    {
+        return VariableType::RecoOppositeSignInvariantMass;
+    }
+    if (varStr == "Reco Same Sign Invariant Mass") 
+    {
+        return VariableType::RecoSameSignInvariantMass;
     }
 
     throw std::invalid_argument("Unknown variable type: " + varStr);

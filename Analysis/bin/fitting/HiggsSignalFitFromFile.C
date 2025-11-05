@@ -20,14 +20,21 @@
 #include "TFitResult.h"
 #include "TGraphErrors.h"
 #include "TTree.h"
+#include "TObjString.h"
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
+#include "CMSAnalysis/Analysis/interface/CrossSectionReader.hh"
 #include "CMSAnalysis/Analysis/interface/FitFunction.hh"
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #define _USE_MATH_DEFINES
 
+
+
 std::string path = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_peter/";
+std::string processedPath = "/uscms/home/bhenning/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Output/HiggsNewOutput/";
+
 TH1* combineHists (std::vector<std::string> fileNames, std::string channel, std::string histName);
 std::vector<std::string> years = {"2016", "2017", "2018"};
 std::vector<std::string> channelTypes =
@@ -58,6 +65,8 @@ void HiggsSignalFitFromFile()
 	remove(parameterFunctions.c_str());
 	std::vector<int> masses = {500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
 
+	CrossSectionReader crossSectionReader(Utility::getBasePath() + "DataCollection/bin/crossSections.txt");
+
 	Fitter fitter(fitHistsName, fitParameterValueFile, parameterFits, parameterFunctions);
 
 	std::cout << "Loaded histogram\n";
@@ -80,12 +89,27 @@ void HiggsSignalFitFromFile()
 				std::cerr << "mass: " << masses[i] << std::endl;
 				// update this to use all gensim decays, not just the same as reco
 				TH1* selectedHist = combineHists(std::vector<std::string>{"HppM" + std::to_string(masses[i])}, channel, histType);
-				selectedHist -> Scale(1/selectedHist -> Integral());
+				if (!selectedHist)
+				{
+					std::cerr << "Histogram for mass " << masses[i] << " not found, skipping\n";
+					continue;
+				}
+				double crossSection = crossSectionReader.getCrossSection("Higgs4l" + std::to_string(masses[i]));
+				double luminosity = 137000; //in pb^-1
+				int eventsInHist = selectedHist -> Integral();
+				std::string filename = processedPath + "Higgs" + std::to_string(masses[i]) + ".root";
+				TFile* processedFile = TFile::Open(filename.c_str());
+				std::string channelAdjusted = Utility::substitute(channel, "m", "u");
+				auto number = processedFile -> Get<TObjString>(("GenSim " + channelAdjusted).c_str());
+				int totalGeneratedEvents = std::stoi(number -> GetString().Data());
+				double efficiency = static_cast<double>(eventsInHist) / totalGeneratedEvents;
+				double expectedEvents = crossSection * luminosity * efficiency;
+				selectedHist -> Scale(expectedEvents / selectedHist -> Integral());
 				std::string keyName = channel + "/" + std::to_string(masses[i]) + '_' + histType;
 				min = masses[i] - 200;
 				max = masses[i] + 200;
 
-				FitFunction func = FitFunction::createFunctionOfType(FitFunction::DOUBLE_SIDED_CRYSTAL_BALL, keyName, "", min, max);
+				FitFunction func = FitFunction::createFunctionOfType(FitFunction::FunctionType::DoubleSidedCrystalBall, keyName, "", min, max, keyName);
 				currentFunctions.insert(func);
 				histogramMap.insert({keyName, selectedHist});
 				massValues.insert({keyName, masses[i]});
@@ -95,10 +119,10 @@ void HiggsSignalFitFromFile()
 				// std::string wait;
 				// std::cin >> wait;
 			}
-			fitter.setHistograms(histogramMap);
+			//fitter.setHistograms(histogramMap);
 			fitter.loadFunctions(currentFunctions);
-			fitter.fitFunctions();
-			fitter.parameterizeFunctions(massValues, actualParams);
+			fitter.fitFunctions(histogramMap);
+			fitter.parameterizeFunctions(massValues, channel, channel, "Mass");
 		}
 	}
 }

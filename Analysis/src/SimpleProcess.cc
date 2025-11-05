@@ -12,6 +12,7 @@ void SimpleProcess::addFile(std::string fileName, std::vector<HistVariable> hist
     if(checkValidity(fileName, histVariables)) {
 	files.push_back(fileName);
 	histVariableVec.push_back(histVariables);
+	std::cout << "Added file: " << fileName << std::endl;
     }
 }
 
@@ -23,14 +24,17 @@ TH1* SimpleProcess::getHist(std::string histType) {
 	{
 		if (getHistFromFile(file, histVariableVec.at(count), histType) == 0) {
 			throw std::runtime_error("Histogram not found in file: " + file);
+			std::cout << "Histogram not found in file: " + file << std::endl;
 		}
 		if (getHistFromFile(file, histVariableVec.at(count), histType)->GetNbinsX() > maxBinNum)
 		{
 			maxBinNum = getHistFromFile(file, histVariableVec.at(count), histType)->GetNbinsX();
+
 		}
 		if ((getHistFromFile(file, histVariableVec.at(count), histType)->GetXaxis()->GetBinWidth(maxBinNum)) > maxBarWidth)
 		{
 			maxBarWidth = (getHistFromFile(file, histVariableVec.at(count), histType)->GetXaxis()->GetBinWidth(maxBinNum));
+
 		}
 		count++;
 	}

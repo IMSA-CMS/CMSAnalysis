@@ -35,7 +35,7 @@ void SuperPlot()
 	//Change extra text here (keep drawLogo to false for now)
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation)");
 	plotFormatter->setUpperMasslimit(.5);
-	plotFormatter->setNumBins(1);
+	plotFormatter->setRebinFactor(5);
 	plotFormatter->setFirstBin(-1);
 	//Change the string for the channel you want, if using one channel. Otherwise use the loop.
 	
@@ -116,9 +116,12 @@ void SuperPlot()
 	//#TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "LeptonJetMLOutput High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
 	//#TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "LeptonJetMLOutput High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
 	//#TCanvas *canvas = plotFormatter->completePlot(InputAnalysis, plotName, xAxisTitle, yAxisTitle, true, false, "0.3");
-	//HistVariable nameVar(ParticleType::muon(), 0, HistVariable::VariableType::SameSignInvariantMass);
-	HistVariable nameVar(ParticleType::muon(), 1, HistVariable::VariableType::Pt);
-	//auto ana = std::make_shared<HiggsCompleteAnalysis>();
+	// HistVariable nameVar(ParticleType::muon(), 0, HistVariable::VariableType::SameSignInvariantMass);
+	// auto ana = std::make_shared<HiggsCompleteAnalysis>();
+	// TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, true, false, "eeee", "Higgs Group 1000");
+	// //HistVariable nameVar(ParticleType::muon(), 0, HistVariable::VariableType::SameSignInvariantMass);
+	HistVariable nameVar(ParticleType::muon(), 1, HistVariable::VariableType::Eta);
+	// //auto ana = std::make_shared<HiggsCompleteAnalysis>();
 	auto ana = std::make_shared<DarkPhotonCompleteAnalysis>();
 	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, true, false, true, "Low Mass and Same Sign/1Jet");
 
