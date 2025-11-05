@@ -5,8 +5,8 @@ HiggsCombineStripModule::HiggsCombineStripModule(){
 }
 
 void HiggsCombineStripModule::addVariables(){
-    addVariable("massPos", SpecialVariableModule::VariableType::Float);
-    addVariable("massNeg", SpecialVariableModule::VariableType::Float);
+    addVariable("mass1", SpecialVariableModule::VariableType::Float);
+    addVariable("mass2", SpecialVariableModule::VariableType::Float);
 
 }
 

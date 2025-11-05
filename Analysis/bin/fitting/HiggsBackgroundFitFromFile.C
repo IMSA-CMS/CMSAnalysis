@@ -190,13 +190,13 @@ void HiggsBackgroundFitFromFile()
 				std::string keyName = channel + '/' + background + " " + histType;
 				keyNames.push_back(keyName);
 
-				FitFunction func = FitFunction::createFunctionOfType(FitFunction::POWER_LAW, keyName, "", range.first, range.second);
+				FitFunction func = FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, keyName, "", range.first, range.second, keyName);
 				currentFunctions.insert(func);
 				histogramMap.insert({keyName, selectedHist});
 			}
-			fitter.setHistograms(histogramMap);
+			//fitter.setHistograms(histogramMap);
 			fitter.loadFunctions(currentFunctions);
-			fitter.fitFunctions();
+			fitter.fitFunctions(histogramMap);
 		}
 	}
 

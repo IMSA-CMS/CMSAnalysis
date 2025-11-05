@@ -25,9 +25,12 @@ class HistVariable
         Eta,
         Pt,
         Phi,
+        MET,
         SameSignInvariantMass,
         OppositeSignInvariantMass,
-        InvariantMass
+        InvariantMass,
+        RecoSameSignInvariantMass,
+        RecoOppositeSignInvariantMass
     };
 
     HistVariable(ParticleType type, int order, VariableType var, std::string unit = "", 

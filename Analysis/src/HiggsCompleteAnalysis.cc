@@ -10,22 +10,25 @@
 #include "CMSAnalysis/Analysis/interface/WindowEstimator.hh"
 #include "CMSAnalysis/Utility/interface/ParticleType.hh"
 #include "TH1.h"
-#include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
 
-std::vector<std::string> HiggsCompleteAnalysis::genSimDecays{"eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu",
-                                            "euet", "euuu", "euut", "eutt", "etet", "etuu", "etut",
-                                            "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt"};
+const std::vector<std::string> HiggsCompleteAnalysis::genSimDecays{
+    "eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt",
+    "etet", "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt"};
 
-std::vector<std::string> HiggsCompleteAnalysis::recoDecays{"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu",
-                                          "uue",  "uuu",  "ee",   "e e",  "eu",   "e u",  "uu",  "u u", "none"};
+const std::vector<std::string> HiggsCompleteAnalysis::recoDecays{
+    "eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet",
+    "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt", "eee",  "eeu",  "eue",
+    "euu",  "uue",  "uuu",  "ee",   "e e",  "eu",   "e u",  "uu",   "u u",  "none"};
+
+const std::vector<std::string> systematics{"RecoHiggsScaleFactor", "HiggsIDISOScaleFactor", "HiggsTriggerScaleFactor"};
 
 // Actual masses for the Higgs signal
 const std::vector<int> HiggsCompleteAnalysis::massTargets{500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
 
-double HiggsCompleteAnalysis::getBranchingRatio(const std::string &channel)
+double HiggsCompleteAnalysis::getBranchingRatio(const std::string &channel) const
 {
     std::unordered_map<std::string, double> originalRatios = {{"ee", 3.0 / 2}, {"eu", 3.0 / 4}, {"uu", 3.0 / 2},
                                                               {"et", 3.0 / 4}, {"ut", 3.0 / 4}, {"tt", 3.0 / 2}};
@@ -36,9 +39,13 @@ double HiggsCompleteAnalysis::getBranchingRatio(const std::string &channel)
     return originalRatios[firstPair] * originalRatios[secondPair];
 }
 
-HiggsCompleteAnalysis::HiggsCompleteAnalysis()
-{   
+std::vector<std::string> HiggsCompleteAnalysis::getSystematics() const
+{
+    return systematics;
+}
 
+HiggsCompleteAnalysis::HiggsCompleteAnalysis()
+{
     const int higgsColor = kOrange + 10;
     const int ttbarColor = kBlue;
     const int drellYanBackColor = kPink + 10;
@@ -61,8 +68,9 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     // std::make_shared<CrossSectionReader>("/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
     auto reader = std::make_shared<CrossSectionReader>(
         "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
-        //  const std::string filePath = "/uscms/home/bhenning/Analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/HiggsFinal/";
-    // const std::string signalFilePath = "/uscms/home/bhenning/Analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/HiggsFinal/";
+    //  const std::string filePath = "/uscms/home/bhenning/Analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/HiggsFinal/";
+    // const std::string signalFilePath =
+    // "/uscms/home/bhenning/Analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/HiggsFinal/";
 
     const std::string filePath = "/uscms/home/bhenning/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Output/HiggsNewOutput/";
     const std::string signalFilePath =
@@ -72,76 +80,78 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     // const std::string signalFilePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
 
     // Luminosity: 1.39
-    double luminosity = 137.62;
+    const double luminosity = 137.62;
 
-    std::vector<HistVariable> histVariablesBackground;
-    std::vector<HistVariable> histVariablesData;
+    // std::vector<HistVariable> histVariablesBackground;
+    // std::vector<HistVariable> histVariablesData;
 
-    std::vector<std::string> rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
-    ///std::vector<std::string> rowNames = {"ee", "eu", "uu", "e u", "u u", "e e"};
-    std::vector<std::string> dataConnecters = {"_Pass_1st Highest mu- ", "_Pass_1st Highest e- "};
-    std::vector<std::string> connecters = {""};
-    std::vector<std::string> systematics = {"RecoHiggsScaleFactor", "HiggsIDISOScaleFactor", "HiggsTriggerScaleFactor"};
+    // std::vector<std::string> rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu",
+    // "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
+    // ///std::vector<std::string> rowNames = {"ee", "eu", "uu", "e u", "u u", "e e"};
+    // std::vector<std::string> dataConnecters = {"_Pass_1st Highest mu- ", "_Pass_1st Highest e- "};
+    // std::vector<std::string> connecters = {""};
 
-    std::vector<ParticleType> particleTypes = {ParticleType::electron(), ParticleType::muon(), ParticleType::tau()};
-    std::vector<int> orders = {1, 2, 3, 4}; //whatever max order
-    std::vector<HistVariable::VariableType> variableTypes = 
-    {
-    HistVariable::VariableType::Pt,
-    HistVariable::VariableType::Eta,
-    HistVariable::VariableType::Phi,
-    HistVariable::VariableType::SameSignInvariantMass,
-    HistVariable::VariableType::OppositeSignInvariantMass,
-    HistVariable::VariableType::InvariantMass
-    };
+    // std::vector<ParticleType> particleTypes = {ParticleType::electron(), ParticleType::muon(), ParticleType::tau()};
+    // std::vector<int> orders = {1, 2, 3, 4}; // whatever max order
+    // std::vector<HistVariable::VariableType> variableTypes = {HistVariable::VariableType::Pt,
+    //                                                          HistVariable::VariableType::Eta,
+    //                                                          HistVariable::VariableType::Phi,
+    //                                                          HistVariable::VariableType::SameSignInvariantMass,
+    //                                                          HistVariable::VariableType::OppositeSignInvariantMass,
+    //                                                          HistVariable::VariableType::InvariantMass};
 
-
-    for (ParticleType pType : particleTypes)
-    {
-        for (int order : orders)
-        {
-            for (auto varType : variableTypes)
-            {
-                histVariablesBackground.push_back(HistVariable(pType, order, varType));
-                histVariablesData.push_back(HistVariable(pType, order, varType));
-            }
-        }
-    }
-
+    // for (const ParticleType& pType : particleTypes)
+    // {
+    //     for (const int order : orders)
+    //     {
+    //         for (const auto varType : variableTypes)
+    //         {
+    //             histVariablesBackground.push_back(HistVariable(pType, order, varType));
+    //             histVariablesData.push_back(HistVariable(pType, order, varType));
+    //         }
+    //     }
+    // }
 
     TH1::SetDefaultSumw2();
+    for (bool zSelection : {true, false})
+    {
     for (const std::string &recoDecay : recoDecays)
     {
         std::vector<std::shared_ptr<Process>> processes;
-        
+
         for (const auto &genSimDecay : genSimDecays)
         {
-            //std::string decayName = recoDecay + "_" + genSimDecay;
-
+            const std::string decayName = recoDecay + "_" + genSimDecay;
+            auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(decayName);
 
             // auto higgsSignal = std::make_shared<Process>("Higgs Signal", 5);
 
             // not really sure why we need this process at all
             // auto higgsGroupSignal = std::make_shared<Process>("Higgs Group " + recoDecay, 5);
-            for (double massTarget : massTargets)
+            for (const double massTarget : massTargets)
             {
-                std::string decayName = recoDecay + "_" + genSimDecay;
                 auto higgsMassGroup = std::make_shared<Process>("Higgs Signal " + std::to_string((int)massTarget), 1);
 
-                auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(decayName);
+                auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(decayName, true, zSelection);
                 
                 //histVariableToFileMapping["Same Sign Invariant Mass"] = decayName + "__hists/" + decayName + "_Reco Same Sign Invariant Mass";
                 //histVariableToFileMapping["X Projection"] = decayName + "__hists/" + decayName + "_Reco Invariant Mass Background X Projection";
                 //histVariableToFileMapping["Y Projection"] = decayName + "__hists/" + decayName + "_Reco Invariant Mass Background Y Projection";
                 //std::vector<HistVariable> histVariablesSignal;
 
-                // histVariablesSignal.push_back(HistVariable::sameSignMass(decayName + "__hists/" + decayName + "_Reco Same Sign Invariant Mass"));
-                //histVariablesSignal.push_back(HistVariable(Selector::None, HistVariable::VariableType::SameSignInvariantMass));
+                // histVariablesSignal.push_back(HistVariable::sameSignMass(decayName + "__hists/" + decayName + "_Reco
+                // Same Sign Invariant Mass"));
+                // histVariablesSignal.push_back(HistVariable(Selector::None,
+                // HistVariable::VariableType::SameSignInvariantMass));
                 double branchingRatioFixer = getBranchingRatio(genSimDecay);
-                //std::cout << "GENSIMDECAY: " << genSimDecay << std::endl;
-                //std::cout << "BRANCHINGRATIOFIXER " << branchingRatioFixer << std::endl;
-                auto higgsProcess = makeBasicProcess(signalFilePath, "Higgs" + std::to_string((int)massTarget) + ".root", "higgs4l" + std::to_string((int)massTarget), reader, luminosity, histVariableToFileMapping, false, branchingRatioFixer);
-                auto higgsSignal = std::make_shared<Process>("Higgs signal " + genSimDecay + " " + std::to_string((int)massTarget), 1);
+                // std::cout << "GENSIMDECAY: " << genSimDecay << std::endl;
+                // std::cout << "BRANCHINGRATIOFIXER " << branchingRatioFixer << std::endl;
+                auto higgsProcess =
+                    makeBasicProcess(signalFilePath, "Higgs" + std::to_string((int)massTarget) + ".root",
+                                     "higgs4l" + std::to_string((int)massTarget), reader, luminosity,
+                                     histVariableToFileMapping, false, branchingRatioFixer);
+                auto higgsSignal =
+                    std::make_shared<Process>("Higgs signal " + genSimDecay + " " + std::to_string((int)massTarget), 1);
                 higgsSignal->addProcess(higgsProcess);
                 processes.push_back(higgsSignal);
                 higgsMassGroup->addProcess(higgsProcess);
@@ -151,78 +161,107 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         }
 
 
-        auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(recoDecay);
-
+        auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(recoDecay, true, zSelection);
 
         auto zzBackground = std::make_shared<Process>("ZZ Background", ZZBackgroundColor);
-        zzBackground->addProcess(makeBasicProcess(filePath, "ZZ.root", "zzto4l", reader, luminosity, histVariableToFileMapping));
-        
-        //auto zzBackgroundNoVeto = std::make_shared<Process>("ZZ Background No Veto", 3);
-        //zzBackgroundNoVeto->addProcess(makeBasicProcess("/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/NoZVeto/", "ZZ.root", "zzto4l", reader, luminosity, histVariableToFileMapping));
+        zzBackground->addProcess(
+            makeBasicProcess(filePath, "ZZ.root", "zzto4l", reader, luminosity, histVariableToFileMapping));
+
+        // auto zzBackgroundNoVeto = std::make_shared<Process>("ZZ Background No Veto", 3);
+        // zzBackgroundNoVeto->addProcess(makeBasicProcess("/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/NoZVeto/",
+        // "ZZ.root", "zzto4l", reader, luminosity, histVariableToFileMapping));
 
         auto wJetsBackground = std::make_shared<Process>("WJets Background", WJetsBackgroundColor);
-        wJetsBackground->addProcess(makeBasicProcess(filePath, "WJets.root", "WJets", reader, luminosity, histVariableToFileMapping));
+        wJetsBackground->addProcess(
+            makeBasicProcess(filePath, "WJets.root", "WJets", reader, luminosity, histVariableToFileMapping));
 
         // cross sections should be all lowercase
         auto ttBarandMultiBosonBackground = std::make_shared<Process>("t#bar{t}, Multiboson Background", ttbarColor);
-        ttBarandMultiBosonBackground->addProcess(makeBasicProcess(filePath, "TTbar.root", "ttbar_lep", reader, luminosity, histVariableToFileMapping));
-        ttBarandMultiBosonBackground->addProcess(makeBasicProcess(filePath, "TTW.root", "ttw", reader, luminosity, histVariableToFileMapping));
-        ttBarandMultiBosonBackground->addProcess(makeBasicProcess(filePath, "TTZ.root", "ttz", reader, luminosity, histVariableToFileMapping));
+        ttBarandMultiBosonBackground->addProcess(
+            makeBasicProcess(filePath, "TTbar.root", "ttbar_lep", reader, luminosity, histVariableToFileMapping));
+        ttBarandMultiBosonBackground->addProcess(
+            makeBasicProcess(filePath, "TTW.root", "ttw", reader, luminosity, histVariableToFileMapping));
+        ttBarandMultiBosonBackground->addProcess(
+            makeBasicProcess(filePath, "TTZ.root", "ttz", reader, luminosity, histVariableToFileMapping));
 
         auto ttbarProcess = std::make_shared<Process>("TTbar Background", ttbarColor);
-        ttbarProcess->addProcess(makeBasicProcess(filePath, "TTbar.root", "ttbar_lep", reader, luminosity, histVariableToFileMapping));
-        
+        ttbarProcess->addProcess(
+            makeBasicProcess(filePath, "TTbar.root", "ttbar_lep", reader, luminosity, histVariableToFileMapping));
+
         auto ttzProcess = std::make_shared<Process>("TTZ Background", ttbarColor);
-        ttzProcess->addProcess(makeBasicProcess(filePath, "TTZ.root", "ttz", reader, luminosity, histVariableToFileMapping));
-        
+        ttzProcess->addProcess(
+            makeBasicProcess(filePath, "TTZ.root", "ttz", reader, luminosity, histVariableToFileMapping));
+
         auto other = std::make_shared<Process>("Other Background", ttbarColor);
         other->addProcess(makeBasicProcess(filePath, "TTW.root", "ttw", reader, luminosity, histVariableToFileMapping));
         other->addProcess(makeBasicProcess(filePath, "ZZZ.root", "zzz", reader, luminosity, histVariableToFileMapping));
-        other->addProcess(makeBasicProcess(filePath, "WW.root", "wwto2l2nu", reader, luminosity, histVariableToFileMapping));
+        other->addProcess(
+            makeBasicProcess(filePath, "WW.root", "wwto2l2nu", reader, luminosity, histVariableToFileMapping));
         other->addProcess(makeBasicProcess(filePath, "WWW.root", "www", reader, luminosity, histVariableToFileMapping));
         other->addProcess(makeBasicProcess(filePath, "WWZ.root", "wwz", reader, luminosity, histVariableToFileMapping));
-        other->addProcess(makeBasicProcess(filePath, "WZ.root", "wzto3lnu", reader, luminosity, histVariableToFileMapping));
+        other->addProcess(
+            makeBasicProcess(filePath, "WZ.root", "wzto3lnu", reader, luminosity, histVariableToFileMapping));
         other->addProcess(makeBasicProcess(filePath, "WZZ.root", "wzz", reader, luminosity, histVariableToFileMapping));
 
         auto dyBackground = std::make_shared<Process>("Drell-Yan Background", drellYanBackColor);
-        dyBackground->addProcess(makeBasicProcess(filePath, "DY10-50.root", "dy10to50", reader, luminosity, histVariableToFileMapping));
-        dyBackground->addProcess(makeBasicProcess(filePath, "DY50-inf.root", "dy50toInf", reader, luminosity, histVariableToFileMapping));
+        dyBackground->addProcess(
+            makeBasicProcess(filePath, "DY10-50.root", "dy10to50", reader, luminosity, histVariableToFileMapping));
+        dyBackground->addProcess(
+            makeBasicProcess(filePath, "DY50-inf.root", "dy50toInf", reader, luminosity, histVariableToFileMapping));
 
-        //auto dyBackgroundNoVeto = std::make_shared<Process>("Drell-Yan Background No Veto", 2);
-        //dyBackgroundNoVeto->addProcess(makeBasicProcess("/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/NoZVeto/", "DY10-50.root", "dy10to50", reader, luminosity, histVariableToFileMapping));
-        //dyBackgroundNoVeto->addProcess(makeBasicProcess("/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/NoZVeto/", "DY50-inf.root", "dy50toInf", reader, luminosity, histVariableToFileMapping));
-        
+        // auto dyBackgroundNoVeto = std::make_shared<Process>("Drell-Yan Background No Veto", 2);
+        // dyBackgroundNoVeto->addProcess(makeBasicProcess("/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/NoZVeto/",
+        // "DY10-50.root", "dy10to50", reader, luminosity, histVariableToFileMapping));
+        // dyBackgroundNoVeto->addProcess(makeBasicProcess("/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/NoZVeto/",
+        // "DY50-inf.root", "dy50toInf", reader, luminosity, histVariableToFileMapping));
+
         auto qcdBackground = std::make_shared<Process>("QCD Background", QCDBackColor);
-        qcdBackground->addProcess(makeBasicProcess(filePath, "QCD100-200.root", "QCD_100-200", reader, luminosity, histVariableToFileMapping));
-        qcdBackground->addProcess(makeBasicProcess(filePath, "QCD200-300.root", "QCD_200-300", reader, luminosity, histVariableToFileMapping));
-        qcdBackground->addProcess(makeBasicProcess(filePath, "QCD300-500.root", "QCD_300-500", reader, luminosity, histVariableToFileMapping));
-        qcdBackground->addProcess(makeBasicProcess(filePath, "QCD500-700.root", "QCD_500-700", reader, luminosity, histVariableToFileMapping));
-        qcdBackground->addProcess(makeBasicProcess(filePath, "QCD700-1000.root", "QCD_700-1000", reader, luminosity, histVariableToFileMapping));
-        qcdBackground->addProcess(makeBasicProcess(filePath, "QCD1000-1500.root", "QCD_1000-1500", reader, luminosity, histVariableToFileMapping));
-        qcdBackground->addProcess(makeBasicProcess(filePath, "QCD1500-2000.root", "QCD_1500-2000", reader, luminosity, histVariableToFileMapping));
-        // qcdBackground->addProcess(makeBasicProcess(filePath, "QCD2000-inf.root", "QCD_2000-inf", reader, luminosity, histVariableToFileMapping));
+        qcdBackground->addProcess(makeBasicProcess(filePath, "QCD100-200.root", "QCD_100-200", reader, luminosity,
+                                                   histVariableToFileMapping));
+        qcdBackground->addProcess(makeBasicProcess(filePath, "QCD200-300.root", "QCD_200-300", reader, luminosity,
+                                                   histVariableToFileMapping));
+        qcdBackground->addProcess(makeBasicProcess(filePath, "QCD300-500.root", "QCD_300-500", reader, luminosity,
+                                                   histVariableToFileMapping));
+        qcdBackground->addProcess(makeBasicProcess(filePath, "QCD500-700.root", "QCD_500-700", reader, luminosity,
+                                                   histVariableToFileMapping));
+        qcdBackground->addProcess(makeBasicProcess(filePath, "QCD700-1000.root", "QCD_700-1000", reader, luminosity,
+                                                   histVariableToFileMapping));
+        qcdBackground->addProcess(makeBasicProcess(filePath, "QCD1000-1500.root", "QCD_1000-1500", reader, luminosity,
+                                                   histVariableToFileMapping));
+        qcdBackground->addProcess(makeBasicProcess(filePath, "QCD1500-2000.root", "QCD_1500-2000", reader, luminosity,
+                                                   histVariableToFileMapping));
+        // qcdBackground->addProcess(makeBasicProcess(filePath, "QCD2000-inf.root", "QCD_2000-inf", reader, luminosity,
+        // histVariableToFileMapping));
 
         auto higgsData = std::make_shared<Process>("Data", higgsColor);
         // 150022816 events in Data_Trigger_SingleMuon_Year_2016B.root before TriggerCut change
-        higgsData->addProcess(makeBasicProcess(filePath, "Electron2016.root", "Electron2016", reader, luminosity, histVariableToFileMapping, true));
-        higgsData->addProcess(makeBasicProcess(filePath, "Electron2016APV.root", "Electron2016APV", reader, luminosity, histVariableToFileMapping, true));
-        higgsData->addProcess(makeBasicProcess(filePath, "Electron2017.root", "Electron2017", reader, luminosity, histVariableToFileMapping, true));
-        higgsData->addProcess(makeBasicProcess(filePath, "Electron2018.root", "Electron2018", reader, luminosity, histVariableToFileMapping, true));
-        higgsData->addProcess(makeBasicProcess(filePath, "Muon2016.root", "Muon2016", reader, luminosity, histVariableToFileMapping, true));
-        higgsData->addProcess(makeBasicProcess(filePath, "Muon2016APV.root", "Muon2016APV", reader, luminosity, histVariableToFileMapping, true));
-        higgsData->addProcess(makeBasicProcess(filePath, "Muon2017.root", "Muon2017", reader, luminosity, histVariableToFileMapping, true));
-        higgsData->addProcess(makeBasicProcess(filePath, "Muon2018.root", "Muon2018", reader, luminosity, histVariableToFileMapping, true));
+        higgsData->addProcess(makeBasicProcess(filePath, "Electron2016.root", "Electron2016", reader, luminosity,
+                                               histVariableToFileMapping, true));
+        higgsData->addProcess(makeBasicProcess(filePath, "Electron2016APV.root", "Electron2016APV", reader, luminosity,
+                                               histVariableToFileMapping, true));
+        higgsData->addProcess(makeBasicProcess(filePath, "Electron2017.root", "Electron2017", reader, luminosity,
+                                               histVariableToFileMapping, true));
+        higgsData->addProcess(makeBasicProcess(filePath, "Electron2018.root", "Electron2018", reader, luminosity,
+                                               histVariableToFileMapping, true));
+        higgsData->addProcess(makeBasicProcess(filePath, "Muon2016.root", "Muon2016", reader, luminosity,
+                                               histVariableToFileMapping, true));
+        higgsData->addProcess(makeBasicProcess(filePath, "Muon2016APV.root", "Muon2016APV", reader, luminosity,
+                                               histVariableToFileMapping, true));
+        higgsData->addProcess(makeBasicProcess(filePath, "Muon2017.root", "Muon2017", reader, luminosity,
+                                               histVariableToFileMapping, true));
+        higgsData->addProcess(makeBasicProcess(filePath, "Muon2018.root", "Muon2018", reader, luminosity,
+                                               histVariableToFileMapping, true));
 
         processes.push_back(dyBackground);
-        //processes.push_back(dyBackgroundNoVeto);
+        // processes.push_back(dyBackgroundNoVeto);
         processes.push_back(higgsData);
         processes.push_back(qcdBackground);
         processes.push_back(zzBackground);
-        //processes.push_back(zzBackgroundNoVeto);
-        // processes.push_back(ttBarandMultiBosonBackground);
+        // processes.push_back(zzBackgroundNoVeto);
+        //  processes.push_back(ttBarandMultiBosonBackground);
         processes.push_back(ttbarProcess);
         processes.push_back(ttzProcess);
-        
+
         processes.push_back(other);
         processes.push_back(wJetsBackground);
 
@@ -230,41 +269,40 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         // {
         //     for(std::string systematic : systematics)
         //     {
-        //         auto sys = process->calcSystematic(HistVariable(HistVariable::VariableType::SameSignInvariantMass), systematic);
-        //         process->addSystematic(sys);
+        //         auto sys = process->calcSystematic(HistVariable(HistVariable::VariableType::SameSignInvariantMass),
+        //         systematic, true); process->addSystematic(sys);
         //     }
-        // }        
-    
+        // }
 
-        auto leptonProcesses = std::make_shared<Channel>(recoDecay, processes);
+            std::string modeLabel = zSelection ? "_ZPeak" : "";
 
-        for (std::string processName : leptonProcesses->getNames())
-        {
-            // std::cout << processName << std::endl;
-            // Change this line to make the described name your signal process name.
+            auto leptonProcesses = std::make_shared<Channel>(recoDecay + modeLabel, processes);
+
+            for (std::string processName : leptonProcesses->getNames())
+            {
             if (processName == "Higgs Signal 1000")
             {
-                leptonProcesses->labelProcess("signal", processName);
+                leptonProcesses->labelProcess(Channel::Label::Signal, processName);
             }
-            else if (processName.substr(0, 5) == "Group" || processName.substr(0, 5) == "Higgs")
+            else if (processName.starts_with("Group") || processName.starts_with("Higgs"))
             {
-                //leptonProcesses->labelProcess("signal", processName);
-                // std::cout << "Labeled Signal: " << processName << std::endl;
+                // leptonProcesses->labelProcess("signal", processName);
+                //  std::cout << "Labeled Signal: " << processName << std::endl;
             }
             // "Monte Carlo Data"
             else if (processName == "Data")
             { // This line is only used for complete plots
-                leptonProcesses->labelProcess("data", processName);
+                leptonProcesses->labelProcess(Channel::Label::Data, processName);
                 // std::cout << "Labeled Data: " << processName << std::endl;
             }
             else
             {
-                leptonProcesses->labelProcess("background", processName);
+                leptonProcesses->labelProcess(Channel::Label::Background, processName);
                 // std::cout << "Labeled Background: " << processName << std::endl;
             }
+            // leptonBackgrounds->cleanProcesses();
+            getChannelsProtected().push_back(leptonProcesses);
+            }
         }
-        // leptonBackgrounds->cleanProcesses();
-        getChannelsProtected().push_back(leptonProcesses);
     }
 }
-

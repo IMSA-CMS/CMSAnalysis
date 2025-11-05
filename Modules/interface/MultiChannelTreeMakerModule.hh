@@ -14,7 +14,7 @@ class MultiChannelTreeMakerModule : public TreeMakerModule{
     public:
         MultiChannelTreeMakerModule(std::shared_ptr<SpecialVariableModule> specialVariable, std::string name);
         virtual bool process() override;
-        virtual void initialize() override;
+        //virtual void initialize() override;
         virtual void finalize() override;
 
         virtual std::string getName() override {return "MultiChannelTreeMakerModule";}
