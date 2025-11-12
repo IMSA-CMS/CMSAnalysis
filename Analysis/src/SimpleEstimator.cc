@@ -62,16 +62,16 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, HistVaria
 // 
 
 
-    //  std::cout << "postMax " << hist->GetMaximum() << std::endl;
-    //  std::cout << "MaxContent " << hist->GetBinContent(hist->GetMaximumBin()) << std::endl;
-    //  std::cout << "process " << process->getName() << std::endl; 
-    //  std::cout << "totaleventsran " << totaleventsran << std::endl;
-    //  std::cout << "totalentries " << hist->GetEntries() << std::endl;
-    //  std::cout << "efficiency " << efficiency << std::endl;
-    //  std::cout << "luminosity " << luminosity << std::endl;
-    //  std::cout << "cross section " << crosssection << std::endl;
-    //  std::cout << "postIntegral " << hist->Integral(lowerLimit, numBins) << std::endl;
-    //  std::cout << "yield for " << process->getName() << " is " << signalest << std::endl;
+    // std::cout << "postMax " << hist->GetMaximum() << std::endl;
+    // std::cout << "MaxContent " << hist->GetBinContent(hist->GetMaximumBin()) << std::endl;
+    // std::cout << "process " << process->getName() << std::endl; 
+    // std::cout << "totaleventsran " << totaleventsran << std::endl;
+    // std::cout << "totalentries " << hist->GetEntries() << std::endl;
+    // std::cout << "efficiency " << efficiency << std::endl;
+    // std::cout << "luminosity " << luminosity << std::endl;
+    // std::cout << "cross section " << crosssection << std::endl;
+    // std::cout << "postIntegral " << hist->Integral(lowerLimit, numBins) << std::endl;
+    // std::cout << "yield for " << process->getName() << " is " << signalest << std::endl;
     
     return signalest;
 }

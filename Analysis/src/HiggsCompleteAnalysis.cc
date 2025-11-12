@@ -72,7 +72,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     // const std::string signalFilePath =
     // "/uscms/home/bhenning/Analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/HiggsFinal/";
 
-    const std::string filePath = "/uscms/homes/v/vyou/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/HiggsProjection/";
+    const std::string filePath = "/uscms/home/bhenning/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Output/HiggsNewOutput/";
     const std::string signalFilePath =
         "/uscms/home/bhenning/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Output/HiggsNewOutput/";
     // const std::string myPath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
@@ -184,24 +184,24 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         ttBarandMultiBosonBackground->addProcess(
             makeBasicProcess(filePath, "TTZ.root", "ttz", reader, luminosity, histVariableToFileMapping));
 
-        auto ttbarProcess = std::make_shared<Process>("TTbar Background", ttbarColor);
-        ttbarProcess->addProcess(
-            makeBasicProcess(filePath, "TTbar.root", "ttbar_lep", reader, luminosity, histVariableToFileMapping));
+        // auto ttbarProcess = std::make_shared<Process>("TTbar Background", ttbarColor);
+        // ttbarProcess->addProcess(
+        //     makeBasicProcess(filePath, "TTbar.root", "ttbar_lep", reader, luminosity, histVariableToFileMapping));
 
-        auto ttzProcess = std::make_shared<Process>("TTZ Background", ttbarColor);
-        ttzProcess->addProcess(
-            makeBasicProcess(filePath, "TTZ.root", "ttz", reader, luminosity, histVariableToFileMapping));
+        // auto ttzProcess = std::make_shared<Process>("TTZ Background", ttbarColor);
+        // ttzProcess->addProcess(
+        //     makeBasicProcess(filePath, "TTZ.root", "ttz", reader, luminosity, histVariableToFileMapping));
 
-        auto other = std::make_shared<Process>("Other Background", ttbarColor);
-        other->addProcess(makeBasicProcess(filePath, "TTW.root", "ttw", reader, luminosity, histVariableToFileMapping));
-        other->addProcess(makeBasicProcess(filePath, "ZZZ.root", "zzz", reader, luminosity, histVariableToFileMapping));
-        other->addProcess(
+        // auto other = std::make_shared<Process>("Other Background", ttbarColor);
+        ttBarandMultiBosonBackground->addProcess(makeBasicProcess(filePath, "TTW.root", "ttw", reader, luminosity, histVariableToFileMapping));
+        ttBarandMultiBosonBackground->addProcess(makeBasicProcess(filePath, "ZZZ.root", "zzz", reader, luminosity, histVariableToFileMapping));
+        ttBarandMultiBosonBackground->addProcess(
             makeBasicProcess(filePath, "WW.root", "wwto2l2nu", reader, luminosity, histVariableToFileMapping));
-        other->addProcess(makeBasicProcess(filePath, "WWW.root", "www", reader, luminosity, histVariableToFileMapping));
-        other->addProcess(makeBasicProcess(filePath, "WWZ.root", "wwz", reader, luminosity, histVariableToFileMapping));
-        other->addProcess(
+        ttBarandMultiBosonBackground->addProcess(makeBasicProcess(filePath, "WWW.root", "www", reader, luminosity, histVariableToFileMapping));
+        ttBarandMultiBosonBackground->addProcess(makeBasicProcess(filePath, "WWZ.root", "wwz", reader, luminosity, histVariableToFileMapping));
+        ttBarandMultiBosonBackground->addProcess(
             makeBasicProcess(filePath, "WZ.root", "wzto3lnu", reader, luminosity, histVariableToFileMapping));
-        other->addProcess(makeBasicProcess(filePath, "WZZ.root", "wzz", reader, luminosity, histVariableToFileMapping));
+        ttBarandMultiBosonBackground->addProcess(makeBasicProcess(filePath, "WZZ.root", "wzz", reader, luminosity, histVariableToFileMapping));
 
         auto dyBackground = std::make_shared<Process>("Drell-Yan Background", drellYanBackColor);
         dyBackground->addProcess(
@@ -258,11 +258,11 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         processes.push_back(qcdBackground);
         processes.push_back(zzBackground);
         // processes.push_back(zzBackgroundNoVeto);
-        //  processes.push_back(ttBarandMultiBosonBackground);
-        processes.push_back(ttbarProcess);
-        processes.push_back(ttzProcess);
+        processes.push_back(ttBarandMultiBosonBackground);
+        //processes.push_back(ttbarProcess);
+        //processes.push_back(ttzProcess);
 
-        processes.push_back(other);
+        //processes.push_back(other);
         processes.push_back(wJetsBackground);
 
         // for(std::shared_ptr<Process> process : processes)
@@ -298,7 +298,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
             else
             {
                 leptonProcesses->labelProcess(Channel::Label::Background, processName);
-                // std::cout << "Labeled Background: " << processName << std::endl;
+                //std::cout << "Labeled Background: " << processName << std::endl;
             }
             // leptonBackgrounds->cleanProcesses();
             getChannelsProtected().push_back(leptonProcesses);

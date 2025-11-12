@@ -31,7 +31,9 @@ class HistVariable
         InvariantMass,
         RecoSameSignInvariantMass,
         RecoOppositeSignInvariantMass,
-        DarkPhotonBDTOutput
+        DarkPhotonBDTOutput,
+        LeptonJetMass,
+        LeptonJetDeltaR
     };
 
     HistVariable(ParticleType type, int order, VariableType var, std::string unit = "", 

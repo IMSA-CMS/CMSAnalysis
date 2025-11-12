@@ -21,17 +21,18 @@ TH1* SingleProcess::getHist(HistVariable histType, bool scaleToExpected) const
     //std::cout << getName() << std::endl;
     TH1* hist = input->getHist(histType);
     if (!hist) {
-       //std::cout << "Hist not found in SingleProcess: " << getName() << std::endl;
+       std::cout << "Hist not found in SingleProcess: " << getName() << std::endl;
        return nullptr;
     }
-    if(scaleToExpected) {
+    if(scaleToExpected) 
+    {
         double yield = getExpectedYield(histType);
         double events = hist->Integral();
         if(events > 0) 
         {
             hist->Scale(yield/events);
-            //std::cout << "Yield: " << yield << " Events: " << events << "\n";
-            //std::cout << getName() << " Scale: " << (yield/events) << "\n";
+            // std::cout << "Yield: " << yield << " Events: " << events << "\n";
+            // std::cout << getName() << " Scale: " << (yield/events) << "\n";
         }
     }
     //std::cout << "SingleProcess 2" << std::endl;
