@@ -98,6 +98,11 @@ std::string HistVariable::getName() const
     case HistVariable::VariableType::MET:
         name += "MET";
         break;
+    case HistVariable::VariableType::DarkPhotonBDTOutput:
+        name+= "LeptonJetMLOutputMain";
+        break;
+    default:
+        throw std::runtime_error("Unknown variable type in HistVariable::getName()");
     }
 
     if (is2DHistX_)

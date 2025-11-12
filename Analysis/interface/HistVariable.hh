@@ -30,7 +30,8 @@ class HistVariable
         OppositeSignInvariantMass,
         InvariantMass,
         RecoSameSignInvariantMass,
-        RecoOppositeSignInvariantMass
+        RecoOppositeSignInvariantMass,
+        DarkPhotonBDTOutput
     };
 
     HistVariable(ParticleType type, int order, VariableType var, std::string unit = "", 
