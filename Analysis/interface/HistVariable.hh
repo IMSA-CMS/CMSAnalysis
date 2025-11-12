@@ -30,7 +30,9 @@ class HistVariable
         OppositeSignInvariantMass,
         InvariantMass,
         RecoSameSignInvariantMass,
-        RecoOppositeSignInvariantMass
+        RecoOppositeSignInvariantMass,
+        LeptonJetMass,
+        LeptonJetDeltaR
     };
 
     HistVariable(ParticleType type, int order, VariableType var, std::string unit = "", 

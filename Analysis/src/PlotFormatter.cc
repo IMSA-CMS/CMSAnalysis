@@ -359,9 +359,10 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     if (includeData)
     {
         data = analysis->getHist(histvariable, dataNames.at(0), false, channelName);
+        std::cout << "Data has: " << data->GetEntries() << std::endl;
     }
 
-    //std::cout << "Data has: " << data->GetEntries() << std::endl;
+
 
 
 
@@ -393,7 +394,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     std::vector<std::shared_ptr<Process>> backgroundProcesses;
     for(std::string name : backgroundNames)
     {
-        // std::cout << name << std::endl;
+        std::cout << name << std::endl;
         // std::cout << channelName << std::endl;
         // std::cout << histvariable.getName() << std::endl;
         
@@ -401,7 +402,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
 
         backgroundProcesses.push_back(analysis->getChannel(channelName)->findProcess(name));
         // auto hist = process->getSystematicHist(histvariable, true).second;
-
+        
         // TEST
         if (!hist)
         {
@@ -424,11 +425,12 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
         float backgroundIntegral = 0;
 
         IntegralScaling(upperMasslimit, scaleTodata, backgroundHists, firstBin, dataIntegral, backgroundIntegral);
+        maxCombinedY = std::max(data->GetMaximum(), maxCombinedY);
     }
 
     background = new THStack("background", "background");
 
-    maxCombinedY *= 100;
+    //maxCombinedY *= 100;
     if(data)
     {
         data->SetMaximum(maxCombinedY);
@@ -876,7 +878,7 @@ TLegend* PlotFormatter::GetLegend(THStack* background, std::shared_ptr<Channel> 
         toAdd = name;
         legend->AddEntry(data, " " + toAdd, "L");
     }
-    else
+    if (includeSignal)
     {
         name = processes->getNamesWithLabel(Channel::Label::Signal).at(0); 
         toAdd = name;
