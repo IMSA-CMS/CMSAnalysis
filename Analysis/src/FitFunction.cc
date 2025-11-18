@@ -2,6 +2,7 @@
 #include "TF1.h"
 #include <TMath.h>
 #include <boost/algorithm/string/split.hpp>
+#include <cmath>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -59,6 +60,26 @@ double FitFunction::DSCB(double *x, double *par)
 double FitFunction::doubleGaussian(double *x, double *par)
 {
     return par[0] * TMath::Gaus(x[0], par[1], par[2]) + par[3] * TMath::Gaus(x[0], par[4], par[5]);
+}
+
+// Params: mult, u, sigma1, s, n
+double FitFunction::gausLogPowerNorm(double *xs, double *par)
+{
+    const auto x = xs[0];
+    const auto mult = par[0];
+    const auto u = par[1];
+    const auto sigma1 = par[2];
+    const auto s = par[3];
+    const auto n = par[4];
+
+    if (x <= u)
+    {
+        return mult * exp(-(x - u) * (x - u) / (2 * sigma1 * sigma1));
+    }
+    else
+    {
+        return mult * exp(-s * pow(log(x / u), n));
+    }
 }
 
 FitFunction::FitFunction(const TF1 &func, FunctionType funcType, std::string channelName)
@@ -177,8 +198,10 @@ FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const s
         func = TF1(name.data(), doubleGaussian, min, max, 6, 1, TF1::EAddToList::kNo);
         func.SetParNames("mul_{1}", "#mu_{1}", "#sigma_{1}", "mul_{2}", "#mu_{2}", "#sigma_{2}");
         break;
-    default:
-        throw std::invalid_argument("Not a valid FunctionType enum value");
+    case FunctionType::GausLogPowerNorm:
+        func = TF1(name.data(), gausLogPowerNorm, min, max, 5, 1, TF1::EAddToList::kNo);
+        func.SetParNames("N", "#mu", "#sigma_{1}", "s", "n");
+        break;
     };
 
     return FitFunction(func, functionType, std::move(channelName));
