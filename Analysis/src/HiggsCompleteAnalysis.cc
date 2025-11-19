@@ -21,7 +21,7 @@ const std::vector<std::string> HiggsCompleteAnalysis::genSimDecays{
 const std::vector<std::string> HiggsCompleteAnalysis::recoDecays{
     "eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet",
     "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt", "eee",  "eeu",  "eue",
-    "euu",  "uue",  "uuu",  "ee",   "e e",  "eu",   "e u",  "uu",   "u u",  "none", "e_e_", "u_u_"};
+    "euu",  "uue",  "uuu",  "e_e_", "u_u_", "ee",   "e e",  "eu",   "e u",  "uu",   "u u",  "none", };
 
 const std::vector<std::string> systematics{"ElectronScaleFactor", "MuonIDISOScaleFactor", "MuonRecoScaleFactor",
                                            "MuonTriggerScaleFactor"};
