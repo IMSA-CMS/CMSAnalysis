@@ -12,7 +12,7 @@ class Estimator
 public: 
 	virtual ~Estimator() {}
 	virtual double getMassTarget() const = 0;
-	virtual double getExpectedYield(const SingleProcess* process, HistVariable dataType, double luminosity) const = 0;
+	virtual double getExpectedYield(const SingleProcess* process, const HistVariable& dataType, double luminosity) const = 0;
 };
 
 

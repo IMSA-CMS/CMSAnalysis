@@ -4,7 +4,10 @@
 #include "CMSAnalysis/Analysis/interface/RateSystematic.hh"
 #include "TH1F.h"
 #include "TH2F.h"
+#include "TList.h"
+#include <algorithm>
 #include <iostream>
+#include <string>
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -12,78 +15,70 @@
 #include "CMSAnalysis/Utility/interface/ScaleFactor.hh" 
 #include "CMSAnalysis/Analysis/interface/ShapeSystematic.hh"
 
-TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
+
+TH1* Process::getHist(const HistVariable& histType, bool scaleToExpected) const
 {
+	if (processes.size() == 0)
+	{
+		return new TH1D(name.c_str(), name.c_str(), 1, 0.0, 0.0);
+	}
+
 	int maxBinNum = 0;
 	double maxBarWidth = 0.0;
-	int singleProcessNumber = 0;
-	TH1* newHist;
-	TH1* hist; 
-	if(processes.size() > 0) 
+	for (const auto& singleProcess : processes)
 	{
-		for (const auto& singleProcess : processes)
+		TH1 *hist = nullptr;
+		try
 		{
-			singleProcessNumber++;
-			try
-			{
-				hist = singleProcess.getHist(histType, scaleToExpected);
-			}
-			catch (std::runtime_error& error)
-			{
-				std::cout << "Error: " << error.what() << std::endl;
-				continue;
-			}
-			if (!hist)
-			{
-				continue;
-			}
-			/*
-			if (!hist || hist->IsZombie()) 
-			{
-				return nullptr;
-				//throw std::runtime_error("Histogram not found in process: " + this->name + "\nIn singleProcess number: " + singleProcessNumber);
-			}
-			*/
-			if (hist->IsZombie()) 
-			{
-				return nullptr;
-				//throw std::runtime_error("Histogram not found in process: " + this->name + "\nIn singleProcess number: " + singleProcessNumber);
-			}
-			//std::cout << "numBins: " << hist->GetNbinsX() << "\n";
-			if (hist->GetNbinsX() > maxBinNum)
-			{
-				maxBinNum = hist->GetNbinsX();
-			}
-			if ((hist->GetXaxis()->GetBinWidth(maxBinNum)) > maxBarWidth)
-			{
-				maxBarWidth = (hist->GetXaxis()->GetBinWidth(maxBinNum));
-			}
+			hist = singleProcess.getHist(histType, scaleToExpected);
 		}
-		newHist = new TH1F(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * maxBarWidth);
-		TH1* toAdd;
-		TList* toMerge = new TList;
-		for (const auto& singleProcess : processes)	
+		catch (std::runtime_error& error)
 		{
-			//std::cout << "Process: " << singleProcess.getName() << std::endl;
-			toAdd = singleProcess.getHist(histType, scaleToExpected);
-			//Add only if the hisogram exists
-
-			if (toAdd)
-			{
-				toMerge->Add(toAdd);
-			}
-
-			//std::cout << toAdd->GetName() << " has " << toAdd->GetNbinsX() << std::endl;
+			std::cout << "Error: " << error.what() << '\n';
+			continue;
 		}
-		newHist->Merge(toMerge);
-		newHist->SetLineColor(color);
-		newHist->SetFillColor(color);
+		if (!hist)
+		{
+			continue;
+		}
+		/*
+		if (!hist || hist->IsZombie()) 
+		{
+			return nullptr;
+			//throw std::runtime_error("Histogram not found in process: " + this->name + "\nIn singleProcess number: " + singleProcessNumber);
+		}
+		*/
+		if (hist->IsZombie()) 
+		{
+			return nullptr;
+			//throw std::runtime_error("Histogram not found in process: " + this->name + "\nIn singleProcess number: " + singleProcessNumber);
+		}
+		//std::cout << "numBins: " << hist->GetNbinsX() << "\n";
+		maxBinNum = std::max(hist->GetNbinsX(), maxBinNum);
+		maxBarWidth = std::max(hist->GetXaxis()->GetBinWidth(maxBinNum), maxBarWidth);
 	}
-	else
+	if (maxBinNum == 0)
 	{
-		newHist = new TH1D(name.c_str(), name.c_str(), 1, 0.0, 0.0);
-		//std::cout << "Made Empty Hist" << std::endl;
+		return new TH1D(name.c_str(), name.c_str(), 1, 0.0, 0.0);
 	}
+	TH1 *newHist = new TH1F(name.c_str(), name.c_str(), maxBinNum, 0, maxBinNum * maxBarWidth);
+	TList* toMerge = new TList;
+	for (const auto& singleProcess : processes)	
+	{
+		//std::cout << "Process: " << singleProcess.getName() << std::endl;
+		TH1 *toAdd = singleProcess.getHist(histType, scaleToExpected);
+		//Add only if the hisogram exists
+
+		if (toAdd)
+		{
+			toMerge->Add(toAdd);
+		}
+
+		//std::cout << toAdd->GetName() << " has " << toAdd->GetNbinsX() << std::endl;
+	}
+	newHist->Merge(toMerge);
+	newHist->SetLineColor(color);
+	newHist->SetFillColor(color);
 
 	if (!newHist)
 	{
@@ -95,7 +90,7 @@ TH1* Process::getHist(HistVariable histType, bool scaleToExpected) const
 	return newHist;
 }
 
-TH2* Process::get2DHist(HistVariable histType) const
+TH2* Process::get2DHist(const HistVariable& histType) const
 {
 	int maxBinNum = 0;
 	int yMaxBinNum = 0;
@@ -158,7 +153,7 @@ const SingleProcess& Process::getSingleProcess(const std::string& singleProcessN
 	throw std::invalid_argument("There is no SingleProcess named " + singleProcessName + " within this Process object");
 }
 
-double Process::getYield(HistVariable dataType) const
+double Process::getYield(const HistVariable& dataType) const
 {
 	double totalYield = 0;
 	for(const auto& singleProcess : processes)

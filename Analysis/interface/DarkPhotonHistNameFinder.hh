@@ -8,7 +8,7 @@ class DarkPhotonHistNameFinder : public HistNameFinder
 	public:
 	DarkPhotonHistNameFinder(std::string iChannel, std::string iSubchannel, bool iisData = false) 
 	: channel(std::move(iChannel)), subChannel(std::move(iSubchannel)), isData(iisData) {}
-	virtual std::string getHistName(HistVariable histVariable) const override;
+	virtual std::string getHistName(const HistVariable& histVariable) const override;
 
 	private:
 	std::string channel;

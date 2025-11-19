@@ -169,9 +169,9 @@ void ParticleType::particleTypeOverrides()
 
     typeList[13].collectionHists.push_back(getSameSignInvariantMassHist());
     typeList[13].collectionHists.push_back(getOppositeSignInvariantMassHist());
-    typeList[13].particleHists.push_back(getDXYHist());
-    typeList[13].particleHists.push_back(getDZHist());
-    typeList[13].particleHists.push_back(getIsolationHist());
+
+    typeList[15].collectionHists.push_back(getSameSignInvariantMassHist());
+    typeList[15].collectionHists.push_back(getOppositeSignInvariantMassHist());
 
     registerType("Meson",26,0,
     std::vector<HistParams>{getPtHist(),getPhiHist(),getEtaHist()},

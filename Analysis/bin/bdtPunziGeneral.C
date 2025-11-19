@@ -22,9 +22,9 @@ void createPunzi(const std::string& fileName, const std::string& signalHistName,
                     const TString& xTitle, const TString& yTitle, double luminosity, double cross_section, const std::string& outputFileName) {
     auto plotFormatter = std::make_shared<PlotFormatter>(false, "Preliminary Data");
 	DarkPhotonCompleteAnalysis analysis; 
-	auto channel = analysis.getChannel("0.3");
-	auto signalHists = channel->getHists(HistVariable("LeptonJetMLOutput Low Mass and Same Sign"), "signal", true);
-	auto backgroundHists = channel->getHists(HistVariable("LeptonJetMLOutput Low Mass and Same Sign"), "background", true);
+	auto channel = analysis.getChannel("Low Mass and Different Sign/1Jet");
+	auto signalHists = channel->getHists(HistVariable(HistVariable::VariableType::DarkPhotonBDTOutput), Channel::Label::Signal, true);
+	auto backgroundHists = channel->getHists(HistVariable(HistVariable::VariableType::DarkPhotonBDTOutput), Channel::Label::Background, true);
 	auto signalHist = Channel::combineHists(signalHists);
 	auto backgroundHist = Channel::combineHists(backgroundHists);
 	

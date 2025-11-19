@@ -18,9 +18,9 @@ class RootFileInput : public Input
 		std::shared_ptr<HistNameFinder> histVariableToFileMapping);
 		TFile* getFile(std::string fileName) const;
 		//Gets hists, if 2D projects it down to 1D
-		TH1* getHist(HistVariable histType) const override;
+		TH1* getHist(const HistVariable& histType) const override;
 		//Gets hist without projecting (if 2D)
-		TH1* get2DHist(HistVariable histType) const override;
+		TH1* get2DHist(const HistVariable& histType) const override;
 		//Gets histogram using its name from within the file, as opposed to its HistVariable type
 		TH1* getHistFromName(std::string histName) const;
 		int getTotalEvents() const override;

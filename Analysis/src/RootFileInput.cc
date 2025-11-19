@@ -36,7 +36,7 @@ TFile* RootFileInput::getFile(std::string fileSource) const
 }
 
 
-TH1* RootFileInput::getHist(HistVariable histType) const
+TH1* RootFileInput::getHist(const HistVariable& histType) const
 {
 	TH1::AddDirectory(kFALSE);
 	std::string name = histVariableToFileMapping->getHistName(histType);
@@ -56,7 +56,6 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 		dir = (TDirectory*)dir->GetDirectory(folder.c_str());
 		if (!dir) 
 		{
-			std::cout << "No directory named " << folder << " found in file " << fileSource <<"\n";
 			// std::cout << "No directory named " + folder + " found in file: "<< fileSource <<"\n";
 			delete dir;
 			delete hist;
@@ -71,7 +70,7 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 	//std::cout << "RootFileInput Hit 3 " << std::endl;
 	if (!hist)
 	{
-		std::cout << "No histogram named " << histName << " found in file " << fileSource << '\n';
+		// std::cout << "No histogram named " << histName << " found in file " << fileSource << '\n';
 		delete file;
 		return nullptr;
 	}
@@ -137,7 +136,7 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 }
 
 
-TH1* RootFileInput::get2DHist(HistVariable histType) const
+TH1* RootFileInput::get2DHist(const HistVariable& histType) const
 {
 	std::string name = histVariableToFileMapping->getHistName(histType);
 

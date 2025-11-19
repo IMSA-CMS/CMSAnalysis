@@ -13,6 +13,7 @@ class FitFunction
         DoubleSidedCrystalBall,
         PowerLaw,
         DoubleGaussian,
+        GausLogPowerNorm,
     };
 
     // static const std::vector<std::string> functionList;
@@ -39,6 +40,7 @@ class FitFunction
     static double powerLaw(double *x, double *par);
     static double DSCB(double *x, double *par);
     static double doubleGaussian(double *x, double *par);
+    static double gausLogPowerNorm(double *x, double *par);
     static std::vector<std::string> split(const std::string &str, char delimiter);
 
     TF1 function;

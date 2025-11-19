@@ -4,7 +4,7 @@
 #include "TH1.h"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 
-double SimpleEstimator::getExpectedYield(const SingleProcess* process, HistVariable dataType, double luminosity) const
+double SimpleEstimator::getExpectedYield(const SingleProcess* process, const HistVariable& dataType, double luminosity) const
 {
     //Takes the histogram wanted from the file, assigns it hist
     //TH1 *hist = dynamic_cast<TH1 *>(process->getHist(dataType, false));
