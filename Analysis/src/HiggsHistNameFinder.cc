@@ -25,7 +25,9 @@ std::string HiggsHistNameFinder::getHistName(HistVariable histVariable) const
         break;
     }
 
-    std::string path = "hists/" + syst + "ZVeto" + reco + gensim + "/" + histVariable.getName();
+    std::string zSomething = zSelection ? "ZPeak" : "ZVeto";
+
+    std::string path = "hists/" + syst + zSomething + reco + gensim + "/" + histVariable.getName();
 
     return path;
 
