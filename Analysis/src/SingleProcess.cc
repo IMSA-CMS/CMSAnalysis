@@ -15,13 +15,13 @@
 #include "CMSAnalysis/Analysis/interface/Correction.hh"
 #include <unordered_map>
 
-TH1* SingleProcess::getHist(HistVariable histType, bool scaleToExpected) const
+TH1* SingleProcess::getHist(const HistVariable& histType, bool scaleToExpected) const
 {
     //std::cout << "SingleProcess 1" << std::endl;
     //std::cout << getName() << std::endl;
     TH1* hist = input->getHist(histType);
     if (!hist) {
-       std::cout << "Hist not found in SingleProcess: " << getName() << std::endl;
+       // std::cout << "Hist not found in SingleProcess: " << getName() << "\n";
        return nullptr;
     }
     if(scaleToExpected) 
@@ -41,7 +41,7 @@ TH1* SingleProcess::getHist(HistVariable histType, bool scaleToExpected) const
     return hist;
 }
 
-TH1* SingleProcess::get2DHist(HistVariable histType) const
+TH1* SingleProcess::get2DHist(const HistVariable& histType) const
 {
     return input->get2DHist(histType);
 }
@@ -51,7 +51,7 @@ int SingleProcess::getTotalEvents() const
     return input->getTotalEvents();
 }
 
-double SingleProcess::getExpectedYield(HistVariable dataType) const
+double SingleProcess::getExpectedYield(const HistVariable& dataType) const
 {
     double expectedYield = estimator->getExpectedYield(this, dataType, luminosity);
     return expectedYield;
