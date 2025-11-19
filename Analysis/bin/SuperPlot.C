@@ -122,7 +122,7 @@ void SuperPlot()
 	// //HistVariable nameVar(ParticleType::muon(), 0, HistVariable::VariableType::SameSignInvariantMass);
 	HistVariable nameVar(HistVariable::VariableType::RecoSameSignInvariantMass);
 	auto ana = std::make_shared<HiggsCompleteAnalysis>();
-	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, false, true, "ee___ZPeak");
+	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, false, true, "ee__ _ZPeak");
 
 	// auto ana = std::make_shared<DarkPhotonCompleteAnalysis>();
 	// TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, false, true, "High Mass and Different Sign/1Jet");

@@ -4,10 +4,11 @@
 
 std::string HiggsHistNameFinder::getHistName(const HistVariable &histVariable) const
 {
-    std::string genSimStr;
-    if (!genSim.empty())
+    const auto reco = "/Reco " + channel.substr(0, 4);
+    std::string gensim;
+    if (channel.size() > 4)
     {
-        genSimStr = "GenSim " + genSim + "/";
+        gensim = "/GenSim " + channel.substr(5, 4);
     }
 
     std::string syst;
@@ -23,16 +24,9 @@ std::string HiggsHistNameFinder::getHistName(const HistVariable &histVariable) c
         break;
     }
 
-    std::string zSel;
-    if (zSelection)
-    {
-        zSel = "ZPeak/";
-    }
-    else
-    {
-        zSel = "ZVeto/";
-    }
-    const std::string path = "hists/" + syst + zSel + "Reco " + reco + "/" + genSimStr + histVariable.getName();
+    std::string zSomething = zSelection ? "ZPeak" : "ZVeto";
+
+    std::string path = "hists/" + syst + zSomething + reco + gensim + "/" + histVariable.getName();
 
     return path;
 

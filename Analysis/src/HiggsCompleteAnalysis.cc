@@ -20,8 +20,9 @@ const std::vector<std::string> HiggsCompleteAnalysis::genSimDecays{
 
 const std::vector<std::string> HiggsCompleteAnalysis::recoDecays{
     "eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet",
-    "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt", "eee",  "eeu",  "eue",
-    "euu",  "uue",  "uuu",  "e_e_", "u_u_", "ee",   "e e",  "eu",   "e u",  "uu",   "u u",  "none", };
+    "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt", "eee_", "eeu_", "eue_",
+    "euu_", "uue_", "uuu_", "eet_", "ete_", "eut_", "etu_", "uut_", "utu_", "ett_", "utt_", "ttt_",
+    "ee__", "e_e_", "eu__", "e_u_", "uu__", "u_u_", "tt__", "t_t_", "te__", "t_e_", "tu__", "t_u_", "none"};
 
 const std::vector<std::string> systematics{"ElectronScaleFactor", "MuonIDISOScaleFactor", "MuonRecoScaleFactor",
                                            "MuonTriggerScaleFactor"};
@@ -76,6 +77,9 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     //  const std::string filePath = "/uscms/home/bhenning/Analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/HiggsFinal/";
     // const std::string signalFilePath =
     // "/uscms/home/bhenning/Analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/HiggsFinal/";
+
+    const std::string filePath = "/uscms/home/bhenning/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Output/HiggsNewOutput/";
+    const std::string signalFilePath = "/uscms/home/bhenning/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Output/HiggsNewOutput/";
     // const std::string myPath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     // const std::string filePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     // const std::string signalFilePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
@@ -302,10 +306,10 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
                 else
                 {
                     leptonProcesses->labelProcess(Channel::Label::Background, processName);
-                    //std::cout << "Labeled Background: " << processName << std::endl;
+                    // std::cout << "Labeled Background: " << processName << std::endl;
                 }
-            }
             // leptonBackgrounds->cleanProcesses();
+            }
             getChannelsProtected().push_back(leptonProcesses);
         }
     }
