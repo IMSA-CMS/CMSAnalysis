@@ -2,142 +2,114 @@
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
-#include "TAxis.h"
-#include "TCanvas.h"
 #include "TF1.h"
-#include "TFile.h"
-#include "TFitResult.h"
-#include "TFormula.h"
 #include "TGraph.h"
-#include "TGraphErrors.h"
 #include "TH1.h"
-#include "TH2.h"
-#include "TMath.h"
-#include "TStyle.h"
-#include <cmath>
-#include <float.h>
-#include <fstream>
 #include <iostream>
 #include <map>
-#include <math.h>
-#include <sstream>
 #include <string>
 #include <vector>
-#define _USE_MATH_DEFINES
 
-std::vector<std::string> channelTypes = {
-    "eeee", "eeeu", "eueu", "eeuu",
-    "euuu", "uuuu"
-    // "ee",
-    // "eu",
-    // "uu",
+void fitProcess(const Process &process, Fitter &fitter, const HistVariable &histVar, const std::string &channelName,
+                int min, int max);
+
+const std::vector<HistVariable> histogramTypes = {
+    HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
+    HistVariable(HistVariable::VariableType::InvariantMass, "", false, true),
 };
 
-std::vector<HistVariable> histogramTypes = {
-    HistVariable(Selector::None, VariableType::RecoInvariantMassBackground, "", true, false),
-    HistVariable(Selector::None, VariableType::RecoInvariantMassBackground, "", false, true),
-    HistVariable(Selector::None, VariableType::SameSignInvariantMass),
+const std::string fitHistsName = "H++BackgroundFitsOld.root";
+const std::string fitParameterValueFile = "H++BackgroundFunctionsOld.txt";
+// These don't do anything
+const std::string parameterFits = "H++BackgroundParameterFits.root";
+const std::string parameterFunctions = "H++BackgroundParameterFunctions.txt";
+
+const std::map<std::string, std::pair<int, int>> bgsToRange = {
+    {"Drell-Yan Background", {0, 2000}},            // 140-500
+    {"QCD Background", {0, 2000}},                  // 200-2000
+    {"ZZ Background", {0, 2000}},                   // 100-800
+    {"WJets Background", {0, 2000}},                //
+    {"t#bar{t}, Multiboson Background", {0, 2000}}, //
 };
+
+const int minData = 500;
 
 // run in batch mode for faster processing: root -b HiggsBackgroundFit.C+
 void HiggsBackgroundFit()
 {
-    // const double min = 200;
-    // const double max = 2000;
-
-	std::string fitHistsName = "H++BackgroundFits.root";
-	std::string fitParameterValueFile = "H++BackgroundFunctions.txt";
-
-    // these don't do anything
-    std::string parameterFits = "H++BackgroundParameterFits.root";
-    std::string parameterFunctions = "H++BackgroundParameterFunctions.txt";
     remove(fitParameterValueFile.c_str());
     remove(parameterFunctions.c_str());
 
-    // std::vector<std::string> backgrounds = {
-    // 	// "t#bar{t} Background 1",
-    // 	// "t#bar{t} Background 2",
-    // 	// "t#bar{t} Background 3",
-    // 	"Drell-Yan Background",
-    // 	// "Drell-Yan Background No Veto",
-    // 	"QCD Background",
-    // 	"ZZ Background",
-    // 	// "ZZ Background No Veto",
-    // 	// "ZZZ",
-    // 	// "WW",
-    // 	// "WWW",
-    // 	// "WWZ",
-    // 	// "WZ",
-    // 	// "WZZ",
-    // 	"t#bar{t}, Multiboson Background",
-    // };
-
-    std::map<std::string, std::pair<int, int>> backgroundsToRange = {
-        {"Drell-Yan Background", {140, 500}},
-        {"QCD Background", {200, 2000}}, // no events anyway
-        {"ZZ Background", {100, 800}},
-        {"TTbar Background", {70, 2000}},
-        // {"TTW Background", {90, 2000}}, // almost no events on uuuu, figure out something
-        {"TTZ Background", {120, 2000}},
-        // {"ZZZ Background", {200, 2000}}, // not enough to fit
-        // {"WW Background", {200, 2000}}, // not enough to fit
-        // {"WWW Background", {200, 2000}}, // not enough to fit
-        // {"WWZ Background", {200, 2000}}, // not enough
-        // {"WZ Background", {200, 2000}}, // not enough
-        // {"WZZ Background", {200, 2000}}, // enough on some?
-        // {"Other Background", {200, 2000}},
-    };
-
     Fitter fitter(fitHistsName, fitParameterValueFile, parameterFits, parameterFunctions);
 
-    std::shared_ptr<HiggsCompleteAnalysis> analysis = std::make_shared<HiggsCompleteAnalysis>();
-    std::cout << "Loaded histogram\n";
+    const auto analysis = HiggsCompleteAnalysis();
+    const auto systs = analysis.getSystematics();
+    std::cout << "Loaded histograms\n";
 
     for (const auto &histVar : histogramTypes)
     {
-        for (const auto &channel : channelTypes)
+        for (const auto &channel : analysis.getChannels())
         {
-            std::unordered_map<std::string, double> massValues;
-            std::unordered_map<std::string, TH1 *> histogramMap;
-            FitFunctionCollection currentFunctions;
-
-            auto targetChannel = analysis->getChannel(channel);
-            std::vector<std::string> keyNames;
-            for (auto backgroundAndRange : backgroundsToRange)
+            for (const auto &bgAndRange : bgsToRange)
             {
-                auto background = backgroundAndRange.first;
-                auto range = backgroundAndRange.second;
-                try
+                const auto process = channel->findProcess(bgAndRange.first);
+                fitProcess(*process, fitter, histVar, channel->getName(), bgAndRange.second.first,
+                           bgAndRange.second.second);
+
+                // Fit systematics
+                for (const auto &systName : systs)
                 {
-                    auto process = targetChannel->findProcess(background);
+                    for (const auto &systType : {ScaleFactor::SystematicType::Down, ScaleFactor::SystematicType::Up})
+                    {
+                        auto systHistVar = histVar;
+
+                        systHistVar.setSystematic(systType, systName);
+                        fitProcess(*process, fitter, systHistVar, channel->getName(), bgAndRange.second.first,
+                                   bgAndRange.second.second);
+                    }
                 }
-                catch (std::runtime_error &)
-                {
-                    continue;
-                }
-                auto process = targetChannel->findProcess(background);
-
-                std::cout << "process.getProcesses().size(): " << process->getProcesses().size() << "\n";
-
-                std::cout << "histVar: " << histVar.getName() << "\n";
-
-                TH1 *selectedHist = process->getHist(histVar, true);
-                if (selectedHist->GetEntries() < 1)
-                {
-                    continue;
-                }
-                std::cout << "Reached\n";
-                std::string keyName = channel + '/' + background + " " + histVar.getName();
-                keyNames.push_back(keyName);
-
-                FitFunction func =
-                    FitFunction::createFunctionOfType(FitFunction::POWER_LAW, keyName, "", range.first, range.second);
-                currentFunctions.insert(func);
-                histogramMap.insert({keyName, selectedHist});
             }
-            fitter.setHistograms(histogramMap);
-            fitter.loadFunctions(currentFunctions);
-            fitter.fitFunctions();
         }
     }
+}
+
+void fitProcess(const Process &process, Fitter &fitter, const HistVariable &histVar, const std::string &channelName,
+                int min, int max)
+{
+    TH1 *const selectedHist = process.getHist(histVar, true);
+    if (selectedHist->GetEntries() < minData)
+    {
+        return;
+    }
+
+    std::string systDesc;
+    switch (histVar.getSystematicType())
+    {
+    case ScaleFactor::SystematicType::Nominal:
+        systDesc = "Nominal";
+        break;
+    case ScaleFactor::SystematicType::Up:
+        systDesc = histVar.getSystematicName() + " Up";
+        break;
+    case ScaleFactor::SystematicType::Down:
+        systDesc = histVar.getSystematicName() + " Down";
+        break;
+    }
+
+    const auto title = "Higgs " + channelName + " " + process.getName() + " " + systDesc;
+    selectedHist->SetTitle(title.c_str());
+
+    std::cout << "Fitting " + channelName + " " + process.getName() + "/" + histVar.getName() + " (" + systDesc + ")\n";
+
+    const std::string name = process.getName() + "/" + histVar.getName() + " " + systDesc;
+
+    FitFunction func =
+        FitFunction::createFunctionOfType(FitFunction::FunctionType::GausLogPowerNorm, name, "", min, max, channelName);
+
+    FitFunctionCollection currentFunctions;
+    currentFunctions.insert("", func);
+    std::unordered_map<std::string, TH1 *> histogramMap = {{"", selectedHist}};
+
+    fitter.loadFunctions(currentFunctions);
+    fitter.fitFunctions(histogramMap);
 }

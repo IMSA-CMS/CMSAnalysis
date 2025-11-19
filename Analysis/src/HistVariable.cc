@@ -65,7 +65,14 @@ std::string HistVariable::getName() const
 
     if (particleType != ParticleType::none())
     {
-        name += particleType.getName() + ' ';
+        if (particleType == ParticleType::leptonJet())
+        {
+            name += "leptonJet ";
+        }
+        else
+        {
+            name += particleType.getName() + ' ';
+        }
     }
 
 
@@ -98,6 +105,17 @@ std::string HistVariable::getName() const
     case HistVariable::VariableType::MET:
         name += "MET";
         break;
+    case HistVariable::VariableType::DarkPhotonBDTOutput:
+        name+= "LeptonJetMLOutputMain";
+        break;
+    case HistVariable::VariableType::LeptonJetMass:
+        name += "Lepton Jet Mass";
+        break;
+    case HistVariable::VariableType::LeptonJetDeltaR:
+        name += "Lepton Jet Delta R";
+        break;
+    default:
+        throw std::runtime_error("Unknown variable type in HistVariable::getName()");
     }
 
     if (is2DHistX_)
@@ -149,6 +167,14 @@ HistVariable::VariableType HistVariable::stringToVariableType(const std::string&
     if (varStr == "Reco Same Sign Invariant Mass") 
     {
         return VariableType::RecoSameSignInvariantMass;
+    }
+    if (varStr == "Lepton Jet Mass")
+    {
+        return VariableType::LeptonJetMass;
+    }
+    if (varStr == "Delta R")
+    {
+        return VariableType::LeptonJetDeltaR;
     }
 
     throw std::invalid_argument("Unknown variable type: " + varStr);

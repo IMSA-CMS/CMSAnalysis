@@ -1,9 +1,8 @@
 #include "CMSAnalysis/Analysis/interface/HiggsHistNameFinder.hh"
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
-#include <vector>
 
-std::string HiggsHistNameFinder::getHistName(HistVariable histVariable) const
+std::string HiggsHistNameFinder::getHistName(const HistVariable &histVariable) const
 {
     const auto reco = "/Reco " + channel.substr(0, 4);
     std::string gensim;
