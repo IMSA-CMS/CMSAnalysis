@@ -8,12 +8,13 @@ class HiggsCompleteAnalysis : public FullAnalysis
 {
   public:
     HiggsCompleteAnalysis();
-    double getBranchingRatio(const std::string &channel);
+    double getBranchingRatio(const std::string &channel) const;
 
     static const std::vector<std::string> genSimDecays;
     static const std::vector<std::string> recoDecays;
     static const std::vector<int> massTargets;
-    static const std::vector<std::string> systematics;
+
+    std::vector<std::string> getSystematics() const override;
 
     // bool checkChannelName(std::string channelName, double massTarget);
 

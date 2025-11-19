@@ -23,34 +23,39 @@ const int minData = 500;
 const double xMin = 0;
 const double xMax = 2000;
 
+const std::string fitHistsName = "H++SignalFits.root";
+const std::string fitParameterValueFile = "H++SignalFunctions.txt";
+const std::string parameterFits = "H++SignalParameterFits.root";
+const std::string parameterFunctions = "H++SignalParameterFunctions.txt";
+
 // run in batch mode for faster processing: root -b HiggsSignalFit.C+
 void HiggsSignalFit()
 {
-    const std::string fitHistsName = "H++SignalFits.root";
-    const std::string fitParameterValueFile = "H++SignalFunctions.txt";
-    const std::string parameterFits = "H++SignalParameterFits.root";
-    const std::string parameterFunctions = "H++SignalParameterFunctions.txt";
-
     remove(fitParameterValueFile.c_str());
     remove(parameterFunctions.c_str());
 
     Fitter fitter(fitHistsName, fitParameterValueFile, parameterFits, parameterFunctions);
 
     auto analysis = HiggsCompleteAnalysis();
+    const auto systs = analysis.getSystematics();
     std::cout << "Loaded histograms\n";
-    // for (const auto &systName : HiggsCompleteAnalysis::systematics)
-    {
-        // for (const auto &systType : {ScaleFactor::SystematicType::Down, ScaleFactor::SystematicType::Up})
-        {
-            for (auto histType : histogramTypes)
-            {
-                // histType.setSystematic(systType, systName);
 
-                for (const auto &channel : analysis.getChannels())
+    for (const auto &histType : histogramTypes)
+    {
+        for (const auto &channel : analysis.getChannels())
+        {
+            for (const auto &genSim : HiggsCompleteAnalysis::genSimDecays)
+            {
+                fitChannel(*channel, fitter, histType, genSim);
+
+                // Fit systematics
+                for (const auto &systName : systs)
                 {
-                    for (const auto &genSim : HiggsCompleteAnalysis::genSimDecays)
+                    for (const auto &systType : {ScaleFactor::SystematicType::Down, ScaleFactor::SystematicType::Up})
                     {
-                        fitChannel(*channel, fitter, histType, genSim);
+                        auto systHistType = histType;
+                        systHistType.setSystematic(systType, systName);
+                        fitChannel(*channel, fitter, systHistType, genSim);
                     }
                 }
             }
@@ -89,6 +94,9 @@ void fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
 
     const double skewAvg = skewSum / n;
     const double maxBinPctAvg = maxBinPctSum / n;
+    const FitFunction::FunctionType funcType = (-1.5 < skewAvg && 60 * maxBinPctAvg - skewAvg > 0.9)
+                                                   ? FitFunction::FunctionType::DoubleGaussian
+                                                   : FitFunction::FunctionType::DoubleSidedCrystalBall;
 
     std::unordered_map<std::string, double> massValues;
     std::unordered_map<std::string, TH1 *> histogramMap;
@@ -110,7 +118,7 @@ void fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
         // std::cout << "NEntry: " << histDown->GetEntries() << "\n";
 
         const auto title = "Higgs signal " + genSim + " #rightarrow " + channelName + " " + std::to_string(mass) + " " +
-                           histType.getSystematicName();
+                           histType.getName() + " " + histType.getSystematicName();
         hist->SetTitle(title.c_str());
         // histDown->SetTitle((title + " Down").c_str());
         // histUp->SetTitle((title + " Up").c_str());
@@ -121,11 +129,7 @@ void fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
         // FitFunction funcDown;
         // FitFunction funcUp;
         const auto name = genSim + "/" + std::to_string(mass) + '_' + histType.getName();
-        FitFunction func = (-1.5 < skewAvg && 60 * maxBinPctAvg - skewAvg > 0.9)
-                               ? FitFunction::createFunctionOfType(FitFunction::FunctionType::DOUBLE_GAUSSIAN, name, "",
-                                                                   xMin, xMax, channelName)
-                               : FitFunction::createFunctionOfType(FitFunction::FunctionType::DOUBLE_SIDED_CRYSTAL_BALL,
-                                                                   name, "", xMin, xMax, channelName);
+        FitFunction func = FitFunction::createFunctionOfType(funcType, name, "", xMin, xMax, channelName);
 
         const std::string keyName = std::to_string(mass);
         currentFunctions.insert(keyName, func);

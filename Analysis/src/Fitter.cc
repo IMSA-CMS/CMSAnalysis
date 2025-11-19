@@ -12,6 +12,7 @@
 #include <array>
 #include <boost/algorithm/cxx17/reduce.hpp>
 #include <cmath>
+#include <stdexcept>
 #include <utility>
 
 Fitter::Fitter(const std::string &functionFile, std::string fitTextFile, const std::string &parameterRootFile,
@@ -58,6 +59,8 @@ void Fitter::setParameterizationRootOutput(const std::string &name)
     {
         parameterRootFile->Close();
     }
+    delete parameterRootFile;
+
     parameterRootFile = TFile::Open(name.c_str(), "RECREATE");
 }
 
@@ -84,16 +87,16 @@ void Fitter::fitFunctions(std::unordered_map<std::string, TH1 *> &histograms)
 
         switch (func.getFunctionType())
         {
-        case FitFunction::FunctionType::EXPRESSION_FORMULA:
+        case FitFunction::FunctionType::ExpressionFormula:
             fitExpressionFormula(histogram, func);
             break;
-        case FitFunction::FunctionType::DOUBLE_SIDED_CRYSTAL_BALL:
+        case FitFunction::FunctionType::DoubleSidedCrystalBall:
             fitDSCB(histogram, func);
             break;
-        case FitFunction::FunctionType::POWER_LAW:
+        case FitFunction::FunctionType::PowerLaw:
             fitPowerLaw(histogram, func);
             break;
-        case FitFunction::FunctionType::DOUBLE_GAUSSIAN:
+        case FitFunction::FunctionType::DoubleGaussian:
             fitDoubleGaussian(histogram, func);
             break;
         default:
@@ -107,15 +110,20 @@ void Fitter::fitFunctions(std::unordered_map<std::string, TH1 *> &histograms)
             inner->SetParError(par, error);
         }
 
-        auto canvas = TCanvas(func.getName().c_str(), func.getName().c_str(), 0, 0, 1500, 500);
+        const auto full = func.getChannelName() + "/" + func.getName();
+        const auto split = full.find_last_of('/');
+        const std::string dir = full.substr(0, split);
+        const auto name = full.substr(split + 1);
+
+        auto canvas = TCanvas(name.c_str(), name.c_str(), 0, 0, 1500, 500);
         histogram->Draw();
 
-        std::string dir = func.getChannelName();
         if (!fitDirectories.contains(dir))
         {
-            fitDirectories[dir] = fitRootFile->mkdir(dir.c_str());
+            fitDirectories[dir] =
+                fitRootFile->mkdir(dir.c_str(), "", true)->GetDirectory(dir.substr(dir.find('/') + 1).c_str());
         }
-        fitDirectories[dir]->WriteObject(&canvas, func.getName().c_str());
+        fitDirectories.at(dir)->WriteObject(&canvas, name.c_str());
 
         canvas.Close();
     }
@@ -361,7 +369,7 @@ std::vector<ParameterizationData> Fitter::getParameterData(std::unordered_map<st
 }
 
 FitFunction Fitter::parameterizeFunction(ParameterizationData &parameterData, const std::string &genSim,
-                                         const std::string &reco, const HistVariable &var)
+                                         const std::string &reco, const std::string &var)
 {
     const auto channel = reco + "_" + genSim;
     const auto fullName = channel + "/" + parameterData.name;
@@ -370,20 +378,20 @@ FitFunction Fitter::parameterizeFunction(ParameterizationData &parameterData, co
     auto graph = TGraphErrors(parameterData.x.size(), parameterData.x.data(), parameterData.y.data(), nullptr,
                               parameterData.error.data());
 
-    auto func = TF1(fullName.c_str(), FitFunction::powerLaw, 0, 2000, 3);
-    func.SetParameters(boost::algorithm::reduce(parameterData.y) / parameterData.y.size(), 0, 0);
-    func.SetParLimits(1, -10000, 0);
+    auto function = FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, fullName, "", 0, 2000, channel);
+
+    auto *func = function.getFunction();
+    func->SetParameters(boost::algorithm::reduce(parameterData.y) / parameterData.y.size(), 0, 0);
+    func->SetParLimits(1, -10000, 0);
     for (int n = 0; n < 4; n++)
     {
-        graph.Fit(&func, "SQ");
+        graph.Fit(func, "SQ");
     }
 
-    func.SetRange(0, 2000);
-    graph.SetTitle((genSim + " #rightarrow " + reco + " " + var.getName() + " ^{}" + parameterData.name).c_str());
+    func->SetRange(0, 2000);
+    graph.SetTitle((genSim + " #rightarrow " + reco + " " + var + " ^{}" + parameterData.name).c_str());
     graph.SetMarkerStyle(15);
     graph.Draw("AP");
-
-    const auto function = FitFunction(func, FitFunction::FunctionType::POWER_LAW, channel);
 
     gStyle->SetOptFit(1111);
 
@@ -392,14 +400,14 @@ FitFunction Fitter::parameterizeFunction(ParameterizationData &parameterData, co
         parameterDirectories[channel] = parameterRootFile->mkdir(channel.c_str());
     }
 
-    parameterDirectories.at(channel)->WriteObject(canvas, (var.getName() + " " + parameterData.name).c_str());
+    parameterDirectories.at(channel)->WriteObject(canvas, (var + " " + parameterData.name).c_str());
     canvas->Close();
 
     return function;
 }
 
 void Fitter::parameterizeFunctions(std::unordered_map<std::string, double> &xData, const std::string &genSim,
-                                   const std::string &reco, const HistVariable &var)
+                                   const std::string &reco, const std::string &var)
 {
     std::vector<ParameterizationData> totalParameterData = getParameterData(xData);
     FitFunctionCollection paramFunctions;
