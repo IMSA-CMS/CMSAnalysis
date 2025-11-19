@@ -430,7 +430,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
 
     background = new THStack("background", "background");
 
-    //maxCombinedY *= 100;
+    maxCombinedY *= 100;
     if(data)
     {
         data->SetMaximum(maxCombinedY);
