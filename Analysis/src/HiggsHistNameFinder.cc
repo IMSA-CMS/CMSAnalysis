@@ -4,6 +4,7 @@
 
 std::string HiggsHistNameFinder::getHistName(const HistVariable &histVariable) const
 {
+    const auto channel = histVariable.getName();
     const auto reco = "/Reco " + channel.substr(0, 4);
     std::string gensim;
     if (channel.size() > 4)

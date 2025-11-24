@@ -428,6 +428,41 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
         maxCombinedY = std::max(data->GetMaximum(), maxCombinedY);
     }
 
+    bool valid = false;
+
+    if (data && data->GetEntries() > 0 && data->Integral() > 0 &&
+        !std::isnan(data->GetMaximum()) && !std::isinf(data->GetMaximum()))
+    {
+        valid = true;
+    }
+
+    if (!valid && signal && signal->GetEntries() > 0 && signal->Integral() > 0 &&
+        !std::isnan(signal->GetMaximum()) && !std::isinf(signal->GetMaximum()))
+    {
+        valid = true;
+    }
+
+    if (!valid)
+    {
+        for (auto* h : backgroundHists)
+        {
+            if (h && h->GetEntries() > 0 && h->Integral() > 0 &&
+                !std::isnan(h->GetMaximum()) && !std::isinf(h->GetMaximum()))
+            {
+                valid = true;
+                break;
+            }
+        }
+    }
+
+    if (!valid)
+    {
+        std::cout << "[JUMBO PLOT] Skipping empty/invalid hist: "
+                  << histvariable.getName()
+                  << " in channel " << channelName << std::endl;
+        return nullptr;
+    }
+
     background = new THStack("background", "background");
 
     //maxCombinedY *= 100;
