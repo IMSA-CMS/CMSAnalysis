@@ -26,6 +26,7 @@
 #include "TFitResult.h"
 #include <iostream>
 #include <memory>
+#include <optional>
 #include <vector>
 #include <cmath> 
 
@@ -40,8 +41,8 @@ float right = 0.04*width;
 TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle)
 {
     
-    THStack* background = processes->getStack(histvariable, "background", true);
-	THStack* signal = processes->getStack(histvariable, "signal", true);
+    THStack* background = processes->getStack(histvariable, Channel::Label::Background, true);
+	THStack* signal = processes->getStack(histvariable, Channel::Label::Signal, true);
 
     //Defines order to draw in so graph isn't cut off
     THStack* first;
@@ -287,7 +288,7 @@ TCanvas* PlotFormatter::simple2DHist(std::shared_ptr<Process> process, HistVaria
 }
 
 TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle) {
-    THStack* hists = processes->getStack(histvariable, "", true);
+    THStack* hists = processes->getStack(histvariable, std::nullopt, true);
 
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
 
@@ -342,7 +343,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     }
     */
    
-    std::vector<std::string> backgroundNames = processes->getNamesWithLabel("background");
+    std::vector<std::string> backgroundNames = processes->getNamesWithLabel(Channel::Label::Background);
     /*
     std::cout << "Background Names Size: " << backgroundNames.size() << std::endl;
 
@@ -351,9 +352,9 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
         std::cout << backgroundNames[i] << std::endl;
     }
     */
-    std::vector<std::string> signalNames = processes->getNamesWithLabel("signal");
+    std::vector<std::string> signalNames = processes->getNamesWithLabel(Channel::Label::Signal);
     
-    std::vector<std::string> dataNames = processes->getNamesWithLabel("data");
+    std::vector<std::string> dataNames = processes->getNamesWithLabel(Channel::Label::Data);
     
     if (includeData)
     {
@@ -887,20 +888,20 @@ TLegend* PlotFormatter::GetLegend(THStack* background, std::shared_ptr<Channel> 
     TString toAdd;
     if (includeData)
     {
-        name = processes->getNamesWithLabel("data").at(0); 
+        name = processes->getNamesWithLabel(Channel::Label::Data).at(0); 
         toAdd = name;
         legend->AddEntry(data, " " + toAdd, "L");
     }
     else
     {
-        name = processes->getNamesWithLabel("signal").at(0); 
+        name = processes->getNamesWithLabel(Channel::Label::Signal).at(0); 
         toAdd = name;
         legend->AddEntry(signal, " Signal", "L");
     }
     int count = 0;
     for(const auto&& obj2 : *background->GetHists()) {
         // std::cout << "count";
-        name = processes->getNamesWithLabel("background").at(count);
+        name = processes->getNamesWithLabel(Channel::Label::Background).at(count);
         toAdd = name;
         legend->AddEntry(obj2, " " + toAdd, "F");
         count++;
@@ -949,15 +950,15 @@ TLegend* PlotFormatter::GetSuperImposedLegend(std::shared_ptr<Channel> processes
     int count = 0;
     std::string name;
     TString toAdd;
-    for(const auto&& obj : *(processes->getStack(histvariable, "signal", true))->GetHists()) {
-        name = processes->getNamesWithLabel("signal").at(count); 
+    for(const auto&& obj : *(processes->getStack(histvariable, Channel::Label::Signal, true))->GetHists()) {
+        name = processes->getNamesWithLabel(Channel::Label::Signal).at(count); 
         toAdd = name;
         legend->AddEntry(obj, " " + toAdd, "L");
         count++;
     }
     count = 0;
-    for(const auto&& obj2 : *(processes->getStack(histvariable, "background", true))->GetHists()) {
-        name = processes->getNamesWithLabel("background").at(count);
+    for(const auto&& obj2 : *(processes->getStack(histvariable, Channel::Label::Background, true))->GetHists()) {
+        name = processes->getNamesWithLabel(Channel::Label::Background).at(count);
         toAdd = name;
         legend->AddEntry(obj2, " " + toAdd, "L");
         count++;

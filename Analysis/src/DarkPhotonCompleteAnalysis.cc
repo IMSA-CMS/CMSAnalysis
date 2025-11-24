@@ -159,16 +159,16 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
                 {
                     if (processName == "Dark Photon Baseline")
                     {
-                        leptonBackgrounds->labelProcess("signal", processName);
+                        leptonBackgrounds->labelProcess(Channel::Label::Signal, processName);
                     }
                 }
                 else if(processName == "Data")
                 { //This line is only used for complete plots
-                    leptonBackgrounds->labelProcess("data", processName);
+                    leptonBackgrounds->labelProcess(Channel::Label::Data, processName);
                 }
                 else
                 {
-                    leptonBackgrounds->labelProcess("background", processName);
+                    leptonBackgrounds->labelProcess(Channel::Label::Background, processName);
                 }
             }
 

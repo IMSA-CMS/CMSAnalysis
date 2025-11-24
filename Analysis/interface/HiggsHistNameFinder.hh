@@ -6,12 +6,13 @@
 class HiggsHistNameFinder : public HistNameFinder
 {
 	public:
-	HiggsHistNameFinder(std::string iChannel, bool iisData = false) : channel(std::move(iChannel)), isData(iisData) {}
+	HiggsHistNameFinder(std::string iChannel, bool iisData = false, bool izSelection = true) : channel(std::move(iChannel)), isData(iisData), zSelection(izSelection) {}
 	virtual std::string getHistName(HistVariable histVariable) const override;
 
 	private:
 	std::string channel;
 	bool isData;
+	bool zSelection;
 };
 
 
