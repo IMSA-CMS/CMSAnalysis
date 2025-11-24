@@ -21,7 +21,7 @@ std::shared_ptr<Channel> FullAnalysis::getChannel(std::string name)
 {
     for (std::shared_ptr<Channel> singleChannel : channels)
     {
-        std::cout << "Checking channel: " << singleChannel->getName() << std::endl;
+        //std::cout << "Checking channel: " << singleChannel->getName() << std::endl;
         if (singleChannel->getName() == name)
         {
             return singleChannel;
