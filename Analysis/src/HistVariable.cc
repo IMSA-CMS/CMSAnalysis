@@ -69,7 +69,14 @@ std::string HistVariable::getName() const
 
     if (particleType != ParticleType::none())
     {
-        name += particleType.getName() + ' ';
+        if (particleType == ParticleType::leptonJet())
+        {
+            name += "leptonJet ";
+        }
+        else
+        {
+            name += particleType.getName() + ' ';
+        }
     }
 
 
@@ -93,12 +100,26 @@ std::string HistVariable::getName() const
     case HistVariable::VariableType::InvariantMass:
         name += "Reco Invariant Mass Background";
         break;
-    case HistVariable::VariableType::BDT1:
-        name += "BDT1 Output";
+    case HistVariable::VariableType::RecoOppositeSignInvariantMass:
+        name += "Reco Opposite Sign Invariant Mass";
         break;
-    case HistVariable::VariableType::BDT2:
-        name += "BDT2 Output";
+    case HistVariable::VariableType::RecoSameSignInvariantMass:
+        name += "Reco Same Sign Invariant Mass";
         break;
+    case HistVariable::VariableType::MET:
+        name += "MET";
+        break;
+    case HistVariable::VariableType::DarkPhotonBDTOutput:
+        name+= "LeptonJetMLOutputMain";
+        break;
+    case HistVariable::VariableType::LeptonJetMass:
+        name += "Lepton Jet Mass";
+        break;
+    case HistVariable::VariableType::LeptonJetDeltaR:
+        name += "Lepton Jet Delta R";
+        break;
+    default:
+        throw std::runtime_error("Unknown variable type in HistVariable::getName()");
     }
 
     if (is2DHistX_)
@@ -111,4 +132,93 @@ std::string HistVariable::getName() const
     }
 
     return name;
+}
+
+HistVariable::VariableType HistVariable::stringToVariableType(const std::string& varStr)
+{
+    if (varStr == "Eta") 
+    {
+        return VariableType::Eta;
+    }
+    if (varStr == "Phi") 
+    {
+        return VariableType::Phi;
+    }
+    if (varStr == "MET")
+    {
+        return VariableType::MET;
+    }
+    if (varStr == "Pt") 
+    {
+        return VariableType::Pt;
+    }
+    if (varStr == "Same Sign Invariant Mass") 
+    {
+        return VariableType::SameSignInvariantMass;
+    }
+    if (varStr == "Opposite Sign Invariant Mass") 
+    {
+        return VariableType::OppositeSignInvariantMass;
+    }
+    if (varStr == "Reco Invariant Mass Background") 
+    {
+        return VariableType::InvariantMass;
+    }
+    if (varStr == "Reco Opposite Sign Invariant Mass") 
+    {
+        return VariableType::RecoOppositeSignInvariantMass;
+    }
+    if (varStr == "Reco Same Sign Invariant Mass") 
+    {
+        return VariableType::RecoSameSignInvariantMass;
+    }
+    if (varStr == "Lepton Jet Mass")
+    {
+        return VariableType::LeptonJetMass;
+    }
+    if (varStr == "Delta R")
+    {
+        return VariableType::LeptonJetDeltaR;
+    }
+
+    throw std::invalid_argument("Unknown variable type: " + varStr);
+}
+
+int HistVariable::stringToOrder(const std::string& connecter)
+{
+    if (connecter.find("1st") != std::string::npos) 
+    {
+        return 1;
+    }
+    if (connecter.find("2nd") != std::string::npos)
+    {
+        return 2;
+    } 
+    if (connecter.find("3rd") != std::string::npos) 
+    {
+        return 3;
+    }
+    return 0;
+}
+
+ParticleType HistVariable::stringToParticle(const std::string& connecter)
+{
+    if (connecter.empty())
+    {
+        return ParticleType::none();
+    }
+    if (connecter.find("mu-") != std::string::npos) 
+    {
+        return ParticleType::muon();
+    }
+    if (connecter.find("e-")  != std::string::npos) 
+    {
+        return ParticleType::electron();
+    }
+    if (connecter.find("tau-")!= std::string::npos) 
+    {
+        return ParticleType::tau();
+    }
+
+    throw std::invalid_argument("Unknown particle type in connecter string: " + connecter);
 }

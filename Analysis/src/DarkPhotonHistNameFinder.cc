@@ -1,12 +1,9 @@
 #include "CMSAnalysis/Analysis/interface/DarkPhotonHistNameFinder.hh"
 
-std::string DarkPhotonHistNameFinder::getHistName(HistVariable histVariable) const
+std::string DarkPhotonHistNameFinder::getHistName(const HistVariable& histVariable) const
 {
 	std::string path = "hists/" + channel + "/" + subChannel + "/";
-	if (isData)
-	{
-		path += "_Pass";
-	}
+	
 	path += histVariable.getName();
 // Add systematic type
 	

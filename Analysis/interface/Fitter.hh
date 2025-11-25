@@ -2,6 +2,7 @@
 #define FITTER_HH
 
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
+#include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include <TCanvas.h>
 #include <TFile.h>
 #include <TGraph.h>
@@ -13,42 +14,27 @@ struct ParameterizationData
     std::vector<double> x;
     std::vector<double> y;
     std::vector<double> error;
-    std::vector<double> zero;
-    int size;
     std::string name;
 };
 
 class Fitter
 {
   public:
-    Fitter();
-    Fitter(const std::string &functionFile, const std::string &fitParameterFile);
-    Fitter(const std::string &functionFile, const std::string &fitParameterFile, const std::string &parameterRootFile,
-           const std::string &parameterizationFuncFile);
+    Fitter(const std::string &functionFile, std::string fitTextFile, const std::string &parameterRootFile,
+           std::string parameterizationFuncFile);
     ~Fitter();
 
     void setFunctionRootOutput(const std::string &name);
-    void setFunctionOutput(const std::string &name);
+    void setFunctionOutput(std::string name);
     void setParameterizationRootOutput(const std::string &name);
-    void setParameterizationOutput(const std::string &name);
+    void setParameterizationOutput(std::string name);
 
-    void loadFunctions(const FitFunctionCollection &fitFunctions);
+    void loadFunctions(FitFunctionCollection fitFunctions);
     // void loadHistogram(const std::vector<string>& histNames);
 
-    TFitResultPtr fitFunction(TF1 *function, TH1 *hist);
-    TFitResultPtr fitFunction(TF1 *function, TGraph *graph);
-
-    void fitFunctions();
-    void parameterizeFunctions(std::unordered_map<std::string, double> &xData, const std::string &channel);
-
-    const std::unordered_map<std::string, TH1 *> &getHistograms() const
-    {
-        return histograms;
-    }
-    void setHistograms(const std::unordered_map<std::string, TH1 *> &newHistograms)
-    {
-        histograms = newHistograms;
-    }
+    void fitFunctions(std::unordered_map<std::string, TH1 *> &histograms);
+    void parameterizeFunctions(std::unordered_map<std::string, double> &xData, const std::string &genSim,
+                               const std::string &reco, const std::string &var);
 
     const FitFunctionCollection &getFunctions() const
     {
@@ -60,22 +46,23 @@ class Fitter
     }
 
   private:
-    TCanvas *fitExpressionFormula(TH1 *histogram, FitFunction &fitFunction);
-    TCanvas *fitDSCB(TH1 *histogram, FitFunction &fitFunction);
-    TCanvas *fitPowerLaw(TH1 *histogram, FitFunction &fitFunction);
-    TCanvas *fitDoubleGaussian(TH1 *histogram, FitFunction &fitFunction);
+    static void fitExpressionFormula(TH1 *histogram, FitFunction &fitFunction);
+    static void fitDSCB(TH1 *histogram, FitFunction &fitFunction);
+    static void fitPowerLaw(TH1 *histogram, FitFunction &fitFunction);
+    static void fitDoubleGaussian(TH1 *histogram, FitFunction &fitFunction);
+    static void fitGausLogPowerNorm(TH1 *hist, FitFunction &func);
 
     // Insert blank TF1* function ptr which will have the fitted function written to
     static TFitResultPtr fitSingleFunction(TGraph *histogram, TF1 *function, size_t iterations = 1);
 
     // TH1* readHistogram(const std::string& name);
     std::vector<ParameterizationData> getParameterData(std::unordered_map<std::string, double> &xData);
-    FitFunction parameterizeFunction(ParameterizationData &parameterData);
-
+    FitFunction parameterizeFunction(ParameterizationData &parameterData, const std::string &genSim,
+                                     const std::string &reco, const std::string &var);
     // Different ways to try and get seed function for fitting
     // Gets guess inverse power law function y = a(x-b)^-c + d using three points, only guarantees the powerlaw through
     // p0 and p1, not p2
-    static TF1 *seedInversePowerLaw(double x_0, double y_0, double x_1, double y_1, double x_2, double y_2);
+    // static TF1 *seedInversePowerLaw(double x_0, double y_0, double x_1, double y_1, double x_2, double y_2);
 
     TFile *fitRootFile;
     std::string fitTextFile;
@@ -83,7 +70,6 @@ class Fitter
     TFile *parameterRootFile;
     std::string parameterTextFile;
 
-    std::unordered_map<std::string, TH1 *> histograms;
     FitFunctionCollection functions;
 
     std::map<std::string, TDirectory *> fitDirectories;

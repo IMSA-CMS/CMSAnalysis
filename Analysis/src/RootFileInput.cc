@@ -36,7 +36,7 @@ TFile* RootFileInput::getFile(std::string fileSource) const
 }
 
 
-TH1* RootFileInput::getHist(HistVariable histType) const
+TH1* RootFileInput::getHist(const HistVariable& histType) const
 {
 	TH1::AddDirectory(kFALSE);
 	std::string name = histVariableToFileMapping->getHistName(histType);
@@ -46,6 +46,7 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 	auto file = getFile(fileSource);
 	std::string histName = name;
 	TDirectory* dir = file;
+	//std::cout << "Full name: " << name << '\n';
 	//std::cout << "RootFileInput Hit 2 " << std::endl;
 	// TH1* emptyHist = new TH1F("h1", "empty", 1, 0.0, 0.0);
 	while (pos != std::string::npos)
@@ -55,7 +56,6 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 		dir = (TDirectory*)dir->GetDirectory(folder.c_str());
 		if (!dir) 
 		{
-			std::cout << "No directory named " << folder << " found in file " << fileSource <<"\n";
 			// std::cout << "No directory named " + folder + " found in file: "<< fileSource <<"\n";
 			delete dir;
 			delete hist;
@@ -70,7 +70,7 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 	//std::cout << "RootFileInput Hit 3 " << std::endl;
 	if (!hist)
 	{
-		
+		// std::cout << "No histogram named " << histName << " found in file " << fileSource << '\n';
 		delete file;
 		return nullptr;
 	}
@@ -126,7 +126,7 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 		{
 			response->Add(hist);
 		}
-		std::cout << "Hist max: " << response->GetMaximum() << std::endl;
+		//std::cout << "Hist max: " << response->GetMaximum() << std::endl;
 		//std::cout << "Hist Clone Entries: " << response->GetEntries() << std::endl;
 
 		delete hist;
@@ -136,7 +136,7 @@ TH1* RootFileInput::getHist(HistVariable histType) const
 }
 
 
-TH1* RootFileInput::get2DHist(HistVariable histType) const
+TH1* RootFileInput::get2DHist(const HistVariable& histType) const
 {
 	std::string name = histVariableToFileMapping->getHistName(histType);
 
@@ -183,7 +183,7 @@ int RootFileInput::getTotalEvents() const
 	{
 		throw std::runtime_error("Total events not found in file: " + fileSource);
 	}
-	int events = std::stoi(totalevents->GetString().Data());
+	int events = std::stof(totalevents->GetString().Data());
 	delete file;
 	return events;
 	// while (!end)

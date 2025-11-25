@@ -97,7 +97,7 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
            
             auto zzBackground = std::make_shared<Process>("ZZ Background", 4);
             //zzBackground->addProcess(makeBasicProcess(filePath, "ZZ_Decay_4L_Run_2.root", "ZZTo4L", reader, luminosity));
-            zzBackground->addProcess(makeBasicProcess(filePath, "ZZ.root", "ZZTo2e2mu", reader, luminosity, histVariableToFileMapping));
+            zzBackground->addProcess(makeBasicProcess(filePath, "ZZ.root", "ZZTo4L", reader, luminosity, histVariableToFileMapping));
 
 
             auto dyBackground = std::make_shared<Process>("DY Background", 3);
@@ -124,6 +124,9 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
             multiBosonBackground->addProcess(makeBasicProcess(filePath, "WZZ.root", "WWZ", reader, luminosity, histVariableToFileMapping));
             multiBosonBackground->addProcess(makeBasicProcess(filePath, "ZZZ.root", "ZZZ", reader, luminosity, histVariableToFileMapping));
            
+            auto wJetsBackground = std::make_shared<Process>("WJets Background", 7);
+            wJetsBackground->addProcess(
+                makeBasicProcess(filePath, "WJets.root", "WJets", reader, luminosity, histVariableToFileMapping));
 
             for (const auto& [crossSectionName, fileName] : darkPhotonFiles) 
             {
@@ -148,27 +151,28 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis() {
             processes.push_back(multiBosonBackground);
             //processes.push_back(darkPhotonSignal);
             processes.push_back(darkPhotonData);
+            processes.push_back(wJetsBackground);
 
             auto leptonBackgrounds = std::make_shared<Channel>(channelName, processes);
 
             for(std::string processName : leptonBackgrounds->getNames()) {
-                std::cout << processName << std::endl;
+                // std::cout << processName << std::endl;
 
 
                 if(processName.find("Dark Photon") != std::string::npos) 
                 {
                     if (processName == "Dark Photon Baseline")
                     {
-                        leptonBackgrounds->labelProcess("signal", processName);
+                        leptonBackgrounds->labelProcess(Channel::Label::Signal, processName);
                     }
                 }
                 else if(processName == "Data")
                 { //This line is only used for complete plots
-                    leptonBackgrounds->labelProcess("data", processName);
+                    leptonBackgrounds->labelProcess(Channel::Label::Data, processName);
                 }
                 else
                 {
-                    leptonBackgrounds->labelProcess("background", processName);
+                    leptonBackgrounds->labelProcess(Channel::Label::Background, processName);
                 }
             }
 

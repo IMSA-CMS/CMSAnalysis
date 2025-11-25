@@ -120,10 +120,12 @@ void SuperPlot()
 	// auto ana = std::make_shared<HiggsCompleteAnalysis>();
 	// TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, true, false, "eeee", "Higgs Group 1000");
 	// //HistVariable nameVar(ParticleType::muon(), 0, HistVariable::VariableType::SameSignInvariantMass);
-	HistVariable nameVar(ParticleType::muon(), 1, HistVariable::VariableType::Pt);
+	HistVariable nameVar(HistVariable::VariableType::RecoOppositeSignInvariantMass);
 	auto ana = std::make_shared<HiggsCompleteAnalysis>();
-	//auto ana = std::make_shared<DarkPhotonCompleteAnalysis>();
-	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, true, false, true, "u_u_");
+	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, false, true, "e_e_");
+
+	// auto ana = std::make_shared<DarkPhotonCompleteAnalysis>();
+	// TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, false, true, "High Mass and Different Sign/1Jet");
 
 	//TCanvas *canvas = plotFormatter->simpleAnalysisHist(backgroundHists, );
 

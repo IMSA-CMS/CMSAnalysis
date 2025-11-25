@@ -288,6 +288,16 @@ double Particle::getDeltaR(Particle part) const
   return reco::deltaR(part.getFourVector(), getFourVector());
 }
 
+double Particle::invariantMass(const Particle& particle1, const Particle& particle2) 
+{
+  auto vec1 = particle1.getFourVector();
+  auto vec2 = particle2.getFourVector();
+
+  auto sum = vec1 + vec2;
+  return sum.M();
+
+}
+
 Particle::SelectionFit Particle::getSelectionFit() const
 {
   checkIsNull();

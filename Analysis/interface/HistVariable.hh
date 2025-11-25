@@ -25,11 +25,15 @@ class HistVariable
         Eta,
         Pt,
         Phi,
+        MET,
         SameSignInvariantMass,
         OppositeSignInvariantMass,
         InvariantMass,
-        BDT1,
-        BDT2
+        RecoSameSignInvariantMass,
+        RecoOppositeSignInvariantMass,
+        DarkPhotonBDTOutput,
+        LeptonJetMass,
+        LeptonJetDeltaR
     };
 
     HistVariable(ParticleType type, int order, VariableType var, std::string unit = "", 

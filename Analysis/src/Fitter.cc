@@ -1,4 +1,5 @@
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
+#include "CMSAnalysis/Analysis/interface/FitFunction.hh"
 #include <Fit/FitResult.h>
 #include <TCanvas.h>
 #include <TFitResult.h>
@@ -7,22 +8,18 @@
 #include <TH1.h>
 #include <TPaveStats.h>
 #include <TStyle.h>
+#include <algorithm>
 #include <array>
+#include <boost/algorithm/cxx17/reduce.hpp>
 #include <cmath>
+#include <stdexcept>
+#include <utility>
 
-Fitter::Fitter()
-{
-}
-
-Fitter::Fitter(const std::string &functionFile, const std::string &fitTextFile)
-    : fitRootFile(TFile::Open(functionFile.c_str(), "RECREATE")), fitTextFile(fitTextFile)
-{
-}
-
-Fitter::Fitter(const std::string &functionFile, const std::string &fitTextFile, const std::string &parameterRootFile,
-               const std::string &parameterizationFuncFile)
-    : fitRootFile(TFile::Open(functionFile.c_str(), "RECREATE")), fitTextFile(fitTextFile),
-      parameterRootFile(TFile::Open(parameterRootFile.c_str(), "RECREATE")), parameterTextFile(parameterizationFuncFile)
+Fitter::Fitter(const std::string &functionFile, std::string fitTextFile, const std::string &parameterRootFile,
+               std::string parameterizationFuncFile)
+    : fitRootFile(TFile::Open(functionFile.c_str(), "RECREATE")), fitTextFile(std::move(fitTextFile)),
+      parameterRootFile(TFile::Open(parameterRootFile.c_str(), "RECREATE")),
+      parameterTextFile(std::move(parameterizationFuncFile))
 {
 }
 
@@ -32,10 +29,12 @@ Fitter::~Fitter()
     {
         fitRootFile->Close();
     }
+    delete fitRootFile;
     if (parameterRootFile->IsOpen())
     {
         parameterRootFile->Close();
     }
+    delete parameterRootFile;
 }
 
 void Fitter::setFunctionRootOutput(const std::string &name)
@@ -44,13 +43,14 @@ void Fitter::setFunctionRootOutput(const std::string &name)
     {
         fitRootFile->Close();
     }
+    delete fitRootFile;
 
     fitRootFile = TFile::Open(name.c_str(), "RECREATE");
 }
 
-void Fitter::setFunctionOutput(const std::string &name)
+void Fitter::setFunctionOutput(std::string name)
 {
-    fitTextFile = name;
+    fitTextFile = std::move(name);
 }
 
 void Fitter::setParameterizationRootOutput(const std::string &name)
@@ -59,25 +59,22 @@ void Fitter::setParameterizationRootOutput(const std::string &name)
     {
         parameterRootFile->Close();
     }
+    delete parameterRootFile;
+
     parameterRootFile = TFile::Open(name.c_str(), "RECREATE");
 }
 
-void Fitter::setParameterizationOutput(const std::string &name)
+void Fitter::setParameterizationOutput(std::string name)
 {
-    parameterTextFile = name;
+    parameterTextFile = std::move(name);
 }
 
-void Fitter::loadFunctions(const FitFunctionCollection &fitFunctions)
+void Fitter::loadFunctions(FitFunctionCollection fitFunctions)
 {
-    functions = fitFunctions;
+    functions = std::move(fitFunctions);
 }
 
-// void Fitter::loadHistogram(const std::vector<std::string>& histNames)
-// {
-// 	histograms = histNames;
-// }
-
-void Fitter::fitFunctions()
+void Fitter::fitFunctions(std::unordered_map<std::string, TH1 *> &histograms)
 {
     for (auto &funcPair : functions.getFunctions())
     {
@@ -88,41 +85,48 @@ void Fitter::fitFunctions()
             throw std::runtime_error("fitter::fitFunctions attempted histogram that does not exist: " + funcPair.first);
         }
 
-        TCanvas *canvas;
         switch (func.getFunctionType())
         {
-        case FitFunction::FunctionType::EXPRESSION_FORMULA:
-            canvas = fitExpressionFormula(histogram, func);
+        case FitFunction::FunctionType::ExpressionFormula:
+            fitExpressionFormula(histogram, func);
             break;
-        case FitFunction::FunctionType::DOUBLE_SIDED_CRYSTAL_BALL:
-            canvas = fitDSCB(histogram, func);
+        case FitFunction::FunctionType::DoubleSidedCrystalBall:
+            fitDSCB(histogram, func);
             break;
-        case FitFunction::FunctionType::POWER_LAW:
-            canvas = fitPowerLaw(histogram, func);
+        case FitFunction::FunctionType::PowerLaw:
+            fitPowerLaw(histogram, func);
             break;
-        case FitFunction::FunctionType::DOUBLE_GAUSSIAN:
-            canvas = fitDoubleGaussian(histogram, func);
+        case FitFunction::FunctionType::DoubleGaussian:
+            fitDoubleGaussian(histogram, func);
             break;
-        default:
-            throw std::invalid_argument("Not a valid FunctionType enum value");
+        case FitFunction::FunctionType::GausLogPowerNorm:
+            fitGausLogPowerNorm(histogram, func);
+            break;
         }
-        size_t pos = func.getName().find('/');
-        if (pos != std::string::npos)
+
+        auto *inner = func.getFunction();
+        for (auto par = 0; par < inner->GetNpar(); par++)
         {
-            std::string dir = func.getName().substr(0, pos);
-            std::string name = func.getName().substr(pos + 1);
-            auto pos = fitDirectories.find(dir);
-            if (pos == fitDirectories.end())
-            {
-                fitDirectories[dir] = fitRootFile->mkdir(dir.c_str());
-            }
-            fitDirectories[dir]->WriteObject(canvas, name.c_str());
+            const auto error = std::max(inner->GetParError(par), 0.01 * inner->GetParameter(par));
+            inner->SetParError(par, error);
         }
-        else
+
+        const auto full = func.getChannelName() + "/" + func.getName();
+        const auto split = full.find_last_of('/');
+        const std::string dir = full.substr(0, split);
+        const auto name = full.substr(split + 1);
+
+        auto canvas = TCanvas(name.c_str(), name.c_str(), 0, 0, 1500, 500);
+        histogram->Draw();
+
+        if (!fitDirectories.contains(dir))
         {
-            fitRootFile->WriteObject(canvas, func.getName().c_str());
+            fitDirectories[dir] =
+                fitRootFile->mkdir(dir.c_str(), "", true)->GetDirectory(dir.substr(dir.find('/') + 1).c_str());
         }
-        canvas->Close();
+        fitDirectories.at(dir)->WriteObject(&canvas, name.c_str());
+
+        canvas.Close();
     }
     functions.saveFunctions(fitTextFile, true);
 }
@@ -133,20 +137,14 @@ void Fitter::fitFunctions()
 // }
 
 // not sure if this is used at all
-TCanvas *Fitter::fitExpressionFormula(TH1 *histogram, FitFunction &fitFunction)
+void Fitter::fitExpressionFormula(TH1 *histogram, FitFunction &fitFunction)
 {
-    TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(), fitFunction.getName().c_str(), 0, 0, 1500, 500);
-    c1->SetLogy();
-
     TFitResultPtr result =
         histogram->Fit(fitFunction.getFunction(), "SQRWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
-
     gStyle->SetOptFit(1111);
-
-    return c1;
 }
 
-TCanvas *Fitter::fitDSCB(TH1 *histogram, FitFunction &fitFunction)
+void Fitter::fitDSCB(TH1 *histogram, FitFunction &fitFunction)
 {
     // TCanvas *c2 = new TCanvas(fitFunction.getName().c_str(),fitFunction.getName().c_str(),0,0,1500,500);
     TF1 *f1 = fitFunction.getFunction();
@@ -172,7 +170,6 @@ TCanvas *Fitter::fitDSCB(TH1 *histogram, FitFunction &fitFunction)
     f1->SetParameters(2.82606, 2.5, 1.08, 1.136, params[1], params[2], norm);
     // std::cout << "2:5\n";
 
-    f1->SetParNames("alpha_{low}", "alpha_{high}", "n_{low}", "n_{high}", "mean", "sigma", "norm");
     f1->SetParLimits(0, 0, 10);
     f1->SetParLimits(1, 0, 10);
     f1->SetParLimits(2, 1, 10);
@@ -195,7 +192,6 @@ TCanvas *Fitter::fitDSCB(TH1 *histogram, FitFunction &fitFunction)
     // }
     f1->SetRange(fitFunction.getMin(), fitFunction.getMax());
     f1->SetLineColor(kRed);
-    TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(), fitFunction.getName().c_str(), 0, 0, 1500, 500);
     // std::cout << "2:7\n";
     // std::cout << "staring\n";
     histogram->Fit(f1, "SWLQRBWIDTH");
@@ -206,7 +202,7 @@ TCanvas *Fitter::fitDSCB(TH1 *histogram, FitFunction &fitFunction)
     gStyle->SetOptFit(111111);
     // file->WriteObject(c1, name);
     //  std::string Graphname = name + "DBSCball"+ ".png";
-    TPaveStats *st = (TPaveStats *)histogram->FindObject("stats");
+    TPaveStats *st = dynamic_cast<TPaveStats *>(histogram->FindObject("stats"));
     st->SetX1NDC(0.1);
     st->SetX2NDC(0.5);
     // histogram->GetXaxis()->SetRange(900, 1100);
@@ -217,16 +213,11 @@ TCanvas *Fitter::fitDSCB(TH1 *histogram, FitFunction &fitFunction)
 
     // c1->SaveAs(Graphname.c_str());
     // c1->Close();
-
-    return c1;
 }
-TCanvas *Fitter::fitPowerLaw(TH1 *histogram, FitFunction &fitFunction)
+void Fitter::fitPowerLaw(TH1 *histogram, FitFunction &fitFunction)
 {
     std::array<double, 3> initalParams = {{1e17, 0, -5}};
     fitFunction.getFunction()->SetParameters(initalParams.data());
-
-    TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(), fitFunction.getName().c_str(), 0, 0, 1500, 500);
-    c1->SetLogy();
 
     // setting this as L (log likelihood) fit
     // gives much worse fits for some graphs but seg faults without L sometimes?
@@ -238,23 +229,18 @@ TCanvas *Fitter::fitPowerLaw(TH1 *histogram, FitFunction &fitFunction)
     double chi2 = __DBL_MAX__;
     while (chi2 - result->Chi2() > 0.000001)
     {
-        std::cout << "Chi2: " << result->Chi2() << '\n';
         chi2 = result->Chi2();
         fitFunction.getFunction()->SetParameters(result->Parameter(0), result->Parameter(1), result->Parameter(2));
         result = histogram->Fit(fitFunction.getFunction(), "SWLQR", "", fitFunction.getMin(), fitFunction.getMax());
     }
 
     gStyle->SetOptFit(1111);
-
-    return c1;
 }
 
-TCanvas *Fitter::fitDoubleGaussian(TH1 *histogram, FitFunction &fitFunction)
+void Fitter::fitDoubleGaussian(TH1 *histogram, FitFunction &fitFunction)
 {
-    TF1 *f1 = fitFunction.getFunction();
-
-    auto mean = histogram->GetMean();
-    auto std = histogram->GetStdDev();
+    const auto mean = histogram->GetMean();
+    const auto std = histogram->GetStdDev();
 
     TFitResultPtr LowGaus = histogram->Fit("gaus", "SWLQWIDTH", "", fitFunction.getMin(), mean);
     TFitResultPtr HighGaus = histogram->Fit("gaus", "SWLQWIDTH", "", mean, fitFunction.getMax());
@@ -291,16 +277,15 @@ TCanvas *Fitter::fitDoubleGaussian(TH1 *histogram, FitFunction &fitFunction)
         HighGausSigma = std;
     }
 
+    TF1 *f1 = fitFunction.getFunction();
+
     f1->SetParameters(LowGausMul, LowGausMean, LowGausSigma, HighGausMul, HighGausMean, HighGausSigma);
-    f1->SetParNames("mul_{1}", "\\mu_{1}", "\\sigma_{1}", "mul_{2}", "\\mu_{2}", "\\sigma_{2}");
 
     f1->SetNpx(1000);
 
-    TCanvas *c1 = new TCanvas(fitFunction.getName().c_str(), fitFunction.getName().c_str(), 0, 0, 1500, 500);
-
     TFitResultPtr res;
 
-    for (int n = 0; n < 10; n++)
+    for (int n = 0; n < 4; n++)
     {
         if (f1->GetParameter(4) < f1->GetParameter(1))
         {
@@ -348,7 +333,28 @@ TCanvas *Fitter::fitDoubleGaussian(TH1 *histogram, FitFunction &fitFunction)
     }
 
     gStyle->SetOptFit(1111);
-    return c1;
+}
+
+void Fitter::fitGausLogPowerNorm(TH1 *const hist, FitFunction &func)
+{
+    TF1 *const f1 = func.getFunction();
+
+    // Params: mult, u, sigma1, s, n
+    f1->SetParameters(1, hist->GetMean(), hist->GetStdDev(), 1, 2);
+    f1->SetParLimits(0, 0, hist->Integral());
+    f1->SetParLimits(1, 0, func.getMax());
+    f1->SetParLimits(3, 0, 100);
+    f1->SetParLimits(4, 1, 100);
+
+    f1->SetNpx(1000);
+
+    hist->Fit(f1, "SWLQWIDTH", "", func.getMin(), func.getMax());
+    // Make sure we didn't get too close to arbitrarily chosen upper bounds
+    assert(f1->GetParameter(0) < hist->Integral() / 3);
+    assert(f1->GetParameter(3) < 100.0 / 3);
+    assert(f1->GetParameter(4) < 100.0 / 3);
+
+    gStyle->SetOptFit(1111);
 }
 
 std::vector<ParameterizationData> Fitter::getParameterData(std::unordered_map<std::string, double> &xData)
@@ -358,17 +364,15 @@ std::vector<ParameterizationData> Fitter::getParameterData(std::unordered_map<st
         throw std::invalid_argument("FitFunctionCollection is not comprised on similar functions");
     }
 
-    int params = functions.getFunctions().begin()->second.getFunction()->GetNpar();
+    const int params = functions.getFunctions().begin()->second.getFunction()->GetNpar();
     auto data = std::vector<ParameterizationData>(params);
 
     for (int i = 0; i < params; ++i)
     {
-        data[i] = ParameterizationData{std::vector<double>(functions.size()),
-                                       std::vector<double>(functions.size()),
-                                       std::vector<double>(functions.size()),
-                                       std::vector<double>(functions.size()),
-                                       i,
-                                       functions.getFunctions().begin()->second.getFunction()->GetParName(i)};
+        data[i] = ParameterizationData{.x = std::vector<double>(functions.size()),
+                                       .y = std::vector<double>(functions.size()),
+                                       .error = std::vector<double>(functions.size()),
+                                       .name = functions.getFunctions().begin()->second.getFunction()->GetParName(i)};
     }
 
     int i = 0;
@@ -379,95 +383,84 @@ std::vector<ParameterizationData> Fitter::getParameterData(std::unordered_map<st
             data[j].x[i] = xData[pair.first];
             data[j].y[i] = pair.second.getFunction()->GetParameter(j);
             data[j].error[i] = pair.second.getFunction()->GetParError(j);
-            data[j].zero[i] = 0;
         }
         ++i;
     }
     return data;
 }
 
-FitFunction Fitter::parameterizeFunction(ParameterizationData &parameterData)
+FitFunction Fitter::parameterizeFunction(ParameterizationData &parameterData, const std::string &genSim,
+                                         const std::string &reco, const std::string &var)
 {
-    auto *canvas = new TCanvas(parameterData.name.c_str(), parameterData.name.c_str(), 0, 0, 2000, 500);
-    auto *graph = new TGraphErrors(parameterData.x.size(), parameterData.x.data(), parameterData.y.data(),
-                                   parameterData.zero.data(), parameterData.error.data());
+    const auto channel = reco + "_" + genSim;
+    const auto fullName = channel + "/" + parameterData.name;
+    auto *const canvas = new TCanvas(fullName.c_str(), fullName.c_str(), 0, 0, 2000, 500);
 
-    auto *func = new TF1("Power Law", FitFunction::powerLaw, 0, 2000, 3);
-    func->SetParameter(1, 0);
+    auto graph = TGraphErrors(parameterData.x.size(), parameterData.x.data(), parameterData.y.data(), nullptr,
+                              parameterData.error.data());
+
+    auto function =
+        FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, fullName, "", 0, 2000, channel);
+
+    auto *func = function.getFunction();
+    func->SetParameters(boost::algorithm::reduce(parameterData.y) / parameterData.y.size(), 0, 0);
     func->SetParLimits(1, -10000, 0);
-    for (int n = 0; n < 10; n++)
+    for (int n = 0; n < 4; n++)
     {
-        graph->Fit(func, "SQ");
+        graph.Fit(func, "SQ");
     }
 
     func->SetRange(0, 2000);
-    func->SetName(parameterData.name.c_str());
-    graph->SetTitle(parameterData.name.c_str());
-    graph->SetMarkerStyle(15);
-    graph->Draw("AP");
-
-    auto function = FitFunction(func, FitFunction::FunctionType::POWER_LAW);
+    graph.SetTitle((genSim + " #rightarrow " + reco + " " + var + " ^{}" + parameterData.name).c_str());
+    graph.SetMarkerStyle(15);
+    graph.Draw("AP");
 
     gStyle->SetOptFit(1111);
 
-    size_t pos = function.getName().find('/');
-    if (pos != std::string::npos)
+    if (!parameterDirectories.contains(channel))
     {
-        std::string dir = function.getName().substr(0, pos);
-        std::string name = function.getName().substr(pos + 1);
-        auto pos = parameterDirectories.find(dir);
-        if (pos == parameterDirectories.end())
-        {
-            parameterDirectories[dir] = parameterRootFile->mkdir(dir.c_str());
-        }
-        std::cout << "writing object " << name << "\n";
-
-        parameterDirectories[dir]->WriteObject(canvas, name.c_str());
-    }
-    else
-    {
-        parameterRootFile->WriteObject(canvas, parameterData.name.c_str());
+        parameterDirectories[channel] = parameterRootFile->mkdir(channel.c_str());
     }
 
+    parameterDirectories.at(channel)->WriteObject(canvas, (var + " " + parameterData.name).c_str());
     canvas->Close();
 
     return function;
 }
 
-void Fitter::parameterizeFunctions(std::unordered_map<std::string, double> &xData, const std::string &channel)
+void Fitter::parameterizeFunctions(std::unordered_map<std::string, double> &xData, const std::string &genSim,
+                                   const std::string &reco, const std::string &var)
 {
     std::vector<ParameterizationData> totalParameterData = getParameterData(xData);
     FitFunctionCollection paramFunctions;
 
-    for (auto param : totalParameterData)
+    for (auto &param : totalParameterData)
     {
-        param.name = channel + "/" + param.name;
-        std::cout << "Parameterizing " << param.name << '\n';
-        FitFunction func = parameterizeFunction(param);
+        FitFunction func = parameterizeFunction(param, genSim, reco, var);
         paramFunctions.insert(func);
     }
 
     paramFunctions.saveFunctions(parameterTextFile, true);
 }
 
-TF1 *Fitter::seedInversePowerLaw(double x_0, double y_0, double x_1, double y_1, double x_2, double y_2)
-{
-    // static double range = 1.0;
-    TF1 *powerLaw = new TF1("", "[0]*(x-[1])^[2]");
-    powerLaw->SetParameter(0, y_0);
-    powerLaw->SetParameter(1, x_0 - 1);
-    powerLaw->SetParameter(2, -1);
+// TF1 *Fitter::seedInversePowerLaw(double x_0, double y_0, double x_1, double y_1, double x_2, double y_2)
+// {
+//     // static double range = 1.0;
+//     TF1 *powerLaw = new TF1("", "[0]*(x-[1])^[2]");
+//     powerLaw->SetParameter(0, y_0);
+//     powerLaw->SetParameter(1, x_0 - 1);
+//     powerLaw->SetParameter(2, -1);
 
-    powerLaw->SetParLimits(2, -10, 0);
+//     powerLaw->SetParLimits(2, -10, 0);
 
-    // powerLaw->SetParameter(1, 0);
-    // powerLaw->SetParameter(3, y_2);
-    // double logOne = std::log((y_1 - y_2) / (y_0 - y_2));
-    // double logTwo = std::log(x_1 / x_2);
-    // double c = logOne / logTwo;
-    // double a = (y_0 - y_2) / (std::pow(x_0, c));
-    // powerLaw->SetParameter(2, c);
-    // powerLaw->SetParameter(0, a);
+//     // powerLaw->SetParameter(1, 0);
+//     // powerLaw->SetParameter(3, y_2);
+//     // double logOne = std::log((y_1 - y_2) / (y_0 - y_2));
+//     // double logTwo = std::log(x_1 / x_2);
+//     // double c = logOne / logTwo;
+//     // double a = (y_0 - y_2) / (std::pow(x_0, c));
+//     // powerLaw->SetParameter(2, c);
+//     // powerLaw->SetParameter(0, a);
 
-    return powerLaw;
-}
+//     return powerLaw;
+// }

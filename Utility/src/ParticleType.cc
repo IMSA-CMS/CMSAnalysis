@@ -170,6 +170,9 @@ void ParticleType::particleTypeOverrides()
     typeList[13].collectionHists.push_back(getSameSignInvariantMassHist());
     typeList[13].collectionHists.push_back(getOppositeSignInvariantMassHist());
 
+    typeList[15].collectionHists.push_back(getSameSignInvariantMassHist());
+    typeList[15].collectionHists.push_back(getOppositeSignInvariantMassHist());
+
     registerType("Meson",26,0,
     std::vector<HistParams>{getPtHist(),getPhiHist(),getEtaHist()},
     std::vector<CollectionHistParams>{getNumberHist()}); 
