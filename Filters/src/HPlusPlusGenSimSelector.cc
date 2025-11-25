@@ -40,13 +40,13 @@ void HPlusPlusGenSimSelector::selectParticles(const EventInput *input, Event &ev
                     if (genSimParticle.pdgId() > 0 && !plus)
                     {
                         plus = true;
-                        event.addSpecialObject("LeftHiggs", particle);
+                        // event.addSpecialObject("LeftHiggs", particle);
                         event.addGenSimParticle(genSimParticle);
                     }
                     else if (genSimParticle.pdgId() < 0 && !minus)
                     {
                         minus = true;
-                        event.addSpecialObject("LeftHiggs", particle);
+                        // event.addSpecialObject("LeftHiggs", particle);
                         event.addGenSimParticle(genSimParticle);
                     }
                 } else {
@@ -55,13 +55,13 @@ void HPlusPlusGenSimSelector::selectParticles(const EventInput *input, Event &ev
                     if (genSimParticle.pdgId() > 0 && !plus)
                     {
                         plus = true;
-                        event.addSpecialObject("RightHiggs", particle);
+                        // event.addSpecialObject("RightHiggs", particle);
                         event.addGenSimParticle(genSimParticle);
                     }
                     else if (genSimParticle.pdgId() < 0 && !minus)
                     {
                         minus = true;
-                        event.addSpecialObject("RightHiggs", particle);
+                        // event.addSpecialObject("RightHiggs", particle);
                         event.addGenSimParticle(genSimParticle);
                     }
                 }
@@ -92,7 +92,7 @@ void HPlusPlusGenSimSelector::selectParticles(const EventInput *input, Event &ev
         }
         else if (genSimParticle.getType() == ParticleType::muon() && genSimParticle.getPt() > 5)
         {
-            genSimParticle.addInfo("Isolation", 0); //Dummy value for isolation for errors
+            // genSimParticle.addInfo("Isolation", 0); //Dummy value for isolation for errors
             event.addGenSimParticle(genSimParticle);
         }
     }

@@ -67,7 +67,8 @@ def loopRun(crab, path, fileCount, skipFiles, fileList, outputFile):
         nameLocation = file.rfind("/") + 1
         nameEnd = len(file) - 4
         name = file[nameLocation:nameEnd]
-        outputString = "output=" + path + name + ".root"
+        # outputString = "output=" + path + name + ".root"
+        outputString = "output=" + name + ".root"
         inputString = "input=" + file
         offset = len("Run2PickFiles/")
         if file[0+offset:5+offset] == "Higgs":
@@ -86,7 +87,10 @@ def loopRun(crab, path, fileCount, skipFiles, fileList, outputFile):
             # 20 works for most jobs, TTbar and DY50-inf should use 5
             # theoretically could all the way down to 1,
             # but it might take longer to submit than just nohup
-            maxNumFiles = 20
+            if args.type == "Data":
+                maxNumFiles = 5
+            else:
+                maxNumFiles = 20
             totalFiles = min(int(fileCount), totalFiles) if fileCount != None else totalFiles
             
             # uncomment this for selective reproccessing
@@ -110,7 +114,8 @@ def loopRun(crab, path, fileCount, skipFiles, fileList, outputFile):
                         f"--output={output}",
                         f"--{analysisName}",
                         f"--user={cernUsername}",
-                        f"--folder={path + file[14:-4]}",
+                        f"--folder={file[14:-4]}",
+                        f"--mainFolder={path}",
                         f"--numFiles={min(maxNumFiles, totalFiles - i)}",
                         f"--skipFiles={i}",
                     ],
@@ -118,9 +123,9 @@ def loopRun(crab, path, fileCount, skipFiles, fileList, outputFile):
                 )
                 generate.wait()
                 submit = Popen(
-                    ["crab", "submit", "-c", f"gen/{output[:-5]}_crab_config.py"], cwd=crab_directory
+                ["crab", "submit", "-c", f"gen/{output[:-5]}_crab_config.py"], cwd=crab_directory
                 )
-                # submit.wait()
+                submit.wait()
         else:
             with open(outputFile, "a") as out:
                 print("Creating " + outputString)
@@ -154,6 +159,7 @@ if __name__ == "__main__":
     parser.add_argument("--user", help="CERN Username")
     parser.add_argument("--numFiles", help="Number of files to run over")
     parser.add_argument("--skipFiles", help="Number of files to skip over")
+    parser.add_argument("--type", help="Data or MC")
     parser.add_argument("--outputFile", help="Specify an output log file", default="nohup.out")
 
     args = parser.parse_args()
@@ -165,6 +171,8 @@ if __name__ == "__main__":
     if not args.analysis:
         print("No analysis specified, defaulting to Higgs")
         analysis = 0
+    if not args.type:
+        print("No type specified, defaulting to MC")
     else:
         analysisName = args.analysis
         if analysisName == "Higgs":
@@ -320,10 +328,19 @@ if __name__ == "__main__":
     # jobsList = [higgsSignal] if analysis == 0 or analysis == 2 else [darkPhotonSignal]
 
     # COMMENTED FOR ML STRIP
-    if analysisName == "Higgs":
-        jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, data, qcd, wjets]
+    if not args.type:
+        analysisType = "MC"
     else:
-        jobsList = [ttBar, zz, dy, multiBoson, darkPhotonSignal, dataMu, qcd, wjets]
+        analysisType = args.type
+        
+    if analysisName == "Higgs" and analysisType == "MC":
+        jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, qcd, wjets]
+    elif analysisName == "Higgs" and analysisType == "Data":
+        jobsList = [data]
+    elif analysisName == "DarkPhoton" and analysisType =="MC":
+        jobsList = [ttBar, zz, dy, multiBoson, darkPhotonSignal, qcd, wjets]
+    else:
+        jobsList = [dataMu]
 
     #jobsList = [wjets]  
     #jobsList = [dy, qcd, darkPhotonSignal]  
