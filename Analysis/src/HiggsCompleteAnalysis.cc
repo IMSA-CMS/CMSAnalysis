@@ -30,9 +30,9 @@ const std::vector<std::string> systematics{"ElectronScaleFactor", "MuonIDISOScal
 // Actual masses for the Higgs signal
 const std::vector<int> HiggsCompleteAnalysis::massTargets{500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
 
-constexpr auto bgFilePath = "/uscms/home/bhenning/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Output/HiggsWithSystematics1/";
-constexpr auto signalFilePath = "/uscms/home/bhenning/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Output/HiggsNewOutput/";
-constexpr auto dataFilePath = "/uscms/home/bhenning/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Output/HiggsNewOutput/";
+constexpr auto bgFilePath = "/uscms/home/bhenning/nobackup/HiggsWithSystematics1/";
+constexpr auto signalFilePath = "/uscms/home/bhenning/nobackup/HiggsWithSystematics1/";
+constexpr auto dataFilePath = "/uscms/home/bhenning/nobackup/HiggsWithSystematics1/";
 
 double HiggsCompleteAnalysis::getBranchingRatio(const std::string &channel) const
 {
@@ -80,7 +80,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
 
     const std::string filePath = "/uscms/home/bhenning/nobackup/";
     const std::string signalFilePath =
-        "/uscms/home/bhenning/nobackup/";
+        "/uscms/home/bhenning/nobackup/HiggsWithSystematics1/";
     // const std::string myPath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     // const std::string filePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     // const std::string signalFilePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
