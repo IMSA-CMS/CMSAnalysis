@@ -1,18 +1,13 @@
 #include "CMSAnalysis/Analysis/interface/HiggsHistNameFinder.hh"
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
-#include <vector>
 
-std::string HiggsHistNameFinder::getHistName(HistVariable histVariable) const
+std::string HiggsHistNameFinder::getHistName(const HistVariable &histVariable) const
 {
-    std::vector<std::string> out;
-    boost::split(out, channel, boost::is_any_of("_"));
-
-    const auto reco = "/Reco " + out.at(0);
-    std::string gensim;
-    if (out.size() > 1)
+    std::string genSimStr;
+    if (!genSim.empty())
     {
-        gensim = "/GenSim " + out.at(1);
+        genSimStr = "GenSim " + genSim + "/";
     }
 
     std::string syst;
@@ -28,7 +23,16 @@ std::string HiggsHistNameFinder::getHistName(HistVariable histVariable) const
         break;
     }
 
-    std::string path = "hists/" + syst + "ZVeto" + reco + gensim + "/" + histVariable.getName();
+    std::string zSel;
+    if (zSelection)
+    {
+        zSel = "ZPeak/";
+    }
+    else
+    {
+        zSel = "ZVeto/";
+    }
+    const std::string path = "hists/" + syst + zSel + "Reco " + reco + "/" + genSimStr + histVariable.getName();
 
     return path;
 

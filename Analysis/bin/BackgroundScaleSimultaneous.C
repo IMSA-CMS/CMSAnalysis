@@ -1,181 +1,156 @@
-#include "CMSAnalysis/Analysis/interface/RootFileInput.hh"
-#include "CMSAnalysis/Analysis/interface/Estimator.hh"
+#include "CMSAnalysis/Analysis/interface/Channel.hh"
+#include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
-#include "CMSAnalysis/Analysis/interface/DarkPhotonCompleteAnalysis.hh"
-#include <memory>
-#include "THStack.h"
 #include "TCanvas.h"
-#include "TLegend.h"
-#include "TFile.h"
 #include "TH1.h"
-#include "TMath.h"
+#include "THStack.h"
+#include "TLegend.h"
+#include <TF1.h>
+#include <TFile.h>
+#include <TH2.h>
+#include <cassert>
+#include <cmath>
 #include <iostream>
+#include <tuple>
 #include <vector>
 
 // Global variables to be used in the chi-squared function
-TH1* globalData;
-TH1* globalDynamicBG;
-TH1* globalFixedBG;
+// (dyn bg, fixed bg, observed)
+std::vector<std::tuple<TH1 *, TH1 *, TH1 *>> globalData;
 
-// Chi-squared calculation function for grid scan
-double calculateChiSquared(double scaleDynamic, double scaleFixed) {
-    TH1* scaledDynamicBG = (TH1*)globalDynamicBG->Clone();
-    scaledDynamicBG->Scale(scaleDynamic);
+double error(const double *const x, const double *const par)
+{
+    const double dyn = par[0];
+    const double fix = par[1];
 
-    TH1* scaledFixedBG = (TH1*)globalFixedBG->Clone();
-    scaledFixedBG->Scale(scaleFixed);
-
-    TH1* totalBG = (TH1*)scaledDynamicBG->Clone();
-    totalBG->Add(scaledFixedBG);
-
-    double chiSquared = 0.0;
-    for (int i = 1; i <= globalData->GetNbinsX(); ++i) {
-        double observed = globalData->GetBinContent(i);
-        double expected = totalBG->GetBinContent(i);
-        double error = globalData->GetBinError(i); // Get error for observed data bin
-        if (error > 0) {
-            chiSquared += (observed - expected) * (observed - expected) / (error * error);
+    double sum = 0;
+    for (const auto channel : globalData)
+    {
+        auto *const dynBg = std::get<0>(channel);
+        auto *const fixedBg = std::get<1>(channel);
+        auto *const data = std::get<2>(channel);
+        const auto pred =
+            dyn * dynBg->GetBinContent(dynBg->FindBin(x[0])) + fix * fixedBg->GetBinContent(fixedBg->FindBin(x[0]));
+        const auto obsv = data->GetBinContent(data->FindBin(x[0]));
+        const auto err = data->GetBinError(data->FindBin(x[0]));
+        if (err != 0)
+        {
+            sum += (pred - obsv) * (pred - obsv) / (err * err);
         }
     }
 
-    delete scaledDynamicBG;
-    delete scaledFixedBG;
-    delete totalBG;
+    // std::cout << dyn << "," << fix << "," << x[0] << "->" << sum << "\n";
 
-    return chiSquared;
+    return sqrt(sum);
 }
 
+void BackgroundScaleSimultaneous(const char *const outputName)
+{
+    const std::string dynamicBgName = "Drell-Yan Background";
+    const std::vector<std::string> channelNames{"e_e__ZPeak", "u_u__ZPeak"};
 
-void fitAndDisplayHistograms(const char* plotName, const char* outputName) {
-    //const std::string plotName = "Pt Low Mass and Same Sign";
-    const std::string dynamicBGName = "QCD Background";
-    const std::string channelName = "0.3";
-    // const std::string inputAnalysisPath = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/DarkPhoton_MLStrip_CompleteCuts_Output/";
-    const std::string inputAnalysisPath = "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/LeptonJetReconstruction_All/";
+    auto outFile = TFile(outputName, "RECREATE");
 
-    auto analysis = std::make_shared<DarkPhotonCompleteAnalysis>(inputAnalysisPath, "/uscms/home/jpalamad/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+    auto analysis = HiggsCompleteAnalysis();
 
-    // Get channels and background histograms
-    std::vector<std::shared_ptr<Channel>> channels = analysis->getChannels();
-    std::shared_ptr<Channel> channel = channels.at(0);
+    const HistVariable histVar(HistVariable::VariableType::RecoOppositeSignInvariantMass);
 
-    for (std::shared_ptr<Channel> channel : channels) {
-        for (std::string processName : channel->getNames()) {
-            if (processName == "signal") {
-                channel->labelProcess("signal", processName);
-            } else if (processName == "data") {
-                channel->labelProcess("data", processName);
-            } else if (processName == dynamicBGName) {
-                channel->labelProcess("dynamicbg", processName);
-            } else {
-                channel->labelProcess("fixedbg", processName);
+    for (const auto &channelName : channelNames)
+    {
+        const auto channel = analysis.getChannel(channelName);
+
+        // Retrieve histograms
+        auto *data = channel->getHists(histVar, Channel::Label::Data).at(0);
+        auto *dynBg = analysis.getHist(histVar, dynamicBgName, false, channelName);
+        auto *fixedBg = dynamic_cast<TH1 *>(dynBg->Clone());
+        fixedBg->Reset();
+
+        for (const std::string &name : channel->getNamesWithLabel(Channel::Label::Background))
+        {
+            if (name == dynamicBgName)
+            {
+                continue;
             }
+            std::cout << "Fixed bg name: " << name << "\n";
+            TH1 *fixedHist = analysis.getHist(histVar, name, true, channelName);
+            fixedBg->Add(fixedHist);
         }
-    }
 
-    std::vector<std::string> backgroundNames = channel->getNamesWithLabel("fixedbg");
-    std::vector<std::string> dataNames = channel->getNamesWithLabel("data");
+        auto *canvas = new TCanvas((channelName + " Initial Stacked Histogram").c_str(),
+                                   (channelName + " Initial Stacked Histogram").c_str(), 800, 600);
+        auto stack = THStack("stack", (channelName + " Initial Background Components;Mass;Events").c_str());
 
-    // Retrieve histograms
-    HistVariable histvariable(plotName);
-    globalData = analysis->getHist(histvariable, dataNames.at(0), false, channelName);
-    globalDynamicBG = analysis->getHist(histvariable, dynamicBGName, false, channelName);
+        dynBg->SetFillColor(kRed);
+        fixedBg->SetFillColor(kBlue);
+        data->SetMarkerStyle(20);
 
-    // Create collective fixed background histogram
-    globalFixedBG = (TH1*)globalDynamicBG->Clone();
-    globalFixedBG->Reset();
-    for (const std::string& name : backgroundNames) {
-        TH1* fixedHist = analysis->getHist(histvariable, name, true, channelName);
-        globalFixedBG->Add(fixedHist);
+        stack.Add(fixedBg);
+        stack.Add(dynBg);
+
+        stack.Draw("HIST");
+        data->Draw("E SAME");
+
+        auto legend = TLegend(0.7, 0.7, 0.9, 0.9);
+        legend.AddEntry(data, "Data", "lep");
+        legend.AddEntry(fixedBg, "Fixed Background", "f");
+        legend.AddEntry(dynBg, ("Dynamic Background (" + dynamicBgName + ")").c_str(), "f");
+        legend.Draw();
+
+        outFile.WriteObject(canvas, canvas->GetName());
+        globalData.push_back(std::tuple(dynBg, fixedBg, data));
     }
 
     // Draw initial stacked histogram
-    TCanvas* canvas1 = new TCanvas("InitialStack", "Initial Stacked Histogram", 800, 600);
-    THStack* stack = new THStack("stack", "Initial Background Components;Mass;Events");
 
-    globalDynamicBG->SetFillColor(kRed);
-    globalFixedBG->SetFillColor(kBlue);
-    globalData->SetMarkerStyle(20);
+    auto *const func = new TF1("f1", error, 0, 1, 2, 1, TF1::EAddToList::kNo);
+    func->SetParameters(1, 1);
+    func->SetParLimits(0, 0, 100);
+    func->SetParLimits(1, 0, 100);
+    func->FixParameter(1, 1);
+    auto *const hist = dynamic_cast<TH1 *>(std::get<2>(globalData.at(0))->Clone());
+    hist->Reset();
 
-    stack->Add(globalFixedBG);
-    stack->Add(globalDynamicBG);
+    hist->Fit(func, "WW");
 
-    stack->Draw("HIST");
-    globalData->Draw("E SAME");
+    const auto dynScale = func->GetParameter(0);
+    const auto fixScale = func->GetParameter(1);
 
-    TLegend* legend = new TLegend(0.7, 0.7, 0.9, 0.9);
-    legend->AddEntry(globalData, "Data", "lep");
-    legend->AddEntry(globalFixedBG, "Fixed Background", "f");
-    legend->AddEntry(globalDynamicBG, "Dynamic Background", "f");
-    legend->Draw();
+    std::cout << "-------------------------\n";
+    std::cout << "Best fit scale factors:\n";
+    std::cout << "Dynamic Background Scale: " << dynScale << "\n";
+    std::cout << "Fixed Background Scale: " << fixScale << "\n";
+    std::cout << "Chi-sqared: " << func->GetChisquare() << '\n';
+    std::cout << "-------------------------\n";
 
-    canvas1->SaveAs("InitialStackedHistogram.root");
-    canvas1->SaveAs("InitialStackedHistogram.png");
+    for (size_t i = 0; i < channelNames.size(); i++)
+    {
+        const auto &name = channelNames.at(i);
+        const auto *canvas =
+            new TCanvas((name + " BestFitStack").c_str(), (name + " Best Fit Stacked Histogram").c_str(), 800, 600);
+        auto bestFitStack = THStack("bestFitStack", (name + " Best Fit Background Components;Mass;Events").c_str());
 
-    // Grid scan parameters
-    double minScaleDynamic = 0.01;
-    double maxScaleDynamic = 0.7;
-    double stepSizeDynamic = 0.01;
+        const auto hists = globalData.at(i);
 
-    double minScaleFixed = 0.001;
-    double maxScaleFixed = 0.02;
-    double stepSizeFixed = 0.001;
+        TH1 *const bestFitDynamicBG = dynamic_cast<TH1 *>(std::get<0>(hists)->Clone());
+        bestFitDynamicBG->Scale(dynScale);
+        bestFitDynamicBG->SetFillColor(kRed);
 
-    // Variables to store best-fit results
-    double bestScaleDynamic = 0.01;
-    double bestScaleFixed = 0.01;
-    double minChiSquared = 1e9;
+        TH1 *const bestFitFixedBG = dynamic_cast<TH1 *>(std::get<1>(hists)->Clone());
+        bestFitFixedBG->Scale(fixScale);
+        bestFitFixedBG->SetFillColor(kBlue);
 
-    // Perform grid scan
-    for (double scaleDynamic = minScaleDynamic; scaleDynamic <= maxScaleDynamic; scaleDynamic += stepSizeDynamic) {
-        for (double scaleFixed = minScaleFixed; scaleFixed <= maxScaleFixed; scaleFixed += stepSizeFixed) {
-            double chiSquared = calculateChiSquared(scaleDynamic, scaleFixed);
-            if (chiSquared < minChiSquared) {
-                minChiSquared = chiSquared;
-                bestScaleDynamic = scaleDynamic;
-                bestScaleFixed = scaleFixed;
-            }
-        }
+        bestFitStack.Add(bestFitFixedBG);
+        bestFitStack.Add(bestFitDynamicBG);
+
+        bestFitStack.Draw("HIST");
+        std::get<2>(hists)->Draw("E SAME");
+
+        auto bestFitLegend = TLegend(0.7, 0.7, 0.9, 0.9);
+        bestFitLegend.AddEntry(std::get<2>(hists), "Data", "lep");
+        bestFitLegend.AddEntry(bestFitFixedBG, "Fixed Background", "f");
+        bestFitLegend.AddEntry(bestFitDynamicBG, ("Dynamic Background (Best fit, " + dynamicBgName + ")").c_str(), "f");
+        bestFitLegend.Draw();
+
+        outFile.WriteObject(canvas, canvas->GetName());
     }
-
-    std::cout << "Best fit scale factors: " << std::endl;
-    std::cout << "Dynamic Background Scale: " << bestScaleDynamic << std::endl;
-    std::cout << "Fixed Background Scale: " << bestScaleFixed << std::endl;
-    std::cout << "Chi-sqared: " << minChiSquared << std::endl;
-
-    std::cout << "-------------------------" << std::endl;
-    std::cout << "Dynamic events: " << bestScaleDynamic * globalDynamicBG->GetEntries() << std::endl;
-    std::cout << "Fixed events: " << bestScaleFixed * globalFixedBG->GetEntries() << std::endl;
-    std::cout << "-------------------------" << std::endl;
-
-    // Create best-fit stacked histogram
-    TCanvas* canvas2 = new TCanvas("BestFitStack", "Best Fit Stacked Histogram", 800, 600);
-    THStack* bestFitStack = new THStack("bestFitStack", "Best Fit Background Components;Mass;Events");
-
-    TH1* bestFitDynamicBG = (TH1*)globalDynamicBG->Clone();
-    bestFitDynamicBG->Scale(bestScaleDynamic);
-    bestFitDynamicBG->SetFillColor(kRed);
-
-    TH1* bestFitFixedBG = (TH1*)globalFixedBG->Clone();
-    bestFitFixedBG->Scale(bestScaleFixed);
-    bestFitFixedBG->SetFillColor(kBlue);
-
-    bestFitStack->Add(bestFitFixedBG);
-    bestFitStack->Add(bestFitDynamicBG);
-
-    bestFitStack->Draw("HIST");
-    globalData->Draw("E SAME");
-
-    TLegend* bestFitLegend = new TLegend(0.7, 0.7, 0.9, 0.9);
-    bestFitLegend->AddEntry(globalData, "Data", "lep");
-    bestFitLegend->AddEntry(bestFitFixedBG, "Fixed Background (Best Fit)", "f");
-    bestFitLegend->AddEntry(bestFitDynamicBG, "Dynamic Background (Best Fit)", "f");
-    bestFitLegend->Draw();
-
-    //canvas2->SaveAs("BestFitStackedHistogram.png");
-    canvas2->SaveAs(outputName);
-}
-
-void BackgroundScaleSimultaneous(const char* plotName, const char* outputName) {
-    fitAndDisplayHistograms(plotName, outputName);
 }

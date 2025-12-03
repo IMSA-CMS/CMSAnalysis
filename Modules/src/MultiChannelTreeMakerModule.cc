@@ -27,9 +27,16 @@ bool MultiChannelTreeMakerModule::process()
     auto recoParticles = getParticles();
     //std::string filter = Utility::identifyChannel(recoParticles[0]);
     std::string recoFilter = Utility::identifyChannel(recoParticles[0]);
-    std::string genSimFilter = Utility::identifyChannel(recoParticles[1]);
-    std::string filter = recoFilter + "__" + genSimFilter;
+    //std::string genSimFilter = Utility::identifyChannel(recoParticles[1]);
+    std::string filter = recoFilter;
 
+    if(trees.find(filter) == trees.end())
+    {
+        std::string treeName = filter + getTreeName();
+        TTree* channelTree = new TTree(treeName.c_str(), treeName.c_str());
+        getSpecialVariable()->addVariablesToTree(channelTree); 
+        trees.insert({filter, channelTree});
+    }
     if (trees.find(filter) != trees.end())
     {
         for (const auto& collection : recoParticles)
@@ -47,34 +54,34 @@ bool MultiChannelTreeMakerModule::process()
 
 
 // initialize all trees corresponding to different event channels
-void MultiChannelTreeMakerModule::initialize()
-{
-    std::vector<std::string> channels = {
-        // four lepton channels with none missing
-        "eeee_", "eeeu_", "eeuu_", "euuu_", "uuuu_",
-        "eeet_", "eeut_", "eett_", "euet_", "euut_", "eutt_",
-        "uuet_", "etut_", "uuut_", "uutt_", "etet_", "ettt_", "utut_", "uttt_", "tttt_",
+// void MultiChannelTreeMakerModule::initialize()
+// {
+//     std::vector<std::string> channels = {
+//         // four lepton channels with none missing
+//         "eeee_", "eeeu_", "eeuu_", "euuu_", "uuuu_",
+//         "eeet_", "eeut_", "eett_", "euet_", "euut_", "eutt_",
+//         "uuet_", "etut_", "uuut_", "uutt_", "etet_", "ettt_", "utut_", "uttt_", "tttt_",
 
-        // three lepton channels, one missing
-        "eeu_", "eue_", "euu_", "uue_", "uuu_",
-        "eet_", "eut_", "uut_", "ete_", "etu_", "ett_",
-        "ute_", "utu_", "utt_", "ttu_", "ttt_",
+//         // three lepton channels, one missing
+//         "eeu_", "eue_", "euu_", "uue_", "uuu_",
+//         "eet_", "eut_", "uut_", "ete_", "etu_", "ett_",
+//         "ute_", "utu_", "utt_", "ttu_", "ttt_",
 
-        // two lepton channels, two missing
-        "eu__", "e_u_", "uu__", "u_u_",
-        "et__", "e_t_", "u_t_", "tt__", "t_t_",
-    };
+//         // two lepton channels, two missing
+//         "eu__", "e_u_", "uu__", "u_u_",
+//         "et__", "e_t_", "u_t_", "tt__", "t_t_",
+//     };
 
-    // For each channel name, create a TTree and add variables to it
-    for (const auto& channel : channels)
-    {
-        std::string treeName = channel + getTreeName();
-        TTree* channelTree = new TTree(treeName.c_str(), treeName.c_str());
-        getSpecialVariable()->addVariablesToTree(channelTree); 
-        trees.insert({channel, channelTree});
-    }
+//     // For each channel name, create a TTree and add variables to it
+//     for (const auto& channel : channels)
+//     {
+//         std::string treeName = channel + getTreeName();
+//         TTree* channelTree = new TTree(treeName.c_str(), treeName.c_str());
+//         getSpecialVariable()->addVariablesToTree(channelTree); 
+//         trees.insert({channel, channelTree});
+//     }
 
-}
+// }
 
 // write all trees to the output file at the end of processing
 void MultiChannelTreeMakerModule::finalize()

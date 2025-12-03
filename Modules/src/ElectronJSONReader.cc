@@ -127,8 +127,8 @@ void ElectronJSONReader::loadScaleFactors(Value output, ScaleFactor::SystematicT
                     for (size_t ptBin = 0; ptBin < ptEdges.size() - 1; ptBin++) // Loop over pt bins
                     {
                         double etaMin = etaEdges[etaBin].asDouble();
-                        double etaMax = etaEdges[etaBin + 1].asDouble();
-                        double ptMin = ptEdges[ptBin].asDouble();
+                        //double etaMax = etaEdges[etaBin + 1].asDouble();
+                        //double ptMin = ptEdges[ptBin].asDouble();
                         double ptMax = ptEdges[ptBin + 1].asDouble();
 
                         if (index < binningContent.size()) 
