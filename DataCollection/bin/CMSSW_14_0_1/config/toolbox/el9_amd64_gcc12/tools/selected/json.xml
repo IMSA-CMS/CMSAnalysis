@@ -1,6 +1,0 @@
-<tool name="json" version="3.11.3-2540d984125d8aab890b619b66fd01ff">
-  <client>
-    <environment name="JSON_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/json/3.11.3-2540d984125d8aab890b619b66fd01ff"/>
-    <environment name="INCLUDE"   default="$JSON_BASE/include"/>
-  </client>
-</tool>
