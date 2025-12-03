@@ -1,9 +1,0 @@
-<tool name="gperf" version="2.11-8948c681bfd246f5e1c7e4d2961058ca">
-  <lib name="profiler"/>
-  <client>
-    <environment name="GPERF_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/gperftools/2.11-8948c681bfd246f5e1c7e4d2961058ca"/>
-    <environment name="LIBDIR"        default="$GPERF_BASE/lib"/>
-  </client>
-  <use name="libunwind"/>
-  <runtime name="PATH" value="$GPERF_BASE/bin" type="path"/>
-</tool>

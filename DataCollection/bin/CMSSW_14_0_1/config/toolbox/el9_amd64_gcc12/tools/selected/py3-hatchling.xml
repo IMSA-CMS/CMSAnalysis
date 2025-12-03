@@ -1,6 +1,0 @@
-<tool name="py3-hatchling" version="1.14.0-ffdb9a5f17173a14b15fc5eadda61328">
-  <client>
-    <environment name="PY3_HATCHLING_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/py3-hatchling/1.14.0-ffdb9a5f17173a14b15fc5eadda61328"/>
-  </client>
-  <runtime name="PATH" value="$PY3_HATCHLING_BASE/bin" type="path"/>
-</tool>

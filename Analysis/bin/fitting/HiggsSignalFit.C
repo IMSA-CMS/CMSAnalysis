@@ -6,7 +6,7 @@
 #include "TF1.h"
 #include "TGraph.h"
 #include "TH1.h"
-#include <boost/algorithm/string.hpp>
+//#include <boost/algorithm/string.hpp>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -144,5 +144,5 @@ void fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
     }
     fitter.loadFunctions(currentFunctions);
     fitter.fitFunctions(histogramMap);
-    fitter.parameterizeFunctions(massValues, genSim, channelName, histType);
+    fitter.parameterizeFunctions(massValues, genSim, channelName, histType.getName());
 }

@@ -133,8 +133,8 @@ void Quadlepton::beginJob()
   //std::cout << "Made it (in beginJob) to line" << __LINE__ << std::endl;
 
   //Pt Histogram Range
-  double ptMaxRange = 1000;
-  double massMaxRange = 15000;
+ // double ptMaxRange = 1000;
+  //double massMaxRange = 15000;
   double massInvarMaxRange = 5700;
 
   edm::Service<TFileService> fs;

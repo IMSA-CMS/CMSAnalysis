@@ -45,7 +45,7 @@ bool NanoAODEventFile::checkTrigger(std::string triggerName, std::string subProc
         // return false;
         if (!tree->GetBranch(triggerName.c_str()))
         {
-            // std::cout << triggerName << " doesn't exist\n";
+            std::cout << triggerName << " doesn't exist\n";
             return false;
         }
         auto currentEntry = treeReader.GetCurrentEntry();

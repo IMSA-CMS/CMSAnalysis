@@ -442,16 +442,16 @@ void RecoGenSimComparisonModule::sameSignDeltaRComparison(const ParticleCollecti
 }
 
 
-     void RecoGenSimComparisonModule::fakePhotonComparison(const ParticleCollection<Particle>& recoParts, const ParticleCollection<Particle>& genParts, std::ostream& output)
+void RecoGenSimComparisonModule::fakePhotonComparison(const ParticleCollection<Particle>& recoParts, const ParticleCollection<Particle>& genParts, std::ostream& output)
 {
     int recoEventElement = 1;
 
     ParticleType recoType;
-    int wrongCharge;
-    int fakePhoton;
-    int noMatch;
-    int mismeasuredPt;
-    int accurate;
+    // int wrongCharge;
+    // int fakePhoton;
+    // int noMatch;
+    // int mismeasuredPt;
+    // int accurate;
     
 
     for (auto& recoPart : recoParts)
@@ -503,15 +503,15 @@ void RecoGenSimComparisonModule::sameSignDeltaRComparison(const ParticleCollecti
             if (recoType==ParticleType::electron()) 
             {
                 electronCounter++;
-                elecWrongChargeCounter += wrongCharge;
-                elecFakePhotonCounter += fakePhoton;
-                elecNoMatchCounter += noMatch;
-                elecMismeasuredPtCounter += mismeasuredPt;
-                elecAccurateCounter += accurate;
+                // elecWrongChargeCounter += wrongCharge;
+                // elecFakePhotonCounter += fakePhoton;
+                // elecNoMatchCounter += noMatch;
+                // elecMismeasuredPtCounter += mismeasuredPt;
+                // elecAccurateCounter += accurate;
             } 
-            if(noMatch){
-                noMatchCounter++;
-            }
+            //if(noMatch){
+                //noMatchCounter++;
+           // }
              
         }
         // determines if the photon is fake

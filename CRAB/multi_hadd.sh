@@ -6,7 +6,7 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-OUTPUT_DIR="Output/$1"
+OUTPUT_DIR="nobackup/$1"
 mkdir -p "$OUTPUT_DIR"
 
 for dir in */; do
@@ -29,6 +29,8 @@ for dir in */; do
     hadd -f "$dir/$dir.root" @"$dir/files.txt"
     
     # Copy output
-    mkdir -p "$CMSSW_BASE/src/CMSAnalysis/$OUTPUT_DIR"
-    root -l -b -q "$CMSSW_BASE/src/CMSAnalysis/CRAB/cleanfile.C+( \"$dir/$dir.root\", \"$CMSSW_BASE/src/CMSAnalysis/$OUTPUT_DIR/$dir.root\" )"
+    mkdir -p "/uscms/home/bhenning/$OUTPUT_DIR"
+
+    #Clean the Files
+    root -l -b -q "$CMSSW_BASE/src/CMSAnalysis/CRAB/cleanfile.C+( \"$dir/$dir.root\", \"/uscms/home/bhenning/$OUTPUT_DIR/$dir.root\" )"
 done

@@ -176,8 +176,8 @@ TH1* RootFileInput::getHistFromName(std::string histName) const
 int RootFileInput::getTotalEvents() const
 {
 	auto file = getFile(fileSource);
-	bool end = false; 
-	int index = 1;
+	//bool end = false; 
+	//int index = 1;
 	auto *totalevents = file->Get<TObjString>("NEvents");
 	if (!totalevents)
 	{

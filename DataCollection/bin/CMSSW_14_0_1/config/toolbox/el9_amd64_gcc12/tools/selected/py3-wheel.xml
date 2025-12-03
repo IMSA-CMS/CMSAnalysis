@@ -1,6 +1,0 @@
-<tool name="py3-wheel" version="0.40.0-77089ce8b8399be6714f9fdac00a8e2b">
-  <client>
-    <environment name="PY3_WHEEL_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/py3-wheel/0.40.0-77089ce8b8399be6714f9fdac00a8e2b"/>
-  </client>
-  <runtime name="PATH" value="$PY3_WHEEL_BASE/bin" type="path"/>
-</tool>
