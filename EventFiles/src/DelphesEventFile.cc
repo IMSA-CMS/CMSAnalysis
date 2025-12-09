@@ -108,7 +108,7 @@ ParticleCollection<Particle> DelphesEventFile::getRecoParticles() const
         // Lorentz four-vector
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(elec_pt[i],elec_eta[i], elec_phi[i], elec_mass[i])),
-        elec_dxy[i], elec_dz[i], charge, ParticleType::electron(), fit);
+        charge, ParticleType::electron(), fit);
 
         //particle.addInfo("Isolation", elec_reliso[i]); GAVIN CHANGED
         recoParticles.addParticle(particle);
@@ -135,7 +135,7 @@ ParticleCollection<Particle> DelphesEventFile::getRecoParticles() const
         // Lorentz four-vector
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(muon_pt[i],muon_eta[i], muon_phi[i], muon_mass[i])),
-        muon_dxy[i], muon_dz[i], charge, ParticleType::muon(), fit);
+        charge, ParticleType::muon(), fit);
 
         //particle.addInfo("Isolation", muon_reliso[i]); GAVIN CHANGED
         recoParticles.addParticle(particle);
@@ -149,7 +149,7 @@ ParticleCollection<Particle> DelphesEventFile::getRecoJets() const
     for(Int_t i = 0; i < *jet_size; i++) 
     {
         recoParticles.addParticle(
-        Particle(reco::Candidate::LorentzVector(jet_pt[i], jet_eta[i], jet_phi[i], jet_mass[i]), 0, 0, 0,ParticleType::jet()));     
+        Particle(reco::Candidate::LorentzVector(jet_pt[i], jet_eta[i], jet_phi[i], jet_mass[i]), 0,ParticleType::jet()));     
     }
     return recoParticles;
 }

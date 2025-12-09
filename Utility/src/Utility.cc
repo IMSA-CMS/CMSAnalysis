@@ -320,3 +320,91 @@ void writeRootObj(TFile *outFile, const std::string &path, TObject *obj)
 
     outFile->cd();
 }
+
+//   double invariantMass(Particle p1, Particle p2, double met_x, double met_y, bool caseTwo)
+// {
+//     struct Vector2D {
+//         double x;
+//         double y;
+
+//         Vector2D operator+(const Vector2D& other) const {
+//             return {x + other.x, y + other.y};
+//         }
+
+//         Vector2D operator*(double scalar) const {
+//             return {scalar * x, scalar * y};
+//         }
+//     };
+
+//     Vector2D p1T { p1.px(), p1.py() };
+//     Vector2D p2T { p2.px(), p2.py() };
+//     Vector2D MET { met_x, met_y };
+
+//     std::cout << "p1T = (" << p1T.x << ", " << p1T.y << ")\n";
+//     std::cout << "p2T = (" << p2T.x << ", " << p2T.y << ")\n";
+//     std::cout << "MET = (" << MET.x << ", " << MET.y << ")\n";
+
+//     // this is good to use
+//     // Solve for α1 and α2
+//     // Matrix:
+//     // [ p1x  p2x ] [a1] = [ METx ]
+//     // [ p1y  p2y ] [a2]   [ METy ]
+    
+//     double det = p1T.x * p2T.y - p1T.y * p2T.x;
+
+//     std::cout << "det = " << det << "\n";
+
+//     if (std::abs(det) < 1e-9) {
+//         std::cout << "DET=0 — method fails.\n";
+//         return -1;
+//     }
+
+//     double alpha1 = ( MET.x * p2T.y - MET.y * p2T.x ) / det;
+//     double alpha2 = ( p1T.x * MET.y - p1T.y * MET.x ) / det;
+
+//     std::cout << "alpha1 = " << alpha1 << "\n";
+//     std::cout << "alpha2 = " << alpha2 << "\n";
+
+//     if (alpha1 < 0 || alpha2 < 0) {
+//         std::cout << "Negative energy scaling — return -1.\n";
+//         return -1;
+//     }
+   
+//     double E1 = p1.energy();
+//     double E2 = p2.energy();
+
+//     double pz1 = p1.pz();
+//     double pz2 = p2.pz();
+
+//     double m_vis =
+//         std::sqrt( std::pow(E1 + E2, 2)
+//         - std::pow(p1.px()+p2.px(), 2)
+//         - std::pow(p1.py()+p2.py(), 2)
+//         - std::pow(p1.pz()+p2.pz(), 2) );
+ 
+//     double m_vis1 = std::sqrt(E1*E1 - (p1.px()*p1.px() + p1.py()*p1.py() + pz1*pz1));
+//     double m_vis2 = std::sqrt(E2*E2 - (p2.px()*p2.px() + p2.py()*p2.py() + pz2*pz2));
+
+//     std::cout << "m_vis  = " << m_vis << "\n";
+//     std::cout << "m_vis1 = " << m_vis1 << "\n";
+//     std::cout << "m_vis2 = " << m_vis2 << "\n";
+  
+//     if (!caseTwo) {
+//         double result = m_vis * std::sqrt((1 + alpha1) * (1 + alpha2));
+//         std::cout << "CASE 1 MASS = " << result << "\n";
+//         return result;
+//     }
+
+//     double m2 =
+//           (1+alpha1)*(1+alpha1)*m_vis1*m_vis1
+//         + (1+alpha2)*(1+alpha2)*m_vis2*m_vis2;
+
+//     if (m2 < 0) {
+//         std::cout << "m² < 0 — return 0.\n";
+//         return 0;
+//     }
+
+//     double result = std::sqrt(m2);
+//     std::cout << "CASE 2 MASS = " << result << "\n";
+//     return result;
+// }

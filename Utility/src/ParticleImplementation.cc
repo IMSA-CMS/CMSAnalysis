@@ -20,14 +20,3 @@ void ParticleImplementation::addInfo(std::string mapKey, double value)
 	infoMap[mapKey] = value;
 }
 
-double ParticleImplementation::getDXY() const
-{
-	return 0;
-	//throw std::runtime_error("getDXY() is not implemented for this type of ParticleImplementation");
-}
-
-double ParticleImplementation::getDZ() const
-{
-	return 0;
-	//throw std::runtime_error("getDZ is not implemented for this type of ParticleImplementation");
-}

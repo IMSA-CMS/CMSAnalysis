@@ -17,6 +17,10 @@ class HiggsSelector : public Selector
     public:
         ~HiggsSelector() {}
         virtual void selectParticles(const EventInput* input, Event& event) const override;
+
+    private:
+        double massDifference(const std::vector<Particle>& positiveLeptons, const std::vector<Particle>& negativeLeptons)const;
+        std::vector<Particle> adjustForNeutrinos(const std::vector<Particle>& leptons, const EventInput* input) const;
 };
 
 #endif
