@@ -52,6 +52,11 @@ TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
 
     //Draws the histogram with more events first (bigger axis)
+    double minBg = CalculateLogMinimum(background);
+    double minSig = CalculateLogMinimum(signal);
+    double logMinimum = std::min(minBg, minSig);
+    
+    first->SetMinimum(logMinimum);
     first->Draw("HIST");
     stackVector.push_back(first);
 
@@ -95,6 +100,8 @@ TCanvas* PlotFormatter::superImposedHist(std::shared_ptr<Channel> processes, His
     gStyle->SetOptStat(0);
 
     //Draws the histogram with more events first (bigger axis)
+    double logMinimum = CalculateLogMinimum(hists);
+    first->SetMinimum(logMinimum);
     first->Draw("HIST");
     histVector.push_back(first);
 
@@ -171,6 +178,9 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
 
     //Draws the histogram with more events first (bigger axis)
     first->SetLineColor(colors.at(firstIndex));
+
+    double logMinimum = CalculateLogMinimum(hists);
+    first->SetMinimum(logMinimum);
     first->Draw("HIST");
     histVector.push_back(first);
 
@@ -204,11 +214,9 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
         Bin(hists, first, firstIndex, maximum, count, false);
         count=0;
 
-        int lowValue = maximum;
+        double logMinimum = CalculateLogMinimum(hists);
+
         for(TH1* hist : hists) {
-            if(hist->GetMinimum() < lowValue) {
-                lowValue = hist->GetMinimum();
-            }
             hist->SetLineColor(colors.at(count));
             count++;
         }
@@ -218,7 +226,7 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
         gStyle->SetOptStat(0);
 
         //Draws the histogram with more events first (bigger axis);
-        first->SetMinimum(lowValue);
+        first->SetMinimum(logMinimum);
         //first->SetMinimum(-8);
         first->Draw("HIST");
         histVector.push_back(first);
@@ -293,6 +301,8 @@ TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, Hist
     TCanvas* canvas = makeFormat(width, height, top, bottom, left, right);
 
     //Draws the histogram with more events first (bigger axis)
+    double logMinimum = CalculateLogMinimum(hists);
+    hists->SetMinimum(logMinimum);
     hists->Draw("HIST");
     stackVector.push_back(hists);
 
@@ -428,44 +438,44 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
         maxCombinedY = std::max(data->GetMaximum(), maxCombinedY);
     }
 
-    bool valid = false;
+    // bool valid = false;
 
-    if (data && data->GetEntries() > 0 && data->Integral() > 0 &&
-        !std::isnan(data->GetMaximum()) && !std::isinf(data->GetMaximum()))
-    {
-        valid = true;
-    }
+    // if (data && data->GetEntries() > 0 && data->Integral() > 0 &&
+    //     !std::isnan(data->GetMaximum()) && !std::isinf(data->GetMaximum()))
+    // {
+    //     valid = true;
+    // }
 
-    if (!valid && signal && signal->GetEntries() > 0 && signal->Integral() > 0 &&
-        !std::isnan(signal->GetMaximum()) && !std::isinf(signal->GetMaximum()))
-    {
-        valid = true;
-    }
+    // if (!valid && signal && signal->GetEntries() > 0 && signal->Integral() > 0 &&
+    //     !std::isnan(signal->GetMaximum()) && !std::isinf(signal->GetMaximum()))
+    // {
+    //     valid = true;
+    // }
 
-    if (!valid)
-    {
-        for (auto* h : backgroundHists)
-        {
-            if (h && h->GetEntries() > 0 && h->Integral() > 0 &&
-                !std::isnan(h->GetMaximum()) && !std::isinf(h->GetMaximum()))
-            {
-                valid = true;
-                break;
-            }
-        }
-    }
+    // if (!valid)
+    // {
+    //     for (auto* h : backgroundHists)
+    //     {
+    //         if (h && h->GetEntries() > 0 && h->Integral() > 0 &&
+    //             !std::isnan(h->GetMaximum()) && !std::isinf(h->GetMaximum()))
+    //         {
+    //             valid = true;
+    //             break;
+    //         }
+    //     }
+    // }
 
-    if (!valid)
-    {
-        std::cout << "[JUMBO PLOT] Skipping empty/invalid hist: "
-                  << histvariable.getName()
-                  << " in channel " << channelName << std::endl;
-        return nullptr;
-    }
+    // if (!valid)
+    // {
+    //     std::cout << "[JUMBO PLOT] Skipping empty/invalid hist: "
+    //               << histvariable.getName()
+    //               << " in channel " << channelName << std::endl;
+    //     return nullptr;
+    // }
 
     background = new THStack("background", "background");
 
-    //maxCombinedY *= 100;
+    maxCombinedY *= 100;
     if(data)
     {
         data->SetMaximum(maxCombinedY);
@@ -478,6 +488,12 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     // std::cout << "MAXCOMBINEDY: " << maxCombinedY << std::endl;
 
     FormatSignalData(background, signal, data, backgroundHists, rebinFactor);
+
+    std::vector<TH1*> allHists = backgroundHists;
+    if (signal) allHists.push_back(signal);
+    if (data) allHists.push_back(data);
+    
+    double logMinimum = CalculateLogMinimum(allHists);
 
     //Defines order to draw in so graph isn't cut off
     //int first = 0;
@@ -505,6 +521,9 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
         // backgroundHist->GetXaxis()->SetLimits(firstBin, upperMasslimit);
         backgroundHist->SetMinimum(xAxisMin);
     }
+
+    background->SetMinimum(logMinimum);
+
     background->Draw("HIST");
     stackVector.push_back(background);  
     
@@ -518,6 +537,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
         signal->SetLineColor(6);
 	    signal->SetFillColor(0);
         signal->SetLineWidth(3);
+        signal->SetMinimum(logMinimum);
         signal->Draw("HIST SAME");
        // std::cout << "first = 0";
         //std::cout << "Hist content: " << signal->Integral() << '\n';
@@ -527,13 +547,14 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     if (data)
     {
         histVector.push_back(signal);
+        data->SetMinimum(logMinimum);
         data->Draw("P SAME E1 X0");
         data->SetLineColor(kBlack);
         data->SetLineWidth(2);
         histVector.push_back(data);
     }
 
-    hist->SetMinimum(1e-2);
+    //hist->SetMinimum(1e-2);
 
 
     ChangeAxisTitles(hist, xAxisTitle, yAxisTitle);
@@ -555,7 +576,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     // backgroundHist->SetLineWidth(5);
     backgroundHist->Draw("E2 SAME");
     //std::cout <<"Integral: " << backgroundHist->Integral() << std::endl;
-//    backgroundHist->Draw("E2 SAME");
+    //backgroundHist->Draw("E2 SAME");
     
     //Draws on bottom pad
     topPad->Update();
@@ -1151,4 +1172,50 @@ TH1* PlotFormatter::CreateErrorHistogram(THStack* hists, std::vector<std::shared
 
     backgroundHist->Draw("E2 SAME");
     return backgroundHist;
+}
+
+double PlotFormatter::CalculateLogMinimum(const std::vector<TH1*>& hists) {
+    double globalMin = std::numeric_limits<double>::max();
+    
+    for (const auto* hist : hists) {
+        if (!hist) continue;
+        
+        for (int i = 1; i <= hist->GetNbinsX(); ++i) {
+            double binContent = hist->GetBinContent(i);
+            if (binContent > 0 && binContent < globalMin) {
+                globalMin = binContent;
+            }
+        }
+    }
+    
+
+    if (globalMin == std::numeric_limits<double>::max()) {
+        return 1e-5;
+    }
+    
+
+    return globalMin / 10.0;
+}
+
+double PlotFormatter::CalculateLogMinimum(THStack* stack) {
+    if (!stack || !stack->GetHists()) return 1e-2;
+    
+    double globalMin = std::numeric_limits<double>::max();
+    TIter next(stack->GetHists());
+    TH1* hist;
+    
+    while ((hist = dynamic_cast<TH1*>(next()))) {
+        for (int i = 1; i <= hist->GetNbinsX(); ++i) {
+            double binContent = hist->GetBinContent(i);
+            if (binContent > 0 && binContent < globalMin) {
+                globalMin = binContent;
+            }
+        }
+    }
+    
+    if (globalMin == std::numeric_limits<double>::max()) {
+        return 1e-2;
+    }
+    
+    return globalMin / 10.0;
 }

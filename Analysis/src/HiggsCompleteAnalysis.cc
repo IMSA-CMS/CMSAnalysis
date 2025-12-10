@@ -22,7 +22,7 @@ const std::vector<std::string> HiggsCompleteAnalysis::recoDecays{
     "eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet",
     "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt", "eee_", "eeu_", "eue_",
     "euu_", "uue_", "uuu_", "eet_", "ete_", "eut_", "etu_", "uut_", "utu_", "ett_", "utt_", "ttt_",
-    "ee__", "e_e_", "eu__", "e_u_", "uu__", "u_u_", "tt__", "t_t_", "te__", "t_e_", "tu__", "t_u_", "none"};
+    "ee__", "e_e_", "eu__", "e_u_", "uu__", "u_u_", "tt__", "t_t_", "et__", "e_t_", "ut__", "u_t_", "none"};
 
 const std::vector<std::string> systematics{"ElectronScaleFactor", "MuonIDISOScaleFactor", "MuonRecoScaleFactor",
                                            "MuonTriggerScaleFactor"};

@@ -7,13 +7,13 @@ static std::string defaultUnit(HistVariable::VariableType var)
     switch (var)
     {
     case HistVariable::VariableType::Pt:
-        return "GeV";
+        return "pT [GeV]";
     case HistVariable::VariableType::Eta:
-        return "";
+        return "#eta";
     case HistVariable::VariableType::Phi:
-        return "";
+        return "#phi";
     case HistVariable::VariableType::SameSignInvariantMass:
-		return "GeV";
+		return "Same sign invariant mass [GeV]";
     case HistVariable::VariableType::OppositeSignInvariantMass:
 		return "GeV";
     case HistVariable::VariableType::InvariantMass:

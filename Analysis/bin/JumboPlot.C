@@ -12,6 +12,7 @@
 #include "CMSAnalysis/Analysis/interface/PlotFormatter.hh"
 #include "CMSAnalysis/Utility/interface/TableData.hh"
 #include "CMSAnalysis/Utility/interface/HTMLTable.hh"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "CMSAnalysis/Analysis/interface/SimpleAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/SimpleHiggsComparison.hh"
 #include <fstream>
@@ -70,8 +71,10 @@ std::vector<HistVariable> variables, bool includeData, bool includeSignal)
 				entry = "";
 				TString xAxisName = var.getUnit();//units[unitCounter];
 				TString yAxisName = "Events";
-				std::string storageRouting = (signal == "Dark Photons") ? "DarkPhoton" : "HiggsSignal";
-				fileName = "jumboPlotStorage/" + storageRouting + "/" + channel->getName() + " " + var.getName() + " " + "DataMC.png";
+				std::string storageRouting = (signal.find("Dark") != std::string::npos) ? "DarkPhoton" : "HiggsSignal";
+				std::string tempChannelName = Utility::substitute(channel->getName(),"/","_");
+
+				fileName = "jumboPlotStorage/" + storageRouting + "/" + tempChannelName + " " + var.getName() + " " + "DataMC.png";
 				//HistVariable fullDataType = HistVariable(connecter + dataType);
 				//bool includeSignal = false;
 				TCanvas *canvas = plotFormatter->completePlot(analysis, var, xAxisName, yAxisName, false, includeSignal, includeData, channel->getName());
@@ -179,29 +182,7 @@ void JumboPlot()
 		HistVariable(HistVariable::VariableType::MET),
 	};
 
-	auto darkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
-		std::vector<HistVariable> darkphotonVariables = {
-		HistVariable(ParticleType::muon(), 1, HistVariable::VariableType::Eta),
-		HistVariable(ParticleType::muon(), 1, HistVariable::VariableType::Pt),
-		HistVariable(ParticleType::muon(), 1, HistVariable::VariableType::Phi),
-		HistVariable(ParticleType::leptonJet(), 1, HistVariable::VariableType::Pt),
-		HistVariable(ParticleType::leptonJet(), 1, HistVariable::VariableType::Eta),
-		};
 
-		std::vector<std::shared_ptr<Channel>> darkPhotonChannels = darkPhotonAnalysis->getChannels();
-		std::vector<std::shared_ptr<Channel>> controlChannels;
-		std::vector<std::shared_ptr<Channel>> signalChannels;
-		for (auto channel : darkPhotonChannels)
-		{
-			if (channel->getName().find("Low Mass and Different Sign") == std::string::npos)
-			{
-				controlChannels.push_back(channel);
-			}
-			else
-			{
-				signalChannels.push_back(channel);
-			}
-		}
 		// std::vector<std::string> darkPhotonControlChannels = {
 		// 	"High Mass and Same Sign/1jet",
 		// 	"Low Mass and Same Sign/1jet",
@@ -226,32 +207,41 @@ void JumboPlot()
 	// std::vector<std::string> bsvtfutsps = {}; // bullshitvectortofillupthesestupidparameterslots
 	// std::vector<std::string> connectors = {"_1st Highest Lepton Jet "};
 
-	auto darkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>(); 
-	std::vector<std::shared_ptr<Channel>> darkPhotonChannels = darkPhotonAnalysis->getChannels();
-
 	std::vector<HistVariable> darkPhotonVariables = 
 	{
 		HistVariable(HistVariable::VariableType::DarkPhotonBDTOutput),
 		HistVariable(HistVariable::VariableType::LeptonJetMass),
 		HistVariable(HistVariable::VariableType::LeptonJetDeltaR),
 		HistVariable(HistVariable::VariableType::MET),
-		HistVariable(HistVariable::VariableType::Eta),
-		HistVariable(HistVariable::VariableType::Pt),
-		HistVariable(HistVariable::VariableType::Phi),
-		
-		HistVariable(ParticleType::electron(), 1, HistVariable::VariableType::Eta),
+
 		HistVariable(ParticleType::muon(), 1, HistVariable::VariableType::Eta),
-		HistVariable(ParticleType::electron(), 1, HistVariable::VariableType::Pt),
 		HistVariable(ParticleType::muon(), 1, HistVariable::VariableType::Pt),
-		HistVariable(ParticleType::electron(), 1, HistVariable::VariableType::Phi),
 		HistVariable(ParticleType::muon(), 1, HistVariable::VariableType::Phi),
 	};
 
-	// makePlots("Higgs Signal 2Channel", higgsAnalysis, channelTwoLeptons, variables ,true, false);
-	// makePlots("Higgs Signal 3Channel", higgsAnalysis, channelThreeLeptons, variables , false, true);
-	// makePlots("Higgs Signal 4Channel", higgsAnalysis, channelFourLeptons, variables , false, true);
+	auto darkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
+	std::vector<std::shared_ptr<Channel>> darkPhotonChannels = darkPhotonAnalysis->getChannels();
 
-	makePlots("Dark Photons", darkPhotonAnalysis, darkPhotonChannels, darkPhotonVariables, false, false);
+	std::vector<std::shared_ptr<Channel>> controlChannels;
+	std::vector<std::shared_ptr<Channel>> signalChannels;
+	for (auto channel : darkPhotonChannels)
+	{
+		if (channel->getName().find("Low Mass and Different Sign") == std::string::npos)
+		{
+			controlChannels.push_back(channel);
+		}
+		else
+		{
+			signalChannels.push_back(channel);
+		}
+	}
+
+	makePlots("Higgs Signal 2Channel", higgsAnalysis, channelTwoLeptons, variables ,true, false);
+	makePlots("Higgs Signal 3Channel", higgsAnalysis, channelThreeLeptons, variables , false, true);
+	makePlots("Higgs Signal 4Channel", higgsAnalysis, channelFourLeptons, variables , false, true);
+
+	//makePlots("Dark Photons Control", darkPhotonAnalysis, controlChannels, darkPhotonVariables, true, false);
+	//makePlots("Dark Photons Signal", darkPhotonAnalysis, signalChannels, darkPhotonVariables, false, false);
 	
 }
 //std::string signal, std::shared_ptr<FullAnalysis> analysis, std::vector<std::shared_ptr<Channel>> channels, std::vector<HistVariable> variables, bool includeData, bool includeSignal
