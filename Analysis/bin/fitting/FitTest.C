@@ -3,6 +3,9 @@
 //see if it can read in the functions without breaking 
 //the file your reading into is H++SignalParameterFunctions.txt
 //mainly to check through file and makes sure things are read in --> will show in terminal
+
+//currently needs to load more than seven functions 
+//also figure out why there's 11s in the text file
 void FitTest()
 {
 	std::cout << "Starting FitTest()...\n";
@@ -10,8 +13,8 @@ void FitTest()
     // loads functions from the text file
     FitFunctionCollection functions;
     try {
-        functions = FitFunctionCollection::loadFunctions("H++SignalParameterFunctions.txt");
-        std::cout << "Successfully read H++SignalParameterFunctions.txt\n";
+        functions = FitFunctionCollection::loadFunctions("H++SignalFunctions.txt");
+        std::cout << "Successfully read H++SignalFunctions.txt\n";
     }
     catch (const std::exception& e) {
         std::cerr << "Failed to load functions: " << e.what() << std::endl;
@@ -40,7 +43,6 @@ void FitTest()
             continue;
         }
 
-        std::cout << "-----------------------------------------\n";
         std::cout << "Function name: " << key << "\n";
         std::cout << "TF1 formula: " << tf1->GetExpFormula("P") << "\n";
         std::cout << "Npar: " << tf1->GetNpar() << "\n";
@@ -54,8 +56,11 @@ void FitTest()
         }
     }
 
+    std::cout << "Total functions successfully processed: " << funcMap.size() << "\n";
     std::cout << "FitTest() finished successfully.\n";
 }
+
+
 
 
 

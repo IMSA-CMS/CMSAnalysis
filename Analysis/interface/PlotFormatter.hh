@@ -53,7 +53,8 @@ class PlotFormatter
             
         //Complete Signal/Background plot
         TCanvas* completePlot(std::shared_ptr<FullAnalysis> analysis, HistVariable histvariable,
-            TString xAxisTitle, TString yAxisTitle, bool scaleTodata, bool includeSignal, bool includeData, std::string channelName = "");
+            TString xAxisTitle, TString yAxisTitle, bool scaleTodata, bool includeSignal, 
+            bool includeData, std::string channelName = "");
 
         //Deletes all hist pointers made with the PlotFormatter
         void deleteHists();
@@ -85,10 +86,6 @@ class PlotFormatter
         void IntegralScaling(double& upperMasslimit, bool& scaleTodata, std::vector<TH1*>& backgroundHists, int& firstBin, float& dataIntegral, float& backgroundIntegral);
     
         int GetOrder(TH1* data, TH1* signal, THStack* background);
-
-        TH1* DrawFirst(THStack*& background, TH1*& signal, TH1*& data, TPad*& topPad, float upperMasslimit, int firstBin);
-
-        void DrawOtherHistograms(THStack*& background, TH1*& signal, TH1*& data);
 
         void DrawOtherHistograms(std::vector<TH1*>& hists, std::vector<int>& colors, int firstIndex);
 

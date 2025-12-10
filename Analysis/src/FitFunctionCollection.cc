@@ -1,23 +1,35 @@
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
+#include <TF1.h>
 #include <fstream>
 #include <string>
+//run HiggsSignalFit make sure it works with adjustments
+
 
 
 
 std::vector<FitFunction> alphabetizeParameters(std::vector<FitFunction> fitFunctions);
+//std::string replaceAll(std::string unmodifiedString, const std::string from, const std::string to);
 
 FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string &fileName)
 {
-    std::fstream file(fileName, std::ios_base::in);
+    std::ifstream file(fileName);
+    
     if (file)
     {
-        size_t size;
-        file >> size;
+        //size_t size;
+        //file >> size;
+        //std::cout << "First number read (expected size): " << size << std::endl;
         FitFunctionCollection functions;
-        for (size_t i = 0; i < size; ++i)
+        //for (size_t i = 0; i < size; ++i)
+        while (file)
         {
-            FitFunction func;
+            std::cout << "Reading function #" << "..." << std::endl;
+            FitFunction func(TF1(), FitFunction::FunctionType::ExpressionFormula, "");
             file >> func;
+            if (!file)
+            {
+                break;
+            }
             functions.insert(func);
         }
         return functions;
@@ -26,28 +38,69 @@ FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string &fi
     {
         throw std::runtime_error("File not loaded successfully");
     }
+
 }
+// FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string &fileName)
+// {
+//     std::fstream file(fileName, std::ios_base::in);
+//     if (!file)
+//     {
+//         throw std::runtime_error("File not loaded successfully: " + fileName);
+//     }
+
+//     std::cout << "Opening file: " << fileName << std::endl;
+
+//     size_t size;
+//     file >> size;
+//     std::cout << "Declared number of functions (from file): " << size << std::endl;
+
+//     FitFunctionCollection functions;
+
+//     for (size_t i = 0; i < size; ++i)
+//     {
+//         std::cout << "Reading function #" << (i + 1) << std::endl;
+
+//         FitFunction func;
+//         if (!(file >> func))
+//         {
+//             std::cerr << "Failed to read FitFunction #" << (i + 1)
+//                       << " at file position " << file.tellg() << ".\n";
+//             break; // keep original behavior
+//         }
+
+//         auto tf1 = func.getFunction();
+//         if (!tf1)
+//         {
+//             std::cerr << "TF1 is null for function #" << (i + 1) << ". Skipping.\n";
+//             continue;
+//         }
+
+//         std::string name = tf1->GetName();
+//         std::cout << "Inserting function: " << name << std::endl;
+
+//         functions.insert(func);
+//     }
+
+//     std::cout << "Finished reading functions.\n";
+//     std::cout << "Declared size: " << size
+//               << ", Actually inserted: " << functions.size() << "\n";
+
+//     return functions;
+// }
+
 void FitFunctionCollection::saveFunctions(const std::string &fileName, bool append)
 {
-    std::fstream file;
-    if (!file.is_open())
+    std::ofstream file(fileName, std::ios::app);
+    if (!file)
     {
-        if (append)
-            file = std::fstream(fileName, std::ios_base::app);
-        else
-            file = std::fstream(fileName, std::ios_base::out);
-    }
-    else
-    {
-        throw std::invalid_argument(fileName + " file is already open");
+        throw std::invalid_argument("File " + fileName + " not found!");
     }
 
-    file << functions.size() << '\n';
+    //file << functions.size() << '\n';
     for (auto &funcPair : functions)
     {
         file << funcPair.second << "\n";
     }
-    file.close();
 }
 
 std::map<std::string, std::vector<FitFunction>> FitFunctionCollection::getFunctionsSortedByChannel(std::string fileName)
@@ -79,17 +132,18 @@ std::map<std::string, std::vector<FitFunction>> FitFunctionCollection::getFuncti
 
 
     // Sorts functions by channel
-    std::unordered_map<std::string, FitFunction> parameterFunctions = functionCollection.getFunctions();
+    auto parameterFunctions = functionCollection.getFunctions();
     for (auto [functionName, function] : parameterFunctions)
     {
-        std::string channel = function.getChannelName();
-
+        std::string channel = function.getChannel();
+        //std::string channel = replaceAll(unformattedChannel, "m", "u");
+        std::cout << "DEBUG: channel name for function: " << channel << "\n";
         // Check whether channel name needs to be modified for internal processes
         for (auto modifier : existingChannelNameModifiers)
         {
             if (function.getParameterName().find(modifier) != std::string::npos)
             {
-                channel += modifier;
+                channel += channelNameModifiers[modifier];
             }
         }
 
@@ -111,6 +165,22 @@ std::map<std::string, std::vector<FitFunction>> FitFunctionCollection::getFuncti
 
     return sortedFunctions;
 }
+
+// std::string replaceAll(std::string unmodifiedString, const std::string from, const std::string to)
+// {
+//     if (from.empty())
+//         return unmodifiedString; // avoid infinite loop if 'from' is empty
+
+//     std::string str = unmodifiedString;
+//     size_t start_pos = 0;
+//     while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
+//         str.replace(start_pos, from.length(), to);
+//         start_pos += to.length(); // move past the replaced part
+//     }
+    
+//     return str;
+
+// }
 
 std::vector<FitFunction> alphabetizeParameters(std::vector<FitFunction> fitFunctions)
 {
@@ -169,7 +239,8 @@ size_t FitFunctionCollection::size() const
 
 FitFunction &FitFunctionCollection::operator[](const std::string &key)
 {
-    return functions[key];
+
+    return get(key);
 }
 
 FitFunction &FitFunctionCollection::get(const std::string &key)
@@ -178,7 +249,7 @@ FitFunction &FitFunctionCollection::get(const std::string &key)
     {
         return functions.at(key);
     }
-    catch (std::out_of_range& e)
+    catch (std::out_of_range &e)
     {
         std::cout << "FitFunctionCollection Error: No FitFunction with string key of " << key << '\n';
         throw e;
