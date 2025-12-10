@@ -314,9 +314,43 @@ std::ostream &operator<<(std::ostream &stream, FitFunction &function)
         // stream << 1 << ' ';
     }
 
-    stream << '\n';
-    // std::cout << "Got parameters\n";
-    return stream;
+	stream << '\n';
+	// std::cout << "Got parameters\n";
+
+    // --- Systematics Section ---
+auto systematics = function.listSystematics();
+if (!systematics.empty())
+{
+    stream << "Systematics: " << systematics.size() << '\n';
+    for (const auto& sysName : systematics)
+    {
+        auto upFunc = function.getSystematic(sysName, true);
+        auto downFunc = function.getSystematic(sysName, false);
+        stream << "  Systematic: " << sysName << '\n';
+
+        if (upFunc)
+        {
+            stream << "    UpParameters: ";
+            for (int i = 0; i < upFunc->GetNpar(); ++i)
+                stream << upFunc->GetParameter(i) << ' ';
+            stream << '\n';
+        }
+
+        if (downFunc)
+        {
+            stream << "    DownParameters: ";
+            for (int i = 0; i < downFunc->GetNpar(); ++i)
+                stream << downFunc->GetParameter(i) << ' ';
+            stream << '\n';
+        }
+    }
+}
+else
+{
+    stream << "Systematics: 0\n";
+}
+
+	return stream;
 }
 
 // std::ostream& operator<<(std::ostream& stream, TF1* func)
@@ -558,9 +592,94 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
         function.getFunction()->SetParameter(i, paramValues[i]);
         function.getFunction()->SetParError(i, paramErrors[i]);
     }
+    if (getLine(stream, line) && line.rfind("Systematics:", 0) == 0)
+    {
+        int nSys = 0;
+        std::istringstream(line.substr(12)) >> nSys;
 
+        for (int s = 0; s < nSys; ++s)
+        {
+            std::string sysName;
+            if (!getLine(stream, line)) break;
+            if (line.rfind("  Systematic:", 0) != 0) continue;
+            sysName = line.substr(13); // Extract name after "  Systematic:"
+
+            std::vector<double> upParams;
+            std::vector<double> downParams;
+
+            // --- Up variation ---
+
+
+            if (getLine(stream, line) && line.rfind("    UpParameters:", 0) == 0)
+            {
+                std::istringstream ss(line.substr(17));
+                double val;
+                while (ss >> val) upParams.push_back(val);
+            }
+            
+
+            // --- Down variation ---
+
+
+            if (getLine(stream, line) && line.rfind("    DownParameters:", 0) == 0)
+            {
+                std::istringstream ss(line.substr(19));
+                double val;
+                while (ss >> val) downParams.push_back(val);
+            }
+            
+
+            // --- Register these in the FitFunction ---
+            if (!upParams.empty() || !downParams.empty())
+                function.addSystematic(sysName, upParams, downParams);
+        }
+    }
     func = function;
     std::cout << "Successfully read: " << name << " (" << params << " parameters)\n\n";
 
     return stream;
 }
+
+// Systematics Implementation
+
+void FitFunction::addSystematic(const std::string& sysName, const TF1& upFunction, const TF1& downFunction)
+{
+    systematics[sysName] = std::make_pair(upFunction, downFunction);
+}
+
+void FitFunction::addSystematic(const std::string& sysName, const std::vector<double>& upParams, const std::vector<double>& downParams)
+{
+
+
+    TF1* upClone = (TF1*)function.Clone((std::string(function.GetName()) + "_" + sysName + "_up").c_str());
+    TF1* downClone = (TF1*)function.Clone((std::string(function.GetName()) + "_" + sysName + "_down").c_str());
+
+
+    for (size_t i = 0; i < upParams.size(); ++i)
+        upClone->SetParameter(i, upParams[i]);
+
+    for (size_t i = 0; i < downParams.size(); ++i)
+        downClone->SetParameter(i, downParams[i]);
+
+    systematics[sysName] = std::make_pair(*upClone, *downClone);
+}
+
+const TF1* FitFunction::getSystematic(const std::string& sysName, bool up) const
+{
+    auto it = systematics.find(sysName);
+    if (it == systematics.end())
+        return nullptr;
+    return up ? &(it->second.first) : &(it->second.second);
+}
+
+std::vector<std::string> FitFunction::listSystematics() const
+{
+    std::vector<std::string> names;
+    names.reserve(systematics.size());
+    for (const auto& kv : systematics)
+        names.push_back(kv.first);
+    return names;
+}
+
+
+

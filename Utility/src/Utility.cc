@@ -349,8 +349,8 @@ std::pair<std::pair<Particle, Particle>, std::pair<Particle, Particle>> Utility:
   if (tauCount == 0) 
   {
     
-    double positivePairInvariantMass = Particle::invariantMass(positiveLeptons[0], positiveLeptons[1]);
-    double negativePairInvariantMass = Particle::invariantMass(negativeLeptons[0], negativeLeptons[1]);
+    //double positivePairInvariantMass = Particle::invariantMass(positiveLeptons[0], positiveLeptons[1]);
+    //double negativePairInvariantMass = Particle::invariantMass(negativeLeptons[0], negativeLeptons[1]);
     
     int posElectronCount = 0;
     int negElectronCount = 0;
@@ -435,8 +435,8 @@ std::pair<std::pair<Particle, Particle>, std::pair<Particle, Particle>> Utility:
       }
     }
     
-    double firstInvariantMass = Particle::invariantMass(firstPair[0], firstPair[1]);
-    double secondInvariantMass = Particle::invariantMass(secondPair[0], secondPair[1]);
+    //double firstInvariantMass = Particle::invariantMass(firstPair[0], firstPair[1]);
+    //double secondInvariantMass = Particle::invariantMass(secondPair[0], secondPair[1]);
 
     return {{firstPair[0], firstPair[1]}, {secondPair[0], secondPair[1]}};
   }
@@ -456,8 +456,8 @@ std::pair<std::pair<Particle, Particle>, std::pair<Particle, Particle>> Utility:
     
     if (sameSign) {
       // If other leptons have same sign, pair the taus together
-      double tausPairMass = Particle::invariantMass(taus[0], taus[1]);
-      double otherPairMass = Particle::invariantMass(otherLeptons[0], otherLeptons[1]);
+      //double tausPairMass = Particle::invariantMass(taus[0], taus[1]);
+      //double otherPairMass = Particle::invariantMass(otherLeptons[0], otherLeptons[1]);
 
       return {{taus[0], taus[1]}, {otherLeptons[0], otherLeptons[1]}};
     }
@@ -470,13 +470,13 @@ std::pair<std::pair<Particle, Particle>, std::pair<Particle, Particle>> Utility:
                     Particle::invariantMass(taus[1], otherLeptons[0]);
       
       if (mass1 >= mass2) {
-        double pair1Mass = Particle::invariantMass(taus[0], otherLeptons[0]);
-        double pair2Mass = Particle::invariantMass(taus[1], otherLeptons[1]);
+        //double pair1Mass = Particle::invariantMass(taus[0], otherLeptons[0]);
+        //double pair2Mass = Particle::invariantMass(taus[1], otherLeptons[1]);
         return {{taus[0], otherLeptons[0]}, {taus[1], otherLeptons[1]}};
       }
       else {
-        double pair1Mass = Particle::invariantMass(taus[0], otherLeptons[1]);
-        double pair2Mass = Particle::invariantMass(taus[1], otherLeptons[0]);
+        //double pair1Mass = Particle::invariantMass(taus[0], otherLeptons[1]);
+        //double pair2Mass = Particle::invariantMass(taus[1], otherLeptons[0]);
         return {{taus[0], otherLeptons[1]}, {taus[1], otherLeptons[0]}};
       }
     }
@@ -528,7 +528,7 @@ std::pair<std::pair<Particle, Particle>, std::pair<Particle, Particle>> Utility:
       // 4 taus - try all combinations and pick the one with highest invariant mass sum
       else if (tauCount == 4) {
         // Try all possible pairings of the 4 taus (3 unique ways to pair them)
-        double bestMassSum = 0.0;
+        //double bestMassSum = 0.0;
         std::pair<double, double> bestMasses;
         
         // Pairing option 1: (0,1) and (2,3)

@@ -1,5 +1,0 @@
-<tool name="rootphysics" version="6.30.03-1152e0dd06a307703399035629918f21">
-  <info url="http://root.cern.ch/root/"/>
-  <lib name="Physics"/>
-  <use name="roothistmatrix"/>
-</tool>

@@ -60,7 +60,7 @@ void LeptonJetReconstructionPlan::initialize()
   darkPhotonFilter->setInput(eventMod->getEventInput());
   nLeptonJetFilter->setInput(eventMod->getEventInput());
   
-  auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Mu37_TkMu27", "HLT_IsoMu24"});
+  auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>({"HLT_Mu37_TkMu27", "HLT_IsoMu24"})); //express muons
   auto highestMuonPtCut = make_shared<HighestMuonPtCut>(40);
   auto zVetoCut = make_shared<LeptonJetZVetoCut>();
 
@@ -70,7 +70,7 @@ void LeptonJetReconstructionPlan::initialize()
 
   //eventMod->addCut(highestMuonPtCut);
 
-  CommonOperations::addHiggsScaleFactors(eventMod);
+  //CommonOperations::addHiggsScaleFactors(eventMod);
 
   auto matchMod = std::make_shared<MatchingModule>();
   auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
