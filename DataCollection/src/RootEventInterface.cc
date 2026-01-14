@@ -13,8 +13,9 @@ ParticleCollection<Particle> RootEventInterface::getRecoJets() const
 {
     return eventFile->getRecoJets();
 }
-double RootEventInterface::getMET() const
+reco::Candidate::LorentzVector RootEventInterface::getMET() const
 {
+    //return eventFile->getMET();
     return eventFile->getMET();
 }
 unsigned long long RootEventInterface::getEventIDNum() const

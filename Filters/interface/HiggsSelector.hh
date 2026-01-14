@@ -20,7 +20,7 @@ class HiggsSelector : public Selector
 
     private:
         double massDifference(const std::vector<Particle>& positiveLeptons, const std::vector<Particle>& negativeLeptons)const;
-        std::vector<Particle> adjustForNeutrinos(const std::vector<Particle>& leptons, const EventInput* input) const;
+        std::vector<Particle> adjustForNeutrinos(const std::vector<Particle>& positiveLeptons, const std::vector<Particle>& negativeLeptons, const EventInput* input) const;
 };
 
 #endif

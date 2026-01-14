@@ -321,90 +321,243 @@ void writeRootObj(TFile *outFile, const std::string &path, TObject *obj)
     outFile->cd();
 }
 
-//   double invariantMass(Particle p1, Particle p2, double met_x, double met_y, bool caseTwo)
-// {
-//     struct Vector2D {
-//         double x;
-//         double y;
+std::pair<std::pair<Particle, Particle>, std::pair<Particle, Particle>> Utility::findBestLeptonPairing(ParticleCollection<Particle> leptons)
+{
 
-//         Vector2D operator+(const Vector2D& other) const {
-//             return {x + other.x, y + other.y};
-//         }
+  // Collection Initialize
+  ParticleCollection positiveLeptons;
+  ParticleCollection negativeLeptons;
+  ParticleCollection taus;
 
-//         Vector2D operator*(double scalar) const {
-//             return {scalar * x, scalar * y};
-//         }
-//     };
+  // Sorts Leptons by charge
+  for (auto lepton : leptons) {
+    if (lepton.getType() == ParticleType::tau()) {
+      taus.addParticle(lepton);
+    }
+    else if (lepton.getCharge() == 1) {
+      positiveLeptons.addParticle(lepton);
+    }
+    else if (lepton.getCharge() == -1) {
+      negativeLeptons.addParticle(lepton);
+    }
+  }
 
-//     Vector2D p1T { p1.px(), p1.py() };
-//     Vector2D p2T { p2.px(), p2.py() };
-//     Vector2D MET { met_x, met_y };
-
-//     std::cout << "p1T = (" << p1T.x << ", " << p1T.y << ")\n";
-//     std::cout << "p2T = (" << p2T.x << ", " << p2T.y << ")\n";
-//     std::cout << "MET = (" << MET.x << ", " << MET.y << ")\n";
-
-//     // this is good to use
-//     // Solve for α1 and α2
-//     // Matrix:
-//     // [ p1x  p2x ] [a1] = [ METx ]
-//     // [ p1y  p2y ] [a2]   [ METy ]
-    
-//     double det = p1T.x * p2T.y - p1T.y * p2T.x;
-
-//     std::cout << "det = " << det << "\n";
-
-//     if (std::abs(det) < 1e-9) {
-//         std::cout << "DET=0 — method fails.\n";
-//         return -1;
-//     }
-
-//     double alpha1 = ( MET.x * p2T.y - MET.y * p2T.x ) / det;
-//     double alpha2 = ( p1T.x * MET.y - p1T.y * MET.x ) / det;
-
-//     std::cout << "alpha1 = " << alpha1 << "\n";
-//     std::cout << "alpha2 = " << alpha2 << "\n";
-
-//     if (alpha1 < 0 || alpha2 < 0) {
-//         std::cout << "Negative energy scaling — return -1.\n";
-//         return -1;
-//     }
-   
-//     double E1 = p1.energy();
-//     double E2 = p2.energy();
-
-//     double pz1 = p1.pz();
-//     double pz2 = p2.pz();
-
-//     double m_vis =
-//         std::sqrt( std::pow(E1 + E2, 2)
-//         - std::pow(p1.px()+p2.px(), 2)
-//         - std::pow(p1.py()+p2.py(), 2)
-//         - std::pow(p1.pz()+p2.pz(), 2) );
- 
-//     double m_vis1 = std::sqrt(E1*E1 - (p1.px()*p1.px() + p1.py()*p1.py() + pz1*pz1));
-//     double m_vis2 = std::sqrt(E2*E2 - (p2.px()*p2.px() + p2.py()*p2.py() + pz2*pz2));
-
-//     std::cout << "m_vis  = " << m_vis << "\n";
-//     std::cout << "m_vis1 = " << m_vis1 << "\n";
-//     std::cout << "m_vis2 = " << m_vis2 << "\n";
+  // Handle based on number of taus
+  int tauCount = taus.size();
   
-//     if (!caseTwo) {
-//         double result = m_vis * std::sqrt((1 + alpha1) * (1 + alpha2));
-//         std::cout << "CASE 1 MASS = " << result << "\n";
-//         return result;
-//     }
+  // No taus - use the original logic for charged leptons
+  if (tauCount == 0) 
+  {
+    
+    //double positivePairInvariantMass = Particle::invariantMass(positiveLeptons[0], positiveLeptons[1]);
+    //double negativePairInvariantMass = Particle::invariantMass(negativeLeptons[0], negativeLeptons[1]);
+    
+    int posElectronCount = 0;
+    int negElectronCount = 0;
 
-//     double m2 =
-//           (1+alpha1)*(1+alpha1)*m_vis1*m_vis1
-//         + (1+alpha2)*(1+alpha2)*m_vis2*m_vis2;
+    if (positiveLeptons[0].getType() == ParticleType::electron()) ++posElectronCount;
+    if (positiveLeptons[1].getType() == ParticleType::electron()) ++posElectronCount;
+    if (negativeLeptons[0].getType() == ParticleType::electron()) ++negElectronCount;
+    if (negativeLeptons[1].getType() == ParticleType::electron()) ++negElectronCount;
 
-//     if (m2 < 0) {
-//         std::cout << "m² < 0 — return 0.\n";
-//         return 0;
-//     }
+    if (posElectronCount == negElectronCount)
+      return {{positiveLeptons[0], positiveLeptons[1]}, {negativeLeptons[0], negativeLeptons[1]}};
+    
+    if (posElectronCount > negElectronCount) {
+      return {{positiveLeptons[0], positiveLeptons[1]}, {negativeLeptons[0], negativeLeptons[1]}};
+    } 
+    else {
+      return {{negativeLeptons[0], negativeLeptons[1]}, {positiveLeptons[0], positiveLeptons[1]}};
+    }
+  }
+  
+  // 1 tau - pair with the lepton of different charge than the majority
+  else if (tauCount == 1) {
+    // Remaining leptons
+    std::vector<Particle> otherLeptons;
+    for (auto& lepton : leptons) {
+      if (lepton.getType() != ParticleType::tau()) {
+        otherLeptons.push_back(lepton);
+      }
+    }
 
-//     double result = std::sqrt(m2);
-//     std::cout << "CASE 2 MASS = " << result << "\n";
-//     return result;
-// }
+    
+    // Count charges of other leptons
+    int positiveCount = 0, negativeCount = 0;
+    for (auto& lepton : otherLeptons) {
+      if (lepton.getCharge() == 1) positiveCount++;
+      else if (lepton.getCharge() == -1) negativeCount++;
+    }
+    
+    // Pair tau with the minority charge lepton
+    Particle tauPartner = leptons[0]; // Placeholder
+    ParticleCollection firstPair;
+    ParticleCollection secondPair;
+    
+    if (positiveCount > negativeCount) {
+      // Find the negative lepton to pair with tau
+      for (auto& lepton : otherLeptons) {
+        if (lepton.getCharge() == -1) {
+          tauPartner = lepton;
+          break;
+        }
+      }
+      
+      // Add tau and partner to first pair
+      firstPair.addParticle(taus[0]);
+      firstPair.addParticle(tauPartner);
+      
+      // Add remaining leptons to second pair
+      for (auto& lepton : otherLeptons) {
+        if (!(lepton == tauPartner)) {
+          secondPair.addParticle(lepton);
+        }
+      }
+    }
+    else {
+      // Find the positive lepton to pair with tau
+      for (auto& lepton : otherLeptons) {
+        if (lepton.getCharge() == 1) {
+          tauPartner = lepton;
+          break;
+        }
+      }
+      
+      // Add tau and partner to first pair
+      firstPair.addParticle(taus[0]);
+      firstPair.addParticle(tauPartner);
+      
+      // Add remaining leptons to second pair
+      for (auto& lepton : otherLeptons) {
+        if (!(lepton == tauPartner)) {
+          secondPair.addParticle(lepton);
+        }
+      }
+    }
+    
+    //double firstInvariantMass = Particle::invariantMass(firstPair[0], firstPair[1]);
+    //double secondInvariantMass = Particle::invariantMass(secondPair[0], secondPair[1]);
+
+    return {{firstPair[0], firstPair[1]}, {secondPair[0], secondPair[1]}};
+  }
+  
+  // 2 taus - balance charges if possible, otherwise maximize invariant mass
+  else if (tauCount == 2) {
+    // Remaining leptons
+    std::vector<Particle> otherLeptons;
+    for (auto& lepton : leptons) {
+      if (lepton.getType() != ParticleType::tau()) {
+        otherLeptons.push_back(lepton);
+      }
+    }
+   
+    // Check if other leptons have the same sign
+    bool sameSign = (otherLeptons[0].getCharge() == otherLeptons[1].getCharge());
+    
+    if (sameSign) {
+      // If other leptons have same sign, pair the taus together
+      //double tausPairMass = Particle::invariantMass(taus[0], taus[1]);
+      //double otherPairMass = Particle::invariantMass(otherLeptons[0], otherLeptons[1]);
+
+      return {{taus[0], taus[1]}, {otherLeptons[0], otherLeptons[1]}};
+    }
+    else {
+      // If other leptons have opposite sign, try all combinations and pick highest invariant mass
+      double mass1 = Particle::invariantMass(taus[0], otherLeptons[0]) + 
+                    Particle::invariantMass(taus[1], otherLeptons[1]);
+                    
+      double mass2 = Particle::invariantMass(taus[0], otherLeptons[1]) + 
+                    Particle::invariantMass(taus[1], otherLeptons[0]);
+      
+      if (mass1 >= mass2) {
+        //double pair1Mass = Particle::invariantMass(taus[0], otherLeptons[0]);
+        //double pair2Mass = Particle::invariantMass(taus[1], otherLeptons[1]);
+        return {{taus[0], otherLeptons[0]}, {taus[1], otherLeptons[1]}};
+      }
+      else {
+        //double pair1Mass = Particle::invariantMass(taus[0], otherLeptons[1]);
+        //double pair2Mass = Particle::invariantMass(taus[1], otherLeptons[0]);
+        return {{taus[0], otherLeptons[1]}, {taus[1], otherLeptons[0]}};
+      }
+    }
+  }
+        // 3 taus - try all combinations and pick the one with highest invariant mass sum
+      else if (tauCount == 3) {
+        // Get the one non-tau lepton
+        Particle otherLepton = leptons[0]; // Placeholder
+        for (auto& lepton : leptons) {
+          if (lepton.getType() != ParticleType::tau()) {
+            otherLepton = lepton;
+            break;
+          }
+        }
+        
+        // Try all possible combinations and pick the one with highest invariant mass
+        double bestMassSum = 0.0;
+        std::pair<std::pair<Particle, Particle>, std::pair<Particle, Particle>> bestParticles = {{leptons[0], leptons[0]}, {leptons[0], leptons[0]}}; // Placeholder
+
+        // Try pairing each tau with the other lepton
+        for (int i = 0; i < 3; i++) {
+          ParticleCollection firstPair;
+          ParticleCollection secondPair;
+          
+          // First pair: tau[i] + otherLepton
+          firstPair.addParticle(taus[i]);
+          firstPair.addParticle(otherLepton);
+          
+          // Second pair: remaining two taus
+          for (int j = 0; j < 3; j++) {
+            if (j != i) {
+              secondPair.addParticle(taus[j]);
+            }
+          }
+          
+          double mass1 = Particle::invariantMass(firstPair[0], firstPair[1]);
+          double mass2 = Particle::invariantMass(secondPair[0], secondPair[1]);
+          double massSum = mass1 + mass2;
+          
+          if (massSum > bestMassSum) {
+            bestMassSum = massSum;
+            bestParticles = {{firstPair[0], firstPair[1]}, {secondPair[0], secondPair[1]}};
+          }
+        }
+        
+        return {bestParticles};
+      }
+      
+      // 4 taus - try all combinations and pick the one with highest invariant mass sum
+      else if (tauCount == 4) {
+        // Try all possible pairings of the 4 taus (3 unique ways to pair them)
+        //double bestMassSum = 0.0;
+        std::pair<double, double> bestMasses;
+        
+        // Pairing option 1: (0,1) and (2,3)
+        double mass1_1 = Particle::invariantMass(taus[0], taus[1]);
+        double mass1_2 = Particle::invariantMass(taus[2], taus[3]);
+        double sum1 = mass1_1 + mass1_2;
+        
+        // Pairing option 2: (0,2) and (1,3)
+        double mass2_1 = Particle::invariantMass(taus[0], taus[2]);
+        double mass2_2 = Particle::invariantMass(taus[1], taus[3]);
+        double sum2 = mass2_1 + mass2_2;
+        
+        // Pairing option 3: (0,3) and (1,2)
+        double mass3_1 = Particle::invariantMass(taus[0], taus[3]);
+        double mass3_2 = Particle::invariantMass(taus[1], taus[2]);
+        double sum3 = mass3_1 + mass3_2;
+        
+        // Find the best pairing (highest invariant mass sum)
+        if (sum1 >= sum2 && sum1 >= sum3) {
+          return {{taus[0], taus[1]}, {taus[2], taus[3]}};
+        } 
+        else if (sum2 >= sum1 && sum2 >= sum3) {
+          return {{taus[0], taus[2]}, {taus[1], taus[3]}};
+        } 
+        else {
+          return {{taus[0], taus[3]}, {taus[1], taus[2]}};
+        }
+      }
+      else{
+        throw std::runtime_error("Unexpected number of taus in findBestLeptonPairing.");
+      }
+  }

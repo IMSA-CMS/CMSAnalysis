@@ -154,9 +154,10 @@ ParticleCollection<Particle> DelphesEventFile::getRecoJets() const
     return recoParticles;
 }
 
-double DelphesEventFile::getMET() const
+reco::Candidate::LorentzVector DelphesEventFile::getMET() const
 {
-    return static_cast<double>(met_pt[0]);
+    auto vector = math::PtEtaPhiMLorentzVector(met_pt[0], 0, met_phi[0], 0);
+    return reco::Candidate::LorentzVector(vector);
 }
 
 unsigned long long DelphesEventFile::getEventIDNum() const

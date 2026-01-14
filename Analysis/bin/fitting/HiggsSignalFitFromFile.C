@@ -111,7 +111,8 @@ void HiggsSignalFitFromFile()
 				std::string filename = processedPath + "Higgs" + std::to_string(masses[i]) + ".root";
 				TFile* processedFile = TFile::Open(filename.c_str());
 				std::string channelAdjusted = Utility::substitute(channel, "m", "u");
-				auto number = processedFile -> Get<TObjString>(("GenSim " + channelAdjusted).c_str());
+				//auto number = processedFile -> Get<TObjString>(("GenSim " + channelAdjusted).c_str());
+				auto number = processedFile->Get<TObjString>("NEvents");
 				int totalGeneratedEvents = std::stoi(number -> GetString().Data());
 				double efficiency = static_cast<double>(eventsInHist) / totalGeneratedEvents;
 				double branchRatioAdjustment = getBranchingRatio(channelAdjusted);
@@ -121,16 +122,25 @@ void HiggsSignalFitFromFile()
 				min = masses[i] - 200;
 				max = masses[i] + 200;
 
+				std::cout << "Cross section: " << crossSection << std::endl;
+				std::cout << "Selected events: " << eventsInHist << std::endl;
+				std::cout << "Total generated events: " << totalGeneratedEvents << std::endl;
+				std::cout << "Branching ratio adjustment: " << branchRatioAdjustment << std::endl;
+				std::cout << "Expected events: " << expectedEvents << std::endl;
+
+
 				FitFunction func = FitFunction::createFunctionOfType(FitFunction::FunctionType::DoubleSidedCrystalBall, keyName, "", min, max, keyName);
+				std::cout << __LINE__ << std::endl;
 				currentFunctions.insert(func);
 				histogramMap.insert({keyName, selectedHist});
 				massValues.insert({keyName, masses[i]});
-
+				std::cout << __LINE__ << std::endl;
 				// file->Close();
 				// selectedHist->Draw();
 				// std::string wait;
 				// std::cin >> wait;
 			}
+			std::cout << __LINE__ << std::endl;
 			//fitter.setHistograms(histogramMap);
 			fitter.loadFunctions(currentFunctions);
 			fitter.fitFunctions(histogramMap);

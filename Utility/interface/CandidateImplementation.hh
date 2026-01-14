@@ -18,7 +18,6 @@ public:
   CandidateImplementation(const reco::Candidate*);
   virtual reco::Candidate::LorentzVector getFourVector() const override;
   virtual bool operator == (const ParticleImplementation& p1) const override;
-
   virtual int charge() const override;
   virtual int pdgId() const override;
   virtual int status() const override;

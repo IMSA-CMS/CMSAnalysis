@@ -45,7 +45,7 @@ bool NanoAODEventFile::checkTrigger(std::string triggerName, std::string subProc
         // return false;
         if (!tree->GetBranch(triggerName.c_str()))
         {
-            // std::cout << triggerName << " doesn't exist\n";
+            std::cout << triggerName << " doesn't exist\n";
             return false;
         }
         auto currentEntry = treeReader.GetCurrentEntry();
@@ -458,11 +458,12 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoJets() const
     return recoParticles;
 }
 
-double NanoAODEventFile::getMET() const
+reco::Candidate::LorentzVector NanoAODEventFile::getMET() const
 {
     // std::cout << "met_pt TEST: " <<
     // static_cast<double>(getArrayElement<Float_t>("met_pt", 0)) << std::endl;
-    return static_cast<double>(getArrayElement<Float_t>("met_pt", 0));
+    auto vector = math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("met_pt", 0), 0, getArrayElement<Float_t>("met_phi", 0), 0);
+    return reco::Candidate::LorentzVector(vector);
 }
 
 unsigned long long NanoAODEventFile::getEventIDNum() const

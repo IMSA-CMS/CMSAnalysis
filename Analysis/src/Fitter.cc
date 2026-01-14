@@ -1,5 +1,5 @@
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
-#include "CMSAnalysis/Analysis/interface/HistVariable.hh"
+#include "CMSAnalysis/Analysis/interface/FitFunction.hh"
 #include <Fit/FitResult.h>
 #include <TCanvas.h>
 #include <TFitResult.h>
@@ -99,8 +99,9 @@ void Fitter::fitFunctions(std::unordered_map<std::string, TH1 *> &histograms)
         case FitFunction::FunctionType::DoubleGaussian:
             fitDoubleGaussian(histogram, func);
             break;
-        default:
-            throw std::invalid_argument("Not a valid FunctionType enum value");
+        case FitFunction::FunctionType::GausLogPowerNorm:
+            fitGausLogPowerNorm(histogram, func);
+            break;
         }
 
         auto *inner = func.getFunction();
@@ -228,7 +229,6 @@ void Fitter::fitPowerLaw(TH1 *histogram, FitFunction &fitFunction)
     double chi2 = __DBL_MAX__;
     while (chi2 - result->Chi2() > 0.000001)
     {
-        std::cout << "Chi2: " << result->Chi2() << '\n';
         chi2 = result->Chi2();
         fitFunction.getFunction()->SetParameters(result->Parameter(0), result->Parameter(1), result->Parameter(2));
         result = histogram->Fit(fitFunction.getFunction(), "SWLQR", "", fitFunction.getMin(), fitFunction.getMax());
@@ -239,9 +239,8 @@ void Fitter::fitPowerLaw(TH1 *histogram, FitFunction &fitFunction)
 
 void Fitter::fitDoubleGaussian(TH1 *histogram, FitFunction &fitFunction)
 {
-
-    auto mean = histogram->GetMean();
-    auto std = histogram->GetStdDev();
+    const auto mean = histogram->GetMean();
+    const auto std = histogram->GetStdDev();
 
     TFitResultPtr LowGaus = histogram->Fit("gaus", "SWLQWIDTH", "", fitFunction.getMin(), mean);
     TFitResultPtr HighGaus = histogram->Fit("gaus", "SWLQWIDTH", "", mean, fitFunction.getMax());
@@ -336,6 +335,28 @@ void Fitter::fitDoubleGaussian(TH1 *histogram, FitFunction &fitFunction)
     gStyle->SetOptFit(1111);
 }
 
+void Fitter::fitGausLogPowerNorm(TH1 *const hist, FitFunction &func)
+{
+    TF1 *const f1 = func.getFunction();
+
+    // Params: mult, u, sigma1, s, n
+    f1->SetParameters(1, hist->GetMean(), hist->GetStdDev(), 1, 2);
+    f1->SetParLimits(0, 0, hist->Integral());
+    f1->SetParLimits(1, 0, func.getMax());
+    f1->SetParLimits(3, 0, 100);
+    f1->SetParLimits(4, 1, 100);
+
+    f1->SetNpx(1000);
+
+    hist->Fit(f1, "SWLQWIDTH", "", func.getMin(), func.getMax());
+    // Make sure we didn't get too close to arbitrarily chosen upper bounds
+    assert(f1->GetParameter(0) < hist->Integral() / 3);
+    assert(f1->GetParameter(3) < 100.0 / 3);
+    assert(f1->GetParameter(4) < 100.0 / 3);
+
+    gStyle->SetOptFit(1111);
+}
+
 std::vector<ParameterizationData> Fitter::getParameterData(std::unordered_map<std::string, double> &xData)
 {
     if (!functions.checkFunctionsSimilar())
@@ -426,7 +447,8 @@ FitFunction Fitter::parameterizeFunction(ParameterizationData &parameterData, co
     auto graph = TGraphErrors(parameterData.x.size(), parameterData.x.data(), parameterData.y.data(), nullptr,
                               parameterData.error.data());
 
-    auto function = FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, fullName, "", 0, 2000, channel);
+    auto function =
+        FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, fullName, "", 0, 2000, channel);
 
     auto *func = function.getFunction();
     func->SetParameters(boost::algorithm::reduce(parameterData.y) / parameterData.y.size(), 0, 0);

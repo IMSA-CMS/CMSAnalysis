@@ -141,9 +141,9 @@ ParticleCollection<Particle> StrippedEventFile::getRecoJets() const
     return recoParticles;
 }
 
-double StrippedEventFile::getMET() const
+reco::Candidate::LorentzVector StrippedEventFile::getMET() const
 {
-    return static_cast<double>(0);
+    return reco::Candidate::LorentzVector(0, 0, 0, 0);
 }
 
 unsigned long long StrippedEventFile::getEventIDNum() const

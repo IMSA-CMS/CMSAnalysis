@@ -358,13 +358,11 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     
     if (includeData)
     {
-        std::cout << "Data getHist begin! \n\n\n";
         data = analysis->getHist(histvariable, dataNames.at(0), false, channelName);
         std::cout << "Data has: " << data->GetEntries() << std::endl;
-        std::cout << "Data getHist end! \n\n\n";
     }
 
-    //std::cout << "Data has: " << data->GetEntries() << std::endl;
+
 
 
 
@@ -387,7 +385,6 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
         //std::cout << "number of signal bins is: " << signal->GetNbinsX();
         maxCombinedY = signal->GetMaximum();
         //std::cout << "Signal has: " << signal->GetEntries() << std::endl;
-        double maxCombinedY = signal->GetMaximum();
         //std::cout << "Signal Max: " << maxCombinedY << std::endl;
     } 
 
@@ -397,7 +394,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     std::vector<std::shared_ptr<Process>> backgroundProcesses;
     for(std::string name : backgroundNames)
     {
-        // std::cout << name << std::endl;
+        std::cout << name << std::endl;
         // std::cout << channelName << std::endl;
         // std::cout << histvariable.getName() << std::endl;
         
@@ -405,7 +402,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
 
         backgroundProcesses.push_back(analysis->getChannel(channelName)->findProcess(name));
         // auto hist = process->getSystematicHist(histvariable, true).second;
-
+        
         // TEST
         if (!hist)
         {
@@ -413,19 +410,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
         }
         //std::cout << hist->GetName() << " has "<< hist->GetNbinsX() << std::endl;
         backgroundHists.push_back(hist);
-        double max = 0;
-        for (int i = 1; i <= hist->GetNbinsX(); i++)
-        {
-            std::cout << "Bin " << i << " has " << hist->GetBinContent(i) << " events." << std::endl;
-            if (hist->GetBinContent(i) > max)
-            {
-                max = hist->GetBinContent(i);
-            }
-        }
-
-
-        //std::cout << "Background Hist Max: " << max << std::endl;
-        maxCombinedY += max;
+        maxCombinedY += hist->GetMaximum();
         //std::cout << "Max Combined Y: " << maxCombinedY << std::endl;
     }
     //std::cout << backgroundHists.size() << "\n";
@@ -440,25 +425,24 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
         float backgroundIntegral = 0;
 
         IntegralScaling(upperMasslimit, scaleTodata, backgroundHists, firstBin, dataIntegral, backgroundIntegral);
+        maxCombinedY = std::max(data->GetMaximum(), maxCombinedY);
     }
 
     background = new THStack("background", "background");
 
-    maxCombinedY *= 100;
+    //maxCombinedY *= 100;
     if(data)
     {
-        data->SetMaximum(maxCombinedY );
+        data->SetMaximum(maxCombinedY);
     }
     if(signal)
     {
         signal->SetMaximum(maxCombinedY);
     }
     background->SetMaximum(maxCombinedY);
-    //std::cout << "MAXCOMBINEDY: " << maxCombinedY << std::endl;
-    
+    // std::cout << "MAXCOMBINEDY: " << maxCombinedY << std::endl;
 
     FormatSignalData(background, signal, data, backgroundHists, rebinFactor);
-
 
     //Defines order to draw in so graph isn't cut off
     //int first = 0;
@@ -472,7 +456,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     gStyle->SetOptStat(0);
     topPad->Draw();
     topPad->cd();
-    std::cout << "1.3" << std::endl;
+    //std::cout << "1.3" << std::endl;
     //error after this 
 
     //Draws the histogram with more events first (bigger axis)
@@ -607,6 +591,7 @@ void PlotFormatter::FormatSignalData(THStack*& background, TH1*& signal, TH1*& d
     TIter next(histList);  
     TH1 *hist;  
 
+    
     while ((hist = (TH1*)next()))
     {
     //std::cout << hist->GetName() << " entries " << hist->GetEntries() << std::endl;  // Print info about each histogram
@@ -617,6 +602,7 @@ void PlotFormatter::FormatSignalData(THStack*& background, TH1*& signal, TH1*& d
         }
     }
     //std::cerr << "TList End" << std::endl;
+    
 
     //signal->Scale(std::pow(10, 6));
     if (signal)
@@ -892,7 +878,7 @@ TLegend* PlotFormatter::GetLegend(THStack* background, std::shared_ptr<Channel> 
         toAdd = name;
         legend->AddEntry(data, " " + toAdd, "L");
     }
-    else
+    if (includeSignal)
     {
         name = processes->getNamesWithLabel(Channel::Label::Signal).at(0); 
         toAdd = name;

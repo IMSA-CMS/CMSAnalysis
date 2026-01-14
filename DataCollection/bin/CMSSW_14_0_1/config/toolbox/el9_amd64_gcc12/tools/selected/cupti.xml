@@ -1,9 +1,0 @@
-<tool name="cupti" version="12.2.1-b88a5c4a83fd9d39ee49a273aca82177">
-  <info url="https://docs.nvidia.com/cupti/Cupti/index.html"/>
-  <lib name="cupti"/>
-  <client>
-    <environment name="CUPTI_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/cuda/12.2.1-b88a5c4a83fd9d39ee49a273aca82177"/>
-    <environment name="LIBDIR"     default="$CUPTI_BASE/lib64"/>
-    <environment name="INCLUDE"    default="$CUPTI_BASE/include"/>
-  </client>
-</tool>

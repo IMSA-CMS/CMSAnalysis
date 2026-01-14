@@ -380,7 +380,7 @@ inline double ParticleCollection<T>::calculateRecoveredInvariantMass(int nLepton
     }
 
     auto allLeptons = getParticles();       // Vector of Particles
-    int allLeptonsSize = getNumParticles(); // Size of above vector
+    //int allLeptonsSize = getNumParticles(); // Size of above vector
 
     // Get all combinations of nLeptons indices at once (single call):
     std::vector<std::vector<int>> totalCombinations = getAllCombinations(nLeptons);
