@@ -186,8 +186,6 @@ void EventModule::addBasicHistograms(const ParticleType& particleType, const Par
     int count = 0;
     for (auto part : parts)
     {  
-
-
         for (auto params : particleType.getParticleHists())
         {
             auto histName = getBasicHistogramTitle(count, name, params.getName());
@@ -201,12 +199,9 @@ void EventModule::addBasicHistograms(const ParticleType& particleType, const Par
                 // }
                 particleHistograms.insert({histName,histogram});
                 histMod->addHistogram(histogram);
-
-
+                std::cout << "Added histogram: " << histName << "\n";
             }
             particleHistograms[histName]->setParticle(part);
-
-
         }
         count++;
     }
