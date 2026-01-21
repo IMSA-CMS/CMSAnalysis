@@ -103,68 +103,7 @@ void FitFunctionCollection::saveFunctions(const std::string &fileName, bool appe
     }
 }
 
-std::map<std::string, std::vector<FitFunction>> FitFunctionCollection::getFunctionsSortedByChannel(std::string fileName)
-{
-    std::map<std::string, std::vector<FitFunction>> sortedFunctions = {};
-    std::vector<std::string> channelNames = {};
 
-    std::map<std::string, std::string> channelNameModifiers = {};
-    channelNameModifiers["mll1"] = "_X";
-    channelNameModifiers["mll2"] = "_Y";
-
-
-    std::vector<std::string> existingChannelNameModifiers = {};
-    for (auto [modifier, replacement] : channelNameModifiers)
-    {
-        existingChannelNameModifiers.push_back(modifier);
-    }
-
-
-    FitFunctionCollection functionCollection;
-    try {
-        functionCollection = FitFunctionCollection::loadFunctions(fileName);
-        std::cout << "Successfully read " << fileName << "\n";
-    }
-    catch (const std::exception& e) {
-        std::cerr << "Failed to load functions: " << e.what() << std::endl;
-        throw;
-    }
-
-
-    // Sorts functions by channel
-    auto parameterFunctions = functionCollection.getFunctions();
-    for (auto [functionName, function] : parameterFunctions)
-    {
-        std::string channel = function.getChannel();
-        //std::string channel = replaceAll(unformattedChannel, "m", "u");
-        std::cout << "DEBUG: channel name for function: " << channel << "\n";
-        // Check whether channel name needs to be modified for internal processes
-        for (auto modifier : existingChannelNameModifiers)
-        {
-            if (function.getParameterName().find(modifier) != std::string::npos)
-            {
-                channel += channelNameModifiers[modifier];
-            }
-        }
-
-        sortedFunctions[channel].push_back(function);
-
-        // Record channels
-        // if (std::find(channelNames.begin(), channelNames.end(), channel) == channelNames.end())
-        // {
-        //     channelNames.push_back(channel);
-        // }
-    }
-
-    // Alphabetize functions for each channel
-    // for (std::string channelName : channelNames)
-    // {
-    //     std::vector<FitFunction> alphabetizedFunctions = alphabetizeParameters(sortedFunctions[channelName]);
-    //     sortedFunctions[channelName] = alphabetizedFunctions;
-    // }
-
-    return sortedFunctions;
-}
 
 // std::string replaceAll(std::string unmodifiedString, const std::string from, const std::string to)
 // {

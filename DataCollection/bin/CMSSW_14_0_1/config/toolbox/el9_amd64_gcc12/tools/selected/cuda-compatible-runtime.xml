@@ -1,8 +1,0 @@
-<tool name="cuda-compatible-runtime" version="1.0-33a0d728e94d097706069035e02e12e1">
-  <info url="https://gitlab.cern.ch/cms-patatrack/cuda-compatible-runtime/"/>
-  <use name="cuda"/>
-  <use name="cuda-stubs"/>
-  <client>
-    <environment name="CUDA_COMPATIBLE_RUNTIME_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/cuda-compatible-runtime/1.0-33a0d728e94d097706069035e02e12e1"/>
-  </client>
-</tool>

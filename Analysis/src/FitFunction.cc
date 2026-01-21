@@ -2,6 +2,7 @@
 #include "TF1.h"
 #include <TMath.h>
 #include <boost/algorithm/string/split.hpp>
+#include <cmath>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -59,6 +60,26 @@ double FitFunction::DSCB(double *x, double *par)
 double FitFunction::doubleGaussian(double *x, double *par)
 {
     return par[0] * TMath::Gaus(x[0], par[1], par[2]) + par[3] * TMath::Gaus(x[0], par[4], par[5]);
+}
+
+// Params: mult, u, sigma1, s, n
+double FitFunction::gausLogPowerNorm(double *xs, double *par)
+{
+    const auto x = xs[0];
+    const auto mult = par[0];
+    const auto u = par[1];
+    const auto sigma1 = par[2];
+    const auto s = par[3];
+    const auto n = par[4];
+
+    if (x <= u)
+    {
+        return mult * exp(-(x - u) * (x - u) / (2 * sigma1 * sigma1));
+    }
+    else
+    {
+        return mult * exp(-s * pow(log(x / u), n));
+    }
 }
 
 FitFunction::FitFunction(const TF1 &func, FunctionType funcType, std::string channelName)
@@ -177,8 +198,10 @@ FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const s
         func = TF1(name.data(), doubleGaussian, min, max, 6, 1, TF1::EAddToList::kNo);
         func.SetParNames("mul_{1}", "#mu_{1}", "#sigma_{1}", "mul_{2}", "#mu_{2}", "#sigma_{2}");
         break;
-    default:
-        throw std::invalid_argument("Not a valid FunctionType enum value");
+    case FunctionType::GausLogPowerNorm:
+        func = TF1(name.data(), gausLogPowerNorm, min, max, 5, 1, TF1::EAddToList::kNo);
+        func.SetParNames("N", "#mu", "#sigma_{1}", "s", "n");
+        break;
     };
 
     return FitFunction(func, functionType, std::move(channelName));
@@ -297,9 +320,43 @@ std::ostream &operator<<(std::ostream &stream, FitFunction &function)
         // stream << 1 << ' ';
     }
 
-    stream << '\n';
-    // std::cout << "Got parameters\n";
-    return stream;
+	stream << '\n';
+	// std::cout << "Got parameters\n";
+
+    // --- Systematics Section ---
+auto systematics = function.listSystematics();
+if (!systematics.empty())
+{
+    stream << "Systematics: " << systematics.size() << '\n';
+    for (const auto& sysName : systematics)
+    {
+        auto upFunc = function.getSystematic(sysName, true);
+        auto downFunc = function.getSystematic(sysName, false);
+        stream << "  Systematic: " << sysName << '\n';
+
+        if (upFunc)
+        {
+            stream << "    UpParameters: ";
+            for (int i = 0; i < upFunc->GetNpar(); ++i)
+                stream << upFunc->GetParameter(i) << ' ';
+            stream << '\n';
+        }
+
+        if (downFunc)
+        {
+            stream << "    DownParameters: ";
+            for (int i = 0; i < downFunc->GetNpar(); ++i)
+                stream << downFunc->GetParameter(i) << ' ';
+            stream << '\n';
+        }
+    }
+}
+else
+{
+    stream << "Systematics: 0\n";
+}
+
+	return stream;
 }
 
 // std::ostream& operator<<(std::ostream& stream, TF1* func)
@@ -429,6 +486,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     {
         return stream;
     }
+    std::cout << "Next line " << line << std::endl;
     if (line.find("Name:") != std::string::npos)
     {
         name = line.substr(5);
@@ -496,6 +554,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     }
     if (line.find("ParaNames:") != std::string::npos)
     {
+        std::cout << __LINE__ << std::endl;
         std::istringstream ss(line.substr(10));
         for (int i = 0; i < params && ss; ++i)
         {
@@ -510,6 +569,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     }
     if (line.find("Parameters:") != std::string::npos)
     {
+                std::cout << __LINE__ << std::endl;
         std::istringstream ss(line.substr(11));
         for (int i = 0; i < params && ss; ++i)
         {
@@ -524,6 +584,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     }
     if (line.find("ParamErrors:") != std::string::npos)
     {
+                std::cout << __LINE__ << std::endl;
         std::istringstream ss(line.substr(12));
         for (int i = 0; i < params && ss; ++i)
         {
@@ -537,13 +598,104 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     // --- Set parameters ---
     for (int i = 0; i < params; ++i)
     {
+                std::cout << __LINE__ << std::endl;
         function.getFunction()->SetParName(i, paramNames[i].c_str());
         function.getFunction()->SetParameter(i, paramValues[i]);
         function.getFunction()->SetParError(i, paramErrors[i]);
     }
 
+    if (!getLine(stream, line))
+    {
+        return stream;
+    }
+    if (line.find("Systematics:") != std::string::npos)
+    {
+        int nSys = 0;
+        std::istringstream(line.substr(12)) >> nSys;
+        std::cout << "nSystematics: " << nSys << std::endl;
+        for (int s = 0; s < nSys; ++s)
+        {
+            std::string sysName;
+            if (!getLine(stream, line)) break;
+            if (line.rfind("  Systematic:", 0) != 0) continue;
+            sysName = line.substr(13); // Extract name after "  Systematic:"
+
+            std::vector<double> upParams;
+            std::vector<double> downParams;
+
+            // --- Up variation ---
+
+
+            if (getLine(stream, line) && line.rfind("    UpParameters:", 0) == 0)
+            {
+                std::istringstream ss(line.substr(17));
+                double val;
+                while (ss >> val) upParams.push_back(val);
+            }
+            
+
+            // --- Down variation ---
+
+
+            if (getLine(stream, line) && line.rfind("    DownParameters:", 0) == 0)
+            {
+                std::istringstream ss(line.substr(19));
+                double val;
+                while (ss >> val) downParams.push_back(val);
+            }
+            
+
+            // --- Register these in the FitFunction ---
+            if (!upParams.empty() || !downParams.empty())
+                function.addSystematic(sysName, upParams, downParams);
+        }
+    }
     func = function;
     std::cout << "Successfully read: " << name << " (" << params << " parameters)\n\n";
 
     return stream;
 }
+
+// Systematics Implementation
+
+void FitFunction::addSystematic(const std::string& sysName, const TF1& upFunction, const TF1& downFunction)
+{
+    systematics[sysName] = std::make_pair(upFunction, downFunction);
+}
+
+void FitFunction::addSystematic(const std::string& sysName, const std::vector<double>& upParams, const std::vector<double>& downParams)
+{
+
+
+    TF1* upClone = (TF1*)function.Clone((std::string(function.GetName()) + "_" + sysName + "_up").c_str());
+    TF1* downClone = (TF1*)function.Clone((std::string(function.GetName()) + "_" + sysName + "_down").c_str());
+
+
+    for (size_t i = 0; i < upParams.size(); ++i)
+        upClone->SetParameter(i, upParams[i]);
+
+    for (size_t i = 0; i < downParams.size(); ++i)
+        downClone->SetParameter(i, downParams[i]);
+
+    systematics[sysName] = std::make_pair(*upClone, *downClone);
+}
+
+const TF1* FitFunction::getSystematic(const std::string& sysName, bool up) const
+{
+    auto it = systematics.find(sysName);
+    if (it == systematics.end())
+        return nullptr;
+    return up ? &(it->second.first) : &(it->second.second);
+}
+
+std::vector<std::string> FitFunction::listSystematics() const
+{
+    std::vector<std::string> names;
+    names.reserve(systematics.size());
+    for (const auto& kv : systematics)
+        names.push_back(kv.first);
+    return names;
+}
+
+
+

@@ -1,7 +1,0 @@
-<tool name="tensorflow-c" version="2.12.0-3a2286f3fbcfadf4c361fd272203795e">
-  <lib name="tensorflow"/>
-  <use name="tensorflow-framework"/>
-  <use name="eigen"/>
-  <use name="libpng"/>
-  <use name="sqlite"/>
-</tool>
