@@ -76,9 +76,7 @@ class ParticleType
     static HistParams getPtHist();
     static HistParams getPhiHist();
     static HistParams getEtaHist();
-    static HistParams getDXYHist();
-    static HistParams getDZHist();
-    static HistParams getIsolationHist();
+
     static HistParams getDaughterDeltaRHist();
 
     static CollectionHistParams getNumberHist();
@@ -88,6 +86,10 @@ class ParticleType
     static HistParams getLeptonJetDeltaRHist();
     static HistParams getLeptonJetMassHist();
     static HistParams getLeptonJetMassHistZoomed();
+
+    static std::vector<double> calcSameSignInvariantMass(std::shared_ptr<ParticleCollection<Particle>> collection);
+    static std::vector<double> calcOppositeSignInvariantMass(std::shared_ptr<ParticleCollection<Particle>> collection);
+
 
     static bool loadParticle(std::ifstream& file);
     //Lets you manually change the particle types in the method definition

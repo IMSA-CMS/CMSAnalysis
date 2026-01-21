@@ -25,7 +25,7 @@ class NanoAODEventFile : public EventFile
         return tree->GetEntries();
     }
     // virtual GenEventInfoProduct getGenInfo() const override;
-    virtual double getMET() const override;
+    virtual reco::Candidate::LorentzVector getMET() const override;
     virtual unsigned long long getEventIDNum() const override;
     virtual long getRunNum() const override;
     virtual int getNumPileUpInteractions() const override;

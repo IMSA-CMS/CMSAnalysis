@@ -361,33 +361,81 @@ std::vector<ParameterizationData> Fitter::getParameterData(std::unordered_map<st
 {
     if (!functions.checkFunctionsSimilar())
     {
-        throw std::invalid_argument("FitFunctionCollection is not comprised on similar functions");
+        throw std::invalid_argument("FitFunctionCollection is not comprised of similar functions");
     }
 
     const int params = functions.getFunctions().begin()->second.getFunction()->GetNpar();
-    auto data = std::vector<ParameterizationData>(params);
+    auto &funcs = functions.getFunctions(); 
+    const int nFuncs = funcs.size();
+
+    std::vector<ParameterizationData> data;
+    data.reserve(params);
+
+    std::string name = xData.begin()->first;
+    auto histName = name.substr(name.length() - 6, 6); // get histogram name from key); 
 
     for (int i = 0; i < params; ++i)
     {
-        data[i] = ParameterizationData{.x = std::vector<double>(functions.size()),
-                                       .y = std::vector<double>(functions.size()),
-                                       .error = std::vector<double>(functions.size()),
-                                       .name = functions.getFunctions().begin()->second.getFunction()->GetParName(i)};
+        ParameterizationData paramData;
+        paramData.name = funcs.begin()->second.getFunction()->GetParName(i) + std::string(" ") + histName;
+
+        paramData.x.reserve(nFuncs);
+        paramData.y.reserve(nFuncs);
+        paramData.error.reserve(nFuncs);
+
+        for (auto &pair : funcs)
+        {
+            const auto &key = pair.first;
+            auto *func = pair.second.getFunction();
+
+            paramData.x.push_back(xData.at(key));
+            paramData.y.push_back(func->GetParameter(i));
+            paramData.error.push_back(func->GetParError(i));
+        }
+
+        data.push_back(std::move(paramData));
     }
 
-    int i = 0;
-    for (auto &pair : functions.getFunctions())
-    {
-        for (int j = 0; j < params; ++j)
-        {
-            data[j].x[i] = xData[pair.first];
-            data[j].y[i] = pair.second.getFunction()->GetParameter(j);
-            data[j].error[i] = pair.second.getFunction()->GetParError(j);
-        }
-        ++i;
-    }
     return data;
 }
+
+// std::vector<ParameterizationData> Fitter::getParameterData(std::unordered_map<std::string, double> &xData)
+// {
+//     if (!functions.checkFunctionsSimilar())
+//     {
+//         throw std::invalid_argument("FitFunctionCollection is not comprised on similar functions");
+//     }
+
+//     const int params = functions.getFunctions().begin()->second.getFunction()->GetNpar();
+//     std::vector<ParameterizationData> data;
+    
+
+//     // for (int i = 0; i < params; ++i)
+//     // {
+//     //     data[i] = ParameterizationData{.x = std::vector<double>(functions.size()),
+//     //                                    .y = std::vector<double>(functions.size()),
+//     //                                    .error = std::vector<double>(functions.size()),
+//     //                                    .name = functions.getFunctions().begin()->second.getFunction()->GetParName(i)};
+//     // }
+
+
+//     for (int i = 0; i < params; ++i)
+//     {
+//     for (auto &pair : functions.getFunctions())
+//     {
+//         ParameterizationData paramData;
+//         paramData.name = std::string(pair.second.getFunction()->GetParName(i)) + "_" + pair.first;
+//         for (int j = 0; j < params; ++j)
+//         {
+//             paramData.x.push_back(xData[pair.first]);
+//             paramData.y.push_back(pair.second.getFunction()->GetParameter(j));
+//             paramData.error.push_back(pair.second.getFunction()->GetParError(j));
+//         }
+//         data.push_back(paramData);
+//     }
+// }
+//     return data;
+// }
 
 FitFunction Fitter::parameterizeFunction(ParameterizationData &parameterData, const std::string &genSim,
                                          const std::string &reco, const std::string &var)

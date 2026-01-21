@@ -143,5 +143,5 @@ void Event::clear()
     jets = ParticleCollection<Jet>();
     genSimParticles = ParticleCollection<GenSimParticle>();
     specialObjects.clear();
-    MET = 0.0f;
+    MET = reco::Candidate::LorentzVector();
 }

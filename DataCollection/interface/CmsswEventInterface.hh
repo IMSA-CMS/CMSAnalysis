@@ -40,7 +40,7 @@ class CmsswEventInterface : public EventInterface
         ParticleCollection<GenSimParticle> getGenSimParticles() const override;
         ParticleCollection<Particle> getRecoParticles() const override;
         ParticleCollection<Particle> getRecoJets() const override;
-        double getMET() const override;
+        reco::Candidate::LorentzVector getMET() const override;
         std::vector<double> getPDFWeights() const override;
         unsigned long long getEventIDNum() const override; 
         long getRunNum() const override; 

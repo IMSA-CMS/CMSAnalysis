@@ -22,7 +22,7 @@ class GenSimEventFile : public EventFile
         virtual ParticleCollection<Particle> getRecoJets() const override; //not implemented
         virtual int getNumOfEvents() const override {return event->size();}
         virtual int getNumPileUpInteractions() const override; //not implemented
-        virtual double getMET() const override;
+        virtual reco::Candidate::LorentzVector getMET() const override;
         virtual std::vector<double> getPDFWeights() const override;
         virtual unsigned long long getEventIDNum() const override; 
         virtual long getRunNum() const override; 
