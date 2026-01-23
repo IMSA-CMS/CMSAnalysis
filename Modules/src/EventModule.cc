@@ -199,7 +199,7 @@ void EventModule::addBasicHistograms(const ParticleType& particleType, const Par
                 // }
                 particleHistograms.insert({histName,histogram});
                 histMod->addHistogram(histogram);
-                std::cout << "Added histogram: " << histName << "\n";
+                //std::cout << "Added histogram: " << histName << "\n";
             }
             particleHistograms[histName]->setParticle(part);
         }
