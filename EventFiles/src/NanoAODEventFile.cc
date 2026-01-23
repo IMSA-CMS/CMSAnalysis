@@ -326,8 +326,6 @@ void NanoAODEventFile::nextEvent()
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("elec_pt", i),
         getArrayElement<Float_t>("elec_eta", i), getArrayElement<Float_t>("elec_phi", i), getArrayElement<Float_t>("elec_mass", i))),
-        getArrayElement<Float_t>("elec_dxy", i),
-        getArrayElement<Float_t>("elec_dz", i),
         charge, ParticleType::electron(), fit);
         // std::cout << "NanoAOD: " << getArrayElement<Bool_t>("elec_cutBasedHEEP", i) << '\n';
 //        particle.addInfo("CutBasedHEEP", getArrayElement<Bool_t>("elec_cutBasedHEEP", i));
@@ -374,7 +372,7 @@ void NanoAODEventFile::nextEvent()
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("muon_pt", i),
         getArrayElement<Float_t>("muon_eta", i), getArrayElement<Float_t>("muon_phi", i), getArrayElement<Float_t>("muon_mass", i))),
-        getArrayElement<Float_t>("muon_dxy", i), getArrayElement<Float_t>("muon_dz", i), charge, ParticleType::muon(), fit);
+        charge, ParticleType::muon(), fit);
         
         particle.addInfo("Isolation", getArrayElement<Float_t>("muon_reliso", i)); 
         particle.addInfo("dxy", getArrayElement<Float_t>("muon_dxy", i));
@@ -405,7 +403,7 @@ void NanoAODEventFile::nextEvent()
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("tau_pt", i),
         getArrayElement<Float_t>("tau_eta", i), getArrayElement<Float_t>("tau_phi", i), getArrayElement<Float_t>("tau_mass", i))),
-        getArrayElement<Float_t>("tau_dxy", i), getArrayElement<Float_t>("tau_dz", i), charge, ParticleType::tau(), fit);
+        charge, ParticleType::tau(), fit);
        
         recoParticles.addParticle(particle);
     }
@@ -418,7 +416,7 @@ void NanoAODEventFile::nextEvent()
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("photon_pt", i),
         getArrayElement<Float_t>("photon_eta", i), getArrayElement<Float_t>("photon_phi", i), 0)),
-            0, 0, 0, ParticleType::photon(), fit);
+            0, ParticleType::photon(), fit);
         recoParticles.addParticle(particle);
     }
 // //    for (auto& particle : recoParticles)
@@ -453,18 +451,19 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoJets() const
                               getArrayElement<Float_t>("jet_phi", i), getArrayElement<Float_t>("jet_mass", i)),
                           // getArrayElement<Float_t>("jet_dxy", i),
                           // getArrayElement<Float_t>("jet_dz", i), 0,
-                          0, 0, 0, ParticleType::jet());
+                          0, ParticleType::jet());
         particle.addInfo("bJet", getArrayElement<Float_t>("jet_bTag", i));
         recoParticles.addParticle(particle);
     }
     return recoParticles;
 }
 
-double NanoAODEventFile::getMET() const
+reco::Candidate::LorentzVector NanoAODEventFile::getMET() const
 {
     // std::cout << "met_pt TEST: " <<
     // static_cast<double>(getArrayElement<Float_t>("met_pt", 0)) << std::endl;
-    return static_cast<double>(getArrayElement<Float_t>("met_pt", 0));
+    auto vector = math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("met_pt", 0), 0, getArrayElement<Float_t>("met_phi", 0), 0);
+    return reco::Candidate::LorentzVector(vector);
 }
 
 unsigned long long NanoAODEventFile::getEventIDNum() const

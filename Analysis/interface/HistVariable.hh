@@ -2,13 +2,11 @@
 #define HISTVARIABLE_HH
 
 #include "CMSAnalysis/Analysis/interface/FilePathMapper.hh"
-#include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "CMSAnalysis/Utility/interface/ParticleType.hh"
+#include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
 #include <array>
 #include <string>
-
-
 
 // constexpr std::array<Selector, 5> selectors{
 //     {Selector::FirstHighestE, Selector::FirstHighestMu, Selector::E, Selector::Mu, Selector::None}};
@@ -33,14 +31,13 @@ class HistVariable
         RecoOppositeSignInvariantMass,
         DarkPhotonBDTOutput,
         LeptonJetMass,
-        LeptonJetDeltaR
+        LeptonJetDeltaR,
     };
 
-    HistVariable(ParticleType type, int order, VariableType var, std::string unit = "", 
-        bool is2DHistX = false, bool is2DHistY = false);
+    HistVariable(ParticleType type, int order, VariableType var, std::string unit = "", bool is2DHistX = false,
+                 bool is2DHistY = false);
 
-    HistVariable(VariableType var, std::string unit = "", 
-        bool is2DHistX = false, bool is2DHistY = false);
+    HistVariable(VariableType var, std::string unit = "", bool is2DHistX = false, bool is2DHistY = false);
 
     std::string getName() const;
 
@@ -48,7 +45,7 @@ class HistVariable
     {
         return particleType;
     }
-   
+
     int getOrder() const
     {
         return order_;
@@ -76,6 +73,14 @@ class HistVariable
     std::string getSystematicName() const
     {
         return systematicName;
+    }
+    constexpr bool isXProjection() const
+    {
+        return is2DHistX_;
+    }
+    constexpr bool isYProjection() const
+    {
+        return is2DHistY_;
     }
 
   private:

@@ -24,7 +24,7 @@ class DelphesEventFile : public EventFile
         virtual int getNumOfEvents() const override {return tree->GetEntries();}
 
         //virtual GenEventInfoProduct getGenInfo() const override;
-        virtual double getMET() const override;
+        virtual reco::Candidate::LorentzVector getMET() const override;
         virtual unsigned long long getEventIDNum() const override;
         virtual long getRunNum() const override;
         virtual int getNumPileUpInteractions() const override {throw std::runtime_error("not implemented yet");}

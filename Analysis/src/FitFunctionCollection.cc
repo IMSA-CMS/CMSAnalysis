@@ -5,6 +5,11 @@
 //run HiggsSignalFit make sure it works with adjustments
 
 
+
+
+std::vector<FitFunction> alphabetizeParameters(std::vector<FitFunction> fitFunctions);
+//std::string replaceAll(std::string unmodifiedString, const std::string from, const std::string to);
+
 FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string &fileName)
 {
     std::ifstream file(fileName);
@@ -97,6 +102,56 @@ void FitFunctionCollection::saveFunctions(const std::string &fileName, bool appe
         file << funcPair.second << "\n";
     }
 }
+
+
+
+// std::string replaceAll(std::string unmodifiedString, const std::string from, const std::string to)
+// {
+//     if (from.empty())
+//         return unmodifiedString; // avoid infinite loop if 'from' is empty
+
+//     std::string str = unmodifiedString;
+//     size_t start_pos = 0;
+//     while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
+//         str.replace(start_pos, from.length(), to);
+//         start_pos += to.length(); // move past the replaced part
+//     }
+    
+//     return str;
+
+// }
+
+std::vector<FitFunction> alphabetizeParameters(std::vector<FitFunction> fitFunctions)
+{
+    std::vector<std::string> parameterNames;
+    std::vector<FitFunction> alphabetizedFunctions;
+    
+    // Find and alphabetize the names of fit functions
+    for (auto function : fitFunctions)
+    {
+        parameterNames.push_back(function.getParameterName());
+    }
+    std::sort(parameterNames.begin(), parameterNames.end());
+
+
+    // Reorder the fitFunctions based on the order of parameterNames
+    for (auto parameterName : parameterNames)
+    {
+        for (auto function : fitFunctions)
+        {
+            
+            if (function.getParameterName() == parameterName)
+            {
+                alphabetizedFunctions.push_back(function);
+            }
+        }
+    }
+
+    return alphabetizedFunctions;
+}
+
+
+
 
 FitFunctionCollection::FitFunctionCollection()
 {
