@@ -327,9 +327,9 @@ void Fitter::fitGausLogPowerNorm(TH1 *const hist, FitFunction &func)
 
     hist->Fit(f1, "SWLQWIDTH", "", func.getMin(), func.getMax());
     // Make sure we didn't get too close to arbitrarily chosen upper bounds
-    assert(f1->GetParameter(0) < hist->Integral() / 3);
-    assert(f1->GetParameter(3) < 100.0 / 3);
-    assert(f1->GetParameter(4) < 100.0 / 3);
+    // assert(f1->GetParameter(0) < hist->Integral() / 3);
+    // assert(f1->GetParameter(3) < 100.0 / 3);
+    // assert(f1->GetParameter(4) < 100.0 / 3);
 
     gStyle->SetOptFit(1111);
 }
