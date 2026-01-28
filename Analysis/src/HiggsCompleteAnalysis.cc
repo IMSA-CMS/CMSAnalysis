@@ -83,7 +83,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     // const std::string signalFilePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
 
     // Luminosity: 1.39
-    const double luminosity = 137.62;
+    const double luminosity = 137.94;
 
     // std::vector<HistVariable> histVariablesBackground;
     // std::vector<HistVariable> histVariablesData;
