@@ -318,18 +318,11 @@ void Fitter::fitGausLogPowerNorm(TH1 *const hist, FitFunction &func)
 
     // Params: mult, u, sigma1, s, n
     f1->SetParameters(1, hist->GetMean(), hist->GetStdDev(), 1, 2);
-    f1->SetParLimits(0, 0, hist->Integral());
     f1->SetParLimits(1, 0, func.getMax());
-    f1->SetParLimits(3, 0, 100);
-    f1->SetParLimits(4, 1, 100);
 
     f1->SetNpx(1000);
 
     hist->Fit(f1, "SWLQWIDTH", "", func.getMin(), func.getMax());
-    // Make sure we didn't get too close to arbitrarily chosen upper bounds
-    // assert(f1->GetParameter(0) < hist->Integral() / 3);
-    // assert(f1->GetParameter(3) < 100.0 / 3);
-    // assert(f1->GetParameter(4) < 100.0 / 3);
 
     gStyle->SetOptFit(1111);
 }

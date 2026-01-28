@@ -18,8 +18,8 @@ const std::vector<HistVariable> histogramTypes = {
     HistVariable(HistVariable::VariableType::InvariantMass, "", false, true),
 };
 
-const std::string fitHistsName = "H++BackgroundFitsOld.root";
-const std::string fitParameterValueFile = "H++BackgroundFunctionsOld.txt";
+const std::string fitHistsName = "H++BackgroundFits.root";
+const std::string fitParameterValueFile = "H++BackgroundFunctions.txt";
 // These don't do anything
 const std::string parameterFits = "H++BackgroundParameterFits.root";
 const std::string parameterFunctions = "H++BackgroundParameterFunctions.txt";
@@ -99,9 +99,9 @@ void fitProcess(const Process &process, Fitter &fitter, const HistVariable &hist
     const auto title = "Higgs " + channelName + " " + process.getName() + " " + systDesc;
     selectedHist->SetTitle(title.c_str());
 
-    std::cout << "Fitting " + channelName + " " + process.getName() + "/" + histVar.getName() + " (" + systDesc + ")\n";
+    const std::string name = process.getName() + "->" + channelName + "/" + histVar.getName() + " " + systDesc;
 
-    const std::string name = process.getName() + "/" + histVar.getName() + " " + systDesc;
+    std::cout << "Fitting " + name + "\n";
 
     FitFunction func =
         FitFunction::createFunctionOfType(FitFunction::FunctionType::GausLogPowerNorm, name, "", min, max, channelName);
