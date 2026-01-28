@@ -165,20 +165,20 @@ std::string Utility::identifyChannel(ParticleCollection<Particle> particles)
     std::ranges::sort(positiveLeptons);
     std::ranges::sort(negativeLeptons);
 
-    // pad with '_' up to 2 leptons each
-    while (positiveLeptons.size() < 2)
-    {
-        positiveLeptons += '_';
-    }
-    while (negativeLeptons.size() < 2)
-    {
-        negativeLeptons += '_';
-    }
-
     std::string first;
     std::string second;
 
-    if (positiveLeptons < negativeLeptons)
+    if (positiveLeptons.length() > negativeLeptons.length())
+    {
+        first = positiveLeptons;
+        second = negativeLeptons;
+    }
+    else if (positiveLeptons.length() < negativeLeptons.length())
+    {
+        first = negativeLeptons;
+        second = positiveLeptons;
+    }
+    else if (positiveLeptons < negativeLeptons)
     {
         first = positiveLeptons;
         second = negativeLeptons;
@@ -187,6 +187,16 @@ std::string Utility::identifyChannel(ParticleCollection<Particle> particles)
     {
         first = negativeLeptons;
         second = positiveLeptons;
+    }
+
+    // pad with '_' up to 2 leptons each
+    while (first.size() < 2)
+    {
+        first += '_';
+    }
+    while (second.size() < 2)
+    {
+        second += '_';
     }
 
     // builds signature with substitutions
