@@ -244,6 +244,8 @@ std::pair<std::pair<Particle, Particle>, std::pair<Particle, Particle>> Utility:
     ParticleCollection negativeLeptons;
     int posElectronCount = 0;
     int negElectronCount = 0;
+    int posMuonCount = 0;
+    int negMuonCount = 0;
 
     // Sorts Leptons by charge
     for (const auto &lepton : leptons)
@@ -255,6 +257,10 @@ std::pair<std::pair<Particle, Particle>, std::pair<Particle, Particle>> Utility:
             {
                 posElectronCount += 1;
             }
+            if (lepton.getType() == ParticleType::muon())
+            {
+                posMuonCount += 1;
+            }
         }
         else if (lepton.getCharge() == -1)
         {
@@ -263,10 +269,23 @@ std::pair<std::pair<Particle, Particle>, std::pair<Particle, Particle>> Utility:
             {
                 negElectronCount += 1;
             }
+            if (lepton.getType() == ParticleType::muon())
+            {
+                negMuonCount += 1;
+            }
         }
     }
 
-    if (posElectronCount >= negElectronCount)
+    if (posElectronCount > negElectronCount)
+    {
+        return {{positiveLeptons[0], positiveLeptons[1]}, {negativeLeptons[0], negativeLeptons[1]}};
+    }
+    else if (posElectronCount < negElectronCount)
+    {
+        return {{negativeLeptons[0], negativeLeptons[1]}, {positiveLeptons[0], positiveLeptons[1]}};
+    }
+
+    if (posMuonCount >= negMuonCount)
     {
         return {{positiveLeptons[0], positiveLeptons[1]}, {negativeLeptons[0], negativeLeptons[1]}};
     }
