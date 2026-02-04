@@ -52,10 +52,7 @@ class HistogramOutputModule : public AnalysisModule
     void makeHistogram(std::shared_ptr<HistogramPrototype> h);
 
     // Convenient getter methods to access histograms
-    TH1 *getHistogram(const std::string &path, const std::string &name)
-    {
-        return dynamic_cast<TH1 *>(getObject(path, name));
-    }
+    TH1 *getHistogram(const std::string &path, const std::string &name);
     const TH1 *getHistogram(const std::string &path, const std::string &name) const
     {
         return dynamic_cast<const TH1 *>(getObject(path, name));

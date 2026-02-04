@@ -82,7 +82,7 @@ class FitFunction
 
     // static std::vector<FitFunction> loadFunctions(const std::string& fileName);
     // static void saveFunctions(std::vector<FitFunction>& functions, const std::string& fileName);
-
+  FitFunction() {}    
 	FitFunction(const TF1& func, FunctionType funcType, std::string channelName);
 	TF1* getFunction();
 	void setFunction(const TF1& function, FunctionType funcType);
@@ -92,6 +92,7 @@ class FitFunction
 	double getMax();
 	std::string getChannelName();
 	std::string getParameterName();
+  std::string getChannel();
 
 	void addSystematic(const std::string& sysName, const TF1& upFunction, const TF1& downFunction);
 	void addSystematic(const std::string& sysName, const std::vector<double>& upParams, const std::vector<double>& downParams);

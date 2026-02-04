@@ -48,7 +48,7 @@ void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) c
         auto lepton = Lepton(particle);
         if(lepton.isLoose())
         {
-          //selected.addParticle(particle);
+          selected.addParticle(particle);
           looseMuons++;
         }
         if(lepton.isTight())
@@ -61,62 +61,62 @@ void LeptonJetSelector::selectParticles(const EventInput* input, Event& event) c
         }
       }
 
-      if (particle.getType() == ParticleType::electron() && particle.getPt() > 5) 
-      {
-        electronCounter++;
-        auto lepton = Lepton(particle);
-        if(lepton.isLoose())
-        {
-          selected.addParticle(particle);
-          looseElectrons++;
-        }
-        if(lepton.isTight())
-        {
-          tightElectrons++;
-        }
-        if(lepton.isMedium())
-        {
-          mediumElectrons++;
-        }    
-      }
+      // if (particle.getType() == ParticleType::electron() && particle.getPt() > 5) 
+      // {
+      //   electronCounter++;
+      //   auto lepton = Lepton(particle);
+      //   if(lepton.isLoose())
+      //   {
+      //     selected.addParticle(particle);
+      //     looseElectrons++;
+      //   }
+      //   if(lepton.isTight())
+      //   {
+      //     tightElectrons++;
+      //   }
+      //   if(lepton.isMedium())
+      //   {
+      //     mediumElectrons++;
+      //   }    
+      // }
 
       // Trying adding photons as well
-      if (particle.getType() == ParticleType::photon() && particle.getPt() > 5)  // put work in this if statement 
-      {
-        // for (const Particle& particle: particles) 
-        // // outer loop - particle is part of the particles container
-        // {
-        //   if (particle.getType() == ParticleType::photon()) 
-        //   // if the particle type is photon, it's photonPt is stored
-        //   {
-            double photonPt = particle.getPt();
-            bool withinElectronPtRange = false; 
-            // boolean flag tracks when Pt is within the acceptable range
-              for (const Particle& otherParticle : particles)
-              {
-                if (otherParticle.getType() == ParticleType::electron())
-                {
-                  double electronPt = otherParticle.getPt();
+    //   if (particle.getType() == ParticleType::photon() && particle.getPt() > 5)  // put work in this if statement 
+    //   {
+    //     // for (const Particle& particle: particles) 
+    //     // // outer loop - particle is part of the particles container
+    //     // {
+    //     //   if (particle.getType() == ParticleType::photon()) 
+    //     //   // if the particle type is photon, it's photonPt is stored
+    //     //   {
+    //         double photonPt = particle.getPt();
+    //         bool withinElectronPtRange = false; 
+    //         // boolean flag tracks when Pt is within the acceptable range
+    //           for (const Particle& otherParticle : particles)
+    //           {
+    //             if (otherParticle.getType() == ParticleType::electron())
+    //             {
+    //               double electronPt = otherParticle.getPt();
 
-                  if (std::abs(photonPt - electronPt) <= 45.0)
-                  {
-                    withinElectronPtRange = true;
-                  }
+    //               if (std::abs(photonPt - electronPt) <= 45.0)
+    //               {
+    //                 withinElectronPtRange = true;
+    //               }
 
-                  if (withinElectronPtRange)
-                  {
-                    selected.addParticle(particle);
-                  }
-                }
-              }
-         // }
-       // }
-    }
+    //               if (withinElectronPtRange)
+    //               {
+    //                 selected.addParticle(particle);
+    //               }
+    //             }
+    //           }
+    //      // }
+    //    // }
+    // }
 
     for (auto lepton : selected.getParticles())
     {
-      //event.addMuon(lepton);
-      event.addElectron(lepton);
+      event.addMuon(lepton);
+      // event.addElectron(lepton);
     }
 
     //auto recoLeptons = event.getMuons();

@@ -23,7 +23,7 @@ class Event
         const ParticleCollection<Tau>& getTaus() const {return taus;};
         const ParticleCollection<Photon>& getPhotons() const {return photons;};
         const ParticleCollection<Jet>& getJets() const {return jets;};
-        const double& getMET() const {return MET;};
+        const reco::Candidate::LorentzVector& getMET() const {return MET;};
         const std::map<std::string, ParticleCollection<Particle>>& getSpecials() const {return specialObjects;};
 
         // gets a special object by key
@@ -38,7 +38,7 @@ class Event
         void addJet(Jet jet);
         void addGenSimParticle(GenSimParticle particle);
         void addSpecialObject(std::string key, Particle obj); 
-        void setMET(double newMET) {MET = newMET;}
+        void setMET(reco::Candidate::LorentzVector newMET) {MET = newMET;}
 
         // returns true if the event contains any particles
         bool containsParticles() const;
@@ -55,7 +55,7 @@ class Event
         ParticleCollection<Photon> photons;
         ParticleCollection<Jet> jets;
         ParticleCollection<GenSimParticle> genSimParticles;
-        double MET;
+        reco::Candidate::LorentzVector MET;
         std::map<std::string, ParticleCollection<Particle>> specialObjects;
         const EventInput* input;
 };
