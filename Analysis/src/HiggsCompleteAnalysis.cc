@@ -22,7 +22,7 @@ const std::vector<std::string> HiggsCompleteAnalysis::recoDecays{
     "eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet",
     "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt", "eee_", "eeu_", "eue_",
     "euu_", "uue_", "uuu_", "eet_", "ete_", "eut_", "etu_", "uut_", "utu_", "ett_", "utt_", "ttt_",
-    "ee__", "e_e_", "eu__", "e_u_", "uu__", "u_u_", "tt__", "t_t_", "et__", "e_t_", "ut__", "u_t_", "none"};
+    "ee__", "e_e_", "eu__", "e_u_", "uu__", "u_u_", "tt__", "t_t_", "et__", "e_t_", "ut__", "u_t_"};
 
 const std::vector<std::string> systematics{"ElectronScaleFactor", "MuonIDISOScaleFactor", "MuonRecoScaleFactor",
                                            "MuonTriggerScaleFactor"};
@@ -274,14 +274,15 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
             //processes.push_back(other);
             processes.push_back(wJetsBackground);
 
-            // for(std::shared_ptr<Process> process : processes)
-            // {
-            //     for(std::string systematic : systematics)
-            //     {
-            //         auto sys = process->calcSystematic(HistVariable(HistVariable::VariableType::SameSignInvariantMass),
-            //         systematic, true); process->addSystematic(sys);
-            //     }
-            // }
+            for(std::shared_ptr<Process> process : processes)
+            {
+                for(std::string systematic : systematics)
+                {
+                    auto sys = process->calcSystematic(HistVariable(HistVariable::VariableType::SameSignInvariantMass),
+                        systematic, true); 
+                    process->addSystematic(sys);
+                }
+            }
 
             std::string modeLabel = zSelection ? "_ZPeak" : "";
 

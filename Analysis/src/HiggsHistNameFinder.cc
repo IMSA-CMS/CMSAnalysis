@@ -5,10 +5,7 @@
 std::string HiggsHistNameFinder::getHistName(const HistVariable &histVariable) const
 {
     std::string genSimStr;
-    const auto channel = histVariable.getName();
-    const auto reco = "/Reco " + channel.substr(0, 4);
-    std::string gensim;
-    if (channel.size() > 4)
+    if (!genSim.empty())
     {
         genSimStr = "GenSim " + genSim + "/";
     }

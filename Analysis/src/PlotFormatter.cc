@@ -511,6 +511,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     //error after this 
 
     //Draws the histogram with more events first (bigger axis)
+    background->Draw("HIST"); // Needed or else the next line may seg fault
     TH1* hist = background->GetHistogram();
     double xAxisMin = 1e-5;
     for(const auto&& obj2 : *background->GetHists()) 
