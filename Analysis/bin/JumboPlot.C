@@ -24,6 +24,7 @@
 #include "TLegend.h"
 #include "TSystem.h"
 #include <vector>
+#include <algorithm>
 #include <map>
 #include <string>
 #include "CMSAnalysis/Utility/interface/Utility.hh"
@@ -37,7 +38,7 @@ std::vector<HistVariable> variables, bool includeData, bool includeSignal)
 {
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation/Data)");
 	plotFormatter->setUpperMasslimit(2000);
-	plotFormatter->setFirstBin(50);
+	plotFormatter->setFirstBin(-1);
 	int graphSwitch = 5;
 
 	double massTarget = 1400;
@@ -45,75 +46,115 @@ std::vector<HistVariable> variables, bool includeData, bool includeSignal)
 	//You don't have to change anything here, unless your y axis is something other than "Events"
 	TCanvas* canvas;
 	std::string fileName;
-	int count = 0;
-	std::vector<std::vector<std::string>> tableInput;
-	std::vector<std::string> toAdd;
-	std::vector<std::string> rowTitles;
-	
-	for (auto var : variables)
+
+	std::ofstream htmlFileZPeak;
+	std::ofstream htmlFileNonZPeak;
+	std::string baseSignal = Utility::removeSpaces(signal);
+
+	htmlFileZPeak.open(baseSignal + "ZPeak.html");
+	htmlFileNonZPeak.open(baseSignal + "NonZPeak.html");
+
+	for (auto& htmlFile : {&htmlFileZPeak, &htmlFileNonZPeak})
 	{
-		rowTitles.push_back(var.getName());
+		*htmlFile << "<!DOCTYPE html>\n<html>\n<head>\n";
+		*htmlFile << "    <meta charset=\"UTF-8\">\n";
+		*htmlFile << "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n";
+		if (htmlFile == &htmlFileZPeak)
+			*htmlFile << "    <title>" << signal << " ZPeak</title>\n";
+		else
+			*htmlFile << "    <title>" << signal << "</title>\n";
+		*htmlFile << "    <link rel=\"stylesheet\" href=\"style.css\">\n";
+		*htmlFile << "</head>\n<body>\n";
+		if (htmlFile == &htmlFileZPeak)
+			*htmlFile << "    <h1>" << signal << " ZPeak</h1>\n";
+		else
+			*htmlFile << "    <h1>" << signal << "</h1>\n";
 	}
-	
-	
-	std::vector<std::string> columnTitles;
-	std::string entry = "";
-	//bool includeSignal = true;
-	
-	for (auto var: variables)
+
+	for (auto channel : channels)
 	{
-//		int unitCounter = 0;
+		std::string channelName = channel->getName();
+		bool channelIsZPeak = (channelName.find("ZPeak") != std::string::npos);
 
-			for(std::shared_ptr<Channel> channel : channels) 
-			{ 	
-				columnTitles.push_back(channel->getName());
-				
-				entry = "";
-				TString xAxisName = var.getUnit();//units[unitCounter];
-				TString yAxisName = "Events";
-				std::string storageRouting = (signal.find("Dark") != std::string::npos) ? "DarkPhoton" : "HiggsSignal";
-				std::string tempChannelName = Utility::substitute(channel->getName(),"/","_");
+		std::ofstream& htmlFile = channelIsZPeak ? htmlFileZPeak : htmlFileNonZPeak;
 
-				fileName = "jumboPlotStorage/" + storageRouting + "/" + tempChannelName + " " + var.getName() + " " + "DataMC.png";
-				//HistVariable fullDataType = HistVariable(connecter + dataType);
-				//bool includeSignal = false;
-				TCanvas *canvas = plotFormatter->completePlot(analysis, var, xAxisName, yAxisName, false, includeSignal, includeData, channel->getName());
-				if (canvas)
-				{
-					canvas->SaveAs(fileName.c_str());
-					plotFormatter->deleteHists();
-					canvas->Close();
-					delete canvas;
+		std::string channelId = channelName;
+		std::replace(channelId.begin(), channelId.end(), ' ', '_');
+		std::replace(channelId.begin(), channelId.end(), '/', '_');
 
-					entry += "<img src=\"" + fileName + "\" alt=\"DataMC hist\" width=\"100%\" height = \"80%\">";
-				}
-				else
-				{
-					entry += "<p>No histogram available</p>";
-				}
-				toAdd.push_back(entry);
+		htmlFile << "    <div class=\"channel-container\">\n";
+		htmlFile << "        <div class=\"channel-header\" onclick=\"toggleChannel('" << channelId << "')\">\n";
+		htmlFile << "            <span><strong>" << channelName << "</strong></span>\n";
+		htmlFile << "            <span class=\"arrow\" id=\"arrow-" << channelId << "\">▼</span>\n";
+		htmlFile << "        </div>\n";
+		htmlFile << "        <div class=\"channel-content\" id=\"content-" << channelId << "\">\n";
+		htmlFile << "            <div class=\"plot-grid\">\n";
 
+		for (auto var : variables)
+		{
+			std::string varName = var.getName();
+			TString xAxisName = var.getUnit();
+			TString yAxisName = "Events";
+			
+			std::string storageRouting = (signal.find("Dark") != std::string::npos) ? "DarkPhoton" : "HiggsSignal";
+			std::string tempChannelName = Utility::substitute(channel->getName(), "/", "_");
+
+			std::string fileNameFS = "jumboPlotStorage/" + storageRouting + "/" + tempChannelName + " " + varName + " DataMC.png";
+			std::string fileNameHTML = "jumboPlotStorage/" + tempChannelName + " " + varName + " DataMC.png";
+
+			size_t pos = 0;
+			while ((pos = fileNameHTML.find(" ", pos)) != std::string::npos)
+			{
+				fileNameHTML.replace(pos,1,"%20");
+				pos += 3;
 			}
-//			unitCounter++;
-			tableInput.push_back(toAdd);
-			toAdd.clear();
-		
+
+			TCanvas *canvas = plotFormatter->completePlot(analysis, var, xAxisName, yAxisName, false, includeSignal, includeData, channelName);
+
+			if (canvas)
+			{
+				canvas->SaveAs(fileNameFS.c_str());
+				plotFormatter->deleteHists();
+				canvas->Close();
+				delete canvas;
+
+				htmlFile << "                <div class=\"plot-item\">\n";
+				htmlFile << "                    <h3>" << varName << "</h3>\n";
+				htmlFile << "                    <img src=\"" << fileNameHTML << "\" alt=\"" << varName << "\">\n";
+				htmlFile << "                </div>\n";
+			}	
+		}
+		htmlFile << "            </div>\n";
+		htmlFile << "        </div>\n";
+		htmlFile << "    </div>\n";
+
+
+	}
+
+	for (auto& htmlFile : {&htmlFileZPeak, &htmlFileNonZPeak})
+	{
+		*htmlFile << "    <script>\n";
+		*htmlFile << "        function toggleChannel(channelId) {\n";
+		*htmlFile << "            const content = document.getElementById('content-' + channelId);\n";
+		*htmlFile << "            const arrow = document.getElementById('arrow-' + channelId);\n";
+		*htmlFile << "            const header = content.previousElementSibling;\n";
+		*htmlFile << "            \n";
+		*htmlFile << "            if (content.classList.contains('open')) {\n";
+		*htmlFile << "                content.classList.remove('open');\n";
+		*htmlFile << "                arrow.classList.remove('open');\n";
+		*htmlFile << "                header.classList.remove('active');\n";
+		*htmlFile << "            } else {\n";
+		*htmlFile << "                content.classList.add('open');\n";
+		*htmlFile << "                arrow.classList.add('open');\n";
+		*htmlFile << "                header.classList.add('active');\n";
+		*htmlFile << "            }\n";
+		*htmlFile << "        }\n";
+		*htmlFile << "    </script>\n";
+		*htmlFile << "</body>\n</html>\n";
 	}
 	
-
-	
-	auto tableData = std::make_shared<TableData>(tableInput, columnTitles, rowTitles);
-	auto table = std::make_shared<HTMLTable>();
-	std::ofstream htmlFile;
-	htmlFile.open(Utility::removeSpaces(signal) + ".html");
-	htmlFile << "<!DOCTYPE html>" << std::endl;
-	htmlFile << "<html>" << std::endl;
-	htmlFile << "<body>" << std::endl;
-	table->makeTable(tableData, htmlFile);
-	htmlFile << "</body>" << std::endl;
-	htmlFile << "</html>" << std::endl;
-	htmlFile.close();
-	tableInput.clear();
+	htmlFileZPeak.close();
+	htmlFileNonZPeak.close();
 }
 
 void JumboPlot()
@@ -163,10 +204,13 @@ void JumboPlot()
 	std::vector<HistVariable> variables = {
 		HistVariable(ParticleType::electron(), 1, HistVariable::VariableType::Eta),
 		HistVariable(ParticleType::muon(), 1, HistVariable::VariableType::Eta),
+		HistVariable(ParticleType::tau(), 1, HistVariable::VariableType::Eta),
 		HistVariable(ParticleType::electron(), 1, HistVariable::VariableType::Pt),
 		HistVariable(ParticleType::muon(), 1, HistVariable::VariableType::Pt),
+		HistVariable(ParticleType::tau(), 1, HistVariable::VariableType::Pt),
 		HistVariable(ParticleType::electron(), 1, HistVariable::VariableType::Phi),
 		HistVariable(ParticleType::muon(), 1, HistVariable::VariableType::Phi),
+		HistVariable(ParticleType::tau(), 1, HistVariable::VariableType::Phi),
 		HistVariable(ParticleType::electron(), 0, HistVariable::VariableType::SameSignInvariantMass),
 		HistVariable(ParticleType::muon(), 0, HistVariable::VariableType::SameSignInvariantMass),
 		HistVariable(ParticleType::electron(), 0, HistVariable::VariableType::OppositeSignInvariantMass),
@@ -210,8 +254,8 @@ void JumboPlot()
 	std::vector<HistVariable> darkPhotonVariables = 
 	{
 		HistVariable(HistVariable::VariableType::DarkPhotonBDTOutput),
-		HistVariable(HistVariable::VariableType::LeptonJetMass),
-		HistVariable(HistVariable::VariableType::LeptonJetDeltaR),
+		HistVariable(ParticleType::leptonJet(), 1, HistVariable::VariableType::LeptonJetMass),
+		HistVariable(ParticleType::leptonJet(), 1, HistVariable::VariableType::LeptonJetDeltaR),
 		HistVariable(HistVariable::VariableType::MET),
 
 		HistVariable(ParticleType::muon(), 1, HistVariable::VariableType::Eta),
@@ -237,11 +281,11 @@ void JumboPlot()
 	}
 
 	makePlots("Higgs Signal 2Channel", higgsAnalysis, channelTwoLeptons, variables ,true, false);
-	makePlots("Higgs Signal 3Channel", higgsAnalysis, channelThreeLeptons, variables , false, true);
-	makePlots("Higgs Signal 4Channel", higgsAnalysis, channelFourLeptons, variables , false, true);
+	//makePlots("Higgs Signal 3Channel", higgsAnalysis, channelThreeLeptons, variables , false, true);
+	//makePlots("Higgs Signal 4Channel", higgsAnalysis, channelFourLeptons, variables , false, true);
 
-	//makePlots("Dark Photons Control", darkPhotonAnalysis, controlChannels, darkPhotonVariables, true, false);
-	//makePlots("Dark Photons Signal", darkPhotonAnalysis, signalChannels, darkPhotonVariables, false, false);
+	makePlots("Dark Photons Control", darkPhotonAnalysis, controlChannels, darkPhotonVariables, true, false);
+	makePlots("Dark Photons Signal", darkPhotonAnalysis, signalChannels, darkPhotonVariables, false, false);
 	
 }
 //std::string signal, std::shared_ptr<FullAnalysis> analysis, std::vector<std::shared_ptr<Channel>> channels, std::vector<HistVariable> variables, bool includeData, bool includeSignal
