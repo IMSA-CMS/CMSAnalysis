@@ -196,18 +196,7 @@ HistParams ParticleType::getPtHist()
     return HistParams("Pt", 150, 0, 1000, [](Particle particle){return std::vector<double>{particle.getPt()};});
 }
 
-HistParams ParticleType::getDXYHist()
-{
-    return HistParams("Dxy", 150, 0, 0.1, [](Particle particle){return std::vector<double>{Lepton(particle).getDXY()};});
-}
-HistParams ParticleType::getDZHist()
-{
-    return HistParams("Dz", 150, 0, 0.1, [](Particle particle){return std::vector<double>{Lepton(particle).getDZ()};});
-}
-HistParams ParticleType::getIsolationHist()
-{
-    return HistParams("Isolation", 150, 0, 0.1, [](Particle particle){return std::vector<double>{particle.getInfo("Isolation")};});
-}
+
 
 HistParams ParticleType::getPhiHist()
 {

@@ -29,7 +29,7 @@ class MiniAODEventFile : public EventFile
         virtual ParticleCollection<Particle> getRecoJets() const override;
         
         //virtual std::vector<PileupSummaryInfo> getPileupInfo() const override;
-        virtual double getMET() const override;
+        virtual reco::Candidate::LorentzVector getMET() const override;
         virtual unsigned long long getEventIDNum() const override; 
         virtual long getRunNum() const override; 
     private:

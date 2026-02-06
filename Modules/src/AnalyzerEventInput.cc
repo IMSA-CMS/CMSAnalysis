@@ -64,7 +64,7 @@ int AnalyzerEventInput::getNumPileUpInteractions() const
     return (*eventInterface)->getNumPileUpInteractions();
 }
 
-double AnalyzerEventInput::getMET() const
+reco::Candidate::LorentzVector AnalyzerEventInput::getMET() const
 {
     return (*eventInterface)->getMET();
 }

@@ -6,13 +6,11 @@
 #include "TF1.h"
 #include "TGraph.h"
 #include "TH1.h"
-//#include <boost/algorithm/string.hpp>
 #include <iostream>
 #include <string>
 #include <vector>
-#define _USE_MATH_DEFINES
 
-void fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &histType, const std::string &genSim);
+bool fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &histType, const std::string &genSim);
 
 const std::vector<HistVariable> histogramTypes = {
     HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
@@ -44,9 +42,17 @@ void HiggsSignalFit()
     {
         for (const auto &channel : analysis.getChannels())
         {
+            if (channel->getName().find("ZPeak") != std::string::npos)
+            {
+                continue;
+            }
             for (const auto &genSim : HiggsCompleteAnalysis::genSimDecays)
             {
-                fitChannel(*channel, fitter, histType, genSim);
+                bool ok = fitChannel(*channel, fitter, histType, genSim);
+                if (!ok)
+                {
+                    continue;
+                }
 
                 // Fit systematics
                 for (const auto &systName : systs)
@@ -63,7 +69,7 @@ void HiggsSignalFit()
     }
 }
 
-void fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &histType, const std::string &genSim)
+bool fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &histVar, const std::string &genSim)
 {
     double skewSum = 0;
     double maxBinPctSum = 0;
@@ -73,7 +79,7 @@ void fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
     for (const auto mass : HiggsCompleteAnalysis::massTargets)
     {
         const auto process = channel.findProcess("Higgs signal " + genSim + " " + std::to_string(mass));
-        const TH1 *selectedHist = process->getHist(histType, true);
+        const TH1 *selectedHist = process->getHist(histVar, true);
 
         if (!selectedHist || selectedHist->GetEntries() < minData)
         {
@@ -87,10 +93,24 @@ void fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
 
     if (n < 2)
     {
-        return;
+        return false;
     }
 
-    std::cout << "Fitting " << genSim + "->" + channelName << "/" << histType.getName() << "\n";
+    std::string systDesc;
+    switch (histVar.getSystematicType())
+    {
+    case ScaleFactor::SystematicType::Nominal:
+        systDesc = "Nominal";
+        break;
+    case ScaleFactor::SystematicType::Up:
+        systDesc = histVar.getSystematicName() + " Up";
+        break;
+    case ScaleFactor::SystematicType::Down:
+        systDesc = histVar.getSystematicName() + " Down";
+        break;
+    }
+
+    std::cout << "Fitting " << genSim + "->" + channelName << "/" << histVar.getName() + " (" + systDesc + ")\n";
 
     const double skewAvg = skewSum / n;
     const double maxBinPctAvg = maxBinPctSum / n;
@@ -104,7 +124,7 @@ void fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
     for (const auto mass : HiggsCompleteAnalysis::massTargets)
     {
         const auto process = channel.findProcess("Higgs signal " + genSim + " " + std::to_string(mass));
-        TH1 *const hist = process->getHist(histType, true);
+        TH1 *const hist = process->getHist(histVar, true);
 
         if (!hist || hist->GetEntries() < minData)
         {
@@ -118,7 +138,7 @@ void fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
         // std::cout << "NEntry: " << histDown->GetEntries() << "\n";
 
         const auto title = "Higgs signal " + genSim + " #rightarrow " + channelName + " " + std::to_string(mass) + " " +
-                           histType.getName() + " " + histType.getSystematicName();
+                           histVar.getName() + " " + systDesc;
         hist->SetTitle(title.c_str());
         // histDown->SetTitle((title + " Down").c_str());
         // histUp->SetTitle((title + " Up").c_str());
@@ -128,7 +148,8 @@ void fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
 
         // FitFunction funcDown;
         // FitFunction funcUp;
-        const auto name = genSim + "/" + std::to_string(mass) + '_' + histType.getName();
+        const auto name =
+            genSim + "->" + channelName + "/" + std::to_string(mass) + ' ' + histVar.getName() + " " + systDesc;
         FitFunction func = FitFunction::createFunctionOfType(funcType, name, "", xMin, xMax, channelName);
 
         const std::string keyName = std::to_string(mass);
@@ -144,5 +165,6 @@ void fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
     }
     fitter.loadFunctions(currentFunctions);
     fitter.fitFunctions(histogramMap);
-    fitter.parameterizeFunctions(massValues, genSim, channelName, histType.getName());
+    fitter.parameterizeFunctions(massValues, genSim, channelName, histVar.getName(), histVar);
+    return true;
 }

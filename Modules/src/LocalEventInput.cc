@@ -39,7 +39,7 @@ int LocalEventInput::getNumPileUpInteractions() const
     throw std::runtime_error("GenSimEventFile has no implementation of getNumPileUpInteractions");
 }
 
-double LocalEventInput::getMET() const
+reco::Candidate::LorentzVector LocalEventInput::getMET() const
 {
     return event->getMET();
 }

@@ -7,13 +7,13 @@ static std::string defaultUnit(HistVariable::VariableType var)
     switch (var)
     {
     case HistVariable::VariableType::Pt:
-        return "GeV";
+        return "pT [GeV]";
     case HistVariable::VariableType::Eta:
-        return "";
+        return "#eta";
     case HistVariable::VariableType::Phi:
-        return "";
+        return "#phi";
     case HistVariable::VariableType::SameSignInvariantMass:
-		return "GeV";
+		return "Same sign invariant mass [GeV]";
     case HistVariable::VariableType::OppositeSignInvariantMass:
 		return "GeV";
     case HistVariable::VariableType::InvariantMass:
@@ -114,8 +114,6 @@ std::string HistVariable::getName() const
     case HistVariable::VariableType::LeptonJetDeltaR:
         name += "Lepton Jet Delta R";
         break;
-    default:
-        throw std::runtime_error("Unknown variable type in HistVariable::getName()");
     }
 
     if (is2DHistX_)

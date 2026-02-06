@@ -23,7 +23,7 @@ class StrippedEventFile : public EventFile
     virtual ParticleCollection<Particle> getRecoParticles() const override;
     virtual ParticleCollection<Particle> getRecoJets() const override;
     virtual int getNumPileUpInteractions() const override {throw std::runtime_error("not implemented yet for StrippedEventFile");}
-    virtual double getMET() const override;
+    virtual reco::Candidate::LorentzVector getMET() const override;
     virtual std::vector<double> getPDFWeights() const override;
     virtual unsigned long long getEventIDNum() const override; 
     virtual long getRunNum() const override; 
