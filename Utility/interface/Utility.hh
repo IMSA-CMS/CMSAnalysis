@@ -26,6 +26,7 @@ namespace Utility
   std::pair<std::pair<Particle, Particle>, std::pair<Particle, Particle>> findBestLeptonPairing(ParticleCollection<Particle> leptons);
 
 
+  double invariantMass(Particle p1, Particle p2, double met_x, double met_y);
 }
 
 inline bool Utility::comparator(std::string a, std::string b)

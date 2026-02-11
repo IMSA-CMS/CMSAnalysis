@@ -18,7 +18,7 @@ std::vector<std::pair<double, double>> DXYdZHist2D::value2D() const
   
   for (auto p : particles)
   {
-    dXYdZpairs.push_back({{p.getDXY()}, {p.getDZ()}});
+    dXYdZpairs.push_back({{p.getInfo("dxy")}, {p.getInfo("dz")}});
   }
 
   return dXYdZpairs;

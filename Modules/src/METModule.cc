@@ -7,7 +7,9 @@
 bool METModule::process()
 {
 
-  met = getInput()->getMET();
+  auto metObj = getInput()->getMET();
+  met = metObj.pt();
+  phi = metObj.phi();
 
   return true;
 };

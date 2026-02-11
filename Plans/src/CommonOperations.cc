@@ -10,9 +10,8 @@
 #include "CMSAnalysis/Modules/interface/ElectronJSONReader.hh"
 //#include "CMSAnalysis/Modules/interface/MultiYearScaleFactorReader.hh"
 #include "CMSAnalysis/Modules/interface/LeptonScaleFactor.hh"
-
-
-
+#include "CMSAnalysis/Modules/interface/PileUpRootReader.hh"
+#include "CMSAnalysis/Modules/interface/PileUpScaleFactor.hh"
 
 using std::make_shared;
 
@@ -21,57 +20,21 @@ void CommonOperations::addHiggsScaleFactors(std::shared_ptr<EventModule> eventMo
    // auto pileUpScaleFactor = make_shared<MuonScaleFactor>("","");
    // auto recoScaleFactor = make_shared<MultiYearScaleFactorReader>();
     
-   /*
-    // Muon Reco
-    auto muonScaleFactorReader2016 = make_shared<MuonJSONReader>("ScaleFactors/ScaleFactors_Muon_highPt_RECO_2016_schemaV2.json");
-    auto muonScaleFactor2016 = make_shared<LeptonScaleFactor>("MuonRecoScaleFactor2016", muonScaleFactorReader2016, ParticleType::muon());
-    //recoScaleFactorReader->addYearData("2016", muonScaleFactor2016);
-    auto muonScaleFactor2017 = make_shared<MuonJSONReader>("ScaleFactors/ScaleFactors_Muon_highPt_RECO_2017_schemaV2.json");
-    recoScaleFactorReader->addYearData("2017", muonScaleFactor2017);
-    auto muonScaleFactor2018 = make_shared<MuonJSONReader>("ScaleFactors/ScaleFactors_Muon_highPt_RECO_2018_schemaV2.json");
-    recoScaleFactorReader->addYearData("2018", muonScaleFactor2018);
-    auto muonScaleFactor2016APV = make_shared<MuonJSONReader>("ScaleFactors/ScaleFactors_Muon_highPt_RECO_2016_preVFP_schemaV2.json");
-    recoScaleFactorReader->addYearData("2016APV", muonScaleFactor2016APV);
-    
-    // Trigger 
-        auto triggerScaleFactorReader = make_shared<MultiYearScaleFactorReader>();
-        auto muonTriggerScaleFactor2016APV = make_shared<MuonJSONReader>("ScaleFactors/ScaleFactors_Muon_highPt_HLT_2016_preVFP_schemaV2.json");
-        triggerScaleFactorReader->addYearData("2016APV", muonTriggerScaleFactor2016APV);
-        auto muonTriggerScaleFactor2016 = make_shared<MuonJSONReader>("ScaleFactors/ScaleFactors_Muon_highPt_HLT_2016_schemaV2.json");
-        triggerScaleFactorReader->addYearData("2016", muonTriggerScaleFactor2016);
-        auto muonTriggerScaleFactor2017 = make_shared<MuonJSONReader>("ScaleFactors/ScaleFactors_Muon_highPt_HLT_2017_schemaV2.json");
-        triggerScaleFactorReader->addYearData("2017", muonTriggerScaleFactor2017);
-        auto muonTriggerScaleFactor2018 = make_shared<MuonJSONReader>("ScaleFactors/ScaleFactors_Muon_highPt_HLT_2018_schemaV2.json");
-        triggerScaleFactorReader->addYearData("2018", muonTriggerScaleFactor2018);
-    
-    // IDISO
-        auto iDISOScaleFactorReader = make_shared<MultiYearScaleFactorReader>();
-        auto muonIDISOScaleFactor2016APV = make_shared<MuonJSONReader>("ScaleFactors/ScaleFactors_Muon_highPt_IDISO_2016_preVFP_schemaV2.json");
-        iDISOScaleFactorReader->addYearData("2016APV", muonIDISOScaleFactor2016APV);
-        auto muonIDISOScaleFactor2016 = make_shared<MuonJSONReader>("ScaleFactors/ScaleFactors_Muon_highPt_IDISO_2016_schemaV2.json");
-        iDISOScaleFactorReader->addYearData("2016", muonIDISOScaleFactor2016);
-        auto muonIDISOScaleFactor2017 = make_shared<MuonJSONReader>("ScaleFactors/ScaleFactors_Muon_highPt_IDISO_2017_schemaV2.json");
-        iDISOScaleFactorReader->addYearData("2017", muonIDISOScaleFactor2017);
-        auto muonIDISOScaleFactor2018 = make_shared<MuonJSONReader>("ScaleFactors/ScaleFactors_Muon_highPt_IDISO_2018_schemaV2.json");
-        iDISOScaleFactorReader->addYearData("2018", muonIDISOScaleFactor2018);
-    
-    // Electron
-        auto electronScaleFactorReader = make_shared<MultiYearScaleFactorReader>();
-        auto electronScaleFactor2016APV = make_shared<ElectronJSONReader>("ScaleFactors/2016APVelectron.json");
-        electronScaleFactorReader->addYearData("2016APV", electronScaleFactor2016APV);
-        auto electronScaleFactor2016 = make_shared<ElectronJSONReader>("ScaleFactors/2016electron.json");
-        electronScaleFactorReader->addYearData("2016", electronScaleFactor2016);
-        auto electronScaleFactor2017 = make_shared<ElectronJSONReader>("ScaleFactors/2017electron.json");
-        electronScaleFactorReader->addYearData("2017", electronScaleFactor2017);
-        auto electronScaleFactor2018 = make_shared<ElectronJSONReader>("ScaleFactors/2018electron.json");
-        electronScaleFactorReader->addYearData("2018", electronScaleFactor2018);    
+    auto pileUpScaleFactor = make_shared<MultiYearScaleFactor>("PileupScaleFactor");
+    auto pileUpScaleFactor2016Reader = make_shared<PileUpRootReader>("ScaleFactors/PileupHistogram-UL2016-100bins_withVar.root", "ScaleFactors/mcPileupUL2016.root", "pileup", "pu_mc", "pileup_plus", "pileup_minus");
+    auto pileUpScaleFactor2016 = make_shared<PileUpScaleFactor>("PileupScaleFactor2016", pileUpScaleFactor2016Reader);
+    pileUpScaleFactor->addScaleFactor("2016", pileUpScaleFactor2016);
+    auto pileUpScaleFactor2017Reader = make_shared<PileUpRootReader>("ScaleFactors/PileupHistogram-UL2017-100bins_withVar.root", "ScaleFactors/mcPileupUL2017.root", "pileup", "pu_mc", "pileup_plus", "pileup_minus");
+    auto pileUpScaleFactor2017 = make_shared<PileUpScaleFactor>("PileupScaleFactor2017", pileUpScaleFactor2017Reader);
+    pileUpScaleFactor->addScaleFactor("2017", pileUpScaleFactor2017);
+    auto pileUpScaleFactor2018Reader = make_shared<PileUpRootReader>("ScaleFactors/PileupHistogram-UL2018-100bins_withVar.root", "ScaleFactors/mcPileupUL2018.root", "pileup", "pu_mc", "pileup_plus", "pileup_minus");
+    auto pileUpScaleFactor2018 = make_shared<PileUpScaleFactor>("PileupScaleFactor2018", pileUpScaleFactor2018Reader);
+    pileUpScaleFactor->addScaleFactor("2018", pileUpScaleFactor2018);
+    auto pileUpScaleFactor2016APVReader = make_shared<PileUpRootReader>("ScaleFactors/PileupHistogram-UL2016-100bins_withVar.root", "ScaleFactors/mcPileupUL2016.root", "pileup", "pu_mc", "pileup_plus", "pileup_minus");
+    auto pileUpScaleFactor2016APV = make_shared<PileUpScaleFactor>("PileupScaleFactor2016APV", pileUpScaleFactor2016APVReader);
+    pileUpScaleFactor->addScaleFactor("2016APV", pileUpScaleFactor2016APV);
 
-    auto recoScaleFactor = make_shared<MultiYearScaleFactor<LeptonScaleFactor>>("MuonRecoScaleFactor");
-    recoScaleFactor->addScaleFactor("2016", muonScaleFactor2016);
-    auto iDISOScaleFactor = make_shared<MultiYearScaleFactor<LeptonScaleFactor>>("MuonIDISOScaleFactor", iDISOScaleFactorReader, ParticleType::muon());
-    auto triggerScaleFactor = make_shared<MultiYearScaleFactor<LeptonScaleFactor>>("MuonTriggerScaleFactor", triggerScaleFactorReader, ParticleType::muon());
-    auto electronScaleFactor = make_shared<MultiYearScaleFactor<LeptonScaleFactor>>("ElectronScaleFactor", electronScaleFactorReader, ParticleType::electron());
-    */
+
    // Muon Reco
 //auto recoScaleFactorReader = make_shared<MultiYearScaleFactorReader>();
     auto muonScaleFactor = make_shared<MultiYearScaleFactor>("MuonRecoScaleFactor");
@@ -151,5 +114,5 @@ void CommonOperations::addHiggsScaleFactors(std::shared_ptr<EventModule> eventMo
     //std::cout << "Added trigger scale factor" << std::endl;
     eventMod->addScaleFactor(electronScaleFactorReader);
     //std::cout << "Added electron scale factor" << std::endl;
-    //eventMod->addScaleFactor(pileUpScaleFactor);
+    eventMod->addScaleFactor(pileUpScaleFactor);
 }

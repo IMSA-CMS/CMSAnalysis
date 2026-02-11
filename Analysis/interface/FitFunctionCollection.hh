@@ -20,13 +20,16 @@ class FitFunctionCollection
     FitFunction &get(const std::string &key);
     void saveFunctions(const std::string &fileName, bool append = false);
 
-    FitFunction &operator[](const std::string &key);
-    // FitFunction& operator[](int index);
-    bool checkFunctionsSimilar();
-    std::unordered_map<std::string, FitFunction> &getFunctions();
+	FitFunction& operator[](const std::string& key);
+	// FitFunction& operator[](int index);
+	bool checkFunctionsSimilar();
+	std::unordered_map<std::string, FitFunction>& getFunctions();
 
-  private:
-    std::unordered_map<std::string, FitFunction> functions;
+private:
+	std::unordered_map<std::string, FitFunction> functions;
+	std::string name;
+
+
 };
 
 #endif
