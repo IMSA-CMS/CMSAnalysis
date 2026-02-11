@@ -124,7 +124,10 @@ class PlotFormatter
         // void SetErrors(std::shared_ptr<Process> process, HistVariable histVariable, TH1* original);
 
         TH1* CreateErrorHistogram(THStack* hists, std::vector<std::shared_ptr<Process>> processes);
-
+        
+        double CalculateLogMinimum(const std::vector<TH1*>& hists);
+        double CalculateLogMinimum(THStack* stack);
+        
         bool drawLogo;
         TString extraText;
         std::vector<TH1*> histVector;
@@ -133,6 +136,7 @@ class PlotFormatter
         double upperMasslimit;
         int rebinFactor;
         int firstBin;
+        
 
 };
 
