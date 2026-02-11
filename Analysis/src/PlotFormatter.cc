@@ -313,8 +313,15 @@ TCanvas* PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, Hist
 }
 
 TCanvas* PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle, 
-bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
+bool scaleTodata, bool includeSignal, bool includeData, std::string channelName, std::vector<TF1*> parameterizedFunctions)
 {
+    // parameterizedFunctions[0]->DrawCopy("L");
+    // int parameterizedFunctionsSize = parameterizedFunctions.size();
+    // for (int i = 0; i < parameterizedFunctionsSize; i++)
+    // {
+    //     parameterizedFunctions[i]->DrawCopy("LSAME");
+    // }
+
     std::shared_ptr<Channel> processes = 0;
     TH1* data = nullptr;
     TH1* signal = nullptr;
@@ -497,14 +504,20 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
         data->SetLineWidth(2);
         histVector.push_back(data);
     }
-
+    std::cout << "Size of parameterizedFunctions: " << parameterizedFunctions.size() << "\n";
+    for (auto parameterizedFunction : parameterizedFunctions)
+    {
+        std::cout << "Drawing parameterizedFunction " << parameterizedFunction->GetName() << "\n";
+        parameterizedFunction->DrawCopy("LSAME");
+        std::cout << "Successfully drew\n";
+    }
     hist->SetMinimum(1e-2);
 
 
     ChangeAxisTitles(hist, xAxisTitle, yAxisTitle);
     
     //Draws the legend
-    auto legend = GetLegend(background, processes, data, signal, includeSignal, includeData);
+    auto legend = GetLegend(background, processes, data, signal, includeSignal, includeData, parameterizedFunctions);
     legend->Draw();
     topPad->Update();
 
@@ -572,6 +585,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     bottomPad->Modified();
 
     canvas->Update();
+    
     return canvas;
 }
 
@@ -865,7 +879,7 @@ void PlotFormatter::deleteHists()
     th2Vector.clear();
 }
 
-TLegend* PlotFormatter::GetLegend(THStack* background, std::shared_ptr<Channel> processes, TH1* data, TH1* signal, bool includeSignal, bool includeData)
+TLegend* PlotFormatter::GetLegend(THStack* background, std::shared_ptr<Channel> processes, TH1* data, TH1* signal, bool includeSignal, bool includeData, std::vector<TF1*> parameterizedFunctions)
 {
     //Draws the legend
     auto legend = new TLegend(0.55 - (right/width), 0.75 - (top/height), 1 - (right/width), 1 - (top/height));
@@ -891,6 +905,14 @@ TLegend* PlotFormatter::GetLegend(THStack* background, std::shared_ptr<Channel> 
         toAdd = name;
         legend->AddEntry(obj2, " " + toAdd, "F");
         count++;
+    }
+
+    for (TF1* parameterizedFunction: parameterizedFunctions)
+    {
+        name = parameterizedFunction->GetName();
+        //std::cout << "\n \n \n \nName of signal function in legend: " << name << "\n";
+        toAdd = name;
+        legend->AddEntry(parameterizedFunction, " " + toAdd, "L");
     }
     return legend;
 }

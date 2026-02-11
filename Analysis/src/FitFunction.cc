@@ -247,6 +247,13 @@ std::string FitFunction::getChannel()
     return channel_parameters[0];
 }
 
+double FitFunction::evaluate(double x)
+{
+    TF1* tf1 = getFunction();
+    double result = tf1->Eval(x);
+    return result;
+}
+
 // Helper function for splitting strings
 std::vector<std::string> FitFunction::split(const std::string &str, char delimiter)
 {
