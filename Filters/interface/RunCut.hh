@@ -5,6 +5,8 @@
 #include <vector>
 #include "CMSAnalysis/Utility/interface/Filter.hh"
 
+class Event;
+
 class RunCut : public Filter
 {
 public:

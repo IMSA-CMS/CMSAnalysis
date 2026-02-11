@@ -1,5 +1,6 @@
 #include "CMSAnalysis/Filters/interface/RunCut.hh"
 #include "CMSAnalysis/Filters/interface/Selector.hh"
+#include "CMSAnalysis/Utility/interface/Event.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include <algorithm>
 
@@ -8,9 +9,9 @@ RunCut::RunCut(std::string filename)
   // Read in JSON file and fill runNumbers list
 }
 
-bool RunCut::checkEventInternal(const Event& event, const EventInput* input) const;
+bool RunCut::checkEventInternal(const Event& event, const EventInput* input) const
 {
-  long runNum = inputMod->getRunNum();
+  long runNum = input->getRunNum();
   if (std::find(runNumbers.begin(), runNumbers.end(), runNum) != runNumbers.end())
   {
     return true;
@@ -19,4 +20,4 @@ bool RunCut::checkEventInternal(const Event& event, const EventInput* input) con
   {
     return false;
   }
-};
+}
