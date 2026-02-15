@@ -74,10 +74,12 @@ bool EventModule::process ()
  
     clearHistograms(); //all histograms are cleared and we only fill the ones we are using for this event
     event.clear();
+    // std::cout << "Number of lepton jets before selectors: " << event.getSpecial("leptonJet").getParticles().size() << "\n";
     for (auto selector : selectors)
     {
         selector->selectParticles(getInput(),event);
     }
+    // std::cout << "Number of lepton jets after selectors: " << event.getSpecial("leptonJet").getParticles().size() << "\n";
 
 
     event.setMET(getInput()->getMET());
@@ -199,7 +201,7 @@ void EventModule::addBasicHistograms(const ParticleType& particleType, const Par
                 // }
                 particleHistograms.insert({histName,histogram});
                 histMod->addHistogram(histogram);
-                //std::cout << "Added histogram: " << histName << "\n";
+                std::cout << "Added histogram: " << histName << "\n";
             }
             particleHistograms[histName]->setParticle(part);
         }
