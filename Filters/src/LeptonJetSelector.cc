@@ -42,43 +42,43 @@ void LeptonJetSelector::selectParticles(const EventInput *input, Event &event) c
   for (const auto &particle : particles)
   {
     numOfParticles++;
-    if (particle.getType() == ParticleType::muon() && particle.getPt() > 5)
-    {
-      muonCounter++;
-      auto lepton = Lepton(particle);
-      if (lepton.isLoose())
-      {
-        selected.addParticle(particle);
-        looseMuons++;
-      }
-      if (lepton.isTight())
-      {
-        tightMuons++;
-      }
-      if (lepton.isMedium())
-      {
-        mediumMuons++;
-      }
-    }
-
-    // if (particle.getType() == ParticleType::electron() && particle.getPt() > 5)
+    // if (particle.getType() == ParticleType::muon() && particle.getPt() > 5)
     // {
-    //   electronCounter++;
+    //   muonCounter++;
     //   auto lepton = Lepton(particle);
-    //   if(lepton.isLoose())
+    //   if (lepton.isLoose())
     //   {
     //     selected.addParticle(particle);
-    //     looseElectrons++;
+    //     looseMuons++;
     //   }
-    //   if(lepton.isTight())
+    //   if (lepton.isTight())
     //   {
-    //     tightElectrons++;
+    //     tightMuons++;
     //   }
-    //   if(lepton.isMedium())
+    //   if (lepton.isMedium())
     //   {
-    //     mediumElectrons++;
+    //     mediumMuons++;
     //   }
     // }
+
+    if (particle.getType() == ParticleType::electron() && particle.getPt() > 5)
+    {
+      electronCounter++;
+      auto lepton = Lepton(particle);
+      if(lepton.isLoose())
+      {
+        selected.addParticle(particle);
+        looseElectrons++;
+      }
+      if(lepton.isTight())
+      {
+        tightElectrons++;
+      }
+      if(lepton.isMedium())
+      {
+        mediumElectrons++;
+      }
+    }
 
     // Trying adding photons as well
     //   if (particle.getType() == ParticleType::photon() && particle.getPt() > 5)  // put work in this if statement

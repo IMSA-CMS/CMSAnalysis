@@ -265,11 +265,11 @@ std::pair<std::pair<Particle, Particle>, std::pair<Particle, Particle>> Utility:
             positiveLeptons.addParticle(lepton);
             if (lepton.getType() == ParticleType::electron())
             {
-                posElectronCount += 1;
+                ++posElectronCount;
             }
             if (lepton.getType() == ParticleType::muon())
             {
-                posMuonCount += 1;
+                ++posMuonCount;
             }
         }
         else if (lepton.getCharge() == -1)
@@ -277,11 +277,11 @@ std::pair<std::pair<Particle, Particle>, std::pair<Particle, Particle>> Utility:
             negativeLeptons.addParticle(lepton);
             if (lepton.getType() == ParticleType::electron())
             {
-                negElectronCount += 1;
+                ++negElectronCount;
             }
             if (lepton.getType() == ParticleType::muon())
             {
-                negMuonCount += 1;
+                ++negMuonCount;
             }
         }
     }

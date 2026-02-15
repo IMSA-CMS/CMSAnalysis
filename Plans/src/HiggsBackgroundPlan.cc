@@ -91,11 +91,18 @@ void HiggsBackgroundPlan::initialize()
         EventInput::RecoLevel::Reco, "Reco Opposite Sign Invariant Mass", 1000, 0, 2000);
 
     auto positiveNegativeInvMassHist =
-        make_shared<TwoInvariantMassesHist>("Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);
-    auto xProjection = make_shared<HistogramPrototype2DProjection>("Reco Invariant Mass Background X Projection",
+        make_shared<TwoInvariantMassesHist>("Reco Invariant Mass", 100, 100, 0, 0, 2000, 2000);
+    auto xProjection = make_shared<HistogramPrototype2DProjection>("Reco Invariant Mass X Projection",
                                                                    positiveNegativeInvMassHist, true, 2000);
-    auto yProjection = make_shared<HistogramPrototype2DProjection>("Reco Invariant Mass Background Y Projection",
+    auto yProjection = make_shared<HistogramPrototype2DProjection>("Reco Invariant Mass Y Projection",
                                                                    positiveNegativeInvMassHist, false, 2000);
+
+    auto positiveNegativeInvMassHistCorrected =
+        make_shared<TwoInvariantMassesHist>("Corrected Reco Invariant Mass", 100, 100, 0, 0, 2000, 2000, true);
+    auto xProjectionCorrected = make_shared<HistogramPrototype2DProjection>("Corrected Reco Invariant Mass X Projection",
+                                                                   positiveNegativeInvMassHistCorrected, true, 2000);
+    auto yProjectionCorrected = make_shared<HistogramPrototype2DProjection>("Corrected Reco Invariant Mass Y Projection",
+                                                                   positiveNegativeInvMassHistCorrected, false, 2000);
 
     auto highestLeptonPt = make_shared<PtHist>(EventInput::RecoLevel::Reco, "Highest Lepton Pt", 100, 0, 1000);
 
@@ -107,11 +114,14 @@ void HiggsBackgroundPlan::initialize()
     eventHistMod->addHistogram(recoSameSignInvMassHist);
     eventHistMod->addHistogram(sameSignInvMassHist);
     eventHistMod->addHistogram(positiveNegativeInvMassHist);
+    eventHistMod->addHistogram(positiveNegativeInvMassHistCorrected);
     eventHistMod->addHistogram(oppositeSignInvMassHist);
     eventHistMod->addHistogram(recoOppositeSignInvMassHist);
     eventHistMod->addHistogram(highestLeptonPt);
     eventHistMod->addHistogram(xProjection);
     eventHistMod->addHistogram(yProjection);
+    eventHistMod->addHistogram(xProjectionCorrected);
+    eventHistMod->addHistogram(yProjectionCorrected);
 
     // modules.addProductionModule(metMod);
     // //Changed because EventModule inherits from ProductionModule now
