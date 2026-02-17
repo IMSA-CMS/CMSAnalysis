@@ -29,7 +29,9 @@ class Event
         // gets a special object by key
         ParticleCollection<Particle> getSpecial(std::string key) const;
         // get all particles
-        ParticleCollection<Particle> getParticles(EventInput::RecoLevel level = EventInput::RecoLevel::Reco) const;
+        ParticleCollection<Particle> getParticles(EventInput::RecoLevel level = EventInput::RecoLevel::Reco, bool includeSpecials = true) const;
+        // get all leptons
+        ParticleCollection<Particle> getLeptons(EventInput::RecoLevel level = EventInput::RecoLevel::Reco) const;
 
         void addElectron(Electron electron);
         void addMuon(Muon muon);
@@ -45,7 +47,11 @@ class Event
 
         // Clears all ParticleCollections/specialObjects, for reuse of the same Event object
         void clear();
+
         const std::shared_ptr<FileParams> getFileParams() const {return input->getFileParams();}
+        int getNumPileUpInteractions() const {return input->getNumPileUpInteractions();}
+        unsigned long long getEventIDNum() const {return input->getEventIDNum();}
+        long getRunNum() const {return input->getRunNum();}
         void setInput(const EventInput* input1) {input = input1;}
     private:
         //make particlecollections

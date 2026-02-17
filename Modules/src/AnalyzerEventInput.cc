@@ -9,7 +9,7 @@ AnalyzerEventInput::AnalyzerEventInput(const EventInterface **iEventInterface) :
 }
 
 
-ParticleCollection<Particle> AnalyzerEventInput::getParticles(RecoLevel level, const ParticleType& particleType) const
+ParticleCollection<Particle> AnalyzerEventInput::getParticles(RecoLevel level, const ParticleType& particleType, bool includeSpecials) const
 {
     ParticleCollection<Particle> particleList;
     if (level == RecoLevel::GenSim)
