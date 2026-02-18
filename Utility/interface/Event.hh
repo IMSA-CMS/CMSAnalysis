@@ -52,6 +52,7 @@ class Event
         int getNumPileUpInteractions() const {return input->getNumPileUpInteractions();}
         unsigned long long getEventIDNum() const {return input->getEventIDNum();}
         long getRunNum() const {return input->getRunNum();}
+        int getLumiBlock() const {return input->getLumiBlock();}
         void setInput(const EventInput* input1) {input = input1;}
     private:
         //make particlecollections

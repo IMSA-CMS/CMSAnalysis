@@ -44,6 +44,7 @@ public:
     virtual reco::Candidate::LorentzVector getMET() const = 0;
     virtual unsigned long long getEventIDNum() const = 0; 
     virtual long getRunNum() const = 0;
+    virtual int getLumiBlock() const = 0;
 
     virtual const std::shared_ptr<FileParams> getFileParams() const = 0;
 

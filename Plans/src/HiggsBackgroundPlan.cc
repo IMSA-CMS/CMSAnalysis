@@ -8,6 +8,7 @@
 #include "CMSAnalysis/Filters/interface/HiggsTriggerCut.hh"
 #include "CMSAnalysis/Filters/interface/HiggsZVetoFilter.hh"
 #include "CMSAnalysis/Filters/interface/NLeptonsFilter.hh"
+#include "CMSAnalysis/Filters/interface/RunCut.hh"
 #include "CMSAnalysis/Histograms/interface/HistogramPrototype2DProjection.hh"
 #include "CMSAnalysis/Histograms/interface/Histograms.hh"
 #include "CMSAnalysis/Histograms/interface/METHist.hh"
@@ -24,6 +25,7 @@
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
 #include "CMSAnalysis/Modules/interface/TriggerModule.hh"
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
+
 #include <memory>
 
 using std::make_shared;
@@ -36,6 +38,7 @@ void HiggsBackgroundPlan::initialize()
     auto hppSelector = make_shared<HPlusPlusGenSimSelector>();
     auto higgsSelector = make_shared<HiggsSelector>();
     auto higgsCut = make_shared<HiggsCut>();
+    auto runCut = make_shared<RunCut>("runs.json");
     // auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
     auto eventDump = make_shared<GenSimEventDumpModule>(5);
     auto bJetCut = make_shared<BJetCut>();
@@ -47,6 +50,7 @@ void HiggsBackgroundPlan::initialize()
     eventMod->addCut(triggerCut);
     eventMod->addCut(higgsCut);
     eventMod->addCut(bJetCut);
+    //eventMod->addCut(runCut);
     // eventMod->addCut(quarkoniaCut);
     CommonOperations::addHiggsScaleFactors(eventMod);
 

@@ -79,6 +79,11 @@ long AnalyzerEventInput::getRunNum() const
     return (*eventInterface)->getRunNum();
 }
 
+int AnalyzerEventInput::getLumiBlock() const
+{
+    return (*eventInterface)->getLumiBlock();
+}
+
 std::vector<bool> AnalyzerEventInput::getTriggerResults(std::string subProcess) const
 {
     return (*eventInterface)->getTriggerResults(subProcess);

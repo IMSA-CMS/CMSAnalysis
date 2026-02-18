@@ -32,6 +32,7 @@ class LocalEventInput : public EventInput
         virtual reco::Candidate::LorentzVector getMET() const override;
         virtual unsigned long long getEventIDNum() const override; 
         virtual long getRunNum() const override; 
+        virtual int getLumiBlock() const override;
         virtual bool checkTrigger(std::string triggerName, std::string subProcess) const override;
         virtual const std::shared_ptr<FileParams> getFileParams() const override;
 

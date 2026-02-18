@@ -53,6 +53,11 @@ long LocalEventInput::getRunNum() const
     return event->getRunNum(); 
 } 
 
+int LocalEventInput::getLumiBlock() const
+{
+    return event->getLumiBlock();
+}
+
 std::vector<bool> LocalEventInput::getTriggerResults(std::string subProcess) const
 {
     throw std::runtime_error("calling getTrigger___() on a local event doesn't make sense");
