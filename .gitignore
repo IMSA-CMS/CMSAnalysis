@@ -22,9 +22,12 @@
 **/bin/*.txt
 *.txt
 
-# Keep all textfiles in textfiles
+# Keep all text files in textfiles
 !DataCollection/bin/textfiles/*.txt
 !DataCollection/bin/textfiles/*/*.txt
+
+# Also Root files in textfiles/ScaleFactors
+!DataCollection/bin/textfiles/ScaleFactors/*.root
 
 #Remove temporary backups
 *backup.txt

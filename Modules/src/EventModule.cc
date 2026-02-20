@@ -74,38 +74,34 @@ bool EventModule::process ()
  
     clearHistograms(); //all histograms are cleared and we only fill the ones we are using for this event
     event.clear();
+    // std::cout << "Number of lepton jets before selectors: " << event.getSpecial("leptonJet").getParticles().size() << "\n";
     for (auto selector : selectors)
     {
         selector->selectParticles(getInput(),event);
     }
-
+    // std::cout << "Number of lepton jets after selectors: " << event.getSpecial("leptonJet").getParticles().size() << "\n";
 
     event.setMET(getInput()->getMET());
     // auto end_1 = std::chrono::steady_clock::now();
     // time_1 += end_1 - start_1;
 
-
-
-
     // auto start_2 = std::chrono::steady_clock::now();
     bool passesCuts = true;
-
 
     //std::cout<<"\nthe cut size is: " <<cuts.size() << "\n";
     for (size_t i = 0; i < cuts.size(); i++) //The loop is not being entered because the cut size is 0 for our data set
     {
         if (!(cuts[i]->checkEvent(event, getInput(), passesCuts)))
         {
+            //std::cout << "Event failed cut: " << typeid(*(cuts[i])).name() << "\n";
             passesCuts = false;
         }
     }
-
 
     if (!passesCuts)
     {
         return false;
     }
-
 
     // auto end_2 = std::chrono::steady_clock::now();
     // time_2 += end_2 - start_2;

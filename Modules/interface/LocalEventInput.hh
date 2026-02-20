@@ -20,8 +20,8 @@ class LocalEventInput : public EventInput
     public:
         LocalEventInput(const Event* event1);
 
-        
-        virtual ParticleCollection<Particle> getParticles(RecoLevel level, const ParticleType& particleType = ParticleType::none()) const override;
+        virtual ParticleCollection<Particle> getParticles(RecoLevel level, const ParticleType& particleType = ParticleType::none(),
+            bool includeSpecials = false) const override;
         virtual ParticleCollection<Particle> getJets(RecoLevel level) const override;
         virtual ParticleCollection<Particle> getSpecial(std::string key) const override;
         virtual int getNumPileUpInteractions() const override;
@@ -32,6 +32,7 @@ class LocalEventInput : public EventInput
         virtual reco::Candidate::LorentzVector getMET() const override;
         virtual unsigned long long getEventIDNum() const override; 
         virtual long getRunNum() const override; 
+        virtual int getLumiBlock() const override;
         virtual bool checkTrigger(std::string triggerName, std::string subProcess) const override;
         virtual const std::shared_ptr<FileParams> getFileParams() const override;
 

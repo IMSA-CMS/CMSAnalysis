@@ -2,21 +2,23 @@
 #define RUNCUT_HH
 
 #include <memory>
-#include <vector>
-#include "CMSAnalysis/Utility/interface/Filter.hh"
+#include <set>
+#include <unordered_map>
+
+#include "CMSAnalysis/Filters/interface/Cut.hh"
 
 class Event;
 
-class RunCut : public Filter
+class RunCut : public Cut
 {
 public:
   RunCut(std::string filename);
 
 protected:
-  virtual bool checkEventInternal(const Event& event, const EventInput* input) const;
+  virtual bool checkEventInternal(const Event& event, const EventInput* input) const override;
 
 private: 
-  std::vector<long> runNumbers;
+  std::unordered_map<long, std::set<std::pair<int, int>>> runAndLumiRanges;
 
 };
 

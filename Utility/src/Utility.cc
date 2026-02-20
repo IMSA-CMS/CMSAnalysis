@@ -117,6 +117,7 @@ int Utility::gcf(std::vector<int> nums)
 
 std::string Utility::identifyChannel(ParticleCollection<Particle> particles)
 {
+    particles.sort(); // sort by pt, highest first
     std::string positiveLeptons;
     std::string negativeLeptons;
 
@@ -165,6 +166,8 @@ std::string Utility::identifyChannel(ParticleCollection<Particle> particles)
     std::ranges::sort(positiveLeptons);
     std::ranges::sort(negativeLeptons);
 
+    //std::cout << "Positive leptons: " << positiveLeptons << " Negative leptons: " << negativeLeptons << std::endl;
+
     std::string first;
     std::string second;
 
@@ -206,7 +209,7 @@ std::string Utility::identifyChannel(ParticleCollection<Particle> particles)
     signature = substitute(signature, "b", "u");
     signature = substitute(signature, "c", "t");
 
-    // std::cout << "Signature: " << signature << " (length = " << signature.length() << ")"
+    //std::cout << "Signature: " << signature << " (length = " << signature.length() << ")\n";
     //<< " Positives: " << positiveLeptons << " Negatives: " << negativeLeptons << std::endl;
     //  if (signature.size() > 4)
     //    {
@@ -265,11 +268,11 @@ std::pair<std::pair<Particle, Particle>, std::pair<Particle, Particle>> Utility:
             positiveLeptons.addParticle(lepton);
             if (lepton.getType() == ParticleType::electron())
             {
-                posElectronCount += 1;
+                ++posElectronCount;
             }
             if (lepton.getType() == ParticleType::muon())
             {
-                posMuonCount += 1;
+                ++posMuonCount;
             }
         }
         else if (lepton.getCharge() == -1)
@@ -277,11 +280,11 @@ std::pair<std::pair<Particle, Particle>, std::pair<Particle, Particle>> Utility:
             negativeLeptons.addParticle(lepton);
             if (lepton.getType() == ParticleType::electron())
             {
-                negElectronCount += 1;
+                ++negElectronCount;
             }
             if (lepton.getType() == ParticleType::muon())
             {
-                negMuonCount += 1;
+                ++negMuonCount;
             }
         }
     }

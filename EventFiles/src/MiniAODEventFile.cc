@@ -183,3 +183,8 @@ std::vector<double> MiniAODEventFile::getPDFWeights() const
 {
     throw "Function not implemented";
 }
+
+int MiniAODEventFile::getLumiBlock() const
+{
+    throw std::runtime_error("MiniAODEventFile has no implementation of getLumiBlock - needs to be implemented");
+}
