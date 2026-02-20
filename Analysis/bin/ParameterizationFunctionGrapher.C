@@ -151,7 +151,8 @@ void ParameterizationFunctionGrapher()
 	// plotter.completePlot(analysis, HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
 	// 	"Mass", "Events", false, true, false, "eeee");
 	std::string signalParametersFile = "/uscms/home/bhobbs/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Analysis/bin/fitting/H++SignalParameterFunctions.txt";  
-	std::string backgroundParametersFile = "/uscms/home/bhobbs/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Analysis/bin/fitting/OtherBackgroundFunctions.txt"; 
+	std::string backgroundParametersFile = "fitting/H++BackgroundFunctions.txt";
+	//std::string backgroundParametersFile = "/uscms/home/bhobbs/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Analysis/bin/fitting/OtherBackgroundFunctions.txt"; 
 	//std::vector<std::string> channelsToCheck = {"eeee", "uuuu"};
 	auto signalParameters = FitFunctionCollection::loadFunctions(signalParametersFile); 
 	auto backgroundParameters = FitFunctionCollection::loadFunctions(backgroundParametersFile);
@@ -187,18 +188,49 @@ void ParameterizationFunctionGrapher()
 	std::vector<FitFunction> signalFitFunctions = {};
 	signalFitFunctions.push_back(eeeeChannel);
 	//signalFitFunctions.push_back(uuuuChannel);
-	
-	std::vector<TF1*> signalTf1s = {};
+
+	std::vector<FitFunction> backgroundFitFunctions = {};
+	std::vector<std::string> backgroundChannels = {"eeee"};
+	std::vector<std::string> exclude = {"ZPeak", "Up", "Down", "Y Projection"};
+	for (std::string channel : backgroundChannels)
+	{
+		for (auto& pair : backgroundParameterFunctions)
+		{
+			auto& function = pair.second;
+			// std::cout << "function.getChannel(): " << function.getChannel() << "\n";
+			// std::cout << "function.getParameterName(): " << function.getParameterName() << "\n";
+			bool excludeFromGraph = false;
+			for (std::string stringToExclude : exclude)
+			{
+				if (containsSubstring(function.getChannel(), stringToExclude) || 
+				containsSubstring(function.getParameterName(), stringToExclude))
+				{
+					excludeFromGraph = true;
+				}
+			}
+			if (containsSubstring(function.getChannel(), channel) && !excludeFromGraph)
+			{
+				backgroundFitFunctions.push_back(function);
+			}
+		}
+	}
+	std::cout << "backgroundFitFunctions size: " << backgroundFitFunctions.size() << "\n";
+	std::vector<TF1*> signalAndBackgroundTf1s = {};
 	for (auto& signalFitFunction : signalFitFunctions)
 	{
 		auto tf1Reference = signalFitFunction.getFunction();
-		signalTf1s.push_back(tf1Reference);
+		signalAndBackgroundTf1s.push_back(tf1Reference);
+	}
+	for (auto& backgroundFitFunction : backgroundFitFunctions)
+	{
+		auto tf1Reference = backgroundFitFunction.getFunction();
+		signalAndBackgroundTf1s.push_back(tf1Reference);
 	}
 	auto analysis = std::make_shared<HiggsCompleteAnalysis>();
 	PlotFormatter plotter = PlotFormatter(true, "test");
-	std::cout << "\n \n \n \neeee tf1: " << signalTf1s[0]->GetName() << "\n \n \n \n";
+	std::cout << "\n \n \n \neeee tf1: " << signalAndBackgroundTf1s[0]->GetName() << "\n \n \n \n";
 	plotter.completePlot(analysis, HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
-		"Mass", "Events", false, true, false, "eeee", signalTf1s);
+		"Mass", "Events", false, true, false, "eeee", signalAndBackgroundTf1s);
 
 
 	// std::cout << "Organizing functions...\n";

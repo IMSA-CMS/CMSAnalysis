@@ -271,15 +271,15 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
             //processes.push_back(other);
             processes.push_back(wJetsBackground);
 
-            for(std::shared_ptr<Process> process : processes)
-            {
-                for(std::string systematic : systematics)
-                {
-                    auto sys = process->calcSystematic(HistVariable(HistVariable::VariableType::SameSignInvariantMass),
-                        systematic, true); 
-                    process->addSystematic(sys);
-                }
-            }
+            // for(std::shared_ptr<Process> process : processes)
+            // {
+            //     for(std::string systematic : systematics)
+            //     {
+            //         auto sys = process->calcSystematic(HistVariable(HistVariable::VariableType::SameSignInvariantMass),
+            //             systematic, true); 
+            //         process->addSystematic(sys);
+            //     }
+            // }
 
             std::string modeLabel = zSelection ? "_ZPeak" : "";
 
