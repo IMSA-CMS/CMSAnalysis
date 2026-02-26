@@ -71,7 +71,8 @@ void EventModule::finalize()
 bool EventModule::process ()
 {
     //auto start_1 = std::chrono::steady_clock::now();
- 
+    //std::cout << "Pileup (EventInput): " << getInput()->getNumPileUpInteractions() << std::endl;
+    //std::cout << "Pileup (Event): " << event.getNumPileUpInteractions() << std::endl;
     clearHistograms(); //all histograms are cleared and we only fill the ones we are using for this event
     event.clear();
     // std::cout << "Number of lepton jets before selectors: " << event.getSpecial("leptonJet").getParticles().size() << "\n";
