@@ -38,7 +38,9 @@ void HiggsBackgroundPlan::initialize()
     auto hppSelector = make_shared<HPlusPlusGenSimSelector>();
     auto higgsSelector = make_shared<HiggsSelector>();
     auto higgsCut = make_shared<HiggsCut>();
-    auto runCut = make_shared<RunCut>("runs.json");
+    auto runCut = make_shared<RunCut>(std::vector<std::string>{"ScaleFactors/Cert_271036-284044_13TeV_Legacy2016_Collisions16_JSON.txt",
+    "ScaleFactors/Cert_294927-306462_13TeV_UL2017_Collisions17_GoldenJSON.txt",
+    "ScaleFactors/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt" });
     // auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
     auto eventDump = make_shared<GenSimEventDumpModule>(5);
     auto bJetCut = make_shared<BJetCut>();
@@ -47,10 +49,11 @@ void HiggsBackgroundPlan::initialize()
     auto triggerCut = make_shared<HiggsTriggerCut>();
     eventMod->addSelector(hppSelector);
     eventMod->addSelector(higgsSelector);
+    eventMod->addCut(runCut);
     eventMod->addCut(triggerCut);
     eventMod->addCut(higgsCut);
     eventMod->addCut(bJetCut);
-    //eventMod->addCut(runCut);
+
     // eventMod->addCut(quarkoniaCut);
     CommonOperations::addHiggsScaleFactors(eventMod);
 

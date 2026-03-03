@@ -30,9 +30,9 @@ const std::vector<std::string> systematics{"ElectronScaleFactor", "MuonIDISOScal
 // Actual masses for the Higgs signal
 const std::vector<int> HiggsCompleteAnalysis::massTargets{500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
 
-constexpr auto bgFilePath = "/uscms/home/bhenning/nobackup/HiggsWithSystematics1/";
-constexpr auto signalFilePath = "/uscms/home/bhenning/nobackup/HiggsWithSystematics1/";
-constexpr auto dataFilePath = "/uscms/home/bhenning/nobackup/HiggsWithSystematics1/";
+constexpr auto bgFilePath = "/uscms/home/bhenning/nobackup/HiggsReprocessing/";
+constexpr auto signalFilePath = "/uscms/home/bhenning/nobackup/HiggsReprocessing/";
+constexpr auto dataFilePath = "/uscms/home/bhenning/nobackup/HiggsReprocessing/";
 
 double HiggsCompleteAnalysis::getBranchingRatio(const std::string &channel) const
 {

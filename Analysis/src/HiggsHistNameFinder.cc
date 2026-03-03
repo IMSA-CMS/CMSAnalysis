@@ -32,7 +32,10 @@ std::string HiggsHistNameFinder::getHistName(const HistVariable &histVariable) c
     {
         zSel = "ZVeto/";
     }
-    const std::string path = "hists/" + syst + zSel + "Reco " + reco + "/" + genSimStr + histVariable.getName();
+
+    std::string lowMassStr = lowMass ? "LowMass/" : "HighMass/";
+
+    const std::string path = "hists/" + syst + zSel + "Reco " + reco + "/" + genSimStr + lowMassStr + histVariable.getName();
 
     return path;
 
