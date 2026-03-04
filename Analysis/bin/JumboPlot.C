@@ -219,8 +219,6 @@ void JumboPlot()
 		HistVariable(HistVariable::VariableType::InvariantMass, "", false, true),
 
 		HistVariable(HistVariable::VariableType::RecoOppositeSignInvariantMass),
-		HistVariable(HistVariable::VariableType::RecoOppositeSignInvariantMass),
-		HistVariable(HistVariable::VariableType::RecoSameSignInvariantMass),
 		HistVariable(HistVariable::VariableType::RecoSameSignInvariantMass),
 
 		HistVariable(HistVariable::VariableType::MET),
