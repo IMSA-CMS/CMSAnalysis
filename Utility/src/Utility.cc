@@ -2,7 +2,9 @@
 #include <algorithm>
 #include <boost/algorithm/string/erase.hpp>
 #include <cmath>
+#include <fstream>
 #include <numeric>
+#include <regex>
 #include <string>
 #include <vector>
 
@@ -117,6 +119,7 @@ int Utility::gcf(std::vector<int> nums)
 
 std::string Utility::identifyChannel(ParticleCollection<Particle> particles)
 {
+    particles.sort(); // sort by pt, highest first
     std::string positiveLeptons;
     std::string negativeLeptons;
 
@@ -165,6 +168,8 @@ std::string Utility::identifyChannel(ParticleCollection<Particle> particles)
     std::ranges::sort(positiveLeptons);
     std::ranges::sort(negativeLeptons);
 
+    //std::cout << "Positive leptons: " << positiveLeptons << " Negative leptons: " << negativeLeptons << std::endl;
+
     std::string first;
     std::string second;
 
@@ -206,7 +211,7 @@ std::string Utility::identifyChannel(ParticleCollection<Particle> particles)
     signature = substitute(signature, "b", "u");
     signature = substitute(signature, "c", "t");
 
-    // std::cout << "Signature: " << signature << " (length = " << signature.length() << ")"
+    //std::cout << "Signature: " << signature << " (length = " << signature.length() << ")\n";
     //<< " Positives: " << positiveLeptons << " Negatives: " << negativeLeptons << std::endl;
     //  if (signature.size() > 4)
     //    {
@@ -265,11 +270,11 @@ std::pair<std::pair<Particle, Particle>, std::pair<Particle, Particle>> Utility:
             positiveLeptons.addParticle(lepton);
             if (lepton.getType() == ParticleType::electron())
             {
-                posElectronCount += 1;
+                ++posElectronCount;
             }
             if (lepton.getType() == ParticleType::muon())
             {
-                posMuonCount += 1;
+                ++posMuonCount;
             }
         }
         else if (lepton.getCharge() == -1)
@@ -277,11 +282,11 @@ std::pair<std::pair<Particle, Particle>, std::pair<Particle, Particle>> Utility:
             negativeLeptons.addParticle(lepton);
             if (lepton.getType() == ParticleType::electron())
             {
-                negElectronCount += 1;
+                ++negElectronCount;
             }
             if (lepton.getType() == ParticleType::muon())
             {
-                negMuonCount += 1;
+                ++negMuonCount;
             }
         }
     }
@@ -303,4 +308,39 @@ std::pair<std::pair<Particle, Particle>, std::pair<Particle, Particle>> Utility:
     {
         return {{negativeLeptons[0], negativeLeptons[1]}, {positiveLeptons[0], positiveLeptons[1]}};
     }
+}
+
+jsoncollector::Json::Value Utility::loadJSONFile(const std::string& filename)
+{
+    std::ifstream file(Utility::getFullPath(filename));
+    if (!file.is_open()) 
+    {
+        std::cerr << "Unable to open file: " << filename << std::endl;
+        return "";
+    }
+
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+    std::string jsonContent = buffer.str();
+
+    // Replace Infinity and NaN with specific values
+    jsonContent = std::regex_replace(jsonContent, std::regex("Infinity"), "1e30"); // or "null"
+    jsonContent = std::regex_replace(jsonContent, std::regex("NaN"), "null");
+
+    if (jsonContent.empty())
+    {
+        throw std::runtime_error("JSON content is empty for file: " + filename);
+    }
+
+    // Parse the preprocessed JSON content
+    std::istringstream jsonStream(jsonContent); 
+    jsoncollector::Json::Value output;
+    jsoncollector::Json::Reader reader;
+    if (!reader.parse(jsonStream, output))
+    {
+        std::cerr << "Failed to parse JSON from file: " << filename << std::endl;
+        std::cerr << "Error: " << reader.getFormatedErrorMessages() << std::endl;
+        throw std::runtime_error("Failed to parse JSON from file: " + filename);
+    }
+    return output;
 }

@@ -31,7 +31,8 @@ public:
     };
 
     virtual ParticleCollection<Lepton> getLeptons(RecoLevel level) const;
-    virtual ParticleCollection<Particle> getParticles(RecoLevel level, const ParticleType& particleType = ParticleType::none()) const = 0;
+    virtual ParticleCollection<Particle> getParticles(RecoLevel level, const ParticleType& particleType = ParticleType::none(), 
+        bool includeSpecials = false) const = 0;
     virtual ParticleCollection<Particle> getJets(RecoLevel level) const = 0;
     virtual ParticleCollection<Particle> getSpecial(std::string key) const = 0;
     virtual int getNumPileUpInteractions() const = 0;
@@ -43,6 +44,7 @@ public:
     virtual reco::Candidate::LorentzVector getMET() const = 0;
     virtual unsigned long long getEventIDNum() const = 0; 
     virtual long getRunNum() const = 0;
+    virtual int getLumiBlock() const = 0;
 
     virtual const std::shared_ptr<FileParams> getFileParams() const = 0;
 

@@ -36,9 +36,10 @@ class HistVariable
     };
 
     HistVariable(ParticleType type, int order, VariableType var, std::string unit = "", bool is2DHistX = false,
-                 bool is2DHistY = false);
+                 bool is2DHistY = false, bool isCorrected = false);
 
-    HistVariable(VariableType var, std::string unit = "", bool is2DHistX = false, bool is2DHistY = false);
+    HistVariable(VariableType var, std::string unit = "", bool is2DHistX = false, bool is2DHistY = false,
+                bool isCorrected = false);
 
     std::string getName() const;
 
@@ -91,6 +92,7 @@ class HistVariable
     std::string unit;
     bool is2DHistX_ = false;
     bool is2DHistY_ = false;
+    bool isCorrected = false;
     ScaleFactor::SystematicType type = ScaleFactor::SystematicType::Nominal;
     std::string systematicName;
 };

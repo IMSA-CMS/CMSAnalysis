@@ -20,7 +20,7 @@ input(iinput)
 {
 }
 
-ParticleCollection<Particle> Event::getParticles(EventInput::RecoLevel level) const
+ParticleCollection<Particle> Event::getParticles(EventInput::RecoLevel level, bool includeSpecials) const
 {
     ParticleCollection<Particle> particleList;
    
@@ -50,11 +50,14 @@ ParticleCollection<Particle> Event::getParticles(EventInput::RecoLevel level) co
         {
             particleList.addParticle(Particle(p));
         }
-        for (auto& [key,value] : specialObjects)
+        if (includeSpecials)
         {
-            for (const auto& p: value.getParticles())
+            for (auto& [key,value] : specialObjects)
             {
-            particleList.addParticle(Particle(p)); 
+                for (const auto& p: value.getParticles())
+                {
+                particleList.addParticle(Particle(p)); 
+                }
             }
         }
     }
@@ -67,6 +70,39 @@ ParticleCollection<Particle> Event::getParticles(EventInput::RecoLevel level) co
     }
 
     return particleList;
+}
+
+ParticleCollection<Particle> Event::getLeptons(EventInput::RecoLevel level) const
+{
+    ParticleCollection<Particle> leptonList;
+   
+    if (level == EventInput::RecoLevel::Reco)
+    {
+        for (const auto& p: electrons.getParticles())
+        {
+            leptonList.addParticle(Particle(p));
+        }
+        for (const auto& p: muons.getParticles())
+        {
+            leptonList.addParticle(Particle(p));
+        }
+        for (const auto& p: taus.getParticles())
+        {
+            leptonList.addParticle(Particle(p));
+        }
+    }
+    else if (level == EventInput::RecoLevel::GenSim)
+    {
+        for (const auto& p: genSimParticles.getParticles())
+        {
+            if (p.getType() == ParticleType::electron() || p.getType() == ParticleType::muon() || p.getType() == ParticleType::tau())
+            {
+                leptonList.addParticle(Particle(p));
+            }
+        }
+    }
+
+    return leptonList;
 }
 
 void Event::addElectron(Electron electron) 
