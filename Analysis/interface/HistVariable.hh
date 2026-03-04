@@ -30,6 +30,7 @@ class HistVariable
         RecoSameSignInvariantMass,
         RecoOppositeSignInvariantMass,
         DarkPhotonBDTOutput,
+        DarkPhotonSMHiggsBDTOutput,
         LeptonJetMass,
         LeptonJetDeltaR,
     };

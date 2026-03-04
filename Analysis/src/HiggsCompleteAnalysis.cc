@@ -9,6 +9,7 @@
 #include "CMSAnalysis/Analysis/interface/SingleProcess.hh"
 #include "CMSAnalysis/Analysis/interface/WindowEstimator.hh"
 #include "CMSAnalysis/Utility/interface/ParticleType.hh"
+#include "CMSAnalysis/Analysis/interface/ShapeSystematic.hh"
 #include "TH1.h"
 #include <memory>
 #include <string>
@@ -271,12 +272,11 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
             //processes.push_back(other);
             processes.push_back(wJetsBackground);
 
-            for(std::shared_ptr<Process> process : processes)
+            for (auto process : processes)
             {
-                for(std::string systematic : systematics)
+                for (auto systematic : systematics)
                 {
-                    auto sys = process->calcSystematic(HistVariable(HistVariable::VariableType::SameSignInvariantMass),
-                        systematic, true); 
+                    auto sys = std::make_shared<ShapeSystematic>(systematic);
                     process->addSystematic(sys);
                 }
             }

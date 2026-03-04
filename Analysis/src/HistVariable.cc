@@ -108,6 +108,9 @@ std::string HistVariable::getName() const
     case HistVariable::VariableType::DarkPhotonBDTOutput:
         name+= "LeptonJetMLOutputMain";
         break;
+    case HistVariable::VariableType::DarkPhotonSMHiggsBDTOutput:
+        name+= "LeptonJetMLOutputForHiggs125Analysis";
+        break;
     case HistVariable::VariableType::LeptonJetMass:
         name += "Lepton Jet Mass";
         break;

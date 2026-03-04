@@ -570,7 +570,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     //Draws the other histogram   
     //DrawOtherHistograms(background, signal, data); 
     //std::cout <<"before creating histogram" << std::endl;
-    auto backgroundHist = CreateErrorHistogram(background,  backgroundProcesses);
+    auto backgroundHist = CreateErrorHistogram(background,  backgroundProcesses, histvariable);
     backgroundHist->SetFillColor(kBlack);
     backgroundHist->SetFillStyle(3018);
     // backgroundHist->SetLineColor(kRed);
@@ -1129,7 +1129,7 @@ void PlotFormatter::Bin(std::vector<TH1*>& hists, TH1*& first, int& firstIndex, 
 //     // errorGraph->SetFillColor(kBlack);
 // }
 
-TH1* PlotFormatter::CreateErrorHistogram(THStack* hists, std::vector<std::shared_ptr<Process>> processes)
+TH1* PlotFormatter::CreateErrorHistogram(THStack* hists, std::vector<std::shared_ptr<Process>> processes, HistVariable histVar)
 {
     // auto backgroundHist = hists->GetHistogram();
     // backgroundHist->SetFillColor(kBlack);
@@ -1152,21 +1152,40 @@ TH1* PlotFormatter::CreateErrorHistogram(THStack* hists, std::vector<std::shared
         }
     }
 
-    auto systematicHist = Process::combineSystematics(processes, backgroundHist);
+    auto systematicHist = processes.at(0)->combineSystematics(processes, backgroundHist, histVar);
+
+    
 
     //loop through bin by bin in backgroundHist and set the error using setBinError
     for (int i = 0; i < backgroundHist->GetNbinsX(); i++)
     {
         // for (auto hist : systematicHist)
         // {
-            double error1 = systematicHist.first->GetBinContent(i) * backgroundHist->GetBinContent(i) + backgroundHist->GetBinContent(i);
-            double error2 = -systematicHist.second->GetBinContent(i) * backgroundHist->GetBinContent(i) + backgroundHist->GetBinContent(i);
-            // std::cout << "error1: " << error1 << ", error2: " << error2 << std::endl;
-            // std::cout << "bin: " << backgroundHist->GetBinContent(i) << std::endl;
-            // std::cout << "sum of errors: " << error1 + error2 << std::endl;
-            backgroundHist->SetBinContent(i, (error1 + error2)/2);
-            double highError = systematicHist.first->GetBinContent(i) * backgroundHist->GetBinContent(i);
-            backgroundHist->SetBinError(i, highError);
+            // double error1 = systematicHist.first->GetBinContent(i) * backgroundHist->GetBinContent(i) + backgroundHist->GetBinContent(i);
+            // double error2 = -systematicHist.second->GetBinContent(i) * backgroundHist->GetBinContent(i) + backgroundHist->GetBinContent(i);
+            // std::cout << "Bin " << i 
+            //       << " background: " << backgroundHist->GetBinContent(i)
+            //       << " highError: " << systematicHist.first->GetBinContent(i)
+            //       << " lowError: " << systematicHist.second->GetBinContent(i)
+            //       << " error1: " << error1
+            //       << " error2: " << error2
+            //       << std::endl;
+            // // std::cout << "error1: " << error1 << ", error2: " << error2 << std::endl;
+            // // std::cout << "bin: " << backgroundHist->GetBinContent(i) << std::endl;
+            // // std::cout << "sum of errors: " << error1 + error2 << std::endl;
+            // backgroundHist->SetBinContent(i, (error1 + error2)/2);
+            // double highError = systematicHist.first->GetBinContent(i) * backgroundHist->GetBinContent(i);
+            // backgroundHist->SetBinError(i, highError);
+
+
+            std::cout << "Bin " << i 
+                  << " background: " << backgroundHist->GetBinContent(i)
+                  << " highError: " << systematicHist.first->GetBinContent(i)
+                  << " lowError: " << systematicHist.second->GetBinContent(i)
+                  << std::endl;
+
+            backgroundHist->SetBinError(i, backgroundHist->GetBinContent(i) * (systematicHist.first->GetBinContent(i) + systematicHist.second->GetBinContent(i)) / 2.0);
+
           //  std::cout << "background hist error: " << backgroundHist->GetBinError(i) << std::endl;
         // }
     }
