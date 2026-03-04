@@ -97,7 +97,7 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis()
 
 
             //cross sections should be all lowercase
-            auto ttbarBackground = std::make_shared<Process>("TTBar Background", ttbarColor);
+            auto ttbarBackground = std::make_shared<Process>("t#bar{t}, Multiboson Background", ttbarColor);
             ttbarBackground->addProcess(makeBasicProcess(filePath, "TTbar.root", "ttbar_lep", reader, luminosity, histVariableToFileMapping));
             ttbarBackground->addProcess(makeBasicProcess(filePath, "TTW.root", "TTW", reader, luminosity, histVariableToFileMapping));
             ttbarBackground->addProcess(makeBasicProcess(filePath, "TTZ.root", "TTZ", reader, luminosity, histVariableToFileMapping));
@@ -123,13 +123,12 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis()
             //#qcdBackground->addProcess(makeBasicProcess(filePath, "QCD_HTCut_2000-Inf_Run_2_Year_2018.root", "QCD_2000-Inf", reader, luminosity));
 
 
-            auto multiBosonBackground = std::make_shared<Process>("MultiBoson Background", ttbarColor);
-            multiBosonBackground->addProcess(makeBasicProcess(filePath, "WW.root", "WWTo2L2Nu", reader, luminosity, histVariableToFileMapping));
-            multiBosonBackground->addProcess(makeBasicProcess(filePath, "WWW.root", "WWW", reader, luminosity, histVariableToFileMapping));
-            multiBosonBackground->addProcess(makeBasicProcess(filePath, "WWZ.root", "WWZ", reader, luminosity, histVariableToFileMapping));
-            multiBosonBackground->addProcess(makeBasicProcess(filePath, "WZ.root", "WZTo3LNu", reader, luminosity, histVariableToFileMapping));
-            multiBosonBackground->addProcess(makeBasicProcess(filePath, "WZZ.root", "WWZ", reader, luminosity, histVariableToFileMapping));
-            multiBosonBackground->addProcess(makeBasicProcess(filePath, "ZZZ.root", "ZZZ", reader, luminosity, histVariableToFileMapping));
+            ttbarBackground->addProcess(makeBasicProcess(filePath, "WW.root", "WWTo2L2Nu", reader, luminosity, histVariableToFileMapping));
+            ttbarBackground->addProcess(makeBasicProcess(filePath, "WWW.root", "WWW", reader, luminosity, histVariableToFileMapping));
+            ttbarBackground->addProcess(makeBasicProcess(filePath, "WWZ.root", "WWZ", reader, luminosity, histVariableToFileMapping));
+            ttbarBackground->addProcess(makeBasicProcess(filePath, "WZ.root", "WZTo3LNu", reader, luminosity, histVariableToFileMapping));
+            ttbarBackground->addProcess(makeBasicProcess(filePath, "WZZ.root", "WWZ", reader, luminosity, histVariableToFileMapping));
+            ttbarBackground->addProcess(makeBasicProcess(filePath, "ZZZ.root", "ZZZ", reader, luminosity, histVariableToFileMapping));
            
             auto wJetsBackground = std::make_shared<Process>("WJets Background", WJetsBackgroundColor);
             wJetsBackground->addProcess(
@@ -155,10 +154,9 @@ DarkPhotonCompleteAnalysis::DarkPhotonCompleteAnalysis()
             processes.push_back(zzBackground);
             processes.push_back(dyBackground);
             processes.push_back(qcdBackground);
-            processes.push_back(multiBosonBackground);
-            // processes.push_back(darkPhotonSignal);
-            processes.push_back(darkPhotonData);
             processes.push_back(wJetsBackground);
+
+            processes.push_back(darkPhotonData);
 
             auto leptonBackgrounds = std::make_shared<Channel>(channelName, processes);
 
