@@ -401,7 +401,8 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName,
         // signal = analysis->getHist(histvariable, signalName, true, channelName);
         //std::cout << "number of signal bins is: " << signal->GetNbinsX();
         maxCombinedY = signal->GetMaximum();
-        //std::cout << "Signal has: " << signal->GetEntries() << std::endl;
+        std::cout << "Signal has: " << signal->GetEntries() << std::endl;
+        std::cout << "Signal Integral: " << signal->Integral() << std::endl;
         //std::cout << "Signal Max: " << maxCombinedY << std::endl;
     } 
 
