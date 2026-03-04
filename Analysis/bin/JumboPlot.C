@@ -215,8 +215,10 @@ void JumboPlot()
 		HistVariable(ParticleType::muon(), 0, HistVariable::VariableType::SameSignInvariantMass),
 		HistVariable(ParticleType::electron(), 0, HistVariable::VariableType::OppositeSignInvariantMass),
 		HistVariable(ParticleType::muon(), 0, HistVariable::VariableType::OppositeSignInvariantMass),
-		HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
-		HistVariable(HistVariable::VariableType::InvariantMass, "", false, true),
+		HistVariable(HistVariable::VariableType::InvariantMass, "", true, false, false),
+		HistVariable(HistVariable::VariableType::InvariantMass, "", false, true, false),
+		HistVariable(HistVariable::VariableType::InvariantMass, "", true, false, true),
+		HistVariable(HistVariable::VariableType::InvariantMass, "", false, true, true),
 
 		HistVariable(HistVariable::VariableType::RecoOppositeSignInvariantMass),
 		HistVariable(HistVariable::VariableType::RecoSameSignInvariantMass),
@@ -278,9 +280,9 @@ void JumboPlot()
 		}
 	}
 
-	makePlots("Higgs Signal 2Channel", higgsAnalysis, channelTwoLeptons, variables ,true, false);
-	//makePlots("Higgs Signal 3Channel", higgsAnalysis, channelThreeLeptons, variables , false, true);
-	//makePlots("Higgs Signal 4Channel", higgsAnalysis, channelFourLeptons, variables , false, true);
+	// makePlots("Higgs Signal 2Channel", higgsAnalysis, channelTwoLeptons, variables ,true, false);
+	// makePlots("Higgs Signal 3Channel", higgsAnalysis, channelThreeLeptons, variables , false, true);
+	// makePlots("Higgs Signal 4Channel", higgsAnalysis, channelFourLeptons, variables , false, true);
 
 	makePlots("Dark Photons Control", darkPhotonAnalysis, controlChannels, darkPhotonVariables, true, false);
 	makePlots("Dark Photons Signal", darkPhotonAnalysis, signalChannels, darkPhotonVariables, false, false);

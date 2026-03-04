@@ -116,13 +116,13 @@ void SuperPlot()
 	//#TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "LeptonJetMLOutput High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
 	//#TCanvas *canvas = plotFormatter->completePlot(DarkPhotonAnalysis, "LeptonJetMLOutput High Mass and Different Sign", xAxisTitle, yAxisTitle, true, false, "0.3");
 	//#TCanvas *canvas = plotFormatter->completePlot(InputAnalysis, plotName, xAxisTitle, yAxisTitle, true, false, "0.3");
-	// HistVariable nameVar(ParticleType::muon(), 0, HistVariable::VariableType::SameSignInvariantMass);
+	HistVariable nameVar(ParticleType::electron(), 1, HistVariable::VariableType::Eta);
 	// auto ana = std::make_shared<HiggsCompleteAnalysis>();
 	// TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, true, false, "eeee", "Higgs Group 1000");
-	HistVariable nameVar(HistVariable::VariableType::InvariantMass, "", false, true, false);
+	// HistVariable nameVar(HistVariable::VariableType::RecoOppositeSignInvariantMass, "");
 
 	auto ana = std::make_shared<HiggsCompleteAnalysis>();
-	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, false, true, "e_e_");
+	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, false, true, "ee__");
 
 	// auto ana = std::make_shared<DarkPhotonCompleteAnalysis>();
 	// TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, false, true, "High Mass and Different Sign/1Jet");
