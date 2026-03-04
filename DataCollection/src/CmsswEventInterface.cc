@@ -96,7 +96,7 @@ ParticleCollection<Particle> CmsswEventInterface::getRecoJets() const
     return recoParticles;
 }
 
-double CmsswEventInterface::getMET() const
+reco::Candidate::LorentzVector CmsswEventInterface::getMET() const
 {
     edm::Handle<std::vector<pat::MET>> mets;
 
@@ -104,7 +104,7 @@ double CmsswEventInterface::getMET() const
 
     for (const auto &p : *mets)
     {
-        return p.corPt(pat::MET::METCorrectionLevel::Type1);
+        return p.corP4(pat::MET::METCorrectionLevel::Type1);
     }
     throw std::runtime_error("There are no MET objects found");
 }
@@ -115,6 +115,11 @@ unsigned long long CmsswEventInterface::getEventIDNum() const
 }
 
 long CmsswEventInterface::getRunNum() const
+{
+    throw std::runtime_error("Not implemented yet");
+}
+
+int CmsswEventInterface::getLumiBlock() const
 {
     throw std::runtime_error("Not implemented yet");
 }

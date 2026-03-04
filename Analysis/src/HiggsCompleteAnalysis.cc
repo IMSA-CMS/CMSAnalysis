@@ -22,7 +22,7 @@ const std::vector<std::string> HiggsCompleteAnalysis::recoDecays{
     "eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet",
     "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt", "eee_", "eeu_", "eue_",
     "euu_", "uue_", "uuu_", "eet_", "ete_", "eut_", "etu_", "uut_", "utu_", "ett_", "utt_", "ttt_",
-    "ee__", "e_e_", "eu__", "e_u_", "uu__", "u_u_", "tt__", "t_t_", "te__", "t_e_", "tu__", "t_u_", "none"};
+    "ee__", "e_e_", "eu__", "e_u_", "uu__", "u_u_", "tt__", "t_t_", "et__", "e_t_", "ut__", "u_t_"};
 
 const std::vector<std::string> systematics{"ElectronScaleFactor", "MuonIDISOScaleFactor", "MuonRecoScaleFactor",
                                            "MuonTriggerScaleFactor"};
@@ -30,9 +30,9 @@ const std::vector<std::string> systematics{"ElectronScaleFactor", "MuonIDISOScal
 // Actual masses for the Higgs signal
 const std::vector<int> HiggsCompleteAnalysis::massTargets{500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
 
-constexpr auto bgFilePath = "/uscms/home/bhenning/nobackup/HiggsWithSystematics1/";
-constexpr auto signalFilePath = "/uscms/home/bhenning/nobackup/HiggsWithSystematics1/";
-constexpr auto dataFilePath = "/uscms/home/bhenning/nobackup/HiggsWithSystematics1/";
+constexpr auto bgFilePath = "/uscms/home/bhenning/nobackup/HiggsReprocessing/";
+constexpr auto signalFilePath = "/uscms/home/bhenning/nobackup/HiggsReprocessing/";
+constexpr auto dataFilePath = "/uscms/home/bhenning/nobackup/HiggsReprocessing/";
 
 double HiggsCompleteAnalysis::getBranchingRatio(const std::string &channel) const
 {
@@ -78,15 +78,12 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     // const std::string signalFilePath =
     // "/uscms/home/bhenning/Analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/HiggsFinal/";
 
-    const std::string filePath = "/uscms/home/bhenning/nobackup/";
-    const std::string signalFilePath =
-        "/uscms/home/bhenning/nobackup/HiggsWithSystematics1/";
     // const std::string myPath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     // const std::string filePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
     // const std::string signalFilePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
 
     // Luminosity: 1.39
-    const double luminosity = 137.62;
+    const double luminosity = 137.94;
 
     // std::vector<HistVariable> histVariablesBackground;
     // std::vector<HistVariable> histVariablesData;
@@ -279,7 +276,8 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
             //     for(std::string systematic : systematics)
             //     {
             //         auto sys = process->calcSystematic(HistVariable(HistVariable::VariableType::SameSignInvariantMass),
-            //         systematic, true); process->addSystematic(sys);
+            //             systematic, true); 
+            //         process->addSystematic(sys);
             //     }
             // }
 

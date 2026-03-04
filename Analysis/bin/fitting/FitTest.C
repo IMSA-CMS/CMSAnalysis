@@ -1,16 +1,10 @@
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
-//to run to root FitTest.C
-//see if it can read in the functions without breaking 
-//the file your reading into is H++SignalParameterFunctions.txt
-//mainly to check through file and makes sure things are read in --> will show in terminal
 
-//currently needs to load more than seven functions 
-//also figure out why there's 11s in the text file
 void FitTest()
 {
-	std::cout << "Starting FitTest()...\n";
+    std::cout << "Starting FitTest()...\n";
 
-    // loads functions from the text file
+    // Load functions
     FitFunctionCollection functions;
     try {
         functions = FitFunctionCollection::loadFunctions("H++SignalFunctions.txt");
@@ -18,23 +12,21 @@ void FitTest()
     }
     catch (const std::exception& e) {
         std::cerr << "Failed to load functions: " << e.what() << std::endl;
-        return; //if it does not load function, displays error message
+        return;
     }
 
-    // accesses the internal map of functions
-    auto& funcMap = functions.getFunctions(); //
-
+    auto& funcMap = functions.getFunctions();
     if (funcMap.empty()) {
-        std::cerr << "No functions were loaded. Check the file format or path.\n";
+        std::cerr << "No functions were loaded.\n";
         return;
     }
 
     std::cout << "Loaded " << funcMap.size() << " functions:\n";
 
-    // loops over each function and print details including parameter values and errors
+    // Loop over functions
     for (const auto& pair : funcMap)
     {
-        const std::string& key = pair.first;  // function key, e.g., "\sigma_2"
+        const std::string& key = pair.first;
         const FitFunction& func = pair.second;
 
         TF1* tf1 = func.getFunction();
@@ -47,19 +39,63 @@ void FitTest()
         std::cout << "TF1 formula: " << tf1->GetExpFormula("P") << "\n";
         std::cout << "Npar: " << tf1->GetNpar() << "\n";
 
-        // prints parameter names, values, and errors
+        // Example systematic (+5%/-5%)
+        if (tf1->GetNpar() >= 3)
+        {
+            std::vector<double> upParams, downParams;
+            for (int i = 0; i < tf1->GetNpar(); ++i) {
+                double val = tf1->GetParameter(i);
+                upParams.push_back(val * 1.05);
+                downParams.push_back(val * 0.95);
+            }
+
+            FitFunction& mutableFunc = const_cast<FitFunction&>(func);
+            mutableFunc.addSystematic("scale", upParams, downParams);
+
+            TF1* sysUp = mutableFunc.getSystematic("scale", true);
+            TF1* sysDown = mutableFunc.getSystematic("scale", false);
+
+            if (sysUp && sysDown) {
+                std::cout << "  Added systematic 'scale':\n";
+                std::cout << "    Up variation name: " << sysUp->GetName() << "\n";
+                std::cout << "    Down variation name: " << sysDown->GetName() << "\n";
+            }
+
+            // List all systematics
+            auto systNames = mutableFunc.listSystematics();
+            std::cout << "  Current systematics stored: ";
+            for (auto& name : systNames) std::cout << name << " ";
+            std::cout << "\n";
+        }
+
+        // Print parameters
         std::cout << "Parameters and errors:\n";
         for (int i = 0; i < tf1->GetNpar(); ++i) {
             std::cout << "   " << tf1->GetParName(i)
                       << " = " << tf1->GetParameter(i)
                       << " ± " << tf1->GetParError(i) << "\n";
         }
-    }
 
+        // Print all systematics again (optional)
+        std::vector<std::string> sysList = func.listSystematics();
+        if (!sysList.empty()) {
+            std::cout << "  Added systematics:\n";
+            for (const auto& sysName : sysList) {
+                TF1* up = func.getSystematic(sysName, true);
+                TF1* down = func.getSystematic(sysName, false);
+                std::cout << "    " << sysName << ":\n"
+                          << "      Up variation name: " << up->GetName() << "\n"
+                          << "      Down variation name: " << down->GetName() << "\n";
+            }
+        }
+
+        std::cout << "---------------------------------------------\n";
+    } // end of for-loop
+
+    // Print summary AFTER looping through all functions
     std::cout << "Total functions successfully processed: " << funcMap.size() << "\n";
     std::cout << "FitTest() finished successfully.\n";
 }
-
 
 
 

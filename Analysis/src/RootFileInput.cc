@@ -56,7 +56,7 @@ TH1* RootFileInput::getHist(const HistVariable& histType) const
 		dir = (TDirectory*)dir->GetDirectory(folder.c_str());
 		if (!dir) 
 		{
-			// std::cout << "No directory named " + folder + " found in file: "<< fileSource <<"\n";
+			std::cout << "No directory named " + folder + " found in file: "<< fileSource <<"\n";
 			delete dir;
 			delete hist;
 			delete file;
@@ -70,7 +70,7 @@ TH1* RootFileInput::getHist(const HistVariable& histType) const
 	//std::cout << "RootFileInput Hit 3 " << std::endl;
 	if (!hist)
 	{
-		// std::cout << "No histogram named " << histName << " found in file " << fileSource << '\n';
+		std::cout << "No histogram named " << histName << " found in file " << fileSource << '\n';
 		delete file;
 		return nullptr;
 	}
@@ -176,8 +176,8 @@ TH1* RootFileInput::getHistFromName(std::string histName) const
 int RootFileInput::getTotalEvents() const
 {
 	auto file = getFile(fileSource);
-	bool end = false; 
-	int index = 1;
+	//bool end = false; 
+	//int index = 1;
 	auto *totalevents = file->Get<TObjString>("NEvents");
 	if (!totalevents)
 	{

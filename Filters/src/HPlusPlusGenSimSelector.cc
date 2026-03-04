@@ -70,11 +70,12 @@ void HPlusPlusGenSimSelector::selectParticles(const EventInput *input, Event &ev
                     event.addGenSimParticle(genSimParticle.daughter(i));
                 }
             }
-        } else if (genSimParticle.getType() == ParticleType::z() && genSimParticle == genSimParticle.finalDaughter()) // Z Boson
-        {
-            event.addSpecialObject("Zboson", genSimParticle);
-            event.addGenSimParticle(genSimParticle);
-        }
+        } 
+        //else if (genSimParticle.getType() == ParticleType::z() && genSimParticle == genSimParticle.finalDaughter()) // Z Boson
+        // {
+        //     event.addSpecialObject("Zboson", genSimParticle);
+        //     event.addGenSimParticle(genSimParticle);
+        // }
         // Drell-Yan
         // else if (genSimParticle.getType() == ParticleType::photon())
         // {

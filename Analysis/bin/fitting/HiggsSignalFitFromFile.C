@@ -33,7 +33,7 @@
 
 
 std::string path = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_peter/";
-std::string processedPath = "/uscms/home/bhenning/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Output/HiggsNewOutput/";
+std::string processedPath = "/uscms/home/bhenning/nobackup/HiggsWithSystematics1/";
 
 TH1* combineHists (std::vector<std::string> fileNames, std::string channel, std::string histName);
 std::vector<std::string> years = {"2016", "2017", "2018"};
@@ -49,6 +49,17 @@ std::vector<std::string> histogramTypes =
 	"h_mll1",
 	"h_mll2",
 };
+
+double getBranchingRatio(const std::string &channel) //const
+{
+    std::unordered_map<std::string, double> originalRatios = {{"ee", 3.0 / 2}, {"eu", 3.0 / 4}, {"uu", 3.0 / 2},
+                                                              {"et", 3.0 / 4}, {"ut", 3.0 / 4}, {"tt", 3.0 / 2}};
+
+    std::string firstPair = channel.substr(0, 2);
+    std::string secondPair = channel.substr(2, 2);
+
+    return originalRatios[firstPair] * originalRatios[secondPair];
+}
 
 // run in batch mode for faster processing: root -b HiggsSignalFit.C+
 void HiggsSignalFitFromFile() 
@@ -100,25 +111,36 @@ void HiggsSignalFitFromFile()
 				std::string filename = processedPath + "Higgs" + std::to_string(masses[i]) + ".root";
 				TFile* processedFile = TFile::Open(filename.c_str());
 				std::string channelAdjusted = Utility::substitute(channel, "m", "u");
-				auto number = processedFile -> Get<TObjString>(("GenSim " + channelAdjusted).c_str());
+				//auto number = processedFile -> Get<TObjString>(("GenSim " + channelAdjusted).c_str());
+				auto number = processedFile->Get<TObjString>("NEvents");
 				int totalGeneratedEvents = std::stoi(number -> GetString().Data());
 				double efficiency = static_cast<double>(eventsInHist) / totalGeneratedEvents;
-				double expectedEvents = crossSection * luminosity * efficiency;
+				double branchRatioAdjustment = getBranchingRatio(channelAdjusted);
+				double expectedEvents = crossSection * luminosity * efficiency * branchRatioAdjustment;
 				selectedHist -> Scale(expectedEvents / selectedHist -> Integral());
 				std::string keyName = channel + "/" + std::to_string(masses[i]) + '_' + histType;
 				min = masses[i] - 200;
 				max = masses[i] + 200;
 
+				std::cout << "Cross section: " << crossSection << std::endl;
+				std::cout << "Selected events: " << eventsInHist << std::endl;
+				std::cout << "Total generated events: " << totalGeneratedEvents << std::endl;
+				std::cout << "Branching ratio adjustment: " << branchRatioAdjustment << std::endl;
+				std::cout << "Expected events: " << expectedEvents << std::endl;
+
+
 				FitFunction func = FitFunction::createFunctionOfType(FitFunction::FunctionType::DoubleSidedCrystalBall, keyName, "", min, max, keyName);
+				std::cout << __LINE__ << std::endl;
 				currentFunctions.insert(func);
 				histogramMap.insert({keyName, selectedHist});
 				massValues.insert({keyName, masses[i]});
-
+				std::cout << __LINE__ << std::endl;
 				// file->Close();
 				// selectedHist->Draw();
 				// std::string wait;
 				// std::cin >> wait;
 			}
+			std::cout << __LINE__ << std::endl;
 			//fitter.setHistograms(histogramMap);
 			fitter.loadFunctions(currentFunctions);
 			fitter.fitFunctions(histogramMap);

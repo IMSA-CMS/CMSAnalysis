@@ -24,7 +24,7 @@ MuonJSONReader::MuonJSONReader(std::string filename) : JSONReader(filename)
         for (size_t k = 0; k < allptEdges.size(); k++) {
             double pt_max = allptEdges[k].asDouble();
             Value allsfContent = allptContent[k]["content"];
-            double nominal, systUp, systDown;
+            double nominal = 1, systUp = 1, systDown = 1; 
             for (size_t j = 0; j < allsfContent.size(); j++) {
                 Value key = allsfContent[j]["key"];
                 

@@ -99,9 +99,9 @@ void fitProcess(const Process &process, Fitter &fitter, const HistVariable &hist
     const auto title = "Higgs " + channelName + " " + process.getName() + " " + systDesc;
     selectedHist->SetTitle(title.c_str());
 
-    std::cout << "Fitting " + channelName + " " + process.getName() + "/" + histVar.getName() + " (" + systDesc + ")\n";
+    const std::string name = process.getName() + "->" + channelName + "/" + histVar.getName() + " " + systDesc;
 
-    const std::string name = process.getName() + "/" + histVar.getName() + " " + systDesc;
+    std::cout << "Fitting " + name + "\n";
 
     FitFunction func =
         FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, name, "", min, max, channelName);
