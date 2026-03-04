@@ -16,10 +16,11 @@ class HiggsCompleteAnalysis : public FullAnalysis
 
     std::vector<std::string> getSystematics() const override;
 
-    // bool checkChannelName(std::string channelName, double massTarget);
+void addSingleProcess(std::shared_ptr<Process> process, std::string filePathway, std::string fileName, std::string crossSectionName,
+                                std::shared_ptr<CrossSectionReader> crossReader, double luminosity,
+                                std::shared_ptr<HistNameFinder> mappingLowMass, std::shared_ptr<HistNameFinder> mappingHighMass, bool isData = false,
+                                double branchingRatioAdjustment = 1);
 
-    // TH1* getHist(std::string histType, std::string processName, double massTarget, bool scaleToExpected = false,
-    // std::string channelName = "") const override;
 };
 
 #endif
