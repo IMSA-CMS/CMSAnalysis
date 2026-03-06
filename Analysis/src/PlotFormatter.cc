@@ -869,7 +869,7 @@ void PlotFormatter::writeText(int w, int h, float t, float b, float l, float r)
 {
     //Writes CMS logo and integrated luminosity
     int align_ = 13; 
-    TString lumiText = "139 f^-1, 13 TeV";
+    TString lumiText = "139 fb^-1, 13 TeV";
     TLatex latex;
     latex.SetNDC();
     latex.SetTextAngle(0);
