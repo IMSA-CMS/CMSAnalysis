@@ -122,16 +122,16 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         {
             std::vector<std::shared_ptr<Process>> processes;
 
-            for (const auto &genSimDecay : genSimDecays)
+            for (const double massTarget : massTargets)
             {
-                auto histMapperLowMass = std::make_shared<HiggsHistNameFinder>(recoDecay, genSimDecay, true, zSelection, true);
-                auto histMapperHighMass = std::make_shared<HiggsHistNameFinder>(recoDecay, genSimDecay, true, zSelection, false);
+                auto higgsMassGroup = std::make_shared<Process>("Higgs Signal " + std::to_string((int)massTarget), 1);
 
-                double branchingRatioFixer = getBranchingRatio(genSimDecay);
-
-                for (const double massTarget : massTargets)
+                for (const auto &genSimDecay : genSimDecays)
                 {
-                    auto higgsMassGroup = std::make_shared<Process>("Higgs Signal " + std::to_string((int)massTarget), 1);
+                    auto histMapperLowMass = std::make_shared<HiggsHistNameFinder>(recoDecay, genSimDecay, zSelection, true);
+                    auto histMapperHighMass = std::make_shared<HiggsHistNameFinder>(recoDecay, genSimDecay, zSelection, false);
+
+                    double branchingRatioFixer = getBranchingRatio(genSimDecay);
 
                     auto higgsSignal =
                         std::make_shared<Process>("Higgs signal " + genSimDecay + " " + std::to_string((int)massTarget), 1);
@@ -142,14 +142,13 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
                     addSingleProcess(higgsMassGroup, signalFilePath, "Higgs" + std::to_string((int)massTarget) + ".root",
                                      "higgs4l" + std::to_string((int)massTarget), reader, luminosity,
                                      histMapperLowMass, histMapperHighMass, false, branchingRatioFixer);
-
-                    processes.push_back(higgsMassGroup);
                 }
+                processes.push_back(higgsMassGroup);
             }
 
 
-            auto histMapperLowMass = std::make_shared<HiggsHistNameFinder>(recoDecay, "", true, zSelection, true);
-            auto histMapperHighMass = std::make_shared<HiggsHistNameFinder>(recoDecay, "", true, zSelection, false);
+            auto histMapperLowMass = std::make_shared<HiggsHistNameFinder>(recoDecay, "", zSelection, true);
+            auto histMapperHighMass = std::make_shared<HiggsHistNameFinder>(recoDecay, "", zSelection, false);
 
             auto zzBackground = std::make_shared<Process>("ZZ Background", ZZBackgroundColor);
             addSingleProcess(zzBackground, bgFilePath, "ZZ.root", "zzto4l", reader, luminosity,

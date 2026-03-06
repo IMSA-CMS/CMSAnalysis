@@ -344,7 +344,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName,
 
     //int firstBin = 0;
     
-    int rebinFactor = 5;
+    //int rebinFactor = 5;
     
     std::vector<std::shared_ptr<Channel>> channels = analysis->getChannels();
     processes = channels.at(0);
@@ -587,11 +587,11 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName,
     //DrawOtherHistograms(background, signal, data); 
     //std::cout <<"before creating histogram" << std::endl;
     auto backgroundHist = CreateErrorHistogram(background,  backgroundProcesses);
-    backgroundHist->SetFillColor(kBlack);
-    backgroundHist->SetFillStyle(3018);
+    // backgroundHist->SetFillColor(kBlack);
+    // backgroundHist->SetFillStyle(3018);
     // backgroundHist->SetLineColor(kRed);
     // backgroundHist->SetLineWidth(5);
-    backgroundHist->Draw("E2 SAME");
+    //backgroundHist->Draw("E2 SAME");
     //std::cout <<"Integral: " << backgroundHist->Integral() << std::endl;
     //backgroundHist->Draw("E2 SAME");
     
@@ -630,7 +630,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName,
         graph->Draw("AP SAME");
         errorgraph2->GetXaxis()->SetLimits(hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
         errorgraph2->SetFillColor(16);
-        errorgraph2->Draw("SAME E3 0");
+        //errorgraph2->Draw("SAME E3 0");
     }
 
     // auto firstHist = dynamic_cast<TH1*>(background->GetHists()->At(0));
@@ -1196,7 +1196,7 @@ TH1* PlotFormatter::CreateErrorHistogram(THStack* hists, std::vector<std::shared
         // }
     }
 
-    backgroundHist->Draw("E2 SAME");
+    //backgroundHist->Draw("E2 SAME");
     return backgroundHist;
 }
 

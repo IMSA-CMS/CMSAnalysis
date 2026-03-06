@@ -119,11 +119,12 @@ void SuperPlot()
 	// HistVariable nameVar(ParticleType::leptonJet(), 1, HistVariable::VariableType::LeptonJetDeltaR, "Lepton Jet #DeltaR");
 	// auto ana = std::make_shared<HiggsCompleteAnalysis>();
 	// TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, true, false, "eeee", "Higgs Group 1000");
-	HistVariable nameVar(HistVariable::VariableType::RecoSameSignInvariantMass);
+	HistVariable nameVar(HistVariable::VariableType::InvariantMass, "", false, true, true);
 
 	auto ana = std::make_shared<HiggsCompleteAnalysis>();
+	plotFormatter->setRebinFactor(50);
 	//auto ana = std::make_shared<DarkPhotonCompleteAnalysis>();
-	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, false, true, "ee__");
+	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, "Same-sign invariant mass [GeV/c^{2}]", "Events", false, true, false, "eeee");
 
 	// auto ana = std::make_shared<DarkPhotonCompleteAnalysis>();
 	// TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, false, true, "High Mass and Different Sign/1Jet");
