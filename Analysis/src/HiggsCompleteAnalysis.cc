@@ -59,61 +59,13 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
     const int ZZBackgroundColor = kGreen + 10;
     const int WJetsBackgroundColor = kViolet;
 
-    // This is a mass we put into background because the
-    // makeBasicProcess method requires it. It doesn't actually
-    // make sense so in the future fix this
-    //  double tempMass = 1400;
-
-    // const std::vector<std::string> recoDecays{"u u", "uu", "uuu", "uuuu"};
-    // const std::vector<std::string> recoDecays{"ee", "eu", "e u", "uu", "u u"};
-    // const std::vector<std::string> recoDecays{"u u"};
-
     // Change this file to your folder to use your own cross sections
     // filePath is shared between most files. The rest of the filePath to a given file is still given when making
-    // singleProcesses. auto reader =
-    // std::make_shared<CrossSectionReader>("/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+
     auto reader = std::make_shared<CrossSectionReader>(
         "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
-    //  const std::string filePath = "/uscms/home/bhenning/Analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/HiggsFinal/";
-    // const std::string signalFilePath =
-    // "/uscms/home/bhenning/Analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/HiggsFinal/";
 
-    // const std::string myPath = "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
-    // const std::string filePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
-    // const std::string signalFilePath = "/uscms/homes/m/mchen2/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/Higgs/";
-
-    // Luminosity: 1.39
     const double luminosity = 137.94;
-
-    // std::vector<HistVariable> histVariablesBackground;
-    // std::vector<HistVariable> histVariablesData;
-
-    // std::vector<std::string> rowNames = {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu",
-    // "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u"};
-    // ///std::vector<std::string> rowNames = {"ee", "eu", "uu", "e u", "u u", "e e"};
-    // std::vector<std::string> dataConnecters = {"_Pass_1st Highest mu- ", "_Pass_1st Highest e- "};
-    // std::vector<std::string> connecters = {""};
-
-    // std::vector<ParticleType> particleTypes = {ParticleType::electron(), ParticleType::muon(), ParticleType::tau()};
-    // std::vector<int> orders = {1, 2, 3, 4}; // whatever max order
-    // std::vector<HistVariable::VariableType> variableTypes = {HistVariable::VariableType::Pt,
-    //                                                          HistVariable::VariableType::Eta,
-    //                                                          HistVariable::VariableType::Phi,
-    //                                                          HistVariable::VariableType::SameSignInvariantMass,
-    //                                                          HistVariable::VariableType::OppositeSignInvariantMass,
-    //                                                          HistVariable::VariableType::InvariantMass};
-
-    // for (const ParticleType& pType : particleTypes)
-    // {
-    //     for (const int order : orders)
-    //     {
-    //         for (const auto varType : variableTypes)
-    //         {
-    //             histVariablesBackground.push_back(HistVariable(pType, order, varType));
-    //             histVariablesData.push_back(HistVariable(pType, order, varType));
-    //         }
-    //     }
-    // }
 
     TH1::SetDefaultSumw2();
     for (bool zSelection : {true, false})

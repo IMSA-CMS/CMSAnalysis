@@ -958,13 +958,18 @@ TLegend* PlotFormatter::GetLegend(THStack* background, std::shared_ptr<Channel> 
         toAdd = name;
         legend->AddEntry(signal, " Signal", "L");
     }
-    int count = 0;
-    for(const auto&& obj2 : *background->GetHists()) {
-        // std::cout << "count";
+    int count = -1;
+    for(const auto&& obj2 : *background->GetHists())
+    {
+        ++count;
+        auto object = dynamic_cast<TH1*>(obj2);
+        if (!object || object->GetEntries() == 0)
+        {
+            continue;
+        }
         name = processes->getNamesWithLabel(Channel::Label::Background).at(count);
         toAdd = name;
         legend->AddEntry(obj2, " " + toAdd, "F");
-        count++;
     }
 
     for (TF1* parameterizedFunction: parameterizedFunctions)
