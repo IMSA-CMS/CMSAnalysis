@@ -32,7 +32,7 @@ const std::vector<int> HiggsCompleteAnalysis::massTargets{500, 600, 700, 800, 90
 
 constexpr auto bgFilePath = "/uscms/home/bhenning/nobackup/HiggsReprocessing/";
 constexpr auto signalFilePath = "/uscms/home/bhenning/nobackup/HiggsReprocessing/";
-constexpr auto dataFilePath = "/uscms/home/bhenning/nobackup/HiggsReprocessing/";
+constexpr auto dataFilePath = "/uscms/home/bhenning/nobackup/030426HiggsData/";
 
 double HiggsCompleteAnalysis::getBranchingRatio(const std::string &channel) const
 {
