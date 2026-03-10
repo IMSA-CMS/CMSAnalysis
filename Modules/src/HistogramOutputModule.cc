@@ -92,7 +92,7 @@ void HistogramOutputModule::makeHistogram(std::shared_ptr<HistogramPrototype> h)
 {
     auto name = h->getName();
     addObject(getFilterPath(), name, h->makeHistogram(name, name));
-    std::cout << "Making histogram: " << name << " in path: " << getFilterPath() << "\n";
+    //std::cout << "Making histogram: " << name << " in path: " << getFilterPath() << "\n";
     for (const auto &scaleFactor : h->getScaleFactors())
     {
         addObject(scaleFactor->getName() + "_Up/" + getFilterPath(), name, h->makeHistogram(name, name));

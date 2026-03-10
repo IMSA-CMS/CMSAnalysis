@@ -80,10 +80,10 @@ void HiggsBackgroundFitFromFile()
 	// 	"t#bar{t}, Multiboson Background",
 	// };
 	std::map<std::string, std::pair<int, int>> backgroundsToRange = {
-		{"Drell-Yan Background", {140, 500}},
-			{"QCD Background", {200, 2000}}, // no events anyway
-			{"ZZ Background", {200, 800}},
-			{"TTbar Background", {200, 2000}},
+		{"Drell-Yan Background", {0, 2000}},
+			{"QCD Background", {0, 2000}}, // no events anyway
+			{"ZZ Background", {0, 2000}},
+			{"TTbar Background", {0, 2000}},
 			// {"TTW Background", {90, 2000}}, // almost no events on uuuu, figure out something
 			// {"TTZ Background", {120, 2000}},
 			// {"ZZZ Background", {200, 2000}}, // not enough to fit
@@ -92,15 +92,15 @@ void HiggsBackgroundFitFromFile()
 			// {"WWZ Background", {200, 2000}}, // not enough
 			// {"WZ Background", {200, 2000}}, // not enough
 			// {"WZZ Background", {200, 2000}}, // enough on some?
-			{"Other Background", {275, 900}}
+			{"Other Background", {0, 2000}}
 	};
 
 	std::map<std::string, std::map<std::string, std::pair<int, int>>> histRanges = {
 		{"h_mll1_eeee", {
-			{"Drell-Yan Background", {140, 500}},
-			{"QCD Background", {200, 2000}}, // no events anyway
-			{"ZZ Background", {300, 950}},
-			{"TTbar Background", {175, 750}},
+			{"Drell-Yan Background", {0, 2000}},
+			{"QCD Background", {0, 2000}}, // no events anyway
+			{"ZZ Background", {0, 2000}},
+			{"TTbar Background", {0, 2000}},
 			// {"TTW Background", {90, 2000}}, // almost no events on uuuu, figure out something
 			// {"TTZ Background", {120, 2000}},
 			// {"ZZZ Background", {200, 2000}}, // not enough to fit
@@ -109,13 +109,13 @@ void HiggsBackgroundFitFromFile()
 			// {"WWZ Background", {200, 2000}}, // not enough
 			// {"WZ Background", {200, 2000}}, // not enough
 			// {"WZZ Background", {200, 2000}}, // enough on some?
-			{"Other Background", {320, 900}},
+			{"Other Background", {0, 2000}},
 			}},
 		{"h_mll1_mmmm", {
-			{"Drell-Yan Background", {140, 500}},
-			{"QCD Background", {200, 2000}}, // no events anyway
-			{"ZZ Background", {325, 900}},
-			{"TTbar Background", {200, 900}},
+			{"Drell-Yan Background", {0, 2000}},
+			{"QCD Background", {0, 2000}}, // no events anyway
+			{"ZZ Background", {0, 2000}},
+			{"TTbar Background", {0, 2000}},
 			// {"TTW Background", {90, 2000}}, // almost no events on uuuu, figure out something
 			// {"TTZ Background", {120, 2000}},
 			// {"ZZZ Background", {200, 2000}}, // not enough to fit
@@ -124,13 +124,13 @@ void HiggsBackgroundFitFromFile()
 			// {"WWZ Background", {200, 2000}}, // not enough
 			// {"WZ Background", {200, 2000}}, // not enough
 			// {"WZZ Background", {200, 2000}}, // enough on some?
-			{"Other Background", {250, 800}},
+			{"Other Background", {0, 2000}},
 			}},
 		{"h_mll2_eeee", {
-			{"Drell-Yan Background", {140, 500}},
-			{"QCD Background", {200, 2000}}, // no events anyway
-			{"ZZ Background", {210, 900}},
-			{"TTbar Background", {110, 500}},
+			{"Drell-Yan Background", {0, 2000}},
+			{"QCD Background", {0, 2000}}, // no events anyway
+			{"ZZ Background", {0, 2000}},
+			{"TTbar Background", {0, 2000}},
 			// {"TTW Background", {90, 2000}}, // almost no events on uuuu, figure out something
 			// {"TTZ Background", {120, 2000}},
 			// {"ZZZ Background", {200, 2000}}, // not enough to fit
@@ -139,13 +139,13 @@ void HiggsBackgroundFitFromFile()
 			// {"WWZ Background", {200, 2000}}, // not enough
 			// {"WZ Background", {200, 2000}}, // not enough
 			// {"WZZ Background", {200, 2000}}, // enough on some?
-			{"Other Background", {140, 550}},
+			{"Other Background", {0, 2000}},
 			}},
 		{"h_mll2_mmmm", {
-			{"Drell-Yan Background", {140, 500}},
-			{"QCD Background", {200, 2000}}, // no events anyway
-			{"ZZ Background", {175, 650}},
-			{"TTbar Background", {125,620}},
+			{"Drell-Yan Background", {0, 2000}},
+			{"QCD Background", {0, 2000}}, // no events anyway
+			{"ZZ Background", {0, 2000}},
+			{"TTbar Background", {0, 2000}},
 			// {"TTW Background", {90, 2000}}, // almost no events on uuuu, figure out something
 			// {"TTZ Background", {120, 2000}},
 			// {"ZZZ Background", {200, 2000}}, // not enough to fit
@@ -154,7 +154,7 @@ void HiggsBackgroundFitFromFile()
 			// {"WWZ Background", {200, 2000}}, // not enough
 			// {"WZ Background", {200, 2000}}, // not enough
 			// {"WZZ Background", {200, 2000}}, // enough on some?
-			{"Other Background", {175, 500}},
+			{"Other Background", {0, 2000}},
 			}}
 
 	
@@ -190,9 +190,11 @@ void HiggsBackgroundFitFromFile()
 				std::string keyName = channel + '/' + background + " " + histType;
 				keyNames.push_back(keyName);
 
-				FitFunction func = FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, keyName, "", range.first, range.second, keyName);
-				currentFunctions.insert(func);
-				histogramMap.insert({keyName, selectedHist});
+				FitFunction func = FitFunction::createFunctionOfType(FitFunction::FunctionType::GausLogPowerNorm, keyName, "", range.first, range.second, keyName);
+				FitFunctionCollection currentFunctions;
+				currentFunctions.insert("", func);
+				std::unordered_map<std::string, TH1 *> histogramMap = {{"", selectedHist}};
+				//histogramMap.insert({keyName, selectedHist});
 			}
 			//fitter.setHistograms(histogramMap);
 			fitter.loadFunctions(currentFunctions);

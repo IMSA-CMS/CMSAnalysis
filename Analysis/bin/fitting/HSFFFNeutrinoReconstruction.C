@@ -67,10 +67,10 @@ void HiggsSignalFitFromFile()
 	 double min = 0;
 	 double max = 2000;
 
-	std::string fitHistsName = "H++SignalFits.root";
-	std::string fitParameterValueFile = "H++SignalFunctions.txt";
-	std::string parameterFits = "H++SignalParameterFits.root";
-	std::string parameterFunctions = "H++SignalParameterFunctions.txt";
+	std::string fitHistsName = "NeutrinoReconstructionSignalFits.root";
+	std::string fitParameterValueFile = "NeutrinoReconstructionSignalFunctions.txt";
+	std::string parameterFits = "NeutrinoReconstructionSignalParameterFits.root";
+	std::string parameterFunctions = "NeutrinoReconstructionSignalParameterFunctions.txt";
 	
 	remove(fitParameterValueFile.c_str());
 	remove(parameterFunctions.c_str());
@@ -107,31 +107,28 @@ void HiggsSignalFitFromFile()
 				}
 				double crossSection = crossSectionReader.getCrossSection("Higgs4l" + std::to_string(masses[i]));
 				double luminosity = 137000; //in pb^-1
-				//int eventsInHist = selectedHist -> Integral();
-				double eventsInHist = selectedHist->Integral();
+				int eventsInHist = selectedHist -> Integral();
 				std::string filename = processedPath + "Higgs" + std::to_string(masses[i]) + ".root";
 				TFile* processedFile = TFile::Open(filename.c_str());
 				std::string channelAdjusted = Utility::substitute(channel, "m", "u");
 				//auto number = processedFile -> Get<TObjString>(("GenSim " + channelAdjusted).c_str());
 				auto number = processedFile->Get<TObjString>("NEvents");
 				int totalGeneratedEvents = std::stoi(number -> GetString().Data());
-				//int totalGeneratedEvents = 1;
-				//double efficiency = static_cast<double>(eventsInHist) / totalGeneratedEvents;
-				double efficiency = 1; // Efficiency is already accounted for in the histogram scaling, so we set it to 1 here to avoid double counting
+				double efficiency = static_cast<double>(eventsInHist) / totalGeneratedEvents;
 				double branchRatioAdjustment = getBranchingRatio(channelAdjusted);
 				double expectedEvents = crossSection * luminosity * efficiency * branchRatioAdjustment;
-				selectedHist -> Scale(expectedEvents);
+				selectedHist -> Scale(expectedEvents / selectedHist -> Integral());
 				std::string keyName = channel + "/" + std::to_string(masses[i]) + '_' + histType;
 				min = masses[i] - 200;
 				max = masses[i] + 200;
 
-				std::cout << "Cross section: " << crossSection << std::endl;
-				std::cout << "Selected events: " << eventsInHist << std::endl;
-				std::cout << "Efficiency: " << efficiency << std::endl;
-				std::cout << "Total generated events: " << totalGeneratedEvents << std::endl;
-				std::cout << "Branching ratio adjustment: " << branchRatioAdjustment << std::endl;
-				std::cout << "Expected events: " << expectedEvents << std::endl;
-				std::cout << "Scaling factor: " << expectedEvents / selectedHist -> Integral() << std::endl;
+				// std::cout << "Cross section: " << crossSection << std::endl;
+				// std::cout << "Selected events: " << eventsInHist << std::endl;
+				// std::cout << "Efficiency: " << efficiency << std::endl;
+				// std::cout << "Total generated events: " << totalGeneratedEvents << std::endl;
+				// std::cout << "Branching ratio adjustment: " << branchRatioAdjustment << std::endl;
+				// std::cout << "Expected events: " << expectedEvents << std::endl;
+				// std::cout << "Scaling factor: " << expectedEvents / selectedHist -> Integral() << std::endl;
 				
 		
 
@@ -184,18 +181,12 @@ TH1* combineHists (std::vector<std::string> fileNames, std::string channel, std:
 			std::string cutCommand = std::string("gen_cat==") + std::to_string(codeMap [channel]);
 			tree -> Draw (drawCommand.c_str(), cutCommand.c_str());
 			TH1* selectedHist = dynamic_cast <TH1*> (gDirectory -> FindObject(histName.c_str()));
-			auto nEvents = file->Get<TH1>("hnevts");
 			if (!selectedHist)
 	
 			{	
 				std::cout<<"Histogram "<<histName<<" not found\n";
 				continue;
 			}
-			std::cout << "nEvents" << nEvents->GetBinContent(1) << std::endl;
-			std::cout << "Integral of selected histogram: " << selectedHist->Integral() << std::endl;
-			selectedHist->Scale(1.0 / nEvents->GetBinContent(1));\
-			
-
 			if (!hist)
 			{
 				hist = dynamic_cast<TH1*>(selectedHist -> Clone());
