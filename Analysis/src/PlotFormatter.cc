@@ -412,7 +412,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName,
     std::vector<std::shared_ptr<Process>> backgroundProcesses;
     for(std::string name : backgroundNames)
     {
-        std::cout << name << std::endl;
+        //std::cout << name << std::endl;
         // std::cout << channelName << std::endl;
         // std::cout << histvariable.getName() << std::endl;
         
@@ -956,7 +956,7 @@ TLegend* PlotFormatter::GetLegend(THStack* background, std::shared_ptr<Channel> 
     {
         name = processes->getNamesWithLabel(Channel::Label::Signal).at(0); 
         toAdd = name;
-        legend->AddEntry(signal, " Signal", "L");
+        legend->AddEntry(signal, " " + toAdd, "L");
     }
     int count = -1;
     for(const auto&& obj2 : *background->GetHists())

@@ -202,6 +202,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
             for (std::string processName : leptonProcesses->getNames())
             {
                 if (processName == "Higgs Signal 1000")
+                //if (processName == "Higgs signal eueu 1000")
                 {
                     leptonProcesses->labelProcess(Channel::Label::Signal, processName);
                 }
