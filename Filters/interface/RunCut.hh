@@ -12,7 +12,7 @@ class Event;
 class RunCut : public Cut
 {
 public:
-  RunCut(std::string filename);
+  RunCut(std::vector<std::string> filenames);
 
 protected:
   virtual bool checkEventInternal(const Event& event, const EventInput* input) const override;
