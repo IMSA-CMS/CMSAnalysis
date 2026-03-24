@@ -7,6 +7,7 @@
 #include "CMSAnalysis/Filters/interface/HiggsSelector.hh"
 #include "CMSAnalysis/Filters/interface/HiggsTriggerCut.hh"
 #include "CMSAnalysis/Filters/interface/HiggsZVetoFilter.hh"
+#include "CMSAnalysis/Filters/interface/KansasCuts.hh"
 #include "CMSAnalysis/Filters/interface/NLeptonsFilter.hh"
 #include "CMSAnalysis/Histograms/interface/HistogramPrototype2DProjection.hh"
 #include "CMSAnalysis/Histograms/interface/Histograms.hh"
@@ -34,7 +35,8 @@ void HiggsBackgroundPlan::initialize()
 
     auto eventMod = make_shared<EventModule>();
     auto hppSelector = make_shared<HPlusPlusGenSimSelector>();
-    auto higgsSelector = make_shared<HiggsSelector>();
+    //auto higgsSelector = make_shared<HiggsSelector>();
+    auto higgsSelector = make_shared<KansasCuts>();
     auto higgsCut = make_shared<HiggsCut>();
     // auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
     auto eventDump = make_shared<GenSimEventDumpModule>(5);

@@ -2,9 +2,10 @@
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/GenSimSimpleImplementation.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
+#include "CMSAnalysis/Utility/interface/Tau.hh"  
 #include <iostream>
 #include <string>
-
+#include <vector> 
 int NanoAODEventFile::positiveCounter = 0;
 int NanoAODEventFile::negativeCounter = 0;
 
@@ -72,6 +73,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
 		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("elec_charge", "Electron_charge"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_pt", "Electron_pt"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_reliso", "Electron_miniPFRelIso_all"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_pfreliso", "Electron_pfRelIso03_all"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dxy", "Electron_dxy"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dz", "Electron_dz"),
         //std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("elec_dEscaleDown", "Electron_dEscaleDown"),
@@ -85,6 +87,7 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
 		std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("muon_charge", "Muon_charge"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_pt", "Muon_pt"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_reliso", "Muon_miniPFRelIso_all"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_pfreliso", "Muon_pfRelIso04_all"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_dxy", "Muon_dxy"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_dz", "Muon_dz"),
         // do tau stuff here
@@ -96,7 +99,9 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("tau_pt", "Tau_pt"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("tau_dxy", "Tau_dxy"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("tau_dz", "Tau_dz"),
-        std::make_shared<TreeVariable<TTreeReaderArray<UChar_t>>>("tau_mvaid", "Tau_idDeepTau2017v2p1VSjet"),
+        std::make_shared<TreeVariable<TTreeReaderArray<UChar_t>>>("tau_mvaid", "Tau_idDeepTau2017v2p1VSjet"), //ask if int is correct
+        std::make_shared<TreeVariable<TTreeReaderArray<UChar_t>>>("tau_dmu", "Tau_idDeepTau2017v2p1VSmu"),
+        std::make_shared<TreeVariable<TTreeReaderArray<UChar_t>>>("tau_dele", "Tau_idDeepTau2017v2p1VSe"),
         
         std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("photon_eta", "Photon_eta"),
         std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("photon_phi", "Photon_phi"),
@@ -329,11 +334,12 @@ void NanoAODEventFile::nextEvent()
         charge, ParticleType::electron(), fit);
         // std::cout << "NanoAOD: " << getArrayElement<Bool_t>("elec_cutBasedHEEP", i) << '\n';
 //        particle.addInfo("CutBasedHEEP", getArrayElement<Bool_t>("elec_cutBasedHEEP", i));
-        particle.addInfo("Isolation", getArrayElement<Float_t>("elec_reliso", i));
+        particle.addInfo("Isolation", getArrayElement<Float_t>("elec_pfreliso", i));
         particle.addInfo("HEEP_map", getArrayElement<Int_t>("HEEP_bitmap", i)); 
         particle.addInfo("Electron_map", getArrayElement<Int_t>("Electron_bitmap", i)); 
         particle.addInfo("dxy", getArrayElement<Float_t>("elec_dxy", i));
         particle.addInfo("dz", getArrayElement<Float_t>("elec_dz", i));
+         particle.addInfo("mva90", getArrayElement<Bool_t>("mvaElecWP90", i));
         //particle.addInfo("eScaleDown", getArrayElement<Float_t>("elec_dEscaleDown", i));
         //particle.addInfo("eScaleUp", getArrayElement<Float_t>("elec_dEscaleUp", i));
         //particle.addInfo("eSigmaDown", getArrayElement<Float_t>("elec_dEsigmaDown", i));
@@ -374,39 +380,86 @@ void NanoAODEventFile::nextEvent()
         getArrayElement<Float_t>("muon_eta", i), getArrayElement<Float_t>("muon_phi", i), getArrayElement<Float_t>("muon_mass", i))),
         charge, ParticleType::muon(), fit);
         
-        particle.addInfo("Isolation", getArrayElement<Float_t>("muon_reliso", i)); 
+        particle.addInfo("Isolation", getArrayElement<Float_t>("muon_pfreliso", i)); 
         particle.addInfo("dxy", getArrayElement<Float_t>("muon_dxy", i));
         particle.addInfo("dz", getArrayElement<Float_t>("muon_dz", i));
+        particle.addInfo("mtight", getArrayElement<Bool_t>("muon_tightid", i));
         recoParticles.addParticle(particle);
     }
 
     //tau stuff 
     for (UInt_t i = 0; i < getVariable<UInt_t>("tau_size"); i++)
     {
+        
         int charge = getArrayElement<Int_t>("tau_charge", i);
         //std::cout<<charge;
         Particle::SelectionFit fit;
 
 
-        if (getArrayElement<UChar_t>("tau_mvaid", i) >= 32)
+        if (getArrayElement<UChar_t>("tau_mvaid", i) & 32)
         {
             fit = Particle::SelectionFit::Tight;
-        } else if (getArrayElement<UChar_t>("tau_mvaid", i) == 16)
+        } else if (getArrayElement<UChar_t>("tau_mvaid", i) & 16)
         {
             fit = Particle::SelectionFit::Medium;
-        } else if (getArrayElement<UChar_t>("tau_mvaid", i) == 8)
+        } else if (getArrayElement<UChar_t>("tau_mvaid", i) & 8)
         {
             fit = Particle::SelectionFit::Loose;
         } else {
             continue;
         }
+
+        
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("tau_pt", i),
         getArrayElement<Float_t>("tau_eta", i), getArrayElement<Float_t>("tau_phi", i), getArrayElement<Float_t>("tau_mass", i))),
         charge, ParticleType::tau(), fit);
-       
+        particle.addInfo("tau_idVSmu", getArrayElement<UChar_t>("tau_dmu", i));
+        particle.addInfo("tau_idVSele", getArrayElement<UChar_t>("tau_dele", i));
+        particle.addInfo("dz", getArrayElement<Float_t>("tau_dz", i));
         recoParticles.addParticle(particle);
     }
+    // for (UInt_t i = 0; i < getVariable<UInt_t>("tau_size"); i++)
+    // {
+    //     float pt  = getArrayElement<Float_t>("tau_pt", i);
+    //     float eta = getArrayElement<Float_t>("tau_eta", i);
+    //     if (pt < 20) continue;  
+    //     if (std::abs(eta) > 2.3) continue;
+
+    //     UChar_t vsjet = getArrayElement<UChar_t>("tau_mvaid", i);
+    //     UChar_t vsmu  = getArrayElement<UChar_t>("tau_dmu", i);
+    //     UChar_t vsele = getArrayElement<UChar_t>("tau_dsele", i);
+
+    //     if (!(vsjet & 16)) continue;  // VSjet Medium
+    //     if (!(vsmu  & 16)) continue;  // VSmu Medium
+    //     if (!(vsele & 8))  continue;  // VSele Loose
+
+    //     Particle::SelectionFit fit;
+    //     if (vsjet & 32) fit = Particle::SelectionFit::Tight;
+    //     else if (vsjet & 16) fit = Particle::SelectionFit::Medium;
+    //     else if (vsjet & 8)  fit = Particle::SelectionFit::Loose;
+    //     else continue;
+
+    //     // ---- Construct Particle first ----
+    //     Particle particle(
+    //         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(
+    //             pt,
+    //             eta,
+    //             getArrayElement<Float_t>("tau_phi", i),
+    //             getArrayElement<Float_t>("tau_mass", i)
+    //         )),
+    //         getArrayElement<Int_t>("tau_charge", i),
+    //         ParticleType::tau(),
+    //         fit
+    //     );
+
+    //     // ---- Construct Tau from Particle ----
+    //     Tau tau(particle);
+
+    //     // ---- Save to vector ----
+    //     taus.push_back(tau);
+    //}
+
 
     for (UInt_t i = 0; i < getVariable<UInt_t>("photon_size"); i++)
     {
@@ -451,7 +504,7 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoJets() const
                               getArrayElement<Float_t>("jet_phi", i), getArrayElement<Float_t>("jet_mass", i)),
                           // getArrayElement<Float_t>("jet_dxy", i),
                           // getArrayElement<Float_t>("jet_dz", i), 0,
-                          0, ParticleType::jet());
+                                0, ParticleType::jet());
         particle.addInfo("bJet", getArrayElement<Float_t>("jet_bTag", i));
         recoParticles.addParticle(particle);
     }
