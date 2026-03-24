@@ -148,7 +148,8 @@ bool fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
 
         // FitFunction funcDown;
         // FitFunction funcUp;
-        const auto name = genSim + "/" + std::to_string(mass) + ' ' + histVar.getName() + " " + systDesc;
+        const auto name =
+            genSim + "->" + channelName + "/" + std::to_string(mass) + ' ' + histVar.getName() + " " + systDesc;
         FitFunction func = FitFunction::createFunctionOfType(funcType, name, "", xMin, xMax, channelName);
 
         const std::string keyName = std::to_string(mass);

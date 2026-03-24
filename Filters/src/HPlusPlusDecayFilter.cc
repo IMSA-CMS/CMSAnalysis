@@ -72,7 +72,7 @@ std::string HPlusPlusDecayFilter::getState(const EventInput* inputMod) const
     {
         // identifies channel using Utility function 
         std::string channel = Utility::identifyChannel(reco);
-        //std::cout << channel << '\n';
+        //std::cout << "Channel: " << channel << '\n';
         return "Reco " + channel;
     }
 

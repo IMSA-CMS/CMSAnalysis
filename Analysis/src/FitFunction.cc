@@ -247,6 +247,13 @@ std::string FitFunction::getChannel()
     return channel_parameters[0];
 }
 
+double FitFunction::evaluate(double x)
+{
+    TF1* tf1 = getFunction();
+    double result = tf1->Eval(x);
+    return result;
+}
+
 // Helper function for splitting strings
 std::vector<std::string> FitFunction::split(const std::string &str, char delimiter)
 {
@@ -624,7 +631,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
             {
                 break;
             }
-            if (!line.starts_with("  Systematic:"))
+            if (!(line.find("  Systematic:") == 0))
             {
                 continue;
             }
@@ -635,7 +642,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
 
             // --- Up variation ---
 
-            if (getLine(stream, line) && line.starts_with("    UpParameters:"))
+            if (getLine(stream, line) && (line.find("    UpParameters:") == 0))
             {
                 std::istringstream ss(line.substr(17));
                 double val;
@@ -647,7 +654,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
 
             // --- Down variation ---
 
-            if (getLine(stream, line) && line.starts_with("    DownParameters:"))
+            if (getLine(stream, line) && (line.find("    DownParameters:") == 0))
             {
                 std::istringstream ss(line.substr(19));
                 double val;

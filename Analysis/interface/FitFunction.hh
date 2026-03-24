@@ -93,6 +93,7 @@ class FitFunction
 	std::string getChannelName();
 	std::string getParameterName();
   std::string getChannel();
+  double evaluate(double x);
 
 	void addSystematic(const std::string& sysName, const TF1& upFunction, const TF1& downFunction);
 	void addSystematic(const std::string& sysName, const std::vector<double>& upParams, const std::vector<double>& downParams);
