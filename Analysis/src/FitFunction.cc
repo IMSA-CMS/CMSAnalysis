@@ -82,6 +82,12 @@ double FitFunction::gausLogPowerNorm(double *xs, double *par)
     }
 }
 
+// Params: N, mu, width (Breit-Wigner), sigma (Gaussian)
+double FitFunction::voigt(double *x, double *par)
+{
+    return par[0] * TMath::Voigt(x[0] - par[1], par[3], par[2]);
+}
+
 FitFunction::FitFunction(const TF1 &func, FunctionType funcType, std::string channelName)
     : function(func), channelName(std::move(channelName)), functionType(funcType)
 {
@@ -201,6 +207,10 @@ FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const s
     case FunctionType::GausLogPowerNorm:
         func = TF1(name.data(), gausLogPowerNorm, min, max, 5, 1, TF1::EAddToList::kNo);
         func.SetParNames("N", "#mu", "#sigma_{1}", "s", "n");
+        break;
+    case FunctionType::Voigt:
+        func = TF1(name.data(), voigt, min, max, 4, 1, TF1::EAddToList::kNo);
+        func.SetParNames("N", "#mu", "#Gamma", "#sigma");
         break;
     };
 

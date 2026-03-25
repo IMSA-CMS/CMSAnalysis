@@ -73,6 +73,7 @@ class FitFunction
         PowerLaw,
         DoubleGaussian,
         GausLogPowerNorm,
+        Voigt,
     };
 
     // static const std::vector<std::string> functionList;
@@ -111,6 +112,7 @@ private:
     static double DSCB(double *x, double *par);
     static double doubleGaussian(double *x, double *par);
     static double gausLogPowerNorm(double *x, double *par);
+    static double voigt(double *x, double *par);
     static std::vector<std::string> split(const std::string &str, char delimiter);
 };
 
