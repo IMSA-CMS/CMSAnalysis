@@ -24,7 +24,7 @@ class FitFunctionCollection
 	// FitFunction& operator[](int index);
 	bool checkFunctionsSimilar();
 	std::unordered_map<std::string, FitFunction>& getFunctions();
-
+  
 private:
 	std::unordered_map<std::string, FitFunction> functions;
 	std::string name;

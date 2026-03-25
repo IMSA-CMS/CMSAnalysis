@@ -9,7 +9,7 @@ AnalyzerEventInput::AnalyzerEventInput(const EventInterface **iEventInterface) :
 }
 
 
-ParticleCollection<Particle> AnalyzerEventInput::getParticles(RecoLevel level, const ParticleType& particleType) const
+ParticleCollection<Particle> AnalyzerEventInput::getParticles(RecoLevel level, const ParticleType& particleType, bool includeSpecials) const
 {
     ParticleCollection<Particle> particleList;
     if (level == RecoLevel::GenSim)
@@ -77,6 +77,11 @@ unsigned long long AnalyzerEventInput::getEventIDNum() const
 long AnalyzerEventInput::getRunNum() const
 {
     return (*eventInterface)->getRunNum();
+}
+
+int AnalyzerEventInput::getLumiBlock() const
+{
+    return (*eventInterface)->getLumiBlock();
 }
 
 std::vector<bool> AnalyzerEventInput::getTriggerResults(std::string subProcess) const

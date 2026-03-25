@@ -24,19 +24,20 @@ static std::string defaultUnit(HistVariable::VariableType var)
 }
 
 HistVariable::HistVariable(ParticleType type, int order, VariableType var, std::string unit, 
-	bool is2DHistX, bool is2DHistY)
+	bool is2DHistX, bool is2DHistY, bool isCorrected)
     : particleType(type),
       order_(order),
       variableType(var),
       unit(unit.empty() ? defaultUnit(var) : unit),
       is2DHistX_(is2DHistX),
-      is2DHistY_(is2DHistY)
+      is2DHistY_(is2DHistY),
+      isCorrected(isCorrected)
 {
     assert(!(is2DHistX_ && is2DHistY_));
 }
 
-HistVariable::HistVariable(VariableType var, std::string unit, bool is2DHistX, bool is2DHistY) : 
-    HistVariable(ParticleType::none(), 0, var, unit, is2DHistX, is2DHistY)
+HistVariable::HistVariable(VariableType var, std::string unit, bool is2DHistX, bool is2DHistY, bool isCorrected) : 
+    HistVariable(ParticleType::none(), 0, var, unit, is2DHistX, is2DHistY, isCorrected)
 {}
 
 std::string HistVariable::getName() const
@@ -69,6 +70,18 @@ std::string HistVariable::getName() const
         {
             name += "leptonJet ";
         }
+        else if (isCorrected)
+        {
+            name += "corrected ";
+            if (particleType == ParticleType::electron())
+            {
+                name += "Electron ";
+            }
+            else if (particleType == ParticleType::muon())
+            {
+                name += "Muon ";
+            }
+        }
         else
         {
             name += particleType.getName() + ' ';
@@ -94,7 +107,11 @@ std::string HistVariable::getName() const
         name += "Opposite Sign Invariant Mass";
         break;
     case HistVariable::VariableType::InvariantMass:
-        name += "Reco Invariant Mass Background";
+        if (isCorrected)
+        {
+            name += "Corrected ";
+        }
+        name += "Reco Invariant Mass";
         break;
     case HistVariable::VariableType::RecoOppositeSignInvariantMass:
         name += "Reco Opposite Sign Invariant Mass";

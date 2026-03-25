@@ -135,11 +135,14 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
         std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_m1", "GenPart_genPartIdxMother"),
         std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("pdf_weight", "LHEPdfWeight"),
         std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("num_pdfs", "nLHEPdfWeight"),
-        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pileup", "Pileup_nTrueInt"),
+        std::make_shared<TreeVariable<TTreeReaderValue<Int_t>>>("gen_pileup", "Pileup_nPU"),
         std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("HEEP_bitmap", "Electron_vidNestedWPBitmapHEEP"),
         std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("Electron_bitmap", "Electron_vidNestedWPBitmap"),
         std::make_shared<TreeVariable<TTreeReaderValue<ULong64_t>>>("event", "event"),
-        std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("run", "run")};
+        std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("run", "run"),
+        std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("luminosityBlock", "luminosityBlock")
+    };
+
 
     // std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("elec_size",
     // "nElectron"),
@@ -475,9 +478,14 @@ long NanoAODEventFile::getRunNum() const
     return getVariable<UInt_t>("run");
 }
 
+int NanoAODEventFile::getLumiBlock() const
+{
+    return getVariable<UInt_t>("luminosityBlock");
+}
+
 int NanoAODEventFile::getNumPileUpInteractions() const
 {
-    return 1;
+    return getVariable<Int_t>("gen_pileup");
 }
 
 bool NanoAODEventFile::isDone() const

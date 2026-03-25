@@ -32,6 +32,7 @@ class MiniAODEventFile : public EventFile
         virtual reco::Candidate::LorentzVector getMET() const override;
         virtual unsigned long long getEventIDNum() const override; 
         virtual long getRunNum() const override; 
+        virtual int getLumiBlock() const override;
     private:
         std::shared_ptr<fwlite::Event> event = nullptr;
 };

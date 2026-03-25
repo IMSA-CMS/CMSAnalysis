@@ -28,6 +28,7 @@ class NanoAODEventFile : public EventFile
     virtual reco::Candidate::LorentzVector getMET() const override;
     virtual unsigned long long getEventIDNum() const override;
     virtual long getRunNum() const override;
+    virtual int getLumiBlock() const override;
     virtual int getNumPileUpInteractions() const override;
     virtual std::vector<double> getPDFWeights() const override;
     virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;

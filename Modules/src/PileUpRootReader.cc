@@ -72,11 +72,12 @@ std::map<std::string, ScaleFactor::ScaleFactorSet> PileUpRootReader::readData()
 	// Read the histogram and fill the scaleFactors map
 	for (int i = 1; i <= histogram->GetNbinsX(); ++i)
 	{
-		std::string key = std::to_string(histogram->GetXaxis()->GetBinLowEdge(i));
+		std::string key = std::to_string(static_cast<int>(histogram->GetXaxis()->GetBinLowEdge(i)));
 		double value = histogram->GetBinContent(i);
 		double valueUp = up->GetBinContent(i);
 		double valueDown = down->GetBinContent(i);
 		scaleFactors[key] = ScaleFactor::ScaleFactorSet(value, valueUp, valueDown);
+		//std::cout << "Reading key " << key << " Value: " << value << " Value Up: " << valueUp << " Value Down: " << valueDown<< '\n';
 	}
 	return scaleFactors;
 }

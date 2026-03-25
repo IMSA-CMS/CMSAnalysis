@@ -39,6 +39,7 @@ std::vector<HistVariable> variables, bool includeData, bool includeSignal)
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation/Data)");
 	plotFormatter->setUpperMasslimit(2000);
 	plotFormatter->setFirstBin(-1);
+	plotFormatter->setRebinFactor(5);
 	int graphSwitch = 5;
 
 	double massTarget = 1400;
@@ -280,7 +281,7 @@ void JumboPlot()
 		}
 	}
 
-	makePlots("Higgs Signal 2Channel", higgsAnalysis, channelTwoLeptons, variables ,true, false);
+	//makePlots("Higgs Signal 2Channel", higgsAnalysis, channelTwoLeptons, variables ,true, false);
 	//makePlots("Higgs Signal 3Channel", higgsAnalysis, channelThreeLeptons, variables , false, true);
 	//makePlots("Higgs Signal 4Channel", higgsAnalysis, channelFourLeptons, variables , false, true);
 
