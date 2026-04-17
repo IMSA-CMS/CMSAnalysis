@@ -1,7 +1,7 @@
 #ifndef MULTIYEARSCALEFACTOR_HH
 #define MULTIYEARSCALEFACTOR_HH
 
-#include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
+#include "CMSAnalysis/Modules/interface/MapBasedScaleFactor.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include <map>
 #include <string>
@@ -13,7 +13,7 @@ class MuonScaleFactor;
 class ElectronScaleFactor;
 class MultiYearScaleFactorReader;
 
-class MultiYearScaleFactor : public ScaleFactor
+class MultiYearScaleFactor : public MapBasedScaleFactor
 {
 public:
 
