@@ -65,3 +65,8 @@ std::vector<double> RootEventInterface::getPDFWeights() const
 {
     return eventFile->getPDFWeights();
 }
+
+double RootEventInterface::getEventQuantity(std::string key) const
+{
+    return eventFile->getEventQuantity(key);
+}
