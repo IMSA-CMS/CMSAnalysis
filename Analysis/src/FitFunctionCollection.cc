@@ -36,7 +36,7 @@ FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string &fi
     }
     else
     {
-        throw std::runtime_error("File not loaded successfully");
+        throw std::runtime_error("File " + fileName + " not loaded successfully");
     }
 
 }
