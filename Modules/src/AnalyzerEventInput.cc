@@ -108,3 +108,8 @@ std::vector<double> AnalyzerEventInput::getPDFWeights() const
 {
     return (*eventInterface)->getPDFWeights();
 }
+
+double AnalyzerEventInput::getEventQuantity(std::string key) const
+{
+    return (*eventInterface)->getEventQuantity(key);
+}

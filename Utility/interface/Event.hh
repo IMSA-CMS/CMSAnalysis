@@ -54,6 +54,9 @@ class Event
         long getRunNum() const {return input->getRunNum();}
         int getLumiBlock() const {return input->getLumiBlock();}
         void setInput(const EventInput* input1) {input = input1;}
+
+        double getEventQuantity(std::string key) const {return input->getEventQuantity(key);}
+
     private:
         //make particlecollections
         ParticleCollection<Electron> electrons;

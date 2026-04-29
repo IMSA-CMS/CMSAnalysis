@@ -51,26 +51,38 @@ public:
     };
 
     
-    ScaleFactor(std::string iname, std::shared_ptr<ScaleFactorReader> ireader);
-    virtual ~ScaleFactor() = default;
-    virtual double getScaleFactor(const EventInput* input, SystematicType type = SystematicType::Nominal) const;
-    std::string getName() const { return name; }
+//     ScaleFactor(std::string iname, std::shared_ptr<ScaleFactorReader> ireader);
+//     virtual ~ScaleFactor() = default;
+//     virtual double getScaleFactor(const EventInput* input, SystematicType type = SystematicType::Nominal) const;
+//     std::string getName() const { return name; }
 
- protected:
-     virtual std::vector<std::string> getKey(const EventInput* input) const = 0;
-     //std::map<std::string, ScaleFactorSet> & getScaleFactorMap() { return scaleFactors; }
-     const std::map<std::string, ScaleFactorSet> & getScaleFactorMap() const { return scaleFactors; }
+//  protected:
+//      virtual std::vector<std::string> getKey(const EventInput* input) const = 0;
+//      //std::map<std::string, ScaleFactorSet> & getScaleFactorMap() { return scaleFactors; }
+//      const std::map<std::string, ScaleFactorSet> & getScaleFactorMap() const { return scaleFactors; }
 
 
 
-private:
-    std::string name;
-    std::shared_ptr<ScaleFactorReader> reader;
-    // The scale factors are stored in a map with the key being the year and the value
-    std::map<std::string, ScaleFactorSet> scaleFactors;
+// private:
+//     std::string name;
+//     std::shared_ptr<ScaleFactorReader> reader;
+//     // The scale factors are stored in a map with the key being the year and the value
+//     std::map<std::string, ScaleFactorSet> scaleFactors;
 
 
      
+// };
+
+explicit ScaleFactor(std::string iname) : name(std::move(iname)) {}
+    virtual ~ScaleFactor() = default;
+
+    virtual double getScaleFactor(const EventInput* input,
+                                  SystematicType type = SystematicType::Nominal) const = 0;
+
+    std::string getName() const { return name; }
+
+private:
+    std::string name;
 };
 
 #endif // SCALEFACTOR_HH
