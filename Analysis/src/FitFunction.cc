@@ -1,4 +1,4 @@
-#include "CMSAnalysis/Analysis/interface/FitFunction.hh"
+#include "../interface/FitFunction.hh"
 #include "TF1.h"
 #include <TMath.h>
 #include <boost/algorithm/string/split.hpp>
