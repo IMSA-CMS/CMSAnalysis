@@ -1,12 +1,12 @@
 #ifndef EVENTSCALEFACTOR_HH
 #define EVENTSCALEFACTOR_HH
-#include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
+#include "CMSAnalysis/Modules/interface/MapBasedScaleFactor.hh"
 
-class EventScaleFactor : public ScaleFactor
+class EventScaleFactor : public MapBasedScaleFactor
 {
 	public: 
 	EventScaleFactor(std::string name, std::shared_ptr<ScaleFactorReader> reader)
-    : ScaleFactor(name, reader) {}
+    : MapBasedScaleFactor(name, reader) {}
 
 };
 

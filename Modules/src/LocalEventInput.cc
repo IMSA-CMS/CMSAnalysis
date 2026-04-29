@@ -86,3 +86,8 @@ std::vector<double> LocalEventInput::getPDFWeights() const
 {
     throw "Function not implemented";
 }
+
+double LocalEventInput::getEventQuantity(std::string key) const
+{
+    return event->getEventQuantity(key);
+}

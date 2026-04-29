@@ -39,8 +39,12 @@ void HiggsBackgroundPlan::initialize()
     auto higgsSelector = make_shared<HiggsSelector>();
     auto higgsCut = make_shared<HiggsCut>();
     auto runCut = make_shared<RunCut>(std::vector<std::string>{"ScaleFactors/Cert_271036-284044_13TeV_Legacy2016_Collisions16_JSON.txt",
-    "ScaleFactors/Cert_294927-306462_13TeV_UL2017_Collisions17_GoldenJSON.txt",
-    "ScaleFactors/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt" });
+							       "ScaleFactors/Cert_294927-306462_13TeV_UL2017_Collisions17_GoldenJSON.txt",
+							       "jsons/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt"});
+    //
+    // Note: The above JSON .txt files are located in CMSAnalysis/DataCollection/bin/textfiles.
+    // The directory "jsons" was created to store analysis JSONs (Golden, UltraLegacy, etc)
+    //
     // auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
     auto eventDump = make_shared<GenSimEventDumpModule>(5);
     auto bJetCut = make_shared<BJetCut>();
@@ -55,7 +59,7 @@ void HiggsBackgroundPlan::initialize()
     eventMod->addCut(bJetCut);
 
     // eventMod->addCut(quarkoniaCut);
-    CommonOperations::addHiggsScaleFactors(eventMod);
+    //CommonOperations::addHiggsScaleFactors(eventMod);
 
     auto matchMod = make_shared<MatchingModule>();
     auto triggerMod = make_shared<TriggerModule>();

@@ -1,4 +1,4 @@
-#include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
+#include "../interface/FitFunctionCollection.hh"
 #include <TF1.h>
 #include <fstream>
 #include <string>

@@ -1,25 +1,20 @@
-#include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
+#include "CMSAnalysis/Modules/interface/MapBasedScaleFactor.hh"
 #include "CMSAnalysis/Modules/interface/ScaleFactorReader.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/FileParams.hh"
 #include <stdexcept>
 
 
-ScaleFactor::ScaleFactor(std::string iname, std::shared_ptr<ScaleFactorReader> ireader):
-name(iname),
+MapBasedScaleFactor::MapBasedScaleFactor(std::string iname, std::shared_ptr<ScaleFactorReader> ireader):
+ScaleFactor(iname),
 reader(ireader),
 scaleFactors(reader->readData())
 {
 
 }
 
-double ScaleFactor::getScaleFactor(const EventInput* input, SystematicType type ) const
+double MapBasedScaleFactor::getScaleFactor(const EventInput* input, SystematicType type ) const
 {
-	//std::cout << "Weight event input: " << input <<std::endl;
-	if (input->getFileParams()->getProcess() == "Data")
- 	{
-	 	return 1.0; // No scale factor for data
- 	}
 	if (input->getFileParams()->getProcess() == "Data")
  	{
 	 	return 1.0; // No scale factor for data

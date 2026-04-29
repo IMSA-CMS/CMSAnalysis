@@ -3,7 +3,6 @@
 #include "CMSAnalysis/Modules/interface/MultiYearScaleFactor.hh"
 //#include "CMSAnalysis/Modules/interface/ElectronScaleFactor.hh"
 //#include "CMSAnalysis/Modules/interface/MuonScaleFactor.hh"
-#include "CMSAnalysis/Modules/interface/DummyScaleFactor.hh"
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
 #include "CMSAnalysis/Modules/interface/RootReader.hh"
 #include "CMSAnalysis/Modules/interface/MuonJSONReader.hh"
