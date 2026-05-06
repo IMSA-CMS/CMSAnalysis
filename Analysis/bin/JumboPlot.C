@@ -280,9 +280,9 @@ void JumboPlot()
 		}
 	}
 
-	// makePlots("Higgs Signal 2Channel", higgsAnalysis, channelTwoLeptons, variables ,true, false);
-	// makePlots("Higgs Signal 3Channel", higgsAnalysis, channelThreeLeptons, variables , false, true);
-	// makePlots("Higgs Signal 4Channel", higgsAnalysis, channelFourLeptons, variables , false, true);
+	makePlots("Higgs Signal 2Channel", higgsAnalysis, channelTwoLeptons, variables ,true, false);
+	makePlots("Higgs Signal 3Channel", higgsAnalysis, channelThreeLeptons, variables , false, true);
+	makePlots("Higgs Signal 4Channel", higgsAnalysis, channelFourLeptons, variables , false, true);
 
 	makePlots("Dark Photons Control", darkPhotonAnalysis, controlChannels, darkPhotonVariables, true, false);
 	makePlots("Dark Photons Signal", darkPhotonAnalysis, signalChannels, darkPhotonVariables, false, false);

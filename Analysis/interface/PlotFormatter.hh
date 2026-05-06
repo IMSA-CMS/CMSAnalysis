@@ -101,6 +101,8 @@ class PlotFormatter
 
         void ChangeAxisTitles(TH1*& hist, TString xAxisTitle, TString yAxisTitle);
 
+        int CalcRebinFactor(TH1* hist, int targetBins);
+
         void FormatSignalData(THStack*& background, TH1*& signal, TH1*& data, 
             std::vector<TH1*>& backgroundHists, int rebinFactor);
     

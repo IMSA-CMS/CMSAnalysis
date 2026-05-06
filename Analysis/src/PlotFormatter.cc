@@ -37,6 +37,7 @@ float top = 0.08*height;
 float bottom = 0.12*height;
 float left = 0.12*width;
 float right = 0.04*width;
+int binTarget = 30;
 
 TCanvas* PlotFormatter::superImposedStackHist(std::shared_ptr<Channel> processes, HistVariable histvariable, TString xAxisTitle, TString yAxisTitle)
 {
@@ -344,6 +345,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName,
 
     //int firstBin = 0;
     
+    
     int rebinFactor = 5;
     
     std::vector<std::shared_ptr<Channel>> channels = analysis->getChannels();
@@ -430,6 +432,10 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName,
         backgroundHists.push_back(hist);
         maxCombinedY += hist->GetMaximum();
         //std::cout << "Max Combined Y: " << maxCombinedY << std::endl;
+    }
+    if (maxCombinedY == 0)
+    {
+        return nullptr;
     }
     //std::cout << backgroundHists.size() << "\n";
     //std::cout << "End" << std::endl;
@@ -586,13 +592,13 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName,
     //Draws the other histogram   
     //DrawOtherHistograms(background, signal, data); 
     //std::cout <<"before creating histogram" << std::endl;
-    auto backgroundHist = CreateErrorHistogram(background,  backgroundProcesses, histvariable);
-    backgroundHist->SetFillColor(kBlack);
-    backgroundHist->SetFillStyle(3018);
-    // backgroundHist->SetLineColor(kRed);
-    // backgroundHist->SetLineWidth(5);
-    backgroundHist->Draw("E2 SAME");
-    //std::cout <<"Integral: " << backgroundHist->Integral() << std::endl;
+    // auto backgroundHist = CreateErrorHistogram(background,  backgroundProcesses, histvariable);
+    // backgroundHist->SetFillColor(kBlack);
+    // backgroundHist->SetFillStyle(3018);
+    // // backgroundHist->SetLineColor(kRed);
+    // // backgroundHist->SetLineWidth(5);
+    // backgroundHist->Draw("E2 SAME");
+    // //std::cout <<"Integral: " << backgroundHist->Integral() << std::endl;
     //backgroundHist->Draw("E2 SAME");
     
     //Draws on bottom pad
@@ -611,7 +617,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName,
         std::vector<double> yerror2(data->GetNbinsX() + 1);
 
         std::vector<double> centers;
-        GetBottomPadValues(data, background, backgroundHist, x, y, xerror2, yerror2, centers);
+        //GetBottomPadValues(data, background, backgroundHist, x, y, xerror2, yerror2, centers);
         auto graph = new TGraph(data->GetNbinsX() + 1, x.data(), y.data());
         //auto graph = new TGraph();
 
@@ -630,7 +636,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName,
         graph->Draw("AP SAME");
         errorgraph2->GetXaxis()->SetLimits(hist->GetXaxis()->GetXmin(), hist->GetXaxis()->GetXmax());
         errorgraph2->SetFillColor(16);
-        errorgraph2->Draw("SAME E3 0");
+        //errorgraph2->Draw("SAME E3 0");
     }
 
     // auto firstHist = dynamic_cast<TH1*>(background->GetHists()->At(0));
@@ -654,7 +660,7 @@ void PlotFormatter::FormatSignalData(THStack*& background, TH1*& signal, TH1*& d
     //std::cout << "Background Hist Names Start" << std::endl;
     for(TH1* backgroundHist : backgroundHists) 
     {
-        backgroundHist->Rebin(rebinFactor);
+        backgroundHist->Rebin(CalcRebinFactor(backgroundHist,binTarget));
         background->Add(backgroundHist);
         //std::cout << backgroundHist->GetName() << std::endl;
     }
@@ -681,7 +687,7 @@ void PlotFormatter::FormatSignalData(THStack*& background, TH1*& signal, TH1*& d
     //signal->Scale(std::pow(10, 6));
     if (signal)
     {
-        signal->Rebin(rebinFactor);
+        signal->Rebin(CalcRebinFactor(signal, binTarget));
 
         signal->SetLineColor(6);
         signal->SetFillColor(6);
@@ -691,7 +697,7 @@ void PlotFormatter::FormatSignalData(THStack*& background, TH1*& signal, TH1*& d
 
     if (data)
     {
-        data->Rebin(rebinFactor);  
+        data->Rebin(CalcRebinFactor(data, binTarget));  
 
         data->SetLineColor(kBlack);
         data->SetFillColor(kWhite);
@@ -700,6 +706,11 @@ void PlotFormatter::FormatSignalData(THStack*& background, TH1*& signal, TH1*& d
     }
 }
 
+int PlotFormatter::CalcRebinFactor(TH1* hist, int targetBins)
+{
+    int numBins = hist->GetNbinsX();
+    return std::max(1,numBins / targetBins);
+}
 void PlotFormatter::ChangeAxisTitles(TH1*& hist, TString xAxisTitle, TString yAxisTitle)
 {
     hist->GetYaxis()->SetTitle(yAxisTitle);

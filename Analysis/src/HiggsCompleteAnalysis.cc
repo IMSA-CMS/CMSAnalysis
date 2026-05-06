@@ -235,14 +235,14 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
             processes.push_back(ttBarandMultiBosonBackground);
             processes.push_back(wJetsBackground);
 
-            for (auto process : processes)
-            {
-                for (auto systematic : systematics)
-                {
-                    auto sys = std::make_shared<ShapeSystematic>(systematic);
-                    process->addSystematic(sys);
-                }
-            }
+            // for (auto process : processes)
+            // {
+            //     for (auto systematic : systematics)
+            //     {
+            //         auto sys = std::make_shared<ShapeSystematic>(systematic);
+            //         process->addSystematic(sys);
+            //     }
+            // }
 
             std::string modeLabel = zSelection ? "_ZPeak" : "";
 

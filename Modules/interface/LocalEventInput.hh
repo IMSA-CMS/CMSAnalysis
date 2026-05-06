@@ -20,11 +20,14 @@ class LocalEventInput : public EventInput
     public:
         LocalEventInput(const Event* event1);
 
+        void setEventFile(const EventInput* eventFile);
+
         virtual ParticleCollection<Particle> getParticles(RecoLevel level, const ParticleType& particleType = ParticleType::none(),
             bool includeSpecials = false) const override;
         virtual ParticleCollection<Particle> getJets(RecoLevel level) const override;
         virtual ParticleCollection<Particle> getSpecial(std::string key) const override;
         virtual int getNumPileUpInteractions() const override;
+        virtual double getEventQuantity(std::string key) const override;
 
         virtual std::vector<double> getPDFWeights() const override;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override;
@@ -38,5 +41,6 @@ class LocalEventInput : public EventInput
 
     private:
         const Event* event = nullptr;
+        const EventInput* eventFile = nullptr;
 };
 #endif
