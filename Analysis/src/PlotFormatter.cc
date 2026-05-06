@@ -345,8 +345,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName,
 
     //int firstBin = 0;
     
-    
-    int rebinFactor = 5;
+    //int rebinFactor = 5;
     
     std::vector<std::shared_ptr<Channel>> channels = analysis->getChannels();
     processes = channels.at(0);
@@ -414,7 +413,7 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName,
     std::vector<std::shared_ptr<Process>> backgroundProcesses;
     for(std::string name : backgroundNames)
     {
-        std::cout << name << std::endl;
+        //std::cout << name << std::endl;
         // std::cout << channelName << std::endl;
         // std::cout << histvariable.getName() << std::endl;
         
@@ -880,7 +879,7 @@ void PlotFormatter::writeText(int w, int h, float t, float b, float l, float r)
 {
     //Writes CMS logo and integrated luminosity
     int align_ = 13; 
-    TString lumiText = "139 f^-1, 13 TeV";
+    TString lumiText = "139 fb^-1, 13 TeV";
     TLatex latex;
     latex.SetNDC();
     latex.SetTextAngle(0);
@@ -967,15 +966,20 @@ TLegend* PlotFormatter::GetLegend(THStack* background, std::shared_ptr<Channel> 
     {
         name = processes->getNamesWithLabel(Channel::Label::Signal).at(0); 
         toAdd = name;
-        legend->AddEntry(signal, " Signal", "L");
+        legend->AddEntry(signal, " " + toAdd, "L");
     }
-    int count = 0;
-    for(const auto&& obj2 : *background->GetHists()) {
-        // std::cout << "count";
+    int count = -1;
+    for(const auto&& obj2 : *background->GetHists())
+    {
+        ++count;
+        auto object = dynamic_cast<TH1*>(obj2);
+        if (!object || object->GetEntries() == 0)
+        {
+            continue;
+        }
         name = processes->getNamesWithLabel(Channel::Label::Background).at(count);
         toAdd = name;
         legend->AddEntry(obj2, " " + toAdd, "F");
-        count++;
     }
 
     for (TF1* parameterizedFunction: parameterizedFunctions)
@@ -1226,7 +1230,7 @@ TH1* PlotFormatter::CreateErrorHistogram(THStack* hists, std::vector<std::shared
         // }
     }
 
-    backgroundHist->Draw("E2 SAME");
+    //backgroundHist->Draw("E2 SAME");
     return backgroundHist;
 }
 

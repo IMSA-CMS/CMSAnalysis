@@ -39,6 +39,7 @@ std::vector<HistVariable> variables, bool includeData, bool includeSignal)
 	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation/Data)");
 	plotFormatter->setUpperMasslimit(2000);
 	plotFormatter->setFirstBin(-1);
+	plotFormatter->setRebinFactor(5);
 	int graphSwitch = 5;
 
 	double massTarget = 1400;

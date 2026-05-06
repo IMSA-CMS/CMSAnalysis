@@ -6,8 +6,8 @@
 class HiggsHistNameFinder : public HistNameFinder
 {
   public:
-    HiggsHistNameFinder(std::string reco, std::string genSim = "", bool isData = false, bool zSelection = true, bool lowMass = true)
-        : reco(std::move(reco)), genSim(std::move(genSim)), isData(isData), zSelection(zSelection), lowMass(lowMass)
+    HiggsHistNameFinder(std::string reco, std::string genSim = "", bool zSelection = true, bool lowMass = true)
+        : reco(std::move(reco)), genSim(std::move(genSim)), zSelection(zSelection), lowMass(lowMass)
     {}
 
     std::string getHistName(const HistVariable &histVariable) const override;
@@ -15,7 +15,6 @@ class HiggsHistNameFinder : public HistNameFinder
   private:
     std::string reco;
     std::string genSim;
-    bool isData;
     bool zSelection;
     bool lowMass;
 };

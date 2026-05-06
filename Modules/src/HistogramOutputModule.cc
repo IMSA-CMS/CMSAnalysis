@@ -136,9 +136,51 @@ void HistogramOutputModule::fillHistogram(const std::string &path, const std::st
     }
 }
 
+double HistogramOutputModule::eventWeightL(ScaleFactor::SystematicType type, std::shared_ptr<ScaleFactor> scaleFactorToChange) const
+{
+  //std::cout << "Weight event input: " << getInput() <<std::endl;
+  double weight = 1.0;
+  for (auto scaleFactor : scaleFactors)
+  {
+    if (scaleFactor == scaleFactorToChange)
+    {
+      weight *= scaleFactor->getScaleFactor(getInput(), type);
+      //std::cout << "Up: " << scaleFactor->getScaleFactor(getInput(), ScaleFactor::SystematicType::Up) << std::endl;
+      //std::cout << "Down: " << scaleFactor->getScaleFactor(getInput(), ScaleFactor::SystematicType::Down) << std::endl;
+
+    }
+    else
+    {
+      weight *= scaleFactor->getScaleFactor(getInput());
+      //std::cout << "Scale Factor: " << scaleFactor->getScaleFactor(getInput()) << std::endl;
+    }
+    //std::cout << "weight: " << weight << std::endl;
+  }
+  return weight;
+  
+}
+
 bool HistogramOutputModule::process()
 {
+
+    //eventWeight need to be roemved and replaced with the code from  histogramprototype
+    // get all scale factors here and then use them later instead of eventweight
+    // event module stores scale factors, we need to store them here
+    // use map for up and down weights, call weights here, use just numbers later
+
+
     // std::cout << "HistOutMod running \n";
+    double weight = eventWeightL();
+    std::unordered_map<std::shared_ptr<ScaleFactor>, std::pair<double, double>> systematicWeights;
+
+    for (auto scaleFactor : scaleFactors)
+    {
+        systematicWeights[scaleFactor] = std::make_pair(eventWeightL(ScaleFactor::SystematicType::Up, scaleFactor), eventWeightL(ScaleFactor::SystematicType::Down, scaleFactor));
+    }
+
+    
+
+
     for (const auto &hist : histograms)
     {
         bool draw = hist->shouldDraw(); // call the shouldDraw function so we can
@@ -172,15 +214,15 @@ bool HistogramOutputModule::process()
         {
             makeHistogram(hist);
         }
-        fillHistogram(getFilterPath(), hist->getName(), value, hist->eventWeight());
+        fillHistogram(getFilterPath(), hist->getName(), value, weight);
         for (const auto &scaleFactor : hist->getScaleFactors())
         {
             fillHistogram(scaleFactor->getName() + "_Up/" + getFilterPath(), hist->getName(), value,
-                          hist->eventWeight(ScaleFactor::SystematicType::Up, scaleFactor));
-            // std::cout << "UP eventWeight: " << hist->eventWeight(ScaleFactor::SystematicType::Up, scaleFactor) <<
+                          systematicWeights[scaleFactor].first); //*
+            // std::cout << "UP eventWeight: " << hist->eventWeightL(ScaleFactor::SystematicType::Up, scaleFactor) <<
             // "\n";
             fillHistogram(scaleFactor->getName() + "_Down/" + getFilterPath(), hist->getName(), value,
-                          hist->eventWeight(ScaleFactor::SystematicType::Down, scaleFactor));
+                          systematicWeights[scaleFactor].second); //*
             // std::cout << "DOWN eventWeight: " << hist->eventWeight(ScaleFactor::SystematicType::Down,
             // scaleFactor) << "\n";
         }
