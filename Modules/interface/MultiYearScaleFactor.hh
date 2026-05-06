@@ -3,7 +3,6 @@
 
 #include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
-#include "CMSAnalysis/Utility/src/FileParams.cc"
 #include <map>
 #include <string>
 #include <memory>

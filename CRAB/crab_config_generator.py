@@ -10,6 +10,7 @@ if __name__ == "__main__":
     parser.add_argument("--numFiles")
     parser.add_argument("--skipFiles")
     parser.add_argument("--folder")
+    parser.add_argument("--mainFolder")
 
     args = parser.parse_args()
 
@@ -53,6 +54,7 @@ config.General.transferOutputs = True
 config.General.instance = 'prod'
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'PSet.py'
+config.JobType.maxMemoryMB = 3000
 config.JobType.inputFiles = ['FrameworkJobReport.xml', 'input/']
 config.JobType.scriptExe = '{prefix}runAnalyzer.sh'
 config.JobType.outputFiles = ['{args.output}']
@@ -62,7 +64,7 @@ config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 1
 config.Data.totalUnits = 1
 config.Data.publication = False
-{f"config.Data.outLFNDirBase = '/store/user/{args.user}/{args.folder}'" if args.folder else ""}
+{f"config.Data.outLFNDirBase = '/store/user/{args.user}/{args.mainFolder}/{args.folder}'" if args.folder else ""}
 config.Site.storageSite = 'T3_US_FNALLPC'
 """
 # replace storageSite with T3_CH_CERNBOX if on lxplus

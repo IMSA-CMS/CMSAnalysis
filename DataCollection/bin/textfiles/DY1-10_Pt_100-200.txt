@@ -1,0 +1,6 @@
+Drell-Yan
+MassCut:	1-10
+PtCut:	100-200
+Run:	2
+Format:	NanoAOD
+Year:	2016APV	2016	2017	2018

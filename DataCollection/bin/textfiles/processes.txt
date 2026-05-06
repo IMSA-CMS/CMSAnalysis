@@ -6,7 +6,8 @@ Year:	2016APV	2016	2017	2018	2022	2022EE
 Format:	MiniAOD	NanoAOD
 
 Drell-Yan
-MassCut:	4-10	10-50	50-inf
+MassCut:	1-10	10-50	50-inf
+PtCut:	All	100-200
 Run:	2	3	HLLHC
 Format:	NanoAOD	MiniAOD
 Year:	2016APV	2016	2017	2018	2022	2022EE

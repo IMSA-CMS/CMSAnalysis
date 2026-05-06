@@ -17,7 +17,7 @@ double ScaleFactor::getScaleFactor(const EventInput* input, SystematicType type 
 {
 	if (input->getFileParams()->getProcess() == "Data")
  	{
-	 return 1.0; // No scale factor for data
+	 	return 1.0; // No scale factor for data
  	}
 	auto keys = getKey(input);
 	double scaleFactor = 1; 

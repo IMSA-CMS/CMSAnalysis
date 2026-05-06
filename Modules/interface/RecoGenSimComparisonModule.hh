@@ -16,7 +16,7 @@
 class RecoGenSimComparisonModule : public AnalysisModule
 {
     public:
-        RecoGenSimComparisonModule(std::string compType = "perParticle", bool writeOutput = false);
+        RecoGenSimComparisonModule(std::shared_ptr<MatchingModule> matchingModule, std::string compType = "perParticle", bool writeOutput = false);
         virtual bool process() override;
         //prints information to the screen
         virtual void finalize() override;
@@ -32,6 +32,7 @@ class RecoGenSimComparisonModule : public AnalysisModule
     void sameSignDeltaRComparison(const ParticleCollection<Particle>& recoParts,  const ParticleCollection<Particle>& genParts, std::ostream& output);
     void fakePhotonComparison(const ParticleCollection<Particle>& recoParticles, const ParticleCollection<Particle>& genParticles, std::ostream& output_stream = std::cout);
     void mothersComparison(const ParticleCollection<Particle>& recoParticles, const ParticleCollection<Particle>& genParticles, std::ostream& output_stream = std::cout);
+    std::shared_ptr<MatchingModule> matchingModule;
     std::string comparisonType;
     bool eventOutput;
     
@@ -90,8 +91,18 @@ class RecoGenSimComparisonModule : public AnalysisModule
     int elecFsrCounter = 0;
     int muonIsrCounter = 0;
     int muonFsrCounter = 0;
-
     int muon24Count = 0;
+
+    //
+    int totalMatched = 0;
+    int lepJetCount = 0;
+    int lepJetParticleCount = 0;
+    int FSRCount = 0;
+    int ISRCount = 0;
+    int pileupCount = 0;
+    int hardScatterCount = 0;
+    int underlyingEventsCount = 0;
+    int unmatchedCount = 0;
 };
 
 #endif

@@ -13,7 +13,6 @@ class TwoInvariantMassesHist : public HistogramPrototype2D
     // Sorts two particle pairs based on flavor, charge, and invariant mass
     // Returns the sorted pair of invariant masses in the correct order
     std::pair<double, double> sortParticlePairs(const std::pair<Particle, Particle>& firstPair, const std::pair<Particle, Particle>& secondPair) const;
-    std::pair<std::pair<Particle, Particle>, std::pair<Particle, Particle>> findBestLeptonPairing() const;
 };
 
 #endif

@@ -327,8 +327,6 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
 
     //int firstBin = 0;
     
-    int rebinFactor = 5;
-    
     std::vector<std::shared_ptr<Channel>> channels = analysis->getChannels();
     processes = channels.at(0);
 
@@ -1013,7 +1011,7 @@ void PlotFormatter::Bin(std::vector<TH1*>& hists, TH1*& first, int& firstIndex, 
 
     for(TH1* hist : hists) 
     {
-        hist->Rebin(hist->GetNbinsX() / commonFactor);
+       // hist->Rebin(hist->GetNbinsX() / commonFactor);
     }
 
     double maxBinWidth = hists.at(0)->GetXaxis()->GetBinWidth(0);
@@ -1027,7 +1025,7 @@ void PlotFormatter::Bin(std::vector<TH1*>& hists, TH1*& first, int& firstIndex, 
     }
     for(TH1* hist : hists)
     {
-        hist->Rebin((int) (maxBinWidth / hist->GetXaxis()->GetBinWidth(0)));
+       // hist->Rebin((int) (maxBinWidth / hist->GetXaxis()->GetBinWidth(0)));
     }
 
     for(TH1* hist : hists) 

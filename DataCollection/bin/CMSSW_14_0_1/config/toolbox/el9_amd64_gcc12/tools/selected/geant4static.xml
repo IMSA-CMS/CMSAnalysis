@@ -1,8 +1,0 @@
-<tool name="geant4static" version="11.1.2-7cd3a7385c8dd8d2fdf272e345070ea1">
-  <lib name="geant4-static"/>
-  <client>
-    <environment name="GEANT4STATIC_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/geant4/11.1.2-7cd3a7385c8dd8d2fdf272e345070ea1"/>
-    <environment name="LIBDIR" default="$GEANT4STATIC_BASE/lib64/archive"/>
-  </client>
-  <use name="geant4_interface"/>
-</tool>

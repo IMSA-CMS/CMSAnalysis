@@ -67,6 +67,7 @@ class Particle
     reco::Candidate::LorentzVector getFourVector() const;
     const ParticleType& getType() const;
     Particle::SelectionFit getSelectionFit() const;
+    static double invariantMass(const Particle& p1, const Particle& p2);  
 
 protected:
   Particle(std::shared_ptr<ParticleImplementation> particle);

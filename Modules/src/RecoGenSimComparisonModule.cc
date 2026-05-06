@@ -1,6 +1,7 @@
 
 #include "CMSAnalysis/Modules/interface/RecoGenSimComparisonModule.hh"
-RecoGenSimComparisonModule::RecoGenSimComparisonModule(std::string compType, bool writeOutput):
+RecoGenSimComparisonModule::RecoGenSimComparisonModule(std::shared_ptr<MatchingModule> matchingModule, std::string compType, bool writeOutput):
+matchingModule(matchingModule),
 comparisonType(compType),
 eventOutput(writeOutput)
 {
@@ -91,6 +92,27 @@ void RecoGenSimComparisonModule::finalize()
         std::cout << "Muon events with FSR " << muonFsrCounter/(double)numOfDesiredEvents << "\n";
         std::cout << "No match muon events: " << muonNoMatchCounter/(double)numOfDesiredEvents << "\n\n";
         std::cout << "Fraction with Mu24 " << muon24Count/(double)eventCounter << "\n\n";
+
+        int count[5];
+        count[0] = FSRCount;
+        count[1] =  ISRCount;
+        count[2] =  hardScatterCount;
+        count[3] =  pileupCount;
+        count[4] =  underlyingEventsCount;
+
+        std::cout << "\n\n\n\n\n\n\n\n\n\n" << "---------------------------------------------------------" << "\nresults:     FSR             ISR             hS          pu          uE"; 
+        std::cout << "\ncount:       ";
+        for(int i=0; i<5; i++)
+        {
+            std::cout << count[i] << "              ";
+        }
+        std::cout << "\nrate:        ";
+        for(int i=0; i<5; i++)
+        {
+            std::cout << float(count[i]) / (lepJetParticleCount) << "               ";
+        }
+        std::cout << "\n---------------------------------------------------------\n";
+        std::cout << "lepton jet particle count:" <<lepJetParticleCount << "\n\n\n\n\n\n";
     }
 }
 void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particle>& recoParts, 
@@ -561,171 +583,288 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
 {
     std::ofstream unmatchedFile("unmatchedFile2.txt");
     unmatchedFile << "event #\tevent element\tname\tcharge\tpt\tEta\tPhi\tEnergy\tMass\n";
-    int recoEventElement = 1;
-    int genEventElement = 1;
-    int leptonCount = 0;
-    int elecCount = 0;
-    int muonCount = 0;
-    bool moun24Found = false;
-    int fromQuark = 0;
-    int fromLep = 0;
-    bool elecEvent = false;
-    bool muonEvent = false;
-    bool isr = false;
-    bool fsr = false;
-    for(auto &recoPart : recoParts)
-    {
-        if (recoPart.getType() == ParticleType::electron() && recoPart.getPt() > 5)
-        {
-            elecCount++;
-            leptonCount++;
-        }
-        if (recoPart.getType() == ParticleType::muon() && recoPart.getPt() > 5)
-        {
-            muonCount++;
-            leptonCount++;
-            moun24Found = moun24Found || recoPart.getPt() > 24;
-        }
-    }
-    if (moun24Found) 
-    {
-        ++muon24Count; 
-    }
-    
-    if (leptonCount < 4)
-    {
-        return;
-    }
-    printEventHeader(output);
-    numOfDesiredEvents++;
-    int noMatchCount = 0;
-    bool noMatch = true;
-    for(auto &recoPart : recoParts)
-    {
-        noMatch = true;
-        printRecoPart(recoPart, recoEventElement, output);
-        for (auto &genPart : genParts)
-        {
-            genEventElement = 1;
-            double deltaR = std::sqrt( std::pow(recoPart.getPhi() - genPart.getPhi(), 2) + std::pow(recoPart.getEta() - genPart.getEta(), 2) );
+    // int recoEventElement = 1;
+    // int genEventElement = 1;
+    // int leptonCount = 0;
+    // int elecCount = 0;
+    // int lepJetCount = 0;
+    // int muonCount = 0;
+    // bool moun24Found = false;
+    // int fromQuark = 0;
+    // int fromLep = 0;
+    // bool elecEvent = false;
+    // bool muonEvent = false;
+    // bool isr = false;
+    // bool fsr = false;
+    // for(auto &recoPart : recoParts)
+    // {//ParticleType::leptonJet()
+    //     // LeptonJet lepJet(recoPart);
+    //     // Match with closest GenSim
+    //     if (recoPart.getType() == ParticleType::leptonJet() && recoPart.getPt() > 5)
+    //     {
+    //             leptonCount++;
+    //         }
+    //         if (recoPart.getType() == ParticleType::muon() && recoPart.getPt() > 5)
+    //         {
+    //             muonCount++;
+    //             leptonCount++;
+    //             moun24Found = moun24Found || recoPart.getPt() > 24;
+    //         }
+    //     }
+    //     if (moun24Found) 
+    //     {
+    //         ++muon24Count; 
+    //     }
+        
+    //     if (leptonCount < 4)
+    //     {
+    //         return;
+    //     }
+    // printEventHeader(output);
+    // numOfDesiredEvents++;
+    // int noMatchCount = 0;
+    // bool noMatch = true;
+    // for(auto &recoPart : recoParts)
+    // {
+    //     noMatch = true;
+    //     printRecoPart(recoPart, recoEventElement, output);
+    //     for (auto &genPart : genParts)
+    //     {
+    //         genEventElement = 1;
+    //         double deltaR = std::sqrt( std::pow(recoPart.getPhi() - genPart.getPhi(), 2) + std::pow(recoPart.getEta() - genPart.getEta(), 2) );
             
-            if (deltaR < 0.1) //here deltaR is used instead of invariant mass 
-            {
-                noMatch = false;
-                if (eventOutput) 
-                {
-                    output << std::setw(8) << genEventElement << "| " << std::setw(9) << genPart.getName() << "| ";
-                    // Particle properties
-                    output << std::setw(13) << genPart.getCharge() << "| " 
-                        << std::setw(13) << genPart.getPt() << "| " 
-                        << std::setw(13) << genPart.getEta() << "| " 
-                        << std::setw(13) << genPart.getPhi() << "| ";
-                    try{
-                    output << std::setw(13) << genPart.getEnergy() << "| " 
-                        << std::setw(13) << genPart.getMass() << std::endl;
-                    }
-                    catch(const std::exception& e){
-                    output << std::setw(13) << "N/A" << "| " 
-                        << std::setw(13) << genPart.getMass() << std::endl;
-                    }
-                }
+    //         if (deltaR < 0.1) //here deltaR is used instead of invariant mass 
+    //         {
+    //             noMatch = false;
+    //             if (eventOutput) 
+    //             {
+    //                 output << std::setw(8) << genEventElement << "| " << std::setw(9) << genPart.getName() << "| ";
+    //                 // Particle properties
+    //                 output << std::setw(13) << genPart.getCharge() << "| " 
+    //                     << std::setw(13) << genPart.getPt() << "| " 
+    //                     << std::setw(13) << genPart.getEta() << "| " 
+    //                     << std::setw(13) << genPart.getPhi() << "| ";
+    //                 try{
+    //                 output << std::setw(13) << genPart.getEnergy() << "| " 
+    //                     << std::setw(13) << genPart.getMass() << std::endl;
+    //                 }
+    //                 catch(const std::exception& e){
+    //                 output << std::setw(13) << "N/A" << "| " 
+    //                     << std::setw(13) << genPart.getMass() << std::endl;
+    //                 }
+    //             }
 
-                //
-                std::cout << !GenSimParticle(genPart).hasUniqueMother();
-                if (!GenSimParticle(genPart).hasUniqueMother())
-                {
-                    if (eventOutput) output << std::endl;
-                    continue;
-                }
-                if (eventOutput) 
-                {
-                    output << std::setw(10) << GenSimParticle(genPart).uniqueMother().getType().getpdgId();
-                }
-                if (!GenSimParticle(genPart).uniqueMother().hasUniqueMother())
-                {
-                    output << std::endl;
-                    continue;
-                }
-                if (eventOutput) 
-                {
-                    output << std::setw(10) << GenSimParticle(genPart).uniqueMother().uniqueMother().getType().getpdgId() << std::endl;
-                }
-                if (GenSimParticle(genPart).uniqueMother().uniqueMother().getType() == ParticleType::electron() || GenSimParticle(genPart).uniqueMother().uniqueMother().getType() == ParticleType::muon())
-                {
-                    fromLep++;
-                }
-                else if (GenSimParticle(genPart).uniqueMother().uniqueMother().getType().getpdgId() < 7 && GenSimParticle(genPart).uniqueMother().uniqueMother().getType().getpdgId()>0)
-                {
-                    fromQuark++;
-                }
+    //             //
+    //             std::cout << !GenSimParticle(genPart).hasUniqueMother();
+    //             if (!GenSimParticle(genPart).hasUniqueMother())
+    //             {
+    //                 if (eventOutput) output << std::endl;
+    //                 continue;
+    //             }
+    //             if (eventOutput) 
+    //             {
+    //                 output << std::setw(10) << GenSimParticle(genPart).uniqueMother().getType().getpdgId();
+    //             }
+    //             if (!GenSimParticle(genPart).uniqueMother().hasUniqueMother())
+    //             {
+    //                 output << std::endl;
+    //                 continue;
+    //             }
+    //             if (eventOutput) 
+    //             {
+    //                 output << std::setw(10) << GenSimParticle(genPart).uniqueMother().uniqueMother().getType().getpdgId() << std::endl;
+    //             }
+    //             if (GenSimParticle(genPart).uniqueMother().uniqueMother().getType() == ParticleType::electron() || GenSimParticle(genPart).uniqueMother().uniqueMother().getType() == ParticleType::muon())
+    //             {
+    //                 fromLep++;
+    //             }
+    //             else if (GenSimParticle(genPart).uniqueMother().uniqueMother().getType().getpdgId() < 7 && GenSimParticle(genPart).uniqueMother().uniqueMother().getType().getpdgId()>0)
+    //             {
+    //                 fromQuark++;
+    //             }
 
-                // I do not know what this is
-                // if (recoPart.getType()==genPart.getType())
-                // {
-                //     if((recoPart.getPt() - genPart.getPt())/genPart.getPt() < 0.25 && genPart.getCharge() == recoPart.getCharge())
-                //     {
+    //             // I do not know what this is
+    //             // if (recoPart.getType()==genPart.getType())
+    //             // {
+    //             //     if((recoPart.getPt() - genPart.getPt())/genPart.getPt() < 0.25 && genPart.getCharge() == recoPart.getCharge())
+    //             //     {
                         
-                //     }
-                // }
-            }
-            genEventElement++;
-        }
-        if (noMatch)
-        {
-            output << eventCounter << "\t" << recoEventElement << "\t" << recoPart.getName() << "\t";
-            // Particle properties
-            output << recoPart.getCharge() << "\t" 
-            << recoPart.getPt() << "\t"
-            << recoPart.getEta() << "\t" 
-            << recoPart.getPhi() << "\t";
-            try
-            {
-                output << "\t" << recoPart.getEnergy() << "\t" << recoPart.getMass() << std::endl;
-            }
-            catch(const std::exception& e)
-            {
-                output << "\t" << "N/A" << "\t" << recoPart.getMass() << std::endl;
-            }
-            noMatchCount += noMatch;
-        }
-        recoEventElement++;
-    }
-    if (elecCount > 2) 
-    {
-        electronCounter++;
-        elecEvent = true;
-    }
-    if (muonCount > 2) 
-    {
-        muonCounter++;
-        muonEvent = true;
-    }
-    if (elecCount == 2 && muonCount == 2) 
-    {
-        electronCounter++;
-        elecEvent = true;
-    }
-    if (fromQuark > 2) 
-    {
-        isr = true;
-    }
-    if (fromLep >= 2)
-    {
-        fsr = true;
-    }
-    bool noMatchCaused = muonCount + elecCount - noMatchCount < 4;
-    noMatchCounter += noMatchCaused;
-    elecNoMatchCounter += noMatchCaused && elecEvent;
-    muonNoMatchCounter += noMatchCaused && muonEvent;
+    //             //     }
+    //             // }
+    //         }
+    //         genEventElement++;
+    //     }
+    //     if (noMatch)
+    //     {
+    //         output << eventCounter << "\t" << recoEventElement << "\t" << recoPart.getName() << "\t";
+    //         // Particle properties
+    //         output << recoPart.getCharge() << "\t" 
+    //         << recoPart.getPt() << "\t"
+    //         << recoPart.getEta() << "\t" 
+    //         << recoPart.getPhi() << "\t";
+    //         try
+    //         {
+    //             output << "\t" << recoPart.getEnergy() << "\t" << recoPart.getMass() << std::endl;
+    //         }
+    //         catch(const std::exception& e)
+    //         {
+    //             output << "\t" << "N/A" << "\t" << recoPart.getMass() << std::endl;
+    //         }
+    //         noMatchCount += noMatch;
+    //     }
+    //     recoEventElement++;
+    // }
+    // if (elecCount > 2) 
+    // {
+    //     electronCounter++;
+    //     elecEvent = true;
+    // }
+    // if (muonCount > 2) 
+    // {
+    //     muonCounter++;
+    //     muonEvent = true;
+    // }
+    // if (elecCount == 2 && muonCount == 2) 
+    // {
+    //     electronCounter++;
+    //     elecEvent = true;
+    // }
+    // if (fromQuark > 2) 
+    // {
+    //     isr = true;
+    // }
+    // if (fromLep >= 2)
+    // {
+    //     fsr = true;
+    // }
+    // bool noMatchCaused = muonCount + elecCount - noMatchCount < 4;
+    // noMatchCounter += noMatchCaused;
+    // elecNoMatchCounter += noMatchCaused && elecEvent;
+    // muonNoMatchCounter += noMatchCaused && muonEvent;
 
-    isrCounter += isr;
-    fsrCounter += fsr;
-    neitherCounter += !isr && !fsr;
-    elecIsrCounter += isr && elecEvent;
-    elecFsrCounter += fsr && elecEvent;
-    muonIsrCounter += isr && muonEvent;
-    muonFsrCounter += fsr && muonEvent;
-    unmatchedFile.close();
+    // isrCounter += isr;
+    // fsrCounter += fsr;
+    // neitherCounter += !isr && !fsr;
+    // elecIsrCounter += isr && elecEvent;
+    // elecFsrCounter += fsr && elecEvent;
+    // muonIsrCounter += isr && muonEvent;
+    // muonFsrCounter += fsr && muonEvent;
+    // unmatchedFile.close();
+
+
+
+    double bestDeltaR = 0;
+    double deltaR = 0;
+    bool skip = false;
+    // use the getFilter() to count the events in specific mass regions
+    // {
+    //     output << getFilter() << "\n\n";
+    // }
+
+    for(auto &recoPart : recoParts)
+    {//ParticleType::leptonJet()
+        // LeptonJet lepJet(recoPart);
+        // Match with closest GenSim
+        if (recoPart.getType() == ParticleType::leptonJet())
+        {
+            lepJetCount++;
+            LeptonJet lepJet(recoPart);
+            for(auto &particle : lepJet.getParticles())
+            {
+                auto pairs = matchingModule.getMatchingBestPairs().getPairs();
+                // type matching
+
+                lepJetParticleCount++;
+                bestDeltaR = 10;
+                bool foundMatch = false;
+                GenSimParticle bestMatch = GenSimParticle(recoPart);
+                for(auto &genPart : genParts)
+                {
+                    deltaR = particle.getDeltaR(genPart);
+                    if (deltaR < 0.1 && deltaR < bestDeltaR && particle.getType() == genPart.getType())
+                    {
+                        bestDeltaR = deltaR;
+                        bestMatch = GenSimParticle(genPart);
+                        foundMatch = true;
+                    }
+                }
+                if(!foundMatch)
+                {
+                    pileupCount++;
+                    continue;
+                }
+                totalMatched++;
+                if(!bestMatch.hasMother()) {std::cout << "NO MOTHER!!!!!\n\n\n\n\n"; continue;}
+                GenSimParticle currentMom = bestMatch.mother();
+                if(currentMom.pdgId() == bestMatch.pdgId() || currentMom.pdgId() == -1*bestMatch.pdgId())
+                {
+                    int depth = 0;
+                    GenSimParticle loopMom = currentMom;
+                    while (depth++ < 50)
+                    {
+                        int sameTypeCount = 0;
+                        for (GenSimParticle daughter : loopMom.getDaughters())
+                        {
+                            if (abs(daughter.pdgId()) == abs(bestMatch.pdgId()))
+                            {
+                                sameTypeCount++;
+                            }
+                        }
+                        if (sameTypeCount >= 2)
+                        {
+                            FSRCount++;
+                            skip = true;
+                            break;
+                        }
+                        if (abs(loopMom.pdgId()) != abs(bestMatch.pdgId()) || !loopMom.hasMother())
+                        {
+                            currentMom = loopMom;
+                            break;
+                        }
+                        loopMom = loopMom.mother();
+                    }
+                }
+                if(skip) {skip = false; continue;}
+                if(currentMom.pdgId() ==  22)
+                {
+                    FSRCount++;
+                    continue;
+                }
+                if(currentMom.pdgId() ==  23)
+                {
+                    hardScatterCount++;
+                    continue;
+                }
+                if(std::abs(currentMom.pdgId()) <= 8 && currentMom.status() == 21)
+                {
+                    ISRCount++;
+                    continue;
+                }
+                underlyingEventsCount++;
+            }
+
+        }
+    }
+    // int count[5];
+    // count[0] = FSRCount;
+    // count[1] =  ISRCount;
+    // count[2] =  hardScatterCount;
+    // count[3] =  pileupCount;
+    // count[4] =  underlyingEventsCount;
+
+    // std::cout << "\n\n\n\n\n\n\n\n\n\n" << "---------------------------------------------------------" << "\nresults:     FSR             ISR             hS          pu          uE"; 
+    // std::cout << "\ncount:       ";
+    // for(int i=0; i<5; i++)
+    // {
+    //     std::cout << count[i] << "              ";
+    // }
+    // std::cout << "\nrate:        ";
+    // for(int i=0; i<5; i++)
+    // {
+    //     std::cout << float(count[i]) / (lepJetParticleCount) << "               ";
+    // }
+    // std::cout << "\n---------------------------------------------------------\n";
+    // std::cout << "lepton jet particle count:" <<lepJetParticleCount << "\n\n\n\n\n\n";
 }
 //new Code
 // function to calculate deltaR

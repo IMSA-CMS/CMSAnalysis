@@ -1,6 +1,0 @@
-<tool name="py3-send2trash" version="1.8.0-6aa065f38847a4cc563854efbd03ae97">
-  <client>
-    <environment name="PY3_SEND2TRASH_BASE" default="/cvmfs/cms.cern.ch/el9_amd64_gcc12/external/py3-Send2Trash/1.8.0-6aa065f38847a4cc563854efbd03ae97"/>
-  </client>
-  <runtime name="PATH" value="$PY3_SEND2TRASH_BASE/bin" type="path"/>
-</tool>
