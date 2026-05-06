@@ -7,6 +7,6 @@ HistogramPrototype1D(iname, iNBins, iminimum, imaximum)
 std::vector<double> METHist::value() const
 {
     //std::cout << "metModule TEST: " << getInput()->getMET() << std::endl;
-    return {getInput()->getMET()};
+    return {getInput()->getMET().pt()};
 }
 

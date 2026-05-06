@@ -32,28 +32,10 @@ std::string HiggsHistNameFinder::getHistName(const HistVariable &histVariable) c
     {
         zSel = "ZVeto/";
     }
-    const std::string path = "hists/" + syst + zSel + "Reco " + reco + "/" + genSimStr + histVariable.getName();
+
+    std::string lowMassStr = lowMass ? "LowMass/" : "HighMass/";
+
+    const std::string path = "hists/" + syst + zSel + "Reco " + reco + "/" + lowMassStr +genSimStr + histVariable.getName();
 
     return path;
-
-    // std::string path = channel + "__hists/" + channel;
-    // if (isData)
-    // {
-    //     path += "_Pass";
-    // }
-    // path += "_" + histVariable.getName();
-    // // Add systematic type
-
-    // if (histVariable.getSystematicType() == ScaleFactor::SystematicType::Up)
-    // {
-    //     return path + "_" + histVariable.getSystematicName() + "_Up";
-    // }
-    // else if (histVariable.getSystematicType() == ScaleFactor::SystematicType::Down)
-    // {
-    //     return path + "_" + histVariable.getSystematicName() + "_Down";
-    // }
-    // else
-    // {
-    //     return path;
-    // }
 }

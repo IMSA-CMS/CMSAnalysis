@@ -19,7 +19,7 @@ class Process
         int getColor() const {return color;}
         int getNEvents();
         std::vector<SingleProcess> getProcesses() const {return processes;}
-        //Gets the hists frm all the singleProcesses as one hist
+        //Gets the hists from all the singleProcesses as one hist
         TH1* getHist(const HistVariable& histType, bool scaleToExpected = false) const;
         TH2* get2DHist(const HistVariable& histType) const;
         TH1* getSingleProcessHist(const HistVariable& histType, const std::string& singleProcessName, bool scaleToExpected = false) const;
@@ -27,12 +27,12 @@ class Process
         void addProcess(SingleProcess process);
         //Gets the total yield of all singleProcesses
         double getYield(const HistVariable& dataType) const;
-        //Returns table format data of all sinlleProcesses
+        //Returns table format data of all singleProcesses
         //std::vector<std::vector<std::string>> getData() const;
         void addSystematic(std::shared_ptr<Systematic> systematic);
         std::pair<TH1*, TH1*> getSystematicHist(HistVariable histType, bool scaleToExpected = false);
 
-        static std::pair<TH1*, TH1*> combineSystematics(std::vector<std::shared_ptr<Process>> processes, TH1* original);
+        std::pair<TH1*, TH1*> combineSystematics(std::vector<std::shared_ptr<Process>> processes, TH1* original, HistVariable histVar);
 
         std::shared_ptr<Systematic> calcSystematic(HistVariable histType, std::string systematicName, bool isShape);
         std::shared_ptr<Systematic> calcRateSystematic(HistVariable histType, std::string systematicName);

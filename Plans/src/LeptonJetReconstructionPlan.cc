@@ -40,6 +40,10 @@
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
 #include "CMSAnalysis/Filters/interface/NLeptonJetsFilter.hh"
 #include "CMSAnalysis/Filters/interface/FakePhotonSelector.hh"
+#include "CMSAnalysis/Histograms/interface/MassEta2Dhist.hh"
+#include "CMSAnalysis/Histograms/interface/MassPt2Dhist.hh"
+
+
 
 // Use 700-1000 2018, DY50
 
@@ -60,7 +64,7 @@ void LeptonJetReconstructionPlan::initialize()
   darkPhotonFilter->setInput(eventMod->getEventInput());
   nLeptonJetFilter->setInput(eventMod->getEventInput());
   
-  auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Mu37_TkMu27", "HLT_IsoMu24"});
+  auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>({"HLT_Mu37_TkMu27", "HLT_IsoMu24"})); //express muons
   auto highestMuonPtCut = make_shared<HighestMuonPtCut>(40);
   auto zVetoCut = make_shared<LeptonJetZVetoCut>();
 
@@ -71,7 +75,7 @@ void LeptonJetReconstructionPlan::initialize()
 
   //eventMod->addCut(highestMuonPtCut);
 
-  CommonOperations::addHiggsScaleFactors(eventMod);
+  //CommonOperations::addHiggsScaleFactors(eventMod);
 
   auto matchMod = std::make_shared<MatchingModule>();
   auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
@@ -87,7 +91,7 @@ void LeptonJetReconstructionPlan::initialize()
   
   auto lepRecoHistMod = lepRecoMod->getHistogramModule();
 
-  auto recoGenSimComparisonMod = std::make_shared<RecoGenSimComparisonModule>(matchMod, "mother", true);
+  auto recoGenSimComparisonMod = std::make_shared<RecoGenSimComparisonModule>("mother", true);
   recoGenSimComparisonMod->setInput(eventMod->getEventInput());
   auto leptonJetMLStripMod = std::make_shared<LeptonJetMLStripModule>();
   leptonJetMLStripMod->setInput(eventMod->getEventInput());
@@ -136,6 +140,9 @@ void LeptonJetReconstructionPlan::initialize()
   auto zoomedInLeptonJetInvMassHist = std::make_shared<LeptonJetInvariantMassHist>("Zoomed In Lepton Jet Invariant Mass", 1000, 0, 10);
   auto deltaXYHist = std::make_shared<DxyHist>(EventInput::RecoLevel::Reco, "Vertex Delta XY from Primary Vertex", 50, 0, 5);
   auto deltaZHist = std::make_shared<DzHist>(EventInput::RecoLevel::Reco, "Vertex Delta Z from Primary Vertex", 50, 0, 5);
+  auto massEtaHist = std::make_shared<MassEta2Dhist>("Mass vs Eta", 100, 100, 0, -3, 100, 3);
+  auto massPtHist = std::make_shared<MassPt2Dhist>("Mass vs Pt", 100, 100, 0, 0, 100, 400);
+
   // uncomented
 
   eventHistMod->addHistogram(deltaRHist);
@@ -150,6 +157,10 @@ void LeptonJetReconstructionPlan::initialize()
   //histOutputMod->addHistogram(relIsoHist);
   eventHistMod->addHistogram(leptonJetMLHist);
   eventHistMod->addHistogram(leptonJetMLHistForHiggs125Analysis);
+  eventHistMod->addHistogram(massEtaHist);
+  eventHistMod->addHistogram(massPtHist);
+
+
 
   //   histOutputMod->addHistogram(matchDeltaRHist);
   //   histOutputMod->addHistogram(matchPtHist);

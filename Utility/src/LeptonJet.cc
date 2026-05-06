@@ -39,36 +39,6 @@ double LeptonJet::getMass() const
   return leptonJetInvMass;
 }
 
-double LeptonJet::getMaxDXY() const
-{
-  auto particles = getParticles();
-  auto maxDXY = 0;
-  for (const auto& particle : particles)
-  {
-    auto lepton = Lepton(particle);
-    if (lepton.getDXY() > maxDXY) 
-    {
-      maxDXY = lepton.getDXY();
-    }
-  }
-  return maxDXY;
-}
-
-double LeptonJet::getMaxDZ() const
-{
-  auto particles = getParticles();
-  auto maxDZ = 0;
-  for (const auto& particle : particles)
-  {
-    auto lepton = Lepton(particle);
-    if (lepton.getDZ() > maxDZ) 
-    {
-      maxDZ = lepton.getDZ();
-    }
-  }
-  return maxDZ;
-}
-
 bool LeptonJet::allSameSign() const
 {
   auto particles = getParticles();

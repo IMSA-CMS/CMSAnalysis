@@ -54,7 +54,7 @@ class PlotFormatter
         //Complete Signal/Background plot
         TCanvas* completePlot(std::shared_ptr<FullAnalysis> analysis, HistVariable histvariable,
             TString xAxisTitle, TString yAxisTitle, bool scaleTodata, bool includeSignal, 
-            bool includeData, std::string channelName = "");
+            bool includeData, std::string channelName, std::vector<TF1*> parameterizedFunctions = {});
 
         //Deletes all hist pointers made with the PlotFormatter
         void deleteHists();
@@ -77,27 +77,41 @@ class PlotFormatter
         //Writes text and draws logo based on the margins
         void writeText(int w, int h, float t, float b, float l, float r);
     
-        TLegend* GetLegend(THStack* background, std::shared_ptr<Channel> processes, TH1* data,  TH1* signal, bool includeSignal, bool includeData);
+        TLegend* GetLegend(THStack* background, std::shared_ptr<Channel> processes, 
+            TH1* data,  TH1* signal, bool includeSignal, bool includeData, std::vector<TF1*> parameterizedFunctions = {});
         
-        void GraphFormat(TGraph*& graph, TGraphErrors*& errorgraph2, TString xAxisTitle, float xLabelSize, float xTitleSize, float yLableSize, float yTitleSize, float markerSize, float maximum, float minimum, float firstBin, float upperMasslimit);
+        void GraphFormat(TGraph*& graph, TGraphErrors*& errorgraph2, TString xAxisTitle, 
+            float xLabelSize, float xTitleSize, float yLableSize, 
+            float yTitleSize, float markerSize, float maximum, float minimum, 
+            float firstBin, float upperMasslimit);
         
-        void GetBottomPadValues(TH1*& data, THStack*& background, TH1* backgroundHist, std::vector<double>& x,  std::vector<double>& y,  std::vector<double>& xerror2,  std::vector<double>& yerror2 , std::vector<double>& centers);
+        void GetBottomPadValues(TH1*& data, THStack*& background, TH1* backgroundHist, 
+            std::vector<double>& x,  std::vector<double>& y,  
+            std::vector<double>& xerror2,  std::vector<double>& yerror2 , 
+            std::vector<double>& centers);
 
-        void IntegralScaling(double& upperMasslimit, bool& scaleTodata, std::vector<TH1*>& backgroundHists, int& firstBin, float& dataIntegral, float& backgroundIntegral);
+        void IntegralScaling(double& upperMasslimit, bool& scaleTodata, 
+            std::vector<TH1*>& backgroundHists, int& firstBin, 
+            float& dataIntegral, float& backgroundIntegral);
     
         int GetOrder(TH1* data, TH1* signal, THStack* background);
 
-        void DrawOtherHistograms(std::vector<TH1*>& hists, std::vector<int>& colors, int firstIndex);
+        void DrawOtherHistograms(std::vector<TH1*>& hists, std::vector<int>& colors, 
+            int firstIndex);
 
         void ChangeAxisTitles(TH1*& hist, TString xAxisTitle, TString yAxisTitle);
 
-        void FormatSignalData(THStack*& background, TH1*& signal, TH1*& data, std::vector<TH1*>& backgroundHists, int rebinFactor);
+        int CalcRebinFactor(TH1* hist, int targetBins);
+
+        void FormatSignalData(THStack*& background, TH1*& signal, TH1*& data, 
+            std::vector<TH1*>& backgroundHists, int rebinFactor);
     
         TLegend* GetSimpleLegend(std::vector<TH1*> hists, std::vector<std::string> names);
 
         TLegend* GetSimpleLegend(std::vector<TH1*> hists, std::vector<TString> names);
 
-        TLegend* GetSuperImposedLegend(std::shared_ptr<Channel> processes, HistVariable histvariable);
+        TLegend* GetSuperImposedLegend(std::shared_ptr<Channel> processes, 
+            HistVariable histvariable);
 
         TLegend* GetStackedLegend(std::shared_ptr<Channel> processes, THStack* hists);
 
@@ -111,8 +125,11 @@ class PlotFormatter
 
         // void SetErrors(std::shared_ptr<Process> process, HistVariable histVariable, TH1* original);
 
-        TH1* CreateErrorHistogram(THStack* hists, std::vector<std::shared_ptr<Process>> processes);
-
+        TH1* CreateErrorHistogram(THStack* hists, std::vector<std::shared_ptr<Process>> processes, HistVariable histVar);
+        
+        double CalculateLogMinimum(const std::vector<TH1*>& hists);
+        double CalculateLogMinimum(THStack* stack);
+        
         bool drawLogo;
         TString extraText;
         std::vector<TH1*> histVector;
@@ -121,6 +138,7 @@ class PlotFormatter
         double upperMasslimit;
         int rebinFactor;
         int firstBin;
+        
 
 };
 

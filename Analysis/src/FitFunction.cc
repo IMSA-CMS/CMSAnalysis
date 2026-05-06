@@ -1,4 +1,4 @@
-#include "CMSAnalysis/Analysis/interface/FitFunction.hh"
+#include "../interface/FitFunction.hh"
 #include "TF1.h"
 #include <TMath.h>
 #include <boost/algorithm/string/split.hpp>
@@ -80,6 +80,12 @@ double FitFunction::gausLogPowerNorm(double *xs, double *par)
     {
         return mult * exp(-s * pow(log(x / u), n));
     }
+}
+
+// Params: N, mu, width (Breit-Wigner), sigma (Gaussian)
+double FitFunction::voigt(double *x, double *par)
+{
+    return par[0] * TMath::Voigt(x[0] - par[1], par[3], par[2]);
 }
 
 FitFunction::FitFunction(const TF1 &func, FunctionType funcType, std::string channelName)
@@ -180,8 +186,8 @@ FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const s
     // std::cout << "ExpressionFormula enum: " << FunctionType::EXPRESSION_FORMULA << '\n';
     // std::cout << "Function Type: " << functionType << '\n';
     // std::cout << "Got to create function\n";
-    std::cout << "Name: " << name << ", Formula: " << expFormula << ", Min: " << min << ", Max: " << max
-              << ", Channel: " << channelName << '\n';
+    // std::cout << "Name: " << name << ", Formula: " << expFormula << ", Min: " << min << ", Max: " << max
+    //           << ", Channel: " << channelName << '\n';
     switch (functionType)
     {
     case FunctionType::ExpressionFormula:
@@ -201,6 +207,10 @@ FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const s
     case FunctionType::GausLogPowerNorm:
         func = TF1(name.data(), gausLogPowerNorm, min, max, 5, 1, TF1::EAddToList::kNo);
         func.SetParNames("N", "#mu", "#sigma_{1}", "s", "n");
+        break;
+    case FunctionType::Voigt:
+        func = TF1(name.data(), voigt, min, max, 4, 1, TF1::EAddToList::kNo);
+        func.SetParNames("N", "#mu", "#Gamma", "#sigma");
         break;
     };
 
@@ -239,6 +249,19 @@ std::string FitFunction::getParameterName()
 {
     std::vector<std::string> channel_parameters = split(getName(), '/');
     return channel_parameters[1];
+}
+
+std::string FitFunction::getChannel()
+{
+    std::vector<std::string> channel_parameters = split(getName(), '/');
+    return channel_parameters[0];
+}
+
+double FitFunction::evaluate(double x)
+{
+    TF1* tf1 = getFunction();
+    double result = tf1->Eval(x);
+    return result;
 }
 
 // Helper function for splitting strings
@@ -316,6 +339,44 @@ std::ostream &operator<<(std::ostream &stream, FitFunction &function)
 
     stream << '\n';
     // std::cout << "Got parameters\n";
+
+    // --- Systematics Section ---
+    auto systematics = function.listSystematics();
+    if (!systematics.empty())
+    {
+        stream << "Systematics: " << systematics.size() << '\n';
+        for (const auto &sysName : systematics)
+        {
+            const auto *const upFunc = function.getSystematic(sysName, true);
+            const auto *const downFunc = function.getSystematic(sysName, false);
+            stream << "  Systematic: " << sysName << '\n';
+
+            if (upFunc)
+            {
+                stream << "    UpParameters: ";
+                for (int i = 0; i < upFunc->GetNpar(); ++i)
+                {
+                    stream << upFunc->GetParameter(i) << ' ';
+                }
+                stream << '\n';
+            }
+
+            if (downFunc)
+            {
+                stream << "    DownParameters: ";
+                for (int i = 0; i < downFunc->GetNpar(); ++i)
+                {
+                    stream << downFunc->GetParameter(i) << ' ';
+                }
+                stream << '\n';
+            }
+        }
+    }
+    else
+    {
+        stream << "Systematics: 0\n";
+    }
+
     return stream;
 }
 
@@ -446,7 +507,8 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     {
         return stream;
     }
-    if (line.starts_with("Name:"))
+    std::cout << "Next line " << line << std::endl;
+    if (line.find("Name:") != std::string::npos)
     {
         name = line.substr(5);
     }
@@ -458,7 +520,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     {
         return stream;
     }
-    if (line.starts_with("FunctionTypeEnum:"))
+    if (line.find("FunctionTypeEnum:") != std::string::npos)
     {
         tempFuncType = std::stoi(line.substr(17));
     }
@@ -469,7 +531,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     {
         return stream;
     }
-    if (line.starts_with("ExpressionFormula:"))
+    if (line.find("ExpressionFormula:") != std::string::npos)
     {
         expFormula = line.substr(18);
     }
@@ -480,7 +542,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     {
         return stream;
     }
-    if (line.starts_with("Range:"))
+    if (line.find("Range:") != std::string::npos)
     {
         std::istringstream rangeStream(line.substr(6));
         rangeStream >> min >> max;
@@ -491,7 +553,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     {
         return stream;
     }
-    if (line.starts_with("NumOfParameters:"))
+    if (line.find("NumOfParameters:") != std::string::npos)
     {
         params = std::stoi(line.substr(16));
     }
@@ -511,8 +573,9 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     {
         return stream;
     }
-    if (line.starts_with("ParaNames:"))
+    if (line.find("ParaNames:") != std::string::npos)
     {
+        std::cout << __LINE__ << std::endl;
         std::istringstream ss(line.substr(10));
         for (int i = 0; i < params && ss; ++i)
         {
@@ -525,8 +588,9 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     {
         return stream;
     }
-    if (line.starts_with("Parameters:"))
+    if (line.find("Parameters:") != std::string::npos)
     {
+                std::cout << __LINE__ << std::endl;
         std::istringstream ss(line.substr(11));
         for (int i = 0; i < params && ss; ++i)
         {
@@ -539,8 +603,9 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     {
         return stream;
     }
-    if (line.starts_with("ParamErrors:"))
+    if (line.find("ParamErrors:") != std::string::npos)
     {
+                std::cout << __LINE__ << std::endl;
         std::istringstream ss(line.substr(12));
         for (int i = 0; i < params && ss; ++i)
         {
@@ -554,13 +619,117 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     // --- Set parameters ---
     for (int i = 0; i < params; ++i)
     {
+                std::cout << __LINE__ << std::endl;
         function.getFunction()->SetParName(i, paramNames[i].c_str());
         function.getFunction()->SetParameter(i, paramValues[i]);
         function.getFunction()->SetParError(i, paramErrors[i]);
     }
 
+    if (!getLine(stream, line))
+    {
+        return stream;
+    }
+    if (line.find("Systematics:") != std::string::npos)
+    {
+        int nSys = 0;
+        std::istringstream(line.substr(12)) >> nSys;
+        std::cout << "nSystematics: " << nSys << std::endl;
+        for (int s = 0; s < nSys; ++s)
+        {
+            std::string sysName;
+            if (!getLine(stream, line))
+            {
+                break;
+            }
+            if (!(line.find("  Systematic:") == 0))
+            {
+                continue;
+            }
+            sysName = line.substr(13); // Extract name after "  Systematic:"
+
+            std::vector<double> upParams;
+            std::vector<double> downParams;
+
+            // --- Up variation ---
+
+            if (getLine(stream, line) && (line.find("    UpParameters:") == 0))
+            {
+                std::istringstream ss(line.substr(17));
+                double val;
+                while (ss >> val)
+                {
+                    upParams.push_back(val);
+                }
+            }
+
+            // --- Down variation ---
+
+            if (getLine(stream, line) && (line.find("    DownParameters:") == 0))
+            {
+                std::istringstream ss(line.substr(19));
+                double val;
+                while (ss >> val)
+                {
+                    downParams.push_back(val);
+                }
+            }
+
+            // --- Register these in the FitFunction ---
+            if (!upParams.empty() || !downParams.empty())
+            {
+                function.addSystematic(sysName, upParams, downParams);
+            }
+        }
+    }
     func = function;
     std::cout << "Successfully read: " << name << " (" << params << " parameters)\n\n";
 
     return stream;
+}
+
+// Systematics Implementation
+
+void FitFunction::addSystematic(const std::string &sysName, const TF1 &upFunction, const TF1 &downFunction)
+{
+    systematics[sysName] = std::make_pair(upFunction, downFunction);
+}
+
+void FitFunction::addSystematic(const std::string &sysName, const std::vector<double> &upParams,
+                                const std::vector<double> &downParams)
+{
+
+    TF1 *upClone = (TF1 *)function.Clone((std::string(function.GetName()) + "_" + sysName + "_up").c_str());
+    TF1 *downClone = (TF1 *)function.Clone((std::string(function.GetName()) + "_" + sysName + "_down").c_str());
+
+    for (size_t i = 0; i < upParams.size(); ++i)
+    {
+        upClone->SetParameter(i, upParams[i]);
+    }
+    for (size_t i = 0; i < downParams.size(); ++i)
+    {
+        downClone->SetParameter(i, downParams[i]);
+    }
+
+    systematics[sysName] = std::make_pair(*upClone, *downClone);
+}
+
+const TF1 *FitFunction::getSystematic(const std::string &sysName, bool up) const
+{
+    auto it = systematics.find(sysName);
+    if (it == systematics.end())
+    {
+        return nullptr;
+    }
+    return up ? &(it->second.first) : &(it->second.second);
+}
+
+std::vector<std::string> FitFunction::listSystematics() const
+{
+    std::vector<std::string> names;
+    names.reserve(systematics.size());
+    for (const auto &kv : systematics)
+    {
+        names.push_back(kv.first);
+    }
+    return names;
 }

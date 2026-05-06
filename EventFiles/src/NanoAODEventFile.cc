@@ -45,7 +45,7 @@ bool NanoAODEventFile::checkTrigger(std::string triggerName, std::string subProc
         // return false;
         if (!tree->GetBranch(triggerName.c_str()))
         {
-            // std::cout << triggerName << " doesn't exist\n";
+           // std::cout << triggerName << " doesn't exist\n";
             return false;
         }
         auto currentEntry = treeReader.GetCurrentEntry();
@@ -135,11 +135,17 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
         std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("gen_m1", "GenPart_genPartIdxMother"),
         std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("pdf_weight", "LHEPdfWeight"),
         std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("num_pdfs", "nLHEPdfWeight"),
-        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("gen_pileup", "Pileup_nTrueInt"),
+        std::make_shared<TreeVariable<TTreeReaderValue<Int_t>>>("gen_pileup", "Pileup_nPU"),
         std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("HEEP_bitmap", "Electron_vidNestedWPBitmapHEEP"),
         std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("Electron_bitmap", "Electron_vidNestedWPBitmap"),
         std::make_shared<TreeVariable<TTreeReaderValue<ULong64_t>>>("event", "event"),
-        std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("run", "run")};
+        std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("run", "run"),
+        std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("luminosityBlock", "luminosityBlock"),
+        std::make_shared<TreeVariable<TTreeReaderValue<Float_t>>>("L1PreFiringWeight_Dn", "L1PreFiringWeight_Dn"),
+        std::make_shared<TreeVariable<TTreeReaderValue<Float_t>>>("L1PreFiringWeight_Up", "L1PreFiringWeight_Up"),
+        std::make_shared<TreeVariable<TTreeReaderValue<Float_t>>>("L1PreFiringWeight_Nom", "L1PreFiringWeight_Nom")
+    };
+
 
     // std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("elec_size",
     // "nElectron"),
@@ -326,8 +332,6 @@ void NanoAODEventFile::nextEvent()
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("elec_pt", i),
         getArrayElement<Float_t>("elec_eta", i), getArrayElement<Float_t>("elec_phi", i), getArrayElement<Float_t>("elec_mass", i))),
-        getArrayElement<Float_t>("elec_dxy", i),
-        getArrayElement<Float_t>("elec_dz", i),
         charge, ParticleType::electron(), fit);
         // std::cout << "NanoAOD: " << getArrayElement<Bool_t>("elec_cutBasedHEEP", i) << '\n';
 //        particle.addInfo("CutBasedHEEP", getArrayElement<Bool_t>("elec_cutBasedHEEP", i));
@@ -374,7 +378,7 @@ void NanoAODEventFile::nextEvent()
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("muon_pt", i),
         getArrayElement<Float_t>("muon_eta", i), getArrayElement<Float_t>("muon_phi", i), getArrayElement<Float_t>("muon_mass", i))),
-        getArrayElement<Float_t>("muon_dxy", i), getArrayElement<Float_t>("muon_dz", i), charge, ParticleType::muon(), fit);
+        charge, ParticleType::muon(), fit);
         
         particle.addInfo("Isolation", getArrayElement<Float_t>("muon_reliso", i)); 
         particle.addInfo("dxy", getArrayElement<Float_t>("muon_dxy", i));
@@ -405,7 +409,7 @@ void NanoAODEventFile::nextEvent()
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("tau_pt", i),
         getArrayElement<Float_t>("tau_eta", i), getArrayElement<Float_t>("tau_phi", i), getArrayElement<Float_t>("tau_mass", i))),
-        getArrayElement<Float_t>("tau_dxy", i), getArrayElement<Float_t>("tau_dz", i), charge, ParticleType::tau(), fit);
+        charge, ParticleType::tau(), fit);
        
         recoParticles.addParticle(particle);
     }
@@ -418,7 +422,7 @@ void NanoAODEventFile::nextEvent()
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("photon_pt", i),
         getArrayElement<Float_t>("photon_eta", i), getArrayElement<Float_t>("photon_phi", i), 0)),
-            0, 0, 0, ParticleType::photon(), fit);
+            0, ParticleType::photon(), fit);
         recoParticles.addParticle(particle);
     }
 // //    for (auto& particle : recoParticles)
@@ -430,7 +434,9 @@ void NanoAODEventFile::nextEvent()
 //             particle.addInfo("pweight" + std::to_string(i), weight);
 //         }
 //        }    
-
+    setEventQuantity("PreFiringWeight",getVariable<Float_t>("L1PreFiringWeight_Nom"));
+    setEventQuantity("PreFiringWeightUp",getVariable<Float_t>("L1PreFiringWeight_Up"));
+    setEventQuantity("PreFiringWeightDown",getVariable<Float_t>("L1PreFiringWeight_Dn"));
 }
 
 ParticleCollection<GenSimParticle> NanoAODEventFile::getGenSimParticles() const
@@ -453,18 +459,19 @@ ParticleCollection<Particle> NanoAODEventFile::getRecoJets() const
                               getArrayElement<Float_t>("jet_phi", i), getArrayElement<Float_t>("jet_mass", i)),
                           // getArrayElement<Float_t>("jet_dxy", i),
                           // getArrayElement<Float_t>("jet_dz", i), 0,
-                          0, 0, 0, ParticleType::jet());
+                          0, ParticleType::jet());
         particle.addInfo("bJet", getArrayElement<Float_t>("jet_bTag", i));
         recoParticles.addParticle(particle);
     }
     return recoParticles;
 }
 
-double NanoAODEventFile::getMET() const
+reco::Candidate::LorentzVector NanoAODEventFile::getMET() const
 {
     // std::cout << "met_pt TEST: " <<
     // static_cast<double>(getArrayElement<Float_t>("met_pt", 0)) << std::endl;
-    return static_cast<double>(getArrayElement<Float_t>("met_pt", 0));
+    auto vector = math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("met_pt", 0), 0, getArrayElement<Float_t>("met_phi", 0), 0);
+    return reco::Candidate::LorentzVector(vector);
 }
 
 unsigned long long NanoAODEventFile::getEventIDNum() const
@@ -476,9 +483,14 @@ long NanoAODEventFile::getRunNum() const
     return getVariable<UInt_t>("run");
 }
 
+int NanoAODEventFile::getLumiBlock() const
+{
+    return getVariable<UInt_t>("luminosityBlock");
+}
+
 int NanoAODEventFile::getNumPileUpInteractions() const
 {
-    return 1;
+    return getVariable<Int_t>("gen_pileup");
 }
 
 bool NanoAODEventFile::isDone() const

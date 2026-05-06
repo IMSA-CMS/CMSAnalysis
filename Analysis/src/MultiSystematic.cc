@@ -28,8 +28,9 @@ void MultiSystematic::addSystematic(std::shared_ptr<Systematic> systematic)
 	systematics.push_back(systematic);
 }
 
-std::pair<TH1*, TH1*> MultiSystematic::getUncertainties(TH1* original) const 
+std::pair<TH1*, TH1*> MultiSystematic::getUncertainties(TH1* original, HistVariable histVar, const Process* process) const 
 {
+	std::cout << "getUncertainties()\n";
 	const double tolerance = 1e-8;
 	auto histHigh = new TH1F("High hist", "High hist", original->GetNbinsX(), original->GetXaxis()->GetXmin(), original->GetXaxis()->GetXmax());
 	auto histLow = new TH1F("Low hist", "Low hist",original->GetNbinsX(), original->GetXaxis()->GetXmin(), original->GetXaxis()->GetXmax());
@@ -37,18 +38,18 @@ std::pair<TH1*, TH1*> MultiSystematic::getUncertainties(TH1* original) const
 	{
 		double deltayHigh = 0;
 		double deltayLow = 0;
-		std::pair<TH1*, TH1*> margins = system->getUncertainties(original);
+		std::pair<TH1*, TH1*> margins = system->getUncertainties(original, histVar, process);
 		int binsHigh = margins.first->GetNbinsX();
 		int binsLow = margins.second->GetNbinsX();
 	
-		// double originalContent = original->GetBinContent(15);
-    	// std::cout<<"original graph content: " << originalContent << std::endl;
+		double originalContent = original->GetBinContent(15);
+    	std::cout<<"original graph content: " << originalContent << std::endl;
 
-		// double highContent = margins.first->GetBinContent(15);
-   		// std::cout<<"\nmultisystematic high graph content: " << highContent << std::endl;
+		double highContent = margins.first->GetBinContent(15);
+   		std::cout<<"\nmultisystematic high graph content: " << highContent << std::endl;
 		
-		// double lowContent = margins.second->GetBinContent(15);
-    	// std::cout<<"multisystematic low graph content: " << lowContent << std::endl;
+		double lowContent = margins.second->GetBinContent(15);
+    	std::cout<<"multisystematic low graph content: " << lowContent << std::endl;
 
 
 		for (int bin = 0; bin <= binsHigh + 1; bin++)
@@ -59,6 +60,7 @@ std::pair<TH1*, TH1*> MultiSystematic::getUncertainties(TH1* original) const
 				float adjusted_y_value = margins.first->GetBinContent(bin);
 				float change = (adjusted_y_value - y_value)/y_value;
 				deltayHigh += change*change;
+				histHigh->SetBinContent(bin, histHigh->GetBinContent(bin) + change*change);
 				std::cout<<"delta high: " << deltayHigh << std::endl;
 			}
 		}
@@ -71,13 +73,14 @@ std::pair<TH1*, TH1*> MultiSystematic::getUncertainties(TH1* original) const
 				float adjusted_y_value = margins.second->GetBinContent(bin);
 				float change = (adjusted_y_value - y_value)/y_value;
 				deltayLow += change*change;
+				histLow->SetBinContent(bin, histLow->GetBinContent(bin) + change*change);
 				std::cout<<"delta low: " << deltayLow << std::endl;
 			}
 		}
 		double totalChangeHigh = sqrt(deltayHigh);
-		histHigh->Fill(totalChangeHigh);
+		// histHigh->Fill(totalChangeHigh);
 		double totalChangeLow = sqrt(deltayLow);
-		histLow->Fill(totalChangeLow);
+		// histLow->Fill(totalChangeLow);
 	}
 	return {histHigh, histLow};
 }
@@ -98,7 +101,7 @@ std::pair<TH1*, TH1*> MultiSystematic::getUncertainties(TH1* original) const
 // 	return std::make_shared<MultiSystematic>(*this);
 // }
 
-std::pair<TH1*, TH1*> MultiSystematic::combineSystematics(std::vector<std::shared_ptr<MultiSystematic>> systematics, TH1* original)
+std::pair<TH1*, TH1*> MultiSystematic::combineSystematics(std::vector<std::shared_ptr<MultiSystematic>> systematics, TH1* original, HistVariable histVar, const Process* process)
 {
 	std::unordered_map<std::string, std::pair<TH1*, TH1*>> histMap;
 	for (auto system : systematics)
@@ -107,11 +110,11 @@ std::pair<TH1*, TH1*> MultiSystematic::combineSystematics(std::vector<std::share
 		{
 			if (histMap.find(newSystem->getName()) == histMap.end())
 			{
-				histMap[newSystem->getName()] = newSystem->getUncertainties(original);
+				histMap[newSystem->getName()] = newSystem->getUncertainties(original, histVar, process);
 			}
 			else
 			{
-				std::pair<TH1*, TH1*> hist = newSystem->getUncertainties(original);
+				std::pair<TH1*, TH1*> hist = newSystem->getUncertainties(original, histVar, process);
 				histMap[newSystem->getName()].first->Add(hist.first);
 				histMap[newSystem->getName()].second->Add(hist.second);
 			}
@@ -142,6 +145,7 @@ std::pair<TH1*, TH1*> MultiSystematic::combineSystematics(std::vector<std::share
 	{
 		histPair.first->SetBinContent(bin, std::sqrt(histPair.first->GetBinContent(bin)));
 		histPair.second->SetBinContent(bin, std::sqrt(histPair.second->GetBinContent(bin)));
+		std::cout << "Bin " << bin << " hist content: " << histPair.first->GetBinContent(bin) << '\n';
 	}
 	return histPair;
 }

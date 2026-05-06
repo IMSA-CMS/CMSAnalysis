@@ -24,9 +24,10 @@ class DelphesEventFile : public EventFile
         virtual int getNumOfEvents() const override {return tree->GetEntries();}
 
         //virtual GenEventInfoProduct getGenInfo() const override;
-        virtual double getMET() const override;
+        virtual reco::Candidate::LorentzVector getMET() const override;
         virtual unsigned long long getEventIDNum() const override;
         virtual long getRunNum() const override;
+        virtual int getLumiBlock() const override {throw std::runtime_error("not implemented yet");}
         virtual int getNumPileUpInteractions() const override {throw std::runtime_error("not implemented yet");}
         virtual std::vector<double> getPDFWeights() const override;
         virtual std::vector<bool> getTriggerResults(std::string subProcess) const override {throw std::runtime_error("not implemented yet");}

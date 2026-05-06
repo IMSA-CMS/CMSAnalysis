@@ -24,6 +24,8 @@ class HistogramOutputModule : public AnalysisModule
     void addHistogram(std::shared_ptr<HistogramPrototype> hist); // Adds a HistogramPrototype* to histogram (the vector)
     virtual void setInput(const EventInput *iInput) override;
     void addScaleFactor(std::shared_ptr<ScaleFactor> scaleFactor);
+    double eventWeightL(ScaleFactor::SystematicType type = ScaleFactor::SystematicType::Nominal, std::shared_ptr<ScaleFactor> scaleFactorToChange = nullptr) const;
+
     virtual std::string getName() override
     {
         return "HistogramOutputModule";
@@ -52,10 +54,7 @@ class HistogramOutputModule : public AnalysisModule
     void makeHistogram(std::shared_ptr<HistogramPrototype> h);
 
     // Convenient getter methods to access histograms
-    TH1 *getHistogram(const std::string &path, const std::string &name)
-    {
-        return dynamic_cast<TH1 *>(getObject(path, name));
-    }
+    TH1 *getHistogram(const std::string &path, const std::string &name);
     const TH1 *getHistogram(const std::string &path, const std::string &name) const
     {
         return dynamic_cast<const TH1 *>(getObject(path, name));

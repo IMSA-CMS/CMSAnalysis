@@ -16,7 +16,7 @@
 class RecoGenSimComparisonModule : public AnalysisModule
 {
     public:
-        RecoGenSimComparisonModule(std::shared_ptr<MatchingModule> matchingModule, std::string compType = "perParticle", bool writeOutput = false);
+        RecoGenSimComparisonModule(std::string compType = "perParticle", bool writeOutput = false);
         virtual bool process() override;
         //prints information to the screen
         virtual void finalize() override;
@@ -32,7 +32,7 @@ class RecoGenSimComparisonModule : public AnalysisModule
     void sameSignDeltaRComparison(const ParticleCollection<Particle>& recoParts,  const ParticleCollection<Particle>& genParts, std::ostream& output);
     void fakePhotonComparison(const ParticleCollection<Particle>& recoParticles, const ParticleCollection<Particle>& genParticles, std::ostream& output_stream = std::cout);
     void mothersComparison(const ParticleCollection<Particle>& recoParticles, const ParticleCollection<Particle>& genParticles, std::ostream& output_stream = std::cout);
-    std::shared_ptr<MatchingModule> matchingModule;
+
     std::string comparisonType;
     bool eventOutput;
     

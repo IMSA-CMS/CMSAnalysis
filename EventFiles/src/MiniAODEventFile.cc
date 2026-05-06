@@ -89,13 +89,13 @@ int MiniAODEventFile::getNumPileUpInteractions() const {
 
 }
 
-double MiniAODEventFile::getMET() const
+reco::Candidate::LorentzVector MiniAODEventFile::getMET() const
 {
     edm::Handle<std::vector<pat::MET>> mets;
     event->getByLabel(edm::InputTag("slimmedMETs"), mets);
     for (const auto& p : *mets)
     {
-        return p.corPt(pat::MET::METCorrectionLevel::Type1);
+        return p.corP4(pat::MET::METCorrectionLevel::Type1);
     }
     throw std::runtime_error("There are no MET objects found");
 }
@@ -182,4 +182,9 @@ bool MiniAODEventFile::isDone() const
 std::vector<double> MiniAODEventFile::getPDFWeights() const
 {
     throw "Function not implemented";
+}
+
+int MiniAODEventFile::getLumiBlock() const
+{
+    throw std::runtime_error("MiniAODEventFile has no implementation of getLumiBlock - needs to be implemented");
 }

@@ -1,19 +1,19 @@
-#include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
+#include "CMSAnalysis/Modules/interface/MapBasedScaleFactor.hh"
 #include "CMSAnalysis/Modules/interface/ScaleFactorReader.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/FileParams.hh"
 #include <stdexcept>
 
 
-ScaleFactor::ScaleFactor(std::string iname, std::shared_ptr<ScaleFactorReader> ireader):
-name(iname),
+MapBasedScaleFactor::MapBasedScaleFactor(std::string iname, std::shared_ptr<ScaleFactorReader> ireader):
+ScaleFactor(iname),
 reader(ireader),
 scaleFactors(reader->readData())
 {
 
 }
 
-double ScaleFactor::getScaleFactor(const EventInput* input, SystematicType type ) const
+double MapBasedScaleFactor::getScaleFactor(const EventInput* input, SystematicType type ) const
 {
 	if (input->getFileParams()->getProcess() == "Data")
  	{
@@ -28,6 +28,7 @@ double ScaleFactor::getScaleFactor(const EventInput* input, SystematicType type 
 		{
 			throw std::runtime_error("Scale factor " + key + " not found!");
 		}
+		//std::cout << "Scale factor " << name << ": " << " key " << key << " sys type " << static_cast<int>(type) << " value " << entry->second.getSystematic(type) << std::endl;
 		scaleFactor *= entry->second.getSystematic(type);
 	}
 	return scaleFactor;

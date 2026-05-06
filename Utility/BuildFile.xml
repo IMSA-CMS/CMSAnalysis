@@ -12,6 +12,7 @@
 <use   name="TrackingTools/TransientTrack"/>
 <use   name="rootgraphics"/>
 <use   name="roottmva"/>
+<use   name="EventFilter/Utilities"/>
 <export>
    <lib name="1"/>
 </export>

@@ -40,15 +40,17 @@ class CmsswEventInterface : public EventInterface
         ParticleCollection<GenSimParticle> getGenSimParticles() const override;
         ParticleCollection<Particle> getRecoParticles() const override;
         ParticleCollection<Particle> getRecoJets() const override;
-        double getMET() const override;
+        reco::Candidate::LorentzVector getMET() const override;
         std::vector<double> getPDFWeights() const override;
         unsigned long long getEventIDNum() const override; 
         long getRunNum() const override; 
+        virtual int getLumiBlock() const override;
         std::vector<bool> getTriggerResults(std::string subProcess) const override;
         std::vector<std::string> getTriggerNames(std::string subProcess) const override;
         int getNumPileUpInteractions() const override;
         bool checkTrigger(std::string triggerName, std::string subProcess) const override;
         const std::shared_ptr<FileParams> getFileParams() const override;
+        double getEventQuantity(std::string key) const override;
         
     private:
         const edm::Event* event = nullptr;
