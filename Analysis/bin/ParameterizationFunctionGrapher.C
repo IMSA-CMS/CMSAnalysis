@@ -45,7 +45,13 @@ FitFunction createSignalDSCB(std::string channel, std::string xOrY, FitFunctionC
 	{
 		auto function = pair.second;
 		//std::cout << "Channel name: " << function.getChannel() << "\n";
-		std::cout << "Function name: " << function.getName() << "\n";
+		if (!containsSubstring(function.getName(), "Nominal"))
+		{
+			continue;
+		}
+		// std::cout << "Function name: " << function.getName() << "\n";
+		// std::cout << "Function channel: " << function.getChannel() << "\n";
+		// std::cout << "xOrY: " << xOrY << "isXOrY: " << containsSubstring(function.getName(), xOrY) << "\n";
 		bool isXOrY = containsSubstring(function.getName(), xOrY);
 		if (function.getChannel() == channel && isXOrY)
 		{
@@ -95,7 +101,7 @@ FitFunction createSignalDSCB(std::string channel, std::string xOrY, FitFunctionC
 	double norm = sortedChannelFunctions[NORM].evaluate(mass);
 
 	// Construct DSCB
-	FitFunction signalDSCB = FitFunction::createFunctionOfType(FitFunction::FunctionType::DoubleSidedCrystalBall, channel, "", min, max,"eeee");
+	FitFunction signalDSCB = FitFunction::createFunctionOfType(FitFunction::FunctionType::DoubleSidedCrystalBall, channel, "", min, max,"eueu");
 	signalDSCB.getFunction()->SetParameter(0, alpha_l);
 	signalDSCB.getFunction()->SetParameter(1, alpha_h);
 	signalDSCB.getFunction()->SetParameter(2, n_l);
@@ -142,30 +148,30 @@ void graphFunctionFromCollection(FitFunctionCollection *functionCollection, std:
 
 void ParameterizationFunctionGrapher()
 {
-	std::map<std::string, std::string> xOrYMap = {{"X", "h_mll1"}, {"Y", "h_mll2"}};
+	std::map<std::string, std::string> xOrYMap = {{"X", "X"}, {"Y", "Y"}};
 	std::string x = xOrYMap["X"];
 	std::string y = xOrYMap["Y"];
 
 	// auto analysis = std::make_shared<HiggsCompleteAnalysis>();
 	// PlotFormatter plotter;
 	// plotter.completePlot(analysis, HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
-	// 	"Mass", "Events", false, true, false, "eeee");
-	std::string signalParametersFile = "/uscms/home/bhobbs/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Analysis/bin/fitting/H++SignalParameterFunctions.txt";  
-	std::string backgroundParametersFile = "fitting/H++BackgroundFunctions.txt";
+	// 	"Mass", "Events", false, true, false, "eueu");
+	std::string signalParametersFile = "/uscms/home/jdavis1/analysis/CMSSW_15_0_10/src/CMSAnalysis/Analysis/bin/fitting/H++SignalParameterFunctions.txt";  
+	std::string backgroundParametersFile = "/uscms/home/jdavis1/analysis/CMSSW_15_0_10/src/CMSAnalysis/Analysis/bin/fitting/H++BackgroundFunctions.txt";
 	//std::string backgroundParametersFile = "/uscms/home/bhobbs/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Analysis/bin/fitting/OtherBackgroundFunctions.txt"; 
-	//std::vector<std::string> channelsToCheck = {"eeee", "uuuu"};
+	//std::vector<std::string> channelsToCheck = {"eueu", "uuuu"};
 	auto signalParameters = FitFunctionCollection::loadFunctions(signalParametersFile); 
 	auto backgroundParameters = FitFunctionCollection::loadFunctions(backgroundParametersFile);
 	auto backgroundParameterFunctions = backgroundParameters.getFunctions();
 
 	// Arguments for graphing individual signal and background functions
-	std::string signalFunction = "eeee_eeee/#mu h_mll1";
+	std::string signalFunction = "eueu_eueu/#mu h_mll1";
 	//std::string signalXOrY = "X";
-	std::string backgroundFunction = "eeee/ZZ Background h_mll1";
+	std::string backgroundFunction = "eueu/ZZ Background h_mll1";
 	
 	// Arguments for graphing signal DSCB
 	std::string signalXOrY = "X";
-	std::string channel = "eeee_eeee";
+	std::string channel = "eueu_eueu";
 	double mass = 1000;
 
 
@@ -183,15 +189,15 @@ void ParameterizationFunctionGrapher()
 
 
 	// Create signal channel functions
-	auto eeeeChannel = createSignalDSCB("eeee_eeee", x, &signalParameters, mass);
+	auto eueuChannel = createSignalDSCB("eueu_eueu", x, &signalParameters, mass);
 	//auto uuuuChannel = createSignalDSCB("mmmm_mmmm", x, &signalParameters, mass); 
 	std::vector<FitFunction> signalFitFunctions = {};
-	signalFitFunctions.push_back(eeeeChannel);
+	signalFitFunctions.push_back(eueuChannel);
 	//signalFitFunctions.push_back(uuuuChannel);
 
 	std::vector<FitFunction> backgroundFitFunctions = {};
-	std::vector<std::string> backgroundChannels = {"eeee"};
-	std::vector<std::string> exclude = {"ZPeak", "Up", "Down", "Y Projection"};
+	std::vector<std::string> backgroundChannels = {"eueu"};
+	std::vector<std::string> exclude = {"ZPeak", "Up", "Down", "Y Projection", "Multiboson"};
 	for (std::string channel : backgroundChannels)
 	{
 		for (auto& pair : backgroundParameterFunctions)
@@ -219,18 +225,33 @@ void ParameterizationFunctionGrapher()
 	for (auto& signalFitFunction : signalFitFunctions)
 	{
 		auto tf1Reference = signalFitFunction.getFunction();
-		signalAndBackgroundTf1s.push_back(tf1Reference);
+		std::string newName = "Signal parameterization";//std::string(tf1Reference->GetName()) + "_scaled";
+		double scale = 25;
+		TF1 *f_scaled = new TF1(newName.c_str(),
+    		[tf1Reference, scale](double *x, double *p) {
+        return scale * tf1Reference->Eval(x[0]);
+    	}, tf1Reference->GetXmin(), tf1Reference->GetXmax(), tf1Reference->GetNpar());
+		f_scaled->SetLineColor(kBlue);
+		signalAndBackgroundTf1s.push_back(f_scaled);
 	}
 	for (auto& backgroundFitFunction : backgroundFitFunctions)
 	{
 		auto tf1Reference = backgroundFitFunction.getFunction();
-		signalAndBackgroundTf1s.push_back(tf1Reference);
+		std::string newName = "Background parameterization";//std::string(tf1Reference->GetName()) + "_scaled";
+		double scale = 25;
+		TF1 *f_scaled = new TF1(newName.c_str(),
+    		[tf1Reference, scale](double *x, double *p) {
+        return scale * tf1Reference->Eval(x[0]);
+    	}, tf1Reference->GetXmin(), tf1Reference->GetXmax(), tf1Reference->GetNpar());	
+		f_scaled->SetLineColor(kRed);
+		signalAndBackgroundTf1s.push_back(f_scaled);
 	}
 	auto analysis = std::make_shared<HiggsCompleteAnalysis>();
-	PlotFormatter plotter = PlotFormatter(true, "test");
-	std::cout << "\n \n \n \neeee tf1: " << signalAndBackgroundTf1s[0]->GetName() << "\n \n \n \n";
+	PlotFormatter plotter = PlotFormatter(false, "Private Work (CMS Simulation)");
+	plotter.setRebinFactor(50);
+	std::cout << "\n \n \n \neueu tf1: " << signalAndBackgroundTf1s[0]->GetName() << "\n \n \n \n";
 	plotter.completePlot(analysis, HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
-		"Mass", "Events", false, true, false, "eeee", signalAndBackgroundTf1s);
+		"Invariant Mass [GeV]", "Events", false, true, false, "eueu", signalAndBackgroundTf1s);
 
 
 	// std::cout << "Organizing functions...\n";

@@ -182,9 +182,9 @@ void LeptonJetReconstructionModule::assignVariables(LeptonJet leptonJet) {
 
     sumPt += p.getPt();
 
-    if (p.getInfo("Isolation") > tempMaxIso) {
-      tempMaxIso = p.getInfo("Isolation");
-    }
+    // if (p.getInfo("Isolation") > tempMaxIso) {
+    //   tempMaxIso = p.getInfo("Isolation");
+    // }
   }
 
   inputDeltaRValues = {deltaR};

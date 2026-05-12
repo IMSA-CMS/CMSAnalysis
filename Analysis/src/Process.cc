@@ -180,7 +180,7 @@ void Process::addSystematic(std::shared_ptr<Systematic> systematic)
 std::pair<TH1*, TH1*> Process::getSystematicHist(HistVariable histType, bool scaleToExpected)
 {
 	auto hist = getHist(histType, scaleToExpected);
-	return systematics.getUncertainties(hist);
+	return systematics.getUncertainties(hist, histType, this);
 }
 
 int Process::getNEvents() 
@@ -193,7 +193,7 @@ int Process::getNEvents()
 }
 
 std::pair<TH1*, TH1*> Process::combineSystematics(std::vector<std::shared_ptr<Process>> processes,
-	TH1* original)
+	TH1* original, HistVariable histVar)
 {
 	// get all multisystematics in a vector
 	std::vector<std::shared_ptr<MultiSystematic>> multiSystematics;
@@ -202,7 +202,7 @@ std::pair<TH1*, TH1*> Process::combineSystematics(std::vector<std::shared_ptr<Pr
 		multiSystematics.push_back(std::make_shared<MultiSystematic>(process->systematics));
 		//std::cout << "Size: " << multiSystematics.size() << std::endl;
 	}
-	return MultiSystematic::combineSystematics(multiSystematics, original);
+	return MultiSystematic::combineSystematics(multiSystematics, original, histVar, this);
 }
 
 
@@ -251,21 +251,5 @@ std::pair<TH1*, TH1*> Process::combineSystematics(std::vector<std::shared_ptr<Pr
 
  std::shared_ptr<Systematic> Process::calcShapeSystematic(HistVariable histType, std::string systematicName)
 {
-    
-	HistVariable histUp = histType;
-    HistVariable histDown = histType;
-    
-    histUp.setSystematic(ScaleFactor::SystematicType::Up, systematicName);
-    TH1* up = getHist(histUp, true);
-
-    histDown.setSystematic(ScaleFactor::SystematicType::Down, systematicName);
-    TH1* down = getHist(histDown, true);
-
-    if (!up || !down)
-    {
-        std::cerr << "Could not create shape systematic histograms for " << systematicName << " in process " << name << std::endl;
-        return nullptr;
-    }
-
-    return std::make_shared<ShapeSystematic>(systematicName, up, down);
+    return std::make_shared<ShapeSystematic>(systematicName);
 }

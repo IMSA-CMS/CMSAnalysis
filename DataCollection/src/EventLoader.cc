@@ -143,7 +143,7 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents, i
         continue;
       }
       file = changeFileFormat(tFile, params); // Makes a GenSimEventFile, DelphesEventFile or MiniAODFile shared pointer
-      eventInterface.setFile(file);   // Change eventFile reference
+      eventInterface->setFile(file);   // Change eventFile reference
       std::cout << "Number of events in file: " << file->getNumOfEvents() << "\n";
 
       // Loops through every event in the file
@@ -155,7 +155,7 @@ void EventLoader::processRootFiles(int outputEvery, int nFiles, int maxEvents, i
           break;
         }
 
-        modules->processOneEvent(&eventInterface); // EventInterface will loop through all event files in analyzer
+        modules->processOneEvent(eventInterface); // EventInterface will loop through all event files in analyzer
         file->nextEvent();
         ++eventCounter;
         

@@ -15,6 +15,7 @@ class EventInterface
         virtual ParticleCollection<Particle> getRecoJets() const = 0;
         virtual reco::Candidate::LorentzVector getMET() const = 0;
         virtual std::vector<double> getPDFWeights() const = 0;
+        virtual double getEventQuantity(std::string key) const = 0;
         virtual unsigned long long getEventIDNum() const = 0; 
         virtual long getRunNum() const = 0;
         virtual int getLumiBlock() const = 0;

@@ -18,18 +18,18 @@ const std::vector<HistVariable> histogramTypes = {
     HistVariable(HistVariable::VariableType::InvariantMass, "", false, true),
 };
 
-const std::string fitHistsName = "H++BackgroundFits.root";
-const std::string fitParameterValueFile = "H++BackgroundFunctions.txt";
+const std::string fitHistsName = "H++BackgroundFitsZZ.root";
+const std::string fitParameterValueFile = "H++BackgroundFunctionsZZ.txt";
 // These don't do anything
 const std::string parameterFits = "H++BackgroundParameterFits.root";
 const std::string parameterFunctions = "H++BackgroundParameterFunctions.txt";
 
 const std::map<std::string, std::pair<int, int>> bgsToRange = {
-    {"Drell-Yan Background", {0, 2000}},            // 140-500
-    {"QCD Background", {0, 2000}},                  // 200-2000
-    {"ZZ Background", {0, 2000}},                   // 100-800
-    {"WJets Background", {0, 2000}},                //
-    {"t#bar{t}, Multiboson Background", {0, 2000}}, //
+    {"Drell-Yan Background", {0, 0}},            // 140-500
+    {"QCD Background", {0, 0}},                  // 200-2000
+    {"ZZ Background", {0, 0}},                   // 100-800
+    {"WJets Background", {0, 0}},                //
+    {"t#bar{t}, Multiboson Background", {0, 0}}, //
 };
 
 const int minData = 500;
@@ -104,7 +104,7 @@ void fitProcess(const Process &process, Fitter &fitter, const HistVariable &hist
     std::cout << "Fitting " + name + "\n";
 
     FitFunction func =
-        FitFunction::createFunctionOfType(FitFunction::FunctionType::GausLogPowerNorm, name, "", min, max, channelName);
+        FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, name, "", min, max, channelName);
 
     FitFunctionCollection currentFunctions;
     currentFunctions.insert("", func);

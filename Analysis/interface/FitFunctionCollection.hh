@@ -1,7 +1,7 @@
 #ifndef FIT_FUNCTION_COLLECTION_HH
 #define FIT_FUNCTION_COLLECTION_HH
 
-#include "CMSAnalysis/Analysis/interface/FitFunction.hh"
+#include "FitFunction.hh"
 #include <unordered_map>
 
 class FitFunctionCollection

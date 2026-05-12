@@ -101,6 +101,8 @@ class PlotFormatter
 
         void ChangeAxisTitles(TH1*& hist, TString xAxisTitle, TString yAxisTitle);
 
+        int CalcRebinFactor(TH1* hist, int targetBins);
+
         void FormatSignalData(THStack*& background, TH1*& signal, TH1*& data, 
             std::vector<TH1*>& backgroundHists, int rebinFactor);
     
@@ -123,7 +125,7 @@ class PlotFormatter
 
         // void SetErrors(std::shared_ptr<Process> process, HistVariable histVariable, TH1* original);
 
-        TH1* CreateErrorHistogram(THStack* hists, std::vector<std::shared_ptr<Process>> processes);
+        TH1* CreateErrorHistogram(THStack* hists, std::vector<std::shared_ptr<Process>> processes, HistVariable histVar);
         
         double CalculateLogMinimum(const std::vector<TH1*>& hists);
         double CalculateLogMinimum(THStack* stack);

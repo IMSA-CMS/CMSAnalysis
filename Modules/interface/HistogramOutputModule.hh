@@ -24,6 +24,8 @@ class HistogramOutputModule : public AnalysisModule
     void addHistogram(std::shared_ptr<HistogramPrototype> hist); // Adds a HistogramPrototype* to histogram (the vector)
     virtual void setInput(const EventInput *iInput) override;
     void addScaleFactor(std::shared_ptr<ScaleFactor> scaleFactor);
+    double eventWeightL(ScaleFactor::SystematicType type = ScaleFactor::SystematicType::Nominal, std::shared_ptr<ScaleFactor> scaleFactorToChange = nullptr) const;
+
     virtual std::string getName() override
     {
         return "HistogramOutputModule";
