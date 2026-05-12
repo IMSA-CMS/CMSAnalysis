@@ -19,18 +19,22 @@
 #include "TFormula.h"
 #include "TFitResult.h"
 #include "TGraphErrors.h"
+#include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
 #include "CMSAnalysis/Analysis/interface/FitFunction.hh"
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
 #define _USE_MATH_DEFINES
 
-std::string path = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_peter/";
+//change m to u and rerun background files
+
+std::string path = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_MY/";
 TH1* combineHists (std::vector<std::string> fileNames, std::string channel, std::string histName);
 std::vector<std::string> years = {"2016", "2017", "2018"};
 std::vector<std::string> channelTypes =
 {
-	"eeee", "eeem", "emem", "eemm", "emmm", "mmmm"
+	"0tau", "1tau", "2tau", "3tau"
+	//"eeee", "eeem", "emem", "eemm", "emmm", "mmmm"
 	//"ee",
 	//"eu",
 	//"uu",
@@ -41,8 +45,8 @@ std::vector<std::string> histogramTypes =
 	// "X Projection",
 	// "Y Projection",
 	// "Same Sign Invariant Mass",
-	"h_mll1",
-	"h_mll2",
+	"h_mDCH1",
+	"h_mDCH2",
 };
 
 // run in batch mode for faster processing: root -b HiggsBackgroundFit.C+
@@ -169,9 +173,8 @@ void HiggsBackgroundFitFromFile()
 
 	};
 	Fitter fitter(fitHistsName, fitParameterValueFile, parameterFits, parameterFunctions);
-   auto file = TFile::Open("/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_peter/ZZTo4L_2016.root");
+   	auto file = TFile::Open("/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_peter/ZZTo4L_2016.root");
     std::cout << "Loaded histogram\n";
-
 	for (const auto& histType : histogramTypes) 
 	{
 		for (const auto& channel : channelTypes)
@@ -190,10 +193,9 @@ void HiggsBackgroundFitFromFile()
 				std::string keyName = channel + '/' + background + " " + histType;
 				keyNames.push_back(keyName);
 
-				FitFunction func = FitFunction::createFunctionOfType(FitFunction::FunctionType::GausLogPowerNorm, keyName, "", range.first, range.second, keyName);
-				FitFunctionCollection currentFunctions;
-				currentFunctions.insert("", func);
-				std::unordered_map<std::string, TH1 *> histogramMap = {{"", selectedHist}};
+				FitFunction func = FitFunction::createFunctionOfType(FitFunction::FunctionType::GausLogPowerNorm, keyName, "", 0, 2000, channel);
+				currentFunctions.insert(keyName, func);
+				histogramMap.insert({keyName, selectedHist});
 				//histogramMap.insert({keyName, selectedHist});
 			}
 			//fitter.setHistograms(histogramMap);

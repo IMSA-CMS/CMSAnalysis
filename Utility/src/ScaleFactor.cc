@@ -15,6 +15,11 @@ scaleFactors(reader->readData())
 
 double ScaleFactor::getScaleFactor(const EventInput* input, SystematicType type ) const
 {
+	//std::cout << "Weight event input: " << input <<std::endl;
+	if (input->getFileParams()->getProcess() == "Data")
+ 	{
+	 	return 1.0; // No scale factor for data
+ 	}
 	if (input->getFileParams()->getProcess() == "Data")
  	{
 	 	return 1.0; // No scale factor for data
@@ -28,6 +33,7 @@ double ScaleFactor::getScaleFactor(const EventInput* input, SystematicType type 
 		{
 			throw std::runtime_error("Scale factor " + key + " not found!");
 		}
+		//std::cout << "Scale factor " << name << ": " << " key " << key << " sys type " << static_cast<int>(type) << " value " << entry->second.getSystematic(type) << std::endl;
 		scaleFactor *= entry->second.getSystematic(type);
 	}
 	return scaleFactor;

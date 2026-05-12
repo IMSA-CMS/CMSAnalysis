@@ -119,6 +119,11 @@ long CmsswEventInterface::getRunNum() const
     throw std::runtime_error("Not implemented yet");
 }
 
+int CmsswEventInterface::getLumiBlock() const
+{
+    throw std::runtime_error("Not implemented yet");
+}
+
 std::vector<bool> CmsswEventInterface::getTriggerResults(std::string subProcess) const
 {
     edm::Handle<std::vector<pat::TriggerEvent>> triggerResults;

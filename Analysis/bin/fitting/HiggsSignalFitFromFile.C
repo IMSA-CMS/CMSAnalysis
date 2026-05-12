@@ -32,22 +32,23 @@
 
 
 
-std::string path = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_peter/";
+std::string path = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_MY/";
 std::string processedPath = "/uscms/home/bhenning/nobackup/HiggsWithSystematics1/";
 
 TH1* combineHists (std::vector<std::string> fileNames, std::string channel, std::string histName);
 std::vector<std::string> years = {"2016", "2017", "2018"};
 std::vector<std::string> channelTypes =
 {
-"eeee", //"eeem", "emem", 
+"0tau", "1tau", "2tau", "3tau"
+//"eeem", "emem", 
 //"eemm", "emmm", 
-//"mmmm"
+
 };
 
 std::vector<std::string> histogramTypes = 
 {
-	"h_mll1",
-	"h_mll2",
+	"h_mDCH1",
+	"h_mDCH2",
 };
 
 double getBranchingRatio(const std::string &channel) //const
@@ -94,7 +95,7 @@ void HiggsSignalFitFromFile()
 			for (size_t i = 0; i < paramNames.size(); ++i) {
 				actualParams.push_back(channel + '/' + paramNames[i] + "_" + histType);
 			}
-
+			std::string correctedChannel = Utility::substitute(channel, "m", "u");
 			for (size_t i = 0; i < masses.size(); ++i) 
 			{
 				std::cerr << "mass: " << masses[i] << std::endl;
@@ -118,10 +119,11 @@ void HiggsSignalFitFromFile()
 				//int totalGeneratedEvents = 1;
 				//double efficiency = static_cast<double>(eventsInHist) / totalGeneratedEvents;
 				double efficiency = 1; // Efficiency is already accounted for in the histogram scaling, so we set it to 1 here to avoid double counting
-				double branchRatioAdjustment = getBranchingRatio(channelAdjusted);
-				double expectedEvents = crossSection * luminosity * efficiency * branchRatioAdjustment;
+				//double branchRatioAdjustment = getBranchingRatio(channelAdjusted);
+				double expectedEvents = crossSection * luminosity * efficiency;
 				selectedHist -> Scale(expectedEvents);
-				std::string keyName = channel + "/" + std::to_string(masses[i]) + '_' + histType;
+				
+				std::string keyName = correctedChannel + "/" + std::to_string(masses[i]) + '_' + histType;
 				min = masses[i] - 200;
 				max = masses[i] + 200;
 
@@ -129,10 +131,10 @@ void HiggsSignalFitFromFile()
 				std::cout << "Selected events: " << eventsInHist << std::endl;
 				std::cout << "Efficiency: " << efficiency << std::endl;
 				std::cout << "Total generated events: " << totalGeneratedEvents << std::endl;
-				std::cout << "Branching ratio adjustment: " << branchRatioAdjustment << std::endl;
+				//std::cout << "Branching ratio adjustment: " << branchRatioAdjustment << std::endl;
 				std::cout << "Expected events: " << expectedEvents << std::endl;
 				std::cout << "Scaling factor: " << expectedEvents / selectedHist -> Integral() << std::endl;
-				
+				std::cout << "Expected Signal: " << selectedHist -> Integral() << std::endl;
 		
 
 
@@ -151,7 +153,9 @@ void HiggsSignalFitFromFile()
 			//fitter.setHistograms(histogramMap);
 			fitter.loadFunctions(currentFunctions);
 			fitter.fitFunctions(histogramMap);
-			fitter.parameterizeFunctions(massValues, channel, channel, "Mass");
+			HistVariable histVar(HistVariable::VariableType::InvariantMass, "", histType == "h_mll1", histType == "h_mll2");
+
+			fitter.parameterizeFunctions(massValues, correctedChannel, correctedChannel, "Mass", histVar);
 		}
 	}
 }
@@ -159,6 +163,7 @@ TH1* combineHists (std::vector<std::string> fileNames, std::string channel, std:
 {
 	std::unordered_map<std::string, int> codeMap = {{"eeee", 1}, {"eeem", 2}, {"eemm", 4}, {"emem", 7}, {"emmm", 9}, {"mmmm", 16}};
 	TH1* hist = nullptr;
+	int totalEvents = 0;
 	for (auto fileName:fileNames)
 	{
 		for (auto year:years)
@@ -179,12 +184,13 @@ TH1* combineHists (std::vector<std::string> fileNames, std::string channel, std:
 				std::cout<<"directory "<<channel<<" not found\n";
 				continue;
 			}
-			auto tree = directory -> Get<TTree> ("Events");
-			std::string drawCommand = "mll1>>" + histName + "(2000, 0, 2000)";
-			std::string cutCommand = std::string("gen_cat==") + std::to_string(codeMap [channel]);
-			tree -> Draw (drawCommand.c_str(), cutCommand.c_str());
-			TH1* selectedHist = dynamic_cast <TH1*> (gDirectory -> FindObject(histName.c_str()));
-			auto nEvents = file->Get<TH1>("hnevts");
+			auto selectedHist = directory->Get<TH1>("h_mDCH1");
+			// auto tree = directory -> Get<TTree> ("Events");
+			// std::string drawCommand = "mll1>>" + histName + "(2000, 0, 2000)";
+			// std::string cutCommand = std::string("gen_cat==") + std::to_string(codeMap [channel]);
+			// tree -> Draw (drawCommand.c_str(), cutCommand.c_str());
+			// TH1* selectedHist = dynamic_cast <TH1*> (gDirectory -> FindObject(histName.c_str()));
+			auto nEvents = file->Get<TH1>("hNWEvts");
 			if (!selectedHist)
 	
 			{	
@@ -193,8 +199,8 @@ TH1* combineHists (std::vector<std::string> fileNames, std::string channel, std:
 			}
 			std::cout << "nEvents" << nEvents->GetBinContent(1) << std::endl;
 			std::cout << "Integral of selected histogram: " << selectedHist->Integral() << std::endl;
-			selectedHist->Scale(1.0 / nEvents->GetBinContent(1));\
-			
+			totalEvents += nEvents->GetBinContent(1);
+			//totalEvents = 1;
 
 			if (!hist)
 			{
@@ -208,5 +214,6 @@ TH1* combineHists (std::vector<std::string> fileNames, std::string channel, std:
 				}
 		}
 	}
+	hist -> Scale(1.0 / totalEvents);
 	return hist;
 }
