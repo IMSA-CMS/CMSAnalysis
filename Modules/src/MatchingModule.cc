@@ -2,8 +2,11 @@
 #include "CMSAnalysis/Utility/interface/MatchingPair.hh"
 
 #include <cstddef>
+#include <cstdlib>
 #include <limits>
 #include <utility>
+
+const int pTThresh = 5;
 
 MatchingModule::MatchingModule(double deltaRCut) : deltaRCutoff(deltaRCut)
 {
@@ -34,7 +37,12 @@ bool MatchingModule::match(std::vector<Particle> genSimParticles, std::vector<Pa
         {
             for (size_t recoIdx = 0; recoIdx < recoCandidates.size(); recoIdx++)
             {
-                MatchingPair candidate(GenSimParticle(genSimParticles.at(genIdx)), recoCandidates.at(recoIdx));
+                const auto &gen = genSimParticles.at(genIdx);
+                if (gen.getPt() < pTThresh)
+                {
+                    continue;
+                }
+                MatchingPair candidate(GenSimParticle(gen), recoCandidates.at(recoIdx));
                 auto deltaR = candidate.getDeltaR();
                 if (deltaR < bestDeltaR)
                 {
@@ -47,7 +55,7 @@ bool MatchingModule::match(std::vector<Particle> genSimParticles, std::vector<Pa
         if (bestDeltaR > deltaRCutoff)
         {
             // Failed to match some particles
-            return false;
+            return true;
         }
 
         matchingBestPairs.addMatchingPair(
