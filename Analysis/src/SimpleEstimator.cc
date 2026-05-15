@@ -34,8 +34,7 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, const His
     }
 
     //std::cout << "SimpleEstimator 2" << std::endl;
-    int totalEventsInt = process->getTotalEvents();
-    double totaleventsran = totalEventsInt;
+    double totaleventsran = process->getTotalEvents();
     //Finds crosssection (from spreadsheet)
     double crosssection = process->getCrossSection();
 
@@ -62,16 +61,17 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, const His
 // 
 
 
-    // std::cout << "postMax " << hist->GetMaximum() << std::endl;
-    // std::cout << "MaxContent " << hist->GetBinContent(hist->GetMaximumBin()) << std::endl;
-    // std::cout << "process " << process->getName() << std::endl; 
-    // std::cout << "totaleventsran " << totaleventsran << std::endl;
-    // std::cout << "totalentries " << hist->GetEntries() << std::endl;
-    // std::cout << "efficiency " << efficiency << std::endl;
-    // std::cout << "luminosity " << luminosity << std::endl;
-    // std::cout << "cross section " << crosssection << std::endl;
-    // std::cout << "postIntegral " << hist->Integral(lowerLimit, numBins) << std::endl;
-    // std::cout << "yield for " << process->getName() << " is " << signalest << std::endl;
+    std::cout << "postMax " << hist->GetMaximum() << std::endl;
+    std::cout << "MaxContent " << hist->GetBinContent(hist->GetMaximumBin()) << std::endl;
+    std::cout << "process " << process->getName() << std::endl; 
+    std::cout << "totaleventsran " << totaleventsran << std::endl;
+    std::cout << "totalentries " << hist->GetEntries() << std::endl;
+    std::cout << "efficiency " << efficiency << std::endl;
+    std::cout << "luminosity " << luminosity << std::endl;
+    std::cout << "cross section " << crosssection << std::endl;
+    std::cout << "postIntegral " << hist->Integral() << std::endl;
+    std::cout << "yield for " << process->getName() << " is " << signalest << std::endl;
+    std::cout << "\n\n";
     
     return signalest;
 }

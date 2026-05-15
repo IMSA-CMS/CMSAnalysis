@@ -78,6 +78,7 @@ void Fitter::loadFunctions(FitFunctionCollection fitFunctions)
 
 void Fitter::fitFunctions(std::unordered_map<std::string, TH1 *> &histograms)
 {
+    std::cout << "FITTING in CC\n";
     for (auto &funcPair : functions.getFunctions())
     {
         FitFunction &func = funcPair.second;
@@ -104,6 +105,9 @@ void Fitter::fitFunctions(std::unordered_map<std::string, TH1 *> &histograms)
         case FitFunction::FunctionType::GausLogPowerNorm:
             fitGausLogPowerNorm(histogram, func);
             break;
+        case FitFunction::FunctionType::Voigt:
+            fitVoigt(histogram, func);
+            break;
         }
 
         auto *inner = func.getFunction();
@@ -119,6 +123,7 @@ void Fitter::fitFunctions(std::unordered_map<std::string, TH1 *> &histograms)
         const auto name = full.substr(split + 1);
 
         auto canvas = TCanvas(name.c_str(), name.c_str(), 0, 0, 1500, 500);
+        // histogram->Scale(1.0 / histogram->GetBinWidth(1));
         histogram->Draw();
 
         if (!fitDirectories.contains(dir))
@@ -324,6 +329,26 @@ void Fitter::fitGausLogPowerNorm(TH1 *const hist, FitFunction &func)
 
     hist->Fit(f1, "SWLQWIDTH", "", func.getMin(), func.getMax());
 
+    gStyle->SetOptFit(1111);
+}
+
+void Fitter::fitVoigt(TH1 *histogram, FitFunction &fitFunction)
+{
+    TF1 *f1 = fitFunction.getFunction();
+    const double fitMin = fitFunction.getMin();
+    const double fitMax = fitFunction.getMax();
+    const double fitRange = fitMax - fitMin;
+    const double mean = histogram->GetMean();
+    const double stdDev = histogram->GetStdDev();
+    const double norm = histogram->Integral("width");
+    //sketchy
+    f1->SetParameters(norm/2, mean, stdDev, stdDev);
+    f1->SetParLimits(0, 0.0, norm);
+    f1->SetParLimits(1, fitMin, fitMax);
+    f1->SetParLimits(2, 1e-6, fitRange);
+    f1->SetParLimits(3, 1e-6, fitRange);
+    f1->SetNpx(1000);
+    histogram->Fit(f1, "SWLQWIDTH", "", fitMin, fitMax);
     gStyle->SetOptFit(1111);
 }
 

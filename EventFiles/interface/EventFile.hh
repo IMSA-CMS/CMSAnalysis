@@ -28,6 +28,7 @@ class EventFile
         virtual long getRunNum() const = 0; 
         virtual int getLumiBlock() const = 0;
         virtual int getNumPileUpInteractions() const = 0;
+        double getEventQuantity(std::string key) const;
         TFile* getFile() {return file;}
         virtual bool checkTrigger(std::string triggerName, std::string subProcess) const = 0; //checks if event passes trigger criteria
         virtual void nextEvent()=0;
@@ -37,11 +38,13 @@ class EventFile
         const std::shared_ptr<FileParams> getFileParams() const {return params;}
     protected:
         void setEventCount(int newNum) {eventCount = newNum;}
+        void setEventQuantity(std::string key, double value);
 
     private:
         TFile* file;
         int eventCount;
         const std::shared_ptr<FileParams> params;
+        std::unordered_map<std::string, double> eventQuantities;
         
 };
 

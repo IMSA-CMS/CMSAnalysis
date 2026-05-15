@@ -11,6 +11,7 @@ RunCut::RunCut(std::vector<std::string> filenames)
   for (const auto &filename : filenames)
   {
     auto jsonData = Utility::loadJSONFile(filename);
+    std::cout << "Loaded JSON!" << '\n';
     for (const auto &runEntry : jsonData.getMemberNames())
     {
       long runNum = std::stol(runEntry);

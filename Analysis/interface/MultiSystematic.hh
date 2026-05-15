@@ -24,10 +24,10 @@ class MultiSystematic : public Systematic
     public:
         MultiSystematic(std::string name);
         virtual std::string getString() const override;
-        virtual std::pair<TH1*, TH1*> getUncertainties(TH1* original) const override;
+        virtual std::pair<TH1*, TH1*> getUncertainties(TH1* original, HistVariable histVar, const Process* process) const override;
         void addSystematic(std::shared_ptr<Systematic> systematic);
         // std::shared_ptr<MultiSystematic> addMultiSystematic(std::shared_ptr<MultiSystematic> systematic);
-        static std::pair<TH1*, TH1*> combineSystematics(std::vector<std::shared_ptr<MultiSystematic>> systematics, TH1* original);
+        static std::pair<TH1*, TH1*> combineSystematics(std::vector<std::shared_ptr<MultiSystematic>> systematics, TH1* original, HistVariable histVar, const Process* process);
     private:
        std::vector<std::shared_ptr<Systematic>> systematics; 
 };

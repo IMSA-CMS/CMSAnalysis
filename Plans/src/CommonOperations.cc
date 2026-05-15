@@ -3,7 +3,6 @@
 #include "CMSAnalysis/Modules/interface/MultiYearScaleFactor.hh"
 //#include "CMSAnalysis/Modules/interface/ElectronScaleFactor.hh"
 //#include "CMSAnalysis/Modules/interface/MuonScaleFactor.hh"
-#include "CMSAnalysis/Modules/interface/DummyScaleFactor.hh"
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
 #include "CMSAnalysis/Modules/interface/RootReader.hh"
 #include "CMSAnalysis/Modules/interface/MuonJSONReader.hh"
@@ -12,6 +11,7 @@
 #include "CMSAnalysis/Modules/interface/LeptonScaleFactor.hh"
 #include "CMSAnalysis/Modules/interface/PileUpRootReader.hh"
 #include "CMSAnalysis/Modules/interface/PileUpScaleFactor.hh"
+#include "CMSAnalysis/Modules/interface/VariableScaleFactor.hh"
 
 using std::make_shared;
 
@@ -106,6 +106,9 @@ void CommonOperations::addHiggsScaleFactors(std::shared_ptr<EventModule> eventMo
     // auto triggerScaleFactor = make_shared<MultiYearScaleFactor>("MuonTriggerScaleFactor");
     // auto electronScaleFactor = make_shared<MultiYearScaleFactor>("ElectronScaleFactor");
 
+    auto preFireScaleFactor = make_shared<VariableScaleFactor>("L1PreFireScaleFactor", "PreFiringWeight", "PreFiringWeightUp", "PreFiringWeightDown");
+
+    eventMod->addScaleFactor(preFireScaleFactor);
     eventMod->addScaleFactor(muonScaleFactor);
     //std::cout << "Added scale factor" << std::endl;
     eventMod->addScaleFactor(iDISOScaleFactorReader);
