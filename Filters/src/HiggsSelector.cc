@@ -42,8 +42,14 @@ double HiggsSelector:: massDifference(const std::vector<Particle>& leptons) cons
 
     std::vector<Particle> leptons;
 
+    for (auto& particle : particles)
+    {
+            adjustEnergy(particle);
+    }
+
     for (const auto& particle : particles)
     {
+        
         if (particle.getType() == ParticleType::electron())
      {
             auto lepton = Lepton(particle);

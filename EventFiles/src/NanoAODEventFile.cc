@@ -143,7 +143,9 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
         std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("luminosityBlock", "luminosityBlock"),
         std::make_shared<TreeVariable<TTreeReaderValue<Float_t>>>("L1PreFiringWeight_Dn", "L1PreFiringWeight_Dn"),
         std::make_shared<TreeVariable<TTreeReaderValue<Float_t>>>("L1PreFiringWeight_Up", "L1PreFiringWeight_Up"),
-        std::make_shared<TreeVariable<TTreeReaderValue<Float_t>>>("L1PreFiringWeight_Nom", "L1PreFiringWeight_Nom")
+        std::make_shared<TreeVariable<TTreeReaderValue<Float_t>>>("L1PreFiringWeight_Nom", "L1PreFiringWeight_Nom"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("SmearingDown", "Electron_dEsigmaDown"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("SmearingUp", "Electron_dEsigmaUp")
     };
 
 
@@ -344,6 +346,8 @@ void NanoAODEventFile::nextEvent()
         //particle.addInfo("eScaleUp", getArrayElement<Float_t>("elec_dEscaleUp", i));
         //particle.addInfo("eSigmaDown", getArrayElement<Float_t>("elec_dEsigmaDown", i));
         //particle.addInfo("eSigmaUp", getArrayElement<Float_t>("elec_dEsigmaUp", i));
+        particle.addInfo("SmearingDown", getArrayElement<Float_t>("SmearingDown", i));
+        particle.addInfo("SmearingUp", getArrayElement<Float_t>("SmearingUp", i));
 
 
 
