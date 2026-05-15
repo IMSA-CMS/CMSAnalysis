@@ -15,9 +15,9 @@
 #include "CMSAnalysis/Histograms/interface/NLeptonsHist.hh"
 #include "CMSAnalysis/Histograms/interface/SameSignInvariantMassHist.hh"
 #include "CMSAnalysis/Histograms/interface/TwoInvariantMassesHist.hh"
+#include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
 #include "CMSAnalysis/Modules/interface/FilterModule.hh"
-#include "CMSAnalysis/Modules/interface/GenSimEventDumpModule.hh"
 #include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/Modules/interface/LeptonEfficiency.hh"
@@ -38,15 +38,17 @@ void HiggsBackgroundPlan::initialize()
     auto hppSelector = make_shared<HPlusPlusGenSimSelector>();
     auto higgsSelector = make_shared<HiggsSelector>();
     auto higgsCut = make_shared<HiggsCut>();
-    auto runCut = make_shared<RunCut>(std::vector<std::string>{"ScaleFactors/Cert_271036-284044_13TeV_Legacy2016_Collisions16_JSON.txt",
-							       "ScaleFactors/Cert_294927-306462_13TeV_UL2017_Collisions17_GoldenJSON.txt",
-							       "jsons/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt"});
+    auto runCut = make_shared<RunCut>(
+        std::vector<std::string>{"ScaleFactors/Cert_271036-284044_13TeV_Legacy2016_Collisions16_JSON.txt",
+                                 "ScaleFactors/Cert_294927-306462_13TeV_UL2017_Collisions17_GoldenJSON.txt",
+                                 "jsons/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt"});
     //
     // Note: The above JSON .txt files are located in CMSAnalysis/DataCollection/bin/textfiles.
     // The directory "jsons" was created to store analysis JSONs (Golden, UltraLegacy, etc)
     //
     // auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
-    auto eventDump = make_shared<GenSimEventDumpModule>(5);
+    auto matchMod = make_shared<MatchingModule>();
+    auto eventDump = make_shared<EventDumpModule>(true, true, 100, matchMod);
     auto bJetCut = make_shared<BJetCut>();
     // auto quarkoniaCut = make_shared<QuarkoniaCut>();
     // auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
@@ -61,7 +63,6 @@ void HiggsBackgroundPlan::initialize()
     // eventMod->addCut(quarkoniaCut);
     CommonOperations::addHiggsScaleFactors(eventMod);
 
-    auto matchMod = make_shared<MatchingModule>();
     auto triggerMod = make_shared<TriggerModule>();
     auto metMod = make_shared<METModule>();
     // auto bJetFilter = make_shared<BJetFilter>();
@@ -110,10 +111,10 @@ void HiggsBackgroundPlan::initialize()
 
     auto positiveNegativeInvMassHistCorrected =
         make_shared<TwoInvariantMassesHist>("Corrected Reco Invariant Mass", 100, 100, 0, 0, 2000, 2000, true);
-    auto xProjectionCorrected = make_shared<HistogramPrototype2DProjection>("Corrected Reco Invariant Mass X Projection",
-                                                                   positiveNegativeInvMassHistCorrected, true, 2000);
-    auto yProjectionCorrected = make_shared<HistogramPrototype2DProjection>("Corrected Reco Invariant Mass Y Projection",
-                                                                   positiveNegativeInvMassHistCorrected, false, 2000);
+    auto xProjectionCorrected = make_shared<HistogramPrototype2DProjection>(
+        "Corrected Reco Invariant Mass X Projection", positiveNegativeInvMassHistCorrected, true, 2000);
+    auto yProjectionCorrected = make_shared<HistogramPrototype2DProjection>(
+        "Corrected Reco Invariant Mass Y Projection", positiveNegativeInvMassHistCorrected, false, 2000);
 
     auto highestLeptonPt = make_shared<PtHist>(EventInput::RecoLevel::Reco, "Highest Lepton Pt", 100, 0, 1000);
 

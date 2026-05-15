@@ -30,6 +30,7 @@ class HistVariable
         RecoSameSignInvariantMass,
         RecoOppositeSignInvariantMass,
         DarkPhotonBDTOutput,
+        DarkPhotonSMHiggsBDTOutput,
         LeptonJetMass,
         LeptonJetDeltaR,
     };
@@ -38,7 +39,7 @@ class HistVariable
                  bool is2DHistY = false, bool isCorrected = false);
 
     HistVariable(VariableType var, std::string unit = "", bool is2DHistX = false, bool is2DHistY = false,
-                bool isCorrected = false);
+                 bool isCorrected = false);
 
     std::string getName() const;
 
@@ -82,6 +83,13 @@ class HistVariable
     constexpr bool isYProjection() const
     {
         return is2DHistY_;
+    }
+
+    bool operator==(const HistVariable &other) const
+    {
+        return particleType == other.particleType && order_ == other.order_ && variableType == other.variableType &&
+               unit == other.unit && is2DHistX_ == other.is2DHistX_ && is2DHistY_ == other.is2DHistY_ &&
+               isCorrected == other.isCorrected && type == other.type && systematicName == other.systematicName;
     }
 
   private:

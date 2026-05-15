@@ -108,8 +108,11 @@ std::vector<double> AnalyzerEventInput::getPDFWeights() const
 {
     return (*eventInterface)->getPDFWeights();
 }
-
 double AnalyzerEventInput::getEventQuantity(std::string key) const
 {
-    return (*eventInterface)->getEventQuantity(key);
+    if (eventInterface)
+    {
+        return (*eventInterface)->getEventQuantity(key);
+    }
+    throw std::runtime_error("AnalyzerEventInput: EventInterface not set");
 }

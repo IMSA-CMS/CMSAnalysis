@@ -1,0 +1,2 @@
+/store/mc/RunIISummer20UL18NanoAODv9/DY1jToLL_M-1to10_Pt-600toInf_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/40000/4EEF5326-7671-7647-81BA-A69D26F533DC.root
+/store/mc/RunIISummer20UL18NanoAODv9/DY1jToLL_M-1to10_Pt-600toInf_TuneCP5_13TeV-madgraph-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/40000/07E3296B-AD6A-2648-9603-F2E1BC5BDE42.root

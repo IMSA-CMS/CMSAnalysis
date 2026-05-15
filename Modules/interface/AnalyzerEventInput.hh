@@ -39,7 +39,6 @@ class AnalyzerEventInput : public EventInput
         virtual const std::shared_ptr<FileParams> getFileParams() const override;
 
         virtual double getEventQuantity(std::string key) const override;
-
         
     private:
         const EventInterface** eventInterface;

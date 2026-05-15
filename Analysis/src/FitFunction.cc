@@ -62,7 +62,7 @@ double FitFunction::doubleGaussian(double *x, double *par)
     return par[0] * TMath::Gaus(x[0], par[1], par[2]) + par[3] * TMath::Gaus(x[0], par[4], par[5]);
 }
 
-// Params: mult, u, sigma1, s, n
+// Params: N, u, sigma1, s, n
 double FitFunction::gausLogPowerNorm(double *xs, double *par)
 {
     const auto x = xs[0];
@@ -259,7 +259,7 @@ std::string FitFunction::getChannel()
 
 double FitFunction::evaluate(double x)
 {
-    TF1* tf1 = getFunction();
+    TF1 *tf1 = getFunction();
     double result = tf1->Eval(x);
     return result;
 }
@@ -477,7 +477,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
 {
     std::string line;
     std::string name;
-    FitFunction::FunctionType funcType = FitFunction::FunctionType(0);
+    auto funcType = FitFunction::FunctionType(0);
     std::string expFormula;
     double min = 0.0, max = 0.0;
     int params = 0;
@@ -507,7 +507,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     {
         return stream;
     }
-    std::cout << "Next line " << line << std::endl;
+    std::cout << "Next line " << line << "\n";
     if (line.find("Name:") != std::string::npos)
     {
         name = line.substr(5);
@@ -575,7 +575,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     }
     if (line.find("ParaNames:") != std::string::npos)
     {
-        std::cout << __LINE__ << std::endl;
+        std::cout << __LINE__ << "\n";
         std::istringstream ss(line.substr(10));
         for (int i = 0; i < params && ss; ++i)
         {
@@ -590,7 +590,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     }
     if (line.find("Parameters:") != std::string::npos)
     {
-                std::cout << __LINE__ << std::endl;
+        std::cout << __LINE__ << "\n";
         std::istringstream ss(line.substr(11));
         for (int i = 0; i < params && ss; ++i)
         {
@@ -605,7 +605,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     }
     if (line.find("ParamErrors:") != std::string::npos)
     {
-                std::cout << __LINE__ << std::endl;
+        std::cout << __LINE__ << "\n";
         std::istringstream ss(line.substr(12));
         for (int i = 0; i < params && ss; ++i)
         {
@@ -619,7 +619,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     // --- Set parameters ---
     for (int i = 0; i < params; ++i)
     {
-                std::cout << __LINE__ << std::endl;
+        std::cout << __LINE__ << "\n";
         function.getFunction()->SetParName(i, paramNames[i].c_str());
         function.getFunction()->SetParameter(i, paramValues[i]);
         function.getFunction()->SetParError(i, paramErrors[i]);
