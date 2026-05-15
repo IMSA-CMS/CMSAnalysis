@@ -38,13 +38,13 @@
      {
             auto lepton = Lepton(particle);
             if(lepton.isLoose()
-            && particle.getPt() > 38 //do something similar for the other variables in kansas file 
+            /* && particle.getPt() > 38 //do something similar for the other variables in kansas file 
             && particle.getInfo("Isolation") < 0.1
 			&& std::abs(particle.getEta()) < 2.5
 			&& particle.getInfo("dxy") < 0.045
 			&& particle.getInfo("dz") < 0.2
 			&& particle.getInfo("mva90") 
-			&& deltaR > 0.3
+			&& deltaR > 0.3 */
             ) 
             { 
                 //std::cout << "PT: " << std::to_string(particle.getPt()) << std::endl;
@@ -102,13 +102,13 @@
             auto lepton = Lepton(particle);
             //need another loop over particle. if its a tau loop over all particles again, if one of the particles is an election or muon, then you want to calculate delta R for each particle. There's already a function for it (Particle.hh). If the delta r is less than some value we set, ten we just say that they're the same particle. If number is too small just continue. 
             if (lepton.isTight() 
-            && particle.getPt() > 20 
-            && std::abs(particle.getEta()) < 2.3 
-            && particle.getInfo("dz") < 0.5 
-            && static_cast<int>(particle.getInfo("tau_idVSmu")) & 4
-            && static_cast<int>(particle.getInfo("tau_idVSele")) & 8
+            //&& particle.getPt() > 20 
+            //&& std::abs(particle.getEta()) < 2.3 
+             //&& particle.getInfo("dz") < 0.5 
+            //&& static_cast<int>(particle.getInfo("tau_idVSmu")) & 4
+            //&& static_cast<int>(particle.getInfo("tau_idVSele")) & 8
             && deltaR_tt > 0.5
-            && deltaR_lt > 0.5
+            // && deltaR_lt > 0.5 
             )
             {
                 //bool overlap = false;
