@@ -370,8 +370,10 @@ bool scaleTodata, bool includeSignal, bool includeData, std::string channelName)
     double maxCombinedY = 0;
     if (includeSignal)
     {
+        std::cout << "Signal Names Size: " << signalNames.size() << std::endl;
         for(std::string name : signalNames) 
         {
+            std::cout << "Signal Process Name: " << name << std::endl;
             // std::cout << histvariable.getName() << std::endl;
             // std::cout << channelName << std::endl;
             // std::cout << name << std::endl;

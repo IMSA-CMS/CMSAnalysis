@@ -122,7 +122,7 @@ void SuperPlot()
 	HistVariable nameVar( HistVariable::VariableType::RecoSameSignInvariantMass);
 
 	auto ana = std::make_shared<HiggsCompleteAnalysis>();
-	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, false, true, "ee__");
+	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, true, false, "eeeu");
 
 	// auto ana = std::make_shared<DarkPhotonCompleteAnalysis>();
 	// TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, false, true, "High Mass and Different Sign/1Jet");

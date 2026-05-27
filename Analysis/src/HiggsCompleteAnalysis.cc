@@ -122,19 +122,19 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
         {
             std::vector<std::shared_ptr<Process>> processes;
 
-            for (const auto &genSimDecay : genSimDecays)
+            for (const double massTarget : massTargets)
             {
-                auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(recoDecay, genSimDecay, true, zSelection);
-
-                double branchingRatioFixer = getBranchingRatio(genSimDecay);
+                auto higgsMassGroup = std::make_shared<Process>("Higgs Signal " + std::to_string((int)massTarget), 1);
 
                 // auto higgsSignal = std::make_shared<Process>("Higgs Signal", 5);
 
                 // not really sure why we need this process at all
                 // auto higgsGroupSignal = std::make_shared<Process>("Higgs Group " + recoDecay, 5);
-                for (const double massTarget : massTargets)
+                for (const auto &genSimDecay : genSimDecays)
                 {
-                    auto higgsMassGroup = std::make_shared<Process>("Higgs Signal " + std::to_string((int)massTarget), 1);
+                    auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(recoDecay, genSimDecay, true, zSelection);
+
+                    double branchingRatioFixer = getBranchingRatio(genSimDecay);
 
                     //histVariableToFileMapping["Same Sign Invariant Mass"] = decayName + "__hists/" + decayName + "_Reco Same Sign Invariant Mass";
                     //histVariableToFileMapping["X Projection"] = decayName + "__hists/" + decayName + "_Reco Invariant Mass Background X Projection";
@@ -156,9 +156,8 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
                     higgsSignal->addProcess(higgsProcess);
                     processes.push_back(higgsSignal);
                     higgsMassGroup->addProcess(higgsProcess);
-
-                    processes.push_back(higgsMassGroup);
                 }
+                processes.push_back(higgsMassGroup);
             }
 
 
