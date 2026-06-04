@@ -1,6 +1,9 @@
 
 #include "CMSAnalysis/Modules/interface/RecoGenSimComparisonModule.hh"
-RecoGenSimComparisonModule::RecoGenSimComparisonModule(std::string compType, bool writeOutput):
+#include "CMSAnalysis/Modules/interface/MatchingModule.hh"
+
+RecoGenSimComparisonModule::RecoGenSimComparisonModule(std::shared_ptr<MatchingModule> matchMod, std::string compType, bool writeOutput):
+matchMod(matchMod),
 comparisonType(compType),
 eventOutput(writeOutput)
 {
@@ -78,22 +81,30 @@ void RecoGenSimComparisonModule::finalize()
         std::cout << "\nTotal 4-lepton events: " << numOfDesiredEvents << "\n";
         std::cout << "Total electron events: " << electronCounter << "\n";
         std::cout << "Total muon events: " << muonCounter << "\n";
+        std::cout << "Total fakes: " << fakeCounter << "\n";
 
         
         std::cout << "\nRatios are out of total 4-lepton events\n";
         std::cout << "Events with ISR " << isrCounter/(double)numOfDesiredEvents << "\n";
         std::cout << "Events with FSR " << fsrCounter/(double)numOfDesiredEvents << "\n";
+        std::cout << "Events with Pileup: " << pileupCounter/(double)numOfDesiredEvents << "\n";
+        std::cout << "Events with Underlying: " << underlyingCounter/(double)numOfDesiredEvents << "\n";
         std::cout << "No match events: " << noMatchCounter/(double)numOfDesiredEvents << "\n\n";
         std::cout << "\nElectron events with ISR " << elecIsrCounter/(double)numOfDesiredEvents << "\n";
         std::cout << "Electron events with FSR " << elecFsrCounter/(double)numOfDesiredEvents << "\n";
+        std::cout << "Electron events with Pileup: " << elecPileupCounter/(double)numOfDesiredEvents << "\n";
+        std::cout << "Electron events with Underlying " << elecUnderlyingCounter/(double)numOfDesiredEvents << "\n";
         std::cout << "No match electron events: " << elecNoMatchCounter/(double)numOfDesiredEvents << "\n\n";
         std::cout << "\nMuon events with ISR " << muonIsrCounter/(double)numOfDesiredEvents << "\n";
         std::cout << "Muon events with FSR " << muonFsrCounter/(double)numOfDesiredEvents << "\n";
+        std::cout << "Muon events with Pileup: " << muonPileupCounter/(double)numOfDesiredEvents << "\n";
+        std::cout << "Electron events with Underlying " << elecUnderlyingCounter/(double)numOfDesiredEvents << "\n";
         std::cout << "No match muon events: " << muonNoMatchCounter/(double)numOfDesiredEvents << "\n\n";
         std::cout << "Fraction with Mu24 " << muon24Count/(double)eventCounter << "\n\n";
     }
 }
 void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particle>& recoParts, 
+
         const ParticleCollection<Particle>& genParts, 
         std::ostream& output)
 {
@@ -263,6 +274,7 @@ void RecoGenSimComparisonModule::perParticleComparison(const ParticleCollection<
             muonMismeasuredPtCounter += mismeasuredPt;
             muonAccurateCounter += accurate;
         }
+
     }
 }
 void RecoGenSimComparisonModule::sameSignDeltaRComparison(const ParticleCollection<Particle>& recoParts,  const ParticleCollection<Particle>& genParts, std::ostream& output) 
@@ -330,6 +342,7 @@ void RecoGenSimComparisonModule::sameSignDeltaRComparison(const ParticleCollecti
                     output << std::setw(10) << "N/A" << "| " 
                            << std::setw(10) << genPart.getMass() << std::endl;
                 }
+
                 noMatch = false; // Match found
 
                 // Check if the reco and gen particles match in type and further conditions
@@ -573,8 +586,16 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
     bool muonEvent = false;
     bool isr = false;
     bool fsr = false;
+    bool hasUnderlying = false;
+
+    ParticleType recoType;
+    //bool wrongCharge = false;
+    //bool mismeasuredPT = false;
+    //bool fakePhoton = false;
+
     for(auto &recoPart : recoParts)
     {
+        recoType = recoPart.getType();
         if (recoPart.getType() == ParticleType::electron() && recoPart.getPt() > 5)
         {
             elecCount++;
@@ -604,14 +625,30 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
     {
         noMatch = true;
         printRecoPart(recoPart, recoEventElement, output);
+
         for (auto &genPart : genParts)
         {
             genEventElement = 1;
-            double deltaR = std::sqrt( std::pow(recoPart.getPhi() - genPart.getPhi(), 2) + std::pow(recoPart.getEta() - genPart.getEta(), 2) );
+            double deltaR = recoPart.getDeltaR(genPart);
+            //double deltaR = std::sqrt( std::pow(recoPart.getPhi() - genPart.getPhi(), 2) + std::pow(recoPart.getEta() - genPart.getEta(), 2) );
             
             if (deltaR < 0.1) //here deltaR is used instead of invariant mass 
             {
                 noMatch = false;
+
+                GenSimParticle genSim(genPart);
+
+                //Recheck hasUniqueMother()
+                //if (genSim.hasUniqueMother()) //Changed from !gensim.hasUniqueMother (How did this happen?) 
+                //{
+                //    hasUnderlying = true;
+                //}
+
+                if (!genPart.hasMother()) //Check again. Test?
+                {
+                    hasUnderlying = true;
+                }
+
                 if (eventOutput) 
                 {
                     output << std::setw(8) << genEventElement << "| " << std::setw(9) << genPart.getName() << "| ";
@@ -690,6 +727,14 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
         }
         recoEventElement++;
     }
+
+    if (noMatch)
+    {
+        pileupCounter++;
+        if (recoType == ParticleType::electron()) elecPileupCounter++;
+        if (recoType == ParticleType::muon()) muonPileupCounter++;
+    }
+
     if (elecCount > 2) 
     {
         electronCounter++;
@@ -708,11 +753,20 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
     if (fromQuark > 2) 
     {
         isr = true;
+        if (noMatch)
+        {
+            fakeCounter++;
+        }
     }
     if (fromLep >= 2)
     {
         fsr = true;
+        if (noMatch)
+        {
+            fakeCounter++;
+        }
     }
+
     bool noMatchCaused = muonCount + elecCount - noMatchCount < 4;
     noMatchCounter += noMatchCaused;
     elecNoMatchCounter += noMatchCaused && elecEvent;
@@ -720,11 +774,14 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
 
     isrCounter += isr;
     fsrCounter += fsr;
+    underlyingCounter += hasUnderlying;
     neitherCounter += !isr && !fsr;
     elecIsrCounter += isr && elecEvent;
     elecFsrCounter += fsr && elecEvent;
+    elecUnderlyingCounter += hasUnderlying && elecEvent;
     muonIsrCounter += isr && muonEvent;
     muonFsrCounter += fsr && muonEvent;
+    muonUnderlyingCounter += hasUnderlying && muonEvent;
     unmatchedFile.close();
 }
 //new Code

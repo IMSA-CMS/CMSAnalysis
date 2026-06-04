@@ -32,7 +32,9 @@ bool EventDumpModule::process()
   
   if(counter < numOfEvents || numOfEvents == -1)
   {
-    //if (getFilter() == "eeeu_") 
+    std::cout << "Filter: " << getFilter() << '\n'; //uncommand this out
+    std::string filter = getFilter();
+    if (filter[filter.length() - 2] != '_') 
     {
       std::ofstream my_file;
       if(genSim)
@@ -40,7 +42,7 @@ bool EventDumpModule::process()
         auto genParticles = getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::none());
         my_file.open("GenSimEventDump.txt", std::ios::app);
         printGenSimParticleCollection(genParticles, my_file);
-        //std::cout << "\nAn event was printed";
+        std::cout << "\nAn event was printed"; //command this out after test
         my_file.close();
       }
       if(reco)
@@ -58,7 +60,7 @@ bool EventDumpModule::process()
           << std::setw(5) << "| mass\n";
         }
         printRecoParticleCollection(recoParticles, my_file);
-        //std::cout << "\nAn event was printed";
+        std::cout << "\nAn event was printed"; //command out later
         my_file.close();
       }
       counter++;
@@ -91,6 +93,7 @@ void EventDumpModule::printGenSimParticleCollection(const ParticleCollection<Gen
   for(auto &part : particleGroup)
   {
     std::string partName = part.getType().getName();
+    std::cout <<"\nPrint successful.";
     my_file << std::setw(11) << eventElement << "| " << std::setw(13) << partName << std::pair<GenSimParticle, std::vector<GenSimParticle>>{part, particleGroup} << std::endl;
     eventElement++;
   }

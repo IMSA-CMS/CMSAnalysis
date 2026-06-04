@@ -45,6 +45,7 @@
 #include "CMSAnalysis/Modules/interface/METModule.hh"
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
 #include "CMSAnalysis/Modules/interface/TriggerModule.hh"
+#include "CMSAnalysis/Modules/interface/RecoGenSimComparisonModule.hh"
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
 #include <memory>
 
@@ -59,7 +60,7 @@ void HiggsBackgroundPlan::initialize()
     auto higgsSelector = make_shared<HiggsSelector>();
     auto higgsCut = make_shared<HiggsCut>();
     //auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
-    auto eventDump = make_shared<GenSimEventDumpModule>(5);
+    auto eventDump = make_shared<EventDumpModule>(true,true);
     auto bJetCut = make_shared<BJetCut>();
     //auto quarkoniaCut = make_shared<QuarkoniaCut>();
     //auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
@@ -75,6 +76,7 @@ void HiggsBackgroundPlan::initialize()
     auto matchMod = make_shared<MatchingModule>();
     auto triggerMod = make_shared<TriggerModule>();
     auto metMod = make_shared<METModule>();
+    auto recoGenSimMod = make_shared<RecoGenSimComparisonModule>(matchMod, "mother", true); //CHANGE perParticle to mother
     // auto bJetFilter = make_shared<BJetFilter>();
 
     auto higgsFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::Reco);
@@ -139,10 +141,11 @@ void HiggsBackgroundPlan::initialize()
     modules.addFilterModule(recoDecayFilterMod);
     //modules.addFilterModule(make_shared<FilterModule>(bJetFilter));
     //modules.addAnalysisModule(leptonEfficiency);
-    modules.addAnalysisModule(eventHistMod);
-    modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
+    //modules.addAnalysisModule(eventHistMod);
+    //modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
     //modules.addFilterModule(runFilterMod); 
-    //modules.addAnalysisModule(eventDump);
+    //modules.addAnalysisModule(eventDump); //turn on maybe?
+    modules.addAnalysisModule(recoGenSimMod);
     auto hPlusPlusEfficiency = make_shared<HPlusPlusEfficiency>();
     hPlusPlusEfficiency->setInput(eventMod->getEventInput());
     modules.addAnalysisModule(hPlusPlusEfficiency);

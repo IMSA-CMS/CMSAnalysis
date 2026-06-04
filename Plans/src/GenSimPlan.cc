@@ -35,13 +35,13 @@ void GenSimPlan::initialize()
     auto hppGenSimSelector = make_shared<HPlusPlusGenSimSelector>();
     auto higgsFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::GenSim);
     auto metMod = make_shared<METModule>();
-    auto recoGenMatch = make_shared<RecoGenSimComparisonModule>();
 
     auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::GenSim, "Same Sign Invariant Mass", 1000, 0, 2000, false, false);
 
     auto eventDump = make_shared<GenSimEventDumpModule>();
     auto matchMod = make_shared<MatchingModule>();
     auto higgsCut = make_shared<HiggsCut>();
+    auto recoGenMatch = make_shared<RecoGenSimComparisonModule>(matchMod);
     auto higgsMassCut = make_shared<HiggsMassCut>();
     
     auto histMod = make_shared<HistogramOutputModule>();

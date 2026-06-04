@@ -10,13 +10,15 @@
 #include "CMSAnalysis/Utility/interface/ParticleType.hh"
 #include "CMSAnalysis/Histograms/interface/Histograms.hh"
 
+class MatchingModule;
+
 // compares event dumps of reco vs. gensim to match reconstructed particles to their 
 // corresponding gensim particles
 // currently specifically designed to find same sign invariant mass outliers in DY50 events
 class RecoGenSimComparisonModule : public AnalysisModule
 {
     public:
-        RecoGenSimComparisonModule(std::string compType = "perParticle", bool writeOutput = false);
+        RecoGenSimComparisonModule(std::shared_ptr<MatchingModule> matchMod, std::string compType = "mother", bool writeOutput = false); //check
         virtual bool process() override;
         //prints information to the screen
         virtual void finalize() override;
@@ -32,6 +34,8 @@ class RecoGenSimComparisonModule : public AnalysisModule
     void sameSignDeltaRComparison(const ParticleCollection<Particle>& recoParts,  const ParticleCollection<Particle>& genParts, std::ostream& output);
     void fakePhotonComparison(const ParticleCollection<Particle>& recoParticles, const ParticleCollection<Particle>& genParticles, std::ostream& output_stream = std::cout);
     void mothersComparison(const ParticleCollection<Particle>& recoParticles, const ParticleCollection<Particle>& genParticles, std::ostream& output_stream = std::cout);
+    std::shared_ptr<MatchingModule> matchMod;
+    
     std::string comparisonType;
     bool eventOutput;
     
@@ -85,11 +89,19 @@ class RecoGenSimComparisonModule : public AnalysisModule
     // mothers vars
     int isrCounter = 0;
     int fsrCounter = 0;
+    int underlyingCounter = 0;
+    int pileupCounter = 0;
+    int fakeCounter = 0;
     int neitherCounter = 0;
     int elecIsrCounter = 0;
     int elecFsrCounter = 0;
+    int elecPileupCounter = 0;
+    int elecUnderlyingCounter = 0;
     int muonIsrCounter = 0;
     int muonFsrCounter = 0;
+    int muonPileupCounter = 0;
+    int muonUnderlyingCounter = 0;
+
 
     int muon24Count = 0;
 };
