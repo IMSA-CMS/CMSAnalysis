@@ -90,7 +90,7 @@ double HiggsSelector:: massDifference(const std::vector<Particle>& leptons) cons
                         other.getType() == ParticleType::muon())
                     {
                         double dR = particle.getDeltaR(other); // Particle.hh already has this
-                        if (dR < 0.3) // typical cone cut, can tune to 0.2–0.4
+                        if (dR < 0.1) 
                         {
                             overlap = true;
                             break;
