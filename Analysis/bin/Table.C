@@ -10,7 +10,6 @@
 #include "CMSAnalysis/Utility/interface/HTMLTable.hh"
 #include "CMSAnalysis/Utility/interface/LatexTable.hh"
 #include "CMSAnalysis/Utility/interface/PowerpointTable.hh"
-#include "CMSAnalysis/Analysis/interface/HiggsPlusPlusAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include <fstream>
@@ -42,7 +41,7 @@ void Table()
 {
     //Channel Configurations
     std::vector<std::string> particles = {"e", "u"}; // Chosen branch ratio particles
-    std::vector<std::string> channels =  {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u", "none"};
+    std::vector<std::string> channels =  {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee_", "eeu_", "eue_", "euu_", "uue_", "uuu_", "ee__", "e_e_", "eu__", "e_u_", "uu__", "u_u_", "none"};
     //make sure these match with massTargets in HiggsCompleteAnaylsis
     std::vector<double> massTargets { 500, 600, 700, 800, 900, 1100, 1200, 1300, 1400};
 
@@ -79,7 +78,7 @@ void Table()
         channelNames.push_back(channel);
         
         //gets sameSignMass hist data
-        HistVariable histVariable("Same Sign Invariant Mass");
+        HistVariable histVariable(HistVariable::VariableType::InvariantMass, "GeV", true, false, true);
         std::shared_ptr<Channel> channelPtr = higgsAnalysis->getChannel(channel);
    
         //Gets names of decays in channel and their corresponding yields by index (i.e yields[i] corresponds with names[i])
@@ -90,22 +89,23 @@ void Table()
         auto channelProcesses = channelPtr->getProcesses();
         
 
-        for (int stringIndex = names.size() - 1; stringIndex >= 0; --stringIndex) {
+        for (int stringIndex = names.size() - 1; stringIndex >= 0; --stringIndex) 
+        {
             std::string name = names[stringIndex];
-            if (name.find("Higgs signal") != string::npos) {
+            if (name.find("Higgs signal") != string::npos || name == "Data") {
                 names.erase(names.begin() + stringIndex);
                 yields.erase(yields.begin() + stringIndex);
             }
         }
         
-        for (auto process : channelProcesses)
-         {
-            if (process->getName() != "t#bar{t}, Multiboson Background") continue;
-            auto singleProcess =  process->getSingleProcess("wzto3lnu");
-            double yield = singleProcess.getExpectedYield(histVariable);
+        // for (auto process : channelProcesses)
+        //  {
+        //     if (process->getName() != "t#bar{t}, Multiboson Background") continue;
+        //     auto singleProcess =  process->getSingleProcess("wzto3lnu");
+        //     double yield = singleProcess.getExpectedYield(histVariable);
             
-            yields.push_back(yield);
-        }
+        //     yields.push_back(yield);
+        // }
    
 
 
@@ -118,7 +118,7 @@ void Table()
 
         //Saves truncated names to be used as columnNames in data table.
         columnNames = names;
-        columnNames.push_back("wz");
+        //columnNames.push_back("wz");
        
     }
     

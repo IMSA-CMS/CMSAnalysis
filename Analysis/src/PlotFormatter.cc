@@ -181,6 +181,8 @@ TCanvas* PlotFormatter::simpleSuperImposedHist(std::vector<TH1*> hists, std::vec
 
     double logMinimum = CalculateLogMinimum(hists);
     first->SetMinimum(logMinimum);
+    first->Rebin(rebinFactor);
+    first->SetLineWidth(2);
     first->Draw("HIST");
     histVector.push_back(first);
 
@@ -715,6 +717,7 @@ void PlotFormatter::DrawOtherHistograms(std::vector<TH1*>& hists, std::vector<in
         TH1* hist = hists[i];
         hist->SetLineColor(colors[i]);
         hist->SetLineWidth(2);
+        hist->Rebin(rebinFactor);
         hist->Draw("HIST SAME");
         histVector.push_back(hist); 
 
