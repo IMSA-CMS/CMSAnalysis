@@ -22,25 +22,25 @@ std::map<std::string, ScaleFactor::ScaleFactorSet> JSONReader::readData()
 
 
 // Function to preprocess the JSON content
-std::string JSONReader::preprocessJSON(const std::string &filename) 
-{
-    std::ifstream file(Utility::getFullPath(filename));
-    if (!file.is_open()) 
-    {
-        std::cerr << "Unable to open file: " << filename << std::endl;
-        return "";
-    }
+// std::string JSONReader::preprocessJSON(const std::string &filename) 
+// {
+//     std::ifstream file(Utility::getFullPath(filename));
+//     if (!file.is_open()) 
+//     {
+//         std::cerr << "Unable to open file: " << filename << std::endl;
+//         return "";
+//     }
 
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-    std::string jsonContent = buffer.str();
+//     std::stringstream buffer;
+//     buffer << file.rdbuf();
+//     std::string jsonContent = buffer.str();
 
-    // Replace Infinity and NaN with specific values
-    jsonContent = std::regex_replace(jsonContent, std::regex("Infinity"), "1e30"); // or "null"
-    jsonContent = std::regex_replace(jsonContent, std::regex("NaN"), "null");
+//     // Replace Infinity and NaN with specific values
+//     jsonContent = std::regex_replace(jsonContent, std::regex("Infinity"), "1e30"); // or "null"
+//     jsonContent = std::regex_replace(jsonContent, std::regex("NaN"), "null");
 
-    return jsonContent;
-}
+//     return jsonContent;
+// }
 
 // ScaleFactor::ScaleFactorSet& JSONReader::getScaleFactorSet(double eta, double pt)
 // {
@@ -64,21 +64,22 @@ std::string JSONReader::preprocessJSON(const std::string &filename)
 std::map<std::string, ScaleFactor::ScaleFactorSet> JSONReader::loadScaleFactorsFromFile(std::string filename) 
 {
 // Preprocess the JSON content
-    std::string jsonContent = preprocessJSON(filename);
-    if (jsonContent.empty()) {
-        return {};
-    }
+    // std::string jsonContent = preprocessJSON(filename);
+    // if (jsonContent.empty()) {
+    //     return {};
+    // }
 
-    // Parse the preprocessed JSON content
-    std::istringstream jsonStream(jsonContent);
-    jsoncollector::Json::Value output;
-    jsoncollector::Json::Reader reader;
-    if (!reader.parse(jsonStream, output)) {
-        std::cerr << "Failed to parse JSON from file: " << filename << std::endl;
-        std::cerr << "Error: " << reader.getFormatedErrorMessages() << std::endl;
-        return {};
-    }
+    // // Parse the preprocessed JSON content
+    // std::istringstream jsonStream(jsonContent); 
+    // jsoncollector::Json::Value output;
+    // jsoncollector::Json::Reader reader;
+    // if (!reader.parse(jsonStream, output)) {
+    //     std::cerr << "Failed to parse JSON from file: " << filename << std::endl;
+    //     std::cerr << "Error: " << reader.getFormatedErrorMessages() << std::endl;
+    //     return {};
+    // }
     //printScaleFactors();
+    auto output = Utility::loadJSONFile(filename);
     return loadScaleFactors(output);
     
 }

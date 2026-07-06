@@ -9,7 +9,7 @@ AnalyzerEventInput::AnalyzerEventInput(const EventInterface **iEventInterface) :
 }
 
 
-ParticleCollection<Particle> AnalyzerEventInput::getParticles(RecoLevel level, const ParticleType& particleType) const
+ParticleCollection<Particle> AnalyzerEventInput::getParticles(RecoLevel level, const ParticleType& particleType, bool includeSpecials) const
 {
     ParticleCollection<Particle> particleList;
     if (level == RecoLevel::GenSim)
@@ -79,6 +79,11 @@ long AnalyzerEventInput::getRunNum() const
     return (*eventInterface)->getRunNum();
 }
 
+int AnalyzerEventInput::getLumiBlock() const
+{
+    return (*eventInterface)->getLumiBlock();
+}
+
 std::vector<bool> AnalyzerEventInput::getTriggerResults(std::string subProcess) const
 {
     return (*eventInterface)->getTriggerResults(subProcess);
@@ -102,4 +107,12 @@ const std::shared_ptr<FileParams> AnalyzerEventInput::getFileParams() const
 std::vector<double> AnalyzerEventInput::getPDFWeights() const
 {
     return (*eventInterface)->getPDFWeights();
+}
+double AnalyzerEventInput::getEventQuantity(std::string key) const
+{
+    if (eventInterface)
+    {
+        return (*eventInterface)->getEventQuantity(key);
+    }
+    throw std::runtime_error("AnalyzerEventInput: EventInterface not set");
 }

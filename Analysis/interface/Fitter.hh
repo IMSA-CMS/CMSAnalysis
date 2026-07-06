@@ -51,6 +51,7 @@ class Fitter
     static void fitPowerLaw(TH1 *histogram, FitFunction &fitFunction);
     static void fitDoubleGaussian(TH1 *histogram, FitFunction &fitFunction);
     static void fitGausLogPowerNorm(TH1 *hist, FitFunction &func);
+    static void fitVoigt(TH1 *histogram, FitFunction &fitFunction);
 
     // Insert blank TF1* function ptr which will have the fitted function written to
     static TFitResultPtr fitSingleFunction(TGraph *histogram, TF1 *function, size_t iterations = 1);

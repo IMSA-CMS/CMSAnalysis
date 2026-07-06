@@ -21,7 +21,6 @@ protected:
     std::map<std::string, ScaleFactor::ScaleFactorSet> loadScaleFactorsFromFile(std::string filename);
 
 private:
-    std::string preprocessJSON(const std::string &filename); 
     std::string filename;
 };
 

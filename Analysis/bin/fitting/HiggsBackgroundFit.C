@@ -3,7 +3,7 @@
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
 #include "TF1.h"
-#include "TGraph.h"
+#include "TGraph.h" 
 #include "TH1.h"
 #include <iostream>
 #include <map>
@@ -18,31 +18,31 @@ const std::vector<HistVariable> histogramTypes = {
     HistVariable(HistVariable::VariableType::InvariantMass, "", false, true),
 };
 
-const std::string fitHistsName = "H++BackgroundFits.root";
+const std::string fitHistsName = "H++BackgroundFitsZZ.root";
 const std::string fitParameterValueFile = "H++BackgroundFunctions.txt";
 // These don't do anything
 const std::string parameterFits = "H++BackgroundParameterFits.root";
 const std::string parameterFunctions = "H++BackgroundParameterFunctions.txt";
 
 const std::map<std::string, std::pair<int, int>> bgsToRange = {
-    {"Drell-Yan Background", {0, 2000}},            // 140-500
-    {"QCD Background", {0, 2000}},                  // 200-2000
-    {"ZZ Background", {0, 2000}},                   // 100-800
+    {"Drell-Yan Background", {140, 500}},
+    {"QCD Background", {200, 2000}},
+    {"ZZ Background", {0, 2000}},
     {"WJets Background", {0, 2000}},                //
     {"t#bar{t}, Multiboson Background", {0, 2000}}, //
 };
 
-const int minData = 500;
+const int minData = 10;
 
 // run in batch mode for faster processing: root -b HiggsBackgroundFit.C+
 void HiggsBackgroundFit()
 {
+    const auto analysis = HiggsCompleteAnalysis();
     remove(fitParameterValueFile.c_str());
     remove(parameterFunctions.c_str());
 
     Fitter fitter(fitHistsName, fitParameterValueFile, parameterFits, parameterFunctions);
 
-    const auto analysis = HiggsCompleteAnalysis();
     const auto systs = analysis.getSystematics();
     std::cout << "Loaded histograms\n";
 
@@ -104,7 +104,7 @@ void fitProcess(const Process &process, Fitter &fitter, const HistVariable &hist
     std::cout << "Fitting " + name + "\n";
 
     FitFunction func =
-        FitFunction::createFunctionOfType(FitFunction::FunctionType::GausLogPowerNorm, name, "", min, max, channelName);
+        FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, name, "", min, max, channelName);
 
     FitFunctionCollection currentFunctions;
     currentFunctions.insert("", func);

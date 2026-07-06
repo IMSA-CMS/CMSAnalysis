@@ -1,7 +1,10 @@
 #ifndef HIGGSCOMPLETEANALYSIS_HH
 #define HIGGSCOMPLETEANALYSIS_HH
 
+#include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include "FullAnalysis.hh"
+#include <string>
+#include <tuple>
 #include <vector>
 
 class HiggsCompleteAnalysis : public FullAnalysis
@@ -16,10 +19,18 @@ class HiggsCompleteAnalysis : public FullAnalysis
 
     std::vector<std::string> getSystematics() const override;
 
-    // bool checkChannelName(std::string channelName, double massTarget);
+    void addSingleProcess(std::shared_ptr<Process> process, std::string filePathway, std::string fileName,
+                          std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader,
+                          double luminosity, std::shared_ptr<HistNameFinder> mappingLowMass,
+                          std::shared_ptr<HistNameFinder> mappingHighMass, bool isData = false,
+                          double branchingRatioAdjustment = 1);
 
-    // TH1* getHist(std::string histType, std::string processName, double massTarget, bool scaleToExpected = false,
-    // std::string channelName = "") const override;
+  private:
+    // Returns a tuple of (HistVar, channel, genSim, paramName)
+    static std::tuple<HistVariable, std::string, std::string, std::string> parseSignalParamFuncName(
+        const std::string &name);
+    // Returns a tuple of (HistVar, channel, bgName)
+    static std::tuple<HistVariable, std::string, std::string> parseBgFuncName(const std::string &name);
 };
 
 #endif

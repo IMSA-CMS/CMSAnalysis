@@ -73,6 +73,7 @@ class FitFunction
         PowerLaw,
         DoubleGaussian,
         GausLogPowerNorm,
+        Voigt,
     };
 
     // static const std::vector<std::string> functionList;
@@ -93,6 +94,7 @@ class FitFunction
 	std::string getChannelName();
 	std::string getParameterName();
   std::string getChannel();
+  double evaluate(double x);
 
 	void addSystematic(const std::string& sysName, const TF1& upFunction, const TF1& downFunction);
 	void addSystematic(const std::string& sysName, const std::vector<double>& upParams, const std::vector<double>& downParams);
@@ -111,6 +113,7 @@ private:
     static double DSCB(double *x, double *par);
     static double doubleGaussian(double *x, double *par);
     static double gausLogPowerNorm(double *x, double *par);
+    static double voigt(double *x, double *par);
     static std::vector<std::string> split(const std::string &str, char delimiter);
 };
 

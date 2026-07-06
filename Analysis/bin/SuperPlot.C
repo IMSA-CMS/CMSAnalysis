@@ -1,35 +1,14 @@
-#include "CMSAnalysis/Analysis/interface/Channel.hh"
-#include "CMSAnalysis/Analysis/interface/Process.hh"
-#include "CMSAnalysis/Analysis/interface/SingleProcess.hh"
-#include "CMSAnalysis/Analysis/interface/RootFileInput.hh"
-#include "CMSAnalysis/Analysis/interface/Estimator.hh"
-#include "CMSAnalysis/Analysis/interface/FitEstimator.hh"
-#include "CMSAnalysis/Analysis/interface/FullAnalysis.hh"
-#include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/PlotFormatter.hh"
-#include "CMSAnalysis/Analysis/interface/DarkPhotonCompleteAnalysis.hh"
-
-
-#include <fstream>
-#include "THStack.h"
-#include "TString.h"
-#include <iostream>
-#include <memory>	
 #include "TCanvas.h"
-#include "TSystem.h"
-
+#include <memory>
 
 void SuperPlot()
 {
-	std::string plotName = "Invariant Mass";
-	std::string outFile = "SuperPlot.png";
-	//std::vector<double> massTargets {900};
+    std::string plotName = "Invariant Mass";
+    std::string outFile = "SuperPlot.png";
 
-	// auto DarkPhotonAnalysis = std::make_shared<DarkPhotonInputAnalysis>(inputAnalysisPath); // BDT Output Analysis (LeptonJetMLOutput)
-	//auto DarkPhotonAnalysis = std::make_shared<DarkPhotonCompleteAnalysis>();
-
-	//auto DarkPhotonAnalysis = std::make_shared<DarkPhotonInputAnalysis>(inputAnalysisPath); // Variable Isolation Plots
+    //auto DarkPhotonAnalysis = std::make_shared<DarkPhotonInputAnalysis>(inputAnalysisPath); // Variable Isolation Plots
 	// auto NanoAnalysis = std::make_shared<DarkPhotonNanoAnalysis>(15, 17);
 	//auto NoCutAnalysis = std::make_shared<DarkPhotonNoCutAnalysis>(inputAnalysisPath); // When control region filter disabled
 	//Change extra text here (keep drawLogo to false for now)
@@ -119,10 +98,10 @@ void SuperPlot()
 	// HistVariable nameVar(ParticleType::muon(), 0, HistVariable::VariableType::SameSignInvariantMass);
 	// auto ana = std::make_shared<HiggsCompleteAnalysis>();
 	// TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, true, false, "eeee", "Higgs Group 1000");
-	HistVariable nameVar( HistVariable::VariableType::RecoSameSignInvariantMass);
+	HistVariable nameVar( HistVariable::VariableType::InvariantMass, "", false, true);
 
 	auto ana = std::make_shared<HiggsCompleteAnalysis>();
-	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, true, false, "eeeu");
+	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, true, false, "eeeu", true);
 
 	// auto ana = std::make_shared<DarkPhotonCompleteAnalysis>();
 	// TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, false, true, "High Mass and Different Sign/1Jet");
@@ -130,5 +109,5 @@ void SuperPlot()
 	//TCanvas *canvas = plotFormatter->simpleAnalysisHist(backgroundHists, );
 
 	//Uncomment to save a png picture in your bin folder
-	//canvas->SaveAs(outFile.c_str());
+	////canvas->SaveAs(outFile.c_str());
 }

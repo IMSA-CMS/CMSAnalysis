@@ -30,14 +30,16 @@ class HistVariable
         RecoSameSignInvariantMass,
         RecoOppositeSignInvariantMass,
         DarkPhotonBDTOutput,
+        DarkPhotonSMHiggsBDTOutput,
         LeptonJetMass,
         LeptonJetDeltaR,
     };
 
     HistVariable(ParticleType type, int order, VariableType var, std::string unit = "", bool is2DHistX = false,
-                 bool is2DHistY = false);
+                 bool is2DHistY = false, bool isCorrected = false);
 
-    HistVariable(VariableType var, std::string unit = "", bool is2DHistX = false, bool is2DHistY = false);
+    HistVariable(VariableType var, std::string unit = "", bool is2DHistX = false, bool is2DHistY = false,
+                 bool isCorrected = false);
 
     std::string getName() const;
 
@@ -83,6 +85,13 @@ class HistVariable
         return is2DHistY_;
     }
 
+    bool operator==(const HistVariable &other) const
+    {
+        return particleType == other.particleType && order_ == other.order_ && variableType == other.variableType &&
+               unit == other.unit && is2DHistX_ == other.is2DHistX_ && is2DHistY_ == other.is2DHistY_ &&
+               isCorrected == other.isCorrected && type == other.type && systematicName == other.systematicName;
+    }
+
   private:
     ParticleType particleType;
     int order_;
@@ -90,6 +99,7 @@ class HistVariable
     std::string unit;
     bool is2DHistX_ = false;
     bool is2DHistY_ = false;
+    bool isCorrected = false;
     ScaleFactor::SystematicType type = ScaleFactor::SystematicType::Nominal;
     std::string systematicName;
 };

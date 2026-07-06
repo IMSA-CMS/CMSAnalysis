@@ -8,7 +8,7 @@ double HiggsCut::muonThreeChannelCut = 250;
 
 bool HiggsCut::checkEventInternal(const Event &event, const EventInput *input) const
 {
-    const auto particles = event.getParticles(EventInput::RecoLevel::Reco);
+    const auto particles = event.getLeptons(EventInput::RecoLevel::Reco);
 
     const int numLeptons = particles.getLeptonTypeCount(ParticleType::electron()) +
                            particles.getLeptonTypeCount(ParticleType::muon()) +
@@ -17,11 +17,22 @@ bool HiggsCut::checkEventInternal(const Event &event, const EventInput *input) c
     switch (numLeptons)
     {
     case 2:
-        return std::ranges::any_of(particles, [](const auto &p) {
+    {
+        bool anyLeptonAboveThreshold = std::ranges::any_of(particles, [](const auto &p) {
             return (p.getType() == ParticleType::electron() && p.getPt() >= 40) ||
                    (p.getType() == ParticleType::muon() && p.getPt() >= 30);
         });
-    case 3: {
+        if (!anyLeptonAboveThreshold)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    case 3: 
+    {
         // 3 lepton channel pT thresholds
         Particle lepton = Particle::nullParticle();
 
@@ -52,7 +63,8 @@ bool HiggsCut::checkEventInternal(const Event &event, const EventInput *input) c
         }
         return false;
     }
-    case 4: {
+    case 4:
+    {
         int totalCharge = 0;
         for (const auto &particle : particles)
         {
@@ -63,10 +75,18 @@ bool HiggsCut::checkEventInternal(const Event &event, const EventInput *input) c
         {
             return false;
         }
-        return std::ranges::any_of(particles, [](const auto &p) {
+        bool anyLeptonAboveThreshold = std::ranges::any_of(particles, [](const auto &p) {
             return (p.getType() == ParticleType::electron() && p.getPt() >= 40) ||
                    (p.getType() == ParticleType::muon() && p.getPt() >= 30);
         });
+        if (!anyLeptonAboveThreshold)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
     default:
         return false;

@@ -119,6 +119,11 @@ long CmsswEventInterface::getRunNum() const
     throw std::runtime_error("Not implemented yet");
 }
 
+int CmsswEventInterface::getLumiBlock() const
+{
+    throw std::runtime_error("Not implemented yet");
+}
+
 std::vector<bool> CmsswEventInterface::getTriggerResults(std::string subProcess) const
 {
     edm::Handle<std::vector<pat::TriggerEvent>> triggerResults;
@@ -173,6 +178,11 @@ const std::shared_ptr<FileParams> CmsswEventInterface::getFileParams() const
     throw std::runtime_error("getFileParams not implemented for localEventInput");
 }
 std::vector<double> CmsswEventInterface::getPDFWeights() const
+{
+    throw "Function not implemented yet";
+}
+
+double CmsswEventInterface::getEventQuantity(std::string key) const
 {
     throw "Function not implemented yet";
 }
