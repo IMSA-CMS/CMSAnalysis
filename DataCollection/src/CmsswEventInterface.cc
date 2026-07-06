@@ -181,3 +181,8 @@ std::vector<double> CmsswEventInterface::getPDFWeights() const
 {
     throw "Function not implemented yet";
 }
+
+double CmsswEventInterface::getEventQuantity(std::string key) const
+{
+    throw "Function not implemented yet";
+}

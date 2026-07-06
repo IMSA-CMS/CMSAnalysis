@@ -14,14 +14,10 @@ double HiggsSelector:: massDifference(const std::vector<Particle>& leptons) cons
     std::vector<Particle> negativeLeptons;
     for (const auto& lepton : leptons)
     {
-        if (lepton.getCharge() == 1)
-        {
+        if (lepton.getCharge() > 0)
             positiveLeptons.push_back(lepton);
-        }
-        else if (lepton.getCharge() == -1)
-        {
+        else if (lepton.getCharge() < 0)
             negativeLeptons.push_back(lepton);
-        }
     }
     if (positiveLeptons.size() != 2 || negativeLeptons.size() != 2)
     {
@@ -42,8 +38,14 @@ double HiggsSelector:: massDifference(const std::vector<Particle>& leptons) cons
 
     std::vector<Particle> leptons;
 
+    for (auto& particle : particles)
+    {
+            adjustEnergy(particle);
+    }
+
     for (const auto& particle : particles)
     {
+        
         if (particle.getType() == ParticleType::electron())
      {
             auto lepton = Lepton(particle);
@@ -88,7 +90,7 @@ double HiggsSelector:: massDifference(const std::vector<Particle>& leptons) cons
                         other.getType() == ParticleType::muon())
                     {
                         double dR = particle.getDeltaR(other); // Particle.hh already has this
-                        if (dR < 0.3) // typical cone cut, can tune to 0.2–0.4
+                        if (dR < 0.1) 
                         {
                             overlap = true;
                             break;
@@ -158,10 +160,10 @@ double HiggsSelector:: massDifference(const std::vector<Particle>& leptons) cons
 
 std::vector<Particle> HiggsSelector::adjustForNeutrinos(const std::vector<Particle>& leptons, const EventInput* input) const
 {
+    std::cout << "Adjusting for neutrinos..." << leptons.size() << "\n";
+    std::cout << "Initial leptons size: " << leptons.size() << "\n";
     double smallestMassDiff = std::numeric_limits<double>::max();
     std::vector<Particle> bestLeptons;
-
-
 
     if (leptons.size() != 4)
     {
@@ -172,6 +174,7 @@ std::vector<Particle> HiggsSelector::adjustForNeutrinos(const std::vector<Partic
     auto met = input->getMET();
     const double met_x = met.px();
     const double met_y = met.py();
+
     //first step is zero neutrinos (just as they are)
     {
         auto total = leptons[0].getFourVector() + leptons[1].getFourVector() + leptons[2].getFourVector() + leptons[3].getFourVector();
@@ -193,12 +196,12 @@ std::vector<Particle> HiggsSelector::adjustForNeutrinos(const std::vector<Partic
         for (int i = 0; i < 4; i++)
         {
             std::vector<Particle> trial = leptons;
-
             // Neutrino from MET (pz=0 simple approximation)
+            
             double nu_px = met_x;
             double nu_py = met_y;
             double nu_pT  = std::sqrt(nu_px*nu_px + nu_py*nu_py);
-
+            
             double scale = nu_pT / trial[i].getPt();
             auto newFourVector = trial[i].getFourVector() * (scale + 1);
 
@@ -215,6 +218,7 @@ std::vector<Particle> HiggsSelector::adjustForNeutrinos(const std::vector<Partic
                 bestLeptons = trial;
             }
         }
+       
     }
     return bestLeptons;
     //then two neutrinos (each unique pair of leptons gets a trial)
@@ -281,74 +285,6 @@ std::vector<Particle> HiggsSelector::adjustForNeutrinos(const std::vector<Partic
     // return {};
     // return bestLeptons;
 }
-    
-    // if (Leptons.size() != 4)
-    //     return leptons; // only adjust if exactly 4 leptons
-
-//         struct Vector2D {
-//         double x;
-//         double y;
-
-//         Vector2D operator+(const Vector2D& other) const {
-//             return {x + other.x, y + other.y};
-//         }
-
-//         Vector2D operator*(double scalar) const {
-//             return {scalar * x, scalar * y};
-//         }
-//     };
-
-//     Vector2D p1T { p1.px(), p1.py() };
-//     Vector2D p2T { p2.px(), p2.py() };
-//     Vector2D MET { met_x, met_y };
-
-//     std::cout << "p1T = (" << p1T.x << ", " << p1T.y << ")\n";
-//     std::cout << "p2T = (" << p2T.x << ", " << p2T.y << ")\n";
-//     std::cout << "MET = (" << MET.x << ", " << MET.y << ")\n";
-    
-//         double met_x = input->getMET_x();
-//         double met_y = input->getMET_y();
-//         double MET = std::sqrt(met_x*met_x + met_y*met_y);
-
-//         if (MET < METThreshold_) {
-//             std::cout << "MET below threshold — skipping neutrino adjustment.\n";
-//             return leptons;
-//         }
-
-//         for (int mask = 0; mask < 16; mask++)
-//         {
-//             int bitCount = __builtin_popcount(mask);
-        
-//         if (bitCount > 2)
-//             continue;
-        
-//         std::array<double, 4> alpha{};
-        
-//         for (int i = 0; i < 4; i++)
-//         {
-//             alpha[i] = (mask & (1 << i)) ? 1.0 : 0.0;
-//         };
-        
-//         for (auto& alpha : trials)
-//         {
-        
-//             std::vector<Particle> scaled;
-//             scaled.reserve(4);
-//             for (int i = 0; i < 4; i++)
-//                 scaled.push_back(leptons[i].scale(1.0 - alpha[i]));
-//                 // <-- implement scale() or write inlin
-            
-//             double mA = reconstructMass(scaled[0], scaled[1]);
-//             double mB = reconstructMass(scaled[2], scaled[3]);
-//             double diff = std::fabs(mA - mB);
-            
-//             if (diff < bestDiff)
-//             {
-//                 bestDiff = diff;
-//                 bestAlpha = alpha;
-//             }
-//         }
-// }
         
     
 

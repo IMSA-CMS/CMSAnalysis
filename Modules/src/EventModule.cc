@@ -158,6 +158,7 @@ void EventModule::setInput(const EventInput* input)
 {
     Module::setInput(input);
     event.setInput(input);
+    localInput.setEventFile(input);
 }
 
 

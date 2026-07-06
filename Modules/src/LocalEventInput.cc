@@ -86,3 +86,15 @@ std::vector<double> LocalEventInput::getPDFWeights() const
 {
     throw "Function not implemented";
 }
+double LocalEventInput::getEventQuantity(std::string key) const
+{
+    if (eventFile)
+    {
+        return eventFile->getEventQuantity(key);
+    }
+    throw std::runtime_error("LocalEventInput: EventFile not set");
+}
+void LocalEventInput::setEventFile(const EventInput* file)
+{
+    eventFile = file;
+}

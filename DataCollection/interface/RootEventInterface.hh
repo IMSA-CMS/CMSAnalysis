@@ -27,6 +27,8 @@ class RootEventInterface : public EventInterface
         virtual int getNumPileUpInteractions() const override;
         virtual bool checkTrigger(std::string triggerName, std::string subProcess) const override;
         virtual const std::shared_ptr<FileParams> getFileParams() const override; 
+        virtual double getEventQuantity(std::string key) const override;
+
         
     private:   
         std::shared_ptr<EventFile> eventFile;

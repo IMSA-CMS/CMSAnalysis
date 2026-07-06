@@ -21,10 +21,10 @@ const int minData = 500;
 const double xMin = 0;
 const double xMax = 2000;
 
-const std::string fitHistsName = "H++SignalFits.root";
-const std::string fitParameterValueFile = "H++SignalFunctions.txt";
-const std::string parameterFits = "H++SignalParameterFits.root";
-const std::string parameterFunctions = "H++SignalParameterFunctions.txt";
+const std::string fitHistsName = "H++SignalFitsVoigt.root";
+const std::string fitParameterValueFile = "H++SignalFunctionsVoigt.txt";
+const std::string parameterFits = "H++SignalParameterFitsVoigt.root";
+const std::string parameterFunctions = "H++SignalParameterFunctionsVoigt.txt";
 
 // run in batch mode for faster processing: root -b HiggsSignalFit.C+
 void HiggsSignalFit()
@@ -114,9 +114,10 @@ bool fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
 
     const double skewAvg = skewSum / n;
     const double maxBinPctAvg = maxBinPctSum / n;
-    const FitFunction::FunctionType funcType = (-1.5 < skewAvg && 60 * maxBinPctAvg - skewAvg > 0.9)
-                                                   ? FitFunction::FunctionType::DoubleGaussian
-                                                   : FitFunction::FunctionType::DoubleSidedCrystalBall;
+    const FitFunction::FunctionType funcType = FitFunction::FunctionType::Voigt;
+    // (-1.5 < skewAvg && 60 * maxBinPctAvg - skewAvg > 0.9)
+                                                //    ? FitFunction::FunctionType::DoubleGaussian
+                                                //    : FitFunction::FunctionType::DoubleSidedCrystalBall;
 
     std::unordered_map<std::string, double> massValues;
     std::unordered_map<std::string, TH1 *> histogramMap;

@@ -41,7 +41,7 @@ class EventLoader
 
     private:
         void beginJob();
-        void analyze(const RootEventInterface);
+        void analyze(const RootEventInterface* eventInterface);
         void endJob();
         
         void processRootFiles(int outputEvery, int nFiles, int maxEvents, int skipFiles);
@@ -49,7 +49,7 @@ class EventLoader
         std::vector<std::shared_ptr<FileParams>> rootFiles;
         Analyzer *modules; 
         std::shared_ptr<EventFile> file = nullptr;
-        RootEventInterface eventInterface = RootEventInterface();
+        RootEventInterface* eventInterface = nullptr;
         
 };
 

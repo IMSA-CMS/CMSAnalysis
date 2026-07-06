@@ -1,33 +1,32 @@
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/PlotFormatter.hh"
-#include "CMSAnalysis/Analysis/interface/DarkPhotonCompleteAnalysis.hh"
-
-#include <iostream>
-#include <memory>	
 #include "TCanvas.h"
+#include <memory>
 
 void SuperPlot()
 {
-	std::string plotName = "Invariant Mass";
-	std::string outFile = "SuperPlot.png";
+    std::string plotName = "Invariant Mass";
+    std::string outFile = "SuperPlot.png";
 
-	auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation/Data)");
-	plotFormatter->setUpperMasslimit(.5);
-	plotFormatter->setRebinFactor(5);
-	plotFormatter->setFirstBin(-1);
+    auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation/Data)");
+    plotFormatter->setUpperMasslimit(.5);
+    // plotFormatter->setRebinFactor(5);
+    plotFormatter->setFirstBin(-1);
 
-	//HistVariable nameVar(ParticleType::leptonJet(), 1, HistVariable::VariableType::LeptonJetDeltaR, "Lepton Jet #{Delta}R");
-	// auto ana = std::make_shared<HiggsCompleteAnalysis>();
-	// TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, true, false, "eeee", "Higgs Group 1000");
-	HistVariable nameVar(HistVariable::VariableType::RecoSameSignInvariantMass, "Invariant Mass (GeV)");
-
-	auto ana = std::make_shared<HiggsCompleteAnalysis>();
-	plotFormatter->setRebinFactor(33);
-	TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, "Invariant Mass [GeV/c^2]", "Events", false, false, true, "uu__");
-
-	// auto ana = std::make_shared<DarkPhotonCompleteAnalysis>();
-	// TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, false, true, "High Mass and Different Sign/1Jet");
-
-	//Uncomment to save a png picture in your bin folder
-	//canvas->SaveAs(outFile.c_str());
+    // HistVariable nameVar(ParticleType::leptonJet(), 1, HistVariable::VariableType::LeptonJetDeltaR, "Lepton Jet
+    // #{Delta}R");
+    //  auto ana = std::make_shared<HiggsCompleteAnalysis>();
+    //  TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, true, false, "eeee",
+    //  "Higgs Group 1000"); HistVariable nameVar(HistVariable::VariableType::RecoOppositeSignInvariantMass);
+    //  HistVariable nameVar(ParticleType::leptonJet(), 1, HistVariable::VariableType::LeptonJetMass);
+    auto nameVar = HistVariable(HistVariable::VariableType::InvariantMass, "", true, false);
+    auto ana = std::make_shared<HiggsCompleteAnalysis>();
+    // TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, false, true,
+    // "e_e__ZPeak"); auto ana = std::make_shared<DarkPhotonCompleteAnalysis>(); TCanvas *canvas =
+    // plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, false, true, "High Mass and Different
+    // Sign/1Jet");
+    TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, "Invariant Mass [GeV/c^2]", "Events", false, true,
+                                                  false, "eeet", true);
+    // Uncomment to save a png picture in your bin folder
+    // canvas->SaveAs(outFile.c_str());
 }

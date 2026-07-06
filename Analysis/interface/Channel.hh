@@ -32,7 +32,9 @@ class Channel
     {
         return name;
     }
-    std::vector<std::string> getNamesWithLabel(Label label);
+    std::vector<std::string> getNamesWithLabel(Label label) const;
+    std::vector<std::shared_ptr<Process>> getWithLabel(Label label) const;
+
     // Makes stacked histogram
     THStack *getStack(HistVariable histType, std::optional<Label> label = {}, bool scaleToExpected = false,
                       int rebinConstant = 1) const;
@@ -40,9 +42,9 @@ class Channel
     std::vector<TH1 *> getHists(HistVariable histType, std::optional<Label> label = {},
                                 bool scaleToExpected = false) const;
 
-    const std::shared_ptr<Process> findProcess(std::string processName) const;
+    std::shared_ptr<Process> findProcess(const std::string &processName) const;
 
-    void labelProcess(Label label, std::string processName);
+    void labelProcess(Label label, const std::string &processName);
 
     void labelProcess(Label label, std::shared_ptr<Process> process);
 

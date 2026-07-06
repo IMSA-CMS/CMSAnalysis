@@ -8,7 +8,7 @@
 
 
 MultiYearScaleFactor::MultiYearScaleFactor(std::string name)
-	: ScaleFactor(name, std::make_shared<DummyScaleFactorReader>()) // Using a dummy reader since we don't read data directly here
+	: MapBasedScaleFactor(name, std::make_shared<DummyScaleFactorReader>()) // Using a dummy reader since we don't read data directly here
 {
 }
 
