@@ -123,7 +123,7 @@ void Fitter::fitFunctions(std::unordered_map<std::string, TH1 *> &histograms)
         const auto name = full.substr(split + 1);
 
         auto canvas = TCanvas(name.c_str(), name.c_str(), 0, 0, 1500, 500);
-        // histogram->Scale(1.0 / histogram->GetBinWidth(1));
+        histogram->Scale(1.0 / histogram->GetBinWidth(1));
         histogram->Draw();
 
         if (!fitDirectories.contains(dir))
