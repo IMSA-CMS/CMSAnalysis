@@ -192,15 +192,30 @@ HiggsKansasStateAnalysis::HiggsKansasStateAnalysis()
                     catch (std::out_of_range &e)
                     {
                     }
-
-                    addSingleProcess(higgsSignal, signalFilePath, "Higgs" + std::to_string((int)massTarget) + ".root",
+                    addSingleProcess(higgsSignal, signalFilePath, "HppM" + std::to_string((int)massTarget) + "_2016.root",
                                      "higgs4l" + std::to_string((int)massTarget), reader, luminosity, histMapperLowMass,
                                      histMapperHighMass, false, branchingRatioFixer);
+                    addSingleProcess(higgsSignal, signalFilePath, "HppM" + std::to_string((int)massTarget) + "_2017.root",
+                                     "higgs4l" + std::to_string((int)massTarget), reader, luminosity, histMapperLowMass,
+                                     histMapperHighMass, false, branchingRatioFixer);
+                    addSingleProcess(higgsSignal, signalFilePath, "HppM" + std::to_string((int)massTarget) + "_2018.root",
+                                     "higgs4l" + std::to_string((int)massTarget), reader, luminosity, histMapperLowMass,
+                                     histMapperHighMass, false, branchingRatioFixer);
+
                     processes.push_back(higgsSignal);
                     addSingleProcess(higgsMassGroup, signalFilePath,
-                                     "Higgs" + std::to_string((int)massTarget) + ".root",
+                                     "HppM" + std::to_string((int)massTarget) + "_2016.root",
                                      "higgs4l" + std::to_string((int)massTarget), reader, luminosity, histMapperLowMass,
                                      histMapperHighMass, false, branchingRatioFixer);
+                    addSingleProcess(higgsMassGroup, signalFilePath,
+                                     "HppM" + std::to_string((int)massTarget) + "_2017.root",
+                                     "higgs4l" + std::to_string((int)massTarget), reader, luminosity, histMapperLowMass,
+                                     histMapperHighMass, false, branchingRatioFixer);
+                    addSingleProcess(higgsMassGroup, signalFilePath,
+                                     "HppM" + std::to_string((int)massTarget) + "_2018.root",
+                                     "higgs4l" + std::to_string((int)massTarget), reader, luminosity, histMapperLowMass,
+                                     histMapperHighMass, false, branchingRatioFixer);
+                    
                 }
                 processes.push_back(higgsMassGroup);
             }
@@ -212,11 +227,11 @@ HiggsKansasStateAnalysis::HiggsKansasStateAnalysis()
             std::vector<std::string> names = {"ZZTo2L2Nu", "ZZTo2Q2L", "ZZTo4L"};
             for (auto name : names)
             {
-                addSingleProcess(zzBackground, bgFilePath, name + "_2016.root", "ttbar_lep", reader, luminosity,
+                addSingleProcess(zzBackground, bgFilePath, name + "_2016.root", reader, luminosity,
                              histMapperLowMass, histMapperHighMass, false);
-                addSingleProcess(zzBackground, bgFilePath, name + "_2017.root", "ttbar_lep", reader, luminosity,
+                addSingleProcess(zzBackground, bgFilePath, name + "_2017.root", reader, luminosity,
                              histMapperLowMass, histMapperHighMass, false, 1);
-                addSingleProcess(zzBackground, bgFilePath, name + "_2018.root", "ttbar_lep", reader, luminosity,
+                addSingleProcess(zzBackground, bgFilePath, name + "_2018.root", reader, luminosity,
                              histMapperLowMass, histMapperHighMass, false, 1);
             } 
 
@@ -227,11 +242,11 @@ HiggsKansasStateAnalysis::HiggsKansasStateAnalysis()
             "WJetsToLNu_0J"};
             for (auto name : names)
             {
-                addSingleProcess(wJetsBackground, bgFilePath, name + "_2016.root", "ttbar_lep", reader, luminosity,
+                addSingleProcess(wJetsBackground, bgFilePath, name + "_2016.root", reader, luminosity,
                              histMapperLowMass, histMapperHighMass, false);
-                addSingleProcess(wJetsBackground, bgFilePath, name + "_2017.root", "ttbar_lep", reader, luminosity,
+                addSingleProcess(wJetsBackground, bgFilePath, name + "_2017.root", reader, luminosity,
                              histMapperLowMass, histMapperHighMass, false, 1);
-                addSingleProcess(wJetsBackground, bgFilePath, name + "_2018.root", "ttbar_lep", reader, luminosity,
+                addSingleProcess(wJetsBackground, bgFilePath, name + "_2018.root", reader, luminosity,
                              histMapperLowMass, histMapperHighMass, false, 1);
             } 
 
@@ -243,11 +258,11 @@ HiggsKansasStateAnalysis::HiggsKansasStateAnalysis()
             "ttHJetToNonbb", "ttHTo2L2Nu", "ttHToEE", "ttHToTauTau", "ZZZ"};
             for (auto name : names)
             {
-                addSingleProcess(ttBarandMultiBosonBackground, bgFilePath, name + "_2016.root", "ttbar_lep", reader, luminosity,
+                addSingleProcess(ttBarandMultiBosonBackground, bgFilePath, name + "_2016.root", reader, luminosity,
                              histMapperLowMass, histMapperHighMass, false);
-                addSingleProcess(ttBarandMultiBosonBackground, bgFilePath, name + "_2017.root", "ttbar_lep", reader, luminosity,
+                addSingleProcess(ttBarandMultiBosonBackground, bgFilePath, name + "_2017.root", reader, luminosity,
                              histMapperLowMass, histMapperHighMass, false, 1);
-                addSingleProcess(ttBarandMultiBosonBackground, bgFilePath, name + "_2018.root", "ttbar_lep", reader, luminosity,
+                addSingleProcess(ttBarandMultiBosonBackground, bgFilePath, name + "_2018.root", reader, luminosity,
                              histMapperLowMass, histMapperHighMass, false, 1);
             }
             
@@ -256,11 +271,11 @@ HiggsKansasStateAnalysis::HiggsKansasStateAnalysis()
             std::vector<std::string> names = {"DYJetsToLLM10to50_", "DYJetsToLLM50"};
             for (auto name : names)
             {
-                addSingleProcess(dyBackground, bgFilePath, name + "_2016.root", "ttbar_lep", reader, luminosity,
+                addSingleProcess(dyBackground, bgFilePath, name + "_2016.root", reader, luminosity,
                              histMapperLowMass, histMapperHighMass, false);
-                addSingleProcess(dyBackground, bgFilePath, name + "_2017.root", "ttbar_lep", reader, luminosity,
+                addSingleProcess(dyBackground, bgFilePath, name + "_2017.root", reader, luminosity,
                              histMapperLowMass, histMapperHighMass, false, 1);
-                addSingleProcess(dyBackground, bgFilePath, name + "_2018.root", "ttbar_lep", reader, luminosity,
+                addSingleProcess(dyBackground, bgFilePath, name + "_2018.root", reader, luminosity,
                              histMapperLowMass, histMapperHighMass, false, 1);
             }
 
@@ -269,23 +284,26 @@ HiggsKansasStateAnalysis::HiggsKansasStateAnalysis()
             "QCD_HT200to300", "QCD_HT300to500", "QCD_HT500to700", "QCD_HT50to100", "QCD_HT700to1000"};
             for (auto name : names)
             {
-                addSingleProcess(qcdBackground, bgFilePath, name + "_2016.root", "ttbar_lep", reader, luminosity,
+                addSingleProcess(qcdBackground, bgFilePath, name + "_2016.root", reader, luminosity,
                              histMapperLowMass, histMapperHighMass, false);
-                addSingleProcess(qcdBackground, bgFilePath, name + "_2017.root", "ttbar_lep", reader, luminosity,
+                addSingleProcess(qcdBackground, bgFilePath, name + "_2017.root", reader, luminosity,
                              histMapperLowMass, histMapperHighMass, false, 1);
-                addSingleProcess(qcdBackground, bgFilePath, name + "_2018.root", "ttbar_lep", reader, luminosity,
+                addSingleProcess(qcdBackground, bgFilePath, name + "_2018.root", reader, luminosity,
                              histMapperLowMass, histMapperHighMass, false, 1);
             }
 
             auto higgsData = std::make_shared<Process>("Data", higgsColor);
-            std::vector<std::string> names = {};
+            std::vector<std::string> names = {"SingleMuonA", "SingleMuonB", "SingleMuonC", "SingleMuonD", "SingleMuonE", 
+            "SingleMuonF", "SingleMuonG", "SingleMuonH", "EgammaA", "EGammaB", "EGammaC", "EGammaD",
+            "SingleElectronB", "SingleElectronC", "SingleElectronD", "SingleElectronE", "SingleElectronF", "SingleElectronG",
+            "SingleElectronH"};
             for (auto name : names)
             {
-                addSingleProcess(higgsData, bgFilePath, name + "_2016.root", "ttbar_lep", reader, luminosity,
+                addSingleProcess(higgsData, bgFilePath, name + "_2016.root", reader, luminosity,
                              histMapperLowMass, histMapperHighMass, false);
-                addSingleProcess(higgsData, bgFilePath, name + "_2017.root", "ttbar_lep", reader, luminosity,
+                addSingleProcess(higgsData, bgFilePath, name + "_2017.root", reader, luminosity,
                              histMapperLowMass, histMapperHighMass, false, 1);
-                addSingleProcess(higgsData, bgFilePath, name + "_2018.root", "ttbar_lep", reader, luminosity,
+                addSingleProcess(higgsData, bgFilePath, name + "_2018.root", reader, luminosity,
                              histMapperLowMass, histMapperHighMass, false, 1);
             }
 
