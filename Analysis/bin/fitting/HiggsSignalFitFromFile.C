@@ -66,8 +66,8 @@ double getBranchingRatio(const std::string &channel) //const
 void HiggsSignalFitFromFile() 
 {
 	 double min = 0;
-	 double max = 2000;
-
+	 double max = 2500;
+	const double width = 500;
 	std::string fitHistsName = "H++SignalFits.root";
 	std::string fitParameterValueFile = "H++SignalFunctions.txt";
 	std::string parameterFits = "H++SignalParameterFits.root";
@@ -124,8 +124,8 @@ void HiggsSignalFitFromFile()
 				selectedHist -> Scale(expectedEvents);
 				
 				std::string keyName = correctedChannel + "/" + std::to_string(masses[i]) + '_' + histType;
-				min = masses[i] - 200;
-				max = masses[i] + 200;
+				min = 0;//masses[i] - width;
+				max = 2500; //masses[i] + width;
 
 				std::cout << "Cross section: " << crossSection << std::endl;
 				std::cout << "Selected events: " << eventsInHist << std::endl;

@@ -13,12 +13,15 @@ class SingleProcess;
 class SimpleEstimator : public Estimator
 {		
 	public: 
-		SimpleEstimator(double scaleFactor = 1, bool data = false, double branchingRatioFixer = 1) : scaleFactor(scaleFactor), isData(data), isBranchingRatioFixer(branchingRatioFixer) {}
-		double getMassTarget() const override  {return 0;}
-		double getExpectedYield(const SingleProcess* process, const HistVariable& dataType, double luminosity) const override;
+		SimpleEstimator(const std::shared_ptr<CrossSectionReader> iReader, double luminosity, double scaleFactor = 1, 
+			bool data = false, double branchingRatioFixer = 1) : reader(iReader), luminosity(luminosity), scaleFactor(scaleFactor), 
+			isData(data), isBranchingRatioFixer(branchingRatioFixer) {}
+		double getExpectedYield(const SingleProcess* process, const HistVariable& dataType) const override;
 		double getBranchingRatioFixer() const { return isBranchingRatioFixer; }
 
 	private:
+		const std::shared_ptr<CrossSectionReader> reader;
+		double luminosity;
 		double scaleFactor;
 		bool isData;
 		double isBranchingRatioFixer;
