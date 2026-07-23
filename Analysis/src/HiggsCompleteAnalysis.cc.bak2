@@ -162,8 +162,6 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
                     auto higgsSignal = std::make_shared<Process>(
                         "Higgs signal " + genSimDecay + " " + std::to_string((int)massTarget), 1);
 
-                    try
-                    {
                         for (auto fit : signalParamMap.at(std::tuple(genSimDecay, channelName)))
                         {
                             const auto histVar = std::get<0>(fit);
@@ -188,11 +186,6 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
                             }
                             higgsSignal->setPlot(histVar, func);
                         }
-                    }
-                    catch (std::out_of_range &e)
-                    {
-                    }
-
                     addSingleProcess(higgsSignal, signalFilePath, "Higgs" + std::to_string((int)massTarget) + ".root",
                                      "higgs4l" + std::to_string((int)massTarget), reader, luminosity, histMapperLowMass,
                                      histMapperHighMass, false, branchingRatioFixer);
@@ -329,15 +322,9 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
 
             for (const auto &proc : leptonProcesses->getWithLabel(Channel::Label::Background))
             {
-                try
+                for (auto fit : bgParamMap.at(std::tuple(channelName, proc->getName())))
                 {
-                    for (auto fit : bgParamMap.at(std::tuple(channelName, proc->getName())))
-                    {
-                        proc->setPlot(std::get<0>(fit), std::get<1>(fit));
-                    }
-                }
-                catch (std::out_of_range &e)
-                {
+                    proc->setPlot(std::get<0>(fit), std::get<1>(fit));
                 }
             }
 
@@ -381,7 +368,7 @@ std::tuple<HistVariable, std::string, std::string, std::string> HiggsCompleteAna
 
     const auto xProj = projName == "X";
     const auto yProj = projName == "Y";
-    //assert(xProj || yProj);
+    assert(xProj || yProj);
 
     auto histVar = HistVariable(HistVariable::VariableType::InvariantMass, "", xProj, yProj);
 
@@ -427,7 +414,7 @@ std::tuple<HistVariable, std::string, std::string> HiggsCompleteAnalysis::parseB
 
     const auto xProj = projName == "X";
     const auto yProj = projName == "Y";
-    // assert(xProj || yProj);
+    assert(xProj || yProj);
 
     auto histVar = HistVariable(HistVariable::VariableType::InvariantMass, "", xProj, yProj);
 

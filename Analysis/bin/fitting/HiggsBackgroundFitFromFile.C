@@ -86,7 +86,7 @@ void HiggsBackgroundFitFromFile()
 	std::map<std::string, std::pair<int, int>> backgroundsToRange = {
 		{"Drell-Yan Background", {0, 2000}},
 			{"QCD Background", {0, 2000}}, // no events anyway
-			{"ZZ Background", {300, 2000}},
+			{"ZZ Background", {0, 2000}},
 			{"TTbar Background", {0, 2000}},
 			// {"TTW Background", {90, 2000}}, // almost no events on uuuu, figure out something
 			// {"TTZ Background", {120, 2000}},
@@ -103,7 +103,7 @@ void HiggsBackgroundFitFromFile()
 		{"h_mll1_eeee", {
 			{"Drell-Yan Background", {0, 2000}},
 			{"QCD Background", {0, 2000}}, // no events anyway
-			{"ZZ Background", {300, 2000}},
+			{"ZZ Background", {0, 2000}},
 			{"TTbar Background", {0, 2000}},
 			// {"TTW Background", {90, 2000}}, // almost no events on uuuu, figure out something
 			// {"TTZ Background", {120, 2000}},
@@ -118,7 +118,7 @@ void HiggsBackgroundFitFromFile()
 		{"h_mll1_mmmm", {
 			{"Drell-Yan Background", {0, 2000}},
 			{"QCD Background", {0, 2000}}, // no events anyway
-			{"ZZ Background", {300, 2000}},
+			{"ZZ Background", {0, 2000}},
 			{"TTbar Background", {0, 2000}},
 			// {"TTW Background", {90, 2000}}, // almost no events on uuuu, figure out something
 			// {"TTZ Background", {120, 2000}},
@@ -133,7 +133,7 @@ void HiggsBackgroundFitFromFile()
 		{"h_mll2_eeee", {
 			{"Drell-Yan Background", {0, 2000}},
 			{"QCD Background", {0, 2000}}, // no events anyway
-			{"ZZ Background", {300, 2000}},
+			{"ZZ Background", {0, 2000}},
 			{"TTbar Background", {0, 2000}},
 			// {"TTW Background", {90, 2000}}, // almost no events on uuuu, figure out something
 			// {"TTZ Background", {120, 2000}},
@@ -148,7 +148,7 @@ void HiggsBackgroundFitFromFile()
 		{"h_mll2_mmmm", {
 			{"Drell-Yan Background", {0, 2000}},
 			{"QCD Background", {0, 2000}}, // no events anyway
-			{"ZZ Background", {300, 2000}},
+			{"ZZ Background", {0, 2000}},
 			{"TTbar Background", {0, 2000}},
 			// {"TTW Background", {90, 2000}}, // almost no events on uuuu, figure out something
 			// {"TTZ Background", {120, 2000}},
@@ -193,7 +193,7 @@ void HiggsBackgroundFitFromFile()
 				std::string keyName = channel + '/' + background + " " + histType;
 				keyNames.push_back(keyName);
 
-				FitFunction func = FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, keyName, "", 300, 2000, channel);
+				FitFunction func = FitFunction::createFunctionOfType(FitFunction::FunctionType::GausLogPowerNorm, keyName, "", 0, 2000, channel);
 				currentFunctions.insert(keyName, func);
 				histogramMap.insert({keyName, selectedHist});
 				//histogramMap.insert({keyName, selectedHist});

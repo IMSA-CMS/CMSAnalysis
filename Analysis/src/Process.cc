@@ -267,6 +267,7 @@ std::optional<FitFunction> Process::getPlot(const HistVariable &histType)
     }
     return {};
 }
+
 void Process::setPlot(const HistVariable &histType, FitFunction plot)
 {
     for (auto &entry : plots)

@@ -162,12 +162,19 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
                     auto higgsSignal = std::make_shared<Process>(
                         "Higgs signal " + genSimDecay + " " + std::to_string((int)massTarget), 1);
 
-                    try
-                    {
-                        for (auto fit : signalParamMap.at(std::tuple(genSimDecay, channelName)))
+                        auto sigKey = std::tuple(genSimDecay, channelName);
+                        if (channelName == "eeeu") {
+                            std::cout << "DEBUG: genSimDecay=" << genSimDecay << " channelName=" << channelName
+                                      << " contains=" << signalParamMap.contains(sigKey) << "\n";
+                        }
+                        if (!signalParamMap.contains(sigKey)) { continue; }
+                        for (auto fit : signalParamMap.at(sigKey))
                         {
                             const auto histVar = std::get<0>(fit);
                             auto params = std::get<1>(fit);
+                            if (channelName == "eeeu") {
+                                std::cout << "DEBUG: histVar name=" << histVar.getName() << "\n";
+                            }
                             // TODO: Make this more robust
                             auto funcType = FitFunction::FunctionType::DoubleSidedCrystalBall;
                             if (params.contains("mul_{2}"))
@@ -187,12 +194,11 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
                                 tf1->SetParameter(name, value);
                             }
                             higgsSignal->setPlot(histVar, func);
+                            higgsMassGroup->setPlot(histVar, func);
+                            if (channelName == "eeeu") {
+                                std::cout << "DEBUG: setPlot called on higgsMassGroup for histVar=" << histVar.getName() << "\n";
+                            }
                         }
-                    }
-                    catch (std::out_of_range &e)
-                    {
-                    }
-
                     addSingleProcess(higgsSignal, signalFilePath, "Higgs" + std::to_string((int)massTarget) + ".root",
                                      "higgs4l" + std::to_string((int)massTarget), reader, luminosity, histMapperLowMass,
                                      histMapperHighMass, false, branchingRatioFixer);
@@ -329,15 +335,11 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
 
             for (const auto &proc : leptonProcesses->getWithLabel(Channel::Label::Background))
             {
-                try
+                auto key = std::tuple(channelName, proc->getName());
+                if (!bgParamMap.contains(key)) { continue; }
+                for (auto fit : bgParamMap.at(key))
                 {
-                    for (auto fit : bgParamMap.at(std::tuple(channelName, proc->getName())))
-                    {
-                        proc->setPlot(std::get<0>(fit), std::get<1>(fit));
-                    }
-                }
-                catch (std::out_of_range &e)
-                {
+                    proc->setPlot(std::get<0>(fit), std::get<1>(fit));
                 }
             }
 
@@ -381,7 +383,7 @@ std::tuple<HistVariable, std::string, std::string, std::string> HiggsCompleteAna
 
     const auto xProj = projName == "X";
     const auto yProj = projName == "Y";
-    //assert(xProj || yProj);
+    assert(xProj || yProj);
 
     auto histVar = HistVariable(HistVariable::VariableType::InvariantMass, "", xProj, yProj);
 
@@ -427,7 +429,7 @@ std::tuple<HistVariable, std::string, std::string> HiggsCompleteAnalysis::parseB
 
     const auto xProj = projName == "X";
     const auto yProj = projName == "Y";
-    // assert(xProj || yProj);
+    assert(xProj || yProj);
 
     auto histVar = HistVariable(HistVariable::VariableType::InvariantMass, "", xProj, yProj);
 
