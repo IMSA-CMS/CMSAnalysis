@@ -19,15 +19,8 @@ class HiggsKansasStateAnalysis : public FullAnalysis
 
     std::vector<std::string> getSystematics() const override;
 
-    void addSingleProcess(std::shared_ptr<Process> process, std::string filePathway, std::string fileName,
-                          bool isData = false);
-
-  private:
-    // Returns a tuple of (HistVar, channel, genSim, paramName)
-    static std::tuple<HistVariable, std::string, std::string, std::string> parseSignalParamFuncName(
-        const std::string &name);
-    // Returns a tuple of (HistVar, channel, bgName)
-    static std::tuple<HistVariable, std::string, std::string> parseBgFuncName(const std::string &name);
+    void addSingleProcess(std::shared_ptr<Process> process, std::string filePathway, std::string fileName, 
+      std::shared_ptr<HistNameFinder> finder);
 
 
 };

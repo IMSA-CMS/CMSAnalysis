@@ -162,10 +162,6 @@ double Process::getYield(const HistVariable &dataType) const
 
 void Process::addProcess(SingleProcess process)
 {
-    // if(process.checkValidity())
-    // {
-    // 	processes.push_back(process);
-    // }
     processes.push_back(process);
 }
 

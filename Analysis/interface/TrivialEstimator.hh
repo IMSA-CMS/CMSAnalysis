@@ -13,8 +13,7 @@ class SingleProcess;
 class TrivialEstimator : public Estimator
 {		
 	public: 
-		double getMassTarget() const override  {return 0;}
-		double getExpectedYield(const SingleProcess* process, const HistVariable& dataType, double luminosity) const override;
+		double getExpectedYield(const SingleProcess* process, const HistVariable& dataType) const override;
 		double getBranchingRatioFixer() const { return 1; }
 
 	private:
