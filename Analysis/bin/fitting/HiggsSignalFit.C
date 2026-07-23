@@ -1,7 +1,7 @@
 #include "CMSAnalysis/Analysis/interface/FitFunction.hh"
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
-#include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
+#include "CMSAnalysis/Analysis/interface/HiggsKansasStateAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include "TF1.h"
 #include "TGraph.h"
@@ -21,10 +21,10 @@ const int minData = 500;
 const double xMin = 0;
 const double xMax = 2000;
 
-const std::string fitHistsName = "H++SignalFitsVoigt.root";
-const std::string fitParameterValueFile = "H++SignalFunctionsVoigt.txt";
-const std::string parameterFits = "H++SignalParameterFitsVoigt.root";
-const std::string parameterFunctions = "H++SignalParameterFunctionsVoigt.txt";
+const std::string fitHistsName = "H++SignalFits.root";
+const std::string fitParameterValueFile = "H++SignalFunctions.txt";
+const std::string parameterFits = "H++SignalParameterFits.root";
+const std::string parameterFunctions = "H++SignalParameterFunctions.txt";
 
 // run in batch mode for faster processing: root -b HiggsSignalFit.C+
 void HiggsSignalFit()
@@ -34,7 +34,7 @@ void HiggsSignalFit()
 
     Fitter fitter(fitHistsName, fitParameterValueFile, parameterFits, parameterFunctions);
 
-    auto analysis = HiggsCompleteAnalysis();
+    auto analysis = HiggsKansasStateAnalysis();
     const auto systs = analysis.getSystematics();
     std::cout << "Loaded histograms\n";
 
@@ -46,7 +46,7 @@ void HiggsSignalFit()
             {
                 continue;
             }
-            for (const auto &genSim : HiggsCompleteAnalysis::genSimDecays)
+            for (const auto &genSim : HiggsKansasStateAnalysis::genSimDecays)
             {
                 bool ok = fitChannel(*channel, fitter, histType, genSim);
                 if (!ok)
@@ -76,7 +76,7 @@ bool fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
     auto n = 0;
     const auto channelName = channel.getName();
 
-    for (const auto mass : HiggsCompleteAnalysis::massTargets)
+    for (const auto mass : HiggsKansasStateAnalysis::massTargets)
     {
         const auto process = channel.findProcess("Higgs signal " + genSim + " " + std::to_string(mass));
         const TH1 *selectedHist = process->getHist(histVar, true);
@@ -122,7 +122,7 @@ bool fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
     std::unordered_map<std::string, double> massValues;
     std::unordered_map<std::string, TH1 *> histogramMap;
     FitFunctionCollection currentFunctions;
-    for (const auto mass : HiggsCompleteAnalysis::massTargets)
+    for (const auto mass : HiggsKansasStateAnalysis::massTargets)
     {
         const auto process = channel.findProcess("Higgs signal " + genSim + " " + std::to_string(mass));
         TH1 *const hist = process->getHist(histVar, true);
