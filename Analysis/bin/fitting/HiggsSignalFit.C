@@ -149,9 +149,17 @@ bool fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
 
         // FitFunction funcDown;
         // FitFunction funcUp;
-        const auto name =
-            genSim + "->" + channelName + "/" + std::to_string(mass) + ' ' + histVar.getName() + " " + systDesc;
-        FitFunction func = FitFunction::createFunctionOfType(funcType, name, "", xMin, xMax, channelName);
+        std::map<std::string, std::string> nameParams;
+        nameParams["genSim"] = genSim;
+        nameParams["channel"] = channelName;
+        nameParams["mass"] = std::to_string(mass);
+        nameParams["histVar"] = histVar.getName();
+        nameParams["systematic"] = systDesc;
+
+        const auto name = FitFunction::encodeName(nameParams);
+        // const auto name =
+        //     genSim + "->" + channelName + "/" + std::to_string(mass) + ' ' + histVar.getName() + " " + systDesc;
+        FitFunction func = FitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
 
         const std::string keyName = std::to_string(mass);
         currentFunctions.insert(keyName, func);
