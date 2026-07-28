@@ -34,7 +34,7 @@ class Fitter
 
     void fitFunctions(std::unordered_map<std::string, TH1 *> &histograms);
     void parameterizeFunctions(std::unordered_map<std::string, double> &xData, const std::string &genSim,
-                               const std::string &reco, const std::string &var);
+                               const std::string &reco, const std::string &var, const HistVariable &histVar);
 
     const FitFunctionCollection &getFunctions() const
     {
@@ -51,6 +51,7 @@ class Fitter
     static void fitPowerLaw(TH1 *histogram, FitFunction &fitFunction);
     static void fitDoubleGaussian(TH1 *histogram, FitFunction &fitFunction);
     static void fitGausLogPowerNorm(TH1 *hist, FitFunction &func);
+    static void fitVoigt(TH1 *histogram, FitFunction &fitFunction);
 
     // Insert blank TF1* function ptr which will have the fitted function written to
     static TFitResultPtr fitSingleFunction(TGraph *histogram, TF1 *function, size_t iterations = 1);
@@ -58,7 +59,7 @@ class Fitter
     // TH1* readHistogram(const std::string& name);
     std::vector<ParameterizationData> getParameterData(std::unordered_map<std::string, double> &xData);
     FitFunction parameterizeFunction(ParameterizationData &parameterData, const std::string &genSim,
-                                     const std::string &reco, const std::string &var);
+                                     const std::string &reco, const std::string &var, const HistVariable &histVar);
     // Different ways to try and get seed function for fitting
     // Gets guess inverse power law function y = a(x-b)^-c + d using three points, only guarantees the powerlaw through
     // p0 and p1, not p2

@@ -27,7 +27,7 @@ std::string RateSystematic::getString() const
     return std::to_string(upFactor) + " " + std::to_string(downFactor);
 }
 
-std::pair<TH1*, TH1*> RateSystematic::getUncertainties(TH1* original) const 
+std::pair<TH1*, TH1*> RateSystematic::getUncertainties(TH1* original, HistVariable histVar, const Process* process) const 
 {
     auto graphHigh = dynamic_cast<TH1*>(original->Clone());
     auto graphLow = dynamic_cast<TH1*>(original->Clone());

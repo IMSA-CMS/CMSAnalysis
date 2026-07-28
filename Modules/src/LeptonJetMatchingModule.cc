@@ -117,8 +117,8 @@ bool LeptonJetMatchingModule::process()
                 }
                 else
                 {
-                    std::cout << "The closest match is: " << closestMatch.getType().getName()
-                              << " and the lepton is: " << lepton.getType().getName() << "\n";
+                    // std::cout << "The closest match is: " << closestMatch.getType().getName()
+                    //           << " and the lepton is: " << lepton.getType().getName() << "\n";
                 }
             }
             else
@@ -143,8 +143,8 @@ bool LeptonJetMatchingModule::process()
                 }
                 else
                 {
-                    std::cout << "No match: The closest match: " << closestMatch.getType().getName()
-                              << " Lepton: " << lepton.getType().getName() << "\n";
+                    // std::cout << "No match: The closest match: " << closestMatch.getType().getName()
+                    //           << " Lepton: " << lepton.getType().getName() << "\n";
                 }
             }
         }

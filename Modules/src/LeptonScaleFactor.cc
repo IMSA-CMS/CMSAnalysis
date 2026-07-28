@@ -5,7 +5,7 @@
 #include "CMSAnalysis/Utility/interface/FileParams.hh"
 
 LeptonScaleFactor::LeptonScaleFactor(std::string name, std::shared_ptr<ScaleFactorReader> reader, ParticleType particleType) 
-    : ScaleFactor(name, reader), particleType(particleType)
+    : MapBasedScaleFactor(name, reader), particleType(particleType)
 {
 	// Extract eta and pt bins from the scale factor map
 	for (const auto& entry : getScaleFactorMap()) 

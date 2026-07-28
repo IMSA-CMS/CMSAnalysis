@@ -50,13 +50,13 @@ int GenSimEventFile::getNumPileUpInteractions() const
     return -1;
 }
 
-double GenSimEventFile::getMET() const
+reco::Candidate::LorentzVector GenSimEventFile::getMET() const
 {
     edm::Handle<std::vector<reco::GenMET>> mets;
     event->getByLabel(edm::InputTag("genMetTrue"), mets);
     for (const auto& p : *mets)
     {
-        return std::sqrt(p.p4().Perp2()); 
+        return p.p4(); 
     }
     throw std::runtime_error("There are no MET objects found");
 }

@@ -23,13 +23,15 @@ class Event
         const ParticleCollection<Tau>& getTaus() const {return taus;};
         const ParticleCollection<Photon>& getPhotons() const {return photons;};
         const ParticleCollection<Jet>& getJets() const {return jets;};
-        const double& getMET() const {return MET;};
+        const reco::Candidate::LorentzVector& getMET() const {return MET;};
         const std::map<std::string, ParticleCollection<Particle>>& getSpecials() const {return specialObjects;};
 
         // gets a special object by key
         ParticleCollection<Particle> getSpecial(std::string key) const;
         // get all particles
-        ParticleCollection<Particle> getParticles(EventInput::RecoLevel level = EventInput::RecoLevel::Reco) const;
+        ParticleCollection<Particle> getParticles(EventInput::RecoLevel level = EventInput::RecoLevel::Reco, bool includeSpecials = true) const;
+        // get all leptons
+        ParticleCollection<Particle> getLeptons(EventInput::RecoLevel level = EventInput::RecoLevel::Reco) const;
 
         void addElectron(Electron electron);
         void addMuon(Muon muon);
@@ -38,15 +40,23 @@ class Event
         void addJet(Jet jet);
         void addGenSimParticle(GenSimParticle particle);
         void addSpecialObject(std::string key, Particle obj); 
-        void setMET(double newMET) {MET = newMET;}
+        void setMET(reco::Candidate::LorentzVector newMET) {MET = newMET;}
 
         // returns true if the event contains any particles
         bool containsParticles() const;
 
         // Clears all ParticleCollections/specialObjects, for reuse of the same Event object
         void clear();
+
         const std::shared_ptr<FileParams> getFileParams() const {return input->getFileParams();}
+        int getNumPileUpInteractions() const {return input->getNumPileUpInteractions();}
+        unsigned long long getEventIDNum() const {return input->getEventIDNum();}
+        long getRunNum() const {return input->getRunNum();}
+        int getLumiBlock() const {return input->getLumiBlock();}
         void setInput(const EventInput* input1) {input = input1;}
+
+        double getEventQuantity(std::string key) const {return input->getEventQuantity(key);}
+
     private:
         //make particlecollections
         ParticleCollection<Electron> electrons;
@@ -55,7 +65,7 @@ class Event
         ParticleCollection<Photon> photons;
         ParticleCollection<Jet> jets;
         ParticleCollection<GenSimParticle> genSimParticles;
-        double MET;
+        reco::Candidate::LorentzVector MET;
         std::map<std::string, ParticleCollection<Particle>> specialObjects;
         const EventInput* input;
 };

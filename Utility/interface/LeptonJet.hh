@@ -27,10 +27,7 @@ public:
   double getDeltaR() const;
   double getMass() const;
   double getTotalCharge() const;
-
-  double getMaxDXY() const;
-  double getMaxDZ() const;
-
+  
   bool allSameSign() const;
 
 private:

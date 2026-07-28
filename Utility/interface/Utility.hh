@@ -5,6 +5,7 @@
 #include <string>
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
+#include "EventFilter/Utilities/interface/json.h"
 
 namespace Utility
 {
@@ -25,7 +26,9 @@ namespace Utility
   std::string identifyChannel(ParticleCollection<Particle> particles);
   std::pair<std::pair<Particle, Particle>, std::pair<Particle, Particle>> findBestLeptonPairing(ParticleCollection<Particle> leptons);
 
+  jsoncollector::Json::Value loadJSONFile(const std::string& filename);
 
+  double invariantMass(Particle p1, Particle p2, double met_x, double met_y);
 }
 
 inline bool Utility::comparator(std::string a, std::string b)

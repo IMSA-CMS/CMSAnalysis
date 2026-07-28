@@ -34,7 +34,7 @@ class RateSystematic : public Systematic
         };
         RateSystematic(std::string name, double upRate, double downRate, Distribution distribution = Distribution::LogNormal);
         virtual std::string getString() const override;
-        virtual std::pair<TH1*, TH1*> getUncertainties(TH1* original) const override;
+        virtual std::pair<TH1*, TH1*> getUncertainties(TH1* original, HistVariable histVar, const Process* process) const override;
     private:
         double upFactor;
         double downFactor;

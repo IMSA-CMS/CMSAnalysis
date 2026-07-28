@@ -32,23 +32,35 @@
 
 
 
-std::string path = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_peter/";
-std::string processedPath = "/uscms/home/bhenning/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Output/HiggsNewOutput/";
+std::string path = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_MY/";
+std::string processedPath = "/uscms/home/bhenning/nobackup/HiggsWithSystematics1/";
 
 TH1* combineHists (std::vector<std::string> fileNames, std::string channel, std::string histName);
 std::vector<std::string> years = {"2016", "2017", "2018"};
 std::vector<std::string> channelTypes =
 {
-"eeee", //"eeem", "emem", 
+"0tau", "1tau", "2tau", "3tau"
+//"eeem", "emem", 
 //"eemm", "emmm", 
-"mmmm"
+
 };
 
 std::vector<std::string> histogramTypes = 
 {
-	"h_mll1",
-	"h_mll2",
+	"h_mDCH1",
+	"h_mDCH2",
 };
+
+double getBranchingRatio(const std::string &channel) //const
+{
+    std::unordered_map<std::string, double> originalRatios = {{"ee", 3.0 / 2}, {"eu", 3.0 / 4}, {"uu", 3.0 / 2},
+                                                              {"et", 3.0 / 4}, {"ut", 3.0 / 4}, {"tt", 3.0 / 2}};
+
+    std::string firstPair = channel.substr(0, 2);
+    std::string secondPair = channel.substr(2, 2);
+
+    return originalRatios[firstPair] * originalRatios[secondPair];
+}
 
 // run in batch mode for faster processing: root -b HiggsSignalFit.C+
 void HiggsSignalFitFromFile() 
@@ -83,7 +95,7 @@ void HiggsSignalFitFromFile()
 			for (size_t i = 0; i < paramNames.size(); ++i) {
 				actualParams.push_back(channel + '/' + paramNames[i] + "_" + histType);
 			}
-
+			std::string correctedChannel = Utility::substitute(channel, "m", "u");
 			for (size_t i = 0; i < masses.size(); ++i) 
 			{
 				std::cerr << "mass: " << masses[i] << std::endl;
@@ -96,33 +108,54 @@ void HiggsSignalFitFromFile()
 				}
 				double crossSection = crossSectionReader.getCrossSection("Higgs4l" + std::to_string(masses[i]));
 				double luminosity = 137000; //in pb^-1
-				int eventsInHist = selectedHist -> Integral();
+				//int eventsInHist = selectedHist -> Integral();
+				double eventsInHist = selectedHist->Integral();
 				std::string filename = processedPath + "Higgs" + std::to_string(masses[i]) + ".root";
 				TFile* processedFile = TFile::Open(filename.c_str());
 				std::string channelAdjusted = Utility::substitute(channel, "m", "u");
-				auto number = processedFile -> Get<TObjString>(("GenSim " + channelAdjusted).c_str());
+				//auto number = processedFile -> Get<TObjString>(("GenSim " + channelAdjusted).c_str());
+				auto number = processedFile->Get<TObjString>("NEvents");
 				int totalGeneratedEvents = std::stoi(number -> GetString().Data());
-				double efficiency = static_cast<double>(eventsInHist) / totalGeneratedEvents;
+				//int totalGeneratedEvents = 1;
+				//double efficiency = static_cast<double>(eventsInHist) / totalGeneratedEvents;
+				double efficiency = 1; // Efficiency is already accounted for in the histogram scaling, so we set it to 1 here to avoid double counting
+				//double branchRatioAdjustment = getBranchingRatio(channelAdjusted);
 				double expectedEvents = crossSection * luminosity * efficiency;
-				selectedHist -> Scale(expectedEvents / selectedHist -> Integral());
-				std::string keyName = channel + "/" + std::to_string(masses[i]) + '_' + histType;
+				selectedHist -> Scale(expectedEvents);
+				
+				std::string keyName = correctedChannel + "/" + std::to_string(masses[i]) + '_' + histType;
 				min = masses[i] - 200;
 				max = masses[i] + 200;
 
+				std::cout << "Cross section: " << crossSection << std::endl;
+				std::cout << "Selected events: " << eventsInHist << std::endl;
+				std::cout << "Efficiency: " << efficiency << std::endl;
+				std::cout << "Total generated events: " << totalGeneratedEvents << std::endl;
+				//std::cout << "Branching ratio adjustment: " << branchRatioAdjustment << std::endl;
+				std::cout << "Expected events: " << expectedEvents << std::endl;
+				std::cout << "Scaling factor: " << expectedEvents / selectedHist -> Integral() << std::endl;
+				std::cout << "Expected Signal: " << selectedHist -> Integral() << std::endl;
+		
+
+
 				FitFunction func = FitFunction::createFunctionOfType(FitFunction::FunctionType::DoubleSidedCrystalBall, keyName, "", min, max, keyName);
+				std::cout << __LINE__ << std::endl;
 				currentFunctions.insert(func);
 				histogramMap.insert({keyName, selectedHist});
 				massValues.insert({keyName, masses[i]});
-
+				std::cout << __LINE__ << std::endl;
 				// file->Close();
 				// selectedHist->Draw();
 				// std::string wait;
 				// std::cin >> wait;
 			}
+			std::cout << __LINE__ << std::endl;
 			//fitter.setHistograms(histogramMap);
 			fitter.loadFunctions(currentFunctions);
 			fitter.fitFunctions(histogramMap);
-			fitter.parameterizeFunctions(massValues, channel, channel, "Mass");
+			HistVariable histVar(HistVariable::VariableType::InvariantMass, "", histType == "h_mll1", histType == "h_mll2");
+
+			fitter.parameterizeFunctions(massValues, correctedChannel, correctedChannel, "Mass", histVar);
 		}
 	}
 }
@@ -130,6 +163,7 @@ TH1* combineHists (std::vector<std::string> fileNames, std::string channel, std:
 {
 	std::unordered_map<std::string, int> codeMap = {{"eeee", 1}, {"eeem", 2}, {"eemm", 4}, {"emem", 7}, {"emmm", 9}, {"mmmm", 16}};
 	TH1* hist = nullptr;
+	int totalEvents = 0;
 	for (auto fileName:fileNames)
 	{
 		for (auto year:years)
@@ -150,17 +184,24 @@ TH1* combineHists (std::vector<std::string> fileNames, std::string channel, std:
 				std::cout<<"directory "<<channel<<" not found\n";
 				continue;
 			}
-			auto tree = directory -> Get<TTree> ("Events");
-			std::string drawCommand = "mll1>>" + histName + "(2000, 0, 2000)";
-			std::string cutCommand = std::string("gen_cat==") + std::to_string(codeMap [channel]);
-			tree -> Draw (drawCommand.c_str(), cutCommand.c_str());
-			TH1* selectedHist = dynamic_cast <TH1*> (gDirectory -> FindObject(histName.c_str()));
+			auto selectedHist = directory->Get<TH1>("h_mDCH1");
+			// auto tree = directory -> Get<TTree> ("Events");
+			// std::string drawCommand = "mll1>>" + histName + "(2000, 0, 2000)";
+			// std::string cutCommand = std::string("gen_cat==") + std::to_string(codeMap [channel]);
+			// tree -> Draw (drawCommand.c_str(), cutCommand.c_str());
+			// TH1* selectedHist = dynamic_cast <TH1*> (gDirectory -> FindObject(histName.c_str()));
+			auto nEvents = file->Get<TH1>("hNWEvts");
 			if (!selectedHist)
 	
 			{	
 				std::cout<<"Histogram "<<histName<<" not found\n";
 				continue;
 			}
+			std::cout << "nEvents" << nEvents->GetBinContent(1) << std::endl;
+			std::cout << "Integral of selected histogram: " << selectedHist->Integral() << std::endl;
+			totalEvents += nEvents->GetBinContent(1);
+			//totalEvents = 1;
+
 			if (!hist)
 			{
 				hist = dynamic_cast<TH1*>(selectedHist -> Clone());
@@ -173,5 +214,6 @@ TH1* combineHists (std::vector<std::string> fileNames, std::string channel, std:
 				}
 		}
 	}
+	hist -> Scale(1.0 / totalEvents);
 	return hist;
 }

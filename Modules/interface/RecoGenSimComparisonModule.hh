@@ -104,6 +104,17 @@ class RecoGenSimComparisonModule : public AnalysisModule
 
 
     int muon24Count = 0;
+
+    //
+    int totalMatched = 0;
+    int lepJetCount = 0;
+    int lepJetParticleCount = 0;
+    int FSRCount = 0;
+    int ISRCount = 0;
+    int pileupCount = 0;
+    int hardScatterCount = 0;
+    int underlyingEventsCount = 0;
+    int unmatchedCount = 0;
 };
 
 #endif

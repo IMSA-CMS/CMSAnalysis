@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Photons Control ZPeak</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Dark Photons Control ZPeak</h1>
+    <script>
+        function toggleChannel(channelId) {
+            const content = document.getElementById('content-' + channelId);
+            const arrow = document.getElementById('arrow-' + channelId);
+            const header = content.previousElementSibling;
+            
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                arrow.classList.remove('open');
+                header.classList.remove('active');
+            } else {
+                content.classList.add('open');
+                arrow.classList.add('open');
+                header.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
