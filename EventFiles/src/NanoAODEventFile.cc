@@ -419,7 +419,10 @@ void NanoAODEventFile::nextEvent()
             continue;
         }
 
-        
+        if (getArrayElement<UChar_t>("tau_dmu", i) < 2 || getArrayElement<UChar_t>("tau_dele", i) < 2) 
+        {
+            continue; 
+        }        
         auto particle = Particle(
         reco::Candidate::LorentzVector(math::PtEtaPhiMLorentzVector(getArrayElement<Float_t>("tau_pt", i),
         getArrayElement<Float_t>("tau_eta", i), getArrayElement<Float_t>("tau_phi", i), getArrayElement<Float_t>("tau_mass", i))),

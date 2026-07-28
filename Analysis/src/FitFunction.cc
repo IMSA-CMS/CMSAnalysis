@@ -575,7 +575,6 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     }
     if (line.find("ParaNames:") != std::string::npos)
     {
-        std::cout << __LINE__ << "\n";
         std::istringstream ss(line.substr(10));
         for (int i = 0; i < params && ss; ++i)
         {
@@ -590,7 +589,6 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     }
     if (line.find("Parameters:") != std::string::npos)
     {
-        std::cout << __LINE__ << "\n";
         std::istringstream ss(line.substr(11));
         for (int i = 0; i < params && ss; ++i)
         {
@@ -605,7 +603,6 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     }
     if (line.find("ParamErrors:") != std::string::npos)
     {
-        std::cout << __LINE__ << "\n";
         std::istringstream ss(line.substr(12));
         for (int i = 0; i < params && ss; ++i)
         {
@@ -619,7 +616,6 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     // --- Set parameters ---
     for (int i = 0; i < params; ++i)
     {
-        std::cout << __LINE__ << "\n";
         function.getFunction()->SetParName(i, paramNames[i].c_str());
         function.getFunction()->SetParameter(i, paramValues[i]);
         function.getFunction()->SetParError(i, paramErrors[i]);

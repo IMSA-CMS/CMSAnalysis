@@ -12,8 +12,7 @@
 #include <memory>
 #include <utility>
 #include <vector>
-// Channel::Channel(std::string name, std::string iYAxisName, std::vector<std::shared_ptr<Process>> iProcesses) :
-// name(name), yAxisName(iYAxisName)
+
 Channel::Channel(std::string name, std::vector<std::shared_ptr<Process>> iProcesses) : name(name)
 {
     for (auto process : iProcesses)
@@ -121,7 +120,7 @@ void Channel::makeDatacard(HistVariable histType)
     datacard << "\n";
 }
 
-void Channel::CombineDatacard(HistVariable histType)
+void Channel::combineDatacard(HistVariable histType)
 {
     std::string channelName = getName();
     std::string filename = channelName + ".txt";
@@ -301,7 +300,7 @@ std::vector<TH1 *> Channel::getHists(HistVariable histType, std::optional<Label>
     return hists;
 }
 
-TH1 *Channel::combineHists(const std::vector<TH1 *> &hists)
+TH1 *Channel::combineHists(const std::vector<TH1*>& hists)
 {
     if (hists.empty())
     {

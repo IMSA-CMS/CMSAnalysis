@@ -78,30 +78,30 @@ double HiggsSelector:: massDifference(const std::vector<Particle>& leptons) cons
             //need another loop over particle. if its a tau loop over all particles again, if one of the particles is an election or muon, then you want to calculate delta R for each particle. There's already a function for it (Particle.hh). If the delta r is less than some value we set, ten we just say that they're the same particle. If number is too small just continue. 
             if (lepton.isTight() && particle.getPt() > 5)
             {
-                bool overlap = false;
+                // bool overlap = false;
 
-                // loop over all other particles (from input, not just taus)
-                for (const auto& other : particles)
-                {
-                    if (other == particle) continue; // skip self
+                // // loop over all other particles (from input, not just taus)
+                // for (const auto& other : particles)
+                // {
+                //     if (other == particle) continue; // skip self
 
-                    // only check against electrons and muons
-                    if (other.getType() == ParticleType::electron() ||
-                        other.getType() == ParticleType::muon())
-                    {
-                        double dR = particle.getDeltaR(other); // Particle.hh already has this
-                        if (dR < 0.1) 
-                        {
-                            overlap = true;
-                            break;
-                        }
-                    }
-                }
+                //     // only check against electrons and muons
+                //     if (other.getType() == ParticleType::electron() ||
+                //         other.getType() == ParticleType::muon())
+                //     {
+                //         double dR = particle.getDeltaR(other); // Particle.hh already has this
+                //         if (dR < 0.1) 
+                //         {
+                //             overlap = true;
+                //             break;
+                //         }
+                //     }
+                // }
 
-                if (!overlap)
-                {
+                // if (!overlap)
+                // {
                     leptons.push_back(particle); // only keep tau if no e/μ is too close
-                }
+                // }
             }
         }
 

@@ -4,16 +4,8 @@
 #include "TH1.h"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 
-double SimpleEstimator::getExpectedYield(const SingleProcess* process, const HistVariable& dataType, double luminosity) const
+double SimpleEstimator::getExpectedYield(const SingleProcess* process, const HistVariable& dataType) const
 {
-    //Takes the histogram wanted from the file, assigns it hist
-    //TH1 *hist = dynamic_cast<TH1 *>(process->getHist(dataType, false));
-    //std::cout << "SimpleEstimator 1" << std::endl;
-    // if (isData)
-    // {
-    //     return process->getTotalEvents();
-    // }
-
     TH1 *hist;
     try
     {
@@ -33,16 +25,9 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, const His
         return hist->Integral();
     }
 
-    //std::cout << "SimpleEstimator 2" << std::endl;
     double totaleventsran = process->getTotalEvents();
-    //Finds crosssection (from spreadsheet)
-    double crosssection = process->getCrossSection();
+    double crosssection = reader->getCrossSection(process->getName());
 
-//without integral code
-/*
-    double efficiency = hist->GetEntries() / totaleventsran;
-    double signalest = crosssection * 1000 * luminosity * efficiency;
-*/ 
 //commented out integral code
 // /*
     // integral/fit only calibrated after firstBin  

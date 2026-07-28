@@ -10,11 +10,12 @@ class DarkPhotonCompleteAnalysis : public FullAnalysis
 {
     public:
         DarkPhotonCompleteAnalysis();
-        // bool checkChannelName(std::string channelName, double massTarget);
-
-        // TH1* getHist(std::string histType, std::string processName, double massTarget, bool scaleToExpected = false, std::string channelName = "") const override;
 
     private:
+        void addSingleProcess(std::shared_ptr<Process> process, std::string filePathway,
+                              std::string fileName, std::string crossSectionName,
+                              std::shared_ptr<CrossSectionReader> crossReader,
+                              std::shared_ptr<HistNameFinder> finder, bool isData = false);
         std::vector<std::shared_ptr<Channel>> channels;
 };
 

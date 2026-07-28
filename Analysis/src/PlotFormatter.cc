@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <map>
 #include <memory>
 #include <optional>
 #include <vector>
@@ -179,6 +180,8 @@ TCanvas *PlotFormatter::simpleSuperImposedHist(std::vector<TH1 *> hists, std::ve
 
     double logMinimum = CalculateLogMinimum(hists);
     first->SetMinimum(logMinimum);
+    first->Rebin(rebinFactor);
+    first->SetLineWidth(2);
     first->Draw("HIST");
     histVector.push_back(first);
 
@@ -388,6 +391,8 @@ TCanvas *PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     std::vector<TH1 *> backgroundHists;
 
     std::vector<std::shared_ptr<Process>> backgroundProcesses;
+    std::map<std::string, int> backgroundRebinFactors;
+    std::map<std::string, TH1 *> backgroundHistsByName;
     for (const std::string &name : processes->getNamesWithLabel(Channel::Label::Background))
     {
         // std::cout << name << std::endl;
@@ -398,7 +403,6 @@ TCanvas *PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
             analysis->getHist(histvariable, name, true,
                               channelName); // error message: Warning in <TH1::TH1>: nbins is <=0 - set to nbins = 1
 
-        backgroundProcesses.push_back(analysis->getChannel(channelName)->findProcess(name));
         // auto hist = process->getSystematicHist(histvariable, true).second;
 
         // TEST
@@ -406,6 +410,9 @@ TCanvas *PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
         {
             continue;
         }
+        backgroundProcesses.push_back(analysis->getChannel(channelName)->findProcess(name));
+        backgroundRebinFactors[name] = CalcRebinFactor(hist, binTarget);
+        backgroundHistsByName[name] = hist;
         // std::cout << hist->GetName() << " has "<< hist->GetNbinsX() << std::endl;
         backgroundHists.push_back(hist);
         maxCombinedY += hist->GetMaximum();
@@ -416,6 +423,12 @@ TCanvas *PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
         return nullptr;
     }
     // std::cout << backgroundHists.size() << "\n";
+    int actualRebinFactor = 1;
+    if (!backgroundHists.empty() && backgroundHists[0])
+    {
+        actualRebinFactor = CalcRebinFactor(backgroundHists[0], binTarget);
+    }
+    (void)actualRebinFactor; // no longer used for scaling now that curves are matched via integral, kept for potential future debug use
     // std::cout << "End" << std::endl;
 
     // int firstBin = 50;
@@ -558,17 +571,42 @@ TCanvas *PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     {
         if (signal)
         {
-            for (const auto &proc : processes->getWithLabel(Channel::Label::Signal))
+            auto signalProcs = processes->getWithLabel(Channel::Label::Signal);
+            std::cout << "DEBUG: signal process count = " << signalProcs.size() << "\n";
+            for (const auto &proc : signalProcs)
             {
+                std::cout << "DEBUG: checking signal process name = " << proc->getName() << "\n";
                 auto plot = proc->getPlot(histvariable);
                 if (plot.has_value())
                 {
-                    plot->getFunction()->DrawCopy("LSAME");
+                    TF1 *rawFunc = plot->getFunction();
+                    double fitMin_sig, fitMax_sig;
+                    rawFunc->GetRange(fitMin_sig, fitMax_sig);
+                    int loBin_sig = signal->GetXaxis()->FindBin(fitMin_sig);
+                    int hiBin_sig = signal->GetXaxis()->FindBin(fitMax_sig);
+                    double histIntegral_sig = signal->Integral(loBin_sig, hiBin_sig);
+                    double funcIntegral_sig = rawFunc->Integral(fitMin_sig, fitMax_sig);
+                    double scale_sig = (funcIntegral_sig > 0) ? histIntegral_sig / funcIntegral_sig : 0.0;
+
+                    std::cout << "DEBUG SCALE: SIGNAL histIntegral=" << histIntegral_sig
+                              << " funcIntegral=" << funcIntegral_sig
+                              << " scale=" << scale_sig << "\n";
+                    
+                    // Signal branch
+                    double binWidth_sig = signal->GetBinWidth(1);
+                    TF1 rawFuncCopy_sig(*rawFunc);
+                    TF1 *scaledFunc = new TF1((std::string(rawFunc->GetName()) + "_scaled").c_str(),
+                        [rawFuncCopy_sig, scale_sig, binWidth_sig](double *x, double *) mutable { return binWidth_sig * rawFuncCopy_sig.Eval(x[0]); },
+                        fitMin_sig, fitMax_sig, 0, 1, TF1::EAddToList::kNo);
+                    scaledFunc->SetLineColor(kViolet+1);
+                    scaledFunc->SetLineWidth(4);
+                    scaledFunc->DrawCopy("LSAME");
+                    delete scaledFunc;
                     std::cout << "Successfully drew signal\n";
                 }
                 else
                 {
-                    std::cout << "Could not get plot " << histvariable.getName() << "\n";
+                    std::cout << "DEBUG: Could not get plot for SIGNAL proc " << proc->getName() << ": " << histvariable.getName() << "\n";
                 }
             }
         }
@@ -578,17 +616,53 @@ TCanvas *PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
             if (plot.has_value())
             {
                 std::cout << "Drawing parameterizedFunction " << plot->getName() << "\n";
-                plot->getFunction()->DrawCopy("LSAME");
+                auto it = backgroundHistsByName.find(func->getName());
+                if (it == backgroundHistsByName.end() || !it->second)
+                {
+                    std::cout << "DEBUG: No matched background hist for " << func->getName() << "\n";
+                    continue;
+                }
+                TH1 *matchedHist = it->second;
+
+                TF1 *rawFunc = plot->getFunction();
+                double fitMin_bg, fitMax_bg;
+                rawFunc->GetRange(fitMin_bg, fitMax_bg);
+                int loBin_bg = matchedHist->GetXaxis()->FindBin(fitMin_bg);
+                int hiBin_bg = matchedHist->GetXaxis()->FindBin(fitMax_bg);
+                double histIntegral_bg = matchedHist->Integral(loBin_bg, hiBin_bg);
+                double funcIntegral_bg = rawFunc->Integral(fitMin_bg, fitMax_bg);
+                double scale_bg = (funcIntegral_bg > 0) ? histIntegral_bg / funcIntegral_bg : 0.0;
+
+                std::cout << "DEBUG SCALE: " << func->getName()
+                          << " histIntegral=" << histIntegral_bg
+                          << " funcIntegral=" << funcIntegral_bg
+                          << " scale=" << scale_bg << "\n";
+
+                // Background loop
+                double binWidth_bg = matchedHist->GetBinWidth(1);
+                TF1 rawFuncCopy_bg(*rawFunc);
+                TF1 *scaledFunc = new TF1((std::string(rawFunc->GetName()) + "_scaled").c_str(),
+                    [rawFuncCopy_bg, scale_bg, binWidth_bg](double *x, double *) mutable { return binWidth_bg * rawFuncCopy_bg.Eval(x[0]); },
+                    fitMin_bg, fitMax_bg, 0, 1, TF1::EAddToList::kNo);
+
+                if (func->getName() == "ZZ Background") { scaledFunc->SetLineColor(kCyan+2); }
+                else if (func->getName() == "t#bar{t}, Multiboson Background") { scaledFunc->SetLineColor(kAzure-2); }
+                scaledFunc->SetLineWidth(4);
+                scaledFunc->DrawCopy("LSAME");
+                delete scaledFunc;
                 std::cout << "Successfully drew\n";
             }
             else
             {
-                std::cout << "Could not get plot " << histvariable.getName() << "\n";
+                std::cout << "DEBUG: Could not get plot for BACKGROUND proc " << func->getName() << ": " << histvariable.getName() << "\n";
             }
         }
     }
 
     hist->SetMinimum(1e-2);
+    topPad->Modified();
+    topPad->Update();
+    std::cout << "DEBUG PAD: y-range (log10) = [" << topPad->GetUymin() << ", " << topPad->GetUymax() << "]\n";
 
     // hist->SetMinimum(1e-2);
 
@@ -741,6 +815,7 @@ void PlotFormatter::DrawOtherHistograms(std::vector<TH1 *> &hists, std::vector<C
         TH1 *hist = hists.at(i);
         hist->SetLineColor(colors.at(i));
         hist->SetLineWidth(2);
+        hist->Rebin(rebinFactor);
         hist->Draw("HIST SAME");
         histVector.push_back(hist);
 

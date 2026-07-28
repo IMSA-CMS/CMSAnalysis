@@ -79,7 +79,7 @@ void LeptonJetReconstructionPlan::initialize()
 
   auto matchMod = std::make_shared<MatchingModule>();
   auto lepRecoMod = std::make_shared<LeptonJetReconstructionModule>(.5);
-  auto eventDumpMod = std::make_shared<EventDumpModule>(true,true, 10);
+  auto eventDumpMod = std::make_shared<EventDumpModule>(true, true, 10);
   auto lepMatchMod = std::make_shared<LeptonJetMatchingModule>(lepRecoMod, 0.1); // this
   
   // auto highestLeptonJetDeltaRCut = std::make_shared<HighestLeptonJetDeltaRCut>(lepRecoMod);

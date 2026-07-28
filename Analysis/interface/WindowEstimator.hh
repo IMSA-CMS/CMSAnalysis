@@ -13,10 +13,13 @@ class SingleProcess;
 class WindowEstimator : public Estimator
 {		
 	public: 
-		WindowEstimator(double low, double high) : lowBound(low), highBound(high) {}
-		double getExpectedYield(const SingleProcess* process, const HistVariable& dataType, double luminosity) const override;
-		double getMassTarget() const override;
+		WindowEstimator(std::shared_ptr<CrossSectionReader> reader, double luminosity, double low, double high) : reader(reader),
+			luminosity(luminosity), lowBound(low), highBound(high) {}
+		double getExpectedYield(const SingleProcess* process, const HistVariable& dataType) const override;
+
 	private:
+		std::shared_ptr<CrossSectionReader> reader;
+		double luminosity;
 		double lowBound;
 		double highBound;
 };	

@@ -162,10 +162,6 @@ double Process::getYield(const HistVariable &dataType) const
 
 void Process::addProcess(SingleProcess process)
 {
-    // if(process.checkValidity())
-    // {
-    // 	processes.push_back(process);
-    // }
     processes.push_back(process);
 }
 
@@ -267,6 +263,7 @@ std::optional<FitFunction> Process::getPlot(const HistVariable &histType)
     }
     return {};
 }
+
 void Process::setPlot(const HistVariable &histType, FitFunction plot)
 {
     for (auto &entry : plots)
