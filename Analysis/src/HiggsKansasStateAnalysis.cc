@@ -23,7 +23,7 @@
 #include <unordered_map>
 #include <vector>
 
-const std::vector<std::string> HiggsKansasStateAnalysis::genSimDecays{};
+const std::vector<std::string> HiggsKansasStateAnalysis::genSimDecays{""};
 
 const std::vector<std::string> HiggsKansasStateAnalysis::recoDecays{
     "0tau", "1tau", "2tau", "3tau"};
@@ -39,7 +39,7 @@ const double lumi = 137.94;
 constexpr auto bgFilePath = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_MY/";
 constexpr auto signalFilePath = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_MY/";
 constexpr auto dataFilePath = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_MY/";
-const auto signalParamPath = Utility::getBasePath() + "Analysis/bin/fitting/H++SignalParameterFunctions.txt";
+const auto signalParamPath = "/uscms/home/kprasad/cmsReleaseArea/CMSSW_15_0_4/src/CMSAnalysis/Analysis/bin/fitting/H++SignalParameterFunctions.txt";
 const auto bgParamPath =
     "/uscms/home/kprasad/cmsReleaseArea/CMSSW_15_0_4/src/CMSAnalysis/Analysis/bin/fitting/H++BackgroundFunctions.txt";
 
@@ -75,7 +75,7 @@ HiggsKansasStateAnalysis::HiggsKansasStateAnalysis() :
     auto reader = std::make_shared<CrossSectionReader>(
         Utility::getBasePath() + "DataCollection/bin/crossSections.txt");
         
-    auto signalParams = FitFunctionCollection::loadFunctions(signalParamPath);
+    //auto signalParams = FitFunctionCollection::loadFunctions(signalParamPath);
 
     //                 (genSim     , reco       )
     // std::map<std::tuple<std::string, std::string>,
@@ -150,10 +150,10 @@ HiggsKansasStateAnalysis::HiggsKansasStateAnalysis() :
 
             for (const double massTarget : massTargets)
             {
-                auto higgsMassGroup = std::make_shared<Process>("Higgs Signal " + std::to_string((int)massTarget), 1);
+                auto higgsMassGroup = std::make_shared<Process>("Higgs Signal  " + std::to_string((int)massTarget), 1);
 
                 auto higgsSignal = std::make_shared<Process>(
-                    "Higgs signal " + std::to_string((int)massTarget), 1);
+                    "Higgs signal  " + std::to_string((int)massTarget), 1);
 
                 // try
                 // {
@@ -318,5 +318,8 @@ void HiggsKansasStateAnalysis::addSingleProcess(std::shared_ptr<Process> process
 
     process->addProcess(SingleProcess(fileName, input1, histEstimator));
     process->addProcess(SingleProcess(fileName, input2, histEstimator));
+    //KLUDGE
+    if (fileName.find("HppM700")!=std::string::npos) return;
+    if (fileName.find("HppM1500")!=std::string::npos) return;
     process->addProcess(SingleProcess(fileName, input3, histEstimator));
 }
