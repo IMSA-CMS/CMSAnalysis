@@ -22,22 +22,23 @@ class FitFunction
 
     // static const std::vector<std::string> functionList;
     static FitFunction createFunctionOfType(FunctionType functionType, const std::string &name,
-                                            const std::string &expFormula, double min, double max,
-                                            std::string channelName);
+                                            const std::string &expFormula, double min, double max);
+    static std::string encodeName(std::map<std::string, std::string> parameters);
+    static std::map<std::string, std::string> decodeName(std::string name);
 
     // static std::vector<FitFunction> loadFunctions(const std::string& fileName);
     // static void saveFunctions(std::vector<FitFunction>& functions, const std::string& fileName);
   FitFunction() {}    
-	FitFunction(const TF1& func, FunctionType funcType, std::string channelName);
+	FitFunction(const TF1& func, FunctionType funcType);
 	TF1* getFunction();
 	void setFunction(const TF1& function, FunctionType funcType);
 	FunctionType getFunctionType();
 	std::string getName();
 	double getMin();
 	double getMax();
-	std::string getChannelName();
-	std::string getParameterName();
-  std::string getChannel();
+
+  std::string getParameter(std::string name);
+
   double evaluate(double x);
 
 	void addSystematic(const std::string& sysName, const TF1& upFunction, const TF1& downFunction);
@@ -49,7 +50,6 @@ class FitFunction
 
 private:
 	TF1 function;
-	std::string channelName;
 	FunctionType functionType;
 	std::map<std::string, std::pair<TF1, TF1>> systematics; 
 

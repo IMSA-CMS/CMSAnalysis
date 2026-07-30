@@ -79,9 +79,11 @@ void Fitter::loadFunctions(FitFunctionCollection fitFunctions)
 void Fitter::fitFunctions(std::unordered_map<std::string, TH1 *> &histograms)
 {
     std::cout << "FITTING in CC\n";
+    std::cout << "Number of functions: " << functions.getFunctions().size() << "\n";
     for (auto &funcPair : functions.getFunctions())
     {
         FitFunction &func = funcPair.second;
+        std::cout << "Processing function: " << funcPair.first << "\n";
         TH1 *histogram = histograms[funcPair.first];
         if (!histogram)
         {
@@ -109,6 +111,7 @@ void Fitter::fitFunctions(std::unordered_map<std::string, TH1 *> &histograms)
             fitVoigt(histogram, func);
             break;
         }
+        std::cout << "Finished fitting function: " << funcPair.first << "\n";
 
         auto *inner = func.getFunction();
         for (auto par = 0; par < inner->GetNpar(); par++)
@@ -117,21 +120,28 @@ void Fitter::fitFunctions(std::unordered_map<std::string, TH1 *> &histograms)
             inner->SetParError(par, error);
         }
 
-        const auto full = func.getChannelName() + "/" + func.getName();
-        const auto split = full.find_last_of('/');
-        const std::string dir = full.substr(0, split);
-        const auto name = full.substr(split + 1);
-
+        const auto full = func.getName();
+        auto decoded = FitFunction::decodeName(full);
+        const std::string dir = decoded["channel"];
+        const auto name = decoded["histVar"] + " " + decoded["systematic"];
+        // const auto split = full.find_last_of('/');
+        // const std::string dir = full.substr(0, split);
+        // const auto name = full.substr(split + 1);
+        // std::cout << "Name: " << name << '\n';
         auto canvas = TCanvas(name.c_str(), name.c_str(), 0, 0, 1500, 500);
         histogram->Scale(1.0 / histogram->GetBinWidth(1));
         histogram->Draw();
+        // std::cout << "Directory: " << dir << '\n';
 
         if (!fitDirectories.contains(dir))
         {
+            // std::cout << "Creating directory " << dir << '\n';
             fitDirectories[dir] =
-                fitRootFile->mkdir(dir.c_str(), "", true)->GetDirectory(dir.substr(dir.find('/') + 1).c_str());
+                fitRootFile->mkdir(dir.c_str(), "", true);
         }
+        // std::cout << "Writing object" << name << '\n';
         fitDirectories.at(dir)->WriteObject(&canvas, name.c_str());
+        // std::cout << "Closing" << name << '\n';
 
         canvas.Close();
     }
@@ -437,36 +447,49 @@ FitFunction Fitter::parameterizeFunction(ParameterizationData &parameterData, co
     const auto channel = reco + "_" + genSim;
     // genSim + "/" + std::to_string(mass) + ' ' + histVar.getName() + " " + systDesc
 
-    std::string desc;
+    std::string sys;
     switch (histVar.getSystematicType())
     {
     case ScaleFactor::SystematicType::Nominal:
-        desc = "Nominal";
+        sys = "Nominal";
         break;
     case ScaleFactor::SystematicType::Up:
-        desc = histVar.getSystematicName() + " Up";
+        sys = histVar.getSystematicName() + " Up";
         break;
     case ScaleFactor::SystematicType::Down:
-        desc = histVar.getSystematicName() + " Down";
+        sys = histVar.getSystematicName() + " Down";
         break;
     }
+    std::string proj;
     if (histVar.isXProjection())
     {
-        desc += " X projection";
+        proj += "X";
     }
     if (histVar.isYProjection())
     {
-        desc += " Y projection";
+        proj += "Y";
     }
 
-    const auto fullName = channel + "/" + parameterData.name + " " + desc;
+    std::map<std::string, std::string> nameParams;
+    nameParams["Reco"] = reco;
+    nameParams["GenSim"] = genSim;
+    nameParams["Systematic"] = sys;
+    if (!proj.empty())
+    {
+        nameParams["Projection"] = proj;
+    }
+    nameParams["Parameter"] = parameterData.name;
+
+    const auto fullName = FitFunction::encodeName(nameParams);
+
+    // const auto fullName = channel + "/" + parameterData.name + " " + desc;
     auto *const canvas = new TCanvas(fullName.c_str(), fullName.c_str(), 0, 0, 2000, 500);
 
     auto graph = TGraphErrors(parameterData.x.size(), parameterData.x.data(), parameterData.y.data(), nullptr,
                               parameterData.error.data());
 
     auto function =
-        FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, fullName, "", 0, 2000, channel);
+        FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, fullName, "", 0, 2000);
 
     auto *func = function.getFunction();
     func->SetParameters(boost::algorithm::reduce(parameterData.y) / parameterData.y.size(), 0, 0);
