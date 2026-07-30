@@ -16,103 +16,23 @@
 #include <stdexcept>
 #include <utility>
 
-Fitter::Fitter(const std::string &functionFile, std::string fitTextFile, const std::string &parameterRootFile,
-               std::string parameterizationFuncFile)
-    : fitRootFile(TFile::Open(functionFile.c_str(), "RECREATE")), fitTextFile(std::move(fitTextFile)),
-      parameterRootFile(TFile::Open(parameterRootFile.c_str(), "RECREATE")),
-      parameterTextFile(std::move(parameterizationFuncFile))
+FitFunctionCollection Fitter::fitFunctions(std::unordered_map<std::string, std::pair<TH1*, FitFunction>> &histogramPairs,
+    std::string rootFileName)
 {
-    ROOT::EnableImplicitMT();
-}
-
-Fitter::~Fitter()
-{
-    if (fitRootFile->IsOpen())
+    TFile* rootFile = TFile::Open(rootFileName.c_str(), "RECREATE");
+    FitFunctionCollection functions;
+    for (auto& histPair : histogramPairs)
     {
-        fitRootFile->Close();
-    }
-    delete fitRootFile;
-    if (parameterRootFile->IsOpen())
-    {
-        parameterRootFile->Close();
-    }
-    delete parameterRootFile;
-}
+        FitFunction& func = histPair.second;
+        TH1* histogram = histPair.first;
 
-void Fitter::setFunctionRootOutput(const std::string &name)
-{
-    if (fitRootFile->IsOpen())
-    {
-        fitRootFile->Close();
-    }
-    delete fitRootFile;
+        fitSingleFunction(histogram, func.getFunction(), rootFileName);
 
-    fitRootFile = TFile::Open(name.c_str(), "RECREATE");
-}
-
-void Fitter::setFunctionOutput(std::string name)
-{
-    fitTextFile = std::move(name);
-}
-
-void Fitter::setParameterizationRootOutput(const std::string &name)
-{
-    if (parameterRootFile->IsOpen())
-    {
-        parameterRootFile->Close();
-    }
-    delete parameterRootFile;
-
-    parameterRootFile = TFile::Open(name.c_str(), "RECREATE");
-}
-
-void Fitter::setParameterizationOutput(std::string name)
-{
-    parameterTextFile = std::move(name);
-}
-
-void Fitter::loadFunctions(FitFunctionCollection fitFunctions)
-{
-    functions = std::move(fitFunctions);
-}
-
-void Fitter::fitFunctions(std::unordered_map<std::string, TH1 *> &histograms)
-{
-    std::cout << "FITTING in CC\n";
-    for (auto &funcPair : functions.getFunctions())
-    {
-        FitFunction &func = funcPair.second;
-        TH1 *histogram = histograms[funcPair.first];
-        if (!histogram)
-        {
-            throw std::runtime_error("fitter::fitFunctions attempted histogram that does not exist: " + funcPair.first);
-        }
-
-        switch (func.getFunctionType())
-        {
-        case FitFunction::FunctionType::ExpressionFormula:
-            fitExpressionFormula(histogram, func);
-            break;
-        case FitFunction::FunctionType::DoubleSidedCrystalBall:
-            fitDSCB(histogram, func);
-            break;
-        case FitFunction::FunctionType::PowerLaw:
-            fitPowerLaw(histogram, func);
-            break;
-        case FitFunction::FunctionType::DoubleGaussian:
-            fitDoubleGaussian(histogram, func);
-            break;
-        case FitFunction::FunctionType::GausLogPowerNorm:
-            fitGausLogPowerNorm(histogram, func);
-            break;
-        case FitFunction::FunctionType::Voigt:
-            fitVoigt(histogram, func);
-            break;
-        }
-
-        auto *inner = func.getFunction();
+        auto* inner = func.getFunction();
         for (auto par = 0; par < inner->GetNpar(); par++)
         {
+            // Set error to at least 1% of the parameter value to avoid zero error
+            // Not sure if this is a good idea
             const auto error = std::max(inner->GetParError(par), 0.01 * inner->GetParameter(par));
             inner->SetParError(par, error);
         }
@@ -126,22 +46,50 @@ void Fitter::fitFunctions(std::unordered_map<std::string, TH1 *> &histograms)
         histogram->Scale(1.0 / histogram->GetBinWidth(1));
         histogram->Draw();
 
-        if (!fitDirectories.contains(dir))
+        if (!rootFile->GetDirectory(dir.c_str()))
         {
-            fitDirectories[dir] =
-                fitRootFile->mkdir(dir.c_str(), "", true)->GetDirectory(dir.substr(dir.find('/') + 1).c_str());
+            rootFile->mkdir(dir.c_str(), "", true);
         }
-        fitDirectories.at(dir)->WriteObject(&canvas, name.c_str());
+        rootFile->GetDirectory(dir.c_str())->WriteObject(&canvas, name.c_str());
 
         canvas.Close();
+
+        functions.insert(func);
     }
+    rootFile->Close();
+    delete rootFile;
     functions.saveFunctions(fitTextFile, true);
 }
 
-// TH1* Fitter::readHistogram(const std::string& name)
-// {
-// 	return dynamic_cast<TH1*>(histogramFile->FindObjectAny(name.c_str()));
-// }
+void Fitter::fitSingleFunction(TGraph *histogram, TF1 *function, size_t iterations = 1)
+{
+    if (!histogram || !function)
+    {
+        throw std::runtime_error("fitter::fitFunctions attempted histogram that does not exist: " + histPair.first);
+    }
+
+    switch (func.getFunctionType())
+    {
+    case FitFunction::FunctionType::ExpressionFormula:
+        fitExpressionFormula(histogram, function);
+        break;
+    case FitFunction::FunctionType::DoubleSidedCrystalBall:
+        fitDSCB(histogram, function);
+        break;
+    case FitFunction::FunctionType::PowerLaw:
+        fitPowerLaw(histogram, function);
+        break;
+    case FitFunction::FunctionType::DoubleGaussian:
+        fitDoubleGaussian(histogram, function);
+        break;
+    case FitFunction::FunctionType::GausLogPowerNorm:
+        fitGausLogPowerNorm(histogram, function);
+        break;
+    case FitFunction::FunctionType::Voigt:
+        fitVoigt(histogram, function);
+        break;
+    }
+}
 
 // not sure if this is used at all
 void Fitter::fitExpressionFormula(TH1 *histogram, FitFunction &fitFunction)
