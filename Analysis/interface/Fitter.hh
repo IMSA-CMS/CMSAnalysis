@@ -9,23 +9,15 @@
 #include <TH1.h>
 #include <map>
 
-struct ParameterizationData
-{
-    std::vector<double> x;
-    std::vector<double> y;
-    std::vector<double> error;
-    std::string name;
-};
-
 class Fitter
 {
   public:
     // Insert blank TF1* function ptr which will have the fitted function written to
-    static void fitSingleFunction(TGraph *histogram, TF1 *function, size_t iterations = 1);
+    static void fitSingleFunction(TH1* histogram, TF1* function, size_t iterations = 1);
 
-    FitFunctionCollection fitFunctions(const std::unordered_map<std::string, std::pair<TH1*, FitFunction>> &histogramPairs,
+    FitFunctionCollection fitFunctions(const std::unordered_map<std::string, std::pair<TH1*, FitFunction>>& histogramPairs,
         std::string rootFileName);
-    FitFunctionCollection parameterizeFunctions(std::unordered_map<std::string, double> &xData, const std::string &genSim,
+    FitFunctionCollection parameterizeFunctions(std::unordered_map<double, TF1*>& xData, const std::string &genSim,
         const std::string &reco, const std::string &var, const HistVariable &histVar);
 
   private:
@@ -36,10 +28,10 @@ class Fitter
     static void fitGausLogPowerNorm(TH1 *hist, FitFunction &func);
     static void fitVoigt(TH1 *histogram, FitFunction &fitFunction);
 
+    static void fitPowerLawToGraph(TGraph* graph, FitFunction &fitFunction);
+
     // TH1* readHistogram(const std::string& name);
-    std::vector<ParameterizationData> getParameterData(std::unordered_map<std::string, double> &xData);
-    FitFunction parameterizeFunction(ParameterizationData &parameterData, const std::string &genSim,
-                                     const std::string &reco, const std::string &var, const HistVariable &histVar);
+    FitFunction parameterizeFunction(const std::unordered_map<double, TF1*>& xData, );
     // Different ways to try and get seed function for fitting
     // Gets guess inverse power law function y = a(x-b)^-c + d using three points, only guarantees the powerlaw through
     // p0 and p1, not p2

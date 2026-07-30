@@ -29,6 +29,7 @@ FitFunctionCollection Fitter::fitFunctions(std::unordered_map<std::string, std::
         fitSingleFunction(histogram, func.getFunction(), rootFileName);
 
         auto* inner = func.getFunction();
+
         for (auto par = 0; par < inner->GetNpar(); par++)
         {
             // Set error to at least 1% of the parameter value to avoid zero error
@@ -37,20 +38,25 @@ FitFunctionCollection Fitter::fitFunctions(std::unordered_map<std::string, std::
             inner->SetParError(par, error);
         }
 
-        const auto full = func.getChannelName() + "/" + func.getName();
-        const auto split = full.find_last_of('/');
-        const std::string dir = full.substr(0, split);
-        const auto name = full.substr(split + 1);
-
+        const auto full = func.getName();
+        auto decoded = FitFunction::decodeName(full);
+        const std::string dir = decoded["channel"];
+        const auto name = decoded["histVar"] + " " + decoded["systematic"];
+        // const auto split = full.find_last_of('/');
+        // const std::string dir = full.substr(0, split);
+        // const auto name = full.substr(split + 1);
+        // std::cout << "Name: " << name << '\n';
         auto canvas = TCanvas(name.c_str(), name.c_str(), 0, 0, 1500, 500);
         histogram->Scale(1.0 / histogram->GetBinWidth(1));
         histogram->Draw();
+        // std::cout << "Directory: " << dir << '\n';
 
         if (!rootFile->GetDirectory(dir.c_str()))
         {
             rootFile->mkdir(dir.c_str(), "", true);
         }
         rootFile->GetDirectory(dir.c_str())->WriteObject(&canvas, name.c_str());
+
 
         canvas.Close();
 
@@ -61,14 +67,14 @@ FitFunctionCollection Fitter::fitFunctions(std::unordered_map<std::string, std::
     functions.saveFunctions(fitTextFile, true);
 }
 
-void Fitter::fitSingleFunction(TGraph *histogram, TF1 *function, size_t iterations = 1)
+void Fitter::fitSingleFunction(TH1* histogram, TF1* function, size_t iterations)
 {
     if (!histogram || !function)
     {
-        throw std::runtime_error("fitter::fitFunctions attempted histogram that does not exist: " + histPair.first);
+        throw std::runtime_error("fitter::fitFunctions attempted histogram that does not exist: " + histogram->GetName());
     }
 
-    switch (func.getFunctionType())
+    switch (function->getFunctionType())
     {
     case FitFunction::FunctionType::ExpressionFormula:
         fitExpressionFormula(histogram, function);
@@ -300,126 +306,15 @@ void Fitter::fitVoigt(TH1 *histogram, FitFunction &fitFunction)
     gStyle->SetOptFit(1111);
 }
 
-std::vector<ParameterizationData> Fitter::getParameterData(std::unordered_map<std::string, double> &xData)
+void Fitter::fitPowerLawToGraph(TGraph* graph, FitFunction &fitFunction)
 {
-    if (!functions.checkFunctionsSimilar())
-    {
-        throw std::invalid_argument("FitFunctionCollection is not comprised of similar functions");
-    }
-
-    const int params = functions.getFunctions().begin()->second.getFunction()->GetNpar();
-    auto &funcs = functions.getFunctions();
-    const size_t nFuncs = funcs.size();
-
-    std::vector<ParameterizationData> data;
-    data.reserve(params);
-
-    std::string name = xData.begin()->first;
-    auto histName = name;
-
-    for (int i = 0; i < params; ++i)
-    {
-        ParameterizationData paramData;
-        paramData.name = funcs.begin()->second.getFunction()->GetParName(i) + std::string(" ") + histName;
-
-        paramData.x.reserve(nFuncs);
-        paramData.y.reserve(nFuncs);
-        paramData.error.reserve(nFuncs);
-
-        for (auto &pair : funcs)
-        {
-            const auto &key = pair.first;
-            auto *func = pair.second.getFunction();
-
-            paramData.x.push_back(xData.at(key));
-            paramData.y.push_back(func->GetParameter(i));
-            paramData.error.push_back(func->GetParError(i));
-        }
-
-        data.push_back(std::move(paramData));
-    }
-
-    return data;
-}
-
-// std::vector<ParameterizationData> Fitter::getParameterData(std::unordered_map<std::string, double> &xData)
-// {
-//     if (!functions.checkFunctionsSimilar())
-//     {
-//         throw std::invalid_argument("FitFunctionCollection is not comprised on similar functions");
-//     }
-
-//     const int params = functions.getFunctions().begin()->second.getFunction()->GetNpar();
-//     std::vector<ParameterizationData> data;
-
-//     // for (int i = 0; i < params; ++i)
-//     // {
-//     //     data[i] = ParameterizationData{.x = std::vector<double>(functions.size()),
-//     //                                    .y = std::vector<double>(functions.size()),
-//     //                                    .error = std::vector<double>(functions.size()),
-//     //                                    .name =
-//     functions.getFunctions().begin()->second.getFunction()->GetParName(i)};
-//     // }
-
-//     for (int i = 0; i < params; ++i)
-//     {
-//     for (auto &pair : functions.getFunctions())
-//     {
-//         ParameterizationData paramData;
-//         paramData.name = std::string(pair.second.getFunction()->GetParName(i)) + "_" + pair.first;
-//         for (int j = 0; j < params; ++j)
-//         {
-//             paramData.x.push_back(xData[pair.first]);
-//             paramData.y.push_back(pair.second.getFunction()->GetParameter(j));
-//             paramData.error.push_back(pair.second.getFunction()->GetParError(j));
-//         }
-//         data.push_back(paramData);
-//     }
-// }
-//     return data;
-// }
-
-FitFunction Fitter::parameterizeFunction(ParameterizationData &parameterData, const std::string &genSim,
-                                         const std::string &reco, const std::string &var, const HistVariable &histVar)
-{
-    const auto channel = reco + "_" + genSim;
-    // genSim + "/" + std::to_string(mass) + ' ' + histVar.getName() + " " + systDesc
-
-    std::string desc;
-    switch (histVar.getSystematicType())
-    {
-    case ScaleFactor::SystematicType::Nominal:
-        desc = "Nominal";
-        break;
-    case ScaleFactor::SystematicType::Up:
-        desc = histVar.getSystematicName() + " Up";
-        break;
-    case ScaleFactor::SystematicType::Down:
-        desc = histVar.getSystematicName() + " Down";
-        break;
-    }
-    if (histVar.isXProjection())
-    {
-        desc += " X projection";
-    }
-    if (histVar.isYProjection())
-    {
-        desc += " Y projection";
-    }
-
-    const auto fullName = channel + "/" + parameterData.name + " " + desc;
-    auto *const canvas = new TCanvas(fullName.c_str(), fullName.c_str(), 0, 0, 2000, 500);
-
-    auto graph = TGraphErrors(parameterData.x.size(), parameterData.x.data(), parameterData.y.data(), nullptr,
-                              parameterData.error.data());
-
     auto function =
-        FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, fullName, "", 0, 2000, channel);
+        FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, fullName, "", 0, 2000);
 
     auto *func = function.getFunction();
     func->SetParameters(boost::algorithm::reduce(parameterData.y) / parameterData.y.size(), 0, 0);
     func->SetParLimits(1, -10000, 0);
-    for (int n = 0; n < 4; n++)
+    for (int n = 0; n < 4; ++n)
     {
         graph.Fit(func, "SQ");
     }
@@ -427,6 +322,63 @@ FitFunction Fitter::parameterizeFunction(ParameterizationData &parameterData, co
     func->SetRange(0, 2000);
     graph.SetTitle((genSim + " #rightarrow " + reco + " " + var + " ^{}" + parameterData.name).c_str());
     graph.SetMarkerStyle(15);
+}
+
+FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::unordered_map<double, TF1*>& xData)
+{
+    auto nPoints = xData.size();
+
+
+    // const auto channel = reco + "_" + genSim;
+    // // genSim + "/" + std::to_string(mass) + ' ' + histVar.getName() + " " + systDesc
+
+    // std::string sys;
+    // switch (histVar.getSystematicType())
+    // {
+    // case ScaleFactor::SystematicType::Nominal:
+    //     sys = "Nominal";
+    //     break;
+    // case ScaleFactor::SystematicType::Up:
+    //     sys = histVar.getSystematicName() + " Up";
+    //     break;
+    // case ScaleFactor::SystematicType::Down:
+    //     sys = histVar.getSystematicName() + " Down";
+    //     break;
+    // }
+    // std::string proj;
+    // if (histVar.isXProjection())
+    // {
+    //     proj += "X";
+    // }
+    // if (histVar.isYProjection())
+    // {
+    //     proj += "Y";
+    // }
+
+    // std::map<std::string, std::string> nameParams;
+    // nameParams["Reco"] = reco;
+    // nameParams["GenSim"] = genSim;
+    // nameParams["Systematic"] = sys;
+    // if (!proj.empty())
+    // {
+    //     nameParams["Projection"] = proj;
+    // }
+    // nameParams["Parameter"] = parameterData.name;
+
+    // const auto fullName = FitFunction::encodeName(nameParams);
+
+    // const auto fullName = channel + "/" + parameterData.name + " " + desc;
+    auto *const canvas = new TCanvas(name.c_str(), name.c_str(), 0, 0, 2000, 500);
+
+    // Get data from map
+    std::vector<double> xValues;
+    std::vector<double> yValues;
+
+
+    auto graph = TGraphErrors(xData.size(), xData.data(), parameterData.y.data(), nullptr,
+                              parameterData.error.data());
+
+    
     graph.Draw("AP");
 
     gStyle->SetOptFit(1111);

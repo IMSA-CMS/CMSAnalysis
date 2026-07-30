@@ -3,6 +3,7 @@
 
 #include "FitFunction.hh"
 #include <unordered_map>
+#include <set>
 
 class FitFunctionCollection
 {
@@ -19,6 +20,10 @@ class FitFunctionCollection
     size_t size() const;
     FitFunction &get(const std::string &key);
     void saveFunctions(const std::string &fileName, bool append = false);
+
+    std::set<std::string> findUniqueNames(std::string parameter); //
+    std::vector<FitFunction> getFunctions(std::string name); //
+    std::vector<FitFunction> getFunctions(std::string parameter, std::string name); //
 
 	FitFunction& operator[](const std::string& key);
 	// FitFunction& operator[](int index);

@@ -88,8 +88,8 @@ double FitFunction::voigt(double *x, double *par)
     return par[0] * TMath::Voigt(x[0] - par[1], par[3], par[2]);
 }
 
-FitFunction::FitFunction(const TF1 &func, FunctionType funcType, std::string channelName)
-    : function(func), channelName(std::move(channelName)), functionType(funcType)
+FitFunction::FitFunction(const TF1 &func, FunctionType funcType)
+    : function(func), functionType(funcType)
 {
 }
 
@@ -179,8 +179,7 @@ double FitFunction::getMax()
 // }
 
 FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const std::string &name,
-                                              const std::string &expFormula, double min, double max,
-                                              std::string channelName)
+                                              const std::string &expFormula, double min, double max)
 {
     TF1 func;
     // std::cout << "ExpressionFormula enum: " << FunctionType::EXPRESSION_FORMULA << '\n';
@@ -214,7 +213,7 @@ FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const s
         break;
     };
 
-    return FitFunction(func, functionType, std::move(channelName));
+    return FitFunction(func, functionType);
 }
 
 // std::ostream& operator<<(std::ostream& stream, FitFunction& function)
@@ -240,22 +239,11 @@ FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const s
 // 	return stream;
 // }
 
-std::string FitFunction::getChannelName()
-{
-    return channelName;
-}
+// std::string FitFunction::getChannelName()
+// {
+//     return channelName;
+// }
 
-std::string FitFunction::getParameterName()
-{
-    std::vector<std::string> channel_parameters = split(getName(), '/');
-    return channel_parameters[1];
-}
-
-std::string FitFunction::getChannel()
-{
-    std::vector<std::string> channel_parameters = split(getName(), '/');
-    return channel_parameters[0];
-}
 
 double FitFunction::evaluate(double x)
 {
@@ -489,37 +477,32 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
         s.erase(s.find_last_not_of(" \t") + 1);
     };
 
-    // --- Helper to safely get next non-empty line ---
-    auto getLine = [&](std::istream &in, std::string &out) -> bool {
-        while (std::getline(in, out))
-        {
-            trim(out);
-            if (!out.empty())
-            {
-                return true;
-            }
-        }
-        return false;
-    };
+
 
     // --- Read "Name:" line ---
-    if (!getLine(stream, line))
+    do
+    {
+        std::getline(stream, line);
+    }
+    while (stream && line.empty());
+    if (!stream)
     {
         return stream;
     }
-    std::cout << "Next line " << line << "\n";
+    // std::cout << "Next line " << line << "\n";
     if (line.find("Name:") != std::string::npos)
     {
         name = line.substr(5);
+    }
+    else
+    {
+        throw std::runtime_error ("Name not found");
     }
     trim(name);
     std::cout << "Reading function: " << name << '\n';
 
     // --- Read "FunctionTypeEnum:" line ---
-    if (!getLine(stream, line))
-    {
-        return stream;
-    }
+    std::getline(stream, line);
     if (line.find("FunctionTypeEnum:") != std::string::npos)
     {
         tempFuncType = std::stoi(line.substr(17));
@@ -527,10 +510,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     funcType = static_cast<FitFunction::FunctionType>(tempFuncType);
 
     // --- Read "ExpressionFormula:" line ---
-    if (!getLine(stream, line))
-    {
-        return stream;
-    }
+    std::getline(stream, line);
     if (line.find("ExpressionFormula:") != std::string::npos)
     {
         expFormula = line.substr(18);
@@ -538,10 +518,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     trim(expFormula);
 
     // --- Read "Range:" line ---
-    if (!getLine(stream, line))
-    {
-        return stream;
-    }
+    std::getline(stream, line);
     if (line.find("Range:") != std::string::npos)
     {
         std::istringstream rangeStream(line.substr(6));
@@ -549,10 +526,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     }
 
     // --- Read "NumOfParameters:" line ---
-    if (!getLine(stream, line))
-    {
-        return stream;
-    }
+    std::getline(stream, line);
     if (line.find("NumOfParameters:") != std::string::npos)
     {
         params = std::stoi(line.substr(16));
@@ -569,10 +543,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     std::vector<double> paramErrors(params);
 
     // --- Read "ParaNames:" line ---
-    if (!getLine(stream, line))
-    {
-        return stream;
-    }
+    std::getline(stream, line);
     if (line.find("ParaNames:") != std::string::npos)
     {
         std::istringstream ss(line.substr(10));
@@ -583,10 +554,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     }
 
     // --- Read "Parameters:" line ---
-    if (!getLine(stream, line))
-    {
-        return stream;
-    }
+    std::getline(stream, line);
     if (line.find("Parameters:") != std::string::npos)
     {
         std::istringstream ss(line.substr(11));
@@ -597,10 +565,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     }
 
     // --- Read "ParamErrors:" line ---
-    if (!getLine(stream, line))
-    {
-        return stream;
-    }
+    std::getline(stream, line);
     if (line.find("ParamErrors:") != std::string::npos)
     {
         std::istringstream ss(line.substr(12));
@@ -611,7 +576,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
     }
 
     // --- Create FitFunction object ---
-    FitFunction function = FitFunction::createFunctionOfType(funcType, name, expFormula, min, max, "");
+    FitFunction function = FitFunction::createFunctionOfType(funcType, name, expFormula, min, max);
 
     // --- Set parameters ---
     for (int i = 0; i < params; ++i)
@@ -621,10 +586,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
         function.getFunction()->SetParError(i, paramErrors[i]);
     }
 
-    if (!getLine(stream, line))
-    {
-        return stream;
-    }
+    std::getline(stream, line);
     if (line.find("Systematics:") != std::string::npos)
     {
         int nSys = 0;
@@ -633,10 +595,7 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
         for (int s = 0; s < nSys; ++s)
         {
             std::string sysName;
-            if (!getLine(stream, line))
-            {
-                break;
-            }
+            std::getline(stream, line);
             if (!(line.find("  Systematic:") == 0))
             {
                 continue;
@@ -647,8 +606,8 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
             std::vector<double> downParams;
 
             // --- Up variation ---
-
-            if (getLine(stream, line) && (line.find("    UpParameters:") == 0))
+            std::getline(stream, line);
+            if (line.find("    UpParameters:") == 0)
             {
                 std::istringstream ss(line.substr(17));
                 double val;
@@ -659,8 +618,8 @@ std::istream &operator>>(std::istream &stream, FitFunction &func)
             }
 
             // --- Down variation ---
-
-            if (getLine(stream, line) && (line.find("    DownParameters:") == 0))
+            std::getline(stream, line);
+            if (line.find("    DownParameters:") == 0)
             {
                 std::istringstream ss(line.substr(19));
                 double val;
@@ -728,4 +687,36 @@ std::vector<std::string> FitFunction::listSystematics() const
         names.push_back(kv.first);
     }
     return names;
+}
+
+std::string FitFunction::encodeName(std::map<std::string, std::string> parameters)
+{
+    std::string result;
+    for (auto& [key, value] : parameters)
+    {
+        result += key + " - " + value + " | ";
+    }
+    return result;
+}
+
+std::map<std::string, std::string> FitFunction::decodeName(std::string name)
+{
+    std::map<std::string, std::string> result;
+    std::istringstream stream(name);
+    std::string token;
+    while (std::getline(stream, token, '|'))
+    {
+        size_t dashPos = token.find(" - ");
+        if (dashPos != std::string::npos)
+        {
+            std::string key = token.substr(0, dashPos);
+            std::string value = token.substr(dashPos + 3);
+            key.erase(0, key.find_first_not_of(" \t"));
+            key.erase(key.find_last_not_of(" \t") + 1);
+            value.erase(0, value.find_first_not_of(" \t"));
+            value.erase(value.find_last_not_of(" \t") + 1);
+            result[key] = value;
+        }
+    }
+    return result;
 }
