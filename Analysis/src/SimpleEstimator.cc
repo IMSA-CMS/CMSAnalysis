@@ -4,16 +4,8 @@
 #include "TH1.h"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 
-double SimpleEstimator::getExpectedYield(const SingleProcess* process, const HistVariable& dataType, double luminosity) const
+double SimpleEstimator::getExpectedYield(const SingleProcess* process, const HistVariable& dataType) const
 {
-    //Takes the histogram wanted from the file, assigns it hist
-    //TH1 *hist = dynamic_cast<TH1 *>(process->getHist(dataType, false));
-    //std::cout << "SimpleEstimator 1" << std::endl;
-    // if (isData)
-    // {
-    //     return process->getTotalEvents();
-    // }
-
     TH1 *hist;
     try
     {
@@ -33,17 +25,9 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, const His
         return hist->Integral();
     }
 
-    //std::cout << "SimpleEstimator 2" << std::endl;
-    int totalEventsInt = process->getTotalEvents();
-    double totaleventsran = totalEventsInt;
-    //Finds crosssection (from spreadsheet)
-    double crosssection = process->getCrossSection();
+    double totaleventsran = process->getTotalEvents();
+    double crosssection = reader->getCrossSection(process->getName());
 
-//without integral code
-/*
-    double efficiency = hist->GetEntries() / totaleventsran;
-    double signalest = crosssection * 1000 * luminosity * efficiency;
-*/ 
 //commented out integral code
 // /*
     // integral/fit only calibrated after firstBin  
@@ -62,16 +46,17 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, const His
 // 
 
 
-    // std::cout << "postMax " << hist->GetMaximum() << std::endl;
-    // std::cout << "MaxContent " << hist->GetBinContent(hist->GetMaximumBin()) << std::endl;
-    // std::cout << "process " << process->getName() << std::endl; 
-    // std::cout << "totaleventsran " << totaleventsran << std::endl;
-    // std::cout << "totalentries " << hist->GetEntries() << std::endl;
-    // std::cout << "efficiency " << efficiency << std::endl;
-    // std::cout << "luminosity " << luminosity << std::endl;
-    // std::cout << "cross section " << crosssection << std::endl;
-    // std::cout << "postIntegral " << hist->Integral(lowerLimit, numBins) << std::endl;
-    // std::cout << "yield for " << process->getName() << " is " << signalest << std::endl;
+    std::cout << "postMax " << hist->GetMaximum() << std::endl;
+    std::cout << "MaxContent " << hist->GetBinContent(hist->GetMaximumBin()) << std::endl;
+    std::cout << "process " << process->getName() << std::endl; 
+    std::cout << "totaleventsran " << totaleventsran << std::endl;
+    std::cout << "totalentries " << hist->GetEntries() << std::endl;
+    std::cout << "efficiency " << efficiency << std::endl;
+    std::cout << "luminosity " << luminosity << std::endl;
+    std::cout << "cross section " << crosssection << std::endl;
+    std::cout << "postIntegral " << hist->Integral() << std::endl;
+    std::cout << "yield for " << process->getName() << " is " << signalest << std::endl;
+    std::cout << "\n\n";
     
     return signalest;
 }

@@ -17,11 +17,11 @@
 
 void SuperImpose() {
   // Change extraText here
-  auto plotFormatter = std::make_shared<PlotFormatter>(false, "Simulation Preliminary");
-
+  auto plotFormatter = std::make_shared<PlotFormatter>(false, "Private Work (CMS Simulation)");
+  plotFormatter->setRebinFactor(40);
   // Change the filePath here. This should be the longest branch all input files have in common.
   //const std::string filePath = "/uscms/home/ceddingt/analysis/CMSSW_14_0_4/src/CMSAnalysis/Output/";
-  const std::string filePath = "/uscms/home/dlimosne/analysis/CMSSW_14_0_1/src/CMSAnalysis/Output/";
+  const std::string filePath = "/uscms_data/d3/bhenning/030426DarkPhoton/";
   // Write the remaining file paths and graphs here. The hist in index 0 of the hists vector gets pulled from the file at index 0 in files, and so on.
   // Write your graph names here (for the legend)
   // std::vector<std::string> files = {"scalefactors.root", "noscalefactors.root"};
@@ -86,17 +86,17 @@ void SuperImpose() {
 
 
   // darkPhotonHiggs super imposed graphs - Note that for some reason the root files are empty for these two files
-  std::vector<std::string> files = {"darkPhotonHiggs125.root", "darkPhotonHiggs300.root"};
-  std::vector<std::string> hists = {
-      "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput",
-      "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput"
-  };
+  // std::vector<std::string> files = {"darkPhotonHiggs125.root", "darkPhotonHiggs300.root"};
+  // std::vector<std::string> hists = {
+  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput",
+  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput"
+  // };
   
-  std::vector<TString> names = {"darkPhotonHiggs125", "darkPhotonHiggs300"};
-  std::vector<int> colors = {kBlack, kBlue};
+  // std::vector<TString> names = {"darkPhotonHiggs125", "darkPhotonHiggs300"};
+  // std::vector<int> colors = {kBlack, kBlue};
 
-  TString xTitle = "BDT Output";
-  TString yTitle = "Number of Events";
+  // TString xTitle = "BDT Output";
+  // TString yTitle = "Number of Events";
 
 
 
@@ -116,17 +116,60 @@ void SuperImpose() {
 
 
   // darkPhotonBaselineRun2 vs. DY50-inf super imposed graphs
-  // std::vector<std::string> files = {"darkPhotonBaselineRun2LeptonJetReconstruction.root", "DY50_inf.root"};
+  std::vector<std::string> files = {"darkPhotonBaselineRun2.root", "DY50-inf.root"};
+  std::vector<std::string> hists = {
+      "hists/Low Mass and Different Sign/1Jet/1st Highest mu- Eta",
+      "hists/Low Mass and Different Sign/1Jet/1st Highest mu- Eta"
+  };
+  
+  std::vector<TString> names = {"Dark photons", "Drell-Yan"};
+  std::vector<int> colors = {kRed, kBlue};
+
+  TString xTitle = "Transverse Momentum (GeV/c)";
+  TString yTitle = "Number of Events";
+
+
+  // Neutrino Reconstruction Graphs for eett channels
+  // std::vector<std::string> files = {"noNeutrinoReconstruction.root", "1Neutrino.root"};
   // std::vector<std::string> hists = {
-  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput",
-  //     "Low Mass and Different Sign__hists/Low Mass and Different Sign_LeptonJetMLOutput"
+  //     "hists/ZVeto/Reco eeet/GenSim eeet/Reco Invariant Mass Background Y Projection",
+  //     "hists/ZVeto/Reco eeet/GenSim eeet/Reco Invariant Mass Background Y Projection"
   // };
   
-  // std::vector<TString> names = {"darkPhotonBaselineRun2", "DY50-inf"};
-  // std::vector<int> colors = {kBlack, kBlue};
+  // std::vector<TString> names = {"Original", "Corrected"};
+  // std::vector<int> colors = {kBlue, kRed};
 
-  // TString xTitle = "BDT Output";
+  // TString xTitle = "Mass (GeV/c^2)";
   // TString yTitle = "Number of Events";
+
+
+  // ee and tt Graph Comparisons
+  // std::vector<std::string> files = {"noNeutrinoReconstruction.root", "noNeutrinoReconstruction.root"};
+  // std::vector<std::string> hists = {
+  //     "hists/ZVeto/Reco eett/GenSim eett/Reco Invariant Mass Background X Projection",
+  //     "hists/ZVeto/Reco eett/GenSim eett/Reco Invariant Mass Background Y Projection"
+  // };
+  
+  // std::vector<TString> names = {"Electrons", "Taus"};
+  // std::vector<int> colors = {kBlue, kRed};
+
+  // TString xTitle = "Mass (GeV/c^2)";
+  // TString yTitle = "Number of Events";
+
+
+  // eett no neutrino versus neutrino Graph Comparisons
+  // std::vector<std::string> files = {"noNeutrinoReconstruction.root", "1Neutrino.root"};
+  // std::vector<std::string> hists = {
+  //     "hists/ZVeto/Reco eett/GenSim eett/Reco Invariant Mass Background Y Projection",
+  //     "hists/ZVeto/Reco eett/GenSim eett/Reco Invariant Mass Background Y Projection"
+  // };
+  
+  // std::vector<TString> names = {"Original", "Corrected"};
+  // std::vector<int> colors = {kRed, kBlue};
+
+  // TString xTitle = "Mass (GeV/c^2)";
+  // TString yTitle = "Number of Events";
+
 
 
 
@@ -198,7 +241,7 @@ void SuperImpose() {
   std::cout << "Adding histograms: " << std::endl;
 
 
-  histVector[0]->Add(histVector[1]);
+  //histVector[0]->Add(histVector[1]);
 
   // Use this if you have four histograms you want to superimpose
   // histVector[0]->Add(histVector[2]);
@@ -208,7 +251,7 @@ void SuperImpose() {
   histVector = {histVector[0], histVector[1]}; // Use this if you have two histograms
   //histVector = {histVector[0], histVector[1], histVector[2], histVector[3]}; // Use this if you have four histograms
 
-
+  plotFormatter->setRebinFactor(3);
   // Debug: Inform about the superimposition step
   std::cout << "Superimposing histograms..." << std::endl;
 

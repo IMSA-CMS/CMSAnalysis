@@ -23,11 +23,7 @@ TH1* FitEstimator::getFitHist(const HistVariable& histType) const {
     return fitInput->getHist(histType);
 }
 
-double FitEstimator::getMassTarget() const {
-    return massTarget;
-}
-
-double FitEstimator::getExpectedYield(const SingleProcess* process, const HistVariable& dataType, double luminosity) const 
+double FitEstimator::getExpectedYield(const SingleProcess* process, const HistVariable& dataType) const 
 {
     int totalEventsInt = process->getTotalEvents();
     //Takes the fit histogram wanted from the file, assigns it hist 
@@ -57,7 +53,7 @@ double FitEstimator::getExpectedYield(const SingleProcess* process, const HistVa
     }
 
     //Pulls analysis hist from file
-    TH1 *histanalysis = process->getHist(dataType);
+    TH1 *histanalysis = process->getHist(dataType, luminosity);
 
     //Finds number of events ran total (from spreadsheet)
     double totaleventsran = totalEventsInt;
@@ -83,7 +79,7 @@ double FitEstimator::getExpectedYield(const SingleProcess* process, const HistVa
     //Finds efficiency
     double efficiency = exp(log(eventsanalysishist) - log(totaleventsran));
     //Finds crosssection (from spreadsheet)
-    double crosssection = process->getCrossSection();
+    double crosssection = reader->getCrossSection(process->getName());
     //Finds background
     double backgroundest = exp(log(efficiency) + log(1000) + log(crosssection) + log(luminosity) + (2 * log(histfraction)));
     if(rangefitintegral != 0) {

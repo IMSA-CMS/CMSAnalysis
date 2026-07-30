@@ -36,20 +36,18 @@ class EventLoader
 
         static std::vector<std::shared_ptr<FileParams>> fetchRootFiles(const std::string &configFile);
 
-    protected:
-        int numOfEvents;
-
     private:
         void beginJob();
-        void analyze(const RootEventInterface);
+        void analyze(const RootEventInterface* eventInterface);
         void endJob();
         
         void processRootFiles(int outputEvery, int nFiles, int maxEvents, int skipFiles);
 
+        int numOfEvents = 0;
         std::vector<std::shared_ptr<FileParams>> rootFiles;
         Analyzer *modules; 
         std::shared_ptr<EventFile> file = nullptr;
-        RootEventInterface eventInterface = RootEventInterface();
+        RootEventInterface* eventInterface;
         
 };
 
