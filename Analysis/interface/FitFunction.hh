@@ -1,4 +1,3 @@
-
 #ifndef FIT_FUNCTION_HH
 #define FIT_FUNCTION_HH
 

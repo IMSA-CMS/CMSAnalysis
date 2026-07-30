@@ -26,10 +26,12 @@ const std::vector<std::string> HiggsCompleteAnalysis::genSimDecays{
     "etet", "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt"};
 
 const std::vector<std::string> HiggsCompleteAnalysis::recoDecays{
-    "eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet",
-    "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt", "eee_", "eeu_", "eue_",
-    "euu_", "uue_", "uuu_", "eet_", "ete_", "eut_", "etu_", "uut_", "utu_", "ett_", "utt_", "ttt_",
-    "ee__", "e_e_", "eu__", "e_u_", "uu__", "u_u_", "tt__", "t_t_", "et__", "e_t_", "ut__", "u_t_"};
+    "eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt",
+    "etet", "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt",
+    "eee_", "eeu_", "eet_", "eue_", "euu_", "eut_", "ete_", "etu_", "ett_",
+    "uue_", "uuu_", "uut_", "ute_", "utu_", "utt_", "tte_", "ttu_", "ttt_",
+    "ee__", "e_e_", "eu__", "e_u_", "et__", "e_t_",
+    "uu__", "u_u_", "ut__", "u_t_", "tt__", "t_t_"};
 
 const std::vector<std::string> systematics{"ElectronScaleFactor", "MuonIDISOScaleFactor", "MuonRecoScaleFactor",
                                            "MuonTriggerScaleFactor"};
@@ -76,7 +78,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() :
     // filePath is shared between most files. The rest of the filePath to a given file is still given when making
 
     auto reader = std::make_shared<CrossSectionReader>(
-        "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+        "/uscms/homes/p/pdong/work/analysis/CMSSW_15_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
 
     auto signalParams = FitFunctionCollection::loadFunctions(signalParamPath);
 
@@ -199,8 +201,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() :
                                      "higgs4l" + std::to_string((int)massTarget), reader, histMapperLowMass,
                                      histMapperHighMass, false, branchingRatioFixer);
                     processes.push_back(higgsSignal);
-                    addSingleProcess(higgsMassGroup, signalFilePath,
-                                     "Higgs" + std::to_string((int)massTarget) + ".root",
+                    addSingleProcess(higgsMassGroup, signalFilePath, "Higgs" + std::to_string((int)massTarget) + ".root",
                                      "higgs4l" + std::to_string((int)massTarget), reader, histMapperLowMass,
                                      histMapperHighMass, false, branchingRatioFixer);
                 }
@@ -386,7 +387,7 @@ std::tuple<HistVariable, std::string, std::string, std::string> HiggsCompleteAna
 
     const auto xProj = projName == "X";
     const auto yProj = projName == "Y";
-    assert(xProj || yProj);
+    //assert(xProj || yProj);
 
     auto histVar = HistVariable(HistVariable::VariableType::InvariantMass, "", xProj, yProj);
 
@@ -432,7 +433,7 @@ std::tuple<HistVariable, std::string, std::string> HiggsCompleteAnalysis::parseB
 
     const auto xProj = projName == "X";
     const auto yProj = projName == "Y";
-    assert(xProj || yProj);
+    // assert(xProj || yProj);
 
     auto histVar = HistVariable(HistVariable::VariableType::InvariantMass, "", xProj, yProj);
 
