@@ -104,24 +104,25 @@ void FitFunction::setFunction(const TF1 &func, FunctionType funcType)
     functionType = funcType;
 }
 
-FitFunction::FunctionType FitFunction::getFunctionType()
+FitFunction::FunctionType FitFunction::getFunctionType() const
 {
     return functionType;
 }
 
-std::string FitFunction::getName()
+std::string FitFunction::getName() const
 {
     return function.GetName();
 }
 
-double FitFunction::getMin()
+double FitFunction::getMin() const
 {
     double min;
     double max;
     function.GetRange(min, max);
     return min;
 }
-double FitFunction::getMax()
+
+double FitFunction::getMax() const
 {
     double min;
     double max;

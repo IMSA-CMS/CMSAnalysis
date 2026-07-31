@@ -16,17 +16,17 @@
 #include <stdexcept>
 #include <utility>
 
-FitFunctionCollection Fitter::fitFunctions(std::unordered_map<std::string, std::pair<TH1*, FitFunction>> &histogramPairs,
+FitFunctionCollection Fitter::fitFunctions(const std::vector<std::pair<TH1*, FitFunction>>& histogramPairs,
     std::string rootFileName)
 {
     TFile* rootFile = TFile::Open(rootFileName.c_str(), "RECREATE");
     FitFunctionCollection functions;
-    for (auto& histPair : histogramPairs)
+    for (const auto& histPair : histogramPairs)
     {
-        FitFunction& func = histPair.second;
-        TH1* histogram = histPair.first;
+        auto histogram = histPair.first;
+        auto func = histPair.second;
 
-        fitSingleFunction(histogram, func.getFunction(), rootFileName);
+        fitSingleFunction(histogram, func);
 
         auto* inner = func.getFunction();
 
@@ -64,17 +64,18 @@ FitFunctionCollection Fitter::fitFunctions(std::unordered_map<std::string, std::
     }
     rootFile->Close();
     delete rootFile;
-    functions.saveFunctions(fitTextFile, true);
+    // functions.saveFunctions(fitTextFile, true);
+    return functions;
 }
 
-void Fitter::fitSingleFunction(TH1* histogram, TF1* function, size_t iterations)
+void Fitter::fitSingleFunction(TH1* histogram, FitFunction& function)
 {
-    if (!histogram || !function)
+    if (!histogram)
     {
-        throw std::runtime_error("fitter::fitFunctions attempted histogram that does not exist: " + histogram->GetName());
+        throw std::runtime_error(std::string("fitter::fitFunctions attempted histogram that does not exist: ") + histogram->GetName());
     }
 
-    switch (function->getFunctionType())
+    switch (function.getFunctionType())
     {
     case FitFunction::FunctionType::ExpressionFormula:
         fitExpressionFormula(histogram, function);
@@ -306,28 +307,71 @@ void Fitter::fitVoigt(TH1 *histogram, FitFunction &fitFunction)
     gStyle->SetOptFit(1111);
 }
 
-void Fitter::fitPowerLawToGraph(TGraph* graph, FitFunction &fitFunction)
+FitFunction Fitter::fitPowerLawToGraph(TGraph* graph, std::string name)
 {
     auto function =
-        FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, fullName, "", 0, 2000);
+        FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, name, "", 0, 2000);
 
     auto *func = function.getFunction();
-    func->SetParameters(boost::algorithm::reduce(parameterData.y) / parameterData.y.size(), 0, 0);
+
     func->SetParLimits(1, -10000, 0);
     for (int n = 0; n < 4; ++n)
     {
-        graph.Fit(func, "SQ");
+        graph->Fit(func, "SQ");
     }
 
     func->SetRange(0, 2000);
-    graph.SetTitle((genSim + " #rightarrow " + reco + " " + var + " ^{}" + parameterData.name).c_str());
-    graph.SetMarkerStyle(15);
+    return function;
 }
 
-FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::unordered_map<double, TF1*>& xData)
+FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::unordered_map<double, TF1*>& xData, 
+    std::string rootFileName)
 {
-    auto nPoints = xData.size();
+    FitFunctionCollection paramFunctions;
+    
+    if (xData.empty())
+    {
+        return paramFunctions;
+    }
+    
+    auto file = TFile::Open(rootFileName.c_str(), "RECREATE");
 
+    auto nPoints = xData.size();
+    auto nParams = xData.begin()->second->GetNpar();
+    for (int i = 0; i < nParams; ++i)
+    {
+        std::vector<double> xValues;
+        std::vector<double> yValues;
+        std::vector<double> errors;
+
+        for (const auto& [x, func] : xData)
+        {
+            xValues.push_back(x);
+            yValues.push_back(func->GetParameter(i));
+            errors.push_back(func->GetParError(i));
+        }
+
+        TGraphErrors graph(nPoints, xValues.data(), yValues.data(), nullptr, errors.data());
+        std::string fullName = name + " parameter " + xData.begin()->second->GetParName(i);
+        graph.SetTitle(fullName.c_str());
+
+        auto fit = fitPowerLawToGraph(&graph, fullName);
+        paramFunctions.insert(fit);
+
+        auto *const canvas = new TCanvas(fullName.c_str(), fullName.c_str(), 0, 0, 2000, 500);
+
+        graph.Draw("AP");
+
+        gStyle->SetOptFit(1111);
+
+        file->WriteObject(canvas, fullName.c_str());
+        canvas->Close();
+        delete canvas;
+    }
+    file->Close();
+    delete file;
+
+    return paramFunctions;
 
     // const auto channel = reco + "_" + genSim;
     // // genSim + "/" + std::to_string(mass) + ' ' + histVar.getName() + " " + systDesc
@@ -368,46 +412,46 @@ FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::
     // const auto fullName = FitFunction::encodeName(nameParams);
 
     // const auto fullName = channel + "/" + parameterData.name + " " + desc;
-    auto *const canvas = new TCanvas(name.c_str(), name.c_str(), 0, 0, 2000, 500);
+    // auto *const canvas = new TCanvas(name.c_str(), name.c_str(), 0, 0, 2000, 500);
 
-    // Get data from map
-    std::vector<double> xValues;
-    std::vector<double> yValues;
+    // // Get data from map
+    // std::vector<double> xValues;
+    // std::vector<double> yValues;
 
 
-    auto graph = TGraphErrors(xData.size(), xData.data(), parameterData.y.data(), nullptr,
-                              parameterData.error.data());
+    // auto graph = TGraphErrors(xData.size(), xData.data(), parameterData.y.data(), nullptr,
+    //                           parameterData.error.data());
 
     
-    graph.Draw("AP");
+    // graph.Draw("AP");
 
-    gStyle->SetOptFit(1111);
+    // gStyle->SetOptFit(1111);
 
-    if (!parameterDirectories.contains(channel))
-    {
-        parameterDirectories[channel] = parameterRootFile->mkdir(channel.c_str());
-    }
+    // if (!parameterDirectories.contains(channel))
+    // {
+    //     parameterDirectories[channel] = parameterRootFile->mkdir(channel.c_str());
+    // }
 
-    parameterDirectories.at(channel)->WriteObject(canvas, (var + " " + parameterData.name).c_str());
-    canvas->Close();
+    // parameterDirectories.at(channel)->WriteObject(canvas, (var + " " + parameterData.name).c_str());
+    // canvas->Close();
 
-    return function;
+    // return function;
 }
 
-void Fitter::parameterizeFunctions(std::unordered_map<std::string, double> &xData, const std::string &genSim,
-                                   const std::string &reco, const std::string &var, const HistVariable &histVar)
-{
-    std::vector<ParameterizationData> totalParameterData = getParameterData(xData);
-    FitFunctionCollection paramFunctions;
+// void Fitter::parameterizeFunctions(std::unordered_map<std::string, double> &xData, const std::string &genSim,
+//                                    const std::string &reco, const std::string &var, const HistVariable &histVar)
+// {
+//     std::vector<ParameterizationData> totalParameterData = getParameterData(xData);
+//     FitFunctionCollection paramFunctions;
 
-    for (auto &param : totalParameterData)
-    {
-        FitFunction func = parameterizeFunction(param, genSim, reco, var, histVar);
-        paramFunctions.insert(func);
-    }
+//     for (auto &param : totalParameterData)
+//     {
+//         FitFunction func = parameterizeFunction(param, genSim, reco, var, histVar);
+//         paramFunctions.insert(func);
+//     }
 
-    paramFunctions.saveFunctions(parameterTextFile, true);
-}
+//     paramFunctions.saveFunctions(parameterTextFile, true);
+// }
 
 // TF1 *Fitter::seedInversePowerLaw(double x_0, double y_0, double x_1, double y_1, double x_2, double y_2)
 // {
