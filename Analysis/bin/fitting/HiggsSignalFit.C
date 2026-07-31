@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-bool fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &histType, const std::string &genSim);
+bool fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &histType, const std::string &genSim, const std::vector<std::string>&systs);
 
 const std::vector<HistVariable> histogramTypes = {
     HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
@@ -32,7 +32,7 @@ void HiggsSignalFit()
     //remove(fitParameterValueFile.c_str());
     //remove(parameterFunctions.c_str());
 
-    Fitter fitter(fitHistsName, fitParameterValueFile, parameterFits, parameterFunctions);
+    Fitter fitter;
 
     auto analysis = HiggsKansasStateAnalysis();
     const auto systs = analysis.getSystematics();
@@ -61,8 +61,10 @@ void HiggsSignalFit()
     }
 }
 
-bool fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &histVar, const std::string &genSim)
+bool fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &histVar, const std::string &genSim, const std::string &genSim, const std::vector<std::string>&systs)
+
 {
+    FitFunctionCollection functions;
     double skewSum = 0;
     double maxBinPctSum = 0;
     auto n = 0;
@@ -155,30 +157,35 @@ bool fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
         fitter.fitSingleFunction(hist, func);
          for (const auto &systName : systs)
                 {
-                    for (const auto &systType : {ScaleFactor::SystematicType::Down, ScaleFactor::SystematicType::Up})
-                    {
-                        auto systHistType = histType;
-                        systHistType.setSystematic(systType, systName);
-                        FitFunction newfunction = FitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
-                        const TH1 *sysHist = process->getHist(sysHistType, true);
-                        fitter.fitSingleFunction(sysHist, newfunction);
-                    }
-                    func.addSystematic()
-                }
+                    
+                        auto systHistType = histVar;
+                        systHistType.setSystematic(ScaleFactor::SystematicType::Down, systName);
+                        FitFunction downFunction = FitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
+                        TH1 *sysHistdown = process->getHist(sysHistType, true);
+                        fitter.fitSingleFunction(sysHistdown, downFunction);
 
-        const std::string keyName = std::to_string(mass);
-        currentFunctions.insert(keyName, func);
+                        systHistType.setSystematic(ScaleFactor::SystematicType::Up, systName);
+                        FitFunction upFunction = FitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
+                        TH1 *sysHistup = process->getHist(sysHistType, true);
+                        fitter.fitSingleFunction(sysHistup, upFunction);
+                    
+                    func.addSystematic(systName, *upFunction.getFunction(), *downFunction.getFunction());
+                }
+        functions.insert(func);
+        //const std::string keyName = std::to_string(mass);
+        //currentFunctions.insert(keyName, func);
         // currentFunctions.insert(keyNameDown, funcDown);
         // currentFunctions.insert(keyNameUp, funcUp);
-        histogramMap.insert({keyName, hist});
+        //histogramMap.insert({keyName, hist});
         // histogramMap.insert({keyNameDown, histDown});
         // histogramMap.insert({keyNameUp, histUp});
-        massValues.insert({keyName, mass});
+        //massValues.insert({keyName, mass});
         // massValues.insert({keyNameDown, mass});
         // massValues.insert({keyNameUp, mass});
     }
-    fitter.loadFunctions(currentFunctions);
-    fitter.fitFunctions(histogramMap);
-    fitter.parameterizeFunctions(massValues, genSim, channelName, histVar.getName(), histVar);
+    auto parameterizations = fitter.parameterizeFunction
+    //fitter.loadFunctions(currentFunctions);
+    //fitter.fitFunctions(histogramMap);
+    //fitter.parameterizeFunctions(massValues, genSim, channelName, histVar.getName(), histVar);
     return true;
 }
