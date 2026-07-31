@@ -13,12 +13,14 @@ class Fitter
 {
   public:
     // Insert blank TF1* function ptr which will have the fitted function written to
-    static void fitSingleFunction(TH1* histogram, TF1* function, size_t iterations = 1);
+    static void fitSingleFunction(TH1* histogram, FitFunction& function);
 
-    FitFunctionCollection fitFunctions(const std::unordered_map<std::string, std::pair<TH1*, FitFunction>>& histogramPairs,
+    FitFunctionCollection fitFunctions(const std::vector<std::pair<TH1*, FitFunction>>& histogramPairs,
         std::string rootFileName);
-    FitFunctionCollection parameterizeFunctions(std::unordered_map<double, TF1*>& xData, const std::string &genSim,
-        const std::string &reco, const std::string &var, const HistVariable &histVar);
+    // FitFunctionCollection parameterizeFunctions(std::unordered_map<double, TF1*>& xData, const std::string &genSim,
+    //     const std::string &reco, const std::string &var, const HistVariable &histVar);
+    FitFunctionCollection parameterizeFunction(std::string name, const std::unordered_map<double, TF1*>& xData, 
+        std::string rootFileName);
 
   private:
     static void fitExpressionFormula(TH1 *histogram, FitFunction &fitFunction);
@@ -28,10 +30,10 @@ class Fitter
     static void fitGausLogPowerNorm(TH1 *hist, FitFunction &func);
     static void fitVoigt(TH1 *histogram, FitFunction &fitFunction);
 
-    static void fitPowerLawToGraph(TGraph* graph, FitFunction &fitFunction);
+    static FitFunction fitPowerLawToGraph(TGraph* graph, std::string name);
 
     // TH1* readHistogram(const std::string& name);
-    FitFunction parameterizeFunction(const std::unordered_map<double, TF1*>& xData, );
+
     // Different ways to try and get seed function for fitting
     // Gets guess inverse power law function y = a(x-b)^-c + d using three points, only guarantees the powerlaw through
     // p0 and p1, not p2

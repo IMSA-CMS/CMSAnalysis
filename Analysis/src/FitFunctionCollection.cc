@@ -159,10 +159,10 @@ FitFunctionCollection::FitFunctionCollection()
 
 FitFunctionCollection::FitFunctionCollection(std::vector<FitFunction> &functions)
 {
-    this->functions.reserve(functions.size());
+    functions.reserve(functions.size());
     for (auto &func : functions)
     {
-        this->insert(func);
+        insert(func);
     }
 }
 
@@ -195,7 +195,7 @@ FitFunction &FitFunctionCollection::get(const std::string &key)
     }
 }
 
-void FitFunctionCollection::insert(FitFunction &func)
+void FitFunctionCollection::insert(FitFunction func)
 {
     // std::cout << "Making function\n";
     // std::cout << "FuncName: " << func.getFunction()->GetName() << '\n';
@@ -205,7 +205,7 @@ void FitFunctionCollection::insert(FitFunction &func)
     functions.insert({func.getFunction()->GetName(), func});
 }
 
-void FitFunctionCollection::insert(const std::string &key, FitFunction &func)
+void FitFunctionCollection::insert(const std::string& key, FitFunction func)
 {
     functions.insert({key, func});
 }
@@ -301,4 +301,13 @@ std::vector<FitFunction> FitFunctionCollection::getFunctions(std::string paramet
         }
     }
     return result;
+}
+
+FitFunctionCollection& FitFunctionCollection::operator+=(const FitFunctionCollection& other)
+{
+    for (const auto& [key, func] : other.functions)
+    {
+        insert(key, func);
+    }
+    return *this;
 }
