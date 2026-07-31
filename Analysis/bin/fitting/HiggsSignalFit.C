@@ -55,15 +55,7 @@ void HiggsSignalFit()
                 }
 
                 // Fit systematics
-                for (const auto &systName : systs)
-                {
-                    for (const auto &systType : {ScaleFactor::SystematicType::Down, ScaleFactor::SystematicType::Up})
-                    {
-                        auto systHistType = histType;
-                        systHistType.setSystematic(systType, systName);
-                        fitChannel(*channel, fitter, systHistType, genSim);
-                    }
-                }
+               
             }
         }
     }
@@ -160,6 +152,19 @@ bool fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
         // const auto name =
         //     genSim + "->" + channelName + "/" + std::to_string(mass) + ' ' + histVar.getName() + " " + systDesc;
         FitFunction func = FitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
+        fitter.fitSingleFunction(hist, func);
+         for (const auto &systName : systs)
+                {
+                    for (const auto &systType : {ScaleFactor::SystematicType::Down, ScaleFactor::SystematicType::Up})
+                    {
+                        auto systHistType = histType;
+                        systHistType.setSystematic(systType, systName);
+                        FitFunction newfunction = FitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
+                        const TH1 *sysHist = process->getHist(sysHistType, true);
+                        fitter.fitSingleFunction(sysHist, newfunction);
+                    }
+                    func.addSystematic()
+                }
 
         const std::string keyName = std::to_string(mass);
         currentFunctions.insert(keyName, func);
