@@ -183,12 +183,18 @@ FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const H
 FitFunctionCollection parameterize(FitFunctionCollection functions, TFile* rootFile)
 {
     std::unordered_map<double, TF1*> massMap;
+    std::string channelName;
     for (auto &pair : functions.getFunctions())
     {
         auto& func = pair.second;
-        const auto decoded = FitFunction::decodeName(func.getName());
+        auto decoded = FitFunction::decodeName(func.getName());
         const auto mass = std::stod(decoded.at("Mass"));
         massMap.insert({mass, func.getFunction()});
+        decoded.erase("Mass");
+        if (channelName.empty())
+        {
+            channelName = FitFunction::encodeName(decoded);
+        }
     }
-    return Fitter::parameterizeFunction("HiggsSignal", massMap, rootFile);
+    return Fitter::parameterizeFunction(channelName, massMap, rootFile);
 }
