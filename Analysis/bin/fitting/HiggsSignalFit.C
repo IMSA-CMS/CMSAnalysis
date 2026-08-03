@@ -6,14 +6,16 @@
 #include "TF1.h"
 #include "TGraph.h"
 #include "TH1.h"
+#include "TROOT.h"
 #include <iostream>
 #include <string>
 #include <vector>
 
-bool fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &histType, const std::string &genSim, const std::vector<std::string>&systs);
+FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const HistVariable &histType, const std::string &genSim, const std::vector<std::string>&systs, TFile* rootFile);
+FitFunctionCollection parameterize(FitFunctionCollection functions, TFile* rootFile);
 
 const std::vector<HistVariable> histogramTypes = {
-    HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
+     HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
     HistVariable(HistVariable::VariableType::InvariantMass, "", false, true),
 };
 
@@ -29,14 +31,16 @@ const std::string parameterFunctions = "H++SignalParameterFunctions.txt";
 // run in batch mode for faster processing: root -b HiggsSignalFit.C+
 void HiggsSignalFit()
 {
-    //remove(fitParameterValueFile.c_str());
-    //remove(parameterFunctions.c_str());
-
-    Fitter fitter;
+    gROOT->SetBatch(kTRUE);
 
     auto analysis = HiggsKansasStateAnalysis();
     const auto systs = analysis.getSystematics();
     std::cout << "Loaded histograms\n";
+
+    auto rootFile = TFile::Open(fitHistsName.c_str(), "RECREATE");
+    auto parameterRootFile = TFile::Open(parameterFits.c_str(), "RECREATE");
+    FitFunctionCollection allFunctions;
+    FitFunctionCollection parameterizations;
 
     for (const auto &histType : histogramTypes)
     {
@@ -48,31 +52,34 @@ void HiggsSignalFit()
             }
             for (const auto &genSim : HiggsKansasStateAnalysis::genSimDecays)
             {
-                bool ok = fitChannel(*channel, fitter, histType, genSim);
-                if (!ok)
-                {
-                    continue;
-                }
-
-                // Fit systematics
-               
+                auto fitFunctions = fitChannel(channel, histType, genSim, systs, rootFile);
+                allFunctions += fitFunctions;   
+                auto parameterization = parameterize(fitFunctions, parameterRootFile);
+                parameterizations += parameterization;
             }
         }
     }
+
+    allFunctions.saveFunctions(fitParameterValueFile, true);
+    parameterizations.saveFunctions(parameterFunctions, true);
+    rootFile->Close();
+    delete rootFile;
+    parameterRootFile->Close();
+    delete parameterRootFile;
 }
 
-bool fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &histVar, const std::string &genSim, const std::string &genSim, const std::vector<std::string>&systs)
-
+FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const HistVariable &histVar, const std::string &genSim,
+    const std::vector<std::string>& systs, TFile* rootFile)
 {
     FitFunctionCollection functions;
     double skewSum = 0;
     double maxBinPctSum = 0;
     auto n = 0;
-    const auto channelName = channel.getName();
+    const auto channelName = channel->getName();
 
     for (const auto mass : HiggsKansasStateAnalysis::massTargets)
     {
-        const auto process = channel.findProcess("Higgs signal " + genSim + " " + std::to_string(mass));
+        const auto process = channel->findProcess("Higgs signal " + genSim + " " + std::to_string(mass));
         const TH1 *selectedHist = process->getHist(histVar, true);
 
         if (!selectedHist || selectedHist->GetEntries() < minData)
@@ -87,24 +94,10 @@ bool fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
 
     if (n < 2)
     {
-        return false;
+        return FitFunctionCollection();
     }
 
-    std::string systDesc;
-    switch (histVar.getSystematicType())
-    {
-    case ScaleFactor::SystematicType::Nominal:
-        systDesc = "Nominal";
-        break;
-    case ScaleFactor::SystematicType::Up:
-        systDesc = histVar.getSystematicName() + " Up";
-        break;
-    case ScaleFactor::SystematicType::Down:
-        systDesc = histVar.getSystematicName() + " Down";
-        break;
-    }
-
-    std::cout << "Fitting " << genSim + "->" + channelName << "/" << histVar.getName() + " (" + systDesc + ")\n";
+    std::cout << "Fitting " << genSim + "->" + channelName << "/" << histVar.getName() << "\n";
 
     const double skewAvg = skewSum / n;
     const double maxBinPctAvg = maxBinPctSum / n;
@@ -118,7 +111,7 @@ bool fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
     FitFunctionCollection currentFunctions;
     for (const auto mass : HiggsKansasStateAnalysis::massTargets)
     {
-        const auto process = channel.findProcess("Higgs signal " + genSim + " " + std::to_string(mass));
+        const auto process = channel->findProcess("Higgs signal " + genSim + " " + std::to_string(mass));
         TH1 *const hist = process->getHist(histVar, true);
 
         if (!hist || hist->GetEntries() < minData)
@@ -133,7 +126,7 @@ bool fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
         // std::cout << "NEntry: " << histDown->GetEntries() << "\n";
 
         const auto title = "Higgs signal " + genSim + " #rightarrow " + channelName + " " + std::to_string(mass) + " " +
-                           histVar.getName() + " " + systDesc;
+                           histVar.getName();
         hist->SetTitle(title.c_str());
         // histDown->SetTitle((title + " Down").c_str());
         // histUp->SetTitle((title + " Up").c_str());
@@ -144,33 +137,31 @@ bool fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
         // FitFunction funcDown;
         // FitFunction funcUp;
         std::map<std::string, std::string> nameParams;
-        nameParams["genSim"] = genSim;
-        nameParams["channel"] = channelName;
-        nameParams["mass"] = std::to_string(mass);
-        nameParams["histVar"] = histVar.getName();
-        nameParams["systematic"] = systDesc;
+        nameParams["GenSim"] = genSim;
+        nameParams["Channel"] = channelName;
+        nameParams["Mass"] = std::to_string(mass);
+        nameParams["HistVar"] = histVar.getName();
 
         const auto name = FitFunction::encodeName(nameParams);
         // const auto name =
         //     genSim + "->" + channelName + "/" + std::to_string(mass) + ' ' + histVar.getName() + " " + systDesc;
         FitFunction func = FitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
-        fitter.fitSingleFunction(hist, func);
-         for (const auto &systName : systs)
-                {
-                    
-                        auto systHistType = histVar;
-                        systHistType.setSystematic(ScaleFactor::SystematicType::Down, systName);
-                        FitFunction downFunction = FitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
-                        TH1 *sysHistdown = process->getHist(sysHistType, true);
-                        fitter.fitSingleFunction(sysHistdown, downFunction);
+        Fitter::fitSingleFunction(hist, func, rootFile); // Only add the nominal version to the Root file
+        for (const auto &systName : systs)
+        {
+            auto systHistType = histVar;
+            systHistType.setSystematic(ScaleFactor::SystematicType::Down, systName);
+            FitFunction downFunction = FitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
+            TH1 *sysHistdown = process->getHist(systHistType, true);
+            Fitter::fitSingleFunction(sysHistdown, downFunction);
 
-                        systHistType.setSystematic(ScaleFactor::SystematicType::Up, systName);
-                        FitFunction upFunction = FitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
-                        TH1 *sysHistup = process->getHist(sysHistType, true);
-                        fitter.fitSingleFunction(sysHistup, upFunction);
-                    
-                    func.addSystematic(systName, *upFunction.getFunction(), *downFunction.getFunction());
-                }
+            systHistType.setSystematic(ScaleFactor::SystematicType::Up, systName);
+            FitFunction upFunction = FitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
+            TH1 *sysHistup = process->getHist(systHistType, true);
+            Fitter::fitSingleFunction(sysHistup, upFunction);
+            
+            func.addSystematic(systName, *upFunction.getFunction(), *downFunction.getFunction());
+        }
         functions.insert(func);
         //const std::string keyName = std::to_string(mass);
         //currentFunctions.insert(keyName, func);
@@ -183,9 +174,27 @@ bool fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
         // massValues.insert({keyNameDown, mass});
         // massValues.insert({keyNameUp, mass});
     }
-    auto parameterizations = fitter.parameterizeFunction
     //fitter.loadFunctions(currentFunctions);
     //fitter.fitFunctions(histogramMap);
     //fitter.parameterizeFunctions(massValues, genSim, channelName, histVar.getName(), histVar);
-    return true;
+    return functions;
+}
+
+FitFunctionCollection parameterize(FitFunctionCollection functions, TFile* rootFile)
+{
+    std::unordered_map<double, TF1*> massMap;
+    std::string channelName;
+    for (auto &pair : functions.getFunctions())
+    {
+        auto& func = pair.second;
+        auto decoded = FitFunction::decodeName(func.getName());
+        const auto mass = std::stod(decoded.at("Mass"));
+        massMap.insert({mass, func.getFunction()});
+        decoded.erase("Mass");
+        if (channelName.empty())
+        {
+            channelName = FitFunction::encodeName(decoded);
+        }
+    }
+    return Fitter::parameterizeFunction(channelName, massMap, rootFile);
 }

@@ -13,14 +13,14 @@ class Fitter
 {
   public:
     // Insert blank TF1* function ptr which will have the fitted function written to
-    static void fitSingleFunction(TH1* histogram, FitFunction& function);
+    static void fitSingleFunction(TH1* histogram, FitFunction& function, TFile* rootFile = nullptr);
 
-    FitFunctionCollection fitFunctions(const std::vector<std::pair<TH1*, FitFunction>>& histogramPairs,
+    static FitFunctionCollection fitFunctions(const std::vector<std::pair<TH1*, FitFunction>>& histogramPairs,
         std::string rootFileName);
     // FitFunctionCollection parameterizeFunctions(std::unordered_map<double, TF1*>& xData, const std::string &genSim,
     //     const std::string &reco, const std::string &var, const HistVariable &histVar);
-    FitFunctionCollection parameterizeFunction(std::string name, const std::unordered_map<double, TF1*>& xData, 
-        std::string rootFileName);
+    static FitFunctionCollection parameterizeFunction(std::string name, const std::unordered_map<double, TF1*>& xData, 
+        TFile* rootFile);
 
   private:
     static void fitExpressionFormula(TH1 *histogram, FitFunction &fitFunction);
