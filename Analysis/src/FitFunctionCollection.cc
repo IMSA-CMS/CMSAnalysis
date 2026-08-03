@@ -90,7 +90,7 @@ FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string &fi
 
 void FitFunctionCollection::saveFunctions(const std::string &fileName, bool append)
 {
-    std::ofstream file(fileName, std::ios::app);
+    std::ofstream file(fileName);
     if (!file)
     {
         throw std::invalid_argument("File " + fileName + " not found!");

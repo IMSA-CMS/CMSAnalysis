@@ -38,27 +38,15 @@ FitFunctionCollection Fitter::fitFunctions(const std::vector<std::pair<TH1*, Fit
             inner->SetParError(par, error);
         }
 
-        const auto full = func.getName();
-        auto decoded = FitFunction::decodeName(full);
-        const std::string dir = decoded["channel"];
-        const auto name = decoded["histVar"] + " " + decoded["systematic"];
+        // const auto full = func.getName();
+        // auto decoded = FitFunction::decodeName(full);
+        // const std::string dir = decoded["channel"];
+        // const auto name = decoded["histVar"] + " " + decoded["systematic"];
         // const auto split = full.find_last_of('/');
         // const std::string dir = full.substr(0, split);
         // const auto name = full.substr(split + 1);
         // std::cout << "Name: " << name << '\n';
-        auto canvas = TCanvas(name.c_str(), name.c_str(), 0, 0, 1500, 500);
-        histogram->Scale(1.0 / histogram->GetBinWidth(1));
-        histogram->Draw();
-        // std::cout << "Directory: " << dir << '\n';
-
-        if (!rootFile->GetDirectory(dir.c_str()))
-        {
-            rootFile->mkdir(dir.c_str(), "", true);
-        }
-        rootFile->GetDirectory(dir.c_str())->WriteObject(&canvas, name.c_str());
-
-
-        canvas.Close();
+       
 
         functions.insert(func);
     }
@@ -68,7 +56,7 @@ FitFunctionCollection Fitter::fitFunctions(const std::vector<std::pair<TH1*, Fit
     return functions;
 }
 
-void Fitter::fitSingleFunction(TH1* histogram, FitFunction& function)
+void Fitter::fitSingleFunction(TH1* histogram, FitFunction& function, TFile* rootFile)
 {
     if (!histogram)
     {
@@ -95,6 +83,18 @@ void Fitter::fitSingleFunction(TH1* histogram, FitFunction& function)
     case FitFunction::FunctionType::Voigt:
         fitVoigt(histogram, function);
         break;
+    }
+
+    if (rootFile)
+    {
+        auto name = function.getName();
+        auto canvas = TCanvas(name.c_str(), name.c_str(), 0, 0, 1500, 500);
+        histogram->Scale(1.0 / histogram->GetBinWidth(1)); // Scaling needed to display
+        histogram->Draw();
+
+        rootFile->WriteObject(&canvas, name.c_str());
+
+        canvas.Close();
     }
 }
 
@@ -325,7 +325,7 @@ FitFunction Fitter::fitPowerLawToGraph(TGraph* graph, std::string name)
 }
 
 FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::unordered_map<double, TF1*>& xData, 
-    std::string rootFileName)
+    TFile* rootFile)
 {
     FitFunctionCollection paramFunctions;
     
@@ -334,8 +334,6 @@ FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::
         return paramFunctions;
     }
     
-    auto file = TFile::Open(rootFileName.c_str(), "RECREATE");
-
     auto nPoints = xData.size();
     auto nParams = xData.begin()->second->GetNpar();
     for (int i = 0; i < nParams; ++i)
@@ -364,13 +362,10 @@ FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::
 
         gStyle->SetOptFit(1111);
 
-        file->WriteObject(canvas, fullName.c_str());
+        rootFile->WriteObject(canvas, fullName.c_str());
         canvas->Close();
         delete canvas;
     }
-    file->Close();
-    delete file;
-
     return paramFunctions;
 
     // const auto channel = reco + "_" + genSim;
