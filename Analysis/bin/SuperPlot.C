@@ -28,6 +28,6 @@ void SuperPlot()
     TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, "Invariant Mass [GeV/c^2]", "Events", false, true,
                                                   false, "eeet", true);
     // Uncomment to save a png picture in your bin folder
-    // canvas->SaveAs(outFile.c_str());
+    canvas->SaveAs(outFile.c_str());
 
 }

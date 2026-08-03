@@ -78,7 +78,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() :
     auto reader = std::make_shared<CrossSectionReader>(
         "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
 
-    auto signalParams = FitFunctionCollection::loadFunctions(signalParamPath);
+    // auto signalParams = FitFunctionCollection::loadFunctions(signalParamPath);
 
     // //                 (genSim     , reco       )
     // std::map<std::tuple<std::string, std::string>,
@@ -363,96 +363,152 @@ void HiggsCompleteAnalysis::addSingleProcess(std::shared_ptr<Process> process, s
     process->addProcess(SingleProcess(crossSectionName, inputFile2, histEstimator));    
 }
 
-std::tuple<HistVariable, std::string, std::string, std::string> HiggsCompleteAnalysis::parseSignalParamFuncName(
-    const std::string &name)
+// std::tuple<HistVariable, std::string, std::string, std::string> HiggsCompleteAnalysis::parseSignalParamFuncName(
+//     const std::string &name)
+// {
+//     // Name format: uttt_uttt/#alpha_{low} 1400 MuonTriggerScaleFactor Up X projection
+//     std::vector<std::string> parts;
+//     boost::split(parts, name, boost::is_any_of("/"));
+//     const auto genReco = parts.at(0);
+//     const auto subName = parts.at(1);
+
+//     std::vector<std::string> parts2;
+//     boost::split(parts2, genReco, boost::is_any_of("_"));
+//     const auto genSim = parts2.at(0);
+//     const auto reco = parts2.at(1);
+
+//     std::vector<std::string> parts3;
+//     boost::split(parts3, subName, boost::is_any_of(" "));
+//     const auto paramName = parts3.at(0);
+//     const auto projName = parts3.at(parts3.size() - 2);
+//     const auto systName = parts3.at(2);
+
+//     const auto xProj = projName == "X";
+//     const auto yProj = projName == "Y";
+//     //assert(xProj || yProj);
+
+//     auto histVar = HistVariable(HistVariable::VariableType::InvariantMass, "", xProj, yProj);
+
+//     if (systName != "Nominal")
+//     {
+//         auto systType = ScaleFactor::SystematicType::Nominal;
+//         const auto &typeName = parts3.at(3);
+//         if (typeName == "Up")
+//         {
+//             systType = ScaleFactor::SystematicType::Up;
+//         }
+//         else if (typeName == "Down")
+//         {
+//             systType = ScaleFactor::SystematicType::Down;
+//         }
+//         else
+//         {
+//             throw std::runtime_error("Error parsing signal parameterization");
+//         }
+//         histVar.setSystematic(systType, systName);
+//     }
+
+//     return {histVar, reco, genSim, paramName};
+// }
+
+// std::tuple<HistVariable, std::string, std::string> HiggsCompleteAnalysis::parseBgFuncName(const std::string &name)
+// {
+//     // Name format: t#bar{t}, Multiboson Background->eueu_ZPeak/Reco Invariant Mass Background Y Projection
+//     std::vector<std::string> parts;
+//     boost::split(parts, name, boost::is_any_of("/"));
+//     const auto bgReco = parts.at(0);
+//     const auto subName = parts.at(1);
+
+//     std::vector<std::string> parts2;
+//     boost::iter_split(parts2, bgReco, boost::first_finder("->"));
+//     const auto bgName = parts2.at(0);
+//     const auto reco = parts2.at(1);
+
+//     std::vector<std::string> parts3;
+//     boost::split(parts3, subName, boost::is_any_of(" "));
+//     const auto projName = parts3.at(4);
+//     const auto systName = parts3.at(6);
+
+//     const auto xProj = projName == "X";
+//     const auto yProj = projName == "Y";
+//     // assert(xProj || yProj);
+
+//     auto histVar = HistVariable(HistVariable::VariableType::InvariantMass, "", xProj, yProj);
+
+//     if (systName != "Nominal")
+//     {
+//         auto systType = ScaleFactor::SystematicType::Nominal;
+//         const auto &typeName = parts3.at(7);
+//         if (typeName == "Up")
+//         {
+//             systType = ScaleFactor::SystematicType::Up;
+//         }
+//         else if (typeName == "Down")
+//         {
+//             systType = ScaleFactor::SystematicType::Down;
+//         }
+//         else
+//         {
+//             throw std::runtime_error("Error parsing bg parameterization");
+//         }
+//         histVar.setSystematic(systType, systName);
+//     }
+
+//     return {histVar, reco, bgName};
+// }
+
+void HiggsCompleteAnalysis::addParameterizations()
 {
-    // Name format: uttt_uttt/#alpha_{low} 1400 MuonTriggerScaleFactor Up X projection
-    std::vector<std::string> parts;
-    boost::split(parts, name, boost::is_any_of("/"));
-    const auto genReco = parts.at(0);
-    const auto subName = parts.at(1);
+    FitFunctionCollection signalParams = FitFunctionCollection::loadFunctions(signalParamPath);
+    FitFunctionCollection bgParams = FitFunctionCollection::loadFunctions(bgParamPath);
 
-    std::vector<std::string> parts2;
-    boost::split(parts2, genReco, boost::is_any_of("_"));
-    const auto genSim = parts2.at(0);
-    const auto reco = parts2.at(1);
-
-    std::vector<std::string> parts3;
-    boost::split(parts3, subName, boost::is_any_of(" "));
-    const auto paramName = parts3.at(0);
-    const auto projName = parts3.at(parts3.size() - 2);
-    const auto systName = parts3.at(2);
-
-    const auto xProj = projName == "X";
-    const auto yProj = projName == "Y";
-    //assert(xProj || yProj);
-
-    auto histVar = HistVariable(HistVariable::VariableType::InvariantMass, "", xProj, yProj);
-
-    if (systName != "Nominal")
+    //signal
+    for (auto& channel : getChannelsProtected())
     {
-        auto systType = ScaleFactor::SystematicType::Nominal;
-        const auto &typeName = parts3.at(3);
-        if (typeName == "Up")
+        const auto channelName = channel->getName();
+        auto matchingSignalFunctions = signalParams.getFunctions("reco", channelName);
+
+        for (auto& fitFunction : matchingSignalFunctions)
         {
-            systType = ScaleFactor::SystematicType::Up;
+            auto parsed = FitFunction::decodeName(fitFunction.getName());
+            auto projection = parsed["projection"];
+            auto genSim = parsed["genSim"];
+
+            HistVariable histVar(HistVariable::VariableType::InvariantMass, "", projection == "X", projection == "Y", true);
+
+            for (const auto mass : massTargets)
+            {
+                const std::string processName = "Higgs signal " + genSim + " " + std::to_string(mass);
+                auto process = channel->findProcess(processName);
+                if (!process)
+                {
+                    continue;
+                }
+                process->setPlot(histVar, fitFunction);
+            }
         }
-        else if (typeName == "Down")
-        {
-            systType = ScaleFactor::SystematicType::Down;
-        }
-        else
-        {
-            throw std::runtime_error("Error parsing signal parameterization");
-        }
-        histVar.setSystematic(systType, systName);
     }
 
-    return {histVar, reco, genSim, paramName};
-}
-
-std::tuple<HistVariable, std::string, std::string> HiggsCompleteAnalysis::parseBgFuncName(const std::string &name)
-{
-    // Name format: t#bar{t}, Multiboson Background->eueu_ZPeak/Reco Invariant Mass Background Y Projection
-    std::vector<std::string> parts;
-    boost::split(parts, name, boost::is_any_of("/"));
-    const auto bgReco = parts.at(0);
-    const auto subName = parts.at(1);
-
-    std::vector<std::string> parts2;
-    boost::iter_split(parts2, bgReco, boost::first_finder("->"));
-    const auto bgName = parts2.at(0);
-    const auto reco = parts2.at(1);
-
-    std::vector<std::string> parts3;
-    boost::split(parts3, subName, boost::is_any_of(" "));
-    const auto projName = parts3.at(4);
-    const auto systName = parts3.at(6);
-
-    const auto xProj = projName == "X";
-    const auto yProj = projName == "Y";
-    // assert(xProj || yProj);
-
-    auto histVar = HistVariable(HistVariable::VariableType::InvariantMass, "", xProj, yProj);
-
-    if (systName != "Nominal")
+    //background
+    for (auto& channel : getChannelsProtected())
     {
-        auto systType = ScaleFactor::SystematicType::Nominal;
-        const auto &typeName = parts3.at(7);
-        if (typeName == "Up")
-        {
-            systType = ScaleFactor::SystematicType::Up;
-        }
-        else if (typeName == "Down")
-        {
-            systType = ScaleFactor::SystematicType::Down;
-        }
-        else
-        {
-            throw std::runtime_error("Error parsing bg parameterization");
-        }
-        histVar.setSystematic(systType, systName);
-    }
+        const auto channelName = channel->getName();
+        auto matchingBgFunctions = bgParams.getFunctions("channel", channelName);
 
-    return {histVar, reco, bgName};
+        for (auto& fitFunction : matchingBgFunctions)
+        {
+            auto parsed = FitFunction::decodeName(fitFunction.getName());
+            auto projection = parsed["projection"];
+            auto bgName = parsed["process"];
+
+            HistVariable histVar(HistVariable::VariableType::InvariantMass, "", projection == "X", projection == "Y", true);
+
+            auto process = channel->findProcess(bgName);
+            if (!process)
+            {
+                continue;
+            }
+            process->setPlot(histVar, fitFunction);
+        }
+    }
 }
