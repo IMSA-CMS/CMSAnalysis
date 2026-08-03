@@ -11,7 +11,7 @@
 #include <vector>
 
 void fitProcess(const Process &process, Fitter &fitter, const HistVariable &histVar, const std::string &channelName,
-                int min, int max);
+                int min, int max, const std::vector<std::string>& systs);
 
 const std::vector<HistVariable> histogramTypes = {
     HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
@@ -54,27 +54,17 @@ void HiggsBackgroundFit()
             {
                 const auto process = channel->findProcess(bgAndRange.first);
                 fitProcess(*process, fitter, histVar, channel->getName(), bgAndRange.second.first,
-                           bgAndRange.second.second);
+                           bgAndRange.second.second, systs);
 
                 // Fit systematics
-                for (const auto &systName : systs)
-                {
-                    for (const auto &systType : {ScaleFactor::SystematicType::Down, ScaleFactor::SystematicType::Up})
-                    {
-                        auto systHistVar = histVar;
-
-                        systHistVar.setSystematic(systType, systName);
-                        fitProcess(*process, fitter, systHistVar, channel->getName(), bgAndRange.second.first,
-                                   bgAndRange.second.second);
-                    }
-                }
+                
             }
         }
     }
 }
 
 void fitProcess(const Process &process, Fitter &fitter, const HistVariable &histVar, const std::string &channelName,
-                int min, int max)
+                int min, int max, const std::vector<std::string>& systs)
 {
     TH1 *const selectedHist = process.getHist(histVar, true);
     if (selectedHist->GetEntries() < minData)
@@ -112,6 +102,33 @@ void fitProcess(const Process &process, Fitter &fitter, const HistVariable &hist
 
     FitFunction func =
         FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, name, "", min, max);
+
+        fitter.fitSingleFunction(selectedHist, func);
+    
+        for (const auto &systName : systs)
+                {
+                    for (const auto &systType : {ScaleFactor::SystematicType::Down, ScaleFactor::SystematicType::Up})
+                    {
+                        auto systHistVar = histVar;
+
+                        systHistVar.setSystematic(ScaleFactor::SystematicType::Down, systName);
+                        TH1 *histDown = process.getHist(systHistVar, true);
+
+                        FitFunction downFunction = FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, name, "", min, max);
+                        fitter.fitSingleFunction(histDown, downFunction);
+
+                        systHistVar.setSystematic(ScaleFactor::SystematicType::Up, systName);
+                        TH1 *histUp = process.getHist(systHistVar, true);
+
+                        
+                        FitFunction upFunction = FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, name, "", min, max);
+                        fitter.fitSingleFunction(histUp, upFunction);
+
+                        func.addSystematic(systName, *upFunction.getFunction(), *downFunction.getFunction());
+                        //fitProcess(*process, fitter, systHistVar, channel->getName(), bgAndRange.second.first,
+                                   //bgAndRange.second.second);
+                    }
+                }
 
     FitFunctionCollection currentFunctions;
     currentFunctions.insert(name, func);
