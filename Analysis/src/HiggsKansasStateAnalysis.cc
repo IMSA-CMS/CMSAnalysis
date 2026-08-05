@@ -22,6 +22,7 @@
 #include <tuple>
 #include <unordered_map>
 #include <vector>
+#include <filesystem>
 
 const std::vector<std::string> HiggsKansasStateAnalysis::genSimDecays{""};
 
@@ -185,12 +186,12 @@ HiggsKansasStateAnalysis::HiggsKansasStateAnalysis() :
                 // catch (std::out_of_range &e)
                 // {
                 // }
-
-                addSingleProcess(higgsSignal, signalFilePath, "HppM" + std::to_string((int)massTarget), histMapper);
+                auto estimator = std::make_shared<SimpleEstimator>(reader, lumi);
+                addSingleProcess(higgsSignal, signalFilePath, "HppM" + std::to_string((int)massTarget), histMapper, estimator);
 
                 processes.push_back(higgsSignal);
 
-                addSingleProcess(higgsMassGroup, signalFilePath, "HppM" + std::to_string((int)massTarget), histMapper);
+                addSingleProcess(higgsMassGroup, signalFilePath, "HppM" + std::to_string((int)massTarget), histMapper, estimator);
                 processes.push_back(higgsMassGroup);
             }
 
@@ -224,13 +225,13 @@ HiggsKansasStateAnalysis::HiggsKansasStateAnalysis() :
 
             auto dyBackground = std::make_shared<Process>("Drell-Yan Background", drellYanBackColor);
 
-            for (auto name : {"DYJetsToLLM10to50_", "DYJetsToLLM50"})
+            for (auto name : {"DYJetsToLLM10to50", "DYJetsToLLM50"})
             {
                 addSingleProcess(dyBackground, bgFilePath, name, histMapper);
             }
 
             auto qcdBackground = std::make_shared<Process>("QCD Background", QCDBackColor);
-            for (auto name : {"QCD_HT1000to1500", " QCD_HT100to200", "QCD_HT1500to2000", "QCD_HT2000toInf",
+            for (auto name : {"QCD_HT1000to1500", "QCD_HT100to200", "QCD_HT1500to2000", "QCD_HT2000toInf",
             "QCD_HT200to300", "QCD_HT300to500", "QCD_HT500to700", "QCD_HT50to100", "QCD_HT700to1000"})
             {
                 addSingleProcess(qcdBackground, bgFilePath, name, histMapper);
@@ -309,17 +310,40 @@ HiggsKansasStateAnalysis::HiggsKansasStateAnalysis() :
 }
 
 void HiggsKansasStateAnalysis::addSingleProcess(std::shared_ptr<Process> process, std::string filePathway,
-                                                std::string fileName, std::shared_ptr<HistNameFinder> finder)
+                                                std::string fileName, std::shared_ptr<HistNameFinder> finder, std::shared_ptr<Estimator> estimator)
 {
+    if (!estimator)
+    {
+        estimator = std::make_shared<TrivialEstimator>();
+    }
+    std::string crossSectionName = fileName;
+    if (crossSectionName.find("Hpp") != std::string::npos)
+    {
+        crossSectionName = "higgs4l" + fileName.substr(4);
+    }
     auto input1 = std::make_shared<RootFileInput>(filePathway + fileName + "_2016.root", finder);
     auto input2 = std::make_shared<RootFileInput>(filePathway + fileName + "_2017.root", finder);
     auto input3 = std::make_shared<RootFileInput>(filePathway + fileName + "_2018.root", finder);
-    auto histEstimator = std::make_shared<TrivialEstimator>();
+    //auto histEstimator = std::make_shared<TrivialEstimator>();
+    
+    if (exists (filePathway + fileName + "_2016.root"))
+    {
+        process->addProcess(SingleProcess(crossSectionName, input1, estimator));
+    }
 
-    process->addProcess(SingleProcess(fileName, input1, histEstimator));
-    process->addProcess(SingleProcess(fileName, input2, histEstimator));
-    //KLUDGE
-    if (fileName.find("HppM700")!=std::string::npos) return;
-    if (fileName.find("HppM1500")!=std::string::npos) return;
-    process->addProcess(SingleProcess(fileName, input3, histEstimator));
+    if (exists (filePathway + fileName + "_2017.root"))
+    {
+        process->addProcess(SingleProcess(crossSectionName, input2, estimator));
+    }
+
+    if (exists (filePathway + fileName + "_2018.root"))
+    {
+        process->addProcess(SingleProcess(crossSectionName, input3, estimator));
+    }
+    
+}
+
+bool HiggsKansasStateAnalysis::exists(std::string fileName)
+{
+    return std::filesystem::exists(fileName);
 }
