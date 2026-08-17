@@ -1,5 +1,6 @@
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
 #include "CMSAnalysis/Analysis/interface/FitFunction.hh"
+#include "CMSAnalysis/Analysis/interface/FitFunctionParameterization.hh"
 #include <Fit/FitResult.h>
 #include <TCanvas.h>
 #include <TFitResult.h>
@@ -497,15 +498,24 @@ void Fitter::parameterizeFunctions(std::unordered_map<std::string, double> &xDat
                                    const std::string &reco, const std::string &var, const HistVariable &histVar)
 {
     std::vector<ParameterizationData> totalParameterData = getParameterData(xData);
-    FitFunctionCollection paramFunctions;
+    const auto channel = reco + "_" + genSim;
+    auto &templateFunction = functions.getFunctions().begin()->second;
+    auto *templateTF1 = templateFunction.getFunction();
+    double min = 0;
+    double max = 0;
+    templateTF1->GetRange(min, max);
+    const char *rawFormula = templateTF1->GetExpFormula();
+    const std::string expFormula = rawFormula == nullptr ? "" : rawFormula;
+    FitFunctionParameterization parameterization(channel + "/" + var, channel, templateFunction.getFunctionType(),
+                                                expFormula, min, max);
 
     for (auto &param : totalParameterData)
     {
         FitFunction func = parameterizeFunction(param, genSim, reco, var, histVar);
-        paramFunctions.insert(func);
+        parameterization.insert(func);
     }
 
-    paramFunctions.saveFunctions(parameterTextFile, true);
+    parameterization.save(parameterTextFile, true);
 }
 
 // TF1 *Fitter::seedInversePowerLaw(double x_0, double y_0, double x_1, double y_1, double x_2, double y_2)

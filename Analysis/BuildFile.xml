@@ -1,5 +1,6 @@
 <use   name="rootcore"/>
 <use   name="root"/>
+<use   name="roofit"/>
 <use   name="FWCore/FWLite"/>
 <use   name="DataFormats/FWLite"/>
 <use   name="DataFormats/Candidate"/>

@@ -89,7 +89,7 @@ double FitFunction::voigt(double *x, double *par)
 }
 
 FitFunction::FitFunction(const TF1 &func, FunctionType funcType, std::string channelName)
-    : function(func), channelName(std::move(channelName)), functionType(funcType)
+    : FitFunctionBase(funcType, std::move(channelName)), function(func)
 {
 }
 
@@ -101,12 +101,7 @@ TF1 *FitFunction::getFunction()
 void FitFunction::setFunction(const TF1 &func, FunctionType funcType)
 {
     function = func;
-    functionType = funcType;
-}
-
-FitFunction::FunctionType FitFunction::getFunctionType()
-{
-    return functionType;
+    setFunctionType(funcType);
 }
 
 std::string FitFunction::getName()
@@ -240,11 +235,6 @@ FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const s
 // 	return stream;
 // }
 
-std::string FitFunction::getChannelName()
-{
-    return channelName;
-}
-
 std::string FitFunction::getParameterName()
 {
     std::vector<std::string> channel_parameters = split(getName(), '/');
@@ -257,11 +247,9 @@ std::string FitFunction::getChannel()
     return channel_parameters[0];
 }
 
-double FitFunction::evaluate(double x)
+double FitFunction::evaluate(double x) const
 {
-    TF1* tf1 = getFunction();
-    double result = tf1->Eval(x);
-    return result;
+    return function.Eval(x);
 }
 
 // Helper function for splitting strings
