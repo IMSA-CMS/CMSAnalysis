@@ -6,7 +6,8 @@ Year:	2016APV	2016	2017	2018	2022	2022EE
 Format:	MiniAOD	NanoAOD
 
 Drell-Yan
-MassCut:	4-10	10-50	50-inf
+MassCut:	1-10	10-50	50-inf
+PtCut:	All	100-200
 Run:	2	3	HLLHC
 Format:	NanoAOD	MiniAOD
 Year:	2016APV	2016	2017	2018	2022	2022EE
@@ -42,6 +43,7 @@ Year:	2016APV	2016	2017	2018	2022	2022EE
 
 JPsi
 Run:	2
+Year:	2016	2016APV	2017	2018
 
 Data
 Trigger:	DoubleMuon	SingleMuon	SingleElectron
@@ -61,10 +63,17 @@ ZH
 Run:	2
 Year:	2016	2016APV	2017	2018
 
-Higgs
+H
 Run:	2
+Decay:	ZZ
 Year:	2016	2016APV	2017	2018
 
 HH
 Run:	2
 Year:	2016	2016APV	2017	2018
+
+Upsilon
+Run:	2
+Year:	2016	2016APV	2017	2018
+Decay:	Muon
+PtCut:	200-400	400-inf	80-200

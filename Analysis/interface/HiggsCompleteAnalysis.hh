@@ -1,7 +1,10 @@
 #ifndef HIGGSCOMPLETEANALYSIS_HH
 #define HIGGSCOMPLETEANALYSIS_HH
 
+#include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include "FullAnalysis.hh"
+#include <string>
+#include <tuple>
 #include <vector>
 
 class HiggsCompleteAnalysis : public FullAnalysis
@@ -16,11 +19,16 @@ class HiggsCompleteAnalysis : public FullAnalysis
 
     std::vector<std::string> getSystematics() const override;
 
-void addSingleProcess(std::shared_ptr<Process> process, std::string filePathway, std::string fileName, std::string crossSectionName,
-                                std::shared_ptr<CrossSectionReader> crossReader, double luminosity,
-                                std::shared_ptr<HistNameFinder> mappingLowMass, std::shared_ptr<HistNameFinder> mappingHighMass, bool isData = false,
-                                double branchingRatioAdjustment = 1);
+    void addParameterizations();
 
+    void addSingleProcess(std::shared_ptr<Process> process, std::string filePathway, std::string fileName,
+                          std::string crossSectionName, std::shared_ptr<CrossSectionReader> crossReader,
+                          std::shared_ptr<HistNameFinder> mappingLowMass,
+                          std::shared_ptr<HistNameFinder> mappingHighMass, bool isData = false,
+                          double branchingRatioAdjustment = 1);
+
+  private:
+    
 };
 
 #endif

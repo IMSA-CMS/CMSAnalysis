@@ -20,3 +20,5 @@ private:
 };
 
 #endif // SCALEFACTOR_HH
+
+// write source file for this class and then variables are in the nanoAOD event file, so we can get them from there. We can also add more variables in the future if we want to. We can also add more systematic types if we want to.

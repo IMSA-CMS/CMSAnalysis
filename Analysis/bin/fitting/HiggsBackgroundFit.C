@@ -3,7 +3,7 @@
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
 #include "TF1.h"
-#include "TGraph.h"
+#include "TGraph.h" 
 #include "TH1.h"
 #include <iostream>
 #include <map>
@@ -27,22 +27,22 @@ const std::string parameterFunctions = "H++BackgroundParameterFunctions.txt";
 const std::map<std::string, std::pair<int, int>> bgsToRange = {
     {"Drell-Yan Background", {0, 2000}},            // 140-500
     {"QCD Background", {0, 2000}},                  // 200-2000
-    {"ZZ Background", {0, 2000}},                   // 100-800
+    {"ZZ Background", {90, 930}},                   // 90-930
     {"WJets Background", {0, 2000}},                //
     {"t#bar{t}, Multiboson Background", {0, 2000}}, //
 };
 
-const int minData = 500;
+const int minData = 10;
 
 // run in batch mode for faster processing: root -b HiggsBackgroundFit.C+
 void HiggsBackgroundFit()
 {
+    const auto analysis = HiggsCompleteAnalysis();
     remove(fitParameterValueFile.c_str());
     remove(parameterFunctions.c_str());
 
     Fitter fitter(fitHistsName, fitParameterValueFile, parameterFits, parameterFunctions);
 
-    const auto analysis = HiggsCompleteAnalysis();
     const auto systs = analysis.getSystematics();
     std::cout << "Loaded histograms\n";
 
@@ -96,19 +96,26 @@ void fitProcess(const Process &process, Fitter &fitter, const HistVariable &hist
         break;
     }
 
+    std::map<std::string, std::string> nameParams;
+    nameParams["process"] = process.getName();
+    nameParams["channel"] = channelName;
+    nameParams["histVar"] = histVar.getName();
+    nameParams["systematic"] = systDesc;
+
+    const std::string name = FitFunction::encodeName(nameParams);
     const auto title = "Higgs " + channelName + " " + process.getName() + " " + systDesc;
     selectedHist->SetTitle(title.c_str());
 
-    const std::string name = process.getName() + "->" + channelName + "/" + histVar.getName() + " " + systDesc;
+    // const std::string name = process.getName() + "->" + channelName + "/" + histVar.getName() + " " + systDesc;
 
     std::cout << "Fitting " + name + "\n";
 
     FitFunction func =
-        FitFunction::createFunctionOfType(FitFunction::FunctionType::GausLogPowerNorm, name, "", min, max, channelName);
+        FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, name, "", min, max);
 
     FitFunctionCollection currentFunctions;
-    currentFunctions.insert("", func);
-    std::unordered_map<std::string, TH1 *> histogramMap = {{"", selectedHist}};
+    currentFunctions.insert(name, func);
+    std::unordered_map<std::string, TH1 *> histogramMap = {{name, selectedHist}};
 
     fitter.loadFunctions(currentFunctions);
     fitter.fitFunctions(histogramMap);

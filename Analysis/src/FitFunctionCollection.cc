@@ -7,7 +7,7 @@
 
 
 
-std::vector<FitFunction> alphabetizeParameters(std::vector<FitFunction> fitFunctions);
+// std::vector<FitFunction> alphabetizeParameters(std::vector<FitFunction> fitFunctions);
 //std::string replaceAll(std::string unmodifiedString, const std::string from, const std::string to);
 
 FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string &fileName)
@@ -24,7 +24,7 @@ FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string &fi
         while (file)
         {
             std::cout << "Reading function #" << "..." << std::endl;
-            FitFunction func(TF1(), FitFunction::FunctionType::ExpressionFormula, "");
+            FitFunction func(TF1(), FitFunction::FunctionType::ExpressionFormula);
             file >> func;
             if (!file)
             {
@@ -36,7 +36,7 @@ FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string &fi
     }
     else
     {
-        throw std::runtime_error("File not loaded successfully");
+        throw std::runtime_error("File " + fileName + " not loaded successfully");
     }
 
 }
@@ -121,34 +121,34 @@ void FitFunctionCollection::saveFunctions(const std::string &fileName, bool appe
 
 // }
 
-std::vector<FitFunction> alphabetizeParameters(std::vector<FitFunction> fitFunctions)
-{
-    std::vector<std::string> parameterNames;
-    std::vector<FitFunction> alphabetizedFunctions;
+// std::vector<FitFunction> alphabetizeParameters(std::vector<FitFunction> fitFunctions)
+// {
+//     std::vector<std::string> parameterNames;
+//     std::vector<FitFunction> alphabetizedFunctions;
     
-    // Find and alphabetize the names of fit functions
-    for (auto function : fitFunctions)
-    {
-        parameterNames.push_back(function.getParameterName());
-    }
-    std::sort(parameterNames.begin(), parameterNames.end());
+//     // Find and alphabetize the names of fit functions
+//     // for (auto function : fitFunctions)
+//     // {
+//     //     parameterNames.push_back(function.getParameterName());
+//     // }
+//     // std::sort(parameterNames.begin(), parameterNames.end());
 
 
-    // Reorder the fitFunctions based on the order of parameterNames
-    for (auto parameterName : parameterNames)
-    {
-        for (auto function : fitFunctions)
-        {
+//     // Reorder the fitFunctions based on the order of parameterNames
+//     for (auto parameterName : parameterNames)
+//     {
+//         for (auto function : fitFunctions)
+//         {
             
-            if (function.getParameterName() == parameterName)
-            {
-                alphabetizedFunctions.push_back(function);
-            }
-        }
-    }
+//             if (function.getParameterName() == parameterName)
+//             {
+//                 alphabetizedFunctions.push_back(function);
+//             }
+//         }
+//     }
 
-    return alphabetizedFunctions;
-}
+//     return alphabetizedFunctions;
+// }
 
 
 
@@ -263,4 +263,42 @@ bool FitFunctionCollection::checkFunctionsSimilar()
 std::unordered_map<std::string, FitFunction> &FitFunctionCollection::getFunctions()
 {
     return functions;
+}
+
+std::set<std::string> FitFunctionCollection::findUniqueNames(std::string parameter)
+{
+    std::set<std::string> result;
+    for (auto& [key, fitFunction] : functions)
+    {
+        auto decoded = FitFunction::decodeName(fitFunction.getName());
+        result.insert(decoded[parameter]);
+    }
+    return result;
+}
+
+std::vector<FitFunction> FitFunctionCollection::getFunctions(std::string name)
+{
+    std::vector<FitFunction> result;
+    for (auto& [key, fitFunction] : functions)
+    {
+        if (fitFunction.getName().find(name) != std::string::npos)
+        {
+            result.push_back(fitFunction);
+        }
+    }
+    return result;
+}
+
+std::vector<FitFunction> FitFunctionCollection::getFunctions(std::string parameter, std::string name)
+{
+    std::vector<FitFunction> result;
+    for (auto& [key, fitFunction] : functions)
+    {
+        auto decoded = FitFunction::decodeName(fitFunction.getName());
+        if (decoded[parameter] == name)
+        {
+            result.push_back(fitFunction);
+        }
+    }
+    return result;
 }
