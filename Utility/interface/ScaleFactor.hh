@@ -9,80 +9,58 @@ class ScaleFactorReader;
 class EventInput; // Forward declaration
 
 class ScaleFactor
-{
-    
-public:
+{  
+    public:
 
-    enum class SystematicType 
-    {
-        Nominal,
-        Up,
-        Down
-    };
-    struct ScaleFactorSet
-    {
-        double nominal;
-        double systUp;
-        double systDown;
-        ScaleFactorSet(double nominal = 1.0, double systUp = 1.0, double systDown = 1.0) : nominal(nominal), systUp(systUp), systDown(systDown) {}
-        ScaleFactorSet& operator*= (const ScaleFactorSet& rhs)
+        enum class SystematicType 
         {
-            nominal *= rhs.nominal;
-            systUp *= rhs.systUp;
-            systDown *= rhs.systDown;
-            return *this;
-        }
-
-        double getSystematic(SystematicType type) const
+            Nominal,
+            Up,
+            Down
+        };
+        struct ScaleFactorSet
         {
-            if (type == SystematicType::Nominal)
+            double nominal;
+            double systUp;
+            double systDown;
+            ScaleFactorSet(double nominal = 1.0, double systUp = 1.0, double systDown = 1.0) : nominal(nominal), systUp(systUp), systDown(systDown) {}
+            ScaleFactorSet& operator*= (const ScaleFactorSet& rhs)
             {
-                return nominal;
+                nominal *= rhs.nominal;
+                systUp *= rhs.systUp;
+                systDown *= rhs.systDown;
+                return *this;
             }
-            else if (type == SystematicType::Down)
+
+            double getSystematic(SystematicType type) const
             {
-                return systDown;
+                if (type == SystematicType::Nominal)
+                {
+                    return nominal;
+                }
+                else if (type == SystematicType::Down)
+                {
+                    return systDown;
+                }
+                else
+                {
+                    return systUp;
+                }
             }
-            else
-            {
-                return systUp;
-            }
-        }
-    };
+        };
 
-    
-//     ScaleFactor(std::string iname, std::shared_ptr<ScaleFactorReader> ireader);
-//     virtual ~ScaleFactor() = default;
-//     virtual double getScaleFactor(const EventInput* input, SystematicType type = SystematicType::Nominal) const;
-//     std::string getName() const { return name; }
+        ScaleFactor(std::string iname, bool hasUncertainty = true) : name(std::move(iname)), uncertainty(hasUncertainty) {}
+        virtual ~ScaleFactor() = default;
 
-//  protected:
-//      virtual std::vector<std::string> getKey(const EventInput* input) const = 0;
-//      //std::map<std::string, ScaleFactorSet> & getScaleFactorMap() { return scaleFactors; }
-//      const std::map<std::string, ScaleFactorSet> & getScaleFactorMap() const { return scaleFactors; }
+        virtual double getScaleFactor(const EventInput* input,
+                                    SystematicType type = SystematicType::Nominal) const = 0;
 
+        std::string getName() const { return name; }
+        bool hasUncertainty() const { return uncertainty; }
 
-
-// private:
-//     std::string name;
-//     std::shared_ptr<ScaleFactorReader> reader;
-//     // The scale factors are stored in a map with the key being the year and the value
-//     std::map<std::string, ScaleFactorSet> scaleFactors;
-
-
-     
-// };
-
-explicit ScaleFactor(std::string iname) : name(std::move(iname)) {}
-    virtual ~ScaleFactor() = default;
-
-    virtual double getScaleFactor(const EventInput* input,
-                                  SystematicType type = SystematicType::Nominal) const = 0;
-
-    std::string getName() const { return name; }
-
-private:
-    std::string name;
+    private:
+        std::string name;
+        bool uncertainty;
 };
 
 #endif // SCALEFACTOR_HH
