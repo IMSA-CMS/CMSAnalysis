@@ -2,6 +2,7 @@
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsKansasStateAnalysis.hh"
+#include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include "TF1.h"
 #include "TGraph.h"
@@ -23,34 +24,55 @@ const int minData = 500;
 const double xMin = 0;
 const double xMax = 2500;
 
+std::array<int, 11> massTargets = {500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};
+
 const std::string fitHistsName = "H++SignalFits.root";
 const std::string fitParameterValueFile = "H++SignalFunctions.txt";
 const std::string parameterFits = "H++SignalParameterFits.root";
 const std::string parameterFunctions = "H++SignalParameterFunctions.txt";
 
 // run in batch mode for faster processing: root -b HiggsSignalFit.C+
-void HiggsSignalFit()
+void HiggsSignalFit(bool useKansasState = false)
 {
     gROOT->SetBatch(kTRUE);
 
-    auto analysis = HiggsKansasStateAnalysis();
-    const auto systs = analysis.getSystematics();
-    std::cout << "Loaded histograms\n";
+    //auto analysis = HiggsKansasStateAnalysis();
+    
+    //const auto systs = analysis.getSystematics();
+    //std::cout << "Loaded histograms\n";
 
     auto rootFile = TFile::Open(fitHistsName.c_str(), "RECREATE");
     auto parameterRootFile = TFile::Open(parameterFits.c_str(), "RECREATE");
     FitFunctionCollection allFunctions;
     FitFunctionCollection parameterizations;
 
+    std::shared_ptr<FullAnalysis> analysis;
+    if (useKansasState)
+    {
+        analysis = std::make_shared<HiggsKansasStateAnalysis>();
+    }
+    else 
+    {
+        analysis = std::make_shared<HiggsCompleteAnalysis>();
+    }
+
+    const auto systs = analysis->getSystematics();
+    std::cout << "Loaded histograms\n";
+
+    std::vector<std::string> genSimDecays{""};
+    if (!useKansasState)
+    {
+        genSimDecays = HiggsCompleteAnalysis::genSimDecays;
+    }
     for (const auto &histType : histogramTypes)
     {
-        for (const auto &channel : analysis.getChannels())
+        for (const auto &channel : analysis->getChannels())
         {
             if (channel->getName().find("ZPeak") != std::string::npos)
-            {
+            {   
                 continue;
             }
-            for (const auto &genSim : HiggsKansasStateAnalysis::genSimDecays)
+            for (const auto &genSim : genSimDecays)
             {
                 auto fitFunctions = fitChannel(channel, histType, genSim, systs, rootFile);
                 allFunctions += fitFunctions;   
@@ -59,6 +81,8 @@ void HiggsSignalFit()
             }
         }
     }
+
+
 
     allFunctions.saveFunctions(fitParameterValueFile, true);
     parameterizations.saveFunctions(parameterFunctions, true);
@@ -77,7 +101,7 @@ FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const H
     auto n = 0;
     const auto channelName = channel->getName();
 
-    for (const auto mass : HiggsKansasStateAnalysis::massTargets)
+    for (const auto mass : massTargets)
     {
         const auto process = channel->findProcess("Higgs signal " + genSim + " " + std::to_string(mass));
         const TH1 *selectedHist = process->getHist(histVar, true);
@@ -109,7 +133,7 @@ FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const H
     std::unordered_map<std::string, double> massValues;
     std::unordered_map<std::string, TH1 *> histogramMap;
     FitFunctionCollection currentFunctions;
-    for (const auto mass : HiggsKansasStateAnalysis::massTargets)
+    for (const auto mass : massTargets)
     {
         const auto process = channel->findProcess("Higgs signal " + genSim + " " + std::to_string(mass));
         TH1 *const hist = process->getHist(histVar, true);

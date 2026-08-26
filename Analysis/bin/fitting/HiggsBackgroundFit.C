@@ -13,7 +13,7 @@
 #include "TROOT.h"
 
 
-FitFunction fitProcess(const Process &process, const HistVariable &histVar,
+FitFunction fitProcess(const std::shared_ptr<Process> process, const HistVariable &histVar,
                 const std::string &channelName, int min, int max, const std::vector<std::string>& systs, TFile* rootFile);
 
 const std::vector<HistVariable> histogramTypes = {
@@ -38,38 +38,68 @@ const std::map<std::string, std::pair<int, int>> bgsToRange = {
 const int minData = 10;
 
 // run in batch mode for faster processing: root -b HiggsBackgroundFit.C+
-void HiggsBackgroundFit()
+void HiggsBackgroundFit(bool useKansasState = false)
 {
     gROOT->SetBatch(kTRUE);
-    const auto analysis = HiggsKansasStateAnalysis();
+        //const auto analysis = HiggsKansasStateAnalysis();
     //remove(fitParameterValueFile.c_str());
     //remove(parameterFunctions.c_str());
 
     //Fitter fitter(fitHistsName, fitParameterValueFile, parameterFits, parameterFunctions);
 
-    const auto systs = analysis.getSystematics();
-    std::cout << "Loaded histograms\n";
-
     auto rootFile = TFile::Open(fitHistsName.c_str(), "RECREATE");
     FitFunctionCollection allFunctions; 
 
+    std::shared_ptr<FullAnalysis> analysis;
+    if (useKansasState)
+    {
+        analysis = std::make_shared<HiggsKansasStateAnalysis>();
+    }
+    else 
+    {
+        analysis= std::make_shared<HiggsCompleteAnalysis>();
+    }
+
+    const auto systs = analysis->getSystematics();
+    std::cout << "Loaded histograms\n";
+
+    
+
     for (const auto &histVar : histogramTypes)
     {
-        for (const auto &channel : analysis.getChannels())
+        for (const auto &channel : analysis->getChannels())
         {
+            if (channel->getName().find("ZPeak") != std::string::npos)
+            {
+                continue;
+            }
+
             for (const auto &bgAndRange : bgsToRange)
             {
-                if (channel->getName().find("ZPeak") != std::string::npos)
+                const auto process =
+                    channel->findProcess(bgAndRange.first);
+
+                if (!process)
                 {
-                continue;
-                } 
-                const auto process = channel->findProcess(bgAndRange.first);
-                //auto func = fitProcess(*process, fitter, histVar, channel->getName(), bgAndRange.second.first,
-                           //bgAndRange.second.second, systs);
-                //allFunctions += func;
-                FitFunction func = fitProcess(*process, histVar, channel->getName(),
-                bgAndRange.second.first, bgAndRange.second.second, systs, rootFile);
-                // Fit systematics
+                    std::cout
+                        << "Could not find process '"
+                        << bgAndRange.first
+                        << "' in channel '"
+                        << channel->getName()
+                        << "'\n";
+
+                        continue;
+                }
+
+                std::cout
+                    << "Found background '"
+                    << process->getName()
+                    << "' in channel '"
+                    << channel->getName()
+                    << "'\n";
+
+                FitFunction func = fitProcess(process, histVar, channel->getName(), bgAndRange.second.first, bgAndRange.second.second, systs, rootFile);
+
                 allFunctions.insert(func);
             }
         }
@@ -80,10 +110,10 @@ void HiggsBackgroundFit()
 }
 
 
-FitFunction fitProcess(const Process &process, const HistVariable &histVar, const std::string &channelName,
+FitFunction fitProcess(const std::shared_ptr<Process> process, const HistVariable &histVar, const std::string &channelName,
                 int min, int max, const std::vector<std::string>& systs, TFile* rootFile)
 {
-    TH1 *const selectedHist = process.getHist(histVar, true);
+    TH1 *const selectedHist = process->getHist(histVar, true);
     if (!selectedHist || selectedHist->GetEntries() < minData)
     {
         return FitFunction();
@@ -104,13 +134,13 @@ FitFunction fitProcess(const Process &process, const HistVariable &histVar, cons
     //}
 
     std::map<std::string, std::string> nameParams;
-    nameParams["process"] = process.getName();
+    nameParams["process"] = process->getName();
     nameParams["channel"] = channelName;
     nameParams["histVar"] = histVar.getName();
     //nameParams["systematic"] = systDesc;
 
     const std::string name = FitFunction::encodeName(nameParams);
-    const auto title = "Higgs " + channelName + " " + process.getName();
+    const auto title = "Higgs " + channelName + " " + process->getName();
     selectedHist->SetTitle(title.c_str());
 
     // const std::string name = process.getName() + "->" + channelName + "/" + histVar.getName() + " " + systDesc;
@@ -127,13 +157,13 @@ FitFunction fitProcess(const Process &process, const HistVariable &histVar, cons
                         auto systHistVar = histVar;
 
                         systHistVar.setSystematic(ScaleFactor::SystematicType::Down, systName);
-                        TH1 *histDown = process.getHist(systHistVar, true);
+                        TH1 *histDown = process->getHist(systHistVar, true);
 
                         FitFunction downFunction = FitFunction::createFunctionOfType(type, name, "", min, max);
                         Fitter::fitSingleFunction(histDown, downFunction);
 
                         systHistVar.setSystematic(ScaleFactor::SystematicType::Up, systName);
-                        TH1 *histUp = process.getHist(systHistVar, true);
+                        TH1 *histUp = process->getHist(systHistVar, true);
 
                         
                         FitFunction upFunction = FitFunction::createFunctionOfType(type, name, "", min, max);
