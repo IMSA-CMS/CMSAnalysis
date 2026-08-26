@@ -20,8 +20,10 @@ class HiggsKansasStateAnalysis : public FullAnalysis
     std::vector<std::string> getSystematics() const override;
 
     void addSingleProcess(std::shared_ptr<Process> process, std::string filePathway, std::string fileName, 
-      std::shared_ptr<HistNameFinder> finder);
+      std::shared_ptr<HistNameFinder> finder, std::shared_ptr<Estimator> estimator = nullptr);
 
+  private:
+    bool exists(std::string fileName);
 
 };
 

@@ -44,9 +44,9 @@ const double lumi = 137.94;
 constexpr auto bgFilePath = "/uscms/home/bhenning/nobackup/HiggsReprocessing/";
 constexpr auto signalFilePath = "/uscms/home/bhenning/nobackup/HiggsReprocessing/";
 constexpr auto dataFilePath = "/uscms/home/bhenning/nobackup/030426HiggsData/";
-const auto signalParamPath = Utility::getBasePath() + "Analysis/bin/fitting/H++SignalParameterFunctions.txt";
+const auto signalParamPath = "/uscms/home/hchen2/analysis/CMSSW_15_0_4/src/CMSAnalysis/Analysis/bin/fitting/H++SignalParameterFunctions.txt";
 const auto bgParamPath =
-    "/uscms/home/kprasad/cmsReleaseArea/CMSSW_15_0_4/src/CMSAnalysis/Analysis/bin/fitting/H++BackgroundFunctions.txt";
+    "/uscms/home/hchen2/analysis/CMSSW_15_0_4/src/CMSAnalysis/Analysis/bin/fitting/H++BackgroundFunctions.txt";
 
 double HiggsCompleteAnalysis::getBranchingRatio(const std::string &channel) const
 {

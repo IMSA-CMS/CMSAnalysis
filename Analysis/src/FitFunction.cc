@@ -104,24 +104,25 @@ void FitFunction::setFunction(const TF1 &func, FunctionType funcType)
     functionType = funcType;
 }
 
-FitFunction::FunctionType FitFunction::getFunctionType()
+FitFunction::FunctionType FitFunction::getFunctionType() const
 {
     return functionType;
 }
 
-std::string FitFunction::getName()
+std::string FitFunction::getName() const
 {
     return function.GetName();
 }
 
-double FitFunction::getMin()
+double FitFunction::getMin() const
 {
     double min;
     double max;
     function.GetRange(min, max);
     return min;
 }
-double FitFunction::getMax()
+
+double FitFunction::getMax() const
 {
     double min;
     double max;
@@ -129,64 +130,10 @@ double FitFunction::getMax()
     return max;
 }
 
-// std::string FitFunction::getFormulaName(const std::string& name)
-// {
-// 	auto index = name.find_first_of('_');
-// 	if (index == std::string::npos)
-// 		return name;
-// 	else
-// 	{
-// 		return name.substr(0, index);
-// 	}
-// }
-
-// std::vector<FitFunction> FitFunction::loadFunctions(const std::string& fileName)
-// {
-// 	std::fstream file(fileName, std::ios_base::in);
-// 	if (file.is_open())
-// 	{
-// 		int size;
-// 		file >> size;
-// 		std::vector<FitFunction> functions(size);
-// 		for (int i = 0; i < size; ++i)
-// 		{
-// 			file >> functions[i];
-// 		}
-// 		file.close();
-// 		return functions;
-// 	}
-// 	else
-// 	{
-// 		throw std::runtime_error("File not loaded successfully");
-// 	}
-// }
-// void FitFunction::saveFunctions(std::vector<FitFunction>& functions, const std::string& fileName)
-// {
-// 	std::fstream file(fileName, std::ios_base::out);
-// 	if (file.is_open())
-// 	{
-// 		file << functions.size() << '\n';
-// 		for (size_t i = 0; i < functions.size(); ++i)
-// 		{
-// 			file << functions[i];
-// 		}
-// 		file.close();
-// 	}
-// 	else
-// 	{
-// 		throw std::runtime_error("File not saved successfully");
-// 	}
-// }
-
 FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const std::string &name,
                                               const std::string &expFormula, double min, double max)
 {
     TF1 func;
-    // std::cout << "ExpressionFormula enum: " << FunctionType::EXPRESSION_FORMULA << '\n';
-    // std::cout << "Function Type: " << functionType << '\n';
-    // std::cout << "Got to create function\n";
-    // std::cout << "Name: " << name << ", Formula: " << expFormula << ", Min: " << min << ", Max: " << max
-    //           << ", Channel: " << channelName << '\n';
     switch (functionType)
     {
     case FunctionType::ExpressionFormula:
@@ -215,35 +162,6 @@ FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const s
 
     return FitFunction(func, functionType);
 }
-
-// std::ostream& operator<<(std::ostream& stream, FitFunction& function)
-// {
-// 	TF1* func = function.getFunction();
-// 	std::vector<std::string> channel_parameter = FitFunction::split(func->GetName(), '/');
-
-// 	stream << channel_parameter[1] << "		";
-
-// 	for (int i = 0; i < func->GetNpar(); ++i)
-// 	{
-// 		stream << func->GetParameter(i) << "		";
-// 	}
-
-// 	for (int i = 0; i < func->GetNpar(); ++i)
-// 	{
-// 		stream << func->GetParError(i) << "		";
-// 		// stream << 1 << ' ';
-// 	}
-
-// 	stream << '\n';
-// 	// std::cout << "Got parameters\n";
-// 	return stream;
-// }
-
-// std::string FitFunction::getChannelName()
-// {
-//     return channelName;
-// }
-
 
 double FitFunction::evaluate(double x)
 {
@@ -367,99 +285,6 @@ std::ostream &operator<<(std::ostream &stream, FitFunction &function)
 
     return stream;
 }
-
-// std::ostream& operator<<(std::ostream& stream, TF1* func)
-// {
-// 	auto formulaName = FitFunction::getFormulaName(func->GetName());
-// 	auto it = std::find(FitFunction::functionList.begin(), FitFunction::functionList.end(), formulaName);
-// 	if (it != FitFunction::functionList.end())
-// 	{
-// 		stream << "Name: " << func->GetName() << '\n';
-// 		stream << "Function: " << formulaName << '\n';
-// 	}
-// 	else
-// 	{
-// 		stream << "Name: " << func->GetName() << '\n';
-// 		stream << "Function: " << func->GetExpFormula() << '\n';
-// 	}
-// 	double min = 0;
-// 	double max = 0;
-// 	func->GetRange(min, max);
-// 	stream << "Range: " << min << ' ' << max << '\n';
-// 	stream << "NumOfParameters: " << func->GetNpar() << '\n';
-
-// 	stream << "Parameters: ";
-// 	for (int i = 0; i < func->GetNpar(); ++i)
-// 	{
-// 		stream << func->GetParameter(i) << ' ';
-// 	}
-
-// 	stream << '\n' << "ParamErrors: ";
-
-// 	for (int i = 0; i < func->GetNpar(); ++i)
-// 	{
-// 		stream << func->GetParError(i) << ' ';
-// 	}
-
-// 	stream << '\n';
-// 	return stream;
-// }
-
-// std::istream& operator>>(std::istream& stream, FitFunction& func)
-// {
-// 	std::string ignore;
-// 	std::string name;
-// 	FitFunction::FunctionType funcType;
-// 	std::string expFormula;
-// 	double min, max;
-// 	int params;
-// 	int tempFuncType;
-
-// 	stream >> ignore >> name;
-// 	stream >> ignore >> tempFuncType;
-// 	std::cout << "TempFuncType = " << tempFuncType << '\n';
-// 	funcType = (FitFunction::FunctionType) tempFuncType;
-// 	stream >> ignore >> expFormula;
-
-// 	stream >> ignore >> min >> max;
-// 	stream >> ignore >> params;
-
-// 	std::vector<std::string> paramNames(params);
-// 	std::vector<double> paramValues(params);
-// 	std::vector<double> paramErrors(params);
-
-// 	stream >> ignore;
-// 	for (int i = 0; i < params; ++i)
-// 	{
-// 		stream >> paramNames[i];
-// 	}
-
-// 	stream >> ignore;
-// 	for (int i = 0; i < params; ++i)
-// 	{
-// 		stream >> paramValues[i];
-// 	}
-
-// 	stream >> ignore;
-// 	for (int i = 0; i < params; ++i)
-// 	{
-// 		stream >> paramErrors[i];
-// 	}
-
-// 	FitFunction function = FitFunction::createFunctionOfType(funcType, name, expFormula, min, max);
-
-// 	for (int i = 0; i < params; ++i)
-// 	{
-// 		function.getFunction()->SetParName(i, paramNames[i].c_str());
-// 		function.getFunction()->SetParameter(i, paramValues[i]);
-// 		function.getFunction()->SetParError(i, paramErrors[i]);
-// 	}
-// 	func = function;
-
-// 	// std::cout << "Set function\n";
-
-// 	return stream;
-// }
 
 std::istream &operator>>(std::istream &stream, FitFunction &func)
 {
