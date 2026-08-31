@@ -15,8 +15,7 @@ scp HiggsSignal4ChannelZPeak.html \
 	DarkPhotonsControlNonZPeak.html \
     index.html \
     style.css \
-    jplotnic@lxplus.cern.ch:/eos/user/j/jplotnic/www/
+    ncatlett@lxplus.cern.ch:/eos/user/n/ncatlett/www/
 
-scp jumboPlotStorage/HiggsSignal/*.png jplotnic@lxplus.cern.ch:/eos/user/j/jplotnic/www/jumboPlotStorage
-scp jumboPlotStorage/DarkPhoton/*.png jplotnic@lxplus.cern.ch:/eos/user/j/jplotnic/www/jumboPlotStorage
-
+scp jumboPlotStorage/HiggsSignal/*.png ncatlett@lxplus.cern.ch:/eos/user/n/ncatlett/www/jumboPlotStorage
+scp jumboPlotStorage/DarkPhoton/*.png ncatlett@lxplus.cern.ch:/eos/user/n/ncatlett/www/jumboPlotStorage
