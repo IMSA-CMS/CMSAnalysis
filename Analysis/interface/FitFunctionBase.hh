@@ -1,8 +1,8 @@
 #ifndef FIT_FUNCTION_BASE_HH
 #define FIT_FUNCTION_BASE_HH
 
+#include <map>
 #include <string>
-#include <utility>
 
 class FitFunctionBase
 {
@@ -17,35 +17,36 @@ class FitFunctionBase
         Voigt,
     };
 
-    virtual ~FitFunctionBase() = default;
+    virtual ~FitFunctionBase() {};
 
-    virtual std::string getName() = 0;
+    std::string getName()
+    {
+        return name;
+    }
 
     FunctionType getFunctionType()
     {
         return functionType;
     }
 
-    std::string getChannelName()
-    {
-        return channelName;
-    }
+    virtual std::string getNormExpression(const std::string &variable) = 0;
+
+    static std::string encodeName(std::map<std::string, std::string> parameters);
+    static std::map<std::string, std::string> decodeName(std::string name);
 
   protected:
-    FitFunctionBase() = default;
-    FitFunctionBase(FunctionType functionType, std::string channelName)
-        : channelName(std::move(channelName)), functionType(functionType)
-    {
-    }
+    FitFunctionBase() {};
+    FitFunctionBase(FunctionType functionType, std::string name);
 
+    void setName(std::string newName);
     void setFunctionType(FunctionType type)
     {
         functionType = type;
     }
 
   private:
-    std::string channelName;
-    FunctionType functionType;
+    FunctionType functionType = FunctionType::ExpressionFormula;
+    std::string name;
 };
 
 #endif

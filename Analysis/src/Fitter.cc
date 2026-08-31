@@ -530,8 +530,13 @@ void Fitter::parameterizeFunctions(std::unordered_map<std::string, double> &xDat
     templateTF1->GetRange(min, max);
     const char *rawFormula = templateTF1->GetExpFormula();
     const std::string expFormula = rawFormula == nullptr ? "" : rawFormula;
-    FitFunctionParameterization parameterization(channel + "/" + var, channel, templateFunction.getFunctionType(),
-                                                expFormula, min, max);
+    auto nameParameters = FitFunctionBase::decodeName(templateFunction.getName());
+    nameParameters.erase("mass");
+    nameParameters["IsParameterization"] = "true";
+    const std::string parameterizationName = FitFunctionBase::encodeName(nameParameters);
+
+    FitFunctionParameterization parameterization(parameterizationName, channel, templateFunction.getFunctionType(),
+                                                 expFormula, min, max);
 
     for (auto &param : totalParameterData)
     {

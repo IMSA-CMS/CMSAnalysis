@@ -2,33 +2,28 @@
 #define FIT_FUNCTION_PARAMETERIZATION_HH
 
 #include "FitFunction.hh"
-#include "RooFitFunction.hh"
 #include <optional>
 #include <string>
 #include <vector>
 
-class RooAbsReal;
-
-class FitFunctionParameterization
+class FitFunctionParameterization : public FitFunctionBase
 {
   public:
     FitFunctionParameterization() = default;
-    FitFunctionParameterization(std::string name, std::string channelName, FitFunction::FunctionType functionType,
+    FitFunctionParameterization(std::string name, std::string channelName, FunctionType functionType,
                                 std::string expFormula, double min, double max);
 
     static FitFunctionParameterization load(const std::string &fileName);
 
     void insert(const FitFunction &function);
     FitFunction reconstructFunction(double mass);
-    RooFitFunction reconstructFunction(RooAbsReal &observable, RooAbsReal &mass);
+    std::string getNormExpression(const std::string &variable) override;
     void save(const std::string &fileName, bool append = false);
 
   private:
-    static std::optional<size_t> defaultNormParameterIndex(FitFunction::FunctionType type);
+    static std::optional<size_t> defaultNormParameterIndex(FunctionType type);
 
-    std::string name;
     std::string channelName;
-    FitFunction::FunctionType functionType = FitFunction::FunctionType::ExpressionFormula;
     std::string expFormula;
     double min = 0;
     double max = 0;

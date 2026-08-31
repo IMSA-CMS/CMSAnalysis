@@ -1,16 +1,14 @@
-#include "CMSAnalysis/Analysis/interface/FitFunctionParameterization.hh"
-#include <RooAbsReal.h>
+#include "../interface/FitFunctionParameterization.hh"
 #include <fstream>
 #include <iomanip>
 #include <stdexcept>
 #include <utility>
 
 FitFunctionParameterization::FitFunctionParameterization(std::string name, std::string channelName,
-                                                         const FitFunction::FunctionType functionType,
+                                                         const FunctionType functionType,
                                                          std::string expFormula, const double min, const double max)
-    : name(std::move(name)),
+    : FitFunctionBase(functionType, std::move(name)),
       channelName(std::move(channelName)),
-      functionType(functionType),
       expFormula(std::move(expFormula)),
       min(min),
       max(max),
@@ -40,7 +38,7 @@ FitFunctionParameterization FitFunctionParameterization::load(const std::string 
     file >> label >> std::quoted(formula);
     file >> label >> min >> max;
 
-    FitFunctionParameterization result(objectName, channel, static_cast<FitFunction::FunctionType>(type), formula,
+    FitFunctionParameterization result(objectName, channel, static_cast<FunctionType>(type), formula,
                                        min, max);
     file >> label;
     if (label == "NormParameterIndex:")
@@ -68,9 +66,7 @@ FitFunctionParameterization FitFunctionParameterization::load(const std::string 
         file >> label >> functionMin >> functionMax;
         file >> label >> npar;
 
-        auto function = FitFunction::createFunctionOfType(static_cast<FitFunction::FunctionType>(parameterType),
-                                                          functionName, parameterFormula, functionMin, functionMax,
-                                                          channel);
+        auto function = FitFunction::createFunctionOfType(static_cast<FunctionType>(parameterType), functionName, parameterFormula, functionMin, functionMax);
         for (int parameter = 0; parameter < npar; ++parameter)
         {
             std::string parameterName;
@@ -80,10 +76,6 @@ FitFunctionParameterization FitFunctionParameterization::load(const std::string 
             function.getFunction()->SetParName(parameter, parameterName.c_str());
             function.getFunction()->SetParameter(parameter, value);
             function.getFunction()->SetParError(parameter, error);
-        }
-        if (function.getParameterName() != parameterName)
-        {
-            function.getFunction()->SetName((channel + "/" + parameterName).c_str());
         }
         result.parameterFunctions.push_back(std::move(function));
     }
@@ -102,12 +94,8 @@ void FitFunctionParameterization::insert(const FitFunction &function)
 
 FitFunction FitFunctionParameterization::reconstructFunction(const double mass)
 {
-    auto function = FitFunction::createFunctionOfType(functionType, name, expFormula, min, max, channelName);
+    auto function = FitFunction::createFunctionOfType(getFunctionType(), getName(), expFormula, min, max);
     auto *const tf1 = function.getFunction();
-    if (parameterFunctions.size() != static_cast<size_t>(tf1->GetNpar()))
-    {
-        throw std::runtime_error("FitFunction parameterization does not match the function parameter count");
-    }
 
     for (size_t i = 0; i < parameterFunctions.size(); ++i)
     {
@@ -117,10 +105,14 @@ FitFunction FitFunctionParameterization::reconstructFunction(const double mass)
     return function;
 }
 
-RooFitFunction FitFunctionParameterization::reconstructFunction(RooAbsReal &observable, RooAbsReal &mass)
+std::string FitFunctionParameterization::getNormExpression(const std::string &variable)
 {
-    return RooFitFunction::createParameterized(name, channelName, functionType, expFormula, min, max,
-                                               parameterFunctions, observable, mass, normParameterIndex);
+    if (!normParameterIndex || *normParameterIndex >= parameterFunctions.size())
+    {
+        throw std::runtime_error("FitFunction type does not have a norma parameter");
+    }
+    //i have to figure out how to get it for ones without norm parameer
+    return parameterFunctions[*normParameterIndex].getExpression(variable);
 }
 
 void FitFunctionParameterization::save(const std::string &fileName, const bool append)
@@ -131,9 +123,9 @@ void FitFunctionParameterization::save(const std::string &fileName, const bool a
         throw std::invalid_argument("File " + fileName + " could not be opened");
     }
 
-    file << "Parameterization: " << std::quoted(name) << '\n';
+    file << "Parameterization: " << std::quoted(getName()) << '\n';
     file << "Channel: " << std::quoted(channelName) << '\n';
-    file << "OriginalFunctionTypeEnum: " << static_cast<int>(functionType) << '\n';
+    file << "OriginalFunctionTypeEnum: " << static_cast<int>(getFunctionType()) << '\n';
     file << "OriginalExpressionFormula: " << std::quoted(expFormula) << '\n';
     file << "OriginalRange: " << min << ' ' << max << '\n';
     file << "NormParameterIndex: "
@@ -164,19 +156,19 @@ void FitFunctionParameterization::save(const std::string &fileName, const bool a
 }
 
 std::optional<size_t>
-FitFunctionParameterization::defaultNormParameterIndex(const FitFunction::FunctionType type)
+FitFunctionParameterization::defaultNormParameterIndex(const FunctionType type)
 {
     switch (type)
     {
-    case FitFunction::FunctionType::DoubleSidedCrystalBall:
+    case FunctionType::DoubleSidedCrystalBall:
         return 6;
-    case FitFunction::FunctionType::GausLogPowerNorm:
-    case FitFunction::FunctionType::Voigt:
+    case FunctionType::GausLogPowerNorm:
+    case FunctionType::Voigt:
         return 0;
-    case FitFunction::FunctionType::ExpressionFormula:
-    case FitFunction::FunctionType::PowerLaw:
-    case FitFunction::FunctionType::DoubleGaussian:
-        return std::nullopt;
+    case FunctionType::PowerLaw:
+    case FunctionType::ExpressionFormula:
+    case FunctionType::DoubleGaussian:
+    default:
+        return std::nullptr;
     }
-    return std::nullopt;
 }
