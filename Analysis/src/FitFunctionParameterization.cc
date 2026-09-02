@@ -169,6 +169,6 @@ FitFunctionParameterization::defaultNormParameterIndex(const FunctionType type)
     case FunctionType::ExpressionFormula:
     case FunctionType::DoubleGaussian:
     default:
-        return std::nullptr;
+        return std::nullopt;
     }
 }
