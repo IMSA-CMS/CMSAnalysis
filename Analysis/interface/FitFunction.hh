@@ -31,6 +31,7 @@ class FitFunction
     FitFunction() {}    
     FitFunction(const TF1& func, FunctionType funcType);
     TF1* getFunction();
+    const TF1* getFunction() const;
     void setFunction(const TF1& function, FunctionType funcType);
     FunctionType getFunctionType() const;
     std::string getName() const;
@@ -39,7 +40,7 @@ class FitFunction
 
     std::string getParameter(std::string name);
 
-    double evaluate(double x);
+    double evaluate(double x) const;
 
     void addSystematic(const std::string& sysName, const TF1& upFunction, const TF1& downFunction);
     void addSystematic(const std::string& sysName, const std::vector<double>& upParams, const std::vector<double>& downParams);
