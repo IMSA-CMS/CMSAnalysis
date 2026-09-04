@@ -26,10 +26,12 @@ const std::vector<std::string> HiggsCompleteAnalysis::genSimDecays{
     "etet", "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt"};
 
 const std::vector<std::string> HiggsCompleteAnalysis::recoDecays{
-    "eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet",
-    "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt", "eee_", "eeu_", "eue_",
-    "euu_", "uue_", "uuu_", "eet_", "ete_", "eut_", "etu_", "uut_", "utu_", "ett_", "utt_", "ttt_",
-    "ee__", "e_e_", "eu__", "e_u_", "uu__", "u_u_", "tt__", "t_t_", "et__", "e_t_", "ut__", "u_t_"};
+    "eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt",
+    "etet", "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt",
+    "eee_", "eeu_", "eet_", "eue_", "euu_", "eut_", "ete_", "etu_", "ett_",
+    "uue_", "uuu_", "uut_", "ute_", "utu_", "utt_", "tte_", "ttu_", "ttt_",
+    "ee__", "e_e_", "eu__", "e_u_", "et__", "e_t_",
+    "uu__", "u_u_", "ut__", "u_t_", "tt__", "t_t_"};
 
 const std::vector<std::string> systematics{"ElectronScaleFactor", "MuonIDISOScaleFactor", "MuonRecoScaleFactor",
                                            "MuonTriggerScaleFactor"};
@@ -42,9 +44,9 @@ const double lumi = 137.94;
 constexpr auto bgFilePath = "/uscms/home/bhenning/nobackup/HiggsReprocessing/";
 constexpr auto signalFilePath = "/uscms/home/bhenning/nobackup/HiggsReprocessing/";
 constexpr auto dataFilePath = "/uscms/home/bhenning/nobackup/030426HiggsData/";
-const auto signalParamPath = Utility::getBasePath() + "Analysis/bin/fitting/H++SignalParameterFunctions.txt";
+const auto signalParamPath = "/uscms/home/hchen2/analysis/CMSSW_15_0_4/src/CMSAnalysis/Analysis/bin/fitting/H++SignalParameterFunctions.txt";
 const auto bgParamPath =
-    "/uscms/home/kprasad/cmsReleaseArea/CMSSW_15_0_4/src/CMSAnalysis/Analysis/bin/fitting/H++BackgroundFunctions.txt";
+    "/uscms/home/hchen2/analysis/CMSSW_15_0_4/src/CMSAnalysis/Analysis/bin/fitting/H++BackgroundFunctions.txt";
 
 double HiggsCompleteAnalysis::getBranchingRatio(const std::string &channel) const
 {
@@ -76,7 +78,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() :
     // filePath is shared between most files. The rest of the filePath to a given file is still given when making
 
     auto reader = std::make_shared<CrossSectionReader>(
-        "/uscms/homes/s/sdulam/analysis/CMSSW_14_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+        "/uscms/homes/p/pdong/work/analysis/CMSSW_15_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
 
     // auto signalParams = FitFunctionCollection::loadFunctions(signalParamPath);
 

@@ -21,6 +21,7 @@ void SuperPlot()
     //  HistVariable nameVar(ParticleType::leptonJet(), 1, HistVariable::VariableType::LeptonJetMass);
     auto nameVar = HistVariable(HistVariable::VariableType::InvariantMass, "", true, false);
     auto ana = std::make_shared<HiggsCompleteAnalysis>();
+    ana->addParameterizations();
     // TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, false, true,
     // "e_e__ZPeak"); auto ana = std::make_shared<DarkPhotonCompleteAnalysis>(); TCanvas *canvas =
     // plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, false, true, "High Mass and Different

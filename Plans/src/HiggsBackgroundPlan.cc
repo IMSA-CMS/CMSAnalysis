@@ -37,8 +37,8 @@ void HiggsBackgroundPlan::initialize()
 
     auto eventMod = make_shared<EventModule>();
     auto hppSelector = make_shared<HPlusPlusGenSimSelector>();
-    //auto higgsSelector = make_shared<HiggsSelector>();
-    auto higgsSelector = make_shared<KansasCuts>();
+    auto higgsSelector = make_shared<HiggsSelector>();
+    //auto higgsSelector = make_shared<KansasCuts>();
     auto higgsCut = make_shared<HiggsCut>();
     auto runCut = make_shared<RunCut>(
         std::vector<std::string>{"ScaleFactors/Cert_271036-284044_13TeV_Legacy2016_Collisions16_JSON.txt",

@@ -53,8 +53,8 @@ std::vector<std::string> histogramTypes =
 void HiggsBackgroundFitFromFile()
 {
 	std::cout << "[INFO] Starting HiggsBackgroundFitFromFile()" << std::endl;
-	//const double min = 200;
-	//const double max = 2000;
+	const double min = 0;
+	const double max = 1500;
 	
 	//Output in OtherBackgroundFits
 	std::string fitHistsName = "OtherBackgroundFits.root";
@@ -193,7 +193,7 @@ void HiggsBackgroundFitFromFile()
 				std::string keyName = channel + '/' + background + " " + histType;
 				keyNames.push_back(keyName);
 
-				FitFunction func = FitFunction::createFunctionOfType(FitFunction::FunctionType::GausLogPowerNorm, keyName, "", 0, 2000, channel);
+				FitFunction func = FitFunction::createFunctionOfType(FitFunction::FunctionType::GausLogPowerNorm, keyName, "", min, max, channel);
 				currentFunctions.insert(keyName, func);
 				histogramMap.insert({keyName, selectedHist});
 				//histogramMap.insert({keyName, selectedHist});
