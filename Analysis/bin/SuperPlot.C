@@ -25,7 +25,7 @@ void SuperPlot()
     // "e_e__ZPeak"); auto ana = std::make_shared<DarkPhotonCompleteAnalysis>(); TCanvas *canvas =
     // plotFormatter->completePlot(ana, nameVar, xAxisTitle, yAxisTitle, false, false, true, "High Mass and Different
     // Sign/1Jet");
-    TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, "Invariant Mass [GeV/c^2]", "Events", false, true,
+    TCanvas *canvas = plotFormatter->completePlot(ana, nameVar, false, true,
                                                   false, "eeet", true);
     // Uncomment to save a png picture in your bin folder
     canvas->SaveAs(outFile.c_str());

@@ -330,7 +330,7 @@ TCanvas *PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, Hist
 }
 
 TCanvas *PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, HistVariable histvariable,
-                                     TString xAxisTitle, TString yAxisTitle, bool scaleTodata, bool includeSignal,
+                                    bool scaleTodata, bool includeSignal,
                                      bool includeData, std::string channelName, bool drawFunctions)
 {
     // parameterizedFunctions[0]->DrawCopy("L");
@@ -665,6 +665,8 @@ TCanvas *PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     std::cout << "DEBUG PAD: y-range (log10) = [" << topPad->GetUymin() << ", " << topPad->GetUymax() << "]\n";
 
     // hist->SetMinimum(1e-2);
+    std::string xAxisTitle = histvariable.getAxisLabel();
+    std::string yAxisTitle = "Events";
 
     ChangeAxisTitles(hist, xAxisTitle, yAxisTitle);
 
