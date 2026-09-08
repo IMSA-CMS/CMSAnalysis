@@ -1,34 +1,29 @@
-#ifndef EVENTSMEARINGUNCERTAINTY_HH
-#define EVENTSMEARINGUNCERTAINTY_HH
+#ifndef UNCERTAINTY_HH
+#define UNCERTAINTY_HH
 
-#include "CMSAnalysis/Modules/interface/ProductionModule.hh"
-#include "CMSAnalysis/Utility/interface/Event.hh"
-#include "CMSAnalysis/Modules/interface/LocalEventInput.hh"
-#include "CMSAnalysis/Modules/interface/AnalyzerEventInput.hh"
+#include "CMSAnalysis/Modules/interface/SystematicEventInput.hh"
 #include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
 
-class SystematicEventInput : public AnalyzerEventInput
+template <typename T>
+class Uncertainty
 {
 public:
-	// Constructor: takes the EventInterface pointer and desired variation
-	Uncertainty(const EventInterface **eventInterface,
-				ScaleFactor::SystematicType variation);
+	Uncertainty(const EventInterface **eventInterface);
 
-	// Override getParticles to apply Up/Down/Nominal modifications
-	virtual ParticleCollection<Particle> getParticles(
-		RecoLevel level,
-		const ParticleType &particleType = ParticleType::none(),
-		bool includeSpecials = false) const override;
-
-protected:
-	virtual double getScale() const = 0;
+	// Accessors for the Up and Down inputs
+	SystematicEventInput *getUpInput() const { return upInput.get(); }
+	SystematicEventInput *getDownInput() const { return downInput.get(); }
 
 private:
-	// Which variation this instance should output
-	UncertaintyVariation variation;
-
-	// Helper function to modify a single particle's pT
-	Particle modifyParticlePt(const Particle &p, double scale) const;
+	std::unique_ptr<SystematicEventInput> upInput;
+	std::unique_ptr<SystematicEventInput> downInput;
 };
+
+template <typename T>
+inline Uncertainty::Uncertainty(const EventInterface **eventInterface)
+{
+	upInput = std::make_unique<T>(eventInterface, ScaleFactor::SystematicType::Up);
+	downInput = std::make_unique<T>(eventInterface, ScaleFactor::SystematicType::Down);
+}
 
 #endif
