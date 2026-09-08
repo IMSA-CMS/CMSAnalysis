@@ -276,28 +276,28 @@ std::set<std::string> FitFunctionCollection::findUniqueNames(std::string paramet
     return result;
 }
 
-std::vector<FitFunction> FitFunctionCollection::getFunctions(std::string name)
+FitFunctionCollection FitFunctionCollection::getFunctions(std::string name)
 {
-    std::vector<FitFunction> result;
+    FitFunctionCollection result;
     for (auto& [key, fitFunction] : functions)
     {
         if (fitFunction.getName().find(name) != std::string::npos)
         {
-            result.push_back(fitFunction);
+            result.insert(fitFunction);
         }
     }
     return result;
 }
 
-std::vector<FitFunction> FitFunctionCollection::getFunctions(std::string parameter, std::string name)
+FitFunctionCollection FitFunctionCollection::getFunctions(std::string parameter, std::string name)
 {
-    std::vector<FitFunction> result;
+    FitFunctionCollection result;
     for (auto& [key, fitFunction] : functions)
     {
         auto decoded = FitFunction::decodeName(fitFunction.getName());
         if (decoded[parameter] == name)
         {
-            result.push_back(fitFunction);
+            result.insert(fitFunction);
         }
     }
     return result;
