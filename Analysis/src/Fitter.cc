@@ -1,5 +1,6 @@
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
 #include "CMSAnalysis/Analysis/interface/FitFunction.hh"
+#include "CMSAnalysis/Analysis/interface/FitFunctionParameterization.hh"
 #include <Fit/FitResult.h>
 #include <TCanvas.h>
 #include <TFitResult.h>
@@ -279,12 +280,29 @@ FitFunction Fitter::fitPowerLawToGraph(TGraph* graph, std::string name)
 FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::unordered_map<double, TF1*>& xData, 
     TFile* rootFile)
 {
-    FitFunctionCollection paramFunctions;
-    
-    if (xData.empty())
+    std::vector<ParameterizationData> totalParameterData = getParameterData(xData);
+    const auto channel = reco + "_" + genSim;
+    auto &templateFunction = functions.getFunctions().begin()->second;
+    auto *templateTF1 = templateFunction.getFunction();
+    double min = 0;
+    double max = 0;
+    templateTF1->GetRange(min, max);
+    const char *rawFormula = templateTF1->GetExpFormula();
+    const std::string expFormula = rawFormula == nullptr ? "" : rawFormula;
+    auto nameParameters = FitFunctionBase::decodeName(templateFunction.getName());
+    nameParameters.erase("mass");
+    nameParameters["IsParameterization"] = "true";
+    const std::string parameterizationName = FitFunctionBase::encodeName(nameParameters);
+
+    FitFunctionParameterization parameterization(parameterizationName, channel, templateFunction.getFunctionType(),
+                                                 expFormula, min, max);
+
+    for (auto &param : totalParameterData)
     {
-        return paramFunctions;
+        FitFunction func = parameterizeFunction(param, genSim, reco, var, histVar);
+        parameterization.insert(func);
     }
+    parameterization.save(parameterTextFile, true);
     
     auto nPoints = xData.size();
     auto nParams = xData.begin()->second->GetNpar();

@@ -1,31 +1,19 @@
 #ifndef FIT_FUNCTION_HH
 #define FIT_FUNCTION_HH
 
+#include "CMSAnalysis/Analysis/interface/FitFunctionBase.hh"
 #include "TF1.h"
 #include <iostream>
 #include <map>
 #include <string>
 #include <vector>
 
-class FitFunction
+class FitFunction : public FitFunctionBase
 {
   public:
-    enum class FunctionType
-    {
-        ExpressionFormula,
-        DoubleSidedCrystalBall,
-        PowerLaw,
-        DoubleGaussian,
-        GausLogPowerNorm,
-        Voigt,
-    };
-
     // static const std::vector<std::string> functionList;
     static FitFunction createFunctionOfType(FunctionType functionType, const std::string &name,
                                             const std::string &expFormula, double min, double max);
-    static std::string encodeName(std::map<std::string, std::string> parameters);
-    static std::map<std::string, std::string> decodeName(std::string name);
-
     // static std::vector<FitFunction> loadFunctions(const std::string& fileName);
     // static void saveFunctions(std::vector<FitFunction>& functions, const std::string& fileName);
     FitFunction() {}    
