@@ -179,11 +179,21 @@ int RootFileInput::getTotalEvents() const
 	//bool end = false; 
 	//int index = 1;
 	auto *totalevents = file->Get<TObjString>("NEvents");
+	int events;
 	if (!totalevents)
 	{
-		throw std::runtime_error("Total events not found in file: " + fileSource);
+		auto totalHist = file->Get<TH1>("hNWEvts");
+		if (!totalHist)
+		{
+			throw std::runtime_error("Total events not found in file: " + fileSource);
+		}
+		events = totalHist->GetBinContent(1);
 	}
-	int events = std::stof(totalevents->GetString().Data());
+	else
+	{
+		events = std::stof(totalevents->GetString().Data());
+	}
+	
 	delete file;
 	return events;
 	// while (!end)

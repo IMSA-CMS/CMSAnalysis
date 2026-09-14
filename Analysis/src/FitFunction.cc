@@ -3,11 +3,68 @@
 #include <TMath.h>
 #include <boost/algorithm/string/split.hpp>
 #include <cmath>
+#include <iomanip>
 #include <iostream>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
+
+FitFunction::FitFunction(const TF1 &func, FunctionType funcType)
+    : FitFunctionBase(funcType, func.GetName()), function(func)
+{
+}
+
+TF1 *FitFunction::getFunction()
+{
+    return &function;
+}
+
+void FitFunction::setFunction(const TF1 &func, FunctionType funcType)
+{
+    function = func;
+    setName(func.GetName());
+    setFunctionType(funcType);
+}
+
+double FitFunction::getMin()
+{
+    double min;
+    double max;
+    function.GetRange(min, max);
+    return min;
+}
+double FitFunction::getMax()
+{
+    double min;
+    double max;
+    function.GetRange(min, max);
+    return max;
+}
+
+std::string FitFunction::getParameter(std::string name)
+{
+    auto parameters = decodeName(getName());
+    auto parameter = parameters.find(name);
+    return parameter == parameters.end() ? "" : parameter->second;
+}
+
+std::string FitFunction::getParameterName()
+{
+    std::string parameter = getParameter("Parameter");
+    if (parameter.empty())
+    {
+        parameter = getParameter("parameter");
+    }
+    if (!parameter.empty())
+    {
+        return parameter;
+    }
+
+    const size_t separator = getName().find_last_of('/');
+    return separator == std::string::npos ? getName() : getName().substr(separator + 1);
+}
 
 double FitFunction::powerLaw(double *x, double *par)
 {
@@ -30,7 +87,7 @@ double FitFunction::DSCB(double *x, double *par)
     const double fact1THihgerAlphaH = alpha_h / n_h;
     const double fact2THigherAlphaH = (n_h / alpha_h) - alpha_h + t;
 
-    double root2 = std::pow(2, 0.5);
+    const double root2 = std::pow(2, 0.5);
     if (-alpha_l <= t && alpha_h >= t)
     {
         result = exp(-0.5 * t * t);
@@ -39,21 +96,16 @@ double FitFunction::DSCB(double *x, double *par)
     {
         result = exp(-0.5 * alpha_l * alpha_l) * pow(fact1TLessMinosAlphaL * fact2TLessMinosAlphaL, -n_l);
     }
-    else // if (t > alpha_h)
+    else
     {
         result = exp(-0.5 * alpha_h * alpha_h) * pow(fact1THihgerAlphaH * fact2THigherAlphaH, -n_h);
     }
 
-    const double lowTailNorm = (n_l / std::abs(alpha_l)) * 1 / (n_l - 1) * std::exp(-0.5 * alpha_l * alpha_l);
-    const double highTailNorm = (n_h / std::abs(alpha_h)) * 1 / (n_h - 1) * std::exp(-0.5 * alpha_h * alpha_h);
+    const double lowTailNorm = (n_l / std::abs(alpha_l)) / (n_l - 1) * std::exp(-0.5 * alpha_l * alpha_l);
+    const double highTailNorm = (n_h / std::abs(alpha_h)) / (n_h - 1) * std::exp(-0.5 * alpha_h * alpha_h);
     const double gaussianNormA = erf(std::abs(alpha_l / root2)) + erf(std::abs(alpha_h / root2));
     const double gaussianNormB = std::pow(M_PI / 2, 0.5) * gaussianNormA;
     const double functionNormalization = std::pow(sigma * (gaussianNormB + lowTailNorm + highTailNorm), -1);
-
-    // globalCounter++;
-    // if(globalCounter%1000 == 0){
-    // //std::cout<<"Global norm: " << globalNorm << "\n";
-    // }
     return N * functionNormalization * result;
 }
 
@@ -62,7 +114,6 @@ double FitFunction::doubleGaussian(double *x, double *par)
     return par[0] * TMath::Gaus(x[0], par[1], par[2]) + par[3] * TMath::Gaus(x[0], par[4], par[5]);
 }
 
-// Params: N, u, sigma1, s, n
 double FitFunction::gausLogPowerNorm(double *xs, double *par)
 {
     const auto x = xs[0];
@@ -76,117 +127,18 @@ double FitFunction::gausLogPowerNorm(double *xs, double *par)
     {
         return mult * exp(-(x - u) * (x - u) / (2 * sigma1 * sigma1));
     }
-    else
-    {
-        return mult * exp(-s * pow(log(x / u), n));
-    }
+    return mult * exp(-s * pow(log(x / u), n));
 }
 
-// Params: N, mu, width (Breit-Wigner), sigma (Gaussian)
 double FitFunction::voigt(double *x, double *par)
 {
     return par[0] * TMath::Voigt(x[0] - par[1], par[3], par[2]);
 }
 
-FitFunction::FitFunction(const TF1 &func, FunctionType funcType)
-    : function(func), functionType(funcType)
-{
-}
-
-TF1 *FitFunction::getFunction()
-{
-    return &function;
-}
-
-void FitFunction::setFunction(const TF1 &func, FunctionType funcType)
-{
-    function = func;
-    functionType = funcType;
-}
-
-FitFunction::FunctionType FitFunction::getFunctionType()
-{
-    return functionType;
-}
-
-std::string FitFunction::getName()
-{
-    return function.GetName();
-}
-
-double FitFunction::getMin()
-{
-    double min;
-    double max;
-    function.GetRange(min, max);
-    return min;
-}
-double FitFunction::getMax()
-{
-    double min;
-    double max;
-    function.GetRange(min, max);
-    return max;
-}
-
-// std::string FitFunction::getFormulaName(const std::string& name)
-// {
-// 	auto index = name.find_first_of('_');
-// 	if (index == std::string::npos)
-// 		return name;
-// 	else
-// 	{
-// 		return name.substr(0, index);
-// 	}
-// }
-
-// std::vector<FitFunction> FitFunction::loadFunctions(const std::string& fileName)
-// {
-// 	std::fstream file(fileName, std::ios_base::in);
-// 	if (file.is_open())
-// 	{
-// 		int size;
-// 		file >> size;
-// 		std::vector<FitFunction> functions(size);
-// 		for (int i = 0; i < size; ++i)
-// 		{
-// 			file >> functions[i];
-// 		}
-// 		file.close();
-// 		return functions;
-// 	}
-// 	else
-// 	{
-// 		throw std::runtime_error("File not loaded successfully");
-// 	}
-// }
-// void FitFunction::saveFunctions(std::vector<FitFunction>& functions, const std::string& fileName)
-// {
-// 	std::fstream file(fileName, std::ios_base::out);
-// 	if (file.is_open())
-// 	{
-// 		file << functions.size() << '\n';
-// 		for (size_t i = 0; i < functions.size(); ++i)
-// 		{
-// 			file << functions[i];
-// 		}
-// 		file.close();
-// 	}
-// 	else
-// 	{
-// 		throw std::runtime_error("File not saved successfully");
-// 	}
-// }
-
 FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const std::string &name,
                                               const std::string &expFormula, double min, double max)
 {
     TF1 func;
-    // std::cout << "ExpressionFormula enum: " << FunctionType::EXPRESSION_FORMULA << '\n';
-    // std::cout << "Function Type: " << functionType << '\n';
-    // std::cout << "Got to create function\n";
-    // std::cout << "Name: " << name << ", Formula: " << expFormula << ", Min: " << min << ", Max: " << max
-    //           << ", Channel: " << channelName << '\n';
     switch (functionType)
     {
     case FunctionType::ExpressionFormula:
@@ -216,40 +168,63 @@ FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const s
     return FitFunction(func, functionType);
 }
 
-// std::ostream& operator<<(std::ostream& stream, FitFunction& function)
-// {
-// 	TF1* func = function.getFunction();
-// 	std::vector<std::string> channel_parameter = FitFunction::split(func->GetName(), '/');
-
-// 	stream << channel_parameter[1] << "		";
-
-// 	for (int i = 0; i < func->GetNpar(); ++i)
-// 	{
-// 		stream << func->GetParameter(i) << "		";
-// 	}
-
-// 	for (int i = 0; i < func->GetNpar(); ++i)
-// 	{
-// 		stream << func->GetParError(i) << "		";
-// 		// stream << 1 << ' ';
-// 	}
-
-// 	stream << '\n';
-// 	// std::cout << "Got parameters\n";
-// 	return stream;
-// }
-
-// std::string FitFunction::getChannelName()
-// {
-//     return channelName;
-// }
-
-
-double FitFunction::evaluate(double x)
+double FitFunction::evaluate(double x) const
 {
-    TF1 *tf1 = getFunction();
+    auto* tf1 = getFunction();
     double result = tf1->Eval(x);
     return result;
+}
+
+std::string FitFunction::getExpression(const std::string &variable)
+{
+    //we assume power law paramter function
+    std::ostringstream expression;
+    expression << function.GetParameter(0) << " * (" << variable << " - "
+               << function.GetParameter(1) << ")^" << function.GetParameter(2);
+    return expression.str();
+}
+
+std::string FitFunction::getNormExpression(const std::string &)
+{
+    double norm = 0;
+    switch (getFunctionType())
+    {
+    case FunctionType::DoubleSidedCrystalBall:
+        norm = function.GetParameter(6);
+        break;
+    case FunctionType::Voigt:
+        norm = function.GetParameter(0);
+        break;
+    case FunctionType::PowerLaw:
+    {
+        const double coeff = function.GetParameter(0);
+        const double shift = function.GetParameter(1);
+        const double expo = function.GetParameter(2);
+        const double lower = getMin() - shift;
+        const double upper = getMax() - shift;
+
+        if (expo != -1)
+        {
+            norm = coeff / (expo + 1) * (std::pow(upper, expo + 1) - std::pow(lower, expo + 1));
+        }
+        else
+        {
+            norm = coeff * std::log(upper / lower);
+            
+        }
+        break;
+    }
+    case FunctionType::GausLogPowerNorm:
+    case FunctionType::DoubleGaussian:
+    case FunctionType::ExpressionFormula:
+    default:
+        norm = function.Integral(getMin(), getMax());
+        break;
+    }
+
+    std::ostringstream expression;
+    expression << std::setprecision(17) << norm;
+    return expression.str();
 }
 
 // Helper function for splitting strings
@@ -367,99 +342,6 @@ std::ostream &operator<<(std::ostream &stream, FitFunction &function)
 
     return stream;
 }
-
-// std::ostream& operator<<(std::ostream& stream, TF1* func)
-// {
-// 	auto formulaName = FitFunction::getFormulaName(func->GetName());
-// 	auto it = std::find(FitFunction::functionList.begin(), FitFunction::functionList.end(), formulaName);
-// 	if (it != FitFunction::functionList.end())
-// 	{
-// 		stream << "Name: " << func->GetName() << '\n';
-// 		stream << "Function: " << formulaName << '\n';
-// 	}
-// 	else
-// 	{
-// 		stream << "Name: " << func->GetName() << '\n';
-// 		stream << "Function: " << func->GetExpFormula() << '\n';
-// 	}
-// 	double min = 0;
-// 	double max = 0;
-// 	func->GetRange(min, max);
-// 	stream << "Range: " << min << ' ' << max << '\n';
-// 	stream << "NumOfParameters: " << func->GetNpar() << '\n';
-
-// 	stream << "Parameters: ";
-// 	for (int i = 0; i < func->GetNpar(); ++i)
-// 	{
-// 		stream << func->GetParameter(i) << ' ';
-// 	}
-
-// 	stream << '\n' << "ParamErrors: ";
-
-// 	for (int i = 0; i < func->GetNpar(); ++i)
-// 	{
-// 		stream << func->GetParError(i) << ' ';
-// 	}
-
-// 	stream << '\n';
-// 	return stream;
-// }
-
-// std::istream& operator>>(std::istream& stream, FitFunction& func)
-// {
-// 	std::string ignore;
-// 	std::string name;
-// 	FitFunction::FunctionType funcType;
-// 	std::string expFormula;
-// 	double min, max;
-// 	int params;
-// 	int tempFuncType;
-
-// 	stream >> ignore >> name;
-// 	stream >> ignore >> tempFuncType;
-// 	std::cout << "TempFuncType = " << tempFuncType << '\n';
-// 	funcType = (FitFunction::FunctionType) tempFuncType;
-// 	stream >> ignore >> expFormula;
-
-// 	stream >> ignore >> min >> max;
-// 	stream >> ignore >> params;
-
-// 	std::vector<std::string> paramNames(params);
-// 	std::vector<double> paramValues(params);
-// 	std::vector<double> paramErrors(params);
-
-// 	stream >> ignore;
-// 	for (int i = 0; i < params; ++i)
-// 	{
-// 		stream >> paramNames[i];
-// 	}
-
-// 	stream >> ignore;
-// 	for (int i = 0; i < params; ++i)
-// 	{
-// 		stream >> paramValues[i];
-// 	}
-
-// 	stream >> ignore;
-// 	for (int i = 0; i < params; ++i)
-// 	{
-// 		stream >> paramErrors[i];
-// 	}
-
-// 	FitFunction function = FitFunction::createFunctionOfType(funcType, name, expFormula, min, max);
-
-// 	for (int i = 0; i < params; ++i)
-// 	{
-// 		function.getFunction()->SetParName(i, paramNames[i].c_str());
-// 		function.getFunction()->SetParameter(i, paramValues[i]);
-// 		function.getFunction()->SetParError(i, paramErrors[i]);
-// 	}
-// 	func = function;
-
-// 	// std::cout << "Set function\n";
-
-// 	return stream;
-// }
 
 std::istream &operator>>(std::istream &stream, FitFunction &func)
 {
@@ -687,36 +569,4 @@ std::vector<std::string> FitFunction::listSystematics() const
         names.push_back(kv.first);
     }
     return names;
-}
-
-std::string FitFunction::encodeName(std::map<std::string, std::string> parameters)
-{
-    std::string result;
-    for (auto& [key, value] : parameters)
-    {
-        result += key + " - " + value + " | ";
-    }
-    return result;
-}
-
-std::map<std::string, std::string> FitFunction::decodeName(std::string name)
-{
-    std::map<std::string, std::string> result;
-    std::istringstream stream(name);
-    std::string token;
-    while (std::getline(stream, token, '|'))
-    {
-        size_t dashPos = token.find(" - ");
-        if (dashPos != std::string::npos)
-        {
-            std::string key = token.substr(0, dashPos);
-            std::string value = token.substr(dashPos + 3);
-            key.erase(0, key.find_first_not_of(" \t"));
-            key.erase(key.find_last_not_of(" \t") + 1);
-            value.erase(0, value.find_first_not_of(" \t"));
-            value.erase(value.find_last_not_of(" \t") + 1);
-            result[key] = value;
-        }
-    }
-    return result;
 }
