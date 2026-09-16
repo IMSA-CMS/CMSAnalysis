@@ -19,7 +19,7 @@ class Fitter
         std::string rootFileName);
     // FitFunctionCollection parameterizeFunctions(std::unordered_map<double, TF1*>& xData, const std::string &genSim,
     //     const std::string &reco, const std::string &var, const HistVariable &histVar);
-    static FitFunctionCollection parameterizeFunction(std::string name, const std::unordered_map<double, TF1*>& xData, 
+    static FitFunctionCollection parameterizeFunction(std::string name, const std::unordered_map<double, FitFunction*>& xData, 
         TFile* rootFile);
 
   private:

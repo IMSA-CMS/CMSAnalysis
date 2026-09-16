@@ -78,7 +78,7 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() :
     // filePath is shared between most files. The rest of the filePath to a given file is still given when making
 
     auto reader = std::make_shared<CrossSectionReader>(
-        "/uscms/homes/p/pdong/work/analysis/CMSSW_15_0_4/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
+        "/uscms/homes/p/pdong/work/analysis/CMSSW_16_0_0/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
 
     // auto signalParams = FitFunctionCollection::loadFunctions(signalParamPath);
 

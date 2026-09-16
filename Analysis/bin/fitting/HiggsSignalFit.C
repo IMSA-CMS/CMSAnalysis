@@ -206,14 +206,14 @@ FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const H
 
 FitFunctionCollection parameterize(FitFunctionCollection functions, TFile* rootFile)
 {
-    std::unordered_map<double, TF1*> massMap;
+    std::unordered_map<double, FitFunction*> massMap;
     std::string channelName;
     for (auto &pair : functions.getFunctions())
     {
         auto& func = pair.second;
         auto decoded = FitFunction::decodeName(func.getName());
         const auto mass = std::stod(decoded.at("Mass"));
-        massMap.insert({mass, func.getFunction()});
+        massMap.insert({mass, &func});
         decoded.erase("Mass");
         if (channelName.empty())
         {
