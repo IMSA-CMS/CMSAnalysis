@@ -27,7 +27,7 @@ const std::vector<std::string> HiggsCompleteAnalysis::genSimDecays{
 const std::vector<std::string> HiggsCompleteAnalysis::recoDecays{
     "eeee", "eeeu", "eeet", "eeuu", "eeut", "eett", "eueu", "euet", "euuu", "euut", "eutt", "etet",
     "etuu", "etut", "ettt", "uuuu", "uuut", "uutt", "utut", "uttt", "tttt", "eee_", "eeu_", "eue_",
-    "euu_", "uue_", "uuu_", "eet_", "ete_", "eut_", "etu_", "uut_", "utu_", "ett_", "utt_", "ttt_",
+    "euu_", "uue_", "uuu_", "eet_", "ete_", "eut_", "etu_", "uut_", "utu_", "ett_", "utt_", "ttt_", "tte_", "ttu_", "ute_",
     "ee__", "e_e_", "eu__", "e_u_", "uu__", "u_u_", "tt__", "t_t_", "et__", "e_t_", "ut__", "u_t_"};
 
 const std::vector<std::string> systematics{"ElectronScaleFactor", "MuonIDISOScaleFactor", "MuonRecoScaleFactor",
@@ -162,40 +162,32 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis()
                         "Higgs signal " + genSimDecay + " " + std::to_string((int)massTarget), 1);
 
                         auto sigKey = std::tuple(genSimDecay, channelName);
-                        if (channelName == "eeeu") {
-                            std::cout << "DEBUG: genSimDecay=" << genSimDecay << " channelName=" << channelName
-                                      << " contains=" << signalParamMap.contains(sigKey) << "\n";
-                        }
-                        if (!signalParamMap.contains(sigKey)) { continue; }
-                        for (auto fit : signalParamMap.at(sigKey))
+                        if (signalParamMap.contains(sigKey))
                         {
-                            const auto histVar = std::get<0>(fit);
-                            auto params = std::get<1>(fit);
-                            if (channelName == "eeeu") {
-                                std::cout << "DEBUG: histVar name=" << histVar.getName() << "\n";
-                            }
-                            // TODO: Make this more robust
-                            auto funcType = FitFunction::FunctionType::DoubleSidedCrystalBall;
-                            if (params.contains("mul_{2}"))
+                            for (auto fit : signalParamMap.at(sigKey))
                             {
-                                funcType = FitFunction::FunctionType::DoubleGaussian;
-                            }
-                            auto func = FitFunction::createFunctionOfType(funcType, "", "", 0, 2000, channelName);
+                                const auto histVar = std::get<0>(fit);
+                                auto params = std::get<1>(fit);
+                                // TODO: Make this more robust
+                                auto funcType = FitFunction::FunctionType::DoubleSidedCrystalBall;
+                                if (params.contains("mul_{2}"))
+                                {
+                                    funcType = FitFunction::FunctionType::DoubleGaussian;
+                                }
+                                auto func = FitFunction::createFunctionOfType(funcType, "", "", 0, 2000, channelName);
 
-                            auto *tf1 = func.getFunction();
+                                auto *tf1 = func.getFunction();
 
-                            for (auto param : params)
-                            {
-                                const auto name = std::get<0>(param);
-                                auto fit = std::get<1>(param);
-                                const auto *fitTf1 = fit.getFunction();
-                                const auto value = fitTf1->Eval(massTarget);
-                                tf1->SetParameter(name, value);
-                            }
-                            higgsSignal->setPlot(histVar, func);
-                            higgsMassGroup->setPlot(histVar, func);
-                            if (channelName == "eeeu") {
-                                std::cout << "DEBUG: setPlot called on higgsMassGroup for histVar=" << histVar.getName() << "\n";
+                                for (auto param : params)
+                                {
+                                    const auto name = std::get<0>(param);
+                                    auto fit = std::get<1>(param);
+                                    const auto *fitTf1 = fit.getFunction();
+                                    const auto value = fitTf1->Eval(massTarget);
+                                    tf1->SetParameter(name, value);
+                                }
+                                higgsSignal->setPlot(histVar, func);
+                                higgsMassGroup->setPlot(histVar, func);
                             }
                         }
                     addSingleProcess(higgsSignal, signalFilePath, "Higgs" + std::to_string((int)massTarget) + ".root",

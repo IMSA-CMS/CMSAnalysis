@@ -64,15 +64,12 @@ std::string HPlusPlusDecayFilter::getState(const EventInput* inputMod) const
             }
         }
         std::string channel = "GenSim " + Utility::identifyChannel(collection);
-
         return channel;
     }
-
     else if (typeGenSim == EventInput::RecoLevel::Reco) 
     {
         // identifies channel using Utility function 
         std::string channel = Utility::identifyChannel(reco);
-        //std::cout << "Channel: " << channel << '\n';
         return "Reco " + channel;
     }
 

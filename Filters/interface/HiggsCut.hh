@@ -10,6 +10,7 @@ class HiggsCut : public Cut
     private:
         static double electronThreeChannelCut;
         static double muonThreeChannelCut;
+        static double tauThreeChannelCut;
 };
 
 #endif

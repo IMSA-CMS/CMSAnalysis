@@ -37,8 +37,8 @@ void HiggsBackgroundPlan::initialize()
 
     auto eventMod = make_shared<EventModule>();
     auto hppSelector = make_shared<HPlusPlusGenSimSelector>();
-    //auto higgsSelector = make_shared<HiggsSelector>();
-    auto higgsSelector = make_shared<KansasCuts>();
+    auto higgsSelector = make_shared<HiggsSelector>();
+    //auto higgsSelector = make_shared<KansasCuts>();
     auto higgsCut = make_shared<HiggsCut>();
     auto runCut = make_shared<RunCut>(
         std::vector<std::string>{"ScaleFactors/Cert_271036-284044_13TeV_Legacy2016_Collisions16_JSON.txt",
@@ -95,9 +95,14 @@ void HiggsBackgroundPlan::initialize()
     auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
 
     auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(
-        EventInput::RecoLevel::GenSim, "GenSim Same Sign Invariant Mass", 1000, 0, 2000, false, false);
+        EventInput::RecoLevel::GenSim, "GenSim Same Sign Invariant Mass", 1000, 0, 2000, false);
     auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(
-        EventInput::RecoLevel::Reco, "Reco Same Sign Invariant Mass", 1000, 0, 2000);
+        EventInput::RecoLevel::Reco, "Reco Same Sign Invariant Mass", 1000, 0, 2000, false);
+
+    auto correctedSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(
+        EventInput::RecoLevel::GenSim, "Corrected GenSim Same Sign Invariant Mass", 1000, 0, 2000, true);
+    auto correctedRecoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(
+        EventInput::RecoLevel::Reco, "Corrected Reco Same Sign Invariant Mass", 1000, 0, 2000, true);
 
     auto oppositeSignInvMassHist = make_shared<OppositeSignInvariantMassHist>(
         EventInput::RecoLevel::GenSim, "GenSim Opposite Sign Invariant Mass", 1000, 0, 2000);
@@ -127,6 +132,8 @@ void HiggsBackgroundPlan::initialize()
     eventHistMod->addHistogram(metHist);
     eventHistMod->addHistogram(recoSameSignInvMassHist);
     eventHistMod->addHistogram(sameSignInvMassHist);
+    eventHistMod->addHistogram(correctedRecoSameSignInvMassHist);
+    eventHistMod->addHistogram(correctedSameSignInvMassHist);
     eventHistMod->addHistogram(positiveNegativeInvMassHist);
     eventHistMod->addHistogram(positiveNegativeInvMassHistCorrected);
     eventHistMod->addHistogram(oppositeSignInvMassHist);

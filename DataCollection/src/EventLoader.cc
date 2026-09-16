@@ -13,7 +13,8 @@
 #include "CMSAnalysis/DataCollection/interface/SingleFileParams.hh"
 #include "CMSAnalysis/DataCollection/interface/ListFileParams.hh"
 
-EventLoader::EventLoader(std::vector<std::shared_ptr<FileParams>> fileList, Analyzer *nAnalyzer)
+EventLoader::EventLoader(std::vector<std::shared_ptr<FileParams>> fileList, Analyzer *nAnalyzer) :
+    eventInterface(new RootEventInterface())
 {
   rootFiles = fileList;
   modules = nAnalyzer;
