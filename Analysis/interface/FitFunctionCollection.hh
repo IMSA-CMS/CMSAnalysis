@@ -29,7 +29,7 @@ class FitFunctionCollection
     FitFunctionCollection& operator+=(const FitFunctionCollection& other);
 
     bool checkFunctionsSimilar();
-    std::unordered_map<std::string, FitFunction>& getFunctions();
+    std::unordered_map<std::string, FitFunction>& getFunctionsMap();
     
   private:
     std::unordered_map<std::string, FitFunction> functions;

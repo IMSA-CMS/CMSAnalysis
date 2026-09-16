@@ -208,7 +208,7 @@ FitFunctionCollection parameterize(FitFunctionCollection functions, TFile* rootF
 {
     std::unordered_map<double, FitFunction*> massMap;
     std::string channelName;
-    for (auto &pair : functions.getFunctions())
+    for (auto &pair : functions.getFunctionsMap())
     {
         auto& func = pair.second;
         auto decoded = FitFunction::decodeName(func.getName());

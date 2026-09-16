@@ -138,7 +138,7 @@ void HiggsSignalFitFromFile()
 		
 
 
-				FitFunction func = FitFunction::createFunctionOfType(FitFunction::FunctionType::DoubleSidedCrystalBall, keyName, "", min, max, keyName);
+				FitFunction func = FitFunction::createFunctionOfType(FitFunction::FunctionType::DoubleSidedCrystalBall, keyName, "", min, max);
 				std::cout << __LINE__ << std::endl;
 				currentFunctions.insert(func);
 				histogramMap.insert({keyName, selectedHist});
