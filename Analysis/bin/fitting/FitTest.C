@@ -15,7 +15,7 @@ void FitTest()
         return;
     }
 
-    auto& funcMap = functions.getFunctions();
+    auto& funcMap = functions.getFunctionsMap();
     if (funcMap.empty()) {
         std::cerr << "No functions were loaded.\n";
         return;

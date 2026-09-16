@@ -36,7 +36,7 @@ FitFunction createSignalDSCB(std::string channel, std::string xOrY, FitFunctionC
 	const double max = 2000;
 
 
-	auto functionsInCollection = signalCollection->getFunctions();
+	auto functionsInCollection = signalCollection->getFunctionsMap();
 	std::vector<FitFunction> channelFunctions = {};
 	std::vector<FitFunction> sortedChannelFunctions = {};
 
@@ -118,7 +118,7 @@ FitFunction createSignalDSCB(std::string channel, std::string xOrY, FitFunctionC
 
 void graphFunctionFromCollection(FitFunctionCollection *functionCollection, std::string functionName)
 {
-	auto functions = functionCollection->getFunctions();
+	auto functions = functionCollection->getFunctionsMap();
 	bool functionFound = false;
 	for (auto pair : functions)
 	{
@@ -162,7 +162,7 @@ void ParameterizationFunctionGrapher()
 	//std::vector<std::string> channelsToCheck = {"eueu", "uuuu"};
 	auto signalParameters = FitFunctionCollection::loadFunctions(signalParametersFile); 
 	auto backgroundParameters = FitFunctionCollection::loadFunctions(backgroundParametersFile);
-	auto backgroundParameterFunctions = backgroundParameters.getFunctions();
+	auto backgroundParameterFunctions = backgroundParameters.getFunctionsMap();
 
 	// Arguments for graphing individual signal and background functions
 	std::string signalFunction = "eueu_eueu/#mu h_mll1";

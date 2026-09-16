@@ -138,7 +138,7 @@ bool FitFunctionCollection::checkFunctionsSimilar()
     }
 }
 
-std::unordered_map<std::string, FitFunction> &FitFunctionCollection::getFunctions()
+std::unordered_map<std::string, FitFunction> &FitFunctionCollection::getFunctionsMap()
 {
     return functions;
 }

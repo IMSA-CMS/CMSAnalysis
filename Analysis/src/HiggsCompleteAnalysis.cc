@@ -468,11 +468,11 @@ void HiggsCompleteAnalysis::addParameterizations()
     for (auto& channel : getChannelsProtected())
     {
         const auto channelName = channel->getName();
-        auto matchingSignalFunctions = signalParams.getFunctions("reco", channelName);
+        auto matchingSignalFunctions = signalParams.getFunctions("reco", channelName).getFunctionsMap();
 
         for (auto& fitFunction : matchingSignalFunctions)
         {
-            auto parsed = FitFunction::decodeName(fitFunction.getName());
+            auto parsed = FitFunction::decodeName(fitFunction.second.getName());
             auto projection = parsed["projection"];
             auto genSim = parsed["genSim"];
 
@@ -486,7 +486,7 @@ void HiggsCompleteAnalysis::addParameterizations()
                 {
                     continue;
                 }
-                process->setPlot(histVar, fitFunction);
+                process->setPlot(histVar, fitFunction.second);
             }
         }
     }
@@ -495,11 +495,11 @@ void HiggsCompleteAnalysis::addParameterizations()
     for (auto& channel : getChannelsProtected())
     {
         const auto channelName = channel->getName();
-        auto matchingBgFunctions = bgParams.getFunctions("channel", channelName);
+        auto matchingBgFunctions = bgParams.getFunctions("channel", channelName).getFunctionsMap();
 
         for (auto& fitFunction : matchingBgFunctions)
         {
-            auto parsed = FitFunction::decodeName(fitFunction.getName());
+            auto parsed = FitFunction::decodeName(fitFunction.second.getName());
             auto projection = parsed["projection"];
             auto bgName = parsed["process"];
 
@@ -510,7 +510,7 @@ void HiggsCompleteAnalysis::addParameterizations()
             {
                 continue;
             }
-            process->setPlot(histVar, fitFunction);
+            process->setPlot(histVar, fitFunction.second);
         }
     }
 }
