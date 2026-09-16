@@ -1,36 +1,25 @@
 #ifndef FIT_FUNCTION_HH
 #define FIT_FUNCTION_HH
 
+#include "CMSAnalysis/Analysis/interface/FitFunctionBase.hh"
 #include "TF1.h"
 #include <iostream>
 #include <map>
 #include <string>
 #include <vector>
 
-class FitFunction
+class FitFunction : public FitFunctionBase
 {
   public:
-    enum class FunctionType
-    {
-        ExpressionFormula,
-        DoubleSidedCrystalBall,
-        PowerLaw,
-        DoubleGaussian,
-        GausLogPowerNorm,
-        Voigt,
-    };
-
     // static const std::vector<std::string> functionList;
     static FitFunction createFunctionOfType(FunctionType functionType, const std::string &name,
                                             const std::string &expFormula, double min, double max);
-    static std::string encodeName(std::map<std::string, std::string> parameters);
-    static std::map<std::string, std::string> decodeName(std::string name);
-
     // static std::vector<FitFunction> loadFunctions(const std::string& fileName);
     // static void saveFunctions(std::vector<FitFunction>& functions, const std::string& fileName);
     FitFunction() {}    
     FitFunction(const TF1& func, FunctionType funcType);
     TF1* getFunction();
+    const TF1* getFunction() const;
     void setFunction(const TF1& function, FunctionType funcType);
     FunctionType getFunctionType() const;
     std::string getName() const;
@@ -39,7 +28,7 @@ class FitFunction
 
     std::string getParameter(std::string name);
 
-    double evaluate(double x);
+    double evaluate(double x) const;
 
     void addSystematic(const std::string& sysName, const TF1& upFunction, const TF1& downFunction);
     void addSystematic(const std::string& sysName, const std::vector<double>& upParams, const std::vector<double>& downParams);

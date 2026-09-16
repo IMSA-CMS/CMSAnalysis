@@ -35,10 +35,10 @@ class HistVariable
         LeptonJetDeltaR,
     };
 
-    HistVariable(ParticleType type, int order, VariableType var, std::string unit = "", bool is2DHistX = false,
+    HistVariable(ParticleType type, int order, VariableType var, std::string AxisLabel = "", bool is2DHistX = false,
                  bool is2DHistY = false, bool isCorrected = false);
 
-    HistVariable(VariableType var, std::string unit = "", bool is2DHistX = false, bool is2DHistY = false,
+    HistVariable(VariableType var, std::string AxisLabel = "", bool is2DHistX = false, bool is2DHistY = false,
                  bool isCorrected = false);
 
     std::string getName() const;
@@ -58,9 +58,9 @@ class HistVariable
         return variableType;
     }
 
-    std::string getUnit() const
+    std::string getAxisLabel() const
     {
-        return unit;
+        return AxisLabel;
     }
 
     void setSystematic(ScaleFactor::SystematicType itype, std::string isystematicName)
@@ -88,7 +88,7 @@ class HistVariable
     bool operator==(const HistVariable &other) const
     {
         return particleType == other.particleType && order_ == other.order_ && variableType == other.variableType &&
-               unit == other.unit && is2DHistX_ == other.is2DHistX_ && is2DHistY_ == other.is2DHistY_ &&
+               AxisLabel == other.AxisLabel && is2DHistX_ == other.is2DHistX_ && is2DHistY_ == other.is2DHistY_ &&
                isCorrected == other.isCorrected && type == other.type && systematicName == other.systematicName;
     }
 
@@ -96,7 +96,7 @@ class HistVariable
     ParticleType particleType;
     int order_;
     VariableType variableType;
-    std::string unit;
+    std::string AxisLabel;
     bool is2DHistX_ = false;
     bool is2DHistY_ = false;
     bool isCorrected = false;

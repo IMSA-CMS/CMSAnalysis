@@ -1,5 +1,6 @@
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
 #include "CMSAnalysis/Analysis/interface/FitFunction.hh"
+#include "CMSAnalysis/Analysis/interface/FitFunctionParameterization.hh"
 #include <Fit/FitResult.h>
 #include <TCanvas.h>
 #include <TFitResult.h>
@@ -277,11 +278,27 @@ FitFunction Fitter::fitPowerLawToGraph(TGraph *graph, std::string name)
 FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::unordered_map<double, FitFunction *> &xData,
                                                    TFile *rootFile)
 {
-    FitFunctionCollection paramFunctions;
+    std::vector<ParameterizationData> totalParameterData = getParameterData(xData);
+    const auto channel = reco + "_" + genSim;
+    auto &templateFunction = functions.getFunctions().begin()->second;
+    auto *templateTF1 = templateFunction.getFunction();
+    double min = 0;
+    double max = 0;
+    templateTF1->GetRange(min, max);
+    const char *rawFormula = templateTF1->GetExpFormula();
+    const std::string expFormula = rawFormula == nullptr ? "" : rawFormula;
+    auto nameParameters = FitFunctionBase::decodeName(templateFunction.getName());
+    nameParameters.erase("mass");
+    nameParameters["IsParameterization"] = "true";
+    const std::string parameterizationName = FitFunctionBase::encodeName(nameParameters);
 
-    if (xData.empty())
+    FitFunctionParameterization parameterization(parameterizationName, channel, templateFunction.getFunctionType(),
+                                                 expFormula, min, max);
+
+    for (auto &param : totalParameterData)
     {
-        return paramFunctions;
+        FitFunction func = parameterizeFunction(param, genSim, reco, var, histVar);
+        parameterization.insert(func);
     }
 
     auto *firstFunction = xData.begin()->second;
@@ -299,6 +316,8 @@ FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::
     // auto nPoints = xData.size();
     // auto nParams = xData.begin()->second->GetNpar();
     // up
+    parameterization.save(parameterTextFile, true);
+    
     for (int i = 0; i < nParams; ++i)
     {
         std::vector<double> xValues;
