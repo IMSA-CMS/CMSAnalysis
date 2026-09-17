@@ -21,7 +21,7 @@
 #include "TGraphErrors.h"
 #include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
-#include "CMSAnalysis/Analysis/interface/FitFunction.hh"
+#include "CMSAnalysis/Analysis/interface/SimpleFitFunction.hh"
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
 #define _USE_MATH_DEFINES
@@ -193,7 +193,7 @@ void HiggsBackgroundFitFromFile()
 				std::string keyName = channel + '/' + background + " " + histType;
 				keyNames.push_back(keyName);
 
-				FitFunction func = FitFunction::createFunctionOfType(FitFunction::FunctionType::GausLogPowerNorm, keyName, "", min, max, channel);
+				SimpleFitFunction func = SimpleFitFunction::createFunctionOfType(FitFunction::FunctionType::GausLogPowerNorm, keyName, "", min, max, channel);
 				currentFunctions.insert(keyName, func);
 				histogramMap.insert({keyName, selectedHist});
 				//histogramMap.insert({keyName, selectedHist});

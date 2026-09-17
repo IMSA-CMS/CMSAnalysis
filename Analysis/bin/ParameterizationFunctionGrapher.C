@@ -30,15 +30,15 @@ bool containsSubstring(const std::string& text, const std::string& pattern) {
 }
 
 
-FitFunction createSignalDSCB(std::string channel, std::string xOrY, FitFunctionCollection *signalCollection, double mass)
+SimpleFitFunction createSignalDSCB(std::string channel, std::string xOrY, FitFunctionCollection *signalCollection, double mass)
 {
 	const double min = 0;
 	const double max = 2000;
 
 
 	auto functionsInCollection = signalCollection->getFunctionsMap();
-	std::vector<FitFunction> channelFunctions = {};
-	std::vector<FitFunction> sortedChannelFunctions = {};
+	std::vector<SimpleFitFunction> channelFunctions = {};
+	std::vector<SimpleFitFunction> sortedChannelFunctions = {};
 
 	// Find functions in channel
 	for (auto pair : functionsInCollection)
@@ -101,7 +101,7 @@ FitFunction createSignalDSCB(std::string channel, std::string xOrY, FitFunctionC
 	double norm = sortedChannelFunctions[NORM].evaluate(mass);
 
 	// Construct DSCB
-	FitFunction signalDSCB = FitFunction::createFunctionOfType(FitFunction::FunctionType::DoubleSidedCrystalBall, channel, "", min, max,"eueu");
+	SimpleFitFunction signalDSCB = SimpleFitFunction::createFunctionOfType(FitFunction::FunctionType::DoubleSidedCrystalBall, channel, "", min, max,"eueu");
 	signalDSCB.getFunction()->SetParameter(0, alpha_l);
 	signalDSCB.getFunction()->SetParameter(1, alpha_h);
 	signalDSCB.getFunction()->SetParameter(2, n_l);
@@ -191,11 +191,11 @@ void ParameterizationFunctionGrapher()
 	// Create signal channel functions
 	auto eueuChannel = createSignalDSCB("eueu_eueu", x, &signalParameters, mass);
 	//auto uuuuChannel = createSignalDSCB("mmmm_mmmm", x, &signalParameters, mass); 
-	std::vector<FitFunction> signalFitFunctions = {};
+	std::vector<SimpleFitFunction> signalFitFunctions = {};
 	signalFitFunctions.push_back(eueuChannel);
 	//signalFitFunctions.push_back(uuuuChannel);
 
-	std::vector<FitFunction> backgroundFitFunctions = {};
+	std::vector<SimpleFitFunction> backgroundFitFunctions = {};
 	std::vector<std::string> backgroundChannels = {"eueu"};
 	std::vector<std::string> exclude = {"ZPeak", "Up", "Down", "Y Projection", "Multiboson"};
 	for (std::string channel : backgroundChannels)

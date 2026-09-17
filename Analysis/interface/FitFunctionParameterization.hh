@@ -2,11 +2,12 @@
 #define FIT_FUNCTION_PARAMETERIZATION_HH
 
 #include "FitFunction.hh"
+#include "SimpleFitFunction.hh"
 #include <optional>
 #include <string>
 #include <vector>
 
-class FitFunctionParameterization : public FitFunctionBase
+class FitFunctionParameterization : public FitFunction
 {
   public:
     FitFunctionParameterization() = default;
@@ -15,8 +16,8 @@ class FitFunctionParameterization : public FitFunctionBase
 
     static FitFunctionParameterization load(const std::string &fileName);
 
-    void insert(const FitFunction &function);
-    FitFunction reconstructFunction(double mass);
+    void insert(const SimpleFitFunction &function);
+    SimpleFitFunction reconstructFunction(double mass);
     std::string getNormExpression(const std::string &variable) override;
     void save(const std::string &fileName, bool append = false);
 
@@ -27,7 +28,7 @@ class FitFunctionParameterization : public FitFunctionBase
     std::string expFormula;
     double min = 0;
     double max = 0;
-    std::vector<FitFunction> parameterFunctions;
+    std::vector<SimpleFitFunction> parameterFunctions;
     std::optional<size_t> normParameterIndex;
 };
 

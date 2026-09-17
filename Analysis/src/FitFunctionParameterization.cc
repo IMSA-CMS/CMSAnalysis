@@ -7,7 +7,7 @@
 FitFunctionParameterization::FitFunctionParameterization(std::string name, std::string channelName,
                                                          const FunctionType functionType,
                                                          std::string expFormula, const double min, const double max)
-    : FitFunctionBase(functionType, std::move(name)),
+    : FitFunction(functionType, std::move(name)),
       channelName(std::move(channelName)),
       expFormula(std::move(expFormula)),
       min(min),
@@ -66,7 +66,7 @@ FitFunctionParameterization FitFunctionParameterization::load(const std::string 
         file >> label >> functionMin >> functionMax;
         file >> label >> npar;
 
-        auto function = FitFunction::createFunctionOfType(static_cast<FunctionType>(parameterType), functionName, parameterFormula, functionMin, functionMax);
+        auto function = SimpleFitFunction::createFunctionOfType(static_cast<FunctionType>(parameterType), functionName, parameterFormula, functionMin, functionMax);
         for (int parameter = 0; parameter < npar; ++parameter)
         {
             std::string parameterName;
@@ -87,14 +87,14 @@ FitFunctionParameterization FitFunctionParameterization::load(const std::string 
     return result;
 }
 
-void FitFunctionParameterization::insert(const FitFunction &function)
+void FitFunctionParameterization::insert(const SimpleFitFunction &function)
 {
     parameterFunctions.push_back(function);
 }
 
-FitFunction FitFunctionParameterization::reconstructFunction(const double mass)
+SimpleFitFunction FitFunctionParameterization::reconstructFunction(const double mass)
 {
-    auto function = FitFunction::createFunctionOfType(getFunctionType(), getName(), expFormula, min, max);
+    auto function = SimpleFitFunction::createFunctionOfType(getFunctionType(), getName(), expFormula, min, max);
     auto *const tf1 = function.getFunction();
 
     for (size_t i = 0; i < parameterFunctions.size(); ++i)

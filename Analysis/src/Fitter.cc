@@ -1,5 +1,5 @@
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
-#include "CMSAnalysis/Analysis/interface/FitFunction.hh"
+#include "CMSAnalysis/Analysis/interface/SimpleFitFunction.hh"
 #include "CMSAnalysis/Analysis/interface/FitFunctionParameterization.hh"
 #include <Fit/FitResult.h>
 #include <TCanvas.h>
@@ -17,7 +17,7 @@
 #include <stdexcept>
 #include <utility>
 
-FitFunctionCollection Fitter::fitFunctions(const std::vector<std::pair<TH1 *, FitFunction>> &histogramPairs,
+FitFunctionCollection Fitter::fitFunctions(const std::vector<std::pair<TH1 *, SimpleFitFunction>> &histogramPairs,
                                            std::string rootFileName)
 {
     TFile *rootFile = TFile::Open(rootFileName.c_str(), "RECREATE");
@@ -47,7 +47,7 @@ FitFunctionCollection Fitter::fitFunctions(const std::vector<std::pair<TH1 *, Fi
     return functions;
 }
 
-void Fitter::fitSingleFunction(TH1 *histogram, FitFunction &function, TFile *rootFile)
+void Fitter::fitSingleFunction(TH1 *histogram, SimpleFitFunction &function, TFile *rootFile)
 {
     if (!histogram)
     {
@@ -90,14 +90,14 @@ void Fitter::fitSingleFunction(TH1 *histogram, FitFunction &function, TFile *roo
 }
 
 // not sure if this is used at all
-void Fitter::fitExpressionFormula(TH1 *histogram, FitFunction &fitFunction)
+void Fitter::fitExpressionFormula(TH1 *histogram, SimpleFitFunction &fitFunction)
 {
     TFitResultPtr result =
         histogram->Fit(fitFunction.getFunction(), "SQRWIDTH", "", fitFunction.getMin(), fitFunction.getMax());
     gStyle->SetOptFit(1111);
 }
 
-void Fitter::fitDSCB(TH1 *histogram, FitFunction &fitFunction)
+void Fitter::fitDSCB(TH1 *histogram, SimpleFitFunction &fitFunction)
 {
     TF1 *f1 = fitFunction.getFunction();
     TFitResultPtr gausResult = histogram->Fit("gaus", "SWLQR", "", fitFunction.getMin(), fitFunction.getMax());
@@ -127,7 +127,7 @@ void Fitter::fitDSCB(TH1 *histogram, FitFunction &fitFunction)
     st->SetX2NDC(0.5);
 }
 
-void Fitter::fitPowerLaw(TH1 *histogram, FitFunction &fitFunction)
+void Fitter::fitPowerLaw(TH1 *histogram, SimpleFitFunction &fitFunction)
 {
     std::array<double, 3> initalParams = {{1e17, 0, -5}};
     fitFunction.getFunction()->SetParameters(initalParams.data());
@@ -150,7 +150,7 @@ void Fitter::fitPowerLaw(TH1 *histogram, FitFunction &fitFunction)
     gStyle->SetOptFit(1111);
 }
 
-void Fitter::fitDoubleGaussian(TH1 *histogram, FitFunction &fitFunction)
+void Fitter::fitDoubleGaussian(TH1 *histogram, SimpleFitFunction &fitFunction)
 {
     const auto mean = histogram->GetMean();
     const auto std = histogram->GetStdDev();
@@ -223,7 +223,7 @@ void Fitter::fitDoubleGaussian(TH1 *histogram, FitFunction &fitFunction)
     gStyle->SetOptFit(1111);
 }
 
-void Fitter::fitGausLogPowerNorm(TH1 *const hist, FitFunction &func)
+void Fitter::fitGausLogPowerNorm(TH1 *const hist, SimpleFitFunction &func)
 {
     TF1 *const f1 = func.getFunction();
 
@@ -238,7 +238,7 @@ void Fitter::fitGausLogPowerNorm(TH1 *const hist, FitFunction &func)
     gStyle->SetOptFit(1111);
 }
 
-void Fitter::fitVoigt(TH1 *histogram, FitFunction &fitFunction)
+void Fitter::fitVoigt(TH1 *histogram, SimpleFitFunction &fitFunction)
 {
     TF1 *f1 = fitFunction.getFunction();
     const double fitMin = fitFunction.getMin();
@@ -258,10 +258,10 @@ void Fitter::fitVoigt(TH1 *histogram, FitFunction &fitFunction)
     gStyle->SetOptFit(1111);
 }
 
-FitFunction Fitter::fitPowerLawToGraph(TGraph *graph, std::string name)
+SimpleFitFunction Fitter::fitPowerLawToGraph(TGraph *graph, std::string name)
 {
     auto function =
-        FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, name, "", 0, 2000);
+        SimpleFitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, name, "", 0, 2000);
 
     auto *func = function.getFunction();
 
@@ -275,7 +275,7 @@ FitFunction Fitter::fitPowerLawToGraph(TGraph *graph, std::string name)
     return function;
 }
 
-FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::unordered_map<double, FitFunction *> &xData,
+FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::unordered_map<double, SimpleFitFunction *> &xData,
                                                    TFile *rootFile)
 {
     std::vector<ParameterizationData> totalParameterData = getParameterData(xData);
@@ -287,17 +287,17 @@ FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::
     templateTF1->GetRange(min, max);
     const char *rawFormula = templateTF1->GetExpFormula();
     const std::string expFormula = rawFormula == nullptr ? "" : rawFormula;
-    auto nameParameters = FitFunctionBase::decodeName(templateFunction.getName());
+    auto nameParameters = FitFunction::decodeName(templateFunction.getName());
     nameParameters.erase("mass");
     nameParameters["IsParameterization"] = "true";
-    const std::string parameterizationName = FitFunctionBase::encodeName(nameParameters);
+    const std::string parameterizationName = FitFunction::encodeName(nameParameters);
 
     FitFunctionParameterization parameterization(parameterizationName, channel, templateFunction.getFunctionType(),
                                                  expFormula, min, max);
 
     for (auto &param : totalParameterData)
     {
-        FitFunction func = parameterizeFunction(param, genSim, reco, var, histVar);
+        SimpleFitFunction func = parameterizeFunction(param, genSim, reco, var, histVar);
         parameterization.insert(func);
     }
 
@@ -352,8 +352,8 @@ FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::
         // Systematics part
         for (const auto &systematic : systematics)
         {
-            FitFunction upFit;
-            FitFunction downFit;
+            SimpleFitFunction upFit;
+            SimpleFitFunction downFit;
             bool hasUp = false;
             bool hasDown = false;
 

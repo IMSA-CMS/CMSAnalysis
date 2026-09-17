@@ -1,4 +1,4 @@
-#include "CMSAnalysis/Analysis/interface/FitFunction.hh"
+#include "CMSAnalysis/Analysis/interface/SimpleFitFunction.hh"
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsKansasStateAnalysis.hh"
@@ -169,18 +169,18 @@ FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const H
         const auto name = FitFunction::encodeName(nameParams);
         // const auto name =
         //     genSim + "->" + channelName + "/" + std::to_string(mass) + ' ' + histVar.getName() + " " + systDesc;
-        FitFunction func = FitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
+        SimpleFitFunction func = SimpleFitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
         Fitter::fitSingleFunction(hist, func, rootFile); // Only add the nominal version to the Root file
         for (const auto &systName : systs)
         {
             auto systHistType = histVar;
             systHistType.setSystematic(ScaleFactor::SystematicType::Down, systName);
-            FitFunction downFunction = FitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
+            SimpleFitFunction downFunction = SimpleFitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
             TH1 *sysHistdown = process->getHist(systHistType, true);
             Fitter::fitSingleFunction(sysHistdown, downFunction);
 
             systHistType.setSystematic(ScaleFactor::SystematicType::Up, systName);
-            FitFunction upFunction = FitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
+            SimpleFitFunction upFunction = SimpleFitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
             TH1 *sysHistup = process->getHist(systHistType, true);
             Fitter::fitSingleFunction(sysHistup, upFunction);
             
@@ -206,7 +206,7 @@ FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const H
 
 FitFunctionCollection parameterize(FitFunctionCollection functions, TFile* rootFile)
 {
-    std::unordered_map<double, FitFunction*> massMap;
+    std::unordered_map<double, SimpleFitFunction*> massMap;
     std::string channelName;
     for (auto &pair : functions.getFunctionsMap())
     {
