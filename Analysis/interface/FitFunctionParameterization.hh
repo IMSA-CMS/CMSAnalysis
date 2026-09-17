@@ -3,7 +3,6 @@
 
 #include "FitFunction.hh"
 #include "SimpleFitFunction.hh"
-#include <optional>
 #include <string>
 #include <vector>
 
@@ -17,19 +16,24 @@ class FitFunctionParameterization : public FitFunction
     static FitFunctionParameterization load(const std::string &fileName);
 
     void insert(const SimpleFitFunction &function);
-    SimpleFitFunction reconstructFunction(double mass);
-    std::string getNormExpression(const std::string &variable) override;
+    //update evaluate
+    double evaluate(double observable, double modelMass,
+                    const NuisanceValues &nuisances = {}) const override;
+    std::string getNormExpression(const std::string &variable) const override;
+    std::vector<std::string> listSystematics() const override;
     void save(const std::string &fileName, bool append = false);
 
   private:
-    static std::optional<size_t> defaultNormParameterIndex(FunctionType type);
+    static int defaultNormParameterIndex(FunctionType type);
 
     std::string channelName;
     std::string expFormula;
     double min = 0;
     double max = 0;
+    SimpleFitFunction templateFunction;
     std::vector<SimpleFitFunction> parameterFunctions;
-    std::optional<size_t> normParameterIndex;
+    // -1 means no said yield parameter
+    int normParameterIndex = -1;
 };
 
 #endif

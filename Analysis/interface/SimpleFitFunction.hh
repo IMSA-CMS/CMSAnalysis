@@ -21,25 +21,28 @@ class SimpleFitFunction : public FitFunction
     TF1* getFunction();
     const TF1* getFunction() const;
     void setFunction(const TF1& function, FunctionType funcType);
-    FunctionType getFunctionType() const;
-    std::string getName() const;
     double getMin() const;
     double getMax() const;
 
-    std::string getParameter(std::string name);
+    std::string getParameter(std::string name) const;
 
     double evaluate(double x) const;
+    double evaluate(double x, const NuisanceValues &nuisances) const;
+    double evaluate(double observable, double modelMass,
+                    const NuisanceValues &nuisances = {}) const override;
+    double evaluateWithParameters(double x, const std::vector<double> &parameters) const;
+    std::string getExpression(const std::string &variable) const;
+    std::string getNormExpression(const std::string &variable) const override;
 
     void addSystematic(const std::string& sysName, const TF1& upFunction, const TF1& downFunction);
     void addSystematic(const std::string& sysName, const std::vector<double>& upParams, const std::vector<double>& downParams);
     const TF1* getSystematic(const std::string& sysName, bool up) const;
-    std::vector<std::string> listSystematics() const;
+    std::vector<std::string> listSystematics() const override;
     // implement functions into source code
     // modify input output stuff (start with implements)
 
   private:
-    TF1 function;
-    FunctionType functionType;
+    mutable TF1 function;
     std::map<std::string, std::pair<TF1, TF1>> systematics; 
 
     static double powerLaw(double *x, double *par);
@@ -48,6 +51,7 @@ class SimpleFitFunction : public FitFunction
     static double gausLogPowerNorm(double *x, double *par);
     static double voigt(double *x, double *par);
     static std::vector<std::string> split(const std::string &str, char delimiter);
+    ClassDefNV(SimpleFitFunction, 1)
 };
 
 std::ostream &operator<<(std::ostream &stream, SimpleFitFunction &function);

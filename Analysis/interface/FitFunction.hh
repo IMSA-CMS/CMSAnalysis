@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 class FitFunction
 {
@@ -17,19 +18,24 @@ class FitFunction
         Voigt,
     };
 
+    using NuisanceValues = std::map<std::string, double>;
+
     virtual ~FitFunction() {};
 
-    std::string getName()
+    std::string getName() const
     {
         return name;
     }
 
-    FunctionType getFunctionType()
+    FunctionType getFunctionType() const
     {
         return functionType;
     }
 
-    virtual std::string getNormExpression(const std::string &variable) = 0;
+    virtual double evaluate(double observable, double modelMass,
+                            const NuisanceValues &nuisances = {}) const = 0;
+    virtual std::string getNormExpression(const std::string &variable) const = 0;
+    virtual std::vector<std::string> listSystematics() const = 0;
 
     static std::string encodeName(std::map<std::string, std::string> parameters);
     static std::map<std::string, std::string> decodeName(std::string name);

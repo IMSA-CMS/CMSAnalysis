@@ -1,5 +1,6 @@
 #include "../interface/SimpleFitFunction.hh"
 #include "TF1.h"
+#include "TBuffer.h"
 #include <TMath.h>
 #include <boost/algorithm/string/split.hpp>
 #include <cmath>
@@ -11,12 +12,52 @@
 #include <utility>
 #include <vector>
 
+ClassImp(SimpleFitFunction);
+
+void SimpleFitFunction::Streamer(TBuffer &buffer)
+{
+    if (!buffer.IsReading())
+    {
+        buffer.WriteClassBuffer(SimpleFitFunction::Class(), this);
+        return;
+    }
+    buffer.ReadClassBuffer(SimpleFitFunction::Class(), this);
+    const auto restore = [this](TF1 &tf1) {
+        // must note here that for TF1 the reader registers are global
+        // cannot restore callback
+        // so we dont use the global ROOT list
+        
+        tf1.AddToGlobalList(false);
+        switch (getFunctionType())
+        {
+        case FunctionType::DoubleSidedCrystalBall: tf1.SetFunction(DSCB); break;
+        case FunctionType::PowerLaw: tf1.SetFunction(powerLaw); break;
+        case FunctionType::DoubleGaussian: tf1.SetFunction(doubleGaussian); break;
+        case FunctionType::GausLogPowerNorm: tf1.SetFunction(gausLogPowerNorm); break;
+        case FunctionType::Voigt: tf1.SetFunction(voigt); break;
+        case FunctionType::ExpressionFormula: break;
+        }
+    };
+    restore(function);
+    for (auto &[name, variations] : systematics)
+    {
+        restore(variations.first);
+        restore(variations.second);
+    }
+}
+
+
 SimpleFitFunction::SimpleFitFunction(const TF1 &func, FunctionType funcType)
     : FitFunction(funcType, func.GetName()), function(func)
 {
 }
 
 TF1 *SimpleFitFunction::getFunction()
+{
+    return &function;
+}
+
+const TF1 *SimpleFitFunction::getFunction() const
 {
     return &function;
 }
@@ -43,7 +84,7 @@ double SimpleFitFunction::getMax() const
     return max;
 }
 
-std::string SimpleFitFunction::getParameter(std::string name)
+std::string SimpleFitFunction::getParameter(std::string name) const
 {
     auto parameters = decodeName(getName());
     auto parameter = parameters.find(name);
@@ -155,12 +196,58 @@ SimpleFitFunction SimpleFitFunction::createFunctionOfType(FunctionType functionT
 
 double SimpleFitFunction::evaluate(double x) const
 {
-    auto* tf1 = getFunction();
-    double result = tf1->Eval(x);
-    return result;
+    return function.Eval(x);
 }
 
-std::string SimpleFitFunction::getExpression(const std::string &variable)
+double SimpleFitFunction::evaluate(double x, const NuisanceValues &nuisances) const
+{
+    // new hierarchy for the function with simplefitfunc
+
+    std::vector<double> parameters(function.GetNpar());
+    function.GetParameters(parameters.data());
+    for (const auto &[name, delta] : nuisances)
+    {
+        if (!std::isfinite(delta))
+            throw std::invalid_argument("Shape-systematic deltas must be finite");
+        const TF1 *up = getSystematic(name, true);
+        const TF1 *down = getSystematic(name, false);
+        // nusiance only effects some rows
+       
+        if (!up && !down)
+            continue;
+        if (!up || !down || up->GetNpar() != function.GetNpar() || down->GetNpar() != function.GetNpar())
+            throw std::invalid_argument("Shape variations must match the nominal parameter count");
+        for (int p = 0; p < function.GetNpar(); ++p)
+        {
+            const double nominal = function.GetParameter(p);
+            if (!std::isfinite(nominal) || !std::isfinite(up->GetParameter(p)) || !std::isfinite(down->GetParameter(p)))
+                throw std::invalid_argument("Shape-systematic parameters must be finite");
+            if (getFunctionType() == FunctionType::DoubleSidedCrystalBall && p == 6)
+                continue;
+            const double upShift = up->GetParameter(p) - nominal;
+            const double downShift = down->GetParameter(p) - nominal;
+            if (!std::isfinite(upShift) || !std::isfinite(downShift))
+                throw std::invalid_argument("Shape-systematic shifts must be finite");
+            parameters[p] += std::abs(delta) * (delta >= 0 ? upShift : downShift);
+        }
+    }
+    return evaluateWithParameters(x, parameters);
+}
+
+// change depending on type
+double SimpleFitFunction::evaluate(double observable, double, const NuisanceValues &nuisances) const
+{
+    return evaluate(observable, nuisances);
+}
+
+double SimpleFitFunction::evaluateWithParameters(double x, const std::vector<double> &parameters) const
+{
+    if (parameters.size() != static_cast<size_t>(function.GetNpar()))
+        throw std::invalid_argument("FitFunction parameter count does not match its TF1");
+    return function.EvalPar(&x, parameters.data());
+}
+
+std::string SimpleFitFunction::getExpression(const std::string &variable) const
 {
     //we assume power law paramter function
     std::ostringstream expression;
@@ -169,7 +256,7 @@ std::string SimpleFitFunction::getExpression(const std::string &variable)
     return expression.str();
 }
 
-std::string SimpleFitFunction::getNormExpression(const std::string &)
+std::string SimpleFitFunction::getNormExpression(const std::string &) const
 {
     double norm = 0;
     switch (getFunctionType())

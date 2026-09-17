@@ -278,28 +278,9 @@ SimpleFitFunction Fitter::fitPowerLawToGraph(TGraph *graph, std::string name)
 FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::unordered_map<double, SimpleFitFunction *> &xData,
                                                    TFile *rootFile)
 {
-    std::vector<ParameterizationData> totalParameterData = getParameterData(xData);
-    const auto channel = reco + "_" + genSim;
-    auto &templateFunction = functions.getFunctions().begin()->second;
-    auto *templateTF1 = templateFunction.getFunction();
-    double min = 0;
-    double max = 0;
-    templateTF1->GetRange(min, max);
-    const char *rawFormula = templateTF1->GetExpFormula();
-    const std::string expFormula = rawFormula == nullptr ? "" : rawFormula;
-    auto nameParameters = FitFunction::decodeName(templateFunction.getName());
-    nameParameters.erase("mass");
-    nameParameters["IsParameterization"] = "true";
-    const std::string parameterizationName = FitFunction::encodeName(nameParameters);
-
-    FitFunctionParameterization parameterization(parameterizationName, channel, templateFunction.getFunctionType(),
-                                                 expFormula, min, max);
-
-    for (auto &param : totalParameterData)
-    {
-        SimpleFitFunction func = parameterizeFunction(param, genSim, reco, var, histVar);
-        parameterization.insert(func);
-    }
+    FitFunctionCollection paramFunctions;
+    if (xData.empty())
+        return paramFunctions;
 
     auto *firstFunction = xData.begin()->second;
 
@@ -316,7 +297,6 @@ FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::
     // auto nPoints = xData.size();
     // auto nParams = xData.begin()->second->GetNpar();
     // up
-    parameterization.save(parameterTextFile, true);
     
     for (int i = 0; i < nParams; ++i)
     {
@@ -347,7 +327,11 @@ FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::
         std::string fullName = name + " parameter " + firstTF1->GetParName(i);
         graph.SetTitle(fullName.c_str());
 
-        auto fit = fitPowerLawToGraph(&graph, fullName);
+        auto metadata = FitFunction::decodeName(name);
+        metadata["ParameterIndex"] = std::to_string(i);
+        metadata["OriginalFunctionType"] = std::to_string(static_cast<int>(firstFunction->getFunctionType()));
+        metadata["Parameter"] = firstTF1->GetParName(i);
+        auto fit = fitPowerLawToGraph(&graph, FitFunction::encodeName(metadata));
 
         // Systematics part
         for (const auto &systematic : systematics)
