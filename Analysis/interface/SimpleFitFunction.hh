@@ -51,7 +51,7 @@ class SimpleFitFunction : public FitFunction
     static double gausLogPowerNorm(double *x, double *par);
     static double voigt(double *x, double *par);
     static std::vector<std::string> split(const std::string &str, char delimiter);
-    ClassDefNV(SimpleFitFunction, 1)
+    ClassDef(SimpleFitFunction, 1)
 };
 
 std::ostream &operator<<(std::ostream &stream, SimpleFitFunction &function);

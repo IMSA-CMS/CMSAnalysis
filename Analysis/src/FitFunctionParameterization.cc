@@ -185,3 +185,5 @@ FitFunctionParameterization::defaultNormParameterIndex(const FunctionType type)
         return -1;
     }
 }
+
+ClassImp(FitFunctionParameterization)

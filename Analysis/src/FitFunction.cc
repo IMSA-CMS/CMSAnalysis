@@ -44,3 +44,5 @@ std::map<std::string, std::string> FitFunction::decodeName(std::string name)
     }
     return result;
 }
+
+ClassImp(FitFunction)

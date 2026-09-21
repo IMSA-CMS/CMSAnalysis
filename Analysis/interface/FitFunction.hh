@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include "Rtypes.h"
 
 class FitFunction
 {
@@ -53,6 +54,7 @@ class FitFunction
   private:
     FunctionType functionType = FunctionType::ExpressionFormula;
     std::string name;
+    ClassDef(FitFunction, 1)
 };
 
 #endif
