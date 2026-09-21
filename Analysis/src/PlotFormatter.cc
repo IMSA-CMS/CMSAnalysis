@@ -180,6 +180,8 @@ TCanvas *PlotFormatter::simpleSuperImposedHist(std::vector<TH1 *> hists, std::ve
 
     double logMinimum = CalculateLogMinimum(hists);
     first->SetMinimum(logMinimum);
+    first->Rebin(rebinFactor);
+    first->SetLineWidth(2);
     first->Draw("HIST");
     histVector.push_back(first);
 
@@ -328,7 +330,7 @@ TCanvas *PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, Hist
 }
 
 TCanvas *PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, HistVariable histvariable,
-                                     TString xAxisTitle, TString yAxisTitle, bool scaleTodata, bool includeSignal,
+                                    bool scaleTodata, bool includeSignal,
                                      bool includeData, std::string channelName, bool drawFunctions)
 {
     // parameterizedFunctions[0]->DrawCopy("L");
@@ -349,7 +351,7 @@ TCanvas *PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     // int firstBin = 0;
 
     const std::vector<std::shared_ptr<Channel>> channels = analysis->getChannels();
-    const std::shared_ptr<Channel> processes = analysis->getChannel(channelName);
+    const std::shared_ptr<Channel> &processes = channels.at(0);
 
     /*
     for (auto channel : channels)
@@ -372,28 +374,14 @@ TCanvas *PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     // data = signal = new TH1F("h1", "empty", 1, 0.0, 0.0);
     double maxCombinedY = 0;
 
-    //int signalRebinFactor = 1;
     if (includeSignal)
     {
-        // std::cout << "Signal Names Size: " << signalNames.size() << std::endl;
-        for(std::string name : processes->getNamesWithLabel(Channel::Label::Signal)) 
-        {
-            std::cout << "Signal Process Name: " << name << std::endl;
-            // std::cout << histvariable.getName() << std::endl;
-            // std::cout << channelName << std::endl;
-            // std::cout << name << std::endl;
-            signal = analysis->getHist(histvariable, name, true, channelName);
-            // std::cout << "number of signal bins is: " << signal->GetNbinsX();
-            // std::cout << name << std::endl;
-            // std::cout << histvariable.getName() << std::endl;
-            // std::cout << "SIGNAl MAX" << signal->GetMaximum() << std::endl;
-        }
+        auto signalProcs = processes->getNamesWithLabel(Channel::Label::Signal);
+
+        signal = analysis->getHist(histvariable, signalProcs.at(0), true, channelName);
+
         // signal = analysis->getHist(histvariable, signalName, true, channelName);
         // std::cout << "number of signal bins is: " << signal->GetNbinsX();
-        // if (signal)
-        //{
-        //    signalRebinFactor = CalcRebinFactor(signal, binTarget);
-        //}
         maxCombinedY = signal->GetMaximum();
         std::cout << "Signal has: " << signal->GetEntries() << "\n";
         std::cout << "Signal Integral: " << signal->Integral() << "\n";
@@ -619,7 +607,6 @@ TCanvas *PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
                 else
                 {
                     std::cout << "DEBUG: Could not get plot for SIGNAL proc " << proc->getName() << ": " << histvariable.getName() << "\n";
-                    proc->dumpPlots();
                 }
             }
         }
@@ -678,6 +665,8 @@ TCanvas *PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     std::cout << "DEBUG PAD: y-range (log10) = [" << topPad->GetUymin() << ", " << topPad->GetUymax() << "]\n";
 
     // hist->SetMinimum(1e-2);
+    std::string xAxisTitle = histvariable.getAxisLabel();
+    std::string yAxisTitle = "Events";
 
     ChangeAxisTitles(hist, xAxisTitle, yAxisTitle);
 
@@ -828,6 +817,7 @@ void PlotFormatter::DrawOtherHistograms(std::vector<TH1 *> &hists, std::vector<C
         TH1 *hist = hists.at(i);
         hist->SetLineColor(colors.at(i));
         hist->SetLineWidth(2);
+        hist->Rebin(rebinFactor);
         hist->Draw("HIST SAME");
         histVector.push_back(hist);
 
@@ -1084,9 +1074,7 @@ TLegend *PlotFormatter::GetLegend(THStack *background, std::shared_ptr<Channel> 
         auto fit = proc->getPlot(histVar);
         if (fit)
         {
-            auto *fitClone = (TF1 *)fit->getFunction()->Clone();
-            fitClone->SetLineColor(kViolet+1);
-            legend->AddEntry(fitClone, " " + toAdd + " fit", "L");
+            legend->AddEntry(fit->getFunction()->Clone(), " " + toAdd + " fit", "L");
         }
     }
 
@@ -1106,11 +1094,7 @@ TLegend *PlotFormatter::GetLegend(THStack *background, std::shared_ptr<Channel> 
         auto fit = proc->getPlot(histVar);
         if (fit)
         {
-            auto *fitClone = (TF1 *)fit->getFunction()->Clone();
-            if (toAdd == "ZZ Background") { fitClone->SetLineColor(kCyan+2); }
-            else if (toAdd == "t#bar{t}, Multiboson Background") { fitClone->SetLineColor(kAzure-2); }
-            else { fitClone->SetLineColor(kViolet+1); }
-            legend->AddEntry(fitClone, " " + toAdd + " fit", "L");
+            legend->AddEntry(fit->getFunction()->Clone(), " " + toAdd + " fit", "L");
         }
     }
     return legend;

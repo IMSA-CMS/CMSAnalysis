@@ -13,6 +13,7 @@
 class Process;
 class THStack;
 class Systematic;
+
 class Channel
 {
   public:
@@ -28,16 +29,13 @@ class Channel
     // Gets data from all processes in the format needed to make table
     std::vector<double> getYields(HistVariable dataType) const;
     std::vector<std::string> getNames() const;
-    std::string getName() const
-    {
-        return name;
-    }
+    std::string getName() const { return name; }
     std::vector<std::string> getNamesWithLabel(Label label) const;
     std::vector<std::shared_ptr<Process>> getWithLabel(Label label) const;
 
     // Makes stacked histogram
-    THStack *getStack(HistVariable histType, std::optional<Label> label = {}, bool scaleToExpected = false,
-                      int rebinConstant = 1) const;
+    THStack *getStack(HistVariable histType, std::optional<Label> label = {}, 
+                      bool scaleToExpected = false, int rebinConstant = 1) const;
 
     std::vector<TH1 *> getHists(HistVariable histType, std::optional<Label> label = {},
                                 bool scaleToExpected = false) const;
@@ -52,20 +50,16 @@ class Channel
 
     void makeDatacard(HistVariable histType);
 
-    void CombineDatacard(HistVariable histType);
+    void combineDatacard(HistVariable histType);
 
     void addGlobalSystematic(Systematic &systematic);
 
-    std::vector<std::shared_ptr<Process>> getProcesses()
-    {
-        return processes;
-    }
+    std::vector<std::shared_ptr<Process>> getProcesses() const { return processes; }
 
-    static TH1 *combineHists(const std::vector<TH1 *> &hists);
+    static TH1 *combineHists(const std::vector<TH1*>& hists);
 
   private:
     std::string name;
-    // std::string yAxisName;
     std::vector<std::shared_ptr<Process>> processes;
     std::unordered_map<Label, std::vector<std::shared_ptr<Process>>> map;
 };

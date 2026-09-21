@@ -162,10 +162,6 @@ double Process::getYield(const HistVariable &dataType) const
 
 void Process::addProcess(SingleProcess process)
 {
-    // if(process.checkValidity())
-    // {
-    // 	processes.push_back(process);
-    // }
     processes.push_back(process);
 }
 
@@ -264,34 +260,10 @@ std::optional<FitFunction> Process::getPlot(const HistVariable &histType)
         {
             return std::get<1>(entry);
         }
-        if (otherType.getName() == histType.getName())
-        {
-            std::cout << "DEBUG MISMATCH: name matches (" << histType.getName()
-                      << ") but operator== failed.\n"
-                      << "DEBUG MISMATCH: stored  -> order=" << otherType.getOrder()
-                      << " particle=" << otherType.getParticleType().getName()
-                      << " sysType=" << (int)otherType.getSystematicType()
-                      << " sysName='" << otherType.getSystematicName() << "'\n"
-                      << "DEBUG MISMATCH: lookup  -> order=" << histType.getOrder()
-                      << " particle=" << histType.getParticleType().getName()
-                      << " sysType=" << (int)histType.getSystematicType()
-                      << " sysName='" << histType.getSystematicName() << "'\n";
-        }
     }
     return {};
 }
-void Process::dumpPlots() const
-{
-    std::cout << "DEBUG DUMP: process=" << name << " plots.size()=" << plots.size() << "\n";
-    for (const auto &entry : plots)
-    {
-        const auto &hv = std::get<0>(entry);
-        std::cout << "DEBUG DUMP entry: name='" << hv.getName() << "' order=" << hv.getOrder()
-                  << " particle=" << hv.getParticleType().getName()
-                  << " sysType=" << (int)hv.getSystematicType()
-                  << " sysName='" << hv.getSystematicName() << "'\n";
-    }
-}
+
 void Process::setPlot(const HistVariable &histType, FitFunction plot)
 {
     for (auto &entry : plots)

@@ -112,7 +112,7 @@ double HiggsSelector::sameSignPairMass(const std::vector<Particle>& leptons) con
             //need another loop over particle. if its a tau loop over all particles again, if one of the particles is an election or muon, then you want to calculate delta R for each particle. There's already a function for it (Particle.hh). If the delta r is less than some value we set, ten we just say that they're the same particle. If number is too small just continue. 
             if (lepton.isTight() && particle.getPt() > 5)
             {
-                bool overlap = false;
+                // bool overlap = false;
 
                 // // loop over all other particles (from input, not just taus)
                 // for (const auto& other : particles)
@@ -132,10 +132,10 @@ double HiggsSelector::sameSignPairMass(const std::vector<Particle>& leptons) con
                 //     }
                 // }
 
-                if (!overlap)
-                {
+                // if (!overlap)
+                // {
                     leptons.push_back(particle); // only keep tau if no e/μ is too close
-                }
+                // }
             }
         }
 
