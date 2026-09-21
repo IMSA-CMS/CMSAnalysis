@@ -25,7 +25,7 @@ FitFunctionCollection Fitter::fitFunctions(const std::vector<std::pair<TH1 *, Fi
     for (const auto &histPair : histogramPairs)
     {
         auto histogram = histPair.first;
-        auto func = histPair.second;
+        auto &func = histPair.second;
 
         fitSingleFunction(histogram, func);
 

@@ -21,6 +21,11 @@ TF1 *FitFunction::getFunction()
     return &function;
 }
 
+const TF1* FitFunction::getFunction() const
+{
+    return &function;
+}
+
 void FitFunction::setFunction(const TF1 &func, FunctionType funcType)
 {
     function = func;
@@ -155,9 +160,9 @@ FitFunction FitFunction::createFunctionOfType(FunctionType functionType, const s
 
 double FitFunction::evaluate(double x) const
 {
-    auto* tf1 = getFunction();
-    double result = tf1->Eval(x);
-    return result;
+    const auto* tf1 = getFunction();
+    //double result = tf1->Eval(x);
+    return tf1->Eval(x);
 }
 
 std::string FitFunction::getExpression(const std::string &variable)

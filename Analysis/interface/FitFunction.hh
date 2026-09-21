@@ -27,6 +27,9 @@ class FitFunction : public FitFunctionBase
     double getMax() const;
 
     std::string getParameter(std::string name);
+    
+    std::string getExpression(const std::string& variable); //new
+    std::string getNormExpression(const std::string& name) override; //new
 
     double evaluate(double x) const;
 
