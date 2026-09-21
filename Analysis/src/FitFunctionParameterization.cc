@@ -55,30 +55,11 @@ FitFunctionParameterization FitFunctionParameterization::load(const std::string 
 
     for (size_t i = 0; i < size; ++i)
     {
-        std::string parameterName;
-        std::string parameterFormula;
-        std::string functionName;
-        int parameterType = 0;
-        double functionMin = 0;
-        double functionMax = 0;
-        int npar = 0;
-        file >> label >> std::quoted(parameterName);
-        file >> label >> parameterType;
-        file >> label >> std::quoted(parameterFormula);
-        file >> label >> std::quoted(functionName);
-        file >> label >> functionMin >> functionMax;
-        file >> label >> npar;
-
-        auto function = SimpleFitFunction::createFunctionOfType(static_cast<FunctionType>(parameterType), functionName, parameterFormula, functionMin, functionMax);
-        for (int parameter = 0; parameter < npar; ++parameter)
+        SimpleFitFunction function;
+        file >> function;
+        if (!file)
         {
-            std::string parameterName;
-            double value = 0;
-            double error = 0;
-            file >> label >> std::quoted(parameterName) >> value >> error;
-            function.getFunction()->SetParName(parameter, parameterName.c_str());
-            function.getFunction()->SetParameter(parameter, value);
-            function.getFunction()->SetParError(parameter, error);
+            throw std::runtime_error("Invalid parameter function in " + fileName);
         }
         result.parameterFunctions.push_back(std::move(function));
     }
@@ -88,6 +69,11 @@ FitFunctionParameterization FitFunctionParameterization::load(const std::string 
         throw std::runtime_error("Invalid FitFunctionParameterization in " + fileName);
     }
     return result;
+}
+
+std::vector<FitFunctionParameterization> FitFunctionParameterization::loadFunctions(const std::string &fileName)
+{
+    return {};
 }
 
 void FitFunctionParameterization::insert(const SimpleFitFunction &function)
@@ -178,24 +164,7 @@ void FitFunctionParameterization::save(const std::string &fileName, const bool a
 
     for (auto &parameterFunction : parameterFunctions)
     {
-        auto *const tf1 = parameterFunction.getFunction();
-        double functionMin = 0;
-        double functionMax = 0;
-        tf1->GetRange(functionMin, functionMax);
-        const char *const rawFormula = tf1->GetExpFormula();
-        const std::string formula = rawFormula == nullptr ? "" : rawFormula;
-
-        file << "Parameter: " << std::quoted(parameterFunction.getParameter("Parameter")) << '\n';
-        file << "FunctionTypeEnum: " << static_cast<int>(parameterFunction.getFunctionType()) << '\n';
-        file << "ExpressionFormula: " << std::quoted(formula) << '\n';
-        file << "FunctionName: " << std::quoted(std::string(tf1->GetName())) << '\n';
-        file << "Range: " << functionMin << ' ' << functionMax << '\n';
-        file << "NumOfTF1Parameters: " << tf1->GetNpar() << '\n';
-        for (int parameter = 0; parameter < tf1->GetNpar(); ++parameter)
-        {
-            file << "TF1Parameter: " << std::quoted(std::string(tf1->GetParName(parameter))) << ' '
-                 << tf1->GetParameter(parameter) << ' ' << tf1->GetParError(parameter) << '\n';
-        }
+        file << parameterFunction;
     }
 }
 

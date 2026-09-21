@@ -555,6 +555,7 @@ std::istream &operator>>(std::istream &stream, SimpleFitFunction &func)
                 continue;
             }
             sysName = line.substr(13); // Extract name after "  Systematic:"
+            trim(sysName);
 
             std::vector<double> upParams;
             std::vector<double> downParams;

@@ -275,23 +275,35 @@ SimpleFitFunction Fitter::fitPowerLawToGraph(TGraph *graph, std::string name)
     return function;
 }
 
-FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::unordered_map<double, SimpleFitFunction *> &xData,
-                                                   TFile *rootFile)
+FitFunctionParameterization Fitter::parameterizeFunction(std::string name,
+    const std::unordered_map<double, SimpleFitFunction *> &xData, TFile *rootFile)
 {
-    FitFunctionCollection paramFunctions;
     if (xData.empty())
-        return paramFunctions;
+        return FitFunctionParameterization();
 
     auto *firstFunction = xData.begin()->second;
 
     if (!firstFunction)
     {
-        return paramFunctions;
+        return FitFunctionParameterization();
     }
 
     auto *firstTF1 = firstFunction->getFunction();
+    double min = 0;
+    double max = 0;
+    firstTF1->GetRange(min, max);
+    const char *rawFormula = firstTF1->GetExpFormula();
+    const std::string expFormula = rawFormula == nullptr ? "" : rawFormula;
 
-    const auto nPoints = xData.size();
+    //just add the additional metadata
+    auto parameterizationMetadata = FitFunction::decodeName(name);
+    parameterizationMetadata["IsParameterization"] = "true";
+    const std::string parameterizationName = FitFunction::encodeName(parameterizationMetadata);
+
+    FitFunctionParameterization parameterization(
+        parameterizationName, parameterizationMetadata["Channel"], firstFunction->getFunctionType(),
+        expFormula, min, max);
+
     const auto nParams = firstTF1->GetNpar();
     const auto systematics = firstFunction->listSystematics();
     // auto nPoints = xData.size();
@@ -327,9 +339,8 @@ FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::
         std::string fullName = name + " parameter " + firstTF1->GetParName(i);
         graph.SetTitle(fullName.c_str());
 
-        auto metadata = FitFunction::decodeName(name);
+        std::map<std::string, std::string> metadata;
         metadata["ParameterIndex"] = std::to_string(i);
-        metadata["OriginalFunctionType"] = std::to_string(static_cast<int>(firstFunction->getFunctionType()));
         metadata["Parameter"] = firstTF1->GetParName(i);
         auto fit = fitPowerLawToGraph(&graph, FitFunction::encodeName(metadata));
 
@@ -428,7 +439,7 @@ FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::
                     *downFit.getFunction());
             }
         }
-        paramFunctions.insert(fit);
+        parameterization.insert(fit);
 
         auto *const canvas = new TCanvas(fullName.c_str(), fullName.c_str(), 0, 0, 2000, 500);
 
@@ -445,5 +456,5 @@ FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::
         canvas->Close();
         delete canvas;
     }
-    return paramFunctions;
+    return parameterization;
 }

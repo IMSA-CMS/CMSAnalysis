@@ -1,5 +1,6 @@
 #include "CMSAnalysis/Analysis/interface/SimpleFitFunction.hh"
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
+#include "CMSAnalysis/Analysis/interface/FitFunctionParameterization.hh"
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsKansasStateAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
@@ -13,7 +14,7 @@
 #include <vector>
 
 FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const HistVariable &histType, const std::string &genSim, const std::vector<std::string>&systs, TFile* rootFile);
-FitFunctionCollection parameterize(FitFunctionCollection functions, TFile* rootFile);
+FitFunctionParameterization parameterize(FitFunctionCollection functions, TFile* rootFile);
 
 const std::vector<HistVariable> histogramTypes = {
      HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
@@ -44,7 +45,7 @@ void HiggsSignalFit(bool useKansasState = false)
     auto rootFile = TFile::Open(fitHistsName.c_str(), "RECREATE");
     auto parameterRootFile = TFile::Open(parameterFits.c_str(), "RECREATE");
     FitFunctionCollection allFunctions;
-    FitFunctionCollection parameterizations;
+    std::vector<FitFunctionParameterization> parameterizations;
 
     std::shared_ptr<FullAnalysis> analysis;
     if (useKansasState)
@@ -75,9 +76,11 @@ void HiggsSignalFit(bool useKansasState = false)
             for (const auto &genSim : genSimDecays)
             {
                 auto fitFunctions = fitChannel(channel, histType, genSim, systs, rootFile);
-                allFunctions += fitFunctions;   
-                auto parameterization = parameterize(fitFunctions, parameterRootFile);
-                parameterizations += parameterization;
+                allFunctions += fitFunctions;
+                if (fitFunctions.size() != 0)
+                {
+                    parameterizations.push_back(parameterize(fitFunctions, parameterRootFile));
+                }
             }
         }
     }
@@ -85,7 +88,10 @@ void HiggsSignalFit(bool useKansasState = false)
 
 
     allFunctions.saveFunctions(fitParameterValueFile, true);
-    parameterizations.saveFunctions(parameterFunctions, true);
+    for (size_t i = 0; i < parameterizations.size(); ++i)
+    {
+        parameterizations[i].save(parameterFunctions, i != 0);
+    }
     rootFile->Close();
     delete rootFile;
     parameterRootFile->Close();
@@ -204,7 +210,7 @@ FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const H
     return functions;
 }
 
-FitFunctionCollection parameterize(FitFunctionCollection functions, TFile* rootFile)
+FitFunctionParameterization parameterize(FitFunctionCollection functions, TFile* rootFile)
 {
     std::unordered_map<double, SimpleFitFunction*> massMap;
     std::string channelName;
