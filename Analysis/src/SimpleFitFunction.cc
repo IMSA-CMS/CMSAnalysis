@@ -642,3 +642,5 @@ std::vector<std::string> SimpleFitFunction::listSystematics() const
     }
     return names;
 }
+
+ClassImp(SimpleFitFunction)
