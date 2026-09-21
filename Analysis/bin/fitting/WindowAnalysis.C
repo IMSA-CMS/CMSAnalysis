@@ -755,7 +755,7 @@ void WindowAnalysisImpl(const int mode = -1)
                     if (useParameterization)
                     {
                         // Cache function map reference to avoid repeated map retrieval.
-                        auto &functionMap = backgroundFunctions.getFunctions();
+                        auto &functionMap = backgroundFunctions.getFunctionsMap();
                         for (size_t i = 0; i < BACKGROUNDS.size(); ++i)
                         {
                             // Build exact key used when fit functions were stored.

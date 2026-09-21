@@ -1,0 +1,8 @@
+<lcgdict>
+  <class name="FitFunction" />
+  <class name="SimpleFitFunction" noStreamer="true" />
+  <class name="FitFunctionParameterization" />
+  <class name="std::pair&lt;TF1,TF1&gt;" />
+  <class name="std::map&lt;std::string,std::pair&lt;TF1,TF1&gt; &gt;" />
+  <class name="std::vector&lt;SimpleFitFunction&gt;" />
+</lcgdict>
