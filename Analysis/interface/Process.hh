@@ -1,7 +1,7 @@
 #ifndef PROCESS_HH
 #define PROCESS_HH
 
-#include "CMSAnalysis/Analysis/interface/FitFunction.hh"
+#include "CMSAnalysis/Analysis/interface/SimpleFitFunction.hh"
 #include "HistVariable.hh"
 #include "MultiSystematic.hh"
 #include "SingleProcess.hh"
@@ -43,8 +43,8 @@ class Process
     std::shared_ptr<Systematic> calcSystematic(HistVariable histType, std::string systematicName, bool isShape);
     std::shared_ptr<Systematic> calcRateSystematic(HistVariable histType, std::string systematicName);
     std::shared_ptr<Systematic> calcShapeSystematic(HistVariable histType, std::string systematicName);
-    std::optional<FitFunction> getPlot(const HistVariable &histType);
-    void setPlot(const HistVariable &histType, FitFunction plot);
+    std::optional<SimpleFitFunction> getPlot(const HistVariable &histType);
+    void setPlot(const HistVariable &histType, SimpleFitFunction plot);
 
   private:
     const std::string name;
@@ -52,7 +52,7 @@ class Process
     std::vector<SingleProcess> processes;
     MultiSystematic systematics;
     // Fitted plots
-    std::vector<std::tuple<HistVariable, FitFunction>> plots;
+    std::vector<std::tuple<HistVariable, SimpleFitFunction>> plots;
 };
 
 #endif

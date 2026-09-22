@@ -27,7 +27,7 @@ void FitTest()
     for (const auto& pair : funcMap)
     {
         const std::string& key = pair.first;  // function key, e.g., "\sigma_2"
-        const FitFunction& func = pair.second;
+        const SimpleFitFunction& func = pair.second;
 
         TF1* tf1 = func.getFunction();
         if (!tf1) {

@@ -251,7 +251,7 @@ std::shared_ptr<Systematic> Process::calcShapeSystematic(HistVariable histType, 
     return std::make_shared<ShapeSystematic>(systematicName);
 }
 
-std::optional<FitFunction> Process::getPlot(const HistVariable &histType)
+std::optional<SimpleFitFunction> Process::getPlot(const HistVariable &histType)
 {
     for (auto &entry : plots)
     {
@@ -264,7 +264,7 @@ std::optional<FitFunction> Process::getPlot(const HistVariable &histType)
     return {};
 }
 
-void Process::setPlot(const HistVariable &histType, FitFunction plot)
+void Process::setPlot(const HistVariable &histType, SimpleFitFunction plot)
 {
     for (auto &entry : plots)
     {

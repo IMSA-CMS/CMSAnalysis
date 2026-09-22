@@ -1,17 +1,20 @@
 #include "../interface/FitFunctionParameterization.hh"
+#include <cmath>
 #include <fstream>
 #include <iomanip>
+#include <set>
 #include <stdexcept>
 #include <utility>
 
 FitFunctionParameterization::FitFunctionParameterization(std::string name, std::string channelName,
                                                          const FunctionType functionType,
                                                          std::string expFormula, const double min, const double max)
-    : FitFunctionBase(functionType, std::move(name)),
+    : FitFunction(functionType, std::move(name)),
       channelName(std::move(channelName)),
       expFormula(std::move(expFormula)),
       min(min),
       max(max),
+      templateFunction(SimpleFitFunction::createFunctionOfType(functionType, getName(), this->expFormula, min, max)),
       normParameterIndex(defaultNormParameterIndex(functionType))
 {
 }
@@ -45,7 +48,7 @@ FitFunctionParameterization FitFunctionParameterization::load(const std::string 
     {
         int normIndex = -1;
         file >> normIndex;
-        result.normParameterIndex = normIndex < 0 ? std::nullopt : std::optional<size_t>(normIndex);
+        result.normParameterIndex = normIndex;
         file >> label;
     }
     file >> size;
@@ -66,7 +69,7 @@ FitFunctionParameterization FitFunctionParameterization::load(const std::string 
         file >> label >> functionMin >> functionMax;
         file >> label >> npar;
 
-        auto function = FitFunction::createFunctionOfType(static_cast<FunctionType>(parameterType), functionName, parameterFormula, functionMin, functionMax);
+        auto function = SimpleFitFunction::createFunctionOfType(static_cast<FunctionType>(parameterType), functionName, parameterFormula, functionMin, functionMax);
         for (int parameter = 0; parameter < npar; ++parameter)
         {
             std::string parameterName;
@@ -87,32 +90,73 @@ FitFunctionParameterization FitFunctionParameterization::load(const std::string 
     return result;
 }
 
-void FitFunctionParameterization::insert(const FitFunction &function)
+void FitFunctionParameterization::insert(const SimpleFitFunction &function)
 {
     parameterFunctions.push_back(function);
 }
 
-FitFunction FitFunctionParameterization::reconstructFunction(const double mass)
+double FitFunctionParameterization::evaluate(const double observable, const double modelMass,
+                                             const NuisanceValues &nuisances) const
 {
-    auto function = FitFunction::createFunctionOfType(getFunctionType(), getName(), expFormula, min, max);
-    auto *const tf1 = function.getFunction();
-
-    for (size_t i = 0; i < parameterFunctions.size(); ++i)
+    if (parameterFunctions.size() != static_cast<size_t>(templateFunction.getFunction()->GetNpar()))
     {
-        tf1->SetParameter(static_cast<int>(i), parameterFunctions[i].evaluate(mass));
-        tf1->SetParName(static_cast<int>(i), parameterFunctions[i].getParameterName().c_str());
+        throw std::runtime_error("FitFunctionParameterization has a different number of parameter functions than its model");
     }
-    return function;
+
+    std::vector<double> parameters;
+    parameters.reserve(parameterFunctions.size());
+    for (size_t parameter = 0; parameter < parameterFunctions.size(); ++parameter)
+    {
+        const auto &parameterFunction = parameterFunctions[parameter];
+        if (getFunctionType() == FunctionType::DoubleSidedCrystalBall && parameter == 6)
+        {
+            // so here the variations to the shape are applied to the pdf shape.
+            // normalization shoul go through get norm expression and roofit yield formula
+         
+            parameters.push_back(parameterFunction.evaluate(modelMass));
+        }
+        else
+        {
+            const double nominal = parameterFunction.evaluate(modelMass);
+            double value = nominal;
+            for (const auto &[name, delta] : nuisances)
+            {
+                if (!std::isfinite(delta))
+                    throw std::invalid_argument("Shape-systematic deltas must be finite");
+
+                // eval each endpoint before interpolating shape parameter
+                // do this rather than interpolating the coefficients of its mass fit
+                // other way is backwards I think
+                const double variation = parameterFunction.evaluate(modelMass, {{name, delta >= 0 ? 1.0 : -1.0}});
+                value += std::abs(delta) * (variation - nominal);
+            }
+            parameters.push_back(value);
+        }
+    }
+    return templateFunction.evaluateWithParameters(observable, parameters);
 }
 
-std::string FitFunctionParameterization::getNormExpression(const std::string &variable)
+std::string FitFunctionParameterization::getNormExpression(const std::string &variable) const
 {
-    if (!normParameterIndex || *normParameterIndex >= parameterFunctions.size())
+    if (normParameterIndex < 0 || static_cast<size_t>(normParameterIndex) >= parameterFunctions.size())
     {
         throw std::runtime_error("FitFunction type does not have a norma parameter");
     }
     //i have to figure out how to get it for ones without norm parameer
-    return parameterFunctions[*normParameterIndex].getExpression(variable);
+    return parameterFunctions[normParameterIndex].getExpression(variable);
+}
+
+std::vector<std::string> FitFunctionParameterization::listSystematics() const
+{
+    std::set<std::string> names;
+    for (const auto &parameterFunction : parameterFunctions)
+    {
+        for (const auto &name : parameterFunction.listSystematics())
+        {
+            names.insert(name);
+        }
+    }
+    return {names.begin(), names.end()};
 }
 
 void FitFunctionParameterization::save(const std::string &fileName, const bool append)
@@ -129,7 +173,7 @@ void FitFunctionParameterization::save(const std::string &fileName, const bool a
     file << "OriginalExpressionFormula: " << std::quoted(expFormula) << '\n';
     file << "OriginalRange: " << min << ' ' << max << '\n';
     file << "NormParameterIndex: "
-         << (normParameterIndex ? static_cast<int>(*normParameterIndex) : -1) << '\n';
+         << normParameterIndex << '\n';
     file << "NumOfParameters: " << parameterFunctions.size() << '\n';
 
     for (auto &parameterFunction : parameterFunctions)
@@ -141,7 +185,7 @@ void FitFunctionParameterization::save(const std::string &fileName, const bool a
         const char *const rawFormula = tf1->GetExpFormula();
         const std::string formula = rawFormula == nullptr ? "" : rawFormula;
 
-        file << "Parameter: " << std::quoted(parameterFunction.getParameterName()) << '\n';
+        file << "Parameter: " << std::quoted(parameterFunction.getParameter("Parameter")) << '\n';
         file << "FunctionTypeEnum: " << static_cast<int>(parameterFunction.getFunctionType()) << '\n';
         file << "ExpressionFormula: " << std::quoted(formula) << '\n';
         file << "FunctionName: " << std::quoted(std::string(tf1->GetName())) << '\n';
@@ -155,7 +199,7 @@ void FitFunctionParameterization::save(const std::string &fileName, const bool a
     }
 }
 
-std::optional<size_t>
+int
 FitFunctionParameterization::defaultNormParameterIndex(const FunctionType type)
 {
     switch (type)
@@ -169,6 +213,6 @@ FitFunctionParameterization::defaultNormParameterIndex(const FunctionType type)
     case FunctionType::ExpressionFormula:
     case FunctionType::DoubleGaussian:
     default:
-        return std::nullopt;
+        return -1;
     }
 }

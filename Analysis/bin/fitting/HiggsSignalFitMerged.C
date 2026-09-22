@@ -1,4 +1,4 @@
-#include "CMSAnalysis/Analysis/interface/FitFunction.hh"
+#include "CMSAnalysis/Analysis/interface/SimpleFitFunction.hh"
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
@@ -267,7 +267,7 @@ bool fitChannel(const Channel &channel, Fitter &fitter, const HistVariable &hist
         // FitFunction funcUp;
         const auto name =
             genSim + "->" + channelName + "/" + std::to_string(mass) + ' ' + histVar.getName() + " " + systDesc;
-        FitFunction func = FitFunction::createFunctionOfType(funcType, name, "", xMin, xMax, channelName);
+        SimpleFitFunction func = SimpleFitFunction::createFunctionOfType(funcType, name, "", xMin, xMax, channelName);
 
         const std::string keyName = std::to_string(mass);
         currentFunctions.insert(keyName, func);

@@ -20,7 +20,7 @@
 #include "TFitResult.h"
 #include "TGraphErrors.h"
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
-#include "CMSAnalysis/Analysis/interface/FitFunction.hh"
+#include "CMSAnalysis/Analysis/interface/SimpleFitFunction.hh"
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
 #define _USE_MATH_DEFINES
@@ -56,8 +56,8 @@ void HBFFFNeutrinoReconstruction()
 		return;
 	}
 	Fitter fitter("","","","");
-	FitFunction func = FitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, "Background", "", 0, 2000, "Background");
-	std::vector<FitFunction> functions = {func};
+	SimpleFitFunction func = SimpleFitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, "Background", "", 0, 2000, "Background");
+	std::vector<SimpleFitFunction> functions = {func};
 	FitFunctionCollection coll(functions);
 	fitter.loadFunctions(coll);
 	std::unordered_map<std::string, TH1*> histogramMap = {{"Background", hist}};
