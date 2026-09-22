@@ -117,12 +117,38 @@ int Utility::gcf(std::vector<int> nums)
     return toReturn;
 }
 
+static std::string truncatePreferDiversity(const std::string &leptons)
+{
+    if (leptons.size() <= 2)
+    {
+        return leptons;
+    }
+    std::string result;
+    for (char c : leptons) // already in pt-descending order from particles.sort()
+    {
+        if (result.find(c) == std::string::npos)
+        {
+            result += c;
+            if (result.size() == 2)
+            {
+                break;
+            }
+        }
+    }
+    if (result.size() < 2) // all same flavor, fall back to plain top-2 by pt
+    {
+        result = leptons.substr(0, 2);
+    }
+    return result;
+}
+
 std::string Utility::identifyChannel(ParticleCollection<Particle> particles)
 {
     particles.sort(); // sort by pt, highest first
     std::string positiveLeptons;
     std::string negativeLeptons;
 
+    std::string particleDump;
     for (const auto &particle : particles)
     {
         char flavor;
@@ -144,6 +170,22 @@ std::string Utility::identifyChannel(ParticleCollection<Particle> particles)
             continue;
         }
 
+        particleDump += std::string(1, flavor) + "(pt=" + std::to_string(particle.getPt()) +
+                        ",q=" + std::to_string(particle.getCharge());
+        if (flavor == 'c')
+        {
+            try
+            {
+                particleDump += ",dmu=" + std::to_string(particle.getInfo("tau_idVSmu")) +
+                                ",dele=" + std::to_string(particle.getInfo("tau_idVSele"));
+            }
+            catch (...)
+            {
+                particleDump += ",dmu=NA,dele=NA";
+            }
+        }
+        particleDump += ") ";
+
         if (particle.getCharge() > 0)
         {
             positiveLeptons += flavor;
@@ -154,14 +196,23 @@ std::string Utility::identifyChannel(ParticleCollection<Particle> particles)
         }
     }
 
+    std::string rawPositive = positiveLeptons;
+    std::string rawNegative = negativeLeptons;
+
+    if (std::ranges::count(positiveLeptons, 'b') + std::ranges::count(negativeLeptons, 'b') == 4 &&
+        positiveLeptons.find('a') == std::string::npos && negativeLeptons.find('a') == std::string::npos &&
+        positiveLeptons.find('c') == std::string::npos && negativeLeptons.find('c') == std::string::npos)
+    {
+    }
+
     if (positiveLeptons.size() > 2)
     {
-        positiveLeptons = positiveLeptons.substr(0, 2);
+        return "none";
     }
 
     if (negativeLeptons.size() > 2)
     {
-        negativeLeptons = negativeLeptons.substr(0, 2);
+        return "none";
     }
 
     // sorts by flavor
@@ -289,6 +340,11 @@ std::pair<std::pair<Particle, Particle>, std::pair<Particle, Particle>> Utility:
                 ++negMuonCount;
             }
         }
+    }
+
+    if (positiveLeptons.size() != 2 || negativeLeptons.size() != 2)
+    {
+        return {{Particle::nullParticle(), Particle::nullParticle()}, {Particle::nullParticle(), Particle::nullParticle()}};
     }
 
     if (posElectronCount > negElectronCount)

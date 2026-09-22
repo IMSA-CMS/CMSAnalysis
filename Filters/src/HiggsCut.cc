@@ -5,6 +5,7 @@
 
 double HiggsCut::electronThreeChannelCut = 250;
 double HiggsCut::muonThreeChannelCut = 250;
+double HiggsCut::tauThreeChannelCut = 250; // new — tune this to compare s/sqrt(b), taus usually reconstruct softer than e/mu
 
 bool HiggsCut::checkEventInternal(const Event &event, const EventInput *input) const
 {
@@ -18,22 +19,15 @@ bool HiggsCut::checkEventInternal(const Event &event, const EventInput *input) c
     {
     case 2:
     {
+        // unchanged
         bool anyLeptonAboveThreshold = std::ranges::any_of(particles, [](const auto &p) {
             return (p.getType() == ParticleType::electron() && p.getPt() >= 40) ||
                    (p.getType() == ParticleType::muon() && p.getPt() >= 30);
         });
-        if (!anyLeptonAboveThreshold)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return anyLeptonAboveThreshold;
     }
-    case 3: 
+    case 3:
     {
-        // 3 lepton channel pT thresholds
         Particle lepton = Particle::nullParticle();
 
         if (particles.getNumPosParticles() == 2)
@@ -57,7 +51,8 @@ bool HiggsCut::checkEventInternal(const Event &event, const EventInput *input) c
         }
 
         if ((lepton.getType() == ParticleType::electron() && lepton.getPt() > electronThreeChannelCut) ||
-            (lepton.getType() == ParticleType::muon() && lepton.getPt() > muonThreeChannelCut))
+            (lepton.getType() == ParticleType::muon() && lepton.getPt() > muonThreeChannelCut) ||
+            (lepton.getType() == ParticleType::tau() && lepton.getPt() > tauThreeChannelCut))
         {
             return true;
         }
@@ -65,12 +60,12 @@ bool HiggsCut::checkEventInternal(const Event &event, const EventInput *input) c
     }
     case 4:
     {
+        // unchanged
         int totalCharge = 0;
         for (const auto &particle : particles)
         {
             totalCharge += particle.getCharge();
         }
-
         if (totalCharge != 0)
         {
             return false;
@@ -79,14 +74,7 @@ bool HiggsCut::checkEventInternal(const Event &event, const EventInput *input) c
             return (p.getType() == ParticleType::electron() && p.getPt() >= 40) ||
                    (p.getType() == ParticleType::muon() && p.getPt() >= 30);
         });
-        if (!anyLeptonAboveThreshold)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return anyLeptonAboveThreshold;
     }
     default:
         return false;

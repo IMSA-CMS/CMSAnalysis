@@ -57,7 +57,7 @@ class FitFunction
   private:
     FunctionType functionType = FunctionType::ExpressionFormula;
     std::string name;
-  ClassDef(FitFunction, 1)
+    ClassDef(FitFunction, 1)
 };
 
 #endif

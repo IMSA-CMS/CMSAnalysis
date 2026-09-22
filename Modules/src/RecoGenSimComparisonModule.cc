@@ -793,7 +793,7 @@ void RecoGenSimComparisonModule::mothersComparison(const ParticleCollection<Part
                     continue;
                 }
                 totalMatched++;
-                if(!bestMatch.hasMother()) {std::cout << "NO MOTHER!!!!!\n\n\n\n\n"; continue;}
+                if(!bestMatch.hasMother()) {continue;}
                 GenSimParticle currentMom = bestMatch.mother();
                 if(currentMom.pdgId() == bestMatch.pdgId() || currentMom.pdgId() == -1*bestMatch.pdgId())
                 {

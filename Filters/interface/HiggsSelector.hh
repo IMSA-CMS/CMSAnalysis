@@ -21,10 +21,12 @@ class HiggsSelector : public Selector
     protected:
         virtual void adjustEnergy(Particle& particle) const {};
 
+    public:
+        std::vector<Particle> adjustForNeutrinos(const std::vector<Particle>& leptons, const EventInput* input) const;
     private:
         double massDifference(const std::vector<Particle>& leptons)const;
-        std::vector<Particle> adjustForNeutrinos(const std::vector<Particle>& leptons, const EventInput* input) const;
-
+        std::vector<Particle> findSameSignPair(const std::vector<Particle>& leptons) const;
+        double sameSignPairMass(const std::vector<Particle>& leptons) const;
     
 };
 

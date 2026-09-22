@@ -13,6 +13,8 @@
 <use   name="TrackingTools/TransientTrack"/>
 <use   name="rootgraphics"/>
 <use   name="CMSAnalysis/DataCollection"/>
+<flags LCG_DICT_HEADER="classes.h"/>
+<flags LCG_DICT_XML="classes_def.xml"/>
 <export>
    <lib name="1"/>
 </export>

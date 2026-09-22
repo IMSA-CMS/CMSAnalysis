@@ -125,6 +125,12 @@ std::vector<std::pair<double, double>> TwoInvariantMassesHist::value2D() const
   }
   auto bestPairing = Utility::findBestLeptonPairing(leptons);
 
+  if (!bestPairing.first.first.isNotNull() || !bestPairing.first.second.isNotNull() ||
+      !bestPairing.second.first.isNotNull() || !bestPairing.second.second.isNotNull())
+  {
+    return {};
+  }
+
   return {sortParticlePairs(bestPairing.first, bestPairing.second)};
 }
 
