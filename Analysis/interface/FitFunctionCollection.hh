@@ -1,7 +1,8 @@
 #ifndef FIT_FUNCTION_COLLECTION_HH
 #define FIT_FUNCTION_COLLECTION_HH
 
-#include "SimpleFitFunction.hh"
+#include "CMSAnalysis/Analysis/interface/SimpleFitFunction.hh"
+#include <memory>
 #include <unordered_map>
 #include <set>
 
@@ -21,18 +22,21 @@ class FitFunctionCollection
     SimpleFitFunction &get(const std::string &key);
     void saveFunctions(const std::string &fileName, bool append = false);
 
-    std::set<std::string> findUniqueNames(std::string parameter); //
-    FitFunctionCollection getFunctions(std::string name); //
-    FitFunctionCollection getFunctions(std::string parameter, std::string name); //
+    std::set<std::string> findUniqueNames(std::string parameter) const;
+    FitFunctionCollection getFunctions(std::string name) const;
+    FitFunctionCollection getFunctions(std::string parameter, std::string name) const;
+    std::shared_ptr<FitFunction> getModel(const std::string &channel, double min, double max) const;
 
     SimpleFitFunction& operator[](const std::string& key);
     FitFunctionCollection& operator+=(const FitFunctionCollection& other);
 
     bool checkFunctionsSimilar();
-    std::unordered_map<std::string, SimpleFitFunction>& getFunctionsMap();
+    const std::unordered_map<std::string, std::shared_ptr<SimpleFitFunction>>& getFunctionsMap() const;
     
   private:
-    std::unordered_map<std::string, SimpleFitFunction> functions;
+    
+    // as selections share fitted rows if u mutate a row it affects every selection of it
+    std::unordered_map<std::string, std::shared_ptr<SimpleFitFunction>> functions;
 };
 
 #endif

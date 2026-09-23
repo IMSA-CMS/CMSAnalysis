@@ -43,7 +43,7 @@ SimpleFitFunction createSignalDSCB(std::string channel, std::string xOrY, FitFun
 	// Find functions in channel
 	for (auto pair : functionsInCollection)
 	{
-		auto function = pair.second;
+		auto function = *pair.second;
 		//std::cout << "Channel name: " << function.getChannel() << "\n";
 		if (!containsSubstring(function.getName(), "Nominal"))
 		{
@@ -124,7 +124,7 @@ void graphFunctionFromCollection(FitFunctionCollection *functionCollection, std:
 	{
 		if (functionName == pair.first)
 		{
-			auto function = pair.second;
+			auto function = *pair.second;
 			TF1* tf1Reference = function.getFunction();
 			tf1Reference->SetLineColor(kBlue);
 			tf1Reference->SetRange(0, 2000);
@@ -202,7 +202,7 @@ void ParameterizationFunctionGrapher()
 	{
 		for (auto& pair : backgroundParameterFunctions)
 		{
-			auto& function = pair.second;
+			auto& function = *pair.second;
 			// std::cout << "function.getChannel(): " << function.getChannel() << "\n";
 			// std::cout << "function.getParameterName(): " << function.getParameterName() << "\n";
 			bool excludeFromGraph = false;

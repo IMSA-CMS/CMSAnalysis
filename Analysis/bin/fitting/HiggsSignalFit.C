@@ -210,7 +210,7 @@ FitFunctionCollection parameterize(FitFunctionCollection functions, TFile* rootF
     std::string channelName;
     for (auto &pair : functions.getFunctionsMap())
     {
-        auto& func = pair.second;
+        auto& func = *pair.second;
         auto decoded = FitFunction::decodeName(func.getName());
         const auto mass = std::stod(decoded.at("Mass"));
         massMap.insert({mass, &func});
