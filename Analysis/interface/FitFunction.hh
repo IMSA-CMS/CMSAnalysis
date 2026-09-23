@@ -11,11 +11,8 @@
 class FitFunction : public FitFunctionBase
 {
   public:
-    // static const std::vector<std::string> functionList;
     static FitFunction createFunctionOfType(FunctionType functionType, const std::string &name,
                                             const std::string &expFormula, double min, double max);
-    // static std::vector<FitFunction> loadFunctions(const std::string& fileName);
-    // static void saveFunctions(std::vector<FitFunction>& functions, const std::string& fileName);
     FitFunction() {}    
     FitFunction(const TF1& func, FunctionType funcType);
     TF1* getFunction();
