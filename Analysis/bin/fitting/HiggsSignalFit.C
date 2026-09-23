@@ -170,7 +170,7 @@ FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const H
         nameParams["GenSim"] = genSim;
         nameParams["Channel"] = channelName;
         nameParams["Mass"] = std::to_string(mass);
-        nameParams["HistVar"] = histVar.getName();
+        nameParams["Projection"] = histVar.getName().substr(histVar.getName().find_last_of(" ") - 1, 1); // just X or Y
 
         const auto name = FitFunction::encodeName(nameParams);
         // const auto name =

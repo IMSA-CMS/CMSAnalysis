@@ -134,9 +134,9 @@ SimpleFitFunction fitProcess(const std::shared_ptr<Process> process, const HistV
     //}
 
     std::map<std::string, std::string> nameParams;
-    nameParams["process"] = process->getName();
-    nameParams["channel"] = channelName;
-    nameParams["histVar"] = histVar.getName();
+    nameParams["Process"] = process->getName();
+    nameParams["Channel"] = channelName;
+    nameParams["Projection"] = histVar.getName().substr(histVar.getName().find_last_of(" ") - 1, 1); // just X or Y
     //nameParams["systematic"] = systDesc;
 
     const std::string name = FitFunction::encodeName(nameParams);
