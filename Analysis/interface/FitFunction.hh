@@ -1,53 +1,51 @@
 #ifndef FIT_FUNCTION_HH
 #define FIT_FUNCTION_HH
 
-#include "CMSAnalysis/Analysis/interface/FitFunctionBase.hh"
-#include "TF1.h"
-#include <iostream>
 #include <map>
 #include <string>
 #include <vector>
+#include "Rtypes.h"
 
-class FitFunction : public FitFunctionBase
+class FitFunction
 {
   public:
-    static FitFunction createFunctionOfType(FunctionType functionType, const std::string &name,
-                                            const std::string &expFormula, double min, double max);
-    FitFunction() {}    
-    FitFunction(const TF1& func, FunctionType funcType);
-    TF1* getFunction();
-    const TF1* getFunction() const;
-    void setFunction(const TF1& function, FunctionType funcType);
-    FunctionType getFunctionType() const;
-    std::string getName() const;
-    double getMin() const;
-    double getMax() const;
+    enum class FunctionType
+    {
+        ExpressionFormula,
+        DoubleSidedCrystalBall,
+        PowerLaw,
+        DoubleGaussian,
+        GausLogPowerNorm,
+        Voigt,
+    };
 
-    std::string getParameter(std::string name);
+    using NuisanceValues = std::map<std::string, double>;
 
-    double evaluate(double x) const;
+    virtual ~FitFunction() {};
 
-    void addSystematic(const std::string& sysName, const TF1& upFunction, const TF1& downFunction);
-    void addSystematic(const std::string& sysName, const std::vector<double>& upParams, const std::vector<double>& downParams);
-    const TF1* getSystematic(const std::string& sysName, bool up) const;
-    std::vector<std::string> listSystematics() const;
-    // implement functions into source code
-    // modify input output stuff (start with implements)
+    std::string getName() const {return name;}
+
+    FunctionType getFunctionType() const {return functionType;}
+
+    virtual double evaluate(double observable, double modelMass,
+                            const NuisanceValues &nuisances = {}) const = 0;
+    virtual std::string getNormExpression(const std::string &variable) const = 0;
+    virtual std::vector<std::string> listSystematics() const = 0;
+
+    static std::string encodeName(std::map<std::string, std::string> parameters);
+    static std::map<std::string, std::string> decodeName(std::string name);
+
+  protected:
+    FitFunction() {};
+    FitFunction(FunctionType functionType, std::string name);
+
+    void setName(std::string newName);
+    void setFunctionType(FunctionType type){functionType = type;}
 
   private:
-    TF1 function;
-    FunctionType functionType;
-    std::map<std::string, std::pair<TF1, TF1>> systematics; 
-
-    static double powerLaw(double *x, double *par);
-    static double DSCB(double *x, double *par);
-    static double doubleGaussian(double *x, double *par);
-    static double gausLogPowerNorm(double *x, double *par);
-    static double voigt(double *x, double *par);
-    static std::vector<std::string> split(const std::string &str, char delimiter);
+    FunctionType functionType = FunctionType::ExpressionFormula;
+    std::string name;
+    ClassDef(FitFunction, 1)
 };
-
-std::ostream &operator<<(std::ostream &stream, FitFunction &function);
-std::istream &operator>>(std::istream &stream, FitFunction &function);
 
 #endif

@@ -14,7 +14,7 @@ void FitTest()
     }
 
     // accesses the internal map of functions
-    auto& funcMap = functions.getFunctions();
+    auto& funcMap = functions.getFunctionsMap();
 
     if (funcMap.empty()) {
         std::cerr << "No functions were loaded. Check the file format or path.\n";
@@ -27,7 +27,7 @@ void FitTest()
     for (const auto& pair : funcMap)
     {
         const std::string& key = pair.first;  // function key, e.g., "\sigma_2"
-        const FitFunction& func = pair.second;
+        const SimpleFitFunction& func = pair.second;
 
         TF1* tf1 = func.getFunction();
         if (!tf1) {

@@ -12,8 +12,8 @@ FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string &fi
         FitFunctionCollection functions;
         while (file)
         {
-            std::cout << "Reading function #" << "..." << std::endl;
-            FitFunction func(TF1(), FitFunction::FunctionType::ExpressionFormula);
+            // std::cout << "Reading function #" << "..." << std::endl;
+            SimpleFitFunction func(TF1(), FitFunction::FunctionType::ExpressionFormula);
             file >> func;
             if (!file)
             {
@@ -49,7 +49,7 @@ FitFunctionCollection::FitFunctionCollection()
 {
 }
 
-FitFunctionCollection::FitFunctionCollection(std::vector<FitFunction> &functions)
+FitFunctionCollection::FitFunctionCollection(std::vector<SimpleFitFunction> &functions)
 {
     functions.reserve(functions.size());
     for (auto &func : functions)
@@ -63,13 +63,13 @@ size_t FitFunctionCollection::size() const
     return functions.size();
 }
 
-FitFunction &FitFunctionCollection::operator[](const std::string &key)
+SimpleFitFunction &FitFunctionCollection::operator[](const std::string &key)
 {
 
     return get(key);
 }
 
-FitFunction &FitFunctionCollection::get(const std::string &key)
+SimpleFitFunction &FitFunctionCollection::get(const std::string &key)
 {
     try
     {
@@ -82,12 +82,12 @@ FitFunction &FitFunctionCollection::get(const std::string &key)
     }
 }
 
-void FitFunctionCollection::insert(FitFunction func)
+void FitFunctionCollection::insert(SimpleFitFunction func)
 {
     functions.insert({func.getFunction()->GetName(), func});
 }
 
-void FitFunctionCollection::insert(const std::string& key, FitFunction func)
+void FitFunctionCollection::insert(const std::string& key, SimpleFitFunction func)
 {
     functions.insert({key, func});
 }
@@ -96,7 +96,7 @@ bool FitFunctionCollection::checkFunctionsSimilar()
 {
     if (size() > 0)
     {
-        FitFunction &compareFunc = functions.begin()->second;
+        SimpleFitFunction &compareFunc = functions.begin()->second;
         for (auto &pair : functions)
         {
             if (pair.second.getFunctionType() != compareFunc.getFunctionType() ||
@@ -138,7 +138,7 @@ bool FitFunctionCollection::checkFunctionsSimilar()
     }
 }
 
-std::unordered_map<std::string, FitFunction> &FitFunctionCollection::getFunctions()
+std::unordered_map<std::string, SimpleFitFunction> &FitFunctionCollection::getFunctionsMap()
 {
     return functions;
 }

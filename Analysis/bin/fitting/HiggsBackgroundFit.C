@@ -1,4 +1,4 @@
-#include "CMSAnalysis/Analysis/interface/FitFunction.hh"
+#include "CMSAnalysis/Analysis/interface/SimpleFitFunction.hh"
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
 #include "CMSAnalysis/Analysis/interface/Fitter.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
@@ -13,7 +13,7 @@
 #include "TROOT.h"
 
 
-FitFunction fitProcess(const std::shared_ptr<Process> process, const HistVariable &histVar,
+SimpleFitFunction fitProcess(const std::shared_ptr<Process> process, const HistVariable &histVar,
                 const std::string &channelName, int min, int max, const std::vector<std::string>& systs, TFile* rootFile);
 
 const std::vector<HistVariable> histogramTypes = {
@@ -98,7 +98,7 @@ void HiggsBackgroundFit(bool useKansasState = false)
                     << channel->getName()
                     << "'\n";
 
-                FitFunction func = fitProcess(process, histVar, channel->getName(), bgAndRange.second.first, bgAndRange.second.second, systs, rootFile);
+                SimpleFitFunction func = fitProcess(process, histVar, channel->getName(), bgAndRange.second.first, bgAndRange.second.second, systs, rootFile);
 
                 allFunctions.insert(func);
             }
@@ -110,13 +110,13 @@ void HiggsBackgroundFit(bool useKansasState = false)
 }
 
 
-FitFunction fitProcess(const std::shared_ptr<Process> process, const HistVariable &histVar, const std::string &channelName,
+SimpleFitFunction fitProcess(const std::shared_ptr<Process> process, const HistVariable &histVar, const std::string &channelName,
                 int min, int max, const std::vector<std::string>& systs, TFile* rootFile)
 {
     TH1 *const selectedHist = process->getHist(histVar, true);
     if (!selectedHist || selectedHist->GetEntries() < minData)
     {
-        return FitFunction();
+        return SimpleFitFunction();
     }
 
     //std::string systDesc;
@@ -147,8 +147,8 @@ FitFunction fitProcess(const std::shared_ptr<Process> process, const HistVariabl
 
     std::cout << "Fitting " + name + "\n";
     FitFunction::FunctionType type = FitFunction::FunctionType::GausLogPowerNorm;
-    FitFunction func =
-        FitFunction::createFunctionOfType(type, name, "", min, max);
+    SimpleFitFunction func =
+        SimpleFitFunction::createFunctionOfType(type, name, "", min, max);
 
         Fitter::fitSingleFunction(selectedHist, func, rootFile);
     
@@ -159,14 +159,14 @@ FitFunction fitProcess(const std::shared_ptr<Process> process, const HistVariabl
                         systHistVar.setSystematic(ScaleFactor::SystematicType::Down, systName);
                         TH1 *histDown = process->getHist(systHistVar, true);
 
-                        FitFunction downFunction = FitFunction::createFunctionOfType(type, name, "", min, max);
+                        SimpleFitFunction downFunction = SimpleFitFunction::createFunctionOfType(type, name, "", min, max);
                         Fitter::fitSingleFunction(histDown, downFunction);
 
                         systHistVar.setSystematic(ScaleFactor::SystematicType::Up, systName);
                         TH1 *histUp = process->getHist(systHistVar, true);
 
                         
-                        FitFunction upFunction = FitFunction::createFunctionOfType(type, name, "", min, max);
+                        SimpleFitFunction upFunction = SimpleFitFunction::createFunctionOfType(type, name, "", min, max);
                         Fitter::fitSingleFunction(histUp, upFunction);
 
                         func.addSystematic(systName, *upFunction.getFunction(), *downFunction.getFunction());

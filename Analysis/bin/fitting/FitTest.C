@@ -15,7 +15,7 @@ void FitTest()
         return;
     }
 
-    auto& funcMap = functions.getFunctions();
+    auto& funcMap = functions.getFunctionsMap();
     if (funcMap.empty()) {
         std::cerr << "No functions were loaded.\n";
         return;
@@ -27,7 +27,7 @@ void FitTest()
     for (const auto& pair : funcMap)
     {
         const std::string& key = pair.first;
-        const FitFunction& func = pair.second;
+        const SimpleFitFunction& func = pair.second;
 
         TF1* tf1 = func.getFunction();
         if (!tf1) {
@@ -49,7 +49,7 @@ void FitTest()
                 downParams.push_back(val * 0.95);
             }
 
-            FitFunction& mutableFunc = const_cast<FitFunction&>(func);
+            SimpleFitFunction& mutableFunc = const_cast<SimpleFitFunction&>(func);
             mutableFunc.addSystematic("scale", upParams, downParams);
 
             TF1* sysUp = mutableFunc.getSystematic("scale", true);
