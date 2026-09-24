@@ -1,7 +1,7 @@
 #ifndef JSONREADER_HH
 #define JSONREADER_HH
 
-#include "CMSAnalysis/Modules/interface/ScaleFactorReader.hh"
+#include "CMSAnalysis/ScaleFactors/interface/ScaleFactorReader.hh"
 #include "EventFilter/Utilities/interface/json.h"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include <map>

@@ -1,7 +1,7 @@
-#include "CMSAnalysis/Modules/interface/ElectronJSONReader.hh"
+#include "CMSAnalysis/ScaleFactors/interface/ElectronJSONReader.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
-#include "CMSAnalysis/Modules/interface/EventInput.hh"
+#include "CMSAnalysis/ScaleFactors/interface/EventInput.hh"
 #include <iostream>
 
 using jsoncollector::Json::Value;

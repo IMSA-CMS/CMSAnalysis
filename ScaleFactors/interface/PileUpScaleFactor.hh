@@ -1,6 +1,6 @@
 #ifndef PILEUPSCALEFACTOR_HH
 #define PILEUPSCALEFACTOR_HH
-#include "CMSAnalysis/Modules/interface/EventScaleFactor.hh"
+#include "CMSAnalysis/ScaleFactors/interface/EventScaleFactor.hh"
 #include <set>
 
 class PileUpScaleFactor : public EventScaleFactor

@@ -1,6 +1,6 @@
 #ifndef EVENTSCALEFACTOR_HH
 #define EVENTSCALEFACTOR_HH
-#include "CMSAnalysis/Modules/interface/MapBasedScaleFactor.hh"
+#include "CMSAnalysis/ScaleFactors/interface/MapBasedScaleFactor.hh"
 
 class EventScaleFactor : public MapBasedScaleFactor
 {

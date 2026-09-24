@@ -1,5 +1,5 @@
-#include "CMSAnalysis/Modules/interface/LeptonScaleFactor.hh"
-#include "CMSAnalysis/Modules/interface/EventInput.hh"
+#include "CMSAnalysis/ScaleFactors/interface/LeptonScaleFactor.hh"
+#include "CMSAnalysis/ScaleFactors/interface/EventInput.hh"
 #include <iostream>
 #include <limits>
 #include "CMSAnalysis/Utility/interface/FileParams.hh"

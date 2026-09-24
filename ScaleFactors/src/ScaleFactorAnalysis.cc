@@ -1,5 +1,5 @@
-#include "CMSAnalysis/Modules/interface/ScaleFactorAnalysis.hh"
-#include "CMSAnalysis/Modules/interface/EventInput.hh"
+#include "CMSAnalysis/ScaleFactors/interface/ScaleFactorAnalysis.hh"
+#include "CMSAnalysis/ScaleFactors/interface/EventInput.hh"
 #include <iostream>
 
 void ScaleFactorAnalysis::initialize()

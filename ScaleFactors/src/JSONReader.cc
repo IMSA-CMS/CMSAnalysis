@@ -4,10 +4,10 @@
 #include <string>
 #include <regex>
 #include <map>
-#include "CMSAnalysis/Modules/interface/JSONReader.hh"
+#include "CMSAnalysis/ScaleFactors/interface/JSONReader.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "CMSAnalysis/Utility/interface/Utility.hh"
-#include "CMSAnalysis/Modules/interface/EventInput.hh"
+#include "CMSAnalysis/ScaleFactors/interface/EventInput.hh"
 #include "EventFilter/Utilities/interface/json.h"
 #include "CMSAnalysis/Utility/interface/Utility.hh"
 #include "TH1.h"

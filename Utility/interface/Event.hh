@@ -10,7 +10,7 @@
 #include "CMSAnalysis/Utility/interface/Photon.hh"
 #include "CMSAnalysis/Utility/interface/Jet.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
-#include "CMSAnalysis/Modules/interface/EventInput.hh"
+#include "CMSAnalysis/ScaleFactors/interface/EventInput.hh"
 
 // Stores an event by containing ParticleCollections of different types of Particles, as well as MET.
 // Used in EventModule, where cuts are applied to it.

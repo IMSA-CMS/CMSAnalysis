@@ -1,7 +1,7 @@
 #ifndef DUMMYSCALEFACTORREADER_HH
 #define DUMMYSCALEFACTORREADER_HH
 
-#include "CMSAnalysis/Modules/interface/ScaleFactorReader.hh"
+#include "CMSAnalysis/ScaleFactors/interface/ScaleFactorReader.hh"
 
 class DummyScaleFactorReader : public ScaleFactorReader
 {

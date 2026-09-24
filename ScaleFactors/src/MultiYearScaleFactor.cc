@@ -1,6 +1,6 @@
-#include "CMSAnalysis/Modules/interface/MultiYearScaleFactor.hh"
-#include "CMSAnalysis/Modules/interface/DummyScaleFactorReader.hh"
-#include "CMSAnalysis/Modules/interface/EventInput.hh"
+#include "CMSAnalysis/ScaleFactors/interface/MultiYearScaleFactor.hh"
+#include "CMSAnalysis/ScaleFactors/interface/DummyScaleFactorReader.hh"
+#include "CMSAnalysis/ScaleFactors/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/FileParams.hh"
 #include <stdexcept>
 #include <iostream>

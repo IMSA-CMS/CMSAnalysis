@@ -1,7 +1,7 @@
 #ifndef ELECTRONJSONREADER_HH
 #define ELECTRONJSONREADER_HH
 
-#include "CMSAnalysis/Modules/interface/JSONReader.hh"
+#include "CMSAnalysis/ScaleFactors/interface/JSONReader.hh"
 #include <map>
 #include <string>
 

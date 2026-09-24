@@ -1,5 +1,5 @@
-#include "CMSAnalysis/Modules/interface/VariableScaleFactor.hh"
-#include "CMSAnalysis/Modules/interface/EventInput.hh"
+#include "CMSAnalysis/ScaleFactors/interface/VariableScaleFactor.hh"
+#include "CMSAnalysis/ScaleFactors/interface/EventInput.hh"
 
 VariableScaleFactor::VariableScaleFactor(std::string iname, std::string variableNameNominal, std::string variableNameUp, std::string variableNameDown) :
  ScaleFactor(iname),

@@ -1,5 +1,5 @@
-#include "CMSAnalysis/Modules/interface/PileUpScaleFactor.hh"
-#include "CMSAnalysis/Modules/interface/EventInput.hh"
+#include "CMSAnalysis/ScaleFactors/interface/PileUpScaleFactor.hh"
+#include "CMSAnalysis/ScaleFactors/interface/EventInput.hh"
 #include <vector>
 #include <string>
 #include <limits>
