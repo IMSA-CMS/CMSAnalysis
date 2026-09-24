@@ -21,73 +21,76 @@ FitFunctionParameterization::FitFunctionParameterization(std::string name, std::
 
 FitFunctionParameterization FitFunctionParameterization::load(const std::string &fileName)
 {
+    auto functions = loadFunctions(fileName);
+    if (functions.empty())
+    {
+        throw std::runtime_error("No FitFunctionParameterization in " + fileName);
+    }
+    return functions[0];
+}
+
+std::vector<FitFunctionParameterization> FitFunctionParameterization::loadFunctions(const std::string &fileName)
+{
     std::ifstream file(fileName);
     if (!file)
     {
         throw std::runtime_error("File not loaded successfully: " + fileName);
     }
 
+    std::vector<FitFunctionParameterization> functions;
     std::string label;
-    std::string objectName;
-    std::string channel;
-    std::string formula;
-    int type = 0;
-    double min = 0;
-    double max = 0;
-    size_t size = 0;
-    file >> label >> std::quoted(objectName);
-    file >> label >> std::quoted(channel);
-    file >> label >> type;
-    file >> label >> std::quoted(formula);
-    file >> label >> min >> max;
-
-    FitFunctionParameterization result(objectName, channel, static_cast<FunctionType>(type), formula,
-                                       min, max);
-    file >> label;
-    if (label == "NormParameterIndex:")
+    while (file >> label)
     {
-        int normIndex = -1;
-        file >> normIndex;
-        result.normParameterIndex = normIndex;
-        file >> label;
-    }
-    file >> size;
-
-    for (size_t i = 0; i < size; ++i)
-    {
-        std::string parameterName;
-        std::string parameterFormula;
-        std::string functionName;
-        int parameterType = 0;
-        double functionMin = 0;
-        double functionMax = 0;
-        int npar = 0;
-        file >> label >> std::quoted(parameterName);
-        file >> label >> parameterType;
-        file >> label >> std::quoted(parameterFormula);
-        file >> label >> std::quoted(functionName);
-        file >> label >> functionMin >> functionMax;
-        file >> label >> npar;
-
-        auto function = SimpleFitFunction::createFunctionOfType(static_cast<FunctionType>(parameterType), functionName, parameterFormula, functionMin, functionMax);
-        for (int parameter = 0; parameter < npar; ++parameter)
+        if (label != "Parameterization:")
         {
-            std::string parameterName;
-            double value = 0;
-            double error = 0;
-            file >> label >> std::quoted(parameterName) >> value >> error;
-            function.getFunction()->SetParName(parameter, parameterName.c_str());
-            function.getFunction()->SetParameter(parameter, value);
-            function.getFunction()->SetParError(parameter, error);
+            throw std::runtime_error("Invalid FitFunctionParameterization in " + fileName);
         }
-        result.parameterFunctions.push_back(std::move(function));
+
+        std::string objectName;
+        std::string channel;
+        std::string formula;
+        int type = 0;
+        double min = 0;
+        double max = 0;
+        size_t size = 0;
+        file >> std::quoted(objectName);
+        file >> label >> std::quoted(channel);
+        file >> label >> type;
+        file >> label >> std::quoted(formula);
+        file >> label >> min >> max;
+
+        FitFunctionParameterization result(objectName, channel, static_cast<FunctionType>(type), formula,
+                                           min, max);
+        file >> label;
+        if (label == "NormParameterIndex:")
+        {
+            file >> result.normParameterIndex;
+            file >> label;
+        }
+        file >> size;
+        if (!file)
+        {
+            throw std::runtime_error("Invalid FitFunctionParameterization in " + fileName);
+        }
+
+        for (size_t i = 0; i < size; ++i)
+        {
+            SimpleFitFunction function;
+            file >> function;
+            if (!file)
+            {
+                throw std::runtime_error("Invalid parameter function in " + fileName);
+            }
+            result.parameterFunctions.push_back(std::move(function));
+        }
+        functions.push_back(std::move(result));
     }
 
     if (!file && !file.eof())
     {
         throw std::runtime_error("Invalid FitFunctionParameterization in " + fileName);
     }
-    return result;
+    return functions;
 }
 
 void FitFunctionParameterization::insert(const SimpleFitFunction &function)
@@ -178,24 +181,7 @@ void FitFunctionParameterization::save(const std::string &fileName, const bool a
 
     for (auto &parameterFunction : parameterFunctions)
     {
-        auto *const tf1 = parameterFunction.getFunction();
-        double functionMin = 0;
-        double functionMax = 0;
-        tf1->GetRange(functionMin, functionMax);
-        const char *const rawFormula = tf1->GetExpFormula();
-        const std::string formula = rawFormula == nullptr ? "" : rawFormula;
-
-        file << "Parameter: " << std::quoted(parameterFunction.getParameter("Parameter")) << '\n';
-        file << "FunctionTypeEnum: " << static_cast<int>(parameterFunction.getFunctionType()) << '\n';
-        file << "ExpressionFormula: " << std::quoted(formula) << '\n';
-        file << "FunctionName: " << std::quoted(std::string(tf1->GetName())) << '\n';
-        file << "Range: " << functionMin << ' ' << functionMax << '\n';
-        file << "NumOfTF1Parameters: " << tf1->GetNpar() << '\n';
-        for (int parameter = 0; parameter < tf1->GetNpar(); ++parameter)
-        {
-            file << "TF1Parameter: " << std::quoted(std::string(tf1->GetParName(parameter))) << ' '
-                 << tf1->GetParameter(parameter) << ' ' << tf1->GetParError(parameter) << '\n';
-        }
+        file << parameterFunction;
     }
 }
 
