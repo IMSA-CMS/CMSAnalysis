@@ -14,6 +14,7 @@ class FitFunctionParameterization : public FitFunction
                                 std::string expFormula, double min, double max);
 
     static FitFunctionParameterization load(const std::string &fileName);
+    static std::vector<FitFunctionParameterization> loadFunctions(const std::string &fileName);
 
     void insert(const SimpleFitFunction &function);
     //update evaluate

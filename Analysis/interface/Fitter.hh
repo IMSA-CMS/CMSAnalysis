@@ -2,6 +2,7 @@
 #define FITTER_HH
 
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
+#include "CMSAnalysis/Analysis/interface/FitFunctionParameterization.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include <TCanvas.h>
 #include <TFile.h>
@@ -19,8 +20,8 @@ class Fitter
         std::string rootFileName);
     // FitFunctionCollection parameterizeFunctions(std::unordered_map<double, TF1*>& xData, const std::string &genSim,
     //     const std::string &reco, const std::string &var, const HistVariable &histVar);
-    static FitFunctionCollection parameterizeFunction(std::string name, const std::unordered_map<double, SimpleFitFunction*>& xData, 
-        TFile* rootFile);
+    static FitFunctionParameterization parameterizeFunction(std::string name,
+        const std::unordered_map<double, SimpleFitFunction*>& xData, TFile* rootFile);
 
   private:
     static void fitExpressionFormula(TH1 *histogram, SimpleFitFunction &fitFunction);
