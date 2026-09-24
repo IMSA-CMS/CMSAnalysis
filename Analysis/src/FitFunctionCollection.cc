@@ -1,7 +1,9 @@
-#include "../interface/FitFunctionCollection.hh"
+#include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
+#include "CMSAnalysis/Analysis/interface/FitFunctionParameterization.hh"
 #include <TF1.h>
 #include <fstream>
 #include <string>
+#include <utility>
 
 FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string &fileName)
 {
@@ -12,7 +14,7 @@ FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string &fi
         FitFunctionCollection functions;
         while (file)
         {
-            std::cout << "Reading function #" << "..." << std::endl;
+            // std::cout << "Reading function #" << "..." << std::endl;
             SimpleFitFunction func(TF1(), FitFunction::FunctionType::ExpressionFormula);
             file >> func;
             if (!file)
@@ -41,7 +43,7 @@ void FitFunctionCollection::saveFunctions(const std::string &fileName, bool appe
     //file << functions.size() << '\n';
     for (auto &funcPair : functions)
     {
-        file << funcPair.second << "\n";
+        file << *funcPair.second << "\n";
     }
 }
 
@@ -51,7 +53,7 @@ FitFunctionCollection::FitFunctionCollection()
 
 FitFunctionCollection::FitFunctionCollection(std::vector<SimpleFitFunction> &functions)
 {
-    functions.reserve(functions.size());
+    this->functions.reserve(functions.size());
     for (auto &func : functions)
     {
         insert(func);
@@ -73,7 +75,7 @@ SimpleFitFunction &FitFunctionCollection::get(const std::string &key)
 {
     try
     {
-        return functions.at(key);
+        return *functions.at(key);
     }
     catch (std::out_of_range &e)
     {
@@ -84,25 +86,26 @@ SimpleFitFunction &FitFunctionCollection::get(const std::string &key)
 
 void FitFunctionCollection::insert(SimpleFitFunction func)
 {
-    functions.insert({func.getFunction()->GetName(), func});
+    const auto name = func.getName();
+    insert(name, std::move(func));
 }
 
 void FitFunctionCollection::insert(const std::string& key, SimpleFitFunction func)
 {
-    functions.insert({key, func});
+    functions.insert({key, std::make_shared<SimpleFitFunction>(std::move(func))});
 }
 
 bool FitFunctionCollection::checkFunctionsSimilar()
 {
     if (size() > 0)
     {
-        SimpleFitFunction &compareFunc = functions.begin()->second;
+        SimpleFitFunction &compareFunc = *functions.begin()->second;
         for (auto &pair : functions)
         {
-            if (pair.second.getFunctionType() != compareFunc.getFunctionType() ||
-                pair.second.getFunction()->GetNpar() != compareFunc.getFunction()->GetNpar())
+            if (pair.second->getFunctionType() != compareFunc.getFunctionType() ||
+                pair.second->getFunction()->GetNpar() != compareFunc.getFunction()->GetNpar())
             {
-                if (pair.second.getFunctionType() != compareFunc.getFunctionType())
+                if (pair.second->getFunctionType() != compareFunc.getFunctionType())
                 {
                     std::cout << "Functions are different types\n";
                 }
@@ -118,11 +121,11 @@ bool FitFunctionCollection::checkFunctionsSimilar()
                 for (int i = 0; i < compareFunc.getFunction()->GetNpar(); ++i)
                 {
                     std::string firstFunc(compareFunc.getFunction()->GetParName(i));
-                    std::string secondFunc(pair.second.getFunction()->GetParName(i));
+                    std::string secondFunc(pair.second->getFunction()->GetParName(i));
                     if (firstFunc != secondFunc)
                     {
                         std::cout << "compareFunc: " << compareFunc.getFunction()->GetParName(i) << '\n';
-                        std::cout << "currentFunc: " << pair.second.getFunction()->GetParName(i) << '\n';
+                        std::cout << "currentFunc: " << pair.second->getFunction()->GetParName(i) << '\n';
                         std::cout << "3\n";
                         return false;
                     }
@@ -138,44 +141,44 @@ bool FitFunctionCollection::checkFunctionsSimilar()
     }
 }
 
-std::unordered_map<std::string, SimpleFitFunction> &FitFunctionCollection::getFunctionsMap()
+const std::unordered_map<std::string, std::shared_ptr<SimpleFitFunction>> &FitFunctionCollection::getFunctionsMap() const
 {
     return functions;
 }
 
-std::set<std::string> FitFunctionCollection::findUniqueNames(std::string parameter)
+std::set<std::string> FitFunctionCollection::findUniqueNames(std::string parameter) const
 {
     std::set<std::string> result;
     for (auto& [key, fitFunction] : functions)
     {
-        auto decoded = FitFunction::decodeName(fitFunction.getName());
+        auto decoded = FitFunction::decodeName(fitFunction->getName());
         result.insert(decoded[parameter]);
     }
     return result;
 }
 
-FitFunctionCollection FitFunctionCollection::getFunctions(std::string name)
+FitFunctionCollection FitFunctionCollection::getFunctions(std::string name) const
 {
     FitFunctionCollection result;
     for (auto& [key, fitFunction] : functions)
     {
-        if (fitFunction.getName().find(name) != std::string::npos)
+        if (fitFunction->getName().find(name) != std::string::npos)
         {
-            result.insert(fitFunction);
+            result.functions.insert({key, fitFunction});
         }
     }
     return result;
 }
 
-FitFunctionCollection FitFunctionCollection::getFunctions(std::string parameter, std::string name)
+FitFunctionCollection FitFunctionCollection::getFunctions(std::string parameter, std::string name) const
 {
     FitFunctionCollection result;
     for (auto& [key, fitFunction] : functions)
     {
-        auto decoded = FitFunction::decodeName(fitFunction.getName());
+        auto decoded = FitFunction::decodeName(fitFunction->getName());
         if (decoded[parameter] == name)
         {
-            result.insert(fitFunction);
+            result.functions.insert({key, fitFunction});
         }
     }
     return result;
@@ -185,7 +188,40 @@ FitFunctionCollection& FitFunctionCollection::operator+=(const FitFunctionCollec
 {
     for (const auto& [key, func] : other.functions)
     {
-        insert(key, func);
+        functions.insert({key, func});
     }
     return *this;
+}
+
+std::shared_ptr<FitFunction> FitFunctionCollection::getModel(const std::string &channel,
+                                                          double min, double max) const
+{
+    if (functions.empty())
+        throw std::runtime_error("No signal functions for " + channel);
+    const auto &candidate = functions.begin()->second;
+    if (candidate->getParameter("ParameterIndex").empty())
+    {
+        if (size() != 1)
+            throw std::runtime_error("wanted one signal model for " + channel);
+        return candidate;
+    }
+
+    std::vector<std::shared_ptr<SimpleFitFunction>> rows;
+    for (size_t i = 0; i < size(); ++i)
+    {
+        const auto row = getFunctions("ParameterIndex", std::to_string(i));
+        if (row.size() != 1)
+            throw std::runtime_error("bad signal parameter group for " + channel);
+        rows.push_back(row.functions.begin()->second);
+    }
+    const auto &first = rows.front();
+    const auto type = static_cast<FitFunction::FunctionType>(std::stoi(first->getParameter("OriginalFunctionType")));
+    const auto shape = SimpleFitFunction::createFunctionOfType(type, "", "", min, max);
+    if (rows.size() != static_cast<size_t>(shape.getFunction()->GetNpar()) ||
+        findUniqueNames("GenSim").size() != 1 || findUniqueNames("OriginalFunctionType").size() != 1)
+        throw std::runtime_error("bad signal parameter group for " + channel);
+    auto model = std::make_shared<FitFunctionParameterization>(first->getName(), channel, type, "", min, max);
+    for (const auto &row : rows)
+        model->insert(*row);
+    return model;
 }

@@ -23,15 +23,9 @@ class FitFunction
 
     virtual ~FitFunction() {};
 
-    std::string getName() const
-    {
-        return name;
-    }
+    std::string getName() const {return name;}
 
-    FunctionType getFunctionType() const
-    {
-        return functionType;
-    }
+    FunctionType getFunctionType() const {return functionType;}
 
     virtual double evaluate(double observable, double modelMass,
                             const NuisanceValues &nuisances = {}) const = 0;
@@ -46,10 +40,7 @@ class FitFunction
     FitFunction(FunctionType functionType, std::string name);
 
     void setName(std::string newName);
-    void setFunctionType(FunctionType type)
-    {
-        functionType = type;
-    }
+    void setFunctionType(FunctionType type){functionType = type;}
 
   private:
     FunctionType functionType = FunctionType::ExpressionFormula;

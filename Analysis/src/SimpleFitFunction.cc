@@ -545,7 +545,7 @@ std::istream &operator>>(std::istream &stream, SimpleFitFunction &func)
     {
         int nSys = 0;
         std::istringstream(line.substr(12)) >> nSys;
-        std::cout << "nSystematics: " << nSys << std::endl;
+        //std::cout << "nSystematics: " << nSys << std::endl;
         for (int s = 0; s < nSys; ++s)
         {
             std::string sysName;
@@ -592,7 +592,7 @@ std::istream &operator>>(std::istream &stream, SimpleFitFunction &func)
         }
     }
     func = function;
-    std::cout << "Successfully read: " << name << " (" << params << " parameters)\n\n";
+    //std::cout << "Successfully read: " << name << " (" << params << " parameters)\n\n";
 
     return stream;
 }

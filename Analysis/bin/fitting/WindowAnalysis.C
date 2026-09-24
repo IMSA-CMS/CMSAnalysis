@@ -764,7 +764,7 @@ void WindowAnalysisImpl(const int mode = -1)
                             auto it = functionMap.find(functionName);
                             if (it != functionMap.end())
                             {
-                                TF1 *tf1 = it->second.getFunction();
+                                TF1 *tf1 = it->second->getFunction();
                                 if (tf1)
                                 {
                                     // Integrate fitted function over same mass window.
