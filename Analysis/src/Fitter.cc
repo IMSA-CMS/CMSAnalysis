@@ -439,6 +439,7 @@ FitFunctionParameterization Fitter::parameterizeFunction(std::string name,
                     *downFit.getFunction());
             }
         }
+        
         parameterization.insert(fit);
 
         auto *const canvas = new TCanvas(fullName.c_str(), fullName.c_str(), 0, 0, 2000, 500);
