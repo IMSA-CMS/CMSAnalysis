@@ -31,6 +31,7 @@ class Fitter
     static void fitGausLogPowerNorm(TH1 *hist, SimpleFitFunction &func);
     static void fitVoigt(TH1 *histogram, SimpleFitFunction &fitFunction);
 
+<<<<<<< HEAD
     static std::shared_ptr<SimpleFitFunction> fitPowerLawToGraph(TGraph* graph, std::string name);
 
     // TH1* readHistogram(const std::string& name);
@@ -50,6 +51,9 @@ class Fitter
 
     // std::map<std::string, TDirectory *> fitDirectories;
     // std::map<std::string, TDirectory *> parameterDirectories;
+=======
+    static SimpleFitFunction fitPowerLawToGraph(TGraph* graph, std::string name);
+>>>>>>> 48310bb8c69cd971e128baa156e1aaa8dff31f7d
 };
 
 #endif

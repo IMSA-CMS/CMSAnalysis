@@ -7,3 +7,11 @@
 #include "CMSAnalysis/Analysis/interface/GausLogPowerNormFitFunction.hh"
 #include "CMSAnalysis/Analysis/interface/VoigtFitFunction.hh"
 #include "CMSAnalysis/Analysis/interface/FitFunctionParameterization.hh"
+
+namespace CMSAnalysis_Analysis
+{
+    struct dictionary
+    {
+        
+    };
+}

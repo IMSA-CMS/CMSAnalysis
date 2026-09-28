@@ -19,6 +19,9 @@ class FitFunction
         Voigt,
     };
 
+    std::string getParameter(std::string name);
+    
+    std::string getExpression(const std::string& variable); //new
     using NuisanceValues = std::map<std::string, double>;
 
     virtual ~FitFunction() {};

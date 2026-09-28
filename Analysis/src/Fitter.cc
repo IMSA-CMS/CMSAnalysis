@@ -22,10 +22,10 @@ FitFunctionCollection Fitter::fitFunctions(const std::vector<std::pair<TH1 *, st
 {
     TFile *rootFile = TFile::Open(rootFileName.c_str(), "RECREATE");
     FitFunctionCollection functions;
-    for (const auto &histPair : histogramPairs)
+    for (auto &histPair : histogramPairs)
     {
         auto histogram = histPair.first;
-        auto func = histPair.second;
+        auto &func = histPair.second;
 
         fitSingleFunction(histogram, *func);
 
@@ -439,6 +439,7 @@ FitFunctionParameterization Fitter::parameterizeFunction(std::string name,
                     *downFit->getFunction());
             }
         }
+        
         parameterization.insert(fit);
 
         auto *const canvas = new TCanvas(fullName.c_str(), fullName.c_str(), 0, 0, 2000, 500);
