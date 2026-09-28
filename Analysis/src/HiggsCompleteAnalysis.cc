@@ -301,7 +301,13 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() :
             //         auto sys = std::make_shared<ShapeSystematic>(systematic);
             //         process->addSystematic(sys);
             //     }
-            // }
+            // x}
+
+            std::cout << "Processes for channel " << channelName << ": \n";
+            for (auto process : processes)
+            {
+                std::cout << process->getName() << '\n';
+            }
 
             auto leptonProcesses = std::make_shared<Channel>(channelName, processes);
 
@@ -472,7 +478,7 @@ void HiggsCompleteAnalysis::addParameterizations()
 
         for (auto& fitFunction : matchingSignalFunctions)
         {
-            auto parsed = FitFunction::decodeName(fitFunction.second.getName());
+            auto parsed = FitFunction::decodeName(fitFunction.second->getName());
             auto projection = parsed["projection"];
             auto genSim = parsed["genSim"];
 
@@ -486,7 +492,7 @@ void HiggsCompleteAnalysis::addParameterizations()
                 {
                     continue;
                 }
-                process->setPlot(histVar, fitFunction.second);
+                process->setPlot(histVar, *fitFunction.second);
             }
         }
     }
@@ -499,7 +505,7 @@ void HiggsCompleteAnalysis::addParameterizations()
 
         for (auto& fitFunction : matchingBgFunctions)
         {
-            auto parsed = FitFunction::decodeName(fitFunction.second.getName());
+            auto parsed = FitFunction::decodeName(fitFunction.second->getName());
             auto projection = parsed["projection"];
             auto bgName = parsed["process"];
 
@@ -510,7 +516,7 @@ void HiggsCompleteAnalysis::addParameterizations()
             {
                 continue;
             }
-            process->setPlot(histVar, fitFunction.second);
+            process->setPlot(histVar, *fitFunction.second);
         }
     }
 }
