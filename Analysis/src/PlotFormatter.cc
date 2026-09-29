@@ -577,7 +577,7 @@ TCanvas *PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
             {
                 std::cout << "DEBUG: checking signal process name = " << proc->getName() << "\n";
                 auto plot = proc->getPlot(histvariable);
-                if (plot.has_value())
+                if (plot)
                 {
                     TF1 *rawFunc = plot->getFunction();
                     double fitMin_sig, fitMax_sig;
@@ -613,7 +613,7 @@ TCanvas *PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
         for (const auto &func : backgroundProcesses)
         {
             auto plot = func->getPlot(histvariable);
-            if (plot.has_value())
+            if (plot)
             {
                 std::cout << "Drawing parameterizedFunction " << plot->getName() << "\n";
                 auto it = backgroundHistsByName.find(func->getName());

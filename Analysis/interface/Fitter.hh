@@ -2,6 +2,7 @@
 #define FITTER_HH
 
 #include "CMSAnalysis/Analysis/interface/FitFunctionCollection.hh"
+#include "CMSAnalysis/Analysis/interface/FitFunctionParameterization.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include <TCanvas.h>
 #include <TFile.h>
@@ -15,12 +16,12 @@ class Fitter
     // Insert blank TF1* function ptr which will have the fitted function written to
     static void fitSingleFunction(TH1* histogram, SimpleFitFunction& function, TFile* rootFile = nullptr);
 
-    static FitFunctionCollection fitFunctions(const std::vector<std::pair<TH1*, SimpleFitFunction>>& histogramPairs,
+    static FitFunctionCollection fitFunctions(const std::vector<std::pair<TH1*, std::shared_ptr<SimpleFitFunction>>>& histogramPairs,
         std::string rootFileName);
     // FitFunctionCollection parameterizeFunctions(std::unordered_map<double, TF1*>& xData, const std::string &genSim,
     //     const std::string &reco, const std::string &var, const HistVariable &histVar);
-    static FitFunctionCollection parameterizeFunction(std::string name, const std::unordered_map<double, SimpleFitFunction*>& xData, 
-        TFile* rootFile);
+    static FitFunctionParameterization parameterizeFunction(std::string name,
+        const std::unordered_map<double, SimpleFitFunction*>& xData, TFile* rootFile);
 
   private:
     static void fitExpressionFormula(TH1 *histogram, SimpleFitFunction &fitFunction);
@@ -30,7 +31,8 @@ class Fitter
     static void fitGausLogPowerNorm(TH1 *hist, SimpleFitFunction &func);
     static void fitVoigt(TH1 *histogram, SimpleFitFunction &fitFunction);
 
-    static SimpleFitFunction fitPowerLawToGraph(TGraph* graph, std::string name);
+<<<<<<< HEAD
+    static std::shared_ptr<SimpleFitFunction> fitPowerLawToGraph(TGraph* graph, std::string name);
 
     // TH1* readHistogram(const std::string& name);
 
@@ -49,6 +51,9 @@ class Fitter
 
     // std::map<std::string, TDirectory *> fitDirectories;
     // std::map<std::string, TDirectory *> parameterDirectories;
+=======
+    static SimpleFitFunction fitPowerLawToGraph(TGraph* graph, std::string name);
+>>>>>>> 48310bb8c69cd971e128baa156e1aaa8dff31f7d
 };
 
 #endif

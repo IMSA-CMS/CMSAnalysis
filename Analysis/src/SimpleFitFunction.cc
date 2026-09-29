@@ -1,7 +1,12 @@
 #include "../interface/SimpleFitFunction.hh"
+#include "CMSAnalysis/Analysis/interface/ExpressionFitFunction.hh"
+#include "CMSAnalysis/Analysis/interface/DSCBFitFunction.hh"
+#include "CMSAnalysis/Analysis/interface/PowerLawFitFunction.hh"
+#include "CMSAnalysis/Analysis/interface/DoubleGaussianFitFunction.hh"
+#include "CMSAnalysis/Analysis/interface/GausLogPowerNormFitFunction.hh"
+#include "CMSAnalysis/Analysis/interface/VoigtFitFunction.hh"
 #include "TF1.h"
 #include "TBuffer.h"
-#include <TMath.h>
 #include <boost/algorithm/string/split.hpp>
 #include <cmath>
 #include <iomanip>
@@ -28,15 +33,7 @@ void SimpleFitFunction::Streamer(TBuffer &buffer)
         // so we dont use the global ROOT list
         
         tf1.AddToGlobalList(false);
-        switch (getFunctionType())
-        {
-        case FunctionType::DoubleSidedCrystalBall: tf1.SetFunction(DSCB); break;
-        case FunctionType::PowerLaw: tf1.SetFunction(powerLaw); break;
-        case FunctionType::DoubleGaussian: tf1.SetFunction(doubleGaussian); break;
-        case FunctionType::GausLogPowerNorm: tf1.SetFunction(gausLogPowerNorm); break;
-        case FunctionType::Voigt: tf1.SetFunction(voigt); break;
-        case FunctionType::ExpressionFormula: break;
-        }
+        restoreFunction(tf1);
     };
     restore(function);
     for (auto &[name, variations] : systematics)
@@ -52,6 +49,11 @@ SimpleFitFunction::SimpleFitFunction(const TF1 &func, FunctionType funcType)
 {
 }
 
+SimpleFitFunction::SimpleFitFunction(FunctionType funcType)
+    : FitFunction(funcType, "")
+{
+}
+
 TF1 *SimpleFitFunction::getFunction()
 {
     return &function;
@@ -64,9 +66,10 @@ const TF1 *SimpleFitFunction::getFunction() const
 
 void SimpleFitFunction::setFunction(const TF1 &func, FunctionType funcType)
 {
+    if (funcType != getFunctionType())
+        throw std::invalid_argument("Cannot change a SimpleFitFunction's type");
     function = func;
     setName(func.GetName());
-    setFunctionType(funcType);
 }
 
 double SimpleFitFunction::getMin() const
@@ -92,106 +95,25 @@ std::string SimpleFitFunction::getParameter(std::string name) const
 }
 
 
-double SimpleFitFunction::powerLaw(double *x, double *par)
+std::shared_ptr<SimpleFitFunction> SimpleFitFunction::createFunctionOfType(FunctionType functionType,
+    const std::string &name, const std::string &expFormula, double min, double max)
 {
-    return par[0] * pow(x[0] - par[1], par[2]);
-}
-
-double SimpleFitFunction::DSCB(double *x, double *par)
-{
-    const double alpha_l = par[0];
-    const double alpha_h = par[1];
-    const double n_l = par[2];
-    const double n_h = par[3];
-    const double mean = par[4];
-    const double sigma = par[5];
-    const double N = par[6];
-    const float t = (x[0] - mean) / sigma;
-    double result;
-    const double fact1TLessMinosAlphaL = alpha_l / n_l;
-    const double fact2TLessMinosAlphaL = (n_l / alpha_l) - alpha_l - t;
-    const double fact1THihgerAlphaH = alpha_h / n_h;
-    const double fact2THigherAlphaH = (n_h / alpha_h) - alpha_h + t;
-
-    const double root2 = std::pow(2, 0.5);
-    if (-alpha_l <= t && alpha_h >= t)
-    {
-        result = exp(-0.5 * t * t);
-    }
-    else if (t < -alpha_l)
-    {
-        result = exp(-0.5 * alpha_l * alpha_l) * pow(fact1TLessMinosAlphaL * fact2TLessMinosAlphaL, -n_l);
-    }
-    else
-    {
-        result = exp(-0.5 * alpha_h * alpha_h) * pow(fact1THihgerAlphaH * fact2THigherAlphaH, -n_h);
-    }
-
-    const double lowTailNorm = (n_l / std::abs(alpha_l)) / (n_l - 1) * std::exp(-0.5 * alpha_l * alpha_l);
-    const double highTailNorm = (n_h / std::abs(alpha_h)) / (n_h - 1) * std::exp(-0.5 * alpha_h * alpha_h);
-    const double gaussianNormA = erf(std::abs(alpha_l / root2)) + erf(std::abs(alpha_h / root2));
-    const double gaussianNormB = std::pow(M_PI / 2, 0.5) * gaussianNormA;
-    const double functionNormalization = std::pow(sigma * (gaussianNormB + lowTailNorm + highTailNorm), -1);
-    return N * functionNormalization * result;
-}
-
-double SimpleFitFunction::doubleGaussian(double *x, double *par)
-{
-    return par[0] * TMath::Gaus(x[0], par[1], par[2]) + par[3] * TMath::Gaus(x[0], par[4], par[5]);
-}
-
-double SimpleFitFunction::gausLogPowerNorm(double *xs, double *par)
-{
-    const auto x = xs[0];
-    const auto mult = par[0];
-    const auto u = par[1];
-    const auto sigma1 = par[2];
-    const auto s = par[3];
-    const auto n = par[4];
-
-    if (x <= u)
-    {
-        return mult * exp(-(x - u) * (x - u) / (2 * sigma1 * sigma1));
-    }
-    return mult * exp(-s * pow(log(x / u), n));
-}
-
-double SimpleFitFunction::voigt(double *x, double *par)
-{
-    return par[0] * TMath::Voigt(x[0] - par[1], par[3], par[2]);
-}
-
-SimpleFitFunction SimpleFitFunction::createFunctionOfType(FunctionType functionType, const std::string &name,
-                                              const std::string &expFormula, double min, double max)
-{
-    TF1 func;
     switch (functionType)
     {
     case FunctionType::ExpressionFormula:
-        func = TF1(name.data(), expFormula.data(), min, max, TF1::EAddToList::kNo);
-        break;
+        return std::make_shared<ExpressionFitFunction>(name, expFormula, min, max);
     case FunctionType::DoubleSidedCrystalBall:
-        func = TF1(name.data(), DSCB, min, max, 7, 1, TF1::EAddToList::kNo);
-        func.SetParNames("#alpha_{low}", "#alpha_{high}", "n_{low}", "n_{high}", "#mu", "#sigma", "norm");
-        break;
+        return std::make_shared<DSCBFitFunction>(name, min, max);
     case FunctionType::PowerLaw:
-        func = TF1(name.data(), powerLaw, min, max, 3, 1, TF1::EAddToList::kNo);
-        break;
+        return std::make_shared<PowerLawFitFunction>(name, min, max);
     case FunctionType::DoubleGaussian:
-        func = TF1(name.data(), doubleGaussian, min, max, 6, 1, TF1::EAddToList::kNo);
-        func.SetParNames("mul_{1}", "#mu_{1}", "#sigma_{1}", "mul_{2}", "#mu_{2}", "#sigma_{2}");
-        break;
+        return std::make_shared<DoubleGaussianFitFunction>(name, min, max);
     case FunctionType::GausLogPowerNorm:
-        func = TF1(name.data(), gausLogPowerNorm, min, max, 5, 1, TF1::EAddToList::kNo);
-        func.SetParNames("N", "#mu", "#sigma_{1}", "s", "n");
-        break;
+        return std::make_shared<GausLogPowerNormFitFunction>(name, min, max);
     case FunctionType::Voigt:
-        func = TF1(name.data(), voigt, min, max, 4, 1, TF1::EAddToList::kNo);
-        func.SetParNames("N", "#mu", "#Gamma", "#sigma");
-        break;
-    };
-
-    return SimpleFitFunction(func, functionType);
+        return std::make_shared<VoigtFitFunction>(name, min, max);
+    }
+    throw std::invalid_argument("Unknown FitFunction type");
 }
 
 double SimpleFitFunction::evaluate(double x) const
@@ -222,7 +144,7 @@ double SimpleFitFunction::evaluate(double x, const NuisanceValues &nuisances) co
             const double nominal = function.GetParameter(p);
             if (!std::isfinite(nominal) || !std::isfinite(up->GetParameter(p)) || !std::isfinite(down->GetParameter(p)))
                 throw std::invalid_argument("Shape-systematic parameters must be finite");
-            if (getFunctionType() == FunctionType::DoubleSidedCrystalBall && p == 6)
+            if (!variesWithSystematic(p))
                 continue;
             const double upShift = up->GetParameter(p) - nominal;
             const double downShift = down->GetParameter(p) - nominal;
@@ -258,44 +180,8 @@ std::string SimpleFitFunction::getExpression(const std::string &variable) const
 
 std::string SimpleFitFunction::getNormExpression(const std::string &) const
 {
-    double norm = 0;
-    switch (getFunctionType())
-    {
-    case FunctionType::DoubleSidedCrystalBall:
-        norm = function.GetParameter(6);
-        break;
-    case FunctionType::Voigt:
-        norm = function.GetParameter(0);
-        break;
-    case FunctionType::PowerLaw:
-    {
-        const double coeff = function.GetParameter(0);
-        const double shift = function.GetParameter(1);
-        const double expo = function.GetParameter(2);
-        const double lower = getMin() - shift;
-        const double upper = getMax() - shift;
-
-        if (expo != -1)
-        {
-            norm = coeff / (expo + 1) * (std::pow(upper, expo + 1) - std::pow(lower, expo + 1));
-        }
-        else
-        {
-            norm = coeff * std::log(upper / lower);
-            
-        }
-        break;
-    }
-    case FunctionType::GausLogPowerNorm:
-    case FunctionType::DoubleGaussian:
-    case FunctionType::ExpressionFormula:
-    default:
-        norm = function.Integral(getMin(), getMax());
-        break;
-    }
-
     std::ostringstream expression;
-    expression << std::setprecision(17) << norm;
+    expression << std::setprecision(17) << function.Integral(getMin(), getMax());
     return expression.str();
 }
 
@@ -315,9 +201,9 @@ std::vector<std::string> SimpleFitFunction::split(const std::string &str, char d
 }
 
 // OLD CODE
-std::ostream &operator<<(std::ostream &stream, SimpleFitFunction &function)
+std::ostream &operator<<(std::ostream &stream, const SimpleFitFunction &function)
 {
-    TF1 *func = function.getFunction();
+    const TF1 *func = function.getFunction();
     // std::cout << "Got functions\n";
     stream << "Name: " << func->GetName() << '\n';
     stream << "FunctionTypeEnum: " << static_cast<int>(function.getFunctionType()) << '\n';
@@ -415,7 +301,7 @@ std::ostream &operator<<(std::ostream &stream, SimpleFitFunction &function)
     return stream;
 }
 
-std::istream &operator>>(std::istream &stream, SimpleFitFunction &func)
+std::istream &operator>>(std::istream &stream, std::shared_ptr<SimpleFitFunction> &func)
 {
     std::string line;
     std::string name;
@@ -530,14 +416,14 @@ std::istream &operator>>(std::istream &stream, SimpleFitFunction &func)
     }
 
     // --- Create FitFunction object ---
-    SimpleFitFunction function = SimpleFitFunction::createFunctionOfType(funcType, name, expFormula, min, max);
+    auto function = SimpleFitFunction::createFunctionOfType(funcType, name, expFormula, min, max);
 
     // --- Set parameters ---
     for (int i = 0; i < params; ++i)
     {
-        function.getFunction()->SetParName(i, paramNames[i].c_str());
-        function.getFunction()->SetParameter(i, paramValues[i]);
-        function.getFunction()->SetParError(i, paramErrors[i]);
+        function->getFunction()->SetParName(i, paramNames[i].c_str());
+        function->getFunction()->SetParameter(i, paramValues[i]);
+        function->getFunction()->SetParError(i, paramErrors[i]);
     }
 
     std::getline(stream, line);
@@ -545,7 +431,7 @@ std::istream &operator>>(std::istream &stream, SimpleFitFunction &func)
     {
         int nSys = 0;
         std::istringstream(line.substr(12)) >> nSys;
-        std::cout << "nSystematics: " << nSys << std::endl;
+        //std::cout << "nSystematics: " << nSys << std::endl;
         for (int s = 0; s < nSys; ++s)
         {
             std::string sysName;
@@ -555,6 +441,7 @@ std::istream &operator>>(std::istream &stream, SimpleFitFunction &func)
                 continue;
             }
             sysName = line.substr(13); // Extract name after "  Systematic:"
+            trim(sysName);
 
             std::vector<double> upParams;
             std::vector<double> downParams;
@@ -586,12 +473,12 @@ std::istream &operator>>(std::istream &stream, SimpleFitFunction &func)
             // --- Register these in the FitFunction ---
             if (!upParams.empty() || !downParams.empty())
             {
-                function.addSystematic(sysName, upParams, downParams);
+                function->addSystematic(sysName, upParams, downParams);
             }
         }
     }
     func = function;
-    std::cout << "Successfully read: " << name << " (" << params << " parameters)\n\n";
+    //std::cout << "Successfully read: " << name << " (" << params << " parameters)\n\n";
 
     return stream;
 }
@@ -642,5 +529,3 @@ std::vector<std::string> SimpleFitFunction::listSystematics() const
     }
     return names;
 }
-
-ClassImp(SimpleFitFunction)

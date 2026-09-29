@@ -17,19 +17,19 @@
 #include <stdexcept>
 #include <utility>
 
-FitFunctionCollection Fitter::fitFunctions(const std::vector<std::pair<TH1 *, SimpleFitFunction>> &histogramPairs,
+FitFunctionCollection Fitter::fitFunctions(const std::vector<std::pair<TH1 *, std::shared_ptr<SimpleFitFunction>>> &histogramPairs,
                                            std::string rootFileName)
 {
     TFile *rootFile = TFile::Open(rootFileName.c_str(), "RECREATE");
     FitFunctionCollection functions;
-    for (const auto &histPair : histogramPairs)
+    for (auto &histPair : histogramPairs)
     {
         auto histogram = histPair.first;
-        auto func = histPair.second;
+        auto &func = histPair.second;
 
-        fitSingleFunction(histogram, func);
+        fitSingleFunction(histogram, *func);
 
-        auto *inner = func.getFunction();
+        auto *inner = func->getFunction();
 
         for (auto par = 0; par < inner->GetNpar(); par++)
         {
@@ -258,12 +258,12 @@ void Fitter::fitVoigt(TH1 *histogram, SimpleFitFunction &fitFunction)
     gStyle->SetOptFit(1111);
 }
 
-SimpleFitFunction Fitter::fitPowerLawToGraph(TGraph *graph, std::string name)
+std::shared_ptr<SimpleFitFunction> Fitter::fitPowerLawToGraph(TGraph *graph, std::string name)
 {
     auto function =
         SimpleFitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, name, "", 0, 2000);
 
-    auto *func = function.getFunction();
+    auto *func = function->getFunction();
 
     func->SetParLimits(1, -10000, 0);
     for (int n = 0; n < 4; ++n)
@@ -275,23 +275,35 @@ SimpleFitFunction Fitter::fitPowerLawToGraph(TGraph *graph, std::string name)
     return function;
 }
 
-FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::unordered_map<double, SimpleFitFunction *> &xData,
-                                                   TFile *rootFile)
+FitFunctionParameterization Fitter::parameterizeFunction(std::string name,
+    const std::unordered_map<double, SimpleFitFunction *> &xData, TFile *rootFile)
 {
-    FitFunctionCollection paramFunctions;
     if (xData.empty())
-        return paramFunctions;
+        return FitFunctionParameterization();
 
     auto *firstFunction = xData.begin()->second;
 
     if (!firstFunction)
     {
-        return paramFunctions;
+        return FitFunctionParameterization();
     }
 
     auto *firstTF1 = firstFunction->getFunction();
+    double min = 0;
+    double max = 0;
+    firstTF1->GetRange(min, max);
+    const char *rawFormula = firstTF1->GetExpFormula();
+    const std::string expFormula = rawFormula == nullptr ? "" : rawFormula;
 
-    const auto nPoints = xData.size();
+    //just add the additional metadata
+    auto parameterizationMetadata = FitFunction::decodeName(name);
+    parameterizationMetadata["IsParameterization"] = "true";
+    const std::string parameterizationName = FitFunction::encodeName(parameterizationMetadata);
+
+    FitFunctionParameterization parameterization(
+        parameterizationName, parameterizationMetadata["Channel"], firstFunction->getFunctionType(),
+        expFormula, min, max);
+
     const auto nParams = firstTF1->GetNpar();
     const auto systematics = firstFunction->listSystematics();
     // auto nPoints = xData.size();
@@ -327,17 +339,16 @@ FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::
         std::string fullName = name + " parameter " + firstTF1->GetParName(i);
         graph.SetTitle(fullName.c_str());
 
-        auto metadata = FitFunction::decodeName(name);
+        std::map<std::string, std::string> metadata;
         metadata["ParameterIndex"] = std::to_string(i);
-        metadata["OriginalFunctionType"] = std::to_string(static_cast<int>(firstFunction->getFunctionType()));
         metadata["Parameter"] = firstTF1->GetParName(i);
         auto fit = fitPowerLawToGraph(&graph, FitFunction::encodeName(metadata));
 
         // Systematics part
         for (const auto &systematic : systematics)
         {
-            SimpleFitFunction upFit;
-            SimpleFitFunction downFit;
+            std::shared_ptr<SimpleFitFunction> upFit;
+            std::shared_ptr<SimpleFitFunction> downFit;
             bool hasUp = false;
             bool hasDown = false;
 
@@ -422,13 +433,14 @@ FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::
             // put the Up and Down functions to thecentral fit
             if (hasUp && hasDown)
             {
-                fit.addSystematic(
+                fit->addSystematic(
                     systematic,
-                    *upFit.getFunction(),
-                    *downFit.getFunction());
+                    *upFit->getFunction(),
+                    *downFit->getFunction());
             }
         }
-        paramFunctions.insert(fit);
+        
+        parameterization.insert(fit);
 
         auto *const canvas = new TCanvas(fullName.c_str(), fullName.c_str(), 0, 0, 2000, 500);
 
@@ -445,5 +457,5 @@ FitFunctionCollection Fitter::parameterizeFunction(std::string name, const std::
         canvas->Close();
         delete canvas;
     }
-    return paramFunctions;
+    return parameterization;
 }

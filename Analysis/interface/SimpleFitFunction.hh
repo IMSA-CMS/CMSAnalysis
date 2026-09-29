@@ -5,6 +5,7 @@
 #include "TF1.h"
 #include <iostream>
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -12,12 +13,11 @@ class SimpleFitFunction : public FitFunction
 {
   public:
     // static const std::vector<std::string> functionList;
-    static SimpleFitFunction createFunctionOfType(FunctionType functionType, const std::string &name,
-                                            const std::string &expFormula, double min, double max);
+    static std::shared_ptr<SimpleFitFunction> createFunctionOfType(FunctionType functionType, const std::string &name,
+                                                                  const std::string &expFormula, double min, double max);
     // static std::vector<FitFunction> loadFunctions(const std::string& fileName);
     // static void saveFunctions(std::vector<FitFunction>& functions, const std::string& fileName);
-    SimpleFitFunction() {}    
-    SimpleFitFunction(const TF1& func, FunctionType funcType);
+    SimpleFitFunction() = default;
     TF1* getFunction();
     const TF1* getFunction() const;
     void setFunction(const TF1& function, FunctionType funcType);
@@ -33,6 +33,8 @@ class SimpleFitFunction : public FitFunction
     double evaluateWithParameters(double x, const std::vector<double> &parameters) const;
     std::string getExpression(const std::string &variable) const;
     std::string getNormExpression(const std::string &variable) const override;
+    virtual int getNormParameterIndex() const { return -1; }
+    virtual bool variesWithSystematic(int parameter) const { return true; }
 
     void addSystematic(const std::string& sysName, const TF1& upFunction, const TF1& downFunction);
     void addSystematic(const std::string& sysName, const std::vector<double>& upParams, const std::vector<double>& downParams);
@@ -41,20 +43,20 @@ class SimpleFitFunction : public FitFunction
     // implement functions into source code
     // modify input output stuff (start with implements)
 
+  protected:
+    SimpleFitFunction(const TF1& func, FunctionType funcType);
+    explicit SimpleFitFunction(FunctionType funcType);
+    virtual void restoreFunction(TF1 &func) const = 0;
+
   private:
     mutable TF1 function;
     std::map<std::string, std::pair<TF1, TF1>> systematics; 
 
-    static double powerLaw(double *x, double *par);
-    static double DSCB(double *x, double *par);
-    static double doubleGaussian(double *x, double *par);
-    static double gausLogPowerNorm(double *x, double *par);
-    static double voigt(double *x, double *par);
     static std::vector<std::string> split(const std::string &str, char delimiter);
-    ClassDef(SimpleFitFunction, 1)
+    ClassDefOverride(SimpleFitFunction, 1)
 };
 
-std::ostream &operator<<(std::ostream &stream, SimpleFitFunction &function);
-std::istream &operator>>(std::istream &stream, SimpleFitFunction &function);
+std::ostream &operator<<(std::ostream &stream, const SimpleFitFunction &function);
+std::istream &operator>>(std::istream &stream, std::shared_ptr<SimpleFitFunction> &function);
 
 #endif
