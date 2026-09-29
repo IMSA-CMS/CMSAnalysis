@@ -31,29 +31,7 @@ class Fitter
     static void fitGausLogPowerNorm(TH1 *hist, SimpleFitFunction &func);
     static void fitVoigt(TH1 *histogram, SimpleFitFunction &fitFunction);
 
-<<<<<<< HEAD
     static std::shared_ptr<SimpleFitFunction> fitPowerLawToGraph(TGraph* graph, std::string name);
-
-    // TH1* readHistogram(const std::string& name);
-
-    // Different ways to try and get seed function for fitting
-    // Gets guess inverse power law function y = a(x-b)^-c + d using three points, only guarantees the powerlaw through
-    // p0 and p1, not p2
-    // static TF1 *seedInversePowerLaw(double x_0, double y_0, double x_1, double y_1, double x_2, double y_2);
-
-    // TFile *fitRootFile;
-    // std::string fitTextFile;
-
-    // TFile *parameterRootFile;
-    // std::string parameterTextFile;
-
-    // FitFunctionCollection functions;
-
-    // std::map<std::string, TDirectory *> fitDirectories;
-    // std::map<std::string, TDirectory *> parameterDirectories;
-=======
-    static SimpleFitFunction fitPowerLawToGraph(TGraph* graph, std::string name);
->>>>>>> 48310bb8c69cd971e128baa156e1aaa8dff31f7d
 };
 
 #endif
