@@ -1,5 +1,5 @@
 #include "CMSAnalysis/Filters/interface/CollinsSoperFilter.hh"
-#include "CMSAnalysis/ScaleFactors/interface/EventInput.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 //#include "CMSAnalysis/DataCollection/interface/GenSimIdentificationModule.hh"
 
 CollinsSoperFilter::CollinsSoperFilter(double hiCut) : // genSim(genSimModule),

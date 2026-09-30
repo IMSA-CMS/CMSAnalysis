@@ -1,4 +1,4 @@
-#include "CMSAnalysis/ScaleFactors/interface/EventInput.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 
 ParticleCollection<Lepton> EventInput::getLeptons(RecoLevel level) const
 {

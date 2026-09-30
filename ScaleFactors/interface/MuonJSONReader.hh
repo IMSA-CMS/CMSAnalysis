@@ -4,7 +4,7 @@
 #include "CMSAnalysis/ScaleFactors/interface/JSONReader.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
-#include "CMSAnalysis/ScaleFactors/interface/EventInput.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include <iostream>
 #include <memory>
 #include <map>

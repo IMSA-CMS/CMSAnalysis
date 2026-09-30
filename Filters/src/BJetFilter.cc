@@ -1,5 +1,5 @@
 #include "CMSAnalysis/Filters/interface/BJetFilter.hh"
-#include "CMSAnalysis/ScaleFactors/interface/EventInput.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 
 
 std::string BJetFilter::getFilterString(const EventInput* inputMod) const

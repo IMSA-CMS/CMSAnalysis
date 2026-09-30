@@ -2,7 +2,7 @@
 #define MULTIYEARSCALEFACTOR_HH
 
 #include "CMSAnalysis/ScaleFactors/interface/MapBasedScaleFactor.hh"
-#include "CMSAnalysis/ScaleFactors/interface/EventInput.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include <map>
 #include <string>
 #include <memory>

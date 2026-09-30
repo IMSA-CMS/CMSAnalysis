@@ -1,7 +1,7 @@
 #ifndef L1PREFIRINGWEIGHTRECIPE_HH
 #define L1PREFIRINGWEIGHTRECIPE_HH
 
-#include "CMSAnalysis/Modules/interface/EventScaleFactor.hh"
+#include "CMSAnalysis/ScaleFactors/interface/EventScaleFactor.hh"
 
 class L1PrefiringWeightRecipe : public EventScaleFactor
 {

@@ -1,6 +1,6 @@
-#include "CMSAnalysis/ScaleFactors/interface/Module.hh"
+#include "CMSAnalysis/Modules/interface/Module.hh"
 #include "CMSAnalysis/Utility/interface/TDisplayText.h"
-#include "CMSAnalysis/ScaleFactors/interface/EventInput.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 
 // Static initialization
 std::unordered_map<std::string, double> Module::parameters;

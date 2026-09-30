@@ -12,7 +12,7 @@
 #include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
 #include "CMSAnalysis/Filters/interface/Selector.hh"
 #include "CMSAnalysis/Filters/interface/Cut.hh"
-#include "CMSAnalysis/ScaleFactors/interface/EventInput.hh"
+#include "CMSAnalysis/Modules/interface/EventInput.hh"
 
 
 Event::Event(const EventInput* iinput):
