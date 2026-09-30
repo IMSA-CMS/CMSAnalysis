@@ -14,11 +14,10 @@
 #include <fstream> //change include paths
 
 
-ShapeSystematic::ShapeSystematic(std::string name, TH1* ihigh, TH1* ilow, Distribution idistribution) :
+ShapeSystematic::ShapeSystematic(std::string name, Distribution idistribution) :
     Systematic(name),
-    high(ihigh),
-    low(ilow),
     distribution(idistribution)
+    
 {}
 
 
@@ -27,24 +26,37 @@ std::string ShapeSystematic::getString() const
     return "";
 }
 
-std::pair<TH1*, TH1*> ShapeSystematic::getUncertainties(TH1* original) const 
+std::pair<TH1*, TH1*> ShapeSystematic::getUncertainties(TH1* original, HistVariable histVar, const Process* process) const 
 {
-    auto graphHigh = dynamic_cast<TH1*>(high->Clone());
-    auto graphLow = dynamic_cast<TH1*>(low->Clone());
-    double num = original->Integral(); 
-    
-    double highNum = graphHigh->Integral();
-    double lowNum = graphLow->Integral();
-    
-    double  tolerance = 1e-8;
-    if(highNum > tolerance)
+    histVar.setSystematic(ScaleFactor::SystematicType::Up, getName());
+    TH1* graphHigh = process->getHist(histVar, true);
+    if (graphHigh->GetNbinsX() == original->GetNbinsX())
     {
-        graphHigh->Scale(num/highNum);
+        graphHigh->Divide(original);
     }
-    if (lowNum > tolerance)
+
+    histVar.setSystematic(ScaleFactor::SystematicType::Down, getName());
+    TH1* graphLow = process->getHist(histVar, true);
+        if (graphLow->GetNbinsX() == original->GetNbinsX())
     {
-        graphLow->Scale(num/lowNum);
+        graphLow->Divide(original);
     }
+    
+    histVar.setSystematic(ScaleFactor::SystematicType::Nominal, getName());
+    // double num = original->Integral(); 
+    
+    // double highNum = graphHigh->Integral();
+    // double lowNum = graphLow->Integral();
+    
+    // double  tolerance = 1e-8;
+    // if(highNum > tolerance)
+    // {
+    //     graphHigh->Scale(num/highNum);
+    // }
+    // if (lowNum > tolerance)
+    // {
+    //     graphLow->Scale(num/lowNum);
+    // }
     
     return {graphHigh, graphLow};
 }

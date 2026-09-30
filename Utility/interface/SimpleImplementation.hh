@@ -10,7 +10,7 @@ class SimpleImplementation : public ParticleImplementation
 {
     public:
         virtual ~SimpleImplementation(){}
-        SimpleImplementation(reco::Candidate::LorentzVector vec, double dxy, double dz, int ch, const ParticleType& type, 
+        SimpleImplementation(reco::Candidate::LorentzVector vec, int ch, const ParticleType& type, 
             Particle::SelectionFit fit = Particle::SelectionFit::Tight);
 
         virtual reco::Candidate::LorentzVector getFourVector() const override;
@@ -25,8 +25,6 @@ class SimpleImplementation : public ParticleImplementation
         virtual int numberOfDaughters() const override{throw std::runtime_error("numberOfDaughters() error");}
         virtual const ParticleType& getType() const  override{ return particleType; }
         virtual Particle::SelectionFit getSelectionFit() const override{ return selectionFit;}
-        inline virtual double getDXY() const override { return deltaXY; }
-        inline virtual double getDZ() const override { return deltaZ; }
         virtual bool isNotNull() const override {return true;}
         virtual bool isFinalState() const override {return true;}
         virtual bool operator== (const ParticleImplementation& other) const override;
@@ -36,8 +34,6 @@ class SimpleImplementation : public ParticleImplementation
 
     private:
         reco::Candidate::LorentzVector lorentzVec;
-        double deltaXY;
-        double deltaZ;
         const int particleCharge;
         const ParticleType& particleType;
         Particle::SelectionFit selectionFit;

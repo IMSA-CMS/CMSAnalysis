@@ -3,18 +3,16 @@
 #include "CMSAnalysis/Analysis/interface/Process.hh"
 #include "CMSAnalysis/Analysis/interface/Systematic.hh"
 #include "CMSAnalysis/Utility/interface/Utility.hh"
-#include "TAxis.h"
 #include "TH1.h"
 #include "THStack.h"
-#include "TStyle.h"
 #include <algorithm>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <memory>
+#include <utility>
 #include <vector>
-// Channel::Channel(std::string name, std::string iYAxisName, std::vector<std::shared_ptr<Process>> iProcesses) :
-// name(name), yAxisName(iYAxisName)
+
 Channel::Channel(std::string name, std::vector<std::shared_ptr<Process>> iProcesses) : name(name)
 {
     for (auto process : iProcesses)
@@ -27,7 +25,7 @@ void addGlobalSystematic(Systematic &systematic)
 {
 }
 
-const std::shared_ptr<Process> Channel::findProcess(std::string processName) const
+std::shared_ptr<Process> Channel::findProcess(const std::string &processName) const
 {
     for (auto process : processes)
     {
@@ -39,7 +37,7 @@ const std::shared_ptr<Process> Channel::findProcess(std::string processName) con
     throw std::runtime_error("No process found with the inputted name " + processName);
 }
 
-std::vector<std::string> Channel::getNamesWithLabel(Label label)
+std::vector<std::string> Channel::getNamesWithLabel(Label label) const
 {
     std::vector<std::string> names;
     auto processes = map.find(label);
@@ -55,7 +53,22 @@ std::vector<std::string> Channel::getNamesWithLabel(Label label)
     return names;
 }
 
-void Channel::labelProcess(Label label, std::string processName)
+std::vector<std::shared_ptr<Process>> Channel::getWithLabel(Channel::Label label) const
+{
+    std::vector<std::shared_ptr<Process>> procs;
+    auto processes = map.find(label);
+    if (processes == map.end())
+    {
+        throw std::runtime_error("No processes with label");
+    }
+    for (const auto &process : processes->second)
+    {
+        procs.push_back(process);
+    }
+    return procs;
+}
+
+void Channel::labelProcess(Label label, const std::string &processName)
 {
     auto process = findProcess(processName);
     labelProcess(label, process);
@@ -107,7 +120,7 @@ void Channel::makeDatacard(HistVariable histType)
     datacard << "\n";
 }
 
-void Channel::CombineDatacard(HistVariable histType)
+void Channel::combineDatacard(HistVariable histType)
 {
     std::string channelName = getName();
     std::string filename = channelName + ".txt";
@@ -144,7 +157,7 @@ void Channel::CombineDatacard(HistVariable histType)
 
     datacard << std::setw(20) << std::left << "process" << std::left;
 
-    for (auto process : getProcesses())
+    for (const auto &process : getProcesses())
     {
         auto processName = Utility::substitute(process->getName(), " ", "_");
         datacard << std::setw(20) << std::left << processName;
@@ -156,9 +169,13 @@ void Channel::CombineDatacard(HistVariable histType)
     for (auto i = 0; i < 5; i++)
     {
         if (i < 4)
+        {
             datacard << std::setw(20) << std::left << i;
+        }
         else
+        {
             datacard << std::setw(20) << std::left << -1;
+        }
     }
 
     datacard << "\n";
@@ -178,7 +195,7 @@ void Channel::addProcessLabel(Label label, std::vector<std::shared_ptr<Process>>
     auto &vec = map[label];
     for (auto process : processes)
     {
-        if (std::find(vec.begin(), vec.end(), process) == vec.end())
+        if (std::ranges::find(vec, process) == vec.end())
         {
             vec.push_back(process);
         }
@@ -188,7 +205,7 @@ void Channel::addProcessLabel(Label label, std::vector<std::shared_ptr<Process>>
 std::vector<double> Channel::getYields(HistVariable dataType) const
 {
     std::vector<double> yields;
-    for (auto process : processes)
+    for (const auto &process : processes)
     {
         yields.push_back(process->getYield(dataType));
     }
@@ -198,7 +215,7 @@ std::vector<double> Channel::getYields(HistVariable dataType) const
 std::vector<std::string> Channel::getNames() const
 {
     std::vector<std::string> names;
-    for (auto process : processes)
+    for (const auto &process : processes)
     {
         names.push_back(process->getName());
     }
@@ -208,10 +225,10 @@ std::vector<std::string> Channel::getNames() const
 THStack *Channel::getStack(HistVariable histType, std::optional<Label> label, bool scaleToExpected,
                            int rebinConstant) const
 {
-    THStack *superPlot = new THStack(name.c_str(), name.c_str());
+    auto *superPlot = new THStack(name.c_str(), name.c_str());
     if (!label.has_value())
     {
-        for (auto process : processes)
+        for (const auto &process : processes)
         {
             superPlot->Add(process->getHist(histType, scaleToExpected)->Rebin(rebinConstant));
         }
@@ -251,7 +268,7 @@ std::vector<TH1 *> Channel::getHists(HistVariable histType, std::optional<Label>
     std::vector<TH1 *> hists;
     if (!label.has_value())
     {
-        for (auto process : processes)
+        for (const auto &process : processes)
         {
             hists.push_back(process->getHist(histType, scaleToExpected));
         }
@@ -283,7 +300,7 @@ std::vector<TH1 *> Channel::getHists(HistVariable histType, std::optional<Label>
     return hists;
 }
 
-TH1 *Channel::combineHists(const std::vector<TH1 *> &hists)
+TH1 *Channel::combineHists(const std::vector<TH1*>& hists)
 {
     if (hists.empty())
     {

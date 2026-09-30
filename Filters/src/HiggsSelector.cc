@@ -1,5 +1,6 @@
 #include "CMSAnalysis/Filters/interface/HiggsSelector.hh"
 #include <vector>
+#include <cmath>
 
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
@@ -8,25 +9,82 @@
 #include "CMSAnalysis/Utility/interface/ParticleType.hh"
 #include "CMSAnalysis/Utility/interface/Event.hh"
 
+double HiggsSelector:: massDifference(const std::vector<Particle>& leptons) const
+{
+    std::vector<Particle> positiveLeptons;
+    std::vector<Particle> negativeLeptons;
+    for (const auto& lepton : leptons)
+    {
+        if (lepton.getCharge() > 0)
+            positiveLeptons.push_back(lepton);
+        else if (lepton.getCharge() < 0)
+            negativeLeptons.push_back(lepton);
+    }
+    if (positiveLeptons.size() != 2 || negativeLeptons.size() != 2)
+    {
+        //throw std::invalid_argument
+        //std::cout<<"massDifference requires exactly 2 positive and 2 negative leptons./n";
+        return 0;
+    }
 
+    double massPos = Particle::invariantMass(positiveLeptons[0], positiveLeptons[1]);
+    double massNeg = Particle::invariantMass(negativeLeptons[0], negativeLeptons[1]);
 
+    return std::abs(massPos - massNeg);
+}
+
+std::vector<Particle> HiggsSelector::findSameSignPair(const std::vector<Particle>& leptons) const
+{
+    std::vector<Particle> positiveLeptons;
+    std::vector<Particle> negativeLeptons;
+    for (const auto& lepton : leptons)
+    {
+        if (lepton.getCharge() > 0)
+            positiveLeptons.push_back(lepton);
+        else if (lepton.getCharge() < 0)
+            negativeLeptons.push_back(lepton);
+    }
+
+    if (positiveLeptons.size() >= 2)
+    {
+        return {positiveLeptons[0], positiveLeptons[1]};
+    }
+    if (negativeLeptons.size() >= 2)
+    {
+        return {negativeLeptons[0], negativeLeptons[1]};
+    }
+    return {};
+}
+
+double HiggsSelector::sameSignPairMass(const std::vector<Particle>& leptons) const
+{
+    auto pair = findSameSignPair(leptons);
+    if (pair.size() != 2)
+    {
+        return 0;
+    }
+    return Particle::invariantMass(pair[0], pair[1]);
+}
 
  void HiggsSelector::selectParticles(const EventInput* input, Event& event) const
 {
     auto particles = input->getLeptons(EventInput::RecoLevel::Reco).getParticles();
 
-
     std::vector<Particle> leptons;
 
+    for (auto& particle : particles)
+    {
+            adjustEnergy(particle);
+    }
 
     for (const auto& particle : particles)
     {
+        
         if (particle.getType() == ParticleType::electron())
      {
             auto lepton = Lepton(particle);
             if(lepton.isLoose()
             && particle.getPt() > 10
-               
             )
             {
                 //std::cout << "PT: " << std::to_string(particle.getPt()) << std::endl;
@@ -54,30 +112,30 @@
             //need another loop over particle. if its a tau loop over all particles again, if one of the particles is an election or muon, then you want to calculate delta R for each particle. There's already a function for it (Particle.hh). If the delta r is less than some value we set, ten we just say that they're the same particle. If number is too small just continue. 
             if (lepton.isTight() && particle.getPt() > 5)
             {
-                bool overlap = false;
+                // bool overlap = false;
 
-                // loop over all other particles (from input, not just taus)
-                for (const auto& other : particles)
-                {
-                    if (other == particle) continue; // skip self
+                // // loop over all other particles (from input, not just taus)
+                // for (const auto& other : particles)
+                // {
+                //     if (other == particle) continue; // skip self
 
-                    // only check against electrons and muons
-                    if (other.getType() == ParticleType::electron() ||
-                        other.getType() == ParticleType::muon())
-                    {
-                        double dR = particle.getDeltaR(other); // Particle.hh already has this
-                        if (dR < 0.3) // typical cone cut, can tune to 0.2–0.4
-                        {
-                            overlap = true;
-                            break;
-                        }
-                    }
-                }
+                //     // only check against electrons and muons
+                //     if (other.getType() == ParticleType::electron() ||
+                //         other.getType() == ParticleType::muon())
+                //     {
+                //         double dR = particle.getDeltaR(other); // Particle.hh already has this
+                //         if (dR < 0.3) // typical cone cut, can tune to 0.2–0.4
+                //         {
+                //             overlap = true;
+                //             break;
+                //         }
+                //     }
+                // }
 
-                if (!overlap)
-                {
+                // if (!overlap)
+                // {
                     leptons.push_back(particle); // only keep tau if no e/μ is too close
-                }
+                // }
             }
         }
 
@@ -96,7 +154,8 @@
         leptons.erase(leptons.begin() + index);
     }
 
-
+    //auto correctedLeptons = adjustForNeutrinos(positiveLeptons, negativeLeptons, input);
+    //auto correctedLeptons = leptons; // Temporarily disable neutrino adjustment
     for (auto particle : leptons)
     {
         if (particle.getType() == ParticleType::electron())
@@ -105,13 +164,235 @@
         }
         else if (particle.getType() == ParticleType::muon())
         {
-            //std::cout << particle.getInfo("Isolation") << std::endl;
             event.addMuon(particle);
         }
         else if (particle.getType() == ParticleType::tau())
         {
-            //std::cout << particle.getInfo("Isolation") << std::endl;
             event.addTau(particle);
         }
     }
+
+    auto correctedLeptons = adjustForNeutrinos(leptons, input);
+    for (auto particle : correctedLeptons)
+    {
+        if (particle.getType() == ParticleType::electron())
+        {
+            event.addSpecialObject("correctedElectron", particle);
+        }
+        else if (particle.getType() == ParticleType::muon())
+        {
+            event.addSpecialObject("correctedMuon", particle);
+        }
+        else if (particle.getType() == ParticleType::tau())
+        {
+            event.addSpecialObject("correctedTau", particle);
+        }
+    }
+    // std::cout << "Added corrected leptons to event: " << correctedLeptons.size() << std::endl;
+    // std::cout << "Total leptons added to event: " << leptons.size() << std::endl;
 }
+
+std::vector<Particle> HiggsSelector::adjustForNeutrinos(const std::vector<Particle>& leptons, const EventInput* input) const
+{
+    double smallestMassDiff = std::numeric_limits<double>::max();
+    std::vector<Particle> bestLeptons;
+
+    if (leptons.size() != 4 && leptons.size() != 3)
+    {
+        return leptons;
+    }
+
+    auto met = input->getMET();
+    const double met_x = met.px();
+    const double met_y = met.py();
+
+    if (leptons.size() == 4)
+    {
+        //first step is zero neutrinos (just as they are)
+        {
+            double diff = massDifference(leptons);
+            if (diff < smallestMassDiff)
+            {
+                smallestMassDiff = diff;
+                bestLeptons = leptons;
+            }
+        }
+
+        //next step is one neutrino (each gets a trial, each lepton gets a neutrino)
+        for (int i = 0; i < 4; i++)
+        {
+            std::vector<Particle> trial = leptons;
+            double nu_px = met_x;
+            double nu_py = met_y;
+            double nu_pT  = std::sqrt(nu_px*nu_px + nu_py*nu_py);
+
+            double scale = nu_pT / trial[i].getPt();
+            auto newFourVector = trial[i].getFourVector() * (scale + 1);
+
+            trial[i] = Particle(newFourVector, trial[i].getCharge(), trial[i].getType(), trial[i].getSelectionFit());
+            double diff = massDifference(trial);
+
+            if (diff < smallestMassDiff)
+            {
+                smallestMassDiff = diff;
+                bestLeptons = trial;
+            }
+        }
+
+        return bestLeptons;
+    }
+
+    // Single-tau MET-proximity correction (08/31/26 notes): if exactly one
+    // tau is present, check whether MET points close to it in phi. If so,
+    // assume the missing neutrino belongs to that tau and give it the full
+    // MET. If not close enough, apply no correction at all.
+    auto pairLeptons = findSameSignPair(leptons);
+    if (pairLeptons.size() != 2)
+    {
+        return leptons;
+    }
+
+    std::vector<int> pairIndices;
+    for (std::size_t i = 0; i < leptons.size(); i++)
+    {
+        for (const auto& p : pairLeptons)
+        {
+            if (p.getCharge() == leptons[i].getCharge() &&
+                std::abs(p.getPt() - leptons[i].getPt()) < 1e-6)
+            {
+                pairIndices.push_back(static_cast<int>(i));
+                break;
+            }
+        }
+    }
+
+    if (pairIndices.size() != 2)
+    {
+        return leptons;
+    }
+
+    int tauInPairCount = 0;
+    int tauIndex = -1;
+    int otherPairIndex = -1;
+    for (int idx : pairIndices)
+    {
+        if (leptons[idx].getType() == ParticleType::tau())
+        {
+            tauInPairCount++;
+            tauIndex = idx;
+        }
+        else
+        {
+            otherPairIndex = idx;
+        }
+    }
+
+    if (tauInPairCount == 1 && otherPairIndex != -1)
+    {
+        // Calibrated 09/10/26 against Higgs1000Run2: 0.1 -> n=663, mean=998.85;
+        // 0.2 -> n=1086, mean=994.90. Kept 0.2, corrects more events at the same accuracy.
+        const double metPhiMatchThreshold = 0.2;
+
+        auto deltaPhiToMet = [&](int idx)
+        {
+            double met_phi = std::atan2(met_y, met_x);
+            double lepton_phi = leptons[idx].getFourVector().Phi();
+            double dPhi = met_phi - lepton_phi;
+            while (dPhi > M_PI) dPhi -= 2 * M_PI;
+            while (dPhi < -M_PI) dPhi += 2 * M_PI;
+            return std::abs(dPhi);
+        };
+
+        double tauDeltaPhi = deltaPhiToMet(tauIndex);
+        double otherDeltaPhi = deltaPhiToMet(otherPairIndex);
+
+        if (tauDeltaPhi < otherDeltaPhi && tauDeltaPhi < metPhiMatchThreshold)
+        {
+            std::vector<Particle> trial = leptons;
+            double nu_pT = std::sqrt(met_x * met_x + met_y * met_y);
+            double scale = nu_pT / trial[tauIndex].getPt();
+            auto newFourVector = trial[tauIndex].getFourVector() * (scale + 1);
+            trial[tauIndex] = Particle(newFourVector, trial[tauIndex].getCharge(), trial[tauIndex].getType(), trial[tauIndex].getSelectionFit());
+
+            return trial;
+        }
+
+        return leptons;
+    }
+
+    // No case above applied: tau outside the pair, tau-tau pair, or no tau at
+    // all. Zero-tau maximization fallback dropped (09/14/26) -- it has no
+    // physical model and can distort an already well-defined lower-mean peak
+    // by always pushing mass upward regardless of whether correction is
+    // actually warranted. Leave uncorrected.
+    return leptons;
+    //then two neutrinos (each unique pair of leptons gets a trial)
+    // {
+    //     int pairs[6][2] =
+    //     {
+    //         {0,1}, {0,2}, {0,3},
+    //         {1,2}, {1,3},
+    //         {2,3}
+    //     };
+
+    //     for (int p = 0; p < 6; p++)
+    //     {
+    //         int i = pairs[p][0];
+    //         int j = pairs[p][1];
+
+    //         // Transverse momentum components
+    //         double pix = leptons[i].getFourVector().px();
+    //         double piy = leptons[i].getFourVector().py();
+    //         double pjx = leptons[j].getFourVector().px();
+    //         double pjy = leptons[j].getFourVector().py();
+
+    //         // Solve:
+    //         // met_x = a*pix + b*pjx
+    //         // met_y = a*piy + b*pjy
+
+    //         double det = pix * pjy - piy * pjx;
+    //         if (std::abs(det) < 1e-6)
+    //         {
+    //             std::cout << "Case 2: Pair (" << i << "," << j
+    //                       << ") DET=0, skipping.\n";
+    //             continue;
+    //         }
+
+    //         double a = ( met_x * pjy - met_y * pjx ) / det;
+    //         double b = (-met_x * piy + met_y * pix ) / det;
+
+    //         std::cout << "Case 2: Pair (" << i << "," << j
+    //                   << ") a=" << a << " b=" << b << std::endl;
+
+
+    //         auto lep_i_new4 = leptons[i].getFourVector() * (1.0 + a);
+    //         auto lep_j_new4 = leptons[j].getFourVector() * (1.0 + b);
+
+    //         std::vector<Particle> trial = leptons;
+    //         trial[i] = Particle(lep_i_new4, leptons[i].getCharge(), leptons[i].getType(), leptons[i].getSelectionFit());
+    //         trial[j] = Particle(lep_j_new4, leptons[j].getCharge(), leptons[j].getType(), leptons[j].getSelectionFit());
+    //         auto total = trial[0].getFourVector() + trial[1].getFourVector() + trial[2].getFourVector() + trial[3].getFourVector();
+
+    //         double mass = total.mass();
+    //         double diff = massDifference(positiveLeptons, negativeLeptons);
+
+    //         std::cout << "Case 2: Pair (" << i << "," << j
+    //                   << ")  mass = " << mass
+    //                   << " diff = " << diff << std::endl;
+
+    //         if (diff < smallestMassDiff)
+    //         {
+    //             smallestMassDiff = diff;
+    //             bestLeptons = trial;
+    //         }
+    //     }
+    // }
+    // return {};
+    // return bestLeptons;
+}
+        
+    
+
+ 
+
+

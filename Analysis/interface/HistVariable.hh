@@ -2,13 +2,11 @@
 #define HISTVARIABLE_HH
 
 #include "CMSAnalysis/Analysis/interface/FilePathMapper.hh"
-#include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
 #include "CMSAnalysis/Utility/interface/Particle.hh"
 #include "CMSAnalysis/Utility/interface/ParticleType.hh"
+#include "CMSAnalysis/Utility/interface/ScaleFactor.hh"
 #include <array>
 #include <string>
-
-
 
 // constexpr std::array<Selector, 5> selectors{
 //     {Selector::FirstHighestE, Selector::FirstHighestMu, Selector::E, Selector::Mu, Selector::None}};
@@ -32,15 +30,16 @@ class HistVariable
         RecoSameSignInvariantMass,
         RecoOppositeSignInvariantMass,
         DarkPhotonBDTOutput,
+        DarkPhotonSMHiggsBDTOutput,
         LeptonJetMass,
-        LeptonJetDeltaR
+        LeptonJetDeltaR,
     };
 
-    HistVariable(ParticleType type, int order, VariableType var, std::string unit = "", 
-        bool is2DHistX = false, bool is2DHistY = false);
+    HistVariable(ParticleType type, int order, VariableType var, std::string AxisLabel = "", bool is2DHistX = false,
+                 bool is2DHistY = false, bool isCorrected = false);
 
-    HistVariable(VariableType var, std::string unit = "", 
-        bool is2DHistX = false, bool is2DHistY = false);
+    HistVariable(VariableType var, std::string AxisLabel = "", bool is2DHistX = false, bool is2DHistY = false,
+                 bool isCorrected = false);
 
     std::string getName() const;
 
@@ -48,7 +47,7 @@ class HistVariable
     {
         return particleType;
     }
-   
+
     int getOrder() const
     {
         return order_;
@@ -59,9 +58,9 @@ class HistVariable
         return variableType;
     }
 
-    std::string getUnit() const
+    std::string getAxisLabel() const
     {
-        return unit;
+        return AxisLabel;
     }
 
     void setSystematic(ScaleFactor::SystematicType itype, std::string isystematicName)
@@ -77,14 +76,30 @@ class HistVariable
     {
         return systematicName;
     }
+    constexpr bool isXProjection() const
+    {
+        return is2DHistX_;
+    }
+    constexpr bool isYProjection() const
+    {
+        return is2DHistY_;
+    }
+
+    bool operator==(const HistVariable &other) const
+    {
+        return particleType == other.particleType && order_ == other.order_ && variableType == other.variableType &&
+               AxisLabel == other.AxisLabel && is2DHistX_ == other.is2DHistX_ && is2DHistY_ == other.is2DHistY_ &&
+               isCorrected == other.isCorrected && type == other.type && systematicName == other.systematicName;
+    }
 
   private:
     ParticleType particleType;
     int order_;
     VariableType variableType;
-    std::string unit;
+    std::string AxisLabel;
     bool is2DHistX_ = false;
     bool is2DHistY_ = false;
+    bool isCorrected = false;
     ScaleFactor::SystematicType type = ScaleFactor::SystematicType::Nominal;
     std::string systematicName;
 };

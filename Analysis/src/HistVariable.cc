@@ -2,41 +2,101 @@
 #include <cassert>
 #include <string>
 
-static std::string defaultUnit(HistVariable::VariableType var)
+static std::string defaultAxisLabel(ParticleType type, int order, HistVariable::VariableType var)
 {
-    switch (var)
+    std::string label = "";
+
+    if (order > 0)
     {
-    case HistVariable::VariableType::Pt:
-        return "GeV";
-    case HistVariable::VariableType::Eta:
-        return "";
-    case HistVariable::VariableType::Phi:
-        return "";
-    case HistVariable::VariableType::SameSignInvariantMass:
-		return "GeV";
-    case HistVariable::VariableType::OppositeSignInvariantMass:
-		return "GeV";
-    case HistVariable::VariableType::InvariantMass:
-        return "GeV";
-    default:
-        return "";
+        switch (order)
+        {
+            case 1:
+                label += "Leading ";
+                break;
+            
+            case 2:
+                label += "2nd Leading ";
+                break;
+            
+            case 3:
+                label += "3rd Leading ";
+                break;
+
+            default:
+                label += std::to_string(order) + "th Leading ";
+                break;
+        }
     }
+
+    if (type != ParticleType::none())
+    {
+        if (type == ParticleType:: leptonJet())
+            {
+                label += "Lepton Jet ";
+            }
+            else if (type == ParticleType::electron())
+            {
+                label += "Electron ";
+            }
+            else if (type == ParticleType::muon())
+            {
+                label += "Muon ";
+            }
+            else
+            {
+                label += type.getName() + ' ';
+            }
+    }
+
+    switch (var)
+        {
+            case HistVariable::VariableType::Pt:
+                label += "pT [GeV]";
+                break;
+            
+            case HistVariable::VariableType::Eta:
+                label += "#eta";
+                break;
+            
+            case HistVariable::VariableType::Phi:
+                label += "#phi";
+                break;
+            
+            case HistVariable::VariableType::SameSignInvariantMass:
+                label += "Same-Sign Invariant Mass [GeV/c^2]";
+                break;
+            
+            case HistVariable::VariableType::OppositeSignInvariantMass:
+                label += "Opposite-Sign Invariant Mass [GeV/c^2]";
+                break;
+
+            case HistVariable::VariableType::InvariantMass:
+                label += "Invariant Mass [GeV/c^2]";
+                break;
+            
+            default:
+                break;
+
+        }
+    
+    return label;
 }
 
-HistVariable::HistVariable(ParticleType type, int order, VariableType var, std::string unit, 
-	bool is2DHistX, bool is2DHistY)
+HistVariable::HistVariable(ParticleType type, int order, VariableType var, std::string AxisLabel, 
+	bool is2DHistX, bool is2DHistY, bool isCorrected)
     : particleType(type),
       order_(order),
       variableType(var),
-      unit(unit.empty() ? defaultUnit(var) : unit),
+      AxisLabel(AxisLabel.empty() ? defaultAxisLabel(type, order, var) : AxisLabel),
       is2DHistX_(is2DHistX),
-      is2DHistY_(is2DHistY)
+      is2DHistY_(is2DHistY),
+      isCorrected(isCorrected)
 {
     assert(!(is2DHistX_ && is2DHistY_));
 }
 
-HistVariable::HistVariable(VariableType var, std::string unit, bool is2DHistX, bool is2DHistY) : 
-    HistVariable(ParticleType::none(), 0, var, unit, is2DHistX, is2DHistY)
+HistVariable::HistVariable(VariableType var, std::string AxisLabel, bool is2DHistX, bool is2DHistY, bool isCorrected) : 
+    HistVariable(ParticleType::none(), 0, var, AxisLabel, is2DHistX, is2DHistY, isCorrected)
 {}
 
 std::string HistVariable::getName() const
@@ -60,7 +120,7 @@ std::string HistVariable::getName() const
             name += std::to_string(order_) + "th ";
             break;
         }
-        name += "Highest ";
+        name += "Highest";
     }
 
     if (particleType != ParticleType::none())
@@ -68,6 +128,18 @@ std::string HistVariable::getName() const
         if (particleType == ParticleType::leptonJet())
         {
             name += "leptonJet ";
+        }
+        else if (isCorrected)
+        {
+            name += "corrected ";
+            if (particleType == ParticleType::electron())
+            {
+                name += "Electron ";
+            }
+            else if (particleType == ParticleType::muon())
+            {
+                name += "Muon ";
+            }
         }
         else
         {
@@ -94,7 +166,11 @@ std::string HistVariable::getName() const
         name += "Opposite Sign Invariant Mass";
         break;
     case HistVariable::VariableType::InvariantMass:
-        name += "Reco Invariant Mass Background";
+        if (isCorrected)
+        {
+            name += "Corrected ";
+        }
+        name += "Reco Invariant Mass";
         break;
     case HistVariable::VariableType::RecoOppositeSignInvariantMass:
         name += "Reco Opposite Sign Invariant Mass";
@@ -108,14 +184,15 @@ std::string HistVariable::getName() const
     case HistVariable::VariableType::DarkPhotonBDTOutput:
         name+= "LeptonJetMLOutputMain";
         break;
+    case HistVariable::VariableType::DarkPhotonSMHiggsBDTOutput:
+        name+= "LeptonJetMLOutputForHiggs125Analysis";
+        break;
     case HistVariable::VariableType::LeptonJetMass:
         name += "Lepton Jet Mass";
         break;
     case HistVariable::VariableType::LeptonJetDeltaR:
         name += "Lepton Jet Delta R";
         break;
-    default:
-        throw std::runtime_error("Unknown variable type in HistVariable::getName()");
     }
 
     if (is2DHistX_)

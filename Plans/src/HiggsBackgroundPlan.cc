@@ -3,42 +3,22 @@
 #include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
 #include "CMSAnalysis/Filters/interface/HPlusPlusGenSimSelector.hh"
 #include "CMSAnalysis/Filters/interface/HiggsCut.hh"
+#include "CMSAnalysis/Filters/interface/HiggsMassFilter.hh"
 #include "CMSAnalysis/Filters/interface/HiggsSelector.hh"
 #include "CMSAnalysis/Filters/interface/HiggsTriggerCut.hh"
 #include "CMSAnalysis/Filters/interface/HiggsZVetoFilter.hh"
-
-#include <memory>
-
-
-#include "CMSAnalysis/Modules/interface/FilterModule.hh"
-#include "CMSAnalysis/Modules/interface/GenSimEventDumpModule.hh"
-#include "CMSAnalysis/Filters/interface/HiggsCut.hh"
-#include "CMSAnalysis/Filters/interface/HiggsSelector.hh"
-#include "CMSAnalysis/Filters/interface/HPlusPlusGenSimSelector.hh"
-#include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
-#include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
-#include "CMSAnalysis/Modules/interface/MatchingModule.hh"
-#include "CMSAnalysis/Histograms/interface/METHist.hh"
-#include "CMSAnalysis/Histograms/interface/Histograms.hh"
-#include "CMSAnalysis/Modules/interface/METModule.hh"
+#include "CMSAnalysis/Filters/interface/KansasCuts.hh"
 #include "CMSAnalysis/Filters/interface/NLeptonsFilter.hh"
-#include "CMSAnalysis/Filters/interface/RunFilter.hh"
+#include "CMSAnalysis/Filters/interface/RunCut.hh"
 #include "CMSAnalysis/Histograms/interface/HistogramPrototype2DProjection.hh"
 #include "CMSAnalysis/Histograms/interface/Histograms.hh"
 #include "CMSAnalysis/Histograms/interface/METHist.hh"
 #include "CMSAnalysis/Histograms/interface/NLeptonsHist.hh"
 #include "CMSAnalysis/Histograms/interface/SameSignInvariantMassHist.hh"
-#include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
-#include "CMSAnalysis/Histograms/interface/Histograms.hh"
-#include "CMSAnalysis/Filters/interface/HiggsTriggerCut.hh"
-
-
-#include "CMSAnalysis/Modules/interface/TriggerModule.hh"
-#include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
 #include "CMSAnalysis/Histograms/interface/TwoInvariantMassesHist.hh"
+#include "CMSAnalysis/Modules/interface/EventDumpModule.hh"
 #include "CMSAnalysis/Modules/interface/EventModule.hh"
 #include "CMSAnalysis/Modules/interface/FilterModule.hh"
-#include "CMSAnalysis/Modules/interface/GenSimEventDumpModule.hh"
 #include "CMSAnalysis/Modules/interface/HPlusPlusEfficiency.hh"
 #include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include "CMSAnalysis/Modules/interface/LeptonEfficiency.hh"
@@ -46,6 +26,7 @@
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
 #include "CMSAnalysis/Modules/interface/TriggerModule.hh"
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
+
 #include <memory>
 
 using std::make_shared;
@@ -57,22 +38,33 @@ void HiggsBackgroundPlan::initialize()
     auto eventMod = make_shared<EventModule>();
     auto hppSelector = make_shared<HPlusPlusGenSimSelector>();
     auto higgsSelector = make_shared<HiggsSelector>();
+    //auto higgsSelector = make_shared<KansasCuts>();
     auto higgsCut = make_shared<HiggsCut>();
-    //auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
-    auto eventDump = make_shared<GenSimEventDumpModule>(5);
+    auto runCut = make_shared<RunCut>(
+        std::vector<std::string>{"ScaleFactors/Cert_271036-284044_13TeV_Legacy2016_Collisions16_JSON.txt",
+                                 "ScaleFactors/Cert_294927-306462_13TeV_UL2017_Collisions17_GoldenJSON.txt",
+                                 "jsons/Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt"});
+    //
+    // Note: The above JSON .txt files are located in CMSAnalysis/DataCollection/bin/textfiles.
+    // The directory "jsons" was created to store analysis JSONs (Golden, UltraLegacy, etc)
+    //
+    // auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
+    auto matchMod = make_shared<MatchingModule>();
+    auto eventDump = make_shared<EventDumpModule>(true, true, 100, matchMod);
     auto bJetCut = make_shared<BJetCut>();
-    //auto quarkoniaCut = make_shared<QuarkoniaCut>();
-    //auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
+    // auto quarkoniaCut = make_shared<QuarkoniaCut>();
+    // auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
     auto triggerCut = make_shared<HiggsTriggerCut>();
     eventMod->addSelector(hppSelector);
     eventMod->addSelector(higgsSelector);
+    eventMod->addCut(runCut);
     eventMod->addCut(triggerCut);
     eventMod->addCut(higgsCut);
     eventMod->addCut(bJetCut);
-    //eventMod->addCut(quarkoniaCut);
-   // CommonOperations::addHiggsScaleFactors(eventMod);
 
-    auto matchMod = make_shared<MatchingModule>();
+    // eventMod->addCut(quarkoniaCut);
+    CommonOperations::addHiggsScaleFactors(eventMod);
+
     auto triggerMod = make_shared<TriggerModule>();
     auto metMod = make_shared<METModule>();
     // auto bJetFilter = make_shared<BJetFilter>();
@@ -87,6 +79,10 @@ void HiggsBackgroundPlan::initialize()
     auto zVetoFilterMod = make_shared<FilterModule>(zVetoFilter);
     zVetoFilterMod->setInput(eventMod->getEventInput());
 
+    auto massFilter = make_shared<HiggsMassFilter>(500);
+    auto massFilterMod = make_shared<FilterModule>(massFilter);
+    massFilterMod->setInput(eventMod->getEventInput());
+
     auto genSimDecayFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::GenSim);
     // auto filterStringModule = make_shared<FilterStringModule>();
     // modules.addAnalysisModule(filterStringModule);
@@ -99,9 +95,14 @@ void HiggsBackgroundPlan::initialize()
     auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
 
     auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(
-        EventInput::RecoLevel::GenSim, "GenSim Same Sign Invariant Mass", 1000, 0, 2000, false, false);
+        EventInput::RecoLevel::GenSim, "GenSim Same Sign Invariant Mass", 1000, 0, 2000, false);
     auto recoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(
-        EventInput::RecoLevel::Reco, "Reco Same Sign Invariant Mass", 1000, 0, 2000);
+        EventInput::RecoLevel::Reco, "Reco Same Sign Invariant Mass", 1000, 0, 2000, false);
+
+    auto correctedSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(
+        EventInput::RecoLevel::GenSim, "Corrected GenSim Same Sign Invariant Mass", 1000, 0, 2000, true);
+    auto correctedRecoSameSignInvMassHist = make_shared<SameSignInvariantMassHist>(
+        EventInput::RecoLevel::Reco, "Corrected Reco Same Sign Invariant Mass", 1000, 0, 2000, true);
 
     auto oppositeSignInvMassHist = make_shared<OppositeSignInvariantMassHist>(
         EventInput::RecoLevel::GenSim, "GenSim Opposite Sign Invariant Mass", 1000, 0, 2000);
@@ -109,11 +110,18 @@ void HiggsBackgroundPlan::initialize()
         EventInput::RecoLevel::Reco, "Reco Opposite Sign Invariant Mass", 1000, 0, 2000);
 
     auto positiveNegativeInvMassHist =
-        make_shared<TwoInvariantMassesHist>("Reco Invariant Mass Background", 100, 100, 0, 0, 2000, 2000);
-    auto xProjection = make_shared<HistogramPrototype2DProjection>(
-        "Reco Invariant Mass Background X Projection", positiveNegativeInvMassHist, true, 2000);
-    auto yProjection = make_shared<HistogramPrototype2DProjection>(
-        "Reco Invariant Mass Background Y Projection", positiveNegativeInvMassHist, false, 2000);
+        make_shared<TwoInvariantMassesHist>("Reco Invariant Mass", 100, 100, 0, 0, 2000, 2000);
+    auto xProjection = make_shared<HistogramPrototype2DProjection>("Reco Invariant Mass X Projection",
+                                                                   positiveNegativeInvMassHist, true, 2000);
+    auto yProjection = make_shared<HistogramPrototype2DProjection>("Reco Invariant Mass Y Projection",
+                                                                   positiveNegativeInvMassHist, false, 2000);
+
+    auto positiveNegativeInvMassHistCorrected =
+        make_shared<TwoInvariantMassesHist>("Corrected Reco Invariant Mass", 100, 100, 0, 0, 2000, 2000, true);
+    auto xProjectionCorrected = make_shared<HistogramPrototype2DProjection>(
+        "Corrected Reco Invariant Mass X Projection", positiveNegativeInvMassHistCorrected, true, 2000);
+    auto yProjectionCorrected = make_shared<HistogramPrototype2DProjection>(
+        "Corrected Reco Invariant Mass Y Projection", positiveNegativeInvMassHistCorrected, false, 2000);
 
     auto highestLeptonPt = make_shared<PtHist>(EventInput::RecoLevel::Reco, "Highest Lepton Pt", 100, 0, 1000);
 
@@ -124,12 +132,17 @@ void HiggsBackgroundPlan::initialize()
     eventHistMod->addHistogram(metHist);
     eventHistMod->addHistogram(recoSameSignInvMassHist);
     eventHistMod->addHistogram(sameSignInvMassHist);
+    eventHistMod->addHistogram(correctedRecoSameSignInvMassHist);
+    eventHistMod->addHistogram(correctedSameSignInvMassHist);
     eventHistMod->addHistogram(positiveNegativeInvMassHist);
+    eventHistMod->addHistogram(positiveNegativeInvMassHistCorrected);
     eventHistMod->addHistogram(oppositeSignInvMassHist);
     eventHistMod->addHistogram(recoOppositeSignInvMassHist);
     eventHistMod->addHistogram(highestLeptonPt);
     eventHistMod->addHistogram(xProjection);
     eventHistMod->addHistogram(yProjection);
+    eventHistMod->addHistogram(xProjectionCorrected);
+    eventHistMod->addHistogram(yProjectionCorrected);
 
     // modules.addProductionModule(metMod);
     // //Changed because EventModule inherits from ProductionModule now
@@ -137,12 +150,13 @@ void HiggsBackgroundPlan::initialize()
     modules.addProductionModule(matchMod);
     modules.addFilterModule(zVetoFilterMod);
     modules.addFilterModule(recoDecayFilterMod);
-    //modules.addFilterModule(make_shared<FilterModule>(bJetFilter));
-    //modules.addAnalysisModule(leptonEfficiency);
+    modules.addFilterModule(massFilterMod);
+    // modules.addFilterModule(make_shared<FilterModule>(bJetFilter));
+    // modules.addAnalysisModule(leptonEfficiency);
     modules.addAnalysisModule(eventHistMod);
     modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
-    //modules.addFilterModule(runFilterMod); 
-    //modules.addAnalysisModule(eventDump);
+    // modules.addFilterModule(runFilterMod);
+    // modules.addAnalysisModule(eventDump);
     auto hPlusPlusEfficiency = make_shared<HPlusPlusEfficiency>();
     hPlusPlusEfficiency->setInput(eventMod->getEventInput());
     modules.addAnalysisModule(hPlusPlusEfficiency);

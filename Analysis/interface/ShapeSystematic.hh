@@ -26,12 +26,10 @@ class ShapeSystematic : public Systematic
         {
             LogNormal
         };
-        ShapeSystematic(std::string name, TH1* high, TH1* low, Distribution distribution = Distribution::LogNormal);
+        ShapeSystematic(std::string name, Distribution distribution = Distribution::LogNormal);
         virtual std::string getString() const override;
-        virtual std::pair<TH1*, TH1*> getUncertainties(TH1* original) const override;
+        virtual std::pair<TH1*, TH1*> getUncertainties(TH1* original, HistVariable histVar, const Process* process) const override;
     private:
-        TH1* high;
-        TH1* low;
         Distribution distribution;
 };
 

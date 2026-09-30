@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 
+class Process;
 class Systematic
 {
     public:
@@ -18,7 +19,7 @@ class Systematic
 
         // should return deltax/x in each bin
         // first histogram is the high uncertainty, second is the low uncertainty
-        virtual std::pair<TH1*, TH1*> getUncertainties(TH1* original) const = 0;
+        virtual std::pair<TH1*, TH1*> getUncertainties(TH1* original, HistVariable histVar, const Process* process) const = 0;
     private:
         const std::string name;
 };

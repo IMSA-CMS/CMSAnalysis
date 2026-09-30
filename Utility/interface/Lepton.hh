@@ -22,8 +22,5 @@ class Lepton : public RecoParticle
         bool isTight() const;
         bool isMedium() const;
         bool isLoose() const;
-
-        double getDXY() const;
-        double getDZ() const;
 };
 #endif

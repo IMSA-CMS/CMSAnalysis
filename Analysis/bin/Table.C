@@ -11,7 +11,6 @@
 #include "CMSAnalysis/Utility/interface/HTMLTable.hh"
 #include "CMSAnalysis/Utility/interface/LatexTable.hh"
 #include "CMSAnalysis/Utility/interface/PowerpointTable.hh"
-// #include "CMSAnalysis/Analysis/interface/HiggsPlusPlusAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HiggsCompleteAnalysis.hh"
 #include "CMSAnalysis/Analysis/interface/HistVariable.hh"
 #include <fstream>
@@ -42,11 +41,8 @@ std::string roundDoubleString(double doub, int digits)
 void Table() 
 {
     //Channel Configurations
-    // std::vector<std::string> particles = {"e", "u"}; // Chosen branch ratio particles
-    // std::vector<std::string> channels =  {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee", "eeu", "eue", 
-    //     "euu", "uue", "uuu", "ee", "e e", "eu", "e u", "uu", "u u", "none"};
-    std::vector<std::string> channels = HiggsCompleteAnalysis::recoDecays;
-
+    std::vector<std::string> particles = {"e", "u"}; // Chosen branch ratio particles
+    std::vector<std::string> channels =  {"eeee", "eeeu", "eeuu", "eueu", "euuu", "uuuu", "eee_", "eeu_", "eue_", "euu_", "uue_", "uuu_", "ee__", "e_e_", "eu__", "e_u_", "uu__", "u_u_", "none"};
     //make sure these match with massTargets in HiggsCompleteAnaylsis
     std::vector<double> massTargets { 500, 600, 700, 800, 900, 1100, 1200, 1300, 1400};
 
@@ -84,6 +80,7 @@ void Table()
         
         //gets sameSignMass hist data
         HistVariable histVariable(HistVariable::VariableType::RecoSameSignInvariantMass);
+        // HistVariable histVariable(HistVariable::VariableType::InvariantMass, "GeV", true, false, true);
         std::shared_ptr<Channel> channelPtr = higgsAnalysis->getChannel(channel);
         
         // SimpleEstimator debug for eeee and uuuu channels
@@ -103,22 +100,14 @@ void Table()
         // WWZ Boson Extraction
         auto channelProcesses = channelPtr->getProcesses();
         
-        double eeeeMass = 0;
-        for (int stringIndex = names.size() - 1; stringIndex >= 0; --stringIndex) {
+
+        for (int stringIndex = names.size() - 1; stringIndex >= 0; --stringIndex) 
+        {
             std::string name = names[stringIndex];
-            if (name.find("Higgs signal") != string::npos || name.find("Data") != string::npos) {
-                if (name.find(" 500") != string::npos && channel.find("eeee") != string::npos) {
-                    // try getting all the yields for "Higgs signal ____ 500" under eeee row  
-                    eeeeMass += yields[stringIndex];
-                    std::cout << "COLUMN NAME: " << name << " YIELD: " << yields[stringIndex] << "\n";
-                }
+            if (name.find("Higgs signal") != string::npos || name == "Data") {
                 names.erase(names.begin() + stringIndex);
                 yields.erase(yields.begin() + stringIndex);
             }
-        }
-        
-        if (eeeeMass > 0) { // could just force channel to be "eeee" but im lazy
-            std::cout << "TOTAL EEEE MASS: " << eeeeMass << "\n"; 
         }
         
         // for (auto process : channelProcesses)
@@ -141,7 +130,7 @@ void Table()
 
         //Saves truncated names to be used as columnNames in data table.
         columnNames = names;
-        // columnNames.push_back("wz");
+        //columnNames.push_back("wz");
        
     }
    

@@ -14,10 +14,10 @@ LocalEventInput::LocalEventInput(const Event* event1)
     event = event1;
 } 
 
-ParticleCollection<Particle> LocalEventInput::getParticles(RecoLevel level, const ParticleType& particleType) const
+ParticleCollection<Particle> LocalEventInput::getParticles(RecoLevel level, const ParticleType& particleType, bool includeSpecials) const
 {
     ParticleCollection<Particle> particleList;
-    auto particles = event->getParticles(level).getParticles();
+    auto particles = event->getParticles(level, includeSpecials).getParticles();
     for (const auto &p : particles)
     {
         if (p.getType() == particleType || particleType == ParticleType::none())
@@ -28,7 +28,6 @@ ParticleCollection<Particle> LocalEventInput::getParticles(RecoLevel level, cons
     return particleList;
 }
 
-/* TODO: getJets */
 ParticleCollection<Particle> LocalEventInput::getJets(RecoLevel level) const
 {
     return event->getJets();
@@ -36,25 +35,28 @@ ParticleCollection<Particle> LocalEventInput::getJets(RecoLevel level) const
 
 int LocalEventInput::getNumPileUpInteractions() const
 {
-    throw std::runtime_error("GenSimEventFile has no implementation of getNumPileUpInteractions");
+    return event->getNumPileUpInteractions();
 }
 
-double LocalEventInput::getMET() const
+reco::Candidate::LorentzVector LocalEventInput::getMET() const
 {
     return event->getMET();
 }
 
 unsigned long long LocalEventInput::getEventIDNum() const
 {
-    //return event->getEventIDNum();
-    throw std::runtime_error("GenSimEventFile has no implementation of getEventIDNum");  
+    return event->getEventIDNum();
 } 
 
 long LocalEventInput::getRunNum() const
 {
-    //return event->getEventIDNum();
-    throw std::runtime_error("GenSimEventFile has no implementation of getRunNum");  
+    return event->getRunNum(); 
 } 
+
+int LocalEventInput::getLumiBlock() const
+{
+    return event->getLumiBlock();
+}
 
 std::vector<bool> LocalEventInput::getTriggerResults(std::string subProcess) const
 {
@@ -83,4 +85,16 @@ const std::shared_ptr<FileParams> LocalEventInput::getFileParams() const
 std::vector<double> LocalEventInput::getPDFWeights() const
 {
     throw "Function not implemented";
+}
+double LocalEventInput::getEventQuantity(std::string key) const
+{
+    if (eventFile)
+    {
+        return eventFile->getEventQuantity(key);
+    }
+    throw std::runtime_error("LocalEventInput: EventFile not set");
+}
+void LocalEventInput::setEventFile(const EventInput* file)
+{
+    eventFile = file;
 }

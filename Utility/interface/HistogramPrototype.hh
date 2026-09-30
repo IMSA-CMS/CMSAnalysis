@@ -22,7 +22,7 @@ class HistogramPrototype
 {
 public:
 	HistogramPrototype(const std::string& iname) :
-		name(iname) //#GAVIN CHANGED
+		name(iname) 
 	{}
 
 	virtual void setInput(const EventInput* iInput);

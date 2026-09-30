@@ -17,10 +17,10 @@
 #include "CMSAnalysis/Analysis/interface/WindowEstimator.hh"
 
 
-double WindowEstimator::getExpectedYield(const SingleProcess* process, const HistVariable& dataType, double luminosity) const
+double WindowEstimator::getExpectedYield(const SingleProcess* process, const HistVariable& dataType) const
 {
     //Takes the histogram wanted from the file, assigns it hist
-    TH1 *hist = dynamic_cast<TH1 *>(process->getHist(dataType));
+    TH1 *hist = dynamic_cast<TH1 *>(process->getHist(dataType, luminosity));
     if (!hist) {
         throw std::runtime_error("Hist not found");
     }
@@ -28,15 +28,16 @@ double WindowEstimator::getExpectedYield(const SingleProcess* process, const His
     int totalEventsInt = process->getTotalEvents();
 
     //Finds crosssection (from spreadsheet)
-    double crosssection = process->getCrossSection();
+    double crosssection = reader->getCrossSection(process->getName());
 
     //Sets massbounds (to get the fraction inside window)
     double masslowaccepted = lowBound;
     double masshighaccepted = highBound;
     //Opens hist to analyze (checks whether hist is 2D or not) and runs estimator
     //Any lines that are the same in the two sides have to be in both. Having two "if's" with lines shared in the middle doesn't compile.
-    if(dynamic_cast<TH2 *>(process->get2DHist(dataType)) == 0) {
-        TH1 *histanalysis = process->getHist(dataType);
+    if (!dynamic_cast<TH2 *>(process->get2DHist(dataType)))
+    {
+        TH1 *histanalysis = process->getHist(dataType, luminosity);
         //Finds the number of events in the analyzed hist
         double eventsanalysishist = histanalysis->GetEntries();
 
@@ -80,9 +81,4 @@ double WindowEstimator::getExpectedYield(const SingleProcess* process, const His
         //return signalest4;
         return signalest;
     }
-}
-
-double WindowEstimator::getMassTarget() const 
-{
-    return (lowBound + highBound) / 2;
 }

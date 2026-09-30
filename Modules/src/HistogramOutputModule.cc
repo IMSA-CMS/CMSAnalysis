@@ -92,6 +92,7 @@ void HistogramOutputModule::makeHistogram(std::shared_ptr<HistogramPrototype> h)
 {
     auto name = h->getName();
     addObject(getFilterPath(), name, h->makeHistogram(name, name));
+    //std::cout << "Making histogram: " << name << " in path: " << getFilterPath() << "\n";
     for (const auto &scaleFactor : h->getScaleFactors())
     {
         addObject(scaleFactor->getName() + "_Up/" + getFilterPath(), name, h->makeHistogram(name, name));
@@ -105,7 +106,6 @@ void HistogramOutputModule::fillHistogram(const std::string &path, const std::st
     auto hist = getHistogram(path, name);
     if (!hist)
         throw std::runtime_error("Argument to getHistogram was not of TH1 type!  Name: " + name + "&! \n");
-    // " and Root type: " + getObject(name)->ClassName());
 
     if (auto hist2D = dynamic_cast<TH2 *>(hist)) // If the hist is 2D hist
     {
@@ -128,53 +128,76 @@ void HistogramOutputModule::fillHistogram(const std::string &path, const std::st
     {
         for (double currentNum : values)
         {
-            // std::cout << "currentNum: " << currentNum << "\n";
-            // std::cout << "Weight: " << weight << "\n";
             hist->Fill(currentNum, weight);
         }
     }
 }
 
+double HistogramOutputModule::eventWeightL(ScaleFactor::SystematicType type, std::shared_ptr<ScaleFactor> scaleFactorToChange) const
+{
+  double weight = 1.0;
+  for (auto scaleFactor : scaleFactors)
+  {
+    if (scaleFactor == scaleFactorToChange)
+    {
+      weight *= scaleFactor->getScaleFactor(getInput(), type);
+    }
+    else
+    {
+      weight *= scaleFactor->getScaleFactor(getInput());
+    }
+  }
+  return weight;
+  
+}
+
 bool HistogramOutputModule::process()
 {
-    // std::cout << "HistOutMod running \n";
+    double weight = eventWeightL();
+    std::unordered_map<std::shared_ptr<ScaleFactor>, std::pair<double, double>> systematicWeights;
+
+    for (auto scaleFactor : scaleFactors)
+    {
+        if (scaleFactor->hasUncertainty())
+        {
+            systematicWeights[scaleFactor] = std::make_pair(eventWeightL(ScaleFactor::SystematicType::Up, scaleFactor), eventWeightL(ScaleFactor::SystematicType::Down, scaleFactor));
+        }
+    }
+
     for (const auto &hist : histograms)
     {
-        bool draw = hist->shouldDraw(); // call the shouldDraw function so we can
-                                        // call process on the FilterModules
-        // 2/2/2023 investigating shouldDraw problem, this comment is just a placeholder
+        bool draw = hist->shouldDraw(); 
 
         if (!draw)
         {
             continue;
         }
 
-        // If the histogram doesn't exist, make it
+        auto value = hist->value();
+                // If the histogram doesn't exist, make it
+
+        if(value.empty()){
+            continue;
+        }
+
         if (getObject(getFilterPath(), hist->getName()) == nullptr)
         {
             makeHistogram(hist);
         }
-
-        // Fill the histogram if shouldDraw(event) (draw) returns true
-        // if (draw) {
-        // for (double value : hist->value())
-        // {
-        //   std::cout << hist->getFilteredName() << " has " << value << "\n";
-        // }
-        // std::cout << "Module particle size: " <<
-        // getInput()->getParticles(EventInput::RecoLevel::Reco).getNumParticles() << "\n"; std::cout <<
-        // "HistOutputModule event input: " << getInput() <<std::endl;
-        fillHistogram(getFilterPath(), hist->getName(), hist->value(), hist->eventWeight());
+        fillHistogram(getFilterPath(), hist->getName(), value, weight);
         for (const auto &scaleFactor : hist->getScaleFactors())
         {
-            fillHistogram(scaleFactor->getName() + "_Up/" + getFilterPath(), hist->getName(), hist->value(),
-                          hist->eventWeight(ScaleFactor::SystematicType::Up, scaleFactor));
-            // std::cout << "UP eventWeight: " << hist->eventWeight(ScaleFactor::SystematicType::Up, scaleFactor) <<
-            // "\n";
-            fillHistogram(scaleFactor->getName() + "_Down/" + getFilterPath(), hist->getName(), hist->value(),
-                          hist->eventWeight(ScaleFactor::SystematicType::Down, scaleFactor));
-            // std::cout << "DOWN eventWeight: " << hist->eventWeight(ScaleFactor::SystematicType::Down,
-            // scaleFactor) << "\n";
+            if (scaleFactor->hasUncertainty())
+            {
+                fillHistogram(scaleFactor->getName() + "_Up/" + getFilterPath(), hist->getName(), value,
+                                systematicWeights[scaleFactor].first); //*
+                // std::cout << "UP eventWeight: " << hist->eventWeightL(ScaleFactor::SystematicType::Up, scaleFactor) <<
+                // "\n";
+                fillHistogram(scaleFactor->getName() + "_Down/" + getFilterPath(), hist->getName(), value,
+                                systematicWeights[scaleFactor].second); //*
+                // std::cout << "DOWN eventWeight: " << hist->eventWeight(ScaleFactor::SystematicType::Down,
+                // scaleFactor) << "\n";
+            }
         }
     }
     return true;
@@ -198,3 +221,9 @@ std::string HistogramOutputModule::getFilterPath()
 {
     return boost::algorithm::join(getFilters(), "/");
 }
+
+  TH1* HistogramOutputModule::getHistogram(const std::string &path, const std::string &name)
+  {
+
+        return dynamic_cast<TH1 *>(getObject(path, name));
+  }

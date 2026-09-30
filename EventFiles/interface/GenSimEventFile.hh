@@ -20,9 +20,10 @@ class GenSimEventFile : public EventFile
         virtual ParticleCollection<GenSimParticle> getGenSimParticles() const override;
         virtual ParticleCollection<Particle> getRecoParticles() const override; //not implemented
         virtual ParticleCollection<Particle> getRecoJets() const override; //not implemented
+        virtual int getLumiBlock() const override {throw std::runtime_error("GenSim files do not contain luminosity information");}
         virtual int getNumOfEvents() const override {return event->size();}
         virtual int getNumPileUpInteractions() const override; //not implemented
-        virtual double getMET() const override;
+        virtual reco::Candidate::LorentzVector getMET() const override;
         virtual std::vector<double> getPDFWeights() const override;
         virtual unsigned long long getEventIDNum() const override; 
         virtual long getRunNum() const override; 

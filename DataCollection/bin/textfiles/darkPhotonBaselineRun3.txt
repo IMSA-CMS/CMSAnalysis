@@ -2,7 +2,7 @@ DarkPhoton
 DpMass:	0_3
 HiggsMass:	1000
 FSR:	0_0
-Decay:	ZPrime
+Decay:	Higgs2DP
 Format:	MiniAOD
 Run:	3
-Year:	2022
+Year:	2022	2022EE

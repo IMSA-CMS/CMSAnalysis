@@ -1,8 +1,10 @@
 #ifndef FIT_FUNCTION_HH
 #define FIT_FUNCTION_HH
 
-#include "TF1.h"
-#include <iostream>
+#include <map>
+#include <string>
+#include <vector>
+#include "Rtypes.h"
 
 class FitFunction
 {
@@ -14,41 +16,36 @@ class FitFunction
         PowerLaw,
         DoubleGaussian,
         GausLogPowerNorm,
+        Voigt,
     };
 
-    // static const std::vector<std::string> functionList;
-    static FitFunction createFunctionOfType(FunctionType functionType, const std::string &name,
-                                            const std::string &expFormula, double min, double max,
-                                            std::string channelName);
+    using NuisanceValues = std::map<std::string, double>;
 
-    // static std::vector<FitFunction> loadFunctions(const std::string& fileName);
-    // static void saveFunctions(std::vector<FitFunction>& functions, const std::string& fileName);
+    virtual ~FitFunction() {};
 
-    // static std::string getFormulaName(const std::string& name);
+    std::string getName() const {return name;}
 
-    FitFunction(const TF1 &func, FunctionType funcType, std::string channelName);
-    TF1 *getFunction();
-    void setFunction(const TF1 &func, FunctionType funcType);
-    FunctionType getFunctionType();
-    std::string getName();
-    double getMin();
-    double getMax();
-    std::string getChannelName();
-    std::string getParameterName();
+    FunctionType getFunctionType() const {return functionType;}
+
+    virtual double evaluate(double observable, double modelMass,
+                            const NuisanceValues &nuisances = {}) const = 0;
+    virtual std::string getNormExpression(const std::string &variable) const = 0;
+    virtual std::vector<std::string> listSystematics() const = 0;
+
+    static std::string encodeName(std::map<std::string, std::string> parameters);
+    static std::map<std::string, std::string> decodeName(std::string name);
+
+  protected:
+    FitFunction() {};
+    FitFunction(FunctionType functionType, std::string name);
+
+    void setName(std::string newName);
+    void setFunctionType(FunctionType type){functionType = type;}
 
   private:
-    static double powerLaw(double *x, double *par);
-    static double DSCB(double *x, double *par);
-    static double doubleGaussian(double *x, double *par);
-    static double gausLogPowerNorm(double *x, double *par);
-    static std::vector<std::string> split(const std::string &str, char delimiter);
-
-    TF1 function;
-    std::string channelName;
-    FunctionType functionType;
+    FunctionType functionType = FunctionType::ExpressionFormula;
+    std::string name;
+    ClassDef(FitFunction, 1)
 };
-
-std::ostream &operator<<(std::ostream &stream, FitFunction &function);
-std::istream &operator>>(std::istream &stream, FitFunction &function);
 
 #endif

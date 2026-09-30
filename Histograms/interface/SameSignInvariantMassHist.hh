@@ -6,13 +6,12 @@
 class SameSignInvariantMassHist : public GenSimRecoPrototype
 {
   public:
-    SameSignInvariantMassHist(EventInput::RecoLevel typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum, bool iUsingPhi = false, 
-      bool iMultipleMasses = false);
+    SameSignInvariantMassHist(EventInput::RecoLevel typeSwitch, const std::string& iname, int iNBins, double iminimum, double imaximum, bool useCorrectedLeptons = false);
   protected:
     virtual std::vector<double> protectedValue(EventInput::RecoLevel typeGenSim) const override;
   private:
-    bool usingPhi;
-    bool multipleMasses;
+    bool corrected;
+    ParticleCollection<Lepton> getCorrectedLeptons() const;
 };
 
 #endif
