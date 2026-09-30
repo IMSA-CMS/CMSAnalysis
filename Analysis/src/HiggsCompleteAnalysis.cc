@@ -480,7 +480,7 @@ void HiggsCompleteAnalysis::addParameterizations()
                 {
                     continue;
                 }
-                process->setPlot(histVar, *fitFunction.second);
+                process->setPlot(histVar, fitFunction.second);
             }
         }
     }
@@ -504,7 +504,7 @@ void HiggsCompleteAnalysis::addParameterizations()
             {
                 continue;
             }
-            process->setPlot(histVar, *fitFunction.second);
+            process->setPlot(histVar, fitFunction.second);
         }
     }
 }
