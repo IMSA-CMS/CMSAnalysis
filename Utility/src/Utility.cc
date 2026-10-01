@@ -117,30 +117,30 @@ int Utility::gcf(std::vector<int> nums)
     return toReturn;
 }
 
-static std::string truncatePreferDiversity(const std::string &leptons)
-{
-    if (leptons.size() <= 2)
-    {
-        return leptons;
-    }
-    std::string result;
-    for (char c : leptons) // already in pt-descending order from particles.sort()
-    {
-        if (result.find(c) == std::string::npos)
-        {
-            result += c;
-            if (result.size() == 2)
-            {
-                break;
-            }
-        }
-    }
-    if (result.size() < 2) // all same flavor, fall back to plain top-2 by pt
-    {
-        result = leptons.substr(0, 2);
-    }
-    return result;
-}
+// static std::string truncatePreferDiversity(const std::string &leptons)
+// {
+//     if (leptons.size() <= 2)
+//     {
+//         return leptons;
+//     }
+//     std::string result;
+//     for (char c : leptons) // already in pt-descending order from particles.sort()
+//     {
+//         if (result.find(c) == std::string::npos)
+//         {
+//             result += c;
+//             if (result.size() == 2)
+//             {
+//                 break;
+//             }
+//         }
+//     }
+//     if (result.size() < 2) // all same flavor, fall back to plain top-2 by pt
+//     {
+//         result = leptons.substr(0, 2);
+//     }
+//     return result;
+// }
 
 std::string Utility::identifyChannel(ParticleCollection<Particle> particles)
 {

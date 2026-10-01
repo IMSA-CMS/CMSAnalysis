@@ -35,7 +35,7 @@ class FitFunctionParameterization : public FitFunction
     std::vector<SimpleFitFunction> parameterFunctions;
     // -1 means no said yield parameter
     int normParameterIndex = -1;
-    ClassDef(FitFunctionParameterization, 1)
+    ClassDefOverride(FitFunctionParameterization, 1)
 };
 
 #endif

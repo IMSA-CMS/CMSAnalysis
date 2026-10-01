@@ -1217,16 +1217,17 @@ void PlotFormatter::GetOrder(std::vector<TH1 *> &hists, TH1 *&first, int &firstI
 void PlotFormatter::Bin(std::vector<TH1 *> &hists, TH1 *&first, int &firstIndex, double &maximum, int &count,
                         bool scaleToExpected)
 {
-    std::vector<int> bins;
+    // std::vector<int> bins;
+    // for (TH1 *hist : hists)
+    // {
+    //     bins.push_back(hist->GetNbinsX());
+    // }
+
+    //int commonFactor = Utility::gcf(bins);
+
     for (TH1 *hist : hists)
     {
-        bins.push_back(hist->GetNbinsX());
-    }
-
-    int commonFactor = Utility::gcf(bins);
-
-    for (TH1 *hist : hists)
-    {
+        (void)hist;
         // hist->Rebin(hist->GetNbinsX() / commonFactor);
     }
 
@@ -1238,6 +1239,7 @@ void PlotFormatter::Bin(std::vector<TH1 *> &hists, TH1 *&first, int &firstIndex,
     }
     for (TH1 *hist : hists)
     {
+        (void)hist;
         // hist->Rebin((int) (maxBinWidth / hist->GetXaxis()->GetBinWidth(0)));
     }
 
