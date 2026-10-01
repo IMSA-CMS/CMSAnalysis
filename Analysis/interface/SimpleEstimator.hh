@@ -15,9 +15,9 @@ class SimpleEstimator : public Estimator
 	public: 
 		SimpleEstimator(const std::shared_ptr<CrossSectionReader> iReader, double luminosity, double scaleFactor = 1, 
 			bool data = false, double branchingRatioFixer = 1) : reader(iReader), luminosity(luminosity), scaleFactor(scaleFactor), 
-			isData(data), isBranchingRatioFixer(branchingRatioFixer) {}
+			isData(data), branchingRatioFixer(branchingRatioFixer) {}
 		double getExpectedYield(const SingleProcess* process, const HistVariable& dataType) const override;
-		double getBranchingRatioFixer() const { return isBranchingRatioFixer; }
+		double getBranchingRatioFixer() const { return branchingRatioFixer; }
 		
 		static inline bool verbose = false;
 	private:
