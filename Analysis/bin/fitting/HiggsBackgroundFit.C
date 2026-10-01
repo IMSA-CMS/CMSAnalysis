@@ -13,7 +13,7 @@
 #include "TROOT.h"
 
 
-SimpleFitFunction fitProcess(const std::shared_ptr<Process> process, const HistVariable &histVar,
+std::shared_ptr<SimpleFitFunction> fitProcess(const std::shared_ptr<Process> process, const HistVariable &histVar,
                 const std::string &channelName, int min, int max, const std::vector<std::string>& systs, TFile* rootFile);
 
 const std::vector<HistVariable> histogramTypes = {
@@ -98,9 +98,9 @@ void HiggsBackgroundFit(bool useKansasState = false)
                     << channel->getName()
                     << "'\n";
 
-                SimpleFitFunction func = fitProcess(process, histVar, channel->getName(), bgAndRange.second.first, bgAndRange.second.second, systs, rootFile);
-
-                allFunctions.insert(func);
+                auto func = fitProcess(process, histVar, channel->getName(), bgAndRange.second.first, bgAndRange.second.second, systs, rootFile);
+                if (func)
+                    allFunctions.insert(func);
             }
         }
     }
@@ -110,13 +110,13 @@ void HiggsBackgroundFit(bool useKansasState = false)
 }
 
 
-SimpleFitFunction fitProcess(const std::shared_ptr<Process> process, const HistVariable &histVar, const std::string &channelName,
+std::shared_ptr<SimpleFitFunction> fitProcess(const std::shared_ptr<Process> process, const HistVariable &histVar, const std::string &channelName,
                 int min, int max, const std::vector<std::string>& systs, TFile* rootFile)
 {
     TH1 *const selectedHist = process->getHist(histVar, true);
     if (!selectedHist || selectedHist->GetEntries() < minData)
     {
-        return SimpleFitFunction();
+        return nullptr;
     }
 
     //std::string systDesc;
@@ -147,10 +147,10 @@ SimpleFitFunction fitProcess(const std::shared_ptr<Process> process, const HistV
 
     std::cout << "Fitting " + name + "\n";
     FitFunction::FunctionType type = FitFunction::FunctionType::GausLogPowerNorm;
-    SimpleFitFunction func =
+    auto func =
         SimpleFitFunction::createFunctionOfType(type, name, "", min, max);
 
-        Fitter::fitSingleFunction(selectedHist, func, rootFile);
+        Fitter::fitSingleFunction(selectedHist, *func, rootFile);
     
         for (const auto &systName : systs)
                 {
@@ -159,17 +159,17 @@ SimpleFitFunction fitProcess(const std::shared_ptr<Process> process, const HistV
                         systHistVar.setSystematic(ScaleFactor::SystematicType::Down, systName);
                         TH1 *histDown = process->getHist(systHistVar, true);
 
-                        SimpleFitFunction downFunction = SimpleFitFunction::createFunctionOfType(type, name, "", min, max);
-                        Fitter::fitSingleFunction(histDown, downFunction);
+                        auto downFunction = SimpleFitFunction::createFunctionOfType(type, name, "", min, max);
+                        Fitter::fitSingleFunction(histDown, *downFunction);
 
                         systHistVar.setSystematic(ScaleFactor::SystematicType::Up, systName);
                         TH1 *histUp = process->getHist(systHistVar, true);
 
                         
-                        SimpleFitFunction upFunction = SimpleFitFunction::createFunctionOfType(type, name, "", min, max);
-                        Fitter::fitSingleFunction(histUp, upFunction);
+                        auto upFunction = SimpleFitFunction::createFunctionOfType(type, name, "", min, max);
+                        Fitter::fitSingleFunction(histUp, *upFunction);
 
-                        func.addSystematic(systName, *upFunction.getFunction(), *downFunction.getFunction());
+                        func->addSystematic(systName, *upFunction->getFunction(), *downFunction->getFunction());
                         //fitProcess(*process, fitter, systHistVar, channel->getName(), bgAndRange.second.first,
                                    //bgAndRange.second.second);
                     

@@ -175,22 +175,22 @@ FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const H
         const auto name = FitFunction::encodeName(nameParams);
         // const auto name =
         //     genSim + "->" + channelName + "/" + std::to_string(mass) + ' ' + histVar.getName() + " " + systDesc;
-        SimpleFitFunction func = SimpleFitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
-        Fitter::fitSingleFunction(hist, func, rootFile); // Only add the nominal version to the Root file
+        auto func = SimpleFitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
+        Fitter::fitSingleFunction(hist, *func, rootFile); // Only add the nominal version to the Root file
         for (const auto &systName : systs)
         {
             auto systHistType = histVar;
             systHistType.setSystematic(ScaleFactor::SystematicType::Down, systName);
-            SimpleFitFunction downFunction = SimpleFitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
+            auto downFunction = SimpleFitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
             TH1 *sysHistdown = process->getHist(systHistType, true);
-            Fitter::fitSingleFunction(sysHistdown, downFunction);
+            Fitter::fitSingleFunction(sysHistdown, *downFunction);
 
             systHistType.setSystematic(ScaleFactor::SystematicType::Up, systName);
-            SimpleFitFunction upFunction = SimpleFitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
+            auto upFunction = SimpleFitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
             TH1 *sysHistup = process->getHist(systHistType, true);
-            Fitter::fitSingleFunction(sysHistup, upFunction);
+            Fitter::fitSingleFunction(sysHistup, *upFunction);
             
-            func.addSystematic(systName, *upFunction.getFunction(), *downFunction.getFunction());
+            func->addSystematic(systName, *upFunction->getFunction(), *downFunction->getFunction());
         }
         functions.insert(func);
         //const std::string keyName = std::to_string(mass);

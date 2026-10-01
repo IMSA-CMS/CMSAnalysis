@@ -46,7 +46,7 @@ TH1* RootFileInput::getHist(const HistVariable& histType) const
 	auto file = getFile(fileSource);
 	std::string histName = name;
 	TDirectory* dir = file;
-	//std::cout << "Full name: " << name << '\n';
+	// std::cout << "Full name: " << name << '\n';
 	//std::cout << "RootFileInput Hit 2 " << std::endl;
 	// TH1* emptyHist = new TH1F("h1", "empty", 1, 0.0, 0.0);
 	while (pos != std::string::npos)

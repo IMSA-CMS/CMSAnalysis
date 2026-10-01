@@ -12,12 +12,12 @@ class FitFunctionCollection
     static FitFunctionCollection loadFunctions(const std::string &fileName);
 
     FitFunctionCollection();
-    FitFunctionCollection(std::vector<SimpleFitFunction> &functions);
+    FitFunctionCollection(std::vector<std::shared_ptr<SimpleFitFunction>> &functions);
     // FitFunctionCollection(size_t size);
 
     FitFunctionCollection parameterizeFunctions(FitFunction::FunctionType funcType);
-    void insert(const std::string& key, SimpleFitFunction function);
-    void insert(SimpleFitFunction function);
+    void insert(const std::string& key, std::shared_ptr<SimpleFitFunction> function);
+    void insert(std::shared_ptr<SimpleFitFunction> function);
     size_t size() const;
     SimpleFitFunction &get(const std::string &key);
     void saveFunctions(const std::string &fileName, bool append = false);

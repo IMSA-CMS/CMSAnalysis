@@ -146,64 +146,52 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() :
         {
             std::vector<std::shared_ptr<Process>> processes;
             std::map<int, std::shared_ptr<Process>> signalProcesses;
-
+            
             const std::string modeLabel = zSelection ? "_ZPeak" : "";
             const auto channelName = recoDecay + modeLabel;
 
             for (const double massTarget : massTargets)
             {
-                auto higgsMassGroup = std::make_shared<Process>("Higgs Signal " + std::to_string((int)massTarget), 1);
-
+                // not really sure why we need this process at all
+                // auto higgsGroupSignal = std::make_shared<Process>("Higgs Group " + recoDecay, 5);
+                
+                std::string massString = std::to_string((int)massTarget); 
+                auto higgsMassGroup = std::make_shared<Process>("Higgs Signal " + massString, 1);
+                    
                 for (const auto &genSimDecay : genSimDecays)
                 {
-                    auto histMapperLowMass =
+
+                // auto histVariableToFileMapping = std::make_shared<HiggsHistNameFinder>(recoDecay, genSimDecay, true, zSelection);
+                auto histMapperLowMass =
                         std::make_shared<HiggsHistNameFinder>(recoDecay, genSimDecay, zSelection, true);
-                    auto histMapperHighMass =
+                auto histMapperHighMass =
                         std::make_shared<HiggsHistNameFinder>(recoDecay, genSimDecay, zSelection, false);
 
-                    double branchingRatioFixer = getBranchingRatio(genSimDecay);
+                double branchingRatioFixer = getBranchingRatio(genSimDecay);
 
-                    auto higgsSignal = std::make_shared<Process>(
-                        "Higgs signal " + genSimDecay + " " + std::to_string((int)massTarget), 1);
+                auto histVariableToFileMapping =
+                std::make_shared<HiggsHistNameFinder>(recoDecay, genSimDecay, true, zSelection);
+                
+                auto higgsSignal =
+                        std::make_shared<Process>("Higgs signal " + genSimDecay + " " + massString, 1);           
 
-                    // try
-                    // {
-                    //     for (auto fit : signalParamMap.at(std::tuple(genSimDecay, channelName)))
-                    //     {
-                    //         const auto histVar = std::get<0>(fit);
-                    //         auto params = std::get<1>(fit);
-                    //         // TODO: Make this more robust
-                    //         auto funcType = FitFunction::FunctionType::DoubleSidedCrystalBall;
-                    //         if (params.contains("mul_{2}"))
-                    //         {
-                    //             funcType = FitFunction::FunctionType::DoubleGaussian;
-                    //         }
-                    //         auto func = FitFunction::createFunctionOfType(funcType, "", "", 0, 2000, channelName);
+                    addSingleProcess(higgsSignal, signalFilePath, "Higgs" + massString + ".root",
+                                        "higgs4l" + massString, reader, histMapperLowMass, histMapperHighMass,
+                                        false, branchingRatioFixer);
 
-                    //         auto *tf1 = func.getFunction();
+                    // auto higgsMassGroup = std::make_shared<Process>("Higgs Signal " + std::to_string((int)massTarget), 1);
+ 
+                    //FIX MERGE FROM HERE
+                    // histVariablesSignal.push_back(HistVariable::sameSignMass(decayName + "__hists/" + decayName + "_Reco
+                    // Same Sign Invariant Mass"));
+                    // histVariablesSignal.push_back(HistVariable(Selector::None,
+                    // HistVariable::VariableType::SameSignInvariantMass));
 
-                    //         for (auto param : params)
-                    //         {
-                    //             const auto name = std::get<0>(param);
-                    //             auto fit = std::get<1>(param);
-                    //             const auto *fitTf1 = fit.getFunction();
-                    //             const auto value = fitTf1->Eval(massTarget);
-                    //             tf1->SetParameter(name, value);
-                    //         }
-                    //         higgsSignal->setPlot(histVar, func);
-                    //     }
-                    // }
-                    // catch (std::out_of_range &e)
-                    // {
-                    // }
+                    
+                    higgsMassGroup->addProcess(higgsSignal->getSingleProcess("higgs4l" + massString));
 
-                    addSingleProcess(higgsSignal, signalFilePath, "Higgs" + std::to_string((int)massTarget) + ".root",
-                                     "higgs4l" + std::to_string((int)massTarget), reader, histMapperLowMass,
-                                     histMapperHighMass, false, branchingRatioFixer);
                     processes.push_back(higgsSignal);
-                    addSingleProcess(higgsMassGroup, signalFilePath, "Higgs" + std::to_string((int)massTarget) + ".root",
-                                     "higgs4l" + std::to_string((int)massTarget), reader, histMapperLowMass,
-                                     histMapperHighMass, false, branchingRatioFixer);
+
                 }
                 processes.push_back(higgsMassGroup);
             }
@@ -365,7 +353,7 @@ void HiggsCompleteAnalysis::addSingleProcess(std::shared_ptr<Process> process, s
 {
     auto inputFile1 = std::make_shared<RootFileInput>(filePathway + fileName, mappingLowMass);
     auto inputFile2 = std::make_shared<RootFileInput>(filePathway + fileName, mappingHighMass);
-    auto histEstimator = std::make_shared<SimpleEstimator>(crossReader, lumi, 1.0, isData, branchingRatioAdjustment);
+    auto histEstimator = std::make_shared<SimpleEstimator>(crossReader, getLuminosity(), 1.0, isData, branchingRatioAdjustment);
 
     process->addProcess(SingleProcess(crossSectionName, inputFile1, histEstimator));
     process->addProcess(SingleProcess(crossSectionName, inputFile2, histEstimator));    
@@ -492,7 +480,7 @@ void HiggsCompleteAnalysis::addParameterizations()
                 {
                     continue;
                 }
-                process->setPlot(histVar, *fitFunction.second);
+                process->setPlot(histVar, fitFunction.second);
             }
         }
     }
@@ -516,7 +504,7 @@ void HiggsCompleteAnalysis::addParameterizations()
             {
                 continue;
             }
-            process->setPlot(histVar, *fitFunction.second);
+            process->setPlot(histVar, fitFunction.second);
         }
     }
 }
