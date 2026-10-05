@@ -16,7 +16,7 @@ class Fitter
     // Insert blank TF1* function ptr which will have the fitted function written to
     static void fitSingleFunction(TH1* histogram, SimpleFitFunction& function, TFile* rootFile = nullptr);
 
-    static FitFunctionCollection fitFunctions(std::vector<std::pair<TH1*, SimpleFitFunction>>& histogramPairs,
+    static FitFunctionCollection fitFunctions(const std::vector<std::pair<TH1*, std::shared_ptr<SimpleFitFunction>>>& histogramPairs,
         std::string rootFileName);
     // FitFunctionCollection parameterizeFunctions(std::unordered_map<double, TF1*>& xData, const std::string &genSim,
     //     const std::string &reco, const std::string &var, const HistVariable &histVar);
@@ -31,7 +31,7 @@ class Fitter
     static void fitGausLogPowerNorm(TH1 *hist, SimpleFitFunction &func);
     static void fitVoigt(TH1 *histogram, SimpleFitFunction &fitFunction);
 
-    static SimpleFitFunction fitPowerLawToGraph(TGraph* graph, std::string name);
+    static std::shared_ptr<SimpleFitFunction> fitPowerLawToGraph(TGraph* graph, std::string name);
 };
 
 #endif

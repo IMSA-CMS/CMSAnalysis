@@ -208,6 +208,63 @@ std::vector<Particle> HiggsSelector::adjustForNeutrinos(const std::vector<Partic
 
     if (leptons.size() == 4)
     {
+        // 09/21/26: MET-proximity method ported from the 3-lepton case.
+        // Set to false to get the original mass-balance method back.
+        const bool useProximity4Lepton = false;
+        if (useProximity4Lepton)
+        {
+            int tauCount = 0;
+            int tauIndex = -1;
+            for (int i = 0; i < 4; i++)
+            {
+                if (leptons[i].getType() == ParticleType::tau())
+                {
+                    tauCount++;
+                    tauIndex = i;
+                }
+            }
+            if (tauCount != 1)
+            {
+                return leptons;
+            }
+
+            const double metPhiMatchThreshold = 0.2;
+            double met_phi = std::atan2(met_y, met_x);
+
+            auto deltaPhiToMet = [&](int idx)
+            {
+                double lepton_phi = leptons[idx].getFourVector().Phi();
+                double dPhi = met_phi - lepton_phi;
+                while (dPhi > M_PI) dPhi -= 2 * M_PI;
+                while (dPhi < -M_PI) dPhi += 2 * M_PI;
+                return std::abs(dPhi);
+            };
+
+            double tauDeltaPhi = deltaPhiToMet(tauIndex);
+            double closestOtherDeltaPhi = std::numeric_limits<double>::max();
+            for (int i = 0; i < 4; i++)
+            {
+                if (i == tauIndex) continue;
+                double d = deltaPhiToMet(i);
+                if (d < closestOtherDeltaPhi)
+                {
+                    closestOtherDeltaPhi = d;
+                }
+            }
+
+            if (tauDeltaPhi < closestOtherDeltaPhi && tauDeltaPhi < metPhiMatchThreshold)
+            {
+                std::vector<Particle> trial = leptons;
+                double nu_pT = std::sqrt(met_x * met_x + met_y * met_y);
+                double scale = nu_pT / trial[tauIndex].getPt();
+                auto newFourVector = trial[tauIndex].getFourVector() * (scale + 1);
+                trial[tauIndex] = Particle(newFourVector, trial[tauIndex].getCharge(), trial[tauIndex].getType(), trial[tauIndex].getSelectionFit());
+                return trial;
+            }
+
+            return leptons;
+        }
+
         //first step is zero neutrinos (just as they are)
         {
             double diff = massDifference(leptons);

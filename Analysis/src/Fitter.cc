@@ -17,7 +17,7 @@
 #include <stdexcept>
 #include <utility>
 
-FitFunctionCollection Fitter::fitFunctions(std::vector<std::pair<TH1 *, SimpleFitFunction>> &histogramPairs,
+FitFunctionCollection Fitter::fitFunctions(const std::vector<std::pair<TH1 *, std::shared_ptr<SimpleFitFunction>>> &histogramPairs,
                                            std::string rootFileName)
 {
     TFile *rootFile = TFile::Open(rootFileName.c_str(), "RECREATE");
@@ -27,9 +27,9 @@ FitFunctionCollection Fitter::fitFunctions(std::vector<std::pair<TH1 *, SimpleFi
         auto histogram = histPair.first;
         auto &func = histPair.second;
 
-        fitSingleFunction(histogram, func);
+        fitSingleFunction(histogram, *func);
 
-        auto *inner = func.getFunction();
+        auto *inner = func->getFunction();
 
         for (auto par = 0; par < inner->GetNpar(); par++)
         {
@@ -258,12 +258,12 @@ void Fitter::fitVoigt(TH1 *histogram, SimpleFitFunction &fitFunction)
     gStyle->SetOptFit(1111);
 }
 
-SimpleFitFunction Fitter::fitPowerLawToGraph(TGraph *graph, std::string name)
+std::shared_ptr<SimpleFitFunction> Fitter::fitPowerLawToGraph(TGraph *graph, std::string name)
 {
     auto function =
         SimpleFitFunction::createFunctionOfType(FitFunction::FunctionType::PowerLaw, name, "", 0, 2000);
 
-    auto *func = function.getFunction();
+    auto *func = function->getFunction();
 
     func->SetParLimits(1, -10000, 0);
     for (int n = 0; n < 4; ++n)
@@ -363,8 +363,8 @@ FitFunctionParameterization Fitter::parameterizeFunction(std::string name,
         // Systematics part
         for (const auto &systematic : systematics)
         {
-            SimpleFitFunction upFit;
-            SimpleFitFunction downFit;
+            std::shared_ptr<SimpleFitFunction> upFit;
+            std::shared_ptr<SimpleFitFunction> downFit;
             bool hasUp = false;
             bool hasDown = false;
 
@@ -449,10 +449,10 @@ FitFunctionParameterization Fitter::parameterizeFunction(std::string name,
             // put the Up and Down functions to thecentral fit
             if (hasUp && hasDown)
             {
-                fit.addSystematic(
+                fit->addSystematic(
                     systematic,
-                    *upFit.getFunction(),
-                    *downFit.getFunction());
+                    *upFit->getFunction(),
+                    *downFit->getFunction());
             }
         }
          
