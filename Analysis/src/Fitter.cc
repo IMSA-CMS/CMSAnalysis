@@ -344,6 +344,22 @@ FitFunctionParameterization Fitter::parameterizeFunction(std::string name,
         metadata["Parameter"] = firstTF1->GetParName(i);
         auto fit = fitPowerLawToGraph(&graph, FitFunction::encodeName(metadata));
 
+        std::vector<double> upParameters;
+        std::vector<double> downParameters;
+
+        auto *func = fit.getFunction();
+
+        for (int j = 0; j < func->GetNpar(); ++j)
+        {
+            const double parameter = func->GetParameter(j);
+            const double parameterError = func->GetParError(j);
+
+            upParameters.push_back(parameter + parameterError);
+            downParameters.push_back(parameter - parameterError);
+        }
+
+        fit.addSystematic("FitUncertainty", upParameters, downParameters);
+
         // Systematics part
         for (const auto &systematic : systematics)
         {
@@ -439,7 +455,8 @@ FitFunctionParameterization Fitter::parameterizeFunction(std::string name,
                     *downFit.getFunction());
             }
         }
-        
+         
+
         parameterization.insert(fit);
 
         auto *const canvas = new TCanvas(fullName.c_str(), fullName.c_str(), 0, 0, 2000, 500);
