@@ -347,7 +347,7 @@ FitFunctionParameterization Fitter::parameterizeFunction(std::string name,
         std::vector<double> upParameters;
         std::vector<double> downParameters;
 
-        auto *func = fit.getFunction();
+        auto *func = fit->getFunction();
 
         for (int j = 0; j < func->GetNpar(); ++j)
         {
@@ -358,7 +358,7 @@ FitFunctionParameterization Fitter::parameterizeFunction(std::string name,
             downParameters.push_back(parameter - parameterError);
         }
 
-        fit.addSystematic("FitUncertainty", upParameters, downParameters);
+        fit->addSystematic("FitUncertainty", upParameters, downParameters);
 
         // Systematics part
         for (const auto &systematic : systematics)
