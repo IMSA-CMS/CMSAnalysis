@@ -46,7 +46,7 @@ TH1* RootFileInput::getHist(const HistVariable& histType) const
 	auto file = getFile(fileSource);
 	std::string histName = name;
 	TDirectory* dir = file;
-	//std::cout << "Full name: " << name << '\n';
+	// std::cout << "Full name: " << name << '\n';
 	//std::cout << "RootFileInput Hit 2 " << std::endl;
 	// TH1* emptyHist = new TH1F("h1", "empty", 1, 0.0, 0.0);
 	while (pos != std::string::npos)
@@ -179,11 +179,21 @@ int RootFileInput::getTotalEvents() const
 	//bool end = false; 
 	//int index = 1;
 	auto *totalevents = file->Get<TObjString>("NEvents");
+	int events;
 	if (!totalevents)
 	{
-		throw std::runtime_error("Total events not found in file: " + fileSource);
+		auto totalHist = file->Get<TH1>("hNWEvts");
+		if (!totalHist)
+		{
+			throw std::runtime_error("Total events not found in file: " + fileSource);
+		}
+		events = totalHist->GetBinContent(1);
 	}
-	int events = std::stof(totalevents->GetString().Data());
+	else
+	{
+		events = std::stof(totalevents->GetString().Data());
+	}
+	
 	delete file;
 	return events;
 	// while (!end)

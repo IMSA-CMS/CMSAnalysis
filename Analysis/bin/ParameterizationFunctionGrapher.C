@@ -30,20 +30,20 @@ bool containsSubstring(const std::string& text, const std::string& pattern) {
 }
 
 
-FitFunction createSignalDSCB(std::string channel, std::string xOrY, FitFunctionCollection *signalCollection, double mass)
+SimpleFitFunction createSignalDSCB(std::string channel, std::string xOrY, FitFunctionCollection *signalCollection, double mass)
 {
 	const double min = 0;
 	const double max = 2000;
 
 
-	auto functionsInCollection = signalCollection->getFunctions();
-	std::vector<FitFunction> channelFunctions = {};
-	std::vector<FitFunction> sortedChannelFunctions = {};
+	auto functionsInCollection = signalCollection->getFunctionsMap();
+	std::vector<SimpleFitFunction> channelFunctions = {};
+	std::vector<SimpleFitFunction> sortedChannelFunctions = {};
 
 	// Find functions in channel
 	for (auto pair : functionsInCollection)
 	{
-		auto function = pair.second;
+		auto function = *pair.second;
 		//std::cout << "Channel name: " << function.getChannel() << "\n";
 		if (!containsSubstring(function.getName(), "Nominal"))
 		{
@@ -101,7 +101,7 @@ FitFunction createSignalDSCB(std::string channel, std::string xOrY, FitFunctionC
 	double norm = sortedChannelFunctions[NORM].evaluate(mass);
 
 	// Construct DSCB
-	FitFunction signalDSCB = FitFunction::createFunctionOfType(FitFunction::FunctionType::DoubleSidedCrystalBall, channel, "", min, max,"eueu");
+	SimpleFitFunction signalDSCB = SimpleFitFunction::createFunctionOfType(FitFunction::FunctionType::DoubleSidedCrystalBall, channel, "", min, max,"eueu");
 	signalDSCB.getFunction()->SetParameter(0, alpha_l);
 	signalDSCB.getFunction()->SetParameter(1, alpha_h);
 	signalDSCB.getFunction()->SetParameter(2, n_l);
@@ -118,13 +118,13 @@ FitFunction createSignalDSCB(std::string channel, std::string xOrY, FitFunctionC
 
 void graphFunctionFromCollection(FitFunctionCollection *functionCollection, std::string functionName)
 {
-	auto functions = functionCollection->getFunctions();
+	auto functions = functionCollection->getFunctionsMap();
 	bool functionFound = false;
 	for (auto pair : functions)
 	{
 		if (functionName == pair.first)
 		{
-			auto function = pair.second;
+			auto function = *pair.second;
 			TF1* tf1Reference = function.getFunction();
 			tf1Reference->SetLineColor(kBlue);
 			tf1Reference->SetRange(0, 2000);
@@ -162,7 +162,7 @@ void ParameterizationFunctionGrapher()
 	//std::vector<std::string> channelsToCheck = {"eueu", "uuuu"};
 	auto signalParameters = FitFunctionCollection::loadFunctions(signalParametersFile); 
 	auto backgroundParameters = FitFunctionCollection::loadFunctions(backgroundParametersFile);
-	auto backgroundParameterFunctions = backgroundParameters.getFunctions();
+	auto backgroundParameterFunctions = backgroundParameters.getFunctionsMap();
 
 	// Arguments for graphing individual signal and background functions
 	std::string signalFunction = "eueu_eueu/#mu h_mll1";
@@ -191,18 +191,18 @@ void ParameterizationFunctionGrapher()
 	// Create signal channel functions
 	auto eueuChannel = createSignalDSCB("eueu_eueu", x, &signalParameters, mass);
 	//auto uuuuChannel = createSignalDSCB("mmmm_mmmm", x, &signalParameters, mass); 
-	std::vector<FitFunction> signalFitFunctions = {};
+	std::vector<SimpleFitFunction> signalFitFunctions = {};
 	signalFitFunctions.push_back(eueuChannel);
 	//signalFitFunctions.push_back(uuuuChannel);
 
-	std::vector<FitFunction> backgroundFitFunctions = {};
+	std::vector<SimpleFitFunction> backgroundFitFunctions = {};
 	std::vector<std::string> backgroundChannels = {"eueu"};
 	std::vector<std::string> exclude = {"ZPeak", "Up", "Down", "Y Projection", "Multiboson"};
 	for (std::string channel : backgroundChannels)
 	{
 		for (auto& pair : backgroundParameterFunctions)
 		{
-			auto& function = pair.second;
+			auto& function = *pair.second;
 			// std::cout << "function.getChannel(): " << function.getChannel() << "\n";
 			// std::cout << "function.getParameterName(): " << function.getParameterName() << "\n";
 			bool excludeFromGraph = false;

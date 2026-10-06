@@ -17,4 +17,3 @@ void HiggsSmearingSelector::adjustEnergy(Particle& particle) const
 		double newPt = particle.getPt() - correction / std::cosh(particle.getEta());
 	}
 }
-

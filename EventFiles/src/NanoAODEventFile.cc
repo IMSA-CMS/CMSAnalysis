@@ -405,6 +405,10 @@ void NanoAODEventFile::nextEvent()
         //std::cout<<charge;
         Particle::SelectionFit fit;
 
+        if (getArrayElement<UChar_t>("tau_dmu", i) < 2 || getArrayElement<UChar_t>("tau_dele", i) < 2)
+        {
+            continue;
+        }
 
         if (getArrayElement<UChar_t>("tau_mvaid", i) & 32)
         {

@@ -14,7 +14,7 @@ void FitTest()
     }
 
     // accesses the internal map of functions
-    auto& funcMap = functions.getFunctions();
+    auto& funcMap = functions.getFunctionsMap();
 
     if (funcMap.empty()) {
         std::cerr << "No functions were loaded. Check the file format or path.\n";

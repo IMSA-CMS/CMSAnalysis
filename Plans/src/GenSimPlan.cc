@@ -36,7 +36,7 @@ void GenSimPlan::initialize()
     auto higgsFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::GenSim);
     auto metMod = make_shared<METModule>();
 
-    auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::GenSim, "Same Sign Invariant Mass", 1000, 0, 2000, false, false);
+    auto sameSignInvMassHist = make_shared<SameSignInvariantMassHist>(EventInput::RecoLevel::GenSim, "Same Sign Invariant Mass", 1000, 0, 2000, false);
 
     auto eventDump = make_shared<GenSimEventDumpModule>();
     auto matchMod = make_shared<MatchingModule>();

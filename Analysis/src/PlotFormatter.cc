@@ -330,7 +330,7 @@ TCanvas *PlotFormatter::simpleStackHist(std::shared_ptr<Channel> processes, Hist
 }
 
 TCanvas *PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, HistVariable histvariable,
-                                     TString xAxisTitle, TString yAxisTitle, bool scaleTodata, bool includeSignal,
+                                    bool scaleTodata, bool includeSignal,
                                      bool includeData, std::string channelName, bool drawFunctions)
 {
     // parameterizedFunctions[0]->DrawCopy("L");
@@ -577,7 +577,7 @@ TCanvas *PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
             {
                 std::cout << "DEBUG: checking signal process name = " << proc->getName() << "\n";
                 auto plot = proc->getPlot(histvariable);
-                if (plot.has_value())
+                if (plot)
                 {
                     TF1 *rawFunc = plot->getFunction();
                     double fitMin_sig, fitMax_sig;
@@ -613,7 +613,7 @@ TCanvas *PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
         for (const auto &func : backgroundProcesses)
         {
             auto plot = func->getPlot(histvariable);
-            if (plot.has_value())
+            if (plot)
             {
                 std::cout << "Drawing parameterizedFunction " << plot->getName() << "\n";
                 auto it = backgroundHistsByName.find(func->getName());
@@ -665,6 +665,8 @@ TCanvas *PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
     std::cout << "DEBUG PAD: y-range (log10) = [" << topPad->GetUymin() << ", " << topPad->GetUymax() << "]\n";
 
     // hist->SetMinimum(1e-2);
+    std::string xAxisTitle = histvariable.getAxisLabel();
+    std::string yAxisTitle = "Events";
 
     ChangeAxisTitles(hist, xAxisTitle, yAxisTitle);
 
@@ -1215,16 +1217,17 @@ void PlotFormatter::GetOrder(std::vector<TH1 *> &hists, TH1 *&first, int &firstI
 void PlotFormatter::Bin(std::vector<TH1 *> &hists, TH1 *&first, int &firstIndex, double &maximum, int &count,
                         bool scaleToExpected)
 {
-    std::vector<int> bins;
+    // std::vector<int> bins;
+    // for (TH1 *hist : hists)
+    // {
+    //     bins.push_back(hist->GetNbinsX());
+    // }
+
+    //int commonFactor = Utility::gcf(bins);
+
     for (TH1 *hist : hists)
     {
-        bins.push_back(hist->GetNbinsX());
-    }
-
-    int commonFactor = Utility::gcf(bins);
-
-    for (TH1 *hist : hists)
-    {
+        (void)hist;
         // hist->Rebin(hist->GetNbinsX() / commonFactor);
     }
 
@@ -1236,6 +1239,7 @@ void PlotFormatter::Bin(std::vector<TH1 *> &hists, TH1 *&first, int &firstIndex,
     }
     for (TH1 *hist : hists)
     {
+        (void)hist;
         // hist->Rebin((int) (maxBinWidth / hist->GetXaxis()->GetBinWidth(0)));
     }
 

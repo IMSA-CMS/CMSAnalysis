@@ -1,7 +1,7 @@
 import shutil # used to copy files
 
 ################## Reading in Parameters ######################
-f = open('hppPythiaParameters.txt', 'r')
+f = open('DoublyChargedHiggsParameters.txt', 'r')
 lines = f.readlines()
 f.close()
 
@@ -19,10 +19,9 @@ processParameters = processParameters[:-2]
 processParameters += "\n\t\t),\n" # processParameters can now replace the declaration in the python template file
 ##############################################################
 
-# just muon
 for i in range(500, 1501, 100): #mass range 500 to 1500 with increments of 100
-    newFile = f'higgsDatacards/higgsToMuon/pythiaFragmentDoublyChargedHiggsMass{i}.py'
-    shutil.copy('higgsDatacards/template.py', newFile)
+    newFile = f'higgsDatacards/run3/pythiaFragmentDoublyChargedHiggsMass{i}.py'
+    shutil.copy('template.py', newFile)
 
     newf = open(newFile, 'r')
     data = newf.readlines()

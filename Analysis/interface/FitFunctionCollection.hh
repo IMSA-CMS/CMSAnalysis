@@ -1,8 +1,10 @@
 #ifndef FIT_FUNCTION_COLLECTION_HH
 #define FIT_FUNCTION_COLLECTION_HH
 
-#include "FitFunction.hh"
+#include "CMSAnalysis/Analysis/interface/SimpleFitFunction.hh"
+#include <memory>
 #include <unordered_map>
+#include <set>
 
 class FitFunctionCollection
 {
@@ -10,26 +12,31 @@ class FitFunctionCollection
     static FitFunctionCollection loadFunctions(const std::string &fileName);
 
     FitFunctionCollection();
-    FitFunctionCollection(std::vector<FitFunction> &functions);
+    FitFunctionCollection(std::vector<std::shared_ptr<SimpleFitFunction>> &functions);
     // FitFunctionCollection(size_t size);
 
     FitFunctionCollection parameterizeFunctions(FitFunction::FunctionType funcType);
-    void insert(const std::string &key, FitFunction &function);
-    void insert(FitFunction &function);
+    void insert(const std::string& key, std::shared_ptr<SimpleFitFunction> function);
+    void insert(std::shared_ptr<SimpleFitFunction> function);
     size_t size() const;
-    FitFunction &get(const std::string &key);
+    SimpleFitFunction &get(const std::string &key);
     void saveFunctions(const std::string &fileName, bool append = false);
 
-	FitFunction& operator[](const std::string& key);
-	// FitFunction& operator[](int index);
-	bool checkFunctionsSimilar();
-	std::unordered_map<std::string, FitFunction>& getFunctions();
-  
-private:
-	std::unordered_map<std::string, FitFunction> functions;
-	std::string name;
+    std::set<std::string> findUniqueNames(std::string parameter) const;
+    FitFunctionCollection getFunctions(std::string name) const;
+    FitFunctionCollection getFunctions(std::string parameter, std::string name) const;
+    std::shared_ptr<FitFunction> getModel(const std::string &channel, double min, double max) const;
 
+    SimpleFitFunction& operator[](const std::string& key);
+    FitFunctionCollection& operator+=(const FitFunctionCollection& other);
 
+    bool checkFunctionsSimilar();
+    const std::unordered_map<std::string, std::shared_ptr<SimpleFitFunction>>& getFunctionsMap() const;
+    
+  private:
+    
+    // as selections share fitted rows if u mutate a row it affects every selection of it
+    std::unordered_map<std::string, std::shared_ptr<SimpleFitFunction>> functions;
 };
 
 #endif

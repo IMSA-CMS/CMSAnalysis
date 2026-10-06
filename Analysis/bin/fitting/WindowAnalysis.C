@@ -755,7 +755,7 @@ void WindowAnalysisImpl(const int mode = -1)
                     if (useParameterization)
                     {
                         // Cache function map reference to avoid repeated map retrieval.
-                        auto &functionMap = backgroundFunctions.getFunctions();
+                        auto &functionMap = backgroundFunctions.getFunctionsMap();
                         for (size_t i = 0; i < BACKGROUNDS.size(); ++i)
                         {
                             // Build exact key used when fit functions were stored.
@@ -764,7 +764,7 @@ void WindowAnalysisImpl(const int mode = -1)
                             auto it = functionMap.find(functionName);
                             if (it != functionMap.end())
                             {
-                                TF1 *tf1 = it->second.getFunction();
+                                TF1 *tf1 = it->second->getFunction();
                                 if (tf1)
                                 {
                                     // Integrate fitted function over same mass window.
