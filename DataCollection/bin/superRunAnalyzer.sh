@@ -44,6 +44,6 @@ nohup python3 multiRunAnalyzer.py --crab --analysis "$analysis" --user "$user" -
 nohup python3 multiRunAnalyzer.py --crab --analysis "$analysis" --user "$user" --path "$path" --type "Data"
 nohup ./HiggsSignalProcessor.sh
 
-mv /uscms/home/bhenning/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Output/Higgs*.root /uscms/home/bhenning/Analysis/CMSSW_15_0_4/src/CMSAnalysis/Output/"$path"/
+mv "$CMSSW_BASE"/src/CMSAnalysis/Output/Higgs*.root "$CMSSW_BASE"/src/CMSAnalysis/Output/"$path"/
 
 exit 0

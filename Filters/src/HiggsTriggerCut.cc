@@ -7,7 +7,7 @@ bool HiggsTriggerCut::checkEventInternal(const Event& event, const EventInput* i
 {
 	std::vector<std::string> triggers;
 	auto params = input->getFileParams()->getParameters();
-	triggers.push_back("HLT_IsoMu24");
+	//triggers.push_back("HLT_IsoMu24");
 	auto iterator2 = params.find("Year");
 
 	if(iterator2 != params.end())
@@ -16,15 +16,18 @@ bool HiggsTriggerCut::checkEventInternal(const Event& event, const EventInput* i
 		{
 			triggers.push_back("HLT_Ele32_WPTight_Gsf");
 			triggers.push_back("HLT_Ele35_WPTight_Gsf");
+			triggers.push_back("HLT_IsoMu24");
 		}
 		else if(iterator2 -> second == "2017")
 		{
 			triggers.push_back("HLT_Ele35_WPTight_Gsf");
+			triggers.push_back("HLT_IsoMu27");
 		}
 		else
 		{
 			triggers.push_back("HLT_Ele27_WPTight_Gsf");
 			triggers.push_back("HLT_Photon175");
+			triggers.push_back("HLT_IsoMu24");
 		}
 	}
 	auto iterator = params.find("Trigger");

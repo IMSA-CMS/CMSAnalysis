@@ -235,17 +235,17 @@ if __name__ == "__main__":
     )
 
     higgsSignal = (
-        "Higgs500.txt",
-        "Higgs600.txt",
-        "Higgs700.txt",
-        "Higgs800.txt",
-        "Higgs900.txt",
+        # "Higgs500.txt",
+        # "Higgs600.txt",
+        # "Higgs700.txt",
+        # "Higgs800.txt",
+        # "Higgs900.txt",
         "Higgs1000.txt",
-        "Higgs1100.txt",
-        "Higgs1200.txt",
-        "Higgs1300.txt",
-        "Higgs1400.txt",
-        "Higgs1500.txt",
+        # "Higgs1100.txt",
+        # "Higgs1200.txt",
+        # "Higgs1300.txt",
+        # "Higgs1400.txt",
+        # "Higgs1500.txt",
 	)
 
     # NOTE: Muon only for Data - DP processing

@@ -94,7 +94,9 @@ class NanoAODEventFile : public EventFile
         auto it = variables.find(name);
         if (it == variables.end())
         {
-            throw std::runtime_error("Variable " + name + " not found");
+            std::cout<<"Variable "<< name <<" not found \n";
+            return 0;
+            //throw std::runtime_error("Variable " + name + " not found");
         }
         auto array = std::dynamic_pointer_cast<TTreeReaderArray<T>>(it->second);
         if (!array)
@@ -128,7 +130,8 @@ class NanoAODEventFile : public EventFile
         auto it = variables.find(name);
         if (it == variables.end())
         {
-            throw std::runtime_error("Variable " + name + " not found");
+            std::cout << "Variable " << name << " not found";
+            return 0;
         }
         auto value = std::dynamic_pointer_cast<TTreeReaderValue<T>>(it->second);
         if (!value)

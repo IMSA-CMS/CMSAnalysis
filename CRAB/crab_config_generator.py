@@ -54,7 +54,6 @@ config.General.transferOutputs = True
 config.General.instance = 'prod'
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'PSet.py'
-config.JobType.maxMemoryMB = 3000
 config.JobType.inputFiles = ['FrameworkJobReport.xml', 'input/']
 config.JobType.scriptExe = '{prefix}runAnalyzer.sh'
 config.JobType.outputFiles = ['{args.output}']

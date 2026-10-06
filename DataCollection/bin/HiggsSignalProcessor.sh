@@ -14,7 +14,7 @@ files=()
 #done
 
 # Add only Higgs500..Higgs900 files (avoid duplicates)
-for n in 900; do
+for n in 1000; do
     for f in textfiles/Run2PickFiles/Higgs${n}*.txt; do
         rel="${f#textfiles/}"
         # skip if already present
@@ -45,5 +45,5 @@ for f in "${files[@]}"; do
     outfile="$(basename "$f")"
     outfile="../../../../../nobackup/${outfile%.txt}.root"
     echo "=== Writing to: $outfile ==="
-    nohup runAnalyzer input="$f" output="$outfile" analysis=HiggsSignal
+    runAnalyzer input="$f" output="$outfile" analysis=HiggsSignal
 done
