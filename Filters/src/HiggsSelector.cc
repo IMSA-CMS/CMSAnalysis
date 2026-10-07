@@ -99,12 +99,12 @@ double HiggsSelector::sameSignPairMass(const std::vector<Particle>& leptons) con
      {
             auto lepton = Lepton(particle);
             if(lepton.isLoose()
-            && particle.getPt() > 38
-            && particle.getInfo("Isolation") < 0.1
-            && std::abs(particle.getEta()) < 2.5
-            && particle.getInfo("dxy") < 0.045
-            && particle.getInfo("dz") < 0.2
-            && deltaR > 0.3
+            // && particle.getPt() > 38
+            // && particle.getInfo("Isolation") < 0.1
+            // && std::abs(particle.getEta()) < 2.5
+            // && particle.getInfo("dxy") < 0.045
+            // && particle.getInfo("dz") < 0.2
+            // && deltaR > 0.3
             )
             {
                 //std::cout << "PT: " << std::to_string(particle.getPt()) << std::endl;
@@ -116,12 +116,12 @@ double HiggsSelector::sameSignPairMass(const std::vector<Particle>& leptons) con
             //std::cout << "In Muon Selection" << std::endl;
             auto lepton = Lepton(particle);
             if (lepton.isTight()  
-                && particle.getPt() > 30
-                && particle.getInfo("Isolation") < 0.15
-                && std::abs(particle.getEta()) < 2.4
-                && particle.getInfo("dxy") < 0.2
-                && particle.getInfo("dz") < 0.5
-                && deltaR > 0.3
+                // && particle.getPt() > 30
+                // && particle.getInfo("Isolation") < 0.15
+                // && std::abs(particle.getEta()) < 2.4
+                // && particle.getInfo("dxy") < 0.2
+                // && particle.getInfo("dz") < 0.5
+                // && deltaR > 0.3
                 // && lepton.getDXY() < 0.025
                 // && lepton.getDZ() < 0.05
             )
@@ -155,11 +155,11 @@ double HiggsSelector::sameSignPairMass(const std::vector<Particle>& leptons) con
             auto lepton = Lepton(particle);
             //need another loop over particle. if its a tau loop over all particles again, if one of the particles is an election or muon, then you want to calculate delta R for each particle. There's already a function for it (Particle.hh). If the delta r is less than some value we set, ten we just say that they're the same particle. If number is too small just continue. 
             if (lepton.isTight()
-            && particle.getPt() > 20
-            && std::abs(particle.getEta()) < 2.3
-            && particle.getInfo("dz") < 0.5
-            && deltaR_tt > 0.5
-            && deltaR_lt > 0.5
+            // && particle.getPt() > 20
+            // && std::abs(particle.getEta()) < 2.3
+            // && particle.getInfo("dz") < 0.5
+            // && deltaR_tt > 0.5
+            // && deltaR_lt > 0.5
             )
             {
                 // bool overlap = false;
