@@ -97,27 +97,43 @@ std::vector<FitFunctionParameterization> FitFunctionParameterization::loadFuncti
 
 void FitFunctionParameterization::insert(std::shared_ptr<SimpleFitFunction> function)
 {
+    std::lock_guard<std::mutex> lock(parameterCache.mutex);
+    parameterCache.parameters.clear();
     parameterFunctions.push_back(std::move(function));
+}
+
+void FitFunctionParameterization::clearCache() const
+{
+    std::lock_guard<std::mutex> lock(parameterCache.mutex);
+    parameterCache.parameters.clear();
 }
 
 double FitFunctionParameterization::evaluate(const double observable, const double modelMass,
                                              const NuisanceValues &nuisances) const
 {
+    std::lock_guard<std::mutex> lock(parameterCache.mutex);
     return templateFunction->evaluateWithParameters(observable, parameterValues(modelMass, nuisances));
 }
 
 double FitFunctionParameterization::integral(double low, double high, double modelMass,
                                              const NuisanceValues &nuisances) const
 {
+    std::lock_guard<std::mutex> lock(parameterCache.mutex);
     return templateFunction->integralWithParameters(low, high, parameterValues(modelMass, nuisances));
 }
 
-std::vector<double> FitFunctionParameterization::parameterValues(double modelMass,
+const std::vector<double> &FitFunctionParameterization::parameterValues(double modelMass,
                                                                  const NuisanceValues &nuisances) const
 {
     if (parameterFunctions.size() != static_cast<size_t>(templateFunction->getFunction()->GetNpar()))
     {
         throw std::runtime_error("FitFunctionParameterization has a different number of parameter functions than its model");
+    }
+
+    if (!parameterCache.parameters.empty() && parameterCache.mass == modelMass &&
+        parameterCache.nuisances == nuisances)
+    {
+        return parameterCache.parameters;
     }
 
     std::vector<double> parameters;
@@ -140,6 +156,8 @@ std::vector<double> FitFunctionParameterization::parameterValues(double modelMas
             {
                 if (!std::isfinite(delta))
                     throw std::invalid_argument("Shape-systematic deltas must be finite");
+                if (delta == 0)
+                    continue;
 
                 // eval each endpoint before interpolating shape parameter
                 // do this rather than interpolating the coefficients of its mass fit
@@ -150,7 +168,11 @@ std::vector<double> FitFunctionParameterization::parameterValues(double modelMas
             parameters.push_back(value);
         }
     }
-    return parameters;
+    parameterCache.parameters.clear();
+    parameterCache.nuisances = nuisances;
+    parameterCache.mass = modelMass;
+    parameterCache.parameters = std::move(parameters);
+    return parameterCache.parameters;
 }
 
 std::string FitFunctionParameterization::getNormExpression(const std::string &variable) const
@@ -203,6 +225,7 @@ void FitFunctionParameterization::Streamer(TBuffer &buffer)
 {
     if (buffer.IsReading())
     {
+        clearCache();
         buffer.ReadClassBuffer(FitFunctionParameterization::Class(), this);
         auto *type = SimpleFitFunction::Class();
         templateFunction.reset(static_cast<SimpleFitFunction *>(buffer.ReadObjectAny(type)));
