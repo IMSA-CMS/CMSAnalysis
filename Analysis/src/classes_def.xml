@@ -8,6 +8,6 @@
   <class name="GausLogPowerNormFitFunction" />
   <class name="VoigtFitFunction" />
   <class name="FitFunctionParameterization" noStreamer="true" />
-  <!-- <class name="std::pair&lt;TF1,TF1&gt;" />
-  <class name="std::map&lt;std::string,std::pair&lt;TF1,TF1&gt; &gt;" /> -->
+  <class name="std::pair&lt;TF1,TF1&gt;" />
+  <class name="std::map&lt;std::string,std::pair&lt;TF1,TF1&gt; &gt;" /> 
 </lcgdict>
