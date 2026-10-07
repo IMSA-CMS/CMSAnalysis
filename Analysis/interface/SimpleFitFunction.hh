@@ -31,6 +31,12 @@ class SimpleFitFunction : public FitFunction
     double evaluate(double observable, double modelMass,
                     const NuisanceValues &nuisances = {}) const override;
     double evaluateWithParameters(double x, const std::vector<double> &parameters) const;
+    double integral(double low, double high, double modelMass,
+                    const NuisanceValues &nuisances = {}) const override;
+    virtual double integralWithParameters(double, double, const std::vector<double> &) const
+    {
+        throw std::logic_error("This SimpleFitFunction has no analytical integral");
+    }
     std::string getExpression(const std::string &variable) const;
     std::string getNormExpression(const std::string &variable) const override;
     virtual int getNormParameterIndex() const { return -1; }
@@ -49,6 +55,7 @@ class SimpleFitFunction : public FitFunction
     virtual void restoreFunction(TF1 &func) const = 0;
 
   private:
+    std::vector<double> parameterValues(const NuisanceValues &nuisances) const;
     mutable TF1 function;
     std::map<std::string, std::pair<TF1, TF1>> systematics; 
 

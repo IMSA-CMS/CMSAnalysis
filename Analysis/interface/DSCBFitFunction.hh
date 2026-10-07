@@ -9,6 +9,8 @@ class DSCBFitFunction : public SimpleFitFunction
     DSCBFitFunction();
     DSCBFitFunction(const std::string &name, double min, double max);
     std::string getNormExpression(const std::string &variable) const override;
+    bool hasAnalyticalIntegral() const override { return true; }
+    double integralWithParameters(double low, double high, const std::vector<double> &parameters) const override;
     int getNormParameterIndex() const override { return 6; }
     bool variesWithSystematic(int parameter) const override { return parameter != 6; }
 

@@ -103,6 +103,18 @@ void FitFunctionParameterization::insert(std::shared_ptr<SimpleFitFunction> func
 double FitFunctionParameterization::evaluate(const double observable, const double modelMass,
                                              const NuisanceValues &nuisances) const
 {
+    return templateFunction->evaluateWithParameters(observable, parameterValues(modelMass, nuisances));
+}
+
+double FitFunctionParameterization::integral(double low, double high, double modelMass,
+                                             const NuisanceValues &nuisances) const
+{
+    return templateFunction->integralWithParameters(low, high, parameterValues(modelMass, nuisances));
+}
+
+std::vector<double> FitFunctionParameterization::parameterValues(double modelMass,
+                                                                 const NuisanceValues &nuisances) const
+{
     if (parameterFunctions.size() != static_cast<size_t>(templateFunction->getFunction()->GetNpar()))
     {
         throw std::runtime_error("FitFunctionParameterization has a different number of parameter functions than its model");
@@ -138,7 +150,7 @@ double FitFunctionParameterization::evaluate(const double observable, const doub
             parameters.push_back(value);
         }
     }
-    return templateFunction->evaluateWithParameters(observable, parameters);
+    return parameters;
 }
 
 std::string FitFunctionParameterization::getNormExpression(const std::string &variable) const

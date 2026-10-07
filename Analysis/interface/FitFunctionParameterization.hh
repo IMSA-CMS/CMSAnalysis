@@ -21,11 +21,15 @@ class FitFunctionParameterization : public FitFunction
     //update evaluate
     double evaluate(double observable, double modelMass,
                     const NuisanceValues &nuisances = {}) const override;
+    bool hasAnalyticalIntegral() const override { return templateFunction->hasAnalyticalIntegral(); }
+    double integral(double low, double high, double modelMass,
+                    const NuisanceValues &nuisances = {}) const override;
     std::string getNormExpression(const std::string &variable) const override;
     std::vector<std::string> listSystematics() const override;
     void save(const std::string &fileName, bool append = false);
 
   private:
+    std::vector<double> parameterValues(double modelMass, const NuisanceValues &nuisances) const;
     std::string channelName;
     std::string expFormula;
     double min = 0;

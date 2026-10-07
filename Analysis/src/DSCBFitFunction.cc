@@ -1,4 +1,5 @@
 #include "CMSAnalysis/Analysis/interface/DSCBFitFunction.hh"
+#include <algorithm>
 #include <cmath>
 #include <iomanip>
 #include <sstream>
@@ -59,6 +60,55 @@ double DSCBFitFunction::evaluateTF1(double *x, double *par)
 void DSCBFitFunction::restoreFunction(TF1 &func) const
 {
     func.SetFunction(evaluateTF1);
+}
+
+double DSCBFitFunction::integralWithParameters(double low, double high,
+                                               const std::vector<double> &parameters) const
+{
+    if (parameters.size() != 7)
+        throw std::invalid_argument("DSCB requires seven parameters");
+    if (low > high)
+        return -integralWithParameters(high, low, parameters);
+    const double alphaL = parameters[0], alphaR = parameters[1];
+    const double nL = parameters[2], nR = parameters[3];
+    const double mean = parameters[4], sigma = parameters[5];
+    const double tLow = (low - mean) / sigma, tHigh = (high - mean) / sigma;
+
+    // Integrate each tail in distance from its transition. expm1 avoids
+    // cancellation when the exponent is close to one or the interval is small.
+    const auto tail = [](double near, double far, double alpha, double n) {
+        const double scale = n / alpha;
+        const double logNear = std::log1p((near - alpha) / scale);
+        const double logRatio = std::log1p((far - near) / (scale + near - alpha));
+        const double exponent = 1.0 - n;
+        const double powerIntegral = exponent == 0.0 ? logRatio :
+            std::exp(exponent * logNear) * std::expm1(exponent * logRatio) / exponent;
+        return std::exp(-0.5 * alpha * alpha) * scale * powerIntegral;
+    };
+
+    double area = 0.0;
+    if (tLow < -alphaL)
+        area += tail(-std::min(tHigh, -alphaL), -tLow, alphaL, nL);
+    const double coreLow = std::max(tLow, -alphaL);
+    const double coreHigh = std::min(tHigh, alphaR);
+    const double root2 = std::sqrt(2.0);
+    if (coreLow < coreHigh)
+    {
+        const double gaussianArea = coreLow >= 0.0 ?
+            std::erfc(coreLow / root2) - std::erfc(coreHigh / root2) :
+            (coreHigh <= 0.0 ? std::erfc(-coreHigh / root2) - std::erfc(-coreLow / root2) :
+                              std::erf(coreHigh / root2) - std::erf(coreLow / root2));
+        area += std::sqrt(M_PI / 2.0) * gaussianArea;
+    }
+    if (tHigh > alphaR)
+        area += tail(std::max(tLow, alphaR), tHigh, alphaR, nR);
+
+    // Match the existing evaluateTF1 normalization, including its yield factor.
+    const double lowTailNorm = (nL / std::abs(alphaL)) / (nL - 1) * std::exp(-0.5 * alphaL * alphaL);
+    const double highTailNorm = (nR / std::abs(alphaR)) / (nR - 1) * std::exp(-0.5 * alphaR * alphaR);
+    const double coreNorm = std::sqrt(M_PI / 2.0) *
+        (std::erf(std::abs(alphaL / root2)) + std::erf(std::abs(alphaR / root2)));
+    return parameters[6] * area / (coreNorm + lowTailNorm + highTailNorm);
 }
 
 std::string DSCBFitFunction::getNormExpression(const std::string &) const

@@ -123,6 +123,16 @@ double SimpleFitFunction::evaluate(double x) const
 
 double SimpleFitFunction::evaluate(double x, const NuisanceValues &nuisances) const
 {
+    return evaluateWithParameters(x, parameterValues(nuisances));
+}
+
+double SimpleFitFunction::integral(double low, double high, double, const NuisanceValues &nuisances) const
+{
+    return integralWithParameters(low, high, parameterValues(nuisances));
+}
+
+std::vector<double> SimpleFitFunction::parameterValues(const NuisanceValues &nuisances) const
+{
     // new hierarchy for the function with simplefitfunc
 
     std::vector<double> parameters(function.GetNpar());
@@ -153,7 +163,7 @@ double SimpleFitFunction::evaluate(double x, const NuisanceValues &nuisances) co
             parameters[p] += std::abs(delta) * (delta >= 0 ? upShift : downShift);
         }
     }
-    return evaluateWithParameters(x, parameters);
+    return parameters;
 }
 
 // change depending on type

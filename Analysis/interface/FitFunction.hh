@@ -2,6 +2,7 @@
 #define FIT_FUNCTION_HH
 
 #include <map>
+#include <stdexcept>
 #include <string>
 #include <vector>
 #include "Rtypes.h"
@@ -32,6 +33,11 @@ class FitFunction
 
     virtual double evaluate(double observable, double modelMass,
                             const NuisanceValues &nuisances = {}) const = 0;
+    virtual bool hasAnalyticalIntegral() const { return false; }
+    virtual double integral(double, double, double, const NuisanceValues & = {}) const
+    {
+        throw std::logic_error("This FitFunction has no analytical integral");
+    }
     virtual std::string getNormExpression(const std::string &variable) const = 0;
     virtual std::vector<std::string> listSystematics() const = 0;
 
