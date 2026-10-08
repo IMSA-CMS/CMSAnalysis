@@ -1,5 +1,6 @@
 #include "CMSAnalysis/Analysis/interface/DSCBFitFunction.hh"
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <iomanip>
 #include <sstream>
@@ -27,34 +28,53 @@ double DSCBFitFunction::evaluateTF1(double *x, double *par)
     const double mean = par[4];
     const double sigma = par[5];
     const double N = par[6];
+    struct Constants
+    {
+        std::array<double, 5> parameters{};
+        double lowScale = 0, highScale = 0;
+        double lowOffset = 0, highOffset = 0;
+        double lowExp = 0, highExp = 0;
+        double normalization = 0;
+        bool valid = false;
+    };
+    // TF1 callbacks have no instance state. Keep one shape per thread and
+    // check its inputs so different functions and systematic variations cannot reuse stale constants.
+    static thread_local Constants constants;
+    const std::array<double, 5> parameters{alpha_l, alpha_h, n_l, n_h, sigma};
+    if (!constants.valid || constants.parameters != parameters)
+    {
+        constants.lowScale = alpha_l / n_l;
+        constants.highScale = alpha_h / n_h;
+        constants.lowOffset = (n_l / alpha_l) - alpha_l;
+        constants.highOffset = (n_h / alpha_h) - alpha_h;
+        constants.lowExp = std::exp(-0.5 * alpha_l * alpha_l);
+        constants.highExp = std::exp(-0.5 * alpha_h * alpha_h);
+        const double root2 = std::pow(2, 0.5);
+        const double lowTailNorm = (n_l / std::abs(alpha_l)) / (n_l - 1) * constants.lowExp;
+        const double highTailNorm = (n_h / std::abs(alpha_h)) / (n_h - 1) * constants.highExp;
+        const double gaussianNormA = erf(std::abs(alpha_l / root2)) + erf(std::abs(alpha_h / root2));
+        const double gaussianNormB = std::pow(M_PI / 2, 0.5) * gaussianNormA;
+        constants.normalization = std::pow(sigma * (gaussianNormB + lowTailNorm + highTailNorm), -1);
+        constants.parameters = parameters;
+        constants.valid = true;
+    }
     // we need a double for adequate precision here, cannot be a float
     const double t = (x[0] - mean) / sigma;
     double result;
-    const double fact1TLessMinosAlphaL = alpha_l / n_l;
-    const double fact2TLessMinosAlphaL = (n_l / alpha_l) - alpha_l - t;
-    const double fact1THihgerAlphaH = alpha_h / n_h;
-    const double fact2THigherAlphaH = (n_h / alpha_h) - alpha_h + t;
-
-    const double root2 = std::pow(2, 0.5);
     if (-alpha_l <= t && alpha_h >= t)
     {
         result = exp(-0.5 * t * t);
     }
     else if (t < -alpha_l)
     {
-        result = exp(-0.5 * alpha_l * alpha_l) * pow(fact1TLessMinosAlphaL * fact2TLessMinosAlphaL, -n_l);
+        result = constants.lowExp * pow(constants.lowScale * (constants.lowOffset - t), -n_l);
     }
     else
     {
-        result = exp(-0.5 * alpha_h * alpha_h) * pow(fact1THihgerAlphaH * fact2THigherAlphaH, -n_h);
+        result = constants.highExp * pow(constants.highScale * (constants.highOffset + t), -n_h);
     }
 
-    const double lowTailNorm = (n_l / std::abs(alpha_l)) / (n_l - 1) * std::exp(-0.5 * alpha_l * alpha_l);
-    const double highTailNorm = (n_h / std::abs(alpha_h)) / (n_h - 1) * std::exp(-0.5 * alpha_h * alpha_h);
-    const double gaussianNormA = erf(std::abs(alpha_l / root2)) + erf(std::abs(alpha_h / root2));
-    const double gaussianNormB = std::pow(M_PI / 2, 0.5) * gaussianNormA;
-    const double functionNormalization = std::pow(sigma * (gaussianNormB + lowTailNorm + highTailNorm), -1);
-    return N * functionNormalization * result;
+    return N * constants.normalization * result;
 }
 
 void DSCBFitFunction::restoreFunction(TF1 &func) const
