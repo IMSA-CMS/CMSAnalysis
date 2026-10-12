@@ -25,6 +25,7 @@
 #include "CMSAnalysis/Modules/interface/METModule.hh"
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
 #include "CMSAnalysis/Modules/interface/TriggerModule.hh"
+#include "CMSAnalysis/Modules/interface/RecoGenSimComparisonModule.hh"
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
 
 #include <memory>
@@ -67,6 +68,7 @@ void HiggsBackgroundPlan::initialize()
 
     auto triggerMod = make_shared<TriggerModule>();
     auto metMod = make_shared<METModule>();
+    auto recoGenSimMod = make_shared<RecoGenSimComparisonModule>(matchMod, "mother", true); //CHANGE perParticle to mother
     // auto bJetFilter = make_shared<BJetFilter>();
 
     auto higgsFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::Reco);
@@ -152,7 +154,7 @@ void HiggsBackgroundPlan::initialize()
     modules.addFilterModule(recoDecayFilterMod);
     modules.addFilterModule(massFilterMod);
     // modules.addFilterModule(make_shared<FilterModule>(bJetFilter));
-    // modules.addAnalysisModule(leptonEfficiency);
+    modules.addAnalysisModule(leptonEfficiency);
     modules.addAnalysisModule(eventHistMod);
     modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
     // modules.addFilterModule(runFilterMod);

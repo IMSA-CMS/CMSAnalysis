@@ -2,6 +2,8 @@
 #include <sstream>
 #include <utility>
 
+ClassImp(FitFunction)
+
 FitFunction::FitFunction(const FunctionType functionType, std::string name)
     : functionType(functionType), name(std::move(name))
 {
@@ -44,5 +46,3 @@ std::map<std::string, std::string> FitFunction::decodeName(std::string name)
     }
     return result;
 }
-
-ClassImp(FitFunction)

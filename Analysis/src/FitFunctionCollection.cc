@@ -15,7 +15,7 @@ FitFunctionCollection FitFunctionCollection::loadFunctions(const std::string &fi
         while (file)
         {
             // std::cout << "Reading function #" << "..." << std::endl;
-            SimpleFitFunction func(TF1(), FitFunction::FunctionType::ExpressionFormula);
+            std::shared_ptr<SimpleFitFunction> func;
             file >> func;
             if (!file)
             {
@@ -51,7 +51,7 @@ FitFunctionCollection::FitFunctionCollection()
 {
 }
 
-FitFunctionCollection::FitFunctionCollection(std::vector<SimpleFitFunction> &functions)
+FitFunctionCollection::FitFunctionCollection(std::vector<std::shared_ptr<SimpleFitFunction>> &functions)
 {
     this->functions.reserve(functions.size());
     for (auto &func : functions)
@@ -84,15 +84,15 @@ SimpleFitFunction &FitFunctionCollection::get(const std::string &key)
     }
 }
 
-void FitFunctionCollection::insert(SimpleFitFunction func)
+void FitFunctionCollection::insert(std::shared_ptr<SimpleFitFunction> func)
 {
-    const auto name = func.getName();
+    const auto name = func->getName();
     insert(name, std::move(func));
 }
 
-void FitFunctionCollection::insert(const std::string& key, SimpleFitFunction func)
+void FitFunctionCollection::insert(const std::string& key, std::shared_ptr<SimpleFitFunction> func)
 {
-    functions.insert({key, std::make_shared<SimpleFitFunction>(std::move(func))});
+    functions.insert({key, std::move(func)});
 }
 
 bool FitFunctionCollection::checkFunctionsSimilar()
@@ -217,11 +217,11 @@ std::shared_ptr<FitFunction> FitFunctionCollection::getModel(const std::string &
     const auto &first = rows.front();
     const auto type = static_cast<FitFunction::FunctionType>(std::stoi(first->getParameter("OriginalFunctionType")));
     const auto shape = SimpleFitFunction::createFunctionOfType(type, "", "", min, max);
-    if (rows.size() != static_cast<size_t>(shape.getFunction()->GetNpar()) ||
+    if (rows.size() != static_cast<size_t>(shape->getFunction()->GetNpar()) ||
         findUniqueNames("GenSim").size() != 1 || findUniqueNames("OriginalFunctionType").size() != 1)
         throw std::runtime_error("bad signal parameter group for " + channel);
     auto model = std::make_shared<FitFunctionParameterization>(first->getName(), channel, type, "", min, max);
     for (const auto &row : rows)
-        model->insert(*row);
+        model->insert(row);
     return model;
 }

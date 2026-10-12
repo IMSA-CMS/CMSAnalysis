@@ -23,103 +23,146 @@ EventDumpModule::EventDumpModule(bool iGenSim, bool iReco, int inumOfEvents, std
 // update this to remove event parameter
 bool EventDumpModule::process()
 {
-    if (counter >= numOfEvents && numOfEvents != -1)
+  
+  if(counter < numOfEvents || numOfEvents == -1)
+  {
+    std::cout << "Filter: " << getFilter() << '\n'; //uncommand this out
+    std::string filter = getFilter();
+    if (filter[filter.length() - 2] != '_') 
     {
-        return true;
-    }
-
-    // 3 underscores to prevent eee__LowMass from matching
-    if (boost::contains(getFilter(), "ee___"))
-    {
-        const auto recoLeps = getInput()->getLeptons(EventInput::RecoLevel::Reco);
-
-        const auto m = recoLeps.calculateSameSignInvariantMass();
-        if (m < 150 || 600 < m)
+      std::ofstream my_file;
+      if(genSim)
+      {
+        auto genParticles = getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::none());
+        my_file.open("GenSimEventDump.txt", std::ios::app);
+        printGenSimParticleCollection(genParticles, my_file);
+        std::cout << "\nAn event was printed"; //command this out after test
+        my_file.close();
+      }
+      if(reco)
+      {
+        auto recoParticles = getInput()->getLeptons(EventInput::RecoLevel::Reco);
+        my_file.open("RecoEventDump.txt", std::ios::app);
+        if (counter == 0)
         {
             return true;
         }
+        printRecoParticleCollection(recoParticles, my_file);
+        std::cout << "\nAn event was printed"; //command out later
+        my_file.close();
+      }
+      counter++;
+      return true;
 
-        auto matches = matchingMod->getMatchingBestPairs();
-        std::cout << "----\n";
-        for (const auto &pair : matches.getPairs())
-        {
-            std::cout << pair.getGenParticle().getCharge() << "," << pair.getRecoParticle().getCharge() << "\n";
-            const auto gen = pair.getGenParticle();
-            const auto reco = pair.getRecoParticle();
-            if (gen.getType() == ParticleType::photon() && reco.getType().isLepton())
-            {
-                // photon fake
-                photonFakeCounter += 1;
-                continue;
-            }
-            if (gen.getCharge() != reco.getCharge())
-            {
-                // charge misid
-                chargeMisIdCounter += 1;
-                continue;
-            }
+    //     auto matches = matchingMod->getMatchingBestPairs();
+    //     std::cout << "----\n";
+    //     for (const auto &pair : matches.getPairs())
+    //     {
+    //         std::cout << pair.getGenParticle().getCharge() << "," << pair.getRecoParticle().getCharge() << "\n";
+    //         const auto gen = pair.getGenParticle();
+    //         const auto reco = pair.getRecoParticle();
+    //         if (gen.getType() == ParticleType::photon() && reco.getType().isLepton())
+    //         {
+    //             // photon fake
+    //             photonFakeCounter += 1;
+    //             continue;
+    //         }
+    //         if (gen.getCharge() != reco.getCharge())
+    //         {
+    //             // charge misid
+    //             chargeMisIdCounter += 1;
+    //             continue;
+    //         }
 
-            // if ((gen.getType().isLepton() || reco.getType().isLepton()) && (gen.getCharge() != reco.getCharge()))
-            // {
-            //     std::cout << "ignoring event\n";
-            //     return true;
-            // }
-        }
+    //         // if ((gen.getType().isLepton() || reco.getType().isLepton()) && (gen.getCharge() != reco.getCharge()))
+    //         // {
+    //         //     std::cout << "ignoring event\n";
+    //         //     return true;
+    //         // }
+    //     }
 
-        for (const auto &lep : getInput()->getLeptons(EventInput::RecoLevel::Reco))
-        {
-            bool fake = true;
-            for (const auto& pair : matches.getPairs())
-            {
-                if (lep == pair.getRecoParticle())
-                {
-                    // Ok
-                    fake = false;
-                    break;
-                }
-            }
-            if (fake)
-            {
-                unmatchedLepCounter += 1;
-            }
-        }
+    //     for (const auto &lep : getInput()->getLeptons(EventInput::RecoLevel::Reco))
+    //     {
+    //         bool fake = true;
+    //         for (const auto& pair : matches.getPairs())
+    //         {
+    //             if (lep == pair.getRecoParticle())
+    //             {
+    //                 // Ok
+    //                 fake = false;
+    //                 break;
+    //             }
+    //         }
+    //         if (fake)
+    //         {
+    //             unmatchedLepCounter += 1;
+    //         }
+    //     }
 
-        ParticleCollection genSimLeps;
-        for (const auto &lep : getInput()->getLeptons(EventInput::RecoLevel::GenSim))
-        {
-            if (GenSimParticle(lep).isFinalState())
-            {
-                genSimLeps.addParticle(lep);
-            }
-        }
+    //     ParticleCollection genSimLeps;
+    //     for (const auto &lep : getInput()->getLeptons(EventInput::RecoLevel::GenSim))
+    //     {
+    //         if (GenSimParticle(lep).isFinalState())
+    //         {
+    //             genSimLeps.addParticle(lep);
+    //         }
+    //     }
 
-        std::ofstream my_file;
-        if (genSim)
-        {
-            auto genParticles = getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::none());
-            my_file.open("GenSimEventDump.txt", std::ios::app);
-            printGenSimParticleCollection(genParticles, my_file);
-            // std::cout << "An event was printed\n";
-            my_file.close();
-        }
-        if (reco)
-        {
-            auto recoParticles = getInput()->getLeptons(EventInput::RecoLevel::Reco);
-            my_file.open("RecoEventDump.txt", std::ios::app);
-            printRecoParticleCollection(recoParticles, my_file);
-            // std::cout << "An event was printed\n";
-            my_file.close();
-        }
+    //     std::ofstream my_file;
+    //     if (genSim)
+    //     {
+    //         auto genParticles = getInput()->getParticles(EventInput::RecoLevel::GenSim, ParticleType::none());
+    //         my_file.open("GenSimEventDump.txt", std::ios::app);
+    //         printGenSimParticleCollection(genParticles, my_file);
+    //         // std::cout << "An event was printed\n";
+    //         my_file.close();
+    //     }
+    //     if (reco)
+    //     {
+    //         auto recoParticles = getInput()->getLeptons(EventInput::RecoLevel::Reco);
+    //         my_file.open("RecoEventDump.txt", std::ios::app);
+    //         printRecoParticleCollection(recoParticles, my_file);
+    //         // std::cout << "An event was printed\n";
+    //         my_file.close();
+    //     }
 
-        counter++;
-        return true;
-    }
+    //     counter++;
+    //     return true;
+    // }
 
     return true;
+}
+}
+return true;
 }
 
 void EventDumpModule::finalize()
 {
+  int eventElement = 1;
+  int motherColumnWidth = 20;
+  int daughterColumnWidth = 20;
+//   const auto& particleGroup = genParts.getParticles();
+//   my_file << "--------------------------------------------------------" << std::endl;
+//   my_file << "EVENT #" << (counter + 1) <<std::endl;
+//   my_file << "--------------------------------------------------------" << std::endl;
+
+//   my_file << std::left << std::setw(11) << "element" << std::setw(15) << "| name" << std::setw(11) << "| pdgId"
+//    << std::setw(10) << "| status"
+//    << std::setw(motherColumnWidth) << "| mothers"
+//    << std::setw(daughterColumnWidth) << "| daughters"
+//    << std::setw(15) << "| pT"
+//    << std::setw(15) << "| Eta"
+//    << std::setw(15) << "| Phi"
+//    << std::setw(15) << "| E"
+//    << std::setw(5) << "| mass\n";
+  //Prints out all of the particles
+//   for(auto &part : particleGroup)
+//   {
+//     std::string partName = part.getType().getName();
+//     std::cout <<"\nPrint successful.";
+//     my_file << std::setw(11) << eventElement << "| " << std::setw(13) << partName << std::pair<GenSimParticle, std::vector<GenSimParticle>>{part, particleGroup} << std::endl;
+//     eventElement++;
+//   }
     std::cout << "Photon fakes: " << photonFakeCounter << "\n";
     std::cout << "Charge misid: " << chargeMisIdCounter << "\n";
     std::cout << "Unmatched leptons: " << unmatchedLepCounter << "\n";

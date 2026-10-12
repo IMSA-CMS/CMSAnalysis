@@ -77,9 +77,9 @@ std::pair<TH1*, TH1*> MultiSystematic::getUncertainties(TH1* original, HistVaria
 				std::cout<<"delta low: " << deltayLow << std::endl;
 			}
 		}
-		double totalChangeHigh = sqrt(deltayHigh);
+		//double totalChangeHigh = sqrt(deltayHigh);
 		// histHigh->Fill(totalChangeHigh);
-		double totalChangeLow = sqrt(deltayLow);
+		//double totalChangeLow = sqrt(deltayLow);
 		// histLow->Fill(totalChangeLow);
 	}
 	return {histHigh, histLow};

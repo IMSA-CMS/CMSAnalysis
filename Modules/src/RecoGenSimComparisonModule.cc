@@ -1,6 +1,9 @@
 
 #include "CMSAnalysis/Modules/interface/RecoGenSimComparisonModule.hh"
-RecoGenSimComparisonModule::RecoGenSimComparisonModule(std::string compType, bool writeOutput):
+#include "CMSAnalysis/Modules/interface/MatchingModule.hh"
+
+RecoGenSimComparisonModule::RecoGenSimComparisonModule(std::shared_ptr<MatchingModule> matchMod, std::string compType, bool writeOutput):
+matchMod(matchMod),
 comparisonType(compType),
 eventOutput(writeOutput)
 {
@@ -78,17 +81,24 @@ void RecoGenSimComparisonModule::finalize()
         std::cout << "\nTotal 4-lepton events: " << numOfDesiredEvents << "\n";
         std::cout << "Total electron events: " << electronCounter << "\n";
         std::cout << "Total muon events: " << muonCounter << "\n";
+        std::cout << "Total fakes: " << fakeCounter << "\n";
 
         
         std::cout << "\nRatios are out of total 4-lepton events\n";
         std::cout << "Events with ISR " << isrCounter/(double)numOfDesiredEvents << "\n";
         std::cout << "Events with FSR " << fsrCounter/(double)numOfDesiredEvents << "\n";
+        std::cout << "Events with Pileup: " << pileupCounter/(double)numOfDesiredEvents << "\n";
+        std::cout << "Events with Underlying: " << underlyingCounter/(double)numOfDesiredEvents << "\n";
         std::cout << "No match events: " << noMatchCounter/(double)numOfDesiredEvents << "\n\n";
         std::cout << "\nElectron events with ISR " << elecIsrCounter/(double)numOfDesiredEvents << "\n";
         std::cout << "Electron events with FSR " << elecFsrCounter/(double)numOfDesiredEvents << "\n";
+        std::cout << "Electron events with Pileup: " << elecPileupCounter/(double)numOfDesiredEvents << "\n";
+        std::cout << "Electron events with Underlying " << elecUnderlyingCounter/(double)numOfDesiredEvents << "\n";
         std::cout << "No match electron events: " << elecNoMatchCounter/(double)numOfDesiredEvents << "\n\n";
         std::cout << "\nMuon events with ISR " << muonIsrCounter/(double)numOfDesiredEvents << "\n";
         std::cout << "Muon events with FSR " << muonFsrCounter/(double)numOfDesiredEvents << "\n";
+        std::cout << "Muon events with Pileup: " << muonPileupCounter/(double)numOfDesiredEvents << "\n";
+        std::cout << "Electron events with Underlying " << elecUnderlyingCounter/(double)numOfDesiredEvents << "\n";
         std::cout << "No match muon events: " << muonNoMatchCounter/(double)numOfDesiredEvents << "\n\n";
         std::cout << "Fraction with Mu24 " << muon24Count/(double)eventCounter << "\n\n";
 
@@ -115,6 +125,7 @@ void RecoGenSimComparisonModule::finalize()
     }
 }
 void RecoGenSimComparisonModule::printMatchInfo(const ParticleCollection<Particle>& recoParts, 
+
         const ParticleCollection<Particle>& genParts, 
         std::ostream& output)
 {
@@ -284,6 +295,7 @@ void RecoGenSimComparisonModule::perParticleComparison(const ParticleCollection<
             muonMismeasuredPtCounter += mismeasuredPt;
             muonAccurateCounter += accurate;
         }
+
     }
 }
 void RecoGenSimComparisonModule::sameSignDeltaRComparison(const ParticleCollection<Particle>& recoParts,  const ParticleCollection<Particle>& genParts, std::ostream& output) 
@@ -351,6 +363,7 @@ void RecoGenSimComparisonModule::sameSignDeltaRComparison(const ParticleCollecti
                     output << std::setw(10) << "N/A" << "| " 
                            << std::setw(10) << genPart.getMass() << std::endl;
                 }
+
                 noMatch = false; // Match found
 
                 // Check if the reco and gen particles match in type and further conditions

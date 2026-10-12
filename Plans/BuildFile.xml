@@ -16,6 +16,7 @@
 <use   name="CMSAnalysis/Histograms"/>
 <use   name="CMSAnalysis/Modules"/>
 <use   name="CMSAnalysis/Filters"/>
+<use   name="CMSAnalysis/ScaleFactors"/>
 <export>
    <lib name="1"/>
 </export>
