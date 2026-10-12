@@ -17,8 +17,8 @@ FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const H
 FitFunctionParameterization parameterize(FitFunctionCollection functions, TFile* rootFile);
 
 const std::vector<HistVariable> histogramTypes = {
-     HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
-    HistVariable(HistVariable::VariableType::InvariantMass, "", false, true),
+     HistVariable(HistVariable::VariableType::InvariantMass, "", true, false, true),
+    HistVariable(HistVariable::VariableType::InvariantMass, "", false, true, true),
 };
 
 const int minData = 500;

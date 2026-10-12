@@ -37,9 +37,9 @@ const std::vector<int> HiggsKansasStateAnalysis::massTargets{500, 600, 700, 800,
 
 const double lumi = 137.94;
 
-constexpr auto bgFilePath = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_MY/";
-constexpr auto signalFilePath = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_MY/";
-constexpr auto dataFilePath = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_MY/";
+constexpr auto bgFilePath = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_peter/";
+constexpr auto signalFilePath = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_peter/";
+constexpr auto dataFilePath = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_peter/";
 const auto signalParamPath = "/uscms/home/kprasad/cmsReleaseArea/CMSSW_15_0_4/src/CMSAnalysis/Analysis/bin/fitting/H++SignalParameterFunctions.txt";
 const auto bgParamPath =
     "/uscms/home/kprasad/cmsReleaseArea/CMSSW_15_0_4/src/CMSAnalysis/Analysis/bin/fitting/H++BackgroundFunctions.txt";
@@ -204,10 +204,7 @@ HiggsKansasStateAnalysis::HiggsKansasStateAnalysis() :
 
             auto wJetsBackground = std::make_shared<Process>("WJets Background", WJetsBackgroundColor);
            
-            for (auto name : {"WJetsToLNu_NLO", "WJetsToLNu_HT-800To1200", "WJetsToLNu_HT-70To100", 
-            "WJetsToLNu_HT-600To800", "WJetsToLNu_HT-400To600", "WJetsToLNu_HT-2500ToInf", "WJetsToLNu_HT-200To400",
-            "WJetsToLNu_HT-1200To2500", "WJetsToLNu_HT-100To200", "WJetsToLNu_2J", "WJetsToLNu", "WJetsToLNu_1J",
-            "WJetsToLNu_0J"})
+            for (auto name : {"WJetsToLNu_NLO"})
             {
                 addSingleProcess(wJetsBackground, bgFilePath, name, histMapper);
             } 
@@ -241,10 +238,10 @@ HiggsKansasStateAnalysis::HiggsKansasStateAnalysis() :
             for (auto name : {"SingleMuonA", "SingleMuonB", "SingleMuonC", "SingleMuonD", "SingleMuonE", 
             "SingleMuonF", "SingleMuonG", "SingleMuonH", "EgammaA", "EGammaB", "EGammaC", "EGammaD",
             "SingleElectronB", "SingleElectronC", "SingleElectronD", "SingleElectronE", "SingleElectronF", "SingleElectronG",
-            "SingleElectronH"})
+            "SingleElectronH", "EGammaA", "EGammaB", "EGammaC", "EGammaD"})
             {
                 addSingleProcess(higgsData, dataFilePath, name, histMapper);
-            }
+            } 
 
             processes.push_back(dyBackground);
             processes.push_back(higgsData);
@@ -321,12 +318,18 @@ void HiggsKansasStateAnalysis::addSingleProcess(std::shared_ptr<Process> process
     {
         crossSectionName = "higgs4l" + fileName.substr(4);
     }
-    auto input1 = std::make_shared<RootFileInput>(filePathway + fileName + "_2016.root", finder);
+    auto input0 = std::make_shared<RootFileInput>(filePathway + fileName + "_2016preVFP.root", finder);
+    auto input1 = std::make_shared<RootFileInput>(filePathway + fileName + "_2016postVFP.root", finder);
     auto input2 = std::make_shared<RootFileInput>(filePathway + fileName + "_2017.root", finder);
     auto input3 = std::make_shared<RootFileInput>(filePathway + fileName + "_2018.root", finder);
     //auto histEstimator = std::make_shared<TrivialEstimator>();
     
-    if (exists (filePathway + fileName + "_2016.root"))
+    if (exists (filePathway + fileName + "_2016preVFP.root"))
+    {
+        process->addProcess(SingleProcess(crossSectionName, input0, estimator));
+    }
+
+    if (exists (filePathway + fileName + "_2016postVFP.root"))
     {
         process->addProcess(SingleProcess(crossSectionName, input1, estimator));
     }
