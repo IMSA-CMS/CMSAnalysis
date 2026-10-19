@@ -185,13 +185,18 @@ int RootFileInput::getTotalEvents() const
 		auto totalHist = file->Get<TH1>("hNWEvts");
 		if (!totalHist)
 		{
-			throw std::runtime_error("Total events not found in file: " + fileSource);
+			std::cout << "Total events not found in file: " << fileSource << "   Filling with 400000" << std::endl;
+			events = 400000;
+			//throw std::runtime_error("Total events not found in file: " + fileSource);
 		}
-		events = totalHist->GetBinContent(1);
+		else
+		{
+			events = totalHist->GetBinContent(1);
+		}
 	}
 	else
 	{
-		events = std::stof(totalevents->GetString().Data());
+		events = std::stoi(totalevents->GetString().Data());
 	}
 	
 	delete file;

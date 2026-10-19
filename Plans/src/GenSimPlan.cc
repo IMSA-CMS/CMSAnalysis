@@ -55,7 +55,7 @@ void GenSimPlan::initialize()
     histMod->addHistogram(sameSignInvMassHist);
 
 
-    eventMod->addSelector(hppSelector);
+    //eventMod->addSelector(hppSelector);
     eventMod->addSelector(hppGenSimSelector);
     auto eventHistMod = eventMod->getHistogramModule();
 

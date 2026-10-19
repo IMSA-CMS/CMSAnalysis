@@ -186,7 +186,7 @@ HiggsKansasStateAnalysis::HiggsKansasStateAnalysis() :
                 // catch (std::out_of_range &e)
                 // {
                 // }
-                auto estimator = std::make_shared<SimpleEstimator>(reader, lumi);
+                auto estimator = std::make_shared<SimpleEstimator>(reader, lumi, .001); // Scaled by 1/1000 because it was normalized to 1 fb
                 addSingleProcess(higgsSignal, signalFilePath, "HppM" + std::to_string((int)massTarget), histMapper, estimator);
 
                 processes.push_back(higgsSignal);
