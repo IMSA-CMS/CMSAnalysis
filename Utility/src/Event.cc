@@ -60,6 +60,7 @@ ParticleCollection<Particle> Event::getParticles(EventInput::RecoLevel level, bo
                 }
             }
         }
+        // std::cout << "Calling Event::getParticles()\n";
     }
     else if (level == EventInput::RecoLevel::GenSim)
     {

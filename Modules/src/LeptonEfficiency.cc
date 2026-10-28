@@ -23,6 +23,10 @@ bool LeptonEfficiency::process()
 
   for(const auto &particle : genSim.getParticles())
   {
+    GenSimParticle genPart(particle);
+    if (!genPart.isFinalState()) {
+      continue; 
+    }
 
     auto type = particle.getType();
     if(type == ParticleType::electron())
@@ -44,8 +48,10 @@ bool LeptonEfficiency::process()
     if(particle.isNotNull())
     {
       auto type = particle.getType();
+      
       if(type == ParticleType::electron())
       {
+        //  std::cout << "PT: " << particle.getPt() << "\n";
         incrementCounter("recoElectron", 1);
       }
     else if(type == ParticleType::muon())
@@ -57,9 +63,11 @@ bool LeptonEfficiency::process()
   return true;
 }
 
+
 void LeptonEfficiency::finalize()
 {
   //std::cout << "beginning\n";
+  EfficiencyModule::finalize();
   std::string muonEndcapOutputString = std::to_string(getCounter("recoMuon")/(double)getCounter("genSimMuon"));
   writeText(muonEndcapOutputString, "Muon Efficiency");
   //std::cout << "middle\n";

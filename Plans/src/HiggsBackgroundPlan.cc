@@ -50,6 +50,7 @@ void HiggsBackgroundPlan::initialize()
     //
     // auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
     auto matchMod = make_shared<MatchingModule>();
+    matchMod->setInput(eventMod->getEventInput());
     auto eventDump = make_shared<EventDumpModule>(true, true, 100, matchMod);
     auto bJetCut = make_shared<BJetCut>();
     // auto quarkoniaCut = make_shared<QuarkoniaCut>();
@@ -91,6 +92,7 @@ void HiggsBackgroundPlan::initialize()
     auto histMod = make_shared<HistogramOutputModule>();
 
     auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod);
+    leptonEfficiency->setInput(eventMod->getEventInput());
 
     auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
 

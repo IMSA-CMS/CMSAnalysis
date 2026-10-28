@@ -17,7 +17,9 @@ LocalEventInput::LocalEventInput(const Event* event1)
 ParticleCollection<Particle> LocalEventInput::getParticles(RecoLevel level, const ParticleType& particleType, bool includeSpecials) const
 {
     ParticleCollection<Particle> particleList;
+    // std::cout << "Calling local event input\n";
     auto particles = event->getParticles(level, includeSpecials).getParticles();
+
     for (const auto &p : particles)
     {
         if (p.getType() == particleType || particleType == ParticleType::none())

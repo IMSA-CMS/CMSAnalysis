@@ -84,10 +84,10 @@ double HiggsSelector::sameSignPairMass(const std::vector<Particle>& leptons) con
      {
             auto lepton = Lepton(particle);
             if(lepton.isLoose()
-            && particle.getPt() > 10
+            && particle.getPt() > 5
             )
             {
-                //std::cout << "PT: " << std::to_string(particle.getPt()) << std::endl;
+                // std::cout << "PT: " << std::to_string(particle.getPt()) << std::endl;
                 leptons.push_back(particle);
             }
         }
@@ -160,6 +160,7 @@ double HiggsSelector::sameSignPairMass(const std::vector<Particle>& leptons) con
     {
         if (particle.getType() == ParticleType::electron())
         {
+            // std::cout << "PT (selector): " << particle.getPt() << std::endl;
             event.addElectron(particle);
         }
         else if (particle.getType() == ParticleType::muon())
