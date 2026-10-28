@@ -40,25 +40,25 @@ std::string HPlusPlusDecayFilter::getState(const EventInput* inputMod) const
         {
             GenSimParticle genSimParticle = GenSimParticle(particle);
 
-            if (genSimParticle.pdgId() == 9900041)
-            {
-                std::cout << "H++ found\n";
-            }
-            if (genSimParticle.pdgId() == -9900041)
-            {
-                std::cout << "H-- found\n";
-            }
+            // if (genSimParticle.pdgId() == 9900041)
+            // {
+            //     std::cout << "H++ found\n";
+            // }
+            // if (genSimParticle.pdgId() == -9900041)
+            // {
+            //     std::cout << "H-- found\n";
+            // }
 
-            if (genSimParticle.pdgId() == 9900041 &&
-                genSimParticle == genSimParticle.finalDaughter())
-            {
-                std::cout << "H++ found with " << genSimParticle.numberOfDaughters() << " daughters\n";
-            }
-            if (genSimParticle.pdgId() == -9900041 &&
-                genSimParticle == genSimParticle.finalDaughter())
-            {
-                std::cout << "H-- found with " << genSimParticle.numberOfDaughters() << " daughters\n";
-            }
+            // if (genSimParticle.pdgId() == 9900041 &&
+            //     genSimParticle == genSimParticle.finalDaughter())
+            // {
+            //     std::cout << "H++ found with " << genSimParticle.numberOfDaughters() << " daughters\n";
+            // }
+            // if (genSimParticle.pdgId() == -9900041 &&
+            //     genSimParticle == genSimParticle.finalDaughter())
+            // {
+            //     std::cout << "H-- found with " << genSimParticle.numberOfDaughters() << " daughters\n";
+            // }
 
             if ((genSimParticle.pdgId() == 9900041 || genSimParticle.pdgId() == 9900042) &&
                 genSimParticle == genSimParticle.finalDaughter() &&
@@ -82,7 +82,7 @@ std::string HPlusPlusDecayFilter::getState(const EventInput* inputMod) const
                 break;
             }
         }
-        std::cout << "Collection size: " << collection.size() << std::endl;
+        //std::cout << "Collection size: " << collection.size() << std::endl;
         std::string channel = "GenSim " + Utility::identifyChannel(collection);
         return channel;
     }
