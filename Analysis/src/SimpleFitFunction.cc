@@ -131,6 +131,8 @@ double SimpleFitFunction::evaluate(double x, const NuisanceValues &nuisances) co
     {
         if (!std::isfinite(delta))
             throw std::invalid_argument("Shape-systematic deltas must be finite");
+        if (delta == 0)
+            continue;
         const TF1 *up = getSystematic(name, true);
         const TF1 *down = getSystematic(name, false);
         // nusiance only effects some rows

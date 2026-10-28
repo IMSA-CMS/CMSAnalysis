@@ -334,7 +334,7 @@ if __name__ == "__main__":
         analysisType = args.type
         
     if analysisName == "Higgs" and analysisType == "MC":
-        jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, qcd, wjets]
+        jobsList = [ttBar, zz, dy, multiBoson, qcd, wjets]
     elif analysisName == "Higgs" and analysisType == "Data":
         jobsList = [data]
     elif analysisName == "DarkPhoton" and analysisType =="MC":
