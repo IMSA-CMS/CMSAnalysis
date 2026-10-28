@@ -82,7 +82,6 @@ void HiggsSignalFit(bool useKansasState = false)
                     parameterizations.push_back(parameterize(fitFunctions, parameterRootFile));
                 }
             }
-            return; // REMOVE
         }
     }
 
