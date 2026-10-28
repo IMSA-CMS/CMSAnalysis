@@ -42,6 +42,7 @@ TH1 *FullAnalysis::getHist(HistVariable histType, std::string processName, bool 
     // int maxBinNum = 0;
     // double maxBarWidth = 0.0;
     // int channelNumber = 0;
+    std::cout << "Searching for histogram: " << histType.getName() << " in process: " << processName << " in channel: " << channelName << std::endl;
     std::string name = processName;
     for (const auto &channel : channels)
     {

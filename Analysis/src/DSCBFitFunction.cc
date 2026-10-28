@@ -26,7 +26,8 @@ double DSCBFitFunction::evaluateTF1(double *x, double *par)
     const double mean = par[4];
     const double sigma = par[5];
     const double N = par[6];
-    const float t = (x[0] - mean) / sigma;
+    // we need a double for adequate precision here, cannot be a float
+    const double t = (x[0] - mean) / sigma;
     double result;
     const double fact1TLessMinosAlphaL = alpha_l / n_l;
     const double fact2TLessMinosAlphaL = (n_l / alpha_l) - alpha_l - t;

@@ -106,17 +106,19 @@ void Fitter::fitDSCB(TH1 *histogram, SimpleFitFunction &fitFunction)
     f1->SetNpx(1000);
     double norm = histogram->Integral(); //("width");
 
-    f1->SetParameters(2.82606, 2.5, 1.08, 1.136, params[1], params[2], norm);
+    f1->SetParameters(1, 1, 1.08, 1.136, params[1], params[2], norm);
 
     f1->SetParLimits(0, 0, 10);
     f1->SetParLimits(1, 0, 10);
     f1->SetParLimits(2, 1, 10);
     f1->SetParLimits(3, 1, 10);
     f1->SetParLimits(4, fitFunction.getMin(), fitFunction.getMax());
+    //f1->FixParameter(5, 20);
     f1->FixParameter(6, norm);
 
     f1->SetRange(fitFunction.getMin(), fitFunction.getMax());
     f1->SetLineColor(kRed);
+    histogram->Fit(f1, "SWLQRBWIDTH");
     histogram->Fit(f1, "SWLQRBWIDTH");
     f1->SetParError(6, norm / (sqrt(histogram->GetEntries())));
 

@@ -62,7 +62,7 @@ double HiggsCompleteAnalysis::getBranchingRatio(const std::string &channel) cons
 std::vector<std::string> HiggsCompleteAnalysis::getSystematics() const
 {
     return systematics;
-}
+} 
 
 HiggsCompleteAnalysis::HiggsCompleteAnalysis() :
     FullAnalysis(lumi)
@@ -79,65 +79,6 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() :
 
     auto reader = std::make_shared<CrossSectionReader>(
         "/uscms/homes/p/pdong/work/analysis/CMSSW_16_0_0/src/CMSAnalysis/DataCollection/bin/crossSections.txt");
-
-    // auto signalParams = FitFunctionCollection::loadFunctions(signalParamPath);
-
-    // //                 (genSim     , reco       )
-    // std::map<std::tuple<std::string, std::string>,
-    //          //
-    //          std::vector<std::tuple<HistVariable,
-    //                                 //       paramName
-    //                                 std::map<std::string, FitFunction>>>>
-    //     signalParamMap;
-
-    // for (const auto &pair : signalParams.getFunctions())
-    // {
-    //     const auto name = pair.first;
-    //     // (HistVar, reco, genSim, param)
-    //     const auto parsed = parseSignalParamFuncName(name);
-    //     const auto histVar = std::get<0>(parsed);
-    //     const auto reco = std::get<1>(parsed);
-    //     const auto genSim = std::get<2>(parsed);
-    //     const auto paramName = std::get<3>(parsed);
-
-    //     const auto func = pair.second;
-
-    //     auto &inner = signalParamMap[{genSim, reco}];
-    //     std::map<std::string, FitFunction> *value = nullptr;
-    //     for (auto &entry : inner)
-    //     {
-    //         if (std::get<0>(entry) == histVar)
-    //         {
-    //             value = &std::get<1>(entry);
-    //             break;
-    //         }
-    //     }
-    //     if (!value)
-    //     {
-    //         inner.push_back({histVar, {}});
-    //         value = &std::get<1>(inner.at(inner.size() - 1));
-    //     }
-
-    //     (*value)[paramName] = func;
-    // }
-
-    // auto bgParams = FitFunctionCollection::loadFunctions(bgParamPath);
-
-    // //                 (reco       , bg name     )
-    // std::map<std::tuple<std::string, std::string>,
-    //          //
-    //          std::vector<std::tuple<HistVariable, FitFunction>>>
-    //     bgParamMap;
-
-    // for (const auto &pair : bgParams.getFunctions())
-    // {
-    //     const auto name = pair.first;
-    //     const auto parsed = parseBgFuncName(name);
-    //     const auto histVar = std::get<0>(parsed);
-    //     const auto channelName = std::get<1>(parsed);
-    //     const auto bgName = std::get<2>(parsed);
-    //     bgParamMap[{channelName, bgName}].push_back({histVar, pair.second});
-    // }
 
     TH1::SetDefaultSumw2();
     for (bool zSelection : {true, false})
@@ -187,8 +128,10 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() :
                     // histVariablesSignal.push_back(HistVariable(Selector::None,
                     // HistVariable::VariableType::SameSignInvariantMass));
 
-                    
-                    higgsMassGroup->addProcess(higgsSignal->getSingleProcess("higgs4l" + massString));
+                    for (auto process : higgsSignal->getProcesses())
+                    {
+                        higgsMassGroup->addProcess(process);
+                    }
 
                     processes.push_back(higgsSignal);
 
@@ -289,13 +232,13 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() :
             //         auto sys = std::make_shared<ShapeSystematic>(systematic);
             //         process->addSystematic(sys);
             //     }
-            // x}
+            // }
 
-            std::cout << "Processes for channel " << channelName << ": \n";
-            for (auto process : processes)
-            {
-                std::cout << process->getName() << '\n';
-            }
+            // std::cout << "Processes for channel " << channelName << ": \n";
+            // for (auto process : processes)
+            // {
+            //     std::cout << process->getName() << '\n';
+            // }
 
             auto leptonProcesses = std::make_shared<Channel>(channelName, processes);
 
@@ -325,20 +268,6 @@ HiggsCompleteAnalysis::HiggsCompleteAnalysis() :
                 }
             }
 
-            // for (const auto &proc : leptonProcesses->getWithLabel(Channel::Label::Background))
-            // {
-            //     try
-            //     {
-            //         for (auto fit : bgParamMap.at(std::tuple(channelName, proc->getName())))
-            //         {
-            //             proc->setPlot(std::get<0>(fit), std::get<1>(fit));
-            //         }
-            //     }
-            //     catch (std::out_of_range &e)
-            //     {
-            //     }
-            // }
-
             getChannelsProtected().push_back(leptonProcesses);
         }
     }
@@ -359,99 +288,6 @@ void HiggsCompleteAnalysis::addSingleProcess(std::shared_ptr<Process> process, s
     process->addProcess(SingleProcess(crossSectionName, inputFile2, histEstimator));    
 }
 
-// std::tuple<HistVariable, std::string, std::string, std::string> HiggsCompleteAnalysis::parseSignalParamFuncName(
-//     const std::string &name)
-// {
-//     // Name format: uttt_uttt/#alpha_{low} 1400 MuonTriggerScaleFactor Up X projection
-//     std::vector<std::string> parts;
-//     boost::split(parts, name, boost::is_any_of("/"));
-//     const auto genReco = parts.at(0);
-//     const auto subName = parts.at(1);
-
-//     std::vector<std::string> parts2;
-//     boost::split(parts2, genReco, boost::is_any_of("_"));
-//     const auto genSim = parts2.at(0);
-//     const auto reco = parts2.at(1);
-
-//     std::vector<std::string> parts3;
-//     boost::split(parts3, subName, boost::is_any_of(" "));
-//     const auto paramName = parts3.at(0);
-//     const auto projName = parts3.at(parts3.size() - 2);
-//     const auto systName = parts3.at(2);
-
-//     const auto xProj = projName == "X";
-//     const auto yProj = projName == "Y";
-//     //assert(xProj || yProj);
-
-//     auto histVar = HistVariable(HistVariable::VariableType::InvariantMass, "", xProj, yProj);
-
-//     if (systName != "Nominal")
-//     {
-//         auto systType = ScaleFactor::SystematicType::Nominal;
-//         const auto &typeName = parts3.at(3);
-//         if (typeName == "Up")
-//         {
-//             systType = ScaleFactor::SystematicType::Up;
-//         }
-//         else if (typeName == "Down")
-//         {
-//             systType = ScaleFactor::SystematicType::Down;
-//         }
-//         else
-//         {
-//             throw std::runtime_error("Error parsing signal parameterization");
-//         }
-//         histVar.setSystematic(systType, systName);
-//     }
-
-//     return {histVar, reco, genSim, paramName};
-// }
-
-// std::tuple<HistVariable, std::string, std::string> HiggsCompleteAnalysis::parseBgFuncName(const std::string &name)
-// {
-//     // Name format: t#bar{t}, Multiboson Background->eueu_ZPeak/Reco Invariant Mass Background Y Projection
-//     std::vector<std::string> parts;
-//     boost::split(parts, name, boost::is_any_of("/"));
-//     const auto bgReco = parts.at(0);
-//     const auto subName = parts.at(1);
-
-//     std::vector<std::string> parts2;
-//     boost::iter_split(parts2, bgReco, boost::first_finder("->"));
-//     const auto bgName = parts2.at(0);
-//     const auto reco = parts2.at(1);
-
-//     std::vector<std::string> parts3;
-//     boost::split(parts3, subName, boost::is_any_of(" "));
-//     const auto projName = parts3.at(4);
-//     const auto systName = parts3.at(6);
-
-//     const auto xProj = projName == "X";
-//     const auto yProj = projName == "Y";
-//     // assert(xProj || yProj);
-
-//     auto histVar = HistVariable(HistVariable::VariableType::InvariantMass, "", xProj, yProj);
-
-//     if (systName != "Nominal")
-//     {
-//         auto systType = ScaleFactor::SystematicType::Nominal;
-//         const auto &typeName = parts3.at(7);
-//         if (typeName == "Up")
-//         {
-//             systType = ScaleFactor::SystematicType::Up;
-//         }
-//         else if (typeName == "Down")
-//         {
-//             systType = ScaleFactor::SystematicType::Down;
-//         }
-//         else
-//         {
-//             throw std::runtime_error("Error parsing bg parameterization");
-//         }
-//         histVar.setSystematic(systType, systName);
-//     }
-
-//     return {histVar, reco, bgName};
-// }
 
 void HiggsCompleteAnalysis::addParameterizations()
 {

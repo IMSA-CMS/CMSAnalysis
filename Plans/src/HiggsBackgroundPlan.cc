@@ -25,6 +25,7 @@
 #include "CMSAnalysis/Modules/interface/METModule.hh"
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
 #include "CMSAnalysis/Modules/interface/TriggerModule.hh"
+#include "CMSAnalysis/Modules/interface/RecoGenSimComparisonModule.hh"
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
 
 #include <memory>
@@ -67,6 +68,7 @@ void HiggsBackgroundPlan::initialize()
 
     auto triggerMod = make_shared<TriggerModule>();
     auto metMod = make_shared<METModule>();
+    auto recoGenSimMod = make_shared<RecoGenSimComparisonModule>(matchMod, "mother", true); //CHANGE perParticle to mother
     // auto bJetFilter = make_shared<BJetFilter>();
 
     auto higgsFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::Reco);

@@ -341,7 +341,7 @@ std::istream &operator>>(std::istream &stream, std::shared_ptr<SimpleFitFunction
         throw std::runtime_error ("Name not found");
     }
     trim(name);
-    std::cout << "Reading function: " << name << '\n';
+    //std::cout << "Reading function: " << name << '\n';
 
     // --- Read "FunctionTypeEnum:" line ---
     std::getline(stream, line);
