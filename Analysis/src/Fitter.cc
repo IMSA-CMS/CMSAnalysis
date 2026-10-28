@@ -229,9 +229,18 @@ void Fitter::fitGausLogPowerNorm(TH1 *const hist, SimpleFitFunction &func)
 {
     TF1 *const f1 = func.getFunction();
 
-    // Params: mult, u, sigma1, s, n
-    f1->SetParameters(1, hist->GetMean(), hist->GetStdDev(), 1, 2);
-    f1->SetParLimits(1, 0, func.getMax());
+    const double peak = hist->GetMaximum() / hist->GetBinWidth(1);
+    const double fitRange = func.getMax() - func.getMin();
+
+    // Params: mult, mu, sigma1, s, n
+    f1->SetParameters(peak, hist->GetMean(), hist->GetStdDev(), 1, 2);
+
+    f1->SetParLimits(0, 0, 100 * peak);
+    f1->SetParLimits(1, 0.01, func.getMax());
+    f1->SetParLimits(2, 0.01, fitRange);
+    // f1->SetParLimits(2, hist->GetMean() * 0.5, hist->GetMean() * 1.5); //helps some, hurts others
+    f1->SetParLimits(3, 0.0001, 10000);
+    f1->SetParLimits(4, 0.1, 10);
 
     f1->SetNpx(1000);
 
