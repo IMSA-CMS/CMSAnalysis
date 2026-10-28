@@ -46,7 +46,7 @@ TH1* RootFileInput::getHist(const HistVariable& histType) const
 	auto file = getFile(fileSource);
 	std::string histName = name;
 	TDirectory* dir = file;
-	// std::cout << "Full name: " << name << '\n';
+	//std::cout << "Full name: " << name << '\n';
 	//std::cout << "RootFileInput Hit 2 " << std::endl;
 	// TH1* emptyHist = new TH1F("h1", "empty", 1, 0.0, 0.0);
 	while (pos != std::string::npos)
@@ -57,6 +57,7 @@ TH1* RootFileInput::getHist(const HistVariable& histType) const
 		if (!dir) 
 		{
 			std::cout << "No directory named " + folder + " found in file: "<< fileSource <<"\n";
+			//std::cout << "Searching for histogram: " << name << std::endl;
 			delete dir;
 			delete hist;
 			delete file;
@@ -79,40 +80,6 @@ TH1* RootFileInput::getHist(const HistVariable& histType) const
 		delete dir;
 	}
 		
-	
-
-	// if (!hist || hist->IsZombie())
-	// { 
-	// 	std::cout << "RootFileInput Zombie Hit 1 " << std::endl;
-	// 	throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]");
-
-	// 	if (hist->IsZombie())
-	// 	{
-	// 		std::cout << "RootFileInput Zombie Hit 2 " << std::endl;
-	// 		throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]. Hist is a Zombie.");
-	// 	}
-	// 	else
-	// 	{
-	// 		std::cout << "RootFileInput Zombie Else Hit 2 " << std::endl;
-	// 		throw std::runtime_error("File [" + fileSource + "] doesn't contain histogram [" + histType.getName() + "]");
-	// 	}
-	// }
-	/*
-	if(dynamic_cast<TH2 *>(hist) != 0)
-	{
-		TH2* hist2D = dynamic_cast<TH2 *>(hist);
-		TH1 *newhist = hist2D->ProjectionX("_px", 0, -1, "E");
-		return newhist;
-	}	
-	*/
-	// if (hist->GetEntries() < 2.0)
-	// {
-	// 	delete hist;
-	// 	delete file;
-	// 	return emptyHist;
-	// }
-	// else 
-	// {
 	if (hist->GetXaxis()->GetNbins() <= 0)
 	{
 		delete hist;
@@ -196,27 +163,9 @@ int RootFileInput::getTotalEvents() const
 	}
 	else
 	{
-		events = std::stoi(totalevents->GetString().Data());
+		events = std::stod(totalevents->GetString().Data()); // stoi does not work here?
 	}
 	
 	delete file;
 	return events;
-	// while (!end)
-	// {
-	// 	std::string s = "NEvents;" + std::to_string(index);
-    // 	const char* fName = s.c_str();
-	// 	TDisplayText *totalevents = file->Get<TDisplayText>(fName);
-	// 	if(totalevents)
-	// 	{
-	// 		events+=std::stoi(totalevents->GetString().Data());
-	// 		index+=2;
-	// 	}
-	// 	else
-	// 	{
-	// 		end = true;
-	// 	}
-
-	// }
-	
-	//return events;
 }	

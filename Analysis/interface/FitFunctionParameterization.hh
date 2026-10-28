@@ -4,6 +4,7 @@
 #include "FitFunction.hh"
 #include "SimpleFitFunction.hh"
 #include <memory>
+#include <mutex>
 #include <string>
 #include <vector>
 
@@ -18,6 +19,8 @@ class FitFunctionParameterization : public FitFunction
     static std::vector<FitFunctionParameterization> loadFunctions(const std::string &fileName);
 
     void insert(std::shared_ptr<SimpleFitFunction> function);
+    // Call after modifying an inserted parameter function directly.
+    void clearCache() const;
     //update evaluate
     double evaluate(double observable, double modelMass,
                     const NuisanceValues &nuisances = {}) const override;
@@ -26,6 +29,24 @@ class FitFunctionParameterization : public FitFunction
     void save(const std::string &fileName, bool append = false);
 
   private:
+    // Copies start empty; PDF clones can share a model, so access is locked.
+    struct ParameterCache
+    {
+        double mass = 0;
+        NuisanceValues nuisances;
+        std::vector<double> parameters;
+        std::mutex mutex;
+
+        ParameterCache() = default;
+        ParameterCache(const ParameterCache &) {}
+        ParameterCache &operator=(const ParameterCache &)
+        {
+            parameters.clear();
+            return *this;
+        }
+    };
+
+    mutable ParameterCache parameterCache; //!
     std::string channelName;
     std::string expFormula;
     double min = 0;
