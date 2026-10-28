@@ -17,8 +17,8 @@ FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const H
 FitFunctionParameterization parameterize(FitFunctionCollection functions, TFile* rootFile);
 
 const std::vector<HistVariable> histogramTypes = {
-     HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
-    HistVariable(HistVariable::VariableType::InvariantMass, "", false, true),
+     HistVariable(HistVariable::VariableType::InvariantMass, "", true, false, true),
+    HistVariable(HistVariable::VariableType::InvariantMass, "", false, true, true),
 };
 
 const int minData = 500;
@@ -82,6 +82,7 @@ void HiggsSignalFit(bool useKansasState = false)
                     parameterizations.push_back(parameterize(fitFunctions, parameterRootFile));
                 }
             }
+            return; // REMOVE
         }
     }
 
@@ -132,6 +133,7 @@ FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const H
     const double skewAvg = skewSum / n;
     const double maxBinPctAvg = maxBinPctSum / n;
     const FitFunction::FunctionType funcType = //FitFunction::FunctionType::Voigt;
+    
      //(-1.5 < skewAvg && 60 * maxBinPctAvg - skewAvg > 0.9)
                                                     //? FitFunction::FunctionType::DoubleGaussian
                                                      FitFunction::FunctionType::DoubleSidedCrystalBall;

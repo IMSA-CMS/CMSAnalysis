@@ -74,48 +74,6 @@ if outputFileName == "0":
 for i in range(0, len(importedPythiaSettings)):
     importedPythiaSettings[i] = importedPythiaSettings[i].replace("^mass^", str(options.dpMass))
     
-# Pythia definitions
-from Configuration.Generator.Pythia8CommonSettings_cfi import *
-from Configuration.Generator.MCTunes2017.PythiaCP5Settings_cfi import *
-from Configuration.Generator.PSweightsPythia.PythiaPSweightsSettings_cfi import *
-
-process.load('Configuration.StandardSequences.Services_cff')
-process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
-process.load('FWCore.MessageService.MessageLogger_cfi')
-process.load('Configuration.EventContent.EventContent_cff')
-process.load('SimGeneral.MixingModule.mixNoPU_cfi')
-process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
-process.load('Configuration.StandardSequences.MagneticField_cff')
-process.load('Configuration.StandardSequences.Generator_cff')
-process.load('IOMC.EventVertexGenerators.VtxSmearedNominalCollision2015_cfi')
-process.load('GeneratorInterface.Core.genFilterSummary_cff')
-process.load('Configuration.StandardSequences.EndOfProcess_cff')
-process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
-
-print(importedPythiaSettings)
-
-process.generator = cms.EDFilter("Pythia8GeneratorFilter",
-    comEnergy =  cms.double(13000), 
-    crossSection = cms.untracked.double(1e10),
-    filterEfficiency = cms.untracked.double(1),
-    maxEventsToPrint = cms.untracked.int32(0),
-    pythiaHepMCVerbosity = cms.untracked.bool(False),
-    pythiaPylistVerbosity = cms.untracked.int32(1),
-    PythiaParameters = cms.PSet(
-        pythia8CommonSettingsBlock,
-        pythia8CP5SettingsBlock,
-        pythia8PSweightsSettingsBlock,
-        processParameters = cms.vstring(
-            *importedPythiaSettings
-        ),
-        parameterSets = cms.vstring(
-            'pythia8CommonSettings',
-            'pythia8CP5Settings',
-            'pythia8PSweightsSettings',
-            'processParameters'
-        )
-    )
-)
 
 # More definitions
 process.MessageLogger.cerr.FwkReport = cms.untracked.PSet(

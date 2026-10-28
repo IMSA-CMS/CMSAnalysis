@@ -333,13 +333,6 @@ TCanvas *PlotFormatter::completePlot(std::shared_ptr<FullAnalysis> analysis, His
                                     bool scaleTodata, bool includeSignal,
                                      bool includeData, std::string channelName, bool drawFunctions)
 {
-    // parameterizedFunctions[0]->DrawCopy("L");
-    // int parameterizedFunctionsSize = parameterizedFunctions.size();
-    // for (int i = 0; i < parameterizedFunctionsSize; i++)
-    // {
-    //     parameterizedFunctions[i]->DrawCopy("LSAME");
-    // }
-
     TH1 *data = nullptr;
     TH1 *signal = nullptr;
     // mass range
@@ -1089,7 +1082,7 @@ TLegend *PlotFormatter::GetLegend(THStack *background, std::shared_ptr<Channel> 
         }
         auto proc = processes->getWithLabel(Channel::Label::Background).at(count);
         const TString toAdd = proc->getName();
-        std::cout << "Added " << toAdd << "\n";
+        //std::cout << "Added " << toAdd << "\n";
         legend->AddEntry(obj, " " + toAdd, "F");
         auto fit = proc->getPlot(histVar);
         if (fit)
@@ -1217,16 +1210,17 @@ void PlotFormatter::GetOrder(std::vector<TH1 *> &hists, TH1 *&first, int &firstI
 void PlotFormatter::Bin(std::vector<TH1 *> &hists, TH1 *&first, int &firstIndex, double &maximum, int &count,
                         bool scaleToExpected)
 {
-    std::vector<int> bins;
+    // std::vector<int> bins;
+    // for (TH1 *hist : hists)
+    // {
+    //     bins.push_back(hist->GetNbinsX());
+    // }
+
+    //int commonFactor = Utility::gcf(bins);
+
     for (TH1 *hist : hists)
     {
-        bins.push_back(hist->GetNbinsX());
-    }
-
-    int commonFactor = Utility::gcf(bins);
-
-    for (TH1 *hist : hists)
-    {
+        (void)hist;
         // hist->Rebin(hist->GetNbinsX() / commonFactor);
     }
 
@@ -1238,6 +1232,7 @@ void PlotFormatter::Bin(std::vector<TH1 *> &hists, TH1 *&first, int &firstIndex,
     }
     for (TH1 *hist : hists)
     {
+        (void)hist;
         // hist->Rebin((int) (maxBinWidth / hist->GetXaxis()->GetBinWidth(0)));
     }
 
@@ -1329,9 +1324,9 @@ TH1 *PlotFormatter::CreateErrorHistogram(THStack *hists, std::vector<std::shared
         // double highError = systematicHist.first->GetBinContent(i) * backgroundHist->GetBinContent(i);
         // backgroundHist->SetBinError(i, highError);
 
-        std::cout << "Bin " << i << " background: " << backgroundHist->GetBinContent(i)
-                  << " highError: " << systematicHist.first->GetBinContent(i)
-                  << " lowError: " << systematicHist.second->GetBinContent(i) << "\n";
+        // std::cout << "Bin " << i << " background: " << backgroundHist->GetBinContent(i)
+        //           << " highError: " << systematicHist.first->GetBinContent(i)
+        //           << " lowError: " << systematicHist.second->GetBinContent(i) << "\n";
 
         backgroundHist->SetBinError(
             i, backgroundHist->GetBinContent(i) *

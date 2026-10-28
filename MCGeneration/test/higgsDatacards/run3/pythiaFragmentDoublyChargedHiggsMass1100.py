@@ -7,7 +7,7 @@ generator = cms.EDFilter("Pythia8GeneratorFilter",
     pythiaPylistVerbosity = cms.untracked.int32(1),
     filterEfficiency = cms.untracked.double(1.0),
     pythiaHepMCVerbosity = cms.untracked.bool(False),
-    comEnergy = cms.double(13000),
+    comEnergy = cms.double(14000),
     PythiaParameters = cms.PSet(
         pythia8CommonSettingsBlock,
         pythia8CP5SettingsBlock,
@@ -21,15 +21,12 @@ generator = cms.EDFilter("Pythia8GeneratorFilter",
 			'LeftRightSymmmetry:coupHtaue = 0.1',
 			'LeftRightSymmmetry:coupHtaumu = 0.1',
 			'LeftRightSymmmetry:coupHtautau = 0.1',
-			'LeftRightSymmmetry:vL = 0',
-			'9900041:m0 = 1000',
-			'9900041:oneChannel = 1 0.33333 100 -11 -11',
+			'LeftRightSymmmetry:vL = 0'
 			'9900041:m0 = 1100'
-			'9900041:addChannel = 1 0.33333 100 -13 -13'
 		),
         parameterSets = cms.vstring('pythia8CommonSettings',
             'pythia8CP5Settings',
-            'pythia8PSweightsSettings',
+            # 'pythia8PSweightsSettings',
             'processParameters',
             )
         )

@@ -32,11 +32,11 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, const His
 // /*
     // integral/fit only calibrated after firstBin  
     // needs to match the "firstBin" value in "PlotFormatter" if using integral scaling
-    int firstBin = 50;
-    // mass range
-    // needs to match the "upperMasslimit" value in "PlotFormatter" if using integral scaling
-    double xAxisRange = 2000;
-    int numBins = hist->GetNbinsX(); 
+    // int firstBin = 50;
+    // // mass range
+    // // needs to match the "upperMasslimit" value in "PlotFormatter" if using integral scaling
+    // double xAxisRange = 2000;
+    // int numBins = hist->GetNbinsX(); 
     // int lowerLimit = firstBin * (static_cast<double>(numBins) / xAxisRange);
     double efficiency = (hist->Integral()) / totaleventsran;
     double signalest = crosssection * 1000 * luminosity * efficiency * branchingRatioFixer;

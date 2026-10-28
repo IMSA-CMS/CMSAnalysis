@@ -15,6 +15,6 @@ class TDisplayText : public TObjString
         //Adds the displayText to the browser
         void Browse(TBrowser* tb) override;
     private:
-        ClassDef(TDisplayText,2)
+        ClassDefOverride(TDisplayText,2)
 };
 #endif

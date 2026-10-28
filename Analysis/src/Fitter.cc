@@ -106,17 +106,19 @@ void Fitter::fitDSCB(TH1 *histogram, SimpleFitFunction &fitFunction)
     f1->SetNpx(1000);
     double norm = histogram->Integral(); //("width");
 
-    f1->SetParameters(2.82606, 2.5, 1.08, 1.136, params[1], params[2], norm);
+    f1->SetParameters(1, 1, 1.08, 1.136, params[1], params[2], norm);
 
     f1->SetParLimits(0, 0, 10);
     f1->SetParLimits(1, 0, 10);
     f1->SetParLimits(2, 1, 10);
     f1->SetParLimits(3, 1, 10);
     f1->SetParLimits(4, fitFunction.getMin(), fitFunction.getMax());
+    //f1->FixParameter(5, 20);
     f1->FixParameter(6, norm);
 
     f1->SetRange(fitFunction.getMin(), fitFunction.getMax());
     f1->SetLineColor(kRed);
+    histogram->Fit(f1, "SWLQRBWIDTH");
     histogram->Fit(f1, "SWLQRBWIDTH");
     f1->SetParError(6, norm / (sqrt(histogram->GetEntries())));
 
@@ -227,9 +229,18 @@ void Fitter::fitGausLogPowerNorm(TH1 *const hist, SimpleFitFunction &func)
 {
     TF1 *const f1 = func.getFunction();
 
-    // Params: mult, u, sigma1, s, n
-    f1->SetParameters(1, hist->GetMean(), hist->GetStdDev(), 1, 2);
-    f1->SetParLimits(1, 0, func.getMax());
+    const double peak = hist->GetMaximum() / hist->GetBinWidth(1);
+    const double fitRange = func.getMax() - func.getMin();
+
+    // Params: mult, mu, sigma1, s, n
+    f1->SetParameters(peak, hist->GetMean(), hist->GetStdDev(), 1, 2);
+
+    f1->SetParLimits(0, 0, 100 * peak);
+    f1->SetParLimits(1, 0.01, func.getMax());
+    f1->SetParLimits(2, 0.01, fitRange);
+    // f1->SetParLimits(2, hist->GetMean() * 0.5, hist->GetMean() * 1.5); //helps some, hurts others
+    f1->SetParLimits(3, 0.0001, 10000);
+    f1->SetParLimits(4, 0.1, 10);
 
     f1->SetNpx(1000);
 
@@ -344,6 +355,22 @@ FitFunctionParameterization Fitter::parameterizeFunction(std::string name,
         metadata["Parameter"] = firstTF1->GetParName(i);
         auto fit = fitPowerLawToGraph(&graph, FitFunction::encodeName(metadata));
 
+        std::vector<double> upParameters;
+        std::vector<double> downParameters;
+
+        auto *func = fit->getFunction();
+
+        for (int j = 0; j < func->GetNpar(); ++j)
+        {
+            const double parameter = func->GetParameter(j);
+            const double parameterError = func->GetParError(j);
+
+            upParameters.push_back(parameter + parameterError);
+            downParameters.push_back(parameter - parameterError);
+        }
+
+        fit->addSystematic("FitUncertainty", upParameters, downParameters);
+
         // Systematics part
         for (const auto &systematic : systematics)
         {
@@ -439,7 +466,8 @@ FitFunctionParameterization Fitter::parameterizeFunction(std::string name,
                     *downFit->getFunction());
             }
         }
-        
+         
+
         parameterization.insert(fit);
 
         auto *const canvas = new TCanvas(fullName.c_str(), fullName.c_str(), 0, 0, 2000, 500);
