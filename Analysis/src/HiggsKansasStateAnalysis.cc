@@ -186,12 +186,13 @@ HiggsKansasStateAnalysis::HiggsKansasStateAnalysis() :
                 // catch (std::out_of_range &e)
                 // {
                 // }
-                auto estimator = std::make_shared<SimpleEstimator>(reader, lumi, .001); // Scaled by 1/1000 because it was normalized to 1 fb
-                addSingleProcess(higgsSignal, signalFilePath, "HppM" + std::to_string((int)massTarget), histMapper, estimator);
+                std::string name = "HppM" + std::to_string((int)massTarget);
+                auto estimator = std::make_shared<TrivialEstimator>(reader->getCrossSection("higgs4l" + std::to_string((int)massTarget)) * 1000); // Scaled by 1000 because it was normalized to 1 fb
+                addSingleProcess(higgsSignal, signalFilePath, name, histMapper, estimator);
 
                 processes.push_back(higgsSignal);
 
-                addSingleProcess(higgsMassGroup, signalFilePath, "HppM" + std::to_string((int)massTarget), histMapper, estimator);
+                addSingleProcess(higgsMassGroup, signalFilePath, name, histMapper, estimator);
                 processes.push_back(higgsMassGroup);
             }
 

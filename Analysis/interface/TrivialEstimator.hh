@@ -13,11 +13,12 @@ class SingleProcess;
 class TrivialEstimator : public Estimator
 {		
 	public: 
+		TrivialEstimator(double scaleFactor = 1) : scaleFactor(scaleFactor) {}
 		double getExpectedYield(const SingleProcess* process, const HistVariable& dataType) const override;
 		double getBranchingRatioFixer() const { return 1; }
 
 	private:
-		
+		double scaleFactor;
 };	
 
 
