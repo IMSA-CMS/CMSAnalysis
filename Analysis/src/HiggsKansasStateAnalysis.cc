@@ -29,8 +29,10 @@ const std::vector<std::string> HiggsKansasStateAnalysis::genSimDecays{""};
 const std::vector<std::string> HiggsKansasStateAnalysis::recoDecays{
     "0tau", "1tau", "2tau", "3tau"};
 
-const std::vector<std::string> systematics{"ElectronScaleFactor", "MuonIDISOScaleFactor", "MuonRecoScaleFactor",
-                                           "MuonTriggerScaleFactor"};
+const std::vector<std::string> systematics{"chargeFlip", "eIdIso", "eReco",
+                                           "eTrig", "l1Prefire", "muId", "muIso", 
+                                           "pu", "roccor", "tauVsEle", "tauVsJet", 
+                                           "tauVsMu", "tauES", "zpt", "xsec"}; // need to add flat_pu, flat_tauES?
 
 // Actual masses for the Higgs signal
 const std::vector<int> HiggsKansasStateAnalysis::massTargets{500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500};

@@ -62,7 +62,7 @@ TH1 *Process::getHist(const HistVariable &histType, bool scaleToExpected) const
     auto *toMerge = new TList;
     for (const auto &singleProcess : processes)
     {
-        std::cout << "Process: " << singleProcess.getName() << std::endl;
+        //std::cout << "Process: " << singleProcess.getName() << std::endl;
         TH1 *toAdd = singleProcess.getHist(histType, scaleToExpected);
         // Add only if the hisogram exists
 

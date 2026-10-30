@@ -3,6 +3,8 @@
 #include <fstream>
 #include <map>
 #include <stdexcept>
+#include <iomanip>
+#include <sstream>
 
 #include "CMSAnalysis/Filters/interface/HPlusPlusDecayFilter.hh"
 #include "CMSAnalysis/Utility/interface/GenSimParticle.hh"
@@ -157,6 +159,14 @@ void HPlusPlusEfficiency::finalize()
       // get raw event count, cast to int, convert to string for the table
       row.push_back(std::to_string(
           static_cast<unsigned long long>(getCounter(decay)))); 
+    }
+    // Normalize reconstructed counts after the complete row total is known.
+    for (auto& cell : row)
+    {
+      const double fraction = rowTotal > 0 ? std::stod(cell) / rowTotal : 0.0;
+      std::ostringstream formatted;
+      formatted << std::fixed << std::setprecision(4) << fraction;
+      cell = formatted.str();
     }
     row.push_back(std::to_string(
         static_cast<unsigned long long>(rowTotal)));
