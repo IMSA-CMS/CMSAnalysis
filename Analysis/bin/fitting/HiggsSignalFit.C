@@ -39,7 +39,7 @@ void HiggsSignalFit(bool useKansasState = false)
 
     //auto analysis = HiggsKansasStateAnalysis();
     
-    //const auto systs = analysis.getSystematics();
+    // const auto systs = analysis.getSystematics();
     //std::cout << "Loaded histograms\n";
 
     auto rootFile = TFile::Open(fitHistsName.c_str(), "RECREATE");
@@ -186,10 +186,20 @@ FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const H
             TH1 *sysHistdown = process->getHist(systHistType, true);
             Fitter::fitSingleFunction(sysHistdown, *downFunction);
 
+            if (!sysHistdown || sysHistdown->GetEntries() == 0)
+            {
+                continue;
+            }
+
             systHistType.setSystematic(ScaleFactor::SystematicType::Up, systName);
             auto upFunction = SimpleFitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
             TH1 *sysHistup = process->getHist(systHistType, true);
             Fitter::fitSingleFunction(sysHistup, *upFunction);
+
+            if (!sysHistup || sysHistup->GetEntries() == 0)
+            {
+                continue;
+            }
             
             func->addSystematic(systName, *upFunction->getFunction(), *downFunction->getFunction());
         }
