@@ -27,7 +27,7 @@
 const std::vector<std::string> HiggsKansasStateAnalysis::genSimDecays{""};
 
 const std::vector<std::string> HiggsKansasStateAnalysis::recoDecays{
-    "0tau", "1tau", "2tau", "3tau"};
+    "0tau", "1tau", "2tau", "3tau", "3lep0tau", "3lep1tau", "3lep2tau"};
 
 const std::vector<std::string> systematics{"ElectronScaleFactor", "MuonIDISOScaleFactor", "MuonRecoScaleFactor",
                                            "MuonTriggerScaleFactor"};
@@ -37,9 +37,10 @@ const std::vector<int> HiggsKansasStateAnalysis::massTargets{500, 600, 700, 800,
 
 const double lumi = 137.94;
 
-constexpr auto bgFilePath = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_MY/";
-constexpr auto signalFilePath = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_MY/";
-constexpr auto dataFilePath = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_MY/";
+constexpr auto bgFilePath = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_peter/";
+constexpr auto signalFilePath = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_peter/";
+constexpr auto signal3lepFilePath = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_peter/";
+constexpr auto dataFilePath = "/eos/uscms/store/user/greddy/DCH_files/inputs_nopair/hist_peter/";
 const auto signalParamPath = "/uscms/home/kprasad/cmsReleaseArea/CMSSW_15_0_4/src/CMSAnalysis/Analysis/bin/fitting/H++SignalParameterFunctions.txt";
 const auto bgParamPath =
     "/uscms/home/kprasad/cmsReleaseArea/CMSSW_15_0_4/src/CMSAnalysis/Analysis/bin/fitting/H++BackgroundFunctions.txt";
@@ -187,11 +188,13 @@ HiggsKansasStateAnalysis::HiggsKansasStateAnalysis() :
                 // {
                 // }
                 auto estimator = std::make_shared<SimpleEstimator>(reader, lumi);
-                addSingleProcess(higgsSignal, signalFilePath, "HppM" + std::to_string((int)massTarget), histMapper, estimator);
+                const std::string sigPath = (recoDecay.find("3lep") != std::string::npos) ? std::string(signal3lepFilePath) : std::string(signalFilePath);
+
+                addSingleProcess(higgsSignal, sigPath, "HppM" + std::to_string((int)massTarget), histMapper, estimator);
 
                 processes.push_back(higgsSignal);
 
-                addSingleProcess(higgsMassGroup, signalFilePath, "HppM" + std::to_string((int)massTarget), histMapper, estimator);
+                addSingleProcess(higgsMassGroup, sigPath, "HppM" + std::to_string((int)massTarget), histMapper, estimator);
                 processes.push_back(higgsMassGroup);
             }
 

@@ -9,6 +9,7 @@
 #include "TGraph.h"
 #include "TH1.h"
 #include "TROOT.h"
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -33,7 +34,7 @@ const std::string parameterFits = "H++SignalParameterFits.root";
 const std::string parameterFunctions = "H++SignalParameterFunctions.txt";
 
 // run in batch mode for faster processing: root -b HiggsSignalFit.C+
-void HiggsSignalFit(bool useKansasState = false)
+void HiggsSignalFit(bool useKansasState = true)
 {
     gROOT->SetBatch(kTRUE);
 
@@ -75,7 +76,14 @@ void HiggsSignalFit(bool useKansasState = false)
             }
             for (const auto &genSim : genSimDecays)
             {
-                auto fitFunctions = fitChannel(channel, histType, genSim, systs, rootFile);
+                const std::string chName = channel->getName();
+                const bool isThreeLepton = std::count(chName.begin(), chName.end(), '_') == 1;
+                if (isThreeLepton && !histType.isXProjection())
+                {
+                    continue;
+                }
+                const HistVariable threeLeptonVar(HistVariable::VariableType::RecoSameSignInvariantMass, "", false, false, true);
+                auto fitFunctions = fitChannel(channel, isThreeLepton ? threeLeptonVar : histType, genSim, systs, rootFile);
                 allFunctions += fitFunctions;
                 if (fitFunctions.size() != 0)
                 {
@@ -111,6 +119,11 @@ FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const H
     {
         const auto process = channel->findProcess("Higgs signal " + genSim + " " + std::to_string(mass));
         const TH1 *selectedHist = process->getHist(histVar, true);
+        if (std::count(channelName.begin(), channelName.end(), '_') == 1)
+        {
+            std::cout << "THREELEP " << genSim << "->" << channelName << " " << mass << " " << histVar.getName()
+                      << " entries=" << (selectedHist ? selectedHist->GetEntries() : -1) << "\n";
+        }
 
         if (!selectedHist || selectedHist->GetEntries() < minData)
         {

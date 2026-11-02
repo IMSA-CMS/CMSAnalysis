@@ -183,6 +183,10 @@ int RootFileInput::getTotalEvents() const
 	if (!totalevents)
 	{
 		auto totalHist = file->Get<TH1>("hNWEvts");
+                if (!totalHist)
+                {
+                        totalHist = file->Get<TH1>("hnevts");
+                }
 		if (!totalHist)
 		{
 			throw std::runtime_error("Total events not found in file: " + fileSource);
