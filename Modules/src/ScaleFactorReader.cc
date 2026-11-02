@@ -1,1 +1,0 @@
-#include "CMSAnalysis/Modules/interface/ScaleFactorReader.hh"

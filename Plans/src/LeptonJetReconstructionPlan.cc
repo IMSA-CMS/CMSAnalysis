@@ -91,7 +91,7 @@ void LeptonJetReconstructionPlan::initialize()
   
   auto lepRecoHistMod = lepRecoMod->getHistogramModule();
 
-  auto recoGenSimComparisonMod = std::make_shared<RecoGenSimComparisonModule>("mother", true);
+  auto recoGenSimComparisonMod = std::make_shared<RecoGenSimComparisonModule>(matchMod, "mother", true);
   recoGenSimComparisonMod->setInput(eventMod->getEventInput());
   auto leptonJetMLStripMod = std::make_shared<LeptonJetMLStripModule>();
   leptonJetMLStripMod->setInput(eventMod->getEventInput());
@@ -250,7 +250,7 @@ void LeptonJetReconstructionPlan::initialize()
   //modules.addAnalysisModule(massRecoEfficiency800);
   //modules.addAnalysisModule(massRecoEfficiency1000);
   //modules.addAnalysisModule(massRecoEfficiency1300);
-  modules.addAnalysisModule(recoGenSimComparisonMod);
+  //modules.addAnalysisModule(recoGenSimComparisonMod);
   modules.addAnalysisModule(eventDumpMod);
   //modules.addAnalysisModule(recoEventDumpMod);
   /* auto selector = make_shared<SnowmassLeptonSelector>(5);

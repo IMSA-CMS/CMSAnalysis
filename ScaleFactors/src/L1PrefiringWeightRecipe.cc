@@ -1,4 +1,4 @@
-#include "CMSAnalysis/Modules/interface/L1PrefiringWeightRecipe.hh"
+#include "CMSAnalysis/ScaleFactors/interface/L1PrefiringWeightRecipe.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include <vector>
 #include <string>

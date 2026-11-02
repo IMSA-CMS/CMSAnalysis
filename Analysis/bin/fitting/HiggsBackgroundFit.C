@@ -165,6 +165,16 @@ std::shared_ptr<SimpleFitFunction> fitProcess(const std::shared_ptr<Process> pro
                         systHistVar.setSystematic(ScaleFactor::SystematicType::Up, systName);
                         TH1 *histUp = process->getHist(systHistVar, true);
 
+                        // skip up and down histograms if empty
+                        if (!histDown || histDown->GetEntries() == 0)
+                        {
+                            continue;
+                        }
+
+                        if (!histUp || histUp->GetEntries() == 0)
+                        {
+                            continue;
+                        }
                         
                         auto upFunction = SimpleFitFunction::createFunctionOfType(type, name, "", min, max);
                         Fitter::fitSingleFunction(histUp, *upFunction);

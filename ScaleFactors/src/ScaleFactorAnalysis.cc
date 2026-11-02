@@ -1,4 +1,4 @@
-#include "CMSAnalysis/Modules/interface/ScaleFactorAnalysis.hh"
+#include "CMSAnalysis/ScaleFactors/interface/ScaleFactorAnalysis.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include <iostream>
 
@@ -28,6 +28,7 @@ bool ScaleFactorAnalysis::process()
     if (recoParticles.size() == 0) {
         return true;
     }
+    auto recoInvMass = recoParticles.getInvariantMass();
 
     auto& particle = recoParticles[0];
     for (int i = 0; i < 100; ++i) {

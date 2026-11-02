@@ -8,6 +8,7 @@ bool HiggsTriggerCut::checkEventInternal(const Event& event, const EventInput* i
 	std::vector<std::string> muonTriggers;
 	std::vector<std::string> electronTriggers;
 	auto params = input->getFileParams()->getParameters();
+	//triggers.push_back("HLT_IsoMu24");
 
 	auto yearIterator = params.find("Year");
 	if (yearIterator == params.end())

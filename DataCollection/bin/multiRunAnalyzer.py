@@ -235,17 +235,17 @@ if __name__ == "__main__":
     )
 
     higgsSignal = (
-        "Higgs500.txt",
-        "Higgs600.txt",
-        "Higgs700.txt",
-        "Higgs800.txt",
-        "Higgs900.txt",
+        # "Higgs500.txt",
+        # "Higgs600.txt",
+        # "Higgs700.txt",
+        # "Higgs800.txt",
+        # "Higgs900.txt",
         "Higgs1000.txt",
-        "Higgs1100.txt",
-        "Higgs1200.txt",
-        "Higgs1300.txt",
-        "Higgs1400.txt",
-        "Higgs1500.txt",
+        # "Higgs1100.txt",
+        # "Higgs1200.txt",
+        # "Higgs1300.txt",
+        # "Higgs1400.txt",
+        # "Higgs1500.txt",
 	)
 
     # NOTE: Muon only for Data - DP processing
@@ -334,7 +334,7 @@ if __name__ == "__main__":
         analysisType = args.type
         
     if analysisName == "Higgs" and analysisType == "MC":
-        jobsList = [ttBar, zz, dy, multiBoson, higgsSignal, qcd, wjets]
+        jobsList = [ttBar, zz, dy, multiBoson, qcd, wjets]
     elif analysisName == "Higgs" and analysisType == "Data":
         jobsList = [data]
     elif analysisName == "DarkPhoton" and analysisType =="MC":

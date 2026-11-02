@@ -1,4 +1,4 @@
-#include "CMSAnalysis/Modules/interface/PileUpRootReader.hh"
+#include "CMSAnalysis/ScaleFactors/interface/PileUpRootReader.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "TH1.h"
 #include "TFile.h"

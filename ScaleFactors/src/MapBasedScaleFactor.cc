@@ -1,5 +1,5 @@
-#include "CMSAnalysis/Modules/interface/MapBasedScaleFactor.hh"
-#include "CMSAnalysis/Modules/interface/ScaleFactorReader.hh"
+#include "CMSAnalysis/ScaleFactors/interface/MapBasedScaleFactor.hh"
+#include "CMSAnalysis/ScaleFactors/interface/ScaleFactorReader.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 #include "CMSAnalysis/Utility/interface/FileParams.hh"
 #include <stdexcept>

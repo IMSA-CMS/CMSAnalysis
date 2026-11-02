@@ -1,6 +1,6 @@
 #ifndef LEPTONSCALEFACTOR_HH
 #define LEPTONSCALEFACTOR_HH
-#include "CMSAnalysis/Modules/interface/MapBasedScaleFactor.hh"
+#include "CMSAnalysis/ScaleFactors/interface/MapBasedScaleFactor.hh"
 #include "CMSAnalysis/Utility/interface/Lepton.hh"
 #include "CMSAnalysis/Utility/interface/ParticleType.hh"
 

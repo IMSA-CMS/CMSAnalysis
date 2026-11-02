@@ -1,4 +1,4 @@
-#include "CMSAnalysis/Modules/interface/MuonJSONReader.hh"
+#include "CMSAnalysis/ScaleFactors/interface/MuonJSONReader.hh"
 
 using jsoncollector::Json::Value;
 

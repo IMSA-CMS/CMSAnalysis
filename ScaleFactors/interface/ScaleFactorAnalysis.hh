@@ -1,7 +1,8 @@
 #ifndef SCALEFACTORANALYSIS_HH
 #define SCALEFACTORANALYSIS_HH
 
-#include "HistogramOutputModule.hh"
+
+#include "CMSAnalysis/Modules/interface/HistogramOutputModule.hh"
 #include <vector>
 
 // ScaleFactorAnalysis processes histograms with and without scale factors applied, 

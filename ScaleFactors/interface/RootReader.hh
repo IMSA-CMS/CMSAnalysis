@@ -1,7 +1,7 @@
 #ifndef ROOTREADER_HH
 #define ROOTREADER_HH
 
-#include "CMSAnalysis/Modules/interface/ScaleFactorReader.hh"
+#include "CMSAnalysis/ScaleFactors/interface/ScaleFactorReader.hh"
 #include "CMSAnalysis/Utility/interface/ParticleCollection.hh"
 #include <map>
 #include <string>

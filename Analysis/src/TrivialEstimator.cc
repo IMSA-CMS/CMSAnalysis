@@ -21,6 +21,6 @@ double TrivialEstimator::getExpectedYield(const SingleProcess* process, const Hi
        return 0;
     }
     
-    return hist->Integral();
+    return hist->Integral()*scaleFactor;
 }
 

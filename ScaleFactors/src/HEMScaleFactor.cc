@@ -1,4 +1,4 @@
-#include "CMSAnalysis/Modules/interface/HEMScaleFactor.hh"
+#include "CMSAnalysis/ScaleFactors/interface/HEMScaleFactor.hh"
 
 HEMScaleFactor::HEMScaleFactor(std::string iname) : ScaleFactor(std::move(iname), false)
 {}

@@ -1,4 +1,4 @@
-#include "CMSAnalysis/Modules/interface/RootReader.hh"
+#include "CMSAnalysis/ScaleFactors/interface/RootReader.hh"
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
 
 #include "TH1.h"

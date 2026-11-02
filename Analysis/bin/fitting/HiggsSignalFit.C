@@ -18,8 +18,8 @@ FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const H
 FitFunctionParameterization parameterize(FitFunctionCollection functions, TFile* rootFile);
 
 const std::vector<HistVariable> histogramTypes = {
-     HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
-    HistVariable(HistVariable::VariableType::InvariantMass, "", false, true),
+     HistVariable(HistVariable::VariableType::InvariantMass, "", true, false, true),
+    HistVariable(HistVariable::VariableType::InvariantMass, "", false, true, true),
 };
 
 const int minData = 500;
@@ -40,7 +40,7 @@ void HiggsSignalFit(bool useKansasState = true)
 
     //auto analysis = HiggsKansasStateAnalysis();
     
-    //const auto systs = analysis.getSystematics();
+    // const auto systs = analysis.getSystematics();
     //std::cout << "Loaded histograms\n";
 
     auto rootFile = TFile::Open(fitHistsName.c_str(), "RECREATE");
@@ -145,6 +145,7 @@ FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const H
     const double skewAvg = skewSum / n;
     const double maxBinPctAvg = maxBinPctSum / n;
     const FitFunction::FunctionType funcType = //FitFunction::FunctionType::Voigt;
+    
      //(-1.5 < skewAvg && 60 * maxBinPctAvg - skewAvg > 0.9)
                                                     //? FitFunction::FunctionType::DoubleGaussian
                                                      FitFunction::FunctionType::DoubleSidedCrystalBall;
@@ -198,10 +199,20 @@ FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const H
             TH1 *sysHistdown = process->getHist(systHistType, true);
             Fitter::fitSingleFunction(sysHistdown, *downFunction);
 
+            if (!sysHistdown || sysHistdown->GetEntries() == 0)
+            {
+                continue;
+            }
+
             systHistType.setSystematic(ScaleFactor::SystematicType::Up, systName);
             auto upFunction = SimpleFitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
             TH1 *sysHistup = process->getHist(systHistType, true);
             Fitter::fitSingleFunction(sysHistup, *upFunction);
+
+            if (!sysHistup || sysHistup->GetEntries() == 0)
+            {
+                continue;
+            }
             
             func->addSystematic(systName, *upFunction->getFunction(), *downFunction->getFunction());
         }
