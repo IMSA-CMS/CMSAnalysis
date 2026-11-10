@@ -1,5 +1,7 @@
 #include "CMSAnalysis/Analysis/interface/DSCBFitFunction.hh"
+#include <algorithm>
 #include <cmath>
+#include <stdexcept>
 #include <iomanip>
 #include <sstream>
 
@@ -15,45 +17,44 @@ DSCBFitFunction::DSCBFitFunction(const std::string &name, double min, double max
                         FunctionType::DoubleSidedCrystalBall)
 {
     getFunction()->SetParNames("#alpha_{low}", "#alpha_{high}", "n_{low}", "n_{high}", "#mu", "#sigma", "norm");
+    getFunction()->SetParameters(1.0, 1.0, 2.0, 2.0, 0.0, 1.0, 0.0);
 }
 
 double DSCBFitFunction::evaluateTF1(double *x, double *par)
 {
+    for (int i = 0; i < 7; ++i)
+    {
+        if (!std::isfinite(par[i]))
+            throw std::domain_error("DSCB parameters must be finite");
+    }
+    if (!std::isfinite(x[0]) || par[0] <= 0 || par[1] <= 0 || par[5] <= 0 || par[6] < 0)
+        throw std::domain_error("DSCB requires positive transitions and width, and nonnegative normalization");
+
     const double alpha_l = par[0];
     const double alpha_h = par[1];
-    const double n_l = par[2];
-    const double n_h = par[3];
-    const double mean = par[4];
-    const double sigma = par[5];
-    const double N = par[6];
-    // we need a double for adequate precision here, cannot be a float
-    const double t = (x[0] - mean) / sigma;
-    double result;
-    const double fact1TLessMinosAlphaL = alpha_l / n_l;
-    const double fact2TLessMinosAlphaL = (n_l / alpha_l) - alpha_l - t;
-    const double fact1THihgerAlphaH = alpha_h / n_h;
-    const double fact2THigherAlphaH = (n_h / alpha_h) - alpha_h + t;
+    const double n_l = std::max(par[2], 1.000001);
+    const double n_h = std::max(par[3], 1.000001);
+    const double t = (x[0] - par[4]) / par[5];
+    if (!std::isfinite(t))
+        throw std::domain_error("DSCB standardized coordinate is not finite");
 
-    const double root2 = std::pow(2, 0.5);
-    if (-alpha_l <= t && alpha_h >= t)
-    {
-        result = exp(-0.5 * t * t);
-    }
-    else if (t < -alpha_l)
-    {
-        result = exp(-0.5 * alpha_l * alpha_l) * pow(fact1TLessMinosAlphaL * fact2TLessMinosAlphaL, -n_l);
-    }
-    else
-    {
-        result = exp(-0.5 * alpha_h * alpha_h) * pow(fact1THihgerAlphaH * fact2THigherAlphaH, -n_h);
-    }
+    double logShape = -0.5 * t * t;
+    if (t < -alpha_l)
+        logShape = -0.5 * alpha_l * alpha_l - n_l * std::log1p(alpha_l * (-alpha_l - t) / n_l);
+    else if (t > alpha_h)
+        logShape = -0.5 * alpha_h * alpha_h - n_h * std::log1p(alpha_h * (t - alpha_h) / n_h);
 
-    const double lowTailNorm = (n_l / std::abs(alpha_l)) / (n_l - 1) * std::exp(-0.5 * alpha_l * alpha_l);
-    const double highTailNorm = (n_h / std::abs(alpha_h)) / (n_h - 1) * std::exp(-0.5 * alpha_h * alpha_h);
-    const double gaussianNormA = erf(std::abs(alpha_l / root2)) + erf(std::abs(alpha_h / root2));
-    const double gaussianNormB = std::pow(M_PI / 2, 0.5) * gaussianNormA;
-    const double functionNormalization = std::pow(sigma * (gaussianNormB + lowTailNorm + highTailNorm), -1);
-    return N * functionNormalization * result;
+    const double lowTailNorm = (n_l / (n_l - 1)) / alpha_l * std::exp(-0.5 * alpha_l * alpha_l);
+    const double highTailNorm = (n_h / (n_h - 1)) / alpha_h * std::exp(-0.5 * alpha_h * alpha_h);
+    const double gaussianNorm = std::sqrt(M_PI / 2) *
+        (std::erf(alpha_l / std::sqrt(2.0)) + std::erf(alpha_h / std::sqrt(2.0)));
+    const double integral = gaussianNorm + lowTailNorm + highTailNorm;
+    if (!std::isfinite(integral) || integral <= 0)
+        throw std::domain_error("DSCB normalization is not finite and positive");
+    const double value = par[6] / par[5] / integral * std::exp(logShape);
+    if (!std::isfinite(value) || value < 0)
+        throw std::domain_error("DSCB density is not finite and nonnegative");
+    return value;
 }
 
 void DSCBFitFunction::restoreFunction(TF1 &func) const
