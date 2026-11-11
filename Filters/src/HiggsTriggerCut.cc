@@ -5,75 +5,67 @@
  
 bool HiggsTriggerCut::checkEventInternal(const Event& event, const EventInput* input) const
 {
-	std::vector<std::string> triggers;
+	std::vector<std::string> muonTriggers;
+	std::vector<std::string> electronTriggers;
 	auto params = input->getFileParams()->getParameters();
 	//triggers.push_back("HLT_IsoMu24");
-	auto iterator2 = params.find("Year");
 
-	if(iterator2 != params.end())
+	auto yearIterator = params.find("Year");
+	if (yearIterator == params.end())
 	{
-		if(iterator2 -> second == "2018")
-		{
-			triggers.push_back("HLT_Ele32_WPTight_Gsf");
-			triggers.push_back("HLT_Ele35_WPTight_Gsf");
-			triggers.push_back("HLT_IsoMu24");
-		}
-		else if(iterator2 -> second == "2017")
-		{
-			triggers.push_back("HLT_Ele35_WPTight_Gsf");
-			triggers.push_back("HLT_IsoMu27");
-		}
-		else
-		{
-			triggers.push_back("HLT_Ele27_WPTight_Gsf");
-			triggers.push_back("HLT_Photon175");
-			triggers.push_back("HLT_IsoMu24");
-		}
+		muonTriggers = {"HLT_IsoMu24"};
 	}
-	auto iterator = params.find("Trigger");
-	if (iterator == params.end())
+	else if (yearIterator->second.find("2018") != std::string::npos)
 	{
-		for (auto trigger : triggers) 
-		{
-			if (input->checkTrigger(trigger)) 
-			{
-				return true;
-			}
-		}
-		return false;
+		muonTriggers = {"HLT_IsoMu24"};
+		electronTriggers = {"HLT_Ele32_WPTight_Gsf"};
 	}
-
-	auto dataset = iterator->second;
-	if (dataset == "SingleElectron")
+	else if (yearIterator->second.find("2017") != std::string::npos)
 	{
-		// Replace equals with contains if checking multiple valid triggers 
-		if (input->checkTrigger(triggers[0])) 
-		{
-			return false;
-		}
-		
-		// Account for double-counted triggers 
-		else if (input->checkTrigger(triggers[1])) 
-		{
-			return true;
-		}
-		else if (triggers.size() > 2 && input->checkTrigger(triggers[2]))
-		{
-			return true;
-		}
+		muonTriggers = {"HLT_IsoMu27"};
+		electronTriggers = {"HLT_Ele35_WPTight_Gsf"};
 	}
-	// Single Muon (Assuming SingleElectron is the default dataset, not using mixed channels)
 	else
 	{
-		for (auto trigger : triggers) 
+		// 2016
+		muonTriggers = {"HLT_IsoMu24", "HLT_IsoTkMu24"};
+		electronTriggers = {"HLT_Ele27_WPTight_Gsf"};
+	}
+
+	bool muonFired = false;
+	for (const auto& trigger : muonTriggers)
+	{
+		if (input->checkTrigger(trigger))
 		{
-			if (input->checkTrigger(trigger)) 
-			{
-				return true;
-			}
+			muonFired = true;
+			break;
 		}
 	}
-	return false;
+
+	bool electronFired = false;
+	for (const auto& trigger : electronTriggers)
+	{
+		if (input->checkTrigger(trigger))
+		{
+			electronFired = true;
+			break;
+		}
+	}
+
+	auto datasetIterator = params.find("Trigger");
+
+	// Monte Carlo: no dataset label, accept any trigger
+	if (datasetIterator == params.end())
+	{
+		return muonFired || electronFired;
+	}
+
+	// SingleElectron stream: electron only events, muon events belong to the muon stream
+	if (datasetIterator->second == "SingleElectron")
+	{
+		return electronFired && !muonFired;
+	}
+
+	// Muon stream: every event with a muon trigger, with or without an electron trigger
+	return muonFired;
 }
-
-

@@ -14,6 +14,7 @@ MatchingModule::MatchingModule(double deltaRCut) : deltaRCutoff(deltaRCut)
 
 bool MatchingModule::process()
 {
+    // std::cout<<"MatchingModule::process\n";
     std::vector<Particle> genSimParticles = getInput()->getParticles(EventInput::RecoLevel::GenSim).getParticles();
     std::vector<Particle> recoCandidates = getInput()->getParticles(EventInput::RecoLevel::Reco).getParticles();
     return match(genSimParticles, recoCandidates);
@@ -37,6 +38,7 @@ bool MatchingModule::match(std::vector<Particle> genSimParticles, std::vector<Pa
         {
             for (size_t recoIdx = 0; recoIdx < recoCandidates.size(); recoIdx++)
             {
+                // std::cout << "pT (Matching Module): " << recoCandidates.at(recoIdx).getPt() << '\n';
                 const auto &gen = genSimParticles.at(genIdx);
                 if (gen.getPt() < pTThresh)
                 {
