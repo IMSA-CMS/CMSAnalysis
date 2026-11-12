@@ -49,6 +49,8 @@ public:
 
     virtual const std::shared_ptr<FileParams> getFileParams() const = 0;
 
+    bool isData() const;
+
     virtual bool checkTrigger(std::string triggerName, std::string subProcess = "") const = 0;
 
 private:

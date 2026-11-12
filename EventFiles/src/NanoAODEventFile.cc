@@ -90,6 +90,8 @@ NanoAODEventFile::NanoAODEventFile(TFile *ifile, std::shared_ptr<FileParams> ipa
         std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_pfreliso", "Muon_pfRelIso04_all"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_dxy", "Muon_dxy"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("muon_dz", "Muon_dz"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("muon_nTrackerLayers", "Muon_nTrackerLayers"),
+        std::make_shared<TreeVariable<TTreeReaderArray<Int_t>>>("muon_genIdx", "Muon_genPartIdx"),
         // do tau stuff here
         std::make_shared<TreeVariable<TTreeReaderValue<UInt_t>>>("tau_size", "nTau"),
 		std::make_shared<TreeVariable<TTreeReaderArray<Float_t>>>("tau_eta", "Tau_eta"),
@@ -394,6 +396,8 @@ void NanoAODEventFile::nextEvent()
         particle.addInfo("dxy", getArrayElement<Float_t>("muon_dxy", i));
         particle.addInfo("dz", getArrayElement<Float_t>("muon_dz", i));
         particle.addInfo("mtight", getArrayElement<Bool_t>("muon_tightid", i));
+        particle.addInfo("nTrackerLayers", getArrayElement<Int_t>("muon_nTrackerLayers", i));
+        particle.addInfo("genIdx", getArrayElement<Int_t>("muon_genIdx", i));
         recoParticles.addParticle(particle);
     }
 

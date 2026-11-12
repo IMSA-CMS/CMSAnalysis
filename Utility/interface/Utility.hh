@@ -29,6 +29,8 @@ namespace Utility
   jsoncollector::Json::Value loadJSONFile(const std::string& filename);
 
   double invariantMass(Particle p1, Particle p2, double met_x, double met_y);
+
+  double randomNumber();
 }
 
 inline bool Utility::comparator(std::string a, std::string b)

@@ -19,7 +19,7 @@ void MultiYearScaleFactor::addScaleFactor(std::string year, std::shared_ptr<Scal
 
 double MultiYearScaleFactor::getScaleFactor(const EventInput* input, ScaleFactor::SystematicType type) const
 {
-	if (input->getFileParams()->getProcess() == "Data")
+	if (input->isData())
  	{
 	 	return 1.0; // No scale factor for data
  	}

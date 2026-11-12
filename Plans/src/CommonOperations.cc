@@ -12,6 +12,7 @@
 #include "CMSAnalysis/ScaleFactors/interface/PileUpRootReader.hh"
 #include "CMSAnalysis/ScaleFactors/interface/PileUpScaleFactor.hh"
 #include "CMSAnalysis/ScaleFactors/interface/VariableScaleFactor.hh"
+#include "CMSAnalysis/ScaleFactors/interface/RochesterScaleFactor.hh"
 
 using std::make_shared;
 
@@ -96,6 +97,17 @@ void CommonOperations::addHiggsScaleFactors(std::shared_ptr<EventModule> eventMo
     auto electronScaleFactor2018 = make_shared<LeptonScaleFactor>("ElectronScaleFactor2018", electronScaleFactorReader2018, ParticleType::electron());
     electronScaleFactorReader->addScaleFactor("2018", electronScaleFactor2018);
 
+    // Rochester corrections
+    auto rochesterScaleFactor = make_shared<MultiYearScaleFactor>("RochesterScaleFactor");
+    auto rochesterScaleFactor2016APV = make_shared<RochesterScaleFactor>("RochesterScaleFactor2016APV", "RoccoRochester/RoccoR2016aUL.txt");
+    rochesterScaleFactor->addScaleFactor("2016APV", rochesterScaleFactor2016APV);
+    auto rochesterScaleFactor2016 = make_shared<RochesterScaleFactor>("RochesterScaleFactor2016", "RoccoRochester/RoccoR2016bUL.txt");
+    rochesterScaleFactor->addScaleFactor("2016", rochesterScaleFactor2016);
+    auto rochesterScaleFactor2017 = make_shared<RochesterScaleFactor>("RochesterScaleFactor2017", "RoccoRochester/RoccoR2017UL.txt");
+    rochesterScaleFactor->addScaleFactor("2017", rochesterScaleFactor2017);
+    auto rochesterScaleFactor2018 = make_shared<RochesterScaleFactor>("RochesterScaleFactor2018", "RoccoRochester/RoccoR2018UL.txt");
+    rochesterScaleFactor->addScaleFactor("2018", rochesterScaleFactor2018);
+
     // auto recoScaleFactor = make_shared<MultiYearScaleFactor<LeptonScaleFactor>>("MuonRecoScaleFactor", muonScaleFactor, ParticleType::muon());
     // auto iDISOScaleFactor = make_shared<MultiYearScaleFactor<LeptonScaleFactor>>("MuonIDISOScaleFactor", iDISOScaleFactorReader, ParticleType::muon());
     // auto triggerScaleFactor = make_shared<MultiYearScaleFactor<LeptonScaleFactor>>("MuonTriggerScaleFactor", triggerScaleFactorReader, ParticleType::muon());
@@ -118,4 +130,5 @@ void CommonOperations::addHiggsScaleFactors(std::shared_ptr<EventModule> eventMo
     eventMod->addScaleFactor(electronScaleFactorReader);
     //std::cout << "Added electron scale factor" << std::endl;
     eventMod->addScaleFactor(pileUpScaleFactor);
+    eventMod->addScaleFactor(rochesterScaleFactor);
 }

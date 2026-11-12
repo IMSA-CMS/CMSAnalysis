@@ -1,4 +1,5 @@
 #include "CMSAnalysis/Modules/interface/EventInput.hh"
+#include "CMSAnalysis/Utility/interface/FileParams.hh"
 
 ParticleCollection<Lepton> EventInput::getLeptons(RecoLevel level) const
 {
@@ -21,3 +22,9 @@ ParticleCollection<Lepton> EventInput::getLeptons(RecoLevel level) const
     }
     return leptons;
 }
+
+    bool EventInput::isData() const 
+    {
+        return getFileParams()->getProcess() == "Data";
+        
+       }
