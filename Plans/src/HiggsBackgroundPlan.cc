@@ -25,6 +25,7 @@
 #include "CMSAnalysis/Modules/interface/METModule.hh"
 #include "CMSAnalysis/Modules/interface/MatchingModule.hh"
 #include "CMSAnalysis/Modules/interface/TriggerModule.hh"
+#include "CMSAnalysis/Modules/interface/RecoGenSimComparisonModule.hh"
 #include "CMSAnalysis/Plans/interface/CommonOperations.hh"
 
 #include <memory>
@@ -50,6 +51,7 @@ void HiggsBackgroundPlan::initialize()
     //
     // auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
     auto matchMod = make_shared<MatchingModule>();
+    matchMod->setInput(eventMod->getEventInput());
     auto eventDump = make_shared<EventDumpModule>(true, true, 100, matchMod);
     auto bJetCut = make_shared<BJetCut>();
     // auto quarkoniaCut = make_shared<QuarkoniaCut>();
@@ -67,6 +69,7 @@ void HiggsBackgroundPlan::initialize()
 
     auto triggerMod = make_shared<TriggerModule>();
     auto metMod = make_shared<METModule>();
+    auto recoGenSimMod = make_shared<RecoGenSimComparisonModule>(matchMod, "mother", true); //CHANGE perParticle to mother
     // auto bJetFilter = make_shared<BJetFilter>();
 
     auto higgsFilter = make_shared<HPlusPlusDecayFilter>(EventInput::RecoLevel::Reco);
@@ -91,6 +94,7 @@ void HiggsBackgroundPlan::initialize()
     auto histMod = make_shared<HistogramOutputModule>();
 
     auto leptonEfficiency = make_shared<LeptonEfficiency>(matchMod);
+    leptonEfficiency->setInput(eventMod->getEventInput());
 
     auto nLeptonsHist = make_shared<NLeptonsHist>(matchMod, "Matched Leptons", 10, 0, 10);
 
@@ -152,7 +156,7 @@ void HiggsBackgroundPlan::initialize()
     modules.addFilterModule(recoDecayFilterMod);
     modules.addFilterModule(massFilterMod);
     // modules.addFilterModule(make_shared<FilterModule>(bJetFilter));
-    // modules.addAnalysisModule(leptonEfficiency);
+    modules.addAnalysisModule(leptonEfficiency);
     modules.addAnalysisModule(eventHistMod);
     modules.addAnalysisModule(histMod); // Don't remove unless you don't want histograms
     // modules.addFilterModule(runFilterMod);

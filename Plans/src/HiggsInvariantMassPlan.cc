@@ -23,7 +23,7 @@ void HiggsInvariantMassPlan::initialize()
     auto selector = make_shared<HiggsSelector>();
     //auto repeatedEventCuts = make_shared<RepeatedEventCuts>();
     auto eventDump = make_shared<EventDumpModule>(true, true, 20);
-    auto compareMod = make_shared<RecoGenSimComparisonModule>("fakePhoton", true);
+    // auto compareMod = make_shared<RecoGenSimComparisonModule>("fakePhoton", true);
 
     auto triggerCut = make_shared<TriggerCut>(std::vector<std::string>{"HLT_Ele27_WPTight_Gsf", "HLT_IsoMu24"});
 
@@ -42,7 +42,7 @@ void HiggsInvariantMassPlan::initialize()
     modules.addFilterModule(recoDecayFilterMod);
     //modules.addFilterModule(runFilterMod);
     modules.addAnalysisModule(eventDump);
-    modules.addAnalysisModule(compareMod);
+    // modules.addAnalysisModule(compareMod);
     modules.addAnalysisModule(eventHistMod);
    	modules.addAnalysisModule(fileMod);
 }

@@ -9,6 +9,7 @@
 #include "TGraph.h"
 #include "TH1.h"
 #include "TROOT.h"
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -17,8 +18,8 @@ FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const H
 FitFunctionParameterization parameterize(FitFunctionCollection functions, TFile* rootFile);
 
 const std::vector<HistVariable> histogramTypes = {
-     HistVariable(HistVariable::VariableType::InvariantMass, "", true, false),
-    HistVariable(HistVariable::VariableType::InvariantMass, "", false, true),
+     HistVariable(HistVariable::VariableType::InvariantMass, "", true, false, true),
+    HistVariable(HistVariable::VariableType::InvariantMass, "", false, true, true),
 };
 
 const int minData = 500;
@@ -33,13 +34,13 @@ const std::string parameterFits = "H++SignalParameterFits.root";
 const std::string parameterFunctions = "H++SignalParameterFunctions.txt";
 
 // run in batch mode for faster processing: root -b HiggsSignalFit.C+
-void HiggsSignalFit(bool useKansasState = false)
+void HiggsSignalFit(bool useKansasState = true)
 {
     gROOT->SetBatch(kTRUE);
 
     //auto analysis = HiggsKansasStateAnalysis();
     
-    //const auto systs = analysis.getSystematics();
+    // const auto systs = analysis.getSystematics();
     //std::cout << "Loaded histograms\n";
 
     auto rootFile = TFile::Open(fitHistsName.c_str(), "RECREATE");
@@ -75,7 +76,14 @@ void HiggsSignalFit(bool useKansasState = false)
             }
             for (const auto &genSim : genSimDecays)
             {
-                auto fitFunctions = fitChannel(channel, histType, genSim, systs, rootFile);
+                const std::string chName = channel->getName();
+                const bool isThreeLepton = std::count(chName.begin(), chName.end(), '_') == 1;
+                if (isThreeLepton && !histType.isXProjection())
+                {
+                    continue;
+                }
+                const HistVariable threeLeptonVar(HistVariable::VariableType::RecoSameSignInvariantMass, "", false, false, true);
+                auto fitFunctions = fitChannel(channel, isThreeLepton ? threeLeptonVar : histType, genSim, systs, rootFile);
                 allFunctions += fitFunctions;
                 if (fitFunctions.size() != 0)
                 {
@@ -111,6 +119,11 @@ FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const H
     {
         const auto process = channel->findProcess("Higgs signal " + genSim + " " + std::to_string(mass));
         const TH1 *selectedHist = process->getHist(histVar, true);
+        if (std::count(channelName.begin(), channelName.end(), '_') == 1)
+        {
+            std::cout << "THREELEP " << genSim << "->" << channelName << " " << mass << " " << histVar.getName()
+                      << " entries=" << (selectedHist ? selectedHist->GetEntries() : -1) << "\n";
+        }
 
         if (!selectedHist || selectedHist->GetEntries() < minData)
         {
@@ -132,6 +145,7 @@ FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const H
     const double skewAvg = skewSum / n;
     const double maxBinPctAvg = maxBinPctSum / n;
     const FitFunction::FunctionType funcType = //FitFunction::FunctionType::Voigt;
+    
      //(-1.5 < skewAvg && 60 * maxBinPctAvg - skewAvg > 0.9)
                                                     //? FitFunction::FunctionType::DoubleGaussian
                                                      FitFunction::FunctionType::DoubleSidedCrystalBall;
@@ -185,10 +199,20 @@ FitFunctionCollection fitChannel(const std::shared_ptr<Channel> channel, const H
             TH1 *sysHistdown = process->getHist(systHistType, true);
             Fitter::fitSingleFunction(sysHistdown, *downFunction);
 
+            if (!sysHistdown || sysHistdown->GetEntries() == 0)
+            {
+                continue;
+            }
+
             systHistType.setSystematic(ScaleFactor::SystematicType::Up, systName);
             auto upFunction = SimpleFitFunction::createFunctionOfType(funcType, name, "", xMin, xMax);
             TH1 *sysHistup = process->getHist(systHistType, true);
             Fitter::fitSingleFunction(sysHistup, *upFunction);
+
+            if (!sysHistup || sysHistup->GetEntries() == 0)
+            {
+                continue;
+            }
             
             func->addSystematic(systName, *upFunction->getFunction(), *downFunction->getFunction());
         }

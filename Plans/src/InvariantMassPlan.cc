@@ -6,6 +6,7 @@
 #include "CMSAnalysis/Histograms/interface/SameSignInvariantMassHist.hh"
 #include "CMSAnalysis/Modules/interface/RecoGenSimComparisonModule.hh"
 #include "CMSAnalysis/Histograms/interface/PhotonElectronInvariantMassHist.hh"
+#include "CMSAnalysis/Modules/interface/MatchingModule.hh"
 
 using std::make_shared;
 
@@ -46,7 +47,7 @@ auto& modules = getModules();
 
   // Add production modules
   //auto eventDump = make_shared<EventDumpModule>(1, 1);
-  auto compMod = make_shared<RecoGenSimComparisonModule>("mother", true);
+  auto compMod = make_shared<RecoGenSimComparisonModule>(make_shared<MatchingModule>(), "mother", true);
   // Hopefully doesn't break // <- this is profound
   modules.addAnalysisModule(histMod);
   //modules.addAnalysisModule(eventDump);

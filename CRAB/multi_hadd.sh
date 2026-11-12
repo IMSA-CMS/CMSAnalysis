@@ -29,8 +29,8 @@ for dir in */; do
     hadd -f "$dir/$dir.root" @"$dir/files.txt"
     
     # Copy output
-    mkdir -p "/uscms/home/bhenning/$OUTPUT_DIR"
+    mkdir -p "/uscms/home/mkim1/$OUTPUT_DIR"
 
     #Clean the Files
-    root -l -b -q "$CMSSW_BASE/src/CMSAnalysis/CRAB/cleanfile.C+( \"$dir/$dir.root\", \"/uscms/home/bhenning/$OUTPUT_DIR/$dir.root\" )"
+    root -l -b -q "$CMSSW_BASE/src/CMSAnalysis/CRAB/cleanfile.C+( \"$dir/$dir.root\", \"/uscms/home/mkim1/$OUTPUT_DIR/$dir.root\" )"
 done

@@ -2,6 +2,7 @@
 #include "CMSAnalysis/Analysis/interface/Process.hh"
 #include "CMSAnalysis/Analysis/interface/SingleProcess.hh"
 #include "CMSAnalysis/Analysis/interface/RootFileInput.hh"
+#include "CMSAnalysis/Analysis/interface/SimpleEstimator.hh"
 #include "CMSAnalysis/Analysis/interface/Estimator.hh"
 #include "CMSAnalysis/Analysis/interface/FitEstimator.hh"
 #include "CMSAnalysis/Utility/interface/TableData.hh"
@@ -68,21 +69,32 @@ void Table()
     std::vector<std::string> channelNames;
     
     
+    double total = 0;
 
     // Loop through all channels and store yields into finalTableData in order of associated decay names
     for (std::string channel : channels) 
-    {
-       
+    {       
         //skips none channel
         if (channel == "none") continue;
         channelNames.push_back(channel);
         
         //gets sameSignMass hist data
-        HistVariable histVariable(HistVariable::VariableType::InvariantMass, "GeV", true, false, true);
+        HistVariable histVariable(HistVariable::VariableType::RecoSameSignInvariantMass);
+        // HistVariable histVariable(HistVariable::VariableType::InvariantMass, "GeV", true, false, true);
         std::shared_ptr<Channel> channelPtr = higgsAnalysis->getChannel(channel);
-   
+        
+        // SimpleEstimator debug for eeee and uuuu channels
+        SimpleEstimator::verbose = (channel == "eeee" || channel == "uuuu");
+        if (SimpleEstimator::verbose) 
+        {
+            std::cout << "SimpleEstimator output for channel " << channel << "\n";
+        }
+
         //Gets names of decays in channel and their corresponding yields by index (i.e yields[i] corresponds with names[i])
        std::vector<double> yields = channelPtr->getYields(histVariable); 
+
+        SimpleEstimator::verbose = false; // Turn off verbose logging for channels that aren't eeee or uuuu
+
         std::vector<std::string> names = channelPtr->getNames();
 
         // WWZ Boson Extraction
@@ -121,10 +133,6 @@ void Table()
         //columnNames.push_back("wz");
        
     }
-    
-    
-
-
    
 
 

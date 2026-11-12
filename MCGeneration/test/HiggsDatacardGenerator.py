@@ -35,7 +35,11 @@ for i in range(500, 1501, 100): #mass range 500 to 1500 with increments of 100
 
     newf = open(newFile, 'r')
     data = newf.readlines()
-    data[26] = f"\t\t\t'9900041:m0 = {i}'\n"
+    # Find the line after vL = 0 and insert the mass parameter after that line
+    for j in range(len(data)):
+        if "LeftRightSymmmetry:vL = 0" in data[j]:
+            data.insert(j + 1, f"\t\t\t'9900041:m0 = {i}'\n")
+            break
     newf.close()
 
     newf = open(newFile, 'w')

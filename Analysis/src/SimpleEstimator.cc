@@ -33,30 +33,32 @@ double SimpleEstimator::getExpectedYield(const SingleProcess* process, const His
     // integral/fit only calibrated after firstBin  
     // needs to match the "firstBin" value in "PlotFormatter" if using integral scaling
     // int firstBin = 50;
-    // mass range
-    // needs to match the "upperMasslimit" value in "PlotFormatter" if using integral scaling
+    // // mass range
+    // // needs to match the "upperMasslimit" value in "PlotFormatter" if using integral scaling
     // double xAxisRange = 2000;
     // int numBins = hist->GetNbinsX(); 
     // int lowerLimit = firstBin * (static_cast<double>(numBins) / xAxisRange);
     double efficiency = (hist->Integral()) / totaleventsran;
-    double signalest = crosssection * 1000 * luminosity * efficiency * isBranchingRatioFixer;
+    double signalest = crosssection * 1000 * luminosity * efficiency * branchingRatioFixer;
+    // std::cout << "Branching ratio fixer: " << branchingRatioFixer << '\n';
     // std::cout << "Passed Events: " << hist->GetEntries() << " " << hist->Integral() <<"\n";
     // std::cout << "Total Events: " << totaleventsran << "\n";
     // std::cout << "Efficiency of " << process->getName() << " is " << efficiency << std::endl;
 // 
 
-
-    // std::cout << "postMax " << hist->GetMaximum() << std::endl;
-    // std::cout << "MaxContent " << hist->GetBinContent(hist->GetMaximumBin()) << std::endl;
-    // std::cout << "process " << process->getName() << std::endl; 
-    // std::cout << "totaleventsran " << totaleventsran << std::endl;
-    // std::cout << "totalentries " << hist->GetEntries() << std::endl;
-    // std::cout << "efficiency " << efficiency << std::endl;
-    // std::cout << "luminosity " << luminosity << std::endl;
-    // std::cout << "cross section " << crosssection << std::endl;
-    // std::cout << "postIntegral " << hist->Integral() << std::endl;
-    // std::cout << "yield for " << process->getName() << " is " << signalest << std::endl;
-    // std::cout << "\n\n";
+    if (verbose) {
+        std::cout << "postMax " << hist->GetMaximum() << std::endl;
+        std::cout << "MaxContent " << hist->GetBinContent(hist->GetMaximumBin()) << std::endl;
+        std::cout << "process " << process->getName() << std::endl; 
+        std::cout << "totaleventsran " << totaleventsran << std::endl;
+        std::cout << "totalentries " << hist->GetEntries() << std::endl;
+        std::cout << "efficiency " << efficiency << std::endl;
+        std::cout << "luminosity " << luminosity << std::endl;
+        std::cout << "cross section " << crosssection << std::endl;
+        std::cout << "postIntegral " << hist->Integral() << std::endl;
+        std::cout << "Branching ratio fixer: " << branchingRatioFixer << '\n';
+        std::cout << "yield for " << process->getName() << " is " << signalest << std::endl;
+    }
     
     return signalest;
 }
